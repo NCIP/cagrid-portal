@@ -604,11 +604,7 @@ public class ModificationViewer extends GridPortalComponent {
 					int row = getMethodsTable().getSelectedRow();
 					if ((row >= 0) && (row < getMethodsTable().getRowCount())) {
 						MethodType type = getMethodsTable().getMethodType(getMethodsTable().getSelectedRow());
-						if (type.isIsImported()) {
-							getModifyButton().setEnabled(false);
-						} else {
 							getModifyButton().setEnabled(true);
-						}
 					} else {
 						getModifyButton().setEnabled(false);
 					}
@@ -623,9 +619,7 @@ public class ModificationViewer extends GridPortalComponent {
 						int row = getMethodsTable().getSelectedRow();
 						if ((row >= 0) && (row < getMethodsTable().getRowCount())) {
 							MethodType type = getMethodsTable().getMethodType(getMethodsTable().getSelectedRow());
-							if (!type.isIsImported()) {
 								performMethodModify();
-							}
 						}
 					}
 				}

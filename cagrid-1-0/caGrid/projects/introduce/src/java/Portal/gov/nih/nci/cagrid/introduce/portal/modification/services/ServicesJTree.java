@@ -32,8 +32,6 @@ public class ServicesJTree extends JTree {
 
 	private ServicesType services;
 
-	private ServiceInformation info;
-
 	private JPanel optionsPanel;
 
 	private DefaultMutableTreeNode currentNode = null;
@@ -49,7 +47,7 @@ public class ServicesJTree extends JTree {
 				ServicesJTree.this.setSelectionRow(ServicesJTree.this.getRowForLocation(e.getX(), e.getY()));
 				List nodes = ServicesJTree.this.getSelectedNodes();
 				if (nodes.size() >= 1) {
-					ServicesJTree.this.currentNode = (DefaultMutableTreeNode) nodes.get(0);
+					currentNode = (DefaultMutableTreeNode) nodes.get(0);
 					if (SwingUtilities.isRightMouseButton(e)) {
 						if (nodes.get(0) instanceof MethodsTypeTreeNode) {
 							((MethodsTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(), e.getX(),
@@ -76,15 +74,8 @@ public class ServicesJTree extends JTree {
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "methods");
 						} else if (nodes.get(0) instanceof MethodTypeTreeNode) {
-							//make sure the method cannot be edited if it is imported
-							if (((MethodTypeTreeNode) nodes.get(0)).getMethod().isIsImported()) {
-								((MethodButtonPanel) ServicesJTree.this.optionsPanel.getComponent(3))
-									.setCanModify(false);
-							} else {
-								((MethodButtonPanel) ServicesJTree.this.optionsPanel.getComponent(3))
-									.setCanModify(true);
-							}
-							//show the correct card for editing a method
+							((MethodButtonPanel) ServicesJTree.this.optionsPanel.getComponent(3)).setCanModify(true);
+							// show the correct card for editing a method
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "method");
 						} else if (nodes.get(0) instanceof ResourcePropertiesTypeTreeNode) {
@@ -116,7 +107,7 @@ public class ServicesJTree extends JTree {
 	public void removeAllNodes(TreeNode node) {
 		if (node != null) {
 			// node is visited exactly once
-			if (!node.equals(this.root)) {
+			if (!node.equals(root)) {
 				((DefaultTreeModel) getModel()).removeNodeFromParent((MutableTreeNode) node);
 			}
 
@@ -131,14 +122,12 @@ public class ServicesJTree extends JTree {
 
 
 	public void setServices(ServicesType ns, ServiceInformation info) {
-		this.services = ns;
-		this.info = info;
-
+		services = ns;
 		removeAllNodes(root);
 		((DefaultTreeModel) this.getModel()).setRoot(null);
-		this.root = new ServicesTypeTreeNode(info);
-		((DefaultTreeModel) this.getModel()).setRoot(this.root);
-		this.root.setServices(this.services, (DefaultTreeModel) this.getModel());
+		root = new ServicesTypeTreeNode(info);
+		((DefaultTreeModel) this.getModel()).setRoot(root);
+		root.setServices(services, (DefaultTreeModel) this.getModel());
 		expandAll(true);
 	}
 
@@ -228,7 +217,7 @@ public class ServicesJTree extends JTree {
 		// Ignore all collapse requests; collapse events will not be fired
 		if (path.getLastPathComponent() != root) {
 			super.setExpandedState(path, state);
-		} else if (state && path.getLastPathComponent() == root) {
+		} else if (state && (path.getLastPathComponent() == root)) {
 			super.setExpandedState(path, state);
 		}
 	}

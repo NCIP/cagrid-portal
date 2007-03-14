@@ -746,13 +746,6 @@ public class SyncSource {
 			// clientMethod += " throws RemoteException";
 			clientMethod += "{\n";
 
-			// Authorization
-			clientMethod += DOUBLE_TAB + TemplateUtils.upperCaseFirstCharacter(service.getName())
-				+ "Authorization.authorize" + TemplateUtils.upperCaseFirstCharacter(method.getName()) + "();\n";
-			// clientMethod +=
-			// SyncAuthorization.addAuthorizationToProviderImpl(service, method,
-			// lineStart);
-
 			methodString = "";
 			MethodTypeOutput returnTypeEl = method.getOutput();
 

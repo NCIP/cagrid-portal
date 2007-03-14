@@ -18,6 +18,8 @@ support registration on resources
 
 To Do:
 
+need to create upgrader additions for new PDP style, or need to make sure it calls sync.  
+
 need to clean up config params and deploy params to have "display" names
 
 need to validate soapfix

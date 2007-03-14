@@ -60,7 +60,7 @@ public class SecurityDescriptorGenerator {
 			xml.append("    </auth-method>\n");
 			xml.append("</method>\n");
 
-			xml.append(writeServiceSettings(info.getService().getServiceSecurity()));
+			xml.append(writeServiceSettings(info.getService()));
 
 			ServiceType service = info.getService();
 			MethodsType methods = service.getMethods();
@@ -74,7 +74,6 @@ public class SecurityDescriptorGenerator {
 					}
 				}
 			}
-
 			xml.append("</securityConfig>");
 			try {
 				return XMLUtilities.formatXML(xml.toString());
@@ -88,7 +87,8 @@ public class SecurityDescriptorGenerator {
 	}
 
 
-	private static String writeServiceSettings(ServiceSecurity ss) throws Exception {
+	private static String writeServiceSettings(ServiceType service) throws Exception {
+		ServiceSecurity ss = service.getServiceSecurity();
 		StringBuffer xml = new StringBuffer();
 		if (ss != null) {
 
@@ -118,10 +118,12 @@ public class SecurityDescriptorGenerator {
 					xml.append("<authz value=\"gridmap\"/>");
 					xml.append("<gridmap value=\"" + auth.getGridMapAuthorization().getGridMapFileLocation() + "\"/>");
 				} else {
-					xml.append("<authz value=\"none\"/>");
+					xml.append("<authz value=\"" + service.getName().toLowerCase() + ":" + service.getPackageName()
+						+ ".service.globus." + service.getName() + "Authorization" + "\" />");
 				}
 			} else {
-				xml.append("<authz value=\"none\"/>");
+				xml.append("<authz value=\"" + service.getName().toLowerCase() + ":" + service.getPackageName()
+					+ ".service.globus." + service.getName() + "Authorization" + "\" />");
 			}
 			if ((ss.getSecuritySetting() != null) && (ss.getSecuritySetting().equals(SecuritySetting.Custom))) {
 				xml.append("<auth-method>");
@@ -141,7 +143,8 @@ public class SecurityDescriptorGenerator {
 			xml.append("<auth-method>");
 			xml.append("<none/>");
 			xml.append("</auth-method>");
-			xml.append("<authz value=\"none\"/>");
+			xml.append("<authz value=\"" + service.getName().toLowerCase() + ":" + service.getPackageName()
+				+ ".service.globus." + service.getName() + "Authorization" + "\" />");
 			return xml.toString();
 		}
 	}

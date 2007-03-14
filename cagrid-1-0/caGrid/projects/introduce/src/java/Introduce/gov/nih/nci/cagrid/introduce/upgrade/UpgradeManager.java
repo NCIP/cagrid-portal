@@ -3,8 +3,10 @@ package gov.nih.nci.cagrid.introduce.upgrade;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.io.File;
+
 
 public class UpgradeManager {
 	private ServiceDescription service;
@@ -13,12 +15,14 @@ public class UpgradeManager {
 	private String pathToService;
 	private String id;
 
+
 	public UpgradeManager(ServiceDescription service, String pathToService) {
 		this.service = service;
 		this.pathToService = pathToService;
 		iUpgrader = new IntroduceUpgradeManager(service, pathToService);
 		eUpgrader = new ExtensionsUpgradeManager(service, pathToService);
 	}
+
 
 	public boolean canIntroduceBeUpgraded() {
 		if (iUpgrader.needsUpgrading()) {
@@ -29,6 +33,7 @@ public class UpgradeManager {
 
 	}
 
+
 	public boolean canExtensionsBeUpgraded() {
 		if (eUpgrader.needsUpgrading()) {
 			return true;
@@ -38,18 +43,17 @@ public class UpgradeManager {
 
 	}
 
+
 	private void backup() throws Exception {
 		id = String.valueOf(System.currentTimeMillis());
-		ResourceManager.createArchive(id, service.getServices().getService(0)
-				.getName()
-				+ "UPGRADE", pathToService);
+		ResourceManager.createArchive(id, service.getServices().getService(0).getName() + "UPGRADE", pathToService);
 	}
 
+
 	private void recover() throws Exception {
-		ResourceManager.restoreSpecific(id, service.getServices().getService(0)
-				.getName()
-				+ "UPGRADE", pathToService);
+		ResourceManager.restoreSpecific(id, service.getServices().getService(0).getName() + "UPGRADE", pathToService);
 	}
+
 
 	public void upgrade() throws Exception {
 		try {
@@ -57,47 +61,49 @@ public class UpgradeManager {
 
 			if (canIntroduceBeUpgraded()) {
 				upgradeIntroduce();
-				service = (ServiceDescription) Utils.deserializeDocument(
-						pathToService + File.separator + "introduce.xml",
-						ServiceDescription.class);
+				service = (ServiceDescription) Utils.deserializeDocument(pathToService + File.separator
+					+ "introduce.xml", ServiceDescription.class);
 			}
 			if (canExtensionsBeUpgraded()) {
 				upgradeExtensions();
 			}
+
+			SyncTools sync = new SyncTools(new File(pathToService));
+			sync.sync();
+
 		} catch (Exception e) {
 			recover();
 			throw e;
 		}
 	}
 
+
 	private void upgradeIntroduce() throws Exception {
 		if (iUpgrader.needsUpgrading()) {
 			try {
 				iUpgrader.upgrade();
 				// reload the service description after the upgrade
-				service = (ServiceDescription) Utils.deserializeDocument(
-						pathToService + File.separator + "introduce.xml",
-						ServiceDescription.class);
+				service = (ServiceDescription) Utils.deserializeDocument(pathToService + File.separator
+					+ "introduce.xml", ServiceDescription.class);
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new Exception(
-						"Service upgrader failed.  This service does not appear to be upgradable possibly due to modification of Introduce managed files.");
+					"Service upgrader failed.  This service does not appear to be upgradable possibly due to modification of Introduce managed files.");
 			}
 		}
 	}
+
 
 	private void upgradeExtensions() throws Exception {
 		if (eUpgrader.needsUpgrading()) {
 			try {
 				eUpgrader.upgrade();
-				service = (ServiceDescription) Utils.deserializeDocument(
-						pathToService + File.separator + "introduce.xml",
-						ServiceDescription.class);
+				service = (ServiceDescription) Utils.deserializeDocument(pathToService + File.separator
+					+ "introduce.xml", ServiceDescription.class);
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new Exception(
-						"Extensions Upgrader Failed.  This service does not appear to be upgradable.");
+				throw new Exception("Extensions Upgrader Failed.  This service does not appear to be upgradable.");
 			}
 		}
 	}

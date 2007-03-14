@@ -113,5 +113,10 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 		Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "lib" + File.separator
 			+ "caGrid-1.0-Introduce-1.1-soapBindingFix.jar"), new File(getServicePath() + File.separator + "lib"
 			+ File.separator + "caGrid-1.0-Introduce-1.1-soapBindingFix.jar"));
+
+		// recreate the authorization class
+		// recreate the service descriptor
+		// recreate the provider impl
+		// those will be done during the resync
 	}
 }
