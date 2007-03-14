@@ -663,41 +663,6 @@
             </fileset>
         </copy>
     </target>
-
-
-    <!-- Build and install the data service 'from scratch' extension for introduce -->
-    <target name="installFromScratchIntroduceExtension" description="Builds and installs the Data Service from scratch extensions to Introduce.">
-        <delete dir="${introduce.extensions.dir}/dataFS" />
-        <mkdir dir="${introduce.extensions.dir}/dataFS" />
-        <mkdir dir="${introduce.extensions.dir}/dataFS/schema" />
-        <mkdir dir="${introduce.extensions.dir}/dataFS/schema/metadata" />
-        <!-- extension description file -->
-        <copy tofile="${introduce.extensions.dir}/dataFS/extension.xml" file="${from.scratch.extension.description.file}" />
-        <!-- libraries -->
-        <copy todir="${introduce.extensions.dir}/lib">
-            <fileset dir="${lib.dir}">
-                <include name="*.jar" />
-            </fileset>
-            <fileset dir="${ext.lib.dir}">
-                <include name="*.jar" />
-            </fileset>
-            <fileset dir="${build.jars.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-        </copy>
-        <!-- data service schemas -->
-        <copy todir="${introduce.extensions.dir}/dataFS/schema">
-            <fileset dir="${basedir}/schema/Data/">
-                <include name="**/*.xsd" />
-            </fileset>
-        </copy>
-        <!-- metadata schemas -->
-        <copy todir="${introduce.extensions.dir}/dataFS/schema/metadata">
-            <fileset dir="${ext.schema.dir}">
-                <include name="**/*.xsd" />
-            </fileset>
-        </copy>
-    </target>
 	
 	
 	<!-- runs the query building tool -->
