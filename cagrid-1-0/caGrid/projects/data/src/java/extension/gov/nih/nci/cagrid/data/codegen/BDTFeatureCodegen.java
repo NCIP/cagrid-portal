@@ -17,7 +17,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 1:10:16 PM
- * @version $Id: BDTFeatureCodegen.java,v 1.3 2007-03-14 16:29:12 dervin Exp $ 
+ * @version $Id: BDTFeatureCodegen.java,v 1.4 2007-03-14 20:40:52 dervin Exp $ 
  */
 public class BDTFeatureCodegen extends FeatureCodegen {
 	public static final String NL = System.getProperties().getProperty("line.separator");
@@ -57,7 +57,9 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 		"\t} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {" + NL +
 		"\t\tthrow new BDTException(\"Improperly formed query: \" + ex.getMessage(), ex);" + NL +
 		"\t}" + NL;
-	
+	public static final String RESOURCE_REMOVE_METHOD = "public void remove() throws ResourceException {";
+	public static final String RESOURCE_REMOVE_METHOD_IMPL = 
+		"\thelper.cleanUp();" + NL;
 
 	public BDTFeatureCodegen(ServiceInformation info, ServiceType mainService, Properties serviceProps) {
 		super(info, mainService, serviceProps);
@@ -154,6 +156,18 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 			startIndex += NL.length();
 			source.insert(startIndex, RESOURCE_GET_METHOD_IMPL);
 			startIndex += RESOURCE_GET_METHOD_IMPL.length();
+			// strip away the not implemented exception
+			int endIndex = source.indexOf("}", startIndex);
+			source.delete(startIndex, endIndex);
+		}
+		
+		// edits for the remove method
+		if (doEdits) {
+			int startIndex = source.indexOf(RESOURCE_REMOVE_METHOD) + RESOURCE_REMOVE_METHOD.length();
+			source.insert(startIndex, NL);
+			startIndex += NL.length();
+			source.insert(startIndex, RESOURCE_REMOVE_METHOD_IMPL);
+			startIndex += RESOURCE_REMOVE_METHOD_IMPL.length();
 			// strip away the not implemented exception
 			int endIndex = source.indexOf("}", startIndex);
 			source.delete(startIndex, endIndex);
