@@ -30,5 +30,9 @@ public class LookAndFeel {
 	public final static ImageIcon getTileIcon() {
 		return IconUtils.loadIcon("/TileVertical.gif");
 	}
+	
+	public final static ImageIcon getAboutIcon() {
+		return IconUtils.loadIcon("/Inform.gif");
+	}
 
 }

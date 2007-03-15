@@ -373,7 +373,7 @@ public class GridApplication extends JFrame {
 			about = new javax.swing.JMenuItem();
 			about.setText("About");
 			about.setMnemonic(java.awt.event.KeyEvent.VK_A);
-			about.setIcon(IconUtils.loadIcon("/Inform.gif"));
+			about.setIcon(LookAndFeel.getAboutIcon());
 			about.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// showAboutDialog();
