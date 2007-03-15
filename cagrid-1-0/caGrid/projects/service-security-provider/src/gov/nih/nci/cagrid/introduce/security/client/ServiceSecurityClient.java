@@ -14,8 +14,6 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.namespace.QName;
-
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
 import org.apache.axis.client.Stub;
@@ -27,7 +25,6 @@ import org.apache.axis.utils.ClassUtils;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.impl.security.authorization.Authorization;
 import org.globus.wsrf.impl.security.authorization.NoAuthorization;
-import org.oasis.wsrf.properties.GetResourcePropertyResponse;
 
 
 /**
@@ -55,8 +52,8 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 
 	public ServiceSecurityClient(String url, GlobusCredential proxy) throws MalformedURIException, RemoteException {
 		this.proxy = proxy;
-		this.epr = new EndpointReferenceType();
-		this.epr.setAddress(new Address(url));
+		epr = new EndpointReferenceType();
+		epr.setAddress(new Address(url));
 	}
 
 
@@ -93,7 +90,7 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 
 
 	public EndpointReferenceType getEndpointReference() {
-		return this.epr;
+		return epr;
 	}
 
 
@@ -105,6 +102,7 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 	public void setProxy(GlobusCredential proxy) {
 		this.proxy = proxy;
 	}
+
 
 	private ServiceSecurityPortType getPortType() throws RemoteException {
 
@@ -119,7 +117,7 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 		}
 		ServiceSecurityPortType port = null;
 		try {
-			port = locator.getServiceSecurityPortTypePort(this.epr);
+			port = locator.getServiceSecurityPortTypePort(epr);
 		} catch (Exception e) {
 			throw new RemoteException("Unable to configured porttype:" + e.getMessage(), e);
 		}
@@ -156,12 +154,12 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 
 
 	protected void configureStubSecurity(Stub stub, String method) throws RemoteException {
-		
-		boolean https = false;	
+
+		boolean https = false;
 		if (epr.getAddress().getScheme().equals("https")) {
 			https = true;
 		}
-		
+
 		if (method.equals("getServiceSecurityMetadata")) {
 			if (https) {
 				resetStub(stub);
@@ -173,20 +171,22 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 			}
 			return;
 		}
-		
-		if(this.securityMetadata == null){
+
+		if (securityMetadata == null) {
 			operations = new HashMap();
-			this.securityMetadata = getServiceSecurityMetadata();
+			securityMetadata = getServiceSecurityMetadata();
 			ServiceSecurityMetadataOperations ssmo = securityMetadata.getOperations();
 			if (ssmo != null) {
 				Operation[] ops = ssmo.getOperation();
 				if (ops != null) {
 					for (int i = 0; i < ops.length; i++) {
-						operations.put(ops[i].getName(), ops[i]);
+						String lowerMethodName = ops[i].getName().substring(0, 1).toLowerCase()
+							+ ops[i].getName().substring(1);
+						operations.put(lowerMethodName, ops[i]);
 					}
 				}
 			}
-			
+
 		}
 		resetStub(stub);
 
@@ -308,7 +308,7 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata()
 		throws RemoteException {
 		ServiceSecurityPortType port = this.getPortType();
-		this.configureStubSecurity((Stub)port,"getServiceSecurityMetadata");
+		this.configureStubSecurity((Stub) port, "getServiceSecurityMetadata");
 		gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
 		gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = port
 			.getServiceSecurityMetadata(params);
