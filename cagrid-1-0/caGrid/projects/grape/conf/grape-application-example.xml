@@ -96,7 +96,7 @@
                         <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
                         <name>GeneralConfiguration</name>
                     </qname>
-                    <UIClassname>org.cagrid.grape.configuration.GeneralConfigurationWindow</UIClassname>
+                    <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationPanel</ConfigurationPanel>
                     <DefaultFile>conf/general-configuration-example.xml</DefaultFile>
                 </ConfigurationDescriptor>
                 <ConfigurationDescriptor>
@@ -107,7 +107,7 @@
                         <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
                         <name>GeneralConfiguration</name>
                     </qname>
-                    <UIClassname>org.cagrid.grape.configuration.GeneralConfigurationWindow</UIClassname>                    
+                    <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationPanel</ConfigurationPanel>                    
                     <DefaultFile>conf/general-configuration-example.xml</DefaultFile>
                 </ConfigurationDescriptor>
                 <ConfigurationDescriptor>
@@ -118,7 +118,7 @@
                         <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
                         <name>GeneralConfiguration</name>
                     </qname>
-                    <UIClassname>org.cagrid.grape.configuration.GeneralConfigurationWindow</UIClassname>
+                    <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationPanel</ConfigurationPanel>
                     <DefaultFile>conf/general-configuration-example.xml</DefaultFile>
                 </ConfigurationDescriptor>
                 <ConfigurationDescriptor>
@@ -144,7 +144,7 @@
                 <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
                 <name>GeneralConfiguration</name>
             </qname>
-            <UIClassname>org.cagrid.grape.configuration.GeneralConfigurationWindow</UIClassname>
+            <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationPanel</ConfigurationPanel>
             <DefaultFile>conf/general-configuration-example.xml</DefaultFile>
         </ConfigurationDescriptor>
         </ConfigurationDescriptors>
