@@ -1,18 +1,17 @@
 package org.cagrid.grape;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import java.awt.CardLayout;
 import javax.swing.JSplitPane;
-import java.awt.Dimension;
+import javax.swing.JTree;
+
 
 public class ConfigurationWindow extends JDialog {
 
@@ -34,27 +33,28 @@ public class ConfigurationWindow extends JDialog {
 
 	private JSplitPane jSplitPane = null;
 
+
 	/**
 	 * @param owner
 	 */
-	public ConfigurationWindow(Frame owner, ConfigurationManager conf)
-			throws Exception {
+	public ConfigurationWindow(Frame owner, ConfigurationManager conf) throws Exception {
 		super(owner);
 		setModal(false);
 		this.conf = conf;
 		initialize();
 	}
 
+
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() throws Exception {
 		this.setSize(300, 200);
 		this.setTitle("Preferences");
 		this.setContentPane(getJContentPane());
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -69,6 +69,7 @@ public class ConfigurationWindow extends JDialog {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes treePanel
@@ -90,12 +91,13 @@ public class ConfigurationWindow extends JDialog {
 		return treePanel;
 	}
 
+
 	/**
 	 * This method initializes displayPanel
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	
+
 	private JPanel getDisplayPanel() {
 		if (displayPanel == null) {
 			displayLayout = new CardLayout();
@@ -103,6 +105,7 @@ public class ConfigurationWindow extends JDialog {
 		}
 		return displayPanel;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane
@@ -117,6 +120,7 @@ public class ConfigurationWindow extends JDialog {
 		return jScrollPane;
 	}
 
+
 	/**
 	 * This method initializes configurationTree
 	 * 
@@ -129,10 +133,12 @@ public class ConfigurationWindow extends JDialog {
 		return configurationTree;
 	}
 
+
 	protected void addDisplayPanel(String name, JPanel panel) {
 		System.out.println("Adding " + name);
 		displayPanel.add(name, panel);
 	}
+
 
 	protected void showDisplayPanel(String name) {
 		System.out.println("Showing " + name);
@@ -140,19 +146,20 @@ public class ConfigurationWindow extends JDialog {
 		validate();
 	}
 
+
 	/**
-	 * This method initializes jSplitPane	
-	 * 	
-	 * @return javax.swing.JSplitPane	
+	 * This method initializes jSplitPane
+	 * 
+	 * @return javax.swing.JSplitPane
 	 */
-	private JSplitPane getJSplitPane() throws Exception{
+	private JSplitPane getJSplitPane() throws Exception {
 		if (jSplitPane == null) {
 			jSplitPane = new JSplitPane();
 			jSplitPane.setDividerLocation(200);
 			getDisplayPanel();
 			jSplitPane.setLeftComponent(getTreePanel());
 			jSplitPane.setRightComponent(getDisplayPanel());
-			
+
 		}
 		return jSplitPane;
 	}
