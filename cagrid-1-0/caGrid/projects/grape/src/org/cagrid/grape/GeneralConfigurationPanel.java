@@ -2,6 +2,7 @@ package org.cagrid.grape;
 
 import gov.nih.nci.cagrid.common.Utils;
 
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -17,15 +19,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import org.cagrid.grape.configuration.GeneralConfiguration;
 import org.cagrid.grape.configuration.Properties;
 import org.cagrid.grape.configuration.Property;
 import org.cagrid.grape.configuration.Values;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.FlowLayout;
 
 public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 

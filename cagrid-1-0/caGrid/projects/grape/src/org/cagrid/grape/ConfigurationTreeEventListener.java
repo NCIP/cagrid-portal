@@ -61,12 +61,8 @@ public class ConfigurationTreeEventListener extends MouseAdapter {
 
 	private ConfigurationTree tree;
 
-	private ConfigurationWindow window;
-
-	public ConfigurationTreeEventListener(ConfigurationTree owningTree,
-			ConfigurationWindow window) {
+	public ConfigurationTreeEventListener(ConfigurationTree owningTree) {
 		this.tree = owningTree;
-		this.window = window;
 	}
 
 	public void mouseEntered(MouseEvent e) {
@@ -86,12 +82,5 @@ public class ConfigurationTreeEventListener extends MouseAdapter {
 				node.showPanel();
 			}
 		}
-
-		// TODO: Implement this
-		/*
-		 * if ((e.isPopupTrigger()) || (SwingUtilities.isRightMouseButton(e))) { //
-		 * Do nothing, no popip menus for this tree } else if (e.getClickCount() ==
-		 * 2) { window.getContentManager().addNode(this.tree.getCurrentNode()); }
-		 */
 	}
 }

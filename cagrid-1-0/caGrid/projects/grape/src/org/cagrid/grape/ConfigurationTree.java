@@ -70,7 +70,7 @@ public class ConfigurationTree extends JTree {
 		this.rootNode = new ConfigurationTreeNode(window, this,conf);
 		setModel(new DefaultTreeModel(this.rootNode));
 		this.rootNode.addToDisplay();
-		this.addMouseListener(new ConfigurationTreeEventListener(this,window));
+		this.addMouseListener(new ConfigurationTreeEventListener(this));
 		this.setCellRenderer(new ConfigurationTreeRenderer());
 	}
 

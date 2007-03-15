@@ -28,12 +28,11 @@ public class WindowMenu extends JMenu {
     private JMenuItem cascade = new JMenuItem("Cascade");
     private JMenuItem tile = new JMenuItem("Tile");
     private JMenuItem prefs;
-    private GridApplication app;
+
 
 
     public WindowMenu(MDIDesktopPane desktop, final GridApplication app) {
         this.desktop = desktop;
-        this.app = app;
         setText("Window");
         setMnemonic(java.awt.event.KeyEvent.VK_W);
         cascade.setMnemonic(java.awt.event.KeyEvent.VK_C);
