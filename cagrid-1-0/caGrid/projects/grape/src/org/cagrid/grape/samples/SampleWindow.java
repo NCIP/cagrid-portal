@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.ApplicationContext;
 
-
 public class SampleWindow extends ApplicationComponent {
 
 	private static final long serialVersionUID = 1L;
@@ -18,7 +17,6 @@ public class SampleWindow extends ApplicationComponent {
 	private JPanel jContentPane = null;
 
 	private JLabel label = null;
-
 
 	/**
 	 * This is the default constructor
@@ -28,16 +26,15 @@ public class SampleWindow extends ApplicationComponent {
 		initialize();
 	}
 
-
 	/**
 	 * This method initializes this
 	 * 
+	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(300, 200);
 		this.setContentPane(getJContentPane());
 	}
-
 
 	/**
 	 * This method initializes jContentPane

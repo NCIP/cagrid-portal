@@ -1,13 +1,19 @@
 package org.cagrid.grape;
 
-import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.cagrid.grape.model.ConfigurationGroup;
+import javax.swing.JLabel;
+import java.awt.GridBagConstraints;
+import java.awt.Panel;
+import java.awt.Insets;
+import javax.swing.JTextArea;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import javax.swing.JScrollPane;
 
 public class ConfigurationDisplayPanel extends JPanel {
 
@@ -19,7 +25,6 @@ public class ConfigurationDisplayPanel extends JPanel {
 
 	private JLabel logo = null;
 
-
 	/**
 	 * This is the default constructor
 	 */
@@ -27,13 +32,13 @@ public class ConfigurationDisplayPanel extends JPanel {
 		super();
 		this.message = message;
 		initialize();
-
+		
 	}
-
 
 	/**
 	 * This method initializes this
 	 * 
+	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -53,4 +58,5 @@ public class ConfigurationDisplayPanel extends JPanel {
 		this.add(jLabel, gridBagConstraints1);
 		this.add(logo, gridBagConstraints);
 	}
+
 }
