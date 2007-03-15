@@ -58,9 +58,9 @@ import org.cagrid.grape.model.Configuration;
  */
 public class ConfigurationTreeNode extends ConfigurationBaseTreeNode {
 
-	public ConfigurationTreeNode(ConfigurationTree tree,
+	public ConfigurationTreeNode(ConfigurationWindow window, ConfigurationTree tree,
 			ConfigurationManager conf) throws Exception {
-		super(tree,conf);
+		super(window,tree,conf);
 		processConfiguration(conf.getConfiguration());
 	}
 

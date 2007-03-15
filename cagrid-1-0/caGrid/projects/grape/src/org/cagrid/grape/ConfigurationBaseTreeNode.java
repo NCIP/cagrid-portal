@@ -44,6 +44,7 @@
 package org.cagrid.grape;
 
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.cagrid.grape.model.ConfigurationDescriptor;
@@ -66,16 +67,48 @@ public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 	private ConfigurationTree tree;
 
 	private ConfigurationManager configurationManager;
+	
+	private JPanel displayPanel;
+	
+	private ConfigurationWindow configurationWindow;
+	
 
-	public ConfigurationBaseTreeNode(ConfigurationTree tree,
+	public ConfigurationBaseTreeNode(ConfigurationWindow window, ConfigurationTree tree,
 			ConfigurationManager configurationManager) {
 		this.tree = tree;
 		this.configurationManager = configurationManager;
+		this.configurationWindow = window;
 	}
 
 	public ConfigurationTree getTree() {
 		return tree;
 	}
+	
+
+	public ConfigurationWindow getConfigurationWindow() {
+		return configurationWindow;
+	}
+
+	public JPanel getDisplayPanel() {
+		return displayPanel;
+	}
+
+	public void setDisplayPanel(JPanel displayPanel) {
+		this.displayPanel = displayPanel;
+	}
+	
+	public void showPanel(){
+			if(getDisplayPanel()!=null){
+				getConfigurationWindow().showDisplayPanel(getIdentifier());
+			}
+	}
+	
+	public void addToDisplay(){
+		if(getDisplayPanel()!=null){
+			getConfigurationWindow().addDisplayPanel(getIdentifier(), getDisplayPanel());
+		}
+	}
+	
 
 	protected void processConfigurationGroups(ConfigurationGroups list)
 			throws Exception {
@@ -106,15 +139,19 @@ public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 	protected void processConfigurationGroup(ConfigurationGroup des)
 			throws Exception {
 		if (des != null) {
-			this.add(new ConfigurationGroupTreeNode(getTree(),
-					getConfigurationManager(), des));
+			ConfigurationGroupTreeNode node = new ConfigurationGroupTreeNode(getConfigurationWindow(),getTree(),
+					getConfigurationManager(), des);
+			this.add(node);
+			node.addToDisplay();
 		}
 	}
 
 	protected void processConfigurationDescriptor(ConfigurationDescriptor des) throws Exception {
 		if (des != null) {
-			this.add(new ConfigurationDescriptorTreeNode(getTree(),
-					getConfigurationManager(), des));
+			ConfigurationDescriptorTreeNode node = new ConfigurationDescriptorTreeNode(getConfigurationWindow(),getTree(),
+					getConfigurationManager(), des);
+			this.add(node);
+			node.addToDisplay();
 		}
 	}
 
@@ -125,4 +162,14 @@ public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 	public abstract ImageIcon getIcon();
 
 	public abstract String toString();
+	
+	public String getIdentifier(){
+		ConfigurationBaseTreeNode node = (ConfigurationBaseTreeNode)this.getParent();
+		if(node==null){
+			return "Preferences";
+		}else{
+			return node.getIdentifier()+":"+toString();
+		}
+	}
+	
 }

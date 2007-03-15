@@ -46,6 +46,7 @@ package org.cagrid.grape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.SwingUtilities;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -62,13 +63,11 @@ public class ConfigurationTreeEventListener extends MouseAdapter {
 
 	private ConfigurationWindow window;
 
-
 	public ConfigurationTreeEventListener(ConfigurationTree owningTree,
 			ConfigurationWindow window) {
 		this.tree = owningTree;
 		this.window = window;
 	}
-
 
 	public void mouseEntered(MouseEvent e) {
 		process(e);
@@ -79,14 +78,20 @@ public class ConfigurationTreeEventListener extends MouseAdapter {
 	}
 
 	private void process(MouseEvent e) {
-		
-		//TODO: Implement this
-		/*
-		if ((e.isPopupTrigger()) || (SwingUtilities.isRightMouseButton(e))) {
-			// Do nothing, no popip menus for this tree
-		} else if (e.getClickCount() == 2) {
-			window.getContentManager().addNode(this.tree.getCurrentNode());
+
+		if ((e.isPopupTrigger()) || (SwingUtilities.isLeftMouseButton(e))) {
+			ConfigurationBaseTreeNode node = (ConfigurationBaseTreeNode) this.tree
+					.getCurrentNode();
+			if (node != null) {
+				node.showPanel();
+			}
 		}
-		*/
+
+		// TODO: Implement this
+		/*
+		 * if ((e.isPopupTrigger()) || (SwingUtilities.isRightMouseButton(e))) { //
+		 * Do nothing, no popip menus for this tree } else if (e.getClickCount() ==
+		 * 2) { window.getContentManager().addNode(this.tree.getCurrentNode()); }
+		 */
 	}
 }

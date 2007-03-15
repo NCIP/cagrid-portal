@@ -61,11 +61,12 @@ public class ConfigurationGroupTreeNode extends ConfigurationBaseTreeNode {
 	private ConfigurationGroup group;
 
 
-	public ConfigurationGroupTreeNode(ConfigurationTree tree,
+	public ConfigurationGroupTreeNode(ConfigurationWindow window,ConfigurationTree tree,
 			ConfigurationManager conf, ConfigurationGroup group) throws Exception{
-		super(tree, conf);
+		super(window,tree, conf);
 		this.group = group;
 		this.processConfigurationDescriptors(group.getConfigurationDescriptors());
+		this.setDisplayPanel(new ConfigurationGroupPanel(group));
 	}
 
 

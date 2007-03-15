@@ -67,8 +67,9 @@ public class ConfigurationTree extends JTree {
 
 	public ConfigurationTree(ConfigurationWindow window, ConfigurationManager conf) throws Exception{
 		super();
-		this.rootNode = new ConfigurationTreeNode(this,conf);
+		this.rootNode = new ConfigurationTreeNode(window, this,conf);
 		setModel(new DefaultTreeModel(this.rootNode));
+		this.rootNode.addToDisplay();
 		this.addMouseListener(new ConfigurationTreeEventListener(this,window));
 		this.setCellRenderer(new ConfigurationTreeRenderer());
 	}

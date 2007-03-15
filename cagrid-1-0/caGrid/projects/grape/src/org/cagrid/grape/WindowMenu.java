@@ -65,6 +65,7 @@ public class WindowMenu extends JMenu {
 				window.setVisible(true);
 				}catch (Exception ex) {
 					app.showErrorMessage(ex);
+					ex.printStackTrace();
 				}
 			}
 		});

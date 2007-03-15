@@ -60,9 +60,9 @@ public class ConfigurationDescriptorTreeNode extends ConfigurationBaseTreeNode {
 
 	private ConfigurationDescriptor des;
 
-	public ConfigurationDescriptorTreeNode(ConfigurationTree tree,ConfigurationManager conf,
+	public ConfigurationDescriptorTreeNode(ConfigurationWindow window, ConfigurationTree tree,ConfigurationManager conf,
 			ConfigurationDescriptor des) throws Exception{
-		super(tree,conf);
+		super(window, tree,conf);
 		this.des = des;
 	}
 
@@ -73,4 +73,5 @@ public class ConfigurationDescriptorTreeNode extends ConfigurationBaseTreeNode {
 	public String toString() {
 		return des.getDisplayName();
 	}
+	
 }

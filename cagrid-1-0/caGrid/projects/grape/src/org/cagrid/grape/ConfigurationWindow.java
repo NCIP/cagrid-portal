@@ -10,15 +10,14 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-
-
+import java.awt.CardLayout;
 
 public class ConfigurationWindow extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
-	
+
 	private ConfigurationManager conf;
 
 	private JPanel mainPanel = null;
@@ -31,10 +30,13 @@ public class ConfigurationWindow extends JDialog {
 
 	private JTree configurationTree = null;
 
+	private CardLayout displayLayout;
+
 	/**
 	 * @param owner
 	 */
-	public ConfigurationWindow(Frame owner, ConfigurationManager conf) throws Exception{
+	public ConfigurationWindow(Frame owner, ConfigurationManager conf)
+			throws Exception {
 		super(owner);
 		setModal(false);
 		this.conf = conf;
@@ -46,7 +48,7 @@ public class ConfigurationWindow extends JDialog {
 	 * 
 	 * @return void
 	 */
-	private void initialize() throws Exception{
+	private void initialize() throws Exception {
 		this.setSize(300, 200);
 		this.setTitle("Preferences");
 		this.setContentPane(getJContentPane());
@@ -57,7 +59,7 @@ public class ConfigurationWindow extends JDialog {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJContentPane() throws Exception{
+	private JPanel getJContentPane() throws Exception {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new BorderLayout());
@@ -67,17 +69,17 @@ public class ConfigurationWindow extends JDialog {
 	}
 
 	/**
-	 * This method initializes mainPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes mainPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
-	private JPanel getMainPanel() throws Exception{
+	private JPanel getMainPanel() throws Exception {
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 1;
 			gridBagConstraints1.anchor = GridBagConstraints.WEST;
 			gridBagConstraints1.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints1.weightx = 1.0D;
+			gridBagConstraints1.weightx = 0.75D;
 			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints1.fill = GridBagConstraints.BOTH;
 			gridBagConstraints1.gridy = 0;
@@ -85,29 +87,32 @@ public class ConfigurationWindow extends JDialog {
 			gridBagConstraints.anchor = GridBagConstraints.WEST;
 			gridBagConstraints.gridy = 0;
 			gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints.weightx = 1.0D;
+			gridBagConstraints.weightx = 0.25D;
 			gridBagConstraints.weighty = 1.0D;
 			gridBagConstraints.fill = GridBagConstraints.BOTH;
 			gridBagConstraints.gridx = 0;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-			mainPanel.add(getTreePanel(), gridBagConstraints);
+
 			mainPanel.add(getDisplayPanel(), gridBagConstraints1);
+			mainPanel.add(getTreePanel(), gridBagConstraints);
 		}
 		return mainPanel;
 	}
 
 	/**
-	 * This method initializes treePanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes treePanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
-	private JPanel getTreePanel() throws Exception{
+	private JPanel getTreePanel() throws Exception {
 		if (treePanel == null) {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.fill = GridBagConstraints.BOTH;
 			gridBagConstraints2.weighty = 1.0;
-			gridBagConstraints2.weightx = 1.0;
+			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.gridy = 0;
+			gridBagConstraints2.weightx = 1.0D;
 			treePanel = new JPanel();
 			treePanel.setLayout(new GridBagLayout());
 			treePanel.add(getJScrollPane(), gridBagConstraints2);
@@ -116,24 +121,24 @@ public class ConfigurationWindow extends JDialog {
 	}
 
 	/**
-	 * This method initializes displayPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes displayPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getDisplayPanel() {
 		if (displayPanel == null) {
-			displayPanel = new JPanel();
-			displayPanel.setLayout(new GridBagLayout());
+			displayLayout = new CardLayout();
+			displayPanel = new JPanel(displayLayout);
 		}
 		return displayPanel;
 	}
 
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
-	private JScrollPane getJScrollPane() throws Exception{
+	private JScrollPane getJScrollPane() throws Exception {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
 			jScrollPane.setViewportView(getConfigurationTree());
@@ -142,15 +147,25 @@ public class ConfigurationWindow extends JDialog {
 	}
 
 	/**
-	 * This method initializes configurationTree	
-	 * 	
-	 * @return javax.swing.JTree	
+	 * This method initializes configurationTree
+	 * 
+	 * @return javax.swing.JTree
 	 */
-	private JTree getConfigurationTree() throws Exception{
+	private JTree getConfigurationTree() throws Exception {
 		if (configurationTree == null) {
-			configurationTree = new ConfigurationTree(this,this.conf);
+			configurationTree = new ConfigurationTree(this, this.conf);
 		}
 		return configurationTree;
 	}
 
+	protected void addDisplayPanel(String name, JPanel panel) {
+		System.out.println("Adding " + name);
+		displayPanel.add(name, panel);
+	}
+
+	protected void showDisplayPanel(String name) {
+		System.out.println("Showing " + name);
+		displayLayout.show(displayPanel, name);
+		validate();
+	}
 }
