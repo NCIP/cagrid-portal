@@ -12,6 +12,8 @@ import java.awt.Insets;
 import javax.swing.JTextArea;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
+import javax.swing.JScrollPane;
 
 public class ConfigurationGroupPanel extends JPanel {
 
@@ -19,12 +21,12 @@ public class ConfigurationGroupPanel extends JPanel {
 
 	private ConfigurationGroup group;
 
-	private JLabel groupName = null;
+	private JLabel jLabel = null;
 
-	private Panel descriptionPanel = null;
+	private JScrollPane jScrollPane = null;
 
 	private JTextArea description = null;
-	
+
 	/**
 	 * This is the default constructor
 	 */
@@ -41,49 +43,37 @@ public class ConfigurationGroupPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+		gridBagConstraints2.fill = GridBagConstraints.BOTH;
+		gridBagConstraints2.weighty = 1.0;
+		gridBagConstraints2.gridx = 0;
+		gridBagConstraints2.gridy = 1;
+		gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
+		gridBagConstraints2.weightx = 1.0;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.gridx = 0;
-		gridBagConstraints1.ipadx = 296;
-		gridBagConstraints1.ipady = 180;
+		gridBagConstraints1.anchor = GridBagConstraints.NORTHWEST;
 		gridBagConstraints1.insets = new Insets(5, 5, 5, 5);
-		gridBagConstraints1.weightx = 1.0D;
-		gridBagConstraints1.weighty = 1.0D;
-		gridBagConstraints1.fill = GridBagConstraints.BOTH;
-		gridBagConstraints1.gridy = 1;
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.gridheight = 1;
-		gridBagConstraints.gridy = 0;
-		gridBagConstraints.ipadx = 300;
-		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-		gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-		gridBagConstraints.gridx = 0;
-		groupName = new JLabel();
-		groupName.setText(group.getName());
-		this.setSize(300, 200);
+		gridBagConstraints1.gridy = 0;
+		jLabel = new JLabel();
+		jLabel.setText(this.group.getName());
+		jLabel.setFont(new Font("Dialog", Font.BOLD, 18));
 		this.setLayout(new GridBagLayout());
-		this.add(groupName, gridBagConstraints);
-		this.add(getDescriptionPanel(), gridBagConstraints1);
+		this.add(jLabel, gridBagConstraints1);
+		this.add(getJScrollPane(), gridBagConstraints2);
 	}
 
 	/**
-	 * This method initializes descriptionPanel	
+	 * This method initializes jScrollPane	
 	 * 	
-	 * @return java.awt.Panel	
+	 * @return javax.swing.JScrollPane	
 	 */
-	private Panel getDescriptionPanel() {
-		if (descriptionPanel == null) {
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.fill = GridBagConstraints.BOTH;
-			gridBagConstraints2.weighty = 1.0;
-			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 0;
-			gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints2.weightx = 1.0;
-			descriptionPanel = new Panel();
-			descriptionPanel.setLayout(new GridBagLayout());
-			descriptionPanel.add(getDescription(), gridBagConstraints2);
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getDescription());
 		}
-		return descriptionPanel;
+		return jScrollPane;
 	}
 
 	/**
@@ -95,7 +85,6 @@ public class ConfigurationGroupPanel extends JPanel {
 		if (description == null) {
 			description = new JTextArea();
 			description.setLineWrap(true);
-			description.setPreferredSize(new Dimension(0, 0));
 		}
 		return description;
 	}
