@@ -45,6 +45,14 @@ public class LookAndFeel {
 		return IconUtils.loadIcon("/list-remove.png");
 	}
 	
+	public final static ImageIcon getUpIcon() {
+		return IconUtils.loadIcon("/go-up.png");
+	}
+	
+	public final static ImageIcon getDownIcon() {
+		return IconUtils.loadIcon("/go-down.png");
+	}
+	
 	public final static ImageIcon getLogoNoText() {
 		return IconUtils.loadIcon("/caGrid-notext.gif");
 	}

@@ -595,6 +595,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		if (increaseButton == null) {
 			increaseButton = new JButton();
 			increaseButton.setText("Move Up");
+			increaseButton.setIcon(LookAndFeel.getUpIcon());
 			increaseButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					moveUp();
@@ -613,6 +614,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		if (decreaseButton == null) {
 			decreaseButton = new JButton();
 			decreaseButton.setText("Decrease");
+			decreaseButton.setIcon(LookAndFeel.getDownIcon());
 			decreaseButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					moveDown();
