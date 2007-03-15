@@ -1,19 +1,12 @@
 package org.cagrid.grape;
 
-import java.awt.GridBagLayout;
-
-import javax.swing.JPanel;
-
-import org.cagrid.grape.model.ConfigurationGroup;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Panel;
-import java.awt.Insets;
-import javax.swing.JTextArea;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.JScrollPane;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class ConfigurationDisplayPanel extends JPanel {
 

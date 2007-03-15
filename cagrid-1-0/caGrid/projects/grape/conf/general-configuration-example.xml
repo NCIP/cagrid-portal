@@ -7,16 +7,18 @@
         <property>
             <name>Index Service</name>
             <description>The URL of the Index Service(s) used for discovering grid services.</description>
-            <value>
-                <value>
-                    <description>Production Grid</description>
-                    <data>http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService</data>
-                </value>
-                <value>
-                    <description>Development Grid</description>
-                    <data>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService</data>
-                </value>
-            </value>
+            <values>
+                <value>http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService</value>
+                <value>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService</value>
+            </values>
+        </property>
+        <property>
+            <name>Special Services</name>
+            <description>The URL all the special services.</description>
+            <values>
+                <value>http://cagrid-index.nci.nih.gov:8080/wsrf/services/SpecialService</value>
+                <value>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/SpecialService</value>
+            </values>
         </property>
     </properties>
 </GeneralConfiguration>

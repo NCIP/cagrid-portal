@@ -91,7 +91,7 @@
             <xsd:element name="SystemName" type="xsd:string" minOccurs="1" maxOccurs="1"/>
             <xsd:element name="ModelClassname" type="xsd:string" minOccurs="1" maxOccurs="1"/>
             <xsd:element name="qname" type="grape:qname" minOccurs="1" maxOccurs="1"/>
-            <xsd:element name="UIClassname" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="ConfigurationPanel" type="xsd:string" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="DefaultFile" type="xsd:string" minOccurs="1" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
