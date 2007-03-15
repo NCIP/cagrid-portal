@@ -62,6 +62,7 @@ public class ConfigurationTreeNode extends ConfigurationBaseTreeNode {
 			ConfigurationManager conf) throws Exception {
 		super(window,tree,conf);
 		processConfiguration(conf.getConfiguration());
+		this.setDisplayPanel(new ConfigurationDisplayPanel("Preferences"));
 	}
 
 	private void processConfiguration(Configuration c) throws Exception {

@@ -66,7 +66,7 @@ public class ConfigurationGroupTreeNode extends ConfigurationBaseTreeNode {
 		super(window,tree, conf);
 		this.group = group;
 		this.processConfigurationDescriptors(group.getConfigurationDescriptors());
-		this.setDisplayPanel(new ConfigurationGroupPanel(group));
+		this.setDisplayPanel(new ConfigurationDisplayPanel(group.getName()));
 	}
 
 

@@ -34,5 +34,9 @@ public class LookAndFeel {
 	public final static ImageIcon getAboutIcon() {
 		return IconUtils.loadIcon("/Inform.gif");
 	}
+	
+	public final static ImageIcon getLogoNoText() {
+		return IconUtils.loadIcon("/caGrid-notext.gif");
+	}
 
 }

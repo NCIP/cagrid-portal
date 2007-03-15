@@ -106,6 +106,11 @@ public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 	public void addToDisplay(){
 		if(getDisplayPanel()!=null){
 			getConfigurationWindow().addDisplayPanel(getIdentifier(), getDisplayPanel());
+			for(int i=0; i<this.getChildCount(); i++){
+				ConfigurationBaseTreeNode node = (ConfigurationBaseTreeNode)this.getChildAt(i);
+				node.addToDisplay();
+			}
+			
 		}
 	}
 	
@@ -142,7 +147,6 @@ public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 			ConfigurationGroupTreeNode node = new ConfigurationGroupTreeNode(getConfigurationWindow(),getTree(),
 					getConfigurationManager(), des);
 			this.add(node);
-			node.addToDisplay();
 		}
 	}
 
@@ -151,7 +155,6 @@ public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 			ConfigurationDescriptorTreeNode node = new ConfigurationDescriptorTreeNode(getConfigurationWindow(),getTree(),
 					getConfigurationManager(), des);
 			this.add(node);
-			node.addToDisplay();
 		}
 	}
 

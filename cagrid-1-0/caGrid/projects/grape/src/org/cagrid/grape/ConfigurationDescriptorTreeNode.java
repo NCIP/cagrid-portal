@@ -64,6 +64,7 @@ public class ConfigurationDescriptorTreeNode extends ConfigurationBaseTreeNode {
 			ConfigurationDescriptor des) throws Exception{
 		super(window, tree,conf);
 		this.des = des;
+		this.setDisplayPanel(new ConfigurationDisplayPanel(this.des.getDisplayName()));
 	}
 
 	public ImageIcon getIcon() {
