@@ -77,7 +77,7 @@ public class SecurityMetadataGenerator {
 					ops = (Operation[]) operations.toArray(ops);
 
 				}
-				
+
 				ServiceSecurityMetadataOperations ssmo = new ServiceSecurityMetadataOperations();
 				ssmo.setOperation(ops);
 				metadata.setOperations(ssmo);

@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.codegen.services.security.tools;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
+import gov.nih.nci.cagrid.introduce.beans.security.MethodAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.ProxyCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.RunAsMode;
@@ -15,6 +16,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 
 import org.projectmobius.common.XMLUtilities;
@@ -90,6 +92,8 @@ public class SecurityDescriptorGenerator {
 	private static String writeServiceSettings(ServiceType service) throws Exception {
 		ServiceSecurity ss = service.getServiceSecurity();
 		StringBuffer xml = new StringBuffer();
+		boolean usedServiceAuth = false;
+		boolean needMethodAuth = false;
 		if (ss != null) {
 
 			if (ss.getServiceCredentials() != null) {
@@ -117,13 +121,12 @@ public class SecurityDescriptorGenerator {
 				if (auth.getGridMapAuthorization() != null) {
 					xml.append("<authz value=\"gridmap\"/>");
 					xml.append("<gridmap value=\"" + auth.getGridMapAuthorization().getGridMapFileLocation() + "\"/>");
+					usedServiceAuth = true;
 				} else {
 					xml.append("<authz value=\"" + service.getName().toLowerCase() + ":" + service.getPackageName()
 						+ ".service.globus." + service.getName() + "Authorization" + "\" />");
+					usedServiceAuth = true;
 				}
-			} else {
-				xml.append("<authz value=\"" + service.getName().toLowerCase() + ":" + service.getPackageName()
-					+ ".service.globus." + service.getName() + "Authorization" + "\" />");
 			}
 			if ((ss.getSecuritySetting() != null) && (ss.getSecuritySetting().equals(SecuritySetting.Custom))) {
 				xml.append("<auth-method>");
@@ -138,24 +141,44 @@ public class SecurityDescriptorGenerator {
 				xml.append("</auth-method>");
 			}
 
-			return xml.toString();
 		} else {
 			xml.append("<auth-method>");
 			xml.append("<none/>");
 			xml.append("</auth-method>");
+		}
+
+		if ((service.getMethods() != null) && (service.getMethods().getMethod() != null)) {
+			for (int i = 0; i < service.getMethods().getMethod().length; i++) {
+				MethodType method = service.getMethods().getMethod(i);
+				if ((method.getMethodSecurity() != null)
+					&& (method.getMethodSecurity().getMethodAuthorization() != null)) {
+					MethodAuthorization methAuth = method.getMethodSecurity().getMethodAuthorization();
+					if ((methAuth.getCSMAuthorization() != null) || (methAuth.getGridGrouperAuthorization() != null)) {
+						needMethodAuth = true;
+					}
+				}
+			}
+		}
+
+		if (!usedServiceAuth && needMethodAuth) {
 			xml.append("<authz value=\"" + service.getName().toLowerCase() + ":" + service.getPackageName()
 				+ ".service.globus." + service.getName() + "Authorization" + "\" />");
-			return xml.toString();
+		} else if (!usedServiceAuth && !needMethodAuth) {
+			xml.append("<authz value=\"\" />");
 		}
+
+		return xml.toString();
+
 	}
 
 
 	private static String writeMethodSettings(ServiceSecurity service, MethodType method) throws Exception {
 		try {
 			MethodSecurity ms = method.getMethodSecurity();
+
 			StringBuffer xml = new StringBuffer();
 			if (determineWriteMethod(service, ms)) {
-				xml.append("<method name=\"" + method.getName() + "\">");
+				xml.append("<method name=\"" + TemplateUtils.lowerCaseFirstCharacter(method.getName()) + "\">");
 				if ((ms.getSecuritySetting() != null) && (ms.getSecuritySetting().equals(SecuritySetting.Custom))) {
 					xml.append("<auth-method>");
 					xml.append(getSecureConversationSettings(ms.getSecureConversation()));

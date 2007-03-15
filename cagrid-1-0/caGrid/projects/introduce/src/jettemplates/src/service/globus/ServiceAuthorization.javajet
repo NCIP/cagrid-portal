@@ -34,9 +34,15 @@ import org.w3c.dom.Node;
  * 
  */
 public class <%=info.getService().getName()%>Authorization implements PDP {
+
+	public static final String SERVICE_NAMESPACE = "<%=info.getService().getNamespace()%>";
 	
 	
 	public <%=info.getService().getName()%>Authorization() {
+	}
+	
+	protected String getServiceNamespace(){
+		return SERVICE_NAMESPACE;
 	}
 	
 	public static String getCallerIdentity() {
@@ -107,6 +113,10 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
 		throws AuthorizationException {
+		
+		if(!operation.getNamespaceURI().equals(getServiceNamespace())){
+		  return false;
+		}
 <%
 		// look at doc and compare to interface
 		if (info.getService().getMethods() != null && info.getService().getMethods().getMethod() != null) {
@@ -114,7 +124,7 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 				MethodType method = info.getService().getMethods().getMethod(methodIndex);	
 				if(methodIndex==0){	
 %>
-		if(operation.getLocalPart().equals("<%=method.getName()%>")){
+		if(operation.getLocalPart().equals("<%=TemplateUtils.lowerCaseFirstCharacter(method.getName())%>")){
 			try{
 				authorize<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>();
 				return true;
@@ -124,7 +134,7 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 			}
 		} <%				
 				} else {
-%>else if(operation.getLocalPart().equals("<%=method.getName()%>")){
+%>else if(operation.getLocalPart().equals("<%=TemplateUtils.lowerCaseFirstCharacter(method.getName())%>")){
 			try{
 				authorize<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>();
 				return true;
