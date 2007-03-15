@@ -25,6 +25,7 @@ import org.cagrid.grape.configuration.Property;
 import org.cagrid.grape.configuration.Values;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.FlowLayout;
 
 public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 
@@ -66,6 +67,12 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 
 	private JScrollPane jScrollPane1 = null;
 
+	private JPanel priorityPanel = null;
+
+	private JButton increaseButton = null;
+
+	private JButton decreaseButton = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -90,6 +97,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		gridBagConstraints12.gridx = 0;
 		gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints12.weightx = 1.0D;
+		gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
 		gridBagConstraints12.gridy = 4;
 		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 		gridBagConstraints31.gridx = 0;
@@ -117,7 +125,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.gridy = 0;
-		this.setSize(300, 200);
+		this.setSize(500, 400);
 		this.setLayout(new GridBagLayout());
 		this.add(getTitlePanel(), gridBagConstraints);
 		this.add(getPropertiesPanel(), gridBagConstraints11);
@@ -314,6 +322,12 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	 */
 	private JPanel getValuesPanel() {
 		if (valuesPanel == null) {
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.gridy = 1;
+			gridBagConstraints6.weightx = 1.0D;
+			gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.fill = GridBagConstraints.BOTH;
 			gridBagConstraints10.weighty = 1.0;
@@ -329,6 +343,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 					LookAndFeel.getPanelLabelColor()));
 			valuesPanel.add(getJScrollPane1(), gridBagConstraints10);
+			valuesPanel.add(getPriorityPanel(), gridBagConstraints6);
 		}
 		return valuesPanel;
 	}
@@ -373,6 +388,13 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			actionPanel.add(getValueToAdd(), gridBagConstraints7);
 			actionPanel.add(getAddButton(), gridBagConstraints8);
 			actionPanel.add(getRemoveButton(), gridBagConstraints9);
+			actionPanel.setBorder(javax.swing.BorderFactory
+					.createTitledBorder(
+							null,
+							"Add/Remove Value(s)",
+							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+							javax.swing.border.TitledBorder.DEFAULT_POSITION,
+							null, LookAndFeel.getPanelLabelColor()));
 		}
 		return actionPanel;
 	}
@@ -425,6 +447,39 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			});
 		}
 		return removeButton;
+	}
+
+	private void moveUp() {
+		int index = values.getSelectedIndex();
+		if (index > 0) {
+			Property p = (Property) properties
+					.get((String) getPropertySelector().getSelectedItem());
+			Values v = p.getValues();
+			String[] vals = v.getValue();
+			String temp = vals[index - 1];
+			vals[index - 1] = vals[index];
+			vals[index] = temp;
+			loadValues(p);
+			values.setSelectedIndex(index-1);
+		}
+	}
+
+	private void moveDown() {
+		int index = values.getSelectedIndex();
+		if (index != -1) {
+			Property p = (Property) properties
+					.get((String) getPropertySelector().getSelectedItem());
+			Values v = p.getValues();
+			String[] vals = v.getValue();
+			if (index < (vals.length - 1)) {
+				String temp = vals[index + 1];
+				vals[index + 1] = vals[index];
+				vals[index] = temp;
+				loadValues(p);
+				values.setSelectedIndex(index+1);
+			}
+			
+		}
 	}
 
 	private void addValue() {
@@ -504,9 +559,9 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	}
 
 	/**
-	 * This method initializes jScrollPane1	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes jScrollPane1
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane1() {
 		if (jScrollPane1 == null) {
@@ -514,6 +569,57 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			jScrollPane1.setViewportView(getValues());
 		}
 		return jScrollPane1;
+	}
+
+	/**
+	 * This method initializes priorityPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getPriorityPanel() {
+		if (priorityPanel == null) {
+			priorityPanel = new JPanel();
+			priorityPanel.setLayout(new FlowLayout());
+			priorityPanel.add(getIncreaseButton(), null);
+			priorityPanel.add(getDecreaseButton(), null);
+		}
+		return priorityPanel;
+	}
+
+	/**
+	 * This method initializes increaseButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getIncreaseButton() {
+		if (increaseButton == null) {
+			increaseButton = new JButton();
+			increaseButton.setText("Move Up");
+			increaseButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					moveUp();
+				}
+			});
+		}
+		return increaseButton;
+	}
+
+	/**
+	 * This method initializes decreaseButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getDecreaseButton() {
+		if (decreaseButton == null) {
+			decreaseButton = new JButton();
+			decreaseButton.setText("Decrease");
+			decreaseButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					moveDown();
+				}
+			});
+		}
+		return decreaseButton;
 	}
 
 }
