@@ -13,6 +13,15 @@ public class LookAndFeel {
 	public final static ImageIcon getPreferencesTreeIcon() {
 		return IconUtils.loadIcon("/modify16x16.png");
 	}
+	
+	public final static ImageIcon getConfigurationGroupIcon() {
+		return IconUtils.loadIcon("/document-open16x16.png");
+	}
+	
+	public final static ImageIcon getConfigurationPropertyIcon() {
+		return IconUtils.loadIcon("/document-properties16x16.png");
+	}
+
 
 	public final static ImageIcon getCascadeIcon() {
 		return IconUtils.loadIcon("/Cascade.gif");

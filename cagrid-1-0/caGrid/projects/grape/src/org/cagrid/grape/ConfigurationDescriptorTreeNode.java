@@ -64,11 +64,10 @@ public class ConfigurationDescriptorTreeNode extends ConfigurationBaseTreeNode {
 			ConfigurationDescriptor des) throws Exception{
 		super(tree,conf);
 		this.des = des;
-		//this.processConfigurationDescriptor(des);
 	}
 
 	public ImageIcon getIcon() {
-		return LookAndFeel.getPreferencesTreeIcon();
+		return LookAndFeel.getConfigurationPropertyIcon();
 	}
 
 	public String toString() {

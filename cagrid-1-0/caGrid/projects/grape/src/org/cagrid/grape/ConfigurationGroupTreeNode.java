@@ -71,7 +71,7 @@ public class ConfigurationGroupTreeNode extends ConfigurationBaseTreeNode {
 
 
 	public ImageIcon getIcon() {
-		return LookAndFeel.getPreferencesTreeIcon();
+		return LookAndFeel.getConfigurationGroupIcon();
 	}
 
 	public String toString() {

@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.cagrid.org/1/grape file:/C:/projects/cagrid-1-0/caGrid/projects/grape/schema/grape.xsd">
     <name>Grape Sample Application</name>
-    <icon>/applications-internet.png</icon>
+    <icon>/caGrid-icon-22x22.gif</icon>
     <dimensions>
         <width>850</width>
         <height>700</height>
@@ -23,14 +23,14 @@
                         <title>Manage Users</title>
                         <description>Manage Users</description>
                         <classname>org.cagrid.grape.samples.SampleWindow</classname>
-                        <icon>/applications-internet.png</icon>
+                        <icon>/caGrid-icon-22x22.gif</icon>
                         <showOnToolBar>false</showOnToolBar>
                     </component>
                     <component>
                         <title>Manage Identity Providers</title>
                         <description>Manage Identity Providers</description>
                         <classname>org.cagrid.grape.samples.SampleWindow</classname>
-                        <icon>/applications-internet.png</icon>
+                        <icon>/caGrid-icon-22x22.gif</icon>
                         <showOnToolBar>false</showOnToolBar>
                     </component>
                 </components>
@@ -44,14 +44,14 @@
                             <title>Certificate Authorities</title>
                             <description>Certificate Authorities</description>
                             <classname>org.cagrid.grape.samples.SampleWindow</classname>
-                            <icon>/applications-internet.png</icon>
+                            <icon>/caGrid-icon-22x22.gif</icon>
                             <showOnToolBar>false</showOnToolBar>
                         </component>
                         <component>
                             <title>Levels of Assurance</title>
                             <description>Levels of Assurance</description>
                             <classname>org.cagrid.grape.samples.SampleWindow</classname>
-                            <icon>/applications-internet.png</icon>
+                            <icon>/caGrid-icon-22x22.gif</icon>
                             <showOnToolBar>false</showOnToolBar>
                         </component>
                     </components>
@@ -62,7 +62,7 @@
                     <title>Login</title>
                     <description>Login</description>
                     <classname>org.cagrid.grape.samples.SampleWindow</classname>
-                    <icon>/applications-internet.png</icon>
+                    <icon>/caGrid-icon-22x22.gif</icon>
                     <showOnToolBar>true</showOnToolBar>
                 </component>
             </components>
@@ -76,7 +76,7 @@
                     <title>Discover Grid Services</title>
                     <description>Discover Grid Services</description>
                     <classname>org.cagrid.grape.samples.SampleWindow</classname>
-                    <icon>/applications-internet.png</icon>
+                    <icon>/caGrid-icon-22x22.gif</icon>
                     <showOnToolBar>true</showOnToolBar>
                 </component>
             </components>

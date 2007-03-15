@@ -14,7 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -25,11 +24,6 @@ import org.cagrid.grape.filters.XMLFileFilter;
 import org.cagrid.grape.model.Application;
 import org.cagrid.grape.model.Component;
 import org.cagrid.grape.model.Components;
-import org.cagrid.grape.model.Configuration;
-import org.cagrid.grape.model.ConfigurationDescriptor;
-import org.cagrid.grape.model.ConfigurationDescriptors;
-import org.cagrid.grape.model.ConfigurationGroup;
-import org.cagrid.grape.model.ConfigurationGroups;
 import org.cagrid.grape.model.Menu;
 import org.cagrid.grape.model.Menus;
 import org.cagrid.grape.model.Submenus;
@@ -58,7 +52,7 @@ public class GridApplication extends JFrame {
 
 	private javax.swing.JMenu helpMenu = null;
 
-	private javax.swing.JMenuItem jMenuItem = null;
+	private javax.swing.JMenuItem about = null;
 
 	private javax.swing.JToolBar toolBar = null;
 
@@ -354,7 +348,6 @@ public class GridApplication extends JFrame {
 				}
 			});
 			exitMenuItem.setToolTipText("Closes the application.");
-			exitMenuItem.setIcon(IconUtils.loadIcon("/Exit.gif"));
 		}
 		return exitMenuItem;
 	}
@@ -376,18 +369,18 @@ public class GridApplication extends JFrame {
 	}
 
 	private javax.swing.JMenuItem getJMenuItem() {
-		if (jMenuItem == null) {
-			jMenuItem = new javax.swing.JMenuItem();
-			jMenuItem.setText("About");
-			jMenuItem.setMnemonic(java.awt.event.KeyEvent.VK_A);
-			jMenuItem.setIcon(IconUtils.loadIcon("/Inform.gif"));
-			jMenuItem.addActionListener(new java.awt.event.ActionListener() {
+		if (about == null) {
+			about = new javax.swing.JMenuItem();
+			about.setText("About");
+			about.setMnemonic(java.awt.event.KeyEvent.VK_A);
+			about.setIcon(IconUtils.loadIcon("/Inform.gif"));
+			about.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// showAboutDialog();
 				}
 			});
 		}
-		return jMenuItem;
+		return about;
 	}
 
 	/*
@@ -451,7 +444,6 @@ public class GridApplication extends JFrame {
 			closeMenuItem = new javax.swing.JMenuItem();
 			closeMenuItem.setText("Close");
 			closeMenuItem.setMnemonic(java.awt.event.KeyEvent.VK_C);
-			closeMenuItem.setIcon(IconUtils.loadIcon("/Minus.gif"));
 			closeMenuItem
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -487,7 +479,6 @@ public class GridApplication extends JFrame {
 			closeAllMenuItem = new javax.swing.JMenuItem();
 			closeAllMenuItem.setText("Close All");
 			closeAllMenuItem.setMnemonic(java.awt.event.KeyEvent.VK_A);
-			closeAllMenuItem.setIcon(IconUtils.loadIcon("/MultiMinus.gif"));
 			closeAllMenuItem
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
