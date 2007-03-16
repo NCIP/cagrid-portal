@@ -56,7 +56,6 @@ public class DataServiceConstants {
 	
 	// data service naming constants
 	public static final String DATA_SERVICE_PACKAGE = "gov.nih.nci.cagrid.data";
-	public static final String ENUMERATION_DATA_SERVICE_PACKAGE = DATA_SERVICE_PACKAGE + ".enumeration";
 	public static final String DATA_SERVICE_SERVICE_NAME = "DataService";
 	public static final String DATA_SERVICE_NAMESPACE = "http://" + DATA_SERVICE_PACKAGE + "/" + DATA_SERVICE_SERVICE_NAME;
 	public static final String DATA_SERVICE_PORT_TYPE_NAME = DATA_SERVICE_SERVICE_NAME + "PortType";
@@ -119,12 +118,14 @@ public class DataServiceConstants {
 	public static final String ENUMERATION_QUERY_METHOD_OUTPUT_DESCRIPTION = "The enumerate response containing the EPR of the enumeration resource";
 	public static final String ENUMERATION_QUERY_METHOD_DESCRIPTION = "The standard caGrid Data Service query method which begins an Enumeration";
 	public static final String ENUMERATION_QUERY_METHOD_NAME = "enumerationQuery";
+	public static final String ENUMERATION_DATA_SERVICE_PACKAGE = DATA_SERVICE_PACKAGE + ".enumeration";
 	public static final String ENUMERATION_DATA_SERVICE_NAMESPACE = "http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService";
 	
 	// bdt query method constants
 	public static final String BDT_QUERY_METHOD_NAME = "bdtQuery";
 	public static final String BDT_QUERY_METHOD_DESCRIPTION = "The standard caGrid Data Service query method which returns results handled by Bulk Data Transfer.";
-	public static final String BDT_QUERY_METHOD_OUTPUT_SUFFIX = "";
+	public static final String BDT_DATA_SERVICE_NAMESPACE = "http://gov.nih.nci.cagrid.data.bdt/BDTDataService";	
+	public static final String BDT_DATA_SERVICE_PACKAGE_NAME = DATA_SERVICE_PACKAGE + ".bdt";
 	
 	private DataServiceConstants() {
 		
