@@ -22,18 +22,14 @@ import org.cagrid.grape.model.ConfigurationGroups;
 public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 
 	private ConfigurationTree tree;
-
-	private ConfigurationManager configurationManager;
 	
 	private JPanel displayPanel;
 	
 	private ConfigurationWindow configurationWindow;
 	
 
-	public ConfigurationBaseTreeNode(ConfigurationWindow window, ConfigurationTree tree,
-			ConfigurationManager configurationManager) {
+	public ConfigurationBaseTreeNode(ConfigurationWindow window, ConfigurationTree tree) {
 		this.tree = tree;
-		this.configurationManager = configurationManager;
 		this.configurationWindow = window;
 	}
 
@@ -101,22 +97,20 @@ public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 	protected void processConfigurationGroup(ConfigurationGroup des)
 			throws Exception {
 		if (des != null) {
-			ConfigurationGroupTreeNode node = new ConfigurationGroupTreeNode(getConfigurationWindow(),getTree(),
-					getConfigurationManager(), des);
+			ConfigurationGroupTreeNode node = new ConfigurationGroupTreeNode(getConfigurationWindow(),getTree(), des);
 			this.add(node);
 		}
 	}
 
 	protected void processConfigurationDescriptor(ConfigurationDescriptor des) throws Exception {
 		if (des != null) {
-			ConfigurationDescriptorTreeNode node = new ConfigurationDescriptorTreeNode(getConfigurationWindow(),getTree(),
-					getConfigurationManager(), des);
+			ConfigurationDescriptorTreeNode node = new ConfigurationDescriptorTreeNode(getConfigurationWindow(),getTree(), des);
 			this.add(node);
 		}
 	}
 
 	public ConfigurationManager getConfigurationManager() {
-		return configurationManager;
+		return GridApplication.getContext().getConfigurationManager();
 	}
 
 	public abstract ImageIcon getIcon();

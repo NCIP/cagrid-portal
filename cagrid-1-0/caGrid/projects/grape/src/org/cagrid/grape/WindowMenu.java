@@ -54,7 +54,7 @@ public class WindowMenu extends JMenu {
 		prefs.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				try {
-					ConfigurationWindow window = new ConfigurationWindow(app, app.getConfigurationManager());
+					ConfigurationWindow window = new ConfigurationWindow(app);
 					window.setModal(false);
 					window.setSize(700, 400);
 					window.setVisible(true);

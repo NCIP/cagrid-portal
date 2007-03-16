@@ -24,9 +24,8 @@ public class ConfigurationDescriptorTreeNode extends ConfigurationBaseTreeNode {
 	private Logger log;
 
 
-	public ConfigurationDescriptorTreeNode(ConfigurationWindow window, ConfigurationTree tree,
-		ConfigurationManager conf, ConfigurationDescriptor des) throws Exception {
-		super(window, tree, conf);
+	public ConfigurationDescriptorTreeNode(ConfigurationWindow window, ConfigurationTree tree, ConfigurationDescriptor des) throws Exception {
+		super(window, tree);
 		this.des = des;
 		log = Logger.getLogger(this.getClass().getName());
 		if (des.getConfigurationPanel() == null) {

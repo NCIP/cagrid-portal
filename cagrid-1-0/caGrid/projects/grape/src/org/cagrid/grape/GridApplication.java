@@ -73,11 +73,16 @@ public class GridApplication extends JFrame {
 
 	private ConfigurationManager configurationManager;
 
+	private static GridApplication application;
 
-	public GridApplication(Application app) throws Exception {
+	private ApplicationContext context;
+
+
+	private GridApplication(Application app) throws Exception {
 		super();
 		this.app = app;
 		this.threadManager = new MobiusPoolManager();
+		this.context = new ApplicationContext(this);
 		configurationManager = new ConfigurationManager(app.getConfiguration());
 		initialize();
 	}
@@ -85,6 +90,20 @@ public class GridApplication extends JFrame {
 
 	public MobiusPoolManager getThreadManager() {
 		return threadManager;
+	}
+
+
+	public static GridApplication getInstance(Application app) throws Exception {
+		if (application == null) {
+			application = new GridApplication(app);
+			return application;
+		} else {
+			throw new Exception("An instance of the Grid Application has already been created.");
+		}
+	}
+
+	public static ApplicationContext getContext() {
+		return application.context;
 	}
 
 
@@ -139,7 +158,7 @@ public class GridApplication extends JFrame {
 			Application app = (Application) Utils.deserializeDocument(file.getAbsolutePath(), Application.class);
 
 			// launch the portal with the passed config
-			GridApplication application = new GridApplication(app);
+			GridApplication application = GridApplication.getInstance(app);
 			Dimension d = new Dimension(app.getDimensions().getWidth(), app.getDimensions().getHeight());
 
 			try {
@@ -565,12 +584,11 @@ public class GridApplication extends JFrame {
 
 		public void execute() {
 			try {
-				ApplicationContext context = new ApplicationContext(app, component);
 				Class[] inputTypes = new Class[1];
-				inputTypes[0] = ApplicationContext.class;
+				inputTypes[0] = Component.class;
 				Constructor constructor = Class.forName(component.getClassname()).getConstructor(inputTypes);
 				Object[] inputs = new Object[1];
-				inputs[0] = context;
+				inputs[0] = component;
 				ApplicationComponent comp = (ApplicationComponent) constructor.newInstance(inputs);
 				if (component.getDimensions() != null) {
 					app.addApplicationComponent(comp, component.getDimensions().getWidth(), component.getDimensions()

@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.cagrid.grape.ApplicationComponent;
-import org.cagrid.grape.ApplicationContext;
+import org.cagrid.grape.model.Component;
 
 
 public class SampleWindow extends ApplicationComponent {
@@ -23,8 +23,8 @@ public class SampleWindow extends ApplicationComponent {
 	/**
 	 * This is the default constructor
 	 */
-	public SampleWindow(ApplicationContext context) {
-		super(context);
+	public SampleWindow(Component comp) {
+		super(comp);
 		initialize();
 	}
 
@@ -51,7 +51,7 @@ public class SampleWindow extends ApplicationComponent {
 			gridBagConstraints.ipady = 0;
 			gridBagConstraints.gridy = 0;
 			label = new JLabel();
-			label.setText(this.getContext().getComponent().getTitle());
+			label.setText(getComponentDescriptor().getTitle());
 			label.setFont(new Font("Dialog", Font.BOLD, 36));
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new GridBagLayout());

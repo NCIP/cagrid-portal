@@ -17,13 +17,12 @@ import javax.swing.JTree;
 
 import org.apache.log4j.Logger;
 
+
 public class ConfigurationWindow extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
-
-	private ConfigurationManager conf;
 
 	private JPanel treePanel = null;
 
@@ -45,17 +44,17 @@ public class ConfigurationWindow extends JDialog {
 
 	private Logger log;
 
+
 	/**
 	 * @param owner
 	 */
-	public ConfigurationWindow(Frame owner, ConfigurationManager conf)
-			throws Exception {
+	public ConfigurationWindow(Frame owner) throws Exception {
 		super(owner);
 		setModal(false);
-		this.conf = conf;
 		this.log = Logger.getLogger(this.getClass().getName());
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -67,6 +66,7 @@ public class ConfigurationWindow extends JDialog {
 		this.setTitle("Preferences");
 		this.setContentPane(getJContentPane());
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -82,6 +82,7 @@ public class ConfigurationWindow extends JDialog {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes treePanel
@@ -103,6 +104,7 @@ public class ConfigurationWindow extends JDialog {
 		return treePanel;
 	}
 
+
 	/**
 	 * This method initializes displayPanel
 	 * 
@@ -117,6 +119,7 @@ public class ConfigurationWindow extends JDialog {
 		return displayPanel;
 	}
 
+
 	/**
 	 * This method initializes jScrollPane
 	 * 
@@ -130,6 +133,7 @@ public class ConfigurationWindow extends JDialog {
 		return jScrollPane;
 	}
 
+
 	/**
 	 * This method initializes configurationTree
 	 * 
@@ -137,19 +141,22 @@ public class ConfigurationWindow extends JDialog {
 	 */
 	private JTree getConfigurationTree() throws Exception {
 		if (configurationTree == null) {
-			configurationTree = new ConfigurationTree(this, this.conf);
+			configurationTree = new ConfigurationTree(this);
 		}
 		return configurationTree;
 	}
+
 
 	protected void addDisplayPanel(String name, JPanel panel) {
 		displayPanel.add(name, panel);
 	}
 
+
 	protected void showDisplayPanel(String name) {
 		displayLayout.show(displayPanel, name);
 		validate();
 	}
+
 
 	/**
 	 * This method initializes jSplitPane
@@ -168,6 +175,7 @@ public class ConfigurationWindow extends JDialog {
 		return jSplitPane;
 	}
 
+
 	/**
 	 * This method initializes buttonPanel
 	 * 
@@ -183,6 +191,7 @@ public class ConfigurationWindow extends JDialog {
 		return buttonPanel;
 	}
 
+
 	/**
 	 * This method initializes applyButton
 	 * 
@@ -196,16 +205,12 @@ public class ConfigurationWindow extends JDialog {
 			applyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						((ConfigurationTree) getConfigurationTree())
-								.applyChanges();
+						((ConfigurationTree) getConfigurationTree()).applyChanges();
 						dispose();
 					} catch (Exception ex) {
-						JOptionPane
-								.showMessageDialog(
-										win,
-										"An unexpected error occurred applying you configuration changes!!!",
-										"Unexpected Error",
-										JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(win,
+							"An unexpected error occurred applying you configuration changes!!!", "Unexpected Error",
+							JOptionPane.ERROR_MESSAGE);
 						log.error(ex.getMessage(), ex);
 					}
 				}
@@ -213,6 +218,7 @@ public class ConfigurationWindow extends JDialog {
 		}
 		return applyButton;
 	}
+
 
 	/**
 	 * This method initializes cancelButton

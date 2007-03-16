@@ -2,6 +2,7 @@ package org.cagrid.grape;
 
 import javax.swing.JInternalFrame;
 
+import org.cagrid.grape.model.Component;
 import org.cagrid.grape.utils.IconUtils;
 
 
@@ -15,27 +16,26 @@ import org.cagrid.grape.utils.IconUtils;
  */
 public abstract class ApplicationComponent extends JInternalFrame {
 
-	private ApplicationContext applicationContext;
+	private Component componentDescriptor;
 
 
-	public ApplicationComponent(ApplicationContext context) {
+	public ApplicationComponent(Component comp) {
 		setSize(200, 300);
 		setMaximizable(true);
 		setIconifiable(true);
 		setClosable(true);
 		setResizable(true);
-		this.applicationContext = context;
-		if (this.applicationContext.getComponent() != null) {
-			this.setTitle(this.applicationContext.getComponent().getTitle());
-			if (this.applicationContext.getComponent().getIcon() != null) {
-				this.setFrameIcon(IconUtils.loadIcon(this.applicationContext.getComponent().getIcon()));
+		this.componentDescriptor = comp;
+		if (getComponentDescriptor() != null) {
+			this.setTitle(getComponentDescriptor().getTitle());
+			if (getComponentDescriptor().getIcon() != null) {
+				this.setFrameIcon(IconUtils.loadIcon(getComponentDescriptor().getIcon()));
 			}
 		}
 	}
 
-
-	public ApplicationContext getContext() {
-		return applicationContext;
+	public Component getComponentDescriptor() {
+		return componentDescriptor;
 	}
 
 }
