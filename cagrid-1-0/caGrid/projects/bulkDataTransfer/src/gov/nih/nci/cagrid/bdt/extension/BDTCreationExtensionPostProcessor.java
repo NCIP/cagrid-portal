@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
@@ -30,6 +31,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import javax.xml.namespace.QName;
+
 
 public class BDTCreationExtensionPostProcessor implements CreationExtensionPostProcessor {
 
@@ -41,28 +44,28 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		throws CreationExtensionException {
 
 		ServiceDescription serviceDescription = serviceInfo.getServiceDescriptor();
-		this.serviceProperties = serviceInfo.getIntroduceServiceProperties();
+		serviceProperties = serviceInfo.getIntroduceServiceProperties();
 
-		this.info = new ServiceInformation(serviceDescription, this.serviceProperties, new File(this.serviceProperties
+		info = new ServiceInformation(serviceDescription, serviceProperties, new File(serviceProperties
 			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)));
 
-		// apply bulk data transfer requirements to it
+		// apply data service requirements to it
 		try {
-			System.out.println("Adding bulk data transfer components to template");
-			makeBDTService(serviceDescription, this.serviceProperties);
-			addResourceImplStub(serviceDescription, this.serviceProperties);
+			System.out.println("Adding data service components to template");
+			makeBDTService(serviceDescription, serviceProperties);
+			addResourceImplStub(serviceDescription, serviceProperties);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new CreationExtensionException(
-				"Error adding bulk data transfer components to template! " + ex.getMessage(), ex);
+				"Error adding data service components to template! " + ex.getMessage(), ex);
 		}
 		// add the proper deployment properties
 		try {
-			System.out.println("Modifying service properties");
+			System.out.println("Adding deploy property for query processor class");
 			modifyServiceProperties(serviceDescription);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			throw new CreationExtensionException("Error modifying service properties! "
+			throw new CreationExtensionException("Error adding query processor parameter to service! "
 				+ ex.getMessage(), ex);
 		}
 	}
@@ -91,7 +94,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			copySchema(subname, schemaDir);
 		}
 
-		// copy libraries for BDT services into the new bdt lib directory
+		// copy libraries for data services into the new bdt lib directory
 		copyLibraries(props);
 		// namespaces
 		System.out.println("Modifying namespace definitions");
@@ -136,8 +139,8 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		ServiceType mainService = description.getServices().getService(0);
 
 		// add the bdt subservice
-		ServiceDescription desc = (ServiceDescription) Utils.deserializeDocument(
-			extensionDir + File.separator + "introduce.xml", ServiceDescription.class);
+		ServiceDescription desc = (ServiceDescription) Utils.deserializeDocument(extensionDir + File.separator
+			+ "introduce.xml", ServiceDescription.class);
 		ServiceType bdtService = desc.getServices().getService(0);
 		bdtService.setName(mainService.getName() + bdtService.getName());
 		bdtService.setNamespace(mainService.getNamespace() + "BDT");
@@ -156,27 +159,50 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 				MethodTypeProviderInformation mpi = new MethodTypeProviderInformation();
 				mpi.setProviderClass("gov.nih.nci.cagrid.bdt.service.globus.BulkDataHandlerProviderImpl");
 				method.setProviderInformation(mpi);
+				method.setIsImported(true);
+				MethodTypeImportInformation mii = new MethodTypeImportInformation();
+				mii.setFromIntroduce(true);
+				mii.setInputMessage(new QName("http://cagrid.nci.nih.gov/BulkDataHandler", "CreateEnumerationRequest"));
+				mii
+					.setOutputMessage(new QName("http://cagrid.nci.nih.gov/BulkDataHandler",
+						"CreateEnumerationResponse"));
+				mii.setPackageName("gov.nih.nci.cagrid.bdt.stubs");
+				mii.setNamespace("http://cagrid.nci.nih.gov/BulkDataHandler");
+				mii.setPortTypeName("BulkDataHandlerPortType");
+				mii.setWsdlFile("./BulkDataHandler.wsdl");
+				method.setImportInformation(mii);
 			} else if (method.getName().equals("GetGridFTPURLs")) {
 				method.setIsProvided(true);
 				MethodTypeProviderInformation mpi = new MethodTypeProviderInformation();
 				mpi.setProviderClass("gov.nih.nci.cagrid.bdt.service.globus.BulkDataHandlerProviderImpl");
 				method.setProviderInformation(mpi);
+				method.setIsImported(true);
+				MethodTypeImportInformation mii = new MethodTypeImportInformation();
+				mii.setFromIntroduce(true);
+				mii.setInputMessage(new QName("http://cagrid.nci.nih.gov/BulkDataHandler", "GetGridFTPURLsRequest"));
+				mii.setOutputMessage(new QName("http://cagrid.nci.nih.gov/BulkDataHandler", "GetGridFTPURLsResponse"));
+				mii.setPackageName("gov.nih.nci.cagrid.bdt.stubs");
+				mii.setNamespace("http://cagrid.nci.nih.gov/BulkDataHandler");
+				mii.setPortTypeName("BulkDataHandlerPortType");
+				mii.setWsdlFile("./BulkDataHandler.wsdl");
+				method.setImportInformation(mii);
 			}
+
 		}
-		
+
 		List services = new ArrayList(Arrays.asList(description.getServices().getService()));
 		services.add(bdtService);
 		ServiceType[] servicesArr = new ServiceType[services.size()];
 		services.toArray(servicesArr);
 		description.getServices().setService(servicesArr);
+
 	}
 
 
-	private void addResourceImplStub(ServiceDescription desc, Properties properties) throws Exception {
+	private void addResourceImplStub(ServiceDescription desc, Properties serviceProperties) throws Exception {
 		BDTResourceTemplate resourceT = new BDTResourceTemplate();
-		String resourceS = resourceT.generate(new SpecificServiceInformation(
-			this.info, this.info.getServices().getService(0)));
-		File resourceF = new File(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+		String resourceS = resourceT.generate(new SpecificServiceInformation(info, info.getServices().getService(0)));
+		File resourceF = new File(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 			+ File.separator + "src" + File.separator + CommonTools.getPackageDir(desc.getServices().getService(0))
 			+ File.separator + "service" + File.separator + "BDTResource.java");
 		FileWriter resourceFW = new FileWriter(resourceF);
@@ -197,7 +223,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			desc.getServices().getService()[0].setResourcePropertiesList(propsList);
 		}
 		ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
-		if (metadataArray == null || metadataArray.length == 0) {
+		if ((metadataArray == null) || (metadataArray.length == 0)) {
 			metadataArray = new ResourcePropertyType[]{serviceMetadata};
 		} else {
 			ResourcePropertyType[] tmpArray = new ResourcePropertyType[metadataArray.length + 1];
@@ -209,7 +235,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 
 		try {
 			Utils.copyFile(new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "bdt" + File.separator
-				+ "etc" + File.separator + "BulkDataHandler-metadata.xml"), new File(this.serviceProperties
+				+ "etc" + File.separator + "BulkDataHandler-metadata.xml"), new File(serviceProperties
 				.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 				+ File.separator + "etc" + File.separator + "BulkDataHandler-metadata.xml"));
 		} catch (Exception e) {
@@ -225,7 +251,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			return false;
 		}
 		ResourcePropertyType[] props = propsList.getResourceProperty();
-		if (props == null || props.length == 0) {
+		if ((props == null) || (props.length == 0)) {
 			return false;
 		}
 		for (int i = 0; i < props.length; i++) {
@@ -297,4 +323,5 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			addServiceMetadata(desc);
 		}
 	}
+
 }
