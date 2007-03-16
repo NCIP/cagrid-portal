@@ -37,7 +37,7 @@ public class ConfigurationTreeEventListener extends MouseAdapter {
 	private void process(MouseEvent e) {
 
 		if ((e.isPopupTrigger()) || (SwingUtilities.isLeftMouseButton(e))) {
-			ConfigurationBaseTreeNode node = this.tree.getCurrentNode();
+			ConfigurationBaseTreeNode node = (ConfigurationBaseTreeNode) this.tree.getCurrentNode();
 			if (node != null) {
 				node.showPanel();
 			}

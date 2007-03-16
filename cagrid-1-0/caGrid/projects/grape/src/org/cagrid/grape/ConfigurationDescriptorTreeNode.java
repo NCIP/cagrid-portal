@@ -3,6 +3,7 @@ package org.cagrid.grape;
 import java.lang.reflect.Constructor;
 
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.cagrid.grape.model.ConfigurationDescriptor;
@@ -46,6 +47,18 @@ public class ConfigurationDescriptorTreeNode extends ConfigurationBaseTreeNode {
 				log.error("An error occurred using the panel " + des.getConfigurationPanel()
 					+ " for editing the preference " + des.getDisplayName());
 				log.error(e.getMessage(), e);
+			}
+		}
+	}
+
+
+	public void applyChanges() throws Exception {
+		JPanel panel = this.getDisplayPanel();
+		if (panel instanceof ConfigurationBasePanel) {
+			ConfigurationBasePanel p = (ConfigurationBasePanel) panel;
+			if (p.hasChanged()) {
+				this.getConfigurationManager().save(p.getSystemName(), p.getConfigurationObject());
+				p.setChanged(false);
 			}
 		}
 	}

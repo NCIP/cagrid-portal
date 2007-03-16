@@ -9,12 +9,12 @@ import org.cagrid.grape.model.ConfigurationDescriptors;
 import org.cagrid.grape.model.ConfigurationGroup;
 import org.cagrid.grape.model.ConfigurationGroups;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
+ * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -24,60 +24,56 @@ public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 	private ConfigurationTree tree;
 
 	private ConfigurationManager configurationManager;
-
+	
 	private JPanel displayPanel;
-
+	
 	private ConfigurationWindow configurationWindow;
-
+	
 
 	public ConfigurationBaseTreeNode(ConfigurationWindow window, ConfigurationTree tree,
-		ConfigurationManager configurationManager) {
+			ConfigurationManager configurationManager) {
 		this.tree = tree;
 		this.configurationManager = configurationManager;
 		this.configurationWindow = window;
 	}
 
-
 	public ConfigurationTree getTree() {
 		return tree;
 	}
-
+	
 
 	public ConfigurationWindow getConfigurationWindow() {
 		return configurationWindow;
 	}
 
-
 	public JPanel getDisplayPanel() {
 		return displayPanel;
 	}
 
-
 	public void setDisplayPanel(JPanel displayPanel) {
 		this.displayPanel = displayPanel;
 	}
-
-
-	public void showPanel() {
-		if (getDisplayPanel() != null) {
-			getConfigurationWindow().showDisplayPanel(getIdentifier());
-		}
+	
+	public void showPanel(){
+			if(getDisplayPanel()!=null){
+				getConfigurationWindow().showDisplayPanel(getIdentifier());
+			}
 	}
-
-
-	public void addToDisplay() {
-		if (getDisplayPanel() != null) {
+	
+	public void addToDisplay(){
+		if(getDisplayPanel()!=null){
 			getConfigurationWindow().addDisplayPanel(getIdentifier(), getDisplayPanel());
-			for (int i = 0; i < this.getChildCount(); i++) {
-				ConfigurationBaseTreeNode node = (ConfigurationBaseTreeNode) this.getChildAt(i);
+			for(int i=0; i<this.getChildCount(); i++){
+				ConfigurationBaseTreeNode node = (ConfigurationBaseTreeNode)this.getChildAt(i);
 				node.addToDisplay();
 			}
-
+			
 		}
 	}
+	
 
-
-	protected void processConfigurationGroups(ConfigurationGroups list) throws Exception {
+	protected void processConfigurationGroups(ConfigurationGroups list)
+			throws Exception {
 		if (list != null) {
 			ConfigurationGroup[] group = list.getConfigurationGroup();
 			if (group != null) {
@@ -88,8 +84,8 @@ public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 		}
 	}
 
-
-	protected void processConfigurationDescriptors(ConfigurationDescriptors list) throws Exception {
+	protected void processConfigurationDescriptors(ConfigurationDescriptors list)
+			throws Exception {
 
 		if (list != null) {
 			ConfigurationDescriptor[] des = list.getConfigurationDescriptor();
@@ -102,43 +98,40 @@ public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 		}
 	}
 
-
-	protected void processConfigurationGroup(ConfigurationGroup des) throws Exception {
+	protected void processConfigurationGroup(ConfigurationGroup des)
+			throws Exception {
 		if (des != null) {
-			ConfigurationGroupTreeNode node = new ConfigurationGroupTreeNode(getConfigurationWindow(), getTree(),
-				getConfigurationManager(), des);
+			ConfigurationGroupTreeNode node = new ConfigurationGroupTreeNode(getConfigurationWindow(),getTree(),
+					getConfigurationManager(), des);
 			this.add(node);
 		}
 	}
-
 
 	protected void processConfigurationDescriptor(ConfigurationDescriptor des) throws Exception {
 		if (des != null) {
-			ConfigurationDescriptorTreeNode node = new ConfigurationDescriptorTreeNode(getConfigurationWindow(),
-				getTree(), getConfigurationManager(), des);
+			ConfigurationDescriptorTreeNode node = new ConfigurationDescriptorTreeNode(getConfigurationWindow(),getTree(),
+					getConfigurationManager(), des);
 			this.add(node);
 		}
 	}
-
 
 	public ConfigurationManager getConfigurationManager() {
 		return configurationManager;
 	}
 
-
 	public abstract ImageIcon getIcon();
-
+	
+	public abstract void applyChanges() throws Exception;
 
 	public abstract String toString();
-
-
-	public String getIdentifier() {
-		ConfigurationBaseTreeNode node = (ConfigurationBaseTreeNode) this.getParent();
-		if (node == null) {
+	
+	public String getIdentifier(){
+		ConfigurationBaseTreeNode node = (ConfigurationBaseTreeNode)this.getParent();
+		if(node==null){
 			return "Preferences";
-		} else {
-			return node.getIdentifier() + ":" + toString();
+		}else{
+			return node.getIdentifier()+":"+toString();
 		}
 	}
-
+	
 }

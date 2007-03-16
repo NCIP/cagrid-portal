@@ -2,16 +2,20 @@ package org.cagrid.grape;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 
+import org.apache.log4j.Logger;
 
 public class ConfigurationWindow extends JDialog {
 
@@ -33,27 +37,36 @@ public class ConfigurationWindow extends JDialog {
 
 	private JSplitPane jSplitPane = null;
 
+	private JPanel buttonPanel = null;
+
+	private JButton applyButton = null;
+
+	private JButton cancelButton = null;
+
+	private Logger log;
 
 	/**
 	 * @param owner
 	 */
-	public ConfigurationWindow(Frame owner, ConfigurationManager conf) throws Exception {
+	public ConfigurationWindow(Frame owner, ConfigurationManager conf)
+			throws Exception {
 		super(owner);
 		setModal(false);
 		this.conf = conf;
+		this.log = Logger.getLogger(this.getClass().getName());
 		initialize();
 	}
 
-
 	/**
 	 * This method initializes this
+	 * 
+	 * @return void
 	 */
 	private void initialize() throws Exception {
 		this.setSize(300, 200);
 		this.setTitle("Preferences");
 		this.setContentPane(getJContentPane());
 	}
-
 
 	/**
 	 * This method initializes jContentPane
@@ -65,10 +78,10 @@ public class ConfigurationWindow extends JDialog {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new BorderLayout());
 			jContentPane.add(getJSplitPane(), BorderLayout.CENTER);
+			jContentPane.add(getButtonPanel(), BorderLayout.SOUTH);
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes treePanel
@@ -90,7 +103,6 @@ public class ConfigurationWindow extends JDialog {
 		return treePanel;
 	}
 
-
 	/**
 	 * This method initializes displayPanel
 	 * 
@@ -105,7 +117,6 @@ public class ConfigurationWindow extends JDialog {
 		return displayPanel;
 	}
 
-
 	/**
 	 * This method initializes jScrollPane
 	 * 
@@ -119,7 +130,6 @@ public class ConfigurationWindow extends JDialog {
 		return jScrollPane;
 	}
 
-
 	/**
 	 * This method initializes configurationTree
 	 * 
@@ -132,17 +142,14 @@ public class ConfigurationWindow extends JDialog {
 		return configurationTree;
 	}
 
-
 	protected void addDisplayPanel(String name, JPanel panel) {
 		displayPanel.add(name, panel);
 	}
-
 
 	protected void showDisplayPanel(String name) {
 		displayLayout.show(displayPanel, name);
 		validate();
 	}
-
 
 	/**
 	 * This method initializes jSplitPane
@@ -159,5 +166,69 @@ public class ConfigurationWindow extends JDialog {
 
 		}
 		return jSplitPane;
+	}
+
+	/**
+	 * This method initializes buttonPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getButtonPanel() {
+		if (buttonPanel == null) {
+			buttonPanel = new JPanel();
+			buttonPanel.setLayout(new FlowLayout());
+			buttonPanel.add(getApplyButton(), null);
+			buttonPanel.add(getCancelButton(), null);
+		}
+		return buttonPanel;
+	}
+
+	/**
+	 * This method initializes applyButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getApplyButton() {
+		if (applyButton == null) {
+			applyButton = new JButton();
+			applyButton.setText("Apply");
+			final ConfigurationWindow win = this;
+			applyButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						((ConfigurationTree) getConfigurationTree())
+								.applyChanges();
+						dispose();
+					} catch (Exception ex) {
+						JOptionPane
+								.showMessageDialog(
+										win,
+										"An unexpected error occurred applying you configuration changes!!!",
+										"Unexpected Error",
+										JOptionPane.ERROR_MESSAGE);
+						log.error(ex.getMessage(), ex);
+					}
+				}
+			});
+		}
+		return applyButton;
+	}
+
+	/**
+	 * This method initializes cancelButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getCancelButton() {
+		if (cancelButton == null) {
+			cancelButton = new JButton();
+			cancelButton.setText("Cancel");
+			cancelButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dispose();
+				}
+			});
+		}
+		return cancelButton;
 	}
 }

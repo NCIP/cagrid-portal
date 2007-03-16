@@ -226,6 +226,9 @@ public class GridApplication extends JFrame {
 	}
 
 
+	/**
+	 * @return
+	 */
 	private JScrollPane getJScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -265,7 +268,7 @@ public class GridApplication extends JFrame {
 	private javax.swing.JMenu getMenu(List toolbarComponents, Menu menu) {
 		javax.swing.JMenu jmenu = new javax.swing.JMenu();
 		jmenu.setText(menu.getTitle());
-		if (menu.getShowIcons().booleanValue()) {
+		if (menu.getShowIcons()) {
 			jmenu.setIcon(IconUtils.loadIcon(menu.getIcon()));
 		}
 		jmenu.setMnemonic(java.awt.event.KeyEvent.VK_F);
@@ -285,7 +288,7 @@ public class GridApplication extends JFrame {
 			Component[] comp = comps.getComponent();
 			if (comp != null) {
 				for (int i = 0; i < comp.length; i++) {
-					jmenu.add(getComponentItem(comp[i], menu.getShowIcons().booleanValue()));
+					jmenu.add(getComponentItem(comp[i], menu.getShowIcons()));
 					if (comp[i].isShowOnToolBar()) {
 						toolbarComponents.add(comp[i]);
 					}

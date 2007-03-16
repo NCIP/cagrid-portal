@@ -16,10 +16,18 @@ import org.cagrid.grape.model.ConfigurationGroup;
 import org.cagrid.grape.model.ConfigurationGroups;
 
 
+/**
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @created Oct 14, 2004
+ * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
+ *          Exp $
+ */
 public class ConfigurationManager {
 
-	private static final String GRAPE_USER_HOME = Utils.getCaGridUserHome().getAbsolutePath() 
-		+ File.separator + "grape";
+	private static final String GRAPE_USER_HOME = Utils.getCaGridUserHome().getAbsolutePath() + File.separator
+		+ "grape";
 
 	private Map confsByName = null;
 

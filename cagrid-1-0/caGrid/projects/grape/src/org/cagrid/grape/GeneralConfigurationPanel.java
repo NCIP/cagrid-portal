@@ -92,6 +92,8 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 
 	/**
 	 * This method initializes this
+	 * 
+	 * @return void
 	 */
 	private void initialize() {
 
@@ -452,12 +454,13 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	private void moveUp() {
 		int index = values.getSelectedIndex();
 		if (index > 0) {
-			Property p = (Property) properties.get(getPropertySelector().getSelectedItem());
+			Property p = (Property) properties.get((String) getPropertySelector().getSelectedItem());
 			Values v = p.getValues();
 			String[] vals = v.getValue();
 			String temp = vals[index - 1];
 			vals[index - 1] = vals[index];
 			vals[index] = temp;
+			this.setChanged(true);
 			loadValues(p);
 			values.setSelectedIndex(index - 1);
 		}
@@ -467,13 +470,14 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	private void moveDown() {
 		int index = values.getSelectedIndex();
 		if (index != -1) {
-			Property p = (Property) properties.get(getPropertySelector().getSelectedItem());
+			Property p = (Property) properties.get((String) getPropertySelector().getSelectedItem());
 			Values v = p.getValues();
 			String[] vals = v.getValue();
 			if (index < (vals.length - 1)) {
 				String temp = vals[index + 1];
 				vals[index + 1] = vals[index];
 				vals[index] = temp;
+				this.setChanged(true);
 				loadValues(p);
 				values.setSelectedIndex(index + 1);
 			}
@@ -489,7 +493,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			return;
 		} else {
 
-			Property p = (Property) properties.get(getPropertySelector().getSelectedItem());
+			Property p = (Property) properties.get((String) getPropertySelector().getSelectedItem());
 			Values v = p.getValues();
 			String[] newVals = null;
 			if (v != null) {
@@ -513,6 +517,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 				newVals[0] = value;
 				v.setValue(newVals);
 			}
+			this.setChanged(true);
 			this.loadValues(p);
 		}
 	}
@@ -524,7 +529,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			showErrorMessage("Error Removing Value", "No value selected, please select a value to remove!!!");
 		} else {
 
-			Property p = (Property) properties.get(getPropertySelector().getSelectedItem());
+			Property p = (Property) properties.get((String) getPropertySelector().getSelectedItem());
 			Values v = p.getValues();
 			String[] vals = v.getValue();
 			if (vals.length == 1) {
@@ -541,6 +546,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 				v.setValue(newVals);
 
 			}
+			this.setChanged(true);
 			this.loadValues(p);
 
 		}

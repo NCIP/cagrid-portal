@@ -87,4 +87,9 @@ public class ConfigurationTree extends JTree {
 		this.reload(getRootNode());
 	}
 
+
+	public void applyChanges() throws Exception {
+		this.rootNode.applyChanges();
+	}
+
 }
