@@ -35,16 +35,14 @@ public class ConfigurationManager {
 
 	private Logger log;
 
-	private ApplicationContext context;
 
 	private Configuration configuration;
 
 
-	public ConfigurationManager(ApplicationContext context, Configuration configuration) throws Exception {
+	public ConfigurationManager(Configuration configuration) throws Exception {
 		confsByName = new HashMap();
 		objectsByName = new HashMap();
 		this.configuration = configuration;
-		this.context = context;
 		log = Logger.getLogger(this.getClass().getName());
 		if (configuration != null) {
 			File f = new File(GRAPE_USER_HOME);

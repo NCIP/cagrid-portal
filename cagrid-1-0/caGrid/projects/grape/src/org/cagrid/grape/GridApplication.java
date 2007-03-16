@@ -78,7 +78,7 @@ public class GridApplication extends JFrame {
 		super();
 		this.app = app;
 		this.threadManager = new MobiusPoolManager();
-		configurationManager = new ConfigurationManager(new ApplicationContext(this), app.getConfiguration());
+		configurationManager = new ConfigurationManager(app.getConfiguration());
 		initialize();
 	}
 
