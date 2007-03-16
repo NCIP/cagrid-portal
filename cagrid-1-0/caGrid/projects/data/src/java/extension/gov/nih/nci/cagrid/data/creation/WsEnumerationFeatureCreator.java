@@ -75,8 +75,8 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 			ExtensionType extType = new ExtensionType();
 			extType.setName(ext.getServiceExtensionDescription().getName());
 			extType.setExtensionType(ext.getExtensionType());
-			ExtensionType[] serviceExtensions = getServiceInformation().getServiceDescriptor().getExtensions()
-				.getExtension();
+			ExtensionType[] serviceExtensions = getServiceInformation()
+				.getServiceDescriptor().getExtensions().getExtension();
 			ExtensionType[] allExtensions = new ExtensionType[serviceExtensions.length + 1];
 			System.arraycopy(serviceExtensions, 0, allExtensions, 0, serviceExtensions.length);
 			allExtensions[allExtensions.length - 1] = extType;
