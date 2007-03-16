@@ -31,6 +31,7 @@ import org.cagrid.grape.utils.IconUtils;
 import org.projectmobius.common.MobiusPoolManager;
 import org.projectmobius.common.MobiusRunnable;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -72,18 +73,20 @@ public class GridApplication extends JFrame {
 
 	private ConfigurationManager configurationManager;
 
+
 	public GridApplication(Application app) throws Exception {
 		super();
 		this.app = app;
 		this.threadManager = new MobiusPoolManager();
-		configurationManager = new ConfigurationManager(new ApplicationContext(
-				this), app.getConfiguration());
+		configurationManager = new ConfigurationManager(new ApplicationContext(this), app.getConfiguration());
 		initialize();
 	}
+
 
 	public MobiusPoolManager getThreadManager() {
 		return threadManager;
 	}
+
 
 	public static void main(String[] args) {
 		File file = null;
@@ -94,8 +97,7 @@ public class GridApplication extends JFrame {
 		} else {
 			file = new File(args[0]);
 			if (!file.exists()) {
-				System.out
-						.println("Invalid configuration file specified, prompting for one...");
+				System.out.println("Invalid configuration file specified, prompting for one...");
 				promptForConfigFile = true;
 			}
 		}
@@ -103,12 +105,9 @@ public class GridApplication extends JFrame {
 			// No config passed, try to prompt for one
 			JFrame tempFrame = new JFrame(); // temp frame to open file
 			// chooser from
-			System.out
-					.println("No configuration file passed in, prompting for one...");
-			JFileChooser chooser = new JFileChooser(System
-					.getProperty("user.dir"));
-			chooser
-					.setDialogTitle("Select an application configuration file to use.");
+			System.out.println("No configuration file passed in, prompting for one...");
+			JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
+			chooser.setDialogTitle("Select an application configuration file to use.");
 			chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setMultiSelectionEnabled(false);
@@ -119,12 +118,11 @@ public class GridApplication extends JFrame {
 				try {
 					file = new File(chooser.getSelectedFile().getAbsolutePath());
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(null, ex.getMessage(),
-							"Error loading file", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, ex.getMessage(), "Error loading file",
+						JOptionPane.ERROR_MESSAGE);
 				}
 			} else {
-				System.err
-						.println("No configuration file passed in or selected... exiting.");
+				System.err.println("No configuration file passed in or selected... exiting.");
 				System.exit(1);
 			}
 			// destroy the temp frame
@@ -132,20 +130,17 @@ public class GridApplication extends JFrame {
 		} else if (args.length > 1) {
 			// invalid usage
 			System.out.println("USAGE:\n");
-			System.out.println("	java " + GridApplication.class.getName()
-					+ " [application-config-file]");
+			System.out.println("	java " + GridApplication.class.getName() + " [application-config-file]");
 			System.exit(1);
 		}
 
 		try {
 
-			Application app = (Application) Utils.deserializeDocument(file
-					.getAbsolutePath(), Application.class);
+			Application app = (Application) Utils.deserializeDocument(file.getAbsolutePath(), Application.class);
 
 			// launch the portal with the passed config
 			GridApplication application = new GridApplication(app);
-			Dimension d = new Dimension(app.getDimensions().getWidth(), app
-					.getDimensions().getHeight());
+			Dimension d = new Dimension(app.getDimensions().getWidth(), app.getDimensions().getHeight());
 
 			try {
 				application.pack();
@@ -163,6 +158,7 @@ public class GridApplication extends JFrame {
 
 	}
 
+
 	private void initialize() throws Exception {
 		try {
 
@@ -174,8 +170,7 @@ public class GridApplication extends JFrame {
 		this.setJMenuBar(getJJMenuBar(toolbarComponents));
 		this.getContentPane().setLayout(new BorderLayout());
 		this.getContentPane().add(getJScrollPane(), BorderLayout.CENTER);
-		this.getContentPane().add(getToolBar(toolbarComponents),
-				BorderLayout.NORTH);
+		this.getContentPane().add(getToolBar(toolbarComponents), BorderLayout.NORTH);
 
 		this.setTitle(app.getName());
 
@@ -188,6 +183,7 @@ public class GridApplication extends JFrame {
 
 	}
 
+
 	private void executeComponent(Component component) {
 		try {
 			ExecuteComponent comp = new ExecuteComponent(this, component);
@@ -197,8 +193,8 @@ public class GridApplication extends JFrame {
 		}
 	}
 
-	private javax.swing.JMenuItem getComponentItem(final Component comp,
-			boolean showIcon) {
+
+	private javax.swing.JMenuItem getComponentItem(final Component comp, boolean showIcon) {
 		JMenuItem item = new javax.swing.JMenuItem();
 		item.setText(comp.getTitle());
 		if (showIcon) {
@@ -212,6 +208,7 @@ public class GridApplication extends JFrame {
 		});
 		return item;
 	}
+
 
 	private javax.swing.JButton getComponentButton(final Component comp) {
 		JButton button = new JButton();
@@ -228,9 +225,7 @@ public class GridApplication extends JFrame {
 		return button;
 	}
 
-	/**
-	 * @return
-	 */
+
 	private JScrollPane getJScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -240,13 +235,13 @@ public class GridApplication extends JFrame {
 		return scrollPane;
 	}
 
+
 	/**
 	 * This method initializes jJMenuBar
 	 * 
 	 * @return javax.swing.JMenuBar
 	 */
-	private javax.swing.JMenuBar getJJMenuBar(List toolbarComponents)
-			throws Exception {
+	private javax.swing.JMenuBar getJJMenuBar(List toolbarComponents) throws Exception {
 		if (jJMenuBar == null) {
 			jJMenuBar = new javax.swing.JMenuBar();
 			jJMenuBar.add(getFileMenu());
@@ -267,11 +262,10 @@ public class GridApplication extends JFrame {
 	}
 
 
-
 	private javax.swing.JMenu getMenu(List toolbarComponents, Menu menu) {
 		javax.swing.JMenu jmenu = new javax.swing.JMenu();
 		jmenu.setText(menu.getTitle());
-		if (menu.getShowIcons()) {
+		if (menu.getShowIcons().booleanValue()) {
 			jmenu.setIcon(IconUtils.loadIcon(menu.getIcon()));
 		}
 		jmenu.setMnemonic(java.awt.event.KeyEvent.VK_F);
@@ -291,7 +285,7 @@ public class GridApplication extends JFrame {
 			Component[] comp = comps.getComponent();
 			if (comp != null) {
 				for (int i = 0; i < comp.length; i++) {
-					jmenu.add(getComponentItem(comp[i], menu.getShowIcons()));
+					jmenu.add(getComponentItem(comp[i], menu.getShowIcons().booleanValue()));
 					if (comp[i].isShowOnToolBar()) {
 						toolbarComponents.add(comp[i]);
 					}
@@ -302,6 +296,7 @@ public class GridApplication extends JFrame {
 		return jmenu;
 	}
 
+
 	/**
 	 * This method initializes windowsMenu
 	 * 
@@ -309,10 +304,11 @@ public class GridApplication extends JFrame {
 	 */
 	private javax.swing.JMenu getWindowsMenu() {
 		if (windowsMenu == null) {
-			windowsMenu = new WindowMenu(getMDIDesktopPane(),this);
+			windowsMenu = new WindowMenu(getMDIDesktopPane(), this);
 		}
 		return windowsMenu;
 	}
+
 
 	/**
 	 * This method initializes fileMenu
@@ -331,6 +327,7 @@ public class GridApplication extends JFrame {
 		}
 		return fileMenu;
 	}
+
 
 	/**
 	 * This method initializes exitMenuItem
@@ -352,11 +349,13 @@ public class GridApplication extends JFrame {
 		return exitMenuItem;
 	}
 
+
 	protected void exit() {
 		System.out.println("Exiting...");
 		System.exit(0);
 
 	}
+
 
 	private javax.swing.JMenu getHelpMenu() {
 		if (helpMenu == null) {
@@ -367,6 +366,7 @@ public class GridApplication extends JFrame {
 		}
 		return helpMenu;
 	}
+
 
 	private javax.swing.JMenuItem getJMenuItem() {
 		if (about == null) {
@@ -383,6 +383,7 @@ public class GridApplication extends JFrame {
 		return about;
 	}
 
+
 	/*
 	 * private void showAboutDialog() { JOptionPane.showMessageDialog(this,
 	 * this.conf.getAboutHTML(), "About: " + this.conf.getApplicationName(),
@@ -390,8 +391,7 @@ public class GridApplication extends JFrame {
 	 */
 	private javax.swing.JToolBar getToolBar(List comps) {
 		if (toolBar == null) {
-			toolBar = new javax.swing.JToolBar("tools",
-					SwingConstants.HORIZONTAL);
+			toolBar = new javax.swing.JToolBar("tools", SwingConstants.HORIZONTAL);
 			for (int i = 0; i < comps.size(); i++) {
 				Component comp = (Component) comps.get(i);
 				toolBar.add(this.getComponentButton(comp));
@@ -402,20 +402,23 @@ public class GridApplication extends JFrame {
 		return toolBar;
 	}
 
+
 	public void addApplicationComponent(ApplicationComponent frame) {
 		this.lastComp = frame;
 		getMDIDesktopPane().add(frame);
 	}
 
-	public void addApplicationComponent(ApplicationComponent frame, int width,
-			int height) {
+
+	public void addApplicationComponent(ApplicationComponent frame, int width, int height) {
 		this.lastComp = frame;
 		getMDIDesktopPane().add(frame, width, height);
 	}
 
+
 	public ApplicationComponent getLastComponent() {
 		return this.lastComp;
 	}
+
 
 	public MDIDesktopPane getMDIDesktopPane() {
 		if (desktop == null) {
@@ -424,9 +427,11 @@ public class GridApplication extends JFrame {
 		return desktop;
 	}
 
+
 	public ConfigurationManager getConfigurationManager() {
 		return configurationManager;
 	}
+
 
 	protected void closeAllFrames() {
 		JInternalFrame[] frameList = getMDIDesktopPane().getAllFrames();
@@ -439,20 +444,21 @@ public class GridApplication extends JFrame {
 		}
 	}
 
+
 	private javax.swing.JMenuItem getCloseMenuItem() {
 		if (closeMenuItem == null) {
 			closeMenuItem = new javax.swing.JMenuItem();
 			closeMenuItem.setText("Close");
 			closeMenuItem.setMnemonic(java.awt.event.KeyEvent.VK_C);
-			closeMenuItem
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							closeFrame();
-						}
-					});
+			closeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					closeFrame();
+				}
+			});
 		}
 		return closeMenuItem;
 	}
+
 
 	/**
 	 * 
@@ -469,6 +475,7 @@ public class GridApplication extends JFrame {
 
 	}
 
+
 	/**
 	 * This method initializes closeAllMenuItem
 	 * 
@@ -479,62 +486,72 @@ public class GridApplication extends JFrame {
 			closeAllMenuItem = new javax.swing.JMenuItem();
 			closeAllMenuItem.setText("Close All");
 			closeAllMenuItem.setMnemonic(java.awt.event.KeyEvent.VK_A);
-			closeAllMenuItem
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							closeAllFrames();
-						}
-					});
+			closeAllMenuItem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					closeAllFrames();
+				}
+			});
 		}
 		return closeAllMenuItem;
 	}
-	
+
+
 	public void showErrorMessage(String msg) {
 		showErrorMessage("Portal Error", msg);
 	}
+
 
 	public void showErrorMessage(Exception e) {
 		showErrorMessage("Portal Error", e);
 	}
 
+
 	public void showConfigurationErrorMessage(String msg) {
-		showErrorMessage("Portal Configuration Error", new String[] {msg});
+		showErrorMessage("Portal Configuration Error", new String[]{msg});
 	}
 
+
 	public void showMessage(String msg) {
-		showMessage(new String[] {msg});
+		showMessage(new String[]{msg});
 	}
-	
-	
+
+
 	public void showMessage(String[] msg) {
 		showMessage("Information", msg);
 	}
 
+
 	public void showMessage(String title, String msg) {
-		showMessage(title, new String[] {msg});
-	}	
-	
+		showMessage(title, new String[]{msg});
+	}
+
+
 	public void showMessage(String title, String[] msg) {
 		JOptionPane.showMessageDialog(this, msg, title, JOptionPane.INFORMATION_MESSAGE);
 	}
+
 
 	public void showErrorMessage(String title, Exception e) {
 		String mess = Utils.getExceptionMessage(e);
 		JOptionPane.showMessageDialog(this, mess, title, JOptionPane.ERROR_MESSAGE);
 	}
 
+
 	public void showErrorMessage(String title, String msg) {
-		showErrorMessage(title, new String[] {msg});
-	}	
-	
-	public void showErrorMessage(String title, String[] msg) {
-		JOptionPane.showMessageDialog(this, msg, title, JOptionPane.ERROR_MESSAGE);		
+		showErrorMessage(title, new String[]{msg});
 	}
+
+
+	public void showErrorMessage(String title, String[] msg) {
+		JOptionPane.showMessageDialog(this, msg, title, JOptionPane.ERROR_MESSAGE);
+	}
+
 
 	static public class ExecuteComponent extends MobiusRunnable {
 		private Component component;
 
 		private GridApplication app;
+
 
 		public ExecuteComponent(GridApplication app, Component comp) {
 			this.component = comp;
@@ -542,21 +559,19 @@ public class GridApplication extends JFrame {
 
 		}
 
+
 		public void execute() {
 			try {
-				ApplicationContext context = new ApplicationContext(app,
-						component);
+				ApplicationContext context = new ApplicationContext(app, component);
 				Class[] inputTypes = new Class[1];
 				inputTypes[0] = ApplicationContext.class;
-				Constructor constructor = Class.forName(
-						component.getClassname()).getConstructor(inputTypes);
+				Constructor constructor = Class.forName(component.getClassname()).getConstructor(inputTypes);
 				Object[] inputs = new Object[1];
 				inputs[0] = context;
-				ApplicationComponent comp = (ApplicationComponent) constructor
-						.newInstance(inputs);
+				ApplicationComponent comp = (ApplicationComponent) constructor.newInstance(inputs);
 				if (component.getDimensions() != null) {
-					app.addApplicationComponent(comp, component.getDimensions()
-							.getWidth(), component.getDimensions().getHeight());
+					app.addApplicationComponent(comp, component.getDimensions().getWidth(), component.getDimensions()
+						.getHeight());
 				} else {
 					app.addApplicationComponent(comp);
 				}

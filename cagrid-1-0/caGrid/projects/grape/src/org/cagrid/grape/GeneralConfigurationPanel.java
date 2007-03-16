@@ -27,6 +27,7 @@ import org.cagrid.grape.configuration.Properties;
 import org.cagrid.grape.configuration.Property;
 import org.cagrid.grape.configuration.Values;
 
+
 public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 
 	private static final long serialVersionUID = 1L;
@@ -73,6 +74,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 
 	private JButton decreaseButton = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -82,14 +84,14 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		initialize();
 	}
 
+
 	public GeneralConfiguration getGeneralConfiguration() {
 		return (GeneralConfiguration) this.getConfigurationObject();
 	}
 
+
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 
@@ -134,6 +136,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		this.add(getActionPanel(), gridBagConstraints12);
 	}
 
+
 	/**
 	 * This method initializes titlePanel
 	 * 
@@ -165,6 +168,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		return titlePanel;
 	}
 
+
 	/**
 	 * This method initializes propertiesPanel
 	 * 
@@ -184,6 +188,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		return propertiesPanel;
 	}
 
+
 	/**
 	 * This method initializes selectorPanel
 	 * 
@@ -198,19 +203,15 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints4.weightx = 1.0;
 			selectorPanel = new JPanel();
-			selectorPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Select Property",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, LookAndFeel.getPanelLabelColor()));
+			selectorPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Property",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			selectorPanel.setLayout(new GridBagLayout());
 			selectorPanel.add(getPropertySelector(), gridBagConstraints4);
 		}
 		return selectorPanel;
 	}
+
 
 	/**
 	 * This method initializes propertySelector
@@ -220,13 +221,11 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	private JComboBox getPropertySelector() {
 		if (propertySelector == null) {
 			propertySelector = new JComboBox();
-			propertySelector
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							setCurrentProperty((String) propertySelector
-									.getSelectedItem());
-						}
-					});
+			propertySelector.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					setCurrentProperty((String) propertySelector.getSelectedItem());
+				}
+			});
 			Properties p = this.getGeneralConfiguration().getProperties();
 			if (p != null) {
 				Property[] props = p.getProperty();
@@ -241,11 +240,13 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		return propertySelector;
 	}
 
+
 	private void setCurrentProperty(String name) {
 		Property p = (Property) properties.get(name);
 		this.getPropertyDescription().setText(p.getDescription());
 		loadValues(p);
 	}
+
 
 	private void loadValues(Property p) {
 		getValues();
@@ -258,6 +259,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			}
 		}
 	}
+
 
 	/**
 	 * This method initializes propertyDescriptionPanel
@@ -274,18 +276,14 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			gridBagConstraints5.weightx = 1.0;
 			propertyDescriptionPanel = new JPanel();
 			propertyDescriptionPanel.setLayout(new GridBagLayout());
-			propertyDescriptionPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Description",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, LookAndFeel.getPanelLabelColor()));
+			propertyDescriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Description",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			propertyDescriptionPanel.add(getJScrollPane(), gridBagConstraints5);
 		}
 		return propertyDescriptionPanel;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane
@@ -299,6 +297,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		}
 		return jScrollPane;
 	}
+
 
 	/**
 	 * This method initializes propertyDescription
@@ -314,6 +313,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		}
 		return propertyDescription;
 	}
+
 
 	/**
 	 * This method initializes valuesPanel
@@ -337,16 +337,15 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			gridBagConstraints10.weightx = 1.0;
 			valuesPanel = new JPanel();
 			valuesPanel.setLayout(new GridBagLayout());
-			valuesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Values",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					LookAndFeel.getPanelLabelColor()));
+			valuesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Values",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			valuesPanel.add(getJScrollPane1(), gridBagConstraints10);
 			valuesPanel.add(getPriorityPanel(), gridBagConstraints6);
 		}
 		return valuesPanel;
 	}
+
 
 	/**
 	 * This method initializes values
@@ -361,6 +360,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		}
 		return values;
 	}
+
 
 	/**
 	 * This method initializes actionPanel
@@ -388,16 +388,13 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			actionPanel.add(getValueToAdd(), gridBagConstraints7);
 			actionPanel.add(getAddButton(), gridBagConstraints8);
 			actionPanel.add(getRemoveButton(), gridBagConstraints9);
-			actionPanel.setBorder(javax.swing.BorderFactory
-					.createTitledBorder(
-							null,
-							"Add/Remove Value(s)",
-							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-							javax.swing.border.TitledBorder.DEFAULT_POSITION,
-							null, LookAndFeel.getPanelLabelColor()));
+			actionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Add/Remove Value(s)",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 		}
 		return actionPanel;
 	}
+
 
 	/**
 	 * This method initializes valueToAdd
@@ -410,6 +407,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		}
 		return valueToAdd;
 	}
+
 
 	/**
 	 * This method initializes addButton
@@ -430,6 +428,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		return addButton;
 	}
 
+
 	/**
 	 * This method initializes removeButton
 	 * 
@@ -449,26 +448,26 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		return removeButton;
 	}
 
+
 	private void moveUp() {
 		int index = values.getSelectedIndex();
 		if (index > 0) {
-			Property p = (Property) properties
-					.get((String) getPropertySelector().getSelectedItem());
+			Property p = (Property) properties.get(getPropertySelector().getSelectedItem());
 			Values v = p.getValues();
 			String[] vals = v.getValue();
 			String temp = vals[index - 1];
 			vals[index - 1] = vals[index];
 			vals[index] = temp;
 			loadValues(p);
-			values.setSelectedIndex(index-1);
+			values.setSelectedIndex(index - 1);
 		}
 	}
+
 
 	private void moveDown() {
 		int index = values.getSelectedIndex();
 		if (index != -1) {
-			Property p = (Property) properties
-					.get((String) getPropertySelector().getSelectedItem());
+			Property p = (Property) properties.get(getPropertySelector().getSelectedItem());
 			Values v = p.getValues();
 			String[] vals = v.getValue();
 			if (index < (vals.length - 1)) {
@@ -476,22 +475,21 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 				vals[index + 1] = vals[index];
 				vals[index] = temp;
 				loadValues(p);
-				values.setSelectedIndex(index+1);
+				values.setSelectedIndex(index + 1);
 			}
-			
+
 		}
 	}
+
 
 	private void addValue() {
 		String value = Utils.clean(valueToAdd.getText());
 		if (value == null) {
-			showErrorMessage("Error Adding Value",
-					"No value specified, please specify a value to add!!!");
+			showErrorMessage("Error Adding Value", "No value specified, please specify a value to add!!!");
 			return;
 		} else {
 
-			Property p = (Property) properties
-					.get((String) getPropertySelector().getSelectedItem());
+			Property p = (Property) properties.get(getPropertySelector().getSelectedItem());
 			Values v = p.getValues();
 			String[] newVals = null;
 			if (v != null) {
@@ -519,15 +517,14 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		}
 	}
 
+
 	private void removeValue() {
 		int index = values.getSelectedIndex();
 		if (index == -1) {
-			showErrorMessage("Error Removing Value",
-					"No value selected, please select a value to remove!!!");
+			showErrorMessage("Error Removing Value", "No value selected, please select a value to remove!!!");
 		} else {
 
-			Property p = (Property) properties
-					.get((String) getPropertySelector().getSelectedItem());
+			Property p = (Property) properties.get(getPropertySelector().getSelectedItem());
 			Values v = p.getValues();
 			String[] vals = v.getValue();
 			if (vals.length == 1) {
@@ -549,14 +546,16 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		}
 	}
 
+
 	public void showErrorMessage(String title, String msg) {
-		showErrorMessage(title, new String[] { msg });
+		showErrorMessage(title, new String[]{msg});
 	}
 
+
 	public void showErrorMessage(String title, String[] msg) {
-		JOptionPane.showMessageDialog(this, msg, title,
-				JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, msg, title, JOptionPane.ERROR_MESSAGE);
 	}
+
 
 	/**
 	 * This method initializes jScrollPane1
@@ -571,10 +570,11 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		return jScrollPane1;
 	}
 
+
 	/**
-	 * This method initializes priorityPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes priorityPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPriorityPanel() {
 		if (priorityPanel == null) {
@@ -586,10 +586,11 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		return priorityPanel;
 	}
 
+
 	/**
-	 * This method initializes increaseButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes increaseButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getIncreaseButton() {
 		if (increaseButton == null) {
@@ -605,10 +606,11 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		return increaseButton;
 	}
 
+
 	/**
-	 * This method initializes decreaseButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes decreaseButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getDecreaseButton() {
 		if (decreaseButton == null) {

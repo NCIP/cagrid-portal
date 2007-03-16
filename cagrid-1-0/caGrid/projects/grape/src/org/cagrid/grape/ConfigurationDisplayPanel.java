@@ -8,6 +8,7 @@ import java.awt.Insets;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+
 public class ConfigurationDisplayPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -18,6 +19,7 @@ public class ConfigurationDisplayPanel extends JPanel {
 
 	private JLabel logo = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -25,13 +27,12 @@ public class ConfigurationDisplayPanel extends JPanel {
 		super();
 		this.message = message;
 		initialize();
-		
+
 	}
+
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
