@@ -66,8 +66,8 @@ public class StatisticsServer {
 						String msg = new String(buffer, 0, packet.getLength());
 						SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 						Date date = new Date(System.currentTimeMillis());
-						System.out.println(formatter.format(date) + "\n\tHOST:\t\t" + packet.getAddress().getHostName() + msg);
-						fw.append(formatter.format(date) + "\t" + packet.getAddress().getHostName() + "| " + msg + "\n");
+						System.out.println(formatter.format(date) + "\n\tHOST:\t\t" + packet.getAddress().getHostName() + msg + "\n");
+						fw.append(formatter.format(date) + "\n\tHOST:\t\t" + packet.getAddress().getHostName() + msg + "\n\n");
 						fw.flush();
 						// Reset the length of the packet before reusing it.
 						packet.setLength(buffer.length);
