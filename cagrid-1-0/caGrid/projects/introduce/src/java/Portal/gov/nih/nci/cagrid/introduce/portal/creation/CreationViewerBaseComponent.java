@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
+import gov.nih.nci.cagrid.introduce.statistics.StatisticsClient;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -116,6 +117,8 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 						}
 
 						setProgressText("Creating service...");
+						
+						StatisticsClient.sendCreatedServiceStat(CommonTools.getIntroduceVersion(), serviceName,serviceNsDomain,serviceExtensions);
 
 						String cmd = CommonTools.getAntSkeletonCreationCommand(".", serviceName, dirName, packageName,
 							serviceNsDomain, serviceExtensions);

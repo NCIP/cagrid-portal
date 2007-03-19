@@ -1190,4 +1190,40 @@ public class CommonTools {
 		}
 		return null;
 	}
+
+
+	public static String getStatisticSite() {
+		Properties engineProps = new Properties();
+		try {
+			engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
+			return (String) engineProps.get(IntroduceConstants.INTRODUCE_STATS_SITE);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
+	public static int getStatisticPort() {
+		Properties engineProps = new Properties();
+		try {
+			engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
+			return Integer.parseInt((String) engineProps.get(IntroduceConstants.INTRODUCE_STATS_PORT));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
+
+	public static boolean getCollectStats() {
+		Properties engineProps = new Properties();
+		try {
+			engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
+			return new Boolean((String) engineProps.get(IntroduceConstants.INTRODUCE_STATS_COLLECT)).booleanValue();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

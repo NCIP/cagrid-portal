@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.statistics.StatisticsClient;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -272,10 +273,11 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			deployButton.setIcon(IntroduceLookAndFeel.getDeployIcon());
 			deployButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
-						"Deployment") {
+					BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),"Deployment") {
 
 						public void process() {
+							StatisticsClient.sendDeployedServiceStat(CommonTools.getIntroduceVersion(),introService.getServices().getService(0).getName(),introService.getServices().getService(0).getNamespace(),(String) getDeploymentTypeSelector().getSelectedItem());
+							
 							setProgressText("setting introduce resource properties...");
 
 							try {

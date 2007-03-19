@@ -50,6 +50,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeN
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.statistics.StatisticsClient;
 import gov.nih.nci.cagrid.introduce.upgrade.UpgradeManager;
 
 import java.awt.CardLayout;
@@ -1393,9 +1394,12 @@ public class ModificationViewer extends GridPortalComponent {
 			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(), "Save") {
 				public void process() {
 					try {
+						
 						// set the service description
 						info.getServices().getService(0).setDescription(getDescriptionTextArea().getText());
 
+						StatisticsClient.sendModifiedServiceStat(CommonTools.getIntroduceVersion(),info.getServices().getService(0).getName(),info.getServices().getService(0).getNamespace());
+						
 						// walk the namespaces and make sure they are valid
 						setProgressText("validating namespaces");
 						NamespacesType namespaces = info.getNamespaces();

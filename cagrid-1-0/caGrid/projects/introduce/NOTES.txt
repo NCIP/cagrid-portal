@@ -18,6 +18,8 @@ support registration on resources
 
 To Do:  
 
+when updating introduce software there will be a problem with the files in the users home space that will need to also be updated.
+
 need to clean up config params and deploy params to have "display" names
 
 need to validate soapfix
@@ -74,7 +76,7 @@ need to fix the mem and stackoverflow issue on the mac.
 
 Test the lifetime resource
 
-done)fix documentation link in installer and make sure relavent documentation is in there
+(done)fix documentation link in installer and make sure relavent documentation is in there
 
 look at the upper case vs lower case methods issues.....
 

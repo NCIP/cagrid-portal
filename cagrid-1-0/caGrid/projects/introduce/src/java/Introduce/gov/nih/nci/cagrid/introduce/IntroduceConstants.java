@@ -22,6 +22,12 @@ public class IntroduceConstants {
 	public static final String INTRODUCE_VERSION_PROPERTY = "introduce.version";
 
 	public static final String INTRODUCE_UPDATE_SITE_PROPERTY = "introduce.update.site";
+	
+	public static final String INTRODUCE_STATS_SITE = "introduce.statistics.site";
+	
+	public static final String INTRODUCE_STATS_PORT = "introduce.statistics.port";
+	
+	public static final String INTRODUCE_STATS_COLLECT = "introduce.statistics.collect";
 
 	public static final String INTRODUCE_ENGINE_PROPERTIES = "conf/introduce/introduce.engine.properties";
 
