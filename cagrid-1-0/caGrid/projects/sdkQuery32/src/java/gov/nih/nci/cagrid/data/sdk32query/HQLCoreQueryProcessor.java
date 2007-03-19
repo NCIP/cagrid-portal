@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created May 2, 2006 
- * @version $Id: HQLCoreQueryProcessor.java,v 1.3 2006-11-09 14:58:12 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessor.java,v 1.4 2007-03-19 14:18:00 dervin Exp $ 
  */
 public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	public static final String DEFAULT_LOCALHOST_CACORE_URL = "http://localhost:8080/cacore31/server/HTTPServer";
@@ -135,7 +135,7 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	}
 	
 	
-	private List queryCoreService(CQLQuery query) 
+	protected List queryCoreService(CQLQuery query) 
 		throws MalformedQueryException, QueryProcessingException {
 		// get the caCORE application service
 		ApplicationService service = getApplicationService();

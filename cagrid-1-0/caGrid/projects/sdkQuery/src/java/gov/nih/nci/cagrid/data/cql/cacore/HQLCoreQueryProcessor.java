@@ -119,7 +119,7 @@ public class HQLCoreQueryProcessor extends CQLQueryProcessor {
 	}
 	
 	
-	private List queryCoreService(CQLQuery query) 
+	protected List queryCoreService(CQLQuery query) 
 		throws MalformedQueryException, QueryProcessingException {
 		// get the caCORE application service
 		ApplicationService service = getApplicationService();
