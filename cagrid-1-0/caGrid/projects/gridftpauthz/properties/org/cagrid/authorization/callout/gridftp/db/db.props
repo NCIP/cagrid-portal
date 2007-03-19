@@ -1,0 +1,3 @@
+db.connecturi=jdbc:hsqldb:hsql://localhost/gridftp_authorization
+db.user=sa
+db.password=
