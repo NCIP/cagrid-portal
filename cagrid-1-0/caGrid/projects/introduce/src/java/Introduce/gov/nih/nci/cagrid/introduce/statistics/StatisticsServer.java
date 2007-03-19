@@ -33,7 +33,7 @@ public class StatisticsServer {
 		File logFile = new File(LOG_FILE);
 		FileWriter wr = null;
 		try {
-			wr = new FileWriter(logFile);
+			wr = new FileWriter(logFile, true);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
