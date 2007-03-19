@@ -144,7 +144,7 @@
                 <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
                 <name>GeneralConfiguration</name>
             </qname>
-            <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationPanel</ConfigurationPanel>
+            <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
             <DefaultFile>conf/general-configuration-example.xml</DefaultFile>
         </ConfigurationDescriptor>
         </ConfigurationDescriptors>

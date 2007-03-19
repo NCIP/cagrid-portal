@@ -13,13 +13,12 @@ import org.cagrid.grape.model.ConfigurationEditor;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public abstract class ConfigurationBasePanel extends JPanel {
+public abstract class ConfigurationEditorBasePanel extends JPanel {
 
 	private Object configurationObject;
-	private ConfigurationDescriptorTreeNode treeNode;
+	private ConfigurationEditorTreeNode treeNode;
 
-
-	public ConfigurationBasePanel(ConfigurationDescriptorTreeNode treeNode,Object conf) {
+	public ConfigurationEditorBasePanel(ConfigurationEditorTreeNode treeNode,Object conf) {
 		this.configurationObject = conf;
 		this.setTreeNode(treeNode);
 	}
@@ -29,19 +28,20 @@ public abstract class ConfigurationBasePanel extends JPanel {
 		return configurationObject;
 	}
 	
-	
-	
-	public ConfigurationDescriptorTreeNode getTreeNode() {
+	public void addEditor(ConfigurationEditor editor, Object object) throws Exception{
+		getTreeNode().addConfigurationEditor(editor, object);
+	}
+
+
+	public ConfigurationEditorTreeNode getTreeNode() {
 		return treeNode;
 	}
 
 
-	public void setTreeNode(ConfigurationDescriptorTreeNode treeNode) {
+	public void setTreeNode(ConfigurationEditorTreeNode treeNode) {
 		this.treeNode = treeNode;
 	}
+	
+	
 
-
-	public void addEditor(ConfigurationEditor editor, Object object) throws Exception{
-		getTreeNode().addConfigurationEditor(editor, object);
-	}
 }

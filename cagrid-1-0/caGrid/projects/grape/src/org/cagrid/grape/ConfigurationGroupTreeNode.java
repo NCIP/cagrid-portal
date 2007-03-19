@@ -26,15 +26,6 @@ public class ConfigurationGroupTreeNode extends ConfigurationBaseTreeNode {
 		this.setDisplayPanel(new ConfigurationDisplayPanel(group.getName()));
 	}
 
-
-	public void applyChanges() throws Exception {
-		for (int i = 0; i < this.getChildCount(); i++) {
-			ConfigurationBaseTreeNode node = (ConfigurationBaseTreeNode) getChildAt(i);
-			node.applyChanges();
-		}
-	}
-
-
 	public ImageIcon getIcon() {
 		return LookAndFeel.getConfigurationGroupIcon();
 	}

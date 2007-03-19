@@ -3,6 +3,8 @@ package org.cagrid.grape;
 import javax.swing.ImageIcon;
 
 import org.cagrid.grape.model.Configuration;
+import org.cagrid.grape.model.ConfigurationGroup;
+import org.cagrid.grape.model.ConfigurationGroups;
 
 
 /**
@@ -30,12 +32,15 @@ public class ConfigurationTreeNode extends ConfigurationBaseTreeNode {
 		}
 
 	}
-
-
-	public void applyChanges() throws Exception {
-		for (int i = 0; i < this.getChildCount(); i++) {
-			ConfigurationBaseTreeNode node = (ConfigurationBaseTreeNode) getChildAt(i);
-			node.applyChanges();
+	
+	protected void processConfigurationGroups(ConfigurationGroups list) throws Exception {
+		if (list != null) {
+			ConfigurationGroup[] group = list.getConfigurationGroup();
+			if (group != null) {
+				for (int i = 0; i < group.length; i++) {
+					this.processConfigurationGroup(group[i]);
+				}
+			}
 		}
 	}
 

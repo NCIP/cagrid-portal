@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Window;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -567,6 +569,8 @@ public class GridApplication extends JFrame {
 	public void showErrorMessage(String title, String[] msg) {
 		JOptionPane.showMessageDialog(this, msg, title, JOptionPane.ERROR_MESSAGE);
 	}
+	
+	
 
 
 	static public class ExecuteComponent extends MobiusRunnable {

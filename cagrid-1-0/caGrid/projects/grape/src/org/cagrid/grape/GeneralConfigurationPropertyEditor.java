@@ -7,12 +7,9 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -22,13 +19,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
-import org.cagrid.grape.configuration.GeneralConfiguration;
-import org.cagrid.grape.configuration.Properties;
 import org.cagrid.grape.configuration.Property;
 import org.cagrid.grape.configuration.Values;
 
 
-public class GeneralConfigurationPanel extends ConfigurationBasePanel {
+public class GeneralConfigurationPropertyEditor extends ConfigurationEditorBasePanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,14 +32,6 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	private JLabel titleLabel = null;
 
 	private JLabel icon = null;
-
-	private Map properties;
-
-	private JPanel propertiesPanel = null;
-
-	private JPanel selectorPanel = null;
-
-	private JComboBox propertySelector = null;
 
 	private JPanel propertyDescriptionPanel = null;
 
@@ -78,15 +65,14 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	/**
 	 * This is the default constructor
 	 */
-	public GeneralConfigurationPanel(ConfigurationDescriptorTreeNode treeNode,Object conf) {
-		super(treeNode,conf);
-		this.properties = new HashMap();
+	public GeneralConfigurationPropertyEditor(ConfigurationEditorTreeNode treeNode, Object property) {
+		super(treeNode,property);
 		initialize();
 	}
 
 
-	public GeneralConfiguration getGeneralConfiguration() {
-		return (GeneralConfiguration) this.getConfigurationObject();
+	public Property getProperty() {
+		return (Property) this.getConfigurationObject();
 	}
 
 
@@ -102,12 +88,12 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints12.weightx = 1.0D;
 		gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
-		gridBagConstraints12.gridy = 4;
+		gridBagConstraints12.gridy = 3;
 		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 		gridBagConstraints31.gridx = 0;
 		gridBagConstraints31.weighty = 1.0D;
 		gridBagConstraints31.fill = GridBagConstraints.BOTH;
-		gridBagConstraints31.gridy = 3;
+		gridBagConstraints31.gridy = 2;
 		gridBagConstraints31.weightx = 1.0D;
 		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 		gridBagConstraints21.gridx = 0;
@@ -115,13 +101,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		gridBagConstraints21.weightx = 1.0D;
 		gridBagConstraints21.weighty = 0.0D;
 		gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
-		gridBagConstraints21.gridy = 2;
-		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-		gridBagConstraints11.gridx = 0;
-		gridBagConstraints11.weightx = 1.0D;
-		gridBagConstraints11.weighty = 0.0D;
-		gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints11.gridy = 1;
+		gridBagConstraints21.gridy = 1;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -132,7 +112,6 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		this.setSize(500, 400);
 		this.setLayout(new GridBagLayout());
 		this.add(getTitlePanel(), gridBagConstraints);
-		this.add(getPropertiesPanel(), gridBagConstraints11);
 		this.add(getPropertyDescriptionPanel(), gridBagConstraints21);
 		this.add(getValuesPanel(), gridBagConstraints31);
 		this.add(getActionPanel(), gridBagConstraints12);
@@ -160,7 +139,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.gridx = 1;
 			titleLabel = new JLabel();
-			titleLabel.setText(getGeneralConfiguration().getName());
+			titleLabel.setText(getProperty().getName());
 			titleLabel.setFont(new Font("Dialog", Font.BOLD, 14));
 			titlePanel = new JPanel();
 			titlePanel.setLayout(new GridBagLayout());
@@ -171,89 +150,9 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	}
 
 
-	/**
-	 * This method initializes propertiesPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getPropertiesPanel() {
-		if (propertiesPanel == null) {
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 0;
-			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints3.weightx = 1.0D;
-			gridBagConstraints3.gridy = 0;
-			propertiesPanel = new JPanel();
-			propertiesPanel.setLayout(new GridBagLayout());
-			propertiesPanel.add(getSelectorPanel(), gridBagConstraints3);
-		}
-		return propertiesPanel;
-	}
-
-
-	/**
-	 * This method initializes selectorPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getSelectorPanel() {
-		if (selectorPanel == null) {
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints4.gridx = 0;
-			gridBagConstraints4.gridy = 0;
-			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints4.weightx = 1.0;
-			selectorPanel = new JPanel();
-			selectorPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Property",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
-			selectorPanel.setLayout(new GridBagLayout());
-			selectorPanel.add(getPropertySelector(), gridBagConstraints4);
-		}
-		return selectorPanel;
-	}
-
-
-	/**
-	 * This method initializes propertySelector
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getPropertySelector() {
-		if (propertySelector == null) {
-			propertySelector = new JComboBox();
-			propertySelector.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					setCurrentProperty((String) propertySelector.getSelectedItem());
-				}
-			});
-			Properties p = this.getGeneralConfiguration().getProperties();
-			if (p != null) {
-				Property[] props = p.getProperty();
-				if (props != null) {
-					for (int i = 0; i < props.length; i++) {
-						properties.put(props[i].getName(), props[i]);
-						propertySelector.addItem(props[i].getName());
-					}
-				}
-			}
-		}
-		return propertySelector;
-	}
-
-
-	private void setCurrentProperty(String name) {
-		Property p = (Property) properties.get(name);
-		this.getPropertyDescription().setText(p.getDescription());
-		loadValues(p);
-	}
-
-
-	private void loadValues(Property p) {
-		getValues();
+	private void loadValues() {
 		this.valuesModel.removeAllElements();
-		Values v = p.getValues();
+		Values v = getProperty().getValues();
 		if (v != null) {
 			String[] vals = v.getValue();
 			for (int i = 0; i < vals.length; i++) {
@@ -312,6 +211,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			propertyDescription.setLineWrap(true);
 			propertyDescription.setFont(new Font("Arial", Font.PLAIN, 10));
 			propertyDescription.setEditable(false);
+			propertyDescription.setText(getProperty().getDescription());
 		}
 		return propertyDescription;
 	}
@@ -359,6 +259,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			valuesModel = new DefaultListModel();
 			values = new JList(valuesModel);
 			values.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			loadValues();
 		}
 		return values;
 	}
@@ -454,13 +355,13 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	private void moveUp() {
 		int index = values.getSelectedIndex();
 		if (index > 0) {
-			Property p = (Property) properties.get((String) getPropertySelector().getSelectedItem());
+			Property p = getProperty();
 			Values v = p.getValues();
 			String[] vals = v.getValue();
 			String temp = vals[index - 1];
 			vals[index - 1] = vals[index];
 			vals[index] = temp;
-			loadValues(p);
+			loadValues();
 			values.setSelectedIndex(index - 1);
 		}
 	}
@@ -469,14 +370,14 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	private void moveDown() {
 		int index = values.getSelectedIndex();
 		if (index != -1) {
-			Property p = (Property) properties.get((String) getPropertySelector().getSelectedItem());
+			Property p = getProperty();
 			Values v = p.getValues();
 			String[] vals = v.getValue();
 			if (index < (vals.length - 1)) {
 				String temp = vals[index + 1];
 				vals[index + 1] = vals[index];
 				vals[index] = temp;
-				loadValues(p);
+				loadValues();
 				values.setSelectedIndex(index + 1);
 			}
 
@@ -491,7 +392,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			return;
 		} else {
 
-			Property p = (Property) properties.get((String) getPropertySelector().getSelectedItem());
+			Property p = getProperty();
 			Values v = p.getValues();
 			String[] newVals = null;
 			if (v != null) {
@@ -515,7 +416,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 				newVals[0] = value;
 				v.setValue(newVals);
 			}
-			this.loadValues(p);
+			this.loadValues();
 		}
 	}
 
@@ -526,7 +427,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			showErrorMessage("Error Removing Value", "No value selected, please select a value to remove!!!");
 		} else {
 
-			Property p = (Property) properties.get((String) getPropertySelector().getSelectedItem());
+			Property p = getProperty();
 			Values v = p.getValues();
 			String[] vals = v.getValue();
 			if (vals.length == 1) {
@@ -543,7 +444,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 				v.setValue(newVals);
 
 			}
-			this.loadValues(p);
+			this.loadValues();
 
 		}
 	}

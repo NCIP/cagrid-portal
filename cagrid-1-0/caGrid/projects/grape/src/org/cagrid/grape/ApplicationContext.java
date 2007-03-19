@@ -1,5 +1,10 @@
 package org.cagrid.grape;
 
+import java.awt.Dimension;
+import java.awt.Window;
+
+import javax.swing.JComponent;
+
 import org.cagrid.grape.model.Component;
 
 
@@ -46,6 +51,26 @@ public class ApplicationContext {
 
 	public ConfigurationManager getConfigurationManager() {
 		return this.application.getConfigurationManager();
+	}
+	
+	public void centerComponent(JComponent comp) {
+		// Determine the new location of the window
+		int w = application.getSize().width;
+		int h =application.getSize().height;
+		int x = application.getLocationOnScreen().x;
+		int y = application.getLocationOnScreen().y;
+		Dimension dim = comp.getSize();
+		comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
+	}
+
+	public void centerWindow(Window comp) {
+		// Determine the new location of the window
+		int w = application.getSize().width;
+		int h = application.getSize().height;
+		int x = application.getLocationOnScreen().x;
+		int y = application.getLocationOnScreen().y;
+		Dimension dim = comp.getSize();
+		comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
 	}
 
 }

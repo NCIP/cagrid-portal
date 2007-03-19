@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -34,7 +35,6 @@ public class ConfigurationManager {
 	private Map objectsByName = null;
 
 	private Logger log;
-
 
 	private Configuration configuration;
 
@@ -143,9 +143,18 @@ public class ConfigurationManager {
 	}
 
 
-	public void save(String systemName, Object obj) throws Exception {
+	public void saveAll() throws Exception {
+		Iterator itr = objectsByName.keySet().iterator();
+		while (itr.hasNext()) {
+			save((String) itr.next());
+		}
+	}
+
+
+	public void save(String systemName) throws Exception {
 		try {
 			ConfigurationDescriptor des = getConfigurationDescriptor(systemName);
+			Object obj = objectsByName.get(systemName);
 			File conf = new File(GRAPE_USER_HOME + File.separator + des.getSystemName() + "-conf.xml");
 			QName ns = new QName(des.getQname().getNamespace(), des.getQname().getName());
 			Utils.serializeDocument(conf.getAbsolutePath(), obj, ns);

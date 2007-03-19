@@ -200,12 +200,12 @@ public class ConfigurationWindow extends JDialog {
 	private JButton getApplyButton() {
 		if (applyButton == null) {
 			applyButton = new JButton();
-			applyButton.setText("Apply");
+			applyButton.setText("Save");
 			final ConfigurationWindow win = this;
 			applyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						((ConfigurationTree) getConfigurationTree()).applyChanges();
+						GridApplication.getContext().getConfigurationManager().saveAll();
 						dispose();
 					} catch (Exception ex) {
 						JOptionPane.showMessageDialog(win,
