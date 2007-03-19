@@ -8,14 +8,11 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 
 public class StatisticsServer {
-	private static final int BUFFERSIZE = 256;
 	private static final String LOG_FILE = "introduceStatistics.log";
 	private int port;
 	private DatagramSocket dsocket;
