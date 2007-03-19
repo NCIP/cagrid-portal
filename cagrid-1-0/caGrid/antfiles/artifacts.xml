@@ -522,6 +522,18 @@
             </fileset>
         </artifact>
 
+        <artifact track="main" type="jars" id="gridftp.authz.jars">
+            <generatingantcall target="build-gridftpauthz" />
+            <fileset dir="${projects.dir}/gridftp/build/lib">
+                <include name="*-gridftpauthz*.jar" />
+                <exclude name="*test*.jar" />
+            </fileset>
+			<!-- dependent project would need hsqldb.jar -->
+            <fileset dir="${projects.dir}/gridftp/lib">
+                <include name="hsqldb.jar" />
+            </fileset>
+        </artifact>
+
 
         <!-- Authz uses this as a dependency. If you need to use 
 		Authz in your project, don't use this. Use authz.jars -->
