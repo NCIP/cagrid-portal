@@ -524,12 +524,13 @@
 
         <artifact track="main" type="jars" id="gridftp.authz.jars">
             <generatingantcall target="build-gridftpauthz" />
-            <fileset dir="${projects.dir}/gridftp/build/lib">
+			<property name="gridftpauthz.dir}" value="gridftpauthz"/>
+            <fileset dir="${projects.dir}/${gridftpauthz.dir}/build/lib">
                 <include name="*-gridftpauthz*.jar" />
                 <exclude name="*test*.jar" />
             </fileset>
 			<!-- dependent project would need hsqldb.jar -->
-            <fileset dir="${projects.dir}/gridftp/lib">
+            <fileset dir="${projects.dir}/${gridftpauthz.dir}/lib">
                 <include name="hsqldb.jar" />
             </fileset>
         </artifact>
