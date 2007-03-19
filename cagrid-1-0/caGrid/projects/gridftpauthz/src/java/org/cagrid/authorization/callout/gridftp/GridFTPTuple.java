@@ -85,4 +85,8 @@ public class GridFTPTuple {
 	public String getURL() {
 		return _url;
 	}
+	
+	public String toString() {
+		return "(" + _identity + "," + _operation + "," + _url + ")";
+	}
 }

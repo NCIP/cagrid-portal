@@ -15,5 +15,6 @@
 	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/grouper.jar"/>
 	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/subject-0.2.1.jar"/>
+	<classpathentry kind="lib" path="properties"/>
 	<classpathentry kind="output" path="output/classes"/>
 </classpath>

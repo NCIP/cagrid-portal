@@ -69,7 +69,7 @@ import org.cagrid.authorization.callout.gridftp.UnknownOperationException;
   * @author <A HREF="MAILTO:jpermar@bmi.osu.edu">Justin Permar</A>
   * 
   * @created Mar 5, 2007 
-  * @version $Id: DBUtil.java,v 1.1 2007-03-19 16:58:43 jpermar Exp $
+  * @version $Id: DBUtil.java,v 1.2 2007-03-19 23:34:00 jpermar Exp $
  */
 public class DBUtil {
 
@@ -352,16 +352,18 @@ public class DBUtil {
     }    // void update()
 
 	public static void main(String[] args) throws DatabaseException, UnknownOperationException, MalformedURLException {
-		String connectionString = "jdbc:hsqldb:hsql://irondale.bmi.ohio-state.edu/" + DB_NAME;
+		String connectionString = "jdbc:hsqldb:hsql://irondale/" + DB_NAME;
 		String dbuser = "sa";
-		String password = "ch3ck1t@uth";
+		String password = "";
 		DBUtil util = new DBUtil(connectionString, dbuser, password);
 		String user = "/O=cagrid.org/OU=training/OU=caBIG User Group/OU=IdP [1]/CN=gridftp";
-		String operation = "read";
-		GridFTPOperation.Operation authOp = GridFTPOperation.toAuthOperation(operation);
-		String url = "ftp://irondale.bmi.ohio-state.edu/tmp/yayo";
+		GridFTPOperation.Operation authOp = GridFTPOperation.Operation.READ;
+		String url = "ftp://irondale/tmp/yayo";
 		GridFTPTuple tuple = new GridFTPTuple(user, authOp, url);
 		util.insertTuple(tuple);
+		String url2 = "ftp://irondale/tmp/yayo2";
+		util.insertTuple(new GridFTPTuple(user, GridFTPOperation.Operation.CREATE, url2));
+		util.insertTuple(new GridFTPTuple(user, GridFTPOperation.Operation.WRITE, url2));
 		System.out.println(util.tupleExists(tuple));
 		//util.removeTuple(tuple);
 		//System.out.println(util.tupleExists(tuple));
