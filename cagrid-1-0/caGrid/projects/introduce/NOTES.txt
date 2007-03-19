@@ -16,17 +16,13 @@ support registration on resources
 
 ==============================================================================================================================
 
-To Do:
-
-need to create upgrader additions for new PDP style, or need to make sure it calls sync.  
+To Do:  
 
 need to clean up config params and deploy params to have "display" names
 
 need to validate soapfix
 
 need to validate that namespace exist policy on the descovery tools is working. (Globus one does not do anything curently and not sure if scotts cadsr one has been moved forward)
-
-if provider is checked then authorization needs to be disable.
 
 reload preferences from defaults
 
@@ -36,15 +32,10 @@ when adding a serviceContext and then adding a method that returns its referece
 before you hit save, then when you hit save the reference type is not yet in the
 namespaceType list and therefore cant be refered to yet
 
-
-on save etc i have seen unable to delete namespace2package.mappings.
-
 Introduce Portal (or something it uses) is leaving file handles open
   - when i create a service, then close the mod viewer, and try to create it again, it can't delete the creation dir
 
 jaxmejs is leaving file handles laying around somewhere. (update.. System.gc call is owrking for now, might have to patch jaxmejs)
-
-solve timing problems in the addComplexTypeTest.....
 
 add tests to system tests for (coverage report shows no coverage):
 - (DONE) SystemProperties
@@ -60,6 +51,13 @@ add tests to system tests for (coverage report shows no coverage):
 add a .cvsignore file to generated skeletons that includes the gar.  my right mouse button is slowly wearing out... and i am lazy...
 
 ============================ D O N E ================================================================
+solve timing problems in the addComplexTypeTest.....
+
+on save etc i have seen unable to delete namespace2package.mappings.
+
+if provider is checked then authorization needs to be disable.
+
+need to create upgrader additions for new PDP style, or need to make sure it calls sync.
 
 need to add javadoc to interface of services using hte descriptions (almost done, methods are finished, but class could be done)
 
