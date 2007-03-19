@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-gridca.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-gridgrouper-client.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-gridgrouper-common.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-gridgrouper-stubs.jar"/>
-	<classpathentry kind="lib" path="lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="lib/grouper.jar"/>
-	<classpathentry kind="lib" path="lib/subject-0.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
-	<classpathentry kind="lib" path="lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/cog-jglobus.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/ant-contrib.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/caGrid-1.0-core.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/caGrid-1.0-gridca.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/caGrid-1.0-gridgrouper-client.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/caGrid-1.0-gridgrouper-common.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/caGrid-1.0-gridgrouper-stubs.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/castor-0.9.9.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/cog-jglobus.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/commons-logging.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/grouper.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/mobius_common_client-1.1.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/subject-0.2.1.jar"/>
 	<classpathentry kind="output" path="output/classes"/>
 </classpath>
