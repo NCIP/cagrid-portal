@@ -524,7 +524,7 @@
 
         <artifact track="main" type="jars" id="gridftp.authz.jars">
             <generatingantcall target="build-gridftpauthz" />
-			<property name="gridftpauthz.dir}" value="gridftpauthz"/>
+			<property name="gridftpauthz.dir" value="gridftpauthz"/>
             <fileset dir="${projects.dir}/${gridftpauthz.dir}/build/lib">
                 <include name="*-gridftpauthz*.jar" />
                 <exclude name="*test*.jar" />
