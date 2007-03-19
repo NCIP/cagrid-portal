@@ -17,7 +17,8 @@
 	<property name="stubs.dir" location="build/stubs" />
 	<property name="stubs.src" location="build/stubs/src" />
 	<property name="stubs.dest" location="build/stubs/classes" />
-	<property name="common.jar.name" value="${project.name}-common.jar" />
+	<property name="grape.jar.name" value="${project.name}.jar" />
+	<property name="resources.jar.name" value="${project.name}-resources.jar" />
 	<property name="ant.build.stubs" location="${globus.location}/share/globus_wsrf_tools/build-stubs.xml" />
 	<property name="java.debug" value="on" />
 	<property name="schema.src" location="${globus.location}/share/schema" />
@@ -107,7 +108,7 @@
 
 
 	<target name="jar" depends="compile">
-		<jar destfile="${build.jars.dir}/${common.jar.name}">
+		<jar destfile="${build.jars.dir}/${grape.jar.name}">
 			<fileset dir="${stubs.dest}">
 				<include name="**"/>
 			</fileset>
@@ -115,6 +116,9 @@
 				<include name="**"/>
 			</fileset>
 		</jar>
+		  <jar jarfile="${build.jars.dir}/${resources.jar.name}">
+			  <fileset dir="resources/ui/common"/>
+		 </jar>
 	</target>
 
 	<target name="clean">
