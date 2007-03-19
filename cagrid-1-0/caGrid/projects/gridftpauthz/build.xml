@@ -32,6 +32,9 @@
     <property name="test.lib.dir" location="${test.dir}/lib" />
     <property name="test.logs.dir" location="${test.dir}/logs" />
     <property name="test.project.jar" location="${jar.dir}/${project.name}-tests.jar" />
+	
+	<!-- dist -->
+	<property name="dist.dir" location="${basedir}/dist"/>
 
     <import file="test/test.xml" />
 
@@ -194,6 +197,15 @@
 			<tag name="created" scope="all" description="Created On:" />
 		</javadoc>
 	</target>
+	
+	<target name="dist" depends="compile" description="Create java authorization distribution">
+		<property name="dist.file" value="${dist.dir}/${project.shortname}-${project.version}.zip"/>
+		<mkdir dir="${dist.dir}"/>
+		<delete file="${dist.file}"/>
+		<copy file="${globus.dir}/lib/commons-logging.jar" todir="${ext.lib.dir}"/>
+		<zip destfile="${dist.file}" basedir="${basedir}"/>
+	</target>
+	
 
     <!-- ============================================================== -->
     <!-- Builds from scratch                                                -->
