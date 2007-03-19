@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class StatisticsServer {
@@ -60,8 +64,10 @@ public class StatisticsServer {
 
 						// Convert the contents to a string, and display them and log them
 						String msg = new String(buffer, 0, packet.getLength());
-						System.out.println(packet.getAddress().getHostName() + ": " + msg);
-						fw.append(packet.getAddress().getHostName() + ": " + msg + "\n");
+						SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+						Date date = new Date(System.currentTimeMillis());
+						System.out.println(formatter.format(date) + "\n\tHOST:\t\t" + packet.getAddress().getHostName() + msg);
+						fw.append(formatter.format(date) + "\t" + packet.getAddress().getHostName() + "| " + msg + "\n");
 						fw.flush();
 						// Reset the length of the packet before reusing it.
 						packet.setLength(buffer.length);
