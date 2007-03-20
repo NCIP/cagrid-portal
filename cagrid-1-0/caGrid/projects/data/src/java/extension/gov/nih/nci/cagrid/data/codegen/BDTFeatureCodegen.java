@@ -1,7 +1,10 @@
 package gov.nih.nci.cagrid.data.codegen;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
@@ -17,7 +20,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 1:10:16 PM
- * @version $Id: BDTFeatureCodegen.java,v 1.4 2007-03-14 20:40:52 dervin Exp $ 
+ * @version $Id: BDTFeatureCodegen.java,v 1.5 2007-03-20 17:32:30 dervin Exp $ 
  */
 public class BDTFeatureCodegen extends FeatureCodegen {
 	public static final String NL = System.getProperties().getProperty("line.separator");
@@ -72,7 +75,25 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 	}
 	
 	
-	private void editBdtImpl() throws CodegenExtensionException {		
+	private void editBdtImpl() throws CodegenExtensionException {
+        // figure out what the method signature is
+        MethodType bdtQueryMethod = null;
+        MethodType[] allMethods = getMainService().getMethods().getMethod();
+        for (int i = 0; i < allMethods.length; i++) {
+            MethodType current = allMethods[i];
+            if (current.getName().equals(DataServiceConstants.BDT_QUERY_METHOD_NAME)
+                && current.getInputs().getInput(0).getQName().equals(DataServiceConstants.CQL_QUERY_QNAME)) {
+                bdtQueryMethod = current;
+                break;
+            }
+        }
+        if (bdtQueryMethod == null) {
+            throw new CodegenExtensionException("No BDT query method found!");
+        }
+        
+        String methodSignatureStart = SyncSource.createUnBoxedSignatureStringFromMethod(
+            bdtQueryMethod, getServiceInformation());
+        
 		String serviceName = getServiceInformation().getServices().getService()[0].getName();
 		String basePackage = getServiceInformation().getServices().getService()[0].getPackageName();
 		// full name of the service impl class
@@ -93,9 +114,20 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 		edit.append(SERVICE_LINE1).append(SERVICE_LINE2).append(SERVICE_LINE3);
 		if (source.indexOf(edit.toString()) == -1) {
 			// edit has never been performed, perform edits
-			int startIndex = source.indexOf(SERVICE_START) + SERVICE_START.length();
+            // find method start
+            int methodStart = source.indexOf(methodSignatureStart);
+            if (methodStart == -1) {
+                throw new CodegenExtensionException("No signature for BDT query method found!");
+            }
+            int startIndex = source.indexOf(SERVICE_START, methodStart);
+            if (startIndex == -1) {
+                throw new CodegenExtensionException("BDT implementation insertion point not found!");
+            }
+            startIndex += SERVICE_START.length();
+            // add the source
 			source.insert(startIndex, NL);
-			source.insert(startIndex + 1, edit.toString());
+            startIndex += NL.length();
+			source.insert(startIndex, edit.toString());
 		}
 
 		// write the source file back out
