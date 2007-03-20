@@ -257,7 +257,14 @@
     		<property name="wsdl.file" value="ClassToQname.wsdl" />
     		<property name="target.stubs.dir" location="${stubs.src}" />
     	</ant>
-		<!-- generate stubs for Bookstore classes -->
+		<!-- generate stubs for BTD handler reference classes 
+		<ant antfile="${ant.build.stubs}" target="generateStubs">
+			<property name="source.stubs.dir" location="${schema.dest}/Data"/>
+			<property name="wsdl.file" value="BulkDataHandlerReference.wsdl"/>
+			<property name="target.stubs.dir" location="${stubs.src}"/>
+		</ant>
+		-->
+		<!-- generate stubs for Bookstore classes used in testing -->
 		<ant antfile="${ant.build.stubs}" target="generateStubs">
 			<property name="source.stubs.dir" location="${test.resources.dir}" />
 			<property name="wsdl.file" value="bookstore.wsdl"/>
@@ -293,6 +300,21 @@
 			<property name="wsdl.file" value="EnumerationDataService_service.wsdl" />
 			<property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes} -x ${data.service.namespace}" />
 		</ant>
+    	<!-- generate BDT query bindings for globus -->
+    	<ant antfile="${ant.build.stubs}" target="generateBinding">
+    		<property name="source.binding.dir" value="${schema.dest}/Data" />
+    	    <property name="target.binding.dir" value="${schema.dest}/Data" />
+    	    <property name="porttype.wsdl" value="BDTDataService.wsdl" />
+    	    <property name="binding.root" value="BDTDataService" />
+		</ant>
+    	<!-- stub generator -->
+    	<ant antfile="${ant.build.stubs}" target="generateStubs">
+    		<property name="mapping.file" location="${build.dir}/NStoPkg.properties" />
+    		<property name="source.stubs.dir" location="${schema.dest}/Data" />
+    		<property name="target.stubs.dir" location="${stubs.src}" />
+    		<property name="wsdl.file" value="BDTDataService_service.wsdl" />
+    		<property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes} -x ${data.service.namespace}" />
+    	</ant>
     </target>
 
 
