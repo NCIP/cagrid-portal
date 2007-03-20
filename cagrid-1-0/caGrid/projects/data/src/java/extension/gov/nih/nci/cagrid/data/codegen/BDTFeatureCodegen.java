@@ -20,10 +20,11 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 1:10:16 PM
- * @version $Id: BDTFeatureCodegen.java,v 1.5 2007-03-20 17:32:30 dervin Exp $ 
+ * @version $Id: BDTFeatureCodegen.java,v 1.6 2007-03-20 19:18:50 dervin Exp $ 
  */
 public class BDTFeatureCodegen extends FeatureCodegen {
-	public static final String NL = System.getProperties().getProperty("line.separator");
+	// public static final String NL = System.getProperties().getProperty("line.separator");
+    public static final String NL = "\n";
 	
 	// service impl edits
 	public static final String SERVICE_START = "BDTResource thisResource = (BDTResource)bdtHome.find(bdtResourceKey);";
@@ -113,6 +114,10 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 		StringBuffer edit = new StringBuffer();
 		edit.append(SERVICE_LINE1).append(SERVICE_LINE2).append(SERVICE_LINE3);
 		if (source.indexOf(edit.toString()) == -1) {
+            System.out.println("BDT impl has never been edited. Adding DS implementation");
+            System.out.println("BDT impl has never been edited. Adding DS implementation");
+            System.out.println("BDT impl has never been edited. Adding DS implementation");
+            
 			// edit has never been performed, perform edits
             // find method start
             int methodStart = source.indexOf(methodSignatureStart);
@@ -162,7 +167,15 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 		initEdits.append(RESOURCE_INITIALIZE);
 		initEdits.append(NL).append(NL);
 		
-		boolean doEdits = source.indexOf(initEdits.toString()) == -1; 
+		boolean doEdits = source.indexOf(initEdits.toString()) == -1;
+        if (doEdits) {
+            System.out.println("BDT Resource has never been edited, adding implementation");
+            System.out.println("BDT Resource has never been edited, adding implementation");
+            System.out.println("BDT Resource has never been edited, adding implementation");
+            System.out.println("BDT Resource has never been edited, adding implementation");
+            System.out.println("BDT Resource has never been edited, adding implementation");
+        }
+        
 		if (doEdits) {
 			int startIndex = source.indexOf(RESOURCE_CLASS_DECLARATION) + RESOURCE_CLASS_DECLARATION.length();
 			source.insert(startIndex, NL);
