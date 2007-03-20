@@ -547,5 +547,13 @@
                 <include name="junit.jar" />
             </fileset>
         </artifact>
+    	
+    	<!-- BDT libraries -->
+    	<artifact id="bdt.jars" track="main" type="jars">
+            <generatingantcall target="build-bulkDataTransfer" />
+    		<fileset dir="${projects.dir}/bulkDataTransfer/build/lib">
+    			<include name="*.jar"/>
+    		</fileset>
+    	</artifact>
     </target>
 </project>
