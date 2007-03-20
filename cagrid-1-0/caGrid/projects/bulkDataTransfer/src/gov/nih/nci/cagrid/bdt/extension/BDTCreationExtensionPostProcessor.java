@@ -49,24 +49,24 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		info = new ServiceInformation(serviceDescription, serviceProperties, new File(serviceProperties
 			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)));
 
-		// apply data service requirements to it
+		// apply BDT service requirements to it
 		try {
-			System.out.println("Adding data service components to template");
+			System.out.println("Adding BDT service components to template");
 			makeBDTService(serviceDescription, serviceProperties);
 			addResourceImplStub(serviceDescription, serviceProperties);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new CreationExtensionException(
-				"Error adding data service components to template! " + ex.getMessage(), ex);
+				"Error adding BDT service components to template! " + ex.getMessage(), ex);
 		}
-		// add the proper deployment properties
+		// add the proper deployment metadata
 		try {
-			System.out.println("Adding deploy property for query processor class");
+			System.out.println("Modifying metadata");
 			modifyServiceProperties(serviceDescription);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			throw new CreationExtensionException("Error adding query processor parameter to service! "
-				+ ex.getMessage(), ex);
+			throw new CreationExtensionException(
+                "Error modifying metadata: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -161,10 +161,9 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 				method.setProviderInformation(mpi);
 				method.setIsImported(true);
 				MethodTypeImportInformation mii = new MethodTypeImportInformation();
-				mii.setFromIntroduce(true);
+				mii.setFromIntroduce(Boolean.TRUE);
 				mii.setInputMessage(new QName("http://cagrid.nci.nih.gov/BulkDataHandler", "CreateEnumerationRequest"));
-				mii
-					.setOutputMessage(new QName("http://cagrid.nci.nih.gov/BulkDataHandler",
+				mii.setOutputMessage(new QName("http://cagrid.nci.nih.gov/BulkDataHandler",
 						"CreateEnumerationResponse"));
 				mii.setPackageName("gov.nih.nci.cagrid.bdt.stubs");
 				mii.setNamespace("http://cagrid.nci.nih.gov/BulkDataHandler");
@@ -178,7 +177,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 				method.setProviderInformation(mpi);
 				method.setIsImported(true);
 				MethodTypeImportInformation mii = new MethodTypeImportInformation();
-				mii.setFromIntroduce(true);
+				mii.setFromIntroduce(Boolean.TRUE);
 				mii.setInputMessage(new QName("http://cagrid.nci.nih.gov/BulkDataHandler", "GetGridFTPURLsRequest"));
 				mii.setOutputMessage(new QName("http://cagrid.nci.nih.gov/BulkDataHandler", "GetGridFTPURLsResponse"));
 				mii.setPackageName("gov.nih.nci.cagrid.bdt.stubs");
@@ -199,10 +198,10 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 	}
 
 
-	private void addResourceImplStub(ServiceDescription desc, Properties serviceProperties) throws Exception {
+	private void addResourceImplStub(ServiceDescription desc, Properties props) throws Exception {
 		BDTResourceTemplate resourceT = new BDTResourceTemplate();
 		String resourceS = resourceT.generate(new SpecificServiceInformation(info, info.getServices().getService(0)));
-		File resourceF = new File(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+		File resourceF = new File(props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 			+ File.separator + "src" + File.separator + CommonTools.getPackageDir(desc.getServices().getService(0))
 			+ File.separator + "service" + File.separator + "BDTResource.java");
 		FileWriter resourceFW = new FileWriter(resourceF);
@@ -323,5 +322,4 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			addServiceMetadata(desc);
 		}
 	}
-
 }

@@ -19,6 +19,7 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.utils.ClassUtils;
 import org.globus.gsi.GlobusCredential;
 import org.oasis.wsrf.properties.GetResourcePropertyResponse;
+import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
 
 
 /**
@@ -30,7 +31,7 @@ import org.oasis.wsrf.properties.GetResourcePropertyResponse;
  * 
  * @created by Introduce Toolkit version 1.1
  */
-public class BulkDataHandlerClient extends ServiceSecurityClient implements BulkDataHandlerI {
+public class BulkDataHandlerClient extends ServiceSecurityClient implements BulkDataHandlerI, DataSource {
 	protected BulkDataHandlerPortType portType;
 	private Object portTypeMutex;
 
