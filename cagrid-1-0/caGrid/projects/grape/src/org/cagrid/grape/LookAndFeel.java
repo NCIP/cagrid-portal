@@ -41,11 +41,19 @@ public class LookAndFeel {
 	public final static ImageIcon getCloseIcon() {
 		return IconUtils.loadIcon("/edit-delete.png");
 	}
+	
+	public final static ImageIcon getImportIcon() {
+		return IconUtils.loadIcon("/folder-open.png");
+	}
 
 
 
 	public final static ImageIcon getAboutIcon() {
 		return IconUtils.loadIcon("/Inform.gif");
+	}
+	
+	public final static ImageIcon getSaveIcon() {
+		return IconUtils.loadIcon("/save.gif");
 	}
 
 
