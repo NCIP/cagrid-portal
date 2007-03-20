@@ -43,12 +43,12 @@
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}/Introduce">
-					<include name="**/unit/**/*Test.java" />
-					<include name="**/unit/**/*TestCase.java" />
+					<include name="**/test/unit/**/*Test.java" />
+					<include name="**/test/unit/**/*TestCase.java" />
 				</fileset>
 				<fileset dir="${test.src.dir}/UpdateManager">
-					<include name="**/unit/**/*Test.java" />
-					<include name="**/unit/**/*TestCase.java" />
+					<include name="**/test/unit/**/*Test.java" />
+					<include name="**/test/unit/**/*TestCase.java" />
 				</fileset>
 			</batchtest>
 		</junit>
@@ -72,12 +72,12 @@
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}/Introduce">
-					<include name="**/system/**/*Test.java" />
-					<include name="**/system/**/*TestCase.java" />
+					<include name="**/test/system/**/*Test.java" />
+					<include name="**/test/system/**/*TestCase.java" />
 				</fileset>
 				<fileset dir="${test.src.dir}/UpdateManager">
-					<include name="**/unit/**/*Test.java" />
-					<include name="**/unit/**/*TestCase.java" />
+					<include name="**/test/system/**/*Test.java" />
+					<include name="**/test/system/**/*TestCase.java" />
 				</fileset>
 			</batchtest>
 		</junit>

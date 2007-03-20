@@ -1,0 +1,107 @@
+<!-- ======================================================================= -->
+<!-- caGrid Data Services test build file                                    -->
+<!-- ======================================================================= -->
+<project name="caGrid-BDT_tests_harness" basedir=".">
+	<property name="junit.results.dir" value="${test.logs.dir}/junit"/>
+	<property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes"/>
+	<property name="cobertura.report.dir" value="${build.dir}/coverage"/>
+	<property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser"/>
+	<property name="introduce.dir" location="../introduce"/>
+
+	<target name="prepareClasspaths">
+		<path id="Introduce.test.classpath">
+			<fileset dir="${introduce.dir}/lib">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${introduce.dir}/ext/lib">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${introduce.dir}/build/jars">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${introduce.dir}/test/lib">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${introduce.dir}/ext/test/lib">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${ant.library.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="*.jar"/>
+			</fileset>
+		</path>
+		<path id="all.test.classpath">
+			<path refid="test.run.classpath"/>
+			<path refid="Introduce.test.classpath" />
+		</path>
+	</target>
+
+	<target name="instrument">
+		<taskdef classpathref="test.run.classpath" resource="tasks.properties"/>
+		<mkdir dir="${instrumented.classes.dir}"/>
+		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
+			<fileset dir="${build.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+		</cobertura-instrument>
+	</target>
+
+	<target name="test" depends="setGlobus,prepareClasspaths" description="Runs tests" >
+		<mkdir dir="${junit.results.dir}"/>
+		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
+			<jvmarg value="-Dintroduce.base.dir=${introduce.dir}"/>
+			<jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
+			<classpath location="${instrumented.classes.dir}"/>
+			<classpath refid="all.test.classpath"/>
+			<classpath>
+				<pathelement path="${test.classes.dir}"/>
+			</classpath>
+			<formatter type="xml"/>
+			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
+			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/test/unit/**/*Test.java"/>
+					<include name="**/test/unit/**/*TestCase.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed"/>
+		<property name="base.service.created" value="true"/>
+	</target>
+
+
+	<!-- system tests against the basic data service -->
+	<target name="testSystem" depends="setGlobus,  prepareClasspaths" description="Runs system tests">
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
+			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
+			<classpath location="${instrumented.classes.dir}"/>
+			<classpath refid="all.test.classpath"/>
+			<classpath>
+				<pathelement path="${test.classes.dir}"/>
+			</classpath>
+			<formatter type="xml"/>
+			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
+			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/test/system/**/*Test.java"/>
+					<include name="**/test/system/**/*TestCase.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed"/>
+	</target>
+
+
+	<target name="coverageReport" depends="instrument,test" description="Runs the tests and generates a test
+		coverage report.">
+		<cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
+			<fileset dir="${test.src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+		</cobertura-report>
+	</target>
+</project>

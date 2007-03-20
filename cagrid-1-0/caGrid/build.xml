@@ -47,12 +47,12 @@
     <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT UNIT TESTING               -->
     <!-- ================================================================================ -->
     <!-- This should be a subset of the projects above -->
-    <property name="unit.testable.projects.list" value="introduce, cabigextensions, core, discovery, cadsr, evs, fqp, gridca, gridftpauthz, gts, data, sdkQuery, sdkQuery32, gridgrouper, wsEnum, metadatautils, dorian" />
+    <property name="unit.testable.projects.list" value="introduce, cabigextensions, core, discovery, cadsr, evs, fqp, gridca, gridftpauthz, gts, data, sdkQuery, sdkQuery32, gridgrouper, wsEnum, metadatautils, dorian, bulkDataTransfer" />
     <!-- ================================================================================ -->
     <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT SYSTEM TESTING             -->
     <!-- ================================================================================ -->
     <!-- This should be a subset of the projects from the projects.list -->
-    <property name="system.testable.projects.list" value="introduce, data" />
+    <property name="system.testable.projects.list" value="introduce, data, bulkDataTransfer" />
     <!-- ================================================================================ -->
     <!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
     <!-- ================================================================================ -->

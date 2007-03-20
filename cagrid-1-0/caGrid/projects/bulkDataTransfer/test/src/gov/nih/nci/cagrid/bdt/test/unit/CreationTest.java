@@ -19,12 +19,12 @@ import com.atomicobject.haste.framework.Story;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006 
- * @version $Id: CreationTest.java,v 1.1 2007-03-20 18:44:46 hastings Exp $ 
+ * @version $Id: CreationTest.java,v 1.2 2007-03-20 18:50:21 hastings Exp $ 
  */
 public class CreationTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
 	public static final String SERVICE_NAME = "TestBDTService";
-	public static final String SERVICE_DIR = (new File("..")).getAbsolutePath() + File.separator + "bdt" + File.separator + "test" + File.separator + "TestBDTService";
+	public static final String SERVICE_DIR = (new File("..")).getAbsolutePath() + File.separator + "bulkDataTransfer" + File.separator + "test" + File.separator + "TestBDTService";
 	public static final String PACKAGE_NAME = "gov.nih.nci.cagrid.testbdt";
 	public static final String SERVICE_NAMESPACE = "http://" + PACKAGE_NAME + "/" + SERVICE_NAME;
 	
