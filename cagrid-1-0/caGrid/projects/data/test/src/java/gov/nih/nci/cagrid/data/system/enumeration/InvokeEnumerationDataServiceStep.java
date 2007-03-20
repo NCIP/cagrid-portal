@@ -26,7 +26,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 23, 2006 
- * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.1 2006-12-18 14:48:47 dervin Exp $ 
+ * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.2 2007-03-20 17:31:53 dervin Exp $ 
  */
 public class InvokeEnumerationDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
@@ -72,8 +72,10 @@ public class InvokeEnumerationDataServiceStep extends Step {
 		} catch (QueryProcessingExceptionType ex) {
 			assertTrue("Query Processing Exception Type thrown", true);
 		} finally {
-			if (response != null) {
-				// TODO: release the enumeration
+			if (response != null && response.getEnumerationContext() != null) {
+				Release release = new Release();
+				release.setEnumerationContext(response.getEnumerationContext());
+				client.releaseOp(release);
 			}
 		}
 	}
@@ -150,11 +152,11 @@ public class InvokeEnumerationDataServiceStep extends Step {
 		} finally {
 			iter.release();
 		}
-		assertTrue("Results were returned from the enumeration", resultCount != 0);
+		assertTrue("No results were returned from the enumeration", resultCount != 0);
 		
 		// this is my own impl to show and handle the exceptions
 		/*
-		Pull pull = new Pull(); // what dumbass made these names?
+		Pull pull = new Pull(); // who made these names?
 		pull.setEnumerationContext(response.getEnumerationContext());
 		int resultCount = 0;
 		boolean stop = false;
