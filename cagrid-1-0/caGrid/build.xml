@@ -144,7 +144,7 @@
     </target>
 
 	<!-- =============================================================== -->
-	<!-- PORTAL:                                                      -->
+	<!-- PORTAL:                                                    	 -->
 	<!-- =============================================================== -->
     <target name="build-portal" depends="prepare" description="Builds the portal project">
 		<resolveDependencies extdir="${projects.dir}/portal/ext">
@@ -501,32 +501,33 @@
 	<!-- CAGRID DataService:                                             -->
 	<!-- =============================================================== -->
     <target name="build-data" depends="prepare" description="Builds caGrid Data Services components">
-		<resolveDependencies extdir="${projects.dir}/data/ext">
-			<artifact refid="core.jars" />
-			<artifact refid="introduce.jars" />
-			<artifact refid="core.test.jars" />
-			<artifact refid="gme.globus.client.jars" />
-			<artifact refid="core.resources" />
-			<artifact refid="introduce.resources" />
-			<artifact refid="cadsr.jars" />
-			<artifact refid="common.test.jars" />
-			<artifact refid="jet.jars" />
-			<artifact refid="test.coverage.jars" />
-			<artifact refid="data.metadata.jars" />
-			<artifact refid="metadata.schemas" />
-			<artifact refid="metadatautils.jars" />
-			<artifact refid="graph.jars" />
-			<artifact refid="ws.enum.jars" />
-			<artifact refid="ws.enum.schemas" />
-			<artifact refid="security.metadata.schemas" />
-			<artifact refid="introduce.core.test.jars" />
-		</resolveDependencies>
-		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
-	</target>
+        <resolveDependencies extdir="${projects.dir}/data/ext">
+            <artifact refid="core.jars" />
+            <artifact refid="introduce.jars" />
+            <artifact refid="core.test.jars" />
+            <artifact refid="gme.globus.client.jars" />
+            <artifact refid="core.resources" />
+            <artifact refid="introduce.resources" />
+            <artifact refid="cadsr.jars" />
+            <artifact refid="common.test.jars" />
+            <artifact refid="jet.jars" />
+            <artifact refid="test.coverage.jars" />
+            <artifact refid="data.metadata.jars" />
+            <artifact refid="metadata.schemas" />
+            <artifact refid="metadatautils.jars" />
+            <artifact refid="graph.jars" />
+            <artifact refid="ws.enum.jars" />
+            <artifact refid="ws.enum.schemas" />
+            <artifact refid="security.metadata.schemas" />
+            <artifact refid="introduce.core.test.jars" />
+        	<artifact refid="bdt.jars"/>
+        </resolveDependencies>
+        <ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
+    </target>
 
-	<!-- =============================================================== -->
-	<!-- CAGRID BulkDataTransfer:                                        -->
-	<!-- =============================================================== -->
+    <!-- =============================================================== -->
+    <!-- CAGRID BulkDataTransfer:                                        -->
+    <!-- =============================================================== -->
     <target name="build-bulkDataTransfer" depends="prepare" description="Builds caGrid BulkDataTransfer Services components">
 		<resolveDependencies extdir="${projects.dir}/bulkDataTransfer/ext">
 			<artifact refid="introduce.jars" />
