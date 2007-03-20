@@ -264,6 +264,28 @@
 		</junit>
 		<fail message="Tests failed! Check test reports." if="test.failed"/>
 	</target>
+	
+	
+	<!-- system tests for the BDT data service -->
+	<target name="testBdtSystem" depends="setGlobus, testBdtCreation" description="Tests invocation of the BDT data service">
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
+			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
+			<classpath location="${instrumented.classes.dir}"/>
+			<classpath refid="all.test.classpath"/>
+			<classpath>
+				<pathelement path="${test.classes.dir}"/>
+			</classpath>
+			<formatter type="xml"/>
+			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
+			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/system/bdt/BDTDataServiceSystemTests.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed"/>
+	</target>
 
 
 	<target name="coverageReport" depends="test" description="Runs the tests and generates a test
