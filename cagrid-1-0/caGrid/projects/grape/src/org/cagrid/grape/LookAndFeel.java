@@ -31,6 +31,10 @@ public class LookAndFeel {
 	public final static ImageIcon getConfigurationPropertyIcon() {
 		return IconUtils.loadIcon("/preferences-desktop-locale.png");
 	}
+	
+	public final static ImageIcon getSelectIcon() {
+		return IconUtils.loadIcon("/Check.gif");
+	}
 
 
 	public final static ImageIcon getCascadeIcon() {
