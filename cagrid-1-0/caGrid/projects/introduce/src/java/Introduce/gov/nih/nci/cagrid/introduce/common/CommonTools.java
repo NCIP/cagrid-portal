@@ -22,6 +22,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 
@@ -37,6 +38,7 @@ import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
@@ -50,6 +52,7 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  */
 public class CommonTools {
+	private static final Logger logger = Logger.getLogger(CommonTools.class);
 
 	public static final String ALLOWED_JAVA_CLASS_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
 
@@ -245,8 +248,8 @@ public class CommonTools {
 	public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
 		String packagename, String namespacedomain, String extensions) throws Exception {
 		// fix dir path if it relative......
-		System.out.println("CREATION: builddir: " + buildFileDir);
-		System.out.println("CREATION: destdir: " + dir);
+		 logger.debug("CREATION: builddir: " + buildFileDir);
+		 logger.debug("CREATION: destdir: " + dir);
 		File dirF = new File(dir);
 		if (!dirF.isAbsolute()) {
 			dir = buildFileDir + File.separator + dir;
@@ -257,7 +260,7 @@ public class CommonTools {
 			+ packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
 			+ namespacedomain + " -Dintroduce.skeleton.extensions=" + extensions + " createService";
 		cmd = getAntCommandCall(buildFileDir) + cmd;
-		System.out.println("CREATION: cmd: " + cmd);
+		 logger.debug("CREATION: cmd: " + cmd);
 		return cmd;
 	}
 
@@ -265,8 +268,8 @@ public class CommonTools {
 	public static String getAntSkeletonPostCreationCommand(String buildFileDir, String name, String dir,
 		String packagename, String namespacedomain, String extensions) throws Exception {
 		// fix dir path if it relative......
-		System.out.println("CREATION: builddir: " + buildFileDir);
-		System.out.println("CREATION: destdir: " + dir);
+		 logger.debug("CREATION: builddir: " + buildFileDir);
+		 logger.debug("CREATION: destdir: " + dir);
 		File dirF = new File(dir);
 		if (!dirF.isAbsolute()) {
 			dir = buildFileDir + File.separator + dir;
@@ -277,7 +280,7 @@ public class CommonTools {
 			+ packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
 			+ namespacedomain + " -Dintroduce.skeleton.extensions=" + extensions + " postCreateService";
 		cmd = getAntCommandCall(buildFileDir) + cmd;
-		System.out.println("CREATION: cmd: " + cmd);
+		 logger.debug("CREATION: cmd: " + cmd);
 		return cmd;
 	}
 

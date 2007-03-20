@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.awt.Component;
 import java.io.BufferedInputStream;
@@ -27,6 +28,7 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
@@ -39,6 +41,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  */
 public class ResourceManager {
+	private static final Logger logger = Logger.getLogger(ResourceManager.class);
 	public static final int MAX_ARCHIVE = 5;
 
 	public final static String PORTAL_CONFIG_FILE = "introduce-portal-conf.xml";
@@ -265,7 +268,7 @@ public class ResourceManager {
 		Collections.reverse(cacheFilesList);
 
 		for (int i = 0; i < cacheFilesList.size(); i++) {
-			System.out.println("Removing file from cache: " + i + "  " + introduceCache + File.separator
+			logger.debug("Removing file from cache: " + i + "  " + introduceCache + File.separator
 				+ cacheFilesList.get(i));
 			File cacheFile = new File(introduceCache + File.separator + cacheFilesList.get(i));
 			cacheFile.delete();
@@ -334,7 +337,7 @@ public class ResourceManager {
 
 		if (cacheFilesList.size() > MAX_ARCHIVE) {
 			for (int i = MAX_ARCHIVE; i < cacheFilesList.size(); i++) {
-				System.out.println("Removing file from cache: " + i + "  " + introduceCache + File.separator
+				logger.debug("Removing file from cache: " + i + "  " + introduceCache + File.separator
 					+ cacheFilesList.get(i));
 				File cacheFile = new File(introduceCache + File.separator + cacheFilesList.get(i));
 				cacheFile.delete();

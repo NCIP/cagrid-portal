@@ -93,6 +93,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.namespace.QName;
 
+import org.apache.log4j.Logger;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 import javax.swing.JTextArea;
@@ -104,6 +105,7 @@ import java.awt.Insets;
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  */
 public class ModificationViewer extends GridPortalComponent {
+	private static final Logger logger = Logger.getLogger(ModificationViewer.class);
 
 	private JPanel mainPanel = null;
 
@@ -891,7 +893,7 @@ public class ModificationViewer extends GridPortalComponent {
 						BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
 							.getGridPortal(), "Undo") {
 							public void process() {
-								System.out.println("Loading in last known save for this project");
+								logger.info("Loading in last known save for this project");
 								try {
 									if (!dirty) {
 										setProgressText("restoring from local cache");

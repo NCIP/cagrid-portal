@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.axis.utils.JavaUtils;
+import org.apache.log4j.Logger;
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.Parameter;
 
@@ -37,6 +39,7 @@ import org.apache.ws.jaxme.js.Parameter;
  *          Exp $
  */
 public class SyncSource {
+	private static final Logger logger = Logger.getLogger(SyncSource.class);
 
 	private String serviceClient;
 
@@ -888,7 +891,7 @@ public class SyncSource {
 				// remove the provider impl method
 				removeProviderImpl(method);
 			} catch (Exception e) {
-				System.out.println("WARNING: " + e.getMessage()
+				logger.warn("WARNING: " + e.getMessage()
 					+ "\n might be due to method implementation provided by another service");
 			}
 			// remove the client method
@@ -1131,8 +1134,8 @@ public class SyncSource {
 
 
 	public static int bracketMatch(StringBuffer sb, int startingIndex) {
-		// System.out.println("Starting to look for brackets on this string:");
-		// System.out.println(sb.toString().substring(startingIndex));
+		// logger.debug("Starting to look for brackets on this string:");
+		// logger.debug(sb.toString().substring(startingIndex));
 		int parenCount = 0;
 		int index = startingIndex;
 		boolean found = false;
@@ -1293,9 +1296,9 @@ public class SyncSource {
 				}
 			}
 			if (found) {
-				// System.out.println("Found start of method: " + matchedLine);
+				// logger.debug("Found start of method: " + matchedLine);
 			} else {
-				System.out.println("Did not find the appropriate match");
+				logger.debug("Did not find the appropriate match");
 			}
 			// if the last line i found the match then lets look for the start
 			// of the method

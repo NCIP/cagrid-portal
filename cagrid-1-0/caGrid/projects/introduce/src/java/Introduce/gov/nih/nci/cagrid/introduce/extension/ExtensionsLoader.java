@@ -10,13 +10,17 @@ import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.extension.PropertyTypes;
 import gov.nih.nci.cagrid.introduce.beans.extension.ResourcePropertyEditorExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 
 public class ExtensionsLoader {
+	private static final Logger logger = Logger.getLogger(ExtensionsLoader.class);
 
 	private static ExtensionsLoader loader = null;
 
@@ -75,7 +79,7 @@ public class ExtensionsLoader {
 				if (dirs[i].isDirectory()) {
 					if (new File(dirs[i].getAbsolutePath() + File.separator + "extension.xml").exists()) {
 
-						System.out.println("Loading extension: " + dirs[count].getAbsolutePath() + File.separator
+						logger.info("Loading extension: " + dirs[count].getAbsolutePath() + File.separator
 							+ "extension.xml");
 						ExtensionDescription extDesc = null;
 
@@ -107,7 +111,7 @@ public class ExtensionsLoader {
 								processExtensionProperties(extDesc.getAuthorizationExtensionDescription()
 									.getProperties());
 							} else {
-								System.out.println("Unsupported Extension Type: " + extDesc.getExtensionType());
+								logger.warn("Unsupported Extension Type: " + extDesc.getExtensionType());
 							}// TODO Auto-generated method stub
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
@@ -141,7 +145,7 @@ public class ExtensionsLoader {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					System.out.println("WARNING: extension property " + prop.getKey() + " could not be processed");
+					logger.warn("WARNING: extension property " + prop.getKey() + " could not be processed");
 				}
 			}
 		}

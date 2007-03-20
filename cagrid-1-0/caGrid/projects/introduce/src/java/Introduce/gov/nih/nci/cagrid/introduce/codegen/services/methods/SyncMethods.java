@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.codegen.services.methods;
 
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -15,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.JavaSource;
 import org.apache.ws.jaxme.js.JavaSourceFactory;
@@ -35,7 +37,7 @@ import org.projectmobius.common.XMLUtilities;
  *          Exp $
  */
 public class SyncMethods extends SyncTool {
-
+	private static final Logger logger = Logger.getLogger(SyncMethods.class);
 	private List additions;
 	private List removals;
 	private List modifications;
@@ -139,7 +141,7 @@ public class SyncMethods extends SyncTool {
 					}
 				}
 				if (!found) {
-					System.out.println("Found a method for addition: " + mel.getName());
+					logger.debug("Found a method for addition: " + mel.getName());
 					this.additions.add(mel);
 				}
 			}
@@ -159,7 +161,7 @@ public class SyncMethods extends SyncTool {
 				}
 			}
 			if (!found) {
-				System.out.println("Found a method for removal: " + methodName);
+				logger.debug("Found a method for removal: " + methodName);
 				this.removals.add(methods[i]);
 			}
 		}

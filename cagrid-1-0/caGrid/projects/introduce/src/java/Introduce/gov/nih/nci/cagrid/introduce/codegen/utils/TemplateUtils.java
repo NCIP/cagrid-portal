@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.info.ImportInformation;
 import gov.nih.nci.cagrid.introduce.info.NamespaceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -33,6 +35,7 @@ import org.projectmobius.common.XMLUtilities;
  *          Exp $
  */
 public class TemplateUtils {
+	private static final Logger logger = Logger.getLogger(TemplateUtils.class);
 
 	/**
 	 * Returns the input string with the first character converted to lowercase
@@ -140,7 +143,7 @@ public class TemplateUtils {
 									for (int childi = 0; childi < copElChildren.size(); childi++) {
 										Element copElChild = (Element) copElChildren.get(childi);
 										String messageString = copElChild.getAttributeValue("message");
-										System.out.println("Looking for namespace prefix for message " + messageString);
+										logger.debug("Looking for namespace prefix for message " + messageString);
 										Namespace ns = null;
 										String prefix = "";
 										String message = "";
@@ -156,7 +159,7 @@ public class TemplateUtils {
 										for (int nsli = 0; nsli < nslist.size(); nsli++) {
 											Namespace tempns = (Namespace) nslist.get(nsli);
 											if (tempns.getURI().equals(ns.getURI())) {
-												System.out.println("Setting message " + message + " nsPrefix: "
+												logger.debug("Setting message " + message + " nsPrefix: "
 													+ tempns.getPrefix());
 												copElChild.setAttribute("message", tempns.getPrefix() + ":" + message);
 												break;
@@ -223,7 +226,7 @@ public class TemplateUtils {
 	 */
 	public static void walkSchemasGetNamespaces(String schemaFile, Set namespaces, Set excludedNamespaces,
 		Set visitedSchemas) throws Exception {
-		System.out.println("Getting namespaces from schema " + schemaFile);
+		logger.debug("Getting namespaces from schema " + schemaFile);
 		visitedSchemas.add(schemaFile);
 		File currentPath = new File(schemaFile).getCanonicalFile().getParentFile();
 		Document schema = XMLUtilities.fileNameToDocument(schemaFile);
@@ -243,7 +246,7 @@ public class TemplateUtils {
 					String namespace = importEl.getAttributeValue("namespace");
 					if (!excludedNamespaces.contains(namespace)) {
 						if (namespaces.add(namespace)) {
-							System.out.println("adding namepace " + namespace);
+							logger.debug("adding namepace " + namespace);
 						}
 						if (!schemaFile.equals(importedSchema.getCanonicalPath())) {
 							walkSchemasGetNamespaces(importedSchema.getCanonicalPath(), namespaces, excludedNamespaces,

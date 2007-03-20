@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.init;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.help.IntroduceHelp;
@@ -14,11 +15,13 @@ import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import org.apache.log4j.Logger;
 import org.projectmobius.portal.GridPortalInitializer;
 import org.projectmobius.portal.PortalResourceManager;
 
 
 public class IntroducePortalInitializer implements GridPortalInitializer {
+	private static final Logger logger = Logger.getLogger(IntroducePortalInitializer.class);
 	private static final int HELP_MENU = 4;
 
 	private static final int CONFIG_MENU = 3;

@@ -68,6 +68,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Namespace;
 import org.projectmobius.common.MalformedNamespaceException;
@@ -88,8 +89,11 @@ import com.ibm.wsdl.PartImpl;
  *          Exp $
  */
 public class SyncTools {
+	
+	private static final Logger logger = Logger.getLogger(SyncTools.class);
 
 	class MultiServiceSymbolTable {
+		
 		ServiceInformation info;
 
 		Set excludedSet;
@@ -340,7 +344,7 @@ public class SyncTools {
 		// store the modified properties back out....
 		serviceProperties.store(new FileOutputStream(servicePropertiesFile), "Introduce Properties");
 
-		System.out.println("Synchronizing with pre processing extensions");
+		logger.info("Synchronizing with pre processing extensions");
 		// run any extensions that need to be ran
 		if ((introService.getExtensions() != null) && (introService.getExtensions().getExtension() != null)) {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
@@ -356,7 +360,7 @@ public class SyncTools {
 		}
 
 		// serialize the possibly modified model back to disk
-		System.out.println("Serializing service model to disk");
+		logger.info("Serializing service model to disk");
 		Utils.serializeDocument(baseDirectory.getAbsolutePath() + File.separator
 			+ IntroduceConstants.INTRODUCE_XML_FILE, introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
@@ -387,17 +391,17 @@ public class SyncTools {
 		SyncTool serializerS = new SyncSerialization(baseDirectory, info);
 		SyncTool propertiesS = new SyncProperties(baseDirectory, info);
 
-		System.out.println("Synchronizing the base files");
+		logger.info("Synchronizing the base files");
 		baseS.sync();
-		System.out.println("Synchronizing the services");
+		logger.info("Synchronizing the services");
 		servicesS.sync();
-		System.out.println("Synchronizing the type mappings");
+		logger.info("Synchronizing the type mappings");
 		serializerS.sync();
-		System.out.println("Synchronizing the service properties");
+		logger.info("Synchronizing the service properties");
 		propertiesS.sync();
 
 		// STEP 8: run the extensions
-		System.out.println("Synchronizing with post processing extensions");
+		logger.info("Synchronizing with post processing extensions");
 		// run any extensions that need to be ran
 		if ((introService.getExtensions() != null) && (introService.getExtensions().getExtension() != null)) {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
@@ -432,11 +436,11 @@ public class SyncTools {
 		// table.dump(System.out);
 		// get the classnames from the axis symbol table
 		// try {
-		// System.out.println("\n\nSTART OF NAMESPACES\n");
+		// logger.info("\n\nSTART OF NAMESPACES\n");
 		// Utils.serializeObject(info.getServiceDescriptor().getNamespaces(),new
 		// QName("gme://gov.nih.nci.cagrid.introduce/1/Namespace","NamespacesType"),new
 		// PrintWriter(System.out));
-		// System.out.println("\n\nEND OF NAMESPACES\n");
+		// logger.info("\n\nEND OF NAMESPACES\n");
 		// } catch (Exception e) {
 		// // TODO Auto-generated catch block
 		// e.printStackTrace();
@@ -543,7 +547,7 @@ public class SyncTools {
 						// process the messages so that we can find the
 						// types
 						// and the part names
-						System.out.println("LOOKING AT METHOD: " + mtype.getName());
+						logger.debug("LOOKING AT METHOD: " + mtype.getName());
 						// populate the input message class name
 						QName messageQName = null;
 						if (mtype.isIsImported() && (mtype.getImportInformation().getInputMessage() != null)
@@ -578,7 +582,7 @@ public class SyncTools {
 								}
 							}
 						} else {
-							System.out.println("WARNING: Cannot find input message entry: " + messageQName);
+							logger.warn("WARNING: Cannot find input message entry: " + messageQName);
 						}
 
 						// pupulate the output message class name
@@ -614,10 +618,10 @@ public class SyncTools {
 										.getName()));
 								}
 							} else {
-								System.out.println("WARNING: message type does not have any parts: " + messageQName);
+								logger.warn("WARNING: message type does not have any parts: " + messageQName);
 							}
 						} else {
-							System.out.println("WARNING: Cannot find output message entry: " + messageQName);
+							logger.warn("WARNING: Cannot find output message entry: " + messageQName);
 						}
 
 					}
@@ -667,7 +671,7 @@ public class SyncTools {
 			SkeletonSchemaCreator sschc = new SkeletonSchemaCreator();
 			SkeletonSecurityOperationProviderCreator ssopc = new SkeletonSecurityOperationProviderCreator();
 			try {
-				System.out.println("Adding Service for: " + newService.getName());
+				logger.debug("Adding Service for: " + newService.getName());
 				ssc.createSkeleton(info.getBaseDirectory(), info, newService);
 				sschc.createSkeleton(info.getBaseDirectory(), info, newService);
 				ssopc.createSkeleton(new SpecificServiceInformation(info, newService));

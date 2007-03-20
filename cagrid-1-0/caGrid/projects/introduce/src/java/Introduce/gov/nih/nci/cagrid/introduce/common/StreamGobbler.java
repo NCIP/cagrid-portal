@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.common;
 
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,8 +9,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import org.apache.log4j.Logger;
+
 
 class StreamGobbler extends Thread {
+	private static final Logger logger = Logger.getLogger(SyncTools.class);
 	InputStream is;
 	String type;
 	OutputStream os;
@@ -41,7 +46,7 @@ class StreamGobbler extends Thread {
 			while ((line = br.readLine()) != null) {
 				if (pw != null)
 					pw.println(line);
-				System.out.println(type + ">" + line);
+				logger.debug(type + ">" + line);
 			}
 			if (pw != null)
 				pw.flush();
