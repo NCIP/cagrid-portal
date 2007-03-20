@@ -8,6 +8,10 @@ import org.cagrid.grape.utils.IconUtils;
 
 
 public class LookAndFeel {
+	
+	public final static ImageIcon getQueryIcon() {
+		return IconUtils.loadIcon("/system-search.png");
+	}
 
 	public final static ImageIcon getPreferencesIcon() {
 		return IconUtils.loadIcon("/modify22x22.png");
@@ -53,7 +57,7 @@ public class LookAndFeel {
 	}
 	
 	public final static ImageIcon getSaveIcon() {
-		return IconUtils.loadIcon("/save.gif");
+		return IconUtils.loadIcon("/media-floppy.gif");
 	}
 
 
