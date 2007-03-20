@@ -58,8 +58,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 	protected Vector steps() {
 		Vector steps = new Vector();
 		// an enumeration supporting data service is presumed to have been
-		// created
-		// by a previous testing process
+		// created by a previous testing process
 		// 1) Add the bookstore schema to the data service
 		steps.add(new AddBookstoreStep(CreateEnumerationTests.SERVICE_DIR, 
 			CreateEnumerationTests.SERVICE_NAME));

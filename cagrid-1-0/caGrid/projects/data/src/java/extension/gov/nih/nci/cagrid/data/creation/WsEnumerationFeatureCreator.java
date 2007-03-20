@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.creation.templates.EnumerationServiceClientTemplate;
 import gov.nih.nci.cagrid.data.enumeration.service.globus.EnumerationDataServiceProviderImpl;
@@ -36,7 +35,8 @@ import javax.xml.namespace.QName;
 
 
 /**
- * WsEnumerationFeatureCreator Adds the components needed for the WS-Enumeration
+ * WsEnumerationFeatureCreator 
+ * Adds the components needed for the WS-Enumeration
  * feature of data services
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
@@ -93,15 +93,16 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 		enumerateMethod.setDescription(DataServiceConstants.ENUMERATION_QUERY_METHOD_DESCRIPTION);
 		enumerateMethod.setIsImported(true);
 		enumerateMethod.setIsProvided(true);
+        // input
 		MethodTypeInputs enumInputs = new MethodTypeInputs();
 		MethodTypeInputsInput queryParam = new MethodTypeInputsInput();
 		queryParam.setName(DataServiceConstants.QUERY_METHOD_PARAMETER_NAME);
 		queryParam.setIsArray(false);
-		QName queryQname = new QName(DataServiceConstants.CQL_QUERY_URI, CQLQuery.class.getSimpleName());
-		queryParam.setQName(queryQname);
+		queryParam.setQName(DataServiceConstants.CQL_QUERY_QNAME);
 		queryParam.setDescription(DataServiceConstants.QUERY_METHOD_PARAMETER_DESCRIPTION);
 		enumInputs.setInput(new MethodTypeInputsInput[]{queryParam});
 		enumerateMethod.setInputs(enumInputs);
+        // output
 		MethodTypeOutput enumOutput = new MethodTypeOutput();
 		enumOutput.setIsArray(false);
 		enumOutput.setQName(new QName(WsEnumConstants.WS_ENUMERATION_URI, WsEnumConstants.ENUMERATE_RESPONSE_TYPE));
