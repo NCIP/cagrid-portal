@@ -29,7 +29,7 @@ public class LookAndFeel {
 
 
 	public final static ImageIcon getConfigurationPropertyIcon() {
-		return IconUtils.loadIcon("/modify16x16.png");
+		return IconUtils.loadIcon("/preferences-desktop-locale.png");
 	}
 
 
