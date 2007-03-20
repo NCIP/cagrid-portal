@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="build/stubs-BulkDataHandler/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
@@ -81,5 +82,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
+	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
