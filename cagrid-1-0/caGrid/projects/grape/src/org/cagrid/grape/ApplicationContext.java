@@ -1,11 +1,15 @@
 package org.cagrid.grape;
 
+import gov.nih.nci.cagrid.common.Utils;
+
 import java.awt.Dimension;
 import java.awt.Window;
 
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
 import org.cagrid.grape.model.Component;
+import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -52,16 +56,23 @@ public class ApplicationContext {
 	public ConfigurationManager getConfigurationManager() {
 		return this.application.getConfigurationManager();
 	}
-	
+
+
+	public void executeInBackground(MobiusRunnable r) throws Exception {
+		this.application.getThreadManager().executeInBackground(r);
+	}
+
+
 	public void centerComponent(JComponent comp) {
 		// Determine the new location of the window
 		int w = application.getSize().width;
-		int h =application.getSize().height;
+		int h = application.getSize().height;
 		int x = application.getLocationOnScreen().x;
 		int y = application.getLocationOnScreen().y;
 		Dimension dim = comp.getSize();
 		comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
 	}
+
 
 	public void centerWindow(Window comp) {
 		// Determine the new location of the window
@@ -71,6 +82,57 @@ public class ApplicationContext {
 		int y = application.getLocationOnScreen().y;
 		Dimension dim = comp.getSize();
 		comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
+	}
+
+
+	public void showErrorMessage(String msg) {
+		showErrorMessage("Portal Error", msg);
+	}
+
+
+	public void showErrorMessage(Exception e) {
+		showErrorMessage("Portal Error", e);
+	}
+
+
+	public void showConfigurationErrorMessage(String msg) {
+		showErrorMessage("Portal Configuration Error", new String[]{msg});
+	}
+
+
+	public void showMessage(String msg) {
+		showMessage(new String[]{msg});
+	}
+
+
+	public void showMessage(String[] msg) {
+		showMessage("Information", msg);
+	}
+
+
+	public void showMessage(String title, String msg) {
+		showMessage(title, new String[]{msg});
+	}
+
+
+	public void showMessage(String title, String[] msg) {
+		JOptionPane.showMessageDialog(this.application, msg, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+
+
+	public void showErrorMessage(String title, Exception e) {
+		String mess = Utils.getExceptionMessage(e);
+		JOptionPane.showMessageDialog(this.application, mess, title, JOptionPane.ERROR_MESSAGE);
+	}
+
+
+	public void showErrorMessage(String title, String msg) {
+		showErrorMessage(title, new String[]{msg});
+	}
+
+
+	public void showErrorMessage(String title, String[] msg) {
+		JOptionPane.showMessageDialog(this.application, msg, title, JOptionPane.ERROR_MESSAGE);
 	}
 
 }

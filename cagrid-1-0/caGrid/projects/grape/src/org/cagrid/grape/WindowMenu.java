@@ -60,7 +60,7 @@ public class WindowMenu extends JMenu {
 					window.setVisible(true);
 					GridApplication.getContext().centerWindow(window);
 				} catch (Exception ex) {
-					app.showErrorMessage(ex);
+					GridApplication.getContext().showErrorMessage(ex);
 					ex.printStackTrace();
 				}
 			}

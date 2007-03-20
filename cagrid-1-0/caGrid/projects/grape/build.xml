@@ -112,6 +112,12 @@
 			<fileset dir="${stubs.dest}">
 				<include name="**"/>
 			</fileset>
+			<fileset dir="${build.dest}">
+				<include name="**"/>
+			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="**"/>
+			</fileset>
 			<fileset dir="${stubs.src}">
 				<include name="**"/>
 			</fileset>

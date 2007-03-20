@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.Utils;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Window;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -103,6 +101,7 @@ public class GridApplication extends JFrame {
 			throw new Exception("An instance of the Grid Application has already been created.");
 		}
 	}
+
 
 	public static ApplicationContext getContext() {
 		return application.context;
@@ -518,59 +517,6 @@ public class GridApplication extends JFrame {
 		}
 		return closeAllMenuItem;
 	}
-
-
-	public void showErrorMessage(String msg) {
-		showErrorMessage("Portal Error", msg);
-	}
-
-
-	public void showErrorMessage(Exception e) {
-		showErrorMessage("Portal Error", e);
-	}
-
-
-	public void showConfigurationErrorMessage(String msg) {
-		showErrorMessage("Portal Configuration Error", new String[]{msg});
-	}
-
-
-	public void showMessage(String msg) {
-		showMessage(new String[]{msg});
-	}
-
-
-	public void showMessage(String[] msg) {
-		showMessage("Information", msg);
-	}
-
-
-	public void showMessage(String title, String msg) {
-		showMessage(title, new String[]{msg});
-	}
-
-
-	public void showMessage(String title, String[] msg) {
-		JOptionPane.showMessageDialog(this, msg, title, JOptionPane.INFORMATION_MESSAGE);
-	}
-
-
-	public void showErrorMessage(String title, Exception e) {
-		String mess = Utils.getExceptionMessage(e);
-		JOptionPane.showMessageDialog(this, mess, title, JOptionPane.ERROR_MESSAGE);
-	}
-
-
-	public void showErrorMessage(String title, String msg) {
-		showErrorMessage(title, new String[]{msg});
-	}
-
-
-	public void showErrorMessage(String title, String[] msg) {
-		JOptionPane.showMessageDialog(this, msg, title, JOptionPane.ERROR_MESSAGE);
-	}
-	
-	
 
 
 	static public class ExecuteComponent extends MobiusRunnable {
