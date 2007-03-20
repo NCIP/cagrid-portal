@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -534,12 +533,11 @@ public class GridApplication extends JFrame {
 
 		public void execute() {
 			try {
-				Class[] inputTypes = new Class[1];
-				inputTypes[0] = Component.class;
-				Constructor constructor = Class.forName(component.getClassname()).getConstructor(inputTypes);
-				Object[] inputs = new Object[1];
-				inputs[0] = component;
-				ApplicationComponent comp = (ApplicationComponent) constructor.newInstance(inputs);
+				ApplicationComponent comp =  (ApplicationComponent)Class.forName(component.getClassname()).newInstance();
+					comp.setTitle(this.component.getTitle());
+					if (this.component.getIcon() != null) {
+						comp.setFrameIcon(IconUtils.loadIcon(this.component.getIcon()));
+					}
 				if (component.getDimensions() != null) {
 					app.addApplicationComponent(comp, component.getDimensions().getWidth(), component.getDimensions()
 						.getHeight());
