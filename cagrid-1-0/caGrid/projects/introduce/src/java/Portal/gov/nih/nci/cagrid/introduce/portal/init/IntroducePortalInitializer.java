@@ -11,11 +11,13 @@ import gov.nih.nci.cagrid.introduce.portal.updater.IntroduceUpdateWizard;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.projectmobius.portal.GridPortalInitializer;
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -28,6 +30,9 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 
 
 	public void intialize() throws Exception {
+		PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+			+ "log4j.properties");
+
 		ExtensionsLoader.getInstance();
 
 		IntroduceHelp help = new IntroduceHelp();
@@ -36,22 +41,21 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 		helpMenuItem.setMnemonic(KeyEvent.VK_F1);
 		helpMenuItem.addActionListener(help.getFDisplayHelp());
 		helpMenu.insert(helpMenuItem, 0);
-		JMenuItem updateMenuItem = new JMenuItem("Check for Updates",IntroduceLookAndFeel.getUpdateIcon());
+		JMenuItem updateMenuItem = new JMenuItem("Check for Updates", IntroduceLookAndFeel.getUpdateIcon());
 		updateMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				IntroduceUpdateWizard.showUpdateWizard();
 			}
 		});
-		helpMenu.insert(updateMenuItem,1);
+		helpMenu.insert(updateMenuItem, 1);
 
 		JMenu configMenu = PortalResourceManager.getInstance().getGridPortal().getJMenuBar().getMenu(CONFIG_MENU);
 		JMenuItem configMenuItem = new JMenuItem("Preferences");
-		
-		
-		
+
 		configMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PreferencesDialog preferences = new PreferencesDialog(PortalResourceManager.getInstance().getGridPortal());
+				PreferencesDialog preferences = new PreferencesDialog(PortalResourceManager.getInstance()
+					.getGridPortal());
 				// user want to configure preferences....
 				PortalUtils.centerWindow(preferences);
 				preferences.setVisible(true);
