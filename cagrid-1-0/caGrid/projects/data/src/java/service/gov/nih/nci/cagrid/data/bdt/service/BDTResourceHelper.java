@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.service.bdt;
+package gov.nih.nci.cagrid.data.bdt.service;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -37,7 +37,7 @@ import org.w3c.dom.Document;
  * @author David Ervin
  * 
  * @created Mar 12, 2007 2:08:57 PM
- * @version $Id: BDTResourceHelper.java,v 1.2 2007-03-14 16:29:12 dervin Exp $ 
+ * @version $Id: BDTResourceHelper.java,v 1.1 2007-03-21 16:38:42 dervin Exp $ 
  */
 public class BDTResourceHelper extends BaseServiceImpl {
 	private CQLQuery query;
@@ -77,6 +77,7 @@ public class BDTResourceHelper extends BaseServiceImpl {
 			} catch (IOException ex) {
 				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 			} catch (Exception ex) {
+                ex.printStackTrace();
 				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 			}
 		}
@@ -180,8 +181,9 @@ public class BDTResourceHelper extends BaseServiceImpl {
 		if (targetQName == null) {
 			Mappings mapping = (Mappings) Utils.deserializeDocument(
 				classToQNameMapfile, Mappings.class);
-			for (int i = 0; i < mapping.getMapping().length; i++) {
-				ClassToQname conversion = mapping.getMapping(i);
+            ClassToQname[] maps = mapping.getMapping();
+			for (int i = 0; i < maps.length; i++) {
+				ClassToQname conversion = maps[i];
 				if (conversion.getClassName().equals(query.getTarget().getName())) {
 					targetQName = QName.valueOf(conversion.getQname());
 					break;

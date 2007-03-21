@@ -20,7 +20,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 1:10:16 PM
- * @version $Id: BDTFeatureCodegen.java,v 1.6 2007-03-20 19:18:50 dervin Exp $ 
+ * @version $Id: BDTFeatureCodegen.java,v 1.7 2007-03-21 16:38:42 dervin Exp $ 
  */
 public class BDTFeatureCodegen extends FeatureCodegen {
 	// public static final String NL = System.getProperties().getProperty("line.separator");
@@ -35,12 +35,12 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 	
 	// bdt resource edits
 	public static final String RESOURCE_CLASS_DECLARATION = "public class BDTResource extends BDTResourceBase implements BDTResourceI {";
-	public static final String RESOURCE_LINE1 = "\tprivate gov.nih.nci.cagrid.data.service.bdt.BDTResourceHelper helper;" + NL;
+	public static final String RESOURCE_LINE1 = "\tprivate gov.nih.nci.cagrid.data.bdt.service.BDTResourceHelper helper;" + NL;
 	public static final String RESOURCE_INITIALIZE = 
 		"\tvoid initialize(gov.nih.nci.cagrid.cqlquery.CQLQuery query, " + NL +
 		"\t\t\tString classToQnameMapfile, " + NL + 
 		"\t\t\tjava.io.InputStream wsddStream) {" + NL +
-		"\t\tthis.helper = new gov.nih.nci.cagrid.data.service.bdt.BDTResourceHelper(" + NL +
+		"\t\tthis.helper = new gov.nih.nci.cagrid.data.bdt.service.BDTResourceHelper(" + NL +
 		"\t\t\tquery, classToQnameMapfile, wsddStream);" + NL +
 		"\t}";
 	public static final String RESOURCE_CREATE_ENUM_METHOD = "public EnumIterator createEnumeration() throws BDTException {";
