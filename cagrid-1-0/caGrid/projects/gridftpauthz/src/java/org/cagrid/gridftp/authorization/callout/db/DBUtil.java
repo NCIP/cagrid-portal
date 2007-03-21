@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.cagrid.gridftp.authorization.callout.GridFTPOperation;
 import org.cagrid.gridftp.authorization.callout.GridFTPTuple;
-import org.cagrid.gridftp.authorization.callout.UnknownOperationException;
 
 
 /**
@@ -23,7 +22,7 @@ import org.cagrid.gridftp.authorization.callout.UnknownOperationException;
  * 
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * @created Mar 5, 2007
- * @version $Id: DBUtil.java,v 1.1 2007-03-21 13:59:19 jpermar Exp $
+ * @version $Id: DBUtil.java,v 1.2 2007-03-21 14:08:47 jpermar Exp $
  */
 public class DBUtil {
 
@@ -369,7 +368,7 @@ public class DBUtil {
 	} // void update()
 
 
-	public static void main(String[] args) throws DatabaseException, UnknownOperationException, MalformedURLException {
+	public static void main(String[] args) throws DatabaseException, MalformedURLException {
 		String connectionString = "jdbc:hsqldb:hsql://irondale/" + DB_NAME;
 		String dbuser = "sa";
 		String password = "";
