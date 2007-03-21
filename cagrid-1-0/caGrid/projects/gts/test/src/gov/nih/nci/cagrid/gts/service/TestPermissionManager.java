@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.gts.stubs.types.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
 import junit.framework.TestCase;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -22,13 +23,13 @@ public class TestPermissionManager extends TestCase {
 
 	private DBManager db;
 
+
 	public void testCreateAndDestroy() {
 		PermissionManager pm = new PermissionManager(db);
 		try {
 			pm.clearDatabase();
 			pm.buildDatabase();
-			assertTrue(db.getDatabase()
-					.tableExists(PermissionsTable.TABLE_NAME));
+			assertTrue(db.getDatabase().tableExists(PermissionsTable.TABLE_NAME));
 			pm.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -41,6 +42,7 @@ public class TestPermissionManager extends TestCase {
 			}
 		}
 	}
+
 
 	public void testAddPermission() {
 		PermissionManager pm = new PermissionManager(db);
@@ -55,8 +57,7 @@ public class TestPermissionManager extends TestCase {
 			Permission p2 = new Permission();
 			p2.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p2.setRole(Role.TrustAuthorityManager);
-			p2
-					.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
+			p2.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
 			pm.addPermission(p2);
 			assertTrue(pm.doesPermissionExist(p2));
 		} catch (Exception e) {
@@ -71,6 +72,7 @@ public class TestPermissionManager extends TestCase {
 		}
 	}
 
+
 	public void testRevokePermission() {
 		PermissionManager pm = new PermissionManager(db);
 		try {
@@ -84,8 +86,7 @@ public class TestPermissionManager extends TestCase {
 			Permission p2 = new Permission();
 			p2.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p2.setRole(Role.TrustAuthorityManager);
-			p2
-					.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
+			p2.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
 			pm.addPermission(p2);
 			assertTrue(pm.doesPermissionExist(p2));
 			pm.revokePermission(p1);
@@ -102,6 +103,7 @@ public class TestPermissionManager extends TestCase {
 			}
 		}
 	}
+
 
 	public void testRevokeNonExistingPermission() {
 		PermissionManager pm = new PermissionManager(db);
@@ -130,6 +132,7 @@ public class TestPermissionManager extends TestCase {
 			}
 		}
 	}
+
 
 	public void testAddInvalidPermissions() {
 		PermissionManager pm = new PermissionManager(db);
@@ -196,8 +199,7 @@ public class TestPermissionManager extends TestCase {
 				Permission p7 = new Permission();
 				p7.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 				p7.setRole(Role.TrustServiceAdmin);
-				p7
-						.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
+				p7.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
 				pm.addPermission(p7);
 				fail("Should not be able to specify a TrustServiceAdmin permission that applies to one TrustAuthority.");
 			} catch (IllegalPermissionFault f) {
@@ -216,6 +218,7 @@ public class TestPermissionManager extends TestCase {
 		}
 
 	}
+
 
 	public void testFindPermissions() {
 		PermissionManager pm = new PermissionManager(db);
@@ -318,6 +321,7 @@ public class TestPermissionManager extends TestCase {
 
 	}
 
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
@@ -328,6 +332,7 @@ public class TestPermissionManager extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	protected void tearDown() throws Exception {
 		super.tearDown();

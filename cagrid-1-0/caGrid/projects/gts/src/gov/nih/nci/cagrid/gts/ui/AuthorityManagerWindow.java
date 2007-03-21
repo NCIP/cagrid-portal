@@ -279,8 +279,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 
 			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			GridApplication.getContext().addApplicationComponent(
-				new AuthorityWindow(service, proxy, this), 600, 400);
+			GridApplication.getContext().addApplicationComponent(new AuthorityWindow(service, proxy, this), 600, 400);
 		} catch (Exception e) {
 			e.printStackTrace();
 			GridApplication.getContext().showErrorMessage(e);

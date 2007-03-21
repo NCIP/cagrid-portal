@@ -54,12 +54,12 @@ import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -69,32 +69,34 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 
 	private boolean rootStem;
 
-	public ExpressionNode(GridGrouperExpressionEditor editor,
-			MembershipExpression expression, boolean root) {
+
+	public ExpressionNode(GridGrouperExpressionEditor editor, MembershipExpression expression, boolean root) {
 		super(editor);
 		this.rootStem = root;
 		this.expression = expression;
 	}
-	
-	public synchronized void clearExpression(){
+
+
+	public synchronized void clearExpression() {
 		expression.setMembershipExpression(null);
 		expression.setMembershipQuery(null);
 		super.removeAllChildren();
 	}
-	
-	public synchronized void resetExpression(MembershipExpression expression){
+
+
+	public synchronized void resetExpression(MembershipExpression expression) {
 		super.removeAllChildren();
 		this.expression = expression;
 		this.refresh();
 	}
+
 
 	public void loadExpression() {
 		this.removeAllChildren();
 		MembershipExpression[] exps = this.expression.getMembershipExpression();
 		if (exps != null) {
 			for (int i = 0; i < exps.length; i++) {
-				ExpressionNode node = new ExpressionNode(getEditor(), exps[i],
-						false);
+				ExpressionNode node = new ExpressionNode(getEditor(), exps[i], false);
 				synchronized (getTree()) {
 					this.add(node);
 					TreeNode parent = this.getParent();
@@ -124,6 +126,7 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 		}
 	}
 
+
 	public void addGroup(Group grp) {
 		MembershipQuery[] mq = expression.getMembershipQuery();
 		int size = 0;
@@ -133,9 +136,7 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 		MembershipQuery[] nmq = new MembershipQuery[size + 1];
 		for (int i = 0; i < size; i++) {
 			if (mq[i].getGroupIdentifier().equals(grp.getGroupIdentifier())) {
-				Util.showErrorMessage("The group "
-						+ grp.getDisplayName()
-						+ " has already exists in the expression!!!");
+				Util.showErrorMessage("The group " + grp.getDisplayName() + " has already exists in the expression!!!");
 				return;
 			}
 			nmq[i] = mq[i];
@@ -147,17 +148,20 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 		loadExpression();
 	}
 
+
 	public void addAndExpression() {
 		MembershipExpression exp = new MembershipExpression();
 		exp.setLogicRelation(LogicalOperator.AND);
 		addExpression(exp);
 	}
 
+
 	public void addOrExpression() {
 		MembershipExpression exp = new MembershipExpression();
 		exp.setLogicRelation(LogicalOperator.OR);
 		addExpression(exp);
 	}
+
 
 	public void addExpression(MembershipExpression exp) {
 		MembershipExpression[] me = expression.getMembershipExpression();
@@ -173,6 +177,7 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 		expression.setMembershipExpression(nme);
 		loadExpression();
 	}
+
 
 	public void removeExpression(MembershipExpression exp) {
 		MembershipExpression[] me = expression.getMembershipExpression();
@@ -190,13 +195,12 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 				}
 			}
 			expression.setMembershipExpression(nme);
-			TreePath currentSelection = getEditor().getExpressionTree()
-					.getSelectionPath();
-			getEditor().getExpressionTree().setSelectionPath(
-					currentSelection.getParentPath());
+			TreePath currentSelection = getEditor().getExpressionTree().getSelectionPath();
+			getEditor().getExpressionTree().setSelectionPath(currentSelection.getParentPath());
 			loadExpression();
 		}
 	}
+
 
 	public void removeGroup(MembershipQuery query) {
 		MembershipQuery[] qe = expression.getMembershipQuery();
@@ -214,13 +218,12 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 				}
 			}
 			expression.setMembershipQuery(nqe);
-			TreePath currentSelection = getEditor().getExpressionTree()
-					.getSelectionPath();
-			getEditor().getExpressionTree().setSelectionPath(
-					currentSelection.getParentPath());
+			TreePath currentSelection = getEditor().getExpressionTree().getSelectionPath();
+			getEditor().getExpressionTree().setSelectionPath(currentSelection.getParentPath());
 			loadExpression();
 		}
 	}
+
 
 	public void refresh() {
 		loadExpression();
@@ -232,17 +235,21 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 		}
 	}
 
+
 	public ImageIcon getIcon() {
 		return GridGrouperLookAndFeel.getMembershipExpressionIcon16x16();
 	}
+
 
 	public String toString() {
 		return expression.getLogicRelation().getValue();
 	}
 
+
 	public boolean isRootExpression() {
 		return rootStem;
 	}
+
 
 	public MembershipExpression getExpression() {
 		return expression;

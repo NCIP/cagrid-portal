@@ -22,5 +22,6 @@ public abstract class TrustLevelTable {
 
 	public static final String LAST_UPDATED = "LAST_UPDATED";
 
+
 	public abstract String getCreateTableSQL();
 }

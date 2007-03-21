@@ -8,17 +8,16 @@ import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.AccessPrivilegeI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class AccessPrivilege extends GridGrouperObject implements
-		AccessPrivilegeI {
+public class AccessPrivilege extends GridGrouperObject implements AccessPrivilegeI {
 
 	public static final Privilege ADMIN = Privilege.getInstance("admin");
 
@@ -38,11 +37,13 @@ public class AccessPrivilege extends GridGrouperObject implements
 
 	private GroupI group;
 
+
 	public AccessPrivilege(GridGrouper grouper, GroupPrivilege priv) {
 		this.grouper = grouper;
 		this.priv = priv;
 
 	}
+
 
 	public GroupI getGroup() {
 		if (group == null) {
@@ -56,13 +57,16 @@ public class AccessPrivilege extends GridGrouperObject implements
 		return group;
 	}
 
+
 	public String getImplementationName() {
 		return priv.getImplementationClass();
 	}
 
+
 	public String getName() {
 		return priv.getPrivilegeType().getValue();
 	}
+
 
 	public Subject getOwner() {
 		try {
@@ -73,6 +77,7 @@ public class AccessPrivilege extends GridGrouperObject implements
 		}
 	}
 
+
 	public Subject getSubject() {
 		try {
 			return SubjectUtils.getSubject(priv.getSubject());
@@ -81,6 +86,7 @@ public class AccessPrivilege extends GridGrouperObject implements
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+
 
 	public boolean isRevokable() {
 		return this.priv.isIsRevokable();

@@ -54,7 +54,7 @@ public class ConfigurationDescriptorTreeNode extends ConfigurationBaseTreeNode {
 			}
 		}
 		this.processConfigurationEditors(des.getConfigurationEditors());
-		//this.processConfigurationDescriptors(des.getConfigurationDescriptors());
+		// this.processConfigurationDescriptors(des.getConfigurationDescriptors());
 	}
 
 
@@ -82,11 +82,12 @@ public class ConfigurationDescriptorTreeNode extends ConfigurationBaseTreeNode {
 
 
 	public void addConfigurationEditor(ConfigurationEditor editor, Object object) throws Exception {
-		ConfigurationEditorTreeNode node = new ConfigurationEditorTreeNode(getConfigurationWindow(), getTree(),
-			editor, object);
+		ConfigurationEditorTreeNode node = new ConfigurationEditorTreeNode(getConfigurationWindow(), getTree(), editor,
+			object);
 		this.add(node);
 		getTree().reload();
 	}
+
 
 	public ImageIcon getIcon() {
 		return LookAndFeel.getConfigurationPropertyIcon();

@@ -16,6 +16,7 @@ import javax.swing.border.TitledBorder;
 
 import org.globus.gsi.GlobusCredential;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -49,7 +50,8 @@ public class ProxyPanel extends JPanel {
 		super();
 		initialize();
 	}
-	
+
+
 	public void clearProxy() {
 		subjectField.setText("");
 		issuer.setText("");
@@ -93,16 +95,15 @@ public class ProxyPanel extends JPanel {
 		gridBagConstraints13.gridy = 0;
 		this.setLayout(new GridBagLayout());
 		this.add(getJPanel1(), gridBagConstraints13);
-		
-		
+
 	}
 
 
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -184,7 +185,9 @@ public class ProxyPanel extends JPanel {
 			jLabel.setText("Subject");
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
-			jPanel.setBorder(BorderFactory.createTitledBorder(null, "Proxy Information", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel.getPanelLabelColor()));
+			jPanel.setBorder(BorderFactory.createTitledBorder(null, "Proxy Information",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel
+					.getPanelLabelColor()));
 			jPanel.add(jLabel, gridBagConstraints);
 			jPanel.add(jLabel1, gridBagConstraints1);
 			jPanel.add(jLabel2, gridBagConstraints2);
@@ -201,10 +204,10 @@ public class ProxyPanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getIdentity() {
 		if (identity == null) {
 			identity = new JTextField();
@@ -215,10 +218,10 @@ public class ProxyPanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField1	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField1
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getIssuer() {
 		if (issuer == null) {
 			issuer = new JTextField();
@@ -229,10 +232,10 @@ public class ProxyPanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField2	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField2
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getTimeLeft() {
 		if (timeLeft == null) {
 			timeLeft = new JTextField();
@@ -243,10 +246,10 @@ public class ProxyPanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField3	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField3
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getStrength() {
 		if (strength == null) {
 			strength = new JTextField();
@@ -257,10 +260,10 @@ public class ProxyPanel extends JPanel {
 
 
 	/**
-	 * This method initializes jTextField4	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField4
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getSubjectField() {
 		if (subjectField == null) {
 			subjectField = new JTextField();
@@ -271,10 +274,10 @@ public class ProxyPanel extends JPanel {
 
 
 	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel1
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getCertificateChain() {
 		if (certificateChain == null) {
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
@@ -282,7 +285,9 @@ public class ProxyPanel extends JPanel {
 			gridBagConstraints10.weightx = 1.0;
 			gridBagConstraints10.weighty = 1.0;
 			certificateChain = new JPanel();
-			certificateChain.setBorder(BorderFactory.createTitledBorder(null, "Certificate Chain", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel.getPanelLabelColor()));
+			certificateChain.setBorder(BorderFactory.createTitledBorder(null, "Certificate Chain",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel
+					.getPanelLabelColor()));
 			certificateChain.setLayout(new GridBagLayout());
 			certificateChain.add(getJScrollPane(), gridBagConstraints10);
 		}
@@ -291,10 +296,10 @@ public class ProxyPanel extends JPanel {
 
 
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */    
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
@@ -305,10 +310,10 @@ public class ProxyPanel extends JPanel {
 
 
 	/**
-	 * This method initializes certificateTable	
-	 * 	
-	 * @return gov.nih.nci.cagrid.dorian.ifs.portal.CertificateTable	
-	 */    
+	 * This method initializes certificateTable
+	 * 
+	 * @return gov.nih.nci.cagrid.dorian.ifs.portal.CertificateTable
+	 */
 	public CertificateTable getCertificates() {
 		if (certificates == null) {
 			certificates = new CertificateTable();
@@ -316,22 +321,23 @@ public class ProxyPanel extends JPanel {
 		return certificates;
 	}
 
+
 	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel1
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.insets = new java.awt.Insets(5,3,0,5);
+			gridBagConstraints12.insets = new java.awt.Insets(5, 3, 0, 5);
 			gridBagConstraints12.gridy = 1;
 			gridBagConstraints12.weightx = 1.0D;
 			gridBagConstraints12.weighty = 1.0D;
 			gridBagConstraints12.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints12.gridx = 0;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints11.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints11.gridy = 0;
 			gridBagConstraints11.weightx = 1.0D;
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;

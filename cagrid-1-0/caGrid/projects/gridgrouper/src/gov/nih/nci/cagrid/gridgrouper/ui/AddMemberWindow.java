@@ -32,7 +32,6 @@ import org.projectmobius.common.MobiusRunnable;
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -107,6 +106,8 @@ public class AddMemberWindow extends ApplicationComponent {
 	private JComboBox rightGroup = null;
 
 	private GroupBrowser browser;
+
+
 	/**
 	 * This is the default constructor
 	 */
@@ -116,6 +117,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		this.browser = browser;
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -128,6 +130,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		this.setTitle("Add Member");
 		this.setFrameIcon(GridGrouperLookAndFeel.getMemberIcon22x22());
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -142,6 +145,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes detailsPanel
@@ -220,6 +224,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		return detailsPanel;
 	}
 
+
 	/**
 	 * This method initializes gridGrouper
 	 * 
@@ -233,6 +238,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		}
 		return gridGrouper;
 	}
+
 
 	/**
 	 * This method initializes group
@@ -248,6 +254,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		return group;
 	}
 
+
 	/**
 	 * This method initializes credentials
 	 * 
@@ -262,6 +269,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		return credentials;
 	}
 
+
 	/**
 	 * This method initializes membershipType
 	 * 
@@ -270,18 +278,18 @@ public class AddMemberWindow extends ApplicationComponent {
 	private JComboBox getMembershipType() {
 		if (membershipType == null) {
 			membershipType = new JComboBox();
-			membershipType
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							swapPanels();
-						}
-					});
+			membershipType.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					swapPanels();
+				}
+			});
 			membershipType.addItem(USER);
 			membershipType.addItem(GROUP);
 			membershipType.addItem(COMPOSITE);
 		}
 		return membershipType;
 	}
+
 
 	/**
 	 * This method initializes mainPanel
@@ -311,16 +319,16 @@ public class AddMemberWindow extends ApplicationComponent {
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 
-			mainPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Add Member", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-							Font.BOLD, 12), new Color(62, 109, 181)));
+			mainPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Member",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+				new Color(62, 109, 181)));
 			mainPanel.add(getMemberPanel(), gridBagConstraints8);
 			mainPanel.add(getDetailsPanel(), gridBagConstraints4);
 			mainPanel.add(getButtonPanel(), gridBagConstraints9);
 		}
 		return mainPanel;
 	}
+
 
 	/**
 	 * This method initializes memberPanel
@@ -339,6 +347,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		return memberPanel;
 	}
 
+
 	/**
 	 * This method initializes buttonPanel
 	 * 
@@ -353,6 +362,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes addMember
@@ -383,6 +393,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		return addMember;
 	}
 
+
 	private void addMember() {
 		String type = (String) this.getMembershipType().getSelectedItem();
 		if (type.equals(USER)) {
@@ -393,11 +404,11 @@ public class AddMemberWindow extends ApplicationComponent {
 			} else {
 				try {
 					node.getGroup().addMember(SubjectUtils.getSubject(user));
-					if(browser.getHasListedMembers()){
+					if (browser.getHasListedMembers()) {
 						browser.listMembers();
 					}
 					dispose();
-					
+
 					GridApplication.getContext().showMessage("The member was added successfully!!!");
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -406,17 +417,14 @@ public class AddMemberWindow extends ApplicationComponent {
 				}
 			}
 		} else if (type.equals(GROUP)) {
-			GroupNodeCaddy caddy = (GroupNodeCaddy) getGroupToAdd()
-					.getSelectedItem();
+			GroupNodeCaddy caddy = (GroupNodeCaddy) getGroupToAdd().getSelectedItem();
 			try {
-				node.getGroup().addMember(
-						caddy.getNode().getGroup().toSubject());
-				if(browser.getHasListedMembers()){
+				node.getGroup().addMember(caddy.getNode().getGroup().toSubject());
+				if (browser.getHasListedMembers()) {
 					browser.listMembers();
 				}
 				dispose();
-				GridApplication.getContext()
-						.showMessage("The group member was added successfully!!!");
+				GridApplication.getContext().showMessage("The group member was added successfully!!!");
 			} catch (Exception e) {
 				e.printStackTrace();
 				GridApplication.getContext().showErrorMessage(e);
@@ -424,18 +432,14 @@ public class AddMemberWindow extends ApplicationComponent {
 			}
 
 		} else if (type.equals(COMPOSITE)) {
-			CompositeType ct = (CompositeType) this.getCompositeType()
-					.getSelectedItem();
-			GroupNodeCaddy left = (GroupNodeCaddy) getLeftGroup()
-					.getSelectedItem();
-			GroupNodeCaddy right = (GroupNodeCaddy) getRightGroup()
-					.getSelectedItem();
+			CompositeType ct = (CompositeType) this.getCompositeType().getSelectedItem();
+			GroupNodeCaddy left = (GroupNodeCaddy) getLeftGroup().getSelectedItem();
+			GroupNodeCaddy right = (GroupNodeCaddy) getRightGroup().getSelectedItem();
 			try {
-				node.getGroup().addCompositeMember(ct,
-						left.getNode().getGroup(), right.getNode().getGroup());
+				node.getGroup().addCompositeMember(ct, left.getNode().getGroup(), right.getNode().getGroup());
 				this.node.refresh();
 				this.browser.setGroup();
-				if(browser.getHasListedMembers()){
+				if (browser.getHasListedMembers()) {
 					browser.listMembers();
 				}
 				dispose();
@@ -449,6 +453,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		}
 
 	}
+
 
 	/**
 	 * This method initializes cancel
@@ -468,6 +473,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		}
 		return cancel;
 	}
+
 
 	/**
 	 * This method initializes addUserPanel
@@ -492,15 +498,15 @@ public class AddMemberWindow extends ApplicationComponent {
 			addUserPanel = new JPanel();
 			addUserPanel.setLayout(new GridBagLayout());
 			addUserPanel.setName("addUserPanel");
-			addUserPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Add User", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-							Font.BOLD, 12), new Color(62, 109, 181)));
+			addUserPanel.setBorder(BorderFactory.createTitledBorder(null, "Add User",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+				new Color(62, 109, 181)));
 			addUserPanel.add(jLabel4, gridBagConstraints10);
 			addUserPanel.add(getUserIdentity(), gridBagConstraints12);
 		}
 		return addUserPanel;
 	}
+
 
 	/**
 	 * This method initializes userIdentity
@@ -513,6 +519,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		}
 		return userIdentity;
 	}
+
 
 	/**
 	 * This method initializes addGroupPanel
@@ -537,15 +544,15 @@ public class AddMemberWindow extends ApplicationComponent {
 			jLabel5.setText("Group");
 			addGroupPanel = new JPanel();
 			addGroupPanel.setLayout(new GridBagLayout());
-			addGroupPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Add Group", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-							Font.BOLD, 12), new Color(62, 109, 181)));
+			addGroupPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Group",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+				new Color(62, 109, 181)));
 			addGroupPanel.add(jLabel5, gridBagConstraints13);
 			addGroupPanel.add(getGroupToAdd(), gridBagConstraints14);
 		}
 		return addGroupPanel;
 	}
+
 
 	/**
 	 * This method initializes groupToAdd
@@ -557,33 +564,38 @@ public class AddMemberWindow extends ApplicationComponent {
 			groupToAdd = new JComboBox();
 			List nodes = node.getTree().getGroupNodes();
 			for (int i = 0; i < nodes.size(); i++) {
-				this.groupToAdd.addItem(new GroupNodeCaddy(
-						(GroupTreeNode) nodes.get(i)));
+				this.groupToAdd.addItem(new GroupNodeCaddy((GroupTreeNode) nodes.get(i)));
 			}
 		}
 		return groupToAdd;
 	}
+
 
 	private void swapPanels() {
 		String type = (String) this.getMembershipType().getSelectedItem();
 		this.memberTypeLayout.show(getMemberPanel(), type);
 	}
 
+
 	private class GroupNodeCaddy {
 		private GroupTreeNode node;
+
 
 		public GroupNodeCaddy(GroupTreeNode node) {
 			this.node = node;
 		}
 
+
 		public GroupTreeNode getNode() {
 			return node;
 		}
+
 
 		public String toString() {
 			return node.getGroup().getDisplayName();
 		}
 	}
+
 
 	/**
 	 * This method initializes addCompositePanel
@@ -637,10 +649,9 @@ public class AddMemberWindow extends ApplicationComponent {
 			addCompositePanel = new JPanel();
 			addCompositePanel.setLayout(new GridBagLayout());
 			addCompositePanel.setName(COMPOSITE);
-			addCompositePanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Add Composite Member", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-							Font.BOLD, 12), new Color(62, 109, 181)));
+			addCompositePanel.setBorder(BorderFactory.createTitledBorder(null, "Add Composite Member",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+				new Color(62, 109, 181)));
 			addCompositePanel.add(jLabel6, gridBagConstraints15);
 			addCompositePanel.add(getCompositeType(), gridBagConstraints16);
 			addCompositePanel.add(jLabel7, gridBagConstraints17);
@@ -650,6 +661,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		}
 		return addCompositePanel;
 	}
+
 
 	/**
 	 * This method initializes compositeType
@@ -666,6 +678,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		return compositeType;
 	}
 
+
 	/**
 	 * This method initializes leftGroup
 	 * 
@@ -676,12 +689,12 @@ public class AddMemberWindow extends ApplicationComponent {
 			leftGroup = new JComboBox();
 			List nodes = node.getTree().getGroupNodes();
 			for (int i = 0; i < nodes.size(); i++) {
-				this.leftGroup.addItem(new GroupNodeCaddy((GroupTreeNode) nodes
-						.get(i)));
+				this.leftGroup.addItem(new GroupNodeCaddy((GroupTreeNode) nodes.get(i)));
 			}
 		}
 		return leftGroup;
 	}
+
 
 	/**
 	 * This method initializes rightGroup
@@ -693,8 +706,7 @@ public class AddMemberWindow extends ApplicationComponent {
 			rightGroup = new JComboBox();
 			List nodes = node.getTree().getGroupNodes();
 			for (int i = 0; i < nodes.size(); i++) {
-				this.rightGroup.addItem(new GroupNodeCaddy(
-						(GroupTreeNode) nodes.get(i)));
+				this.rightGroup.addItem(new GroupNodeCaddy((GroupTreeNode) nodes.get(i)));
 			}
 		}
 		return rightGroup;

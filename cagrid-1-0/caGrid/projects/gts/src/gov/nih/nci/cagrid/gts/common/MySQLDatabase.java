@@ -8,6 +8,7 @@ import org.projectmobius.db.ConnectionManager;
 import org.projectmobius.db.DatabaseException;
 import org.projectmobius.db.Query;
 
+
 public class MySQLDatabase extends Database {
 
 	private ConnectionManager root;
@@ -16,42 +17,42 @@ public class MySQLDatabase extends Database {
 
 	private boolean dbBuilt = false;
 
+
 	public MySQLDatabase(ConnectionManager cm, String db) {
 		super(db);
 		this.root = cm;
 	}
 
+
 	protected ConnectionManager getConnectionManager() throws DatabaseException {
 		if (dbCM == null) {
-			dbCM = new ConnectionManager(getDatabaseName(),
-					root.getUrlPrefix(), root.getDriver(), root.getHost(), root
-							.getPort(), root.getUsername(), root.getPassword());
+			dbCM = new ConnectionManager(getDatabaseName(), root.getUrlPrefix(), root.getDriver(), root.getHost(), root
+				.getPort(), root.getUsername(), root.getPassword());
 		}
 		return dbCM;
 	}
+
 
 	public void createDatabase() throws DatabaseException {
 		try {
 			if (!dbBuilt) {
 				if (!databaseExists(getDatabaseName())) {
-					Query.update(this.root, "create database "
-							+ getDatabaseName());
+					Query.update(this.root, "create database " + getDatabaseName());
 				}
 				dbBuilt = true;
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new DatabaseException(
-					"An error occured while trying to create the database ("
-							+ getDatabaseName() + ")");
+			throw new DatabaseException("An error occured while trying to create the database (" + getDatabaseName()
+				+ ")");
 		}
 	}
+
 
 	public void destroyDatabase() throws DatabaseException {
 		try {
 			if (databaseExists(getDatabaseName())) {
-				Query.update(this.root, "drop database if exists "
-						+ getDatabaseName());
+				Query.update(this.root, "drop database if exists " + getDatabaseName());
 			}
 			if (dbCM != null) {
 				dbCM.destroy();
@@ -63,12 +64,12 @@ public class MySQLDatabase extends Database {
 			dbBuilt = false;
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new DatabaseException(
-					"An error occured while trying to destroy the database ("
-							+ getDatabaseName() + ")");
+			throw new DatabaseException("An error occured while trying to destroy the database (" + getDatabaseName()
+				+ ")");
 		}
 
 	}
+
 
 	private boolean databaseExists(String db) throws DatabaseException {
 		boolean exists = false;

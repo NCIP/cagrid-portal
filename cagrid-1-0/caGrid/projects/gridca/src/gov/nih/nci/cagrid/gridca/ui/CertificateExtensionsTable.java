@@ -17,9 +17,10 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateExtensionsTable.java,v 1.2 2007-03-21 19:36:22 langella Exp $
+ * @version $Id: CertificateExtensionsTable.java,v 1.2 2007/03/21 19:36:22
+ *          langella Exp $
  */
-public class CertificateExtensionsTable extends GrapeBaseTable{
+public class CertificateExtensionsTable extends GrapeBaseTable {
 
 	public final static String OID = "OID";
 	public final static String NAME = "NAME";
@@ -61,7 +62,7 @@ public class CertificateExtensionsTable extends GrapeBaseTable{
 				v.add(oid);
 				v.add(CertificateExtensionsUtil.getExtentionName(oid));
 				v.add("true");
-				v.add(CertificateExtensionsUtil.getExtensionDisplayValue(oid,cert));
+				v.add(CertificateExtensionsUtil.getExtensionDisplayValue(oid, cert));
 				addRow(v);
 
 			} catch (Exception e) {
@@ -77,7 +78,7 @@ public class CertificateExtensionsTable extends GrapeBaseTable{
 			v.add(oid);
 			v.add(CertificateExtensionsUtil.getExtentionName(oid));
 			v.add("false");
-			v.add(CertificateExtensionsUtil.getExtensionDisplayValue(oid,cert));
+			v.add(CertificateExtensionsUtil.getExtensionDisplayValue(oid, cert));
 			addRow(v);
 		}
 

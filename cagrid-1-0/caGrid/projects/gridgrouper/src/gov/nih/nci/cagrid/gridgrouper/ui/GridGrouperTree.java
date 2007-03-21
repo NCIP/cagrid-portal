@@ -53,12 +53,12 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -66,17 +66,20 @@ public class GridGrouperTree extends JTree {
 
 	private GridGroupersTreeNode rootNode;
 
+
 	public GridGrouperTree(GroupManagementBrowser browser) {
 		super();
 		this.rootNode = new GridGroupersTreeNode(browser);
 		setModel(new DefaultTreeModel(this.rootNode));
-		this.addMouseListener(new GridGrouperTreeEventListener(this,browser));
+		this.addMouseListener(new GridGrouperTreeEventListener(this, browser));
 		this.setCellRenderer(new GridGrouperTreeRenderer());
 	}
+
 
 	public GridGroupersTreeNode getRootNode() {
 		return this.rootNode;
 	}
+
 
 	public List getGroupNodes() {
 		List nodes = new ArrayList();
@@ -84,11 +87,11 @@ public class GridGrouperTree extends JTree {
 		return nodes;
 	}
 
+
 	private void getGroupNodes(GridGrouperBaseTreeNode node, List nodes) {
 		int count = node.getChildCount();
 		for (int i = 0; i < count; i++) {
-			GridGrouperBaseTreeNode child = (GridGrouperBaseTreeNode) node
-					.getChildAt(i);
+			GridGrouperBaseTreeNode child = (GridGrouperBaseTreeNode) node.getChildAt(i);
 			if (child instanceof GroupTreeNode) {
 				nodes.add(child);
 			} else if (child instanceof StemTreeNode) {
@@ -97,15 +100,16 @@ public class GridGrouperTree extends JTree {
 		}
 	}
 
+
 	public GridGrouperBaseTreeNode getCurrentNode() {
 		TreePath currentSelection = this.getSelectionPath();
 		if (currentSelection != null) {
-			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection
-					.getLastPathComponent();
+			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection.getLastPathComponent();
 			return (GridGrouperBaseTreeNode) currentNode;
 		}
 		return null;
 	}
+
 
 	/**
 	 * Get all the selected service nodes
@@ -118,8 +122,7 @@ public class GridGrouperTree extends JTree {
 		if (currentSelection != null) {
 			for (int i = 0; i < currentSelection.length; i++) {
 				TreePath path = currentSelection[i];
-				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) path
-						.getLastPathComponent();
+				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) path.getLastPathComponent();
 				if (currentNode != this.getRootNode()) {
 					selected.add(currentNode);
 				}
@@ -127,6 +130,7 @@ public class GridGrouperTree extends JTree {
 		}
 		return selected;
 	}
+
 
 	/**
 	 * Reload a portion of the tree's view in a synchronized way
@@ -137,6 +141,7 @@ public class GridGrouperTree extends JTree {
 	public synchronized void reload(TreeNode reloadPoint) {
 		((DefaultTreeModel) this.getModel()).reload(reloadPoint);
 	}
+
 
 	/**
 	 * Reload from the root

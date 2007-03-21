@@ -14,5 +14,6 @@ public abstract class TrustedAuthorityTrustLevelsTable {
 
 	public static final String TRUST_LEVEL = "TRUST_LEVEL";
 
+
 	public abstract String getCreateTableSQL();
 }

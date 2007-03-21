@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.gts.bean.Status;
 
 import javax.swing.JComboBox;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -14,9 +15,11 @@ import javax.swing.JComboBox;
 public class StatusComboBox extends JComboBox {
 	private static final String ANY = "Any";
 
+
 	public StatusComboBox() {
 		this(false);
 	}
+
 
 	public StatusComboBox(boolean allowAny) {
 		if (allowAny) {
@@ -26,6 +29,7 @@ public class StatusComboBox extends JComboBox {
 		this.addItem(Status.Suspended);
 		this.setEditable(false);
 	}
+
 
 	public Status getStatus() {
 		if (getSelectedItem().equals(ANY)) {

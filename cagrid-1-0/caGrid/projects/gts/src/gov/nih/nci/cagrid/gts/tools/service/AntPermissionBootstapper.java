@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.gts.service.db.mysql.MySQLManager;
 import gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault;
 import gov.nih.nci.cagrid.gts.stubs.types.IllegalPermissionFault;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -23,25 +24,27 @@ public class AntPermissionBootstapper {
 
 	private PermissionManager pm;
 
+
 	public AntPermissionBootstapper(GTSConfiguration conf) {
-		pm = new PermissionManager(new MySQLManager(new MySQLDatabase(conf
-				.getConnectionManager(), conf.getGTSInternalId())));
+		pm = new PermissionManager(new MySQLManager(new MySQLDatabase(conf.getConnectionManager(), conf
+			.getGTSInternalId())));
 	}
 
-	public void addAdminUser(String gridIdentity) throws GTSInternalFault,
-			IllegalPermissionFault {
+
+	public void addAdminUser(String gridIdentity) throws GTSInternalFault, IllegalPermissionFault {
 		Permission p = new Permission();
 		p.setGridIdentity(gridIdentity);
 		p.setRole(Role.TrustServiceAdmin);
 		pm.addPermission(p);
 	}
 
+
 	public static void usage() {
 		System.err.println(AntPermissionBootstapper.class.getName() + " Usage:");
 		System.err.println();
-		System.err.println("java " + AntPermissionBootstapper.class.getName()
-				+ " GTS_CONFIGURATION_FILE");
+		System.err.println("java " + AntPermissionBootstapper.class.getName() + " GTS_CONFIGURATION_FILE");
 	}
+
 
 	public static void main(String[] args) {
 		if (args.length != 2) {
@@ -51,8 +54,7 @@ public class AntPermissionBootstapper {
 		GTSConfiguration conf = null;
 		try {
 			SimpleResourceManager srm = new SimpleResourceManager(args[0]);
-			conf = (GTSConfiguration) srm
-					.getResource(GTSConfiguration.RESOURCE);
+			conf = (GTSConfiguration) srm.getResource(GTSConfiguration.RESOURCE);
 		} catch (Exception e) {
 			System.out.println("Error loading the GTS config file, " + args[0]);
 			e.printStackTrace();
@@ -62,9 +64,8 @@ public class AntPermissionBootstapper {
 			AntPermissionBootstapper util = new AntPermissionBootstapper(conf);
 			String gridId = args[1];
 			util.addAdminUser(gridId);
-			System.out.println("The user " + gridId
-					+ " was succesfully added as an administrator of the GTS ("
-					+ conf.getGTSInternalId() + ")");
+			System.out.println("The user " + gridId + " was succesfully added as an administrator of the GTS ("
+				+ conf.getGTSInternalId() + ")");
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			System.exit(1);

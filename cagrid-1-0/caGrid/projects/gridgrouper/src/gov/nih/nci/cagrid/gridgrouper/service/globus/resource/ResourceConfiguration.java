@@ -6,7 +6,6 @@ public class ResourceConfiguration {
 	private String serviceMetadataFile;
 
 
-
 	public boolean shouldPerformRegistration() {
 		return performRegistration;
 	}
@@ -25,16 +24,15 @@ public class ResourceConfiguration {
 	public void setRegistrationTemplateFile(String registrationTemplateFile) {
 		this.registrationTemplateFile = registrationTemplateFile;
 	}
-	
-	
-	
+
+
 	public String getServiceMetadataFile() {
 		return serviceMetadataFile;
 	}
-	
-	
+
+
 	public void setServiceMetadataFile(String serviceMetadataFile) {
 		this.serviceMetadataFile = serviceMetadataFile;
 	}
-		
+
 }

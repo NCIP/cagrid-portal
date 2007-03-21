@@ -190,13 +190,13 @@ public class CertificateRevocationLists {
 		}
 	}
 
-/*
-	public static CertificateRevocationLists getCertificateRevocationLists(String locations) {
-		CertificateRevocationLists crl = new CertificateRevocationLists();
-		crl.reload(locations);
-		return crl;
-	}
-*/
+
+	/*
+	 * public static CertificateRevocationLists
+	 * getCertificateRevocationLists(String locations) {
+	 * CertificateRevocationLists crl = new CertificateRevocationLists();
+	 * crl.reload(locations); return crl; }
+	 */
 
 	public static CertificateRevocationLists getCertificateRevocationLists(X509CRL[] crls) {
 		CertificateRevocationLists crl = new CertificateRevocationLists();

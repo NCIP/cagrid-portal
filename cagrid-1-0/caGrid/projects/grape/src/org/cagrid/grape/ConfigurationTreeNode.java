@@ -17,8 +17,7 @@ import org.cagrid.grape.model.ConfigurationGroups;
  */
 public class ConfigurationTreeNode extends ConfigurationBaseTreeNode {
 
-	public ConfigurationTreeNode(ConfigurationWindow window, ConfigurationTree tree)
-		throws Exception {
+	public ConfigurationTreeNode(ConfigurationWindow window, ConfigurationTree tree) throws Exception {
 		super(window, tree);
 		processConfiguration(GridApplication.getContext().getConfigurationManager().getConfiguration());
 		this.setDisplayPanel(new ConfigurationDisplayPanel("Preferences"));
@@ -32,7 +31,8 @@ public class ConfigurationTreeNode extends ConfigurationBaseTreeNode {
 		}
 
 	}
-	
+
+
 	protected void processConfigurationGroups(ConfigurationGroups list) throws Exception {
 		if (list != null) {
 			ConfigurationGroup[] group = list.getConfigurationGroup();

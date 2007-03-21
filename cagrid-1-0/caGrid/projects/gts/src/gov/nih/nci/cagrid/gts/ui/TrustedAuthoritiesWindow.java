@@ -153,8 +153,8 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				GridApplication.getContext().showErrorMessage("Error obtaining the trust levels from " + service + ":\n"
-					+ e.getMessage());
+				GridApplication.getContext().showErrorMessage(
+					"Error obtaining the trust levels from " + service + ":\n" + e.getMessage());
 			}
 		}
 	}

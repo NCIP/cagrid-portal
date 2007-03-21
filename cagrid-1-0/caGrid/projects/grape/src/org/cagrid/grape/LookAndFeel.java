@@ -8,10 +8,11 @@ import org.cagrid.grape.utils.IconUtils;
 
 
 public class LookAndFeel {
-	
+
 	public final static ImageIcon getQueryIcon() {
 		return IconUtils.loadIcon("/system-search.png");
 	}
+
 
 	public final static ImageIcon getPreferencesIcon() {
 		return IconUtils.loadIcon("/modify22x22.png");
@@ -31,7 +32,8 @@ public class LookAndFeel {
 	public final static ImageIcon getConfigurationPropertyIcon() {
 		return IconUtils.loadIcon("/preferences-desktop-locale.png");
 	}
-	
+
+
 	public final static ImageIcon getSelectIcon() {
 		return IconUtils.loadIcon("/Check.gif");
 	}
@@ -45,21 +47,23 @@ public class LookAndFeel {
 	public final static ImageIcon getTileIcon() {
 		return IconUtils.loadIcon("/TileVertical.gif");
 	}
-	
+
+
 	public final static ImageIcon getCloseIcon() {
 		return IconUtils.loadIcon("/edit-delete.png");
 	}
-	
+
+
 	public final static ImageIcon getImportIcon() {
 		return IconUtils.loadIcon("/folder-open.png");
 	}
 
 
-
 	public final static ImageIcon getAboutIcon() {
 		return IconUtils.loadIcon("/Inform.gif");
 	}
-	
+
+
 	public final static ImageIcon getSaveIcon() {
 		return IconUtils.loadIcon("/media-floppy.png");
 	}

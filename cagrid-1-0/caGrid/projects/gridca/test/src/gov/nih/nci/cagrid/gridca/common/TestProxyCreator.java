@@ -26,19 +26,23 @@ public class TestProxyCreator extends TestCase {
 		return s.replace('/', ',');
 	}
 
+
 	public void testCreateProxy() {
 		checkCreateProxy(Integer.MAX_VALUE);
 	}
-	
+
+
 	public void testDelegationProxyLength0() {
 		checkCreateProxy(0);
 	}
-	
+
+
 	public void testDelegationProxyLength5() {
 		checkCreateProxy(5);
 	}
-	
-	public void checkCreateProxy(int length){
+
+
+	public void checkCreateProxy(int length) {
 		try {
 			CA ca = new CA();
 			Credential gridCred = ca.createIdentityCertificate("User X");
@@ -54,8 +58,8 @@ public class TestProxyCreator extends TestCase {
 			assertNotNull(proxyPublicKey);
 			X509Certificate cert = gridCred.getCertificate();
 			assertNotNull(cert);
-			X509Certificate[] certs = ProxyCreator.createImpersonationProxyCertificate(cert, key, proxyPublicKey, hours, minutes,
-				seconds,length);
+			X509Certificate[] certs = ProxyCreator.createImpersonationProxyCertificate(cert, key, proxyPublicKey,
+				hours, minutes, seconds, length);
 			assertNotNull(certs);
 			assertEquals(2, certs.length);
 			GlobusCredential cred = new GlobusCredential(pair.getPrivate(), certs);

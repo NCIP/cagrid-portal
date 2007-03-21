@@ -16,11 +16,12 @@ import org.projectmobius.db.ConnectionManager;
 import org.projectmobius.db.DatabaseException;
 import org.projectmobius.db.Query;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: MysqlDBUtil.java,v 1.5 2006-12-22 22:26:00 langella Exp $
+ * @version $Id: MysqlDBUtil.java,v 1.6 2007-03-21 20:11:35 langella Exp $
  */
 public class MysqlDBUtil {
 
@@ -34,9 +35,11 @@ public class MysqlDBUtil {
 
 	private boolean dbBuilt = false;
 
+
 	public MysqlDBUtil(ConnectionManager rootConnectionManager) {
 		this.root = rootConnectionManager;
 	}
+
 
 	public void createDatabaseIfNeeded() throws GridGrouperRuntimeFault {
 
@@ -46,18 +49,15 @@ public class MysqlDBUtil {
 					Query.update(this.root, "create database " + DB);
 				}
 				if (core == null) {
-					core = new ConnectionManager(DB, root.getUrlPrefix(), root
-							.getDriver(), root.getHost(), root.getPort(), root
-							.getUsername(), root.getPassword());
+					core = new ConnectionManager(DB, root.getUrlPrefix(), root.getDriver(), root.getHost(), root
+						.getPort(), root.getUsername(), root.getPassword());
 				}
 				dbBuilt = true;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
-			fault
-					.setFaultString("An error occured while trying to create the Dorian database ("
-							+ DB + ")");
+			fault.setFaultString("An error occured while trying to create the Dorian database (" + DB + ")");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GridGrouperRuntimeFault) helper.getFault();
@@ -65,6 +65,7 @@ public class MysqlDBUtil {
 		}
 
 	}
+
 
 	public void destroyDatabase() throws GridGrouperRuntimeFault {
 		try {
@@ -82,9 +83,7 @@ public class MysqlDBUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
-			fault
-					.setFaultString("An error occured while trying to destroy the Grid Grouper database ("
-							+ DB + ")");
+			fault.setFaultString("An error occured while trying to destroy the Grid Grouper database (" + DB + ")");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GridGrouperRuntimeFault) helper.getFault();
@@ -92,16 +91,16 @@ public class MysqlDBUtil {
 		}
 	}
 
+
 	public boolean tableExists(String tableName) throws GridGrouperRuntimeFault {
 		boolean exists = false;
 		Connection c = null;
 		try {
 			c = core.getConnection();
 			DatabaseMetaData dbMetadata = c.getMetaData();
-			String[] names = { "TABLE" };
+			String[] names = {"TABLE"};
 			names[0] = tableName;
-			ResultSet tables = dbMetadata
-					.getTables(null, "%", tableName, names);
+			ResultSet tables = dbMetadata.getTables(null, "%", tableName, names);
 			if (tables.next()) {
 				exists = true;
 			}
@@ -120,6 +119,7 @@ public class MysqlDBUtil {
 		return exists;
 	}
 
+
 	public void update(String sql) throws GridGrouperRuntimeFault {
 		try {
 			Query.update(core, sql);
@@ -132,6 +132,7 @@ public class MysqlDBUtil {
 			throw (GridGrouperRuntimeFault) helper.getFault();
 		}
 	}
+
 
 	public long insertGetId(String sql) throws GridGrouperRuntimeFault {
 		try {
@@ -146,13 +147,16 @@ public class MysqlDBUtil {
 		}
 	}
 
+
 	public void releaseConnection(Connection c) {
 		this.core.releaseConnection(c);
 	}
 
+
 	public Connection getConnection() throws DatabaseException {
 		return this.core.getConnection();
 	}
+
 
 	private boolean databaseExists(String db) throws GridGrouperRuntimeFault {
 		boolean exists = false;
@@ -185,23 +189,27 @@ public class MysqlDBUtil {
 		return exists;
 	}
 
+
 	public int getUsedConnectionCount() {
 		return this.core.getUsedConnectionCount();
 	}
 
+
 	public int getRootUsedConnectionCount() {
 		return this.root.getUsedConnectionCount();
 	}
+
 
 	public static MysqlDBUtil getDB() throws Exception {
 		InputStream resource = TestCase.class.getResourceAsStream(DB_CONFIG);
 		Document doc = XMLUtilities.streamToDocument(resource);
 		ConnectionManager cm = new ConnectionManager(doc.getRootElement());
 		MysqlDBUtil db = new MysqlDBUtil(cm);
-		//db.destroyDatabase();
+		// db.destroyDatabase();
 		db.createDatabaseIfNeeded();
 		return db;
 	}
+
 
 	public static void main(String[] args) {
 		try {

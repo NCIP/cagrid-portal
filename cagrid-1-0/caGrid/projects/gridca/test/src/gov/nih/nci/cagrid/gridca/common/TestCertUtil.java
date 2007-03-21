@@ -313,10 +313,10 @@ public class TestCertUtil extends TestCase {
 			assertTrue(crl2.isRevoked(user1));
 			assertTrue(!crl2.isRevoked(user2));
 			assertTrue(crl2.isRevoked(user3));
-			
-//			 Test validity after reading writing to file
+
+			// Test validity after reading writing to file
 			File f = new File("temp-crl.pem");
-			CertUtil.writeCRL(crl,f);
+			CertUtil.writeCRL(crl, f);
 			X509CRL crl3 = CertUtil.loadCRL(f);
 			assertEquals(crl, crl3);
 			crl3.verify(cacert.getPublicKey());
@@ -334,6 +334,7 @@ public class TestCertUtil extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	private static FileInputStream getFileInputStream(String file) throws Exception {
 		return new FileInputStream(new File(file));

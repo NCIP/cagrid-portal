@@ -14,7 +14,6 @@ import java.util.TimeZone;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -24,42 +23,37 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  */
 public class AntCreateHostCertificate {
 
-
 	public static void main(String[] args) {
 		try {
-			Security
-			.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+			Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 			String key = args[0];
-			String password =args[1];
+			String password = args[1];
 			String cert = args[2];
 			String cn = args[3];
 			String daysValid = args[4];
 			String keyOut = args[5];
 			String certOut = args[6];
-			
+
 			int days = Integer.valueOf(daysValid).intValue();
 			while (days <= 0) {
 				System.err.println("Days Valid must be >0");
 				System.exit(1);
 			}
-			PrivateKey cakey = KeyUtil.loadPrivateKey(new File(key),password);
-				
-			
-			X509Certificate cacert =  CertUtil.loadCertificate(new File(cert));
-			
+			PrivateKey cakey = KeyUtil.loadPrivateKey(new File(key), password);
+
+			X509Certificate cacert = CertUtil.loadCertificate(new File(cert));
+
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			String rootSub = cacert.getSubjectDN().toString();
 			int index = rootSub.lastIndexOf(",");
-			String subject = rootSub.substring(0, index) + ",CN=host/"+cn;
-			PKCS10CertificationRequest request = CertUtil
-					.generateCertficateRequest(subject, pair);
-		
-			GregorianCalendar date = new GregorianCalendar(TimeZone
-					.getTimeZone("GMT"));
+			String subject = rootSub.substring(0, index) + ",CN=host/" + cn;
+			PKCS10CertificationRequest request = CertUtil.generateCertficateRequest(subject, pair);
+
+			GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 			/* Allow for a five minute clock skew here. */
 			date.add(Calendar.MINUTE, -5);
 			Date start = new Date(date.getTimeInMillis());
-            Date end = null;
+			Date end = null;
 			/* If hours = 0, then cert lifetime is set to user cert */
 			if (days <= 0) {
 				end = cacert.getNotAfter();
@@ -67,15 +61,16 @@ public class AntCreateHostCertificate {
 				date.add(Calendar.MINUTE, 5);
 				date.add(Calendar.DAY_OF_MONTH, days);
 				Date d = new Date(date.getTimeInMillis());
-				if(cacert.getNotAfter().before(d)){
-					throw new GeneralSecurityException("Cannot create a certificate that expires after issuing certificate.");
+				if (cacert.getNotAfter().before(d)) {
+					throw new GeneralSecurityException(
+						"Cannot create a certificate that expires after issuing certificate.");
 				}
 				end = d;
 			}
-			X509Certificate userCert = CertUtil.signCertificateRequest(request,start,end,cacert,cakey);
+			X509Certificate userCert = CertUtil.signCertificateRequest(request, start, end, cacert, cakey);
 
-			KeyUtil.writePrivateKey(pair.getPrivate(),new File(keyOut));
-			CertUtil.writeCertificate(userCert,new File(certOut));
+			KeyUtil.writePrivateKey(pair.getPrivate(), new File(keyOut));
+			CertUtil.writeCertificate(userCert, new File(certOut));
 			System.out.println("Successfully create the user certificate:");
 			System.out.println(userCert.getSubjectDN().toString());
 			System.out.println("User certificate issued by:");
@@ -86,15 +81,12 @@ public class AntCreateHostCertificate {
 			System.out.println(keyOut);
 			System.out.println("User Certificate Written to:");
 			System.out.println(certOut);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
 
 	}
-
-
 
 }

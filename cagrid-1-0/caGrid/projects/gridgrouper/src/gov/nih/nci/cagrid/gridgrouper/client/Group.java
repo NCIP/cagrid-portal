@@ -45,12 +45,12 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -62,46 +62,57 @@ public class Group extends GridGrouperObject implements GroupI {
 
 	private StemI stem;
 
+
 	protected Group(GridGrouper gridGrouper, GroupDescriptor des) {
 		this.gridGrouper = gridGrouper;
 		this.des = des;
 	}
 
+
 	public String getCreateSource() {
 		return des.getCreateSource();
 	}
+
 
 	public Subject getCreateSubject() throws SubjectNotFoundException {
 		return SubjectUtils.getSubject(des.getCreateSubject(), true);
 	}
 
+
 	public Date getCreateTime() {
 		return new Date(des.getCreateTime());
 	}
+
 
 	public String getDescription() {
 		return des.getDescription();
 	}
 
+
 	public String getDisplayExtension() {
 		return des.getDisplayExtension();
 	}
+
 
 	public String getDisplayName() {
 		return des.getDisplayName();
 	}
 
+
 	public String getExtension() {
 		return des.getExtension();
 	}
+
 
 	public String getModifySource() {
 		return des.getModifySource();
 	}
 
+
 	public Subject getModifySubject() throws SubjectNotFoundException {
 		return SubjectUtils.getSubject(des.getModifySubject(), true);
 	}
+
 
 	public Date getModifyTime() {
 		if (des.getModifyTime() == 0) {
@@ -110,6 +121,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			return new Date(des.getModifyTime());
 		}
 	}
+
 
 	public StemI getParentStem() {
 		if (stem == null) {
@@ -123,32 +135,34 @@ public class Group extends GridGrouperObject implements GroupI {
 		return stem;
 	}
 
+
 	public GroupIdentifier getGroupIdentifier() {
 		return gridGrouper.getGroupIdentifier(getName());
 	}
+
 
 	public String getName() {
 		return des.getName();
 	}
 
+
 	public String getUuid() {
 		return des.getUUID();
 	}
 
+
 	public String toString() {
-		return new ToStringBuilder(this)
-				.append("displayName", getDisplayName()).append("name",
-						getName()).append("uuid", getUuid()).append("created",
-						getCreateTime()).append("modified", getModifyTime())
-				.toString();
+		return new ToStringBuilder(this).append("displayName", getDisplayName()).append("name", getName()).append(
+			"uuid", getUuid()).append("created", getCreateTime()).append("modified", getModifyTime()).toString();
 	}
+
 
 	public GridGrouper getGridGrouper() {
 		return gridGrouper;
 	}
 
-	public void delete() throws GroupDeleteException,
-			InsufficientPrivilegeException {
+
+	public void delete() throws GroupDeleteException, InsufficientPrivilegeException {
 		try {
 			gridGrouper.getClient().deleteGroup(getGroupIdentifier());
 		} catch (InsufficientPrivilegeFault f) {
@@ -164,13 +178,12 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
-	public void setDescription(String value) throws GroupModifyException,
-			InsufficientPrivilegeException {
+
+	public void setDescription(String value) throws GroupModifyException, InsufficientPrivilegeException {
 		try {
 			GroupUpdate update = new GroupUpdate();
 			update.setDescription(value);
-			this.des = gridGrouper.getClient().updateGroup(
-					this.getGroupIdentifier(), update);
+			this.des = gridGrouper.getClient().updateGroup(this.getGroupIdentifier(), update);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (GroupModifyFault f) {
@@ -185,13 +198,12 @@ public class Group extends GridGrouperObject implements GroupI {
 
 	}
 
-	public void setDisplayExtension(String value) throws GroupModifyException,
-			InsufficientPrivilegeException {
+
+	public void setDisplayExtension(String value) throws GroupModifyException, InsufficientPrivilegeException {
 		try {
 			GroupUpdate update = new GroupUpdate();
 			update.setDisplayExtension(value);
-			this.des = gridGrouper.getClient().updateGroup(
-					this.getGroupIdentifier(), update);
+			this.des = gridGrouper.getClient().updateGroup(this.getGroupIdentifier(), update);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (GroupModifyFault f) {
@@ -205,13 +217,12 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
-	public void setExtension(String value) throws GroupModifyException,
-			InsufficientPrivilegeException {
+
+	public void setExtension(String value) throws GroupModifyException, InsufficientPrivilegeException {
 		try {
 			GroupUpdate update = new GroupUpdate();
 			update.setExtension(value);
-			this.des = gridGrouper.getClient().updateGroup(
-					this.getGroupIdentifier(), update);
+			this.des = gridGrouper.getClient().updateGroup(this.getGroupIdentifier(), update);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (GroupModifyFault f) {
@@ -225,12 +236,11 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
-	public void addMember(Subject subj) throws InsufficientPrivilegeException,
-			MemberAddException {
+
+	public void addMember(Subject subj) throws InsufficientPrivilegeException, MemberAddException {
 
 		try {
-			gridGrouper.getClient().addMember(getGroupIdentifier(),
-					subj.getId());
+			gridGrouper.getClient().addMember(getGroupIdentifier(), subj.getId());
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (MemberAddFault f) {
@@ -245,26 +255,30 @@ public class Group extends GridGrouperObject implements GroupI {
 
 	}
 
+
 	public Set getEffectiveMembers() throws GrouperRuntimeException {
 		return getMembers(MemberFilter.EffectiveMembers);
 	}
+
 
 	public Set getImmediateMembers() throws GrouperRuntimeException {
 		return getMembers(MemberFilter.ImmediateMembers);
 	}
 
+
 	public Set getMembers() throws GrouperRuntimeException {
 		return getMembers(MemberFilter.All);
 	}
+
 
 	public Set getCompositeMembers() {
 		return this.getMembers(MemberFilter.CompositeMembers);
 	}
 
+
 	private Set getMembers(MemberFilter filter) throws GrouperRuntimeException {
 		try {
-			MemberDescriptor[] list = gridGrouper.getClient().getMembers(
-					getGroupIdentifier(), filter);
+			MemberDescriptor[] list = gridGrouper.getClient().getMembers(getGroupIdentifier(), filter);
 			Set members = new LinkedHashSet();
 			if (list != null) {
 				for (int i = 0; i < list.length; i++) {
@@ -281,26 +295,26 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
-	public boolean hasEffectiveMember(Subject subj)
-			throws GrouperRuntimeException {
+
+	public boolean hasEffectiveMember(Subject subj) throws GrouperRuntimeException {
 		return hasMember(subj, MemberFilter.EffectiveMembers);
 	}
 
-	public boolean hasImmediateMember(Subject subj)
-			throws GrouperRuntimeException {
+
+	public boolean hasImmediateMember(Subject subj) throws GrouperRuntimeException {
 		return hasMember(subj, MemberFilter.ImmediateMembers);
 	}
+
 
 	public boolean hasMember(Subject subj) throws GrouperRuntimeException {
 		return hasMember(subj, MemberFilter.All);
 	}
 
-	private boolean hasMember(Subject member, MemberFilter filter)
-			throws GrouperRuntimeException {
+
+	private boolean hasMember(Subject member, MemberFilter filter) throws GrouperRuntimeException {
 		try {
 
-			return getGridGrouper().getClient().isMemberOf(
-					getGroupIdentifier(), member.getId(), filter);
+			return getGridGrouper().getClient().isMemberOf(getGroupIdentifier(), member.getId(), filter);
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
@@ -310,11 +324,10 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
-	private Set getMemberships(MemberFilter filter)
-			throws GrouperRuntimeException {
+
+	private Set getMemberships(MemberFilter filter) throws GrouperRuntimeException {
 		try {
-			MembershipDescriptor[] list = gridGrouper.getClient()
-					.getMemberships(getGroupIdentifier(), filter);
+			MembershipDescriptor[] list = gridGrouper.getClient().getMemberships(getGroupIdentifier(), filter);
 			Set members = new LinkedHashSet();
 			if (list != null) {
 				for (int i = 0; i < list.length; i++) {
@@ -331,32 +344,34 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
+
 	public Set getEffectiveMemberships() throws GrouperRuntimeException {
 		return this.getMemberships(MemberFilter.EffectiveMembers);
 	}
+
 
 	public Set getImmediateMemberships() throws GrouperRuntimeException {
 		return this.getMemberships(MemberFilter.ImmediateMembers);
 	}
 
+
 	public Set getMemberships() throws GrouperRuntimeException {
 		return this.getMemberships(MemberFilter.All);
 	}
+
 
 	public Set getCompositeMemberships() {
 		return this.getMemberships(MemberFilter.CompositeMembers);
 	}
 
-	public void deleteMember(Subject subj)
-			throws InsufficientPrivilegeException, MemberDeleteException {
+
+	public void deleteMember(Subject subj) throws InsufficientPrivilegeException, MemberDeleteException {
 		try {
-			gridGrouper.getClient().deleteMember(getGroupIdentifier(),
-					subj.getId());
+			gridGrouper.getClient().deleteMember(getGroupIdentifier(), subj.getId());
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (MemberDeleteFault f) {
-			throw new MemberDeleteException("Cannot remove member "
-					+ f.getFaultString());
+			throw new MemberDeleteException("Cannot remove member " + f.getFaultString());
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
@@ -367,12 +382,14 @@ public class Group extends GridGrouperObject implements GroupI {
 
 	}
 
+
 	public boolean hasComposite() {
 		return des.isHasComposite();
 	}
 
+
 	public void addCompositeMember(CompositeType type, GroupI left, GroupI right)
-			throws InsufficientPrivilegeException, MemberAddException {
+		throws InsufficientPrivilegeException, MemberAddException {
 		try {
 			GroupCompositeType ct = null;
 			if (type.equals(CompositeType.UNION)) {
@@ -382,13 +399,10 @@ public class Group extends GridGrouperObject implements GroupI {
 			} else if (type.equals(CompositeType.COMPLEMENT)) {
 				ct = GroupCompositeType.Complement;
 			} else {
-				throw new Exception("The composite type " + type.toString()
-						+ " is not supported!!!");
+				throw new Exception("The composite type " + type.toString() + " is not supported!!!");
 			}
-			this.des = gridGrouper.getClient().addCompositeMember(ct,
-					this.getGroupIdentifier(),
-					((Group) left).getGroupIdentifier(),
-					((Group) right).getGroupIdentifier());
+			this.des = gridGrouper.getClient().addCompositeMember(ct, this.getGroupIdentifier(),
+				((Group) left).getGroupIdentifier(), ((Group) right).getGroupIdentifier());
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (MemberAddFault f) {
@@ -403,15 +417,15 @@ public class Group extends GridGrouperObject implements GroupI {
 
 	}
 
+
 	public boolean isComposite() {
 		return des.isIsComposite();
 	}
 
-	public void deleteCompositeMember() throws InsufficientPrivilegeException,
-			MemberDeleteException {
+
+	public void deleteCompositeMember() throws InsufficientPrivilegeException, MemberDeleteException {
 		try {
-			this.des = gridGrouper.getClient().deleteCompositeMember(
-					getGroupIdentifier());
+			this.des = gridGrouper.getClient().deleteCompositeMember(getGroupIdentifier());
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (MemberDeleteFault f) {
@@ -426,6 +440,7 @@ public class Group extends GridGrouperObject implements GroupI {
 
 	}
 
+
 	public Subject toSubject() throws GrouperRuntimeException {
 		try {
 			return SubjectUtils.getSubject(des);
@@ -435,15 +450,14 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
+
 	private Set getPrivileges(Subject subject) throws GroupNotFoundException {
 		try {
-			GroupPrivilege[] privs = gridGrouper.getClient()
-					.getGroupPrivileges(getGroupIdentifier(), subject.getId());
+			GroupPrivilege[] privs = gridGrouper.getClient().getGroupPrivileges(getGroupIdentifier(), subject.getId());
 			Set set = new HashSet();
 			if (privs != null) {
 				for (int i = 0; i < privs.length; i++) {
-					AccessPrivilegeI priv = new AccessPrivilege(gridGrouper,
-							privs[i]);
+					AccessPrivilegeI priv = new AccessPrivilege(gridGrouper, privs[i]);
 					set.add(priv);
 				}
 			}
@@ -459,12 +473,11 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
-	private Set getSubjectsWithPrivilege(Privilege privilege)
-			throws GroupNotFoundException {
+
+	private Set getSubjectsWithPrivilege(Privilege privilege) throws GroupNotFoundException {
 		try {
-			String[] subs = gridGrouper.getClient()
-					.getSubjectsWithGroupPrivilege(getGroupIdentifier(),
-							GroupPrivilegeType.fromValue(privilege.getName()));
+			String[] subs = gridGrouper.getClient().getSubjectsWithGroupPrivilege(getGroupIdentifier(),
+				GroupPrivilegeType.fromValue(privilege.getName()));
 			Set set = new HashSet();
 			if (subs != null) {
 				for (int i = 0; i < subs.length; i++) {
@@ -483,12 +496,11 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
-	private boolean hasPrivilege(Subject subject, Privilege privilege)
-			throws GroupNotFoundException {
+
+	private boolean hasPrivilege(Subject subject, Privilege privilege) throws GroupNotFoundException {
 		try {
-			return gridGrouper.getClient().hasGroupPrivilege(
-					getGroupIdentifier(), subject.getId(),
-					GroupPrivilegeType.fromValue(privilege.getName()));
+			return gridGrouper.getClient().hasGroupPrivilege(getGroupIdentifier(), subject.getId(),
+				GroupPrivilegeType.fromValue(privilege.getName()));
 		} catch (GroupNotFoundFault f) {
 			throw new GroupNotFoundException(f.getFaultString());
 		} catch (GridGrouperRuntimeFault e) {
@@ -499,6 +511,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+
 
 	public Set getPrivs(Subject subj) {
 		try {
@@ -511,6 +524,7 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
+
 	public Set getAdmins() {
 		try {
 			return getSubjectsWithPrivilege(AccessPrivilege.ADMIN);
@@ -521,6 +535,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+
 
 	public Set getOptins() {
 		try {
@@ -533,6 +548,7 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
+
 	public Set getOptouts() {
 		try {
 			return getSubjectsWithPrivilege(AccessPrivilege.OPTOUT);
@@ -543,6 +559,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+
 
 	public Set getReaders() {
 		try {
@@ -555,6 +572,7 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
+
 	public Set getUpdaters() {
 		try {
 			return getSubjectsWithPrivilege(AccessPrivilege.UPDATE);
@@ -565,6 +583,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+
 
 	public Set getViewers() {
 		try {
@@ -577,6 +596,7 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
+
 	public boolean hasAdmin(Subject subj) {
 		try {
 			return hasPrivilege(subj, AccessPrivilege.ADMIN);
@@ -587,6 +607,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+
 
 	public boolean hasOptin(Subject subj) {
 		try {
@@ -599,6 +620,7 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
+
 	public boolean hasOptout(Subject subj) {
 		try {
 			return hasPrivilege(subj, AccessPrivilege.OPTOUT);
@@ -609,6 +631,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+
 
 	public boolean hasRead(Subject subj) {
 		try {
@@ -621,6 +644,7 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
+
 	public boolean hasUpdate(Subject subj) {
 		try {
 			return hasPrivilege(subj, AccessPrivilege.UPDATE);
@@ -631,6 +655,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+
 
 	public boolean hasView(Subject subj) {
 		try {
@@ -643,14 +668,12 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
-	public void grantPriv(Subject subj, Privilege priv)
-			throws GrantPrivilegeException, InsufficientPrivilegeException,
-			SchemaException {
+
+	public void grantPriv(Subject subj, Privilege priv) throws GrantPrivilegeException, InsufficientPrivilegeException,
+		SchemaException {
 		try {
-			GroupPrivilegeType type = GroupPrivilegeType.fromValue(priv
-					.getName());
-			gridGrouper.getClient().grantGroupPrivilege(getGroupIdentifier(),
-					subj.getId(), type);
+			GroupPrivilegeType type = GroupPrivilegeType.fromValue(priv.getName());
+			gridGrouper.getClient().grantGroupPrivilege(getGroupIdentifier(), subj.getId(), type);
 
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
@@ -668,14 +691,12 @@ public class Group extends GridGrouperObject implements GroupI {
 
 	}
 
-	public void revokePriv(Subject subj, Privilege priv)
-			throws InsufficientPrivilegeException, RevokePrivilegeException,
-			SchemaException {
+
+	public void revokePriv(Subject subj, Privilege priv) throws InsufficientPrivilegeException,
+		RevokePrivilegeException, SchemaException {
 		try {
-			GroupPrivilegeType type = GroupPrivilegeType.fromValue(priv
-					.getName());
-			gridGrouper.getClient().revokeGroupPrivilege(getGroupIdentifier(),
-					subj.getId(), type);
+			GroupPrivilegeType type = GroupPrivilegeType.fromValue(priv.getName());
+			gridGrouper.getClient().revokeGroupPrivilege(getGroupIdentifier(), subj.getId(), type);
 
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());

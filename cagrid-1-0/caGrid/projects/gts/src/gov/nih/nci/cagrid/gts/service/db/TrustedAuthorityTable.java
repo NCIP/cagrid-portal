@@ -30,5 +30,6 @@ public abstract class TrustedAuthorityTable {
 
 	public static final String CRL = "CRL";
 
+
 	public abstract String getCreateTableSQL();
 }

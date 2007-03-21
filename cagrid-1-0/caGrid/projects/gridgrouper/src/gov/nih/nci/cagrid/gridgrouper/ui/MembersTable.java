@@ -9,12 +9,12 @@ import javax.swing.table.TableColumn;
 
 import org.cagrid.grape.table.GrapeBaseTable;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -22,6 +22,7 @@ public class MembersTable extends GrapeBaseTable {
 	public final static String MEMBER = "Member";
 
 	public final static String MEMBER_NAME = "Member Name";
+
 
 	public MembersTable() {
 		super(createTableModel());
@@ -35,6 +36,7 @@ public class MembersTable extends GrapeBaseTable {
 
 	}
 
+
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(MEMBER);
@@ -42,12 +44,14 @@ public class MembersTable extends GrapeBaseTable {
 		return model;
 	}
 
+
 	public void addMember(final Membership m) throws Exception {
 		Vector v = new Vector();
 		v.add(m);
 		v.add(m.getMember().getSubject().getName());
 		addRow(v);
 	}
+
 
 	public synchronized Membership getSelectedMember() throws Exception {
 		int row = getSelectedRow();
@@ -58,9 +62,11 @@ public class MembersTable extends GrapeBaseTable {
 		}
 	}
 
+
 	public void doubleClick() throws Exception {
 
 	}
+
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub

@@ -78,8 +78,8 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	/**
 	 * This is the default constructor
 	 */
-	public GeneralConfigurationPanel(ConfigurationDescriptorTreeNode treeNode,Object conf) {
-		super(treeNode,conf);
+	public GeneralConfigurationPanel(ConfigurationDescriptorTreeNode treeNode, Object conf) {
+		super(treeNode, conf);
 		this.properties = new HashMap();
 		initialize();
 	}

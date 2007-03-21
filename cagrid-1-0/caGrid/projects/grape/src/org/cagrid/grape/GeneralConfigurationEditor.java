@@ -40,7 +40,7 @@ public class GeneralConfigurationEditor extends ConfigurationBasePanel {
 	 * This is the default constructor
 	 */
 	public GeneralConfigurationEditor(ConfigurationDescriptorTreeNode treeNode, Object conf) {
-		super(treeNode,conf);
+		super(treeNode, conf);
 		initialize();
 		log = Logger.getLogger(this.getClass().getName());
 		Properties p = getGeneralConfiguration().getProperties();

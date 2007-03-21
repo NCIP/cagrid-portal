@@ -39,12 +39,12 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -54,22 +54,27 @@ public class Stem extends GridGrouperObject implements StemI {
 
 	private GridGrouper gridGrouper;
 
+
 	protected Stem(GridGrouper gridGrouper, StemDescriptor des) {
 		this.gridGrouper = gridGrouper;
 		this.des = des;
 	}
 
+
 	public String getCreateSource() {
 		return des.getCreateSource();
 	}
+
 
 	public Subject getCreateSubject() throws SubjectNotFoundException {
 		return SubjectUtils.getSubject(des.getCreateSubject(), true);
 	}
 
+
 	public Date getCreateTime() {
 		return new Date(des.getCreateTime());
 	}
+
 
 	/**
 	 * Gets the description of the stem.
@@ -80,6 +85,7 @@ public class Stem extends GridGrouperObject implements StemI {
 		return des.getDescription();
 	}
 
+
 	/**
 	 * Gets the local display name of the stem.
 	 * 
@@ -88,6 +94,7 @@ public class Stem extends GridGrouperObject implements StemI {
 	public String getDisplayExtension() {
 		return des.getDisplayExtension();
 	}
+
 
 	/**
 	 * Gets the full display name of the stem.
@@ -98,6 +105,7 @@ public class Stem extends GridGrouperObject implements StemI {
 		return des.getDisplayName();
 	}
 
+
 	/**
 	 * Gets the local name of the stem.
 	 * 
@@ -107,13 +115,16 @@ public class Stem extends GridGrouperObject implements StemI {
 		return des.getExtension();
 	}
 
+
 	public String getModifySource() {
 		return des.getModifySource();
 	}
 
+
 	public Subject getModifySubject() throws SubjectNotFoundException {
 		return SubjectUtils.getSubject(des.getModifySubject(), true);
 	}
+
 
 	public Date getModifyTime() {
 		if (des.getModifyTime() == 0) {
@@ -123,9 +134,11 @@ public class Stem extends GridGrouperObject implements StemI {
 		}
 	}
 
+
 	public StemIdentifier getStemIdentifier() {
 		return gridGrouper.getStemIdentifier(getName());
 	}
+
 
 	/**
 	 * Gets the full name of the stem.
@@ -136,6 +149,7 @@ public class Stem extends GridGrouperObject implements StemI {
 		return des.getName();
 	}
 
+
 	/**
 	 * Gets the UUID for the stem.
 	 * 
@@ -145,29 +159,28 @@ public class Stem extends GridGrouperObject implements StemI {
 		return des.getUUID();
 	}
 
+
 	public Set getChildStems() {
 		return gridGrouper.getChildStems(getName());
 	}
+
 
 	public StemI getParentStem() throws StemNotFoundException {
 		return gridGrouper.getParentStem(getName());
 	}
 
+
 	public String toString() {
-		return new ToStringBuilder(this)
-				.append("displayName", getDisplayName()).append("name",
-						getName()).append("uuid", getUuid()).append("created",
-						getCreateTime()).append("modified", getModifyTime())
-				.toString();
+		return new ToStringBuilder(this).append("displayName", getDisplayName()).append("name", getName()).append(
+			"uuid", getUuid()).append("created", getCreateTime()).append("modified", getModifyTime()).toString();
 	}
 
-	public void setDescription(String value)
-			throws InsufficientPrivilegeException, StemModifyException {
+
+	public void setDescription(String value) throws InsufficientPrivilegeException, StemModifyException {
 		try {
 			StemUpdate update = new StemUpdate();
 			update.setDescription(value);
-			this.des = gridGrouper.getClient().updateStem(getStemIdentifier(),
-					update);
+			this.des = gridGrouper.getClient().updateStem(getStemIdentifier(), update);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (StemModifyFault f) {
@@ -182,15 +195,16 @@ public class Stem extends GridGrouperObject implements StemI {
 
 	}
 
+
 	public Set getCreators() {
 		try {
-			return getSubjectsWithPrivilege(Privilege
-					.getInstance(StemPrivilegeType.create.getValue()));
+			return getSubjectsWithPrivilege(Privilege.getInstance(StemPrivilegeType.create.getValue()));
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+
 
 	public Set getPrivs(Subject subj) {
 		try {
@@ -201,23 +215,22 @@ public class Stem extends GridGrouperObject implements StemI {
 		}
 	}
 
+
 	public Set getStemmers() {
 		try {
-			return getSubjectsWithPrivilege(Privilege
-					.getInstance(StemPrivilegeType.stem.getValue()));
+			return getSubjectsWithPrivilege(Privilege.getInstance(StemPrivilegeType.stem.getValue()));
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
 
-	public void setDisplayExtension(String value)
-			throws InsufficientPrivilegeException, StemModifyException {
+
+	public void setDisplayExtension(String value) throws InsufficientPrivilegeException, StemModifyException {
 		try {
 			StemUpdate update = new StemUpdate();
 			update.setDisplayExtension(value);
-			this.des = gridGrouper.getClient().updateStem(getStemIdentifier(),
-					update);
+			this.des = gridGrouper.getClient().updateStem(getStemIdentifier(), update);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (StemModifyFault f) {
@@ -232,6 +245,7 @@ public class Stem extends GridGrouperObject implements StemI {
 
 	}
 
+
 	public boolean hasCreate(Subject subj) {
 		try {
 			return hasPrivilege(subj, NamingPrivilege.CREATE);
@@ -240,6 +254,7 @@ public class Stem extends GridGrouperObject implements StemI {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+
 
 	public boolean hasStem(Subject subj) {
 		try {
@@ -250,14 +265,12 @@ public class Stem extends GridGrouperObject implements StemI {
 		}
 	}
 
-	public void grantPriv(Subject subj, Privilege priv)
-			throws GrantPrivilegeException, InsufficientPrivilegeException,
-			SchemaException {
+
+	public void grantPriv(Subject subj, Privilege priv) throws GrantPrivilegeException, InsufficientPrivilegeException,
+		SchemaException {
 		try {
-			StemPrivilegeType type = StemPrivilegeType
-					.fromValue(priv.getName());
-			gridGrouper.getClient().grantStemPrivilege(getStemIdentifier(),
-					subj.getId(), type);
+			StemPrivilegeType type = StemPrivilegeType.fromValue(priv.getName());
+			gridGrouper.getClient().grantStemPrivilege(getStemIdentifier(), subj.getId(), type);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (GrantPrivilegeFault f) {
@@ -274,14 +287,12 @@ public class Stem extends GridGrouperObject implements StemI {
 
 	}
 
-	public void revokePriv(Subject subj, Privilege priv)
-			throws InsufficientPrivilegeException, RevokePrivilegeException,
-			SchemaException {
+
+	public void revokePriv(Subject subj, Privilege priv) throws InsufficientPrivilegeException,
+		RevokePrivilegeException, SchemaException {
 		try {
-			StemPrivilegeType type = StemPrivilegeType
-					.fromValue(priv.getName());
-			gridGrouper.getClient().revokeStemPrivilege(getStemIdentifier(),
-					subj.getId(), type);
+			StemPrivilegeType type = StemPrivilegeType.fromValue(priv.getName());
+			gridGrouper.getClient().revokeStemPrivilege(getStemIdentifier(), subj.getId(), type);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (GrantPrivilegeFault f) {
@@ -297,11 +308,12 @@ public class Stem extends GridGrouperObject implements StemI {
 		}
 	}
 
-	public StemI addChildStem(String extension, String displayExtension)
-			throws InsufficientPrivilegeException, StemAddException {
+
+	public StemI addChildStem(String extension, String displayExtension) throws InsufficientPrivilegeException,
+		StemAddException {
 		try {
-			StemDescriptor stem = gridGrouper.getClient().addChildStem(
-					this.getStemIdentifier(), extension, displayExtension);
+			StemDescriptor stem = gridGrouper.getClient().addChildStem(this.getStemIdentifier(), extension,
+				displayExtension);
 			return new Stem(this.gridGrouper, stem);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
@@ -316,8 +328,8 @@ public class Stem extends GridGrouperObject implements StemI {
 		}
 	}
 
-	public void delete() throws InsufficientPrivilegeException,
-			StemDeleteException {
+
+	public void delete() throws InsufficientPrivilegeException, StemDeleteException {
 		try {
 			gridGrouper.getClient().deleteStem(this.getStemIdentifier());
 		} catch (InsufficientPrivilegeFault f) {
@@ -333,11 +345,12 @@ public class Stem extends GridGrouperObject implements StemI {
 		}
 	}
 
-	public GroupI addChildGroup(String extension, String displayExtension)
-			throws GroupAddException, InsufficientPrivilegeException {
+
+	public GroupI addChildGroup(String extension, String displayExtension) throws GroupAddException,
+		InsufficientPrivilegeException {
 		try {
-			GroupDescriptor grp = gridGrouper.getClient().addChildGroup(
-					this.getStemIdentifier(), extension, displayExtension);
+			GroupDescriptor grp = gridGrouper.getClient().addChildGroup(this.getStemIdentifier(), extension,
+				displayExtension);
 			return new Group(this.gridGrouper, grp);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
@@ -352,10 +365,10 @@ public class Stem extends GridGrouperObject implements StemI {
 		}
 	}
 
+
 	public Set getChildGroups() {
 		try {
-			GroupDescriptor[] children = gridGrouper.getClient()
-					.getChildGroups(getStemIdentifier());
+			GroupDescriptor[] children = gridGrouper.getClient().getChildGroups(getStemIdentifier());
 			Set set = new HashSet();
 			if (children != null) {
 				for (int i = 0; i < children.length; i++) {
@@ -372,23 +385,22 @@ public class Stem extends GridGrouperObject implements StemI {
 		}
 	}
 
+
 	public GridGrouper getGridGrouper() {
 		return gridGrouper;
 	}
 
+
 	private Set getPrivileges(Subject subject) throws StemNotFoundException {
 		try {
-			StemPrivilege[] privs = gridGrouper.getClient().getStemPrivileges(
-					getStemIdentifier(), subject.getId());
+			StemPrivilege[] privs = gridGrouper.getClient().getStemPrivileges(getStemIdentifier(), subject.getId());
 			Set set = new HashSet();
 			if (privs != null) {
 				for (int i = 0; i < privs.length; i++) {
-					NamingPrivilegeI priv = new NamingPrivilege(privs[i]
-							.getStemName(), SubjectUtils.getSubject(privs[i]
-							.getSubject()), SubjectUtils.getSubject(privs[i]
-							.getOwner()), Privilege.getInstance(privs[i]
-							.getPrivilegeType().getValue()), privs[i]
-							.getImplementationClass(), privs[i].isIsRevokable());
+					NamingPrivilegeI priv = new NamingPrivilege(privs[i].getStemName(), SubjectUtils
+						.getSubject(privs[i].getSubject()), SubjectUtils.getSubject(privs[i].getOwner()), Privilege
+						.getInstance(privs[i].getPrivilegeType().getValue()), privs[i].getImplementationClass(),
+						privs[i].isIsRevokable());
 					set.add(priv);
 				}
 			}
@@ -404,12 +416,11 @@ public class Stem extends GridGrouperObject implements StemI {
 		}
 	}
 
-	private Set getSubjectsWithPrivilege(Privilege privilege)
-			throws StemNotFoundException {
+
+	private Set getSubjectsWithPrivilege(Privilege privilege) throws StemNotFoundException {
 		try {
-			String[] subs = gridGrouper.getClient()
-					.getSubjectsWithStemPrivilege(getStemIdentifier(),
-							StemPrivilegeType.fromValue(privilege.getName()));
+			String[] subs = gridGrouper.getClient().getSubjectsWithStemPrivilege(getStemIdentifier(),
+				StemPrivilegeType.fromValue(privilege.getName()));
 			Set set = new HashSet();
 			if (subs != null) {
 				for (int i = 0; i < subs.length; i++) {
@@ -428,13 +439,11 @@ public class Stem extends GridGrouperObject implements StemI {
 		}
 	}
 
-	private boolean hasPrivilege(Subject subject, Privilege privilege)
-			throws StemNotFoundException {
+
+	private boolean hasPrivilege(Subject subject, Privilege privilege) throws StemNotFoundException {
 		try {
-			StemPrivilegeType type = StemPrivilegeType.fromValue(privilege
-					.getName());
-			return gridGrouper.getClient().hasStemPrivilege(
-					getStemIdentifier(), subject.getId(), type);
+			StemPrivilegeType type = StemPrivilegeType.fromValue(privilege.getName());
+			return gridGrouper.getClient().hasStemPrivilege(getStemIdentifier(), subject.getId(), type);
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
 		} catch (GridGrouperRuntimeFault e) {

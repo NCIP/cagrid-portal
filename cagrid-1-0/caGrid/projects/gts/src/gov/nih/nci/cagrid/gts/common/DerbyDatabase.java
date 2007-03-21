@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import org.projectmobius.db.ConnectionManager;
 import org.projectmobius.db.DatabaseException;
 
+
 public class DerbyDatabase extends Database {
 
 	private String derbyEncryptionPassword = "";
@@ -19,24 +20,25 @@ public class DerbyDatabase extends Database {
 
 	private boolean dbBuilt = false;
 
+
 	public DerbyDatabase(String db, String derbyEncryptionPassword) {
 		super(db);
 		this.derbyEncryptionPassword = derbyEncryptionPassword;
-		File dbHome = new File(Constants.getGTSUserHome().getAbsolutePath()
-				+ File.separator + "gtsdbs");
+		File dbHome = new File(Constants.getGTSUserHome().getAbsolutePath() + File.separator + "gtsdbs");
 		dbHome.mkdirs();
 		this.dbLocation = dbHome.getAbsolutePath() + File.separator + db;
 	}
 
+
 	protected ConnectionManager getConnectionManager() throws DatabaseException {
 		if (cm == null) {
-			String url = "jdbc:derby:" + dbLocation
-					+ ";create=true;dataEncryption=true;bootPassword="
-					+ derbyEncryptionPassword;
+			String url = "jdbc:derby:" + dbLocation + ";create=true;dataEncryption=true;bootPassword="
+				+ derbyEncryptionPassword;
 			cm = new ConnectionManager("GTS", url, driver, null, null);
 		}
 		return cm;
 	}
+
 
 	public void createDatabase() throws DatabaseException {
 		if (!dbBuilt) {
@@ -51,6 +53,7 @@ public class DerbyDatabase extends Database {
 		}
 
 	}
+
 
 	public void destroyDatabase() throws DatabaseException {
 		getConnectionManager().closeAllUnusedConnections();
@@ -67,12 +70,12 @@ public class DerbyDatabase extends Database {
 			}
 
 			if (!deleteDir(f)) {
-				throw new DatabaseException("Error removing that database at "
-						+ dbLocation);
+				throw new DatabaseException("Error removing that database at " + dbLocation);
 			}
 		}
 		dbBuilt = false;
 	}
+
 
 	public boolean deleteDir(File dir) {
 		if (dir.isDirectory()) {
@@ -88,6 +91,7 @@ public class DerbyDatabase extends Database {
 		// The directory is now empty so delete it
 		return dir.delete();
 	}
+
 
 	public boolean tableExists(String tableName) throws DatabaseException {
 		return super.tableExists(tableName.toUpperCase());

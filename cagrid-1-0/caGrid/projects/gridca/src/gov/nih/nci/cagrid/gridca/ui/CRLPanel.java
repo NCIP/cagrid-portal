@@ -10,11 +10,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CRLPanel.java,v 1.1 2006-09-08 17:31:39 langella Exp $
+ * @version $Id: CRLPanel.java,v 1.2 2007-03-21 20:11:32 langella Exp $
  */
 public class CRLPanel extends JPanel {
 	private JPanel infoPanel = null;
@@ -28,6 +29,8 @@ public class CRLPanel extends JPanel {
 	private X509CRL crl = null;
 	private JScrollPane jScrollPane = null;
 	private JTable crlTable = null;
+
+
 	/**
 	 * This is the default constructor
 	 */
@@ -35,6 +38,7 @@ public class CRLPanel extends JPanel {
 		super();
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -47,11 +51,11 @@ public class CRLPanel extends JPanel {
 		gridBagConstraints31.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints31.weightx = 1.0D;
 		gridBagConstraints31.weighty = 1.0D;
-		gridBagConstraints31.insets = new java.awt.Insets(5,5,5,5);
+		gridBagConstraints31.insets = new java.awt.Insets(5, 5, 5, 5);
 		gridBagConstraints31.gridy = 1;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
-		gridBagConstraints.insets = new java.awt.Insets(5,5,5,5);
+		gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.gridy = 0;
@@ -62,10 +66,10 @@ public class CRLPanel extends JPanel {
 
 
 	/**
-	 * This method initializes infoPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes infoPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getInfoPanel() {
 		if (infoPanel == null) {
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
@@ -73,12 +77,12 @@ public class CRLPanel extends JPanel {
 			gridBagConstraints6.gridy = 2;
 			gridBagConstraints6.weightx = 1.0;
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints6.gridx = 1;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints5.gridy = 2;
-			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.gridx = 0;
 			jLabel2 = new JLabel();
 			jLabel2.setText("Next Update");
@@ -87,12 +91,12 @@ public class CRLPanel extends JPanel {
 			gridBagConstraints4.gridy = 1;
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints4.gridx = 1;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints3.gridy = 1;
-			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints3.gridx = 0;
 			jLabel1 = new JLabel();
 			jLabel1.setText("Issued");
@@ -101,10 +105,10 @@ public class CRLPanel extends JPanel {
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints2.gridx = 1;
 			gridBagConstraints2.gridy = 0;
-			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.weightx = 1.0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints1.gridx = 0;
@@ -122,11 +126,12 @@ public class CRLPanel extends JPanel {
 		return infoPanel;
 	}
 
+
 	/**
-	 * This method initializes issuer	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes issuer
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getIssuer() {
 		if (issuer == null) {
 			issuer = new JTextField();
@@ -136,11 +141,12 @@ public class CRLPanel extends JPanel {
 		return issuer;
 	}
 
+
 	/**
-	 * This method initializes issued	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes issued
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getIssued() {
 		if (issued == null) {
 			issued = new JTextField();
@@ -149,11 +155,12 @@ public class CRLPanel extends JPanel {
 		return issued;
 	}
 
+
 	/**
-	 * This method initializes nextUpdate	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes nextUpdate
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getNextUpdate() {
 		if (nextUpdate == null) {
 			nextUpdate = new JTextField();
@@ -162,11 +169,12 @@ public class CRLPanel extends JPanel {
 		return nextUpdate;
 	}
 
+
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getListPanel() {
 		if (listPanel == null) {
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
@@ -180,32 +188,36 @@ public class CRLPanel extends JPanel {
 		return listPanel;
 	}
 
-	public void clearCRL(){
+
+	public void clearCRL() {
 		this.crl = null;
 		this.getIssuer().setText("");
 		this.getIssued().setText("");
 		this.getNextUpdate().setText("");
-		((CRLTable)getCrlTable()).clearTable();
+		((CRLTable) getCrlTable()).clearTable();
 	}
-	
-	public void setCRL(X509CRL crl){
+
+
+	public void setCRL(X509CRL crl) {
 		clearCRL();
 		this.crl = crl;
 		this.getIssuer().setText(crl.getIssuerDN().getName());
 		this.getIssued().setText(crl.getThisUpdate().toString());
 		this.getNextUpdate().setText(crl.getNextUpdate().toString());
-		((CRLTable)getCrlTable()).addCRL(crl);
+		((CRLTable) getCrlTable()).addCRL(crl);
 	}
-	
-	public X509CRL getCRL(){
+
+
+	public X509CRL getCRL() {
 		return this.crl;
 	}
 
+
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */    
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
@@ -214,16 +226,17 @@ public class CRLPanel extends JPanel {
 		return jScrollPane;
 	}
 
+
 	/**
-	 * This method initializes crlTable	
-	 * 	
-	 * @return javax.swing.JTable	
-	 */    
+	 * This method initializes crlTable
+	 * 
+	 * @return javax.swing.JTable
+	 */
 	private JTable getCrlTable() {
 		if (crlTable == null) {
 			crlTable = new CRLTable();
 		}
 		return crlTable;
 	}
- 
+
 }

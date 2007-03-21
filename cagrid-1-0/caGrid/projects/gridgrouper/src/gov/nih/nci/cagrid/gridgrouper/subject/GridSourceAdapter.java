@@ -14,7 +14,6 @@ import edu.internet2.middleware.subject.provider.SubjectTypeEnum;
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -55,8 +54,9 @@ public class GridSourceAdapter extends BaseSourceAdapter {
 			return new GridUserSubject(id, this);
 		}
 	}
-	
-	private void validateGridId(String id) throws SubjectNotFoundException{
+
+
+	private void validateGridId(String id) throws SubjectNotFoundException {
 		if (!id.startsWith("/")) {
 			throw new SubjectNotFoundException("The id " + id + " is not a valid grid identity.");
 		}

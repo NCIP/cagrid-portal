@@ -8,6 +8,7 @@ import org.projectmobius.common.AbstractMobiusConfiguration;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.MobiusResourceManager;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -25,22 +26,22 @@ public class GTSUIConf implements AbstractMobiusConfiguration {
 
 	public List gtsServices;
 
+
 	public GTSUIConf() {
 
 	}
+
 
 	public List getGTSServiceList() {
 		return gtsServices;
 	}
 
-	public void parse(MobiusResourceManager resourceManager, Element config)
-			throws MobiusException {
+
+	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {
 		this.gtsServices = new ArrayList();
 
-		Element services = config.getChild(SERVICES_ELEMENT, config
-				.getNamespace());
-		List serviceList = services.getChildren(SERVICE_ELEMENT, config
-				.getNamespace());
+		Element services = config.getChild(SERVICES_ELEMENT, config.getNamespace());
+		List serviceList = services.getChildren(SERVICE_ELEMENT, config.getNamespace());
 		for (int i = 0; i < serviceList.size(); i++) {
 			String service = ((Element) serviceList.get(i)).getText();
 			if (service != null) {

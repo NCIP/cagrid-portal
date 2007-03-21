@@ -11,6 +11,7 @@ import javax.swing.table.TableColumn;
 
 import org.cagrid.grape.table.GrapeBaseTable;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -18,7 +19,7 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @version $Id: TrustedAuthorityTable.java,v 1.1 2006/03/27 18:52:57 langella
  *          Exp $
  */
-public class AuthorityTable extends GrapeBaseTable{
+public class AuthorityTable extends GrapeBaseTable {
 	public final static String AUTHORITY = "authority";
 
 	public final static String SERVICE_URI = "GTS URI";
@@ -26,6 +27,7 @@ public class AuthorityTable extends GrapeBaseTable{
 	public final static String PRIORITY = "Priority";
 
 	private AuthorityManagerWindow window;
+
 
 	public AuthorityTable(AuthorityManagerWindow window) {
 		super(createTableModel());
@@ -42,6 +44,7 @@ public class AuthorityTable extends GrapeBaseTable{
 		this.clearTable();
 	}
 
+
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(AUTHORITY);
@@ -50,6 +53,7 @@ public class AuthorityTable extends GrapeBaseTable{
 		return model;
 
 	}
+
 
 	public void addAuthority(final AuthorityGTS gts) {
 		Vector v = new Vector();
@@ -73,6 +77,7 @@ public class AuthorityTable extends GrapeBaseTable{
 		}
 	}
 
+
 	public synchronized AuthorityGTS getSelectedAuthority() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
@@ -81,6 +86,7 @@ public class AuthorityTable extends GrapeBaseTable{
 			throw new Exception("Please select an authority!!!");
 		}
 	}
+
 
 	public synchronized void removeSelectedAuthority() throws Exception {
 		int row = getSelectedRow();
@@ -91,6 +97,7 @@ public class AuthorityTable extends GrapeBaseTable{
 		}
 	}
 
+
 	public void doubleClick() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
@@ -100,6 +107,7 @@ public class AuthorityTable extends GrapeBaseTable{
 		}
 
 	}
+
 
 	public synchronized void increasePriority() throws Exception {
 		int row = getSelectedRow();
@@ -122,6 +130,7 @@ public class AuthorityTable extends GrapeBaseTable{
 			throw new Exception("Please select an authority!!!");
 		}
 	}
+
 
 	public synchronized void decreasePriority() throws Exception {
 		int row = getSelectedRow();
@@ -146,6 +155,7 @@ public class AuthorityTable extends GrapeBaseTable{
 		}
 	}
 
+
 	public synchronized AuthorityPriorityUpdate getPriorityUpdate() {
 		AuthorityPriorityUpdate update = new AuthorityPriorityUpdate();
 		AuthorityPrioritySpecification[] specs = new AuthorityPrioritySpecification[getRowCount()];
@@ -158,6 +168,7 @@ public class AuthorityTable extends GrapeBaseTable{
 		update.setAuthorityPrioritySpecification(specs);
 		return update;
 	}
+
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub

@@ -8,6 +8,7 @@ import javax.swing.JComboBox;
 
 import org.globus.gsi.GlobusCredential;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -21,9 +22,11 @@ public class ProxyComboBox extends JComboBox {
 
 	private static final String NO_PROXY = "None";
 
+
 	public ProxyComboBox() {
 		this(false);
 	}
+
 
 	public ProxyComboBox(boolean none) {
 		List creds = ProxyManager.getInstance().getProxies();
@@ -36,20 +39,24 @@ public class ProxyComboBox extends JComboBox {
 		}
 	}
 
+
 	public ProxyComboBox(GlobusCredential cred) {
 		this(false);
 		this.setSelectedItem(new ProxyCaddy(cred));
 	}
+
 
 	public ProxyComboBox(GlobusCredential cred, boolean none) {
 		this(none);
 		this.setSelectedItem(new ProxyCaddy(cred));
 	}
 
+
 	public ProxyCaddy getSelectedProxyCaddy() {
 		ProxyCaddy caddy = ((ProxyCaddy) this.getSelectedItem());
 		return caddy;
 	}
+
 
 	public GlobusCredential getSelectedProxy() throws Exception {
 		ProxyCaddy caddy = ((ProxyCaddy) this.getSelectedItem());

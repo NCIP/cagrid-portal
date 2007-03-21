@@ -66,7 +66,7 @@ public class GeneralConfigurationPropertyEditor extends ConfigurationEditorBaseP
 	 * This is the default constructor
 	 */
 	public GeneralConfigurationPropertyEditor(ConfigurationEditorTreeNode treeNode, Object property) {
-		super(treeNode,property);
+		super(treeNode, property);
 		initialize();
 	}
 

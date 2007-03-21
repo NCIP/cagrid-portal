@@ -4,12 +4,12 @@ import edu.internet2.middleware.grouper.GroupNotFoundException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -23,6 +23,7 @@ public interface GrouperI {
 	 */
 	public StemI getRootStem() throws StemNotFoundException;
 
+
 	/**
 	 * Obtains the Stem object for a specified Stem.
 	 * 
@@ -34,6 +35,7 @@ public interface GrouperI {
 	 */
 	public StemI findStem(String name) throws StemNotFoundException;
 
+
 	/**
 	 * Obtains the name of the Grid Grouper, generally the Grid Grouper service
 	 * URI.
@@ -41,6 +43,7 @@ public interface GrouperI {
 	 * @return The name of the Grid Grouper service.
 	 */
 	public String getName();
+
 
 	/**
 	 * Obtains the Group object for a specified Group.
@@ -53,6 +56,7 @@ public interface GrouperI {
 	 */
 	public GroupI findGroup(String name) throws GroupNotFoundException;
 
+
 	/**
 	 * Determines whether or not a subject is a member of a group.
 	 * 
@@ -64,8 +68,8 @@ public interface GrouperI {
 	 * @throws GroupNotFoundException
 	 *             Thrown if the request group could not be found.
 	 */
-	public boolean isMemberOf(String subjectId, String groupName)
-			throws GroupNotFoundException;
+	public boolean isMemberOf(String subjectId, String groupName) throws GroupNotFoundException;
+
 
 	/**
 	 * Determines whether or not a subject is a member of a group.
@@ -79,7 +83,6 @@ public interface GrouperI {
 	 * @throws GroupNotFoundException
 	 *             Thrown if the request group could not be found.
 	 */
-	public boolean isMemberOf(Subject subject, String groupName)
-			throws GroupNotFoundException;
+	public boolean isMemberOf(Subject subject, String groupName) throws GroupNotFoundException;
 
 }

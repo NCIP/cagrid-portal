@@ -20,5 +20,5 @@ public abstract class ApplicationComponent extends JInternalFrame {
 		setClosable(true);
 		setResizable(true);
 	}
-	
+
 }

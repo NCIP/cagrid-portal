@@ -235,8 +235,8 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				GridApplication.getContext().showErrorMessage("Error obtaining the trust levels from " + service + ":\n"
-					+ e.getMessage());
+				GridApplication.getContext().showErrorMessage(
+					"Error obtaining the trust levels from " + service + ":\n" + e.getMessage());
 			}
 		}
 		invalidate();
@@ -707,8 +707,10 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 				try {
 					crl.verify(cert.getPublicKey());
 				} catch (Exception crle) {
-					GridApplication.getContext()
-						.showErrorMessage("Error verifying CRL, the CRL must be issued and signed by same key is the Trusted Authority's Certificate");
+					GridApplication
+						.getContext()
+						.showErrorMessage(
+							"Error verifying CRL, the CRL must be issued and signed by same key is the Trusted Authority's Certificate");
 				}
 				crlPanel.setCRL(crl);
 			} catch (Exception ex) {
@@ -757,8 +759,8 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			getAddButton().setEnabled(false);
 			X509Certificate cert = this.certificatePanel.getCertificate();
 			if (cert == null) {
-				GridApplication.getContext()
-					.showErrorMessage("No certificate specified, you must specify a certificate to add a Trusted Authority!!!");
+				GridApplication.getContext().showErrorMessage(
+					"No certificate specified, you must specify a certificate to add a Trusted Authority!!!");
 				getAddButton().setEnabled(true);
 				return;
 
@@ -775,7 +777,8 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			client.addTrustedAuthority(ta);
-			GridApplication.getContext().showMessage("The Trusted Authority, " + ta.getName() + " was succesfully added!!!");
+			GridApplication.getContext().showMessage(
+				"The Trusted Authority, " + ta.getName() + " was succesfully added!!!");
 			refresher.refreshTrustedAuthorities();
 			dispose();
 		} catch (Exception e) {
@@ -801,7 +804,8 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			client.updateTrustedAuthority(ta);
-			GridApplication.getContext().showMessage("The Trusted Authority, " + ta.getName() + " was succesfully updated!!!");
+			GridApplication.getContext().showMessage(
+				"The Trusted Authority, " + ta.getName() + " was succesfully updated!!!");
 			refresher.refreshTrustedAuthorities();
 			getAddButton().setEnabled(true);
 		} catch (Exception e) {

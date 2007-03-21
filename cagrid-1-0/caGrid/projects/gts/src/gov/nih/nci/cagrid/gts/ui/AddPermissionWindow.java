@@ -19,6 +19,7 @@ import org.cagrid.grape.GridApplication;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -50,11 +51,11 @@ public class AddPermissionWindow extends ApplicationComponent {
 
 	private PermissionRefresher refresher;
 
+
 	/**
 	 * This is the default constructor
 	 */
-	public AddPermissionWindow(String service, GlobusCredential cred,
-			PermissionRefresher refresher) {
+	public AddPermissionWindow(String service, GlobusCredential cred, PermissionRefresher refresher) {
 		super();
 		this.refresher = refresher;
 		initialize();
@@ -62,6 +63,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 		this.proxy.setSelectedItem(new ProxyCaddy(cred));
 		syncServices();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -74,6 +76,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 		this.setTitle("Add Permission");
 		this.setFrameIcon(GTSLookAndFeel.getAddPermissionIcon());
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -108,6 +111,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes topPanel
@@ -145,11 +149,9 @@ public class AddPermissionWindow extends ApplicationComponent {
 			jLabel = new JLabel();
 			jLabel.setText("Grid Trust Service (GTS)");
 			topPanel = new JPanel();
-			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Service/Login Information",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GTSLookAndFeel.getPanelLabelColor()));
+			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service/Login Information",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(jLabel, gridBagConstraints2);
 			topPanel.add(getGts(), gridBagConstraints3);
@@ -158,6 +160,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 		}
 		return topPanel;
 	}
+
 
 	/**
 	 * This method initializes gts
@@ -175,8 +178,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 						}
 					};
 					try {
-						GridApplication.getContext()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -186,6 +188,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 		}
 		return gts;
 	}
+
 
 	/**
 	 * This method initializes proxy
@@ -198,6 +201,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 		}
 		return proxy;
 	}
+
 
 	/**
 	 * This method initializes buttonPanel
@@ -212,6 +216,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes addButton
@@ -231,8 +236,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 						}
 					};
 					try {
-						GridApplication.getContext()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -243,6 +247,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 
 		return addButton;
 	}
+
 
 	/**
 	 * This method initializes cancelButton
@@ -263,13 +268,12 @@ public class AddPermissionWindow extends ApplicationComponent {
 		return cancelButton;
 	}
 
+
 	private void addPermission() {
 		try {
 			getAddButton().setEnabled(false);
-			GlobusCredential proxy = ((ProxyComboBox) getProxy())
-					.getSelectedProxy();
-			String service = ((GTSServiceListComboBox) getGts())
-					.getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			client.addPermission(permissionPanel.getPermission());
 			refresher.refreshPermissions();
@@ -283,6 +287,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -291,17 +296,16 @@ public class AddPermissionWindow extends ApplicationComponent {
 	private PermissionPanel getPermissionPanel() {
 		if (permissionPanel == null) {
 			permissionPanel = new PermissionPanel(false);
-			permissionPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Permission", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-							.getPanelLabelColor()));
+			permissionPanel.setBorder(BorderFactory.createTitledBorder(null, "Permission",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
+					.getPanelLabelColor()));
 		}
 		return permissionPanel;
 	}
 
+
 	private synchronized void syncServices() {
-		String service = ((GTSServiceListComboBox) getGts())
-				.getSelectedService();
+		String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 		try {
 			permissionPanel.syncWithService(service);
 		} catch (Exception e) {

@@ -11,9 +11,9 @@ public class Nuker {
 	public static void main(String[] args) {
 		try {
 			Database db = Utils.getDBManager().getDatabase();
-			System.out.println("Destroying database........ "+db.getDatabaseName());
+			System.out.println("Destroying database........ " + db.getDatabaseName());
 			db.destroyDatabase();
-			System.out.println("The database "+db.getDatabaseName()+" was successfully destroyed!!!");
+			System.out.println("The database " + db.getDatabaseName() + " was successfully destroyed!!!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

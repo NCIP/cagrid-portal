@@ -8,19 +8,16 @@ import org.projectmobius.common.MobiusPoolManager;
 import org.projectmobius.common.MobiusRunnable;
 
 
-
-
-
 public class Util {
-	
+
 	private static MobiusPoolManager threadManager = new MobiusPoolManager();
-	
-	
-	
+
+
 	public static void executeInBackground(MobiusRunnable r) throws Exception {
 		threadManager.executeInBackground(r);
 	}
-	
+
+
 	public static void showErrorMessage(String msg) {
 		showErrorMessage("Portal Error", msg);
 	}

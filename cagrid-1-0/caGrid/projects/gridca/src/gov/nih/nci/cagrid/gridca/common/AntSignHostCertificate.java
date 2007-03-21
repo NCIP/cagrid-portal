@@ -26,7 +26,7 @@ public class AntSignHostCertificate {
 	public static void main(String[] args) {
 		try {
 			Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-			
+
 			String key = args[0];
 			String password = args[1];
 			String cert = args[2];

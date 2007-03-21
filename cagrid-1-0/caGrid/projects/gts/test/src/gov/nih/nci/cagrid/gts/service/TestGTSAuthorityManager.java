@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 
 import junit.framework.TestCase;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -28,13 +29,14 @@ public class TestGTSAuthorityManager extends TestCase {
 
 	private final String GTS_URI = "localhost";
 
+
 	public TestGTSAuthorityManager() {
 
 	}
 
+
 	public void testCreateAndDestroy() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
-				getAuthoritySyncTime(), db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI, getAuthoritySyncTime(), db);
 		try {
 			am.clearDatabase();
 			assertTrue(db.getDatabase().tableExists(AuthorityTable.TABLE_NAME));
@@ -51,9 +53,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
+
 	public void testAddInvalidAuthority() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
-				getAuthoritySyncTime(), db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI, getAuthoritySyncTime(), db);
 		try {
 			am.clearDatabase();
 			TimeToLive ttl = new TimeToLive();
@@ -177,9 +179,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
+
 	public void testUpdateInvalidAuthority() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
-				getAuthoritySyncTime(), db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI, getAuthoritySyncTime(), db);
 		try {
 			am.clearDatabase();
 			TimeToLive ttl = new TimeToLive();
@@ -280,9 +282,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
+
 	public void testAddAuthority() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
-				getAuthoritySyncTime(), db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI, getAuthoritySyncTime(), db);
 		try {
 			am.clearDatabase();
 			AuthorityGTS a1 = getAuthority("GTS 1", 1);
@@ -304,9 +306,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
+
 	public void testAddUpdateRemoveAuthorities() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
-				getAuthoritySyncTime(), db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI, getAuthoritySyncTime(), db);
 		int count = 5;
 		AuthorityGTS[] a = new AuthorityGTS[count];
 
@@ -379,9 +381,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
+
 	public void testInvalidUpdatePrioritiesAuthorities() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
-				getAuthoritySyncTime(), db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI, getAuthoritySyncTime(), db);
 		int count = 5;
 		AuthorityGTS[] a = new AuthorityGTS[count];
 
@@ -468,9 +470,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
+
 	public void testUpdateRollback() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
-				getAuthoritySyncTime(), db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI, getAuthoritySyncTime(), db);
 		int count = 5;
 		AuthorityGTS[] a = new AuthorityGTS[count];
 		Connection c = null;
@@ -494,13 +496,11 @@ public class TestGTSAuthorityManager extends TestCase {
 			c.setAutoCommit(false);
 			for (int i = 0; i < count; i++) {
 				a[i].setPriority(a[i].getPriority() + 1);
-				am.updateAuthorityPriority(c, a[i].getServiceURI(), a[i]
-						.getPriority());
+				am.updateAuthorityPriority(c, a[i].getServiceURI(), a[i].getPriority());
 			}
 
 			for (int i = 0; i < count; i++) {
-				assertEquals((a[i].getPriority() - 1), am.getAuthority(
-						a[i].getServiceURI()).getPriority());
+				assertEquals((a[i].getPriority() - 1), am.getAuthority(a[i].getServiceURI()).getPriority());
 			}
 
 			c.commit();
@@ -511,13 +511,11 @@ public class TestGTSAuthorityManager extends TestCase {
 
 			for (int i = 0; i < count; i++) {
 				a[i].setPriority(a[i].getPriority() + 1);
-				am.updateAuthorityPriority(c, a[i].getServiceURI(), a[i]
-						.getPriority());
+				am.updateAuthorityPriority(c, a[i].getServiceURI(), a[i].getPriority());
 			}
 
 			try {
-				PreparedStatement bad = c
-						.prepareStatement("INSERT INTO NOTHING SET VALUES(1,2)");
+				PreparedStatement bad = c.prepareStatement("INSERT INTO NOTHING SET VALUES(1,2)");
 				bad.executeUpdate();
 				try {
 					c.commit();
@@ -553,9 +551,9 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
+
 	public void testAddAuthorityOverwritePriority() {
-		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
-				getAuthoritySyncTime(), db);
+		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI, getAuthoritySyncTime(), db);
 		try {
 			am.clearDatabase();
 			AuthorityGTS a1 = getAuthority("GTS 1", 1);
@@ -587,6 +585,7 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
+
 	private AuthorityGTS getAuthority(String uri, int priority) {
 		TimeToLive ttl = new TimeToLive();
 		ttl.setHours(1);
@@ -602,10 +601,12 @@ public class TestGTSAuthorityManager extends TestCase {
 		return a1;
 	}
 
+
 	private AuthoritySyncTime getAuthoritySyncTime() {
 		AuthoritySyncTime time = new AuthoritySyncTime(0, 0, 2);
 		return time;
 	}
+
 
 	private void updateAuthority(AuthorityGTS gts) {
 		TimeToLive ttl = new TimeToLive();
@@ -618,6 +619,7 @@ public class TestGTSAuthorityManager extends TestCase {
 		gts.setTimeToLive(ttl);
 	}
 
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
@@ -629,11 +631,12 @@ public class TestGTSAuthorityManager extends TestCase {
 		}
 	}
 
+
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		try {
 			assertEquals(0, db.getDatabase().getUsedConnectionCount());
-			//db.getDatabase().destroyDatabase();
+			// db.getDatabase().destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

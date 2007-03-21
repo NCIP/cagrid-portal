@@ -14,7 +14,6 @@ import java.util.TimeZone;
 import org.bouncycastle.asn1.x509.X509Name;
 
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -53,26 +52,24 @@ public class GenerateCA {
 			sb.append(",CN=" + cn);
 			KeyPair root = KeyUtil.generateRSAKeyPair1024();
 			int days = IOUtils.readInteger("Enter number of days valid");
-			while(days<=0){
+			while (days <= 0) {
 				days = IOUtils.readInteger("Enter days valid (>0)");
 			}
-			GregorianCalendar date = new GregorianCalendar(TimeZone
-					.getTimeZone("GMT"));
-			
+			GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+
 			date.add(Calendar.MINUTE, -5);
-		
+
 			Date start = new Date(date.getTimeInMillis());
 			date.add(Calendar.MINUTE, 5);
-			date.add(Calendar.DAY_OF_MONTH,days);
+			date.add(Calendar.DAY_OF_MONTH, days);
 			Date end = new Date(date.getTimeInMillis());
-			X509Certificate cert = CertUtil.generateCACertificate(new X509Name(
-					sb.toString()), start,end, root);
+			X509Certificate cert = CertUtil.generateCACertificate(new X509Name(sb.toString()), start, end, root);
 			String password = IOUtils.readLine("Enter a key password");
 			password = Utils.clean(password);
 			String keyOut = IOUtils.readLine("Enter location to write CA key");
 			String caOut = IOUtils.readLine("Enter location to write CA cert");
-			KeyUtil.writePrivateKey(root.getPrivate(),new File(keyOut),password);
-			CertUtil.writeCertificate(cert,new File(caOut));
+			KeyUtil.writePrivateKey(root.getPrivate(), new File(keyOut), password);
+			CertUtil.writeCertificate(cert, new File(caOut));
 			System.out.println("Successfully create the CA certificate:");
 			System.out.println(sb.toString());
 			System.out.println("CA Certificate Valid Till:");
@@ -87,7 +84,5 @@ public class GenerateCA {
 		}
 
 	}
-
-	
 
 }

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class UpdateStatement {
 	private List fields;
 
@@ -13,10 +14,11 @@ public class UpdateStatement {
 	private List whereFields;
 
 	private List whereValues;
-	
+
 	private List whereOperators;
 
 	private String table;
+
 
 	public UpdateStatement(String table) {
 		this.table = table;
@@ -27,11 +29,13 @@ public class UpdateStatement {
 		this.whereOperators = new ArrayList();
 	}
 
-	public void addField(String field,Object value) {
+
+	public void addField(String field, Object value) {
 		this.fields.add(field);
-		
+
 		this.values.add(value);
 	}
+
 
 	public void addWhereField(String field, String operator, Object value) {
 		this.whereFields.add(field);
@@ -39,13 +43,14 @@ public class UpdateStatement {
 		this.whereValues.add(value);
 	}
 
+
 	public PreparedStatement prepareUpdateStatement(Connection c) throws Exception {
 		StringBuffer sql = new StringBuffer("UPDATE " + table + " SET ");
 		boolean first = true;
 		for (int i = 0; i < fields.size(); i++) {
 			if (!first) {
 				sql.append(",");
-			}else{
+			} else {
 				first = false;
 			}
 			sql.append((String) fields.get(i) + " = ?");
@@ -58,10 +63,10 @@ public class UpdateStatement {
 		for (int i = 0; i < whereFields.size(); i++) {
 			if (!first) {
 				sql.append(" AND ");
-			}else{
+			} else {
 				first = false;
 			}
-			sql.append((String) whereFields.get(i) + " "+(String)whereOperators.get(i)+" ?");
+			sql.append((String) whereFields.get(i) + " " + (String) whereOperators.get(i) + " ?");
 		}
 
 		PreparedStatement s = c.prepareStatement(sql.toString());
@@ -74,8 +79,7 @@ public class UpdateStatement {
 			} else if (o instanceof Integer) {
 				s.setInt((i + 1), ((Integer) o).intValue());
 			} else {
-				throw new Exception("Unsupported type "
-						+ o.getClass().getName());
+				throw new Exception("Unsupported type " + o.getClass().getName());
 			}
 		}
 
@@ -89,8 +93,7 @@ public class UpdateStatement {
 			} else if (o instanceof Integer) {
 				s.setInt((index), ((Integer) o).intValue());
 			} else {
-				throw new Exception("Unsupported type "
-						+ o.getClass().getName());
+				throw new Exception("Unsupported type " + o.getClass().getName());
 			}
 		}
 		return s;

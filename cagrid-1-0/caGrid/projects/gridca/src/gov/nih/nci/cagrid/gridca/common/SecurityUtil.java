@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.gridca.common;
 
 import java.security.Security;
+
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -11,10 +13,10 @@ import java.security.Security;
 public class SecurityUtil {
 	private static boolean isInit = false;
 
-	public static void init(){
-		if(!isInit){
-			Security
-			.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+
+	public static void init() {
+		if (!isInit) {
+			Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 			isInit = true;
 		}
 	}

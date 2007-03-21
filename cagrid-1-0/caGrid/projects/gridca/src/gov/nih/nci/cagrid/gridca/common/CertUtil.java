@@ -74,7 +74,8 @@ public class CertUtil {
 		out.println("cond_subjects globus '\"*\"'");
 		out.close();
 	}
-	
+
+
 	public static String subjectToIdentity(String subject) {
 		return "/" + subject.replace(',', '/');
 	}
@@ -154,7 +155,7 @@ public class CertUtil {
 		certGen.setSignatureAlgorithm("md5WithRSAEncryption");
 		certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(numberOfCAs));
 		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(KeyUsage.digitalSignature
-			 | KeyUsage.keyCertSign | KeyUsage.cRLSign));
+			| KeyUsage.keyCertSign | KeyUsage.cRLSign));
 
 		SubjectPublicKeyInfo spki = new SubjectPublicKeyInfo((ASN1Sequence) new DERInputStream(
 			new ByteArrayInputStream(pair.getPublic().getEncoded())).readObject());
@@ -183,7 +184,7 @@ public class CertUtil {
 		certGen.setSignatureAlgorithm("md5WithRSAEncryption");
 		certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(false));
 		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(KeyUsage.digitalSignature
-			| KeyUsage.keyEncipherment |KeyUsage.dataEncipherment|KeyUsage.nonRepudiation));
+			| KeyUsage.keyEncipherment | KeyUsage.dataEncipherment | KeyUsage.nonRepudiation));
 
 		SubjectPublicKeyInfo spki = new SubjectPublicKeyInfo((ASN1Sequence) new DERInputStream(
 			new ByteArrayInputStream(publicKey.getEncoded())).readObject());

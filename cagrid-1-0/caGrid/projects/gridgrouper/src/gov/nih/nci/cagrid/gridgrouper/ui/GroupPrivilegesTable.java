@@ -8,12 +8,12 @@ import javax.swing.table.TableColumn;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.table.GrapeBaseTable;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -35,6 +35,7 @@ public class GroupPrivilegesTable extends GrapeBaseTable {
 	public final static String OPTOUT = "Optout";
 
 	private GroupBrowser browser;
+
 
 	public GroupPrivilegesTable(GroupBrowser browser) {
 		super(createTableModel());
@@ -63,6 +64,7 @@ public class GroupPrivilegesTable extends GrapeBaseTable {
 
 	}
 
+
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(CADDY);
@@ -77,6 +79,7 @@ public class GroupPrivilegesTable extends GrapeBaseTable {
 
 	}
 
+
 	public void addPrivilege(final GroupPrivilegeCaddy priv) {
 		Vector v = new Vector();
 		v.add(priv);
@@ -90,6 +93,7 @@ public class GroupPrivilegesTable extends GrapeBaseTable {
 		addRow(v);
 	}
 
+
 	private String getDisplayText(boolean has) {
 		if (has) {
 			return "Y";
@@ -98,8 +102,8 @@ public class GroupPrivilegesTable extends GrapeBaseTable {
 		}
 	}
 
-	public synchronized GroupPrivilegeCaddy getSelectedPrivilege()
-			throws Exception {
+
+	public synchronized GroupPrivilegeCaddy getSelectedPrivilege() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
 			return (GroupPrivilegeCaddy) getValueAt(row, 0);
@@ -107,6 +111,7 @@ public class GroupPrivilegesTable extends GrapeBaseTable {
 			throw new Exception("Please select a privilege!!!");
 		}
 	}
+
 
 	public synchronized void removeSelectedPrivilege() throws Exception {
 		int row = getSelectedRow();
@@ -117,11 +122,12 @@ public class GroupPrivilegesTable extends GrapeBaseTable {
 		}
 	}
 
+
 	public void doubleClick() throws Exception {
 		GroupPrivilegeCaddy caddy = getSelectedPrivilege();
-		GridApplication.getContext().addApplicationComponent(
-						new GroupPrivilegeWindow(browser, caddy), 500, 200);
+		GridApplication.getContext().addApplicationComponent(new GroupPrivilegeWindow(browser, caddy), 500, 200);
 	}
+
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub

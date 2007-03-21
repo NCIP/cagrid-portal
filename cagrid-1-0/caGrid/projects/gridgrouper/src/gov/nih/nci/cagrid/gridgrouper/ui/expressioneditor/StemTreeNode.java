@@ -56,12 +56,12 @@ import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -71,11 +71,13 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 
 	private boolean rootStem;
 
+
 	public StemTreeNode(GridGrouperExpressionEditor editor, Stem stem, boolean root) {
 		super(editor);
 		this.rootStem = root;
 		this.stem = stem;
 	}
+
 
 	public void loadStem() throws Exception {
 		this.removeAllChildren();
@@ -83,8 +85,7 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		Iterator itr = set.iterator();
 		while (itr.hasNext()) {
 			StemI stem = (StemI) itr.next();
-			StemTreeNode node = new StemTreeNode(getEditor(), ((Stem) stem),
-					false);
+			StemTreeNode node = new StemTreeNode(getEditor(), ((Stem) stem), false);
 			synchronized (getTree()) {
 				this.add(node);
 				TreeNode parent = this.getParent();
@@ -113,9 +114,9 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		}
 	}
 
+
 	public void refresh() {
-		int id = getEditor().getProgress().startEvent(
-				"Refreshing " + toString() + ".... ");
+		int id = getEditor().getProgress().startEvent("Refreshing " + toString() + ".... ");
 		try {
 			stem = (Stem) stem.getGridGrouper().findStem(stem.getName());
 			if (parent != null) {
@@ -124,15 +125,14 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 				getTree().reload();
 			}
 			loadStem();
-			getEditor().getProgress().stopEvent(id,
-					"Refreshed " + toString() + "!!!");
+			getEditor().getProgress().stopEvent(id, "Refreshed " + toString() + "!!!");
 		} catch (Exception e) {
 			e.printStackTrace();
-			getEditor().getProgress().stopEvent(id,
-					"Error refreshing " + toString() + "!!!");
+			getEditor().getProgress().stopEvent(id, "Error refreshing " + toString() + "!!!");
 			Util.showErrorMessage(e);
 		}
 	}
+
 
 	public ImageIcon getIcon() {
 		if (this.rootStem) {
@@ -142,6 +142,7 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		}
 	}
 
+
 	public String toString() {
 		if (this.rootStem) {
 			return stem.getGridGrouper().getName();
@@ -150,13 +151,16 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		}
 	}
 
+
 	public boolean isRootStem() {
 		return rootStem;
 	}
 
+
 	public GridGrouper getGridGrouper() {
 		return stem.getGridGrouper();
 	}
+
 
 	public Stem getStem() {
 		return stem;

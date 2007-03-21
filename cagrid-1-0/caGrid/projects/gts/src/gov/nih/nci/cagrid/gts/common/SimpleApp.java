@@ -9,6 +9,7 @@ import java.sql.Statement;
 
 import org.projectmobius.db.ConnectionManager;
 
+
 /**
  * This sample program is a minimal JDBC application showing JDBC access to
  * Derby. Instructions for how to run this program are given in <A
@@ -35,9 +36,11 @@ public class SimpleApp {
 
 	public String protocol = "jdbc:derby:";
 
+
 	public static void main(String[] args) {
 		new SimpleApp().go(args);
 	}
+
 
 	void go(String[] args) {
 		/* parse the arguments to determine which framework is desired */
@@ -61,12 +64,10 @@ public class SimpleApp {
 			 */
 			// conn = DriverManager.getConnection(protocol +
 			// "gtsDB;create=true", props);
-			ConnectionManager cm = new ConnectionManager("GTS", url, driver,
-					null, null);
+			ConnectionManager cm = new ConnectionManager("GTS", url, driver, null, null);
 			conn = cm.getConnection();
 			System.out.println("Connected to and created database derbyDB");
-			System.out.println("derbyDB Exists? "
-					+ this.tableExists(conn, "derbyDB"));
+			System.out.println("derbyDB Exists? " + this.tableExists(conn, "derbyDB"));
 
 			conn.setAutoCommit(false);
 
@@ -81,25 +82,21 @@ public class SimpleApp {
 			 */
 			s.execute("create table derbyDB(num int, addr varchar(40))");
 			System.out.println("Created table derbyDB");
-			System.out.println("derbyDB Exists? "
-					+ this.tableExists(conn, "derbyDB"));
+			System.out.println("derbyDB Exists? " + this.tableExists(conn, "derbyDB"));
 			s.execute("insert into derbyDB values (1956,'Webster St.')");
 			System.out.println("Inserted 1956 Webster");
 			s.execute("insert into derbyDB values (1910,'Union St.')");
 			System.out.println("Inserted 1910 Union");
-			s
-					.execute("update derbyDB set num=180, addr='Grand Ave.' where num=1956");
+			s.execute("update derbyDB set num=180, addr='Grand Ave.' where num=1956");
 			System.out.println("Updated 1956 Webster to 180 Grand");
 
-			s
-					.execute("update derbyDB set num=300, addr='Lakeshore Ave.' where num=180");
+			s.execute("update derbyDB set num=300, addr='Lakeshore Ave.' where num=180");
 			System.out.println("Updated 180 Grand to 300 Lakeshore");
 
 			/*
 			 * We select the rows and verify the results.
 			 */
-			ResultSet rs = s
-					.executeQuery("SELECT num, addr FROM derbyDB ORDER BY num");
+			ResultSet rs = s.executeQuery("SELECT num, addr FROM derbyDB ORDER BY num");
 
 			if (!rs.next()) {
 				throw new Exception("Wrong number of rows");
@@ -176,14 +173,14 @@ public class SimpleApp {
 		System.out.println("SimpleApp finished");
 	}
 
+
 	public boolean tableExists(Connection c, String tableName) throws Exception {
 		boolean exists = false;
 
 		DatabaseMetaData dbMetadata = c.getMetaData();
-		String[] names = { "TABLE" };
+		String[] names = {"TABLE"};
 		names[0] = tableName;
-		ResultSet tables = dbMetadata.getTables(null, null, tableName
-				.toUpperCase(), null);
+		ResultSet tables = dbMetadata.getTables(null, null, tableName.toUpperCase(), null);
 		if (tables.next()) {
 			exists = true;
 		}
@@ -192,12 +189,14 @@ public class SimpleApp {
 		return exists;
 	}
 
+
 	static void printSQLError(SQLException e) {
 		while (e != null) {
 			System.out.println(e.toString());
 			e = e.getNextException();
 		}
 	}
+
 
 	private void parseArguments(String[] args) {
 		int length = args.length;

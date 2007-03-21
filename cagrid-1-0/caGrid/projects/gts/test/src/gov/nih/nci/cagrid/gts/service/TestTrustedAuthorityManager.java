@@ -389,7 +389,6 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 
 			}
 
-
 			// EXTERNAL ADD: Invalid Trust Level
 			try {
 				TrustedAuthority ta = new TrustedAuthority();
@@ -438,8 +437,6 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
-
-
 
 			// EXTERNAL ADD: No Authority
 			try {
@@ -963,7 +960,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			levels[0] = LEVEL_ONE;
 			levels[1] = LEVEL_TWO;
 			levels[2] = LEVEL_THREE;
-			
+
 			TrustLevels trustLevels = new TrustLevels();
 			trustLevels.setTrustLevel(levels);
 
@@ -998,17 +995,18 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				TrustedAuthority[] tas = trust.findTrustAuthorities(new TrustedAuthorityFilter());
 				assertEquals(tas.length, (i + 1));
 
-//				 Filter by Name
+				// Filter by Name
 				TrustedAuthorityFilter tf3 = new TrustedAuthorityFilter();
 				tf3.setName(name);
 				TrustedAuthority[] tas3 = trust.findTrustAuthorities(tf3);
 				assertEquals(1, tas3.length);
 				assertEquals(auths[i], tas3[0]);
-				assertEquals(auths[i].getTrustLevels().getTrustLevel().length, tas3[0].getTrustLevels().getTrustLevel().length);
+				assertEquals(auths[i].getTrustLevels().getTrustLevel().length,
+					tas3[0].getTrustLevels().getTrustLevel().length);
 				tf3.setName("yada yada");
 				tas3 = trust.findTrustAuthorities(tf3);
 				assertEquals(0, tas3.length);
-				
+
 				// Filter by name and trust level
 				for (int j = 0; j < levels.length; j++) {
 					TrustedAuthorityFilter tf2 = new TrustedAuthorityFilter();
@@ -1022,11 +1020,10 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 					assertEquals(expected, tas2.length);
 					if (expected == 1) {
 						assertEquals(auths[i], tas2[0]);
-						assertEquals(auths[i].getTrustLevels().getTrustLevel().length, tas2[0].getTrustLevels().getTrustLevel().length);
+						assertEquals(auths[i].getTrustLevels().getTrustLevel().length, tas2[0].getTrustLevels()
+							.getTrustLevel().length);
 					}
 				}
-
-				
 
 				// Filter by Trust Level
 				for (int j = 0; j < levels.length; j++) {
@@ -1034,25 +1031,25 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 					tf4.setTrustLevels(toTrustLevels(levels[j]));
 					TrustedAuthority[] tas4 = trust.findTrustAuthorities(tf4);
 					int num = i - j;
-					
+
 					if (num < 0) {
 						num = 0;
 					}
 					assertEquals(num, tas4.length);
-				}	
-				
-				//Test Multiple Trust Levels
+				}
+
+				// Test Multiple Trust Levels
 				for (int j = 0; j < levels.length; j++) {
 					TrustLevels tls = getTrustLevels(levels, j);
 					TrustedAuthorityFilter tf4 = new TrustedAuthorityFilter();
 					tf4.setTrustLevels(tls);
 					TrustedAuthority[] tas4 = trust.findTrustAuthorities(tf4);
-					int expected = (i+1)-j;
-					if(expected<0){
+					int expected = (i + 1) - j;
+					if (expected < 0) {
 						expected = 0;
 					}
 					assertEquals(expected, tas4.length);
-				}			
+				}
 			}
 			// Test Remove
 			int remaining = count;
@@ -1074,15 +1071,17 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 		}
 	}
 
-	private TrustLevels getTrustLevels(String[] list, int count){
+
+	private TrustLevels getTrustLevels(String[] list, int count) {
 		TrustLevels levels = new TrustLevels();
 		String[] trustLevels = new String[count];
-		for(int i=0; i<count; i++){
+		for (int i = 0; i < count; i++) {
 			trustLevels[i] = list[i];
 		}
 		levels.setTrustLevel(trustLevels);
 		return levels;
 	}
+
 
 	public void testUpdateTrustedAuthorities() {
 		TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
@@ -1288,7 +1287,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 	}
 
 
-	public TrustLevels toTrustLevels(String s){
+	public TrustLevels toTrustLevels(String s) {
 		TrustLevels levels = new TrustLevels();
 		String[] array = new String[1];
 		array[0] = s;

@@ -39,8 +39,9 @@ public class ProxyManager {
 		this.proxiesToFile = new HashMap();
 		loadProxies();
 	}
-	
-	public synchronized void loadProxies(){
+
+
+	public synchronized void loadProxies() {
 		this.proxies.clear();
 		this.proxiesToFile.clear();
 		String dir = Utils.getCaGridUserHome() + File.separator + File.separator + "proxy";

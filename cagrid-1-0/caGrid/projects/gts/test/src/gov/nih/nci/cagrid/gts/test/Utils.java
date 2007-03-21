@@ -14,11 +14,12 @@ import org.jdom.Document;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.db.ConnectionManager;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Utils.java,v 1.9 2006-08-02 13:54:13 langella Exp $
+ * @version $Id: Utils.java,v 1.10 2007-03-21 20:11:30 langella Exp $
  */
 public class Utils {
 
@@ -26,27 +27,28 @@ public class Utils {
 
 	private static DBManager dbManager = null;
 
+
 	public static DBManager getDBManager() throws Exception {
 		return getMySQLManager();
 	}
 
+
 	public static DBManager getMySQLManager() throws Exception {
 		if (dbManager == null) {
-			InputStream resource = TestCase.class
-					.getResourceAsStream(GTSConstants.DB_CONFIG);
+			InputStream resource = TestCase.class.getResourceAsStream(GTSConstants.DB_CONFIG);
 			Document doc = XMLUtilities.streamToDocument(resource);
 			ConnectionManager cm = new ConnectionManager(doc.getRootElement());
 			MySQLDatabase db = new MySQLDatabase(cm, DB);
-			//db.destroyDatabase();
-			//db.createDatabase();
+			// db.destroyDatabase();
+			// db.createDatabase();
 			dbManager = new MySQLManager(db);
 		}
 		return dbManager;
 	}
 
+
 	public static GTSConfiguration getGTSConfiguration() throws Exception {
-		InputStream in = TestCase.class
-				.getResourceAsStream(GTSConstants.GTS_CONFIG);
+		InputStream in = TestCase.class.getResourceAsStream(GTSConstants.GTS_CONFIG);
 		SimpleResourceManager srm = new SimpleResourceManager(in);
 		return (GTSConfiguration) srm.getResource(GTSConfiguration.RESOURCE);
 	}

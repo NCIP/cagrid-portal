@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -17,9 +18,11 @@ public class GTSServiceListComboBox extends JComboBox {
 
 	private static final String ANY = "Any";
 
+
 	public GTSServiceListComboBox() {
 		this(false);
 	}
+
 
 	public GTSServiceListComboBox(boolean any) {
 		if (any) {
@@ -46,6 +49,7 @@ public class GTSServiceListComboBox extends JComboBox {
 			}
 		});
 	}
+
 
 	public String getSelectedService() {
 		String s = (String) getSelectedItem();

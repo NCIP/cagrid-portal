@@ -19,7 +19,7 @@ public abstract class ConfigurationBasePanel extends JPanel {
 	private ConfigurationDescriptorTreeNode treeNode;
 
 
-	public ConfigurationBasePanel(ConfigurationDescriptorTreeNode treeNode,Object conf) {
+	public ConfigurationBasePanel(ConfigurationDescriptorTreeNode treeNode, Object conf) {
 		this.configurationObject = conf;
 		this.setTreeNode(treeNode);
 	}
@@ -28,9 +28,8 @@ public abstract class ConfigurationBasePanel extends JPanel {
 	public Object getConfigurationObject() {
 		return configurationObject;
 	}
-	
-	
-	
+
+
 	public ConfigurationDescriptorTreeNode getTreeNode() {
 		return treeNode;
 	}
@@ -41,7 +40,7 @@ public abstract class ConfigurationBasePanel extends JPanel {
 	}
 
 
-	public void addEditor(ConfigurationEditor editor, Object object) throws Exception{
+	public void addEditor(ConfigurationEditor editor, Object object) throws Exception {
 		getTreeNode().addConfigurationEditor(editor, object);
 	}
 }

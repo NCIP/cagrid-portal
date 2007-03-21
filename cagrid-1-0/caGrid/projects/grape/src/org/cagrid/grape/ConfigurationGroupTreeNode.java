@@ -18,13 +18,14 @@ public class ConfigurationGroupTreeNode extends ConfigurationBaseTreeNode {
 	private ConfigurationGroup group;
 
 
-	public ConfigurationGroupTreeNode(ConfigurationWindow window, ConfigurationTree tree,
-		ConfigurationGroup group) throws Exception {
+	public ConfigurationGroupTreeNode(ConfigurationWindow window, ConfigurationTree tree, ConfigurationGroup group)
+		throws Exception {
 		super(window, tree);
 		this.group = group;
 		this.processConfigurationDescriptors(group.getConfigurationDescriptors());
 		this.setDisplayPanel(new ConfigurationDisplayPanel(group.getName()));
 	}
+
 
 	public ImageIcon getIcon() {
 		return LookAndFeel.getConfigurationGroupIcon();

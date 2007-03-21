@@ -27,5 +27,6 @@ public abstract class AuthorityTable {
 
 	public static final String GTS_IDENTITY = "GTS_IDENTITY";
 
+
 	public abstract String getCreateTableSQL();
 }

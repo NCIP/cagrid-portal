@@ -9,6 +9,7 @@ import java.security.cert.X509CRL;
 
 import org.bouncycastle.util.encoders.Base64;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -21,9 +22,8 @@ public class CRLReader extends BufferedReader {
 
 
 	public CRLReader(Reader reader) {
-		this(reader,"BC");
+		this(reader, "BC");
 	}
-
 
 
 	public CRLReader(Reader reader, String provider) {
@@ -43,7 +43,6 @@ public class CRLReader extends BufferedReader {
 		}
 		return null;
 	}
-
 
 
 	private X509CRL readCRL(String endMarker) throws IOException {

@@ -72,7 +72,7 @@ abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 		}
 	}
 
-	
+
 	protected void processConfigurationGroups(ConfigurationGroups list) throws Exception {
 		if (list != null) {
 			ConfigurationGroup[] group = list.getConfigurationGroup();
@@ -84,7 +84,6 @@ abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 		}
 	}
 
-	
 
 	protected void processConfigurationDescriptors(ConfigurationDescriptors list) throws Exception {
 
@@ -115,7 +114,7 @@ abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 			this.add(node);
 		}
 	}
-	
+
 
 	public ConfigurationManager getConfigurationManager() {
 		return GridApplication.getContext().getConfigurationManager();

@@ -50,12 +50,12 @@ import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -63,10 +63,12 @@ public class QueryNode extends ExpressionBaseTreeNode {
 
 	private MembershipQuery query;
 
+
 	public QueryNode(GridGrouperExpressionEditor editor, MembershipQuery query) {
 		super(editor);
 		this.query = query;
 	}
+
 
 	public void refresh() {
 		TreeNode parent = this.getParent();
@@ -77,20 +79,21 @@ public class QueryNode extends ExpressionBaseTreeNode {
 		}
 	}
 
+
 	public ImageIcon getIcon() {
 		return GridGrouperLookAndFeel.getGroupIcon16x16();
 	}
 
+
 	public String toString() {
-		if ((query.getMembershipStatus() == null)
-				|| (query.getMembershipStatus()
-						.equals(MembershipStatus.MEMBER_OF))) {
+		if ((query.getMembershipStatus() == null) || (query.getMembershipStatus().equals(MembershipStatus.MEMBER_OF))) {
 			return query.getGroupIdentifier().getGroupName() + " [Member]";
 		} else {
 			return query.getGroupIdentifier().getGroupName() + " [Not Member]";
 		}
 
 	}
+
 
 	public MembershipQuery getQuery() {
 		return query;

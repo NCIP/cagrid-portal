@@ -16,5 +16,6 @@ public abstract class PermissionsTable {
 
 	public static final String TRUSTED_AUTHORITY = "TRUSTED_AUTHORITY";
 
+
 	public abstract String getCreateTableSQL();
 }

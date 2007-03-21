@@ -8,12 +8,12 @@ import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.MemberI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.MembershipI;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -29,8 +29,8 @@ public class Membership extends GridGrouperObject implements MembershipI {
 
 	private GridGrouper gridGrouper;
 
-	protected Membership(GridGrouper gridGrouper, MembershipDescriptor des)
-			throws SubjectNotFoundException {
+
+	protected Membership(GridGrouper gridGrouper, MembershipDescriptor des) throws SubjectNotFoundException {
 		this.gridGrouper = gridGrouper;
 		this.des = des;
 		this.member = new Member(des.getMember());
@@ -41,9 +41,11 @@ public class Membership extends GridGrouperObject implements MembershipI {
 
 	}
 
+
 	public int getDepth() {
 		return des.getDepth();
 	}
+
 
 	public GroupI getGroup() throws GroupNotFoundException {
 		return group;
@@ -54,13 +56,13 @@ public class Membership extends GridGrouperObject implements MembershipI {
 		return member;
 	}
 
+
 	public GroupI getViaGroup() throws GroupNotFoundException {
-		if(viaGroup!=null){
+		if (viaGroup != null) {
 			return viaGroup;
-		}else{
+		} else {
 			throw new GroupNotFoundException("No via group found for this membership!!!");
 		}
 	}
-
 
 }

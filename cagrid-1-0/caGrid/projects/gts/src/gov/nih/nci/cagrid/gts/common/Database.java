@@ -11,31 +11,38 @@ import org.projectmobius.db.ConnectionManager;
 import org.projectmobius.db.DatabaseException;
 import org.projectmobius.db.Query;
 
+
 public abstract class Database {
 
 	private String databaseName;
 
 	protected Log log;
 
+
 	public Database(String db) {
 		this.databaseName = db;
 		log = LogFactory.getLog(this.getClass().getName());
 	}
 
-	protected abstract ConnectionManager getConnectionManager()
-			throws DatabaseException;
+
+	protected abstract ConnectionManager getConnectionManager() throws DatabaseException;
+
 
 	public abstract void destroyDatabase() throws DatabaseException;
 
+
 	public abstract void createDatabase() throws DatabaseException;
+
 
 	public void update(String sql) throws DatabaseException {
 		Query.update(getConnectionManager(), sql);
 	}
 
+
 	public long insertGetId(String sql) throws DatabaseException {
 		return Query.insertGetId(getConnectionManager(), sql);
 	}
+
 
 	public void releaseConnection(Connection c) {
 		try {
@@ -45,13 +52,16 @@ public abstract class Database {
 		}
 	}
 
+
 	public Connection getConnection() throws DatabaseException {
 		return getConnectionManager().getConnection();
 	}
 
+
 	public String getDatabaseName() {
 		return databaseName;
 	}
+
 
 	public int getUsedConnectionCount() throws DatabaseException {
 		return getConnectionManager().getUsedConnectionCount();
@@ -64,8 +74,7 @@ public abstract class Database {
 		ResultSet results = null;
 		try {
 			c = this.getConnectionManager().getConnection();
-			stmt = c.prepareStatement("SELECT COUNT(*) FROM " + tableName
-					+ " WHERE 1 = 2");
+			stmt = c.prepareStatement("SELECT COUNT(*) FROM " + tableName + " WHERE 1 = 2");
 			results = stmt.executeQuery();
 			return true; // if table does exist, no rows will ever be
 			// returned

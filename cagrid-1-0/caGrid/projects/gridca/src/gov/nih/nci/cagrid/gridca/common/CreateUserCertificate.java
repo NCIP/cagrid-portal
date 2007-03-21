@@ -16,7 +16,6 @@ import java.util.TimeZone;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -26,52 +25,46 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  */
 public class CreateUserCertificate {
 
-
 	public static void main(String[] args) {
 		try {
-			Security
-			.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-			
+			Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+
 			PrivateKey cakey = null;
-			while(true){
-				try{
-					String key = IOUtils.readLine("Enter CA key location",true);
+			while (true) {
+				try {
+					String key = IOUtils.readLine("Enter CA key location", true);
 					String password = IOUtils.readLine("Enter CA key password.");
-					cakey = KeyUtil.loadPrivateKey(new File(key),password);
+					cakey = KeyUtil.loadPrivateKey(new File(key), password);
 					break;
-				}catch(Exception e){
-					e.printStackTrace();		
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
-			
+
 			X509Certificate cacert = null;
-			
-			while(true){
-				try{
-					String cert = IOUtils.readLine("Enter CA certificate location",true);
+
+			while (true) {
+				try {
+					String cert = IOUtils.readLine("Enter CA certificate location", true);
 					cacert = CertUtil.loadCertificate(new File(cert));
 					break;
-				}catch(Exception e){
-					e.printStackTrace();		
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
-			String cn = IOUtils.readLine("Enter Common Name (CN)",true);
+			String cn = IOUtils.readLine("Enter Common Name (CN)", true);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			String rootSub = cacert.getSubjectDN().toString();
 			int index = rootSub.lastIndexOf(",");
-			String subject = rootSub.substring(0, index) + ",CN="+cn;
-			PKCS10CertificationRequest request = CertUtil
-					.generateCertficateRequest(subject, pair);
-			
-		
-			
+			String subject = rootSub.substring(0, index) + ",CN=" + cn;
+			PKCS10CertificationRequest request = CertUtil.generateCertficateRequest(subject, pair);
+
 			int days = IOUtils.readInteger("Enter number of days valid");
-			GregorianCalendar date = new GregorianCalendar(TimeZone
-					.getTimeZone("GMT"));
+			GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 			/* Allow for a five minute clock skew here. */
 			date.add(Calendar.MINUTE, -5);
 			Date start = new Date(date.getTimeInMillis());
-            Date end = null;
+			Date end = null;
 			/* If hours = 0, then cert lifetime is set to user cert */
 			if (days <= 0) {
 				end = cacert.getNotAfter();
@@ -79,17 +72,18 @@ public class CreateUserCertificate {
 				date.add(Calendar.MINUTE, 5);
 				date.add(Calendar.DAY_OF_MONTH, days);
 				Date d = new Date(date.getTimeInMillis());
-				if(cacert.getNotAfter().before(d)){
-					throw new GeneralSecurityException("Cannot create a certificate that expires after issuing certificate.");
+				if (cacert.getNotAfter().before(d)) {
+					throw new GeneralSecurityException(
+						"Cannot create a certificate that expires after issuing certificate.");
 				}
 				end = d;
 			}
-			X509Certificate userCert = CertUtil.signCertificateRequest(request,start,end,cacert,cakey);
+			X509Certificate userCert = CertUtil.signCertificateRequest(request, start, end, cacert, cakey);
 
 			String keyOut = IOUtils.readLine("Enter location to write user key");
 			String caOut = IOUtils.readLine("Enter location to write user cert");
-			KeyUtil.writePrivateKey(pair.getPrivate(),new File(keyOut));
-			CertUtil.writeCertificate(userCert,new File(caOut));
+			KeyUtil.writePrivateKey(pair.getPrivate(), new File(keyOut));
+			CertUtil.writeCertificate(userCert, new File(caOut));
 			System.out.println("Successfully create the user certificate:");
 			System.out.println(userCert.getSubjectDN().toString());
 			System.out.println("User certificate issued by:");
@@ -100,15 +94,12 @@ public class CreateUserCertificate {
 			System.out.println(keyOut);
 			System.out.println("User Certificate Written to:");
 			System.out.println(caOut);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
 
 	}
-
-
 
 }

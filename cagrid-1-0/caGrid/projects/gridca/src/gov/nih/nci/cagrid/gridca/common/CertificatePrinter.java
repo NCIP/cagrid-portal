@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.gridca.common;
 
 import java.io.File;
 import java.security.cert.X509Certificate;
+
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -12,11 +14,10 @@ import java.security.cert.X509Certificate;
 public class CertificatePrinter {
 	public static void main(String[] args) {
 		try {
-			X509Certificate cert = CertUtil
-					.loadCertificate(new File("c:/certificates/usercert.pem"));
-		System.out.println("Subject: "+cert.getSubjectDN());
-		System.out.println("Created: "+cert.getNotBefore());
-		System.out.println("Expires: "+cert.getNotAfter());
+			X509Certificate cert = CertUtil.loadCertificate(new File("c:/certificates/usercert.pem"));
+			System.out.println("Subject: " + cert.getSubjectDN());
+			System.out.println("Created: " + cert.getNotBefore());
+			System.out.println("Expires: " + cert.getNotAfter());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

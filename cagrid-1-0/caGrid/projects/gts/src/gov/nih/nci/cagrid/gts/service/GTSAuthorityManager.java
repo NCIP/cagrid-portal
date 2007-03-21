@@ -27,6 +27,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -48,8 +49,8 @@ public class GTSAuthorityManager {
 
 	private AuthoritySyncTime syncTime;
 
-	public GTSAuthorityManager(String gtsURI, AuthoritySyncTime syncTime,
-			DBManager dbManager) {
+
+	public GTSAuthorityManager(String gtsURI, AuthoritySyncTime syncTime, DBManager dbManager) {
 		log = LogFactory.getLog(this.getClass().getName());
 		this.dbManager = dbManager;
 		this.db = dbManager.getDatabase();
@@ -57,27 +58,23 @@ public class GTSAuthorityManager {
 		this.syncTime = syncTime;
 	}
 
-	public synchronized AuthorityGTS getAuthority(String gtsURI)
-			throws GTSInternalFault, InvalidAuthorityFault {
+
+	public synchronized AuthorityGTS getAuthority(String gtsURI) throws GTSInternalFault, InvalidAuthorityFault {
 		this.buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select * from "
-					+ AuthorityTable.TABLE_NAME + " where "
-					+ AuthorityTable.GTS_URI + "= ?");
+			PreparedStatement s = c.prepareStatement("select * from " + AuthorityTable.TABLE_NAME + " where "
+				+ AuthorityTable.GTS_URI + "= ?");
 			s.setString(1, gtsURI);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				AuthorityGTS gts = new AuthorityGTS();
 				gts.setServiceURI(rs.getString(AuthorityTable.GTS_URI));
-				gts.setPerformAuthorization(rs
-						.getBoolean(AuthorityTable.PERFORM_AUTH));
+				gts.setPerformAuthorization(rs.getBoolean(AuthorityTable.PERFORM_AUTH));
 				gts.setPriority(rs.getInt(AuthorityTable.PRIORITY));
-				gts.setServiceIdentity(Utils.clean(rs
-						.getString(AuthorityTable.GTS_IDENTITY)));
-				gts.setSyncTrustLevels(rs
-						.getBoolean(AuthorityTable.SYNC_TRUST_LEVELS));
+				gts.setServiceIdentity(Utils.clean(rs.getString(AuthorityTable.GTS_IDENTITY)));
+				gts.setSyncTrustLevels(rs.getBoolean(AuthorityTable.SYNC_TRUST_LEVELS));
 				TimeToLive ttl = new TimeToLive();
 				ttl.setHours(rs.getInt(AuthorityTable.TTL_HOURS));
 				ttl.setMinutes(rs.getInt(AuthorityTable.TTL_MINUTES));
@@ -88,15 +85,10 @@ public class GTSAuthorityManager {
 			rs.close();
 			s.close();
 		} catch (Exception e) {
-			this.log
-					.fatal(
-							"Unexpected database error incurred in obtaining the authority, "
-									+ gtsURI
-									+ ", the following statement generated the error: \n",
-							e);
+			this.log.fatal("Unexpected database error incurred in obtaining the authority, " + gtsURI
+				+ ", the following statement generated the error: \n", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault.setFaultString("Unexpected error obtaining the authority "
-					+ gtsURI);
+			fault.setFaultString("Unexpected error obtaining the authority " + gtsURI);
 			throw fault;
 		} finally {
 			try {
@@ -110,9 +102,9 @@ public class GTSAuthorityManager {
 		throw fault;
 	}
 
-	public synchronized void updateAuthorityPriorities(
-			AuthorityPriorityUpdate update) throws GTSInternalFault,
-			IllegalAuthorityFault {
+
+	public synchronized void updateAuthorityPriorities(AuthorityPriorityUpdate update) throws GTSInternalFault,
+		IllegalAuthorityFault {
 
 		AuthorityGTS[] auths = this.getAuthorities();
 		// Create HashMap
@@ -121,8 +113,7 @@ public class GTSAuthorityManager {
 			map.put(auths[i].getServiceURI(), auths[i]);
 		}
 		// Verfiy that all authorities are accounted for
-		AuthorityPrioritySpecification[] specs = update
-				.getAuthorityPrioritySpecification();
+		AuthorityPrioritySpecification[] specs = update.getAuthorityPrioritySpecification();
 		for (int i = 0; i < specs.length; i++) {
 			map.remove(specs[i].getServiceURI());
 		}
@@ -130,7 +121,7 @@ public class GTSAuthorityManager {
 		if (map.size() > 0) {
 			StringBuffer error = new StringBuffer();
 			error
-					.append("Cannot update the authority priorities, an incomplete authority list was provided.\n The provided list was missing the following authorities:\n");
+				.append("Cannot update the authority priorities, an incomplete authority list was provided.\n The provided list was missing the following authorities:\n");
 			Iterator itr = map.keySet().iterator();
 			while (itr.hasNext()) {
 				error.append((String) itr.next() + "\n");
@@ -151,18 +142,14 @@ public class GTSAuthorityManager {
 			if (found < 1) {
 				IllegalAuthorityFault fault = new IllegalAuthorityFault();
 				fault
-						.setFaultString("Cannot update the authority priorities, no authority specified with the priority "
-								+ i
-								+ ", each authority must be assigned a unique priority between 1 and "
-								+ count + "!!!");
+					.setFaultString("Cannot update the authority priorities, no authority specified with the priority "
+						+ i + ", each authority must be assigned a unique priority between 1 and " + count + "!!!");
 				throw fault;
 			} else if (found > 1) {
 				IllegalAuthorityFault fault = new IllegalAuthorityFault();
 				fault
-						.setFaultString("Cannot update the authority priorities, multiple authorities specified with the priority "
-								+ i
-								+ ", each authority must be assigned a unique priority between 1 and "
-								+ count + "!!!");
+					.setFaultString("Cannot update the authority priorities, multiple authorities specified with the priority "
+						+ i + ", each authority must be assigned a unique priority between 1 and " + count + "!!!");
 				throw fault;
 			}
 		}
@@ -172,8 +159,7 @@ public class GTSAuthorityManager {
 			c = db.getConnection();
 			c.setAutoCommit(false);
 			for (int i = 0; i < specs.length; i++) {
-				updateAuthorityPriority(c, specs[i].getServiceURI(), specs[i]
-						.getPriority());
+				updateAuthorityPriority(c, specs[i].getServiceURI(), specs[i].getPriority());
 			}
 			c.commit();
 		} catch (Exception e) {
@@ -184,13 +170,9 @@ public class GTSAuthorityManager {
 					ex.printStackTrace();
 				}
 			}
-			this.log
-					.error(
-							"Unexpected database error incurred in updating the authority priorities!!!",
-							e);
+			this.log.error("Unexpected database error incurred in updating the authority priorities!!!", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault
-					.setFaultString("Unexpected error in updating the authority priorities!!!");
+			fault.setFaultString("Unexpected error in updating the authority priorities!!!");
 			throw fault;
 		} finally {
 			try {
@@ -209,57 +191,48 @@ public class GTSAuthorityManager {
 
 	}
 
-	protected synchronized void updateAuthorityPriority(Connection c,
-			String uri, int priority) throws GTSInternalFault,
-			InvalidAuthorityFault {
+
+	protected synchronized void updateAuthorityPriority(Connection c, String uri, int priority)
+		throws GTSInternalFault, InvalidAuthorityFault {
 		this.buildDatabase();
 		if (!doesAuthorityExist(uri)) {
 
 		} else {
 			try {
-				PreparedStatement update = c.prepareStatement("UPDATE "
-						+ AuthorityTable.TABLE_NAME + " SET "
-						+ AuthorityTable.PRIORITY + " = ? WHERE "
-						+ AuthorityTable.GTS_URI + " = ?");
+				PreparedStatement update = c.prepareStatement("UPDATE " + AuthorityTable.TABLE_NAME + " SET "
+					+ AuthorityTable.PRIORITY + " = ? WHERE " + AuthorityTable.GTS_URI + " = ?");
 				update.setInt(1, priority);
 				update.setString(2, uri);
 				update.executeUpdate();
 
 			} catch (Exception e) {
-				this.log
-						.error(
-								"Unexpected database error incurred in updating the priority for the authority, "
-										+ uri + ".", e);
+				this.log.error("Unexpected database error incurred in updating the priority for the authority, " + uri
+					+ ".", e);
 				GTSInternalFault fault = new GTSInternalFault();
-				fault
-						.setFaultString("Unexpected error occurred in updating the priority for the authority, "
-								+ uri + ".");
+				fault.setFaultString("Unexpected error occurred in updating the priority for the authority, " + uri
+					+ ".");
 				throw fault;
 			}
 		}
 
 	}
 
-	public synchronized void updateAuthority(AuthorityGTS gts)
-			throws GTSInternalFault, IllegalAuthorityFault,
-			InvalidAuthorityFault {
+
+	public synchronized void updateAuthority(AuthorityGTS gts) throws GTSInternalFault, IllegalAuthorityFault,
+		InvalidAuthorityFault {
 		this.buildDatabase();
 		if (Utils.clean(gts.getServiceURI()) == null) {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
-			fault
-					.setFaultString("The Authority cannot be updated, no service URI specified!!!");
+			fault.setFaultString("The Authority cannot be updated, no service URI specified!!!");
 			throw fault;
 		}
 
 		validateTimeToLive(gts.getTimeToLive());
 
-		if ((gts.isPerformAuthorization())
-				&& (Utils.clean(gts.getServiceIdentity()) == null)) {
+		if ((gts.isPerformAuthorization()) && (Utils.clean(gts.getServiceIdentity()) == null)) {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
-			fault
-					.setFaultString("The Authority, "
-							+ gts.getServiceURI()
-							+ " cannot be updated, when authorization is required a service identity must be specified!!!");
+			fault.setFaultString("The Authority, " + gts.getServiceURI()
+				+ " cannot be updated, when authorization is required a service identity must be specified!!!");
 			throw fault;
 		}
 
@@ -267,9 +240,9 @@ public class GTSAuthorityManager {
 		if (curr.getPriority() != gts.getPriority()) {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
 			fault
-					.setFaultString("The Authority, "
-							+ gts.getServiceURI()
-							+ " cannot be updated, priorities cannot be updated using this method, use the update priorities method!!!");
+				.setFaultString("The Authority, "
+					+ gts.getServiceURI()
+					+ " cannot be updated, priorities cannot be updated using this method, use the update priorities method!!!");
 			throw fault;
 		}
 
@@ -277,35 +250,27 @@ public class GTSAuthorityManager {
 		try {
 			c = db.getConnection();
 			if (!gts.equals(curr)) {
-				PreparedStatement update = c.prepareStatement("UPDATE "
-						+ AuthorityTable.TABLE_NAME + " SET "
-						+ AuthorityTable.PRIORITY + " = ?, "
-						+ AuthorityTable.SYNC_TRUST_LEVELS + " = ?, "
-						+ AuthorityTable.TTL_HOURS + " = ?, "
-						+ AuthorityTable.TTL_MINUTES + " = ?, "
-						+ AuthorityTable.TTL_SECONDS + " = ?, "
-						+ AuthorityTable.PERFORM_AUTH + " = ?, "
-						+ AuthorityTable.GTS_IDENTITY + " = ? WHERE "
-						+ AuthorityTable.GTS_URI + " = ?");
+				PreparedStatement update = c.prepareStatement("UPDATE " + AuthorityTable.TABLE_NAME + " SET "
+					+ AuthorityTable.PRIORITY + " = ?, " + AuthorityTable.SYNC_TRUST_LEVELS + " = ?, "
+					+ AuthorityTable.TTL_HOURS + " = ?, " + AuthorityTable.TTL_MINUTES + " = ?, "
+					+ AuthorityTable.TTL_SECONDS + " = ?, " + AuthorityTable.PERFORM_AUTH + " = ?, "
+					+ AuthorityTable.GTS_IDENTITY + " = ? WHERE " + AuthorityTable.GTS_URI + " = ?");
 				update.setInt(1, gts.getPriority());
 				update.setString(2, String.valueOf(gts.isSyncTrustLevels()));
 				update.setInt(3, gts.getTimeToLive().getHours());
 				update.setInt(4, gts.getTimeToLive().getMinutes());
 				update.setInt(5, gts.getTimeToLive().getSeconds());
-				update.setString(6, String
-						.valueOf(gts.isPerformAuthorization()));
+				update.setString(6, String.valueOf(gts.isPerformAuthorization()));
 				update.setString(7, gts.getServiceIdentity());
 				update.setString(8, gts.getServiceURI());
 				update.executeUpdate();
 			}
 		} catch (Exception e) {
 
-			this.log.error(
-					"Unexpected database error incurred in updating the authority "
-							+ gts.getServiceURI() + "!!!", e);
+			this.log.error("Unexpected database error incurred in updating the authority " + gts.getServiceURI()
+				+ "!!!", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault.setFaultString("Unexpected error in updating the authority "
-					+ gts.getServiceURI() + "!!!");
+			fault.setFaultString("Unexpected error in updating the authority " + gts.getServiceURI() + "!!!");
 			throw fault;
 		} finally {
 			try {
@@ -317,19 +282,17 @@ public class GTSAuthorityManager {
 
 	}
 
-	private synchronized AuthorityGTS[] getAuthoritiesEqualToOrAfter(
-			int priority) throws GTSInternalFault {
+
+	private synchronized AuthorityGTS[] getAuthoritiesEqualToOrAfter(int priority) throws GTSInternalFault {
 		this.buildDatabase();
 
 		Connection c = null;
 		List list = new ArrayList();
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select "
-					+ AuthorityTable.GTS_URI + " from "
-					+ AuthorityTable.TABLE_NAME + " WHERE "
-					+ AuthorityTable.PRIORITY + ">= ? ORDER BY "
-					+ AuthorityTable.PRIORITY + "");
+			PreparedStatement s = c.prepareStatement("select " + AuthorityTable.GTS_URI + " from "
+				+ AuthorityTable.TABLE_NAME + " WHERE " + AuthorityTable.PRIORITY + ">= ? ORDER BY "
+				+ AuthorityTable.PRIORITY + "");
 			s.setInt(1, priority);
 			ResultSet rs = s.executeQuery();
 			while (rs.next()) {
@@ -347,12 +310,11 @@ public class GTSAuthorityManager {
 
 		} catch (Exception e) {
 			this.log
-					.error(
-							"Unexpected database error incurred in getting the authorities, the following statement generated the error: \n",
-							e);
+				.error(
+					"Unexpected database error incurred in getting the authorities, the following statement generated the error: \n",
+					e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault
-					.setFaultString("Unexpected error occurred in getting the authorities.");
+			fault.setFaultString("Unexpected error occurred in getting the authorities.");
 			throw fault;
 		} finally {
 			try {
@@ -364,6 +326,7 @@ public class GTSAuthorityManager {
 
 	}
 
+
 	public synchronized AuthorityGTS[] getAuthorities() throws GTSInternalFault {
 		this.buildDatabase();
 
@@ -373,9 +336,8 @@ public class GTSAuthorityManager {
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-			sql.append("select " + AuthorityTable.GTS_URI + " from "
-					+ AuthorityTable.TABLE_NAME + " ORDER BY "
-					+ AuthorityTable.PRIORITY + "");
+			sql.append("select " + AuthorityTable.GTS_URI + " from " + AuthorityTable.TABLE_NAME + " ORDER BY "
+				+ AuthorityTable.PRIORITY + "");
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
 				list.add(rs.getString(AuthorityTable.GTS_URI));
@@ -391,13 +353,11 @@ public class GTSAuthorityManager {
 			return gts;
 
 		} catch (Exception e) {
-			this.log
-					.error(
-							"Unexpected database error incurred in getting the authorities, the following statement generated the error: \n"
-									+ sql.toString() + "\n", e);
+			this.log.error(
+				"Unexpected database error incurred in getting the authorities, the following statement generated the error: \n"
+					+ sql.toString() + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault
-					.setFaultString("Unexpected error occurred in getting the authorities.");
+			fault.setFaultString("Unexpected error occurred in getting the authorities.");
 			throw fault;
 		} finally {
 			try {
@@ -408,6 +368,7 @@ public class GTSAuthorityManager {
 		}
 
 	}
+
 
 	public synchronized int getAuthorityCount() throws GTSInternalFault {
 		this.buildDatabase();
@@ -426,13 +387,11 @@ public class GTSAuthorityManager {
 			s.close();
 			return count;
 		} catch (Exception e) {
-			this.log
-					.error(
-							"Unexpected database error incurred in getting the authority count, the following statement generated the error: \n"
-									+ sql.toString() + "\n", e);
+			this.log.error(
+				"Unexpected database error incurred in getting the authority count, the following statement generated the error: \n"
+					+ sql.toString() + "\n", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault
-					.setFaultString("Unexpected error occurred in getting the authority count.");
+			fault.setFaultString("Unexpected error occurred in getting the authority count.");
 			throw fault;
 		} finally {
 			db.releaseConnection(c);
@@ -440,39 +399,33 @@ public class GTSAuthorityManager {
 
 	}
 
-	public synchronized void addAuthority(AuthorityGTS gts)
-			throws GTSInternalFault, IllegalAuthorityFault {
+
+	public synchronized void addAuthority(AuthorityGTS gts) throws GTSInternalFault, IllegalAuthorityFault {
 		this.buildDatabase();
 		if (Utils.clean(gts.getServiceURI()) == null) {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
-			fault
-					.setFaultString("The Authority cannot be added, no service URI specified!!!");
+			fault.setFaultString("The Authority cannot be added, no service URI specified!!!");
 			throw fault;
 		}
 
 		if (gts.getServiceURI().equals(gtsURI)) {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
-			fault
-					.setFaultString("The Authority cannot be added, a GTS cannot be its own authority!!!");
+			fault.setFaultString("The Authority cannot be added, a GTS cannot be its own authority!!!");
 			throw fault;
 		}
 
 		validateTimeToLive(gts.getTimeToLive());
 
-		if ((gts.isPerformAuthorization())
-				&& (Utils.clean(gts.getServiceIdentity()) == null)) {
+		if ((gts.isPerformAuthorization()) && (Utils.clean(gts.getServiceIdentity()) == null)) {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
-			fault
-					.setFaultString("The Authority, "
-							+ gts.getServiceURI()
-							+ " cannot be added, when authorization is required a service identity must be specified!!!");
+			fault.setFaultString("The Authority, " + gts.getServiceURI()
+				+ " cannot be added, when authorization is required a service identity must be specified!!!");
 			throw fault;
 		}
 
 		if (doesAuthorityExist(gts.getServiceURI())) {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
-			fault.setFaultString("The Authority, " + gts.getServiceURI()
-					+ " cannot be added, it already exists!!!");
+			fault.setFaultString("The Authority, " + gts.getServiceURI() + " cannot be added, it already exists!!!");
 			throw fault;
 		}
 
@@ -480,11 +433,8 @@ public class GTSAuthorityManager {
 		int count = this.getAuthorityCount() + 1;
 		if ((gts.getPriority() < 1) || (gts.getPriority() > count)) {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
-			fault
-					.setFaultString("The Authority, "
-							+ gts.getServiceURI()
-							+ " cannot be added, invalid priority specified the priority must be between 1 and "
-							+ count + "!!!");
+			fault.setFaultString("The Authority, " + gts.getServiceURI()
+				+ " cannot be added, invalid priority specified the priority must be between 1 and " + count + "!!!");
 			throw fault;
 		}
 
@@ -493,23 +443,16 @@ public class GTSAuthorityManager {
 			c = db.getConnection();
 			c.setAutoCommit(false);
 			// Get the current list of Authorities
-			AuthorityGTS[] list = this.getAuthoritiesEqualToOrAfter(gts
-					.getPriority());
+			AuthorityGTS[] list = this.getAuthoritiesEqualToOrAfter(gts.getPriority());
 			for (int i = 0; i < list.length; i++) {
-				this.updateAuthorityPriority(c, list[i].getServiceURI(),
-						(list[i].getPriority() + 1));
+				this.updateAuthorityPriority(c, list[i].getServiceURI(), (list[i].getPriority() + 1));
 			}
 
-			PreparedStatement insert = c.prepareStatement("INSERT INTO "
-					+ AuthorityTable.TABLE_NAME + " SET "
-					+ AuthorityTable.GTS_URI + " = ?, "
-					+ AuthorityTable.PRIORITY + " = ?, "
-					+ AuthorityTable.SYNC_TRUST_LEVELS + " = ?, "
-					+ AuthorityTable.TTL_HOURS + " = ?, "
-					+ AuthorityTable.TTL_MINUTES + " = ?, "
-					+ AuthorityTable.TTL_SECONDS + " = ?, "
-					+ AuthorityTable.PERFORM_AUTH + " = ?, "
-					+ AuthorityTable.GTS_IDENTITY + " = ?");
+			PreparedStatement insert = c.prepareStatement("INSERT INTO " + AuthorityTable.TABLE_NAME + " SET "
+				+ AuthorityTable.GTS_URI + " = ?, " + AuthorityTable.PRIORITY + " = ?, "
+				+ AuthorityTable.SYNC_TRUST_LEVELS + " = ?, " + AuthorityTable.TTL_HOURS + " = ?, "
+				+ AuthorityTable.TTL_MINUTES + " = ?, " + AuthorityTable.TTL_SECONDS + " = ?, "
+				+ AuthorityTable.PERFORM_AUTH + " = ?, " + AuthorityTable.GTS_IDENTITY + " = ?");
 			insert.setString(1, gts.getServiceURI());
 			insert.setInt(2, gts.getPriority());
 			insert.setString(3, String.valueOf(gts.isSyncTrustLevels()));
@@ -528,12 +471,10 @@ public class GTSAuthorityManager {
 					ex.printStackTrace();
 				}
 			}
-			this.log.error(
-					"Unexpected database error incurred in adding the authority "
-							+ gts.getServiceURI() + "!!!", e);
+			this.log.error("Unexpected database error incurred in adding the authority " + gts.getServiceURI() + "!!!",
+				e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault.setFaultString("Unexpected error in adding the authority "
-					+ gts.getServiceURI() + "!!!");
+			fault.setFaultString("Unexpected error in adding the authority " + gts.getServiceURI() + "!!!");
 			throw fault;
 		} finally {
 			try {
@@ -548,8 +489,8 @@ public class GTSAuthorityManager {
 
 	}
 
-	public synchronized void removeAuthority(String uri)
-			throws GTSInternalFault, InvalidAuthorityFault {
+
+	public synchronized void removeAuthority(String uri) throws GTSInternalFault, InvalidAuthorityFault {
 		this.buildDatabase();
 		AuthorityGTS gts = getAuthority(uri);
 		Connection c = null;
@@ -557,16 +498,13 @@ public class GTSAuthorityManager {
 			c = db.getConnection();
 			c.setAutoCommit(false);
 			// Get the current list of Authorities
-			AuthorityGTS[] list = this.getAuthoritiesEqualToOrAfter(gts
-					.getPriority());
+			AuthorityGTS[] list = this.getAuthoritiesEqualToOrAfter(gts.getPriority());
 			for (int i = 0; i < list.length; i++) {
-				this.updateAuthorityPriority(c, list[i].getServiceURI(),
-						(list[i].getPriority() - 1));
+				this.updateAuthorityPriority(c, list[i].getServiceURI(), (list[i].getPriority() - 1));
 			}
 
-			PreparedStatement ps = c.prepareStatement("DELETE FROM "
-					+ AuthorityTable.TABLE_NAME + " WHERE "
-					+ AuthorityTable.GTS_URI + " = ?");
+			PreparedStatement ps = c.prepareStatement("DELETE FROM " + AuthorityTable.TABLE_NAME + " WHERE "
+				+ AuthorityTable.GTS_URI + " = ?");
 			ps.setString(1, uri);
 			ps.executeUpdate();
 			c.commit();
@@ -578,12 +516,9 @@ public class GTSAuthorityManager {
 					ex.printStackTrace();
 				}
 			}
-			this.log.error(
-					"Unexpected database error incurred in deleting the authority "
-							+ uri + "!!!", e);
+			this.log.error("Unexpected database error incurred in deleting the authority " + uri + "!!!", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault.setFaultString("Unexpected error in deleting the authority "
-					+ uri + "!!!");
+			fault.setFaultString("Unexpected error in deleting the authority " + uri + "!!!");
 			throw fault;
 		} finally {
 			try {
@@ -598,17 +533,16 @@ public class GTSAuthorityManager {
 
 	}
 
-	public synchronized boolean doesAuthorityExist(String gtsURI)
-			throws GTSInternalFault {
+
+	public synchronized boolean doesAuthorityExist(String gtsURI) throws GTSInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		boolean exists = false;
 		try {
 			c = db.getConnection();
 
-			PreparedStatement s = c.prepareStatement("select count(*) from "
-					+ AuthorityTable.TABLE_NAME + " where "
-					+ AuthorityTable.GTS_URI + "= ?");
+			PreparedStatement s = c.prepareStatement("select count(*) from " + AuthorityTable.TABLE_NAME + " where "
+				+ AuthorityTable.GTS_URI + "= ?");
 			s.setString(1, gtsURI);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -620,22 +554,17 @@ public class GTSAuthorityManager {
 			rs.close();
 			s.close();
 		} catch (Exception e) {
-			this.log
-					.error(
-							"Unexpected database error incurred in determining if the Authority GTS "
-									+ gtsURI
-									+ " exists, the following statement generated the error: \n"
-								, e);
+			this.log.error("Unexpected database error incurred in determining if the Authority GTS " + gtsURI
+				+ " exists, the following statement generated the error: \n", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault
-					.setFaultString("Unexpected error in determining if the Authority GTS "
-							+ gtsURI + " exists.");
+			fault.setFaultString("Unexpected error in determining if the Authority GTS " + gtsURI + " exists.");
 			throw fault;
 		} finally {
 			db.releaseConnection(c);
 		}
 		return exists;
 	}
+
 
 	public synchronized void clearDatabase() throws GTSInternalFault {
 		try {
@@ -644,38 +573,35 @@ public class GTSAuthorityManager {
 		} catch (Exception e) {
 			this.log.error("Unexpected error in destroying the database.", e);
 			GTSInternalFault fault = new GTSInternalFault();
-			fault
-					.setFaultString("Unexpected error in destroying the database.");
+			fault.setFaultString("Unexpected error in destroying the database.");
 			throw fault;
 		}
 	}
+
 
 	public synchronized void buildDatabase() throws GTSInternalFault {
 		if (!dbBuilt) {
 			try {
 				db.createDatabase();
 				if (!this.db.tableExists(AuthorityTable.TABLE_NAME)) {
-					String trust = dbManager.getAuthorityTable()
-							.getCreateTableSQL();
+					String trust = dbManager.getAuthorityTable().getCreateTableSQL();
 					db.update(trust);
 				}
 				dbBuilt = true;
 			} catch (Exception e) {
 				this.log.error("Unexpected error in creating the database.", e);
 				GTSInternalFault fault = new GTSInternalFault();
-				fault
-						.setFaultString("Unexpected error in creating the database.");
+				fault.setFaultString("Unexpected error in creating the database.");
 				throw fault;
 			}
 		}
 	}
 
-	private void validateTimeToLive(TimeToLive ttl)
-			throws IllegalAuthorityFault {
+
+	private void validateTimeToLive(TimeToLive ttl) throws IllegalAuthorityFault {
 		if (ttl == null) {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
-			fault
-					.setFaultString("The Authority cannot be added, no time to live specified!!!");
+			fault.setFaultString("The Authority cannot be added, no time to live specified!!!");
 			throw fault;
 		}
 		if (syncTime != null) {
@@ -693,23 +619,22 @@ public class GTSAuthorityManager {
 			if (c2.before(c)) {
 				IllegalAuthorityFault fault = new IllegalAuthorityFault();
 				fault
-						.setFaultString("The time to live ("
-								+ ttl.getHours()
-								+ " hour(s), "
-								+ ttl.getMinutes()
-								+ " minute(s), and "
-								+ ttl.getSeconds()
-								+ " second(s)"
-								+ "), is shorter than how often the GTS syncs with its authorities.\n The gts syncs withs authorities every "
-								+ syncTime.getHours() + " hour(s), "
-								+ syncTime.getMinutes() + " minute(s), and "
-								+ syncTime.getSeconds() + " second(s).");
+					.setFaultString("The time to live ("
+						+ ttl.getHours()
+						+ " hour(s), "
+						+ ttl.getMinutes()
+						+ " minute(s), and "
+						+ ttl.getSeconds()
+						+ " second(s)"
+						+ "), is shorter than how often the GTS syncs with its authorities.\n The gts syncs withs authorities every "
+						+ syncTime.getHours() + " hour(s), " + syncTime.getMinutes() + " minute(s), and "
+						+ syncTime.getSeconds() + " second(s).");
 				throw fault;
 			}
 		} else {
 			IllegalAuthorityFault fault = new IllegalAuthorityFault();
 			fault
-					.setFaultString("The Authority cannot be added, this GTS is not configured to sync with authorities!!!");
+				.setFaultString("The Authority cannot be added, this GTS is not configured to sync with authorities!!!");
 			throw fault;
 		}
 

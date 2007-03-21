@@ -6,12 +6,12 @@ import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import edu.internet2.middleware.subject.SubjectType;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -21,18 +21,24 @@ public interface MemberI {
 
 	public String getSubjectId();
 
+
 	public Source getSubjectSource() throws GrouperRuntimeException;
+
 
 	public String getSubjectSourceId();
 
+
 	public SubjectType getSubjectType();
+
 
 	public String getSubjectTypeId();
 
+
 	public String getUuid();
-	
+
+
 	public Subject getSubject() throws SubjectNotFoundException;
-	
+
 	// Actions
 
 	// public boolean canAdmin(Group g) throws IllegalArgumentException;

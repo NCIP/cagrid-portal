@@ -49,6 +49,7 @@ import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.MobiusResourceManager;
 import org.projectmobius.db.ConnectionManager;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -72,15 +73,13 @@ public class GTSConfiguration implements AbstractMobiusConfiguration {
 
 	private AuthoritySyncTime syncTime;
 
-	public void parse(MobiusResourceManager resourceManager, Element config)
-			throws MobiusException {
+
+	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {
 		Element rootDatabaseConfig = config.getChild(DATABASE);
 		if (rootDatabaseConfig != null) {
-			this.rootConnectionManager = new ConnectionManager(
-					rootDatabaseConfig);
+			this.rootConnectionManager = new ConnectionManager(rootDatabaseConfig);
 		} else {
-			throw new MobiusException(
-					"No database defined in the GTS Configuration.");
+			throw new MobiusException("No database defined in the GTS Configuration.");
 		}
 		this.gtsInternalId = config.getChildText(GTS_ID);
 		if (gtsInternalId == null) {
@@ -91,61 +90,55 @@ public class GTSConfiguration implements AbstractMobiusConfiguration {
 		if (sync != null) {
 			String shours = sync.getAttributeValue("hours");
 			if (shours == null) {
-				throw new MobiusException("In the " + SYNC_AUTHORITIES
-						+ " configuration element, no hours specified.");
+				throw new MobiusException("In the " + SYNC_AUTHORITIES + " configuration element, no hours specified.");
 			}
 
 			int hours = 0;
 			try {
 				hours = Integer.valueOf(shours).intValue();
 			} catch (Exception e) {
-				throw new MobiusException(
-						"In the "
-								+ SYNC_AUTHORITIES
-								+ " configuration element, hours must be specified as an integer.");
+				throw new MobiusException("In the " + SYNC_AUTHORITIES
+					+ " configuration element, hours must be specified as an integer.");
 			}
 
 			String sminutes = sync.getAttributeValue("minutes");
 			if (sminutes == null) {
 				throw new MobiusException("In the " + SYNC_AUTHORITIES
-						+ " configuration element, no minutes specified.");
+					+ " configuration element, no minutes specified.");
 			}
 
 			int minutes = 0;
 			try {
 				minutes = Integer.valueOf(sminutes).intValue();
 			} catch (Exception e) {
-				throw new MobiusException(
-						"In the "
-								+ SYNC_AUTHORITIES
-								+ " configuration element, minutes must be specified as an integer.");
+				throw new MobiusException("In the " + SYNC_AUTHORITIES
+					+ " configuration element, minutes must be specified as an integer.");
 			}
 
 			String sseconds = sync.getAttributeValue("seconds");
 			if (sseconds == null) {
 				throw new MobiusException("In the " + SYNC_AUTHORITIES
-						+ " configuration element, no seconds specified.");
+					+ " configuration element, no seconds specified.");
 			}
 
 			int seconds = 0;
 			try {
 				seconds = Integer.valueOf(sseconds).intValue();
 			} catch (Exception e) {
-				throw new MobiusException(
-						"In the "
-								+ SYNC_AUTHORITIES
-								+ " configuration element, seconds must be specified as an integer.");
+				throw new MobiusException("In the " + SYNC_AUTHORITIES
+					+ " configuration element, seconds must be specified as an integer.");
 			}
 			syncTime = new AuthoritySyncTime(hours, minutes, seconds);
 		} else {
-			throw new MobiusException("No " + SYNC_AUTHORITIES
-					+ " configuration element specified.");
+			throw new MobiusException("No " + SYNC_AUTHORITIES + " configuration element specified.");
 		}
 	}
+
 
 	public String getGTSInternalId() {
 		return gtsInternalId;
 	}
+
 
 	/**
 	 * @return Returns the rootConnectionManager.
@@ -153,6 +146,7 @@ public class GTSConfiguration implements AbstractMobiusConfiguration {
 	public ConnectionManager getConnectionManager() {
 		return rootConnectionManager;
 	}
+
 
 	public AuthoritySyncTime getAuthoritySyncTime() {
 		return syncTime;

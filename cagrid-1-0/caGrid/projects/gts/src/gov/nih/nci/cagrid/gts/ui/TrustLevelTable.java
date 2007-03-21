@@ -9,6 +9,7 @@ import javax.swing.table.TableColumn;
 
 import org.cagrid.grape.table.GrapeBaseTable;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -25,6 +26,7 @@ public class TrustLevelTable extends GrapeBaseTable {
 
 	private TrustLevelManagerWindow window;
 
+
 	public TrustLevelTable(TrustLevelManagerWindow window) {
 		super(createTableModel());
 		this.window = window;
@@ -40,6 +42,7 @@ public class TrustLevelTable extends GrapeBaseTable {
 		this.clearTable();
 	}
 
+
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(TRUST_LEVEL);
@@ -49,6 +52,7 @@ public class TrustLevelTable extends GrapeBaseTable {
 
 	}
 
+
 	public void addTrustLevel(final TrustLevel level) {
 		Vector v = new Vector();
 		v.add(level);
@@ -56,6 +60,7 @@ public class TrustLevelTable extends GrapeBaseTable {
 		v.add(level.getDescription());
 		addRow(v);
 	}
+
 
 	public synchronized TrustLevel getSelectedTrustLevel() throws Exception {
 		int row = getSelectedRow();
@@ -66,6 +71,7 @@ public class TrustLevelTable extends GrapeBaseTable {
 		}
 	}
 
+
 	public synchronized void removeSelectedTrustLevel() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
@@ -74,6 +80,7 @@ public class TrustLevelTable extends GrapeBaseTable {
 			throw new Exception("Please select a trust level!!!");
 		}
 	}
+
 
 	public void doubleClick() throws Exception {
 		int row = getSelectedRow();
@@ -84,6 +91,7 @@ public class TrustLevelTable extends GrapeBaseTable {
 		}
 
 	}
+
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub
