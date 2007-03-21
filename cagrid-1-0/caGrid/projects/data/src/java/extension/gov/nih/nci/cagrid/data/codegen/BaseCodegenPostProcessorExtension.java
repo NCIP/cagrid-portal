@@ -13,6 +13,8 @@ import gov.nih.nci.cagrid.data.mapping.Mappings;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
@@ -20,8 +22,8 @@ import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -82,35 +84,77 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
 	protected void generateClassToQnameMapping(Data extData, ServiceInformation info)
 		throws CodegenExtensionException {
 		try {
-			// load the caDSR package to namespace mapping information
-			CadsrInformation cadsrInfo = extData.getCadsrInformation();
-			if (cadsrInfo != null) {
-				Mappings mappings = new Mappings();
-				List classMappings = new ArrayList();
-				for (int pack = 0; cadsrInfo.getPackages() != null && pack < cadsrInfo.getPackages().length; pack++) {
-					CadsrPackage currentPackage = cadsrInfo.getPackages(pack);
-					for (int clazz = 0; currentPackage.getCadsrClass() != null 
-						&& clazz < currentPackage.getCadsrClass().length; clazz++) {
-						ClassMapping map = currentPackage.getCadsrClass(clazz);
-						if (map.getElementName() != null) {
-							String classname = currentPackage.getName() + "." + map.getClassName();
-							QName qname = new QName(currentPackage.getMappedNamespace(), map.getElementName());
-							ClassToQname toQname = new ClassToQname();
-							toQname.setClassName(classname);
-							toQname.setQname(qname.toString());
-							classMappings.add(toQname);
-						}
-					}
-				}
-				ClassToQname[] mapArray = new ClassToQname[classMappings.size()];
-				classMappings.toArray(mapArray);
-				mappings.setMapping(mapArray);
-				// create the filename where the mapping will be stored
-				String mappingFilename = info.getBaseDirectory().getAbsolutePath() + File.separator + "etc" 
-					+ File.separator + DataServiceConstants.CLASS_TO_QNAME_XML;
-				// serialize the mapping to that file
-				Utils.serializeDocument(mappingFilename, mappings, DataServiceConstants.MAPPING_QNAME);
-			}
+            Mappings mappings = new Mappings();
+            List classMappings = new LinkedList();
+            // the first placeto look for mappings is in the caDSR information, which 
+            // is derived from the data service Domain Model.  If no domain model is to be used,
+            // the mappings are still required to do anything with caCORE SDK beans, or BDT in general
+            CadsrInformation cadsrInfo = extData.getCadsrInformation();
+            if (cadsrInfo != null && !cadsrInfo.isNoDomainModel()) {
+                // load the caDSR package to namespace mapping information
+                for (int pack = 0; cadsrInfo.getPackages() != null 
+                    && pack < cadsrInfo.getPackages().length; pack++) {
+                    CadsrPackage currentPackage = cadsrInfo.getPackages(pack);
+                    for (int clazz = 0; currentPackage.getCadsrClass() != null 
+                        && clazz < currentPackage.getCadsrClass().length; clazz++) {
+                        ClassMapping map = currentPackage.getCadsrClass(clazz);
+                        if (map.getElementName() != null) {
+                            String classname = currentPackage.getName() + "." + map.getClassName();
+                            QName qname = new QName(currentPackage.getMappedNamespace(), map.getElementName());
+                            ClassToQname toQname = new ClassToQname();
+                            toQname.setClassName(classname);
+                            toQname.setQname(qname.toString());
+                            classMappings.add(toQname);
+                        }
+                    }
+                }
+                ClassToQname[] mapArray = new ClassToQname[classMappings.size()];
+                classMappings.toArray(mapArray);
+                mappings.setMapping(mapArray);
+            } else {
+                logger.warn("No caDSR information / domain model found in service model.");
+                logger.warn("Falling back to schema information for class to qname mapping.");
+                NamespaceType[] namespaces = info.getNamespaces().getNamespace();
+                // a set of namespaces to ignore
+                Set nsIgnores = new HashSet();
+                nsIgnores.add(IntroduceConstants.W3CNAMESPACE);
+                nsIgnores.add(info.getServices().getService(0).getNamespace());
+                nsIgnores.add(DataServiceConstants.BDT_DATA_SERVICE_NAMESPACE);
+                nsIgnores.add(DataServiceConstants.ENUMERATION_DATA_SERVICE_NAMESPACE);
+                nsIgnores.add(DataServiceConstants.DATA_SERVICE_NAMESPACE);
+                nsIgnores.add(DataServiceConstants.CQL_QUERY_URI);
+                nsIgnores.add(DataServiceConstants.CQL_RESULT_SET_URI);
+                
+                for (int nsIndex = 0; nsIndex < namespaces.length; nsIndex++) {
+                    NamespaceType currentNs = namespaces[nsIndex];
+                    // ignore any unneeded namespaces
+                    if (!nsIgnores.contains(currentNs.getNamespace())) {
+                        SchemaElementType[] schemaElements = currentNs.getSchemaElement();
+                        for (int elemIndex = 0; schemaElements != null && elemIndex < schemaElements.length; elemIndex++) {
+                            SchemaElementType currentElement = schemaElements[elemIndex];
+                            ClassToQname toQname = new ClassToQname();
+                            QName qname = new QName(currentNs.getNamespace(), currentElement.getType());
+                            String shortClassName = currentElement.getClassName();
+                            if (shortClassName == null) { 
+                                shortClassName = currentElement.getType();
+                            }
+                            String fullClassName = currentNs.getPackageName() + "." + shortClassName;
+                            toQname.setQname(qname.toString());
+                            toQname.setClassName(fullClassName);
+                            classMappings.add(toQname);
+                        }
+                    }
+                }
+            }
+            
+            ClassToQname[] mapArray = new ClassToQname[classMappings.size()];
+            classMappings.toArray(mapArray);
+            mappings.setMapping(mapArray);
+            // create the filename where the mapping will be stored
+            String mappingFilename = info.getBaseDirectory().getAbsolutePath() + File.separator + "etc" 
+                + File.separator + DataServiceConstants.CLASS_TO_QNAME_XML;
+            // serialize the mapping to that file
+            Utils.serializeDocument(mappingFilename, mappings, DataServiceConstants.MAPPING_QNAME);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new CodegenExtensionException("Error generating class to QName mapping", ex);
