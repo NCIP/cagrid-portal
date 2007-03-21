@@ -61,7 +61,7 @@ public class LookAndFeel {
 	}
 	
 	public final static ImageIcon getSaveIcon() {
-		return IconUtils.loadIcon("/media-floppy.gif");
+		return IconUtils.loadIcon("/media-floppy.png");
 	}
 
 
