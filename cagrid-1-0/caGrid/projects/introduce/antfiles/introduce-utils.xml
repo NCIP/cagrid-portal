@@ -59,7 +59,7 @@
 		</sequential>
 	</macrodef>
 	
-	<target name="startStatServer" depends="checkGlobus">
+	<target name="startStatServer" depends="checkGlobus" >
 		<runStatServer/>
 	</target>
 	<macrodef name="runStatServer">
