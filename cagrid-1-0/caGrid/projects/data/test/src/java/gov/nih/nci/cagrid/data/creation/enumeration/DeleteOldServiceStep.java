@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.creation.enumeration;
 
-import gov.nih.nci.cagrid.introduce.test.util.FileUtils;
+import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.File;
 
@@ -11,7 +11,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 30, 2006
- * @version $Id: DeleteOldServiceStep.java,v 1.2 2007-02-26 20:24:26 hastings Exp $
+ * @version $Id: DeleteOldServiceStep.java,v 1.3 2007-03-21 17:53:33 dervin Exp $
  */
 public class DeleteOldServiceStep extends Step {
 
@@ -20,7 +20,7 @@ public class DeleteOldServiceStep extends Step {
 		File serviceDir = new File(CreateEnumerationTests.SERVICE_DIR);
 		if (serviceDir.exists()) {
 			System.out.println("Deleting old service directory");
-			FileUtils.deleteRecursive(serviceDir);
+			Utils.deleteDir(serviceDir);
 		}
 	}
 }
