@@ -8,6 +8,7 @@ import java.net.InetAddress;
 
 
 public class StatisticsClient {
+	private static final String magicNumber = "!777!";
 
 	public static void sendCreatedServiceStat(String introduceVersion, String name, String namespace, String extensions) {
 		sendStat("\n\tACTION:\t\tcreated\n\tINTRODUCE:\t" + introduceVersion + "\n\tNAME:\t\t" + name + "\n\tNAMESPACE:\t" + namespace + "\n\tEXTENSIONS:\t" + extensions);
@@ -26,6 +27,8 @@ public class StatisticsClient {
 
 	public static void sendStat(String message) {
 		try {
+			
+			message = magicNumber + message;
 
 			if (CommonTools.getCollectStats()) {
 

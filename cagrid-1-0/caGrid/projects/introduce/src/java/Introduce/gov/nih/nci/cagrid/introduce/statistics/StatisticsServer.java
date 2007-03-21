@@ -13,11 +13,11 @@ import java.util.Date;
 
 
 public class StatisticsServer {
+	private static final String magicNumber = "!777!";
 	private static final String LOG_FILE = "introduceStatistics.log";
 	private int port;
 	private DatagramSocket dsocket;
 	private Thread processThread;
-	
 
 
 	public StatisticsServer() {
@@ -26,7 +26,7 @@ public class StatisticsServer {
 
 
 	public void start() throws SocketException {
-		
+
 		File logFile = new File(LOG_FILE);
 		FileWriter wr = null;
 		try {
@@ -34,7 +34,7 @@ public class StatisticsServer {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		final FileWriter fw = wr;
 
 		// Create a socket to listen on the port.
@@ -59,13 +59,19 @@ public class StatisticsServer {
 					try {
 						dsocket.receive(packet);
 
-						// Convert the contents to a string, and display them and log them
+						// Convert the contents to a string, and display them
+						// and log them
 						String msg = new String(buffer, 0, packet.getLength());
-						SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-						Date date = new Date(System.currentTimeMillis());
-						System.out.println(formatter.format(date) + "\n\tHOST:\t\t" + packet.getAddress().getHostName() + msg + "\n");
-						fw.append(formatter.format(date) + "\n\tHOST:\t\t" + packet.getAddress().getHostName() + msg + "\n\n");
-						fw.flush();
+						if (msg.indexOf(magicNumber) == 0) {
+							msg = msg.substring(5);
+							SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+							Date date = new Date(System.currentTimeMillis());
+							System.out.println(formatter.format(date) + "\n\tHOST:\t\t"
+								+ packet.getAddress().getHostName() + msg + "\n");
+							fw.append(formatter.format(date) + "\n\tHOST:\t\t" + packet.getAddress().getHostName()
+								+ msg + "\n\n");
+							fw.flush();
+						}
 						// Reset the length of the packet before reusing it.
 						packet.setLength(buffer.length);
 
