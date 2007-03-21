@@ -225,7 +225,7 @@ public class DomainModelValidator implements CqlDomainValidator {
 		String[] classNames = getClassHierarchy(sourceClass, model);
 		Set associations = new HashSet();
 		for (int i = 0; i < classNames.length; i++) {
-			Collections.addAll(associations, getUmlAssociations(classNames[i], model));
+			Collections.addAll(associations, (java.lang.Object[]) getUmlAssociations(classNames[i], model));
 		}
 		UMLAssociation[] assocArray = new UMLAssociation[associations.size()];
 		associations.toArray(assocArray);

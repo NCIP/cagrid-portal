@@ -239,7 +239,7 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 				}
 				Set jarNames = new HashSet();
 				if (libs.getJarName() != null) {
-					Collections.addAll(jarNames, libs.getJarName());
+					Collections.addAll(jarNames, (Object[]) libs.getJarName());
 				}
 				// remove the old sdk QP library
 				jarNames.remove(oldSdkQuery.getName());

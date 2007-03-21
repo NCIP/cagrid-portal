@@ -85,7 +85,7 @@ public class QueryModifierDialog extends JDialog {
 			}
 		} else if (existingModifier.getAttributeNames() != null) {
 			Set names = new HashSet();
-			Collections.addAll(names, existingModifier.getAttributeNames());
+			Collections.addAll(names, (java.lang.Object[]) existingModifier.getAttributeNames());
 			for (int i = 0; i < getAttributesPanel().getComponentCount(); i++) {
 				JCheckBox check = (JCheckBox) getAttributesPanel().getComponent(i);
 				check.setSelected(names.contains(check.getText()));

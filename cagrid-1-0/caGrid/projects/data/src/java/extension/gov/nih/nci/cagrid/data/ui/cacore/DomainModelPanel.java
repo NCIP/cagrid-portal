@@ -637,7 +637,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	private void removeUmlPackages(String[] packageNames) {
 		// change the gui
 		Set selected = new HashSet();
-		Collections.addAll(selected, packageNames);
+		Collections.addAll(selected, (Object[]) packageNames);
 		Vector remaining = new Vector();
 		for (int i = 0; i < getSelectedPackagesList().getModel().getSize(); i++) {
 			String name = (String) getSelectedPackagesList().getModel().getElementAt(i);
