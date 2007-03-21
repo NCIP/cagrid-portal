@@ -1,17 +1,28 @@
-package org.cagrid.authorization.callout.gridftp.gridgrouper;
+package org.cagrid.gridftp.authorization.callout.gridgrouper;
 
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils;
 
 import java.util.logging.Level;
 
-import org.cagrid.authorization.callout.gridftp.AbstractAuthCallout;
-import org.cagrid.authorization.callout.gridftp.GridFTPOperation.Operation;
+import org.cagrid.gridftp.authorization.callout.AbstractAuthCallout;
+import org.cagrid.gridftp.authorization.callout.GridFTPTuple;
 
-
+/**
+ * 
+ * This authorization plugin implements a grid grouper check. Currently the check
+ * is to verify the requester is a member of the training:trainees groups
+ * in the training.cagrid.org Grid Grouper.
+ * 
+ * 
+ * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
+ * 
+ * @created Mar 20, 2007 
+ * @version $Id: GridGrouperAuthCallout.java,v 1.1 2007-03-21 13:59:19 jpermar Exp $
+ */
 public class GridGrouperAuthCallout extends AbstractAuthCallout {
 
 	@Override
-	public boolean authorizeOperation(String identity, Operation operation, String target) {
+	public boolean authorizeOperation(GridFTPTuple tuple) { //String identity, Operation operation, String target) {
 
 		boolean authorized = false;
 		
@@ -25,10 +36,10 @@ public class GridGrouperAuthCallout extends AbstractAuthCallout {
 			+ " </ns1:MembershipQuery>" + "</ns1:MembershipExpression>";
 
 		_logger.fine("grid grouper check: " + gridGrouperAuthorizeCheck);
-		if (identity != null) {
+		if (tuple.getIdentity() != null) {
 			_logger.fine("calling isMember()");
 			try {
-				authorized = GridGrouperClientUtils.isMember(gridGrouperAuthorizeCheck, identity);
+				authorized = GridGrouperClientUtils.isMember(gridGrouperAuthorizeCheck, tuple.getIdentity());
 			} catch (Exception e) {
 				_logger.log(Level.WARNING, "Grid grouper check threw exception due to reason: " + e.getMessage(), e);
 			}

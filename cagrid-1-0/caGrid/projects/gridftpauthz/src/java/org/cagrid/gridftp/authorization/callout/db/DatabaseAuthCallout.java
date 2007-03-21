@@ -1,30 +1,55 @@
-package org.cagrid.authorization.callout.gridftp.db;
+package org.cagrid.gridftp.authorization.callout.db;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import org.cagrid.authorization.callout.gridftp.AbstractAuthCallout;
-import org.cagrid.authorization.callout.gridftp.GridFTPTuple;
-import org.cagrid.authorization.callout.gridftp.GridFTPOperation.Operation;
+import org.cagrid.gridftp.authorization.callout.AbstractAuthCallout;
+import org.cagrid.gridftp.authorization.callout.GridFTPTuple;
 
-
-
+/**
+ * 
+ * This class is an authorization plugin that uses a database.
+ * Tuples representing the request are inserted into the database a priori.
+ * This plugin simply checks that the tuple representing the request
+ * exists in the database. If the tuple exists, the plugin authorizes the
+ * request. If the tuple doesn't exist, the plugin denies the request.
+ * 
+ * This plugin gets db connection information from a properties file on
+ * the classpath. Refer to {@link #RESOURCE_LOCATION} for the name of the
+ * Properties file on the classpath that this plugin loads.
+ * 
+ * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
+ * 
+ * @created Mar 20, 2007 
+ * @version $Id: DatabaseAuthCallout.java,v 1.1 2007-03-21 13:59:19 jpermar Exp $
+ */
 public class DatabaseAuthCallout extends AbstractAuthCallout {
 
+	/**
+	 * The property key for the DB connect string
+	 */
 	public static final String DB_CONNECT_STRING="db.connecturi";
+	/**
+	 * The property key for the DB user
+	 */
 	public static final String DB_USER_PROP_NAME="db.user";
+	/**
+	 * The property key for the DB password
+	 */
 	public static final String DB_PASSWORD_PROP_NAME="db.password";
 	
+	/**
+	 * The properties file that must be specified on the classpath.
+	 */
 	public static final String RESOURCE_LOCATION="org/cagrid/authorization/callout/gridftp/db/db.props";
 	
 	private DBUtil _util;
 	private Object _sync = new Object();
 	
 	@Override
-	public boolean authorizeOperation(String identity, Operation operation, String target) {
+	public boolean authorizeOperation(GridFTPTuple tuple) { //String identity, Operation operation, String target) {
 
 		boolean authorized = false;
 		
@@ -35,7 +60,7 @@ public class DatabaseAuthCallout extends AbstractAuthCallout {
 				}
 			}
 			
-			GridFTPTuple tuple = new GridFTPTuple(identity, operation, target);
+			//GridFTPTuple tuple = new GridFTPTuple(identity, operation, target);
 			authorized = _util.tupleExists(tuple);
 			if (authorized) {
 				String msg = "Authorized request: " + tuple;
@@ -46,10 +71,6 @@ public class DatabaseAuthCallout extends AbstractAuthCallout {
 			}
 		} catch (DatabaseException e) {
 			String msg = "Could not check if tuple exists";
-			_logger.log(Level.SEVERE, msg, e);
-			System.out.println(msg);
-		} catch (MalformedURLException e) {
-			String msg = "Bad URL: " + target;
 			_logger.log(Level.SEVERE, msg, e);
 			System.out.println(msg);
 		} catch (IOException e) {
