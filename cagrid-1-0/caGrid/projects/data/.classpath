@@ -120,7 +120,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-Introduce-core-tests.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/globus_transfer_stubs_java.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-BulkDataHandler-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-BulkDataHandler-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-BulkDataHandler-stubs.jar"/>
