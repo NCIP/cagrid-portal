@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
-import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 
 import java.util.Vector;
@@ -8,23 +7,26 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.cagrid.grape.table.GrapeBaseTable;
+
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: TrustedIdPTable.java,v 1.1 2006-09-08 19:22:18 langella Exp $
+ * @version $Id: TrustedIdPTable.java,v 1.2 2007-03-21 19:36:06 langella Exp $
  */
-public class TrustedIdPTable extends PortalBaseTable {
+public class TrustedIdPTable extends GrapeBaseTable {
 	public final static String IDP = "idp";
 
 	public final static String IDP_ID = "IdP Id";
-	
+
 	public final static String NAME = "Identity Provider Name";
-	
+
 	public final static String STATUS = "Status";
 
-	
 	TrustedIdPsWindow window;
+
 
 	public TrustedIdPTable(TrustedIdPsWindow window) {
 		super(createTableModel());
@@ -34,20 +36,19 @@ public class TrustedIdPTable extends PortalBaseTable {
 		c.setMinWidth(0);
 		c.setPreferredWidth(0);
 		c.setResizable(false);
-		
+
 		c = this.getColumn(IDP_ID);
 		c.setMaxWidth(35);
 		c.setMinWidth(35);
-	
-		
+
 		c = this.getColumn(STATUS);
 		c.setMaxWidth(100);
 		c.setMinWidth(100);
-	
 
 		this.clearTable();
 
 	}
+
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
@@ -59,6 +60,7 @@ public class TrustedIdPTable extends PortalBaseTable {
 
 	}
 
+
 	public void addTrustedIdP(final TrustedIdP idp) {
 		Vector v = new Vector();
 		v.add(idp);
@@ -68,7 +70,8 @@ public class TrustedIdPTable extends PortalBaseTable {
 		addRow(v);
 	}
 
-	public synchronized TrustedIdP getSelectedTrustedIdP() throws Exception{
+
+	public synchronized TrustedIdP getSelectedTrustedIdP() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
 			return (TrustedIdP) getValueAt(row, 0);
@@ -76,8 +79,9 @@ public class TrustedIdPTable extends PortalBaseTable {
 			throw new Exception("Please select an Identity Provider!!!");
 		}
 	}
-	
-	public synchronized void removeSelectedTrustedIdP() throws Exception{
+
+
+	public synchronized void removeSelectedTrustedIdP() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
 			removeRow(row);
@@ -86,22 +90,21 @@ public class TrustedIdPTable extends PortalBaseTable {
 		}
 	}
 
+
 	public void doubleClick() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
 			window.showTrustedIdP();
 		} else {
-			throw new Exception(
-				"Please select an Identity Provider!!!");
+			throw new Exception("Please select an Identity Provider!!!");
 		}
 
 	}
 
+
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
 
 }

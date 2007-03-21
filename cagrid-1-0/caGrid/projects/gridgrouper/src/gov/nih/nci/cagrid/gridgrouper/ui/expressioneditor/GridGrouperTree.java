@@ -43,7 +43,6 @@
 
 package gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 
 import java.util.ArrayList;
@@ -58,14 +57,13 @@ import javax.swing.tree.TreePath;
 
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.PortalResourceManager;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -73,14 +71,16 @@ public class GridGrouperTree extends JTree {
 
 	private GridGroupersTreeNode rootNode;
 
+
 	public GridGrouperTree(GridGrouperExpressionEditor editor) {
-		super();	
+		super();
 		setLargeModel(true);
 		this.rootNode = new GridGroupersTreeNode(editor);
 		setModel(new DefaultTreeModel(this.rootNode));
-		this.addMouseListener(new GridGrouperTreeEventListener(this,editor));
+		this.addMouseListener(new GridGrouperTreeEventListener(this, editor));
 		this.setCellRenderer(new TreeRenderer());
 	}
+
 
 	public void addGridGrouper(final String uri, final GlobusCredential cred) {
 		MobiusRunnable runner = new MobiusRunnable() {
@@ -89,22 +89,23 @@ public class GridGrouperTree extends JTree {
 					GridGrouper grouper = new GridGrouper(uri, cred);
 					rootNode.addGridGrouper(grouper);
 				} catch (Exception e) {
-					PortalUtils.showErrorMessage(e);
+					Util.showErrorMessage(e);
 				}
 			}
 		};
 		try {
-			PortalResourceManager.getInstance().getThreadManager()
-					.executeInBackground(runner);
+			Util.executeInBackground(runner);
 		} catch (Exception t) {
 			t.getMessage();
 		}
 
 	}
 
+
 	public GridGroupersTreeNode getRootNode() {
 		return this.rootNode;
 	}
+
 
 	public List getGroupNodes() {
 		List nodes = new ArrayList();
@@ -112,11 +113,11 @@ public class GridGrouperTree extends JTree {
 		return nodes;
 	}
 
+
 	private void getGroupNodes(GridGrouperBaseTreeNode node, List nodes) {
 		int count = node.getChildCount();
 		for (int i = 0; i < count; i++) {
-			GridGrouperBaseTreeNode child = (GridGrouperBaseTreeNode) node
-					.getChildAt(i);
+			GridGrouperBaseTreeNode child = (GridGrouperBaseTreeNode) node.getChildAt(i);
 			if (child instanceof GroupTreeNode) {
 				nodes.add(child);
 			} else if (child instanceof StemTreeNode) {
@@ -125,15 +126,16 @@ public class GridGrouperTree extends JTree {
 		}
 	}
 
+
 	public GridGrouperBaseTreeNode getCurrentNode() {
 		TreePath currentSelection = this.getSelectionPath();
 		if (currentSelection != null) {
-			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection
-					.getLastPathComponent();
+			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection.getLastPathComponent();
 			return (GridGrouperBaseTreeNode) currentNode;
 		}
 		return null;
 	}
+
 
 	/**
 	 * Get all the selected service nodes
@@ -146,8 +148,7 @@ public class GridGrouperTree extends JTree {
 		if (currentSelection != null) {
 			for (int i = 0; i < currentSelection.length; i++) {
 				TreePath path = currentSelection[i];
-				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) path
-						.getLastPathComponent();
+				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) path.getLastPathComponent();
 				if (currentNode != this.getRootNode()) {
 					selected.add(currentNode);
 				}
@@ -155,6 +156,7 @@ public class GridGrouperTree extends JTree {
 		}
 		return selected;
 	}
+
 
 	/**
 	 * Reload a portion of the tree's view in a synchronized way
@@ -165,6 +167,7 @@ public class GridGrouperTree extends JTree {
 	public synchronized void reload(TreeNode reloadPoint) {
 		((DefaultTreeModel) this.getModel()).reload(reloadPoint);
 	}
+
 
 	/**
 	 * Reload from the root

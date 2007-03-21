@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.dorian.ui.idp;
 
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
@@ -22,19 +20,20 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalBaseFrame;
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.3 2007-02-13 14:56:24 dervin Exp $
+ * @version $Id: UserWindow.java,v 1.4 2007-03-21 19:36:06 langella Exp $
  */
-public class UserWindow extends GridPortalBaseFrame {
+public class UserWindow extends ApplicationComponent {
 
 	private final static String ACCOUNT_PANEL = "Account Information";
 
@@ -138,7 +137,6 @@ public class UserWindow extends GridPortalBaseFrame {
 
 	private GlobusCredential proxy;
 
-
 	/**
 	 * This is the default constructor
 	 */
@@ -154,11 +152,11 @@ public class UserWindow extends GridPortalBaseFrame {
 
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Manage User [" + user.getUserId() + "]");
+		this.setSize(600,400);
 
 	}
 
@@ -237,7 +235,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Close");
-			cancel.setIcon(PortalLookAndFeel.getCloseIcon());
+			cancel.setIcon(LookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -265,7 +263,7 @@ public class UserWindow extends GridPortalBaseFrame {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -291,7 +289,6 @@ public class UserWindow extends GridPortalBaseFrame {
 		}
 	}
 
-
 	private synchronized void updateUser() {
 
 		String pass = format(this.getPassword().getPassword());
@@ -301,7 +298,8 @@ public class UserWindow extends GridPortalBaseFrame {
 			if (pass.equals(verify)) {
 				user.setPassword(pass);
 			} else {
-				PortalUtils.showErrorMessage("Cannot update the user " + user.getUserId() + ", password don't match.");
+				GridApplication.getContext().showErrorMessage(
+					"Cannot update the user " + user.getUserId() + ", password don't match.");
 			}
 		}
 
@@ -327,13 +325,13 @@ public class UserWindow extends GridPortalBaseFrame {
 			IdPAdministrationClient client = new IdPAdministrationClient(serviceName, proxy);
 			client.updateUser(user);
 
-			PortalUtils.showMessage("User " + user.getUserId() + " update successfully.");
+			GridApplication.getContext().showMessage("User " + user.getUserId() + " update successfully.");
 
 		} catch (PermissionDeniedFault pdf) {
-			PortalUtils.showErrorMessage(pdf);
+			GridApplication.getContext().showErrorMessage(pdf);
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 	}
 
@@ -347,8 +345,8 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
-				PortalLookAndFeel.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+					.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, null, getInfoPanel(), null);
 			jTabbedPane.addTab(ACCOUNT_PANEL, null, getAccountPanel(), null);
 			jTabbedPane.addTab(PASSWORD_PANEL, null, getPasswordPanel(), null);
@@ -762,8 +760,8 @@ public class UserWindow extends GridPortalBaseFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null,
-				PortalLookAndFeel.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+					.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);
 		}
@@ -946,4 +944,4 @@ public class UserWindow extends GridPortalBaseFrame {
 		return verifyPassword;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

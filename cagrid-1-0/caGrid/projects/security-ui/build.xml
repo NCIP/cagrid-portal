@@ -123,7 +123,8 @@ GSBT - Globus Service Build Tools
 	
 		<!-- Post Introduce Edit-->
 	<target name="ui" description="Run the Security UI" depends="defineClasspaths">
-		<java classname="gov.nih.nci.cagrid.security.ui.SecurityUI" classpathref="run.classpath" fork="yes">
+		<java classname="org.cagrid.grape.GridApplication" classpathref="run.classpath" fork="yes">
+			<arg value="etc/security-ui.xml" />
 			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
 		</java>
 	</target>

@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gts.ui;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustLevels;
@@ -25,10 +24,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalBaseFrame;
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
@@ -38,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006/03/27 19:05:40
  *          langella Exp $
  */
-public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements TrustedAuthorityRefresher {
+public class TrustedAuthoritiesWindow extends ApplicationComponent implements TrustedAuthorityRefresher {
 
 	private final static String ANY = "Any";
 
@@ -154,7 +153,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				PortalUtils.showErrorMessage("Error obtaining the trust levels from " + service + ":\n"
+				GridApplication.getContext().showErrorMessage("Error obtaining the trust levels from " + service + ":\n"
 					+ e.getMessage());
 			}
 		}
@@ -317,7 +316,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -336,10 +335,10 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			TrustedAuthorityWindow window = new TrustedAuthorityWindow(service, proxy, this.getTrustedAuthorityTable()
 				.getSelectedTrustedAuthority(), this);
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(window);
+			GridApplication.getContext().addApplicationComponent(window);
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 	}
 
@@ -448,7 +447,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -498,7 +497,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 			this.updateProgress(false, "Error");
 		}
 	}
@@ -602,7 +601,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -624,7 +623,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 			refreshTrustedAuthorities();
 
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 	}
 
@@ -819,7 +818,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 
 
 	private void addTrustedAuthority() {
-		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedAuthorityWindow(this));
+		GridApplication.getContext().addApplicationComponent(new TrustedAuthorityWindow(this));
 	}
 
 

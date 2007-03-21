@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
-
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,20 +10,20 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class GroupManagementBrowser extends GridPortalComponent {
+public class GroupManagementBrowser extends ApplicationComponent {
 
 	private static final long serialVersionUID = 1L;
 
@@ -55,6 +53,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 
 	private ContentManager tabbedContent = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -62,6 +61,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		super();
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -74,6 +74,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		this.setTitle("Group Management Browser");
 		this.setFrameIcon(GridGrouperLookAndFeel.getGrouperIcon22x22());
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -88,6 +89,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes treePanel
@@ -121,6 +123,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		return treePanel;
 	}
 
+
 	/**
 	 * This method initializes contentPanel
 	 * 
@@ -141,6 +144,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		return contentPanel;
 	}
 
+
 	/**
 	 * This method initializes treePane
 	 * 
@@ -154,6 +158,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		return treePane;
 	}
 
+
 	/**
 	 * This method initializes groupTree
 	 * 
@@ -165,6 +170,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		}
 		return groupTree;
 	}
+
 
 	/**
 	 * This method initializes progress
@@ -182,11 +188,10 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	}
 
 
-
 	/**
-	 * This method initializes buttonPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes buttonPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
@@ -224,10 +229,11 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		return buttonPanel;
 	}
 
+
 	/**
-	 * This method initializes addGridGrouper	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes addGridGrouper
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getAddGridGrouper() {
 		if (addGridGrouper == null) {
@@ -238,12 +244,12 @@ public class GroupManagementBrowser extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
-							PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new AddGridGrouperWindow(getGroupTree().getRootNode()),400,150);
+							GridApplication.getContext().addApplicationComponent(
+								new AddGridGrouperWindow(getGroupTree().getRootNode()), 400, 150);
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -254,10 +260,11 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		return addGridGrouper;
 	}
 
+
 	/**
-	 * This method initializes removeGridGrouper	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes removeGridGrouper
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getRemoveGridGrouper() {
 		if (removeGridGrouper == null) {
@@ -272,8 +279,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -284,10 +290,11 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		return removeGridGrouper;
 	}
 
+
 	/**
-	 * This method initializes view	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes view
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getView() {
 		if (view == null) {
@@ -302,8 +309,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -314,10 +320,11 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		return view;
 	}
 
+
 	/**
-	 * This method initializes refresh	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes refresh
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getRefresh() {
 		if (refresh == null) {
@@ -329,16 +336,15 @@ public class GroupManagementBrowser extends GridPortalComponent {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
 							GridGrouperBaseTreeNode node = getGroupTree().getCurrentNode();
-							if(node!=null){
+							if (node != null) {
 								node.refresh();
-							}else{
-								PortalUtils.showErrorMessage("Please select a node to refresh!!!");
+							} else {
+								GridApplication.getContext().showErrorMessage("Please select a node to refresh!!!");
 							}
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -349,10 +355,11 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		return refresh;
 	}
 
+
 	/**
-	 * This method initializes jSplitPane	
-	 * 	
-	 * @return javax.swing.JSplitPane	
+	 * This method initializes jSplitPane
+	 * 
+	 * @return javax.swing.JSplitPane
 	 */
 	private JSplitPane getJSplitPane() {
 		if (jSplitPane == null) {
@@ -363,10 +370,11 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		return jSplitPane;
 	}
 
+
 	/**
-	 * This method initializes tabbedContent	
-	 * 	
-	 * @return javax.swing.JTabbedPane	
+	 * This method initializes tabbedContent
+	 * 
+	 * @return javax.swing.JTabbedPane
 	 */
 	protected ContentManager getContentManager() {
 		if (tabbedContent == null) {

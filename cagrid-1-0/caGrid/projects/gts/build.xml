@@ -271,7 +271,6 @@
         <jar jarfile="${build.lib.dir}/${ui.jar.name}" basedir="${build.dest}">
             <include name="**/ui/**" />
         	<fileset dir="resources/ui/gts" />
-        	<fileset dir="ext/resources/portal/common" />
         </jar>
         <jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
             <include name="**/*.xml" />
@@ -357,8 +356,8 @@
 
     <!-- Post Introduce Edit-->
     <target name="ui" description="Run the GTS UI" depends="checkGlobus">
-        <java classname="org.projectmobius.portal.GridPortal" fork="yes">
-            <arg value="etc/gts-ui-conf.xml" />
+        <java classname="org.cagrid.grape.GridApplication" fork="yes">
+            <arg value="etc/gts-ui.xml" />
             <classpath>
                 <pathelement location="${stubs.dest}" />
                 <fileset dir="${build.lib.dir}">

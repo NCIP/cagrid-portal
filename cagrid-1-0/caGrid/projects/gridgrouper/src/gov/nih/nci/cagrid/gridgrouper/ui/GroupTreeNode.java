@@ -43,18 +43,19 @@
 
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 import gov.nih.nci.cagrid.gridgrouper.client.Group;
 
 import javax.swing.ImageIcon;
+
+import org.cagrid.grape.GridApplication;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -62,14 +63,15 @@ public class GroupTreeNode extends GridGrouperBaseTreeNode {
 
 	private Group group;
 
+
 	public GroupTreeNode(GroupManagementBrowser browser, Group group) {
 		super(browser);
 		this.group = group;
 	}
 
+
 	public void refresh() {
-		int id = getBrowser().getProgress().startEvent(
-				"Refreshing " + toString() + ".... ");
+		int id = getBrowser().getProgress().startEvent("Refreshing " + toString() + ".... ");
 		try {
 
 			if (parent != null) {
@@ -78,26 +80,28 @@ public class GroupTreeNode extends GridGrouperBaseTreeNode {
 				getTree().reload();
 			}
 			this.getBrowser().getContentManager().refreshGroup(this);
-			getBrowser().getProgress().stopEvent(id,
-					"Refreshed " + toString() + "!!!");
+			getBrowser().getProgress().stopEvent(id, "Refreshed " + toString() + "!!!");
 		} catch (Exception e) {
-			getBrowser().getProgress().stopEvent(id,
-					"Error refreshing " + toString() + "!!!");
-			PortalUtils.showErrorMessage(e);
+			getBrowser().getProgress().stopEvent(id, "Error refreshing " + toString() + "!!!");
+			GridApplication.getContext().showErrorMessage(e);
 		}
 	}
+
 
 	public ImageIcon getIcon() {
 		return GridGrouperLookAndFeel.getGroupIcon16x16();
 	}
 
+
 	public String toString() {
 		return group.getDisplayExtension();
 	}
 
+
 	public GridGrouper getGridGrouper() {
 		return group.getGridGrouper();
 	}
+
 
 	public Group getGroup() {
 		return group;

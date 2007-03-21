@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.dorian.ui.ifs;
 import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
 import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.authentication.client.AuthenticationClient;
-import gov.nih.nci.cagrid.dorian.ui.IdPConf;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.awt.BorderLayout;
@@ -31,8 +30,8 @@ public class AuthenticationServicePanel extends IdPAuthenticationPanel {
 	private JLabel passwordLabel = null;
 	private JPasswordField password = null;
 
-	public AuthenticationServicePanel(IdPConf conf) {
-		super(conf);
+	public AuthenticationServicePanel(String uri) {
+		super(uri);
 		initialize();
 	}
 
@@ -42,7 +41,7 @@ public class AuthenticationServicePanel extends IdPAuthenticationPanel {
 		cred.setUserId(userId.getText());
 		cred.setPassword(new String(password.getPassword()));
 		credential.setBasicAuthenticationCredential(cred);
-		AuthenticationClient client = new AuthenticationClient(getIdPInfo().getParameter("serviceId"),credential);
+		AuthenticationClient client = new AuthenticationClient(getURI(),credential);
 		return client.authenticate();
 	}
 

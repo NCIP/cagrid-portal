@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
@@ -24,19 +22,20 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalBaseFrame;
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.3 2007-02-13 15:00:08 dervin Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.4 2007-03-21 19:36:06 langella Exp $
  */
-public class TrustedIdPsWindow extends GridPortalBaseFrame {
+public class TrustedIdPsWindow extends ApplicationComponent {
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -93,7 +92,6 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -177,7 +175,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			contentPanel.setLayout(new GridBagLayout());
 			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trusted IdPs",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.gridx = 0;
@@ -255,7 +253,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -272,10 +270,11 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		try {
 			String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new TrustedIdPWindow(serviceUrl, proxyCred, getTrustedIdPTable().getSelectedTrustedIdP(), getUserPolicies()));
+			GridApplication.getContext().addApplicationComponent(
+				new TrustedIdPWindow(serviceUrl, proxyCred, getTrustedIdPTable().getSelectedTrustedIdP(),
+					getUserPolicies()));
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 	}
 
@@ -284,10 +283,9 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		try {
 			String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new TrustedIdPWindow(this, serviceUrl, proxyCred, getUserPolicies()));
+			GridApplication.getContext().addApplicationComponent(new TrustedIdPWindow(this, serviceUrl, proxyCred, getUserPolicies()));
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 	}
 
@@ -351,8 +349,8 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
-				PortalLookAndFeel.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+					.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -385,7 +383,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Trusted Identity Providers");
-			query.setIcon(PortalLookAndFeel.getQueryIcon());
+			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
@@ -394,7 +392,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -410,7 +408,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 		synchronized (mutex) {
 			if (isQuerying) {
-				PortalUtils.showErrorMessage("Query Already in Progress",
+				GridApplication.getContext().showErrorMessage("Query Already in Progress",
 					"Please wait until the current query is finished before executing another.");
 				return;
 			} else {
@@ -437,11 +435,11 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			this.updateProgress(false, "Completed [Found " + length + " IdPs]");
 
 		} catch (PermissionDeniedFault pdf) {
-			PortalUtils.showErrorMessage(pdf);
+			GridApplication.getContext().showErrorMessage(pdf);
 			this.updateProgress(false, "Error");
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 			this.updateProgress(false, "Error");
 		}
 		isQuerying = false;
@@ -512,7 +510,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setForeground(PortalLookAndFeel.getPanelLabelColor());
+			progress.setForeground(LookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -548,7 +546,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -568,7 +566,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			client.removeTrustedIdP(getTrustedIdPTable().getSelectedTrustedIdP());
 			getTrustedIdPTable().removeSelectedTrustedIdP();
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 	}
 
@@ -590,7 +588,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}

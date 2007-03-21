@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.DorianCertifcateAuthorityClient;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.ui.DorianServiceListComboBox;
@@ -18,12 +16,13 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
 
 
-public class ViewCACertificateWindow extends GridPortalComponent {
+public class ViewCACertificateWindow extends ApplicationComponent {
 
 	private JPanel jContentPane = null;
 	private JPanel mainPanel = null;
@@ -125,7 +124,7 @@ public class ViewCACertificateWindow extends GridPortalComponent {
 			servicePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "View Dorian CA Certifcate",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
-				PortalLookAndFeel.getPanelLabelColor()));
+				LookAndFeel.getPanelLabelColor()));
 			servicePanel.add(ifsLabel, gridBagConstraints5);
 			servicePanel.add(getIfs(), gridBagConstraints6);
 		}
@@ -178,7 +177,7 @@ public class ViewCACertificateWindow extends GridPortalComponent {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -197,10 +196,10 @@ public class ViewCACertificateWindow extends GridPortalComponent {
 			X509Certificate cert = client.getCACertificate();
 			dispose();
 			CertificateInformationComponent cic = new CertificateInformationComponent(cert);
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(cic, 600, 425);
+			GridApplication.getContext().addApplicationComponent(cic, 600, 425);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 		getViewCAButton().setEnabled(true);
 	}
@@ -210,7 +209,7 @@ public class ViewCACertificateWindow extends GridPortalComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(PortalLookAndFeel.getCloseIcon());
+			close.setIcon(LookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();

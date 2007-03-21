@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.dorian.ui;
 import java.util.List;
 
 import javax.swing.JComboBox;
-
-import org.projectmobius.portal.PortalResourceManager;
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -17,9 +15,7 @@ public class DorianServiceListComboBox extends JComboBox {
 	private static String lastSelectedService;
 
 	public DorianServiceListComboBox() {
-		DorianUIConf conf = (DorianUIConf) PortalResourceManager
-				.getInstance().getResource(DorianUIConf.RESOURCE);
-		List services = conf.getDorianServiceList();
+		List services = DorianUIUtils.getDorianServices();
 		for (int i = 0; i < services.size(); i++) {
 			this.addItem(services.get(i));
 		}

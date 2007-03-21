@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import edu.internet2.middleware.grouper.CompositeType;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 
 import java.awt.BorderLayout;
@@ -23,9 +22,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -36,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class AddMemberWindow extends GridPortalComponent {
+public class AddMemberWindow extends ApplicationComponent {
 
 	private static final String USER = "User";
 
@@ -372,8 +372,7 @@ public class AddMemberWindow extends GridPortalComponent {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -389,8 +388,7 @@ public class AddMemberWindow extends GridPortalComponent {
 		if (type.equals(USER)) {
 			String user = Utils.clean(this.getUserIdentity().getText());
 			if (user == null) {
-				PortalUtils
-						.showErrorMessage("Please enter a member identity!!!");
+				GridApplication.getContext().showErrorMessage("Please enter a member identity!!!");
 				return;
 			} else {
 				try {
@@ -400,11 +398,10 @@ public class AddMemberWindow extends GridPortalComponent {
 					}
 					dispose();
 					
-					PortalUtils
-							.showMessage("The member was added successfully!!!");
+					GridApplication.getContext().showMessage("The member was added successfully!!!");
 				} catch (Exception e) {
 					e.printStackTrace();
-					PortalUtils.showErrorMessage(e);
+					GridApplication.getContext().showErrorMessage(e);
 					return;
 				}
 			}
@@ -418,11 +415,11 @@ public class AddMemberWindow extends GridPortalComponent {
 					browser.listMembers();
 				}
 				dispose();
-				PortalUtils
+				GridApplication.getContext()
 						.showMessage("The group member was added successfully!!!");
 			} catch (Exception e) {
 				e.printStackTrace();
-				PortalUtils.showErrorMessage(e);
+				GridApplication.getContext().showErrorMessage(e);
 				return;
 			}
 
@@ -442,11 +439,10 @@ public class AddMemberWindow extends GridPortalComponent {
 					browser.listMembers();
 				}
 				dispose();
-				PortalUtils
-						.showMessage("The composite member was added successfully!!!");
+				GridApplication.getContext().showMessage("The composite member was added successfully!!!");
 			} catch (Exception e) {
 				e.printStackTrace();
-				PortalUtils.showErrorMessage(e);
+				GridApplication.getContext().showErrorMessage(e);
 				return;
 			}
 

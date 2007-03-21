@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 
 import java.awt.FlowLayout;
@@ -16,20 +15,20 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class AddGroupWindow extends GridPortalComponent {
+public class AddGroupWindow extends ApplicationComponent {
 
 	private static final long serialVersionUID = 1L;
 
@@ -63,6 +62,7 @@ public class AddGroupWindow extends GridPortalComponent {
 
 	private JTextField parentStem = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -71,6 +71,7 @@ public class AddGroupWindow extends GridPortalComponent {
 		this.node = node;
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -83,6 +84,7 @@ public class AddGroupWindow extends GridPortalComponent {
 		this.setTitle("Add Group");
 		this.setFrameIcon(GridGrouperLookAndFeel.getGroupIcon22x22());
 	}
+
 
 	/**
 	 * This method initializes addStemPanel
@@ -167,10 +169,9 @@ public class AddGroupWindow extends GridPortalComponent {
 			jLabel10.setText("Local Name");
 			addStemPanel = new JPanel();
 			addStemPanel.setLayout(new GridBagLayout());
-			addStemPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Add Group", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel
-							.getPanelLabelColor()));
+			addStemPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Group",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel
+					.getPanelLabelColor()));
 			addStemPanel.add(jLabel10, gridBagConstraints35);
 			addStemPanel.add(getChildName(), gridBagConstraints36);
 			addStemPanel.add(jLabel11, gridBagConstraints37);
@@ -186,6 +187,7 @@ public class AddGroupWindow extends GridPortalComponent {
 		return addStemPanel;
 	}
 
+
 	/**
 	 * This method initializes childName
 	 * 
@@ -197,6 +199,7 @@ public class AddGroupWindow extends GridPortalComponent {
 		}
 		return childName;
 	}
+
 
 	/**
 	 * This method initializes childDisplayName
@@ -210,6 +213,7 @@ public class AddGroupWindow extends GridPortalComponent {
 		return childDisplayName;
 	}
 
+
 	/**
 	 * This method initializes addChildGroup
 	 * 
@@ -220,65 +224,50 @@ public class AddGroupWindow extends GridPortalComponent {
 			addChildGroup = new JButton();
 			addChildGroup.setIcon(GridGrouperLookAndFeel.getAddIcon());
 			addChildGroup.setText("Add Group");
-			addChildGroup
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							MobiusRunnable runner = new MobiusRunnable() {
-								public void execute() {
-									StemI stem = node.getStem();
-									int eid = node.getBrowser().getProgress()
-											.startEvent(
-													"Adding a child group....");
-									try {
-
-										String ext = Utils.clean(childName
-												.getText());
-										if (ext == null) {
-											PortalUtils
-													.showErrorMessage("You must enter a local name for the group!!");
-											return;
-										}
-
-										String disExt = Utils
-												.clean(childDisplayName
-														.getText());
-										if (disExt == null) {
-											PortalUtils
-													.showErrorMessage("You must enter a local display name for the group!!!");
-											return;
-										}
-
-										stem.addChildGroup(ext, disExt);
-										node.refresh();
-										node
-												.getBrowser()
-												.getProgress()
-												.stopEvent(eid,
-														"Successfully added a child group!!!");
-										dispose();
-									} catch (Exception e) {
-										node
-												.getBrowser()
-												.getProgress()
-												.stopEvent(eid,
-														"Error adding a child group!!!");
-										PortalUtils.showErrorMessage(e);
-									}
-								}
-							};
+			addChildGroup.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							StemI stem = node.getStem();
+							int eid = node.getBrowser().getProgress().startEvent("Adding a child group....");
 							try {
-								PortalResourceManager.getInstance()
-										.getThreadManager()
-										.executeInBackground(runner);
-							} catch (Exception t) {
-								t.getMessage();
+
+								String ext = Utils.clean(childName.getText());
+								if (ext == null) {
+									GridApplication.getContext().showErrorMessage(
+										"You must enter a local name for the group!!");
+									return;
+								}
+
+								String disExt = Utils.clean(childDisplayName.getText());
+								if (disExt == null) {
+									GridApplication.getContext().showErrorMessage(
+										"You must enter a local display name for the group!!!");
+									return;
+								}
+
+								stem.addChildGroup(ext, disExt);
+								node.refresh();
+								node.getBrowser().getProgress().stopEvent(eid, "Successfully added a child group!!!");
+								dispose();
+							} catch (Exception e) {
+								node.getBrowser().getProgress().stopEvent(eid, "Error adding a child group!!!");
+								GridApplication.getContext().showErrorMessage(e);
 							}
 						}
+					};
+					try {
+						GridApplication.getContext().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
 
-					});
+			});
 		}
 		return addChildGroup;
 	}
+
 
 	/**
 	 * This method initializes buttonPanel
@@ -300,6 +289,7 @@ public class AddGroupWindow extends GridPortalComponent {
 		return buttonPanel;
 	}
 
+
 	/**
 	 * This method initializes cancelButton
 	 * 
@@ -319,6 +309,7 @@ public class AddGroupWindow extends GridPortalComponent {
 		return cancelButton;
 	}
 
+
 	/**
 	 * This method initializes gridGrouper
 	 * 
@@ -332,6 +323,7 @@ public class AddGroupWindow extends GridPortalComponent {
 		}
 		return gridGrouper;
 	}
+
 
 	/**
 	 * This method initializes credentials
@@ -347,6 +339,7 @@ public class AddGroupWindow extends GridPortalComponent {
 		return credentials;
 	}
 
+
 	/**
 	 * This method initializes parentStem
 	 * 
@@ -356,7 +349,7 @@ public class AddGroupWindow extends GridPortalComponent {
 		if (parentStem == null) {
 			parentStem = new JTextField();
 			parentStem.setEditable(false);
-		    parentStem.setText(this.node.getStem().getDisplayName());
+			parentStem.setText(this.node.getStem().getDisplayName());
 		}
 		return parentStem;
 	}

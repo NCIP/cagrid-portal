@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gts.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.ui.ProxyCaddy;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
@@ -17,10 +16,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -29,7 +29,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class AuthorityWindow extends GridPortalComponent {
+public class AuthorityWindow extends ApplicationComponent {
 
 	private JPanel jContentPane = null;
 
@@ -91,16 +91,16 @@ public class AuthorityWindow extends GridPortalComponent {
 
 	private AuthorityRefresher refresher;
 
+
 	/**
 	 * This is the default constructor
 	 */
-	public AuthorityWindow(String service, GlobusCredential cred,
-			AuthorityRefresher refresher) {
+	public AuthorityWindow(String service, GlobusCredential cred, AuthorityRefresher refresher) {
 		this(service, cred, null, refresher);
 	}
 
-	public AuthorityWindow(String service, GlobusCredential cred,
-			AuthorityGTS auth, AuthorityRefresher refresher) {
+
+	public AuthorityWindow(String service, GlobusCredential cred, AuthorityGTS auth, AuthorityRefresher refresher) {
 		super();
 		this.refresher = refresher;
 		if (auth != null) {
@@ -117,24 +117,19 @@ public class AuthorityWindow extends GridPortalComponent {
 			this.getGtsURI().setText(auth.getServiceURI());
 			this.getPriority().setSelectedItem(new Integer(auth.getPriority()));
 			this.getPriority().setEnabled(false);
-			this.getSynchronizeTrustLevels().setSelectedItem(
-					new Boolean(auth.isSyncTrustLevels()));
-			this.getPerformAuthorization().setSelectedItem(
-					new Boolean(auth.isPerformAuthorization()));
+			this.getSynchronizeTrustLevels().setSelectedItem(new Boolean(auth.isSyncTrustLevels()));
+			this.getPerformAuthorization().setSelectedItem(new Boolean(auth.isPerformAuthorization()));
 			this.getAuthorizationIdentity().setText(auth.getServiceIdentity());
-			this.getHours().setSelectedItem(
-					new Integer(auth.getTimeToLive().getHours()));
-			this.getMinutes().setSelectedItem(
-					new Integer(auth.getTimeToLive().getMinutes()));
-			this.getSeconds().setSelectedItem(
-					new Integer(auth.getTimeToLive().getSeconds()));
+			this.getHours().setSelectedItem(new Integer(auth.getTimeToLive().getHours()));
+			this.getMinutes().setSelectedItem(new Integer(auth.getTimeToLive().getMinutes()));
+			this.getSeconds().setSelectedItem(new Integer(auth.getTimeToLive().getSeconds()));
 		}
 	}
 
+
 	private void syncPriorities() {
 		try {
-			GTSPublicClient client = new GTSPublicClient((String) this.getGts()
-					.getSelectedItem());
+			GTSPublicClient client = new GTSPublicClient((String) this.getGts().getSelectedItem());
 			AuthorityGTS[] auths = client.getAuthorities();
 			int count = 0;
 			if (auths != null) {
@@ -147,9 +142,10 @@ public class AuthorityWindow extends GridPortalComponent {
 				this.getPriority().addItem(new Integer(i));
 			}
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 	}
+
 
 	/**
 	 * This method initializes this
@@ -167,6 +163,7 @@ public class AuthorityWindow extends GridPortalComponent {
 			this.setFrameIcon(GTSLookAndFeel.getAuthorityAddIcon());
 		}
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -201,6 +198,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes topPanel
@@ -238,11 +236,9 @@ public class AuthorityWindow extends GridPortalComponent {
 			jLabel = new JLabel();
 			jLabel.setText("Grid Trust Service (GTS)");
 			topPanel = new JPanel();
-			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Service/Login Information",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GTSLookAndFeel.getPanelLabelColor()));
+			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service/Login Information",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(jLabel, gridBagConstraints2);
 			topPanel.add(getGts(), gridBagConstraints3);
@@ -251,6 +247,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		}
 		return topPanel;
 	}
+
 
 	/**
 	 * This method initializes gts
@@ -264,6 +261,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		return gts;
 	}
 
+
 	/**
 	 * This method initializes proxy
 	 * 
@@ -275,6 +273,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		}
 		return proxy;
 	}
+
 
 	/**
 	 * This method initializes buttonPanel
@@ -289,6 +288,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes addButton
@@ -313,8 +313,7 @@ public class AuthorityWindow extends GridPortalComponent {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -325,6 +324,7 @@ public class AuthorityWindow extends GridPortalComponent {
 
 		return addButton;
 	}
+
 
 	/**
 	 * This method initializes cancelButton
@@ -345,32 +345,25 @@ public class AuthorityWindow extends GridPortalComponent {
 		return cancelButton;
 	}
 
+
 	private void addUpdateAuthority() {
 
 		try {
 			getAddButton().setEnabled(false);
-			GlobusCredential proxy = ((ProxyComboBox) getProxy())
-					.getSelectedProxy();
-			String service = ((GTSServiceListComboBox) getGts())
-					.getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			AuthorityGTS auth = new AuthorityGTS();
 			auth.setServiceURI(getGtsURI().getText().trim());
-			auth.setPriority(((Integer) getPriority().getSelectedItem())
-					.intValue());
-			auth.setSyncTrustLevels(((Boolean) getSynchronizeTrustLevels()
-					.getSelectedItem()).booleanValue());
-			auth.setPerformAuthorization(((Boolean) getPerformAuthorization()
-					.getSelectedItem()).booleanValue());
+			auth.setPriority(((Integer) getPriority().getSelectedItem()).intValue());
+			auth.setSyncTrustLevels(((Boolean) getSynchronizeTrustLevels().getSelectedItem()).booleanValue());
+			auth.setPerformAuthorization(((Boolean) getPerformAuthorization().getSelectedItem()).booleanValue());
 			if (auth.isPerformAuthorization()) {
-				auth.setServiceIdentity(getAuthorizationIdentity().getText()
-						.trim());
+				auth.setServiceIdentity(getAuthorizationIdentity().getText().trim());
 			}
 			TimeToLive ttl = new TimeToLive();
 			ttl.setHours(((Integer) getHours().getSelectedItem()).intValue());
-			ttl.setMinutes(((Integer) getMinutes().getSelectedItem())
-					.intValue());
-			ttl.setSeconds(((Integer) getSeconds().getSelectedItem())
-					.intValue());
+			ttl.setMinutes(((Integer) getMinutes().getSelectedItem()).intValue());
+			ttl.setSeconds(((Integer) getSeconds().getSelectedItem()).intValue());
 			auth.setTimeToLive(ttl);
 
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
@@ -382,20 +375,21 @@ public class AuthorityWindow extends GridPortalComponent {
 			refresher.refeshAuthorities();
 			dispose();
 			if (update) {
-				PortalUtils.showMessage("The Authority " + auth.getServiceURI()
-						+ " was updated successfully!!!");
+				GridApplication.getContext().showMessage(
+					"The Authority " + auth.getServiceURI() + " was updated successfully!!!");
 			} else {
-				PortalUtils.showMessage("The Authority " + auth.getServiceURI()
-						+ " was added successfully!!!");
+				GridApplication.getContext().showMessage(
+					"The Authority " + auth.getServiceURI() + " was added successfully!!!");
 			}
 
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 
 	}
+
 
 	/**
 	 * This method initializes trustLevelPanel
@@ -490,31 +484,25 @@ public class AuthorityWindow extends GridPortalComponent {
 			jLabel2.setText("GTS URI");
 			authorityPanel = new JPanel();
 			authorityPanel.setLayout(new GridBagLayout());
-			authorityPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Authority GTS",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, GTSLookAndFeel.getPanelLabelColor()));
+			authorityPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Authority GTS",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
 			authorityPanel.add(jLabel2, gridBagConstraints1);
 			authorityPanel.add(getGtsURI(), gridBagConstraints6);
 			authorityPanel.add(Priority, gridBagConstraints7);
 			authorityPanel.add(getPriority(), gridBagConstraints8);
 			authorityPanel.add(jLabel3, gridBagConstraints9);
-			authorityPanel.add(getSynchronizeTrustLevels(),
-					gridBagConstraints10);
+			authorityPanel.add(getSynchronizeTrustLevels(), gridBagConstraints10);
 			authorityPanel.add(jLabel4, gridBagConstraints11);
 			authorityPanel.add(getPerformAuthorization(), gridBagConstraints13);
 			authorityPanel.add(jLabel5, gridBagConstraints14);
-			authorityPanel
-					.add(getAuthorizationIdentity(), gridBagConstraints15);
+			authorityPanel.add(getAuthorizationIdentity(), gridBagConstraints15);
 			authorityPanel.add(getJPanel(), gridBagConstraints16);
 			authorityPanel.add(jLabel6, gridBagConstraints17);
 		}
 		return authorityPanel;
 	}
+
 
 	/**
 	 * This method initializes name
@@ -527,6 +515,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		}
 		return gtsURI;
 	}
+
 
 	/**
 	 * This method initializes priority
@@ -546,6 +535,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		return priority;
 	}
 
+
 	/**
 	 * This method initializes synchronizeTrustLevels
 	 * 
@@ -560,6 +550,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		return synchronizeTrustLevels;
 	}
 
+
 	/**
 	 * This method initializes performAuthorization
 	 * 
@@ -571,16 +562,16 @@ public class AuthorityWindow extends GridPortalComponent {
 			performAuthorization.addItem(Boolean.FALSE);
 			performAuthorization.addItem(Boolean.TRUE);
 			syncAuthorization();
-			performAuthorization
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							syncAuthorization();
-						}
-					});
+			performAuthorization.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					syncAuthorization();
+				}
+			});
 
 		}
 		return performAuthorization;
 	}
+
 
 	private void syncAuthorization() {
 		Boolean val = (Boolean) getPerformAuthorization().getSelectedItem();
@@ -591,6 +582,7 @@ public class AuthorityWindow extends GridPortalComponent {
 			getAuthorizationIdentity().setEnabled(true);
 		}
 	}
+
 
 	/**
 	 * This method initializes authorizationIdentity
@@ -603,6 +595,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		}
 		return authorizationIdentity;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -628,6 +621,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		return jPanel;
 	}
 
+
 	/**
 	 * This method initializes hours
 	 * 
@@ -643,6 +637,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		return hours;
 	}
 
+
 	/**
 	 * This method initializes minutes
 	 * 
@@ -657,6 +652,7 @@ public class AuthorityWindow extends GridPortalComponent {
 		}
 		return minutes;
 	}
+
 
 	/**
 	 * This method initializes seconds

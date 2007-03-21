@@ -256,9 +256,9 @@
 	<target name="build-gridca" depends="prepare" description="Builds the gridca project">
 		<resolveDependencies extdir="${projects.dir}/gridca/ext">
 			<artifact refid="core.jars" />
+	        <artifact refid="grape.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
-			<artifact refid="core.resources" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -302,11 +302,11 @@
 	<target name="build-dorian" depends="prepare" description="Builds the dorian project">
 		<resolveDependencies extdir="${projects.dir}/dorian/ext">
 			<artifact refid="core.jars" />
+	        <artifact refid="grape.jars" />
 			<artifact refid="mds.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="core.test.jars" />
-			<artifact refid="core.resources" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="mobius.jars" />
 			<artifact refid="authentication.service.client.jars" />
@@ -327,6 +327,7 @@
 	<target name="build-security-ui" depends="prepare" description="Builds the Security UI project">
 		<resolveDependencies extdir="${projects.dir}/security-ui/ext">
 			<artifact refid="dorian.ui.jars" />
+	        <artifact refid="grape.jars" />
 			<artifact refid="dorian.endorsed" />
 			<artifact refid="gts.ui.jars" />
 			<artifact refid="gridgrouper.ui.jars" />
@@ -340,10 +341,10 @@
 	<target name="build-gridgrouper" depends="prepare" description="Builds the Grid Grouper project">
 		<resolveDependencies extdir="${projects.dir}/gridgrouper/ext">
 			<artifact refid="core.jars" />
-			<artifact refid="mds.jars" />
+	 		<artifact refid="grape.jars" />		
+	        <artifact refid="mds.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="core.test.jars" />
-			<artifact refid="core.resources" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
@@ -364,11 +365,11 @@
 	<target name="build-gts" depends="prepare" description="Builds the GTS project">
 		<resolveDependencies extdir="${projects.dir}/gts/ext">
 			<artifact refid="core.jars" />
+	        <artifact refid="grape.jars" />
 			<artifact refid="mds.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="core.test.jars" />
-			<artifact refid="core.resources" />
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="mobius.jars" />

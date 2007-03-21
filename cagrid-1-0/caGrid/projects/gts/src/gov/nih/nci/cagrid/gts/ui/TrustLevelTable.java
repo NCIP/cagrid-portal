@@ -1,12 +1,13 @@
 package gov.nih.nci.cagrid.gts.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+
+import org.cagrid.grape.table.GrapeBaseTable;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -15,7 +16,7 @@ import javax.swing.table.TableColumn;
  * @version $Id: TrustedAuthorityTable.java,v 1.1 2006/03/27 18:52:57 langella
  *          Exp $
  */
-public class TrustLevelTable extends PortalBaseTable {
+public class TrustLevelTable extends GrapeBaseTable {
 	public final static String TRUST_LEVEL = "trust-level";
 
 	public final static String NAME = "Name";

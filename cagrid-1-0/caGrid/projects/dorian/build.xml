@@ -281,7 +281,6 @@
 		<jar jarfile="${build.lib.dir}/${ui.jar.name}" basedir="${build.dest}">
 			    <fileset dir="${build.dest}" includes="**/ui/**"/>
 			    <fileset dir="resources/ui/dorian"/>
-			    <fileset dir="ext/resources/portal/common"/>
 		</jar>
 		
 		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
@@ -353,8 +352,9 @@
 	
 	<!-- Post Introduce Edit-->
 	<target name="ui" description="Run the dorian ui" depends="checkGlobus">
-		<java classname="gov.nih.nci.cagrid.dorian.ui.DorianUI" fork="yes">
+		<java classname="org.cagrid.grape.GridApplication" fork="yes">
 			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
+			<arg value="etc/dorian-ui.xml" />
 	        <classpath refid="service.run.classpath"/>
 	 		<classpath>
 	                <pathelement location="resources/ui/dorian" />

@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gts.service.db.mysql;
 
-import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTable;
 import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTrustLevelsTable;
 
 

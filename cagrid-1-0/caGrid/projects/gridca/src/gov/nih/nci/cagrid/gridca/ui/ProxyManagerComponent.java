@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gridca.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 
 import java.awt.GridBagConstraints;
@@ -12,8 +11,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.portal.GridPortalComponent;
 
 
 /**
@@ -23,7 +23,7 @@ import org.projectmobius.portal.GridPortalComponent;
  * @version $Id: ProxyInformationComponent.java,v 1.3 2005/12/03 07:18:56
  *          langella Exp $
  */
-public class ProxyManagerComponent extends GridPortalComponent {
+public class ProxyManagerComponent extends ApplicationComponent {
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -100,8 +100,6 @@ public class ProxyManagerComponent extends GridPortalComponent {
 	}
 
 
-
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -111,7 +109,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
-			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.weighty = 1.0D;
@@ -142,8 +140,6 @@ public class ProxyManagerComponent extends GridPortalComponent {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-
-
 
 	/**
 	 * This method initializes jPanel
@@ -199,7 +195,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 			proxyPanel = new JPanel();
 			proxyPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Proxy",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,GridCALookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel.getPanelLabelColor()));
 			proxyPanel.setLayout(new GridBagLayout());
 			proxyPanel.add(getProxy(), gridBagConstraints15);
 		}
@@ -256,7 +252,7 @@ public class ProxyManagerComponent extends GridPortalComponent {
 					try {
 						proxyInformation.getCertificates().doubleClick();
 					} catch (Exception ex) {
-						PortalUtils.showErrorMessage(ex);
+						GridApplication.getContext().showErrorMessage(ex);
 					}
 				}
 			});
@@ -297,7 +293,8 @@ public class ProxyManagerComponent extends GridPortalComponent {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils.showErrorMessage("An unexpected error occurred in saving the currently selected proxy!!!");
+			GridApplication.getContext().showErrorMessage(
+				"An unexpected error occurred in saving the currently selected proxy!!!");
 		}
 	}
 
@@ -318,7 +315,8 @@ public class ProxyManagerComponent extends GridPortalComponent {
 						ProxyUtil.saveProxyAsDefault(caddy.getProxy());
 					} catch (Exception ex) {
 						ex.printStackTrace();
-						PortalUtils.showErrorMessage("An unexpected error occurred in setting the default proxy!!!");
+						GridApplication.getContext().showErrorMessage(
+							"An unexpected error occurred in setting the default proxy!!!");
 					}
 				}
 			});
@@ -357,10 +355,10 @@ public class ProxyManagerComponent extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes proxyInformation	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes proxyInformation
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private ProxyPanel getProxyInformation() {
 		if (proxyInformation == null) {
 			proxyInformation = new ProxyPanel();

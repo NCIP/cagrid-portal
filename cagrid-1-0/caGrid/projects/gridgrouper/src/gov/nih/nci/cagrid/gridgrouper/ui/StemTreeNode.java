@@ -43,7 +43,6 @@
 
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 import gov.nih.nci.cagrid.gridgrouper.client.Group;
 import gov.nih.nci.cagrid.gridgrouper.client.Stem;
@@ -55,6 +54,8 @@ import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
+
+import org.cagrid.grape.GridApplication;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -131,7 +132,7 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 			e.printStackTrace();
 			getBrowser().getProgress().stopEvent(id,
 					"Error refreshing " + toString() + "!!!");
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 	}
 

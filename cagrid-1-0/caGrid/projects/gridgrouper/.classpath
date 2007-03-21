@@ -3,7 +3,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="resources/ui/gridgrouper"/>
-	<classpathentry kind="src" path="ext/resources/portal/common"/>
 	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="build/stubs-GridGrouper/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
@@ -73,13 +72,8 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate2-2.1.8.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-client.jar"/>
@@ -90,5 +84,8 @@
 	<classpathentry kind="lib" path="lib/commons-math-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/grouper.jar" sourcepath="/Grouper"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-grape.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-grape-resources.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

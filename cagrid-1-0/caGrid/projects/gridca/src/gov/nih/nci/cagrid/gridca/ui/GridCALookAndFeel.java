@@ -1,8 +1,10 @@
 package gov.nih.nci.cagrid.gridca.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-
 import javax.swing.ImageIcon;
+
+import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.IconUtils;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -11,22 +13,19 @@ import javax.swing.ImageIcon;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GridCALookAndFeel extends PortalLookAndFeel {
-
+public class GridCALookAndFeel extends LookAndFeel {
 
 	public final static ImageIcon getCertificateIcon() {
-		return new javax.swing.ImageIcon(GridCALookAndFeel.class
-				.getResource("/contact-new.png"));
+		return IconUtils.loadIcon("/contact-new.png");
 	}
-	
+
+
 	public final static ImageIcon getProxyManagerIcon() {
-		return new javax.swing.ImageIcon( GridCALookAndFeel.class
-				.getResource("/contact-new.png"));
+		return IconUtils.loadIcon("/contact-new.png");
 	}
-	
-	
+
+
 	public final static ImageIcon getDefaultIcon() {
-		return new javax.swing.ImageIcon(GridCALookAndFeel.class
-				.getResource("/go-home.png"));
+		return IconUtils.loadIcon("/go-home.png");
 	}
 }

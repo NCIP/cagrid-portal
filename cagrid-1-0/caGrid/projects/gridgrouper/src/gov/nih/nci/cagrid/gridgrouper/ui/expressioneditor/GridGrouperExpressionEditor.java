@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor;
 
-import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.bean.LogicalOperator;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
@@ -29,8 +27,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.MultiEventProgressBar;
 
 
 /**
@@ -124,9 +121,11 @@ public class GridGrouperExpressionEditor extends JPanel {
 		this.gridGrouperURIs = gridGrouperURIs;
 		this.expression = new MembershipExpression();
 		this.expression.setLogicRelation(LogicalOperator.AND);
-//		this.setBorder(BorderFactory.createTitledBorder(null, "Grid Grouper Expression Editor",
-//			TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
-//			new Color(62, 109, 181)));
+		// this.setBorder(BorderFactory.createTitledBorder(null, "Grid Grouper
+		// Expression Editor",
+		// TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,
+		// new Font("Dialog", Font.BOLD, 12),
+		// new Color(62, 109, 181)));
 		initialize();
 		if ((loadOnStartup) && (gridGrouperURIs != null) && (gridGrouperURIs.size() > 0)) {
 			this.getGrouperTree().addGridGrouper((String) gridGrouperURIs.get(0), null);
@@ -418,8 +417,9 @@ public class GridGrouperExpressionEditor extends JPanel {
 		this.editorLayout.show(getEditorPanel(), EXPRESSION_EDITOR);
 		repaint();
 	}
-	
-	public void setExpression(MembershipExpression exp){
+
+
+	public void setExpression(MembershipExpression exp) {
 		this.expression = exp;
 		getExpressionTree().getRootNode().resetExpression(exp);
 		setExpressionEditor(exp);
@@ -527,7 +527,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 						ExpressionNode n = (ExpressionNode) currentNode;
 						n.addAndExpression();
 					} else {
-						PortalUtils.showErrorMessage("Please select an expression to add a sub expression to!!!");
+						Util.showErrorMessage("Please select an expression to add a sub expression to!!!");
 					}
 				}
 
@@ -554,7 +554,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 						GroupTreeNode grp = (GroupTreeNode) currentNode;
 						addGroupToCurrentExpression(grp.getGroup());
 					} else {
-						PortalUtils.showErrorMessage("Please select a group to add!!!");
+						Util.showErrorMessage("Please select a group to add!!!");
 					}
 				}
 			});
@@ -579,14 +579,14 @@ public class GridGrouperExpressionEditor extends JPanel {
 					if (currentNode instanceof ExpressionNode) {
 						ExpressionNode n = (ExpressionNode) currentNode;
 						if (n.isRootExpression()) {
-							PortalUtils.showErrorMessage("Cannot remove root expression!!!");
+							Util.showErrorMessage("Cannot remove root expression!!!");
 							return;
 						} else {
 							ExpressionNode parent = (ExpressionNode) n.getParent();
 							parent.removeExpression(n.getExpression());
 						}
 					} else {
-						PortalUtils.showErrorMessage("Please select an expression to remove!!!");
+						Util.showErrorMessage("Please select an expression to remove!!!");
 						return;
 					}
 				}
@@ -692,7 +692,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 						ExpressionNode parent = (ExpressionNode) n.getParent();
 						parent.removeGroup(n.getQuery());
 					} else {
-						PortalUtils.showErrorMessage("Please select a group to remove!!!");
+						Util.showErrorMessage("Please select a group to remove!!!");
 						return;
 					}
 				}
@@ -733,22 +733,13 @@ public class GridGrouperExpressionEditor extends JPanel {
 
 
 	protected void addGroupToCurrentExpression(final Group grp) {
-		MobiusRunnable runner = new MobiusRunnable() {
-			public void execute() {
 
-				DefaultMutableTreeNode currentNode = expressionTree.getCurrentNode();
-				if (currentNode instanceof ExpressionNode) {
-					ExpressionNode exp = (ExpressionNode) currentNode;
-					exp.addGroup(grp);
-				} else {
-					PortalUtils.showErrorMessage("Please select an expression in which to add the group!!!");
-				}
-			}
-		};
-		try {
-			PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
-		} catch (Exception t) {
-			t.getMessage();
+		DefaultMutableTreeNode currentNode = expressionTree.getCurrentNode();
+		if (currentNode instanceof ExpressionNode) {
+			ExpressionNode exp = (ExpressionNode) currentNode;
+			exp.addGroup(grp);
+		} else {
+			Util.showErrorMessage("Please select an expression in which to add the group!!!");
 		}
 	}
 

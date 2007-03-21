@@ -1,23 +1,22 @@
 package gov.nih.nci.cagrid.gridca.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
-
 import java.security.cert.X509Certificate;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.table.GrapeBaseTable;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateTable.java,v 1.1 2006-09-08 17:31:38 langella Exp $
+ * @version $Id: CertificateTable.java,v 1.2 2007-03-21 19:36:22 langella Exp $
  */
-public class CertificateTable extends PortalBaseTable {
+public class CertificateTable extends GrapeBaseTable {
 	public final static String CERTIFICATE = "certificate";
 
 	public final static String SUBJECT = "Subject";
@@ -73,7 +72,7 @@ public class CertificateTable extends PortalBaseTable {
 	public void doubleClick() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+			GridApplication.getContext().addApplicationComponent(
 				new CertificateInformationComponent(getSelectedCertificate()), 600, 425);
 		} else {
 			throw new Exception("No certificate selected, please select a certificate!!!");

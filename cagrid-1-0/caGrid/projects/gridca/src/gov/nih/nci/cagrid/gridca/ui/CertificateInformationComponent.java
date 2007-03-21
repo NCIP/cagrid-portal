@@ -6,15 +6,15 @@ import java.security.cert.X509Certificate;
 
 import javax.swing.JPanel;
 
-import org.projectmobius.portal.GridPortalComponent;
+import org.cagrid.grape.ApplicationComponent;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateInformationComponent.java,v 1.1 2006-09-08 17:31:38 langella Exp $
+ * @version $Id: CertificateInformationComponent.java,v 1.2 2007-03-21 19:36:22 langella Exp $
  */
-public class CertificateInformationComponent extends GridPortalComponent {
+public class CertificateInformationComponent extends ApplicationComponent {
 
 	private javax.swing.JPanel jContentPane = null;
 	private JPanel mainPanel = null;

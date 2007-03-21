@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gts.ui;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.ui.CRLPanel;
 import gov.nih.nci.cagrid.gridca.ui.CertificatePanel;
@@ -38,8 +37,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.portal.GridPortalComponent;
 
 
 /**
@@ -49,7 +49,7 @@ import org.projectmobius.portal.GridPortalComponent;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TrustedAuthorityWindow extends GridPortalComponent {
+public class TrustedAuthorityWindow extends ApplicationComponent {
 
 	private JPanel jContentPane = null;
 
@@ -235,7 +235,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				PortalUtils.showErrorMessage("Error obtaining the trust levels from " + service + ":\n"
+				GridApplication.getContext().showErrorMessage("Error obtaining the trust levels from " + service + ":\n"
 					+ e.getMessage());
 			}
 		}
@@ -684,7 +684,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 				certificatePanel.setCertificate(certificate);
 				this.getTrustedAuthorityName().setText(certificate.getSubjectDN().getName());
 			} catch (Exception ex) {
-				PortalUtils.showErrorMessage(ex);
+				GridApplication.getContext().showErrorMessage(ex);
 			}
 		}
 
@@ -695,7 +695,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 		crlPanel.clearCRL();
 		X509Certificate cert = certificatePanel.getCertificate();
 		if (cert == null) {
-			PortalUtils.showErrorMessage("You must import a certificate before importing a CRL");
+			GridApplication.getContext().showErrorMessage("You must import a certificate before importing a CRL");
 
 		}
 		JFileChooser fc = new JFileChooser();
@@ -707,12 +707,12 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 				try {
 					crl.verify(cert.getPublicKey());
 				} catch (Exception crle) {
-					PortalUtils
+					GridApplication.getContext()
 						.showErrorMessage("Error verifying CRL, the CRL must be issued and signed by same key is the Trusted Authority's Certificate");
 				}
 				crlPanel.setCRL(crl);
 			} catch (Exception ex) {
-				PortalUtils.showErrorMessage(ex);
+				GridApplication.getContext().showErrorMessage(ex);
 			}
 		}
 
@@ -757,7 +757,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			getAddButton().setEnabled(false);
 			X509Certificate cert = this.certificatePanel.getCertificate();
 			if (cert == null) {
-				PortalUtils
+				GridApplication.getContext()
 					.showErrorMessage("No certificate specified, you must specify a certificate to add a Trusted Authority!!!");
 				getAddButton().setEnabled(true);
 				return;
@@ -775,13 +775,13 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			client.addTrustedAuthority(ta);
-			PortalUtils.showMessage("The Trusted Authority, " + ta.getName() + " was succesfully added!!!");
+			GridApplication.getContext().showMessage("The Trusted Authority, " + ta.getName() + " was succesfully added!!!");
 			refresher.refreshTrustedAuthorities();
 			dispose();
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 
 	}
@@ -801,13 +801,13 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
 			client.updateTrustedAuthority(ta);
-			PortalUtils.showMessage("The Trusted Authority, " + ta.getName() + " was succesfully updated!!!");
+			GridApplication.getContext().showMessage("The Trusted Authority, " + ta.getName() + " was succesfully updated!!!");
 			refresher.refreshTrustedAuthorities();
 			getAddButton().setEnabled(true);
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 
 	}

@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import edu.internet2.middleware.subject.Subject;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.Membership;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 
@@ -26,15 +25,15 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.cagrid.grape.GridApplication;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.PortalResourceManager;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -162,6 +161,7 @@ public class GroupBrowser extends JPanel {
 
 	private JButton updatePrivileges = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -174,9 +174,11 @@ public class GroupBrowser extends JPanel {
 
 	}
 
+
 	protected boolean getHasListedMembers() {
 		return hasListedMembers;
 	}
+
 
 	protected void setGroup() {
 		this.serviceURI.setText(this.node.getGridGrouper().getName());
@@ -209,6 +211,7 @@ public class GroupBrowser extends JPanel {
 		this.getRemoveCompositeButton().setEnabled(group.hasComposite());
 	}
 
+
 	/**
 	 * This method initializes this
 	 * 
@@ -235,6 +238,7 @@ public class GroupBrowser extends JPanel {
 		this.add(getGroupDetails(), gridBagConstraints11);
 
 	}
+
 
 	/**
 	 * This method initializes groupProperties
@@ -292,18 +296,13 @@ public class GroupBrowser extends JPanel {
 			groupProperties.add(getGroupName(), gridBagConstraints4);
 			groupProperties.add(jLabel2, gridBagConstraints5);
 			groupProperties.add(getCredentials(), gridBagConstraints6);
-			groupProperties
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Grid Grouper Group",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, GridGrouperLookAndFeel
-											.getPanelLabelColor()));
+			groupProperties.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Grid Grouper Group",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
 		}
 		return groupProperties;
 	}
+
 
 	/**
 	 * This method initializes serviceURI
@@ -318,6 +317,7 @@ public class GroupBrowser extends JPanel {
 		return serviceURI;
 	}
 
+
 	/**
 	 * This method initializes groupName
 	 * 
@@ -330,6 +330,7 @@ public class GroupBrowser extends JPanel {
 		}
 		return groupName;
 	}
+
 
 	/**
 	 * This method initializes credentials
@@ -344,6 +345,7 @@ public class GroupBrowser extends JPanel {
 		return credentials;
 	}
 
+
 	/**
 	 * This method initializes groupDetails
 	 * 
@@ -352,15 +354,13 @@ public class GroupBrowser extends JPanel {
 	private JTabbedPane getGroupDetails() {
 		if (groupDetails == null) {
 			groupDetails = new JTabbedPane();
-			groupDetails.addTab("Details", GridGrouperLookAndFeel
-					.getDetailsIcon(), getDetails(), null);
-			groupDetails.addTab("Privileges", GridGrouperLookAndFeel
-					.getPrivilegesIcon(), getPrivileges(), null);
-			groupDetails.addTab("Members", GridGrouperLookAndFeel
-					.getGroupIcon22x22(), getMembers(), null);
+			groupDetails.addTab("Details", GridGrouperLookAndFeel.getDetailsIcon(), getDetails(), null);
+			groupDetails.addTab("Privileges", GridGrouperLookAndFeel.getPrivilegesIcon(), getPrivileges(), null);
+			groupDetails.addTab("Members", GridGrouperLookAndFeel.getGroupIcon22x22(), getMembers(), null);
 		}
 		return groupDetails;
 	}
+
 
 	/**
 	 * This method initializes details
@@ -375,6 +375,7 @@ public class GroupBrowser extends JPanel {
 		}
 		return details;
 	}
+
 
 	/**
 	 * This method initializes privileges
@@ -397,16 +398,15 @@ public class GroupBrowser extends JPanel {
 			gridBagConstraints30.weightx = 1.0;
 			privileges = new JPanel();
 			privileges.setLayout(new GridBagLayout());
-			privileges.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Privileges",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GridGrouperLookAndFeel.getPanelLabelColor()));
+			privileges.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Privileges",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
 			privileges.add(getJScrollPane2(), gridBagConstraints30);
 			privileges.add(getPrivilegesButtonPanel(), gridBagConstraints31);
 		}
 		return privileges;
 	}
+
 
 	/**
 	 * This method initializes members
@@ -433,17 +433,16 @@ public class GroupBrowser extends JPanel {
 			gridBagConstraints21.gridx = 0;
 			members = new JPanel();
 			members.setLayout(new GridBagLayout());
-			members.setBorder(BorderFactory.createTitledBorder(null,
-					"Group Members",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GridGrouperLookAndFeel.getPanelLabelColor()));
+			members.setBorder(BorderFactory.createTitledBorder(null, "Group Members",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
 			members.add(getMemberSearchPanel(), gridBagConstraints21);
 			members.add(getJScrollPane1(), gridBagConstraints22);
 			members.add(getButtonPanel(), gridBagConstraints29);
 		}
 		return members;
 	}
+
 
 	/**
 	 * This method initializes detailsPanel
@@ -638,11 +637,9 @@ public class GroupBrowser extends JPanel {
 			detailsPanel.add(getDisplayExtension(), gridBagConstraints15);
 			detailsPanel.add(jLabel6, gridBagConstraints16);
 			detailsPanel.add(getSystemExtension(), gridBagConstraints17);
-			detailsPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Stem Details",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GridGrouperLookAndFeel.getPanelLabelColor()));
+			detailsPanel.setBorder(BorderFactory.createTitledBorder(null, "Stem Details",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
 			detailsPanel.add(jLabel7, gridBagConstraints18);
 			detailsPanel.add(getJScrollPane(), gridBagConstraints19);
 			detailsPanel.add(getUpdateGroup(), gridBagConstraints20);
@@ -662,6 +659,7 @@ public class GroupBrowser extends JPanel {
 		return detailsPanel;
 	}
 
+
 	/**
 	 * This method initializes groupId
 	 * 
@@ -676,6 +674,7 @@ public class GroupBrowser extends JPanel {
 		return groupId;
 	}
 
+
 	/**
 	 * This method initializes displayName
 	 * 
@@ -688,6 +687,7 @@ public class GroupBrowser extends JPanel {
 		}
 		return displayName;
 	}
+
 
 	/**
 	 * This method initializes systemName
@@ -702,6 +702,7 @@ public class GroupBrowser extends JPanel {
 		return systemName;
 	}
 
+
 	/**
 	 * This method initializes displayExtension
 	 * 
@@ -710,20 +711,19 @@ public class GroupBrowser extends JPanel {
 	private JTextField getDisplayExtension() {
 		if (displayExtension == null) {
 			displayExtension = new JTextField();
-			displayExtension
-					.addCaretListener(new javax.swing.event.CaretListener() {
-						public void caretUpdate(javax.swing.event.CaretEvent e) {
-							monitorUpdate();
-						}
-					});
+			displayExtension.addCaretListener(new javax.swing.event.CaretListener() {
+				public void caretUpdate(javax.swing.event.CaretEvent e) {
+					monitorUpdate();
+				}
+			});
 
 		}
 		return displayExtension;
 	}
 
+
 	private void monitorUpdate() {
-		if (!getDisplayExtension().getText()
-				.equals(group.getDisplayExtension())) {
+		if (!getDisplayExtension().getText().equals(group.getDisplayExtension())) {
 			this.getUpdateGroup().setEnabled(true);
 		} else if (!getDescription().getText().equals(group.getDescription())) {
 			this.getUpdateGroup().setEnabled(true);
@@ -734,6 +734,7 @@ public class GroupBrowser extends JPanel {
 		}
 	}
 
+
 	/**
 	 * This method initializes systemExtension
 	 * 
@@ -743,15 +744,15 @@ public class GroupBrowser extends JPanel {
 		if (systemExtension == null) {
 			systemExtension = new JTextField();
 			systemExtension.setEditable(true);
-			systemExtension
-					.addCaretListener(new javax.swing.event.CaretListener() {
-						public void caretUpdate(javax.swing.event.CaretEvent e) {
-							monitorUpdate();
-						}
-					});
+			systemExtension.addCaretListener(new javax.swing.event.CaretListener() {
+				public void caretUpdate(javax.swing.event.CaretEvent e) {
+					monitorUpdate();
+				}
+			});
 		}
 		return systemExtension;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane
@@ -765,6 +766,7 @@ public class GroupBrowser extends JPanel {
 		}
 		return jScrollPane;
 	}
+
 
 	/**
 	 * This method initializes description
@@ -783,6 +785,7 @@ public class GroupBrowser extends JPanel {
 		}
 		return description;
 	}
+
 
 	/**
 	 * This method initializes updateGroup
@@ -803,8 +806,7 @@ public class GroupBrowser extends JPanel {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -815,14 +817,14 @@ public class GroupBrowser extends JPanel {
 		return updateGroup;
 	}
 
+
 	private void updateGroup() {
 		try {
 
 			if (!getSystemExtension().getText().equals(group.getExtension())) {
 				group.setExtension(getSystemExtension().getText());
 			}
-			if (!getDisplayExtension().getText().equals(
-					group.getDisplayExtension())) {
+			if (!getDisplayExtension().getText().equals(group.getDisplayExtension())) {
 				group.setDisplayExtension(getDisplayExtension().getText());
 			}
 			if (!getDescription().getText().equals(group.getDescription())) {
@@ -832,11 +834,12 @@ public class GroupBrowser extends JPanel {
 			setGroup();
 			this.monitorUpdate();
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 			node.refresh();
 			this.monitorUpdate();
 		}
 	}
+
 
 	/**
 	 * This method initializes created
@@ -851,6 +854,7 @@ public class GroupBrowser extends JPanel {
 		return created;
 	}
 
+
 	/**
 	 * This method initializes creator
 	 * 
@@ -863,6 +867,7 @@ public class GroupBrowser extends JPanel {
 		}
 		return creator;
 	}
+
 
 	/**
 	 * This method initializes lastModified
@@ -877,6 +882,7 @@ public class GroupBrowser extends JPanel {
 		return lastModified;
 	}
 
+
 	/**
 	 * This method initializes lastModifiedBy
 	 * 
@@ -890,9 +896,11 @@ public class GroupBrowser extends JPanel {
 		return lastModifiedBy;
 	}
 
+
 	protected GroupTreeNode getGroupNode() {
 		return node;
 	}
+
 
 	/**
 	 * This method initializes memberSearchPanel
@@ -913,16 +921,15 @@ public class GroupBrowser extends JPanel {
 			gridBagConstraints23.weightx = 1.0;
 			memberSearchPanel = new JPanel();
 			memberSearchPanel.setLayout(new GridBagLayout());
-			memberSearchPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Member Search",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GridGrouperLookAndFeel.getPanelLabelColor()));
+			memberSearchPanel.setBorder(BorderFactory.createTitledBorder(null, "Member Search",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
 			memberSearchPanel.add(getMemberFilter(), gridBagConstraints23);
 			memberSearchPanel.add(getListMembers(), gridBagConstraints24);
 		}
 		return memberSearchPanel;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane1
@@ -937,6 +944,7 @@ public class GroupBrowser extends JPanel {
 		return jScrollPane1;
 	}
 
+
 	/**
 	 * This method initializes membersTable
 	 * 
@@ -948,6 +956,7 @@ public class GroupBrowser extends JPanel {
 		}
 		return membersTable;
 	}
+
 
 	/**
 	 * This method initializes memberFilter
@@ -964,6 +973,7 @@ public class GroupBrowser extends JPanel {
 		}
 		return memberFilter;
 	}
+
 
 	/**
 	 * This method initializes listMembers
@@ -983,8 +993,7 @@ public class GroupBrowser extends JPanel {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -996,13 +1005,13 @@ public class GroupBrowser extends JPanel {
 		return listMembers;
 	}
 
+
 	protected void listMembers() {
 
 		getListMembers().setEnabled(false);
 		getMemberFilter().setEnabled(false);
 
-		int eid = node.getBrowser().getProgress().startEvent(
-				"Listing group members....");
+		int eid = node.getBrowser().getProgress().startEvent("Listing group members....");
 		try {
 			getMembersTable().clearTable();
 			String type = (String) getMemberFilter().getSelectedItem();
@@ -1024,12 +1033,10 @@ public class GroupBrowser extends JPanel {
 				getMembersTable().addMember(m);
 			}
 			hasListedMembers = true;
-			node.getBrowser().getProgress().stopEvent(eid,
-					"Successfully listed group members!!!");
+			node.getBrowser().getProgress().stopEvent(eid, "Successfully listed group members!!!");
 		} catch (Exception e) {
-			node.getBrowser().getProgress().stopEvent(eid,
-					"Error listing group members!!!");
-			PortalUtils.showErrorMessage(e);
+			node.getBrowser().getProgress().stopEvent(eid, "Error listing group members!!!");
+			GridApplication.getContext().showErrorMessage(e);
 			node.refresh();
 			e.printStackTrace();
 		} finally {
@@ -1038,6 +1045,7 @@ public class GroupBrowser extends JPanel {
 
 		}
 	}
+
 
 	/**
 	 * This method initializes hasComposite
@@ -1052,6 +1060,7 @@ public class GroupBrowser extends JPanel {
 		return hasComposite;
 	}
 
+
 	/**
 	 * This method initializes isComposite
 	 * 
@@ -1064,6 +1073,7 @@ public class GroupBrowser extends JPanel {
 		}
 		return isComposite;
 	}
+
 
 	/**
 	 * This method initializes buttonPanel
@@ -1081,6 +1091,7 @@ public class GroupBrowser extends JPanel {
 		return buttonPanel;
 	}
 
+
 	/**
 	 * This method initializes addMember
 	 * 
@@ -1097,21 +1108,16 @@ public class GroupBrowser extends JPanel {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
 							if (node.getGroup().hasComposite()) {
-								PortalUtils
-										.showErrorMessage("You cannot add a member to a composite group!!!");
+								GridApplication.getContext().showErrorMessage(
+									"You cannot add a member to a composite group!!!");
 							} else {
-								AddMemberWindow window = new AddMemberWindow(
-										gp, node);
-								PortalResourceManager.getInstance()
-										.getGridPortal()
-										.addGridPortalComponent(window, 600,
-												300);
+								AddMemberWindow window = new AddMemberWindow(gp, node);
+								GridApplication.getContext().addApplicationComponent(window, 600, 300);
 							}
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -1121,6 +1127,7 @@ public class GroupBrowser extends JPanel {
 		}
 		return addMember;
 	}
+
 
 	/**
 	 * This method initializes removeMemberButton
@@ -1133,42 +1140,37 @@ public class GroupBrowser extends JPanel {
 			removeMemberButton.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
 			removeMemberButton.setMnemonic(KeyEvent.VK_UNDEFINED);
 			removeMemberButton.setText("Remove Member");
-			removeMemberButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							MobiusRunnable runner = new MobiusRunnable() {
-								public void execute() {
+			removeMemberButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
 
-									try {
-										Membership m = getMembersTable()
-												.getSelectedMember();
-										node.getGroup().deleteMember(
-												m.getMember().getSubject());
-										if (getHasListedMembers()) {
-											listMembers();
-										}
-
-									} catch (Exception e) {
-										e.printStackTrace();
-										PortalUtils.showErrorMessage(e
-												.getMessage());
-									}
-
-								}
-							};
 							try {
-								PortalResourceManager.getInstance()
-										.getThreadManager()
-										.executeInBackground(runner);
-							} catch (Exception t) {
-								t.getMessage();
-							}
-						}
+								Membership m = getMembersTable().getSelectedMember();
+								node.getGroup().deleteMember(m.getMember().getSubject());
+								if (getHasListedMembers()) {
+									listMembers();
+								}
 
-					});
+							} catch (Exception e) {
+								e.printStackTrace();
+								GridApplication.getContext().showErrorMessage(e.getMessage());
+							}
+
+						}
+					};
+					try {
+						GridApplication.getContext().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+
+			});
 		}
 		return removeMemberButton;
 	}
+
 
 	/**
 	 * This method initializes removeCompositeButton
@@ -1178,42 +1180,39 @@ public class GroupBrowser extends JPanel {
 	private JButton getRemoveCompositeButton() {
 		if (removeCompositeButton == null) {
 			removeCompositeButton = new JButton();
-			removeCompositeButton
-					.setIcon(GridGrouperLookAndFeel.getCloseIcon());
+			removeCompositeButton.setIcon(GridGrouperLookAndFeel.getCloseIcon());
 			removeCompositeButton.setText("Remove Composite Member");
-			removeCompositeButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							MobiusRunnable runner = new MobiusRunnable() {
-								public void execute() {
+			removeCompositeButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
 
-									try {
-										node.getGroup().deleteCompositeMember();
-										node.refresh();
-										setGroup();
-										if (getHasListedMembers()) {
-											listMembers();
-										}
-									} catch (Exception e) {
-										e.printStackTrace();
-										PortalUtils.showErrorMessage(e);
-									}
-
-								}
-							};
 							try {
-								PortalResourceManager.getInstance()
-										.getThreadManager()
-										.executeInBackground(runner);
-							} catch (Exception t) {
-								t.getMessage();
+								node.getGroup().deleteCompositeMember();
+								node.refresh();
+								setGroup();
+								if (getHasListedMembers()) {
+									listMembers();
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+								GridApplication.getContext().showErrorMessage(e);
 							}
-						}
 
-					});
+						}
+					};
+					try {
+						GridApplication.getContext().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+
+			});
 		}
 		return removeCompositeButton;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane2
@@ -1228,6 +1227,7 @@ public class GroupBrowser extends JPanel {
 		return jScrollPane2;
 	}
 
+
 	/**
 	 * This method initializes privilegesTable
 	 * 
@@ -1239,6 +1239,7 @@ public class GroupBrowser extends JPanel {
 		}
 		return privilegesTable;
 	}
+
 
 	/**
 	 * This method initializes privilegesButtonPanel
@@ -1256,13 +1257,13 @@ public class GroupBrowser extends JPanel {
 		return privilegesButtonPanel;
 	}
 
+
 	protected void loadPrivileges() {
 		MobiusRunnable runner = new MobiusRunnable() {
 			public void execute() {
 				synchronized (getPrivilegesTable()) {
 					int eid = node.getBrowser().getProgress().startEvent(
-							"Loading the privileges for "
-									+ group.getDisplayExtension() + "...");
+						"Loading the privileges for " + group.getDisplayExtension() + "...");
 					try {
 
 						getPrivilegesTable().clearTable();
@@ -1271,8 +1272,7 @@ public class GroupBrowser extends JPanel {
 						Iterator itr1 = s1.iterator();
 						while (itr1.hasNext()) {
 							Subject sub = (Subject) itr1.next();
-							GroupPrivilegeCaddy caddy = new GroupPrivilegeCaddy(
-									sub.getId());
+							GroupPrivilegeCaddy caddy = new GroupPrivilegeCaddy(sub.getId());
 							caddy.setAdmin(true);
 							map.put(caddy.getIdentity(), caddy);
 						}
@@ -1283,8 +1283,7 @@ public class GroupBrowser extends JPanel {
 							Subject sub = (Subject) itr2.next();
 							GroupPrivilegeCaddy caddy = null;
 							if (map.containsKey(sub.getId())) {
-								caddy = (GroupPrivilegeCaddy) map.get(sub
-										.getId());
+								caddy = (GroupPrivilegeCaddy) map.get(sub.getId());
 							} else {
 								caddy = new GroupPrivilegeCaddy(sub.getId());
 								map.put(caddy.getIdentity(), caddy);
@@ -1298,8 +1297,7 @@ public class GroupBrowser extends JPanel {
 							Subject sub = (Subject) itr3.next();
 							GroupPrivilegeCaddy caddy = null;
 							if (map.containsKey(sub.getId())) {
-								caddy = (GroupPrivilegeCaddy) map.get(sub
-										.getId());
+								caddy = (GroupPrivilegeCaddy) map.get(sub.getId());
 							} else {
 								caddy = new GroupPrivilegeCaddy(sub.getId());
 								map.put(caddy.getIdentity(), caddy);
@@ -1313,8 +1311,7 @@ public class GroupBrowser extends JPanel {
 							Subject sub = (Subject) itr4.next();
 							GroupPrivilegeCaddy caddy = null;
 							if (map.containsKey(sub.getId())) {
-								caddy = (GroupPrivilegeCaddy) map.get(sub
-										.getId());
+								caddy = (GroupPrivilegeCaddy) map.get(sub.getId());
 							} else {
 								caddy = new GroupPrivilegeCaddy(sub.getId());
 								map.put(caddy.getIdentity(), caddy);
@@ -1328,8 +1325,7 @@ public class GroupBrowser extends JPanel {
 							Subject sub = (Subject) itr5.next();
 							GroupPrivilegeCaddy caddy = null;
 							if (map.containsKey(sub.getId())) {
-								caddy = (GroupPrivilegeCaddy) map.get(sub
-										.getId());
+								caddy = (GroupPrivilegeCaddy) map.get(sub.getId());
 							} else {
 								caddy = new GroupPrivilegeCaddy(sub.getId());
 								map.put(caddy.getIdentity(), caddy);
@@ -1343,8 +1339,7 @@ public class GroupBrowser extends JPanel {
 							Subject sub = (Subject) itr6.next();
 							GroupPrivilegeCaddy caddy = null;
 							if (map.containsKey(sub.getId())) {
-								caddy = (GroupPrivilegeCaddy) map.get(sub
-										.getId());
+								caddy = (GroupPrivilegeCaddy) map.get(sub.getId());
 							} else {
 								caddy = new GroupPrivilegeCaddy(sub.getId());
 								map.put(caddy.getIdentity(), caddy);
@@ -1354,30 +1349,25 @@ public class GroupBrowser extends JPanel {
 
 						Iterator itr7 = map.values().iterator();
 						while (itr7.hasNext()) {
-							getPrivilegesTable().addPrivilege(
-									(GroupPrivilegeCaddy) itr7.next());
+							getPrivilegesTable().addPrivilege((GroupPrivilegeCaddy) itr7.next());
 						}
-						node.getBrowser().getProgress().stopEvent(
-								eid,
-								"Loaded the privileges for "
-										+ group.getDisplayExtension() + "!!!");
+						node.getBrowser().getProgress().stopEvent(eid,
+							"Loaded the privileges for " + group.getDisplayExtension() + "!!!");
 					} catch (Exception e) {
-						node.getBrowser().getProgress().stopEvent(
-								eid,
-								"Error loading the privileges for "
-										+ group.getDisplayExtension() + "!!!");
-						PortalUtils.showErrorMessage(e);
+						node.getBrowser().getProgress().stopEvent(eid,
+							"Error loading the privileges for " + group.getDisplayExtension() + "!!!");
+						GridApplication.getContext().showErrorMessage(e);
 					}
 				}
 			}
 		};
 		try {
-			PortalResourceManager.getInstance().getThreadManager()
-					.executeInBackground(runner);
+			GridApplication.getContext().executeInBackground(runner);
 		} catch (Exception t) {
 			t.getMessage();
 		}
 	}
+
 
 	/**
 	 * This method initializes findPrivileges
@@ -1389,15 +1379,15 @@ public class GroupBrowser extends JPanel {
 			findPrivileges = new JButton();
 			findPrivileges.setText("Get Privileges");
 			findPrivileges.setIcon(GridGrouperLookAndFeel.getQueryIcon());
-			findPrivileges
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							loadPrivileges();
-						}
-					});
+			findPrivileges.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					loadPrivileges();
+				}
+			});
 		}
 		return findPrivileges;
 	}
+
 
 	/**
 	 * This method initializes addPrivilege
@@ -1415,20 +1405,16 @@ public class GroupBrowser extends JPanel {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
 							try {
-								PortalResourceManager.getInstance()
-										.getGridPortal()
-										.addGridPortalComponent(
-												new GroupPrivilegeWindow(gb),
-												500, 225);
+								GridApplication.getContext().addApplicationComponent(new GroupPrivilegeWindow(gb), 500,
+									225);
 							} catch (Exception e) {
 								e.printStackTrace();
-								PortalUtils.showErrorMessage(e);
+								GridApplication.getContext().showErrorMessage(e);
 							}
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -1439,6 +1425,7 @@ public class GroupBrowser extends JPanel {
 		return addPrivilege;
 	}
 
+
 	/**
 	 * This method initializes updatePrivileges
 	 * 
@@ -1448,31 +1435,27 @@ public class GroupBrowser extends JPanel {
 		if (updatePrivileges == null) {
 			updatePrivileges = new JButton();
 			updatePrivileges.setText("Update Privilege(s)");
-			updatePrivileges
-					.setIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
-			updatePrivileges
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							MobiusRunnable runner = new MobiusRunnable() {
-								public void execute() {
-									try {
-										getPrivilegesTable().doubleClick();
-									} catch (Exception e) {
-										e.printStackTrace();
-										PortalUtils.showErrorMessage(e);
-									}
-								}
-							};
+			updatePrivileges.setIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
+			updatePrivileges.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
 							try {
-								PortalResourceManager.getInstance()
-										.getThreadManager()
-										.executeInBackground(runner);
-							} catch (Exception t) {
-								t.getMessage();
+								getPrivilegesTable().doubleClick();
+							} catch (Exception e) {
+								e.printStackTrace();
+								GridApplication.getContext().showErrorMessage(e);
 							}
 						}
+					};
+					try {
+						GridApplication.getContext().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
 
-					});
+			});
 		}
 		return updatePrivileges;
 	}

@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.gridgrouper.ui;
 import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.NamingPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
@@ -23,20 +22,20 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class StemPrivilegeWindow extends GridPortalComponent {
+public class StemPrivilegeWindow extends ApplicationComponent {
 
 	private static final long serialVersionUID = 1L;
 
@@ -68,6 +67,7 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 
 	private StemI targetStem;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -75,6 +75,7 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 	public StemPrivilegeWindow(StemBrowser browser) {
 		this(browser, null);
 	}
+
 
 	public StemPrivilegeWindow(StemBrowser browser, StemPrivilegeCaddy caddy) {
 		super();
@@ -84,6 +85,7 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 		this.targetStem = browser.getStem();
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -101,6 +103,7 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 		this.setFrameIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
 	}
 
+
 	/**
 	 * This method initializes jContentPane
 	 * 
@@ -114,6 +117,7 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes mainPanel
@@ -159,16 +163,13 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			if (update) {
-				mainPanel.setBorder(BorderFactory.createTitledBorder(null,
-						"Update Privilege(s)",
-						TitledBorder.DEFAULT_JUSTIFICATION,
-						TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-								Font.BOLD, 12), new Color(62, 109, 181)));
+				mainPanel.setBorder(BorderFactory.createTitledBorder(null, "Update Privilege(s)",
+					TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,
+					new Font("Dialog", Font.BOLD, 12), new Color(62, 109, 181)));
 			} else {
-				mainPanel.setBorder(BorderFactory.createTitledBorder(null,
-						"Add Privilege(s)", TitledBorder.DEFAULT_JUSTIFICATION,
-						TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-								Font.BOLD, 12), new Color(62, 109, 181)));
+				mainPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Privilege(s)",
+					TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,
+					new Font("Dialog", Font.BOLD, 12), new Color(62, 109, 181)));
 			}
 			mainPanel.add(jLabel, gridBagConstraints1);
 			mainPanel.add(getIdentity(), gridBagConstraints2);
@@ -178,6 +179,7 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes identity
 	 * 
@@ -185,14 +187,15 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 	 */
 	private JTextField getIdentity() {
 		if (identity == null) {
-			identity = new JTextField();	
-			if(caddy!=null){
+			identity = new JTextField();
+			if (caddy != null) {
 				identity.setText(caddy.getIdentity());
 				identity.setEditable(false);
 			}
 		}
 		return identity;
 	}
+
 
 	/**
 	 * This method initializes privsPanel
@@ -223,10 +226,9 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 			jLabel1.setText("Stem");
 			privsPanel = new JPanel();
 			privsPanel.setLayout(new GridBagLayout());
-			privsPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Privilege(s)", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-							Font.BOLD, 12), new Color(62, 109, 181)));
+			privsPanel.setBorder(BorderFactory.createTitledBorder(null, "Privilege(s)",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+				new Color(62, 109, 181)));
 			privsPanel.add(getStem(), gridBagConstraints3);
 			privsPanel.add(jLabel1, gridBagConstraints4);
 			privsPanel.add(getCreate(), gridBagConstraints6);
@@ -234,6 +236,7 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 		}
 		return privsPanel;
 	}
+
 
 	/**
 	 * This method initializes stem
@@ -243,12 +246,13 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 	private JCheckBox getStem() {
 		if (stem == null) {
 			stem = new JCheckBox();
-			if ((caddy!=null)&&(caddy.hasStem())) {
+			if ((caddy != null) && (caddy.hasStem())) {
 				stem.setSelected(true);
 			}
 		}
 		return stem;
 	}
+
 
 	/**
 	 * This method initializes create
@@ -258,12 +262,13 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 	private JCheckBox getCreate() {
 		if (create == null) {
 			create = new JCheckBox();
-			if ((caddy!=null)&&(caddy.hasCreate())) {
+			if ((caddy != null) && (caddy.hasCreate())) {
 				create.setSelected(true);
 			}
 		}
 		return create;
 	}
+
 
 	/**
 	 * This method initializes remove
@@ -287,8 +292,7 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -299,13 +303,13 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 		return remove;
 	}
 
+
 	private void addUpdatePrivileges() {
 		try {
 
 			String id = Utils.clean(getIdentity().getText());
 			if (id == null) {
-				PortalUtils
-						.showErrorMessage("Please enter a valid identity!!!");
+				GridApplication.getContext().showErrorMessage("Please enter a valid identity!!!");
 			}
 			boolean reload = false;
 			StringBuffer sb = new StringBuffer();
@@ -322,16 +326,17 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 			}
 
 			dispose();
-			
+
 			if (reload) {
 				browser.loadPrivileges();
 			}
-			PortalUtils.showMessage(sb.toString());
+			GridApplication.getContext().showMessage(sb.toString());
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 
 	}
+
 
 	private String addUpdateCreate() throws Exception {
 		boolean isSelected = getCreate().isSelected();
@@ -339,9 +344,9 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 		if (caddy != null) {
 			wasSelected = caddy.hasCreate();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected,
-				NamingPrivilege.CREATE);
+		return addUpdatePrivilege(wasSelected, isSelected, NamingPrivilege.CREATE);
 	}
+
 
 	private String addUpdateStem() throws Exception {
 		boolean isSelected = getStem().isSelected();
@@ -352,8 +357,8 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 		return addUpdatePrivilege(wasSelected, isSelected, NamingPrivilege.STEM);
 	}
 
-	private String addUpdatePrivilege(boolean wasSelected, boolean selectedNow,
-			Privilege priv) throws Exception {
+
+	private String addUpdatePrivilege(boolean wasSelected, boolean selectedNow, Privilege priv) throws Exception {
 		String id = Utils.clean(getIdentity().getText());
 		Subject subj = SubjectUtils.getSubject(id);
 		if (update) {
@@ -363,8 +368,7 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 					return "GRANTED " + priv.getName() + " privilege.";
 				} catch (Exception e) {
 					e.printStackTrace();
-					throw new Exception("ERROR granting " + priv.getName()
-							+ " privilege: " + e.getMessage());
+					throw new Exception("ERROR granting " + priv.getName() + " privilege: " + e.getMessage());
 				}
 
 			} else if (wasSelected && !selectedNow) {
@@ -373,8 +377,7 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 					return "REVOKED " + priv.getName() + " privilege.";
 				} catch (Exception e) {
 					e.printStackTrace();
-					throw new Exception("ERROR revoking " + priv.getName()
-							+ " privilege: " + e.getMessage());
+					throw new Exception("ERROR revoking " + priv.getName() + " privilege: " + e.getMessage());
 				}
 			}
 		} else {
@@ -384,8 +387,7 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 					return "GRANTED " + priv.getName() + " privilege.";
 				} catch (Exception e) {
 					e.printStackTrace();
-					throw new Exception("ERROR granting " + priv.getName()
-							+ " privilege: " + e.getMessage());
+					throw new Exception("ERROR granting " + priv.getName() + " privilege: " + e.getMessage());
 				}
 			}
 		}

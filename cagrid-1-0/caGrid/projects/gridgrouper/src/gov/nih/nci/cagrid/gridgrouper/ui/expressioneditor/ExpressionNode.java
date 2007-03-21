@@ -43,7 +43,6 @@
 
 package gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.bean.LogicalOperator;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
@@ -134,7 +133,7 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 		MembershipQuery[] nmq = new MembershipQuery[size + 1];
 		for (int i = 0; i < size; i++) {
 			if (mq[i].getGroupIdentifier().equals(grp.getGroupIdentifier())) {
-				PortalUtils.showErrorMessage("The group "
+				Util.showErrorMessage("The group "
 						+ grp.getDisplayName()
 						+ " has already exists in the expression!!!");
 				return;

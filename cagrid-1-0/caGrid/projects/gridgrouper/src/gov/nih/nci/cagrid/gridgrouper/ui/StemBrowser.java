@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 
 import java.awt.BorderLayout;
@@ -24,15 +23,15 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.cagrid.grape.GridApplication;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.PortalResourceManager;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -176,6 +175,7 @@ public class StemBrowser extends JPanel {
 
 	private JButton addPrivileges = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -187,6 +187,7 @@ public class StemBrowser extends JPanel {
 		this.setStem();
 
 	}
+
 
 	protected void setStem() {
 		this.serviceURI.setText(this.node.getGridGrouper().getName());
@@ -218,8 +219,7 @@ public class StemBrowser extends JPanel {
 		getGroupsTable().clearTable();
 		int count = node.getChildCount();
 		for (int i = 0; i < count; i++) {
-			GridGrouperBaseTreeNode child = (GridGrouperBaseTreeNode) node
-					.getChildAt(i);
+			GridGrouperBaseTreeNode child = (GridGrouperBaseTreeNode) node.getChildAt(i);
 			if (child instanceof StemTreeNode) {
 				getChildStemsTable().addStem((StemTreeNode) child);
 			}
@@ -228,6 +228,7 @@ public class StemBrowser extends JPanel {
 			}
 		}
 	}
+
 
 	/**
 	 * This method initializes this
@@ -255,6 +256,7 @@ public class StemBrowser extends JPanel {
 		this.add(getStemDetails(), gridBagConstraints11);
 
 	}
+
 
 	/**
 	 * This method initializes stemProperties
@@ -312,18 +314,13 @@ public class StemBrowser extends JPanel {
 			stemProperties.add(getStemName(), gridBagConstraints4);
 			stemProperties.add(jLabel2, gridBagConstraints5);
 			stemProperties.add(getCredentials(), gridBagConstraints6);
-			stemProperties
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Grid Grouper Stem",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, GridGrouperLookAndFeel
-											.getPanelLabelColor()));
+			stemProperties.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Grid Grouper Stem",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
 		}
 		return stemProperties;
 	}
+
 
 	/**
 	 * This method initializes serviceURI
@@ -338,6 +335,7 @@ public class StemBrowser extends JPanel {
 		return serviceURI;
 	}
 
+
 	/**
 	 * This method initializes stemName
 	 * 
@@ -350,6 +348,7 @@ public class StemBrowser extends JPanel {
 		}
 		return stemName;
 	}
+
 
 	/**
 	 * This method initializes credentials
@@ -364,9 +363,11 @@ public class StemBrowser extends JPanel {
 		return credentials;
 	}
 
+
 	public StemTreeNode getStemNode() {
 		return node;
 	}
+
 
 	/**
 	 * This method initializes stemDetails
@@ -376,17 +377,14 @@ public class StemBrowser extends JPanel {
 	private JTabbedPane getStemDetails() {
 		if (stemDetails == null) {
 			stemDetails = new JTabbedPane();
-			stemDetails.addTab("Details", GridGrouperLookAndFeel
-					.getDetailsIcon(), getDetails(), null);
-			stemDetails.addTab("Privileges", GridGrouperLookAndFeel
-					.getPrivilegesIcon(), getPrivileges(), null);
-			stemDetails.addTab("Child Stems", GridGrouperLookAndFeel
-					.getStemIcon16x16(), getChildStems(), null);
-			stemDetails.addTab("Groups", GridGrouperLookAndFeel
-					.getGroupIcon22x22(), getGroups(), null);
+			stemDetails.addTab("Details", GridGrouperLookAndFeel.getDetailsIcon(), getDetails(), null);
+			stemDetails.addTab("Privileges", GridGrouperLookAndFeel.getPrivilegesIcon(), getPrivileges(), null);
+			stemDetails.addTab("Child Stems", GridGrouperLookAndFeel.getStemIcon16x16(), getChildStems(), null);
+			stemDetails.addTab("Groups", GridGrouperLookAndFeel.getGroupIcon22x22(), getGroups(), null);
 		}
 		return stemDetails;
 	}
+
 
 	/**
 	 * This method initializes details
@@ -401,6 +399,7 @@ public class StemBrowser extends JPanel {
 		}
 		return details;
 	}
+
 
 	/**
 	 * This method initializes privileges
@@ -421,6 +420,7 @@ public class StemBrowser extends JPanel {
 		}
 		return privileges;
 	}
+
 
 	/**
 	 * This method initializes childStems
@@ -456,6 +456,7 @@ public class StemBrowser extends JPanel {
 		return childStems;
 	}
 
+
 	/**
 	 * This method initializes groups
 	 * 
@@ -483,6 +484,7 @@ public class StemBrowser extends JPanel {
 		}
 		return groups;
 	}
+
 
 	/**
 	 * This method initializes detailsPanel
@@ -649,11 +651,9 @@ public class StemBrowser extends JPanel {
 			detailsPanel.add(getDisplayExtension(), gridBagConstraints15);
 			detailsPanel.add(jLabel6, gridBagConstraints16);
 			detailsPanel.add(getSystemExtension(), gridBagConstraints17);
-			detailsPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Stem Details",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GridGrouperLookAndFeel.getPanelLabelColor()));
+			detailsPanel.setBorder(BorderFactory.createTitledBorder(null, "Stem Details",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
 			detailsPanel.add(jLabel7, gridBagConstraints18);
 			detailsPanel.add(getJScrollPane(), gridBagConstraints19);
 			detailsPanel.add(getUpdateStem(), gridBagConstraints20);
@@ -669,6 +669,7 @@ public class StemBrowser extends JPanel {
 		return detailsPanel;
 	}
 
+
 	/**
 	 * This method initializes groupId
 	 * 
@@ -683,6 +684,7 @@ public class StemBrowser extends JPanel {
 		return groupId;
 	}
 
+
 	/**
 	 * This method initializes displayName
 	 * 
@@ -695,6 +697,7 @@ public class StemBrowser extends JPanel {
 		}
 		return displayName;
 	}
+
 
 	/**
 	 * This method initializes systemName
@@ -709,6 +712,7 @@ public class StemBrowser extends JPanel {
 		return systemName;
 	}
 
+
 	/**
 	 * This method initializes displayExtension
 	 * 
@@ -717,16 +721,16 @@ public class StemBrowser extends JPanel {
 	private JTextField getDisplayExtension() {
 		if (displayExtension == null) {
 			displayExtension = new JTextField();
-			displayExtension
-					.addCaretListener(new javax.swing.event.CaretListener() {
-						public void caretUpdate(javax.swing.event.CaretEvent e) {
-							monitorUpdate();
-						}
-					});
+			displayExtension.addCaretListener(new javax.swing.event.CaretListener() {
+				public void caretUpdate(javax.swing.event.CaretEvent e) {
+					monitorUpdate();
+				}
+			});
 
 		}
 		return displayExtension;
 	}
+
 
 	private void monitorUpdate() {
 		if (!getDisplayExtension().getText().equals(stem.getDisplayExtension())) {
@@ -737,6 +741,7 @@ public class StemBrowser extends JPanel {
 			this.getUpdateStem().setEnabled(false);
 		}
 	}
+
 
 	/**
 	 * This method initializes systemExtension
@@ -751,6 +756,7 @@ public class StemBrowser extends JPanel {
 		return systemExtension;
 	}
 
+
 	/**
 	 * This method initializes jScrollPane
 	 * 
@@ -763,6 +769,7 @@ public class StemBrowser extends JPanel {
 		}
 		return jScrollPane;
 	}
+
 
 	/**
 	 * This method initializes description
@@ -781,6 +788,7 @@ public class StemBrowser extends JPanel {
 		}
 		return description;
 	}
+
 
 	/**
 	 * This method initializes updateStem
@@ -801,8 +809,7 @@ public class StemBrowser extends JPanel {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -813,10 +820,10 @@ public class StemBrowser extends JPanel {
 		return updateStem;
 	}
 
+
 	private void updateStem() {
 		try {
-			if (!getDisplayExtension().getText().equals(
-					stem.getDisplayExtension())) {
+			if (!getDisplayExtension().getText().equals(stem.getDisplayExtension())) {
 				stem.setDisplayExtension(getDisplayExtension().getText());
 			}
 			if (!getDescription().getText().equals(stem.getDescription())) {
@@ -826,11 +833,12 @@ public class StemBrowser extends JPanel {
 			setStem();
 			this.monitorUpdate();
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 			node.refresh();
 			this.monitorUpdate();
 		}
 	}
+
 
 	/**
 	 * This method initializes privsList
@@ -853,16 +861,15 @@ public class StemBrowser extends JPanel {
 			gridBagConstraints21.weightx = 1.0;
 			privsList = new JPanel();
 			privsList.setLayout(new GridBagLayout());
-			privsList.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Privileges",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GridGrouperLookAndFeel.getPanelLabelColor()));
+			privsList.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Privileges",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
 			privsList.add(getJScrollPane1(), gridBagConstraints21);
 			privsList.add(getPrivButtons(), gridBagConstraints23);
 		}
 		return privsList;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane1
@@ -877,6 +884,7 @@ public class StemBrowser extends JPanel {
 		return jScrollPane1;
 	}
 
+
 	/**
 	 * This method initializes privs
 	 * 
@@ -888,6 +896,7 @@ public class StemBrowser extends JPanel {
 		}
 		return privs;
 	}
+
 
 	/**
 	 * This method initializes privButtons
@@ -905,6 +914,7 @@ public class StemBrowser extends JPanel {
 		return privButtons;
 	}
 
+
 	/**
 	 * This method initializes getPrivileges
 	 * 
@@ -915,79 +925,72 @@ public class StemBrowser extends JPanel {
 			getPrivileges = new JButton();
 			getPrivileges.setText("Get Privileges");
 			getPrivileges.setIcon(GridGrouperLookAndFeel.getQueryIcon());
-			getPrivileges
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							loadPrivileges();
-						}
+			getPrivileges.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					loadPrivileges();
+				}
 
-					});
+			});
 		}
 		return getPrivileges;
 	}
 
+
 	protected void loadPrivileges() {
 		MobiusRunnable runner = new MobiusRunnable() {
 			public void execute() {
-			
-		synchronized (getPrivs()) {
-			int eid = node.getBrowser().getProgress().startEvent(
-					"Loading the privileges for " + stem.getDisplayExtension()
-							+ "...");
-			try {
 
-				getPrivs().clearTable();
-				Map map = new HashMap();
-				Set s1 = stem.getStemmers();
-				Iterator itr1 = s1.iterator();
-				while (itr1.hasNext()) {
-					Subject sub = (Subject) itr1.next();
-					StemPrivilegeCaddy caddy = new StemPrivilegeCaddy(sub
-							.getId());
-					caddy.setStem(true);
-					map.put(caddy.getIdentity(), caddy);
-				}
+				synchronized (getPrivs()) {
+					int eid = node.getBrowser().getProgress().startEvent(
+						"Loading the privileges for " + stem.getDisplayExtension() + "...");
+					try {
 
-				Set s2 = stem.getCreators();
-				Iterator itr2 = s2.iterator();
-				while (itr2.hasNext()) {
-					Subject sub = (Subject) itr2.next();
-					StemPrivilegeCaddy caddy = null;
-					if (map.containsKey(sub.getId())) {
-						caddy = (StemPrivilegeCaddy) map.get(sub.getId());
-					} else {
-						caddy = new StemPrivilegeCaddy(sub.getId());
-						map.put(caddy.getIdentity(), caddy);
+						getPrivs().clearTable();
+						Map map = new HashMap();
+						Set s1 = stem.getStemmers();
+						Iterator itr1 = s1.iterator();
+						while (itr1.hasNext()) {
+							Subject sub = (Subject) itr1.next();
+							StemPrivilegeCaddy caddy = new StemPrivilegeCaddy(sub.getId());
+							caddy.setStem(true);
+							map.put(caddy.getIdentity(), caddy);
+						}
+
+						Set s2 = stem.getCreators();
+						Iterator itr2 = s2.iterator();
+						while (itr2.hasNext()) {
+							Subject sub = (Subject) itr2.next();
+							StemPrivilegeCaddy caddy = null;
+							if (map.containsKey(sub.getId())) {
+								caddy = (StemPrivilegeCaddy) map.get(sub.getId());
+							} else {
+								caddy = new StemPrivilegeCaddy(sub.getId());
+								map.put(caddy.getIdentity(), caddy);
+							}
+							caddy.setCreate(true);
+						}
+
+						Iterator itr3 = map.values().iterator();
+						while (itr3.hasNext()) {
+							getPrivs().addPrivilege((StemPrivilegeCaddy) itr3.next());
+						}
+						node.getBrowser().getProgress().stopEvent(eid,
+							"Loaded the privileges for " + stem.getDisplayExtension() + "!!!");
+					} catch (Exception e) {
+						node.getBrowser().getProgress().stopEvent(eid,
+							"Error loading the privileges for " + stem.getDisplayExtension() + "!!!");
+						GridApplication.getContext().showErrorMessage(e);
 					}
-					caddy.setCreate(true);
 				}
-
-				Iterator itr3 = map.values().iterator();
-				while (itr3.hasNext()) {
-					getPrivs().addPrivilege((StemPrivilegeCaddy) itr3.next());
-				}
-				node.getBrowser().getProgress().stopEvent(
-						eid,
-						"Loaded the privileges for "
-								+ stem.getDisplayExtension() + "!!!");
-			} catch (Exception e) {
-				node.getBrowser().getProgress().stopEvent(
-						eid,
-						"Error loading the privileges for "
-								+ stem.getDisplayExtension() + "!!!");
-				PortalUtils.showErrorMessage(e);
-			}
-		}
 			}
 		};
 		try {
-			PortalResourceManager.getInstance()
-					.getThreadManager()
-					.executeInBackground(runner);
+			GridApplication.getContext().executeInBackground(runner);
 		} catch (Exception t) {
 			t.getMessage();
 		}
 	}
+
 
 	/**
 	 * This method initializes updatePrivilege
@@ -999,35 +1002,34 @@ public class StemBrowser extends JPanel {
 			updatePrivilege = new JButton();
 			updatePrivilege.setText("Update Privilege(s)");
 			updatePrivilege.setIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
-			updatePrivilege
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							MobiusRunnable runner = new MobiusRunnable() {
-								public void execute() {
-									try {
-										getPrivs().doubleClick();
-									} catch (Exception e) {
-										PortalUtils.showErrorMessage(e);
-									}
-								}
-							};
+			updatePrivilege.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
 							try {
-								PortalResourceManager.getInstance()
-										.getThreadManager()
-										.executeInBackground(runner);
-							} catch (Exception t) {
-								t.getMessage();
+								getPrivs().doubleClick();
+							} catch (Exception e) {
+								GridApplication.getContext().showErrorMessage(e);
 							}
 						}
+					};
+					try {
+						GridApplication.getContext().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
 
-					});
+			});
 		}
 		return updatePrivilege;
 	}
 
+
 	public StemI getStem() {
 		return stem;
 	}
+
 
 	/**
 	 * This method initializes stemsPanel
@@ -1051,16 +1053,15 @@ public class StemBrowser extends JPanel {
 			gridBagConstraints33.weightx = 1.0;
 			stemsPanel = new JPanel();
 			stemsPanel.setLayout(new GridBagLayout());
-			stemsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Child Stems",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GridGrouperLookAndFeel.getPanelLabelColor()));
+			stemsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Child Stems",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
 			stemsPanel.add(getJScrollPane2(), gridBagConstraints33);
 			stemsPanel.add(getButtonPanel(), gridBagConstraints40);
 		}
 		return stemsPanel;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane2
@@ -1075,6 +1076,7 @@ public class StemBrowser extends JPanel {
 		return jScrollPane2;
 	}
 
+
 	/**
 	 * This method initializes childStemsTable
 	 * 
@@ -1086,6 +1088,7 @@ public class StemBrowser extends JPanel {
 		}
 		return childStemsTable;
 	}
+
 
 	/**
 	 * This method initializes addStemPanel
@@ -1129,11 +1132,9 @@ public class StemBrowser extends JPanel {
 			jLabel10.setText("Local Name");
 			addStemPanel = new JPanel();
 			addStemPanel.setLayout(new GridBagLayout());
-			addStemPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Add Stem",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GridGrouperLookAndFeel.getPanelLabelColor()));
+			addStemPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Stem",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
 			addStemPanel.add(jLabel10, gridBagConstraints35);
 			addStemPanel.add(getChildName(), gridBagConstraints36);
 			addStemPanel.add(jLabel11, gridBagConstraints37);
@@ -1142,6 +1143,7 @@ public class StemBrowser extends JPanel {
 		}
 		return addStemPanel;
 	}
+
 
 	/**
 	 * This method initializes childName
@@ -1155,6 +1157,7 @@ public class StemBrowser extends JPanel {
 		return childName;
 	}
 
+
 	/**
 	 * This method initializes childDisplayName
 	 * 
@@ -1166,6 +1169,7 @@ public class StemBrowser extends JPanel {
 		}
 		return childDisplayName;
 	}
+
 
 	/**
 	 * This method initializes addChildStem
@@ -1181,40 +1185,35 @@ public class StemBrowser extends JPanel {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
-							int eid = node.getBrowser().getProgress()
-									.startEvent("Adding a child stem....");
+							int eid = node.getBrowser().getProgress().startEvent("Adding a child stem....");
 							try {
 
 								String ext = Utils.clean(childName.getText());
 								if (ext == null) {
-									PortalUtils
-											.showErrorMessage("You must enter a local name for the stem!!!");
+									GridApplication.getContext().showErrorMessage(
+										"You must enter a local name for the stem!!!");
 									return;
 								}
 
-								String disExt = Utils.clean(childDisplayName
-										.getText());
+								String disExt = Utils.clean(childDisplayName.getText());
 								if (disExt == null) {
-									PortalUtils
-											.showErrorMessage("You must enter a local display name for the stem!!!");
+									GridApplication.getContext().showErrorMessage(
+										"You must enter a local display name for the stem!!!");
 									return;
 								}
 
 								stem.addChildStem(ext, disExt);
 								node.refresh();
 								setStem();
-								node.getBrowser().getProgress().stopEvent(eid,
-										"Successfully added a child stem!!!");
+								node.getBrowser().getProgress().stopEvent(eid, "Successfully added a child stem!!!");
 							} catch (Exception e) {
-								node.getBrowser().getProgress().stopEvent(eid,
-										"Error adding a child stem!!!");
-								PortalUtils.showErrorMessage(e);
+								node.getBrowser().getProgress().stopEvent(eid, "Error adding a child stem!!!");
+								GridApplication.getContext().showErrorMessage(e);
 							}
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -1224,6 +1223,7 @@ public class StemBrowser extends JPanel {
 		}
 		return addChildStem;
 	}
+
 
 	/**
 	 * This method initializes buttonPanel
@@ -1248,6 +1248,7 @@ public class StemBrowser extends JPanel {
 		return buttonPanel;
 	}
 
+
 	/**
 	 * This method initializes viewStem
 	 * 
@@ -1263,13 +1264,14 @@ public class StemBrowser extends JPanel {
 					try {
 						getChildStemsTable().doubleClick();
 					} catch (Exception ex) {
-						PortalUtils.showErrorMessage(ex);
+						GridApplication.getContext().showErrorMessage(ex);
 					}
 				}
 			});
 		}
 		return viewStem;
 	}
+
 
 	/**
 	 * This method initializes removeStem
@@ -1290,31 +1292,25 @@ public class StemBrowser extends JPanel {
 							try {
 								child = getChildStemsTable().getSelectedStem();
 							} catch (Exception ex) {
-								PortalUtils.showErrorMessage(ex);
+								GridApplication.getContext().showErrorMessage(ex);
 								return;
 							}
 
-							int eid = node.getBrowser().getProgress()
-									.startEvent("Removing child stem....");
+							int eid = node.getBrowser().getProgress().startEvent("Removing child stem....");
 							try {
 								child.getStem().delete();
 								node.refresh();
 								setStem();
-								node
-										.getBrowser()
-										.getProgress()
-										.stopEvent(eid,
-												"Successfully removed the child stem!!!");
+								node.getBrowser().getProgress()
+									.stopEvent(eid, "Successfully removed the child stem!!!");
 							} catch (Exception e) {
-								node.getBrowser().getProgress().stopEvent(eid,
-										"Error removing the child stem!!!");
-								PortalUtils.showErrorMessage(e);
+								node.getBrowser().getProgress().stopEvent(eid, "Error removing the child stem!!!");
+								GridApplication.getContext().showErrorMessage(e);
 							}
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -1324,6 +1320,7 @@ public class StemBrowser extends JPanel {
 		}
 		return removeStem;
 	}
+
 
 	/**
 	 * This method initializes groupsPanel
@@ -1345,16 +1342,15 @@ public class StemBrowser extends JPanel {
 			gridBagConstraints45.weightx = 1.0;
 			groupsPanel = new JPanel();
 			groupsPanel.setLayout(new GridBagLayout());
-			groupsPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Child Group(s)",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GridGrouperLookAndFeel.getPanelLabelColor()));
+			groupsPanel.setBorder(BorderFactory.createTitledBorder(null, "Child Group(s)",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
 			groupsPanel.add(getGroupsPane(), gridBagConstraints45);
 			groupsPanel.add(getGroupsButtonPanel(), gridBagConstraints46);
 		}
 		return groupsPanel;
 	}
+
 
 	/**
 	 * This method initializes addGroupsPanel
@@ -1396,20 +1392,18 @@ public class StemBrowser extends JPanel {
 			jLabel12.setText("Local Name");
 			addGroupsPanel = new JPanel();
 			addGroupsPanel.setLayout(new GridBagLayout());
-			addGroupsPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Add Group",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GridGrouperLookAndFeel.getPanelLabelColor()));
+			addGroupsPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Group",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
 			addGroupsPanel.add(jLabel13, gridBagConstraints52);
 			addGroupsPanel.add(jLabel12, gridBagConstraints49);
 			addGroupsPanel.add(getGroupExtension(), gridBagConstraints50);
-			addGroupsPanel
-					.add(getGroupDisplayExtension(), gridBagConstraints51);
+			addGroupsPanel.add(getGroupDisplayExtension(), gridBagConstraints51);
 			addGroupsPanel.add(getAddGroup(), gridBagConstraints53);
 		}
 		return addGroupsPanel;
 	}
+
 
 	/**
 	 * This method initializes groupsPane
@@ -1424,6 +1418,7 @@ public class StemBrowser extends JPanel {
 		return groupsPane;
 	}
 
+
 	/**
 	 * This method initializes groupsTable
 	 * 
@@ -1435,6 +1430,7 @@ public class StemBrowser extends JPanel {
 		}
 		return groupsTable;
 	}
+
 
 	/**
 	 * This method initializes groupsButtonPanel
@@ -1459,6 +1455,7 @@ public class StemBrowser extends JPanel {
 		return groupsButtonPanel;
 	}
 
+
 	/**
 	 * This method initializes viewGroup
 	 * 
@@ -1474,13 +1471,14 @@ public class StemBrowser extends JPanel {
 					try {
 						getGroupsTable().doubleClick();
 					} catch (Exception ex) {
-						PortalUtils.showErrorMessage(ex);
+						GridApplication.getContext().showErrorMessage(ex);
 					}
 				}
 			});
 		}
 		return viewGroup;
 	}
+
 
 	/**
 	 * This method initializes removeButton
@@ -1501,31 +1499,25 @@ public class StemBrowser extends JPanel {
 							try {
 								child = getGroupsTable().getSelectedGroup();
 							} catch (Exception ex) {
-								PortalUtils.showErrorMessage(ex);
+								GridApplication.getContext().showErrorMessage(ex);
 								return;
 							}
 
-							int eid = node.getBrowser().getProgress()
-									.startEvent("Removing the child group....");
+							int eid = node.getBrowser().getProgress().startEvent("Removing the child group....");
 							try {
 								child.getGroup().delete();
 								node.refresh();
 								setStem();
-								node
-										.getBrowser()
-										.getProgress()
-										.stopEvent(eid,
-												"Successfully removed the child group!!!");
-							} catch (Exception e) {
 								node.getBrowser().getProgress().stopEvent(eid,
-										"Error removing the child group!!!");
-								PortalUtils.showErrorMessage(e);
+									"Successfully removed the child group!!!");
+							} catch (Exception e) {
+								node.getBrowser().getProgress().stopEvent(eid, "Error removing the child group!!!");
+								GridApplication.getContext().showErrorMessage(e);
 							}
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -1535,6 +1527,7 @@ public class StemBrowser extends JPanel {
 		}
 		return removeButton;
 	}
+
 
 	/**
 	 * This method initializes groupExtension
@@ -1548,6 +1541,7 @@ public class StemBrowser extends JPanel {
 		return groupExtension;
 	}
 
+
 	/**
 	 * This method initializes groupDisplayExtension
 	 * 
@@ -1559,6 +1553,7 @@ public class StemBrowser extends JPanel {
 		}
 		return groupDisplayExtension;
 	}
+
 
 	/**
 	 * This method initializes addGroup
@@ -1574,42 +1569,35 @@ public class StemBrowser extends JPanel {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
-							int eid = node.getBrowser().getProgress()
-									.startEvent("Adding a child group....");
+							int eid = node.getBrowser().getProgress().startEvent("Adding a child group....");
 							try {
 
-								String ext = Utils.clean(getGroupExtension()
-										.getText());
+								String ext = Utils.clean(getGroupExtension().getText());
 								if (ext == null) {
-									PortalUtils
-											.showErrorMessage("You must enter a local name for the group!!!");
+									GridApplication.getContext().showErrorMessage(
+										"You must enter a local name for the group!!!");
 									return;
 								}
 
-								String disExt = Utils
-										.clean(getGroupDisplayExtension()
-												.getText());
+								String disExt = Utils.clean(getGroupDisplayExtension().getText());
 								if (disExt == null) {
-									PortalUtils
-											.showErrorMessage("You must enter a local display name for the group!!!");
+									GridApplication.getContext().showErrorMessage(
+										"You must enter a local display name for the group!!!");
 									return;
 								}
 
 								stem.addChildGroup(ext, disExt);
 								node.refresh();
 								setStem();
-								node.getBrowser().getProgress().stopEvent(eid,
-										"Successfully added a child group!!!");
+								node.getBrowser().getProgress().stopEvent(eid, "Successfully added a child group!!!");
 							} catch (Exception e) {
-								node.getBrowser().getProgress().stopEvent(eid,
-										"Error adding a child group!!!");
-								PortalUtils.showErrorMessage(e);
+								node.getBrowser().getProgress().stopEvent(eid, "Error adding a child group!!!");
+								GridApplication.getContext().showErrorMessage(e);
 							}
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -1619,6 +1607,7 @@ public class StemBrowser extends JPanel {
 		}
 		return addGroup;
 	}
+
 
 	/**
 	 * This method initializes created
@@ -1633,6 +1622,7 @@ public class StemBrowser extends JPanel {
 		return created;
 	}
 
+
 	/**
 	 * This method initializes creator
 	 * 
@@ -1645,6 +1635,7 @@ public class StemBrowser extends JPanel {
 		}
 		return creator;
 	}
+
 
 	/**
 	 * This method initializes lastModified
@@ -1659,6 +1650,7 @@ public class StemBrowser extends JPanel {
 		return lastModified;
 	}
 
+
 	/**
 	 * This method initializes lastModifiedBy
 	 * 
@@ -1672,6 +1664,7 @@ public class StemBrowser extends JPanel {
 		return lastModifiedBy;
 	}
 
+
 	/**
 	 * This method initializes addPrivileges
 	 * 
@@ -1683,35 +1676,28 @@ public class StemBrowser extends JPanel {
 			addPrivileges.setText("Add Privilege(s)");
 			addPrivileges.setIcon(GridGrouperLookAndFeel.getAddIcon());
 			final StemBrowser sb = this;
-			addPrivileges
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							MobiusRunnable runner = new MobiusRunnable() {
-								public void execute() {
-									try {
-										PortalResourceManager
-												.getInstance()
-												.getGridPortal()
-												.addGridPortalComponent(
-														new StemPrivilegeWindow(
-																sb), 500, 200);
-
-									} catch (Exception e) {
-										e.printStackTrace();
-										PortalUtils.showErrorMessage(e);
-									}
-								}
-							};
+			addPrivileges.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
 							try {
-								PortalResourceManager.getInstance()
-										.getThreadManager()
-										.executeInBackground(runner);
-							} catch (Exception t) {
-								t.getMessage();
+								GridApplication.getContext().addApplicationComponent(new StemPrivilegeWindow(sb), 500,
+									200);
+
+							} catch (Exception e) {
+								e.printStackTrace();
+								GridApplication.getContext().showErrorMessage(e);
 							}
 						}
+					};
+					try {
+						GridApplication.getContext().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
 
-					});
+			});
 		}
 		return addPrivileges;
 	}

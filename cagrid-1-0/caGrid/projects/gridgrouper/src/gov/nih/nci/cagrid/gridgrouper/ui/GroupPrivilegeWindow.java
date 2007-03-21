@@ -4,7 +4,6 @@ import edu.internet2.middleware.grouper.AccessPrivilege;
 import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.Group;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 
@@ -23,20 +22,23 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
+
+
+
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class GroupPrivilegeWindow extends GridPortalComponent {
+public class GroupPrivilegeWindow extends ApplicationComponent {
 
 	private static final long serialVersionUID = 1L;
 
@@ -84,6 +86,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 
 	private JLabel jLabel5 = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -91,6 +94,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 	public GroupPrivilegeWindow(GroupBrowser browser) {
 		this(browser, null);
 	}
+
 
 	public GroupPrivilegeWindow(GroupBrowser browser, GroupPrivilegeCaddy caddy) {
 		super();
@@ -100,6 +104,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		this.targetGroup = browser.getGroupNode().getGroup();
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -117,6 +122,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		this.setFrameIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
 	}
 
+
 	/**
 	 * This method initializes jContentPane
 	 * 
@@ -130,6 +136,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes mainPanel
@@ -175,16 +182,13 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			if (isUpdate) {
-				mainPanel.setBorder(BorderFactory.createTitledBorder(null,
-						"Update Privilege(s)",
-						TitledBorder.DEFAULT_JUSTIFICATION,
-						TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-								Font.BOLD, 12), new Color(62, 109, 181)));
+				mainPanel.setBorder(BorderFactory.createTitledBorder(null, "Update Privilege(s)",
+					TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,
+					new Font("Dialog", Font.BOLD, 12), new Color(62, 109, 181)));
 			} else {
-				mainPanel.setBorder(BorderFactory.createTitledBorder(null,
-						"Add Privilege(s)", TitledBorder.DEFAULT_JUSTIFICATION,
-						TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-								Font.BOLD, 12), new Color(62, 109, 181)));
+				mainPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Privilege(s)",
+					TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,
+					new Font("Dialog", Font.BOLD, 12), new Color(62, 109, 181)));
 			}
 			mainPanel.add(jLabel, gridBagConstraints1);
 			mainPanel.add(getIdentity(), gridBagConstraints2);
@@ -193,6 +197,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		}
 		return mainPanel;
 	}
+
 
 	/**
 	 * This method initializes identity
@@ -209,6 +214,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		}
 		return identity;
 	}
+
 
 	/**
 	 * This method initializes privsPanel
@@ -278,10 +284,9 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 			jLabel1.setText("Admin");
 			privsPanel = new JPanel();
 			privsPanel.setLayout(new GridBagLayout());
-			privsPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Privilege(s)", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-							Font.BOLD, 12), new Color(62, 109, 181)));
+			privsPanel.setBorder(BorderFactory.createTitledBorder(null, "Privilege(s)",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+				new Color(62, 109, 181)));
 			privsPanel.add(getAdmin(), gridBagConstraints3);
 			privsPanel.add(jLabel1, gridBagConstraints4);
 			privsPanel.add(getUpdate(), gridBagConstraints6);
@@ -298,6 +303,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		return privsPanel;
 	}
 
+
 	/**
 	 * This method initializes admin
 	 * 
@@ -313,6 +319,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		return admin;
 	}
 
+
 	/**
 	 * This method initializes update
 	 * 
@@ -327,6 +334,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		}
 		return update;
 	}
+
 
 	/**
 	 * This method initializes remove
@@ -350,8 +358,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -362,13 +369,13 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		return remove;
 	}
 
+
 	private void addUpdatePrivileges() {
 		try {
 
 			String id = Utils.clean(getIdentity().getText());
 			if (id == null) {
-				PortalUtils
-						.showErrorMessage("Please enter a valid identity!!!");
+				GridApplication.getContext().showErrorMessage("Please enter a valid identity!!!");
 			}
 			boolean reload = false;
 			StringBuffer sb = new StringBuffer();
@@ -381,24 +388,24 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 			String s2 = addUpdateAdmin();
 			if (s2 != null) {
 				reload = true;
-				sb.append(s2+ "\n");
+				sb.append(s2 + "\n");
 			}
 
 			String s3 = addUpdateRead();
 			if (s3 != null) {
 				reload = true;
-				sb.append(s3+ "\n");
+				sb.append(s3 + "\n");
 			}
 			String s4 = addUpdateView();
 			if (s4 != null) {
 				reload = true;
-				sb.append(s4+ "\n");
+				sb.append(s4 + "\n");
 			}
 
 			String s5 = addUpdateOptin();
 			if (s5 != null) {
 				reload = true;
-				sb.append(s5+ "\n");
+				sb.append(s5 + "\n");
 			}
 
 			String s6 = addUpdateOptout();
@@ -411,12 +418,13 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 			if (reload) {
 				browser.loadPrivileges();
 			}
-			PortalUtils.showMessage(sb.toString());
+			GridApplication.getContext().showMessage(sb.toString());
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 
 	}
+
 
 	private String addUpdateUpdate() throws Exception {
 		boolean isSelected = getUpdate().isSelected();
@@ -424,9 +432,9 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		if (caddy != null) {
 			wasSelected = caddy.hasUpdate();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected,
-				AccessPrivilege.UPDATE);
+		return addUpdatePrivilege(wasSelected, isSelected, AccessPrivilege.UPDATE);
 	}
+
 
 	private String addUpdateView() throws Exception {
 		boolean isSelected = getView().isSelected();
@@ -437,6 +445,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		return addUpdatePrivilege(wasSelected, isSelected, AccessPrivilege.VIEW);
 	}
 
+
 	private String addUpdateRead() throws Exception {
 		boolean isSelected = getRead().isSelected();
 		boolean wasSelected = false;
@@ -446,15 +455,16 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		return addUpdatePrivilege(wasSelected, isSelected, AccessPrivilege.READ);
 	}
 
+
 	private String addUpdateAdmin() throws Exception {
 		boolean isSelected = getAdmin().isSelected();
 		boolean wasSelected = false;
 		if (caddy != null) {
 			wasSelected = caddy.hasAdmin();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected,
-				AccessPrivilege.ADMIN);
+		return addUpdatePrivilege(wasSelected, isSelected, AccessPrivilege.ADMIN);
 	}
+
 
 	private String addUpdateOptin() throws Exception {
 		boolean isSelected = getOptin().isSelected();
@@ -462,9 +472,9 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		if (caddy != null) {
 			wasSelected = caddy.hasOptin();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected,
-				AccessPrivilege.OPTIN);
+		return addUpdatePrivilege(wasSelected, isSelected, AccessPrivilege.OPTIN);
 	}
+
 
 	private String addUpdateOptout() throws Exception {
 		boolean isSelected = getOptout().isSelected();
@@ -472,14 +482,13 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		if (caddy != null) {
 			wasSelected = caddy.hasOptout();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected,
-				AccessPrivilege.OPTOUT);
+		return addUpdatePrivilege(wasSelected, isSelected, AccessPrivilege.OPTOUT);
 	}
 
-	private String addUpdatePrivilege(boolean wasSelected, boolean selectedNow,
-			Privilege priv) throws Exception {
+
+	private String addUpdatePrivilege(boolean wasSelected, boolean selectedNow, Privilege priv) throws Exception {
 		String id = Utils.clean(getIdentity().getText());
-		Subject subj = SubjectUtils.getSubject(id,true);
+		Subject subj = SubjectUtils.getSubject(id, true);
 		if (isUpdate) {
 			if (!wasSelected && selectedNow) {
 				try {
@@ -487,8 +496,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 					return "GRANTED " + priv.getName() + " privilege.";
 				} catch (Exception e) {
 					e.printStackTrace();
-					throw new Exception("ERROR granting " + priv.getName()
-							+ " privilege: " + e.getMessage());
+					throw new Exception("ERROR granting " + priv.getName() + " privilege: " + e.getMessage());
 				}
 
 			} else if (wasSelected && !selectedNow) {
@@ -497,8 +505,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 					return "REVOKED " + priv.getName() + " privilege.";
 				} catch (Exception e) {
 					e.printStackTrace();
-					throw new Exception("ERROR revoking " + priv.getName()
-							+ " privilege: " + e.getMessage());
+					throw new Exception("ERROR revoking " + priv.getName() + " privilege: " + e.getMessage());
 				}
 			}
 		} else {
@@ -508,14 +515,14 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 					return "GRANTED " + priv.getName() + " privilege.";
 				} catch (Exception e) {
 					e.printStackTrace();
-					throw new Exception("ERROR granting " + priv.getName()
-							+ " privilege: " + e.getMessage());
+					throw new Exception("ERROR granting " + priv.getName() + " privilege: " + e.getMessage());
 				}
 			}
 		}
 		return null;
 
 	}
+
 
 	/**
 	 * This method initializes view
@@ -532,6 +539,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		return view;
 	}
 
+
 	/**
 	 * This method initializes read
 	 * 
@@ -547,6 +555,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		return read;
 	}
 
+
 	/**
 	 * This method initializes optin
 	 * 
@@ -561,6 +570,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		}
 		return optin;
 	}
+
 
 	/**
 	 * This method initializes optout

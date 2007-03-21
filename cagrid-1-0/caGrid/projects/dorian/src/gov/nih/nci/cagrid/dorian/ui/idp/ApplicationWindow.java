@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.dorian.ui.idp;
 
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IdPRegistrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
@@ -18,9 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
@@ -30,7 +29,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class ApplicationWindow extends GridPortalComponent {
+public class ApplicationWindow extends ApplicationComponent {
 
 	private JPanel jContentPane = null;
 
@@ -250,7 +249,7 @@ public class ApplicationWindow extends GridPortalComponent {
 			authPanel.setLayout(new GridBagLayout());
 			authPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Login Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			authPanel.add(serviceLabel, gridBagConstraints3);
 			authPanel.add(getService(), gridBagConstraints4);
 			authPanel.add(usernameLabel, gridBagConstraints5);
@@ -426,7 +425,7 @@ public class ApplicationWindow extends GridPortalComponent {
 
 			infoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Personal Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			infoPanel.add(firstNameLabel, gridBagConstraints11);
 			infoPanel.add(getFirstName(), gridBagConstraints12);
 			infoPanel.add(lastNameLabel, gridBagConstraints13);
@@ -666,7 +665,7 @@ public class ApplicationWindow extends GridPortalComponent {
 
 				}
 			});
-			apply.setIcon(PortalLookAndFeel.getSelectIcon());
+			apply.setIcon(LookAndFeel.getSelectIcon());
 		}
 		return apply;
 	}
@@ -686,7 +685,7 @@ public class ApplicationWindow extends GridPortalComponent {
 					dispose();
 				}
 			});
-			cancel.setIcon(PortalLookAndFeel.getCloseIcon());
+			cancel.setIcon(LookAndFeel.getCloseIcon());
 		}
 		return cancel;
 	}
@@ -711,7 +710,7 @@ public class ApplicationWindow extends GridPortalComponent {
 			String pass = new String(this.getPassword().getPassword());
 			String vpass = new String(this.getPassword().getPassword());
 			if (!pass.equals(vpass)) {
-				PortalUtils.showErrorMessage("Registration Error", "Password don't match!!!");
+				GridApplication.getContext().showErrorMessage("Registration Error", "Password don't match!!!");
 				applied = false;
 			}
 
@@ -735,23 +734,23 @@ public class ApplicationWindow extends GridPortalComponent {
 				public void execute() {
 					try {
 						IdPRegistrationClient client = new IdPRegistrationClient(serviceUrl);
-						PortalUtils.showMessage(client.register(a));
+						GridApplication.getContext().showMessage(client.register(a));
 						dispose();
 					} catch (Exception e) {
 						e.printStackTrace();
-						PortalUtils.showErrorMessage("Registration Error", e);
+						GridApplication.getContext().showErrorMessage("Registration Error", e);
 						applied = false;
 					}
 
 				}
 			};
 			try {
-				PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+				GridApplication.getContext().executeInBackground(runner);
 			} catch (Exception t) {
 				t.getMessage();
 			}
 		} else {
-			PortalUtils.showErrorMessage("Application already sent, currently awaiting response.");
+			GridApplication.getContext().showErrorMessage("Application already sent, currently awaiting response.");
 		}
 	}
 }

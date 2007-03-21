@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
@@ -27,19 +25,20 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalBaseFrame;
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.3 2007-02-13 15:00:08 dervin Exp $
+ * @version $Id: UserWindow.java,v 1.4 2007-03-21 19:36:06 langella Exp $
  */
-public class UserWindow extends GridPortalBaseFrame {
+public class UserWindow extends ApplicationComponent {
 
 	private final static String INFO_PANEL = "User Information";
 
@@ -134,7 +133,6 @@ public class UserWindow extends GridPortalBaseFrame {
 
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -218,7 +216,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Close");
-			cancel.setIcon(PortalLookAndFeel.getCloseIcon());
+			cancel.setIcon(LookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -246,7 +244,7 @@ public class UserWindow extends GridPortalBaseFrame {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -270,13 +268,13 @@ public class UserWindow extends GridPortalBaseFrame {
 			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
 			client.updateUser(user);
 
-			PortalUtils.showMessage("User " + user.getGridId() + " update successfully.");
+			GridApplication.getContext().showMessage("User " + user.getGridId() + " update successfully.");
 
 		} catch (PermissionDeniedFault pdf) {
-			PortalUtils.showErrorMessage(pdf);
+			GridApplication.getContext().showErrorMessage(pdf);
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 
 	}
@@ -290,12 +288,13 @@ public class UserWindow extends GridPortalBaseFrame {
 			user = client.renewUserCredentials(user);
 			X509Certificate cert = CertUtil.loadCertificate(user.getCertificate().getCertificateAsString());
 			this.getCredPanel().setCertificate(cert);
-			PortalUtils.showMessage("Successfully renewed the credentials for the user " + user.getGridId() + ".");
+			GridApplication.getContext().showMessage(
+				"Successfully renewed the credentials for the user " + user.getGridId() + ".");
 		} catch (PermissionDeniedFault pdf) {
-			PortalUtils.showErrorMessage(pdf);
+			GridApplication.getContext().showErrorMessage(pdf);
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 
 	}
@@ -310,8 +309,8 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Grid User",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
-				PortalLookAndFeel.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+					.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel.getUserIcon(), getInfoPanel(), null);
 			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
 		}
@@ -331,26 +330,26 @@ public class UserWindow extends GridPortalBaseFrame {
 			gridBagConstraints21.gridy = 4;
 			gridBagConstraints21.weightx = 1.0;
 			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints21.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints21.gridx = 1;
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
 			gridBagConstraints20.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints20.gridy = 3;
 			gridBagConstraints20.weightx = 1.0;
 			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints20.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints20.gridx = 1;
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.gridx = 0;
 			gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints19.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints19.gridy = 4;
 			jLabel1 = new JLabel();
 			jLabel1.setText("Last Name");
 			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
 			gridBagConstraints18.gridx = 0;
 			gridBagConstraints18.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints18.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints18.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints18.gridy = 3;
 			jLabel = new JLabel();
 			jLabel.setText("First Name");
@@ -502,8 +501,8 @@ public class UserWindow extends GridPortalBaseFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null,
-				PortalLookAndFeel.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+					.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);
 			jPanel2.add(credentialLabel, gridBagConstraints);
@@ -706,10 +705,10 @@ public class UserWindow extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes firstName	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes firstName
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getFirstName() {
 		if (firstName == null) {
 			firstName = new JTextField();
@@ -721,10 +720,10 @@ public class UserWindow extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes lastName	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes lastName
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getLastName() {
 		if (lastName == null) {
 			lastName = new JTextField();

@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gts.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.ui.ProxyCaddy;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
@@ -15,10 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -27,7 +26,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class AddPermissionWindow extends GridPortalComponent {
+public class AddPermissionWindow extends ApplicationComponent {
 
 	private JPanel jContentPane = null;
 
@@ -176,7 +175,7 @@ public class AddPermissionWindow extends GridPortalComponent {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
+						GridApplication.getContext()
 								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
@@ -232,7 +231,7 @@ public class AddPermissionWindow extends GridPortalComponent {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
+						GridApplication.getContext()
 								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
@@ -275,11 +274,11 @@ public class AddPermissionWindow extends GridPortalComponent {
 			client.addPermission(permissionPanel.getPermission());
 			refresher.refreshPermissions();
 			dispose();
-			PortalUtils.showMessage("Succesfully add the permission!!!");
+			GridApplication.getContext().showMessage("Succesfully add the permission!!!");
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 
 	}
@@ -307,7 +306,7 @@ public class AddPermissionWindow extends GridPortalComponent {
 			permissionPanel.syncWithService(service);
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 	}
 

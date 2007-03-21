@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://www.cagrid.org/1/grape"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.cagrid.org/1/grape file:/C:/projects/cagrid-1-0/caGrid/projects/grape/schema/grape.xsd">
+    <name>Dorian</name>
+    <icon>/caGrid-icon-22x22.gif</icon>
+    <dimensions>
+        <width>850</width>
+        <height>700</height>
+    </dimensions>
+    <menus>
+        <menu>
+            <title>Credentials</title>
+            <description>tools</description>
+            <showIcons>true</showIcons>
+            <components>
+                <component>
+                    <title>Login</title>
+                    <description>Obtain Grid Credentials!!!</description>
+                    <classname>gov.nih.nci.cagrid.dorian.ui.ifs.CreateProxyWindow</classname>
+                    <icon>/Door.gif</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                    <dimensions>
+                    <width>600</width>
+                    <height>350</height>
+                    </dimensions>
+                </component>
+                <component>
+                    <title>Credential Manager</title>
+                    <description>Allows the management of grid proxy credentials.</description>
+                    <classname>gov.nih.nci.cagrid.gridca.ui.ProxyManagerComponent</classname>
+                    <icon>/contact-new.png</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                    <dimensions>
+                        <width>700</width>
+                        <height>400</height>
+                    </dimensions>
+                </component>
+                <component>
+                    <title>Download CA Certificate(s)</title>
+                    <description>Download the Dorian CA certificate.</description>
+                    <classname>gov.nih.nci.cagrid.dorian.ui.ifs.ViewCACertificateWindow</classname>
+                    <icon>/go-down.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                        <width>500</width>
+                        <height>150</height>
+                    </dimensions>
+                </component>
+            </components>
+        </menu>
+        <menu>
+            <title>Grid User Management</title>
+            <description>tools</description>
+            <showIcons>true</showIcons>
+            <components>
+                <component>
+                    <title>Account Management</title>
+                    <description>Manage Grid User Accounts</description>
+                    <classname>gov.nih.nci.cagrid.dorian.ui.ifs.UserManagerWindow</classname>
+                    <icon>/system-users.png</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                    <dimensions>
+                        <width>700</width>
+                        <height>550</height>
+                    </dimensions>
+                </component>
+                <component>
+                    <title>Trusted Identity Provider(s)</title>
+                    <description>Trusted Identity Provider(s)</description>
+                    <classname>gov.nih.nci.cagrid.dorian.ui.ifs.TrustedIdPsWindow</classname>
+                    <icon>/group_link.png</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                </component>
+            </components>
+        </menu>
+        
+        <menu>
+            <title>Local Accounts</title>
+            <description>Tools for registering and managing local Dorian accounts.</description>
+            <showIcons>true</showIcons>
+            <components>
+                <component>
+                    <title>Registration</title>
+                    <description>Register with a Dorian for a local account.</description>
+                    <classname>gov.nih.nci.cagrid.dorian.ui.idp.ApplicationWindow</classname>
+                    <icon>/edit-paste.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                        <width>400</width>
+                        <height>500</height>
+                    </dimensions>
+                </component>
+                <component>
+                    <title>Local Account Management</title>
+                    <description>Local Account Management</description>
+                    <classname>gov.nih.nci.cagrid.dorian.ui.idp.UserManagerWindow</classname>
+                    <icon>/system-users.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                        <width>600</width>
+                        <height>500</height>
+                    </dimensions>
+                </component>
+               
+            </components>
+        </menu>
+    </menus>
+
+    <configuration>
+        <ConfigurationDescriptors>
+            <ConfigurationDescriptor>
+                <DisplayName>Grid User Management</DisplayName>
+                <SystemName>dorian</SystemName>
+                <ModelClassname>org.cagrid.grape.configuration.GeneralConfiguration</ModelClassname>
+                <qname>
+                    <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
+                    <name>GeneralConfiguration</name>
+                </qname>
+                <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
+                <DefaultFile>etc/dorian-ui-configuration.xml</DefaultFile>
+            </ConfigurationDescriptor>
+        </ConfigurationDescriptors>
+    </configuration>
+</application>

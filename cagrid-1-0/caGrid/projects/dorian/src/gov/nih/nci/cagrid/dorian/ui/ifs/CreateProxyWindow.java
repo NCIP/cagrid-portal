@@ -1,13 +1,10 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.ui.DorianServiceListComboBox;
-import gov.nih.nci.cagrid.dorian.ui.DorianUIConf;
-import gov.nih.nci.cagrid.dorian.ui.IdPConf;
+import gov.nih.nci.cagrid.dorian.ui.DorianUIUtils;
 import gov.nih.nci.cagrid.gridca.ui.ProxyManager;
 import gov.nih.nci.cagrid.gridca.ui.ProxyManagerComponent;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
@@ -17,7 +14,6 @@ import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,13 +26,14 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
 
 
-public class CreateProxyComponent extends GridPortalComponent {
+public class CreateProxyWindow extends ApplicationComponent {
 
 	private JPanel jContentPane = null;
 	private JPanel mainPanel = null;
@@ -71,26 +68,20 @@ public class CreateProxyComponent extends GridPortalComponent {
 	/**
 	 * This is the default constructor
 	 */
-	public CreateProxyComponent() {
+	public CreateProxyWindow() {
 		super();
 		initialize();
-		DorianUIConf conf = (DorianUIConf) PortalResourceManager.getInstance().getResource(
-			DorianUIConf.RESOURCE);
+
 		authPanels = new HashMap();
-		List idps = conf.getIdPs();
-		for (int i = 0; i < idps.size(); i++) {
+
+		// TODO: Fix this later
+		List services = DorianUIUtils.getAuthenticationServices();
+		for (int i = 0; i < services.size(); i++) {
 			try {
-				IdPConf idp = (IdPConf) idps.get(i);
-				Class c = Class.forName(idp.getAuthenticationPanelClass());
-				Class[] params = new Class[1];
-				params[0] = IdPConf.class;
-				Constructor cons = c.getConstructor(params);
-				Object[] args = new Object[1];
-				args[0] = idp;
-				IdPAuthenticationPanel panel = (IdPAuthenticationPanel) cons.newInstance(args);
-				this.getCardPanel().add(panel, idp.getName());
-				this.getIdentityProvider().addItem(idp);
-				this.authPanels.put(idp.getName(), panel);
+				IdPAuthenticationPanel panel = new AuthenticationServicePanel((String) services.get(i));
+				this.authPanels.put(panel.getURI(), panel);
+				this.getCardPanel().add(panel, panel.getURI());
+				this.getIdentityProvider().addItem(panel.getURI());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -100,7 +91,6 @@ public class CreateProxyComponent extends GridPortalComponent {
 
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -209,7 +199,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.gridx = 0;
 			ifsLabel = new JLabel();
-			ifsLabel.setText("Identity Federation Service");
+			ifsLabel.setText("Dorian Service");
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.gridx = 0;
 			gridBagConstraints4.gridwidth = 2;
@@ -231,12 +221,12 @@ public class CreateProxyComponent extends GridPortalComponent {
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints1.gridx = 0;
 			idpLabel = new JLabel();
-			idpLabel.setText("Identity Provider");
+			idpLabel.setText("Authentication Service");
 			idpPanel = new JPanel();
 			idpPanel.setLayout(new GridBagLayout());
 			idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Proxy",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
 			idpPanel.add(getProgressPanel(), gridBagConstraints15);
 			idpPanel.add(idpLabel, gridBagConstraints1);
 			idpPanel.add(getIdentityProvider(), gridBagConstraints2);
@@ -263,9 +253,9 @@ public class CreateProxyComponent extends GridPortalComponent {
 			identityProvider.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					CardLayout cl = (CardLayout) (getCardPanel().getLayout());
-					if (getIdentityProvider().getSelectedItem() instanceof IdPConf) {
-						IdPConf idp = (IdPConf) getIdentityProvider().getSelectedItem();
-						cl.show(getCardPanel(), idp.getName());
+					if (getIdentityProvider().getSelectedItem() instanceof String) {
+						String idp = (String) getIdentityProvider().getSelectedItem();
+						cl.show(getCardPanel(), idp);
 
 					}
 				}
@@ -301,7 +291,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 			cardPanel.setLayout(new CardLayout());
 			cardPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "IdP Authentication Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
 		}
 		return cardPanel;
 	}
@@ -337,7 +327,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -353,7 +343,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 
 		synchronized (mutex) {
 			if (isCreating) {
-				PortalUtils.showErrorMessage("Already trying to create a proxy, please wait!!!");
+				GridApplication.getContext().showErrorMessage("Already trying to create a proxy, please wait!!!");
 				return;
 			} else {
 				isCreating = true;
@@ -361,7 +351,8 @@ public class CreateProxyComponent extends GridPortalComponent {
 		}
 
 		String ifsService = ((DorianServiceListComboBox) this.getIfs()).getSelectedService();
-		String idpService = ((IdPConf) getIdentityProvider().getSelectedItem()).getName();
+		String idpService = ((String) getIdentityProvider().getSelectedItem());
+		
 		this.updateProgress(true, "Authenticating with IdP...");
 		IdPAuthenticationPanel panel = (IdPAuthenticationPanel) authPanels.get(idpService);
 		try {
@@ -377,19 +368,18 @@ public class CreateProxyComponent extends GridPortalComponent {
 			try {
 				delegation = Integer.valueOf(delegationPathLength.getText()).intValue();
 			} catch (Exception e) {
-				PortalUtils.showErrorMessage("The delegation path length must be an integer.");
+				GridApplication.getContext().showErrorMessage("The delegation path length must be an integer.");
 				return;
 			}
 			GlobusCredential cred = c2.createProxy(saml, lifetime, delegation);
 			this.updateProgress(false, "Proxy Created!!!");
-			ProxyManager.getInstance().addProxy(cred);
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new ProxyManagerComponent(cred),
-				700, 450);
+			ProxyManager.getInstance().addProxy(cred);	
+			GridApplication.getContext().addApplicationComponent(new ProxyManagerComponent(cred), 700, 450);
 			dispose();
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.updateProgress(false, "Error");
-			PortalUtils.showErrorMessage("Error Creating Proxy", e);
+			GridApplication.getContext().showErrorMessage("Error Creating Proxy", e);
 		}
 
 		isCreating = false;
@@ -400,7 +390,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(PortalLookAndFeel.getCloseIcon());
+			close.setIcon(DorianLookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -551,7 +541,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setForeground(PortalLookAndFeel.getPanelLabelColor());
+			progress.setForeground(LookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}

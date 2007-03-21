@@ -148,7 +148,6 @@ GSBT - Globus Service Build Tools
 		 <jar jarfile="${build.lib.dir}/${jar.name}" basedir="${build.dest}">
             <include name="**/gridca/**" />
         	<fileset dir="resources/ui/gridca" />
-        	<fileset dir="ext/resources/portal/common" />
         </jar>
 	</target>
 

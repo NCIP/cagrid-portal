@@ -212,6 +212,20 @@
                 <include name="*.xsd" />
             </fileset>
         </artifact>
+    	
+    	  <artifact track="main" type="jars" id="grape.jars">
+    	            <generatingantcall target="build-grape" />
+    	            <fileset dir="${projects.dir}/grape/build/lib">
+    	                <include name="caGrid-*-grape.jar" />
+    	                <include name="caGrid-*-grape-resources.jar" />
+    	            </fileset>
+    	            <fileset dir="${projects.dir}/grape/ext/lib">
+    	                <include name="*.jar" />
+    	                <exclude name="*test*.jar" />
+    	            </fileset>
+    	        </artifact>
+    	
+    	
         <artifact track="main" type="jars" id="dorian.ui.jars">
             <generatingantcall target="build-dorian" />
             <fileset dir="${projects.dir}/dorian/build/lib">

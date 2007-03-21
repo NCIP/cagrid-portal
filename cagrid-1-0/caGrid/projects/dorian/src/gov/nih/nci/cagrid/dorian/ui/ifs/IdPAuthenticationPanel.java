@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
-import gov.nih.nci.cagrid.dorian.ui.IdPConf;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import javax.swing.JPanel;
@@ -15,16 +14,20 @@ import javax.swing.JPanel;
 
 public abstract class IdPAuthenticationPanel extends JPanel{
 	
-	private IdPConf idp;
-	public IdPAuthenticationPanel(IdPConf conf){
-		this.idp = conf;
+	private String uri;
+	public IdPAuthenticationPanel(String uri){
+		this.uri = uri;
 		
 	}
 	
-	public IdPConf getIdPInfo(){
-		return idp;
-	}
 	
+	
+	public String getURI() {
+		return uri;
+	}
+
+
+
 	public abstract SAMLAssertion authenticate() throws Exception;
 
 }

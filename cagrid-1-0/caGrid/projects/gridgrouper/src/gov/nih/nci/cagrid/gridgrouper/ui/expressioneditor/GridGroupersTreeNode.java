@@ -43,7 +43,6 @@
 
 package gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 import gov.nih.nci.cagrid.gridgrouper.client.Stem;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
@@ -56,14 +55,13 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.PortalResourceManager;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -71,44 +69,43 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 
 	private Map groupers;
 
+
 	public GridGroupersTreeNode(GridGrouperExpressionEditor editor) {
 		super(editor);
 		this.groupers = new HashMap();
 	}
 
+
 	public synchronized void addGridGrouper(GridGrouper grouper) {
 		if (groupers.containsKey(grouper.getName())) {
-			PortalUtils.showErrorMessage("The Grid Grouper Service "
-					+ grouper.getName() + " has already been added!!!");
+			Util.showErrorMessage("The Grid Grouper Service " + grouper.getName() + " has already been added!!!");
 		} else {
-			int id = getEditor().getProgress().startEvent(
-					"Loading Grid Grouper Service.... ");
+			int id = getEditor().getProgress().startEvent("Loading Grid Grouper Service.... ");
 			try {
 				StemI root = grouper.getRootStem();
-				StemTreeNode node = new StemTreeNode(getEditor(),
-						((Stem) root), true);
+				StemTreeNode node = new StemTreeNode(getEditor(), ((Stem) root), true);
 				synchronized (getTree()) {
 					this.add(node);
 					getTree().reload(this);
 				}
 				node.loadStem();
-				getEditor().getProgress().stopEvent(id,
-						"Grid Grouper Service Successfully Loaded!!!");
+				getEditor().getProgress().stopEvent(id, "Grid Grouper Service Successfully Loaded!!!");
 				this.groupers.put(grouper.getName(), node);
 			} catch (Exception e) {
-				PortalUtils.showErrorMessage(e);
-				getEditor().getProgress().stopEvent(id,
-						"Error loading Grid Grouper Service!!!");
+				Util.showErrorMessage(e);
+				getEditor().getProgress().stopEvent(id, "Error loading Grid Grouper Service!!!");
 			}
 
 		}
 
 	}
-	
-	public synchronized void removeAllGridGroupers(){
+
+
+	public synchronized void removeAllGridGroupers() {
 		this.groupers.clear();
 		this.removeAllChildren();
 	}
+
 
 	public synchronized void refresh() {
 		Map old = groupers;
@@ -123,8 +120,7 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 				}
 			};
 			try {
-				PortalResourceManager.getInstance().getThreadManager()
-						.executeInBackground(runner);
+				Util.executeInBackground(runner);
 			} catch (Exception t) {
 				t.getMessage();
 			}
@@ -133,11 +129,11 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 
 	}
 
+
 	public void removeSelectedGridGrouper() {
 		GridGrouperBaseTreeNode node = this.getTree().getCurrentNode();
 		if (node == null) {
-			PortalUtils
-					.showErrorMessage("No service selected, please select a Grid Grouper Service!!!");
+			Util.showErrorMessage("No service selected, please select a Grid Grouper Service!!!");
 		} else {
 			if (node instanceof StemTreeNode) {
 				StemTreeNode stn = (StemTreeNode) node;
@@ -148,19 +144,20 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 						getTree().reload(this);
 					}
 				} else {
-					PortalUtils
-							.showErrorMessage("No service selected, please select a Grid Grouper Service!!!");
+					Util.showErrorMessage("No service selected, please select a Grid Grouper Service!!!");
 				}
 			} else {
-				PortalUtils
-						.showErrorMessage("No service selected, please select a Grid Grouper Service!!!");
+				Util.showErrorMessage("No service selected, please select a Grid Grouper Service!!!");
 			}
 		}
 
 	}
+
+
 	public ImageIcon getIcon() {
 		return GridGrouperLookAndFeel.getGridGrouperServicesIcon16x16();
 	}
+
 
 	public String toString() {
 

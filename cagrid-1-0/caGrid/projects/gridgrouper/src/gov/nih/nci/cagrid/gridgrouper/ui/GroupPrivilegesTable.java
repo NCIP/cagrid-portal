@@ -1,13 +1,12 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
-
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.table.GrapeBaseTable;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -18,7 +17,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class GroupPrivilegesTable extends PortalBaseTable {
+public class GroupPrivilegesTable extends GrapeBaseTable {
 	public final static String CADDY = "Caddy";
 
 	public final static String IDENTITY = "Identity";
@@ -120,8 +119,7 @@ public class GroupPrivilegesTable extends PortalBaseTable {
 
 	public void doubleClick() throws Exception {
 		GroupPrivilegeCaddy caddy = getSelectedPrivilege();
-		PortalResourceManager.getInstance().getGridPortal()
-				.addGridPortalComponent(
+		GridApplication.getContext().addApplicationComponent(
 						new GroupPrivilegeWindow(browser, caddy), 500, 200);
 	}
 

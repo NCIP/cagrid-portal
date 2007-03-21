@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gridca.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 import java.awt.GridBagConstraints;
@@ -16,12 +15,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.1 2006-09-08 17:31:38 langella Exp $
+ * @version $Id: CertificatePanel.java,v 1.2 2007-03-21 19:36:22 langella Exp $
  */
 public class CertificatePanel extends JPanel {
 
@@ -435,7 +437,7 @@ public class CertificatePanel extends JPanel {
 
 				}
 			});
-			loadButton.setIcon(GridCALookAndFeel.getImportIcon());
+			loadButton.setIcon(LookAndFeel.getImportIcon());
 		}
 		return loadButton;
 	}
@@ -451,7 +453,7 @@ public class CertificatePanel extends JPanel {
 				certificate = CertUtil.loadCertificate(new File(fc.getSelectedFile().getAbsolutePath()));
 				setCertificate(certificate);
 			} catch (Exception ex) {
-				PortalUtils.showErrorMessage(ex);
+				GridApplication.getContext().showErrorMessage(ex);
 			}
 		}
 
@@ -466,7 +468,7 @@ public class CertificatePanel extends JPanel {
 			try {
 				CertUtil.writeCertificate(certificate, new File(fc.getSelectedFile().getAbsolutePath()));
 			} catch (Exception ex) {
-				PortalUtils.showErrorMessage(ex);
+				GridApplication.getContext().showErrorMessage(ex);
 			}
 		}
 
@@ -486,7 +488,7 @@ public class CertificatePanel extends JPanel {
 	private JButton getSaveButton() {
 		if (saveButton == null) {
 			saveButton = new JButton();
-			saveButton.setIcon(GridCALookAndFeel.getSaveIcon());
+			saveButton.setIcon(LookAndFeel.getSaveIcon());
 			saveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					exportCertificate();

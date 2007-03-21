@@ -1,12 +1,13 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.gridgrouper.client.Membership;
 
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+
+import org.cagrid.grape.table.GrapeBaseTable;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -17,7 +18,7 @@ import javax.swing.table.TableColumn;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class MembersTable extends PortalBaseTable {
+public class MembersTable extends GrapeBaseTable {
 	public final static String MEMBER = "Member";
 
 	public final static String MEMBER_NAME = "Member Name";

@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 
 import java.awt.FlowLayout;
@@ -16,20 +15,20 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class AddStemWindow extends GridPortalComponent {
+public class AddStemWindow extends ApplicationComponent {
 
 	private static final long serialVersionUID = 1L;
 
@@ -63,6 +62,7 @@ public class AddStemWindow extends GridPortalComponent {
 
 	private JTextField parentStem = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -71,6 +71,7 @@ public class AddStemWindow extends GridPortalComponent {
 		this.node = node;
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -84,10 +85,11 @@ public class AddStemWindow extends GridPortalComponent {
 		this.setFrameIcon(GridGrouperLookAndFeel.getStemIcon16x16());
 	}
 
+
 	/**
-	 * This method initializes addStemPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes addStemPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getAddStemPanel() {
 		if (addStemPanel == null) {
@@ -167,7 +169,9 @@ public class AddStemWindow extends GridPortalComponent {
 			jLabel10.setText("Local Name");
 			addStemPanel = new JPanel();
 			addStemPanel.setLayout(new GridBagLayout());
-			addStemPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Stem", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+			addStemPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Stem",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel
+					.getPanelLabelColor()));
 			addStemPanel.add(jLabel10, gridBagConstraints35);
 			addStemPanel.add(getChildName(), gridBagConstraints36);
 			addStemPanel.add(jLabel11, gridBagConstraints37);
@@ -183,10 +187,11 @@ public class AddStemWindow extends GridPortalComponent {
 		return addStemPanel;
 	}
 
+
 	/**
-	 * This method initializes childName	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes childName
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getChildName() {
 		if (childName == null) {
@@ -195,10 +200,11 @@ public class AddStemWindow extends GridPortalComponent {
 		return childName;
 	}
 
+
 	/**
-	 * This method initializes childDisplayName	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes childDisplayName
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getChildDisplayName() {
 		if (childDisplayName == null) {
@@ -207,10 +213,11 @@ public class AddStemWindow extends GridPortalComponent {
 		return childDisplayName;
 	}
 
+
 	/**
-	 * This method initializes addChildStem	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes addChildStem
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getAddChildStem() {
 		if (addChildStem == null) {
@@ -222,40 +229,35 @@ public class AddStemWindow extends GridPortalComponent {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
 							StemI stem = node.getStem();
-							int eid = node.getBrowser().getProgress()
-									.startEvent("Adding a child stem....");
+							int eid = node.getBrowser().getProgress().startEvent("Adding a child stem....");
 							try {
 
 								String ext = Utils.clean(childName.getText());
 								if (ext == null) {
-									PortalUtils
-											.showErrorMessage("You must enter a local name for the stem!!!");
+									GridApplication.getContext().showErrorMessage(
+										"You must enter a local name for the stem!!!");
 									return;
 								}
 
-								String disExt = Utils.clean(childDisplayName
-										.getText());
+								String disExt = Utils.clean(childDisplayName.getText());
 								if (disExt == null) {
-									PortalUtils
-											.showErrorMessage("You must enter a local display name for the stem!!!");
+									GridApplication.getContext().showErrorMessage(
+										"You must enter a local display name for the stem!!!");
 									return;
 								}
 
 								stem.addChildStem(ext, disExt);
 								node.refresh();
-								node.getBrowser().getProgress().stopEvent(eid,
-										"Successfully added a child stem!!!");
+								node.getBrowser().getProgress().stopEvent(eid, "Successfully added a child stem!!!");
 								dispose();
 							} catch (Exception e) {
-								node.getBrowser().getProgress().stopEvent(eid,
-										"Error adding a child stem!!!");
-								PortalUtils.showErrorMessage(e);
+								node.getBrowser().getProgress().stopEvent(eid, "Error adding a child stem!!!");
+								GridApplication.getContext().showErrorMessage(e);
 							}
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -266,10 +268,11 @@ public class AddStemWindow extends GridPortalComponent {
 		return addChildStem;
 	}
 
+
 	/**
-	 * This method initializes buttonPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes buttonPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
@@ -286,10 +289,11 @@ public class AddStemWindow extends GridPortalComponent {
 		return buttonPanel;
 	}
 
+
 	/**
-	 * This method initializes cancelButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes cancelButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
@@ -305,10 +309,11 @@ public class AddStemWindow extends GridPortalComponent {
 		return cancelButton;
 	}
 
+
 	/**
-	 * This method initializes gridGrouper	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes gridGrouper
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getGridGrouper() {
 		if (gridGrouper == null) {
@@ -319,10 +324,11 @@ public class AddStemWindow extends GridPortalComponent {
 		return gridGrouper;
 	}
 
+
 	/**
-	 * This method initializes credentials	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes credentials
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getCredentials() {
 		if (credentials == null) {
@@ -333,19 +339,20 @@ public class AddStemWindow extends GridPortalComponent {
 		return credentials;
 	}
 
+
 	/**
-	 * This method initializes parentStem	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes parentStem
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getParentStem() {
 		if (parentStem == null) {
 			parentStem = new JTextField();
 			parentStem.setEditable(false);
-			GridGrouperBaseTreeNode parent = (GridGrouperBaseTreeNode)node.getParent();
-			if(parent instanceof StemTreeNode){
-				parentStem.setText(((StemTreeNode)parent).getStem().getDisplayName());	
-			}else{
+			GridGrouperBaseTreeNode parent = (GridGrouperBaseTreeNode) node.getParent();
+			if (parent instanceof StemTreeNode) {
+				parentStem.setText(((StemTreeNode) parent).getStem().getDisplayName());
+			} else {
 				parentStem.setText("Root");
 			}
 		}

@@ -282,7 +282,6 @@
         <jar jarfile="${build.lib.dir}/${ui.jar.name}" basedir="${build.dest}">
 			    <fileset dir="${build.dest}" includes="**/ui/**"/>
 			    <fileset dir="resources/ui/gridgrouper"/>
-			    <fileset dir="ext/resources/portal/common"/>
 		</jar>
         <jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
             <include name="**/*" />
@@ -455,7 +454,8 @@
 	  </target>
 	  
 	   <target name="ui" description="Run the Grid Grouper Admin UI" depends="checkGlobus">
-        <java classname="gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperUI" fork="yes">
+        <java classname="org.cagrid.grape.GridApplication" fork="yes">
+	        <arg value="etc/gridgrouper-ui.xml" />
 	        <classpath refid="run.classpath"/>
             <classpath>
                 <pathelement location="resources/ui/gridgrouper" />

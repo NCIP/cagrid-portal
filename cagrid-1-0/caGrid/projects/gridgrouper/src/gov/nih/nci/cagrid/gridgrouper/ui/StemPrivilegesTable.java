@@ -1,24 +1,23 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
-
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.table.GrapeBaseTable;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class StemPrivilegesTable extends PortalBaseTable {
+public class StemPrivilegesTable extends GrapeBaseTable {
 	public final static String CADDY = "Caddy";
 
 	public final static String IDENTITY = "Identity";
@@ -28,6 +27,7 @@ public class StemPrivilegesTable extends PortalBaseTable {
 	public final static String STEMMER = "Stem";
 
 	private StemBrowser browser;
+
 
 	public StemPrivilegesTable(StemBrowser browser) {
 		super(createTableModel());
@@ -52,6 +52,7 @@ public class StemPrivilegesTable extends PortalBaseTable {
 
 	}
 
+
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(CADDY);
@@ -62,6 +63,7 @@ public class StemPrivilegesTable extends PortalBaseTable {
 
 	}
 
+
 	public void addPrivilege(final StemPrivilegeCaddy priv) {
 		Vector v = new Vector();
 		v.add(priv);
@@ -71,8 +73,8 @@ public class StemPrivilegesTable extends PortalBaseTable {
 		addRow(v);
 	}
 
-	public synchronized StemPrivilegeCaddy getSelectedPrivilege()
-			throws Exception {
+
+	public synchronized StemPrivilegeCaddy getSelectedPrivilege() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
 			return (StemPrivilegeCaddy) getValueAt(row, 0);
@@ -80,6 +82,7 @@ public class StemPrivilegesTable extends PortalBaseTable {
 			throw new Exception("Please select a privilege!!!");
 		}
 	}
+
 
 	public synchronized void removeSelectedPrivilege() throws Exception {
 		int row = getSelectedRow();
@@ -90,14 +93,12 @@ public class StemPrivilegesTable extends PortalBaseTable {
 		}
 	}
 
+
 	public void doubleClick() throws Exception {
 		StemPrivilegeCaddy caddy = getSelectedPrivilege();
-		PortalResourceManager
-				.getInstance()
-				.getGridPortal()
-				.addGridPortalComponent(
-						new StemPrivilegeWindow(browser, caddy), 500, 200);
+		GridApplication.getContext().addApplicationComponent(new StemPrivilegeWindow(browser, caddy), 500, 200);
 	}
+
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub

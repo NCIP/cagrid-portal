@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 
@@ -15,21 +14,21 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class AddGridGrouperWindow extends GridPortalComponent {
+public class AddGridGrouperWindow extends ApplicationComponent {
 
 	private static final long serialVersionUID = 1L;
 
@@ -51,6 +50,7 @@ public class AddGridGrouperWindow extends GridPortalComponent {
 
 	private GridGroupersTreeNode root;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -59,6 +59,7 @@ public class AddGridGrouperWindow extends GridPortalComponent {
 		this.root = node;
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -71,6 +72,7 @@ public class AddGridGrouperWindow extends GridPortalComponent {
 		this.setTitle("Add Grid Grouper");
 		this.setFrameIcon(GridGrouperLookAndFeel.getGrouperIcon22x22());
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -85,6 +87,7 @@ public class AddGridGrouperWindow extends GridPortalComponent {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes mainPanel
@@ -107,6 +110,7 @@ public class AddGridGrouperWindow extends GridPortalComponent {
 		}
 		return mainPanel;
 	}
+
 
 	/**
 	 * This method initializes treePanel
@@ -161,6 +165,7 @@ public class AddGridGrouperWindow extends GridPortalComponent {
 		return treePanel;
 	}
 
+
 	/**
 	 * This method initializes services
 	 * 
@@ -173,6 +178,7 @@ public class AddGridGrouperWindow extends GridPortalComponent {
 		return services;
 	}
 
+
 	/**
 	 * This method initializes credentials
 	 * 
@@ -184,6 +190,7 @@ public class AddGridGrouperWindow extends GridPortalComponent {
 		}
 		return credentials;
 	}
+
 
 	/**
 	 * This method initializes load
@@ -202,8 +209,7 @@ public class AddGridGrouperWindow extends GridPortalComponent {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -215,17 +221,16 @@ public class AddGridGrouperWindow extends GridPortalComponent {
 		return load;
 	}
 
+
 	private void loadGridGrouper() {
 		try {
-			String uri = ((GridGrouperServiceList) this.services)
-					.getSelectedService();
-			GlobusCredential cred = ((ProxyComboBox) this.credentials)
-					.getSelectedProxy();
+			String uri = ((GridGrouperServiceList) this.services).getSelectedService();
+			GlobusCredential cred = ((ProxyComboBox) this.credentials).getSelectedProxy();
 			this.dispose();
 			GridGrouper grouper = new GridGrouper(uri, cred);
 			this.root.addGridGrouper(grouper);
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 
 	}

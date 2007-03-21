@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gts.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPrioritySpecification;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
@@ -10,6 +9,8 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.cagrid.grape.table.GrapeBaseTable;
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -17,7 +18,7 @@ import javax.swing.table.TableColumn;
  * @version $Id: TrustedAuthorityTable.java,v 1.1 2006/03/27 18:52:57 langella
  *          Exp $
  */
-public class AuthorityTable extends PortalBaseTable {
+public class AuthorityTable extends GrapeBaseTable{
 	public final static String AUTHORITY = "authority";
 
 	public final static String SERVICE_URI = "GTS URI";

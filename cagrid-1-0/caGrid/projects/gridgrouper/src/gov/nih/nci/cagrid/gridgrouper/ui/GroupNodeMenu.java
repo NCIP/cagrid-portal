@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import org.cagrid.grape.GridApplication;
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
@@ -35,7 +36,7 @@ public class GroupNodeMenu extends GridGrouperTreeNodeMenu {
 			getBrowser().getProgress().stopEvent(id,
 					"Error removing the group !!!");
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 	}
 

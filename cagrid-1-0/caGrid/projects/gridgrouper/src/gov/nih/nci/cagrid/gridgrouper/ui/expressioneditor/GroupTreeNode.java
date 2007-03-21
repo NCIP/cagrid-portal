@@ -43,19 +43,18 @@
 
 package gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 import gov.nih.nci.cagrid.gridgrouper.client.Group;
 import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 
 import javax.swing.ImageIcon;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
@@ -63,40 +62,43 @@ public class GroupTreeNode extends GridGrouperBaseTreeNode {
 
 	private Group group;
 
+
 	public GroupTreeNode(GridGrouperExpressionEditor editor, Group group) {
 		super(editor);
 		this.group = group;
 	}
 
+
 	public void refresh() {
-		int id = getEditor().getProgress().startEvent(
-				"Refreshing " + toString() + ".... ");
+		int id = getEditor().getProgress().startEvent("Refreshing " + toString() + ".... ");
 		try {
 			if (parent != null) {
 				getTree().reload(parent);
 			} else {
 				getTree().reload();
 			}
-			getEditor().getProgress().stopEvent(id,
-					"Refreshed " + toString() + "!!!");
+			getEditor().getProgress().stopEvent(id, "Refreshed " + toString() + "!!!");
 		} catch (Exception e) {
-			getEditor().getProgress().stopEvent(id,
-					"Error refreshing " + toString() + "!!!");
-			PortalUtils.showErrorMessage(e);
+			getEditor().getProgress().stopEvent(id, "Error refreshing " + toString() + "!!!");
+			Util.showErrorMessage(e);
 		}
 	}
+
 
 	public ImageIcon getIcon() {
 		return GridGrouperLookAndFeel.getGroupIcon16x16();
 	}
 
+
 	public String toString() {
 		return group.getDisplayExtension();
 	}
 
+
 	public GridGrouper getGridGrouper() {
 		return group.getGridGrouper();
 	}
+
 
 	public Group getGroup() {
 		return group;

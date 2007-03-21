@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
@@ -33,19 +31,20 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalBaseFrame;
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.3 2007-02-13 15:00:08 dervin Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.4 2007-03-21 19:36:06 langella Exp $
  */
-public class TrustedIdPWindow extends GridPortalBaseFrame {
+public class TrustedIdPWindow extends ApplicationComponent{
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
 	public static final String KERBEROS = SAMLAuthenticationMethod.value2.getValue();
 	public static final String SRP = SAMLAuthenticationMethod.value3.getValue();
@@ -326,7 +325,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -425,13 +424,13 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 				dispose();
 			} else {
 				client.updateTrustedIdP(idp);
-				PortalUtils.showMessage("The Trusted IdP was updated successfully.");
+				GridApplication.getContext().showMessage("The Trusted IdP was updated successfully.");
 			}
 		} catch (PermissionDeniedFault pdf) {
-			PortalUtils.showErrorMessage(pdf);
+			GridApplication.getContext().showErrorMessage(pdf);
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 		}
 
 	}
@@ -447,7 +446,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Trusted Identity Provider",
 				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
-				PortalLookAndFeel.getPanelLabelColor()));
+				LookAndFeel.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel.getTrustedIdPIcon(), getInfoPanel(), null);
 			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
 			jTabbedPane.addTab(ATTRIBUTES_PANEL, DorianLookAndFeel.getAttributesIcon(), getAttributesPanel(), null);
@@ -590,7 +589,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
 				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null,
-				PortalLookAndFeel.getPanelLabelColor()));
+				LookAndFeel.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);
 			jPanel2.add(credentialLabel, gridBagConstraints);
@@ -934,7 +933,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			authPanel.add(unspecifiedLabel, gridBagConstraints39);
 			authPanel.setBorder(BorderFactory.createTitledBorder(null, "Accepted Authentication Methods",
 				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
-				PortalLookAndFeel.getPanelLabelColor()));
+				LookAndFeel.getPanelLabelColor()));
 			authPanel.add(passwordLabel, gridBagConstraints15);
 			authPanel.add(getPasswordMethod(), gridBagConstraints14);
 
@@ -1275,7 +1274,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			jPanel.add(getEmail(), gridBagConstraints56);
 			jPanel.setBorder(BorderFactory.createTitledBorder(null, "SAML Attribute Descriptions",
 				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null,
-				PortalLookAndFeel.getPanelLabelColor()));
+				LookAndFeel.getPanelLabelColor()));
 		}
 		return jPanel;
 	}

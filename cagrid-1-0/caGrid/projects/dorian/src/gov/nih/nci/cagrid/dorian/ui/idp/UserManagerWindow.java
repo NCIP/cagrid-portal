@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.dorian.ui.idp;
 
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
@@ -18,7 +16,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -27,19 +24,20 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.portal.GridPortalBaseFrame;
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.3 2007-02-13 14:56:24 dervin Exp $
+ * @version $Id: UserManagerWindow.java,v 1.4 2007-03-21 19:36:06 langella Exp $
  */
-public class UserManagerWindow extends GridPortalBaseFrame {
+public class UserManagerWindow extends ApplicationComponent {
 
 	private final static String ROLE_PANEL = "Role";
 
@@ -151,6 +149,8 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 	private JProgressBar progress = null;
 
+	private JButton removeUser = null;
+
 
 	/**
 	 * This is the default constructor
@@ -164,7 +164,6 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -247,8 +246,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			contentPanel.setLayout(new GridBagLayout());
 			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Users",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
-				PortalLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.weighty = 1.0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
@@ -267,6 +265,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
 			buttonPanel.add(getManageUser(), null);
+			buttonPanel.add(getRemoveUser(), null);
 			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
@@ -282,7 +281,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Close");
-			cancel.setIcon(PortalLookAndFeel.getCloseIcon());
+			cancel.setIcon(LookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -352,22 +351,21 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 					try {
 						GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
 
-						PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+						GridApplication.getContext().addApplicationComponent(
 							new UserWindow(serviceName, proxyCred, user));
 					} catch (Exception e) {
-						PortalUtils.showErrorMessage(e);
+						GridApplication.getContext().showErrorMessage(e);
 					}
 				}
 			};
 			try {
-				PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+				GridApplication.getContext().executeInBackground(runner);
 			} catch (Exception t) {
 				t.getMessage();
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(PortalResourceManager.getInstance().getGridPortal(),
-				"Please select a user to manage!!!");
+			GridApplication.getContext().showErrorMessage("Please select a user to manage!!!");
 		}
 	}
 
@@ -408,8 +406,8 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
-				PortalLookAndFeel.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+					.getPanelLabelColor()));
 			jTabbedPane.addTab(STATUS_PANEL, null, getStatus(), null);
 			jTabbedPane.addTab(INFO_PANEL, null, getJPanel1(), null);
 			jTabbedPane.addTab(ROLE_PANEL, null, getRole(), null);
@@ -826,8 +824,8 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null,
-				PortalLookAndFeel.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+					.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -860,7 +858,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Users");
-			query.setIcon(PortalLookAndFeel.getQueryIcon());
+			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
@@ -869,7 +867,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -885,7 +883,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 		synchronized (mutex) {
 			if (isQuerying) {
-				PortalUtils.showErrorMessage("Query Already in Progress",
+				GridApplication.getContext().showErrorMessage("Query Already in Progress",
 					"Please wait until the current query is finished before executing another.");
 				return;
 			} else {
@@ -934,11 +932,11 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			}
 			this.updateProgress(false, "Querying Completed [" + length + " users found]");
 		} catch (PermissionDeniedFault pdf) {
-			PortalUtils.showErrorMessage(pdf);
+			GridApplication.getContext().showErrorMessage(pdf);
 			this.updateProgress(false, "Error");
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			GridApplication.getContext().showErrorMessage(e);
 			this.updateProgress(false, "Error");
 		}
 		isQuerying = false;
@@ -1071,7 +1069,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setForeground(PortalLookAndFeel.getPanelLabelColor());
+			progress.setForeground(LookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -1087,6 +1085,75 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			}
 		});
 
+	}
+
+
+	/**
+	 * This method initializes removeUser
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getRemoveUser() {
+		if (removeUser == null) {
+			removeUser = new JButton();
+			removeUser.setText("Remove User");
+			removeUser.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							removeUser();
+						}
+					};
+					try {
+						GridApplication.getContext().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+
+				}
+			});
+			removeUser.setIcon(DorianLookAndFeel.getRemoveUserIcon());
+		}
+		return removeUser;
+	}
+
+
+	private synchronized void removeUser() {
+		synchronized (mutex) {
+			if (isQuerying) {
+				GridApplication.getContext().showErrorMessage("Action in Progress",
+					"Please wait until the current action is finished before executing another.");
+				return;
+			} else {
+				isQuerying = true;
+			}
+		}
+
+		final int row = getUsersTable().getSelectedRow();
+
+		if ((row >= 0) && (row < getUsersTable().getRowCount())) {
+			IdPUser user = (IdPUser) getUsersTable().getValueAt(row, 0);
+			this.updateProgress(true, "Removing the user " + user.getUserId() + "...");
+
+			try {
+				GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
+				String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
+				IdPAdministrationClient client = new IdPAdministrationClient(serviceUrl, proxyCred);
+				client.removeUser(user.getUserId());
+				getUsersTable().removeRow(row);
+				this.updateProgress(false, "Successfully removed the user " + user.getUserId() + "!!!");
+			} catch (PermissionDeniedFault pdf) {
+				GridApplication.getContext().showErrorMessage(pdf);
+				this.updateProgress(false, "Error removing the user " + user.getUserId() + "!!!");
+			} catch (Exception e) {
+				e.printStackTrace();
+				GridApplication.getContext().showErrorMessage(e);
+				this.updateProgress(false, "Error removing the user " + user.getUserId() + "!!!");
+			}
+		} else {
+			GridApplication.getContext().showErrorMessage("Please select a user to remove!!!");
+		}
+		isQuerying = false;
 	}
 
 }

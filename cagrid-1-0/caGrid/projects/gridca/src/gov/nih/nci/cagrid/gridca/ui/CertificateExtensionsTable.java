@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gridca.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
 
 import java.security.cert.X509Certificate;
@@ -11,14 +10,16 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.cagrid.grape.table.GrapeBaseTable;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateExtensionsTable.java,v 1.1 2006-09-08 17:31:39 langella Exp $
+ * @version $Id: CertificateExtensionsTable.java,v 1.2 2007-03-21 19:36:22 langella Exp $
  */
-public class CertificateExtensionsTable extends PortalBaseTable {
+public class CertificateExtensionsTable extends GrapeBaseTable{
 
 	public final static String OID = "OID";
 	public final static String NAME = "NAME";

@@ -6,7 +6,6 @@
 	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="src" path="build/stubs-GTS/src"/>
-	<classpathentry kind="src" path="ext/resources/portal/common"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
@@ -56,11 +55,6 @@
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
@@ -73,7 +67,6 @@
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-core-tests.jar"/>
@@ -82,5 +75,9 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-grape.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-grape-resources.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

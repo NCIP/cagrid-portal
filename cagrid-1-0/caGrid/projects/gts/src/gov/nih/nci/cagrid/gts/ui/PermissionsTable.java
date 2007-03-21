@@ -1,12 +1,13 @@
 package gov.nih.nci.cagrid.gts.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+
+import org.cagrid.grape.table.GrapeBaseTable;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -15,7 +16,7 @@ import javax.swing.table.TableColumn;
  * @version $Id: TrustedAuthorityTable.java,v 1.1 2006/03/27 18:52:57 langella
  *          Exp $
  */
-public class PermissionsTable extends PortalBaseTable {
+public class PermissionsTable extends GrapeBaseTable {
 	public final static String PERMISSION = "permission";
 
 	public final static String GRID_IDENTITY = "Grid Identity";

@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.dorian.ui.idp;
 
-import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 
 import java.util.Vector;
@@ -8,13 +7,15 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.cagrid.grape.table.GrapeBaseTable;
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.1 2006-09-08 19:22:18 langella Exp $
+ * @version $Id: UsersTable.java,v 1.2 2007-03-21 19:36:06 langella Exp $
  */
-public class UsersTable extends PortalBaseTable {
+public class UsersTable extends GrapeBaseTable {
 	public final static String USER = "user";
 
 	public final static String USERNAME = "Username";
