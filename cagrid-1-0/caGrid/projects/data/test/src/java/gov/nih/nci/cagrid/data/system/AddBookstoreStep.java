@@ -16,7 +16,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: AddBookstoreStep.java,v 1.3 2007-03-02 22:35:00 oster Exp $
+ * @version $Id: AddBookstoreStep.java,v 1.4 2007-03-21 16:32:46 dervin Exp $
  */
 public class AddBookstoreStep extends Step {
 
@@ -49,8 +49,11 @@ public class AddBookstoreStep extends Step {
 		File bookstoreXSDDest = new File(schemaDir + File.separator + "bookstore.xsd");
 		Utils.copyFile(new File(bookstoreFilename), bookstoreXSDDest);
 
-		NamespaceType bookstoreNsType = CommonTools.createNamespaceType(bookstoreXSDDest.getAbsolutePath(), new File(
-			schemaDir));
+		NamespaceType bookstoreNsType = CommonTools.createNamespaceType(
+            bookstoreXSDDest.getAbsolutePath(), new File(schemaDir));
+        
+        // set the package name of the bookstore namespace type
+        bookstoreNsType.setPackageName("org.projectmobius.bookstore");
 
 		// add the namesapce type to the service description
 		CommonTools.addNamespace(desc, bookstoreNsType);
