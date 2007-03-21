@@ -74,7 +74,7 @@
 
 
 	<!-- system tests against the basic data service -->
-	<target name="testSystem" depends="setGlobus,  prepareClasspaths" description="Runs system tests">
+	<target name="systemTest" depends="setGlobus,  prepareClasspaths" description="Runs system tests">
 		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
 			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
