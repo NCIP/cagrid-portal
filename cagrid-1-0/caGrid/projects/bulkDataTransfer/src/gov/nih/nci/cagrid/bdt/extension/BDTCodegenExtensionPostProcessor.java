@@ -90,11 +90,11 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
         if (mainService.getMethods() != null && mainService.getMethods().getMethod() != null) {
             for (int i = 0; i < mainService.getMethods().getMethod().length; i++) {
                 MethodType method = mainService.getMethods().getMethod(i);
-                if (method.getOutput().getIsClientHandle() != null
+                if ((method.getOutput().getIsClientHandle() != null
                     && method.getOutput().getIsClientHandle().booleanValue()
                     && method.getOutput().getClientHandleClass().equals(
                         mainService.getPackageName() + ".bdt.client." + mainService.getName()
-                            + "BulkDataHandlerClient")) {
+                            + "BulkDataHandlerClient")) || method.getOutput().getQName().getLocalPart().equals(mainService.getName() + "BulkDataHandlerReference")) {
                     // need to see if i have added the base impl to this method
                     boolean needToAdd = false;
                     File implSourceFile = new File(info.getBaseDirectory() + File.separator + "src" + File.separator
