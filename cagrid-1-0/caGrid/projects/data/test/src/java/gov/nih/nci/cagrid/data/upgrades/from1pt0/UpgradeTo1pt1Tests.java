@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.data.upgrades.from1pt0;
 
+import gov.nih.nci.cagrid.data.creation.DeleteOldServiceStep;
+import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+
 import java.io.File;
 import java.util.Vector;
 
@@ -15,11 +18,16 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTo1pt1Tests.java,v 1.3 2007-02-26 21:43:11 dervin Exp $ 
+ * @version $Id: UpgradeTo1pt1Tests.java,v 1.4 2007-03-22 14:31:50 dervin Exp $ 
  */
 public class UpgradeTo1pt1Tests extends Story {
 	public static final String TEST_DIR = "../data/test";
+    
 	public static final String SERVICE_DIR = TEST_DIR + File.separator + "BasicDataService";
+    public static final String SERVICE_NAME = "BasicDataService";
+    public static final String SERVICE_PACKAGE = "basicdataservice.cagrid.nci.nih.gov";
+    public static final String SERVICE_NAMESPACE = "http://basicdataservice.cagrid.nci.nih.gov/BasicDataService";
+    
 	
 	public String getDescription() {
 		return "Tests upgrade of a data service from version 1.0 to 1.1";
@@ -27,13 +35,14 @@ public class UpgradeTo1pt1Tests extends Story {
 	
 
 	protected Vector steps() {
+        TestServiceInfo info = new Upgrade1pt0to1pt1TestServiceInfo();
 		Vector steps = new Vector();
 		// steps to unpack and upgrade the old service
-		steps.add(new DeleteServiceDirectoryStep(SERVICE_DIR));
+		steps.add(new DeleteOldServiceStep(info));
 		steps.add(new UnzipOldServiceStep(TEST_DIR));
-		steps.add(new UpgradeIntroduceServiceStep(SERVICE_DIR));
-		steps.add(new UpgradeDataServiceExtensionStep(SERVICE_DIR));
-		steps.add(new BuildUpgradedServiceStep(SERVICE_DIR));
+		steps.add(new UpgradeIntroduceServiceStep(info.getDir()));
+		steps.add(new UpgradeDataServiceExtensionStep(info.getDir()));
+		steps.add(new BuildUpgradedServiceStep(info.getDir()));
 		
 		return steps;
 	}
@@ -53,9 +62,29 @@ public class UpgradeTo1pt1Tests extends Story {
 	}
 	
 	
-	public static class ServiceInfoHolder {
-		public String serviceName;
-		public String servicePackage;
-		public String serviceNamespace;
+	public static class Upgrade1pt0to1pt1TestServiceInfo implements TestServiceInfo {
+	    public String getDir() {
+	        return UpgradeTo1pt1Tests.SERVICE_DIR;
+	    }
+
+
+	    public String getName() {
+	        return SERVICE_NAME;
+	    }
+
+
+	    public String getNamespace() {
+	        return SERVICE_NAMESPACE;
+	    }
+
+
+	    public String getPackage() {
+	        return SERVICE_PACKAGE;
+	    }
+
+
+	    public String getExtensions() {
+	        return "data";
+	    }
 	}
 }

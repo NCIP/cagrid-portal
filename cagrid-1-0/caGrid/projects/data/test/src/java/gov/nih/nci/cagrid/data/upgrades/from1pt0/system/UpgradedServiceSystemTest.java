@@ -27,15 +27,11 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.2 2007-03-22 14:21:25 dervin Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.3 2007-03-22 14:31:50 dervin Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
-	
-	public static final String SERVICE_NAME = "BasicDataService";
-	public static final String SERVICE_PACKAGE = "basicdataservice.cagrid.nci.nih.gov";
-	public static final String SERVICE_NAMESPACE = "http://basicdataservice.cagrid.nci.nih.gov/BasicDataService";
-	
+    
 	private static GlobusHelper globusHelper = 
 		new GlobusHelper(false, 
 			new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT + 5);
@@ -52,31 +48,7 @@ public class UpgradedServiceSystemTest extends Story {
 
 
 	protected Vector steps() {
-        TestServiceInfo info = new TestServiceInfo() {
-          public String getDir() {
-              return UpgradeTo1pt1Tests.SERVICE_DIR;
-          }
-          
-          
-          public String getName() {
-              return SERVICE_NAME;
-          }
-          
-          
-          public String getNamespace() {
-              return SERVICE_NAMESPACE;
-          }
-          
-          
-          public String getPackage() {
-              return SERVICE_PACKAGE;
-          }
-          
-          
-          public String getExtensions() {
-              return "data";
-          }
-        };
+        TestServiceInfo info = new UpgradeTo1pt1Tests.Upgrade1pt0to1pt1TestServiceInfo();
 		Vector steps = new Vector();
 		// steps to invoke the upgraded service 
 		// by the data service creation tests
