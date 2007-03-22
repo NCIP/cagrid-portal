@@ -41,7 +41,7 @@
 		}
 
 		//return the typed EPR
-		bulkdatahandlerreference.BulkDataHandlerReference ref = new bulkdatahandlerreference.BulkDataHandlerReference();
+		<%=arguments.getService().getPackageName()%>.bdt.stubs.types.<%=serviceName%>BulkDataHandlerReference ref = new <%=arguments.getService().getPackageName()%>.bdt.stubs.types.<%=serviceName%>BulkDataHandlerReference();
 		ref.setEndpointReference(epr);
 
 		return ref;
