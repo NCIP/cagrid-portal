@@ -23,6 +23,8 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.xml.namespace.QName;
+
 import org.projectmobius.common.MobiusException;
 
 /** 
@@ -32,7 +34,7 @@ import org.projectmobius.common.MobiusException;
  * @author David Ervin
  * 
  * @created Mar 9, 2007 3:45:48 PM
- * @version $Id: BDTFeatureCreator.java,v 1.4 2007-03-20 17:32:30 dervin Exp $ 
+ * @version $Id: BDTFeatureCreator.java,v 1.5 2007-03-22 19:30:14 dervin Exp $ 
  */
 public class BDTFeatureCreator extends FeatureCreator {
 	
@@ -141,13 +143,7 @@ public class BDTFeatureCreator extends FeatureCreator {
         bdtImport.setNamespace(DataServiceConstants.BDT_DATA_SERVICE_NAMESPACE);
         bdtImport.setPortTypeName(BDTDataServicePortType.class.getSimpleName());
         bdtQueryMethod.setImportInformation(bdtImport);
-        // provider information
-        /*
-        MethodTypeProviderInformation bdtProvider = new MethodTypeProviderInformation();
-        bdtProvider.setProviderClass(BDTDataServiceProviderImpl.class.getName());
-        bdtQueryMethod.setProviderInformation(bdtProvider);
-        */
-		// input of CQL query
+        // input of CQL query
 		MethodTypeInputs inputs = new MethodTypeInputs();
 		MethodTypeInputsInput cqlInput = new MethodTypeInputsInput();
 		cqlInput.setQName(DataServiceConstants.CQL_QUERY_QNAME);
@@ -158,10 +154,16 @@ public class BDTFeatureCreator extends FeatureCreator {
 		bdtQueryMethod.setInputs(inputs);
 		// output of BDT client handle
 		MethodTypeOutput bdtHandleOutput = new MethodTypeOutput();
-		bdtHandleOutput.setQName(DataServiceConstants.BDT_HANDLER_REFERENCE_QNAME);
+        QName handleQname = new QName(
+            getMainService().getNamespace() + "BDT/types",
+            getMainService().getName() + "BulkDataHandlerReference"
+        );
+        bdtHandleOutput.setQName(handleQname);
 		bdtHandleOutput.setIsArray(false);
 		bdtHandleOutput.setIsClientHandle(Boolean.TRUE);
-		bdtHandleOutput.setClientHandleClass(DataServiceConstants.BDT_HANDLER_CLIENT_CLASSNAME);
+        String clientHandleClass = getMainService().getPackageName() 
+            + ".bdt.client." + getMainService().getName() + "BulkDataHandlerClient";
+		bdtHandleOutput.setClientHandleClass(clientHandleClass);
 		bdtQueryMethod.setOutput(bdtHandleOutput);
 		
 		// add the method to the service
