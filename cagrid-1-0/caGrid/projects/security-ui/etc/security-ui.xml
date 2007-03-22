@@ -10,7 +10,7 @@
     </dimensions>
     <menus>
         <menu>
-            <title>Credentials</title>
+            <title>My Account</title>
             <description>tools</description>
             <showIcons>true</showIcons>
             <components>
@@ -50,6 +50,11 @@
             </components>
         </menu>
         <menu>
+           <title>User Management</title>
+            <description>tools</description>
+            <showIcons>false</showIcons>
+            <submenus>
+            <menu>
             <title>Grid User Management</title>
             <description>tools</description>
             <showIcons>true</showIcons>
@@ -73,9 +78,8 @@
                     <showOnToolBar>false</showOnToolBar>
                 </component>
             </components>
-        </menu>
-
-        <menu>
+            </menu>
+              <menu>
             <title>Local Accounts</title>
             <description>Tools for registering and managing local Dorian accounts.</description>
             <showIcons>true</showIcons>
@@ -105,6 +109,10 @@
 
             </components>
         </menu>
+            </submenus>
+        </menu>
+
+      
         <menu>
             <title>Trust Fabric</title>
             <description>tools</description>

@@ -273,7 +273,7 @@ public class GridApplication extends JFrame {
 				Menu[] menu = menus.getMenu();
 				if (menu != null) {
 					for (int i = 0; i < menu.length; i++) {
-						jJMenuBar.add(getMenu(toolbarComponents, menu[i], true));
+						jJMenuBar.add(getMenu(toolbarComponents, null, menu[i]));
 					}
 				}
 			}
@@ -284,10 +284,10 @@ public class GridApplication extends JFrame {
 	}
 
 
-	private javax.swing.JMenu getMenu(List toolbarComponents, Menu menu, boolean isRoot) {
+	private javax.swing.JMenu getMenu(List toolbarComponents, Menu parent, Menu menu) {
 		javax.swing.JMenu jmenu = new javax.swing.JMenu();
 		jmenu.setText(menu.getTitle());
-		if ((!isRoot) && (menu.getShowIcons())) {
+		if ((parent!=null) && (parent.getShowIcons())) {
 			jmenu.setIcon(IconUtils.loadIcon(menu.getIcon()));
 		}
 		jmenu.setMnemonic(java.awt.event.KeyEvent.VK_F);
@@ -297,7 +297,7 @@ public class GridApplication extends JFrame {
 			Menu[] submenu = submenus.getMenu();
 			if (submenu != null) {
 				for (int i = 0; i < submenu.length; i++) {
-					jmenu.add(getMenu(toolbarComponents, submenu[i], false));
+					jmenu.add(getMenu(toolbarComponents, menu,submenu[i]));
 				}
 			}
 		}
