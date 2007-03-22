@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://www.cagrid.org/1/grape file:/C:/projects/cagrid-1-0/caGrid/projects/grape/schema/grape.xsd">
     <name>Grape Sample Application</name>
     <icon>/caGrid-icon-22x22.gif</icon>
-    <AboutHTML><![CDATA[<html><h2>Grape</h2><h3>Authors:</h3><a href="mailto:langella@bmi.osu.edu">Stephen Langella</a> and <a href="mailto:oster@bmi.osu.edu">Scott Oster</a> and <a href="mailto:hastings@bmi.osu.edu">Shannon Hastings</a> and <a href="mailto:ervin@bmi.osu.edu">David Ervin</a></html>]]>	</AboutHTML>
+    <AboutHTML><![CDATA[<html><h2>Grid Application Environment (GRAPE)</h2>GRAPE was developed as part of the caGrid project to provide a framework for<BR> rapidly developing grid applications.  For more information on GRAPE or caGrid<BR> please visit us at <A HREF="http://www.cagrid.org">http://www.cagrid.org</a></html>]]></AboutHTML>
     <dimensions>
         <width>850</width>
         <height>700</height>
