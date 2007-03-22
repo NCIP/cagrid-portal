@@ -1,4 +1,4 @@
-package org.cagrid.gridftp.authorization.callout.db;
+package org.cagrid.gridftp.authorization.plugin.db;
 
 import java.net.MalformedURLException;
 import java.sql.Connection;
@@ -10,8 +10,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cagrid.gridftp.authorization.callout.GridFTPOperation;
-import org.cagrid.gridftp.authorization.callout.GridFTPTuple;
+import org.cagrid.gridftp.authorization.plugin.GridFTPOperation;
+import org.cagrid.gridftp.authorization.plugin.GridFTPTuple;
 
 
 /**
@@ -22,7 +22,7 @@ import org.cagrid.gridftp.authorization.callout.GridFTPTuple;
  * 
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * @created Mar 5, 2007
- * @version $Id: DBUtil.java,v 1.2 2007-03-21 14:08:47 jpermar Exp $
+ * @version $Id: DBUtil.java,v 1.1 2007-03-22 18:54:44 jpermar Exp $
  */
 public class DBUtil {
 

@@ -1,4 +1,4 @@
-package org.cagrid.gridftp.authorization.callout;
+package org.cagrid.gridftp.authorization.plugin;
 
 import java.net.MalformedURLException;
 import java.util.logging.FileHandler;
@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import org.cagrid.gridftp.authorization.callout.db.DatabaseAuthCallout;
+import org.cagrid.gridftp.authorization.plugin.db.DatabaseAuthCallout;
 
 /**
  * 
@@ -24,7 +24,7 @@ import org.cagrid.gridftp.authorization.callout.db.DatabaseAuthCallout;
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * 
  * @created Mar 20, 2007 
- * @version $Id: AbstractAuthCallout.java,v 1.1 2007-03-21 13:59:19 jpermar Exp $
+ * @version $Id: AbstractAuthCallout.java,v 1.1 2007-03-22 18:54:44 jpermar Exp $
  */
 public abstract class AbstractAuthCallout implements Authorize {
 

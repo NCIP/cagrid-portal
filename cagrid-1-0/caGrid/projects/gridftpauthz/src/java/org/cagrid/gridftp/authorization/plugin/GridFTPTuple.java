@@ -1,4 +1,4 @@
-package org.cagrid.gridftp.authorization.callout;
+package org.cagrid.gridftp.authorization.plugin;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,7 +13,7 @@ import java.net.URL;
  * @see GridFTPOperation
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * @created Mar 20, 2007
- * @version $Id: GridFTPTuple.java,v 1.1 2007-03-21 13:59:19 jpermar Exp $
+ * @version $Id: GridFTPTuple.java,v 1.1 2007-03-22 18:54:44 jpermar Exp $
  */
 public class GridFTPTuple {
 	private String _identity;

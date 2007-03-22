@@ -1,11 +1,11 @@
-package org.cagrid.gridftp.authorization.callout.gridgrouper;
+package org.cagrid.gridftp.authorization.plugin.gridgrouper;
 
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils;
 
 import java.util.logging.Level;
 
-import org.cagrid.gridftp.authorization.callout.AbstractAuthCallout;
-import org.cagrid.gridftp.authorization.callout.GridFTPTuple;
+import org.cagrid.gridftp.authorization.plugin.AbstractAuthCallout;
+import org.cagrid.gridftp.authorization.plugin.GridFTPTuple;
 
 /**
  * 
@@ -17,7 +17,7 @@ import org.cagrid.gridftp.authorization.callout.GridFTPTuple;
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * 
  * @created Mar 20, 2007 
- * @version $Id: GridGrouperAuthCallout.java,v 1.1 2007-03-21 13:59:19 jpermar Exp $
+ * @version $Id: GridGrouperAuthCallout.java,v 1.1 2007-03-22 18:54:44 jpermar Exp $
  */
 public class GridGrouperAuthCallout extends AbstractAuthCallout {
 

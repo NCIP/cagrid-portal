@@ -1,12 +1,12 @@
-package org.cagrid.gridftp.authorization.callout.db;
+package org.cagrid.gridftp.authorization.plugin.db;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import org.cagrid.gridftp.authorization.callout.AbstractAuthCallout;
-import org.cagrid.gridftp.authorization.callout.GridFTPTuple;
+import org.cagrid.gridftp.authorization.plugin.AbstractAuthCallout;
+import org.cagrid.gridftp.authorization.plugin.GridFTPTuple;
 
 /**
  * 
@@ -23,27 +23,27 @@ import org.cagrid.gridftp.authorization.callout.GridFTPTuple;
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * 
  * @created Mar 20, 2007 
- * @version $Id: DatabaseAuthCallout.java,v 1.1 2007-03-21 13:59:19 jpermar Exp $
+ * @version $Id: DatabaseAuthCallout.java,v 1.1 2007-03-22 18:54:44 jpermar Exp $
  */
 public class DatabaseAuthCallout extends AbstractAuthCallout {
 
 	/**
 	 * The property key for the DB connect string
 	 */
-	public static final String DB_CONNECT_STRING="db.connecturi";
+	public static final String DB_CONNECT_STRING = "db.connecturi";
 	/**
 	 * The property key for the DB user
 	 */
-	public static final String DB_USER_PROP_NAME="db.user";
+	public static final String DB_USER_PROP_NAME = "db.user";
 	/**
 	 * The property key for the DB password
 	 */
-	public static final String DB_PASSWORD_PROP_NAME="db.password";
+	public static final String DB_PASSWORD_PROP_NAME = "db.password";
 	
 	/**
 	 * The properties file that must be specified on the classpath.
 	 */
-	public static final String RESOURCE_LOCATION="org/cagrid/authorization/callout/gridftp/db/db.props";
+	public static final String RESOURCE_LOCATION = "org/cagrid/gridftp/authorization/plugin/db/db.props";
 	
 	private DBUtil _util;
 	private Object _sync = new Object();

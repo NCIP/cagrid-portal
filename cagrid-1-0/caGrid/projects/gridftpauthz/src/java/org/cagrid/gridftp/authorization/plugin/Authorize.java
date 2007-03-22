@@ -1,4 +1,4 @@
-package org.cagrid.gridftp.authorization.callout;
+package org.cagrid.gridftp.authorization.plugin;
 
 /**
  * This is the interface that all Java Authorization plugins must
@@ -12,7 +12,7 @@ package org.cagrid.gridftp.authorization.callout;
  *      href="http://www.globus.org/toolkit/docs/4.0/security/cas/WS_AA_CAS_HOWTO_Setup_GridFTP.html">WS_AA_CAS_HOWTO_Setup_GridFTP</a>
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * @created Mar 20, 2007
- * @version $Id: Authorize.java,v 1.1 2007-03-21 13:59:19 jpermar Exp $
+ * @version $Id: Authorize.java,v 1.1 2007-03-22 18:54:44 jpermar Exp $
  */
 public interface Authorize {
 
