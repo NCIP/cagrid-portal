@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.data.creation.enumeration;
 
+import gov.nih.nci.cagrid.data.creation.DeleteOldServiceStep;
+import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+
 import java.io.File;
 import java.util.Vector;
 
@@ -15,7 +18,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 30, 2006 
- * @version $Id: CreateEnumerationTests.java,v 1.1 2006-12-18 14:48:47 dervin Exp $ 
+ * @version $Id: CreateEnumerationTests.java,v 1.2 2007-03-22 14:21:25 dervin Exp $ 
  */
 public class CreateEnumerationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -31,11 +34,12 @@ public class CreateEnumerationTests extends Story {
 
 
 	protected Vector steps() {
+        TestServiceInfo info = new TestEnumerationDataServiceInfo();
 		Vector steps = new Vector();
 		// 1. delete any existing enumeration data service directory
-		steps.add(new DeleteOldServiceStep());
+		steps.add(new DeleteOldServiceStep(info));
 		// 2. create a new enumeration data service
-		steps.add(new CreateEnumerationDataServiceStep(getIntroduceBaseDir()));
+		steps.add(new CreateEnumerationDataServiceStep(info, getIntroduceBaseDir()));
 		return steps;
 	}
 	
@@ -61,4 +65,31 @@ public class CreateEnumerationTests extends Story {
 		TestResult result = runner.doRun(new TestSuite(CreateEnumerationTests.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
+    
+    
+    public static class TestEnumerationDataServiceInfo implements TestServiceInfo {
+        public String getName() {
+            return SERVICE_NAME;
+        }
+
+
+        public String getDir() {
+            return SERVICE_DIR;
+        }
+
+
+        public String getNamespace() {
+            return SERVICE_NAMESPACE;
+        }
+
+
+        public String getPackage() {
+            return PACKAGE_NAME;
+        }
+
+
+        public String getExtensions() {
+            return "data";
+        }
+    }
 }

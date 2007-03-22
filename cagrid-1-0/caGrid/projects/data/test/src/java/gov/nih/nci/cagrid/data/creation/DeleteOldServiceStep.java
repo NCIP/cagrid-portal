@@ -8,7 +8,7 @@ import com.atomicobject.haste.framework.Step;
 
 /** 
  *  DeleteOldServiceStep
- *  TODO:DOCUMENT ME
+ *  This step deletes an old service's directory from the file system
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
@@ -16,14 +16,16 @@ import com.atomicobject.haste.framework.Step;
  * @version $Id$ 
  */
 public class DeleteOldServiceStep extends Step {
+    private TestServiceInfo serviceInfo;
 	
-	public DeleteOldServiceStep() {
+	public DeleteOldServiceStep(TestServiceInfo serviceInfo) {
 		super();
+        this.serviceInfo = serviceInfo;
 	}
 	
 
 	public void runStep() throws Throwable {
-		File oldServiceDir = new File(CreationTests.SERVICE_DIR);
+		File oldServiceDir = new File(serviceInfo.getDir());
 		if (oldServiceDir.exists()) {
 			boolean deleted = Utils.deleteDir(oldServiceDir);
 			assertTrue("Failed to delete directory: " + oldServiceDir.getAbsolutePath(), deleted);
@@ -31,5 +33,4 @@ public class DeleteOldServiceStep extends Step {
 			System.out.println("Service dir " + oldServiceDir.getAbsolutePath() + " did not exist...");
 		}
 	}
-
 }

@@ -15,10 +15,12 @@ import com.atomicobject.haste.framework.Step;
  * @version $Id$ 
  */
 public class CreationStep extends Step {
-	private String introduceDir;
+    protected TestServiceInfo serviceInfo;
+    protected String introduceDir;
 	
-	public CreationStep(String introduceDir) {
+	public CreationStep(TestServiceInfo serviceInfo, String introduceDir) {
 		super();
+        this.serviceInfo = serviceInfo;
 		this.introduceDir = introduceDir;
 	}
 	
@@ -26,23 +28,37 @@ public class CreationStep extends Step {
 	public void runStep() throws Throwable {
 		System.out.println("Creating service...");
 
-		String cmd = CommonTools.getAntSkeletonCreationCommand(introduceDir, CreationTests.SERVICE_NAME, 
-			CreationTests.SERVICE_DIR, CreationTests.PACKAGE_NAME, CreationTests.SERVICE_NAMESPACE, "data");
+		String cmd = CommonTools.getAntSkeletonCreationCommand(introduceDir, serviceInfo.getName(), 
+			serviceInfo.getDir(), serviceInfo.getPackage(), serviceInfo.getNamespace(), serviceInfo.getExtensions());
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		assertTrue("Creating new data service failed", p.exitValue() == 0);
+        
+        postSkeletonCreation();
 		
 		System.out.println("Invoking post creation processes...");
-		cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, CreationTests.SERVICE_NAME,
-			CreationTests.SERVICE_DIR, CreationTests.PACKAGE_NAME, CreationTests.SERVICE_NAMESPACE, "data");
+		cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, serviceInfo.getName(),
+			serviceInfo.getDir(), serviceInfo.getPackage(), serviceInfo.getNamespace(), serviceInfo.getExtensions());
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		assertTrue("Service post creation process failed", p.exitValue() == 0);
+        
+        postSkeletonPostCreation();
 
 		System.out.println("Building created service...");
-		cmd = CommonTools.getAntAllCommand(CreationTests.SERVICE_DIR);
+		cmd = CommonTools.getAntAllCommand(serviceInfo.getDir());
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		assertTrue("Build process failed", p.exitValue() == 0);
 	}
+    
+    
+    protected void postSkeletonCreation() throws Throwable {
+        // subclasses can hook in here to do things post-skeleton creation
+    }
+    
+    
+    protected void postSkeletonPostCreation() throws Throwable {
+        // subclasses can hook in here to do things after post-creation process has run
+    }
 }

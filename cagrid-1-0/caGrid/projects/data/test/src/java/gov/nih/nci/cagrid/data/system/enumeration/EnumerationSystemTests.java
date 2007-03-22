@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.system.enumeration;
 
+import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
 import gov.nih.nci.cagrid.data.creation.enumeration.CreateEnumerationTests;
 import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
 import gov.nih.nci.cagrid.data.system.BaseSystemTest;
@@ -56,29 +57,27 @@ public class EnumerationSystemTests extends BaseSystemTest {
 
 
 	protected Vector steps() {
+        TestServiceInfo info = new CreateEnumerationTests.TestEnumerationDataServiceInfo();
 		Vector steps = new Vector();
 		// an enumeration supporting data service is presumed to have been
 		// created by a previous testing process
 		// 1) Add the bookstore schema to the data service
-		steps.add(new AddBookstoreStep(CreateEnumerationTests.SERVICE_DIR, 
-			CreateEnumerationTests.SERVICE_NAME));
+		steps.add(new AddBookstoreStep(info));
 		// 2) change out query processor
-		steps.add(new SetQueryProcessorStep(CreateEnumerationTests.SERVICE_DIR));
+		steps.add(new SetQueryProcessorStep(info.getDir()));
 		// 3) Turn on query validation
-		steps.add(new EnableValidationStep(CreateEnumerationTests.SERVICE_DIR));
+		steps.add(new EnableValidationStep(info.getDir()));
 		// 4) Rebuild the service to pick up the bookstore beans
-		steps.add(new RebuildServiceStep(getIntroduceBaseDir(), CreateEnumerationTests.SERVICE_DIR,
-			CreateEnumerationTests.SERVICE_NAME, CreateEnumerationTests.PACKAGE_NAME,
-			CreateEnumerationTests.SERVICE_NAMESPACE));
+		steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
 		// 5) set up a clean, temporary Globus
 		steps.add(new CreateCleanGlobusStep(globusHelper));
 		// 6) deploy data service
-		steps.add(new DeployDataServiceStep(globusHelper, CreateEnumerationTests.SERVICE_DIR));
+		steps.add(new DeployDataServiceStep(globusHelper, info.getDir()));
 		// 7) start globus
 		steps.add(new StartGlobusStep(globusHelper));
 		// 8) test data service
 		steps.add(new InvokeEnumerationDataServiceStep("localhost", IntroduceTestConstants.TEST_PORT + 2,
-			CreateEnumerationTests.SERVICE_NAME));
+			info.getName()));
 
 		return steps;
 	}

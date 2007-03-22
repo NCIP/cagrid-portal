@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.upgrades.from1pt0.system;
 
+import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
 import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
 import gov.nih.nci.cagrid.data.system.CreateCleanGlobusStep;
 import gov.nih.nci.cagrid.data.system.DeployDataServiceStep;
@@ -26,7 +27,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.1 2007-02-28 15:01:27 dervin Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.2 2007-03-22 14:21:25 dervin Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -51,29 +52,53 @@ public class UpgradedServiceSystemTest extends Story {
 
 
 	protected Vector steps() {
+        TestServiceInfo info = new TestServiceInfo() {
+          public String getDir() {
+              return UpgradeTo1pt1Tests.SERVICE_DIR;
+          }
+          
+          
+          public String getName() {
+              return SERVICE_NAME;
+          }
+          
+          
+          public String getNamespace() {
+              return SERVICE_NAMESPACE;
+          }
+          
+          
+          public String getPackage() {
+              return SERVICE_PACKAGE;
+          }
+          
+          
+          public String getExtensions() {
+              return "data";
+          }
+        };
 		Vector steps = new Vector();
 		// steps to invoke the upgraded service 
 		// by the data service creation tests
 		// 1) Add the bookstore schema to the data service
-		steps.add(new AddBookstoreStep(UpgradeTo1pt1Tests.SERVICE_DIR, SERVICE_NAME));
+		steps.add(new AddBookstoreStep(info));
 		// 2) change out query processor
-		steps.add(new SetQueryProcessorStep(UpgradeTo1pt1Tests.SERVICE_DIR));
+		steps.add(new SetQueryProcessorStep(info.getDir()));
 		// 3) remove anything thats not the query method
-		// steps.add(new RemoveNonQueryMethodsStep(UpgradeTo1pt1Tests.SERVICE_DIR));
+		// steps.add(new RemoveNonQueryMethodsStep(info.getDir()));
 		// 4) Turn on query validation
-		steps.add(new EnableValidationStep(UpgradeTo1pt1Tests.SERVICE_DIR));
+		steps.add(new EnableValidationStep(info.getDir()));
 		// 5) Rebuild the service to pick up the bookstore beans
-		steps.add(new RebuildServiceStep(getIntroduceBaseDir(), UpgradeTo1pt1Tests.SERVICE_DIR, 
-			SERVICE_NAME, SERVICE_PACKAGE, SERVICE_NAMESPACE));
+		steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
 		// 6) set up a clean, temporary Globus
 		steps.add(new CreateCleanGlobusStep(globusHelper));
 		// 7) deploy data service
-		steps.add(new DeployDataServiceStep(globusHelper, UpgradeTo1pt1Tests.SERVICE_DIR));
+		steps.add(new DeployDataServiceStep(globusHelper, info.getDir()));
 		// 8) start globus
 		steps.add(new StartGlobusStep(globusHelper));
 		// 9) test data service
 		steps.add(new InvokeDataServiceStep(
-			"localhost", IntroduceTestConstants.TEST_PORT + 5, SERVICE_NAME));
+			"localhost", IntroduceTestConstants.TEST_PORT + 5, info.getName()));
 		return steps;
 	}
 	

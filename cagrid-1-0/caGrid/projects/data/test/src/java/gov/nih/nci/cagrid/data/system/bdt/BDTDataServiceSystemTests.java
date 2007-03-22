@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.system.bdt;
 
+import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
 import gov.nih.nci.cagrid.data.creation.bdt.BDTDataServiceCreationTests;
 import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
 import gov.nih.nci.cagrid.data.system.BaseSystemTest;
@@ -31,7 +32,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:19:42 PM
- * @version $Id: BDTDataServiceSystemTests.java,v 1.1 2007-03-20 17:32:43 dervin Exp $ 
+ * @version $Id: BDTDataServiceSystemTests.java,v 1.2 2007-03-22 14:21:25 dervin Exp $ 
  */
 public class BDTDataServiceSystemTests extends BaseSystemTest {
 	private static GlobusHelper globusHelper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
@@ -57,19 +58,17 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 
 
 	protected Vector steps() {
+        TestServiceInfo info = new BDTDataServiceCreationTests.TestBDTDataServiceInfo();
 		Vector steps = new Vector();
 		// assumes the BDT service has been created already
 		// 1) Add the bookstore schema to the data service
-		steps.add(new AddBookstoreStep(BDTDataServiceCreationTests.SERVICE_DIR, 
-			BDTDataServiceCreationTests.SERVICE_NAME));
+		steps.add(new AddBookstoreStep(info));
 		// 2) change out query processor
 		steps.add(new SetQueryProcessorStep(BDTDataServiceCreationTests.SERVICE_DIR));
 		// 3) Turn on query validation
 		steps.add(new EnableValidationStep(BDTDataServiceCreationTests.SERVICE_DIR));
 		// 4) Rebuild the service to pick up the bookstore beans
-		steps.add(new RebuildServiceStep(getIntroduceBaseDir(), BDTDataServiceCreationTests.SERVICE_DIR,
-			BDTDataServiceCreationTests.SERVICE_NAME, BDTDataServiceCreationTests.PACKAGE_NAME,
-			BDTDataServiceCreationTests.SERVICE_NAMESPACE));
+		steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
 		// 5) set up a clean, temporary Globus
 		steps.add(new CreateCleanGlobusStep(globusHelper));
 		// 6) deploy data service

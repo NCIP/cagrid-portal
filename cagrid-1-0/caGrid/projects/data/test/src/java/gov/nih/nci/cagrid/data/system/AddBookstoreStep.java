@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data.system;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -16,24 +17,22 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: AddBookstoreStep.java,v 1.4 2007-03-21 16:32:46 dervin Exp $
+ * @version $Id: AddBookstoreStep.java,v 1.5 2007-03-22 14:21:25 dervin Exp $
  */
 public class AddBookstoreStep extends Step {
 
-	private String serviceBaseDir;
-	private String serviceName;
+    private TestServiceInfo serviceInfo;
 
 
-	public AddBookstoreStep(String serviceBaseDir, String serviceName) {
+	public AddBookstoreStep(TestServiceInfo info) {
 		super();
-		this.serviceBaseDir = serviceBaseDir;
-		this.serviceName = serviceName;
+		this.serviceInfo = info;
 	}
 
 
 	public void runStep() throws Throwable {
 		System.out.println("Running step: " + getClass().getName());
-		String serviceModelFile = this.serviceBaseDir + File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
+		String serviceModelFile = serviceInfo.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
 		ServiceDescription desc = null;
 		try {
 			desc = (ServiceDescription) Utils.deserializeDocument(serviceModelFile, ServiceDescription.class);
@@ -45,7 +44,8 @@ public class AddBookstoreStep extends Step {
 		String bookstoreFilename = "test" + File.separator + "resources" + File.separator + "bookstore.xsd";
 
 		// copy the schema to the service's lib directory
-		String schemaDir = this.serviceBaseDir + File.separator + "schema" + File.separator + this.serviceName;
+		String schemaDir = serviceInfo.getDir() + File.separator + "schema" 
+		    + File.separator + serviceInfo.getName();
 		File bookstoreXSDDest = new File(schemaDir + File.separator + "bookstore.xsd");
 		Utils.copyFile(new File(bookstoreFilename), bookstoreXSDDest);
 

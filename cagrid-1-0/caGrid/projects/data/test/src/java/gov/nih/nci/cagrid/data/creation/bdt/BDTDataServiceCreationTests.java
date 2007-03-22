@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.data.creation.bdt;
 
+import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+
 import java.io.File;
 import java.util.Vector;
 
@@ -16,7 +18,7 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 2:41:25 PM
- * @version $Id: BDTDataServiceCreationTests.java,v 1.1 2007-03-13 19:28:07 dervin Exp $ 
+ * @version $Id: BDTDataServiceCreationTests.java,v 1.2 2007-03-22 14:21:25 dervin Exp $ 
  */
 public class BDTDataServiceCreationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -33,10 +35,10 @@ public class BDTDataServiceCreationTests extends Story {
 
 
 	protected Vector steps() {
+        TestServiceInfo info = new TestBDTDataServiceInfo();
 		Vector steps = new Vector();
 		steps.add(new DeleteOldServiceStep(SERVICE_DIR));
-		steps.add(new CreateBDTServiceStep(
-			getIntroduceBaseDir(), SERVICE_NAME, PACKAGE_NAME, SERVICE_NAME, SERVICE_DIR));
+		steps.add(new CreateBDTServiceStep(info, getIntroduceBaseDir()));
 		return steps;
 	}
 
@@ -65,4 +67,31 @@ public class BDTDataServiceCreationTests extends Story {
 		TestResult result = runner.doRun(new TestSuite(BDTDataServiceCreationTests.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
+    
+    
+    public static class TestBDTDataServiceInfo implements TestServiceInfo {
+        public String getName() {
+            return SERVICE_NAME;
+        }
+
+
+        public String getDir() {
+            return SERVICE_DIR;
+        }
+
+
+        public String getNamespace() {
+            return SERVICE_NAMESPACE;
+        }
+
+
+        public String getPackage() {
+            return PACKAGE_NAME;
+        }
+
+
+        public String getExtensions() {
+            return "bdt,data";
+        }
+    } 
 }

@@ -31,11 +31,12 @@ public class CreationTests extends Story {
 	
 
 	protected Vector steps() {
+        TestServiceInfo info = new TestDataServiceInfo();
 		Vector steps = new Vector();
 		// delete any existing service
-		steps.add(new DeleteOldServiceStep());
+		steps.add(new DeleteOldServiceStep(info));
 		// create a new enumeration supporting data service
-		steps.add(new CreationStep(getIntroduceBaseDir()));
+		steps.add(new CreationStep(info, getIntroduceBaseDir()));
 		return steps;
 	}
 	
@@ -63,5 +64,32 @@ public class CreationTests extends Story {
 		TestRunner runner = new TestRunner();
 		TestResult result = runner.doRun(new TestSuite(CreationTests.class));
 		System.exit(result.errorCount() + result.failureCount());
+	}
+    
+    
+	public static class TestDataServiceInfo implements TestServiceInfo {
+	    public String getName() {
+	        return SERVICE_NAME;
+	    }
+
+
+	    public String getDir() {
+	        return SERVICE_DIR;
+	    }
+
+
+	    public String getNamespace() {
+	        return SERVICE_NAMESPACE;
+	    }
+
+
+	    public String getPackage() {
+	        return PACKAGE_NAME;
+	    }
+
+
+	    public String getExtensions() {
+	        return "data";
+	    }
 	}
 }
