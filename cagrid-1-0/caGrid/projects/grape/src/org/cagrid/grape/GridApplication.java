@@ -287,7 +287,7 @@ public class GridApplication extends JFrame {
 	private javax.swing.JMenu getMenu(List toolbarComponents, Menu parent, Menu menu) {
 		javax.swing.JMenu jmenu = new javax.swing.JMenu();
 		jmenu.setText(menu.getTitle());
-		if ((parent!=null) && (parent.getShowIcons())) {
+		if ((parent != null) && (parent.getShowIcons())) {
 			jmenu.setIcon(IconUtils.loadIcon(menu.getIcon()));
 		}
 		jmenu.setMnemonic(java.awt.event.KeyEvent.VK_F);
@@ -297,7 +297,7 @@ public class GridApplication extends JFrame {
 			Menu[] submenu = submenus.getMenu();
 			if (submenu != null) {
 				for (int i = 0; i < submenu.length; i++) {
-					jmenu.add(getMenu(toolbarComponents, menu,submenu[i]));
+					jmenu.add(getMenu(toolbarComponents, menu, submenu[i]));
 				}
 			}
 		}
@@ -398,7 +398,7 @@ public class GridApplication extends JFrame {
 			about.setIcon(LookAndFeel.getAboutIcon());
 			about.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// showAboutDialog();
+					showAboutDialog();
 				}
 			});
 		}
@@ -406,11 +406,12 @@ public class GridApplication extends JFrame {
 	}
 
 
-	/*
-	 * private void showAboutDialog() { JOptionPane.showMessageDialog(this,
-	 * this.conf.getAboutHTML(), "About: " + this.conf.getApplicationName(),
-	 * JOptionPane.INFORMATION_MESSAGE); }
-	 */
+	private void showAboutDialog() {
+		JOptionPane.showMessageDialog(this, this.app.getAboutHTML(), "About: " + this.app.getName(),
+			JOptionPane.INFORMATION_MESSAGE,LookAndFeel.getGridApplicationIcon());
+	}
+
+
 	private javax.swing.JToolBar getToolBar(List comps) {
 		if (toolBar == null) {
 			toolBar = new javax.swing.JToolBar("tools", SwingConstants.HORIZONTAL);
