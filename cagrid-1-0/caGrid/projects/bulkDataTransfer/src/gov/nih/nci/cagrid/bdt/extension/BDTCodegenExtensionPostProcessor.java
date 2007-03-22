@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.bdt.templates.JNDIConfigResourceTemplate;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -18,6 +19,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
@@ -26,14 +29,8 @@ import org.projectmobius.common.XMLUtilities;
 
 public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostProcessor {
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
-
-    }
-
+    public static final QName BDT_HANDLER_REFERENCE_QNAME = new QName("http://cagrid.nci.nih.gov/BulkDataHandlerReference", "BulkDataHandlerReference");
+    
 
     public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
         throws CodegenExtensionException {
@@ -90,11 +87,7 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
         if (mainService.getMethods() != null && mainService.getMethods().getMethod() != null) {
             for (int i = 0; i < mainService.getMethods().getMethod().length; i++) {
                 MethodType method = mainService.getMethods().getMethod(i);
-                if ((method.getOutput().getIsClientHandle() != null
-                    && method.getOutput().getIsClientHandle().booleanValue()
-                    && method.getOutput().getClientHandleClass().equals(
-                        mainService.getPackageName() + ".bdt.client." + mainService.getName()
-                            + "BulkDataHandlerClient")) || method.getOutput().getQName().getLocalPart().equals(mainService.getName() + "BulkDataHandlerReference")) {
+                if (methodReturnsBdtHandle(mainService, method)) {
                     // need to see if i have added the base impl to this method
                     boolean needToAdd = false;
                     File implSourceFile = new File(info.getBaseDirectory() + File.separator + "src" + File.separator
@@ -184,5 +177,24 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
                 }
             }
         }
+    }
+    
+    
+    private boolean methodReturnsBdtHandle(ServiceType service, MethodType method) {
+        MethodTypeOutput methodOutput = method.getOutput();
+        if (methodOutput != null) {
+            if (methodOutput.getIsClientHandle() != null && methodOutput.getIsClientHandle().booleanValue()) {
+                // method returns a client handle
+                String specificServiceClientHandleClass = service.getPackageName() + ".bdt.client." 
+                    + service.getName() + "BulkDataHandlerClient"; 
+                return methodOutput.getClientHandleClass().equals(specificServiceClientHandleClass);
+            } else {
+                // check the output QName
+                QName outputName = methodOutput.getQName();
+                return outputName.getLocalPart().equals(service.getName() + "BulkDataHandlerReference")
+                    || outputName.equals(BDT_HANDLER_REFERENCE_QNAME);
+            }
+        }
+        return false;
     }
 }
