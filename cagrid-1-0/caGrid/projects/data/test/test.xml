@@ -174,7 +174,7 @@
 
 
 	<!-- tests overall system -->
-	<target name="systemTest" depends="setGlobus, prepareClasspaths, testBasicSystem, testEnumerationSystem, testUpgradedFrom1pt0to1pt1System" description="Runs system tests (deploy, invoke, etc)" />
+	<target name="systemTest" depends="setGlobus, prepareClasspaths, testBasicSystem, testEnumerationSystem, testBdtSystem, testUpgradedFrom1pt0to1pt1System" description="Runs system tests (deploy, invoke, etc)" />
 
 
 	<!-- system tests against the basic data service -->
