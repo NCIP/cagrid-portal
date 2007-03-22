@@ -65,7 +65,7 @@
 
 
 	<!-- tests everything but system -->
-	<target name="test" depends="instrument, testCore, testCreation, testEnumerationCreation, testBdtCreation, testUpgradeFrom1pt0to1pt1" description="Runs all non-system tests."/>
+	<target name="test" depends="instrument, testCore, testCreation, testEnumerationCreation, testUpgradeFrom1pt0to1pt1" description="Runs all non-system tests."/>
 
 
 	<!-- tests data service core components -->
