@@ -227,7 +227,7 @@ public class Dorian extends MobiusResourceManager {
 			throw fault;
 		}
 		this.identityProvider.removeUser(uid, userId);
-
+		this.ifs.removeUserByLocalIdIfExists(identityProvider.getIdPCertificate(), userId);
 	}
 
 

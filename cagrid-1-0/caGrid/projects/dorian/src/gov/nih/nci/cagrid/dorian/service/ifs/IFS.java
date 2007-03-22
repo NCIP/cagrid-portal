@@ -174,6 +174,23 @@ public class IFS extends LoggingObject {
 	}
 
 
+	public void removeUserByLocalIdIfExists(X509Certificate idpCert, String localId) throws DorianInternalFault {
+		try {
+			TrustedIdP idp = tm.getTrustedIdPByDN(idpCert.getSubjectDN().getName());
+			IFSUser usr = um.getUser(idp.getId(), localId);
+			um.removeUser(usr);
+		} catch (InvalidUserFault e) {
+
+		} catch (InvalidTrustedIdPFault f) {
+			logError(f.getFaultString(), f);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected error occurred removing the grid user, the IdP "
+				+ idpCert.getSubjectDN().getName() + " could not be resolved!!!");
+			throw fault;
+		}
+	}
+
+
 	public void removeUser(String callerGridIdentity, IFSUser usr) throws DorianInternalFault, InvalidUserFault,
 		PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
@@ -323,7 +340,7 @@ public class IFS extends LoggingObject {
 			throw fault;
 		}
 		policy.applyPolicy(usr);
-        
+
 		// Check to see if authorized
 		this.verifyActiveUser(usr);
 
