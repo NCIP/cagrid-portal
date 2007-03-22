@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.bdt.extension;
 
-import gov.nih.nci.cagrid.bdt.client.BulkDataHandlerClient;
 import gov.nih.nci.cagrid.bdt.templates.BDTResourceCreatorTemplate;
 import gov.nih.nci.cagrid.bdt.templates.JNDIConfigResourceTemplate;
 import gov.nih.nci.cagrid.common.Utils;
@@ -93,7 +92,9 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
                 MethodType method = mainService.getMethods().getMethod(i);
                 if (method.getOutput().getIsClientHandle() != null
                     && method.getOutput().getIsClientHandle().booleanValue()
-                    && method.getOutput().getClientHandleClass().equals(BulkDataHandlerClient.class.getName())) {
+                    && method.getOutput().getClientHandleClass().equals(
+                        mainService.getPackageName() + ".bdt.client." + mainService.getName()
+                            + "BulkDataHandlerClient")) {
                     // need to see if i have added the base impl to this method
                     boolean needToAdd = false;
                     File implSourceFile = new File(info.getBaseDirectory() + File.separator + "src" + File.separator
