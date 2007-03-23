@@ -13,10 +13,6 @@ public class LookAndFeel {
 		return IconUtils.loadIcon("/system-search.png");
 	}
 
-	public final static ImageIcon getGridApplicationIcon() {
-		return IconUtils.loadIcon("/caGrid.gif");
-	}
-
 
 	public final static ImageIcon getPreferencesIcon() {
 		return IconUtils.loadIcon("/modify22x22.png");

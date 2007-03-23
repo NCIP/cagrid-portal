@@ -408,7 +408,7 @@ public class GridApplication extends JFrame {
 
 	private void showAboutDialog() {
 		JOptionPane.showMessageDialog(this, this.app.getAboutHTML(), "About: " + this.app.getName(),
-			JOptionPane.INFORMATION_MESSAGE,LookAndFeel.getGridApplicationIcon());
+			JOptionPane.INFORMATION_MESSAGE, IconUtils.loadIcon(app.getApplicationLogo()));
 	}
 
 

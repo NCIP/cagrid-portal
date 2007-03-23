@@ -35,6 +35,7 @@
         <xsd:sequence>
             <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string"/>
             <xsd:element name="icon" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+            <xsd:element name="ApplicationLogo" minOccurs="1" maxOccurs="1" type="xsd:string"/>
             <xsd:element name="AboutHTML" minOccurs="1" maxOccurs="1" type="xsd:string"/>
             <xsd:element name="dimensions" minOccurs="0" maxOccurs="1" type="grape:dimensions"/>
             <xsd:element name="menus" minOccurs="0" maxOccurs="1" type="grape:menus"/>
