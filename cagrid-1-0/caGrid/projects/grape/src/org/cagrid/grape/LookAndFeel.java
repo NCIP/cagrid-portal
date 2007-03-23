@@ -6,13 +6,23 @@ import javax.swing.ImageIcon;
 
 import org.cagrid.grape.utils.IconUtils;
 
-
 public class LookAndFeel {
 
+	private static ImageIcon applicationLogo;
+	
 	public final static ImageIcon getQueryIcon() {
 		return IconUtils.loadIcon("/system-search.png");
 	}
-
+	
+	
+	public final static void setApplicationLogo(String resource) {
+		applicationLogo = IconUtils.loadIcon(resource);
+	}
+	
+	public final static ImageIcon getApplicationLogo() {
+		return applicationLogo;
+	}
+	
 
 	public final static ImageIcon getPreferencesIcon() {
 		return IconUtils.loadIcon("/modify22x22.png");

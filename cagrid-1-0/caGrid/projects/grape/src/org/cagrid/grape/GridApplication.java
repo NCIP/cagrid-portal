@@ -80,6 +80,7 @@ public class GridApplication extends JFrame {
 	private GridApplication(Application app) throws Exception {
 		super();
 		this.app = app;
+		LookAndFeel.setApplicationLogo(this.app.getApplicationLogo());
 		this.threadManager = new MobiusPoolManager();
 		this.context = new ApplicationContext(this);
 		configurationManager = new ConfigurationManager(app.getConfiguration());
@@ -408,7 +409,7 @@ public class GridApplication extends JFrame {
 
 	private void showAboutDialog() {
 		JOptionPane.showMessageDialog(this, this.app.getAboutHTML(), "About: " + this.app.getName(),
-			JOptionPane.INFORMATION_MESSAGE, IconUtils.loadIcon(app.getApplicationLogo()));
+			JOptionPane.INFORMATION_MESSAGE, LookAndFeel.getApplicationLogo());
 	}
 
 

@@ -49,7 +49,7 @@ public class ConfigurationDisplayPanel extends JPanel {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints.gridy = 0;
-		logo = new JLabel(LookAndFeel.getLogoNoText());
+		logo = new JLabel(LookAndFeel.getApplicationLogo());
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.gridx = 0;
 		gridBagConstraints1.anchor = GridBagConstraints.CENTER;
