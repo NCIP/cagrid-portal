@@ -8,12 +8,12 @@ package org.cagrid.gridftp.authorization.plugin;
  *      href="http://www.globus.org/toolkit/docs/4.0/security/cas/WS_AA_CAS_HOWTO_Setup_GridFTP.html">WS_AA_CAS_HOWTO_Setup_GridFTP</a>
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * @created Mar 20, 2007
- * @version $Id: GridFTPOperation.java,v 1.1 2007-03-22 18:54:44 jpermar Exp $
+ * @version $Id: GridFTPOperation.java,v 1.2 2007-03-23 15:07:40 jpermar Exp $
  */
 
 public enum GridFTPOperation {
 
-	READ("read"), LOOKUP("lookup"), WRITE("write"), CREATE("create"), DELETE("delete"), CHDIR("chdir");
+	read("read"), lookup("lookup"), write("write"), create("create"), delete("delete"), chdir("chdir");
 
 	private String _operation;
 

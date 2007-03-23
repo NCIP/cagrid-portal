@@ -22,7 +22,7 @@ import org.cagrid.gridftp.authorization.plugin.GridFTPTuple;
  * 
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * @created Mar 5, 2007
- * @version $Id: DBUtil.java,v 1.1 2007-03-22 18:54:44 jpermar Exp $
+ * @version $Id: DBUtil.java,v 1.2 2007-03-23 15:07:40 jpermar Exp $
  */
 public class DBUtil {
 
@@ -374,13 +374,13 @@ public class DBUtil {
 		String password = "";
 		DBUtil util = new DBUtil(connectionString, dbuser, password);
 		String user = "/O=cagrid.org/OU=training/OU=caBIG User Group/OU=IdP [1]/CN=gridftp";
-		GridFTPOperation authOp = GridFTPOperation.READ;
+		GridFTPOperation authOp = GridFTPOperation.read;
 		String url = "ftp://irondale/tmp/yayo";
 		GridFTPTuple tuple = new GridFTPTuple(user, authOp, url);
 		util.insertTuple(tuple);
 		String url2 = "ftp://irondale/tmp/yayo2";
-		util.insertTuple(new GridFTPTuple(user, GridFTPOperation.CREATE, url2));
-		util.insertTuple(new GridFTPTuple(user, GridFTPOperation.WRITE, url2));
+		util.insertTuple(new GridFTPTuple(user, GridFTPOperation.create, url2));
+		util.insertTuple(new GridFTPTuple(user, GridFTPOperation.write, url2));
 		System.out.println(util.tupleExists(tuple));
 		// util.removeTuple(tuple);
 		// System.out.println(util.tupleExists(tuple));

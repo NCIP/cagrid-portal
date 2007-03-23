@@ -1,4 +1,4 @@
-package org.cagrid.gridftp.authorization.callout;
+package org.cagrid.gridftp.authorization.plugin;
 
 import gov.nih.nci.cagrid.core.CycleTestCase;
 import junit.framework.TestResult;
