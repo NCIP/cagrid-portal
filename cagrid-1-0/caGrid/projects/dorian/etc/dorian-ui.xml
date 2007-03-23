@@ -4,6 +4,8 @@
     xsi:schemaLocation="http://www.cagrid.org/1/grape file:/C:/projects/cagrid-1-0/caGrid/projects/grape/schema/grape.xsd">
     <name>Dorian</name>
     <icon>/caGrid-icon-22x22.gif</icon>
+     <ApplicationLogo>/dorianSplash.png</ApplicationLogo>
+    <AboutHTML><![CDATA[<html><h2>Dorian</h2>Dorian is grid service for the provisioning and management of grid users<BR>accounts.  Dorian provides an integration point between external security<BR>domains and the grid, allowing accounts managed in external domains to be<BR>federated and managed in the grid. Dorian allows users to use their existing<BR>credentials (external to the grid) to authenticate to the grid.  Dorian was<BR>developed as part of the caGrid project to meet the needs of the caBIG<BR> community.  For more information on Dorian or caGrid please visit us at:<BR> <A HREF="http://www.cagrid.org">http://www.cagrid.org</a></html>]]></AboutHTML>
     <dimensions>
         <width>850</width>
         <height>700</height>
