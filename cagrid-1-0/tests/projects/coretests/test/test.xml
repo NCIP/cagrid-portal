@@ -58,7 +58,6 @@
 
     <!-- call the test target for GMEServiceTest  -->
     <target name="test-gme" depends="instrument">
-        <mkdir dir="${temp.dir}" />
         <echo message="Test results dir: ${junit.results.dir}" />
         <echo message="Test source dir: ${test.src.dir}" />
         <mkdir dir="${junit.results.dir}" />
@@ -68,7 +67,6 @@
 
             <jvmarg value="-Dbuild.dir=${build.dir}" />
             <jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
-            <jvmarg value="-Dtemp.dir=${temp.dir}" />
 
             <classpath location="${instrumented.classes.dir}" />
             <classpath>
