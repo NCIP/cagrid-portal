@@ -15,57 +15,59 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+
 /**
- * This is an integration test that tests the Introduce functionality of creating an 
- * analytical service and deploying it.  It creates a service from scratch, deploys it,
- * and then attempts to invoke a method on it.
+ * This is an integration test that tests the Introduce functionality of
+ * creating an analytical service and deploying it. It creates a service from
+ * scratch, deploys it, and then attempts to invoke a method on it.
+ * 
  * @testType integration
- * @steps ServiceCreateStep, 
+ * @steps ServiceCreateStep,
  * @steps GlobusCreateStep, GlobusDeployServiceStep, GlobusStartStep
  * @steps ServiceInvokeStep
  * @steps GlobusStopStep, GlobusCleanupStep
  * @author Patrick McConnell
  */
-public class BasicAnalyticalServiceTest
-	extends AbstractServiceTest
-{
-	public BasicAnalyticalServiceTest()
-	{
-		super();
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected Vector steps() 
-	{
-		super.init("BasicAnalyticalService");
+public class BasicAnalyticalServiceTest extends AbstractServiceTest {
+    public BasicAnalyticalServiceTest() {
+        super();
+    }
 
-		Vector steps = new Vector();
-		steps.add(getCreateServiceStep());
-		steps.add(new GlobusCreateStep(getGlobus()));
-		steps.add(new GlobusDeployServiceStep(getGlobus(), getCreateServiceStep().getServiceDir()));
-		steps.add(new GlobusStartStep(getGlobus(), getPort()));
-		try {
-			addInvokeSteps(steps);
-		} catch (Exception e) {
-			throw new IllegalArgumentException("could not add invoke steps", e);
-		}
-		//steps.add(new CheckServiceMetadataStep(endpoint, metadataFile));
-		steps.add(new GlobusStopStep(getGlobus(), getPort()));
-		steps.add(new GlobusCleanupStep(getGlobus()));
-		return steps;
-	}
 
-	public String getDescription()
-	{
-		return "BasicAnalyticalServiceTest";
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    protected Vector steps() {
+        super.init("BasicAnalyticalService");
 
-	/**
-	 * Convenience method for running all the Steps in this Story.
-	 */
-	public static void main(String args[]) {
-		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(BasicAnalyticalServiceTest.class));
-		System.exit(result.errorCount() + result.failureCount());
-	}
+        Vector steps = new Vector();
+        steps.add(getCreateServiceStep());
+        steps.add(new GlobusCreateStep(getGlobus()));
+        steps.add(new GlobusDeployServiceStep(getGlobus(), getCreateServiceStep().getServiceDir()));
+        steps.add(new GlobusStartStep(getGlobus()));
+        try {
+            addInvokeSteps(steps);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("could not add invoke steps", e);
+        }
+        // steps.add(new CheckServiceMetadataStep(endpoint, metadataFile));
+        steps.add(new GlobusStopStep(getGlobus()));
+        steps.add(new GlobusCleanupStep(getGlobus()));
+        return steps;
+    }
+
+
+    @Override
+    public String getDescription() {
+        return "BasicAnalyticalServiceTest";
+    }
+
+
+    /**
+     * Convenience method for running all the Steps in this Story.
+     */
+    public static void main(String args[]) {
+        TestRunner runner = new TestRunner();
+        TestResult result = runner.doRun(new TestSuite(BasicAnalyticalServiceTest.class));
+        System.exit(result.errorCount() + result.failureCount());
+    }
 }

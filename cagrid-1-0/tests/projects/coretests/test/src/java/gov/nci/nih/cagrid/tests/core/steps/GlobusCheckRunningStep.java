@@ -3,68 +3,36 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
-import java.io.File;
+import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
+
 import java.rmi.RemoteException;
 
 import javax.xml.rpc.ServiceException;
 
-import org.apache.axis.EngineConfiguration;
-import org.apache.axis.client.AxisClient;
-import org.apache.axis.configuration.FileProvider;
-import org.apache.axis.message.addressing.Address;
-import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.axis.types.URI.MalformedURIException;
-import org.oasis.wsrf.lifetime.Destroy;
-
 import com.atomicobject.haste.framework.Step;
-import com.counter.CounterPortType;
-import com.counter.CreateCounter;
-import com.counter.CreateCounterResponse;
-import com.counter.service.CounterServiceAddressingLocator;
+
 
 /**
- * This step checks to see if globus is running by hitting the CounterService endpoint.  Note: this
- * step will not work on a secure globus globus container.  Instead, you should deploy the echo service
- * and then invoke it.
+ * This step checks to see if globus is running by hitting the CounterService
+ * endpoint. Note: this step will not work on a secure globus globus container.
+ * Instead, you should deploy the echo service and then invoke it.
+ * 
  * @author Patrick McConnell
  */
-public class GlobusCheckRunningStep
-	extends Step
-{
-	private EndpointReferenceType endpoint;
-	
-	public GlobusCheckRunningStep(int port) 
-		throws MalformedURIException
-	{
-		this(new EndpointReferenceType(new Address("http://localhost:" + port + "/wsrf/services/CounterService")));
-	}
+public class GlobusCheckRunningStep extends Step {
+    private GlobusHelper globus;
 
-	public GlobusCheckRunningStep(EndpointReferenceType endpoint)
-	{
-		super();
-		
-		this.endpoint = endpoint; 
-	}
-	
-	public void runStep() 
-		throws ServiceException, RemoteException
-	{
-		CounterServiceAddressingLocator locator = new CounterServiceAddressingLocator();
-		// we found it, so tell axis to configure an engine to use it
-		EngineConfiguration engineConfig = new FileProvider(
-			System.getenv("GLOBUS_LOCATION") + File.separator + "client-config.wsdd"
-		);
-		// set the engine of the locator
-		locator.setEngine(new AxisClient(engineConfig));
-		
-		CounterPortType counter = locator.getCounterPortTypePort(this.endpoint);
-		CreateCounterResponse response = counter.createCounter(new CreateCounter());	
-		EndpointReferenceType endpoint = response.getEndpointReference();
-		endpoint.getProperties().get_any()[0].getValue();
-		counter = locator.getCounterPortTypePort(endpoint); 
-		
-		int count = counter.add(0);
-		assertEquals(count+10, counter.add(10));
-		counter.destroy(new Destroy());
-	}
+
+    public GlobusCheckRunningStep(GlobusHelper globus) {
+        super();
+
+        this.globus = globus;
+    }
+
+
+    @Override
+    public void runStep() throws ServiceException, RemoteException {
+        assertNotNull(this.globus);
+        assertTrue("Globus was not running.", this.globus.isGlobusRunning());
+    }
 }

@@ -14,99 +14,83 @@ import gov.nih.nci.cagrid.metadata.service.ServiceContext;
 
 import java.io.File;
 
-import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
 import com.atomicobject.haste.framework.Step;
 
+
 /**
- * This step attempts to discover a service registered in an index service based upon a locally
- * cached metadata XML file.
+ * This step attempts to discover a service registered in an index service based
+ * upon a locally cached metadata XML file.
+ * 
  * @author Patrick McConnell
  */
-public class ServiceDiscoveryStep
-	extends Step
-{
-	private EndpointReferenceType indexServiceEndpoint;
-	private EndpointReferenceType domainServiceEndpoint;
-	private String domainServicePath;
-	private ServiceMetadata metadata;
-	
-	public ServiceDiscoveryStep(int port, EndpointReferenceType domainServiceEndpoint, File metadataFile) 
-		throws Exception
-	{
-		this(new EndpointReferenceType(new Address("http://localhost:" + port + "/wsrf/services/DefaultIndexService")), domainServiceEndpoint, metadataFile);
-	}
+public class ServiceDiscoveryStep extends Step {
+    private EndpointReferenceType indexServiceEndpoint;
+    private EndpointReferenceType domainServiceEndpoint;
+    private String domainServicePath;
+    private ServiceMetadata metadata;
 
-	public ServiceDiscoveryStep(EndpointReferenceType indexServiceEndpoint, EndpointReferenceType domainServiceEndpoint, File metadataFile) throws Exception
-	{
-		super();
-		
-		this.indexServiceEndpoint = indexServiceEndpoint;
-		this.metadata = (ServiceMetadata) Utils.deserializeDocument(metadataFile.toString(), ServiceMetadata.class);
 
-		this.domainServiceEndpoint = domainServiceEndpoint;
-		domainServicePath = domainServiceEndpoint.getAddress().toString();
-		String search = ":" + domainServiceEndpoint.getAddress().getPort() + "/";
-		int index = domainServicePath.indexOf(search);
-		domainServicePath = domainServicePath.substring(index+search.length());
-	}
-	
-	public void runStep() throws Throwable
-	{
-		DiscoveryClient client = new DiscoveryClient(indexServiceEndpoint);
-		assertTrue(foundService(client.getAllServices(false)));
-		assertTrue(foundService(client.getAllServices(true)));
-		
-		// service
-		assertTrue(foundService(
-			client.discoverServicesByName(metadata.getServiceDescription().getService().getName())
-		));
-		for (ServiceContext context : metadata.getServiceDescription().getService().getServiceContextCollection().getServiceContext()) {
-			for (Operation operation : context.getOperationCollection().getOperation()) {
-				assertTrue(foundService(
-					client.discoverServicesByOperationName(operation.getName())
-				));
-			}
-		}
-		
-		// center
-		assertTrue(foundService(
-			client.discoverServicesByResearchCenter(metadata.getHostingResearchCenter().getResearchCenter().getShortName())
-		));
-		assertTrue(foundService(
-			client.discoverServicesByResearchCenter(metadata.getHostingResearchCenter().getResearchCenter().getDisplayName())
-		));
-		for (PointOfContact poc : metadata.getHostingResearchCenter().getResearchCenter().getPointOfContactCollection().getPointOfContact()) {
-			assertTrue(foundService(
-				client.discoverServicesByPointOfContact(poc)
-			));
-		}
-		
-		// model
-		DomainModel model = MetadataUtils.getDomainModel(domainServiceEndpoint);
-		assertTrue(foundService(
-			client.discoverDataServicesByModelConceptCode(model.getExposedUMLClassCollection().getUMLClass()[0].getUmlAttributeCollection().getUMLAttribute(0).getSemanticMetadata(0).getConceptCode())
-		));		
-	}
-	
-	private boolean foundService(EndpointReferenceType[] endpoints)
-	{
-		if (endpoints == null) return false;
-		
-		for (EndpointReferenceType endpoint : endpoints) {
-			if (endpoint.getAddress().toString().endsWith(domainServicePath)) return true;
-		}
-		return false;
-	}
+    public ServiceDiscoveryStep(EndpointReferenceType indexServiceEndpoint,
+        EndpointReferenceType domainServiceEndpoint, File metadataFile) throws Exception {
+        super();
 
-	public static void main(String[] args) throws Throwable
-	{
-		ServiceDiscoveryStep step = new ServiceDiscoveryStep(
-			8080,
-			new EndpointReferenceType(new Address("http://localhost:8080/wsrf/services/cagrid/BasicAnalyticalServiceWithMetadata")),
-			new File("test\\resources\\services\\BasicAnalyticalServiceWithMetadata\\etc\\serviceMetadata.xml")
-		);
-		step.runStep();
-	}
+        this.indexServiceEndpoint = indexServiceEndpoint;
+        this.metadata = (ServiceMetadata) Utils.deserializeDocument(metadataFile.toString(), ServiceMetadata.class);
+
+        this.domainServiceEndpoint = domainServiceEndpoint;
+        this.domainServicePath = domainServiceEndpoint.getAddress().toString();
+        String search = ":" + domainServiceEndpoint.getAddress().getPort() + "/";
+        int index = this.domainServicePath.indexOf(search);
+        this.domainServicePath = this.domainServicePath.substring(index + search.length());
+    }
+
+
+    @Override
+    public void runStep() throws Throwable {
+        DiscoveryClient client = new DiscoveryClient(this.indexServiceEndpoint);
+        assertTrue(foundService(client.getAllServices(false)));
+        assertTrue(foundService(client.getAllServices(true)));
+
+        // service
+        assertTrue(foundService(client.discoverServicesByName(this.metadata.getServiceDescription().getService()
+            .getName())));
+        for (ServiceContext context : this.metadata.getServiceDescription().getService().getServiceContextCollection()
+            .getServiceContext()) {
+            for (Operation operation : context.getOperationCollection().getOperation()) {
+                assertTrue(foundService(client.discoverServicesByOperationName(operation.getName())));
+            }
+        }
+
+        // center
+        assertTrue(foundService(client.discoverServicesByResearchCenter(this.metadata.getHostingResearchCenter()
+            .getResearchCenter().getShortName())));
+        assertTrue(foundService(client.discoverServicesByResearchCenter(this.metadata.getHostingResearchCenter()
+            .getResearchCenter().getDisplayName())));
+        for (PointOfContact poc : this.metadata.getHostingResearchCenter().getResearchCenter()
+            .getPointOfContactCollection().getPointOfContact()) {
+            assertTrue(foundService(client.discoverServicesByPointOfContact(poc)));
+        }
+
+        // model
+        DomainModel model = MetadataUtils.getDomainModel(this.domainServiceEndpoint);
+        assertTrue(foundService(client.discoverDataServicesByModelConceptCode(model.getExposedUMLClassCollection()
+            .getUMLClass()[0].getUmlAttributeCollection().getUMLAttribute(0).getSemanticMetadata(0).getConceptCode())));
+    }
+
+
+    private boolean foundService(EndpointReferenceType[] endpoints) {
+        if (endpoints == null) {
+            return false;
+        }
+
+        for (EndpointReferenceType endpoint : endpoints) {
+            if (endpoint.getAddress().toString().endsWith(this.domainServicePath)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

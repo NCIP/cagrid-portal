@@ -1,4 +1,6 @@
 Put TODO here:
 
-1) Add system property in GlobusHelper for security descriptor location
-2) 
+
+Problems:
+- User's .globus directory is used... should override with cog properties
+ 

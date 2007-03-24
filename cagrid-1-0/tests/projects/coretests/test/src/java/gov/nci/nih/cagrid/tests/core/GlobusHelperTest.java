@@ -6,11 +6,10 @@ package gov.nci.nih.cagrid.tests.core;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCheckRunningStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
-import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusInstallSecurityDescriptorStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
-import gov.nci.nih.cagrid.tests.core.util.ServiceHelper;
 
 import java.util.Vector;
 
@@ -18,102 +17,94 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.apache.axis.types.URI.MalformedURIException;
-
 import com.atomicobject.haste.framework.Story;
 
+
 /**
- * This is a unit test that validates the functionality of the GlobusHelper class, which is used to
- * create, start, stop, deploy services, and cleanup instances of Globus.
+ * This is a unit test that validates the functionality of the GlobusHelper
+ * class, which is used to create, start, stop, deploy services, and cleanup
+ * instances of Globus.
+ * 
  * @testType unit
- * @steps GlobusCreateStep, GlobusStartStep 
- * @steps GlobusDeployServiceStep, GlobusCheckRunningStep 
+ * @steps GlobusCreateStep, GlobusStartStep
+ * @steps GlobusDeployServiceStep, GlobusCheckRunningStep
  * @steps GlobusStopStep, GlobusCleanupStep
  * @author Patrick McConnell
  */
-public class GlobusHelperTest
-	extends Story
-{
-	private GlobusHelper globus;
-	private int port;
-	private GlobusHelper secureGlobus;
-	private int securePort;
-	
-	public GlobusHelperTest()
-	{
-		super();
-	}
+public class GlobusHelperTest extends Story {
+    private GlobusHelper globus;
+    private GlobusHelper secureGlobus;
 
-	protected boolean storySetUp() 
-		throws Throwable
-	{
-		return true;
-	}
 
-	protected void storyTearDown() 
-		throws Throwable
-	{
-		if (globus != null) {
-			globus.stopGlobus(port);
-			globus.cleanupTempGlobus();
-		}
-		if (secureGlobus != null) {
-			secureGlobus.stopGlobus(securePort);
-			secureGlobus.cleanupTempGlobus();
-		}
-}
-	
-	@SuppressWarnings("unchecked")
-	protected Vector steps()		
-	{
-		globus = new GlobusHelper();
-		port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
-		ServiceHelper echoHelper = new ServiceHelper("IntroduceEcho"); 
-		secureGlobus = echoHelper.getGlobus(); //new GlobusHelper(true);
-		securePort = Integer.parseInt(System.getProperty("test.globus.secure.port", "8443"));
+    public GlobusHelperTest() {
+        super();
+    }
 
-		Vector steps = new Vector();
 
-		steps.add(new GlobusCreateStep(globus));
-		steps.add(new GlobusStartStep(globus, port));
-		try {
-			steps.add(new GlobusCheckRunningStep(port));
-		} catch (MalformedURIException e) {
-			throw new IllegalArgumentException("endpoint badly formed", e);
-		}
-		steps.add(new GlobusStopStep(globus, port));
-		steps.add(new GlobusCleanupStep(globus));
+    @Override
+    protected boolean storySetUp() throws Throwable {
+        return true;
+    }
 
-		steps.add(echoHelper.getCreateServiceStep());
-		steps.add(new GlobusCreateStep(secureGlobus));
-		//secureGlobus.setUseCounterCheck(false);
-		steps.add(new GlobusDeployServiceStep(secureGlobus, echoHelper.getCreateServiceStep().getServiceDir()));
-		//steps.add(new GlobusDeployServiceStep(secureGlobus, new File("..", "echo")));
-		steps.add(new GlobusStartStep(secureGlobus, securePort));
-		steps.add(new GlobusStopStep(secureGlobus, securePort));
-		steps.add(new GlobusCleanupStep(secureGlobus));
-		
-		return steps;
-	}
 
-	public String getDescription()
-	{
-		return "GlobusHelperTest";
-	}
-	
-	/**
-	 * used to make sure that if we are going to use a junit testsuite to test
-	 * this that the test suite will not error out looking for a single test......
-	 */
-	public void testDummy() throws Throwable {
-	}
+    @Override
+    protected void storyTearDown() throws Throwable {
+        if (this.globus != null) {
+            this.globus.stopGlobus();
+            this.globus.cleanupTempGlobus();
+        }
+        if (this.secureGlobus != null) {
+            this.secureGlobus.stopGlobus();
+            this.secureGlobus.cleanupTempGlobus();
+        }
+    }
 
-	/**
-	 * Convenience method for running all the Steps in this Story.
-	 */
-	public static void main(String args[]) {
-		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(GlobusHelperTest.class));
-		System.exit(result.errorCount() + result.failureCount());
-	}
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected Vector steps() {
+        this.globus = new GlobusHelper();
+        this.secureGlobus = new GlobusHelper(true);
+
+        Vector steps = new Vector();
+
+        steps.add(new GlobusCreateStep(this.globus));
+        steps.add(new GlobusStartStep(this.globus));
+        steps.add(new GlobusCheckRunningStep(this.globus));
+        steps.add(new GlobusStopStep(this.globus));
+        steps.add(new GlobusCleanupStep(this.globus));
+
+        steps.add(new GlobusCreateStep(this.secureGlobus));
+        steps.add(new GlobusInstallSecurityDescriptorStep(this.secureGlobus));
+        steps.add(new GlobusStartStep(this.secureGlobus));
+        steps.add(new GlobusStopStep(this.secureGlobus));
+        steps.add(new GlobusCleanupStep(this.secureGlobus));
+
+        return steps;
+    }
+
+
+    @Override
+    public String getDescription() {
+        return "GlobusHelperTest";
+    }
+
+
+    /**
+     * used to make sure that if we are going to use a junit testsuite to test
+     * this that the test suite will not error out looking for a single
+     * test......
+     */
+    public void testDummy() throws Throwable {
+    }
+
+
+    /**
+     * Convenience method for running all the Steps in this Story.
+     */
+    public static void main(String args[]) {
+        TestRunner runner = new TestRunner();
+        TestResult result = runner.doRun(new TestSuite(GlobusHelperTest.class));
+        System.exit(result.errorCount() + result.failureCount());
+    }
 }

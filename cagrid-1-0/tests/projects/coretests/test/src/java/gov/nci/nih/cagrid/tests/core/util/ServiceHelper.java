@@ -5,8 +5,6 @@ package gov.nci.nih.cagrid.tests.core.util;
 
 import gov.nci.nih.cagrid.tests.core.steps.ServiceCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.ServiceInvokeStep;
-import gov.nci.nih.cagrid.tests.core.util.FileUtils;
-import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -17,237 +15,212 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 
-import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
 
-public class ServiceHelper
-{
-	protected String serviceName;
-	protected File testDir;
-	protected File introduceDir;
-	protected File tempDir;
-	protected File serviceDir;
-	protected IntroduceServiceInfo serviceInfo;
-	protected GlobusHelper globus;
-	protected EndpointReferenceType endpoint;
-	protected int port;
-	protected ServiceCreateStep createServiceStep;
-	protected File metadataFile;
-	protected File gmeServiceDir;
-	protected File cadsrServiceDir;
 
-	public ServiceHelper(String serviceName)
-	{
-		this(serviceName, null);
-	}
+public class ServiceHelper {
+    protected String serviceName;
+    protected File testDir;
+    protected File introduceDir;
+    protected File tempDir;
+    protected File serviceDir;
+    protected IntroduceServiceInfo serviceInfo;
+    protected GlobusHelper globus;
+    protected EndpointReferenceType endpoint;
+    protected ServiceCreateStep createServiceStep;
+    protected File metadataFile;
+    protected File gmeServiceDir;
+    protected File cadsrServiceDir;
 
-	public ServiceHelper(String serviceName, File serviceDir)
-	{
-		this(serviceName, serviceDir, null);
-	}
 
-	public ServiceHelper(String serviceName, File serviceDir, Integer port)
-	{
-		super();
-		
-		// service name
-		this.serviceName = serviceName;
-		if (serviceDir != null) this.serviceDir = serviceDir;
-		
-		// test dir (home of the service test)
-		testDir = new File("test" + File.separator + "resources" + File.separator + "services" + File.separator + serviceName);
-		// introduce dir
-		introduceDir = new File(System.getProperty("introduce.dir", 
-			".." + File.separator + ".." + File.separator + ".." + File.separator + 
-			"caGrid" + File.separator + "projects" + File.separator + "introduce"
-		));
-		
-		// create temp dir
-		try {
-			String tempRoot = System.getProperty("temp.dir");
-			tempDir = FileUtils.createTempDir(
-				//ReflectionUtils.getClassShortName(getClass()), "dir", tempRoot == null ? null : new File(tempRoot) 
-				"Service", "dir", tempRoot == null ? null : new File(tempRoot)
-			);
-		} catch (IOException e) {
-			throw new IllegalArgumentException("could not create temp dir", e);
-		}
+    public ServiceHelper(String serviceName) {
+        this(serviceName, null);
+    }
 
-		// parse introduce service info
-		try {
-			//this.serviceDir = serviceDir;
-			//if (this.serviceDir == null) this.serviceDir =  testDir;
-			File introduceXml = new File(this.testDir, "introduce.xml");
-			if (! introduceXml.exists()) introduceXml = new File(serviceDir, "introduce.xml");
-			serviceInfo = new IntroduceServiceInfo(introduceXml);
-		} catch (Exception e) {
-			throw new IllegalArgumentException("could not parse introduce.xml", e);
-		}
-		
-		// set globus helper and port
-		String protocol = "http";
-		globus = new GlobusHelper(serviceInfo.isTransportSecurity(), tempDir);
-		globus.setEchoHelper(this);
-		if (port != null) this.port = port;
-		if (serviceInfo.isTransportSecurity()) {
-			if (port == null) this.port = Integer.parseInt(System.getProperty("test.globus.secure.port", "8443"));
-			protocol = "https";
-			globus.setUseCounterCheck(false);
-		} else {
-			if (port == null) this.port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
-		}
 
-		// set endpoint
-		try {
-			endpoint = new EndpointReferenceType(new Address(protocol + "://localhost:" + this.port + "/wsrf/services/cagrid/" + serviceInfo.getServiceName()));
-		} catch (MalformedURIException e) {
-			throw new IllegalArgumentException("endpoint badly formed");
-		}
-		
-		// set metadataFile
-		metadataFile = new File(testDir, "etc" + File.separator + IntroduceServiceInfo.INTRODUCE_SERVICEMETADATA_FILENAME);
-		
-		// set gme and cadsr service dirs
-		gmeServiceDir = new File(System.getProperty("gme.dir",
-			".." + File.separator + ".." + File.separator + ".." + File.separator + 
-			"caGrid" + File.separator + "projects" + File.separator + "gme"
-		));		
-		cadsrServiceDir = new File(System.getProperty("cadsr.dir",
-			".." + File.separator + ".." + File.separator + ".." + File.separator + 
-			"caGrid" + File.separator + "projects" + File.separator + "cadsr"
-		));		
-	}
-	
-	public ArrayList<ServiceInvokeStep> getInvokeSteps() 
-		throws Exception
-	{
-		File methodsDir = new File(testDir, "test" + File.separator + "resources");
-		return getInvokeSteps(serviceDir, testDir, methodsDir, endpoint);
-	}
-	
-	public static ArrayList<ServiceInvokeStep> getInvokeSteps(File serviceDir, File testDir, File methodsDir, EndpointReferenceType endpoint) 
-		throws Exception
-	{
-		ArrayList<ServiceInvokeStep> steps = new ArrayList<ServiceInvokeStep>();
+    public ServiceHelper(String serviceName, File serviceDir) {
+        super();
 
-		File[] dirs = getInvokeDirs(methodsDir); 
-		
-		// add steps
-		for (File methodDir : dirs) {
-			steps.add(new ServiceInvokeStep(
-				serviceDir, testDir, 
-				methodDir, ServiceInvokeStep.parseParamName(methodDir),
-				endpoint.getAddress().toString()
-			));
-		}
-		
-		return steps;
-	}
-	
-	public static File[] getInvokeDirs(File methodsDir)
-	{
-		// get directory filters
-		final HashSet<String> filterSet = new HashSet<String>();
-		String filterString = System.getProperty("test.methods", "");
-		StringTokenizer st = new StringTokenizer(filterString, ", \t\r\n");
-		while (st.hasMoreTokens()) {
-			filterSet.add(st.nextToken());
-		}
-		
-		// get directories
-		File[] dirs = methodsDir.listFiles(new FileFilter() {
-			public boolean accept(File file) {
-				if (! file.isDirectory() || ! file.getName().matches("\\d+_\\w+")) {
-					return false;
-				}
-				if (filterSet.size() == 0) return true;
-				return filterSet.contains(String.valueOf(ServiceInvokeStep.parseParamPos(file)));
-			}
-		});
-		
-		// sort directories
-		ArrayList<File> dirList = new ArrayList<File>(dirs.length);
-		for (File dir : dirs) dirList.add(dir);
-		Collections.sort(dirList, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return ServiceInvokeStep.parseParamPos(f1) - ServiceInvokeStep.parseParamPos(f2);
-			}
-		});
-		dirs = dirList.toArray(new File[0]);
-		
-		return dirs;
-	}
+        // service name
+        this.serviceName = serviceName;
+        if (serviceDir != null) {
+            this.serviceDir = serviceDir;
+        }
 
-	public String getServiceName()
-	{
-		return serviceName;
-	}
+        // test dir (home of the service test)
+        this.testDir = new File("test" + File.separator + "resources" + File.separator + "services" + File.separator
+            + serviceName);
+        // introduce dir
+        this.introduceDir = new File(System.getProperty("introduce.dir", ".." + File.separator + ".." + File.separator
+            + ".." + File.separator + "caGrid" + File.separator + "projects" + File.separator + "introduce"));
 
-	public File getCadsrServiceDir()
-	{
-		return cadsrServiceDir;
-	}
+        // create temp dir
+        try {
+            String tempRoot = System.getProperty("temp.dir");
+            this.tempDir = FileUtils.createTempDir("Service", "dir", tempRoot == null ? null : new File(tempRoot));
+        } catch (IOException e) {
+            throw new IllegalArgumentException("could not create temp dir", e);
+        }
 
-	public ServiceCreateStep getCreateServiceStep()
-	{
-		// set createServiceStep
-		try {
-			createServiceStep = new ServiceCreateStep(introduceDir, testDir, tempDir);
-		} catch (Exception e) {
-			throw new RuntimeException("could not instantiate CreateServiceStep", e);
-		}
-		serviceDir = createServiceStep.getServiceDir();
-		return createServiceStep;
-	}
+        // parse introduce service info
+        try {
+            // this.serviceDir = serviceDir;
+            // if (this.serviceDir == null) this.serviceDir = testDir;
+            File introduceXml = new File(this.testDir, "introduce.xml");
+            if (!introduceXml.exists()) {
+                introduceXml = new File(serviceDir, "introduce.xml");
+            }
+            this.serviceInfo = new IntroduceServiceInfo(introduceXml);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("could not parse introduce.xml", e);
+        }
 
-	public EndpointReferenceType getEndpoint()
-	{
-		return endpoint;
-	}
+        // set globus helper and port
+        this.globus = new GlobusHelper(this.serviceInfo.isTransportSecurity(), this.tempDir);
 
-	public GlobusHelper getGlobus()
-	{
-		return globus;
-	}
+        // set endpoint
+        try {
+            this.endpoint = this.globus.getServiceEPR("cagrid/" + this.serviceInfo.getServiceName());
+        } catch (MalformedURIException e) {
+            throw new IllegalArgumentException("endpoint badly formed");
+        }
 
-	public File getGmeServiceDir()
-	{
-		return gmeServiceDir;
-	}
+        // set metadataFile
+        this.metadataFile = new File(this.testDir, "etc" + File.separator
+            + IntroduceServiceInfo.INTRODUCE_SERVICEMETADATA_FILENAME);
 
-	public File getIntroduceDir()
-	{
-		return introduceDir;
-	}
+        // set gme and cadsr service dirs
+        this.gmeServiceDir = new File(System.getProperty("gme.dir", ".." + File.separator + ".." + File.separator
+            + ".." + File.separator + "caGrid" + File.separator + "projects" + File.separator + "gme"));
+        this.cadsrServiceDir = new File(System.getProperty("cadsr.dir", ".." + File.separator + ".." + File.separator
+            + ".." + File.separator + "caGrid" + File.separator + "projects" + File.separator + "cadsr"));
+    }
 
-	public File getMetadataFile()
-	{
-		return metadataFile;
-	}
 
-	public int getPort()
-	{
-		return port;
-	}
+    public ArrayList<ServiceInvokeStep> getInvokeSteps() throws Exception {
+        File methodsDir = new File(this.testDir, "test" + File.separator + "resources");
+        return getInvokeSteps(this.serviceDir, this.testDir, methodsDir, this.endpoint);
+    }
 
-	public File getServiceDir()
-	{
-		return serviceDir;
-	}
 
-	public IntroduceServiceInfo getServiceInfo()
-	{
-		return serviceInfo;
-	}
+    public static ArrayList<ServiceInvokeStep> getInvokeSteps(File serviceDir, File testDir, File methodsDir,
+        EndpointReferenceType endpoint) throws Exception {
+        ArrayList<ServiceInvokeStep> steps = new ArrayList<ServiceInvokeStep>();
 
-	public File getTempDir()
-	{
-		return tempDir;
-	}
+        File[] dirs = getInvokeDirs(methodsDir);
 
-	public File getTestDir()
-	{
-		return testDir;
-	}
+        // add steps
+        for (File methodDir : dirs) {
+            steps.add(new ServiceInvokeStep(serviceDir, testDir, methodDir,
+                ServiceInvokeStep.parseParamName(methodDir), endpoint.getAddress().toString()));
+        }
+
+        return steps;
+    }
+
+
+    public static File[] getInvokeDirs(File methodsDir) {
+        // get directory filters
+        final HashSet<String> filterSet = new HashSet<String>();
+        String filterString = System.getProperty("test.methods", "");
+        StringTokenizer st = new StringTokenizer(filterString, ", \t\r\n");
+        while (st.hasMoreTokens()) {
+            filterSet.add(st.nextToken());
+        }
+
+        // get directories
+        File[] dirs = methodsDir.listFiles(new FileFilter() {
+            public boolean accept(File file) {
+                if (!file.isDirectory() || !file.getName().matches("\\d+_\\w+")) {
+                    return false;
+                }
+                if (filterSet.size() == 0) {
+                    return true;
+                }
+                return filterSet.contains(String.valueOf(ServiceInvokeStep.parseParamPos(file)));
+            }
+        });
+
+        // sort directories
+        ArrayList<File> dirList = new ArrayList<File>(dirs.length);
+        for (File dir : dirs) {
+            dirList.add(dir);
+        }
+        Collections.sort(dirList, new Comparator<File>() {
+            public int compare(File f1, File f2) {
+                return ServiceInvokeStep.parseParamPos(f1) - ServiceInvokeStep.parseParamPos(f2);
+            }
+        });
+        dirs = dirList.toArray(new File[0]);
+
+        return dirs;
+    }
+
+
+    public String getServiceName() {
+        return this.serviceName;
+    }
+
+
+    public File getCadsrServiceDir() {
+        return this.cadsrServiceDir;
+    }
+
+
+    public ServiceCreateStep getCreateServiceStep() {
+        // set createServiceStep
+        try {
+            this.createServiceStep = new ServiceCreateStep(this.introduceDir, this.testDir, this.tempDir);
+        } catch (Exception e) {
+            throw new RuntimeException("could not instantiate CreateServiceStep", e);
+        }
+        this.serviceDir = this.createServiceStep.getServiceDir();
+        return this.createServiceStep;
+    }
+
+
+    public EndpointReferenceType getEndpoint() {
+        return this.endpoint;
+    }
+
+
+    public GlobusHelper getGlobus() {
+        return this.globus;
+    }
+
+
+    public File getGmeServiceDir() {
+        return this.gmeServiceDir;
+    }
+
+
+    public File getIntroduceDir() {
+        return this.introduceDir;
+    }
+
+
+    public File getMetadataFile() {
+        return this.metadataFile;
+    }
+
+
+    public File getServiceDir() {
+        return this.serviceDir;
+    }
+
+
+    public IntroduceServiceInfo getServiceInfo() {
+        return this.serviceInfo;
+    }
+
+
+    public File getTempDir() {
+        return this.tempDir;
+    }
+
+
+    public File getTestDir() {
+        return this.testDir;
+    }
 }

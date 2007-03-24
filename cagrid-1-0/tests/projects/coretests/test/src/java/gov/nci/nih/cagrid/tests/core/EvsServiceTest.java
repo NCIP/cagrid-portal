@@ -23,88 +23,92 @@ import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Story;
 
+
 /**
- * This is an integration test that tests the functionality of the EVS grid service. 
- * It deploys the service and then performs a number of client calls.
+ * This is an integration test that tests the functionality of the EVS grid
+ * service. It deploys the service and then performs a number of client calls.
+ * 
  * @testType integration
- * @steps ServiceCreateStep, 
- * @steps GlobusCreateStep, GlobusDeployServiceStep, EvsServiceConfigStep, GlobusStartStep
+ * @steps ServiceCreateStep,
+ * @steps GlobusCreateStep, GlobusDeployServiceStep, EvsServiceConfigStep,
+ *        GlobusStartStep
  * @steps EvsCheckServiceStep
  * @steps GlobusStopStep, GlobusCleanupStep
  * @author Avinash Shanbhag
  * @author Patrick McConnell
  */
-public class EvsServiceTest
-	extends Story
-{
-	private GlobusHelper globus;
-	private File serviceDir;
-	private int port;
-	
-	public EvsServiceTest()
-	{
-		super();
-	}
+public class EvsServiceTest extends Story {
+    private GlobusHelper globus;
+    private File serviceDir;
 
-	protected boolean storySetUp() 
-		throws Throwable
-	{
-		return true;
-	}
 
-	protected void storyTearDown() 
-		throws Throwable
-	{
-		if (globus != null) {
-			globus.stopGlobus(port);
-			globus.cleanupTempGlobus();
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected Vector steps()		
-	{
-		globus = new GlobusHelper();
-		port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
-		serviceDir = new File(System.getProperty("cadsr.dir",
-			".." + File.separator + ".." + File.separator + ".." + File.separator + 
-			"caGrid" + File.separator + "projects" + File.separator + "evs"
-		));
-		
-		Vector steps = new Vector();
-		steps.add(new GlobusCreateStep(globus));
-		steps.add(new GlobusDeployServiceStep(globus, serviceDir));
-		steps.add(new EvsServiceConfigStep(globus));
-		steps.add(new GlobusStartStep(globus, port));
-		try {
-			steps.add(new EvsCheckServiceStep(port));
-		} catch (MalformedURIException e) {
-			throw new RuntimeException("unable to instantiate EvsCheckServiceStep", e);
-		}
-		steps.add(new GlobusStopStep(globus, port));
-		steps.add(new GlobusCleanupStep(globus));
-		return steps;
-	}
+    public EvsServiceTest() {
+        super();
+    }
 
-	public String getDescription()
-	{
-		return "EvsServiceTest";
-	}
-	
-	/**
-	 * used to make sure that if we are going to use a junit testsuite to test
-	 * this that the test suite will not error out looking for a single test......
-	 */
-	public void testDummy() throws Throwable {
-	}
 
-	/**
-	 * Convenience method for running all the Steps in this Story.
-	 */
-	public static void main(String args[]) {
-		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(EvsServiceTest.class));
-		System.exit(result.errorCount() + result.failureCount());
-	}
+    @Override
+    protected boolean storySetUp() throws Throwable {
+        return true;
+    }
+
+
+    @Override
+    protected void storyTearDown() throws Throwable {
+        if (this.globus != null) {
+            this.globus.stopGlobus();
+            this.globus.cleanupTempGlobus();
+        }
+    }
+
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected Vector steps() {
+
+        this.globus = new GlobusHelper();
+
+        this.serviceDir = new File(System.getProperty("evs.dir", ".." + File.separator + ".." + File.separator + ".."
+            + File.separator + "caGrid" + File.separator + "projects" + File.separator + "evs"));
+
+        Vector steps = new Vector();
+        steps.add(new GlobusCreateStep(this.globus));
+        steps.add(new GlobusDeployServiceStep(this.globus, this.serviceDir));
+        steps.add(new EvsServiceConfigStep(this.globus));
+        steps.add(new GlobusStartStep(this.globus));
+        try {
+            steps.add(new EvsCheckServiceStep(this.globus.getServiceEPR(EvsCheckServiceStep.SERVICE_DEPLOYMENT_PATH)));
+        } catch (MalformedURIException e) {
+            throw new RuntimeException("unable to instantiate EvsCheckServiceStep", e);
+        }
+        steps.add(new GlobusStopStep(this.globus));
+        steps.add(new GlobusCleanupStep(this.globus));
+        return steps;
+    }
+
+
+    @Override
+    public String getDescription() {
+        return "EvsServiceTest";
+    }
+
+
+    /**
+     * used to make sure that if we are going to use a junit testsuite to test
+     * this that the test suite will not error out looking for a single
+     * test......
+     */
+    public void testDummy() throws Throwable {
+    }
+
+
+    /**
+     * Convenience method for running all the Steps in this Story.
+     */
+    public static void main(String args[]) {
+        TestRunner runner = new TestRunner();
+        TestResult result = runner.doRun(new TestSuite(EvsServiceTest.class));
+        System.exit(result.errorCount() + result.failureCount());
+    }
 
 }
