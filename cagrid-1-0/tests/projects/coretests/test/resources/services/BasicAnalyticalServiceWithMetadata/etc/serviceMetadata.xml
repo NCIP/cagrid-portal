@@ -1,9 +1,5 @@
 <ns1:ServiceMetadata xsi:type="ns1:ServiceMetadata" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-	<!--
-<ns1:ServiceMetadata xsi:type="ns1:ServiceMetadata" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:serv="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata
-C:\caBIG\cagrid-1-0\tests\projects\coretests\test\resources\services\BasicAnalyticalServiceWithMetadata\schema\cagrid\types\caGridMetadata.xsd">
--->
 	<ns1:serviceDescription>
 		<ns2:Service description="The BasicAnalyticalServiceWithMetadata grid service, created with caGrid Introduce, version:.9999."
 			name="BasicAnalyticalServiceWithMetadata" version=".9999" xsi:type="ns2:Service"
