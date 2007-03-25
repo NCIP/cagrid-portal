@@ -4,6 +4,8 @@
     xsi:schemaLocation="http://www.cagrid.org/1/grape file:/C:/projects/cagrid-1-0/caGrid/projects/grape/schema/grape.xsd">
     <name>Grid Grouper</name>
     <icon>/caGrid-icon-22x22.gif</icon>
+    <ApplicationLogo>/grouper_logo_no_background.png</ApplicationLogo>
+    <AboutHTML><![CDATA[<html><h2>Grid Grouper</h2>Provides a group-based authorization solution for the Grid, wherein grid<BR>services and applications enforce authorization policy based on membership<BR> to groups defined and managed at the grid level. Dorian was developed as<BR>part of the caGrid project to meet the needs of the caBIG community.<BR>  For more information on Grid Grouper or caGrid please visit us at:<BR> <A HREF="http://www.cagrid.org">http://www.cagrid.org</a></html>]]></AboutHTML>
     <dimensions>
         <width>1024</width>
         <height>768</height>
