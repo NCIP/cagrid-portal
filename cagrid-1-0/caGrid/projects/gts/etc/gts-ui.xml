@@ -4,7 +4,9 @@
     xsi:schemaLocation="http://www.cagrid.org/1/grape file:/C:/projects/cagrid-1-0/caGrid/projects/grape/schema/grape.xsd">
     <name>Grid Trust Fabric</name>
     <icon>/caGrid-icon-22x22.gif</icon>
-    <dimensions>
+    <ApplicationLogo>/caGrid.gif</ApplicationLogo>
+    <AboutHTML><![CDATA[<html><h2>Grid Trust Service (GTS)</h2>The Grid Trust Service (GTS) is a grid-wide mechanism for maintaining and<BR>provisioning a federated trust fabric consisting of trusted certificate authorities,<BR> such that grid services may make authentication decisions against the most<BR>up to date information.  The GTS was developed as part of the caGrid project to<BR>meet the needs of the caBIG community.  For more information on the GTS or<BR>caGrid please visit us at:<BR> <A HREF="http://www.cagrid.org">http://www.cagrid.org</a></html>]]></AboutHTML>
+   <dimensions>
         <width>850</width>
         <height>700</height>
     </dimensions>
