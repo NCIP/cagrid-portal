@@ -4,6 +4,8 @@
     xsi:schemaLocation="http://www.cagrid.org/1/grape file:/C:/projects/cagrid-1-0/caGrid/projects/grape/schema/grape.xsd">
     <name>GAARDS</name>
     <icon>/caGrid-icon-22x22.gif</icon>
+    <ApplicationLogo>/caGrid.gif</ApplicationLogo>
+    <AboutHTML><![CDATA[<html><h3>Grid Authentication and Authorization with Reliably Distributed Services (GAARDS)</h3>GAARDS provides services (Dorian, GTS, Grid Grouper) and tools for the administration and enforcement<BR>of security policy in enterprise Grids.  GAARDS was developed on top of the Globus Toolkit and extends<BR>the Grid Security Infrastructure (GSI) to provide enterprise services and administrative tools for:<BR>1) grid user management, 2) identity federation, 3) trust management, 4) group/VO management 5) Access<BR>Control Policy management and enforcement, and 5) Integration between existing security domains<BR>and the grid security domain. GAARDS services can be used individually or grouped together to meet the<BR> authentication and authorization needs for Grids.  GAARDS was developed as part of the caGrid project<BR>to meet the needs of the caBIG community.  For more information on GAARDS or caGrid please visit us at:<BR> <A HREF="http://www.cagrid.org">http://www.cagrid.org</a></html>]]></AboutHTML>
     <dimensions>
         <width>1024</width>
         <height>768</height>
