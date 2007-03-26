@@ -12,7 +12,7 @@ package org.cagrid.gridftp.authorization.plugin;
  *      href="http://www.globus.org/toolkit/docs/4.0/security/cas/WS_AA_CAS_HOWTO_Setup_GridFTP.html">WS_AA_CAS_HOWTO_Setup_GridFTP</a>
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * @created Mar 20, 2007
- * @version $Id: Authorize.java,v 1.1 2007-03-22 18:54:44 jpermar Exp $
+ * @version $Id: Authorize.java,v 1.2 2007-03-26 14:43:41 jpermar Exp $
  */
 public interface Authorize {
 
@@ -28,7 +28,8 @@ public interface Authorize {
 	 * 
 	 * @param operation
 	 *            the requested operation. Supported operations are listed in
-	 *            the CAS documentation.
+	 *            the CAS documentation and in the Java Authorization Plug-in
+	 *            Developer documentationn.
 	 * @param target
 	 *            the complete URL of the requested resource. Example:
 	 * 
