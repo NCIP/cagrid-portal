@@ -559,6 +559,10 @@ public class SyncGTS {
 		// Log Report;
 		try {
 			history.addReport(report);
+			if(description.getCacheSize()!=null){
+				history.prune(description.getCacheSize());
+			}
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

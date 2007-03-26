@@ -13,6 +13,10 @@
 		<ns1:CASubject>O=OSU,OU=BMI,OU=caGrid,OU=Trust Fabric,CN=caGrid Trust Fabric CA</ns1:CASubject>
 	</ns1:ExcludedCAs>
 	<ns1:DeleteInvalidFiles>false</ns1:DeleteInvalidFiles>
-	<ns1:LogEachSync>false</ns1:LogEachSync>
+	<ns1:CacheSize>
+		<ns1:year>0</ns1:year>
+		<ns1:month>1</ns1:month>
+		<ns1:day>0</ns1:day>
+	</ns1:CacheSize>
 	<ns1:NextSync>600</ns1:NextSync>
 </ns1:SyncDescription>

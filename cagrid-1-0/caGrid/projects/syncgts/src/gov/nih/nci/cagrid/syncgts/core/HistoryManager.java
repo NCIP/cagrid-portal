@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.syncgts.bean.SyncReport;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.xml.namespace.QName;
 
@@ -30,7 +32,7 @@ public class HistoryManager {
 	}
 
 
-	public SyncReport getLastReport() throws Exception{
+	public SyncReport getLastReport() throws Exception {
 		File dir = getLastestDayDir();
 		if (dir != null) {
 			File latest = null;
@@ -38,28 +40,69 @@ public class HistoryManager {
 			File files[] = dir.listFiles();
 			for (int i = 0; i < files.length; i++) {
 				if (files[i].isFile()) {
-					
-						int index = files[i].getName().indexOf(".xml");
-						if (index != -1) {
-							try {
-							int temp = Integer.valueOf(files[i].getName().substring(0,index)).intValue();
+
+					int index = files[i].getName().indexOf(".xml");
+					if (index != -1) {
+						try {
+							int temp = Integer.valueOf(files[i].getName().substring(0, index)).intValue();
 							if (temp > num) {
 								num = temp;
 								latest = files[i];
 							}
-							} catch (NumberFormatException e) {
+						} catch (NumberFormatException e) {
 
-							}
 						}
-					
+					}
+
 				}
 			}
-			if(latest != null){
+			if (latest != null) {
 				return getReport(latest.getAbsolutePath());
 			}
 
 		}
 		return null;
+	}
+
+
+	private File getEarliestDayDir() {
+		return getEarliestDir(getEarliestMonthDir());
+	}
+
+
+	private File getEarliestMonthDir() {
+		return getEarliestDir(getEarliestYearDir());
+	}
+
+
+	private File getEarliestYearDir() {
+		return getEarliestDir(getHistoryDirectory());
+	}
+
+
+	private File getEarliestDir(File dir) {
+		File earliest = null;
+		int num = Integer.MAX_VALUE;
+		if (dir != null) {
+			if (dir.exists() && dir.isDirectory()) {
+				File[] dirs = dir.listFiles();
+				for (int i = 0; i < dirs.length; i++) {
+					if (dirs[i].isDirectory()) {
+						try {
+							int temp = Integer.valueOf(dirs[i].getName()).intValue();
+							if (temp < num) {
+								num = temp;
+								earliest = dirs[i];
+							}
+						} catch (NumberFormatException e) {
+
+						}
+					}
+				}
+
+			}
+		}
+		return earliest;
 	}
 
 
@@ -106,6 +149,60 @@ public class HistoryManager {
 
 	public SyncReport getReport(String fileName) throws Exception {
 		return (SyncReport) Utils.deserializeDocument(fileName, SyncReport.class);
+	}
+
+
+	private DateFilter getEarliestFitler() throws Exception {
+		DateFilter d = new DateFilter();
+		File day = getEarliestDayDir();
+		d.setDay(Integer.valueOf(day.getName()).intValue());
+		File month = day.getParentFile();
+		d.setMonth(Integer.valueOf(month.getName()).intValue());
+		File year = month.getParentFile();
+		d.setYear(Integer.valueOf(year.getName()).intValue());
+		return d;
+	}
+
+
+	public void prune(DateFilter filter) throws Exception {
+		DateFilter start = getEarliestFitler();
+		System.out.println(start.getMonth() + "/" + start.getDay() + "/" + start.getYear());
+		Calendar c = new GregorianCalendar();
+		c.add(Calendar.YEAR, (filter.getYear() * -1));
+		c.add(Calendar.MONTH, (filter.getMonth() * -1));
+		c.add(Calendar.DAY_OF_MONTH, (filter.getDay() * -1));
+		DateFilter end = new DateFilter();
+		end.setDay(c.get(Calendar.DAY_OF_MONTH));
+		end.setMonth(c.get(Calendar.MONTH) + 1);
+		end.setYear(c.get(Calendar.YEAR));
+		System.out.println(filter.getMonth() + "/" + filter.getDay() + "/" + filter.getYear());
+		System.out.println(end.getMonth() + "/" + end.getDay() + "/" + end.getYear());
+		while (!start.equals(end)) {
+			File startDir = getDirectory(start);
+			if ((startDir.exists()) && (startDir.isDirectory())) {
+				File[] fileList = startDir.listFiles();
+				for (int i = 0; i < fileList.length; i++) {
+					fileList[i].delete();
+				}
+				File monthDir = startDir.getParentFile();
+				File yearDir = monthDir.getParentFile();
+				startDir.delete();
+				deleteIfEmpty(monthDir);
+				deleteIfEmpty(yearDir);
+
+			}
+			this.incrementDate(start);
+		}
+	}
+
+
+	private void deleteIfEmpty(File dir) {
+		if (dir.isDirectory()) {
+			File files[] = dir.listFiles();
+			if ((files == null) || (files.length == 0)) {
+				dir.delete();
+			}
+		}
 	}
 
 

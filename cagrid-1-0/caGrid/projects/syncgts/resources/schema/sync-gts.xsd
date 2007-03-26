@@ -13,6 +13,7 @@
 				<xsd:element name="ExcludedCAs" minOccurs="1" maxOccurs="1" type="sync:ExcludedCAs"/>
 				<xsd:element name="DeleteInvalidFiles" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
 				<xsd:element name="NextSync" minOccurs="1" maxOccurs="1" type="xsd:integer"/>
+				<xsd:element name="CacheSize" minOccurs="1" maxOccurs="1" type="sync:DateFilter"/>
 			</xsd:sequence>
 		</xsd:complexType>
 		
