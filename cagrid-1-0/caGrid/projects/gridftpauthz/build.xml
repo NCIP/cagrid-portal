@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!-- ================================================================= -->
-<!-- caGrid 1.0 gridftpauth build file                                 -->
+<!-- caGrid 1.0 gridftpauthz build file                                 -->
 <!-- ================================================================= -->
 
-<project name="gridftpauthz" default="compile" basedir=".">
+<project name="caGrid-gridftpauthz" default="compile" basedir=".">
     <!-- Environment -->
     <property environment="env" />
     <property file="${basedir}/build.properties" />
@@ -199,7 +199,7 @@
 	</target>
 	
 	<target name="dist" depends="compile" description="Create java authorization distribution">
-		<property name="dist.file" value="${dist.dir}/${project.shortname}-${project.version}.zip"/>
+		<property name="dist.file" value="${dist.dir}/${project.name}.zip"/>
 		<mkdir dir="${dist.dir}"/>
 		<delete file="${dist.file}"/>
 		<copy file="${globus.dir}/lib/commons-logging.jar" todir="${ext.lib.dir}"/>
@@ -210,6 +210,6 @@
     <!-- ============================================================== -->
     <!-- Builds from scratch                                                -->
     <!-- ============================================================== -->
-    <target name="all" description="Builds the entire application" depends="jar,jar-tests" />
+    <target name="all" description="Builds the entire application" depends="jar,jar-tests,javadoc" />
 </project>
 
