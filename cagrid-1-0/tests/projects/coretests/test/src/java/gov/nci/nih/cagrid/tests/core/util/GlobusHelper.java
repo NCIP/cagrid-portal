@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
@@ -105,7 +106,19 @@ public class GlobusHelper {
 
 
     public synchronized void startGlobus() throws IOException {
-        this.globusProcess = runGlobusCommand("org.globus.wsrf.container.ServiceContainer");
+        ArrayList<String> opts = new ArrayList<String>();
+        if (getPort() != null) {
+            opts.add("-p");
+            opts.add(String.valueOf(getPort()));
+        }
+        if (this.secure && getSecurityDescriptor() != null) {
+            opts.add("-containerDesc");
+            opts.add(getSecurityDescriptor().toString());
+        }
+        if (!this.secure) {
+            opts.add("-nosec");
+        }
+        this.globusProcess = runGlobusCommand("org.globus.wsrf.container.ServiceContainer", opts);
 
         // make sure it is running
         this.isGlobusRunningException = null;
@@ -121,7 +134,7 @@ public class GlobusHelper {
     }
 
 
-    private synchronized Process runGlobusCommand(String clName) throws IOException {
+    private synchronized Process runGlobusCommand(String clName, List<String> options) throws IOException {
         // create globus startup params
         // %_RUNJAVA% -Dlog4j.configuration=container-log4j.properties
         // %LOCAL_OPTS% %GLOBUS_OPTIONS% -classpath %LOCALCLASSPATH%
@@ -152,19 +165,10 @@ public class GlobusHelper {
         cmd.add(classpath);
         cmd.add("org.globus.bootstrap.Bootstrap");
         cmd.add(clName);
-        if (getPort() != null) {
-            cmd.add("-p");
-            cmd.add(String.valueOf(getPort()));
-        }
-        if (this.secure && getSecurityDescriptor() != null) {
-            cmd.add("-containerDesc");
-            cmd.add(getSecurityDescriptor().toString());
-        }
-        if (!this.secure) {
-            cmd.add("-nosec");
-        }
-
         cmd.add("-debug");
+
+        // add provided options
+        cmd.addAll(options);
 
         // build environment
         String[] envp = new String[]{"GLOBUS_LOCATION=" + this.tmpGlobusLocation};
@@ -244,7 +248,31 @@ public class GlobusHelper {
             return;
         }
 
-        runGlobusCommand("org.globus.wsrf.container.ShutdownClient");
+        ArrayList<String> opts = new ArrayList<String>();
+        if (this.secure && getSecurityDescriptor() != null) {
+            opts.add("-f");
+            opts.add(getSecurityDescriptor().toString());
+        } else {
+            // TODO: on create globus, edit the shutdown service to remove
+            // security
+            // descriptor so we can do this
+
+            // // anonymous
+            // opts.add("-a");
+            // // no auth
+            // opts.add("-z");
+            // opts.add("none");
+            this.globusProcess.destroy();
+            return;
+        }
+
+        opts.add("-s");
+        opts.add(getServiceEPR("ShutdownService").getAddress().toString());
+
+        // force a JVM kill
+        opts.add("hard");
+
+        runGlobusCommand("org.globus.wsrf.container.ShutdownClient", opts);
         sleep(2000);
 
         this.globusProcess.destroy();
