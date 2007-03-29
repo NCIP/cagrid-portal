@@ -26,6 +26,7 @@ import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -164,7 +165,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 				mii.setFromIntroduce(Boolean.TRUE);
 				mii.setInputMessage(new QName("http://cagrid.nci.nih.gov/BulkDataHandler", "CreateEnumerationRequest"));
 				mii.setOutputMessage(new QName("http://cagrid.nci.nih.gov/BulkDataHandler",
-						"CreateEnumerationResponse"));
+					"CreateEnumerationResponse"));
 				mii.setPackageName("gov.nih.nci.cagrid.bdt.stubs");
 				mii.setNamespace("http://cagrid.nci.nih.gov/BulkDataHandler");
 				mii.setPortTypeName("BulkDataHandlerPortType");
@@ -186,21 +187,18 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 				mii.setWsdlFile("./BulkDataHandler.wsdl");
 				method.setImportInformation(mii);
 			}
-
 		}
 
-		List services = new ArrayList(Arrays.asList(description.getServices().getService()));
-		services.add(bdtService);
-		ServiceType[] servicesArr = new ServiceType[services.size()];
-		services.toArray(servicesArr);
-		description.getServices().setService(servicesArr);
-
+		ServiceType[] services = description.getServices().getService();
+        services = (ServiceType[]) Utils.appendToArray(services, bdtService);
+		description.getServices().setService(services);
 	}
 
 
 	private void addResourceImplStub(ServiceDescription desc, Properties props) throws Exception {
-		BDTResourceTemplate resourceT = new BDTResourceTemplate();
-		String resourceS = resourceT.generate(new SpecificServiceInformation(info, info.getServices().getService(0)));
+		BDTResourceTemplate resourceTemplate = new BDTResourceTemplate();
+		String resourceS = resourceTemplate.generate(
+            new SpecificServiceInformation(info, info.getServices().getService(0)));
 		File resourceF = new File(props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 			+ File.separator + "src" + File.separator + CommonTools.getPackageDir(desc.getServices().getService(0))
 			+ File.separator + "service" + File.separator + "BDTResource.java");
@@ -210,42 +208,41 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 	}
 
 
-	private void addServiceMetadata(ServiceDescription desc) {
+	private void addServiceMetadata(ServiceDescription desc) throws CreationExtensionException {
 		ResourcePropertyType serviceMetadata = new ResourcePropertyType();
 		serviceMetadata.setPopulateFromFile(true); // no metadata file yet...
 		serviceMetadata.setRegister(true);
 		serviceMetadata.setFileLocation("./BulkDataHandler-metadata.xml");
 		serviceMetadata.setQName(BDTServiceConstants.METADATA_QNAME);
-		ResourcePropertiesListType propsList = desc.getServices().getService()[0].getResourcePropertiesList();
+		ResourcePropertiesListType propsList = desc.getServices().getService(0).getResourcePropertiesList();
 		if (propsList == null) {
 			propsList = new ResourcePropertiesListType();
-			desc.getServices().getService()[0].setResourcePropertiesList(propsList);
+			desc.getServices().getService(0).setResourcePropertiesList(propsList);
 		}
 		ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
 		if ((metadataArray == null) || (metadataArray.length == 0)) {
 			metadataArray = new ResourcePropertyType[]{serviceMetadata};
 		} else {
-			ResourcePropertyType[] tmpArray = new ResourcePropertyType[metadataArray.length + 1];
-			System.arraycopy(metadataArray, 0, tmpArray, 0, metadataArray.length);
-			tmpArray[metadataArray.length] = serviceMetadata;
-			metadataArray = tmpArray;
+            metadataArray = (ResourcePropertyType[]) Utils.appendToArray(metadataArray, serviceMetadata);
 		}
 		propsList.setResourceProperty(metadataArray);
 
 		try {
-			Utils.copyFile(new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "bdt" + File.separator
-				+ "etc" + File.separator + "BulkDataHandler-metadata.xml"), new File(serviceProperties
-				.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-				+ File.separator + "etc" + File.separator + "BulkDataHandler-metadata.xml"));
-		} catch (Exception e) {
-			e.printStackTrace();
+            File baseBdtMetadata = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "bdt" + File.separator
+                + "etc" + File.separator + "BulkDataHandler-metadata.xml");
+            File serviceBdtMetadata = new File(serviceProperties.getProperty(
+                IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+                + File.separator + "etc" + File.separator + "BulkDataHandler-metadata.xml");
+			Utils.copyFile(baseBdtMetadata, serviceBdtMetadata);
+		} catch (IOException ex) {
+			throw new CreationExtensionException("Error copying BDT metadata to service: " 
+                + ex.getMessage(), ex);
 		}
-
 	}
 
 
 	private boolean serviceMetadataExists(ServiceDescription desc) {
-		ResourcePropertiesListType propsList = desc.getServices().getService()[0].getResourcePropertiesList();
+		ResourcePropertiesListType propsList = desc.getServices().getService(0).getResourcePropertiesList();
 		if (propsList == null) {
 			return false;
 		}
