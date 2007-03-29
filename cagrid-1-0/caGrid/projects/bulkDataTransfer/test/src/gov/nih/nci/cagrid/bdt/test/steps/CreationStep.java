@@ -12,7 +12,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * 
  * @created Aug 22, 2006 
- * @version $Id: CreationStep.java,v 1.1 2007-03-20 18:44:46 hastings Exp $ 
+ * @version $Id: CreationStep.java,v 1.2 2007-03-29 16:52:58 dervin Exp $ 
  */
 public class CreationStep extends Step {
 	private String introduceDir;
@@ -27,7 +27,7 @@ public class CreationStep extends Step {
 		System.out.println("Creating service...");
 
 		String cmd = CommonTools.getAntSkeletonCreationCommand(introduceDir, CreationTest.SERVICE_NAME, 
-			CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, "data");
+			CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, "bdt");
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		assertTrue("Creating new data service failed", p.exitValue() == 0);
