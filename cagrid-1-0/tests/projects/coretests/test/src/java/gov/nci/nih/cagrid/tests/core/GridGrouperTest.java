@@ -30,6 +30,8 @@ import gov.nci.nih.cagrid.tests.core.steps.GrouperRemoveMemberStep;
 import gov.nci.nih.cagrid.tests.core.steps.GrouperRemoveStemStep;
 import gov.nci.nih.cagrid.tests.core.steps.GrouperRevokePrivilegeStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
+import gov.nci.nih.cagrid.tests.core.util.NoAvailablePortException;
+import gov.nci.nih.cagrid.tests.core.util.PortPreference;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 
@@ -123,12 +125,6 @@ public class GridGrouperTest extends Story {
         this.caFile = new File(System.getProperty("user.home"), ".globus" + File.separator + "certificates"
             + File.separator + "DorianTest_ca.1");
 
-        this.grouperGlobus = new GlobusHelper(true);
-        this.grouperDir = new File(System.getProperty("grouper.dir", ".." + File.separator + ".." + File.separator
-            + ".." + File.separator + "caGrid" + File.separator + "projects" + File.separator + "gridgrouper"));
-        this.grouperAdminName = System.getProperty("grouper.adminId", "grouper");
-        this.grouperAdmin = System.getProperty("grouper.admin", idp + this.grouperAdminName);
-
         Vector steps = new Vector();
 
         // initialize dorian
@@ -139,17 +135,28 @@ public class GridGrouperTest extends Story {
         steps.add(new GlobusStartStep(this.dorianGlobus));
 
         String dorianURL = null;
+        Integer dorianPort = null;
         try {
             dorianURL = this.dorianGlobus.getServiceEPR("cagrid/Dorian").getAddress().toString();
+            dorianPort = this.dorianGlobus.getPort();
         } catch (MalformedURIException e) {
             e.printStackTrace();
             fail("Unable to get dorian URL:" + e.getMessage());
+        } catch (NoAvailablePortException e) {
+            fail("Unable to find a port for dorian:" + e.getMessage());
         }
 
-        // TODO: the above doesn't actually bind to the socket until the
-        // startstep runs, so the grouper globus thinks it can use it too...
-        // need to fix (for now hack it to just try the next port)
-        this.grouperGlobus.setPort(new Integer(this.dorianGlobus.getPort().intValue() + 1));
+        // the above doesn't actually bind to the socket until the
+        // startstep runs, so setup the grid grouper globus's port preferences
+        // to exclude the port dorian will use
+        PortPreference grouperPortPref = new PortPreference(GlobusHelper.getDefaultPortRangeMinimum(), GlobusHelper
+            .getDefaultPortRangeMaximum(), new Integer[]{dorianPort});
+
+        this.grouperGlobus = new GlobusHelper(true, grouperPortPref);
+        this.grouperDir = new File(System.getProperty("grouper.dir", ".." + File.separator + ".." + File.separator
+            + ".." + File.separator + "caGrid" + File.separator + "projects" + File.separator + "gridgrouper"));
+        this.grouperAdminName = System.getProperty("grouper.adminId", "grouper");
+        this.grouperAdmin = System.getProperty("grouper.admin", idp + this.grouperAdminName);
 
         // initialize grouper
         steps.add(new GrouperCreateDbStep());

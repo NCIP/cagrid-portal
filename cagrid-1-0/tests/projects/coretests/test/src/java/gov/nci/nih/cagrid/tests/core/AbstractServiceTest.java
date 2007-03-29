@@ -29,15 +29,7 @@ public abstract class AbstractServiceTest extends Story {
 
 
     @Override
-    public String getDescription() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
     protected Vector steps() {
-        // TODO Auto-generated method stub
         return null;
     }
 

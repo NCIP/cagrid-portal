@@ -2,7 +2,6 @@ package gov.nci.nih.cagrid.tests.core.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +30,7 @@ public class GlobusHelper {
     private boolean secure;
     private File securityDescriptor;
     private Integer port;
+    private PortPreference portPrefs;
 
     private File tmpDir;
     private File tmpGlobusLocation;
@@ -39,24 +39,35 @@ public class GlobusHelper {
 
 
     public GlobusHelper() {
-        this(false, null);
+        this(false, null, null);
     }
 
 
     public GlobusHelper(File tmpDir) {
-        this(false, tmpDir);
+        this(false, tmpDir, null);
+    }
+
+
+    public GlobusHelper(File tmpDir, PortPreference portPreference) {
+        this(false, tmpDir, portPreference);
     }
 
 
     public GlobusHelper(boolean secure) {
-        this(secure, null);
+        this(secure, null, null);
     }
 
 
-    public GlobusHelper(boolean secure, File tmpDir) {
+    public GlobusHelper(boolean secure, PortPreference portPreference) {
+        this(secure, null, portPreference);
+    }
+
+
+    public GlobusHelper(boolean secure, File tmpDir, PortPreference portPreference) {
         super();
         this.secure = secure;
         this.tmpDir = tmpDir;
+        this.portPrefs = portPreference;
     }
 
 
@@ -189,9 +200,14 @@ public class GlobusHelper {
 
 
     public synchronized URI getContainerBaseURI() throws MalformedURIException {
-        URI url = new URI("http://localhost:" + getPort() + "/wsrf/services/");
-        if (this.secure) {
-            url = new URI("https://localhost:" + getPort() + "/wsrf/services/");
+        URI url = null;
+        try {
+            url = new URI("http://localhost:" + getPort() + "/wsrf/services/");
+            if (this.secure) {
+                url = new URI("https://localhost:" + getPort() + "/wsrf/services/");
+            }
+        } catch (NoAvailablePortException e) {
+            throw new MalformedURIException("Problem getting port:" + e.getMessage());
         }
         return url;
     }
@@ -343,8 +359,9 @@ public class GlobusHelper {
 
     /**
      * @return the port
+     * @throws NoAvailablePortException
      */
-    public synchronized Integer getPort() {
+    public synchronized Integer getPort() throws NoAvailablePortException {
         if (this.port == null) {
             initializePort();
         }
@@ -352,31 +369,27 @@ public class GlobusHelper {
     }
 
 
-    private void initializePort() {
-        String portProp = System.getProperty("test.globus.port");
-        if (portProp != null) {
-            this.port = new Integer(portProp);
-            return;
-        }
-
-        int start = Integer.parseInt(System.getProperty(this.getClass().getName() + ".portrange.min", "10000"));
-        int end = Integer.parseInt(System.getProperty(this.getClass().getName() + ".portrange.max", "10100"));
-
-        for (int i = start; i <= end; i++) {
-            ServerSocket sock = null;
-            try {
-                sock = new ServerSocket(i);
-                this.port = new Integer(i);
-                return;
-            } catch (Throwable e) {
-            } finally {
-                if (sock != null) {
-                    try {
-                        sock.close();
-                    } catch (Throwable t) {
-                    }
-                }
+    private void initializePort() throws NoAvailablePortException {
+        if (this.portPrefs == null) {
+            String portProp = System.getProperty("test.globus.port");
+            if (portProp != null) {
+                this.portPrefs = new PortPreference(new Integer(portProp));
+            } else {
+                this.portPrefs = new PortPreference(getDefaultPortRangeMinimum(), getDefaultPortRangeMaximum(), null);
             }
+
         }
+
+        this.port = this.portPrefs.getPort();
+    }
+
+
+    public static Integer getDefaultPortRangeMaximum() {
+        return new Integer(System.getProperty(GlobusHelper.class.getName() + ".portrange.max", "10100"));
+    }
+
+
+    public static Integer getDefaultPortRangeMinimum() {
+        return new Integer(System.getProperty(GlobusHelper.class.getName() + ".portrange.min", "10000"));
     }
 }

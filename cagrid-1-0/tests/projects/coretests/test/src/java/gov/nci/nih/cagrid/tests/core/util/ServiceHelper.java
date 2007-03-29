@@ -77,7 +77,7 @@ public class ServiceHelper {
         }
 
         // set globus helper and port
-        this.globus = new GlobusHelper(this.serviceInfo.isTransportSecurity(), this.tempDir);
+        this.globus = new GlobusHelper(this.serviceInfo.isTransportSecurity(), this.tempDir, null);
 
         // set endpoint
         try {
