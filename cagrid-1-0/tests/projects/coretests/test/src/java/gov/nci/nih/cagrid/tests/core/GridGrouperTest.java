@@ -132,6 +132,14 @@ public class GridGrouperTest extends Story {
             fail("Unable to get dorian URL:" + e.getMessage());
         }
 
+        String grouperURL = null;
+        try {
+            grouperURL = this.grouperGlobus.getServiceEPR("cagrid/GridGrouper").getAddress().toString();
+        } catch (MalformedURIException e) {
+            e.printStackTrace();
+            fail("Unable to get grouper URL:" + e.getMessage());
+        }
+
         // initialize dorian
         steps.add(new GlobusCreateStep(this.dorianGlobus));
         steps.add(new GlobusInstallSecurityDescriptorStep(this.dorianGlobus));
@@ -188,31 +196,31 @@ public class GridGrouperTest extends Story {
         steps.add(new DorianAuthenticateStep(this.grouperAdminName, this.grouperAdminName, dorianURL));
 
         // add stems and groups
-        steps.add(new GrouperCreateStemStep("test:stem1"));
-        steps.add(new GrouperCreateStemStep("test:stem2:stem3"));
-        steps.add(new GrouperCreateStemStep("test:stem2:stem4"));
-        steps.add(new GrouperCreateGroupStep("test:stem1:group1"));
-        steps.add(new GrouperCreateGroupStep("test:stem2:stem3:group2"));
-        steps.add(new GrouperCreateGroupStep("test:stem2:stem3:group3"));
+        steps.add(new GrouperCreateStemStep("test:stem1", grouperURL));
+        steps.add(new GrouperCreateStemStep("test:stem2:stem3", grouperURL));
+        steps.add(new GrouperCreateStemStep("test:stem2:stem4", grouperURL));
+        steps.add(new GrouperCreateGroupStep("test:stem1:group1", grouperURL));
+        steps.add(new GrouperCreateGroupStep("test:stem2:stem3:group2", grouperURL));
+        steps.add(new GrouperCreateGroupStep("test:stem2:stem3:group3", grouperURL));
 
         // add members
-        steps.add(new GrouperAddMemberStep("test:stem1:group1", idp + "subject1"));
-        steps.add(new GrouperAddMemberStep("test:stem1:group1", idp + "subject2"));
-        steps.add(new GrouperAddMemberStep("test:stem2:stem3:group2", idp + "subject1"));
-        steps.add(new GrouperAddMemberStep("test:stem2:stem3:group2", idp + "subject2"));
+        steps.add(new GrouperAddMemberStep("test:stem1:group1", idp + "subject1", grouperURL));
+        steps.add(new GrouperAddMemberStep("test:stem1:group1", idp + "subject2", grouperURL));
+        steps.add(new GrouperAddMemberStep("test:stem2:stem3:group2", idp + "subject1", grouperURL));
+        steps.add(new GrouperAddMemberStep("test:stem2:stem3:group2", idp + "subject2", grouperURL));
 
         // check stems, groups, and members
-        steps.add(new GrouperCheckStemsStep("test", new String[]{"stem1", "stem2"}));
-        steps.add(new GrouperCheckStemsStep("test:stem1", new String[]{}));
-        steps.add(new GrouperCheckStemsStep("test:stem2", new String[]{"stem3", "stem4"}));
-        steps.add(new GrouperCheckGroupsStep("test", new String[]{}));
-        steps.add(new GrouperCheckGroupsStep("test:stem1", new String[]{"group1"}));
-        steps.add(new GrouperCheckGroupsStep("test:stem2:stem3", new String[]{"group2", "group3"}));
+        steps.add(new GrouperCheckStemsStep("test", new String[]{"stem1", "stem2"}, grouperURL));
+        steps.add(new GrouperCheckStemsStep("test:stem1", new String[]{}, grouperURL));
+        steps.add(new GrouperCheckStemsStep("test:stem2", new String[]{"stem3", "stem4"}, grouperURL));
+        steps.add(new GrouperCheckGroupsStep("test", new String[]{}, grouperURL));
+        steps.add(new GrouperCheckGroupsStep("test:stem1", new String[]{"group1"}, grouperURL));
+        steps.add(new GrouperCheckGroupsStep("test:stem2:stem3", new String[]{"group2", "group3"}, grouperURL));
         steps.add(new GrouperCheckMembersStep("test:stem1:group1", "All", new String[]{idp + "subject1",
-                idp + "subject2"}));
+                idp + "subject2"}, grouperURL));
         steps.add(new GrouperCheckMembersStep("test:stem2:stem3:group2", "All", new String[]{idp + "subject1",
-                idp + "subject2"}));
-        steps.add(new GrouperCheckMembersStep("test:stem2:stem3:group3", "All", new String[]{}));
+                idp + "subject2"}, grouperURL));
+        steps.add(new GrouperCheckMembersStep("test:stem2:stem3:group3", "All", new String[]{}, grouperURL));
 
         // grant privileges
         steps.add(new GrouperGrantPrivilegeStep("test:stem1:group1", idp + "subject1", "admin"));
@@ -221,21 +229,25 @@ public class GridGrouperTest extends Story {
         steps.add(new GrouperGrantPrivilegeStep("test:stem1", idp + "subject1", "stem"));
 
         // check privileges
-        steps.add(new GrouperCheckPrivilegesStep("test:stem1:group1", idp + "subject1", new String[]{"admin"}));
-        steps.add(new GrouperCheckPrivilegesStep("test:stem2:stem3:group2", idp + "subject2", new String[]{"admin"}));
-        steps.add(new GrouperCheckPrivilegesStep("test:stem2:stem3:group2", idp + "subject1", new String[]{"optout"}));
-        steps.add(new GrouperCheckPrivilegesStep("test:stem1", idp + "subject1", new String[]{"stem"}));
+        steps.add(new GrouperCheckPrivilegesStep("test:stem1:group1", idp + "subject1", new String[]{"admin"},
+            grouperURL));
+        steps.add(new GrouperCheckPrivilegesStep("test:stem2:stem3:group2", idp + "subject2", new String[]{"admin"},
+            grouperURL));
+        steps.add(new GrouperCheckPrivilegesStep("test:stem2:stem3:group2", idp + "subject1", new String[]{"optout"},
+            grouperURL));
+        steps.add(new GrouperCheckPrivilegesStep("test:stem1", idp + "subject1", new String[]{"stem"}, grouperURL));
 
         // test group admin privileges
         steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
-        steps.add(new GrouperAddMemberStep("test:stem1:group1", idp + "subject3"));
+        steps.add(new GrouperAddMemberStep("test:stem1:group1", idp + "subject3", grouperURL));
         steps.add(new GrouperCheckMembersStep("test:stem1:group1", "All", new String[]{idp + "subject1",
-                idp + "subject2", idp + "subject3"}));
+                idp + "subject2", idp + "subject3"}, grouperURL));
         steps.add(new GrouperGrantPrivilegeStep("test:stem1:group1", idp + "subject3", "admin"));
-        steps.add(new GrouperCheckPrivilegesStep("test:stem1:group1", idp + "subject3", new String[]{"admin"}));
+        steps.add(new GrouperCheckPrivilegesStep("test:stem1:group1", idp + "subject3", new String[]{"admin"},
+            grouperURL));
         steps.add(new GrouperRemoveMemberStep("test:stem1:group1", idp + "subject3"));
         steps.add(new GrouperCheckMembersStep("test:stem1:group1", "All", new String[]{idp + "subject1",
-                idp + "subject2"}));
+                idp + "subject2"}, grouperURL));
 
         // test group admin privileges fail
         steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
@@ -245,7 +257,7 @@ public class GridGrouperTest extends Story {
         steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
         steps.add(new GrouperRemoveMemberStep("test:stem2:stem3:group2", idp + "subject1"));
         steps.add(new DorianAuthenticateStep("subject2", "subject2", dorianURL));
-        steps.add(new GrouperAddMemberStep("test:stem2:stem3:group2", idp + "subject1"));
+        steps.add(new GrouperAddMemberStep("test:stem2:stem3:group2", idp + "subject1", grouperURL));
         steps.add(new GrouperRevokePrivilegeStep("test:stem2:stem3:group2", idp + "subject1", "optout"));
         steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
         steps.add(new GrouperRemoveMemberStep("test:stem2:stem3:group2", idp + "subject1", true));
@@ -254,11 +266,11 @@ public class GridGrouperTest extends Story {
 
         // test stem privileges
         steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
-        steps.add(new GrouperCreateStemStep("test:stem1:stem5"));
-        steps.add(new GrouperCheckStemsStep("test:stem1", new String[]{"stem5"}));
+        steps.add(new GrouperCreateStemStep("test:stem1:stem5", grouperURL));
+        steps.add(new GrouperCheckStemsStep("test:stem1", new String[]{"stem5"}, grouperURL));
         steps.add(new GrouperRemoveStemStep("test:stem1:stem5"));
         steps.add(new DorianAuthenticateStep("subject2", "subject2", dorianURL));
-        steps.add(new GrouperCreateStemStep("test:stem1:stem5", true));
+        steps.add(new GrouperCreateStemStep("test:stem1:stem5", true, grouperURL));
 
         return steps;
     }

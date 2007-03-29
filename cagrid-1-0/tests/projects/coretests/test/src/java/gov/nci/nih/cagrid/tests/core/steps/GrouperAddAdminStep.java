@@ -10,26 +10,25 @@ import java.util.Properties;
 
 import com.atomicobject.haste.framework.Step;
 
-public class GrouperAddAdminStep
-	extends Step
-{
-	private File grouperDir;
-	private String userName;
-	
-	public GrouperAddAdminStep(File grouperDir, String userName)
-	{
-		super();
-		
-		this.grouperDir = grouperDir;
-		this.userName = userName;
-	}
-	
-	public void runStep() 
-		throws Throwable
-	{
-		Properties sysProps = new Properties();
-		sysProps.setProperty("gridId.input", userName);
-		
-		AntUtils.runAnt(grouperDir, null, "addAdmin", sysProps, null);
-	}
+
+public class GrouperAddAdminStep extends Step {
+    private File grouperDir;
+    private String userName;
+
+
+    public GrouperAddAdminStep(File grouperDir, String userName) {
+        super();
+
+        this.grouperDir = grouperDir;
+        this.userName = userName;
+    }
+
+
+    @Override
+    public void runStep() throws Throwable {
+        Properties sysProps = new Properties();
+        sysProps.setProperty("gridId.input", this.userName);
+
+        AntUtils.runAnt(this.grouperDir, null, "addAdmin", sysProps, null);
+    }
 }
