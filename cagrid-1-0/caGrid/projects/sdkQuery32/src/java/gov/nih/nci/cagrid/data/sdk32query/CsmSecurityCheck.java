@@ -19,7 +19,7 @@ import java.util.List;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 26, 2006 
- * @version $Id: CsmSecurityCheck.java,v 1.1 2006-11-07 16:29:24 dervin Exp $ 
+ * @version $Id: CsmSecurityCheck.java,v 1.2 2007-03-29 13:24:27 dervin Exp $ 
  */
 public class CsmSecurityCheck {
 
@@ -30,7 +30,7 @@ public class CsmSecurityCheck {
 		String csmConfigFile, String callerId, String csmContextName, CQLQuery query) 
 		throws RemoteException {
 		if (csmConfigFile == null || csmConfigFile.trim().length() == 0) {
-			throw new java.rmi.RemoteException("No CSM Configuration file was specified.");
+			throw new RemoteException("No CSM Configuration file was specified.");
 		} else {
 			// here's why its synchronized...
 			System.setProperty(CSM_CONFIG_PROPERTY, csmConfigFile);
