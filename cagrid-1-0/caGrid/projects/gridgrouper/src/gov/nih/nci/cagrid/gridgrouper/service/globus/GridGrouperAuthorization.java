@@ -174,6 +174,16 @@ public class GridGrouperAuthorization{
 		
 		
 	}
+					
+	public static void authorizeGetMember() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeGetMembersGroups() throws RemoteException {
+		
+		
+	}
 	
 	
 }

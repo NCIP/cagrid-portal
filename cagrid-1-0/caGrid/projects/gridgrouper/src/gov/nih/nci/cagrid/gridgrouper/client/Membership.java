@@ -33,7 +33,7 @@ public class Membership extends GridGrouperObject implements MembershipI {
 	protected Membership(GridGrouper gridGrouper, MembershipDescriptor des) throws SubjectNotFoundException {
 		this.gridGrouper = gridGrouper;
 		this.des = des;
-		this.member = new Member(des.getMember());
+		this.member = new Member(gridGrouper, des.getMember());
 		this.group = new Group(this.gridGrouper, des.getGroup());
 		if (this.des.getViaGroup() != null) {
 			this.viaGroup = new Group(this.gridGrouper, des.getViaGroup());

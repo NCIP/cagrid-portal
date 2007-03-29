@@ -282,7 +282,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			Set members = new LinkedHashSet();
 			if (list != null) {
 				for (int i = 0; i < list.length; i++) {
-					members.add(new Member(list[i]));
+					members.add(new Member(gridGrouper,list[i]));
 				}
 			}
 			return members;

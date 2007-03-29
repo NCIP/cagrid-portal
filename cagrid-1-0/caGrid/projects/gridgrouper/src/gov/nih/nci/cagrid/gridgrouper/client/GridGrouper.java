@@ -2,22 +2,27 @@ package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.grouper.GroupNotFoundException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
+import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipType;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GrouperI;
+import gov.nih.nci.cagrid.gridgrouper.grouper.MemberI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 import gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.globus.gsi.GlobusCredential;
@@ -262,6 +267,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
+
 	}
 
 
@@ -273,4 +279,62 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+
+
+	public MemberI findMember(Subject subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
+		return findMember(subject.getId());
+	}
+
+
+	public MemberI findMember(String subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
+		try {
+			return new Member(this, getClient().getMember(subject));
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+
+	public Set getMembersGroups(String subject, MembershipType type) throws GrouperRuntimeException,
+		InsufficientPrivilegeException {
+		try {
+			GroupDescriptor[] list = getClient().getMembersGroups(subject, type);
+			Set grps = new LinkedHashSet();
+			if (list != null) {
+				for (int i = 0; i < list.length; i++) {
+					grps.add(new Group(this, list[i]));
+				}
+			}
+			return grps;
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+	
+	public Set getMembersEffectiveGroups(String subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
+		return getMembersGroups(subject,MembershipType.EffectiveMembers);
+	}
+
+
+	public Set getMembersGroups(String subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
+		return getMembersGroups(subject,MembershipType.Any);
+	}
+
+
+	public Set getMembersImmediateGroups(String subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
+		return getMembersGroups(subject,MembershipType.ImmediateMembers);
+	}
+
 }

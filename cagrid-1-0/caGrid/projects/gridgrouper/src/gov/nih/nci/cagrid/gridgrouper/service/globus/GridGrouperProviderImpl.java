@@ -220,4 +220,18 @@ public class GridGrouperProviderImpl {
 		return boxedResult;
 	}
 
+	public gov.nih.nci.cagrid.gridgrouper.stubs.GetMemberResponse getMember(gov.nih.nci.cagrid.gridgrouper.stubs.GetMemberRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault {
+		GridGrouperAuthorization.authorizeGetMember();
+		gov.nih.nci.cagrid.gridgrouper.stubs.GetMemberResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetMemberResponse();
+		boxedResult.setMemberDescriptor(impl.getMember(params.getMember().getSubjectIdentifier()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersGroupsResponse getMembersGroups(gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersGroupsRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault {
+		GridGrouperAuthorization.authorizeGetMembersGroups();
+		gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersGroupsResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersGroupsResponse();
+		boxedResult.setGroupDescriptor(impl.getMembersGroups(params.getMember().getSubjectIdentifier(),params.getType().getMembershipType()));
+		return boxedResult;
+	}
+
 }

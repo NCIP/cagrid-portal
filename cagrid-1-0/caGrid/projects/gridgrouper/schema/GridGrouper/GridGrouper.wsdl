@@ -773,6 +773,53 @@
           </sequence>
         </complexType>
       </element>
+      <element name="GetMemberRequest">
+        <complexType>
+          <sequence>
+            <element name="member">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:SubjectIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetMemberResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:MemberDescriptor" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetMembersGroupsRequest">
+        <complexType>
+          <sequence>
+            <element name="member">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:SubjectIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="type">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:MembershipType" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetMembersGroupsResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:GroupDescriptor" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperResourceProperties">
         <complexType>
           <sequence>
@@ -956,6 +1003,18 @@
   </message>
   <message name="IsMemberResponse">
     <part name="parameters" element="tns:IsMemberResponse" />
+  </message>
+  <message name="GetMemberRequest">
+    <part name="parameters" element="tns:GetMemberRequest" />
+  </message>
+  <message name="GetMemberResponse">
+    <part name="parameters" element="tns:GetMemberResponse" />
+  </message>
+  <message name="GetMembersGroupsRequest">
+    <part name="parameters" element="tns:GetMembersGroupsRequest" />
+  </message>
+  <message name="GetMembersGroupsResponse">
+    <part name="parameters" element="tns:GetMembersGroupsResponse" />
   </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="ns3:GridGrouperRuntimeFault" />
@@ -1209,6 +1268,18 @@
       <input message="tns:IsMemberRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/IsMemberRequest" />
       <output message="tns:IsMemberResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/IsMemberResponse" />
       <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+    </operation>
+    <operation name="getMember">
+      <input message="tns:GetMemberRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetMemberRequest" />
+      <output message="tns:GetMemberResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetMemberResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
+    </operation>
+    <operation name="getMembersGroups">
+      <input message="tns:GetMembersGroupsRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetMembersGroupsRequest" />
+      <output message="tns:GetMembersGroupsResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetMembersGroupsResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

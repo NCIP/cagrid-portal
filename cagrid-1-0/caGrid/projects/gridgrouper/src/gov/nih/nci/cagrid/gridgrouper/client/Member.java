@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
+import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.subject.Source;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
@@ -8,6 +9,8 @@ import edu.internet2.middleware.subject.SubjectType;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.MemberI;
+
+import java.util.Set;
 
 
 /**
@@ -24,8 +27,11 @@ public class Member implements MemberI {
 
 	private Subject subject;
 
+	private GridGrouper gridGrouper;
 
-	public Member(MemberDescriptor des) throws SubjectNotFoundException {
+
+	public Member(GridGrouper gridGrouper, MemberDescriptor des) throws SubjectNotFoundException {
+		this.gridGrouper = gridGrouper;
 		this.des = des;
 		subject = SubjectUtils.getSubject(des);
 
@@ -68,6 +74,21 @@ public class Member implements MemberI {
 
 	public Subject getSubject() {
 		return subject;
+	}
+
+
+	public Set getEffectiveGroups() throws GrouperRuntimeException, InsufficientPrivilegeException {
+		return this.gridGrouper.getMembersEffectiveGroups(getSubjectId());
+	}
+
+
+	public Set getGroups() throws GrouperRuntimeException, InsufficientPrivilegeException {
+		return this.gridGrouper.getMembersGroups(getSubjectId());
+	}
+
+
+	public Set getImmediateGroups() throws GrouperRuntimeException, InsufficientPrivilegeException {
+		return this.gridGrouper.getMembersImmediateGroups(getSubjectId());
 	}
 
 }

@@ -1,6 +1,9 @@
 package gov.nih.nci.cagrid.gridgrouper.grouper;
 
+import java.util.Set;
+
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
+import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.subject.Source;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
@@ -39,6 +42,7 @@ public interface MemberI {
 
 	public Subject getSubject() throws SubjectNotFoundException;
 
+
 	// Actions
 
 	// public boolean canAdmin(Group g) throws IllegalArgumentException;
@@ -57,15 +61,18 @@ public interface MemberI {
 	//
 	// public boolean canView(Group g) throws IllegalArgumentException;
 	//
-	// public Set getEffectiveGroups();
+	public Set getEffectiveGroups() throws GrouperRuntimeException, InsufficientPrivilegeException;
+
+
 	//
 	// public Set getEffectiveMemberships() throws GrouperRuntimeException;
 	//
 	// public Set getEffectiveMemberships(FieldI f) throws SchemaException;
 	//
-	// public Set getGroups();
-	//
-	// public Set getImmediateGroups();
+	public Set getGroups() throws GrouperRuntimeException, InsufficientPrivilegeException;
+
+	public Set getImmediateGroups() throws GrouperRuntimeException, InsufficientPrivilegeException;
+
 	//
 	// public Set getImmediateMemberships() throws GrouperRuntimeException;
 	//

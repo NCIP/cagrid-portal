@@ -653,5 +653,30 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
         return boxedResult.isResponse();
       }
     }
+	public gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor getMember(java.lang.String member) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"getMember");
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetMemberRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetMemberRequestMember memberContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.GetMemberRequestMember();
+        memberContainer.setSubjectIdentifier(member);
+        params.setMember(memberContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetMemberResponse boxedResult = portType.getMember(params);
+        return boxedResult.getMemberDescriptor();
+      }
+    }
+	public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor[] getMembersGroups(java.lang.String member,gov.nih.nci.cagrid.gridgrouper.bean.MembershipType type) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"getMembersGroups");
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersGroupsRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersGroupsRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersGroupsRequestMember memberContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersGroupsRequestMember();
+        memberContainer.setSubjectIdentifier(member);
+        params.setMember(memberContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersGroupsRequestType typeContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersGroupsRequestType();
+        typeContainer.setMembershipType(type);
+        params.setType(typeContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersGroupsResponse boxedResult = portType.getMembersGroups(params);
+        return boxedResult.getGroupDescriptor();
+      }
+    }
 
 }
