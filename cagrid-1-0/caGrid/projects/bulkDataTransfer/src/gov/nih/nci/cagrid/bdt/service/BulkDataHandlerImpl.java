@@ -39,9 +39,8 @@ public class BulkDataHandlerImpl extends BulkDataHandlerImplBase {
 			EnumResourceHome resourceHome = null;
 			try {
 				resourceHome = EnumResourceHome.getEnumResourceHome();
-			} catch (NamingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (NamingException ex) {
+			    throw new RemoteException(ex.getMessage(), ex);
 			}
 			EnumResource resource = resourceHome.createEnumeration(iter, false);
 			ResourceKey key = resourceHome.getKey(resource);
@@ -52,11 +51,11 @@ public class BulkDataHandlerImpl extends BulkDataHandlerImplBase {
 				return response;
 			} catch (SerializationException e) {
 				e.printStackTrace();
-				throw new RemoteException(e.getMessage(), e.getCause());
+				throw new RemoteException(e.getMessage(), e);
 			}
 		} catch (BDTException e) {
 			e.printStackTrace();
-			throw new RemoteException(e.getMessage(), e.getCause());
+			throw new RemoteException(e.getMessage(), e);
 		}
 	}
 
@@ -67,7 +66,7 @@ public class BulkDataHandlerImpl extends BulkDataHandlerImplBase {
 			return bdtResource.get();
 		} catch (BDTException e) {
 			e.printStackTrace();
-			throw new RemoteException(e.getMessage(), e.getCause());
+			throw new RemoteException(e.getMessage(), e);
 		}
 	}
 	
@@ -77,7 +76,7 @@ public class BulkDataHandlerImpl extends BulkDataHandlerImplBase {
 			return bdtResource.getGridFTPURLs();
 		} catch (BDTException e) {
 			e.printStackTrace();
-			throw new RemoteException(e.getMessage(), e.getCause());
+			throw new RemoteException(e.getMessage(), e);
 		}
 	}
 	
