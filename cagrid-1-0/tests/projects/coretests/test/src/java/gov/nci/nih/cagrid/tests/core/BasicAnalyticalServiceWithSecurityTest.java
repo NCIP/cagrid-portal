@@ -49,6 +49,8 @@ public class BasicAnalyticalServiceWithSecurityTest extends AbstractServiceTest 
 
     @Override
     protected void storyTearDown() throws Throwable {
+        super.storyTearDown();
+
         if (this.caFile != null) {
             this.caFile.delete();
         }
@@ -68,6 +70,14 @@ public class BasicAnalyticalServiceWithSecurityTest extends AbstractServiceTest 
         this.caFile = new File(System.getProperty("user.home"), ".globus" + File.separator + "certificates"
             + File.separator + "BasicAnalyticalServiceWithSecurityTest_ca.1");
 
+        Vector steps = new Vector();
+        steps.add(getCreateServiceStep());
+        steps.add(new GlobusCreateStep(getGlobus()));
+        steps.add(new GlobusInstallSecurityDescriptorStep(getGlobus()));
+        steps.add(new GlobusDeployServiceStep(getGlobus(), dorianDir));
+        steps.add(new GlobusDeployServiceStep(getGlobus(), getCreateServiceStep().getServiceDir()));
+        steps.add(new GlobusStartStep(getGlobus()));
+
         String dorianURL = null;
         try {
             dorianURL = getGlobus().getServiceEPR("cagrid/Dorian").getAddress().toString();
@@ -76,13 +86,6 @@ public class BasicAnalyticalServiceWithSecurityTest extends AbstractServiceTest 
             fail(e.getMessage());
         }
 
-        Vector steps = new Vector();
-        steps.add(getCreateServiceStep());
-        steps.add(new GlobusCreateStep(getGlobus()));
-        steps.add(new GlobusInstallSecurityDescriptorStep(getGlobus()));
-        steps.add(new GlobusDeployServiceStep(getGlobus(), dorianDir));
-        steps.add(new GlobusDeployServiceStep(getGlobus(), getCreateServiceStep().getServiceDir()));
-        steps.add(new GlobusStartStep(getGlobus()));
         steps.add(new DorianAuthenticateStep("dorian", "password", dorianURL));
         steps.add(new DorianAddTrustedCAStep(this.caFile, dorianURL));
         try {
