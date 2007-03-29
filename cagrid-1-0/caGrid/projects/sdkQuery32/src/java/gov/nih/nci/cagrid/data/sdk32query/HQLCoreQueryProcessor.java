@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
 import gov.nih.nci.cagrid.data.utilities.ResultsCreationException;
 import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -34,17 +35,30 @@ import org.apache.log4j.Logger;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created May 2, 2006 
- * @version $Id: HQLCoreQueryProcessor.java,v 1.4 2007-03-19 14:18:00 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessor.java,v 1.5 2007-03-29 13:24:38 dervin Exp $ 
  */
 public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
-	public static final String DEFAULT_LOCALHOST_CACORE_URL = "http://localhost:8080/cacore31/server/HTTPServer";
+    // parameter which determines the remote appservice URL
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
+    
+	// a default caCORE URL which points to localhost
+    public static final String DEFAULT_LOCALHOST_CACORE_URL = "http://localhost:8080/cacore32/http/remoteService";
+    
+    // flag to use CSM security
 	public static final String USE_CSM_FLAG = "useCsmSecurity";
 	public static final String DEFAULT_USE_CSM_FLAG = String.valueOf(false);
+    
+    // the CSM configuration file
 	public static final String CSM_CONFIGURATION_FILENAME = "csmConfigurationFilename";
 	public static final String CSM_CONTEXT_NAME = "csmContextName";
+    
+    // flag to make queries case insensitive
 	public static final String CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
 	public static final String USE_CASE_INSENSITIVE_DEFAULT = String.valueOf(false);
+    
+    // flag to use the local Application Service api instead of HTTP tunneling
+    public static final String USE_LOCAL_APPSERVICE = "useLocalAppservice";
+    public static final String USE_LOCAL_APPSERVICE_DEFAULT = String.valueOf(false);
 	
 	private static Logger LOG = Logger.getLogger(HQLCoreQueryProcessor.class);
 	
@@ -235,12 +249,20 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	
 	private ApplicationService getApplicationService() throws QueryProcessingException {
 		if (coreService == null) {
-			String url = getAppserviceUrl();
-			if (url == null || url.length() == 0) {
-				throw new QueryProcessingException(
-					"Required parameter " + APPLICATION_SERVICE_URL + " was not defined!");
-			}
-			coreService = ApplicationService.getRemoteInstance(url);
+            // see if we should be using the local API application
+            boolean useLocal = Boolean.valueOf(
+                getConfiguredParameters().getProperty(USE_LOCAL_APPSERVICE)).booleanValue();
+            if (useLocal) {
+                coreService = ApplicationServiceProvider.getLocalInstance();
+            } else {
+                // remote, http-tunnled API
+                String url = getAppserviceUrl();
+                if (url == null || url.length() == 0) {
+                    throw new QueryProcessingException(
+                        "Required parameter " + APPLICATION_SERVICE_URL + " was not defined!");
+                }
+                coreService = ApplicationService.getRemoteInstance(url);
+            }			
 		}
 		return coreService;
 	}
@@ -298,6 +320,7 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 		params.setProperty(CSM_CONFIGURATION_FILENAME, "");
 		params.setProperty(CSM_CONTEXT_NAME, "");
 		params.setProperty(CASE_INSENSITIVE_QUERYING, USE_CASE_INSENSITIVE_DEFAULT);
+        params.setProperty(USE_LOCAL_APPSERVICE, USE_LOCAL_APPSERVICE_DEFAULT);
 		return params;
 	}
 }
