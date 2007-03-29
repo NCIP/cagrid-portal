@@ -124,21 +124,6 @@ public class GridGrouperTest extends Story {
         this.grouperAdmin = System.getProperty("grouper.admin", idp + this.grouperAdminName);
 
         Vector steps = new Vector();
-        String dorianURL = null;
-        try {
-            dorianURL = this.dorianGlobus.getServiceEPR("cagrid/Dorian").getAddress().toString();
-        } catch (MalformedURIException e) {
-            e.printStackTrace();
-            fail("Unable to get dorian URL:" + e.getMessage());
-        }
-
-        String grouperURL = null;
-        try {
-            grouperURL = this.grouperGlobus.getServiceEPR("cagrid/GridGrouper").getAddress().toString();
-        } catch (MalformedURIException e) {
-            e.printStackTrace();
-            fail("Unable to get grouper URL:" + e.getMessage());
-        }
 
         // initialize dorian
         steps.add(new GlobusCreateStep(this.dorianGlobus));
@@ -146,6 +131,14 @@ public class GridGrouperTest extends Story {
         steps.add(new GlobusDeployServiceStep(this.dorianGlobus, this.dorianDir));
         steps.add(new DorianConfigureStep(this.dorianGlobus));
         steps.add(new GlobusStartStep(this.dorianGlobus));
+
+        String dorianURL = null;
+        try {
+            dorianURL = this.dorianGlobus.getServiceEPR("cagrid/Dorian").getAddress().toString();
+        } catch (MalformedURIException e) {
+            e.printStackTrace();
+            fail("Unable to get dorian URL:" + e.getMessage());
+        }
 
         // initialize grouper
         steps.add(new GrouperCreateDbStep());
@@ -155,6 +148,14 @@ public class GridGrouperTest extends Story {
         steps.add(new GlobusInstallSecurityDescriptorStep(this.grouperGlobus));
         steps.add(new GlobusDeployServiceStep(this.grouperGlobus, this.grouperDir));
         steps.add(new GlobusStartStep(this.grouperGlobus));
+
+        String grouperURL = null;
+        try {
+            grouperURL = this.grouperGlobus.getServiceEPR("cagrid/GridGrouper").getAddress().toString();
+        } catch (MalformedURIException e) {
+            e.printStackTrace();
+            fail("Unable to get grouper URL:" + e.getMessage());
+        }
 
         // test successful authenticate
         steps.add(new DorianAuthenticateStep("dorian", "password", dorianURL));
