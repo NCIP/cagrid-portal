@@ -18,7 +18,7 @@ import junit.framework.TestCase;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: ZipUtilitiesTestCase.java,v 1.2 2007-02-21 19:36:17 dervin Exp $ 
+ * @version $Id: ZipUtilitiesTestCase.java,v 1.3 2007-03-29 19:11:14 dervin Exp $ 
  */
 public class ZipUtilitiesTestCase extends TestCase {
 	public static final String SOURCE_DIR = "src" + File.separator + "java";
@@ -58,12 +58,12 @@ public class ZipUtilitiesTestCase extends TestCase {
 				return true;
 			}
 		};
-		Set expectedFiles = new HashSet();
+		Set<String> expectedFiles = new HashSet<String>();
 		File sourceDir = new File(SOURCE_DIR);
 		String[] expectedFileNames = sourceDir.list(everythingFilter);
 		Collections.addAll(expectedFiles, expectedFileNames);
 		// list files in the extracted zip
-		Set extractedFiles = new HashSet();
+		Set<String> extractedFiles = new HashSet<String>();
 		String[] extractedFileNames = outDir.list(everythingFilter);
 		Collections.addAll(extractedFiles, extractedFileNames);
 		// check for congruency
