@@ -63,6 +63,12 @@ public class DorianTest extends Story {
 
 
     @Override
+    public String getName() {
+        return "Dorian Story";
+    }
+
+
+    @Override
     protected boolean storySetUp() throws Throwable {
         return true;
     }

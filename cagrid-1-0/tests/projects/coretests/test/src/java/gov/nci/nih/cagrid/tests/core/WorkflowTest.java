@@ -51,6 +51,12 @@ public class WorkflowTest extends Story {
 
 
     @Override
+    public String getName() {
+        return "Workflow Story";
+    }
+
+
+    @Override
     protected boolean storySetUp() throws Throwable {
         return true;
     }

@@ -15,45 +15,34 @@ import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Step;
 
-public class GrouperCreateGroupStep
-	extends Step
-{
-	private String endpoint;
-	private String path;
-	
-	public GrouperCreateGroupStep(String path)
-	{
-		this(path, "https://localhost:9443/wsrf/services/cagrid/GridGrouper");
-	}
-	
-	public GrouperCreateGroupStep(String path, String endpoint)
-	{
-		super();
-		
-		this.endpoint = endpoint;
-		this.path = path;
-	}
-	
-	public void runStep() 
-		throws GridGrouperRuntimeFault, StemNotFoundFault, RemoteException, MalformedURIException
-	{
-		GridGrouperClient grouper = new GridGrouperClient(endpoint);
-		
-		// get paths
-		int index = path.lastIndexOf(':');
-		StemIdentifier stem = Utils.getRootStemIdentifier();
-		if (index != -1) stem =  new StemIdentifier(null, path.substring(0, index));
-		String group = path.substring(path.lastIndexOf(':')+1);
-		
-		// create group
-		grouper.addChildGroup(stem, group, group);
-	}
-	
-	public static void main(String[] args) 
-		throws GridGrouperRuntimeFault, StemNotFoundFault, RemoteException, MalformedURIException
-	{
-		new GrouperCreateGroupStep(
-			"test:hi:there:mygroup"
-		).runStep();
-	}
+
+public class GrouperCreateGroupStep extends Step {
+    private String endpoint;
+    private String path;
+
+
+    public GrouperCreateGroupStep(String path, String endpoint) {
+        super();
+
+        this.endpoint = endpoint;
+        this.path = path;
+    }
+
+
+    @Override
+    public void runStep() throws GridGrouperRuntimeFault, StemNotFoundFault, RemoteException, MalformedURIException {
+        GridGrouperClient grouper = new GridGrouperClient(this.endpoint);
+
+        // get paths
+        int index = this.path.lastIndexOf(':');
+        StemIdentifier stem = Utils.getRootStemIdentifier();
+        if (index != -1) {
+            stem = new StemIdentifier(null, this.path.substring(0, index));
+        }
+        String group = this.path.substring(this.path.lastIndexOf(':') + 1);
+
+        // create group
+        grouper.addChildGroup(stem, group, group);
+    }
+
 }

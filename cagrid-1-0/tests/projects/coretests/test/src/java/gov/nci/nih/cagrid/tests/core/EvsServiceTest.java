@@ -48,6 +48,12 @@ public class EvsServiceTest extends Story {
 
 
     @Override
+    public String getName() {
+        return "EVS Story";
+    }
+
+
+    @Override
     protected boolean storySetUp() throws Throwable {
         return true;
     }

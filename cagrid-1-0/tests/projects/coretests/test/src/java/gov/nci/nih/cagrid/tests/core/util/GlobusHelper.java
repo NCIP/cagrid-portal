@@ -110,6 +110,7 @@ public class GlobusHelper {
         if (getPort() != null) {
             opts.add("-p");
             opts.add(String.valueOf(getPort()));
+            System.out.println("Starting Globus on port:" + getPort());
         }
         if (this.secure && getSecurityDescriptor() != null) {
             opts.add("-containerDesc");
@@ -252,6 +253,17 @@ public class GlobusHelper {
         if (this.secure && getSecurityDescriptor() != null) {
             opts.add("-f");
             opts.add(getSecurityDescriptor().toString());
+
+            String shutdown = getServiceEPR("ShutdownService").getAddress().toString();
+            opts.add("-s");
+            System.out.println("Contacting shutown service:" + shutdown);
+            opts.add(shutdown);
+
+            // force a JVM kill
+            // opts.add("hard");
+
+            runGlobusCommand("org.globus.wsrf.container.ShutdownClient", opts);
+            sleep(2000);
         } else {
             // TODO: on create globus, edit the shutdown service to remove
             // security
@@ -262,18 +274,7 @@ public class GlobusHelper {
             // // no auth
             // opts.add("-z");
             // opts.add("none");
-            this.globusProcess.destroy();
-            return;
         }
-
-        opts.add("-s");
-        opts.add(getServiceEPR("ShutdownService").getAddress().toString());
-
-        // force a JVM kill
-        opts.add("hard");
-
-        runGlobusCommand("org.globus.wsrf.container.ShutdownClient", opts);
-        sleep(2000);
 
         this.globusProcess.destroy();
         this.globusProcess = null;
@@ -355,10 +356,11 @@ public class GlobusHelper {
         String portProp = System.getProperty("test.globus.port");
         if (portProp != null) {
             this.port = new Integer(portProp);
+            return;
         }
 
-        int start = Integer.parseInt(System.getProperty(this.getClass().getName() + ".portrange.min", "1025"));
-        int end = Integer.parseInt(System.getProperty(this.getClass().getName() + ".portrange.max", "1125"));
+        int start = Integer.parseInt(System.getProperty(this.getClass().getName() + ".portrange.min", "10000"));
+        int end = Integer.parseInt(System.getProperty(this.getClass().getName() + ".portrange.max", "10100"));
 
         for (int i = start; i <= end; i++) {
             ServerSocket sock = null;

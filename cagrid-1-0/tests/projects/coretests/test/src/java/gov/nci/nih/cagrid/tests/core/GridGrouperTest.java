@@ -82,6 +82,12 @@ public class GridGrouperTest extends Story {
 
 
     @Override
+    public String getName() {
+        return "GridGrouper Story";
+    }
+
+
+    @Override
     protected boolean storySetUp() throws Throwable {
         return true;
     }
@@ -139,6 +145,11 @@ public class GridGrouperTest extends Story {
             e.printStackTrace();
             fail("Unable to get dorian URL:" + e.getMessage());
         }
+
+        // TODO: the above doesn't actually bind to the socket until the
+        // startstep runs, so the grouper globus thinks it can use it too...
+        // need to fix (for now hack it to just try the next port)
+        this.grouperGlobus.setPort(new Integer(this.dorianGlobus.getPort().intValue() + 1));
 
         // initialize grouper
         steps.add(new GrouperCreateDbStep());
@@ -224,10 +235,10 @@ public class GridGrouperTest extends Story {
         steps.add(new GrouperCheckMembersStep("test:stem2:stem3:group3", "All", new String[]{}, grouperURL));
 
         // grant privileges
-        steps.add(new GrouperGrantPrivilegeStep("test:stem1:group1", idp + "subject1", "admin"));
-        steps.add(new GrouperGrantPrivilegeStep("test:stem2:stem3:group2", idp + "subject2", "admin"));
-        steps.add(new GrouperGrantPrivilegeStep("test:stem2:stem3:group2", idp + "subject1", "optout"));
-        steps.add(new GrouperGrantPrivilegeStep("test:stem1", idp + "subject1", "stem"));
+        steps.add(new GrouperGrantPrivilegeStep("test:stem1:group1", idp + "subject1", "admin", grouperURL));
+        steps.add(new GrouperGrantPrivilegeStep("test:stem2:stem3:group2", idp + "subject2", "admin", grouperURL));
+        steps.add(new GrouperGrantPrivilegeStep("test:stem2:stem3:group2", idp + "subject1", "optout", grouperURL));
+        steps.add(new GrouperGrantPrivilegeStep("test:stem1", idp + "subject1", "stem", grouperURL));
 
         // check privileges
         steps.add(new GrouperCheckPrivilegesStep("test:stem1:group1", idp + "subject1", new String[]{"admin"},
@@ -243,33 +254,33 @@ public class GridGrouperTest extends Story {
         steps.add(new GrouperAddMemberStep("test:stem1:group1", idp + "subject3", grouperURL));
         steps.add(new GrouperCheckMembersStep("test:stem1:group1", "All", new String[]{idp + "subject1",
                 idp + "subject2", idp + "subject3"}, grouperURL));
-        steps.add(new GrouperGrantPrivilegeStep("test:stem1:group1", idp + "subject3", "admin"));
+        steps.add(new GrouperGrantPrivilegeStep("test:stem1:group1", idp + "subject3", "admin", grouperURL));
         steps.add(new GrouperCheckPrivilegesStep("test:stem1:group1", idp + "subject3", new String[]{"admin"},
             grouperURL));
-        steps.add(new GrouperRemoveMemberStep("test:stem1:group1", idp + "subject3"));
+        steps.add(new GrouperRemoveMemberStep("test:stem1:group1", idp + "subject3", grouperURL));
         steps.add(new GrouperCheckMembersStep("test:stem1:group1", "All", new String[]{idp + "subject1",
                 idp + "subject2"}, grouperURL));
 
         // test group admin privileges fail
         steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
-        steps.add(new GrouperRemoveMemberStep("test:stem2:stem3:group2", idp + "subject2", true));
+        steps.add(new GrouperRemoveMemberStep("test:stem2:stem3:group2", idp + "subject2", true, grouperURL));
 
         // test group optout privileges
         steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
-        steps.add(new GrouperRemoveMemberStep("test:stem2:stem3:group2", idp + "subject1"));
+        steps.add(new GrouperRemoveMemberStep("test:stem2:stem3:group2", idp + "subject1", grouperURL));
         steps.add(new DorianAuthenticateStep("subject2", "subject2", dorianURL));
         steps.add(new GrouperAddMemberStep("test:stem2:stem3:group2", idp + "subject1", grouperURL));
-        steps.add(new GrouperRevokePrivilegeStep("test:stem2:stem3:group2", idp + "subject1", "optout"));
+        steps.add(new GrouperRevokePrivilegeStep("test:stem2:stem3:group2", idp + "subject1", "optout", grouperURL));
         steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
-        steps.add(new GrouperRemoveMemberStep("test:stem2:stem3:group2", idp + "subject1", true));
+        steps.add(new GrouperRemoveMemberStep("test:stem2:stem3:group2", idp + "subject1", true, grouperURL));
         steps.add(new DorianAuthenticateStep("subject2", "subject2", dorianURL));
-        steps.add(new GrouperGrantPrivilegeStep("test:stem2:stem3:group2", idp + "subject1", "optout"));
+        steps.add(new GrouperGrantPrivilegeStep("test:stem2:stem3:group2", idp + "subject1", "optout", grouperURL));
 
         // test stem privileges
         steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
         steps.add(new GrouperCreateStemStep("test:stem1:stem5", grouperURL));
         steps.add(new GrouperCheckStemsStep("test:stem1", new String[]{"stem5"}, grouperURL));
-        steps.add(new GrouperRemoveStemStep("test:stem1:stem5"));
+        steps.add(new GrouperRemoveStemStep("test:stem1:stem5", grouperURL));
         steps.add(new DorianAuthenticateStep("subject2", "subject2", dorianURL));
         steps.add(new GrouperCreateStemStep("test:stem1:stem5", true, grouperURL));
 

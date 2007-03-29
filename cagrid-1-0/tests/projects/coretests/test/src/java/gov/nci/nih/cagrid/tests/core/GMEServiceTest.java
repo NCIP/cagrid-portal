@@ -51,6 +51,12 @@ public class GMEServiceTest extends Story {
 
 
     @Override
+    public String getName() {
+        return "GME Story";
+    }
+
+
+    @Override
     protected boolean storySetUp() throws Throwable {
         return true;
     }

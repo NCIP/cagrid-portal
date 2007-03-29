@@ -71,15 +71,18 @@ public class GlobusHelperTest extends Story {
         steps.add(new GlobusCreateStep(this.globus));
         steps.add(new GlobusStartStep(this.globus));
         steps.add(new GlobusCheckRunningStep(this.globus));
-        steps.add(new GlobusStopStep(this.globus));
-        steps.add(new GlobusCleanupStep(this.globus));
-
+        
         steps.add(new GlobusCreateStep(this.secureGlobus));
         steps.add(new GlobusInstallSecurityDescriptorStep(this.secureGlobus));
         steps.add(new GlobusStartStep(this.secureGlobus));
+
+        steps.add(new GlobusStopStep(this.globus));
+        steps.add(new GlobusCleanupStep(this.globus));
+
         steps.add(new GlobusStopStep(this.secureGlobus));
         steps.add(new GlobusCleanupStep(this.secureGlobus));
 
+        
         return steps;
     }
 

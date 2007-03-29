@@ -50,6 +50,12 @@ public class CaDSRServiceTest extends Story {
 
 
     @Override
+    public String getName() {
+        return "caDSR Story";
+    }
+
+
+    @Override
     protected boolean storySetUp() throws Throwable {
         return true;
     }

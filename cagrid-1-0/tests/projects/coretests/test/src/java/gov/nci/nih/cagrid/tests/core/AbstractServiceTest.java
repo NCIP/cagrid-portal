@@ -28,6 +28,30 @@ public abstract class AbstractServiceTest extends Story {
     protected ServiceHelper helper;
 
 
+    @Override
+    public String getDescription() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    @Override
+    protected Vector steps() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    @Override
+    public String getName() {
+        String name = "";
+        if (this.helper != null) {
+            name = this.helper.getServiceName() + " ";
+        }
+        return name += "Introduce Story";
+    }
+
+
     protected void init(String serviceName) {
         // service name
         this.helper = new ServiceHelper(serviceName);
