@@ -153,20 +153,28 @@ public class HistoryManager {
 
 
 	private DateFilter getEarliestFitler() throws Exception {
-		DateFilter d = new DateFilter();
 		File day = getEarliestDayDir();
-		d.setDay(Integer.valueOf(day.getName()).intValue());
 		File month = day.getParentFile();
-		d.setMonth(Integer.valueOf(month.getName()).intValue());
 		File year = month.getParentFile();
-		d.setYear(Integer.valueOf(year.getName()).intValue());
-		return d;
+
+		if ((day == null) || (month == null) || (year == null)) {
+			return null;
+		} else {
+			DateFilter d = new DateFilter();
+			d.setDay(Integer.valueOf(day.getName()).intValue());
+			d.setMonth(Integer.valueOf(month.getName()).intValue());
+			d.setYear(Integer.valueOf(year.getName()).intValue());
+			return d;
+		}
 	}
 
 
 	public void prune(DateFilter filter) throws Exception {
 		DateFilter start = getEarliestFitler();
-		System.out.println(start.getMonth() + "/" + start.getDay() + "/" + start.getYear());
+		if(start==null){
+			return;
+		}
+
 		Calendar c = new GregorianCalendar();
 		c.add(Calendar.YEAR, (filter.getYear() * -1));
 		c.add(Calendar.MONTH, (filter.getMonth() * -1));
@@ -175,8 +183,7 @@ public class HistoryManager {
 		end.setDay(c.get(Calendar.DAY_OF_MONTH));
 		end.setMonth(c.get(Calendar.MONTH) + 1);
 		end.setYear(c.get(Calendar.YEAR));
-		System.out.println(filter.getMonth() + "/" + filter.getDay() + "/" + filter.getYear());
-		System.out.println(end.getMonth() + "/" + end.getDay() + "/" + end.getYear());
+
 		while (!start.equals(end)) {
 			File startDir = getDirectory(start);
 			if ((startDir.exists()) && (startDir.isDirectory())) {
