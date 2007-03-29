@@ -17,6 +17,7 @@
    <ns2:SchemaElement type="StemPrivilegeType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GroupPrivilegeType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="MemberFilter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="MembershipType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GroupCompositeType" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
