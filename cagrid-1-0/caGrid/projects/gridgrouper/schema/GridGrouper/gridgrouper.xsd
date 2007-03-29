@@ -194,6 +194,15 @@
   			</xsd:restriction>
  	 </xsd:simpleType>
  	 
+ 	  <xsd:element name="MembershipType" type="grouper:MembershipType"/>
+ 	   <xsd:simpleType name="MembershipType">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="Any"/>
+   				<xsd:enumeration value="ImmediateMembers"/>	
+   				<xsd:enumeration value="EffectiveMembers"/>
+  			</xsd:restriction>
+ 	 </xsd:simpleType>
+ 	 
  	  <xsd:element name="GroupCompositeType" type="grouper:GroupCompositeType"/>
  	   <xsd:simpleType name="GroupCompositeType">
   			<xsd:restriction base="xsd:string">

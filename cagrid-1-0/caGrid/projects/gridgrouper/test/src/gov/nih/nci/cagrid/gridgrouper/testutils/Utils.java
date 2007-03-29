@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType;
+import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
@@ -25,6 +26,14 @@ public class Utils {
 
 	private static final String SUPER_USER = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=super admin";
 
+	
+	public static void printMemberDesciptor(MemberDescriptor m){
+		System.out.println("UUID: "+m.getUUID());
+		System.out.println("Name: "+m.getSubjectName());
+		System.out.println("Id: "+m.getSubjectId());
+		System.out.println("Type: "+m.getMemberType().getValue());
+		
+	}
 
 	public static StemIdentifier getStemIdentifier(StemDescriptor des) {
 		StemIdentifier id = new StemIdentifier();
@@ -48,7 +57,11 @@ public class Utils {
 
 
 	public static void printMemberships(GroupDescriptor grp) throws Exception {
-		Subject subject = SubjectUtils.getSubject(AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID);
+		printMemberships(grp,AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID);
+	}
+	
+	public static void printMemberships(GroupDescriptor grp, String userId) throws Exception {
+		Subject subject = SubjectUtils.getSubject(userId);
 		GrouperSession session = GrouperSession.start(subject);
 		Group group = GroupFinder.findByName(session, grp.getName());
 		System.out.println();
