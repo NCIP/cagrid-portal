@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
 import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,21 +28,22 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 3:22:07 PM
- * @version $Id: HQL313CoreQueryProcessor.java,v 1.1 2007-03-08 20:21:41 dervin Exp $ 
+ * @version $Id: HQL313CoreQueryProcessor.java,v 1.2 2007-03-30 13:41:51 dervin Exp $ 
  */
 public class HQL313CoreQueryProcessor extends CQLQueryProcessor {
 	public static final String APPSERVICE_URL = "applicationServiceUrl";
 	public static final String CASE_INSENSITIVE_QUERIES = "caseInsensitive";
 	public static final String DEFAULT_CASE_INSENSITIVE = String.valueOf(false);
+    public static final String USE_LOCAL_API = "useLocalApi";
+    public static final String USE_LOCAL_API_DEFAULT = String.valueOf(false);
 
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) throws MalformedQueryException, QueryProcessingException {
 		// get configuration parameters
-		String url = getConfiguredParameters().getProperty(APPSERVICE_URL);
 		boolean caseInsensitive = Boolean.valueOf(
 			getConfiguredParameters().getProperty(CASE_INSENSITIVE_QUERIES)).booleanValue();
 		
 		// init the application service
-		ApplicationService service = ApplicationService.getRemoteInstance(url);
+		ApplicationService service = getAppserviceInstance();
 		
 		// see if the target has subclasses
 		boolean hasSubclasses = SubclassCheckCache.hasClassProperty(cqlQuery.getTarget().getName(), service);
@@ -99,12 +101,24 @@ public class HQL313CoreQueryProcessor extends CQLQueryProcessor {
 		Mappings mappings = (Mappings) Utils.deserializeDocument(filename, Mappings.class);
 		return mappings;
 	}
+    
+    
+    private ApplicationService getAppserviceInstance() {
+        String useLocalValue = getConfiguredParameters().getProperty(USE_LOCAL_API);
+        boolean useLocal = Boolean.valueOf(useLocalValue).booleanValue();
+        if (useLocal) {
+            return ApplicationServiceProvider.getLocalInstance();
+        }
+        String url = getConfiguredParameters().getProperty(APPSERVICE_URL);
+        return ApplicationService.getRemoteInstance(url);
+    }
 	
 	
 	public Properties getRequiredProperties() {
 		Properties props = new Properties();
 		props.setProperty(APPSERVICE_URL, "");
 		props.setProperty(CASE_INSENSITIVE_QUERIES, DEFAULT_CASE_INSENSITIVE);
+        props.setProperty(USE_LOCAL_API, USE_LOCAL_API_DEFAULT);
 		return props;
 	}
 
