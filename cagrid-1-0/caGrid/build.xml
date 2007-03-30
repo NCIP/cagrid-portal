@@ -682,17 +682,19 @@
         <ant dir="${projects.dir}/authz" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
+	
     <!-- =============================================================== -->
     <!-- GRIDFTPAUTHZ:                                                   -->
     <!-- =============================================================== -->
     <target name="build-gridftpauthz" depends="prepare" description="Builds GridFTP Java Authorization API">
         <resolveDependencies extdir="${projects.dir}/gridftpauthz/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="gridgrouper.client.jars" />
-        </resolveDependencies>
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="gridgrouper.client.jars" />
+			<artifact refid="gridgrouper.schemas"/>
+	    </resolveDependencies>
         <ant dir="${projects.dir}/gridftpauthz" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
