@@ -8,23 +8,39 @@
     <property environment="env" />
     <property file="${basedir}/build.properties" />
     <property file="${user.dir}/build.properties" />
-    <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
     <!-- Information -->
 	<property name="project.version" value="1.0" />
 	<property name="project.shortname" value="gridftpauthz"/>
 	<property name="project.name" value="caGrid-${project.version}-${project.shortname}" />
+    <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
 
     <property name="src.dir" value="${basedir}/src/java" />
+    <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
     <property name="build.dir" value="${basedir}/build" />
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
     <property name="classes.dir" value="${build.dir}/classes" />
     <property name="jar.dir" value="${build.dir}/jars" />
+	<property name="schemas.dir" value="schema"/>
+	<property name="testxml.dir" value="testxml"/>
     <property name="project.jarfile" value="${jar.dir}/${project.name}.jar" />
-    <property name="lib.dir" value="${basedir}/lib" />
-    <property name="ext.lib.dir" value="${basedir}/ext/lib" />
-    <property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
+    <property name="lib.dir" value="lib" />
+    <property name="ext.lib.dir" value="ext/lib" />
+	<property name="ext.schemas.dir" value="ext/xsd"/>
+    <property name="ext.test.lib.dir" location="ext/test/lib" />
 
+	<!-- stubs and schemas -->
+	<property name="stubs.dir" location="build/stubs"/>
+	<property name="stubs.src" location="build/stubs/src"/>
+	<property name="stubs.dest" location="build/stubs/classes"/>
+	<property name="schema.src" value="schema" />
+	<property name="schema.dest" location="${build.dir}/schema" />
+	<property name="ant.build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+	<!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
+	<property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"/>
+	<property name="java.debug" value="on" />
+
+	
     <!-- testing stuff -->
     <property name="test.dir" location="${basedir}/test" />
     <property name="test.src.dir" location="${test.dir}/src/java" />
@@ -70,26 +86,54 @@
             <fileset dir="${ext.lib.dir}">
                 <include name="**/*.jar" />
             </fileset>
-            <fileset dir="${globus.dir}/lib">
+	<!--
+            <fileset dir="${ext.globus.dir}/lib">
                 <include name="**/*.jar" />
+	            <exclude name="caGrid-.jar" />
             </fileset>
+            -->
+	    <pathelement location="properties"/>
+	
+	    <pathelement location="${stubs.dest}" />
+            <pathelement location="${ext.globus.dir}/lib/axis.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/addressing-1.0.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/cog-axis.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/cog-jglobus.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/commons-discovery.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/commons-logging.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/cryptix32.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/cryptix-asn1.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/jaxrpc.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/puretls.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/saaj.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/wsdl4j.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/wsrf_core_enum.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/wsrf_core_stubs_enum.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/wsrf_core_stubs.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/wsrf_core.jar"/>
+            <pathelement location="${ext.globus.dir}/lib/wss4j.jar"/>
+        	
         </path>
 
         <path id="run.classpath">
-            <pathelement location="${classes.dir}" />
+			<path refid="build.classpath"/>
+		    <pathelement location="${classes.dir}" />
+	<!--
             <fileset dir="${lib.dir}">
                 <include name="**/*.jar" />
             </fileset>
             <fileset dir="${ext.lib.dir}">
                 <include name="**/*.jar" />
             </fileset>
-            <fileset dir="${globus.dir}/lib">
+            <fileset dir="${ext.globus.dir}/lib">
                 <include name="**/*.jar" />
             </fileset>
             <pathelement location="${ext.globus.dir}" />
+            -->
         </path>
 
         <path id="test.classpath">
+			<path refid="build.classpath"/>
             <pathelement path="${classes.dir}" />
             <pathelement path="${test.dir}/resources" />
             <fileset dir="${test.lib.dir}">
@@ -98,16 +142,18 @@
             <fileset dir="${ext.test.lib.dir}">
                 <include name="**/*.jar" />
             </fileset>
+	<!--
             <fileset dir="${lib.dir}">
                 <include name="**/*.jar" />
             </fileset>
             <fileset dir="${ext.lib.dir}">
                 <include name="**/*.jar" />
             </fileset>
-            <fileset dir="${globus.dir}/lib">
+            <fileset dir="${ext.globus.dir}/lib">
                 <include name="**/*.jar" />
             </fileset>
             <pathelement location="${ext.globus.dir}" />
+            -->
         </path>
     </target>
 
@@ -117,14 +163,27 @@
     <!-- =============================================================== -->
     <target name="prepare" depends="defineClasspaths">
         <tstamp />
+        <mkdir dir="${stubs.dir}" />
+	    <mkdir dir="${stubs.src}" />
+	    <mkdir dir="${stubs.dest}" />
         <mkdir dir="${build.dir}" />
+        <mkdir dir="${schema.dest}" />
+	    <copy toDir="${schema.dest}">
+		   <fileset dir="${schemas.dir}" casesensitive="yes">
+			   <include name="**" />
+		   </fileset>
+		   <fileset dir="${ext.schemas.dir}" casesensitive="yes">
+			   <include name="**" />
+		   </fileset>
+	    </copy>
+	    <copy toDir="${build.dir}" file="${mappings.file}"/>
     </target>
 
 
     <!-- =============================================================== -->
     <!-- Compiles the source code                                        -->
     <!-- =============================================================== -->
-    <target name="compile" depends="prepare" description="compiles.">
+    <target name="compile" depends="compileStubs" description="compiles.">
         <mkdir dir="${classes.dir}" />
         <javac srcdir="${src.dir}" destdir="${classes.dir}" source="1.5" debug="on" deprecation="off" optimize="off">
             <classpath refid="build.classpath" />
@@ -202,14 +261,35 @@
 		<property name="dist.file" value="${dist.dir}/${project.name}.zip"/>
 		<mkdir dir="${dist.dir}"/>
 		<delete file="${dist.file}"/>
-		<copy file="${globus.dir}/lib/commons-logging.jar" todir="${ext.lib.dir}"/>
+		<copy file="${ext.globus.dir}/lib/commons-logging.jar" todir="${ext.lib.dir}"/>
 		<zip destfile="${dist.file}" basedir="${basedir}"/>
 	</target>
+	
+	<target name="stubs" depends="prepare">
+		<!-- gridgrouper config schema -->
+		<ant antfile="${ant.build.stubs}" target="generateStubs">
+		    <property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
+			<property name="source.stubs.dir" location="${schema.dest}"/>
+			<property name="wsdl.file" value="gridgrouper-config.wsdl"/>
+			<property name="target.stubs.dir" location="${stubs.src}"/>
+			<property name="ns.excludes" value="${GT4.ns.excludes} -x http://cagrid.nci.nih.gov/1/GridGrouper"/>
+		</ant>
+		
+	</target>
+
+
+	<target name="compileStubs" depends="defineClasspaths,stubs">
+		<delete dir="${stubs.src}/org/apache" />
+		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" classpathref="build.classpath" debug="${java.debug}">
+			<include name="**/*.java" />
+		</javac>
+	</target>
+	
 	
 
     <!-- ============================================================== -->
     <!-- Builds from scratch                                                -->
     <!-- ============================================================== -->
-    <target name="all" description="Builds the entire application" depends="jar,jar-tests,javadoc" />
+    <target name="all" description="Builds the entire application" depends="prepare,jar,jar-tests,javadoc" />
 </project>
 
