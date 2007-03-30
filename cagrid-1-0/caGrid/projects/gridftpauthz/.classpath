@@ -4,7 +4,6 @@
 	<classpathentry kind="src" path="test/src/java"/>
 	<classpathentry kind="src" path="build/stubs/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
 	<classpathentry kind="lib" path="properties"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca.jar"/>
