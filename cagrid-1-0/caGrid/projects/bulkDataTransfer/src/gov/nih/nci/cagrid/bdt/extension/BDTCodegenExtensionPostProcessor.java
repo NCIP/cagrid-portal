@@ -35,6 +35,7 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
 
     public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
         throws CodegenExtensionException {
+        ServiceType mainService = info.getServices().getService(0);
 
         // 1. change the resource in the jndi file
         File jndiConfigF = new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "jndi-config.xml");
@@ -45,8 +46,6 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
         } catch (MobiusException ex) {
             throw new CodegenExtensionException("Error parsing jndi-config.xml: " + ex.getMessage(), ex);
         }
-
-        ServiceType mainService = info.getServices().getService(0);
 
         List serviceEls = serverConfigJNDIDoc.getRootElement().getChildren();
         for (int i = 0; i < serviceEls.size(); i++) {
@@ -62,12 +61,12 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
                         break;
                     }
                 }
-                JNDIConfigResourceTemplate resourceT = new JNDIConfigResourceTemplate();
-                String resourceS = resourceT.generate(new SpecificServiceInformation(
+                JNDIConfigResourceTemplate resourceTemplate = new JNDIConfigResourceTemplate();
+                String generatedResource = resourceTemplate.generate(new SpecificServiceInformation(
                     info, info.getServices().getService(0)));
                 Element newResourceEl;
                 try {
-                    newResourceEl = XMLUtilities.stringToDocument(resourceS).getRootElement();
+                    newResourceEl = XMLUtilities.stringToDocument(generatedResource).getRootElement();
                 } catch (MobiusException ex) {
                     throw new CodegenExtensionException(ex.getMessage(), ex);
                 }
@@ -119,6 +118,45 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
                 }
             }
         }
+        
+        
+        // 3. edit the bdt client to implement the WS-Enumeration DataSource interface
+        // org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource
+        String bulkDataServiceName = mainService.getName() + "BulkDataHandler";
+        File bdtClientSourceFile = new File(info.getBaseDirectory().getAbsolutePath() 
+            + File.separator + "src" + File.separator + CommonTools.getPackageDir(mainService) 
+            + File.separator + "bdt" + File.separator + "client" + File.separator
+            + bulkDataServiceName + "Client.java");
+        System.out.println("Editing BDT client: " + bdtClientSourceFile);
+        
+        StringBuffer clientImpl = null;
+        try {
+            clientImpl = Utils.fileToStringBuffer(bdtClientSourceFile);
+        } catch (IOException ex) {
+            throw new CodegenExtensionException("Error loading BDT client source: " + ex.getMessage(), ex);
+        }
+        
+        // public class <%=info.getService().getName()%>Client extends ServiceSecurityClient implements <%=serviceName%>I {
+        String base = "public class " + bulkDataServiceName 
+            + "Client extends ServiceSecurityClient implements " + bulkDataServiceName + "I";
+        String uneditedClassDeclaration = base + " {";
+        int classDeclStart = clientImpl.indexOf(uneditedClassDeclaration);
+        if (classDeclStart != -1) {
+            // edit the impl
+            int classDeclEnd = classDeclStart + uneditedClassDeclaration.length();
+            String editedClassDeclaration = base + ", org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource {";
+            clientImpl.delete(classDeclStart, classDeclEnd);
+            clientImpl.insert(classDeclStart, editedClassDeclaration);
+            // save the impl to disk
+            try {
+                FileWriter clientImplWriter = new FileWriter(bdtClientSourceFile);
+                clientImplWriter.write(clientImpl.toString());
+                clientImplWriter.flush();
+                clientImplWriter.close();
+            } catch (IOException ex) {
+                throw new CodegenExtensionException("Error writing edited BDT client: " + ex.getMessage(), ex);
+            }
+        }        
     }
 
 
