@@ -38,7 +38,7 @@ import org.projectmobius.common.MobiusRunnable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.4 2007-03-21 19:36:06 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.5 2007-03-30 14:33:47 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -789,7 +789,7 @@ public class UserManagerWindow extends ApplicationComponent {
 			TrustedIdP[] idps = client.getTrustedIdPs();
 			this.getIdp().removeAllItems();
 			for (int i = 0; i < idps.length; i++) {
-				getIdp().addItem(new TrustedIdPCaddy(idps[0]));
+				getIdp().addItem(new TrustedIdPCaddy(idps[i]));
 			}
 			this.updateProgress(false, "Found " + idps.length + " IdP(s)");
 			getIdp().showPopup();
