@@ -88,6 +88,102 @@ public class TestTrustedIdPManager extends TestCase {
 	}
 
 
+	public void testSingleIdPNoAuthenticationMethods() {
+		try {
+			// We want to run this multiple times
+			assertNotNull(tm);
+			assertEquals(0, tm.getTrustedIdPs().length);
+			String name = "Test IdP";
+			IdPContainer cont = getTrustedIdp(name);
+			cont.getIdp().setAuthenticationMethod(null);
+			TrustedIdP idp = cont.getIdp();
+			idp = tm.addTrustedIdP(idp);
+			idp.setAuthenticationMethod(new SAMLAuthenticationMethod[0]);
+			assertEquals(1, tm.getTrustedIdPs().length);
+			assertEquals(idp.getAuthenticationMethod().length, tm.getAuthenticationMethods(idp.getId()).length);
+			TrustedIdP[] idps = tm.getTrustedIdPs();
+			assertEquals(idp, idps[0]);
+			assertTrue(tm.determineTrustedIdPExistsByName(name));
+			TrustedIdP temp = tm.getTrustedIdPByName(idp.getName());
+			assertEquals(idp, temp);
+			TrustedIdP temp2 = tm.getTrustedIdPById(idp.getId());
+			assertEquals(idp, temp2);
+			TrustedIdP temp3 = tm.getTrustedIdP(cont.getSAMLAssertion());
+			assertEquals(idp, temp3);
+			StringReader reader = new StringReader(idp.getIdPCertificate());
+			X509Certificate cert = CertUtil.loadCertificate(reader);
+			assertTrue(tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
+			assertEquals(idp, tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
+			tm.removeTrustedIdP(idp.getId());
+			assertEquals(0, tm.getTrustedIdPs().length);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+
+
+	public void testSingleIdPUpdateNoAuthenticationMethods() {
+		try {
+			// We want to run this multiple times
+			assertNotNull(tm);
+			assertEquals(0, tm.getTrustedIdPs().length);
+			String name = "Test IdP";
+			IdPContainer cont = getTrustedIdp(name);
+			TrustedIdP idp = cont.getIdp();
+			idp = tm.addTrustedIdP(idp);
+			assertEquals(1, tm.getTrustedIdPs().length);
+			assertEquals(idp.getAuthenticationMethod().length, tm.getAuthenticationMethods(idp.getId()).length);
+			TrustedIdP[] idps = tm.getTrustedIdPs();
+			assertEquals(idp, idps[0]);
+			assertTrue(tm.determineTrustedIdPExistsByName(name));
+			TrustedIdP temp = tm.getTrustedIdPByName(idp.getName());
+			assertEquals(idp, temp);
+			TrustedIdP temp2 = tm.getTrustedIdPById(idp.getId());
+			assertEquals(idp, temp2);
+			TrustedIdP temp3 = tm.getTrustedIdP(cont.getSAMLAssertion());
+			assertEquals(idp, temp3);
+			StringReader reader = new StringReader(idp.getIdPCertificate());
+			X509Certificate cert = CertUtil.loadCertificate(reader);
+			assertTrue(tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
+			assertEquals(idp, tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
+			
+			
+			//Update, removing all authentication methods
+			idp.setAuthenticationMethod(null);
+			tm.updateIdP(idp);
+			idp.setAuthenticationMethod(new SAMLAuthenticationMethod[0]);
+			assertEquals(1, tm.getTrustedIdPs().length);
+			assertEquals(idp.getAuthenticationMethod().length, tm.getAuthenticationMethods(idp.getId()).length);
+			idps = null;
+			idps = tm.getTrustedIdPs();
+			assertEquals(idp, idps[0]);
+			assertTrue(tm.determineTrustedIdPExistsByName(name));
+			temp = null;
+			temp = tm.getTrustedIdPByName(idp.getName());
+			assertEquals(idp, temp);
+			temp2 = null;
+			temp2 = tm.getTrustedIdPById(idp.getId());
+			assertEquals(idp, temp2);
+			temp3 = null;
+			temp3 = tm.getTrustedIdP(cont.getSAMLAssertion());
+			assertEquals(idp, temp3);
+			assertTrue(tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
+			assertEquals(idp, tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
+			
+			
+			
+			
+			
+			tm.removeTrustedIdP(idp.getId());
+			assertEquals(0, tm.getTrustedIdPs().length);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+
+
 	public void testSingleIdP() {
 		try {
 			// We want to run this multiple times
@@ -322,8 +418,9 @@ public class TestTrustedIdPManager extends TestCase {
 		String federation = cert.getSubjectDN().toString();
 		String ipAddress = null;
 		String subjectDNS = null;
-		SAMLNameIdentifier ni = new SAMLNameIdentifier(name, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
-		SAMLSubject sub = new SAMLSubject(ni,null, null, null);
+		SAMLNameIdentifier ni = new SAMLNameIdentifier(name, federation,
+			"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+		SAMLSubject sub = new SAMLSubject(ni, null, null, null);
 		SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub,
 			"urn:oasis:names:tc:SAML:1.0:am:password", new Date(), ipAddress, subjectDNS, null);
 

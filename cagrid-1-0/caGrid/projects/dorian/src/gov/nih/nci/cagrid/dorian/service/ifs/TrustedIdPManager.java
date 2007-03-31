@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.projectmobius.db.Query;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -47,10 +48,12 @@ public class TrustedIdPManager extends LoggingObject {
 
 	private IFSConfiguration conf;
 
+
 	public TrustedIdPManager(IFSConfiguration conf, Database db) {
 		this.db = db;
 		this.conf = conf;
 	}
+
 
 	public void clearDatabase() throws DorianInternalFault {
 		buildDatabase();
@@ -59,46 +62,36 @@ public class TrustedIdPManager extends LoggingObject {
 		dbBuilt = false;
 	}
 
+
 	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(TRUST_MANAGER_TABLE)) {
 				String trust = "CREATE TABLE " + TRUST_MANAGER_TABLE + " ("
-						+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-						+ "NAME VARCHAR(255) NOT NULL,"
-						+ "IDP_SUBJECT VARCHAR(255) NOT NULL,"
-						+ "STATUS VARCHAR(50) NOT NULL,"
-						+ "POLICY_CLASS VARCHAR(255) NOT NULL,"
-						+ "IDP_CERTIFICATE TEXT NOT NULL,"
-						+ "USER_ID_ATT_NS TEXT NOT NULL,"
-						+ "USER_ID_ATT_NAME TEXT NOT NULL,"
-						+ "FIRST_NAME_ATT_NS TEXT NOT NULL,"
-						+ "FIRST_NAME_ATT_NAME TEXT NOT NULL,"
-						+ "LAST_NAME_ATT_NS TEXT NOT NULL,"
-						+ "LAST_NAME_ATT_NAME TEXT NOT NULL,"
-						+ "EMAIL_ATT_NS TEXT NOT NULL,"
-						+ "EMAIL_ATT_NAME TEXT NOT NULL,"
-						+ "INDEX document_index (NAME));";
+					+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + "NAME VARCHAR(255) NOT NULL,"
+					+ "IDP_SUBJECT VARCHAR(255) NOT NULL," + "STATUS VARCHAR(50) NOT NULL,"
+					+ "POLICY_CLASS VARCHAR(255) NOT NULL," + "IDP_CERTIFICATE TEXT NOT NULL,"
+					+ "USER_ID_ATT_NS TEXT NOT NULL," + "USER_ID_ATT_NAME TEXT NOT NULL,"
+					+ "FIRST_NAME_ATT_NS TEXT NOT NULL," + "FIRST_NAME_ATT_NAME TEXT NOT NULL,"
+					+ "LAST_NAME_ATT_NS TEXT NOT NULL," + "LAST_NAME_ATT_NAME TEXT NOT NULL,"
+					+ "EMAIL_ATT_NS TEXT NOT NULL," + "EMAIL_ATT_NAME TEXT NOT NULL," + "INDEX document_index (NAME));";
 				db.update(trust);
 
 				String methods = "CREATE TABLE " + AUTH_METHODS_TABLE + " ("
-						+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-						+ "IDP_ID INT NOT NULL,"
-						+ "METHOD VARCHAR(255) NOT NULL,"
-						+ "INDEX document_index (ID));";
+					+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + "IDP_ID INT NOT NULL,"
+					+ "METHOD VARCHAR(255) NOT NULL," + "INDEX document_index (ID));";
 				db.update(methods);
 			}
 			dbBuilt = true;
 		}
 	}
 
-	public synchronized void removeTrustedIdP(long id)
-			throws DorianInternalFault {
+
+	public synchronized void removeTrustedIdP(long id) throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("delete from "
-					+ TRUST_MANAGER_TABLE + " WHERE ID= ?");
+			PreparedStatement s = c.prepareStatement("delete from " + TRUST_MANAGER_TABLE + " WHERE ID= ?");
 			s.setLong(1, id);
 			s.execute();
 			s.close();
@@ -115,14 +108,13 @@ public class TrustedIdPManager extends LoggingObject {
 		removeAuthenticationMethodsForTrustedIdP(id);
 	}
 
-	private void removeAuthenticationMethodsForTrustedIdP(long id)
-			throws DorianInternalFault {
+
+	private void removeAuthenticationMethodsForTrustedIdP(long id) throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("delete from "
-					+ AUTH_METHODS_TABLE + " WHERE IDP_ID= ?");
+			PreparedStatement s = c.prepareStatement("delete from " + AUTH_METHODS_TABLE + " WHERE IDP_ID= ?");
 			s.setLong(1, id);
 			s.execute();
 			s.close();
@@ -138,27 +130,25 @@ public class TrustedIdPManager extends LoggingObject {
 		}
 	}
 
-	public synchronized SAMLAuthenticationMethod[] getAuthenticationMethods(
-			long id) throws DorianInternalFault {
+
+	public synchronized SAMLAuthenticationMethod[] getAuthenticationMethods(long id) throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select * from "
-					+ AUTH_METHODS_TABLE + " where IDP_ID= ? ORDER BY ID");
+			PreparedStatement s = c.prepareStatement("select * from " + AUTH_METHODS_TABLE
+				+ " where IDP_ID= ? ORDER BY ID");
 			s.setLong(1, id);
 			ResultSet rs = s.executeQuery();
 			List methods = new ArrayList();
 			while (rs.next()) {
-				SAMLAuthenticationMethod method = SAMLAuthenticationMethod
-						.fromString(rs.getString("METHOD"));
+				SAMLAuthenticationMethod method = SAMLAuthenticationMethod.fromString(rs.getString("METHOD"));
 				methods.add(method);
 			}
 			rs.close();
 			s.close();
 
-			SAMLAuthenticationMethod[] list = new SAMLAuthenticationMethod[methods
-					.size()];
+			SAMLAuthenticationMethod[] list = new SAMLAuthenticationMethod[methods.size()];
 			for (int i = 0; i < methods.size(); i++) {
 				list[i] = (SAMLAuthenticationMethod) methods.get(i);
 			}
@@ -177,6 +167,7 @@ public class TrustedIdPManager extends LoggingObject {
 
 	}
 
+
 	private String clean(String s) {
 		if ((s == null) || (s.trim().length() == 0)) {
 			return null;
@@ -186,20 +177,16 @@ public class TrustedIdPManager extends LoggingObject {
 	}
 
 
-	public synchronized void updateIdP(TrustedIdP idp)
-			throws DorianInternalFault, InvalidTrustedIdPFault {
+	public synchronized void updateIdP(TrustedIdP idp) throws DorianInternalFault, InvalidTrustedIdPFault {
 
 		TrustedIdP curr = this.getTrustedIdPById(idp.getId());
 		boolean needsUpdate = false;
 		String name = curr.getName();
-		if ((clean(idp.getName()) != null)
-				&& (!idp.getName().equals(curr.getName()))) {
+		if ((clean(idp.getName()) != null) && (!idp.getName().equals(curr.getName()))) {
 			if (determineTrustedIdPExistsByName(idp.getName())) {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("The name of Trusted IdP "
-						+ curr.getName() + " cannot be changed to "
-						+ idp.getName()
-						+ " and IdP with that name already exists");
+				fault.setFaultString("The name of Trusted IdP " + curr.getName() + " cannot be changed to "
+					+ idp.getName() + " and IdP with that name already exists");
 				throw fault;
 			}
 			needsUpdate = true;
@@ -207,28 +194,23 @@ public class TrustedIdPManager extends LoggingObject {
 		}
 		String policy = curr.getUserPolicyClass();
 
-		if ((clean(idp.getUserPolicyClass()) != null)
-				&& (!idp.getUserPolicyClass().equals(curr.getUserPolicyClass()))) {
+		if ((clean(idp.getUserPolicyClass()) != null) && (!idp.getUserPolicyClass().equals(curr.getUserPolicyClass()))) {
 			needsUpdate = true;
-			policy = validateAndGetPolicy(idp.getUserPolicyClass())
-					.getClassName();
+			policy = validateAndGetPolicy(idp.getUserPolicyClass()).getClassName();
 		}
 		String status = curr.getStatus().getValue();
-		if ((idp.getStatus() != null)
-				&& (!idp.getStatus().equals(curr.getStatus()))) {
+		if ((idp.getStatus() != null) && (!idp.getStatus().equals(curr.getStatus()))) {
 			needsUpdate = true;
 			status = idp.getStatus().getValue();
 		}
 		X509Certificate currcert = validateAndGetCertificate(curr);
 		String certSubject = currcert.getSubjectDN().getName();
 		String certEncoded = curr.getIdPCertificate();
-		if ((clean(idp.getIdPCertificate()) != null)
-				&& (!idp.getIdPCertificate().equals(curr.getIdPCertificate()))) {
+		if ((clean(idp.getIdPCertificate()) != null) && (!idp.getIdPCertificate().equals(curr.getIdPCertificate()))) {
 			if (!isCertificateUnique(idp.getIdPCertificate())) {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("Cannot update the Trusted IdP, "
-						+ idp.getName()
-						+ ", it does not contain a unique certificate.");
+				fault.setFaultString("Cannot update the Trusted IdP, " + idp.getName()
+					+ ", it does not contain a unique certificate.");
 				throw fault;
 			}
 
@@ -241,8 +223,7 @@ public class TrustedIdPManager extends LoggingObject {
 		String uidNS = curr.getUserIdAttributeDescriptor().getNamespaceURI();
 		String uidName = curr.getUserIdAttributeDescriptor().getName();
 		if ((idp.getUserIdAttributeDescriptor() != null)
-				&& (!idp.getUserIdAttributeDescriptor().equals(
-						curr.getUserIdAttributeDescriptor()))) {
+			&& (!idp.getUserIdAttributeDescriptor().equals(curr.getUserIdAttributeDescriptor()))) {
 			verifyUserIdAttributeDescriptor(idp.getUserIdAttributeDescriptor());
 			uidNS = idp.getUserIdAttributeDescriptor().getNamespaceURI();
 			needsUpdate = true;
@@ -250,15 +231,12 @@ public class TrustedIdPManager extends LoggingObject {
 
 		}
 
-		String firstNS = curr.getFirstNameAttributeDescriptor()
-				.getNamespaceURI();
+		String firstNS = curr.getFirstNameAttributeDescriptor().getNamespaceURI();
 		String firstName = curr.getFirstNameAttributeDescriptor().getName();
 
 		if ((idp.getFirstNameAttributeDescriptor() != null)
-				&& (!idp.getFirstNameAttributeDescriptor().equals(
-						curr.getFirstNameAttributeDescriptor()))) {
-			verifyFirstNameAttributeDescriptor(idp
-					.getFirstNameAttributeDescriptor());
+			&& (!idp.getFirstNameAttributeDescriptor().equals(curr.getFirstNameAttributeDescriptor()))) {
+			verifyFirstNameAttributeDescriptor(idp.getFirstNameAttributeDescriptor());
 			firstNS = idp.getFirstNameAttributeDescriptor().getNamespaceURI();
 			needsUpdate = true;
 			firstName = idp.getFirstNameAttributeDescriptor().getName();
@@ -267,10 +245,8 @@ public class TrustedIdPManager extends LoggingObject {
 		String lastNS = curr.getLastNameAttributeDescriptor().getNamespaceURI();
 		String lastName = curr.getLastNameAttributeDescriptor().getName();
 		if ((idp.getLastNameAttributeDescriptor() != null)
-				&& (!idp.getLastNameAttributeDescriptor().equals(
-						curr.getLastNameAttributeDescriptor()))) {
-			verifyFirstNameAttributeDescriptor(idp
-					.getFirstNameAttributeDescriptor());
+			&& (!idp.getLastNameAttributeDescriptor().equals(curr.getLastNameAttributeDescriptor()))) {
+			verifyFirstNameAttributeDescriptor(idp.getFirstNameAttributeDescriptor());
 			lastNS = idp.getLastNameAttributeDescriptor().getNamespaceURI();
 			needsUpdate = true;
 			lastName = idp.getLastNameAttributeDescriptor().getName();
@@ -279,8 +255,7 @@ public class TrustedIdPManager extends LoggingObject {
 		String emailNS = curr.getEmailAttributeDescriptor().getNamespaceURI();
 		String emailName = curr.getEmailAttributeDescriptor().getName();
 		if ((idp.getEmailAttributeDescriptor() != null)
-				&& (!idp.getEmailAttributeDescriptor().equals(
-						curr.getEmailAttributeDescriptor()))) {
+			&& (!idp.getEmailAttributeDescriptor().equals(curr.getEmailAttributeDescriptor()))) {
 			verifyEmailAttributeDescriptor(idp.getEmailAttributeDescriptor());
 			emailNS = idp.getEmailAttributeDescriptor().getNamespaceURI();
 			needsUpdate = true;
@@ -293,9 +268,9 @@ public class TrustedIdPManager extends LoggingObject {
 			if (needsUpdate) {
 				c = db.getConnection();
 				PreparedStatement s = c
-						.prepareStatement("UPDATE "
-								+ TRUST_MANAGER_TABLE
-								+ " SET NAME= ?, IDP_SUBJECT= ?, STATUS= ?, POLICY_CLASS= ?, IDP_CERTIFICATE= ?, USER_ID_ATT_NS = ?, USER_ID_ATT_NAME = ?, FIRST_NAME_ATT_NS = ?, FIRST_NAME_ATT_NAME = ?, LAST_NAME_ATT_NS = ?, LAST_NAME_ATT_NAME = ?, EMAIL_ATT_NS = ?, EMAIL_ATT_NAME = ? WHERE ID= ?");
+					.prepareStatement("UPDATE "
+						+ TRUST_MANAGER_TABLE
+						+ " SET NAME= ?, IDP_SUBJECT= ?, STATUS= ?, POLICY_CLASS= ?, IDP_CERTIFICATE= ?, USER_ID_ATT_NS = ?, USER_ID_ATT_NAME = ?, FIRST_NAME_ATT_NS = ?, FIRST_NAME_ATT_NAME = ?, LAST_NAME_ATT_NS = ?, LAST_NAME_ATT_NAME = ?, EMAIL_ATT_NS = ?, EMAIL_ATT_NAME = ? WHERE ID= ?");
 
 				s.setString(1, name);
 				s.setString(2, certSubject);
@@ -315,21 +290,20 @@ public class TrustedIdPManager extends LoggingObject {
 				s.close();
 			}
 
-			if (!Arrays.equals(curr.getAuthenticationMethod(), idp
-					.getAuthenticationMethod())) {
+			if (!Arrays.equals(curr.getAuthenticationMethod(), idp.getAuthenticationMethod())) {
 				removeAuthenticationMethodsForTrustedIdP(idp.getId());
-				for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
-					this.addAuthenticationMethod(idp.getId(), idp
-							.getAuthenticationMethod(i));
+				if (idp.getAuthenticationMethod() != null) {
+					for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
+						this.addAuthenticationMethod(idp.getId(), idp.getAuthenticationMethod(i));
+					}
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Error updating the Trusted IdP "
-					+ idp.getName()
-					+ ", an unexpected database error occurred.");
+			fault.setFaultString("Error updating the Trusted IdP " + idp.getName()
+				+ ", an unexpected database error occurred.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -339,13 +313,12 @@ public class TrustedIdPManager extends LoggingObject {
 		}
 	}
 
-	public TrustedIdP getTrustedIdP(SAMLAssertion saml)
-			throws DorianInternalFault, InvalidAssertionFault {
+
+	public TrustedIdP getTrustedIdP(SAMLAssertion saml) throws DorianInternalFault, InvalidAssertionFault {
 		TrustedIdP[] idps = getTrustedIdPs();
 		for (int i = 0; i < idps.length; i++) {
 			try {
-				X509Certificate cert = CertUtil.loadCertificate(idps[i]
-						.getIdPCertificate());
+				X509Certificate cert = CertUtil.loadCertificate(idps[i].getIdPCertificate());
 				saml.verify(cert);
 				return idps[i];
 			} catch (SAMLException se) {
@@ -355,27 +328,24 @@ public class TrustedIdPManager extends LoggingObject {
 			}
 		}
 		InvalidAssertionFault fault = new InvalidAssertionFault();
-		fault
-				.setFaultString("The assertion specified, is not signed by a trusted IdP and therefore is not trusted.");
+		fault.setFaultString("The assertion specified, is not signed by a trusted IdP and therefore is not trusted.");
 		throw fault;
 	}
 
-	public synchronized TrustedIdP[] getTrustedIdPs()
-			throws DorianInternalFault {
+
+	public synchronized TrustedIdP[] getTrustedIdPs() throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from "
-					+ TRUST_MANAGER_TABLE);
+			ResultSet rs = s.executeQuery("select * from " + TRUST_MANAGER_TABLE);
 			List idps = new ArrayList();
 			while (rs.next()) {
 				TrustedIdP idp = new TrustedIdP();
 				idp.setId(rs.getLong("ID"));
 				idp.setName(rs.getString("NAME"));
-				idp.setStatus(TrustedIdPStatus
-						.fromValue(rs.getString("STATUS")));
+				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
 				SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
@@ -405,16 +375,13 @@ public class TrustedIdPManager extends LoggingObject {
 			TrustedIdP[] list = new TrustedIdP[idps.size()];
 			for (int i = 0; i < idps.size(); i++) {
 				list[i] = (TrustedIdP) idps.get(i);
-				list[i]
-						.setAuthenticationMethod(getAuthenticationMethods(list[i]
-								.getId()));
+				list[i].setAuthenticationMethod(getAuthenticationMethods(list[i].getId()));
 			}
 			return list;
 
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Error obtaining a list of trusted IdPs, unexpected database error");
+			fault.setFaultString("Error obtaining a list of trusted IdPs, unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -425,23 +392,21 @@ public class TrustedIdPManager extends LoggingObject {
 
 	}
 
-	public synchronized TrustedIdP[] getSuspendedTrustedIdPs()
-			throws DorianInternalFault {
+
+	public synchronized TrustedIdP[] getSuspendedTrustedIdPs() throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from "
-					+ TRUST_MANAGER_TABLE + " where STATUS='"
-					+ TrustedIdPStatus.Suspended + "'");
+			ResultSet rs = s.executeQuery("select * from " + TRUST_MANAGER_TABLE + " where STATUS='"
+				+ TrustedIdPStatus.Suspended + "'");
 			List idps = new ArrayList();
 			while (rs.next()) {
 				TrustedIdP idp = new TrustedIdP();
 				idp.setId(rs.getLong("ID"));
 				idp.setName(rs.getString("NAME"));
-				idp.setStatus(TrustedIdPStatus
-						.fromValue(rs.getString("STATUS")));
+				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
 				idps.add(idp);
@@ -452,16 +417,13 @@ public class TrustedIdPManager extends LoggingObject {
 			TrustedIdP[] list = new TrustedIdP[idps.size()];
 			for (int i = 0; i < idps.size(); i++) {
 				list[i] = (TrustedIdP) idps.get(i);
-				list[i]
-						.setAuthenticationMethod(getAuthenticationMethods(list[i]
-								.getId()));
+				list[i].setAuthenticationMethod(getAuthenticationMethods(list[i].getId()));
 			}
 			return list;
 
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Error obtaining a list of trusted IdPs, unexpected database error");
+			fault.setFaultString("Error obtaining a list of trusted IdPs, unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -472,15 +434,14 @@ public class TrustedIdPManager extends LoggingObject {
 
 	}
 
-	public synchronized TrustedIdP getTrustedIdPById(long id)
-			throws DorianInternalFault, InvalidTrustedIdPFault {
+
+	public synchronized TrustedIdP getTrustedIdPById(long id) throws DorianInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		Connection c = null;
 
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select * from "
-					+ TRUST_MANAGER_TABLE + " WHERE ID= ?");
+			PreparedStatement s = c.prepareStatement("select * from " + TRUST_MANAGER_TABLE + " WHERE ID= ?");
 			s.setLong(1, id);
 			ResultSet rs = s.executeQuery();
 			TrustedIdP idp = null;
@@ -488,8 +449,7 @@ public class TrustedIdPManager extends LoggingObject {
 				idp = new TrustedIdP();
 				idp.setId(rs.getLong("ID"));
 				idp.setName(rs.getString("NAME"));
-				idp.setStatus(TrustedIdPStatus
-						.fromValue(rs.getString("STATUS")));
+				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
 				SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
@@ -513,8 +473,7 @@ public class TrustedIdPManager extends LoggingObject {
 				idp.setEmailAttributeDescriptor(email);
 			} else {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("The Trusted IdP " + id
-						+ " does not exist.");
+				fault.setFaultString("The Trusted IdP " + id + " does not exist.");
 				throw fault;
 			}
 			rs.close();
@@ -525,8 +484,7 @@ public class TrustedIdPManager extends LoggingObject {
 			throw f;
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Error obtaining the Trusted IdP " + id
-					+ ", unexpected database error");
+			fault.setFaultString("Error obtaining the Trusted IdP " + id + ", unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -536,15 +494,14 @@ public class TrustedIdPManager extends LoggingObject {
 		}
 	}
 
-	public synchronized TrustedIdP getTrustedIdPByName(String name)
-			throws DorianInternalFault, InvalidTrustedIdPFault {
+
+	public synchronized TrustedIdP getTrustedIdPByName(String name) throws DorianInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		Connection c = null;
 
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select * from "
-					+ TRUST_MANAGER_TABLE + " WHERE NAME= ?");
+			PreparedStatement s = c.prepareStatement("select * from " + TRUST_MANAGER_TABLE + " WHERE NAME= ?");
 			s.setString(1, name);
 			ResultSet rs = s.executeQuery();
 			TrustedIdP idp = null;
@@ -552,8 +509,7 @@ public class TrustedIdPManager extends LoggingObject {
 				idp = new TrustedIdP();
 				idp.setId(rs.getLong("ID"));
 				idp.setName(rs.getString("NAME"));
-				idp.setStatus(TrustedIdPStatus
-						.fromValue(rs.getString("STATUS")));
+				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
 				SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
@@ -577,8 +533,7 @@ public class TrustedIdPManager extends LoggingObject {
 				idp.setEmailAttributeDescriptor(email);
 			} else {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("The Trusted IdP " + name
-						+ " does not exist.");
+				fault.setFaultString("The Trusted IdP " + name + " does not exist.");
 				throw fault;
 			}
 			rs.close();
@@ -589,8 +544,7 @@ public class TrustedIdPManager extends LoggingObject {
 			throw f;
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Error obtaining the Trusted IdP " + name
-					+ ", unexpected database error");
+			fault.setFaultString("Error obtaining the Trusted IdP " + name + ", unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -600,15 +554,14 @@ public class TrustedIdPManager extends LoggingObject {
 		}
 	}
 
-	public synchronized TrustedIdP getTrustedIdPByDN(String dn)
-			throws DorianInternalFault, InvalidTrustedIdPFault {
+
+	public synchronized TrustedIdP getTrustedIdPByDN(String dn) throws DorianInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		Connection c = null;
 
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select * from "
-					+ TRUST_MANAGER_TABLE + " WHERE IDP_SUBJECT= ?");
+			PreparedStatement s = c.prepareStatement("select * from " + TRUST_MANAGER_TABLE + " WHERE IDP_SUBJECT= ?");
 			s.setString(1, dn);
 			ResultSet rs = s.executeQuery();
 			TrustedIdP idp = null;
@@ -616,8 +569,7 @@ public class TrustedIdPManager extends LoggingObject {
 				idp = new TrustedIdP();
 				idp.setId(rs.getLong("ID"));
 				idp.setName(rs.getString("NAME"));
-				idp.setStatus(TrustedIdPStatus
-						.fromValue(rs.getString("STATUS")));
+				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
 
@@ -643,8 +595,7 @@ public class TrustedIdPManager extends LoggingObject {
 
 			} else {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("The Trusted IdP " + dn
-						+ " does not exist.");
+				fault.setFaultString("The Trusted IdP " + dn + " does not exist.");
 				throw fault;
 			}
 			rs.close();
@@ -655,8 +606,7 @@ public class TrustedIdPManager extends LoggingObject {
 			throw f;
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Error obtaining the Trusted IdP " + dn
-					+ ", unexpected database error");
+			fault.setFaultString("Error obtaining the Trusted IdP " + dn + ", unexpected database error");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -666,25 +616,21 @@ public class TrustedIdPManager extends LoggingObject {
 		}
 	}
 
-	private String validateAndGetName(TrustedIdP idp)
-			throws DorianInternalFault, InvalidTrustedIdPFault {
+
+	private String validateAndGetName(TrustedIdP idp) throws DorianInternalFault, InvalidTrustedIdPFault {
 		String name = idp.getName();
-		if ((name == null)
-				|| (name.trim().length() < conf.getMinimumIdPNameLength())
-				|| (name.trim().length() > conf.getMaximumIdPNameLength())) {
+		if ((name == null) || (name.trim().length() < conf.getMinimumIdPNameLength())
+			|| (name.trim().length() > conf.getMaximumIdPNameLength())) {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-			fault
-					.setFaultString("Invalid IdP name specified, the IdP name must be between "
-							+ conf.getMinimumIdPNameLength()
-							+ " and "
-							+ conf.getMaximumIdPNameLength() + " in length.");
+			fault.setFaultString("Invalid IdP name specified, the IdP name must be between "
+				+ conf.getMinimumIdPNameLength() + " and " + conf.getMaximumIdPNameLength() + " in length.");
 			throw fault;
 		}
 		return name.trim();
 	}
 
-	private IFSUserPolicy validateAndGetPolicy(String className)
-			throws DorianInternalFault, InvalidTrustedIdPFault {
+
+	private IFSUserPolicy validateAndGetPolicy(String className) throws DorianInternalFault, InvalidTrustedIdPFault {
 		IFSUserPolicy[] policies = conf.getUserPolicies();
 		for (int i = 0; i < policies.length; i++) {
 			if (policies[i].getClassName().equals(className)) {
@@ -696,13 +642,13 @@ public class TrustedIdPManager extends LoggingObject {
 		throw fault;
 	}
 
-	private X509Certificate validateAndGetCertificate(TrustedIdP idp)
-			throws DorianInternalFault, InvalidTrustedIdPFault {
+
+	private X509Certificate validateAndGetCertificate(TrustedIdP idp) throws DorianInternalFault,
+		InvalidTrustedIdPFault {
 
 		if (idp.getIdPCertificate() == null) {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-			fault
-					.setFaultString("Invalid Trusted IdP, no IdP certificate specified.");
+			fault.setFaultString("Invalid Trusted IdP, no IdP certificate specified.");
 			throw fault;
 		}
 		StringReader reader = new StringReader(idp.getIdPCertificate());
@@ -729,17 +675,16 @@ public class TrustedIdPManager extends LoggingObject {
 
 	}
 
-	private boolean isCertificateUnique(String certAsString)
-			throws DorianInternalFault {
+
+	private boolean isCertificateUnique(String certAsString) throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = true;
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select count(*) from "
-					+ TRUST_MANAGER_TABLE + " where IDP_CERTIFICATE='"
-					+ certAsString + "'");
+			ResultSet rs = s.executeQuery("select count(*) from " + TRUST_MANAGER_TABLE + " where IDP_CERTIFICATE='"
+				+ certAsString + "'");
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {
@@ -762,91 +707,82 @@ public class TrustedIdPManager extends LoggingObject {
 		return exists;
 	}
 
-	private void verifyUserIdAttributeDescriptor(SAMLAttributeDescriptor des)
-			throws InvalidTrustedIdPFault {
+
+	private void verifyUserIdAttributeDescriptor(SAMLAttributeDescriptor des) throws InvalidTrustedIdPFault {
 		verifySAMLAttributeDescriptor(des, "User Id");
 	}
 
-	private void verifyFirstNameAttributeDescriptor(SAMLAttributeDescriptor des)
-			throws InvalidTrustedIdPFault {
+
+	private void verifyFirstNameAttributeDescriptor(SAMLAttributeDescriptor des) throws InvalidTrustedIdPFault {
 		verifySAMLAttributeDescriptor(des, "First Name");
 	}
 
-	private void verifyLastNameAttributeDescriptor(SAMLAttributeDescriptor des)
-			throws InvalidTrustedIdPFault {
+
+	private void verifyLastNameAttributeDescriptor(SAMLAttributeDescriptor des) throws InvalidTrustedIdPFault {
 		verifySAMLAttributeDescriptor(des, "Last Name");
 	}
 
-	private void verifyEmailAttributeDescriptor(SAMLAttributeDescriptor des)
-			throws InvalidTrustedIdPFault {
+
+	private void verifyEmailAttributeDescriptor(SAMLAttributeDescriptor des) throws InvalidTrustedIdPFault {
 		verifySAMLAttributeDescriptor(des, "Email");
 	}
 
-	private void verifySAMLAttributeDescriptor(SAMLAttributeDescriptor des,
-			String name) throws InvalidTrustedIdPFault {
-		if ((des == null) || (Utils.clean(des.getNamespaceURI()) == null)
-				|| (Utils.clean(des.getName()) == null)) {
+
+	private void verifySAMLAttributeDescriptor(SAMLAttributeDescriptor des, String name) throws InvalidTrustedIdPFault {
+		if ((des == null) || (Utils.clean(des.getNamespaceURI()) == null) || (Utils.clean(des.getName()) == null)) {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-			fault
-					.setFaultString("Cannot add the Trusted IdP, it does not contain a valid "
-							+ name + " Attribute Descriptor");
+			fault.setFaultString("Cannot add the Trusted IdP, it does not contain a valid " + name
+				+ " Attribute Descriptor");
 			throw fault;
 		}
 	}
 
-	public synchronized TrustedIdP addTrustedIdP(TrustedIdP idp)
-			throws DorianInternalFault, InvalidTrustedIdPFault {
+
+	public synchronized TrustedIdP addTrustedIdP(TrustedIdP idp) throws DorianInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		if (!determineTrustedIdPExistsByName(idp.getName())) {
 			String name = validateAndGetName(idp);
 			X509Certificate cert = validateAndGetCertificate(idp);
-			String policyClass = validateAndGetPolicy(idp.getUserPolicyClass())
-					.getClassName();
+			String policyClass = validateAndGetPolicy(idp.getUserPolicyClass()).getClassName();
 			verifyUserIdAttributeDescriptor(idp.getUserIdAttributeDescriptor());
-			verifyFirstNameAttributeDescriptor(idp
-					.getFirstNameAttributeDescriptor());
-			verifyLastNameAttributeDescriptor(idp
-					.getLastNameAttributeDescriptor());
+			verifyFirstNameAttributeDescriptor(idp.getFirstNameAttributeDescriptor());
+			verifyLastNameAttributeDescriptor(idp.getLastNameAttributeDescriptor());
 			verifyEmailAttributeDescriptor(idp.getEmailAttributeDescriptor());
 
 			if (!isCertificateUnique(idp.getIdPCertificate())) {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("Cannot add the Trusted IdP, "
-						+ idp.getName()
-						+ ", it does not contain a unique certificate.");
+				fault.setFaultString("Cannot add the Trusted IdP, " + idp.getName()
+					+ ", it does not contain a unique certificate.");
 				throw fault;
 			}
 			Connection c = null;
 			try {
 				c = db.getConnection();
 				PreparedStatement s = c
-						.prepareStatement("INSERT INTO "
-								+ TRUST_MANAGER_TABLE
-								+ " SET NAME= ?, IDP_SUBJECT= ?, STATUS= ?, POLICY_CLASS= ?, IDP_CERTIFICATE= ?, USER_ID_ATT_NS = ?, USER_ID_ATT_NAME = ?, FIRST_NAME_ATT_NS = ?, FIRST_NAME_ATT_NAME = ?, LAST_NAME_ATT_NS = ?, LAST_NAME_ATT_NAME = ?, EMAIL_ATT_NS = ?, EMAIL_ATT_NAME = ?");
+					.prepareStatement("INSERT INTO "
+						+ TRUST_MANAGER_TABLE
+						+ " SET NAME= ?, IDP_SUBJECT= ?, STATUS= ?, POLICY_CLASS= ?, IDP_CERTIFICATE= ?, USER_ID_ATT_NS = ?, USER_ID_ATT_NAME = ?, FIRST_NAME_ATT_NS = ?, FIRST_NAME_ATT_NAME = ?, LAST_NAME_ATT_NS = ?, LAST_NAME_ATT_NAME = ?, EMAIL_ATT_NS = ?, EMAIL_ATT_NAME = ?");
 
 				s.setString(1, name);
 				s.setString(2, cert.getSubjectDN().toString());
 				s.setString(3, idp.getStatus().getValue());
 				s.setString(4, policyClass);
 				s.setString(5, idp.getIdPCertificate());
-				s.setString(6, idp.getUserIdAttributeDescriptor()
-						.getNamespaceURI());
+				s.setString(6, idp.getUserIdAttributeDescriptor().getNamespaceURI());
 				s.setString(7, idp.getUserIdAttributeDescriptor().getName());
-				s.setString(8, idp.getFirstNameAttributeDescriptor()
-						.getNamespaceURI());
+				s.setString(8, idp.getFirstNameAttributeDescriptor().getNamespaceURI());
 				s.setString(9, idp.getFirstNameAttributeDescriptor().getName());
-				s.setString(10, idp.getLastNameAttributeDescriptor()
-						.getNamespaceURI());
+				s.setString(10, idp.getLastNameAttributeDescriptor().getNamespaceURI());
 				s.setString(11, idp.getLastNameAttributeDescriptor().getName());
-				s.setString(12, idp.getEmailAttributeDescriptor()
-						.getNamespaceURI());
+				s.setString(12, idp.getEmailAttributeDescriptor().getNamespaceURI());
 				s.setString(13, idp.getEmailAttributeDescriptor().getName());
 				s.execute();
 				idp.setId(Query.getLastAutoId(c));
 				s.close();
-				for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
-					this.addAuthenticationMethod(idp.getId(), idp
-							.getAuthenticationMethod(i));
+				if (idp.getAuthenticationMethod() != null) {
+					for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
+						this.addAuthenticationMethod(idp.getId(), idp.getAuthenticationMethod(i));
+					}
 				}
 			} catch (Exception e) {
 				try {
@@ -857,7 +793,7 @@ public class TrustedIdPManager extends LoggingObject {
 				logError(e.getMessage(), e);
 				DorianInternalFault fault = new DorianInternalFault();
 				fault.setFaultString("Error adding the Trusted IdP " + name
-						+ ", an unexpected database error occurred.");
+					+ ", an unexpected database error occurred.");
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
 				fault = (DorianInternalFault) helper.getFault();
@@ -870,21 +806,20 @@ public class TrustedIdPManager extends LoggingObject {
 
 		} else {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-			fault.setFaultString("Cannot add the Trusted IdP, " + idp.getName()
-					+ " because it already exists.");
+			fault.setFaultString("Cannot add the Trusted IdP, " + idp.getName() + " because it already exists.");
 			throw fault;
 		}
 		return idp;
 
 	}
 
-	private synchronized void addAuthenticationMethod(long id,
-			SAMLAuthenticationMethod method) throws DorianInternalFault {
+
+	private synchronized void addAuthenticationMethod(long id, SAMLAuthenticationMethod method)
+		throws DorianInternalFault {
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("INSERT INTO "
-					+ AUTH_METHODS_TABLE + " SET IDP_ID= ?,METHOD= ?");
+			PreparedStatement s = c.prepareStatement("INSERT INTO " + AUTH_METHODS_TABLE + " SET IDP_ID= ?,METHOD= ?");
 
 			s.setLong(1, id);
 			s.setString(2, method.getValue());
@@ -893,9 +828,8 @@ public class TrustedIdPManager extends LoggingObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Error adding the authentication method "
-					+ method.getValue() + " for the  Trusted IdP " + id
-					+ ", an unexpected database error occurred.");
+			fault.setFaultString("Error adding the authentication method " + method.getValue()
+				+ " for the  Trusted IdP " + id + ", an unexpected database error occurred.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -907,15 +841,15 @@ public class TrustedIdPManager extends LoggingObject {
 		}
 	}
 
-	public synchronized boolean determineTrustedIdPExistsByDN(String subject)
-			throws DorianInternalFault {
+
+	public synchronized boolean determineTrustedIdPExistsByDN(String subject) throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select count(*) from "
-					+ TRUST_MANAGER_TABLE + " where IDP_SUBJECT= ?");
+			PreparedStatement s = c.prepareStatement("select count(*) from " + TRUST_MANAGER_TABLE
+				+ " where IDP_SUBJECT= ?");
 			s.setString(1, subject);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -940,15 +874,14 @@ public class TrustedIdPManager extends LoggingObject {
 		return exists;
 	}
 
-	public synchronized boolean determineTrustedIdPExistsByName(String name)
-			throws DorianInternalFault {
+
+	public synchronized boolean determineTrustedIdPExistsByName(String name) throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select count(*) from "
-					+ TRUST_MANAGER_TABLE + " where NAME= ?");
+			PreparedStatement s = c.prepareStatement("select count(*) from " + TRUST_MANAGER_TABLE + " where NAME= ?");
 			s.setString(1, name);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -972,6 +905,7 @@ public class TrustedIdPManager extends LoggingObject {
 		}
 		return exists;
 	}
+
 
 	public synchronized void removeAllTrustedIdPs() throws DorianInternalFault {
 		buildDatabase();
