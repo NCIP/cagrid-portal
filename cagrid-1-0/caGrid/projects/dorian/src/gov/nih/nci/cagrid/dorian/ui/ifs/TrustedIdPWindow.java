@@ -42,9 +42,9 @@ import org.projectmobius.common.MobiusRunnable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.4 2007-03-21 19:36:06 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.5 2007-03-31 13:24:02 langella Exp $
  */
-public class TrustedIdPWindow extends ApplicationComponent{
+public class TrustedIdPWindow extends ApplicationComponent {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
 	public static final String KERBEROS = SAMLAuthenticationMethod.value2.getValue();
 	public static final String SRP = SAMLAuthenticationMethod.value3.getValue();
@@ -224,7 +224,6 @@ public class TrustedIdPWindow extends ApplicationComponent{
 
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -445,8 +444,8 @@ public class TrustedIdPWindow extends ApplicationComponent{
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Trusted Identity Provider",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
-				LookAndFeel.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+					.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel.getTrustedIdPIcon(), getInfoPanel(), null);
 			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
 			jTabbedPane.addTab(ATTRIBUTES_PANEL, DorianLookAndFeel.getAttributesIcon(), getAttributesPanel(), null);
@@ -588,8 +587,8 @@ public class TrustedIdPWindow extends ApplicationComponent{
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null,
-				LookAndFeel.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+					.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);
 			jPanel2.add(credentialLabel, gridBagConstraints);
@@ -932,8 +931,8 @@ public class TrustedIdPWindow extends ApplicationComponent{
 			authPanel.add(getUnspecifiedMethod(), gridBagConstraints38);
 			authPanel.add(unspecifiedLabel, gridBagConstraints39);
 			authPanel.setBorder(BorderFactory.createTitledBorder(null, "Accepted Authentication Methods",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
-				LookAndFeel.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+					.getPanelLabelColor()));
 			authPanel.add(passwordLabel, gridBagConstraints15);
 			authPanel.add(getPasswordMethod(), gridBagConstraints14);
 
@@ -960,9 +959,11 @@ public class TrustedIdPWindow extends ApplicationComponent{
 
 	public boolean idpAcceptsMethod(String method) {
 		SAMLAuthenticationMethod[] methods = idp.getAuthenticationMethod();
-		for (int i = 0; i < methods.length; i++) {
-			if (methods[i].getValue().equals(method)) {
-				return true;
+		if (methods != null) {
+			for (int i = 0; i < methods.length; i++) {
+				if (methods[i].getValue().equals(method)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -1273,8 +1274,8 @@ public class TrustedIdPWindow extends ApplicationComponent{
 			jPanel.add(getEmailNamespace(), gridBagConstraints55);
 			jPanel.add(getEmail(), gridBagConstraints56);
 			jPanel.setBorder(BorderFactory.createTitledBorder(null, "SAML Attribute Descriptions",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null,
-				LookAndFeel.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+					.getPanelLabelColor()));
 		}
 		return jPanel;
 	}
