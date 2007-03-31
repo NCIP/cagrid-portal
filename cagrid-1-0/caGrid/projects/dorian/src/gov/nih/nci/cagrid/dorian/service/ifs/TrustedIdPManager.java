@@ -147,12 +147,15 @@ public class TrustedIdPManager extends LoggingObject {
 			}
 			rs.close();
 			s.close();
-
-			SAMLAuthenticationMethod[] list = new SAMLAuthenticationMethod[methods.size()];
-			for (int i = 0; i < methods.size(); i++) {
-				list[i] = (SAMLAuthenticationMethod) methods.get(i);
+			if (methods.size() > 0) {
+				SAMLAuthenticationMethod[] list = new SAMLAuthenticationMethod[methods.size()];
+				for (int i = 0; i < methods.size(); i++) {
+					list[i] = (SAMLAuthenticationMethod) methods.get(i);
+				}
+				return list;
+			} else {
+				return null;
 			}
-			return list;
 
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();

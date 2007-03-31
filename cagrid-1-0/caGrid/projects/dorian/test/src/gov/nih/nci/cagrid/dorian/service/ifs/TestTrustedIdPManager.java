@@ -98,9 +98,8 @@ public class TestTrustedIdPManager extends TestCase {
 			cont.getIdp().setAuthenticationMethod(null);
 			TrustedIdP idp = cont.getIdp();
 			idp = tm.addTrustedIdP(idp);
-			idp.setAuthenticationMethod(new SAMLAuthenticationMethod[0]);
 			assertEquals(1, tm.getTrustedIdPs().length);
-			assertEquals(idp.getAuthenticationMethod().length, tm.getAuthenticationMethods(idp.getId()).length);
+			assertEquals(null, tm.getAuthenticationMethods(idp.getId()));
 			TrustedIdP[] idps = tm.getTrustedIdPs();
 			assertEquals(idp, idps[0]);
 			assertTrue(tm.determineTrustedIdPExistsByName(name));
@@ -147,14 +146,12 @@ public class TestTrustedIdPManager extends TestCase {
 			X509Certificate cert = CertUtil.loadCertificate(reader);
 			assertTrue(tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
 			assertEquals(idp, tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
-			
-			
-			//Update, removing all authentication methods
+
+			// Update, removing all authentication methods
 			idp.setAuthenticationMethod(null);
 			tm.updateIdP(idp);
-			idp.setAuthenticationMethod(new SAMLAuthenticationMethod[0]);
 			assertEquals(1, tm.getTrustedIdPs().length);
-			assertEquals(idp.getAuthenticationMethod().length, tm.getAuthenticationMethods(idp.getId()).length);
+			assertEquals(null, tm.getAuthenticationMethods(idp.getId()));
 			idps = null;
 			idps = tm.getTrustedIdPs();
 			assertEquals(idp, idps[0]);
@@ -170,16 +167,21 @@ public class TestTrustedIdPManager extends TestCase {
 			assertEquals(idp, temp3);
 			assertTrue(tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
 			assertEquals(idp, tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
-			
-			
-			
-			
-			
+
 			tm.removeTrustedIdP(idp.getId());
 			assertEquals(0, tm.getTrustedIdPs().length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}
+	}
+
+
+	private void checkAuthenticationMethodLength(TrustedIdP idp) throws Exception {
+		if ((idp.getAuthenticationMethod() == null) || (idp.getAuthenticationMethod().length == 0)) {
+			assertEquals(null, tm.getAuthenticationMethods(idp.getId()));
+		} else {
+			assertEquals(idp.getAuthenticationMethod().length, tm.getAuthenticationMethods(idp.getId()).length);
 		}
 	}
 
@@ -196,7 +198,7 @@ public class TestTrustedIdPManager extends TestCase {
 				TrustedIdP idp = cont.getIdp();
 				idp = tm.addTrustedIdP(idp);
 				assertEquals(1, tm.getTrustedIdPs().length);
-				assertEquals(idp.getAuthenticationMethod().length, tm.getAuthenticationMethods(idp.getId()).length);
+				checkAuthenticationMethodLength(idp);
 				TrustedIdP[] idps = tm.getTrustedIdPs();
 				assertEquals(idp, idps[0]);
 				assertTrue(tm.determineTrustedIdPExistsByName(name));
@@ -250,7 +252,7 @@ public class TestTrustedIdPManager extends TestCase {
 
 				tm.removeTrustedIdP(idp.getId());
 				assertEquals(0, tm.getTrustedIdPs().length);
-				assertEquals(0, tm.getAuthenticationMethods(idp.getId()).length);
+				assertEquals(null, tm.getAuthenticationMethods(idp.getId()));
 			}
 
 		} catch (Exception e) {
@@ -274,8 +276,7 @@ public class TestTrustedIdPManager extends TestCase {
 				TrustedIdP idp = cont.getIdp();
 				idp = tm.addTrustedIdP(idp);
 				assertEquals((i + 1), tm.getTrustedIdPs().length);
-				assertEquals(idp.getAuthenticationMethod().length, tm.getAuthenticationMethods(idp.getId()).length);
-
+				checkAuthenticationMethodLength(idp);
 				assertTrue(tm.determineTrustedIdPExistsByName(name));
 				TrustedIdP temp = tm.getTrustedIdPByName(idp.getName());
 				assertEquals(idp, temp);
@@ -474,13 +475,15 @@ public class TestTrustedIdPManager extends TestCase {
 
 		int count = (int) (val / num);
 
-		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[count];
-
-		for (int i = 0; i < count; i++) {
-			methods[i] = (SAMLAuthenticationMethod) getAuthenticationMethods().get(i);
+		if (count == 0) {
+			return null;
+		} else {
+			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[count];
+			for (int i = 0; i < count; i++) {
+				methods[i] = (SAMLAuthenticationMethod) getAuthenticationMethods().get(i);
+			}
+			return methods;
 		}
-
-		return methods;
 	}
 
 
