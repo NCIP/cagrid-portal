@@ -22,7 +22,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * 
  * @created Aug 22, 2006
- * @version $Id: CreationStep.java,v 1.3 2007-03-29 17:03:56 dervin Exp $
+ * @version $Id: CreationStep.java,v 1.4 2007-04-02 19:35:31 hastings Exp $
  */
 public class CreationStep extends Step {
     private String introduceDir;
@@ -41,7 +41,7 @@ public class CreationStep extends Step {
             CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, "bdt");
         Process p = CommonTools.createAndOutputProcess(cmd);
         p.waitFor();
-        assertTrue("Creating new data service failed", p.exitValue() == 0);
+        assertTrue("Creating new bdt service failed", p.exitValue() == 0);
         
         addBdtStartMethod();
 
