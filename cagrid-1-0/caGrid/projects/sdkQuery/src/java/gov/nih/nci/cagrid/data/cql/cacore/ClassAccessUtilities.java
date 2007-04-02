@@ -91,7 +91,7 @@ public class ClassAccessUtilities {
 	 * 		All Fields from the class of the specified type
 	 */
 	public static Field[] getFieldsOfType(Class clazz, String typeName) {
-		Set allFields = new HashSet();
+		Set<Field> allFields = new HashSet<Field>();
 		Class checkClass = clazz;
 		while (checkClass != null) {
 			Field[] classFields = checkClass.getDeclaredFields();

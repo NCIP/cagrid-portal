@@ -21,7 +21,7 @@ import java.util.Set;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 3, 2006 
- * @version $Id: ClassAccessUtilities.java,v 1.2 2006-11-09 14:58:12 dervin Exp $ 
+ * @version $Id: ClassAccessUtilities.java,v 1.3 2007-04-02 14:13:44 dervin Exp $ 
  */
 public class ClassAccessUtilities {	
 	/**
@@ -91,7 +91,7 @@ public class ClassAccessUtilities {
 	 * 		All Fields from the class of the specified type
 	 */
 	public static Field[] getFieldsOfType(Class clazz, String typeName) {
-		Set allFields = new HashSet();
+		Set<Field> allFields = new HashSet<Field>();
 		Class checkClass = clazz;
 		while (checkClass != null) {
 			Field[] classFields = checkClass.getDeclaredFields();
@@ -123,7 +123,7 @@ public class ClassAccessUtilities {
 	 * 		All setter methods which take a parameter of the named type
 	 */
 	public static Method[] getSettersForType(Class clazz, String typeName) {
-		Set allMethods = new HashSet();
+		Set<Method> allMethods = new HashSet<Method>();
 		Class checkClass = clazz;
 		while (checkClass != null) {
 			Method[] classMethods = checkClass.getDeclaredMethods();
