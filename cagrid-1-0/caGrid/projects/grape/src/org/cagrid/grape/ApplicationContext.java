@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import org.cagrid.grape.model.Component;
 import org.projectmobius.common.MobiusRunnable;
+import org.projectmobius.common.MobiusRunnableGroup;
 
 
 /**
@@ -60,6 +61,21 @@ public class ApplicationContext {
 
 	public void executeInBackground(MobiusRunnable r) throws Exception {
 		this.application.getThreadManager().executeInBackground(r);
+	}
+
+
+	public void executeInBackground(MobiusRunnableGroup grp) throws Exception {
+		this.application.getThreadManager().executeGroupInBackground(grp);
+	}
+
+
+	public void execute(MobiusRunnable r) throws Exception {
+		this.application.getThreadManager().execute(r);
+	}
+
+
+	public void execute(MobiusRunnableGroup grp) throws Exception {
+		this.application.getThreadManager().executeGroup(grp);
 	}
 
 
