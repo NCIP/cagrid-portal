@@ -3,9 +3,7 @@ package org.cagrid.gridftp.authorization.plugin.gridgrouper;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 
 import java.net.URL;
-import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.cagrid.gridftp.authorization.plugin.AbstractAuthCallout;
 import org.cagrid.gridftp.authorization.plugin.GridFTPTuple;
@@ -13,10 +11,15 @@ import org.globus.wsrf.encoding.SerializationException;
 
 /**
  * 
- * This authorization plugin implements a grid grouper check. Currently the
- * check is to verify the requester is a member of the training:trainees groups
- * in the training.cagrid.org Grid Grouper.
+ * This authorization plug-in implements a grid grouper check. To use the
+ * plug-in, you need to create an xml configuration file and put it on
+ * the classpath at RESOURCE_LOCATION. The xml file needs to use the
+ * gridgrouper-config schema.
  * 
+ * For complete documentation, refer to the GridFTP with Java Authorization
+ * User Documentation.
+ * 
+ * @see RESOURCE_LOCATION
  * 
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * 
@@ -31,6 +34,10 @@ public class GridGrouperAuthCallout extends AbstractAuthCallout {
 	 * classpath at this location.
 	 */
 	public static final String RESOURCE_LOCATION = "org/cagrid/gridftp/authorization/plugin/gridgrouper/gridgrouper_auth_config.xml";
+	
+	public static final String SCHEMA_LOCATION = "org/cagrid/gridftp/authorization/plugin/gridgrouper/gridgrouper-config.xsd";
+	public static final String PARENT_SCHEMA = "org/cagrid/gridftp/authorization/plugin/gridgrouper/gridgrouper.xsd";
+	
 	private GridGrouperConfigurationManager _manager;
 
 	public GridGrouperAuthCallout() throws Exception {
@@ -46,15 +53,12 @@ public class GridGrouperAuthCallout extends AbstractAuthCallout {
 	}
 
 	@Override
-	public boolean authorizeOperation(GridFTPTuple tuple) { // String identity,
-															// Operation
-															// operation, String
-															// target) {
-
+	public boolean authorizeOperation(GridFTPTuple tuple) { 
+		
 		boolean authorized = false;
 
 		MembershipExpression gridGrouperExpression = _manager
-				.getMostSpecificMembershipQuery(tuple);
+				.getMostSpecificMembershipQuery(tuple.getOperation(), tuple.getURL());
 
 		// do grid grouper check
 		// String gridGrouperAuthorizeCheck =
@@ -69,24 +73,11 @@ public class GridGrouperAuthCallout extends AbstractAuthCallout {
 				if (tuple.getIdentity() != null) {
 					_logger.fine("calling isMember()");
 					try {
-
 						/*
-						 * String gridGrouperAuthorizeCheck = "<ns1:MembershipExpression
-						 * ns1:logicRelation=\"AND\"
-						 * xmlns:ns1=\"http://cagrid.nci.nih.gov/1/GridGrouper\">" + "
-						 * <ns1:MembershipQuery
-						 * ns1:MembershipStatus=\"MEMBER_OF\">" + "
-						 * <ns1:GroupIdentifier>" + "
-						 * <ns1:gridGrouperURL>https://training.cagrid.org:8443/wsrf/services/cagrid/GridGrouper</ns1:gridGrouperURL>" + "
-						 * <ns1:GroupName>training:trainees</ns1:GroupName>" + "
-						 * </ns1:GroupIdentifier>" + " </ns1:MembershipQuery>" + "</ns1:MembershipExpression>";
+						 authorized =
+						 GridGrouperClientUtils.isMember(gridGrouperExpression,
+						 tuple.getIdentity());
 						 */
-						// authorized =
-						// GridGrouperClientUtils.isMember(gridGrouperExpression,
-						// tuple.getIdentity());
-						// authorized =
-						// GridGrouperClientUtils.isMember(gridGrouperAuthorizeCheck,
-						// tuple.getIdentity());
 					} catch (Exception e) {
 						_logger.log(Level.WARNING,
 								"Grid grouper check threw exception due to reason: "
@@ -121,7 +112,7 @@ public class GridGrouperAuthCallout extends AbstractAuthCallout {
 		callout
 				.authorize(
 						"/O=cagrid.org/OU=training/OU=caBIG User Group/OU=IdP [1]/CN=gridftp",
-						"write", "ftp://irondale/my/test/dir/a");
+						"read", "ftp://irondale/my/test/dir/a");
 	}
 
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GridFTP_Grouper_Config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.cagrid.org/1/gridftpauthz ../build/schema/gridgrouper-config.xsd"
+ xsi:schemaLocation="http://www.cagrid.org/1/gridftpauthz gridgrouper-config.xsd"
  xmlns="http://www.cagrid.org/1/gridftpauthz"><entry>
 	<action>read</action>
-	<uri>ftp://irondale/*</uri>
+	<path>/tmp/test</path>
  	<MembershipExpression xmlns="http://cagrid.nci.nih.gov/1/GridGrouper" xmlns:ns1="http://cagrid.nci.nih.gov/1/GridGrouper" ns1:logicRelation="AND">
  		<MembershipQuery ns1:MembershipStatus="MEMBER_OF">
  			<GroupIdentifier>
@@ -12,24 +12,10 @@
  			</GroupIdentifier>
  		</MembershipQuery>
 	</MembershipExpression> 		
- 	<!--
-	<grouper_expression>
-			<![CDATA[
-	<ns1:MembershipExpression ns1:logicRelation="AND" xmlns:ns1="http://cagrid.nci.nih.gov/1/GridGrouper">
-			<ns1:MembershipQuery ns1:MembershipStatus="MEMBER_OF">
-			<ns1:GroupIdentifier>
-			<ns1:gridGrouperURL>https://training.cagrid.org:8443/wsrf/services/cagrid/GridGrouper</ns1:gridGrouperURL>
-			<ns1:GroupName>training:trainees</ns1:GroupName>
-			</ns1:GroupIdentifier>
-			</ns1:MembershipQuery>
-			</ns1:MembershipExpression>
-			]]>
-	</grouper_expression>
-	-->
 </entry>
 <entry>
 	<action>read</action>
-	<uri>ftp://irondale/*</uri>
+	<path>/*</path>
 	<MembershipExpression xmlns="http://cagrid.nci.nih.gov/1/GridGrouper" xmlns:ns1="http://cagrid.nci.nih.gov/1/GridGrouper" ns1:logicRelation="AND">
 		<MembershipQuery ns1:MembershipStatus="MEMBER_OF">
 			<GroupIdentifier>
@@ -38,19 +24,5 @@
 			</GroupIdentifier>
 		</MembershipQuery>
 	</MembershipExpression> 		
-	<!--
-	<grouper_expression>
-			<![CDATA[
-	<ns1:MembershipExpression ns1:logicRelation="AND" xmlns:ns1="http://cagrid.nci.nih.gov/1/GridGrouper">
-			<ns1:MembershipQuery ns1:MembershipStatus="MEMBER_OF">
-			<ns1:GroupIdentifier>
-			<ns1:gridGrouperURL>https://training.cagrid.org:8443/wsrf/services/cagrid/GridGrouper</ns1:gridGrouperURL>
-			<ns1:GroupName>training:trainees</ns1:GroupName>
-			</ns1:GroupIdentifier>
-			</ns1:MembershipQuery>
-			</ns1:MembershipExpression>
-			]]>
-	</grouper_expression>
-	-->
 </entry>
 </GridFTP_Grouper_Config>
