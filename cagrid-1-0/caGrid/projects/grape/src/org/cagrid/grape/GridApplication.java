@@ -26,6 +26,7 @@ import org.cagrid.grape.model.Components;
 import org.cagrid.grape.model.Menu;
 import org.cagrid.grape.model.Menus;
 import org.cagrid.grape.model.Submenus;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.cagrid.grape.utils.IconUtils;
 import org.projectmobius.common.MobiusPoolManager;
 import org.projectmobius.common.MobiusRunnable;
@@ -79,6 +80,7 @@ public class GridApplication extends JFrame {
 
 	private GridApplication(Application app) throws Exception {
 		super();
+		ErrorDialog.setOwnerFrame(this);
 		this.app = app;
 		LookAndFeel.setApplicationLogo(this.app.getApplicationLogo());
 		this.threadManager = new MobiusPoolManager();

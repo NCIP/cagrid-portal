@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.ui.mygroups;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 
 import org.globus.gsi.GlobusCredential;
@@ -19,6 +20,8 @@ public class MyGroupFinder extends MobiusRunnable {
 	private String gridGrouperURI;
 	private GlobusCredential proxy;
 	private MyGroupsTable groupsTable;
+	private boolean isSuccessful = false;
+	private String error = null;
 
 
 	public MyGroupFinder(String gridGrouperURI, GlobusCredential proxy, MyGroupsTable groupsTable) {
@@ -34,10 +37,25 @@ public class MyGroupFinder extends MobiusRunnable {
 			String targetIdentity = proxy.getIdentity();
 			GridGrouper gridGrouper = new GridGrouper(gridGrouperURI, proxy);
 			groupsTable.addGroups(gridGrouper.getMembersGroups(targetIdentity));
-			System.out.println("Got groups from "+gridGrouperURI);
+			isSuccessful = true;
 		} catch (Exception e) {
-			//e.printStackTrace();
-			System.err.println("Could not get groups from "+gridGrouperURI);
+			error = Utils.getExceptionMessage(e);
 		}
 	}
+
+
+	public String getGridGrouperURI() {
+		return gridGrouperURI;
+	}
+
+
+	public boolean isSuccessful() {
+		return isSuccessful;
+	}
+
+
+	public String getError() {
+		return error;
+	}
+
 }

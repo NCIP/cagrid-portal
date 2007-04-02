@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor;
 
+import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.gridgrouper.bean.LogicalOperator;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
@@ -26,8 +27,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
-
-import org.cagrid.grape.MultiEventProgressBar;
 
 
 /**

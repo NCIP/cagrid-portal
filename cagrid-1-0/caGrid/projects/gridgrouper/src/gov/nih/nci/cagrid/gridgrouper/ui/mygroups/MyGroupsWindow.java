@@ -15,7 +15,8 @@ import javax.swing.JTextField;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.MultiEventProgressBar;
+import org.cagrid.grape.utils.ErrorDialog;
+import org.cagrid.grape.utils.MultiEventProgressBar;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.common.MobiusRunnableGroup;
@@ -62,16 +63,21 @@ public class MyGroupsWindow extends ApplicationComponent {
 
 
 	private void findGroups() {
+		int id = getProgress().startEvent("Discovering Groups.....");
 		try {
 			GlobusCredential cred = null;
 			try {
 				cred = ProxyUtil.getDefaultProxy();
 				this.getGridIdentity().setText(cred.getIdentity());
 			} catch (Exception e) {
-				e.printStackTrace();
+				ErrorDialog
+					.showErrorDialog(
+						"Credentials required to discover groups",
+						"In order to discover the groups in which you are a member you must have grid credentials.  No grid credentials could be found, please logon and try again!!!");
+				getProgress().stopEvent(id, "");
 				return;
 			}
-			int id = getProgress().startEvent("Discovering Groups.....");
+
 			MobiusRunnableGroup grp = new MobiusRunnableGroup();
 			List services = GridGrouperUIUtils.getGridGrouperServices();
 			for (int i = 0; i < services.size(); i++) {
@@ -79,11 +85,19 @@ public class MyGroupsWindow extends ApplicationComponent {
 				grp.add(finder);
 			}
 			GridApplication.getContext().execute(grp);
-			// TODO: Fix this.
-			getProgress().stopEvent(id, "Found Groups!!!");
+
+			for (int i = 0; i < grp.size(); i++) {
+				MyGroupFinder finder = (MyGroupFinder) grp.get(i);
+				if (!finder.isSuccessful()) {
+					ErrorDialog.showErrorDialog("Could not discover groups from " + finder.getGridGrouperURI() + ".",
+						finder.getError());
+				}
+			}
+			getProgress().stopEvent(id, "");
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			getProgress().stopEvent(id, "");
 		}
 	}
 
