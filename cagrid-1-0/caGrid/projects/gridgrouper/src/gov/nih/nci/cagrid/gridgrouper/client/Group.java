@@ -14,6 +14,7 @@ import edu.internet2.middleware.grouper.RevokePrivilegeException;
 import edu.internet2.middleware.grouper.SchemaException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
@@ -174,7 +175,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -193,7 +194,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 
 	}
@@ -213,7 +214,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -232,7 +233,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -250,7 +251,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 
 	}
@@ -282,7 +283,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			Set members = new LinkedHashSet();
 			if (list != null) {
 				for (int i = 0; i < list.length; i++) {
-					members.add(new Member(gridGrouper,list[i]));
+					members.add(new Member(gridGrouper, list[i]));
 				}
 			}
 			return members;
@@ -291,7 +292,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -320,7 +321,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -340,7 +341,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -377,7 +378,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 
 	}
@@ -412,7 +413,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 
 	}
@@ -435,7 +436,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 
 	}
@@ -446,7 +447,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			return SubjectUtils.getSubject(des);
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -469,7 +470,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -492,7 +493,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -508,7 +509,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -686,7 +687,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 
 	}
@@ -709,7 +710,7 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 }

@@ -5,6 +5,7 @@ import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
@@ -70,7 +71,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			this.setClient(new GridGrouperClient(serviceURI, cred));
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -107,7 +108,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -132,7 +133,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -152,7 +153,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -168,7 +169,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -237,7 +238,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			throw new GroupNotFoundException(f.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -265,7 +266,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			throw new GroupNotFoundException(f.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 
 	}
@@ -276,7 +277,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			return getClient().isMember(member, exp);
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -296,7 +297,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
 
@@ -319,22 +320,23 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
-	
+
+
 	public Set getMembersEffectiveGroups(String subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
-		return getMembersGroups(subject,MembershipType.EffectiveMembers);
+		return getMembersGroups(subject, MembershipType.EffectiveMembers);
 	}
 
 
 	public Set getMembersGroups(String subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
-		return getMembersGroups(subject,MembershipType.Any);
+		return getMembersGroups(subject, MembershipType.Any);
 	}
 
 
 	public Set getMembersImmediateGroups(String subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
-		return getMembersGroups(subject,MembershipType.ImmediateMembers);
+		return getMembersGroups(subject, MembershipType.ImmediateMembers);
 	}
 
 }

@@ -40,6 +40,9 @@ public class MyGroupFinder extends MobiusRunnable {
 			isSuccessful = true;
 		} catch (Exception e) {
 			error = Utils.getExceptionMessage(e);
+			if ((error.indexOf("Operation name could not be determined") >= 0)) {
+				error = "The Grid Grouper service maybe an older version which does not support looking up a member's groups.";
+			}
 		}
 	}
 
