@@ -12,6 +12,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.PromptButtonDialog;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.codegen.DomainModelCreationUtil;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
@@ -114,6 +115,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private transient Project mostRecentProject = null;
 	private transient Map packageToNamespace = null;
 	private transient Map packageToClassMap = null;
+    private JButton visualizeDomainModelButton = null;
 
 
 	public DataServiceModificationPanel(ServiceExtensionDescriptionType desc, ServiceInformation info) {
@@ -156,16 +158,19 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 						removeStoredCadsrInformation();
 						PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), false);
 						PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), false);
+                        getVisualizeDomainModelButton().setEnabled(false);
 						cleanOutGui();
 					} else if (current == getSuppliedDomainModelRadioButton().getModel()) {
 						removeStoredCadsrInformation();
 						PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), true);
 						PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), false);
+                        getVisualizeDomainModelButton().setEnabled(true);
 					} else if (current == getCadsrDomainModelRadioButton().getModel()) {
 						storeCadsrServiceUrl();
 						PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), false);
 						PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), true);
 						getDomainModelNameTextField().setText("");
+                        getVisualizeDomainModelButton().setEnabled(true);
 					}
 				}
 				// always record this state
@@ -837,19 +842,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		if (noDomainModelRadioButton == null) {
 			noDomainModelRadioButton = new JRadioButton();
 			noDomainModelRadioButton.setText("No Domain Model");
-			/*
-			 * noDomainModelRadioButton.addItemListener(new ItemListener() {
-			 * public void itemStateChanged(ItemEvent e) { if
-			 * (noDomainModelRadioButton.isSelected()) {
-			 * removeStoredCadsrInformation();
-			 * PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(),
-			 * false);
-			 * PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(),
-			 * false); // clear up the GUI
-			 * getDomainModelNameTextField().setText("");
-			 * getUmlTree().clearTree(); getClassConfigTable().clearTable(); } }
-			 * });
-			 */
 		}
 		return noDomainModelRadioButton;
 	}
@@ -864,16 +856,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		if (cadsrDomainModelRadioButton == null) {
 			cadsrDomainModelRadioButton = new JRadioButton();
 			cadsrDomainModelRadioButton.setText("caDSR Domain Model");
-			/*
-			 * cadsrDomainModelRadioButton.addItemListener(new ItemListener() {
-			 * public void itemStateChanged(ItemEvent e) { if
-			 * (cadsrDomainModelRadioButton.isSelected()) {
-			 * storeCadsrServiceUrl();
-			 * PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(),
-			 * false);
-			 * PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(),
-			 * true); getDomainModelNameTextField().setText(""); } } });
-			 */
 		}
 		return cadsrDomainModelRadioButton;
 	}
@@ -888,16 +870,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		if (suppliedDomainModelRadioButton == null) {
 			suppliedDomainModelRadioButton = new JRadioButton();
 			suppliedDomainModelRadioButton.setText("Supplied Domain Model");
-			/*
-			 * suppliedDomainModelRadioButton.addItemListener(new ItemListener() {
-			 * public void itemStateChanged(ItemEvent e) { if
-			 * (suppliedDomainModelRadioButton.isSelected()) {
-			 * removeStoredCadsrInformation();
-			 * PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(),
-			 * true);
-			 * PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(),
-			 * false); } } });
-			 */
 		}
 		return suppliedDomainModelRadioButton;
 	}
@@ -948,13 +920,16 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	 */
 	private JPanel getDomainConfigPanel() {
 		if (domainConfigPanel == null) {
+			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+			gridBagConstraints19.gridx = 1;
+			gridBagConstraints19.gridy = 1;
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.gridx = 0;
 			gridBagConstraints15.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints15.gridwidth = 2;
 			gridBagConstraints15.weightx = 1.0D;
 			gridBagConstraints15.weighty = 1.0D;
-			gridBagConstraints15.gridy = 1;
+			gridBagConstraints15.gridy = 2;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 1;
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -963,12 +938,14 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			gridBagConstraints11.gridy = 0;
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.gridx = 0;
+			gridBagConstraints10.gridheight = 2;
 			gridBagConstraints10.gridy = 0;
 			domainConfigPanel = new JPanel();
 			domainConfigPanel.setLayout(new GridBagLayout());
 			domainConfigPanel.add(getDomainModelSourcePanel(), gridBagConstraints10);
 			domainConfigPanel.add(getDomainModelSelectionPanel(), gridBagConstraints11);
 			domainConfigPanel.add(getCadsrDomainModelPanel(), gridBagConstraints15);
+			domainConfigPanel.add(getVisualizeDomainModelButton(), gridBagConstraints19);
 		}
 		return domainConfigPanel;
 	}
@@ -1535,4 +1512,50 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			ErrorDialog.showErrorDialog("Error removing cadsr information from extension", ex);
 		}
 	}
+
+
+    /**
+     * This method initializes visualizeDomainModelButton	
+     * 	
+     * @return javax.swing.JButton	
+     */
+    private JButton getVisualizeDomainModelButton() {
+        if (visualizeDomainModelButton == null) {
+            visualizeDomainModelButton = new JButton();
+            visualizeDomainModelButton.setText("Visualize Domain Model");
+            visualizeDomainModelButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    DomainModel model = null;
+                    // get the domain model selected
+                    if (getSuppliedDomainModelRadioButton().isSelected()
+                        && getDomainModelNameTextField().getText().length() != 0) {
+                        // domain model from file system
+                        String filename = getDomainModelNameTextField().getText();
+                        try {
+                            model = MetadataUtils.deserializeDomainModel(
+                                new FileReader(filename));
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            ErrorDialog.showErrorDialog("Error loading domain model: " + ex.getMessage(), ex);
+                        }
+                    } else if (getCadsrDomainModelRadioButton().isSelected()) {
+                        // build the domain model
+                        try {
+                            Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+                            CadsrInformation info = data.getCadsrInformation();
+                            // TODO: busy dialog runnable
+                            model = DomainModelCreationUtil.createDomainModel(info);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            ErrorDialog.showErrorDialog("Error getting caDSR information: " + ex.getMessage(), ex);
+                        }   
+                    }
+                    if (model != null) {
+                        new DomainModelVisualizationDialog(model);
+                    }
+                }
+            });
+        }
+        return visualizeDomainModelButton;
+    }
 }

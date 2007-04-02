@@ -373,7 +373,7 @@
 
 
     <!-- compiles the extension source code -->
-    <target name="compileExtension" depends="generateJETClasses, compileStubs, compileCommon, compileService, compileCql, compileValidation, compileUtils">
+    <target name="compileExtension" depends="generateJETClasses, compileStubs, compileCommon, compileService, compileCql, compileValidation, compileUtils, compileTools">
         <javac srcdir="${extension.src.dir}" destdir="${build.extension.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
             	<path refid="base.classpath"/>
@@ -383,6 +383,7 @@
                 <pathelement location="${build.cql.dest}" />
             	<pathelement location="${build.validation.dest}"/>
             	<pathelement location="${build.utils.dest}"/>
+				<pathelement location="${build.tools.dest}"/>
                 <fileset dir="${globus.dir}/lib">
                     <include name="*.jar" />
                 </fileset>

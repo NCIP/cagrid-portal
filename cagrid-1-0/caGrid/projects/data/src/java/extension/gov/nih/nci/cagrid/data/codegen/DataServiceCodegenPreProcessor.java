@@ -1,13 +1,9 @@
 package gov.nih.nci.cagrid.data.codegen;
 
-import gov.nih.nci.cadsr.umlproject.domain.Project;
-import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -22,14 +18,11 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
-import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -161,85 +154,31 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 	private void generateDomainModel(CadsrInformation cadsrInfo, ServiceInformation info, String domainModelFile) throws CodegenExtensionException {		
 		if (cadsrInfo != null) {
-			// init the cadsr service client
-			String cadsrUrl = cadsrInfo.getServiceUrl();
-			LOG.info("Initializing caDSR client (URL = " + cadsrUrl + ")");
-			CaDSRServiceClient cadsrClient = null;
-			try {
-				cadsrClient = new CaDSRServiceClient(cadsrUrl);
-			} catch (Exception ex) {
-				throw new CodegenExtensionException("Error initializing caDSR client: " + ex.getMessage(), ex);
-			}
-
-			// create the prototype project
-			Project proj = new Project();
-			proj.setLongName(cadsrInfo.getProjectLongName());
-			proj.setVersion(cadsrInfo.getProjectVersion());
-
-			// Set of selected (fully qualified) class names
-			Set selectedClasses = new HashSet();
-
-			// Set of targetable class names
-			Set targetableClasses = new HashSet();
-
-			// walk through the selected packages
-			for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
-				CadsrPackage packageInfo = cadsrInfo.getPackages(i);
-				String packName = packageInfo.getName();
-				// get selected classes from the package
-				if (packageInfo.getCadsrClass() != null) {
-					for (int j = 0; j < packageInfo.getCadsrClass().length; j++) {
-						ClassMapping currentClass = packageInfo.getCadsrClass(j);
-						if (currentClass.isSelected()) {
-							String fullClassName = packName + "." + currentClass.getClassName();
-							selectedClasses.add(fullClassName);
-							if (currentClass.isTargetable()) {
-								targetableClasses.add(fullClassName);
-							}
-						}
-					}
-				}
-			}
-
-			// get the data service's description
-			ServiceType dataService = null;
-			String serviceName = info.getIntroduceServiceProperties().getProperty(
-				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-			ServiceType[] services = info.getServices().getService();
-			for (int i = 0; i < services.length; i++) {
-				if (services[i].getName().equals(serviceName)) {
-					dataService = services[i];
-					break;
-				}
-			}
-			if (dataService == null) {
-				// this REALLY should never happen...
-				throw new CodegenExtensionException("No data service found in service information");
-			}
-
-			// build the domain model
-			LOG.info("Contacting caDSR to build domain model.  This might take a while...");
-			System.out.println("Contacting caDSR to build domain model.  This might take a while...");
 			DomainModel model = null;
-			try {
-				String classNames[] = new String[selectedClasses.size()];
-				selectedClasses.toArray(classNames);
-				model = cadsrClient.generateDomainModelForClasses(proj, classNames);
-				if (model == null) {
-					throw new CodegenExtensionException("caDSR returned a null domain model.");
-				}
-				LOG.info("Setting targetability in the domain model");
-				System.out.println("Setting targetability in the domain model");
-				UMLClass[] exposedClasses = model.getExposedUMLClassCollection().getUMLClass();
-				for (int i = 0; exposedClasses != null && i < exposedClasses.length; i++) {
-					String fullClassName = exposedClasses[i].getPackageName() + "." + exposedClasses[i].getClassName();
-					exposedClasses[i].setAllowableAsTarget(targetableClasses.contains(fullClassName));
-				}
-				System.out.println("Created data service Domain Model!");
-				LOG.info("Created data service Domain Model!");
-			} catch (Exception ex) {
-				throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
-			}
+            try {
+                model = DomainModelCreationUtil.createDomainModel(cadsrInfo);
+            } catch (Exception ex) {
+                throw new CodegenExtensionException("Error creating domain model: " + ex.getMessage(), ex);
+            }
+            
+            System.out.println("Created data service Domain Model!");
+            LOG.info("Created data service Domain Model!");
+            
+			// get the data service's description
+            ServiceType dataService = null;
+            String serviceName = info.getIntroduceServiceProperties().getProperty(
+                IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+            ServiceType[] services = info.getServices().getService();
+            for (int i = 0; i < services.length; i++) {
+                if (services[i].getName().equals(serviceName)) {
+                    dataService = services[i];
+                    break;
+                }
+            }
+            if (dataService == null) {
+                // this REALLY should never happen...
+                throw new CodegenExtensionException("No data service found in service information");
+            }
 
 			LOG.debug("Serializing domain model to file " + domainModelFile);
 			try {
