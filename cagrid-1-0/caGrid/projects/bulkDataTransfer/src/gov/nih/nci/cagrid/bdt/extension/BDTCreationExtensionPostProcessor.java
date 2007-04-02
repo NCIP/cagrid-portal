@@ -111,6 +111,11 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			+ BDTServiceConstants.METADATA_SCHEMA, schemaDirFile);
 		// metadataNamespace.setGenerateStubs(new Boolean(false));
 		metadataNamespace.setPackageName("gov.nih.nci.cagrid.bdt.beans.metadata");
+		//base reference
+		NamespaceType refNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
+			+ BDTServiceConstants.BDT_REF_SCHEMA, schemaDirFile);
+		refNamespace.setGenerateStubs(new Boolean(false));
+		refNamespace.setPackageName("gov.nih.nci.cagrid.bdt.stubs.reference");
 		// transfer
 		NamespaceType transferNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.TRANSFER_SCHEMA, schemaDirFile);
@@ -128,6 +133,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		addressingNamespace.setPackageName("org.globus.addressing");
 
 		bdtNamespaces.add(metadataNamespace);
+		bdtNamespaces.add(refNamespace);
 		bdtNamespaces.add(transferNamespace);
 		bdtNamespaces.add(enumerationNamespace);
 		bdtNamespaces.add(addressingNamespace);

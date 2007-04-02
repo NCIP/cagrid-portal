@@ -1,5 +1,6 @@
-<%@ jet package="gov.nih.nci.cagrid.bdt.templates" class="BDTResourceCreatorTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*"%>
-<%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
+<%@ jet package="gov.nih.nci.cagrid.bdt.templates" class="BDTResourceCreatorTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.bdt.extension.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*"%>
+<%  BDTTemplateInformationHolder holder = (BDTTemplateInformationHolder) argument;
+    gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = holder.getSsi();
   	Properties properties = arguments.getIntroduceServiceProperties();
 	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
 	String serviceName = arguments.getService().getName();
@@ -39,9 +40,16 @@
 		} catch (Exception e) {
 			throw new RemoteException("Error looking up BDT home:" + e.getMessage(), e);
 		}
-
+		<%
+		SchemaInformation info = gov.nih.nci.cagrid.introduce.common.CommonTools.getSchemaInformation(arguments.getNamespaces(), holder.getMethod().getOutput().getQName());
+		String returnType = info.getType().getClassName();
+		if ((info.getType().getPackageName() != null) && (info.getType().getPackageName().length() > 0)) {
+			returnType = info.getType().getPackageName() + "." + returnType;
+		}
+        %>
+        
 		//return the typed EPR
-		<%=arguments.getService().getPackageName()%>.bdt.stubs.types.<%=serviceName%>BulkDataHandlerReference ref = new <%=arguments.getService().getPackageName()%>.bdt.stubs.types.<%=serviceName%>BulkDataHandlerReference();
+		<%=returnType%> ref = new <%=returnType%>();
 		ref.setEndpointReference(epr);
 
 		return ref;

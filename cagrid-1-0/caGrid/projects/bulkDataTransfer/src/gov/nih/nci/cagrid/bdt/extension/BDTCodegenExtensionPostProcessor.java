@@ -208,9 +208,11 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
                 + SyncSource.createExceptions(method, info, mainService);
             // open the method body
             bdtMethodImpl += "{\n";
+
             // generate the method body from the template
+            BDTTemplateInformationHolder holder = new BDTTemplateInformationHolder(new SpecificServiceInformation(info, mainService),method);
             BDTResourceCreatorTemplate template = new BDTResourceCreatorTemplate();
-            String methodTemplate = template.generate(new SpecificServiceInformation(info, mainService));
+            String methodTemplate = template.generate(holder);
             bdtMethodImpl += methodTemplate + "\t}\n";
 
             // append the method to the end of the class
