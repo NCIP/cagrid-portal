@@ -17,7 +17,7 @@ public class GridGrouperUIUtils {
 
 
 	public static List getGridGrouperServices() {
-		return getValues(GridGrouperUIConstants.GTS_SERVICES_CONF);
+		return getValues(GridGrouperUIConstants.GRIDGROUPER_SERVICES_CONF);
 	}
 
 

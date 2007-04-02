@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
 import gov.nih.nci.cagrid.gridgrouper.service.globus.resource.BaseResource;
-import gov.nih.nci.cagrid.gridgrouper.service.ServiceConfiguration;
 
 import java.rmi.RemoteException;
 

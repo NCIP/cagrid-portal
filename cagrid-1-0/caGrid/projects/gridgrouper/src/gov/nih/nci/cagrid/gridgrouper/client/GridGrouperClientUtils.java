@@ -1,14 +1,14 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-
-import javax.xml.namespace.QName;
-
 import edu.internet2.middleware.grouper.GroupNotFoundException;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
+
+import java.io.StringReader;
+import java.io.StringWriter;
+
+import javax.xml.namespace.QName;
 
 import org.globus.gsi.GlobusCredential;
 

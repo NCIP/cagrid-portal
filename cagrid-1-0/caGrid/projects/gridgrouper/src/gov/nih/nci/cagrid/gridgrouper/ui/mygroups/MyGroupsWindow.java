@@ -1,20 +1,34 @@
 package gov.nih.nci.cagrid.gridgrouper.ui.mygroups;
 
+import gov.nih.nci.cagrid.common.security.ProxyUtil;
+import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperUIUtils;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.MultiEventProgressBar;
+import org.globus.gsi.GlobusCredential;
+import org.projectmobius.common.MobiusRunnable;
+import org.projectmobius.common.MobiusRunnableGroup;
 
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
+/**
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
+ * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
+ * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
+ *          Exp $
+ */
 public class MyGroupsWindow extends ApplicationComponent {
 
 	private static final long serialVersionUID = 1L;
@@ -37,6 +51,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 
 	private MyGroupsTable groups = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -44,6 +59,34 @@ public class MyGroupsWindow extends ApplicationComponent {
 		super();
 		initialize();
 	}
+
+
+	private void findGroups() {
+		try {
+			GlobusCredential cred = null;
+			try {
+				cred = ProxyUtil.getDefaultProxy();
+				this.getGridIdentity().setText(cred.getIdentity());
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
+			int id = getProgress().startEvent("Discovering Groups.....");
+			MobiusRunnableGroup grp = new MobiusRunnableGroup();
+			List services = GridGrouperUIUtils.getGridGrouperServices();
+			for (int i = 0; i < services.size(); i++) {
+				MyGroupFinder finder = new MyGroupFinder((String) services.get(i), cred, getGroups());
+				grp.add(finder);
+			}
+			GridApplication.getContext().execute(grp);
+			// TODO: Fix this.
+			getProgress().stopEvent(id, "Found Groups!!!");
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
 
 	/**
 	 * This method initializes this
@@ -54,7 +97,18 @@ public class MyGroupsWindow extends ApplicationComponent {
 		this.setSize(300, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("JFrame");
+		MobiusRunnable runner = new MobiusRunnable() {
+			public void execute() {
+				findGroups();
+			}
+		};
+		try {
+			GridApplication.getContext().executeInBackground(runner);
+		} catch (Exception t) {
+			t.getMessage();
+		}
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -93,6 +147,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 		return jContentPane;
 	}
 
+
 	/**
 	 * This method initializes metadataPanel
 	 * 
@@ -122,6 +177,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 		return metadataPanel;
 	}
 
+
 	/**
 	 * This method initializes gridIdentity
 	 * 
@@ -134,6 +190,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 		}
 		return gridIdentity;
 	}
+
 
 	/**
 	 * This method initializes progressPanel
@@ -155,6 +212,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 		return progressPanel;
 	}
 
+
 	/**
 	 * This method initializes groupsPanel
 	 * 
@@ -173,22 +231,24 @@ public class MyGroupsWindow extends ApplicationComponent {
 		return groupsPanel;
 	}
 
+
 	/**
 	 * This method initializes progress
 	 * 
 	 * @return javax.swing.JProgressBar
 	 */
-	private JProgressBar getProgress() {
+	private MultiEventProgressBar getProgress() {
 		if (progress == null) {
-			progress = new MultiEventProgressBar(false);
+			progress = new MultiEventProgressBar(true);
 		}
 		return progress;
 	}
 
+
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
@@ -198,12 +258,13 @@ public class MyGroupsWindow extends ApplicationComponent {
 		return jScrollPane;
 	}
 
+
 	/**
-	 * This method initializes groups	
-	 * 	
-	 * @return javax.swing.JTable	
+	 * This method initializes groups
+	 * 
+	 * @return javax.swing.JTable
 	 */
-	private JTable getGroups() {
+	private MyGroupsTable getGroups() {
 		if (groups == null) {
 			groups = new MyGroupsTable();
 		}
