@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.ui.mygroups;
 
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
+import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperUIUtils;
 
 import java.awt.GridBagConstraints;
@@ -74,6 +75,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 
 	private void findGroups() {
 		int id = getProgress().startEvent("Discovering Groups.....");
+		getGroups().clearTable();
 		try {
 			GlobusCredential cred = null;
 			try {
@@ -84,6 +86,12 @@ public class MyGroupsWindow extends ApplicationComponent {
 					.showError(
 						"Credentials required to discover groups",
 						"In order to discover the groups in which you are a member you must have grid credentials.  No grid credentials could be found, please logon and try again!!!");
+				getProgress().stopEvent(id, "");
+				return;
+			}
+
+			if (cred.getTimeLeft() <= 0) {
+				ErrorDialog.showError("Your credentials are expired.");
 				getProgress().stopEvent(id, "");
 				return;
 			}
@@ -304,9 +312,9 @@ public class MyGroupsWindow extends ApplicationComponent {
 
 
 	/**
-	 * This method initializes buttonPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes buttonPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
@@ -321,17 +329,21 @@ public class MyGroupsWindow extends ApplicationComponent {
 
 
 	/**
-	 * This method initializes view	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes view
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getView() {
 		if (view == null) {
 			view = new JButton();
 			view.setText("View");
+			view.setIcon(GridGrouperLookAndFeel.getQueryIcon());
 			view.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					System.out.println("actionPerformed()"); // TODO
+					// Auto-generated
+					// Event stub
+					// actionPerformed()
 				}
 			});
 		}
@@ -340,17 +352,27 @@ public class MyGroupsWindow extends ApplicationComponent {
 
 
 	/**
-	 * This method initializes refresh	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes refresh
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getRefresh() {
 		if (refresh == null) {
 			refresh = new JButton();
 			refresh.setText("Refresh");
+			refresh.setIcon(GridGrouperLookAndFeel.getLoadIcon());
 			refresh.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							findGroups();
+						}
+					};
+					try {
+						GridApplication.getContext().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
 				}
 			});
 		}
@@ -359,17 +381,18 @@ public class MyGroupsWindow extends ApplicationComponent {
 
 
 	/**
-	 * This method initializes close	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes close
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getClose() {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Cancel");
+			close.setIcon(GridGrouperLookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					dispose();
 				}
 			});
 		}
