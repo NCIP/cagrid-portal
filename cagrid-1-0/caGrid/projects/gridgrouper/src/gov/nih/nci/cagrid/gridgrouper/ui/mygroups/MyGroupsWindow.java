@@ -329,6 +329,11 @@ public class MyGroupsWindow extends ApplicationComponent {
 		if (view == null) {
 			view = new JButton();
 			view.setText("View");
+			view.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
 		}
 		return view;
 	}
@@ -343,6 +348,11 @@ public class MyGroupsWindow extends ApplicationComponent {
 		if (refresh == null) {
 			refresh = new JButton();
 			refresh.setText("Refresh");
+			refresh.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
 		}
 		return refresh;
 	}
@@ -357,6 +367,11 @@ public class MyGroupsWindow extends ApplicationComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Cancel");
+			close.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
 		}
 		return close;
 	}
