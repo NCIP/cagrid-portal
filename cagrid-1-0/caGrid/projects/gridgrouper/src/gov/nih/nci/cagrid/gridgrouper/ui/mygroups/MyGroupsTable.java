@@ -22,8 +22,8 @@ import org.cagrid.grape.table.GrapeBaseTable;
  */
 public class MyGroupsTable extends GrapeBaseTable {
 	public final static String GROUP = "Groups";
-
 	public final static String GRIDGROUPER_URI = "Grid Grouper";
+	public final static String NAMESPACE = "Namespace";
 
 	public final static String NAME = "Name";
 
@@ -45,6 +45,7 @@ public class MyGroupsTable extends GrapeBaseTable {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(GROUP);
 		model.addColumn(GRIDGROUPER_URI);
+		model.addColumn(NAMESPACE);
 		model.addColumn(NAME);
 		return model;
 	}
@@ -53,6 +54,9 @@ public class MyGroupsTable extends GrapeBaseTable {
 	public synchronized void addGroup(final Group group) {
 		Vector v = new Vector();
 		v.add(group);
+		v.add(group.getGridGrouper().getName());
+		int index = group.getDisplayName().lastIndexOf(":");
+		v.add(group.getDisplayName().substring(0, index));
 		v.add(group.getDisplayExtension());
 		addRow(v);
 	}

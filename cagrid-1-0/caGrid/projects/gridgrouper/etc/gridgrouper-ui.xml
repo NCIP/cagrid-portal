@@ -23,8 +23,8 @@
                     <icon>/grouper_logo_no_background_22x22.png</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
-                        <width>600</width>
-                        <height>400</height>
+                        <width>800</width>
+                        <height>300</height>
                     </dimensions>
                 </component>
                 <component>
