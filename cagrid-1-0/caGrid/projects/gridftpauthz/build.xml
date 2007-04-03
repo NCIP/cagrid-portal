@@ -69,8 +69,10 @@
 	<property name="globus_puretls.jar" location="${ext.globus.dir}/lib/puretls.jar"/>
 	<property name="globus_saaj.jar" location="${ext.globus.dir}/lib/saaj.jar"/>
 	<property name="globus_wsdl4j.jar" location="${ext.globus.dir}/lib/wsdl4j.jar"/>
+	<!--
 	<property name="globus_wsrf_core_enum.jar" location="${ext.globus.dir}/lib/wsrf_core_enum.jar"/>
 	<property name="globus_wsrf_core_stubs_enum.jar" location="${ext.globus.dir}/lib/wsrf_core_stubs_enum.jar"/>
+	-->
 	<property name="globus_wsrf_core_stubs.jar" location="${ext.globus.dir}/lib/wsrf_core_stubs.jar"/>
 	<property name="globus_wsrf_core.jar" location="${ext.globus.dir}/lib/wsrf_core.jar"/>
 	<property name="globus_wss4j.jar" location="${ext.globus.dir}/lib/wss4j.jar"/>
@@ -127,8 +129,10 @@
 			<pathelement location="${globus_puretls.jar}"/>
 			<pathelement location="${globus_saaj.jar}"/>
 			<pathelement location="${globus_wsdl4j.jar}"/>
+	<!--
 			<pathelement location="${globus_wsrf_core_enum.jar}"/>
 			<pathelement location="${globus_wsrf_core_stubs_enum.jar}"/>
+			-->
 			<pathelement location="${globus_wsrf_core_stubs.jar}"/>
 			<pathelement location="${globus_wsrf_core.jar}"/>
 			<pathelement location="${globus_wss4j.jar}"/>
@@ -272,8 +276,10 @@
 		<copy file="${globus_puretls.jar}" todir="${ext.lib.dir}"/>
 		<copy file="${globus_saaj.jar}" todir="${ext.lib.dir}"/>
 		<copy file="${globus_wsdl4j.jar}" todir="${ext.lib.dir}"/>
+	<!--
 		<copy file="${globus_wsrf_core_enum.jar}" todir="${ext.lib.dir}"/>
 		<copy file="${globus_wsrf_core_stubs_enum.jar}" todir="${ext.lib.dir}"/>
+		-->
 		<copy file="${globus_wsrf_core_stubs.jar}" todir="${ext.lib.dir}"/>
 		<copy file="${globus_wsrf_core.jar}" todir="${ext.lib.dir}"/>
 		<copy file="${globus_wss4j.jar}" todir="${ext.lib.dir}"/>
