@@ -8,7 +8,7 @@
 	<property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser"/>
 	<property name="introduce.dir" location="../introduce"/>
 
-	<target name="prepareClasspaths">
+	<target name="prepareClasspaths" depends="defineClasspaths">
 		<path id="Introduce.test.classpath">
 			<fileset dir="${introduce.dir}/lib">
 				<include name="*.jar"/>
@@ -48,7 +48,7 @@
 		</cobertura-instrument>
 	</target>
 
-	<target name="test" depends="setGlobus,prepareClasspaths" description="Runs tests" >
+	<target name="test" depends="setGlobus, prepareClasspaths" description="Runs tests" >
 		<mkdir dir="${junit.results.dir}"/>
 		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
@@ -56,9 +56,6 @@
 			<jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
 			<classpath location="${instrumented.classes.dir}"/>
 			<classpath refid="all.test.classpath"/>
-			<classpath>
-				<pathelement path="${test.classes.dir}"/>
-			</classpath>
 			<formatter type="xml"/>
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
@@ -80,9 +77,6 @@
 			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
 			<classpath location="${instrumented.classes.dir}"/>
 			<classpath refid="all.test.classpath"/>
-			<classpath>
-				<pathelement path="${test.classes.dir}"/>
-			</classpath>
 			<formatter type="xml"/>
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">

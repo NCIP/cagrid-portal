@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.bdt.test.unit;
 
 import gov.nih.nci.cagrid.bdt.test.steps.CreationStep;
 import gov.nih.nci.cagrid.bdt.test.steps.DeleteOldServiceStep;
+import gov.nih.nci.cagrid.bdt.test.steps.VerifyBDTImplAddedStep;
 
 import java.io.File;
 import java.util.Vector;
@@ -19,7 +20,7 @@ import com.atomicobject.haste.framework.Story;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006 
- * @version $Id: CreationTest.java,v 1.4 2007-04-02 19:32:15 hastings Exp $ 
+ * @version $Id: CreationTest.java,v 1.5 2007-04-03 15:06:49 dervin Exp $ 
  */
 public class CreationTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -39,6 +40,8 @@ public class CreationTest extends Story {
 		steps.add(new DeleteOldServiceStep());
 		// create a new enumeration supporting data service
 		steps.add(new CreationStep(getIntroduceBaseDir()));
+        // verify the build worked
+        steps.add(new VerifyBDTImplAddedStep());
 		return steps;
 	}
 	

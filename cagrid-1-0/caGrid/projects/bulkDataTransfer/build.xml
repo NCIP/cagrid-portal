@@ -176,6 +176,7 @@
 		</path>
 		<path id="test.run.classpath">
 			<pathelement location="${test.build.dest}" />
+			<pathelement location="${test.dir}/resources"/>
 			<path refid="test.build.classpath" />
 		</path>
 		<path id="run.classpath">
@@ -288,7 +289,14 @@
 
 	<!-- Create a JAR file with the test implementation classes -->
 	<target name="jarTests" depends="jar,compileTests">
-		<jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}" />
+		<jar jarfile="${build.lib.dir}/${test.jar.name}" >
+			<fileset dir="${test.build.dest}">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="${test.dir}">
+				<include name="resources/**/*"/>
+			</fileset>
+		</jar>
 	</target>
 
 
@@ -309,7 +317,7 @@
 	</target>
 
 	<!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
-	<target name="all" depends="clean, jars" description="Builds the entire service." />
+	<target name="all" depends="jars" description="Builds the entire service." />
 
 	<target name="help" description="Prints usage information.">
 		<echo message="================================================================================" />
