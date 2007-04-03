@@ -25,10 +25,12 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 29, 2007 2:28:04 PM
- * @version $Id: VerifyBDTImplAddedStep.java,v 1.3 2007-04-03 15:06:49 dervin Exp $ 
+ * @version $Id: VerifyBDTImplAddedStep.java,v 1.4 2007-04-03 16:07:38 dervin Exp $ 
  */
 public class VerifyBDTImplAddedStep extends Step {
-
+    
+    public static final String BDT_RESOURCE_CREATION_LINE = "BDTResource thisResource = (BDTResource)bdtHome.find(bdtResourceKey);";
+    
     public void runStep() throws Throwable {
         // get the service model
         File serviceModelFile = new File(CreationTest.SERVICE_DIR 
@@ -61,15 +63,9 @@ public class VerifyBDTImplAddedStep extends Step {
         assertTrue("Main service implementation file could not be read", mainServiceImplFile.canRead());
         
         String mainServiceImplSource = readStream(new FileInputStream(mainServiceImplFile));
-        
-        // read in the gold method body
-        InputStream methodBodyInputStream = getClass().getResourceAsStream(
-            "/bdtStartMethodImpl.gold");
-        String methodBodySource = readStream(methodBodyInputStream);
-        
-        
+                
         assertTrue("BDT implementation not found in source", 
-            mainServiceImplSource.indexOf(methodBodySource) != -1);
+            mainServiceImplSource.indexOf(BDT_RESOURCE_CREATION_LINE) != -1);
     }
     
     
