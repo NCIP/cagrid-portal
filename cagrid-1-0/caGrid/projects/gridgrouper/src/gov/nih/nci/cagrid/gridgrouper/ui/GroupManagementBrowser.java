@@ -12,6 +12,7 @@ import javax.swing.JSplitPane;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.projectmobius.common.MobiusRunnable;
 
 
@@ -339,7 +340,7 @@ public class GroupManagementBrowser extends ApplicationComponent {
 							if (node != null) {
 								node.refresh();
 							} else {
-								GridApplication.getContext().showErrorMessage("Please select a node to refresh!!!");
+								ErrorDialog.showError("Please select a node to refresh!!!");
 							}
 						}
 					};

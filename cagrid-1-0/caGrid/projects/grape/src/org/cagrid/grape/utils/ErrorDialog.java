@@ -1,5 +1,6 @@
 package org.cagrid.grape.utils;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import java.awt.Dimension;
@@ -35,7 +36,7 @@ import javax.swing.event.ListSelectionListener;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Oct 2, 2006
- * @version $Id: ErrorDialog.java,v 1.1 2007-04-02 20:44:56 langella Exp $
+ * @version $Id: ErrorDialog.java,v 1.2 2007-04-03 04:04:25 langella Exp $
  */
 public class ErrorDialog extends JDialog {
 
@@ -111,8 +112,8 @@ public class ErrorDialog extends JDialog {
 	}
 
 
-	public static void showErrorDialog(Exception ex) {
-		String message = ex.getMessage();
+	public static void showError(Exception ex) {
+		String message = Utils.getExceptionMessage(ex);
 		if (message == null) {
 			message = ex.getClass().getName();
 		}
@@ -123,17 +124,18 @@ public class ErrorDialog extends JDialog {
 	}
 
 
-	public static void showErrorDialog(String error) {
+
+	public static void showError(String error) {
 		addError(error, "");
 	}
 
 
-	public static void showErrorDialog(String error, String detail) {
+	public static void showError(String error, String detail) {
 		addError(error, detail);
 	}
 
 
-	public static void showErrorDialog(String error, String[] detail) {
+	public static void showError(String error, String[] detail) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < detail.length; i++) {
 			builder.append(detail).append("\n");
@@ -142,7 +144,7 @@ public class ErrorDialog extends JDialog {
 	}
 
 
-	public static void showErrorDialog(String message, Exception ex) {
+	public static void showError(String message, Exception ex) {
 		StringWriter writer = new StringWriter();
 		ex.printStackTrace(new PrintWriter(writer));
 		String detail = writer.getBuffer().toString();
@@ -405,7 +407,7 @@ public class ErrorDialog extends JDialog {
 				writer.close();
 			} catch (IOException ex) {
 				ex.printStackTrace();
-				showErrorDialog(ex);
+				showError(ex);
 			}
 		}
 	}
@@ -423,7 +425,7 @@ public class ErrorDialog extends JDialog {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			ErrorDialog.showErrorDialog(new Exception("Oh Noes!"));
+			ErrorDialog.showError(new Exception("Oh Noes!"));
 		}
 	}
 

@@ -25,6 +25,7 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -33,7 +34,7 @@ import org.projectmobius.common.MobiusRunnable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.4 2007-03-21 19:36:06 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.5 2007-04-03 04:04:23 langella Exp $
  */
 public class TrustedIdPsWindow extends ApplicationComponent {
 
@@ -274,7 +275,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 				new TrustedIdPWindow(serviceUrl, proxyCred, getTrustedIdPTable().getSelectedTrustedIdP(),
 					getUserPolicies()));
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
@@ -285,7 +286,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			GridApplication.getContext().addApplicationComponent(new TrustedIdPWindow(this, serviceUrl, proxyCred, getUserPolicies()));
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
@@ -408,7 +409,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 		synchronized (mutex) {
 			if (isQuerying) {
-				GridApplication.getContext().showErrorMessage("Query Already in Progress",
+				ErrorDialog.showError("Query Already in Progress",
 					"Please wait until the current query is finished before executing another.");
 				return;
 			} else {
@@ -435,11 +436,10 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			this.updateProgress(false, "Completed [Found " + length + " IdPs]");
 
 		} catch (PermissionDeniedFault pdf) {
-			GridApplication.getContext().showErrorMessage(pdf);
+			ErrorDialog.showError(pdf);
 			this.updateProgress(false, "Error");
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 			this.updateProgress(false, "Error");
 		}
 		isQuerying = false;
@@ -566,7 +566,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			client.removeTrustedIdP(getTrustedIdPTable().getSelectedTrustedIdP());
 			getTrustedIdPTable().removeSelectedTrustedIdP();
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 

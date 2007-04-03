@@ -12,7 +12,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import org.cagrid.grape.ApplicationComponent;
-import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
 
@@ -252,7 +252,7 @@ public class ProxyManagerComponent extends ApplicationComponent {
 					try {
 						proxyInformation.getCertificates().doubleClick();
 					} catch (Exception ex) {
-						GridApplication.getContext().showErrorMessage(ex);
+						ErrorDialog.showError("An unexpected error in loading the requested certificate.", ex);
 					}
 				}
 			});
@@ -292,9 +292,7 @@ public class ProxyManagerComponent extends ApplicationComponent {
 				ProxyUtil.saveProxy(caddy.getProxy(), fc.getSelectedFile().getAbsolutePath());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(
-				"An unexpected error occurred in saving the currently selected proxy!!!");
+			ErrorDialog.showError("An unexpected error occurred in saving the currently selected proxy!!!", e);
 		}
 	}
 
@@ -314,9 +312,8 @@ public class ProxyManagerComponent extends ApplicationComponent {
 						ProxyCaddy caddy = (ProxyCaddy) getProxy().getSelectedItem();
 						ProxyUtil.saveProxyAsDefault(caddy.getProxy());
 					} catch (Exception ex) {
-						ex.printStackTrace();
-						GridApplication.getContext().showErrorMessage(
-							"An unexpected error occurred in setting the default proxy!!!");
+						ErrorDialog.showError("An unexpected error occurred in saving the currently selected proxy!!!",
+							ex);
 					}
 				}
 			});

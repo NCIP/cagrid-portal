@@ -1,9 +1,5 @@
 package gov.nih.nci.cagrid.gridca.common;
 
-import gov.nih.nci.cagrid.gridca.common.CRLEntry;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
-
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.X509CRL;

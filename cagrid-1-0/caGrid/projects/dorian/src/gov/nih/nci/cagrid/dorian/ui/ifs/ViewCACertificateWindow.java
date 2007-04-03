@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
-import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.client.DorianCertifcateAuthorityClient;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.ui.DorianServiceListComboBox;
@@ -19,6 +18,7 @@ import javax.swing.JPanel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.projectmobius.common.MobiusRunnable;
 
 
@@ -45,7 +45,6 @@ public class ViewCACertificateWindow extends ApplicationComponent {
 
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -123,8 +122,7 @@ public class ViewCACertificateWindow extends ApplicationComponent {
 			servicePanel.setLayout(new GridBagLayout());
 			servicePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "View Dorian CA Certifcate",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
-				LookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			servicePanel.add(ifsLabel, gridBagConstraints5);
 			servicePanel.add(getIfs(), gridBagConstraints6);
 		}
@@ -198,8 +196,7 @@ public class ViewCACertificateWindow extends ApplicationComponent {
 			CertificateInformationComponent cic = new CertificateInformationComponent(cert);
 			GridApplication.getContext().addApplicationComponent(cic, 600, 425);
 		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 		getViewCAButton().setEnabled(true);
 	}

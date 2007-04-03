@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -223,14 +224,15 @@ public class AddGridGrouperWindow extends ApplicationComponent {
 
 
 	private void loadGridGrouper() {
+		String uri = null;
 		try {
-			String uri = ((GridGrouperServiceList) this.services).getSelectedService();
+			uri = ((GridGrouperServiceList) this.services).getSelectedService();
 			GlobusCredential cred = ((ProxyComboBox) this.credentials).getSelectedProxy();
 			this.dispose();
 			GridGrouper grouper = new GridGrouper(uri, cred);
 			this.root.addGridGrouper(grouper);
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 
 	}

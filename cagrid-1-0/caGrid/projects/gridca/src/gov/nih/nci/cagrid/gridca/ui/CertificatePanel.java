@@ -15,15 +15,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.ErrorDialog;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.2 2007-03-21 19:36:22 langella Exp $
+ * @version $Id: CertificatePanel.java,v 1.3 2007-04-03 04:04:23 langella Exp $
  */
 public class CertificatePanel extends JPanel {
 
@@ -453,7 +453,7 @@ public class CertificatePanel extends JPanel {
 				certificate = CertUtil.loadCertificate(new File(fc.getSelectedFile().getAbsolutePath()));
 				setCertificate(certificate);
 			} catch (Exception ex) {
-				GridApplication.getContext().showErrorMessage(ex);
+				ErrorDialog.showError(ex);
 			}
 		}
 
@@ -468,7 +468,7 @@ public class CertificatePanel extends JPanel {
 			try {
 				CertUtil.writeCertificate(certificate, new File(fc.getSelectedFile().getAbsolutePath()));
 			} catch (Exception ex) {
-				GridApplication.getContext().showErrorMessage(ex);
+				ErrorDialog.showError(ex);
 			}
 		}
 

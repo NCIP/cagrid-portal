@@ -71,7 +71,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 				this.getGridIdentity().setText(cred.getIdentity());
 			} catch (Exception e) {
 				ErrorDialog
-					.showErrorDialog(
+					.showError(
 						"Credentials required to discover groups",
 						"In order to discover the groups in which you are a member you must have grid credentials.  No grid credentials could be found, please logon and try again!!!");
 				getProgress().stopEvent(id, "");
@@ -89,8 +89,8 @@ public class MyGroupsWindow extends ApplicationComponent {
 			for (int i = 0; i < grp.size(); i++) {
 				MyGroupFinder finder = (MyGroupFinder) grp.get(i);
 				if (!finder.isSuccessful()) {
-					ErrorDialog.showErrorDialog("Could not discover groups from " + finder.getGridGrouperURI() + ".",
-						finder.getError());
+					ErrorDialog.showError("Could not discover groups from " + finder.getGridGrouperURI() + ".", finder
+						.getError());
 				}
 			}
 			getProgress().stopEvent(id, "");

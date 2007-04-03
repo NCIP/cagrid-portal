@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gridgrouper.ui;
 import javax.swing.JMenuItem;
 
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 
 
 /**
@@ -43,12 +44,12 @@ public class StemNodeMenu extends GridGrouperTreeNodeMenu {
 	public void removeNode() {
 		StemTreeNode node = getStemNode();
 		if (node.getChildCount() > 0) {
-			GridApplication.getContext().showErrorMessage("Cannot remove stem with child stems or child groups!!!");
+			ErrorDialog.showError("Cannot remove stem with child stems or child groups!!!");
 			return;
 		}
 
 		if (node.isRootStem()) {
-			GridApplication.getContext().showErrorMessage("Cannot remove root stem!!!");
+			ErrorDialog.showError("Cannot remove root stem!!!");
 			return;
 		}
 		int id = getBrowser().getProgress().startEvent("Removing the stem.... ");
@@ -59,8 +60,7 @@ public class StemNodeMenu extends GridGrouperTreeNodeMenu {
 			getBrowser().getProgress().stopEvent(id, "Successfully removed the stem !!!");
 		} catch (Exception e) {
 			getBrowser().getProgress().stopEvent(id, "Error removing the stem !!!");
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 

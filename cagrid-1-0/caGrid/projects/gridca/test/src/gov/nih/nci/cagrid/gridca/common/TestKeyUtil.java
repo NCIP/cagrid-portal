@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gridca.common;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.File;
 import java.io.InputStream;

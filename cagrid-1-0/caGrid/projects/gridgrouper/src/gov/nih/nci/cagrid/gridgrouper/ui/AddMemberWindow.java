@@ -24,6 +24,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.projectmobius.common.MobiusRunnable;
 
 
@@ -399,7 +400,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		if (type.equals(USER)) {
 			String user = Utils.clean(this.getUserIdentity().getText());
 			if (user == null) {
-				GridApplication.getContext().showErrorMessage("Please enter a member identity!!!");
+				ErrorDialog.showError("Please enter a member identity!!!");
 				return;
 			} else {
 				try {
@@ -412,7 +413,7 @@ public class AddMemberWindow extends ApplicationComponent {
 					GridApplication.getContext().showMessage("The member was added successfully!!!");
 				} catch (Exception e) {
 					e.printStackTrace();
-					GridApplication.getContext().showErrorMessage(e);
+					ErrorDialog.showError(e);
 					return;
 				}
 			}
@@ -426,8 +427,7 @@ public class AddMemberWindow extends ApplicationComponent {
 				dispose();
 				GridApplication.getContext().showMessage("The group member was added successfully!!!");
 			} catch (Exception e) {
-				e.printStackTrace();
-				GridApplication.getContext().showErrorMessage(e);
+				ErrorDialog.showError(e);
 				return;
 			}
 
@@ -445,8 +445,7 @@ public class AddMemberWindow extends ApplicationComponent {
 				dispose();
 				GridApplication.getContext().showMessage("The composite member was added successfully!!!");
 			} catch (Exception e) {
-				e.printStackTrace();
-				GridApplication.getContext().showErrorMessage(e);
+				ErrorDialog.showError(e);
 				return;
 			}
 

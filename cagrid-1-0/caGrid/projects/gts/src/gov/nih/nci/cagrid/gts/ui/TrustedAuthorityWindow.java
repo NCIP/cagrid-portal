@@ -39,6 +39,7 @@ import javax.swing.JTextField;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
 
@@ -234,9 +235,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 				}
 
 			} catch (Exception e) {
-				e.printStackTrace();
-				GridApplication.getContext().showErrorMessage(
-					"Error obtaining the trust levels from " + service + ":\n" + e.getMessage());
+				ErrorDialog.showError("Error obtaining the trust levels from " + service + ":\n" + e.getMessage());
 			}
 		}
 		invalidate();
@@ -684,7 +683,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 				certificatePanel.setCertificate(certificate);
 				this.getTrustedAuthorityName().setText(certificate.getSubjectDN().getName());
 			} catch (Exception ex) {
-				GridApplication.getContext().showErrorMessage(ex);
+				ErrorDialog.showError(ex);
 			}
 		}
 
@@ -695,7 +694,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		crlPanel.clearCRL();
 		X509Certificate cert = certificatePanel.getCertificate();
 		if (cert == null) {
-			GridApplication.getContext().showErrorMessage("You must import a certificate before importing a CRL");
+			ErrorDialog.showError("You must import a certificate before importing a CRL");
 
 		}
 		JFileChooser fc = new JFileChooser();
@@ -707,14 +706,12 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 				try {
 					crl.verify(cert.getPublicKey());
 				} catch (Exception crle) {
-					GridApplication
-						.getContext()
-						.showErrorMessage(
-							"Error verifying CRL, the CRL must be issued and signed by same key is the Trusted Authority's Certificate");
+					ErrorDialog
+						.showError("Error verifying CRL, the CRL must be issued and signed by same key is the Trusted Authority's Certificate");
 				}
 				crlPanel.setCRL(crl);
 			} catch (Exception ex) {
-				GridApplication.getContext().showErrorMessage(ex);
+				ErrorDialog.showError(ex);
 			}
 		}
 
@@ -759,8 +756,8 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			getAddButton().setEnabled(false);
 			X509Certificate cert = this.certificatePanel.getCertificate();
 			if (cert == null) {
-				GridApplication.getContext().showErrorMessage(
-					"No certificate specified, you must specify a certificate to add a Trusted Authority!!!");
+				ErrorDialog
+					.showError("No certificate specified, you must specify a certificate to add a Trusted Authority!!!");
 				getAddButton().setEnabled(true);
 				return;
 
@@ -783,8 +780,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			dispose();
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 
 	}
@@ -810,8 +806,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			getAddButton().setEnabled(true);
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 
 	}

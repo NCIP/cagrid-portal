@@ -26,6 +26,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -153,8 +154,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				GridApplication.getContext().showErrorMessage(
-					"Error obtaining the trust levels from " + service + ":\n" + e.getMessage());
+				ErrorDialog.showError("Error obtaining the trust levels from " + service + ":\n" + e.getMessage());
 			}
 		}
 	}
@@ -337,8 +337,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 				.getSelectedTrustedAuthority(), this);
 			GridApplication.getContext().addApplicationComponent(window);
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
@@ -496,8 +495,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 			this.updateProgress(false, "Completed [Found " + length + " Trusted Authority(s)]");
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 			this.updateProgress(false, "Error");
 		}
 	}
@@ -623,7 +621,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 			refreshTrustedAuthorities();
 
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 

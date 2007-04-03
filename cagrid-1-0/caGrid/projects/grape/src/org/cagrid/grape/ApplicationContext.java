@@ -1,7 +1,5 @@
 package org.cagrid.grape;
 
-import gov.nih.nci.cagrid.common.Utils;
-
 import java.awt.Dimension;
 import java.awt.Window;
 
@@ -101,21 +99,6 @@ public class ApplicationContext {
 	}
 
 
-	public void showErrorMessage(String msg) {
-		showErrorMessage("Portal Error", msg);
-	}
-
-
-	public void showErrorMessage(Exception e) {
-		showErrorMessage("Portal Error", e);
-	}
-
-
-	public void showConfigurationErrorMessage(String msg) {
-		showErrorMessage("Portal Configuration Error", new String[]{msg});
-	}
-
-
 	public void showMessage(String msg) {
 		showMessage(new String[]{msg});
 	}
@@ -134,21 +117,4 @@ public class ApplicationContext {
 	public void showMessage(String title, String[] msg) {
 		JOptionPane.showMessageDialog(this.application, msg, title, JOptionPane.INFORMATION_MESSAGE);
 	}
-
-
-	public void showErrorMessage(String title, Exception e) {
-		String mess = Utils.getExceptionMessage(e);
-		JOptionPane.showMessageDialog(this.application, mess, title, JOptionPane.ERROR_MESSAGE);
-	}
-
-
-	public void showErrorMessage(String title, String msg) {
-		showErrorMessage(title, new String[]{msg});
-	}
-
-
-	public void showErrorMessage(String title, String[] msg) {
-		JOptionPane.showMessageDialog(this.application, msg, title, JOptionPane.ERROR_MESSAGE);
-	}
-
 }

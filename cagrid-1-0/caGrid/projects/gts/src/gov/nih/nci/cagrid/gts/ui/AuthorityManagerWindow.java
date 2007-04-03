@@ -21,6 +21,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -281,8 +282,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			GridApplication.getContext().addApplicationComponent(new AuthorityWindow(service, proxy, this), 600, 400);
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
@@ -294,7 +294,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			GridApplication.getContext().addApplicationComponent(
 				new AuthorityWindow(service, proxy, getAuthorityTable().getSelectedAuthority(), this), 600, 400);
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
@@ -434,8 +434,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			this.updateProgress(false, "Completed [Found " + length + " Authority(s)]");
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 			this.updateProgress(false, "Error");
 		} finally {
 			enableAllActions();
@@ -560,7 +559,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			GridApplication.getContext().showMessage(
 				"Successfully removed the authority " + gts.getServiceURI() + "!!!");
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
@@ -574,7 +573,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			client.updateAuthorityPriorities(getAuthorityTable().getPriorityUpdate());
 			GridApplication.getContext().showMessage("Successfully updated the authority priorities!!!");
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		} finally {
 			enableAllActions();
 		}
@@ -620,7 +619,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 							try {
 								getAuthorityTable().doubleClick();
 							} catch (Exception ex) {
-								GridApplication.getContext().showErrorMessage(ex);
+								ErrorDialog.showError(ex);
 							}
 							enableAllActions();
 						}
@@ -669,7 +668,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 					try {
 						getAuthorityTable().increasePriority();
 					} catch (Exception ex) {
-						GridApplication.getContext().showErrorMessage(ex);
+						ErrorDialog.showError(ex);
 					}
 				}
 			});
@@ -693,7 +692,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 					try {
 						getAuthorityTable().decreasePriority();
 					} catch (Exception ex) {
-						GridApplication.getContext().showErrorMessage(ex);
+						ErrorDialog.showError(ex);
 					}
 				}
 			});

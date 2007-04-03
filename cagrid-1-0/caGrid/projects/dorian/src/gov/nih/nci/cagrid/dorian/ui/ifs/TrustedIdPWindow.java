@@ -34,6 +34,7 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -42,7 +43,7 @@ import org.projectmobius.common.MobiusRunnable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.5 2007-03-31 13:24:02 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.6 2007-04-03 04:04:23 langella Exp $
  */
 public class TrustedIdPWindow extends ApplicationComponent {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
@@ -426,10 +427,9 @@ public class TrustedIdPWindow extends ApplicationComponent {
 				GridApplication.getContext().showMessage("The Trusted IdP was updated successfully.");
 			}
 		} catch (PermissionDeniedFault pdf) {
-			GridApplication.getContext().showErrorMessage(pdf);
+			ErrorDialog.showError(pdf);
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 
 	}

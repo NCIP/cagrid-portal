@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service;
 
 import gov.nih.nci.cagrid.dorian.service.globus.resource.BaseResource;
-import gov.nih.nci.cagrid.dorian.service.ServiceConfiguration;
 
 import java.rmi.RemoteException;
 

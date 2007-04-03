@@ -1,5 +1,7 @@
 package org.cagrid.grape;
 
+import gov.nih.nci.cagrid.common.Utils;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
@@ -10,6 +12,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+
+import org.cagrid.grape.utils.ErrorDialog;
 
 
 /**
@@ -60,7 +64,7 @@ public class WindowMenu extends JMenu {
 					window.setVisible(true);
 					GridApplication.getContext().centerWindow(window);
 				} catch (Exception ex) {
-					GridApplication.getContext().showErrorMessage(ex);
+					ErrorDialog.showError(Utils.getExceptionMessage(ex));
 					ex.printStackTrace();
 				}
 			}

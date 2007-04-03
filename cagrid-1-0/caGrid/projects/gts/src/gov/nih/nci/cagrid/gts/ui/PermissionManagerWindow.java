@@ -21,6 +21,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -275,7 +276,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 			GridApplication.getContext().addApplicationComponent(new AddPermissionWindow(service, proxy, this), 600,
 				300);
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
@@ -418,8 +419,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 			this.updateProgress(false, "Completed [Found " + length + " Permission(s)]");
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 			this.updateProgress(false, "Error");
 		}
 
@@ -556,7 +556,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 			this.refreshPermissions();
 
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
@@ -587,8 +587,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 				int length = filterPanel.syncWithService(service);
 				this.updateProgress(false, "Completed [Found " + length + " Trusted Authority(s)]");
 			} catch (Exception e) {
-				e.printStackTrace();
-				GridApplication.getContext().showErrorMessage(e);
+				ErrorDialog.showError(e);
 				updateProgress(false, "Error!!!");
 			}
 		}

@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -366,8 +367,7 @@ public class TrustLevelWindow extends ApplicationComponent {
 			}
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 
 	}

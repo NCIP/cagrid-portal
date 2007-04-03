@@ -17,6 +17,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.projectmobius.common.MobiusRunnable;
 
 
@@ -234,15 +235,13 @@ public class AddGroupWindow extends ApplicationComponent {
 
 								String ext = Utils.clean(childName.getText());
 								if (ext == null) {
-									GridApplication.getContext().showErrorMessage(
-										"You must enter a local name for the group!!");
+									ErrorDialog.showError("You must enter a local name for the group!!");
 									return;
 								}
 
 								String disExt = Utils.clean(childDisplayName.getText());
 								if (disExt == null) {
-									GridApplication.getContext().showErrorMessage(
-										"You must enter a local display name for the group!!!");
+									ErrorDialog.showError("You must enter a local display name for the group!!!");
 									return;
 								}
 
@@ -252,7 +251,7 @@ public class AddGroupWindow extends ApplicationComponent {
 								dispose();
 							} catch (Exception e) {
 								node.getBrowser().getProgress().stopEvent(eid, "Error adding a child group!!!");
-								GridApplication.getContext().showErrorMessage(e);
+								ErrorDialog.showError(e);
 							}
 						}
 					};

@@ -29,6 +29,7 @@ import javax.swing.SwingUtilities;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -343,7 +344,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 
 		synchronized (mutex) {
 			if (isCreating) {
-				GridApplication.getContext().showErrorMessage("Already trying to create a proxy, please wait!!!");
+				ErrorDialog.showError("Already trying to create a proxy, please wait!!!");
 				return;
 			} else {
 				isCreating = true;
@@ -352,7 +353,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 
 		String ifsService = ((DorianServiceListComboBox) this.getIfs()).getSelectedService();
 		String idpService = ((String) getIdentityProvider().getSelectedItem());
-		
+
 		this.updateProgress(true, "Authenticating with IdP...");
 		IdPAuthenticationPanel panel = (IdPAuthenticationPanel) authPanels.get(idpService);
 		try {
@@ -368,18 +369,17 @@ public class CreateProxyWindow extends ApplicationComponent {
 			try {
 				delegation = Integer.valueOf(delegationPathLength.getText()).intValue();
 			} catch (Exception e) {
-				GridApplication.getContext().showErrorMessage("The delegation path length must be an integer.");
+				ErrorDialog.showError("The delegation path length must be an integer.");
 				return;
 			}
 			GlobusCredential cred = c2.createProxy(saml, lifetime, delegation);
 			this.updateProgress(false, "Proxy Created!!!");
-			ProxyManager.getInstance().addProxy(cred);	
+			ProxyManager.getInstance().addProxy(cred);
 			GridApplication.getContext().addApplicationComponent(new ProxyManagerComponent(cred), 700, 450);
 			dispose();
 		} catch (Exception e) {
-			e.printStackTrace();
 			this.updateProgress(false, "Error");
-			GridApplication.getContext().showErrorMessage("Error Creating Proxy", e);
+			ErrorDialog.showError("Error Creating Proxy", e);
 		}
 
 		isCreating = false;

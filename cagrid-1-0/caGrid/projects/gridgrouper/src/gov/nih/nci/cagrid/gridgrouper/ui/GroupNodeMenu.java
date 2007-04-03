@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 
 
 /**
@@ -34,8 +34,7 @@ public class GroupNodeMenu extends GridGrouperTreeNodeMenu {
 			getBrowser().getProgress().stopEvent(id, "Successfully removed the group !!!");
 		} catch (Exception e) {
 			getBrowser().getProgress().stopEvent(id, "Error removing the group !!!");
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 

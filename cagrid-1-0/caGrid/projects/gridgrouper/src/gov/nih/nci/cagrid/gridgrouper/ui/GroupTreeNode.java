@@ -48,7 +48,7 @@ import gov.nih.nci.cagrid.gridgrouper.client.Group;
 
 import javax.swing.ImageIcon;
 
-import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 
 
 /**
@@ -83,7 +83,7 @@ public class GroupTreeNode extends GridGrouperBaseTreeNode {
 			getBrowser().getProgress().stopEvent(id, "Refreshed " + toString() + "!!!");
 		} catch (Exception e) {
 			getBrowser().getProgress().stopEvent(id, "Error refreshing " + toString() + "!!!");
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 

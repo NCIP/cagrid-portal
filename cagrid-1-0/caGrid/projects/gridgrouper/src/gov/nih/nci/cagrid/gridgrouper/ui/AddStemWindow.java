@@ -17,6 +17,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.projectmobius.common.MobiusRunnable;
 
 
@@ -234,15 +235,13 @@ public class AddStemWindow extends ApplicationComponent {
 
 								String ext = Utils.clean(childName.getText());
 								if (ext == null) {
-									GridApplication.getContext().showErrorMessage(
-										"You must enter a local name for the stem!!!");
+									ErrorDialog.showError("You must enter a local name for the stem!!!");
 									return;
 								}
 
 								String disExt = Utils.clean(childDisplayName.getText());
 								if (disExt == null) {
-									GridApplication.getContext().showErrorMessage(
-										"You must enter a local display name for the stem!!!");
+									ErrorDialog.showError("You must enter a local display name for the stem!!!");
 									return;
 								}
 
@@ -252,7 +251,7 @@ public class AddStemWindow extends ApplicationComponent {
 								dispose();
 							} catch (Exception e) {
 								node.getBrowser().getProgress().stopEvent(eid, "Error adding a child stem!!!");
-								GridApplication.getContext().showErrorMessage(e);
+								ErrorDialog.showError(e);
 							}
 						}
 					};

@@ -21,6 +21,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -265,7 +266,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			GridApplication.getContext().addApplicationComponent(new TrustLevelWindow(service, proxy, this), 500, 400);
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
@@ -277,7 +278,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 			GridApplication.getContext().addApplicationComponent(
 				new TrustLevelWindow(service, proxy, getTrustLevelTable().getSelectedTrustLevel(), this), 500, 400);
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
@@ -417,8 +418,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 			this.updateProgress(false, "Completed [Found " + length + " Trust Level(s)]");
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 			this.updateProgress(false, "Error");
 		}
 	}
@@ -539,7 +539,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 			getTrustLevelTable().removeSelectedTrustLevel();
 			refreshTrustLevels();
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
@@ -560,7 +560,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 						getTrustLevelTable().doubleClick();
 						enableAllActions();
 					} catch (Exception ex) {
-						GridApplication.getContext().showErrorMessage(ex);
+						ErrorDialog.showError(ex);
 					}
 				}
 			});

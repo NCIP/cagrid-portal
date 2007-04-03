@@ -24,6 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.projectmobius.common.MobiusRunnable;
 
 
@@ -833,7 +834,7 @@ public class StemBrowser extends JPanel {
 			setStem();
 			this.monitorUpdate();
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 			node.refresh();
 			this.monitorUpdate();
 		}
@@ -979,7 +980,7 @@ public class StemBrowser extends JPanel {
 					} catch (Exception e) {
 						node.getBrowser().getProgress().stopEvent(eid,
 							"Error loading the privileges for " + stem.getDisplayExtension() + "!!!");
-						GridApplication.getContext().showErrorMessage(e);
+						ErrorDialog.showError(e);
 					}
 				}
 			}
@@ -1009,7 +1010,7 @@ public class StemBrowser extends JPanel {
 							try {
 								getPrivs().doubleClick();
 							} catch (Exception e) {
-								GridApplication.getContext().showErrorMessage(e);
+								ErrorDialog.showError(e);
 							}
 						}
 					};
@@ -1190,15 +1191,13 @@ public class StemBrowser extends JPanel {
 
 								String ext = Utils.clean(childName.getText());
 								if (ext == null) {
-									GridApplication.getContext().showErrorMessage(
-										"You must enter a local name for the stem!!!");
+									ErrorDialog.showError("You must enter a local name for the stem!!!");
 									return;
 								}
 
 								String disExt = Utils.clean(childDisplayName.getText());
 								if (disExt == null) {
-									GridApplication.getContext().showErrorMessage(
-										"You must enter a local display name for the stem!!!");
+									ErrorDialog.showError("You must enter a local display name for the stem!!!");
 									return;
 								}
 
@@ -1208,7 +1207,7 @@ public class StemBrowser extends JPanel {
 								node.getBrowser().getProgress().stopEvent(eid, "Successfully added a child stem!!!");
 							} catch (Exception e) {
 								node.getBrowser().getProgress().stopEvent(eid, "Error adding a child stem!!!");
-								GridApplication.getContext().showErrorMessage(e);
+								ErrorDialog.showError(e);
 							}
 						}
 					};
@@ -1264,7 +1263,7 @@ public class StemBrowser extends JPanel {
 					try {
 						getChildStemsTable().doubleClick();
 					} catch (Exception ex) {
-						GridApplication.getContext().showErrorMessage(ex);
+						ErrorDialog.showError(ex);
 					}
 				}
 			});
@@ -1292,7 +1291,7 @@ public class StemBrowser extends JPanel {
 							try {
 								child = getChildStemsTable().getSelectedStem();
 							} catch (Exception ex) {
-								GridApplication.getContext().showErrorMessage(ex);
+								ErrorDialog.showError(ex);
 								return;
 							}
 
@@ -1305,7 +1304,7 @@ public class StemBrowser extends JPanel {
 									.stopEvent(eid, "Successfully removed the child stem!!!");
 							} catch (Exception e) {
 								node.getBrowser().getProgress().stopEvent(eid, "Error removing the child stem!!!");
-								GridApplication.getContext().showErrorMessage(e);
+								ErrorDialog.showError(e);
 							}
 						}
 					};
@@ -1471,7 +1470,7 @@ public class StemBrowser extends JPanel {
 					try {
 						getGroupsTable().doubleClick();
 					} catch (Exception ex) {
-						GridApplication.getContext().showErrorMessage(ex);
+						ErrorDialog.showError(ex);
 					}
 				}
 			});
@@ -1499,7 +1498,7 @@ public class StemBrowser extends JPanel {
 							try {
 								child = getGroupsTable().getSelectedGroup();
 							} catch (Exception ex) {
-								GridApplication.getContext().showErrorMessage(ex);
+								ErrorDialog.showError(ex);
 								return;
 							}
 
@@ -1512,7 +1511,7 @@ public class StemBrowser extends JPanel {
 									"Successfully removed the child group!!!");
 							} catch (Exception e) {
 								node.getBrowser().getProgress().stopEvent(eid, "Error removing the child group!!!");
-								GridApplication.getContext().showErrorMessage(e);
+								ErrorDialog.showError(e);
 							}
 						}
 					};
@@ -1574,15 +1573,13 @@ public class StemBrowser extends JPanel {
 
 								String ext = Utils.clean(getGroupExtension().getText());
 								if (ext == null) {
-									GridApplication.getContext().showErrorMessage(
-										"You must enter a local name for the group!!!");
+									ErrorDialog.showError("You must enter a local name for the group!!!");
 									return;
 								}
 
 								String disExt = Utils.clean(getGroupDisplayExtension().getText());
 								if (disExt == null) {
-									GridApplication.getContext().showErrorMessage(
-										"You must enter a local display name for the group!!!");
+									ErrorDialog.showError("You must enter a local display name for the group!!!");
 									return;
 								}
 
@@ -1592,7 +1589,7 @@ public class StemBrowser extends JPanel {
 								node.getBrowser().getProgress().stopEvent(eid, "Successfully added a child group!!!");
 							} catch (Exception e) {
 								node.getBrowser().getProgress().stopEvent(eid, "Error adding a child group!!!");
-								GridApplication.getContext().showErrorMessage(e);
+								ErrorDialog.showError(e);
 							}
 						}
 					};
@@ -1685,8 +1682,7 @@ public class StemBrowser extends JPanel {
 									200);
 
 							} catch (Exception e) {
-								e.printStackTrace();
-								GridApplication.getContext().showErrorMessage(e);
+								ErrorDialog.showError(e);
 							}
 						}
 					};

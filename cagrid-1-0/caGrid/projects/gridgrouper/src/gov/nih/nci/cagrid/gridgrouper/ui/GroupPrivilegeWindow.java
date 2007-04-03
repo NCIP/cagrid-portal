@@ -24,6 +24,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.projectmobius.common.MobiusRunnable;
 
 
@@ -372,7 +373,7 @@ public class GroupPrivilegeWindow extends ApplicationComponent {
 
 			String id = Utils.clean(getIdentity().getText());
 			if (id == null) {
-				GridApplication.getContext().showErrorMessage("Please enter a valid identity!!!");
+				ErrorDialog.showError("Please enter a valid identity!!!");
 			}
 			boolean reload = false;
 			StringBuffer sb = new StringBuffer();
@@ -417,7 +418,7 @@ public class GroupPrivilegeWindow extends ApplicationComponent {
 			}
 			GridApplication.getContext().showMessage(sb.toString());
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 
 	}

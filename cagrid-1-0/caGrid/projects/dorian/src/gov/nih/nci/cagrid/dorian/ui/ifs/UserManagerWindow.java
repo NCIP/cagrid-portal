@@ -30,6 +30,7 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -38,7 +39,7 @@ import org.projectmobius.common.MobiusRunnable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.5 2007-03-30 14:33:47 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.6 2007-04-03 04:04:23 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -340,7 +341,7 @@ public class UserManagerWindow extends ApplicationComponent {
 					GridApplication.getContext().addApplicationComponent(
 						new UserWindow(serviceUrl, proxyCred, user, tidp));
 				} catch (Exception e) {
-					GridApplication.getContext().showErrorMessage(e);
+					ErrorDialog.showError(e);
 				}
 			}
 		};
@@ -470,7 +471,7 @@ public class UserManagerWindow extends ApplicationComponent {
 
 		synchronized (mutex) {
 			if (isQuerying) {
-				GridApplication.getContext().showErrorMessage("Query Already in Progress",
+				ErrorDialog.showError("Query Already in Progress",
 					"Please wait until the current query is finished before executing another.");
 				return;
 			} else {
@@ -515,11 +516,10 @@ public class UserManagerWindow extends ApplicationComponent {
 			this.updateProgress(false, "Querying Completed [" + length + " users found]");
 
 		} catch (PermissionDeniedFault pdf) {
-			GridApplication.getContext().showErrorMessage(pdf);
+			ErrorDialog.showError(pdf);
 			this.updateProgress(false, "Error");
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 			this.updateProgress(false, "Error");
 		}
 		isQuerying = false;
@@ -794,9 +794,8 @@ public class UserManagerWindow extends ApplicationComponent {
 			this.updateProgress(false, "Found " + idps.length + " IdP(s)");
 			getIdp().showPopup();
 		} catch (Exception e) {
-			// FaultUtil.printFault(e);
 			this.updateProgress(false, "Error");
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
@@ -951,7 +950,7 @@ public class UserManagerWindow extends ApplicationComponent {
 			client.removeUser(usr);
 			this.getUsersTable().removeSelectedUser();
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 
 	}

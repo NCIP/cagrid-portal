@@ -23,6 +23,7 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -31,7 +32,7 @@ import org.projectmobius.common.MobiusRunnable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.4 2007-03-21 19:36:06 langella Exp $
+ * @version $Id: UserWindow.java,v 1.5 2007-04-03 04:04:24 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 
@@ -137,6 +138,7 @@ public class UserWindow extends ApplicationComponent {
 
 	private GlobusCredential proxy;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -156,7 +158,7 @@ public class UserWindow extends ApplicationComponent {
 	private void initialize() {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Manage User [" + user.getUserId() + "]");
-		this.setSize(600,400);
+		this.setSize(600, 400);
 
 	}
 
@@ -289,6 +291,7 @@ public class UserWindow extends ApplicationComponent {
 		}
 	}
 
+
 	private synchronized void updateUser() {
 
 		String pass = format(this.getPassword().getPassword());
@@ -298,8 +301,7 @@ public class UserWindow extends ApplicationComponent {
 			if (pass.equals(verify)) {
 				user.setPassword(pass);
 			} else {
-				GridApplication.getContext().showErrorMessage(
-					"Cannot update the user " + user.getUserId() + ", password don't match.");
+				ErrorDialog.showError("Cannot update the user " + user.getUserId() + ", password don't match.");
 			}
 		}
 
@@ -328,10 +330,9 @@ public class UserWindow extends ApplicationComponent {
 			GridApplication.getContext().showMessage("User " + user.getUserId() + " update successfully.");
 
 		} catch (PermissionDeniedFault pdf) {
-			GridApplication.getContext().showErrorMessage(pdf);
+			ErrorDialog.showError(pdf);
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 

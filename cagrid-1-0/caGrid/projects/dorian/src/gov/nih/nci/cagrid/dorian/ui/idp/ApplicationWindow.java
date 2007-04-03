@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.projectmobius.common.MobiusRunnable;
 
 
@@ -119,7 +120,6 @@ public class ApplicationWindow extends ApplicationComponent {
 
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -710,7 +710,7 @@ public class ApplicationWindow extends ApplicationComponent {
 			String pass = new String(this.getPassword().getPassword());
 			String vpass = new String(this.getPassword().getPassword());
 			if (!pass.equals(vpass)) {
-				GridApplication.getContext().showErrorMessage("Registration Error", "Password don't match!!!");
+				ErrorDialog.showError("Registration Error", "Password don't match!!!");
 				applied = false;
 			}
 
@@ -738,7 +738,7 @@ public class ApplicationWindow extends ApplicationComponent {
 						dispose();
 					} catch (Exception e) {
 						e.printStackTrace();
-						GridApplication.getContext().showErrorMessage("Registration Error", e);
+						ErrorDialog.showError("Registration Error", e);
 						applied = false;
 					}
 
@@ -750,7 +750,7 @@ public class ApplicationWindow extends ApplicationComponent {
 				t.getMessage();
 			}
 		} else {
-			GridApplication.getContext().showErrorMessage("Application already sent, currently awaiting response.");
+			ErrorDialog.showError("Application already sent, currently awaiting response.");
 		}
 	}
 }

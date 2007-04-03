@@ -27,6 +27,7 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -35,7 +36,7 @@ import org.projectmobius.common.MobiusRunnable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.4 2007-03-21 19:36:06 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.5 2007-04-03 04:04:23 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -354,7 +355,7 @@ public class UserManagerWindow extends ApplicationComponent {
 						GridApplication.getContext().addApplicationComponent(
 							new UserWindow(serviceName, proxyCred, user));
 					} catch (Exception e) {
-						GridApplication.getContext().showErrorMessage(e);
+						ErrorDialog.showError(e);
 					}
 				}
 			};
@@ -365,7 +366,7 @@ public class UserManagerWindow extends ApplicationComponent {
 			}
 
 		} else {
-			GridApplication.getContext().showErrorMessage("Please select a user to manage!!!");
+			ErrorDialog.showError("Please select a user to manage!!!");
 		}
 	}
 
@@ -883,7 +884,7 @@ public class UserManagerWindow extends ApplicationComponent {
 
 		synchronized (mutex) {
 			if (isQuerying) {
-				GridApplication.getContext().showErrorMessage("Query Already in Progress",
+				ErrorDialog.showError("Query Already in Progress",
 					"Please wait until the current query is finished before executing another.");
 				return;
 			} else {
@@ -932,11 +933,11 @@ public class UserManagerWindow extends ApplicationComponent {
 			}
 			this.updateProgress(false, "Querying Completed [" + length + " users found]");
 		} catch (PermissionDeniedFault pdf) {
-			GridApplication.getContext().showErrorMessage(pdf);
+			ErrorDialog.showError(pdf);
 			this.updateProgress(false, "Error");
 		} catch (Exception e) {
 			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 			this.updateProgress(false, "Error");
 		}
 		isQuerying = false;
@@ -1121,7 +1122,7 @@ public class UserManagerWindow extends ApplicationComponent {
 	private synchronized void removeUser() {
 		synchronized (mutex) {
 			if (isQuerying) {
-				GridApplication.getContext().showErrorMessage("Action in Progress",
+				ErrorDialog.showError("Action in Progress",
 					"Please wait until the current action is finished before executing another.");
 				return;
 			} else {
@@ -1143,15 +1144,14 @@ public class UserManagerWindow extends ApplicationComponent {
 				getUsersTable().removeRow(row);
 				this.updateProgress(false, "Successfully removed the user " + user.getUserId() + "!!!");
 			} catch (PermissionDeniedFault pdf) {
-				GridApplication.getContext().showErrorMessage(pdf);
+				ErrorDialog.showError(pdf);
 				this.updateProgress(false, "Error removing the user " + user.getUserId() + "!!!");
 			} catch (Exception e) {
-				e.printStackTrace();
-				GridApplication.getContext().showErrorMessage(e);
+				ErrorDialog.showError(e);
 				this.updateProgress(false, "Error removing the user " + user.getUserId() + "!!!");
 			}
 		} else {
-			GridApplication.getContext().showErrorMessage("Please select a user to remove!!!");
+			ErrorDialog.showError("Please select a user to remove!!!");
 		}
 		isQuerying = false;
 	}

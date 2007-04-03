@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 
 
 /**
@@ -65,7 +65,7 @@ public class ContentManager extends JTabbedPane {
 		} else if (node instanceof GroupTreeNode) {
 			this.addGroup((GroupTreeNode) node);
 		} else {
-			GridApplication.getContext().showErrorMessage("Please select a stem or group to view!!!");
+			ErrorDialog.showError("Please select a stem or group to view!!!");
 		}
 	}
 
@@ -76,7 +76,7 @@ public class ContentManager extends JTabbedPane {
 		} else if (node instanceof GroupTreeNode) {
 			this.removeGroup((GroupTreeNode) node);
 		} else {
-			GridApplication.getContext().showErrorMessage("Please select a stem or group to remove!!!");
+			ErrorDialog.showError("Please select a stem or group to remove!!!");
 		}
 	}
 

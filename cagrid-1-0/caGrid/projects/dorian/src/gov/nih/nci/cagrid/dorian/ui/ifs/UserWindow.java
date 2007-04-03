@@ -28,6 +28,7 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -36,7 +37,7 @@ import org.projectmobius.common.MobiusRunnable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.4 2007-03-21 19:36:06 langella Exp $
+ * @version $Id: UserWindow.java,v 1.5 2007-04-03 04:04:23 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 
@@ -271,10 +272,9 @@ public class UserWindow extends ApplicationComponent {
 			GridApplication.getContext().showMessage("User " + user.getGridId() + " update successfully.");
 
 		} catch (PermissionDeniedFault pdf) {
-			GridApplication.getContext().showErrorMessage(pdf);
+			ErrorDialog.showError(pdf);
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 
 	}
@@ -291,10 +291,9 @@ public class UserWindow extends ApplicationComponent {
 			GridApplication.getContext().showMessage(
 				"Successfully renewed the credentials for the user " + user.getGridId() + ".");
 		} catch (PermissionDeniedFault pdf) {
-			GridApplication.getContext().showErrorMessage(pdf);
+			ErrorDialog.showError(pdf);
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 
 	}

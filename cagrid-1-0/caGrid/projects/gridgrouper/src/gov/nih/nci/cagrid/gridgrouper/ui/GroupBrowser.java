@@ -26,6 +26,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.projectmobius.common.MobiusRunnable;
 
 
@@ -834,7 +835,7 @@ public class GroupBrowser extends JPanel {
 			setGroup();
 			this.monitorUpdate();
 		} catch (Exception e) {
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 			node.refresh();
 			this.monitorUpdate();
 		}
@@ -1036,7 +1037,7 @@ public class GroupBrowser extends JPanel {
 			node.getBrowser().getProgress().stopEvent(eid, "Successfully listed group members!!!");
 		} catch (Exception e) {
 			node.getBrowser().getProgress().stopEvent(eid, "Error listing group members!!!");
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 			node.refresh();
 			e.printStackTrace();
 		} finally {
@@ -1108,8 +1109,7 @@ public class GroupBrowser extends JPanel {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
 							if (node.getGroup().hasComposite()) {
-								GridApplication.getContext().showErrorMessage(
-									"You cannot add a member to a composite group!!!");
+								ErrorDialog.showError("You cannot add a member to a composite group!!!");
 							} else {
 								AddMemberWindow window = new AddMemberWindow(gp, node);
 								GridApplication.getContext().addApplicationComponent(window, 600, 300);
@@ -1153,8 +1153,7 @@ public class GroupBrowser extends JPanel {
 								}
 
 							} catch (Exception e) {
-								e.printStackTrace();
-								GridApplication.getContext().showErrorMessage(e.getMessage());
+								ErrorDialog.showError(e);
 							}
 
 						}
@@ -1195,8 +1194,7 @@ public class GroupBrowser extends JPanel {
 									listMembers();
 								}
 							} catch (Exception e) {
-								e.printStackTrace();
-								GridApplication.getContext().showErrorMessage(e);
+								ErrorDialog.showError(e);
 							}
 
 						}
@@ -1356,7 +1354,7 @@ public class GroupBrowser extends JPanel {
 					} catch (Exception e) {
 						node.getBrowser().getProgress().stopEvent(eid,
 							"Error loading the privileges for " + group.getDisplayExtension() + "!!!");
-						GridApplication.getContext().showErrorMessage(e);
+						ErrorDialog.showError(e);
 					}
 				}
 			}
@@ -1408,8 +1406,7 @@ public class GroupBrowser extends JPanel {
 								GridApplication.getContext().addApplicationComponent(new GroupPrivilegeWindow(gb), 500,
 									225);
 							} catch (Exception e) {
-								e.printStackTrace();
-								GridApplication.getContext().showErrorMessage(e);
+								ErrorDialog.showError(e);
 							}
 						}
 					};
@@ -1443,8 +1440,7 @@ public class GroupBrowser extends JPanel {
 							try {
 								getPrivilegesTable().doubleClick();
 							} catch (Exception e) {
-								e.printStackTrace();
-								GridApplication.getContext().showErrorMessage(e);
+								ErrorDialog.showError(e);
 							}
 						}
 					};

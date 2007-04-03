@@ -54,6 +54,7 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.projectmobius.common.MobiusRunnable;
 
 
@@ -78,8 +79,7 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 
 	public synchronized void addGridGrouper(GridGrouper grouper) {
 		if (groupers.containsKey(grouper.getName())) {
-			GridApplication.getContext().showErrorMessage(
-				"The Grid Grouper Service " + grouper.getName() + " has already been added!!!");
+			ErrorDialog.showError("The Grid Grouper Service " + grouper.getName() + " has already been added!!!");
 		} else {
 			int id = getBrowser().getProgress().startEvent("Loading Grid Grouper Service.... ");
 			try {
@@ -93,7 +93,7 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 				getBrowser().getProgress().stopEvent(id, "Grid Grouper Service Successfully Loaded!!!");
 				this.groupers.put(grouper.getName(), node);
 			} catch (Exception e) {
-				GridApplication.getContext().showErrorMessage(e);
+				ErrorDialog.showError(e);
 				getBrowser().getProgress().stopEvent(id, "Error loading Grid Grouper Service!!!");
 			}
 
@@ -128,8 +128,7 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 	public void removeSelectedGridGrouper() {
 		GridGrouperBaseTreeNode node = this.getTree().getCurrentNode();
 		if (node == null) {
-			GridApplication.getContext().showErrorMessage(
-				"No service selected, please select a Grid Grouper Service!!!");
+			ErrorDialog.showError("No service selected, please select a Grid Grouper Service!!!");
 		} else {
 			if (node instanceof StemTreeNode) {
 				StemTreeNode stn = (StemTreeNode) node;
@@ -141,12 +140,10 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 						getTree().reload(this);
 					}
 				} else {
-					GridApplication.getContext().showErrorMessage(
-						"No service selected, please select a Grid Grouper Service!!!");
+					ErrorDialog.showError("No service selected, please select a Grid Grouper Service!!!");
 				}
 			} else {
-				GridApplication.getContext().showErrorMessage(
-					"No service selected, please select a Grid Grouper Service!!!");
+				ErrorDialog.showError("No service selected, please select a Grid Grouper Service!!!");
 			}
 		}
 

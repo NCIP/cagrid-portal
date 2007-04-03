@@ -16,6 +16,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -281,8 +282,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 			GridApplication.getContext().showMessage("Succesfully add the permission!!!");
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 
 	}
@@ -309,8 +309,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 		try {
 			permissionPanel.syncWithService(service);
 		} catch (Exception e) {
-			e.printStackTrace();
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 

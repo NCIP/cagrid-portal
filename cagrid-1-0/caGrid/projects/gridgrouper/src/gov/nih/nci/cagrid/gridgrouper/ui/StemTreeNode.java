@@ -55,7 +55,7 @@ import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
-import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 
 
 /**
@@ -129,9 +129,8 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 			this.getBrowser().getContentManager().refreshStem(this);
 			getBrowser().getProgress().stopEvent(id, "Refreshed " + toString() + "!!!");
 		} catch (Exception e) {
-			e.printStackTrace();
 			getBrowser().getProgress().stopEvent(id, "Error refreshing " + toString() + "!!!");
-			GridApplication.getContext().showErrorMessage(e);
+			ErrorDialog.showError(e);
 		}
 	}
 
