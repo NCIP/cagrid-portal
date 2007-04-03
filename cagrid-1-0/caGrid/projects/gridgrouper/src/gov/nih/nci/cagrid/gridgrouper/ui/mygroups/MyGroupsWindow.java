@@ -20,6 +20,8 @@ import org.cagrid.grape.utils.MultiEventProgressBar;
 import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.common.MobiusRunnableGroup;
+import java.awt.FlowLayout;
+import javax.swing.JButton;
 
 
 /**
@@ -51,6 +53,14 @@ public class MyGroupsWindow extends ApplicationComponent {
 	private JScrollPane jScrollPane = null;
 
 	private MyGroupsTable groups = null;
+
+	private JPanel buttonPanel = null;
+
+	private JButton view = null;
+
+	private JButton refresh = null;
+
+	private JButton close = null;
 
 
 	/**
@@ -131,6 +141,12 @@ public class MyGroupsWindow extends ApplicationComponent {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints12.weightx = 1.0D;
+			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints12.gridy = 4;
 			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 			gridBagConstraints21.gridx = 0;
 			gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
@@ -157,6 +173,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 			jContentPane.add(getMetadataPanel(), gridBagConstraints);
 			jContentPane.add(getProgressPanel(), gridBagConstraints11);
 			jContentPane.add(getGroupsPanel(), gridBagConstraints21);
+			jContentPane.add(getButtonPanel(), gridBagConstraints12);
 		}
 		return jContentPane;
 	}
@@ -283,6 +300,65 @@ public class MyGroupsWindow extends ApplicationComponent {
 			groups = new MyGroupsTable();
 		}
 		return groups;
+	}
+
+
+	/**
+	 * This method initializes buttonPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getButtonPanel() {
+		if (buttonPanel == null) {
+			buttonPanel = new JPanel();
+			buttonPanel.setLayout(new FlowLayout());
+			buttonPanel.add(getView(), null);
+			buttonPanel.add(getRefresh(), null);
+			buttonPanel.add(getClose(), null);
+		}
+		return buttonPanel;
+	}
+
+
+	/**
+	 * This method initializes view	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getView() {
+		if (view == null) {
+			view = new JButton();
+			view.setText("View");
+		}
+		return view;
+	}
+
+
+	/**
+	 * This method initializes refresh	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getRefresh() {
+		if (refresh == null) {
+			refresh = new JButton();
+			refresh.setText("Refresh");
+		}
+		return refresh;
+	}
+
+
+	/**
+	 * This method initializes close	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getClose() {
+		if (close == null) {
+			close = new JButton();
+			close.setText("Cancel");
+		}
+		return close;
 	}
 
 }
