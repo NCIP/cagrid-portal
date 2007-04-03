@@ -4,240 +4,237 @@
 <!-- ================================================================= -->
 
 <project name="caGrid-gridftpauthz" default="compile" basedir=".">
-    <!-- Environment -->
-    <property environment="env" />
-    <property file="${basedir}/build.properties" />
-    <property file="${user.dir}/build.properties" />
+	<!-- Environment -->
+	<property environment="env" />
+	<!--
+	<property file="${basedir}/build.properties" />
+	<property file="${user.dir}/build.properties" />
+	-->
 
-    <!-- Information -->
+	<!-- Information -->
 	<property name="project.version" value="1.0" />
 	<property name="project.shortname" value="gridftpauthz"/>
 	<property name="project.name" value="caGrid-${project.version}-${project.shortname}" />
-    <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
+	<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
 
-    <property name="src.dir" value="${basedir}/src/java" />
-    <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-    <property name="build.dir" value="${basedir}/build" />
+	<property name="src.dir" value="src/java" />
+	<property name="mappings.file" value="namespace2package.mappings" />
+	<property name="build.dir" value="build" />
+	<property name="conf.dir" value="conf"/>
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
-    <property name="classes.dir" value="${build.dir}/classes" />
-    <property name="jar.dir" value="${build.dir}/jars" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="jar.dir" value="${build.dir}/jars" />
+	<property name="properties.dir" value="properties"/>
 	<property name="schemas.dir" value="schema"/>
 	<property name="testxml.dir" value="testxml"/>
-    <property name="project.jarfile" value="${jar.dir}/${project.name}.jar" />
-    <property name="lib.dir" value="lib" />
-    <property name="ext.lib.dir" value="ext/lib" />
+	<property name="project.jarfile" value="${jar.dir}/${project.name}.jar" />
+	<property name="lib.dir" value="lib" />
+	<property name="ext.lib.dir" value="ext/lib" />
 	<property name="ext.schemas.dir" value="ext/xsd"/>
-    <property name="ext.test.lib.dir" location="ext/test/lib" />
+	<property name="ext.test.lib.dir" location="ext/test/lib" />
 
 	<!-- stubs and schemas -->
 	<property name="stubs.dir" location="build/stubs"/>
 	<property name="stubs.src" location="build/stubs/src"/>
 	<property name="stubs.dest" location="build/stubs/classes"/>
 	<property name="schema.src" value="schema" />
-	<property name="schema.dest" location="${build.dir}/schema" />
+	<property name="schema.dest" value="${build.dir}/schema" />
 	<property name="ant.build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
 	<!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
 	<property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"/>
 	<property name="java.debug" value="on" />
 
-	
-    <!-- testing stuff -->
-    <property name="test.dir" location="${basedir}/test" />
-    <property name="test.src.dir" location="${test.dir}/src/java" />
-    <property name="test.classes.dir" location="${build.dir}/test_classes" />
-    <property name="test.lib.dir" location="${test.dir}/lib" />
-    <property name="test.logs.dir" location="${test.dir}/logs" />
-    <property name="test.project.jar" location="${jar.dir}/${project.name}-tests.jar" />
-	
+
+	<!-- testing stuff -->
+	<property name="test.dir" location="test" />
+	<property name="test.src.dir" location="${test.dir}/src/java" />
+	<property name="test.classes.dir" location="${build.dir}/test_classes" />
+	<property name="test.lib.dir" location="${test.dir}/lib" />
+	<property name="test.logs.dir" location="${test.dir}/logs" />
+	<property name="test.project.jar" location="${jar.dir}/${project.name}-tests.jar" />
+
 	<!-- dist -->
-	<property name="dist.dir" location="${basedir}/dist"/>
-
-    <import file="test/test.xml" />
-
-
-    <!-- ============================================================== -->
-    <!-- Globus properties                                              -->
-    <!-- ============================================================== -->
-    <target name="checkGlobus" depends="setGlobus">
-        <condition property="globus.not.found">
-            <or>
-                <not>
-                    <isset property="ext.globus.dir" />
-                </not>
-                <equals arg1="${ext.globus.dir}" arg2="" />
-            </or>
-        </condition>
-        <fail message="Globus installation is not set in either GLOBUS_LOCATION or ext.globus.dir" if="globus.not.found" />
-        <echo message="Globus: ${ext.globus.dir}" />
-    </target>
-    <target name="setGlobus" if="env.GLOBUS_LOCATION">
-        <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
-    </target>
+	<property name="dist.dir" location="dist"/>
+	<!-- define globus jars we use that should be on the classpath and in the distribution -->
+	<property name="globus_axis.jar" location="${ext.globus.dir}/lib/axis.jar"/>
+	<property name="globus_addressing.jar" location="${ext.globus.dir}/lib/addressing-1.0.jar"/>
+	<property name="globus_cog_axis.jar" location="${ext.globus.dir}/lib/cog-axis.jar"/>
+	<property name="globus_cog_jglobus.jar" location="${ext.globus.dir}/lib/cog-jglobus.jar"/>
+	<property name="globus_commons_discovery.jar" location="${ext.globus.dir}/lib/commons-discovery.jar"/>
+	<property name="globus_commons_logging.jar" location="${ext.globus.dir}/lib/commons-logging.jar"/>
+	<property name="globus_commons_cryptix32.jar" location="${ext.globus.dir}/lib/cryptix32.jar"/>
+	<property name="globus_cryptix_asn1.jar" location="${ext.globus.dir}/lib/cryptix-asn1.jar"/>
+	<property name="globus_jaxrpc.jar" location="${ext.globus.dir}/lib/jaxrpc.jar"/>
+	<property name="globus_jce_jdk.jar" location="${ext.globus.dir}/lib/jce-jdk13-125.jar"/>
+	<property name="globus_puretls.jar" location="${ext.globus.dir}/lib/puretls.jar"/>
+	<property name="globus_saaj.jar" location="${ext.globus.dir}/lib/saaj.jar"/>
+	<property name="globus_wsdl4j.jar" location="${ext.globus.dir}/lib/wsdl4j.jar"/>
+	<property name="globus_wsrf_core_enum.jar" location="${ext.globus.dir}/lib/wsrf_core_enum.jar"/>
+	<property name="globus_wsrf_core_stubs_enum.jar" location="${ext.globus.dir}/lib/wsrf_core_stubs_enum.jar"/>
+	<property name="globus_wsrf_core_stubs.jar" location="${ext.globus.dir}/lib/wsrf_core_stubs.jar"/>
+	<property name="globus_wsrf_core.jar" location="${ext.globus.dir}/lib/wsrf_core.jar"/>
+	<property name="globus_wss4j.jar" location="${ext.globus.dir}/lib/wss4j.jar"/>
 
 
-    <!-- =============================================================== -->
-    <!-- Define the Classpaths                                           -->
-    <!-- =============================================================== -->
-    <target name="defineClasspaths" depends="checkGlobus">
-        <path id="build.classpath">
-            <fileset dir="${lib.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-            <fileset dir="${ext.lib.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-	<!--
-            <fileset dir="${ext.globus.dir}/lib">
-                <include name="**/*.jar" />
-	            <exclude name="caGrid-.jar" />
-            </fileset>
-            -->
-	    <pathelement location="properties"/>
-	
-	    <pathelement location="${stubs.dest}" />
-            <pathelement location="${ext.globus.dir}/lib/axis.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/addressing-1.0.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/cog-axis.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/cog-jglobus.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/commons-discovery.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/commons-logging.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/cryptix32.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/cryptix-asn1.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/jaxrpc.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/puretls.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/saaj.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/wsdl4j.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/wsrf_core_enum.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/wsrf_core_stubs_enum.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/wsrf_core_stubs.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/wsrf_core.jar"/>
-            <pathelement location="${ext.globus.dir}/lib/wss4j.jar"/>
-        	
-        </path>
 
-        <path id="run.classpath">
+	<import file="test/test.xml" />
+
+
+	<!-- ============================================================== -->
+	<!-- Globus properties                                              -->
+	<!-- ============================================================== -->
+	<target name="checkGlobus" depends="setGlobus">
+		<condition property="globus.not.found">
+			<or>
+				<not>
+					<isset property="ext.globus.dir" />
+				</not>
+				<equals arg1="${ext.globus.dir}" arg2="" />
+			</or>
+		</condition>
+		<fail message="Globus installation is not set in either GLOBUS_LOCATION or ext.globus.dir" if="globus.not.found" />
+		<echo message="Globus: ${ext.globus.dir}" />
+	</target>
+	<target name="setGlobus" if="env.GLOBUS_LOCATION">
+		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- Define the Classpaths                                           -->
+	<!-- =============================================================== -->
+	<target name="defineClasspaths" depends="checkGlobus">
+		<path id="build.classpath">
+			<fileset dir="${lib.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+
+			<pathelement location="${stubs.dest}" />
+
+			<pathelement location="${globus_axis.jar}"/>
+			<pathelement location="${globus_addressing.jar}"/>
+			<pathelement location="${globus_cog_axis.jar}"/>
+			<pathelement location="${globus_cog_jglobus.jar}"/>
+			<pathelement location="${globus_commons_discovery.jar}"/>
+			<pathelement location="${globus_commons_logging.jar}"/>
+			<pathelement location="${globus_commons_cryptix32.jar}"/>
+			<pathelement location="${globus_cryptix_asn1.jar}"/>
+			<pathelement location="${globus_jaxrpc.jar}"/>
+			<pathelement location="${globus_jce_jdk.jar}"/>
+			<pathelement location="${globus_puretls.jar}"/>
+			<pathelement location="${globus_saaj.jar}"/>
+			<pathelement location="${globus_wsdl4j.jar}"/>
+			<pathelement location="${globus_wsrf_core_enum.jar}"/>
+			<pathelement location="${globus_wsrf_core_stubs_enum.jar}"/>
+			<pathelement location="${globus_wsrf_core_stubs.jar}"/>
+			<pathelement location="${globus_wsrf_core.jar}"/>
+			<pathelement location="${globus_wss4j.jar}"/>
+
+		</path>
+
+		<path id="run.classpath">
+			<pathelement location="properties"/>
 			<path refid="build.classpath"/>
-		    <pathelement location="${classes.dir}" />
-	<!--
-            <fileset dir="${lib.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-            <fileset dir="${ext.lib.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-            <fileset dir="${ext.globus.dir}/lib">
-                <include name="**/*.jar" />
-            </fileset>
-            <pathelement location="${ext.globus.dir}" />
-            -->
-        </path>
+			<pathelement location="${classes.dir}" />
+		</path>
 
-        <path id="test.classpath">
-			<path refid="build.classpath"/>
-            <pathelement path="${classes.dir}" />
-            <pathelement path="${test.dir}/resources" />
-            <fileset dir="${test.lib.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-            <fileset dir="${ext.test.lib.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-	<!--
-            <fileset dir="${lib.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-            <fileset dir="${ext.lib.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-            <fileset dir="${ext.globus.dir}/lib">
-                <include name="**/*.jar" />
-            </fileset>
-            <pathelement location="${ext.globus.dir}" />
-            -->
-        </path>
-    </target>
+		<path id="test.classpath">
+			<path refid="run.classpath"/>
+			<pathelement path="${test.dir}/resources" />
+			<fileset dir="${test.lib.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${ext.test.lib.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- Prepares the build directory                                    -->
-    <!-- =============================================================== -->
-    <target name="prepare" depends="defineClasspaths">
-        <tstamp />
-        <mkdir dir="${stubs.dir}" />
-	    <mkdir dir="${stubs.src}" />
-	    <mkdir dir="${stubs.dest}" />
-        <mkdir dir="${build.dir}" />
-        <mkdir dir="${schema.dest}" />
-	    <copy toDir="${schema.dest}">
-		   <fileset dir="${schemas.dir}" casesensitive="yes">
-			   <include name="**" />
-		   </fileset>
-		   <fileset dir="${ext.schemas.dir}" casesensitive="yes">
-			   <include name="**" />
-		   </fileset>
-	    </copy>
-	    <copy toDir="${build.dir}" file="${mappings.file}"/>
-    </target>
+	<!-- =============================================================== -->
+	<!-- Prepares the build directory                                    -->
+	<!-- =============================================================== -->
+	<target name="prepare" depends="defineClasspaths">
+		<tstamp />
+		<mkdir dir="${stubs.dir}" />
+		<mkdir dir="${stubs.src}" />
+		<mkdir dir="${stubs.dest}" />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${schema.dest}" />
+		<mkdir dir="${dist.dir}"/>
+		<copy toDir="${schema.dest}">
+			<fileset dir="${schemas.dir}" casesensitive="yes">
+				<include name="**" />
+			</fileset>
+			<fileset dir="${ext.schemas.dir}" casesensitive="yes">
+				<include name="**" />
+			</fileset>
+		</copy>
+		<copy toDir="${build.dir}" file="${mappings.file}"/>
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- Compiles the source code                                        -->
-    <!-- =============================================================== -->
-    <target name="compile" depends="compileStubs" description="compiles.">
-        <mkdir dir="${classes.dir}" />
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" source="1.5" debug="on" deprecation="off" optimize="off">
-            <classpath refid="build.classpath" />
-        </javac>
-        <copy toDir="${classes.dir}">
-            <fileset dir="${src.dir}">
-                <include name="**/*" />
-            </fileset>
-        </copy>
-    </target>
+	<!-- =============================================================== -->
+	<!-- Compiles the source code                                        -->
+	<!-- =============================================================== -->
+	<target name="compile" depends="compileStubs" description="compiles.">
+		<mkdir dir="${classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" source="1.5" debug="on" deprecation="off" optimize="off">
+			<classpath refid="build.classpath" />
+		</javac>
+		<copy toDir="${classes.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
 
-    <!-- =============================================================== -->
-    <!-- Compiles the test source code                                        -->
-    <!-- =============================================================== -->
-    <target name="compile-tests" depends="prepare" description="compiles.">
-        <mkdir dir="${test.classes.dir}" />
-        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" source="1.5" debug="on" deprecation="off" optimize="off">
-            <classpath refid="test.classpath" />
-        </javac>
-    </target>
-
-
-    <!-- ============================================================== -->
-    <!-- Cleans up generated stuff                                      -->
-    <!-- ============================================================== -->
-    <target name="clean" depends="" description="Removes generated files.">
-        <delete dir="${build.dir}" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- Compiles the test source code                                        -->
+	<!-- =============================================================== -->
+	<target name="compile-tests" depends="prepare" description="compiles.">
+		<mkdir dir="${test.classes.dir}" />
+		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" source="1.5" debug="on" deprecation="off" optimize="off">
+			<classpath refid="test.classpath" />
+		</javac>
+	</target>
 
 
-    <!-- ============================================================== -->
-    <!-- Creates the test jar files                                          -->
-    <!-- ============================================================== -->
-    <target name="jar" depends="compile" description="Builds the Jar Files">
-        <mkdir dir="${jar.dir}" />
-        <jar jarfile="${project.jarfile}" basedir="${classes.dir}">
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <attribute name="Main-Class" value="${main.class}" />
-            </manifest>
-        </jar>
-    </target>
+	<!-- ============================================================== -->
+	<!-- Cleans up generated stuff                                      -->
+	<!-- ============================================================== -->
+	<target name="clean" depends="" description="Removes generated files.">
+		<delete dir="${build.dir}" />
+	</target>
 
-    <!-- ============================================================== -->
-    <!-- Creates the jar files                                          -->
-    <!-- ============================================================== -->
-    <target name="jar-tests" depends="compile-tests" description="Builds the Jar Files">
-        <mkdir dir="${jar.dir}" />
-        <jar jarfile="${test.project.jar}" basedir="${test.classes.dir}">
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-            </manifest>
-        </jar>
-    </target>
+
+	<!-- ============================================================== -->
+	<!-- Creates the test jar files                                          -->
+	<!-- ============================================================== -->
+	<target name="jar" depends="compile" description="Builds the Jar Files">
+		<mkdir dir="${jar.dir}" />
+		<jar jarfile="${project.jarfile}" basedir="${classes.dir}">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="${main.class}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Creates the jar files                                          -->
+	<!-- ============================================================== -->
+	<target name="jar-tests" depends="compile-tests" description="Builds the Jar Files">
+		<mkdir dir="${jar.dir}" />
+		<jar jarfile="${test.project.jar}" basedir="${test.classes.dir}">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+			</manifest>
+		</jar>
+	</target>
 
 	<!-- =================================================================== -->
 	<!-- Builds Code Docuementation                                          -->
@@ -256,25 +253,54 @@
 			<tag name="created" scope="all" description="Created On:" />
 		</javadoc>
 	</target>
-	
+
 	<target name="dist" depends="compile" description="Create java authorization distribution">
 		<property name="dist.file" value="${dist.dir}/${project.name}.zip"/>
-		<mkdir dir="${dist.dir}"/>
+		<property name="dist.install.dir" value="${project.name}"/>
 		<delete file="${dist.file}"/>
+
+		<copy file="${globus_axis.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_addressing.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_cog_axis.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_cog_jglobus.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_commons_discovery.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_commons_logging.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_commons_cryptix32.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_cryptix_asn1.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_jaxrpc.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_jce_jdk.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_puretls.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_saaj.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_wsdl4j.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_wsrf_core_enum.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_wsrf_core_stubs_enum.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_wsrf_core_stubs.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_wsrf_core.jar}" todir="${ext.lib.dir}"/>
+		<copy file="${globus_wss4j.jar}" todir="${ext.lib.dir}"/>
+
 		<copy file="${ext.globus.dir}/lib/commons-logging.jar" todir="${ext.lib.dir}"/>
-		<zip destfile="${dist.file}" basedir="${basedir}"/>
+		<zip duplicate="fail" destfile="${dist.file}">
+			<zipfileset dir="${jar.dir}" includes="${project.name}.jar" prefix="${dist.install.dir}/${jar.dir}"/>
+			<zipfileset dir="${javadoc.dir}" prefix="${dist.install.dir}/${javadoc.dir}"/>
+			<zipfileset dir="${conf.dir}" prefix="${dist.install.dir}/${conf.dir}"/>
+			<zipfileset dir="${schema.dest}" prefix="${dist.install.dir}/${schema.dest}"/>
+			<zipfileset dir="${lib.dir}" prefix="${dist.install.dir}/${lib.dir}"/>
+			<zipfileset dir="${ext.lib.dir}" prefix="${dist.install.dir}/${ext.lib.dir}"/>
+			<zipfileset dir="${properties.dir}" prefix="${dist.install.dir}/${properties.dir}"/>
+		</zip>
+
 	</target>
-	
+
 	<target name="stubs" depends="prepare">
 		<!-- gridgrouper config schema -->
 		<ant antfile="${ant.build.stubs}" target="generateStubs">
-		    <property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
+			<property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
 			<property name="source.stubs.dir" location="${schema.dest}"/>
 			<property name="wsdl.file" value="gridgrouper-config.wsdl"/>
 			<property name="target.stubs.dir" location="${stubs.src}"/>
 			<property name="ns.excludes" value="${GT4.ns.excludes} -x http://cagrid.nci.nih.gov/1/GridGrouper"/>
 		</ant>
-		
+
 	</target>
 
 
@@ -284,12 +310,12 @@
 			<include name="**/*.java" />
 		</javac>
 	</target>
-	
-	
 
-    <!-- ============================================================== -->
-    <!-- Builds from scratch                                                -->
-    <!-- ============================================================== -->
-    <target name="all" description="Builds the entire application" depends="prepare,jar,jar-tests,javadoc" />
+
+
+	<!-- ============================================================== -->
+	<!-- Builds from scratch                                                -->
+	<!-- ============================================================== -->
+	<target name="all" description="Builds the entire application" depends="prepare,jar,jar-tests,javadoc" />
 </project>
 

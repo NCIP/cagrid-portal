@@ -1,6 +1,7 @@
 package org.cagrid.gridftp.authorization.plugin.gridgrouper;
 
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
+import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils;
 
 import java.net.URL;
 import java.util.logging.Level;
@@ -73,11 +74,9 @@ public class GridGrouperAuthCallout extends AbstractAuthCallout {
 				if (tuple.getIdentity() != null) {
 					_logger.fine("calling isMember()");
 					try {
-						/*
 						 authorized =
 						 GridGrouperClientUtils.isMember(gridGrouperExpression,
 						 tuple.getIdentity());
-						 */
 					} catch (Exception e) {
 						_logger.log(Level.WARNING,
 								"Grid grouper check threw exception due to reason: "
