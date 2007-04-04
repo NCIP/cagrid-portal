@@ -5,17 +5,17 @@
 <!--
 	<xs:include schemaLocation="gridgrouper.xsd"/>
 -->
-	<xs:element name="GridFTP_Grouper_Config">
+	<xs:element name="GridFTPGrouperConfig">
 		<xs:annotation>
 			<xs:documentation>Configuration for GridGrouper authorization plugin for GridFTP</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="entry" type="Grouper_Config_Entry" maxOccurs="unbounded"/>
+				<xs:element name="rule" type="GrouperConfigRule" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:complexType name="Grouper_Config_Entry">
+	<xs:complexType name="GrouperConfigRule">
 		<xs:sequence>
 			<xs:element name="action">
 				<xs:simpleType>

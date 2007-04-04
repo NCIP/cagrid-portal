@@ -16,20 +16,23 @@ import javax.xml.namespace.QName;
 import org.apache.axis.encoding.Serializer;
 import org.cagrid.gridftp.authorization.plugin.GridFTPOperation;
 import org.cagrid.gridftp.authorization.plugin.GridFTPTuple;
-import org.cagrid.www._1.gridftpauthz.GridFTP_Grouper_Config;
-import org.cagrid.www._1.gridftpauthz.Grouper_Config_Entry;
-import org.cagrid.www._1.gridftpauthz.Grouper_Config_EntryAction;
+import org.cagrid.www._1.gridftpauthz.GridFTPGrouperConfig;
+import org.cagrid.www._1.gridftpauthz.GridFTPGrouperConfig;
+import org.cagrid.www._1.gridftpauthz.GrouperConfigRule;
+import org.cagrid.www._1.gridftpauthz.GrouperConfigRuleAction;
 import org.globus.wsrf.encoding.ObjectSerializer;
 import org.globus.wsrf.encoding.SerializationException;
 
-
-public class GridGrouperConfigurationManager {
+/*
+ * Not public on purpose. Only meant for internal use.
+ */
+class GridGrouperConfigurationManager {
 
 	private static String WILDCARD = "*";
 
 	private List<GrouperConfig> _config;
 
-	public GridGrouperConfigurationManager(GridFTP_Grouper_Config xmlConfig) throws GridGrouperAuthorizationConfigurationException {
+	public GridGrouperConfigurationManager(GridFTPGrouperConfig xmlConfig) throws GridGrouperAuthorizationConfigurationException {
 		try {
 			validateConfig(xmlConfig);
 		} catch (Exception e) {
@@ -41,8 +44,8 @@ public class GridGrouperConfigurationManager {
 	
 	public GridGrouperConfigurationManager(String configFilePath) throws GridGrouperAuthorizationConfigurationException {
 		try {
-			GridFTP_Grouper_Config xmlConfig = (GridFTP_Grouper_Config) Utils.deserializeDocument(configFilePath,
-				GridFTP_Grouper_Config.class);
+			GridFTPGrouperConfig xmlConfig = (GridFTPGrouperConfig) Utils.deserializeDocument(configFilePath,
+				GridFTPGrouperConfig.class);
 
 			/*
 			URL configResource = this.getClass().getClassLoader().getResource(
@@ -50,6 +53,12 @@ public class GridGrouperConfigurationManager {
 
 			SchemaValidator.validate(configResource.getFile(), new File(configFilePath));
 	*/
+			/*
+			File file = new File("/gridgrouper_auth_config.xml");
+			System.out.println(file.exists());
+			SchemaValidator.validate("/gridgrouper-config.xsd", file);
+			*/
+			
 			validateConfig(xmlConfig);
 		} catch (Exception e) {
 			String msg = "Could not load grid grouper authorization configuration file due to: " + e.getMessage();
@@ -57,7 +66,7 @@ public class GridGrouperConfigurationManager {
 		}
 	}
 
-	private void validateConfig(GridFTP_Grouper_Config xmlConfig) throws Exception {
+	private void validateConfig(GridFTPGrouperConfig xmlConfig) throws Exception {
 		
 		//serialize config and check it
 		//TODO enable validation
@@ -68,10 +77,11 @@ public class GridGrouperConfigurationManager {
 		URL configResource = this.getClass().getClassLoader().getResource(
 			GridGrouperAuthCallout.SCHEMA_LOCATION);
 
-		SchemaValidator.validate(configResource.getFile(), configAsString);
-	*/
+		//SchemaValidator.validate(configResource.getFile(), configAsString);
+		SchemaValidator.validate("/gridgrouper-config.xsd", configAsString);
+		*/
 		
-		Grouper_Config_Entry[] entries = xmlConfig.getEntry();
+		GrouperConfigRule[] entries = xmlConfig.getRule();
 
 		
 		_config = new ArrayList<GrouperConfig>();
@@ -81,14 +91,14 @@ public class GridGrouperConfigurationManager {
 		Set<Rule> rules = new HashSet<Rule>();
 		
 		// validate all entries
-		for (Grouper_Config_Entry entry : entries) {
+		for (GrouperConfigRule entry : entries) {
 			//TODO validate the xml... specifically checking that the path is valid
 			//entry.entry.getPath()
 			//entry.getMembershipExpression().
 			// the action is valid since it must be valid according to the
 			// schema,
 			// which has an enum for the actions
-			Grouper_Config_EntryAction action = entry.getAction();
+			GrouperConfigRuleAction action = entry.getAction();
 			// action is essentially validated by the schema's enum
 			// specification
 			
@@ -159,15 +169,11 @@ public class GridGrouperConfigurationManager {
 	 * that best matches. That is, it finds the most specific rule from the
 	 * config file that matches and returns the membership expression for it
 	 * 
-	 * @param tuple the GridFTPTuple representing the request. Note that
-	 * identity is not used in the tuple, so that can be null. Furthermore,
-	 * a tuple is used here since we only care about the path of the URL
-	 * and not the complete URL (and GridFTPTuple only keeps the path from the
-	 * URL)
+	 * @param action the action specified in the GridFTP request
+	 * @param path the path specified in the GridFTP request
 	 * @return the grid grouper MembershipExpression that matched, or null if no
 	 *         match was found
 	 */
-	//public MembershipExpression getMostSpecificMembershipQuery(GridFTPTuple tuple) {
 	public MembershipExpression getMostSpecificMembershipQuery(GridFTPOperation action, String path) {
 		// TODO add in action to this
 		MembershipExpression expression = null;
@@ -296,18 +302,18 @@ public class GridGrouperConfigurationManager {
 		return writer.getBuffer().toString();
 	}
 	
-	String configToString(GridFTP_Grouper_Config objectConfig) throws SerializationException {
+	String configToString(GridFTPGrouperConfig objectConfig) throws SerializationException {
 		StringWriter writer = new StringWriter();
-		//ObjectSerializer.serialize(writer, objectConfig, new QName(""));//new QName("http://www.cagrid.org/1/gridftpauthz", "GridFTP_Grouper_Config"));
+		//ObjectSerializer.serialize(writer, objectConfig, new QName(""));//new QName("http://www.cagrid.org/1/gridftpauthz", "GridFTPGrouperConfig"));
 		try {
-			//new QName("http://www.cagrid.org/1/gridftpauthz","GridFTP_Grouper_Config")
-			//Utils.serializeObject(objectConfig, Utils.getRegisteredQName(GridFTP_Grouper_Config.class), writer);
-			//Utils.serializeObject(objectConfig, new QName("http://www.cagrid.org/1/gridftpauthz","GridFTP_Grouper_Config"), writer);
-			Utils.serializeObject(objectConfig, new QName("GridFTP_Grouper_Config"), writer);
+			//new QName("http://www.cagrid.org/1/gridftpauthz","GridFTPGrouperConfig")
+			//Utils.serializeObject(objectConfig, Utils.getRegisteredQName(GridFTPGrouperConfig.class), writer);
+			Utils.serializeObject(objectConfig, new QName("http://www.cagrid.org/1/gridftpauthz","GridFTPGrouperConfig"), writer);
+			//Utils.serializeObject(objectConfig, new QName("GridFTPGrouperConfig"), writer);
 		} catch (Exception e) {
 			throw new SerializationException("Could not serialize grouper config object");
 		}
-		//Serializer serializer = GridFTP_Grouper_Config.getSerializer("test", GridFTP_Grouper_Config.class, new QName("GridFTP_Grouper_Config"));
+		//Serializer serializer = GridFTPGrouperConfig.getSerializer("test", GridFTPGrouperConfig.class, new QName("GridFTPGrouperConfig"));
 		//serializer.serialize(name, attributes, value, context)
 		return writer.getBuffer().toString();
 		

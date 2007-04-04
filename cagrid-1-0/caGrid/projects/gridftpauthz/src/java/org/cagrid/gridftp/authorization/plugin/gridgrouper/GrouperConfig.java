@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 
 import org.globus.wsrf.encoding.SerializationException;
 
-public class GrouperConfig {
+class GrouperConfig {
 
 	private String _operation;
 	

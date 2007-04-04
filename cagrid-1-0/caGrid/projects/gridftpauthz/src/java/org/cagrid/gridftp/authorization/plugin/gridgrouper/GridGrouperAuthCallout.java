@@ -20,7 +20,7 @@ import org.globus.wsrf.encoding.SerializationException;
  * For complete documentation, refer to the GridFTP with Java Authorization
  * User Documentation.
  * 
- * @see RESOURCE_LOCATION
+ * @see #RESOURCE_LOCATION
  * 
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * 

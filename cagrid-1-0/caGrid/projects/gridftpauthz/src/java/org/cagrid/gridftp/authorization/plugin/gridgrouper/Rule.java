@@ -1,6 +1,6 @@
 package org.cagrid.gridftp.authorization.plugin.gridgrouper;
 
-public class Rule {
+class Rule {
 
 	private String _operation;
 	

@@ -7,9 +7,15 @@ package org.cagrid.gridftp.authorization.plugin.gridgrouper;
  * @author <A HREF="MAILTO:jpermar at bmi.osu.edu">Justin Permar</A>
  * 
  * @created Apr 2, 2007 
- * @version $Id: GridGrouperAuthorizationConfigurationException.java,v 1.2 2007-04-02 22:04:55 jpermar Exp $
+ * @version $Id: GridGrouperAuthorizationConfigurationException.java,v 1.3 2007-04-04 13:53:33 jpermar Exp $
  */
 public class GridGrouperAuthorizationConfigurationException extends Exception {
+
+	/**
+	 * Comment for <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = -1356697173196980493L;
+
 
 	public GridGrouperAuthorizationConfigurationException() {
 		// TODO Auto-generated constructor stub

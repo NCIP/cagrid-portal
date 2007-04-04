@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GridFTP_Grouper_Config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.cagrid.org/1/gridftpauthz gridgrouper-config.xsd"
- xmlns="http://www.cagrid.org/1/gridftpauthz"><entry>
+<GridFTPGrouperConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.cagrid.org/1/gridftpauthz ../build/schema/gridgrouper-config.xsd"
+ xmlns="http://www.cagrid.org/1/gridftpauthz">
+<rule>
 	<action>read</action>
 	<path>/tmp/test</path>
  	<MembershipExpression xmlns="http://cagrid.nci.nih.gov/1/GridGrouper" xmlns:ns1="http://cagrid.nci.nih.gov/1/GridGrouper" ns1:logicRelation="AND">
@@ -12,8 +13,8 @@
  			</GroupIdentifier>
  		</MembershipQuery>
 	</MembershipExpression> 		
-</entry>
-<entry>
+</rule>
+<rule>
 	<action>read</action>
 	<path>/*</path>
 	<MembershipExpression xmlns="http://cagrid.nci.nih.gov/1/GridGrouper" xmlns:ns1="http://cagrid.nci.nih.gov/1/GridGrouper" ns1:logicRelation="AND">
@@ -24,5 +25,5 @@
 			</GroupIdentifier>
 		</MembershipQuery>
 	</MembershipExpression> 		
-</entry>
-</GridFTP_Grouper_Config>
+</rule>
+</GridFTPGrouperConfig>
