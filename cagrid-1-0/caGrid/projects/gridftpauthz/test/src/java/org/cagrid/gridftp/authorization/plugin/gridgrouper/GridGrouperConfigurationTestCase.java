@@ -327,7 +327,6 @@ public class GridGrouperConfigurationTestCase extends TestCase {
 
 	public void testInvalidRuleInvalidURIBadFormatWildcardNotAtEnd() throws MalformedURIException,
 		GridGrouperAuthorizationConfigurationException, MalformedURLException {
-		try {
 			GrouperConfigRule[] entries = new GrouperConfigRule[1];
 			String actionName = "read";
 			GrouperConfigRuleAction action = GrouperConfigRuleAction.fromString(actionName);
@@ -341,23 +340,22 @@ public class GridGrouperConfigurationTestCase extends TestCase {
 			String path = "/*foo/*";
 			entries[0] = new GrouperConfigRule(action, expression, path);
 			GridFTPGrouperConfig config = new GridFTPGrouperConfig(entries);
-
+		try {
 			GridGrouperConfigurationManager manager = new GridGrouperConfigurationManager(config);
 			GridFTPOperation requestAction = GridFTPOperation.read;
 			String requestURL = "/foo/bar";
 			// GridFTPTuple tuple = new GridFTPTuple(null, requestAction,
 			// requestURL);
 			MembershipExpression result = manager.getMostSpecificMembershipQuery(requestAction, requestURL);
-			fail("Expected to fail due to wildcard found in the middle of the path: " + path);
-		} catch (Exception e) {
-			assertTrue(true);
+			fail("Expected to fail schema validation due to wildcard found in the middle of the path: " + path);
+		} catch (GridGrouperAuthorizationConfigurationException e) {
+			//expected
 		}
 	}
 
 
 	public void testInvalidRuleInvalidURIBadFormatMultipleWildcardsAtEnd() throws MalformedURIException,
 		GridGrouperAuthorizationConfigurationException, MalformedURLException {
-		try {
 			GrouperConfigRule[] entries = new GrouperConfigRule[1];
 			String actionName = "read";
 			GrouperConfigRuleAction action = GrouperConfigRuleAction.fromString(actionName);
@@ -372,14 +370,15 @@ public class GridGrouperConfigurationTestCase extends TestCase {
 			entries[0] = new GrouperConfigRule(action, expression, path);
 			GridFTPGrouperConfig config = new GridFTPGrouperConfig(entries);
 
+			try {
 			GridGrouperConfigurationManager manager = new GridGrouperConfigurationManager(config);
 			GridFTPOperation requestAction = GridFTPOperation.read;
 			String requestURL = "/foo/bar";
 			// GridFTPTuple tuple = new GridFTPTuple(null, requestAction,
 			// requestURL);
 			MembershipExpression result = manager.getMostSpecificMembershipQuery(requestAction, requestURL);
-			fail("Expected to fail due to * at place other than end of the configured URI");
-		} catch (Exception e) {
+			fail("Expected to fail schema validation due to * at place other than end of the configured URI");
+		} catch (GridGrouperAuthorizationConfigurationException e) {
 			assertTrue(true);
 		}
 	}
@@ -570,7 +569,6 @@ public class GridGrouperConfigurationTestCase extends TestCase {
 	// still count as duplicate
 	public void testDuplicateEntriesWhenExact() throws MalformedURIException,
 		GridGrouperAuthorizationConfigurationException, MalformedURLException {
-		try {
 			// entry 1
 			String actionName = "read";
 			GrouperConfigRuleAction action = GrouperConfigRuleAction.fromString(actionName);
@@ -602,10 +600,11 @@ public class GridGrouperConfigurationTestCase extends TestCase {
 			GridFTPGrouperConfig config = new GridFTPGrouperConfig(entries);
 
 			// request
+			try {
 			GridGrouperConfigurationManager manager = new GridGrouperConfigurationManager(config);
 			fail("Did not catch expected GridGrouperAuthorizationConfigurationException for duplicate configuration entries");
 		} catch (GridGrouperAuthorizationConfigurationException e) {
-			assertTrue(true);
+			//expected
 		}
 		/*
 		 * GridFTPOperation requestAction = GridFTPOperation.read; String
@@ -667,32 +666,100 @@ public class GridGrouperConfigurationTestCase extends TestCase {
 		 */
 	}
 
-	public void testDoubleSlashInPathFails() throws MalformedURIException, GridGrouperAuthorizationConfigurationException,
-	MalformedURLException {
-		try {
-	GrouperConfigRule[] entries = new GrouperConfigRule[1];
-	GrouperConfigRuleAction action = GrouperConfigRuleAction.fromString("*");
-	GroupIdentifier groupIdentifier = new GroupIdentifier(
-		"https://training.cagrid.org:8443/wsrf/services/cagrid/GridGrouper", "demo:groupz");
-	MembershipQuery query = new MembershipQuery(groupIdentifier, MembershipStatus.MEMBER_OF);
-	MembershipQuery[] queries = new MembershipQuery[]{query};
-	MembershipExpression expression = new MembershipExpression(LogicalOperator.AND, new MembershipExpression[0],
-		queries);
-	// URI uri = new URI("/my/test/dir");
-	String path = "//my/test/dir/*";
-	entries[0] = new GrouperConfigRule(action, expression, path);
-	GridFTPGrouperConfig config = new GridFTPGrouperConfig(entries);
 
-	GridGrouperConfigurationManager manager = new GridGrouperConfigurationManager(config);
-	GridFTPOperation requestAction = GridFTPOperation.read;
-	String requestURL = "/m";
-	// GridFTPTuple tuple = new GridFTPTuple(null, requestAction,
-	// requestURL);
-	MembershipExpression result = manager.getMostSpecificMembershipQuery(requestAction, requestURL);
-	fail("Expected to throw GridGrouperAuthorizationConfigurationException due to two // in the path: " + path);
-		} catch(GridGrouperAuthorizationConfigurationException e) {
+	public void testDoubleSlashInPathFails() throws MalformedURIException,
+		GridGrouperAuthorizationConfigurationException, MalformedURLException {
+			GrouperConfigRule[] entries = new GrouperConfigRule[1];
+			GrouperConfigRuleAction action = GrouperConfigRuleAction.fromString("*");
+			GroupIdentifier groupIdentifier = new GroupIdentifier(
+				"https://training.cagrid.org:8443/wsrf/services/cagrid/GridGrouper", "demo:groupz");
+			MembershipQuery query = new MembershipQuery(groupIdentifier, MembershipStatus.MEMBER_OF);
+			MembershipQuery[] queries = new MembershipQuery[]{query};
+			MembershipExpression expression = new MembershipExpression(LogicalOperator.AND,
+				new MembershipExpression[0], queries);
+			// URI uri = new URI("/my/test/dir");
+			String path = "//my/test/dir/*";
+			entries[0] = new GrouperConfigRule(action, expression, path);
+			GridFTPGrouperConfig config = new GridFTPGrouperConfig(entries);
+
+		try {
+			GridGrouperConfigurationManager manager = new GridGrouperConfigurationManager(config);
+			GridFTPOperation requestAction = GridFTPOperation.read;
+			String requestURL = "/m";
+			// GridFTPTuple tuple = new GridFTPTuple(null, requestAction,
+			// requestURL);
+			MembershipExpression result = manager.getMostSpecificMembershipQuery(requestAction, requestURL);
+			fail("Expected to throw GridGrouperAuthorizationConfigurationException due to two // in the path: " + path);
+		} catch (GridGrouperAuthorizationConfigurationException e) {
 			assertTrue(true);
 		}
-}
+	}
+
+
+	public void testShortRequestPathLongerPathInRule() throws MalformedURIException,
+		GridGrouperAuthorizationConfigurationException, MalformedURLException {
+		GrouperConfigRule[] entries = new GrouperConfigRule[1];
+		GrouperConfigRuleAction action = GrouperConfigRuleAction.fromString("*");
+		GroupIdentifier groupIdentifier = new GroupIdentifier(
+			"https://training.cagrid.org:8443/wsrf/services/cagrid/GridGrouper", "demo:groupz");
+		MembershipQuery query = new MembershipQuery(groupIdentifier, MembershipStatus.MEMBER_OF);
+		MembershipQuery[] queries = new MembershipQuery[]{query};
+		MembershipExpression expression = new MembershipExpression(LogicalOperator.AND, new MembershipExpression[0],
+			queries);
+		// URI uri = new URI("/my/test/dir");
+		String path = "/my/test/dir/*";
+		entries[0] = new GrouperConfigRule(action, expression, path);
+		GridFTPGrouperConfig config = new GridFTPGrouperConfig(entries);
+
+		GridGrouperConfigurationManager manager = new GridGrouperConfigurationManager(config);
+		GridFTPOperation requestAction = GridFTPOperation.read;
+		String requestURL = "/m";
+		// GridFTPTuple tuple = new GridFTPTuple(null, requestAction,
+		// requestURL);
+		MembershipExpression result = manager.getMostSpecificMembershipQuery(requestAction, requestURL);
+		assertNull(result);
+	}
+
+
+	public void testWherePathDiffersByOne() throws MalformedURIException,
+		GridGrouperAuthorizationConfigurationException, MalformedURLException {
+		// entry 1
+		String actionName = "read";
+		GrouperConfigRuleAction action = GrouperConfigRuleAction.fromString(actionName);
+		GroupIdentifier groupIdentifier = new GroupIdentifier(
+			"https://training.cagrid.org:8443/wsrf/services/cagrid/GridGrouper", "demo:groupz");
+		MembershipQuery query = new MembershipQuery(groupIdentifier, MembershipStatus.MEMBER_OF);
+		MembershipQuery[] queries = new MembershipQuery[]{query};
+		MembershipExpression expression1 = new MembershipExpression(LogicalOperator.AND, new MembershipExpression[0],
+			queries);
+		// URI uri = new URI("/tmp/my/test/file2");
+		String path = "/tmp/ab";
+		GrouperConfigRule entry1 = new GrouperConfigRule(action, expression1, path);
+
+		// entry 2
+		actionName = "*";
+		action = GrouperConfigRuleAction.fromString(actionName);
+		groupIdentifier = new GroupIdentifier("https://training.cagrid.org:8443/wsrf/services/cagrid/GridGrouper",
+			"demo:groupz");
+		query = new MembershipQuery(groupIdentifier, MembershipStatus.MEMBER_OF);
+		queries = new MembershipQuery[]{query};
+		MembershipExpression expression2 = new MembershipExpression(LogicalOperator.AND, new MembershipExpression[0],
+			queries);
+		// uri = new URI("/tmp/my/test/file2");
+		path = "/tmp/abc";
+		GrouperConfigRule entry2 = new GrouperConfigRule(action, expression2, path);
+
+		GrouperConfigRule[] entries = new GrouperConfigRule[]{entry1, entry2};
+
+		GridFTPGrouperConfig config = new GridFTPGrouperConfig(entries);
+
+		GridGrouperConfigurationManager manager = new GridGrouperConfigurationManager(config);
+		GridFTPOperation requestAction = GridFTPOperation.read;
+		String requestURL = "/tmp/abc";
+		// GridFTPTuple tuple = new GridFTPTuple(null, requestAction,
+		// requestURL);
+		MembershipExpression result = manager.getMostSpecificMembershipQuery(requestAction, requestURL);
+		assertEquals(expression2, result);
+	}
 
 }

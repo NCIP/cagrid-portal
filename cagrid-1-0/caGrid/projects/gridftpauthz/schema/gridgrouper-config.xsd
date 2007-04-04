@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2006 rel. 3 sp1 (http://www.altova.com) by Tony C. Pan (OSU BMI) -->
 <xs:schema xmlns="http://www.cagrid.org/1/gridftpauthz" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://cagrid.nci.nih.gov/1/GridGrouper" targetNamespace="http://www.cagrid.org/1/gridftpauthz" elementFormDefault="qualified" attributeFormDefault="qualified">
-	<xs:import namespace="http://cagrid.nci.nih.gov/1/GridGrouper" schemaLocation="gridgrouper.xsd"/>
-<!--
-	<xs:include schemaLocation="gridgrouper.xsd"/>
--->
+	<xs:import namespace="http://cagrid.nci.nih.gov/1/GridGrouper" schemaLocation="xsd/gridgrouper.xsd"/>
 	<xs:element name="GridFTPGrouperConfig">
 		<xs:annotation>
 			<xs:documentation>Configuration for GridGrouper authorization plugin for GridFTP</xs:documentation>

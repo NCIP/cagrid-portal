@@ -25,12 +25,11 @@
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="jar.dir" value="${build.dir}/jars" />
 	<property name="properties.dir" value="properties"/>
-	<property name="schemas.dir" value="schema"/>
+	<property name="properties.schemas.dir" value="${properties.dir}/org/cagrid/gridftp/authorization/plugin/gridgrouper"/>
 	<property name="testxml.dir" value="testxml"/>
 	<property name="project.jarfile" value="${jar.dir}/${project.name}.jar" />
 	<property name="lib.dir" value="lib" />
 	<property name="ext.lib.dir" value="ext/lib" />
-	<property name="ext.schemas.dir" value="ext/xsd"/>
 	<property name="ext.test.lib.dir" location="ext/test/lib" />
 
 	<!-- stubs and schemas -->
@@ -170,10 +169,7 @@
 		<mkdir dir="${schema.dest}" />
 		<mkdir dir="${dist.dir}"/>
 		<copy toDir="${schema.dest}">
-			<fileset dir="${schemas.dir}" casesensitive="yes">
-				<include name="**" />
-			</fileset>
-			<fileset dir="${ext.schemas.dir}" casesensitive="yes">
+			<fileset dir="${schema.src}" casesensitive="yes">
 				<include name="**" />
 			</fileset>
 		</copy>
@@ -307,6 +303,10 @@
 			<property name="ns.excludes" value="${GT4.ns.excludes} -x http://cagrid.nci.nih.gov/1/GridGrouper"/>
 		</ant>
 
+		<!-- copy two schemas from ${schema.dest} to the properties directory -->
+		<copy file="${schema.dest}/gridgrouper-config.xsd" todir="${properties.schemas.dir}"/>
+		<copy file="${schema.dest}/xsd/gridgrouper.xsd" todir="${properties.schemas.dir}"/>
+	
 	</target>
 
 
