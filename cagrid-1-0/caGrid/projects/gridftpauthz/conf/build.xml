@@ -9,14 +9,19 @@
 
 	<target name="install" description="Customize the gridgrouper config with the location of your GridFTP install directory">
 		<property environment="env"/>
-		<!-- check that GLOBUS_LOCATION is set -->
-		<fail>
-			<condition>
-				<isset property="${env.GRIDFTP_ROOT}"/>
-			</condition>
-		</fail>
 
-		<!-- make replacements in the bashrc file and the gridftp service startup file -->
+                <fail message="GRIDFTP_ROOT environment variable is not set. Please set it before running this script.">
+		<condition>
+			<or>
+				<not>
+					<isset property="env.GRIDFTP_ROOT"/>
+				</not>
+				<equals arg1="${env.GRIDFTP_ROOT}" arg2=""/>
+			</or>
+		</condition>
+                </fail>
+                <echo message="GRIDFTP_ROOT=${env.GRIDFTP_ROOT}"/>
+
 		<replace file="${gridftp_auth_config.file}" token="@@GRIDFTP_ROOT@@" value="${env.GRIDFTP_ROOT}"/>
 
 	</target>
