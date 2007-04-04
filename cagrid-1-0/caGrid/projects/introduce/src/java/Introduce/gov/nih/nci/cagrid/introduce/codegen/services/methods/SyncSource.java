@@ -3,11 +3,9 @@ package gov.nih.nci.cagrid.introduce.codegen.services.methods;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
@@ -18,14 +16,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.axis.utils.JavaUtils;
 import org.apache.log4j.Logger;
 import org.apache.ws.jaxme.js.JavaMethod;
-import org.apache.ws.jaxme.js.Parameter;
 
 
 /**
@@ -41,372 +37,36 @@ import org.apache.ws.jaxme.js.Parameter;
 public class SyncSource {
 	private static final Logger logger = Logger.getLogger(SyncSource.class);
 
+    public static final String TAB = "  ";
+    public static final String DOUBLE_TAB = TAB + TAB;
+    public static final String TRIPPLE_TAB = DOUBLE_TAB + TAB;
+    
 	private String serviceClient;
-
 	private String serviceInterface;
-
 	private String serviceImpl;
-
 	private String serviceProviderImpl;
-
 	private ServiceInformation serviceInfo;
-
 	private ServiceType service;
-
-	private static final String TAB = "  ";
-
-	private static final String DOUBLE_TAB = TAB + TAB;
-
-	private static final String TRIPPLE_TAB = DOUBLE_TAB + TAB;
-
 
 	public SyncSource(File baseDir, ServiceInformation info, ServiceType service) {
 		this.service = service;
 		serviceInfo = info;
 		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
-			+ CommonTools.getPackageDir(service) + File.separator + "client" + File.separator + service.getName()
-			+ "Client.java";
+			+ CommonTools.getPackageDir(service) + File.separator + "client" + File.separator 
+            + service.getName() + "Client.java";
 		serviceInterface = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
-			+ CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName()
-			+ "I.java";
+			+ CommonTools.getPackageDir(service) + File.separator + "common" + File.separator 
+            + service.getName() + "I.java";
 		serviceImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
-			+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + service.getName()
-			+ "Impl.java";
+			+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator 
+            + service.getName() + "Impl.java";
 		serviceProviderImpl = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
-			+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-			+ File.separator + service.getName() + "ProviderImpl.java";
+			+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator 
+            + "globus" + File.separator + service.getName() + "ProviderImpl.java";
 	}
 
-
-	public String createJavaDoc(MethodType method) {
-		if ((method.getDescription() != null) && !method.getDescription().trim().equals("")) {
-			String javaDoc = TAB + "/**\n";
-			if (method.getDescription() != null) {
-				javaDoc += TAB + " * " + method.getDescription() + "\n";
-				javaDoc += TAB + " *\n";
-			}
-			if ((method.getInputs() != null) && (method.getInputs().getInput() != null)
-				&& (method.getInputs().getInput().length > 0)) {
-				for (int i = 0; i < method.getInputs().getInput().length; i++) {
-					javaDoc += TAB + " * @param " + method.getInputs().getInput(i).getName() + "\n";
-					if ((method.getInputs().getInput(i).getDescription() != null)
-						&& (method.getInputs().getInput(i).getDescription().length() > 0)) {
-						javaDoc += TAB + " *\t" + method.getInputs().getInput(i).getDescription() + "\n";
-					}
-				}
-			}
-			if ((method.getOutput() != null) && (method.getOutput().getDescription() != null)
-				&& (method.getOutput().getDescription().length() > 0)) {
-				javaDoc += TAB + " * @return " + method.getOutput().getDescription() + "\n";
-			}
-			if ((method.getExceptions() != null) && (method.getExceptions().getException() != null)
-				&& (method.getExceptions().getException().length > 0)) {
-				for (int i = 0; i < method.getExceptions().getException().length; i++) {
-					javaDoc += TAB + " * @throws " + method.getExceptions().getException(i).getName() + "\n";
-					if (method.getExceptions().getException(i).getDescription() != null) {
-						javaDoc += TAB + " *\t" + method.getExceptions().getException(i).getDescription() + "\n";
-					}
-				}
-			}
-			javaDoc += TAB + " */";
-			return javaDoc;
-		} else {
-			return "";
-		}
-	}
-
-
-	public String createClientExceptions(MethodType method) {
-		String exceptions = "";
-		// process the faults for this method...
-		MethodTypeExceptions exceptionsEl = method.getExceptions();
-		exceptions += "RemoteException";
-		if ((method.getOutput().getIsClientHandle() != null) && method.getOutput().getIsClientHandle().booleanValue()) {
-			exceptions += ", org.apache.axis.types.URI.MalformedURIException";
-		}
-		if ((exceptionsEl != null) && (exceptionsEl.getException() != null)) {
-			if (exceptionsEl.getException().length > 0) {
-				exceptions += ", ";
-			}
-			for (int i = 0; i < exceptionsEl.getException().length; i++) {
-				MethodTypeExceptionsException fault = exceptionsEl.getException(i);
-				SchemaInformation info = CommonTools
-					.getSchemaInformation(serviceInfo.getNamespaces(), fault.getQname());
-				String ex = info.getType().getPackageName()
-					+ "."
-					+ TemplateUtils.upperCaseFirstCharacter(info.getType().getClassName() != null ? info.getType()
-						.getClassName() : info.getType().getType());
-				exceptions += ex;
-				if (i < exceptionsEl.getException().length - 1) {
-					exceptions += ", ";
-				}
-			}
-		}
-		if (exceptions.length() > 0) {
-			exceptions = "throws " + exceptions + " ";
-		}
-		return exceptions;
-	}
-
-
-	public static String createExceptions(MethodType method, ServiceInformation serviceInfo, ServiceType service) {
-		String exceptions = "";
-		// process the faults for this method...
-		MethodTypeExceptions exceptionsEl = method.getExceptions();
-		exceptions += "RemoteException";
-		if ((exceptionsEl != null) && (exceptionsEl.getException() != null)) {
-			if (exceptionsEl.getException().length > 0) {
-				exceptions += ", ";
-			}
-			for (int i = 0; i < exceptionsEl.getException().length; i++) {
-				MethodTypeExceptionsException fault = exceptionsEl.getException(i);
-				SchemaInformation info = CommonTools
-					.getSchemaInformation(serviceInfo.getNamespaces(), fault.getQname());
-				String ex = info.getType().getPackageName()
-					+ "."
-					+ TemplateUtils.upperCaseFirstCharacter(info.getType().getClassName() != null ? info.getType()
-						.getClassName() : info.getType().getType());
-				exceptions += ex;
-				if (i < exceptionsEl.getException().length - 1) {
-					exceptions += ", ";
-				}
-			}
-		}
-		if (exceptions.length() > 0) {
-			exceptions = "throws " + exceptions + " ";
-		}
-		return exceptions;
-	}
-
-
-	public String createClientUnBoxedSignatureStringFromMethod(MethodType method, ServiceInformation serviceInfo) {
-		String methodString = "";
-		MethodTypeOutput returnTypeEl = method.getOutput();
-		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
-		String returnType = null;
-		if (returnTypeEl.getQName().getNamespaceURI().equals("")
-			&& returnTypeEl.getQName().getLocalPart().equals("void")) {
-			returnType = "void";
-		} else {
-			SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), returnTypeEl
-				.getQName());
-			returnType = info.getType().getClassName();
-			if ((info.getType().getPackageName() != null) && (info.getType().getPackageName().length() > 0)) {
-				if ((returnTypeEl.getIsClientHandle() != null) && returnTypeEl.getIsClientHandle().booleanValue()) {
-					returnType = returnTypeEl.getClientHandleClass();
-				} else {
-					returnType = info.getType().getPackageName() + "." + returnType;
-				}
-			}
-			if (returnTypeEl.isIsArray()) {
-				returnType += "[]";
-			}
-		}
-
-		methodString += "public " + returnType + " " + methodName + "(";
-
-		if ((method.getInputs() != null) && (method.getInputs().getInput() != null)) {
-			for (int j = 0; j < method.getInputs().getInput().length; j++) {
-				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), method
-					.getInputs().getInput(j).getQName());
-				String packageName = info.getType().getPackageName();
-				String classType = null;
-				if ((packageName != null) && (packageName.length() > 0)) {
-					classType = packageName + "." + info.getType().getClassName();
-				} else {
-					classType = info.getType().getClassName();
-				}
-				if (method.getInputs().getInput(j).isIsArray()) {
-					classType += "[]";
-				}
-				String paramName = method.getInputs().getInput(j).getName();
-				methodString += classType + " " + paramName;
-				if (j < method.getInputs().getInput().length - 1) {
-					methodString += ",";
-				}
-			}
-		}
-		methodString += ")";
-
-		return methodString;
-	}
-
-
-	public static String removeMultiNewLines(String string) {
-		return string.replaceAll("\n\n(\n)+", "\n\n");
-	}
-
-
-	public static String createUnBoxedSignatureStringFromMethod(MethodType method, ServiceInformation serviceInfo) {
-		String methodString = "";
-		MethodTypeOutput returnTypeEl = method.getOutput();
-		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
-		String returnType = null;
-		if (returnTypeEl.getQName().getNamespaceURI().equals("")
-			&& returnTypeEl.getQName().getLocalPart().equals("void")) {
-			returnType = "void";
-		} else {
-			SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), returnTypeEl
-				.getQName());
-			returnType = info.getType().getClassName();
-			if ((info.getType().getPackageName() != null) && (info.getType().getPackageName().length() > 0)) {
-				returnType = info.getType().getPackageName() + "." + returnType;
-			}
-			if (returnTypeEl.isIsArray()) {
-				returnType += "[]";
-			}
-		}
-		methodString += "public " + returnType + " " + methodName + "(";
-		if ((method.getInputs() != null) && (method.getInputs().getInput() != null)) {
-			for (int j = 0; j < method.getInputs().getInput().length; j++) {
-				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), method
-					.getInputs().getInput(j).getQName());
-				String packageName = info.getType().getPackageName();
-				String classType = null;
-				if ((packageName != null) && (packageName.length() > 0)) {
-					classType = packageName + "." + info.getType().getClassName();
-				} else {
-					classType = info.getType().getClassName();
-				}
-				if (method.getInputs().getInput(j).isIsArray()) {
-					classType += "[]";
-				}
-				String paramName = method.getInputs().getInput(j).getName();
-				methodString += classType + " " + paramName;
-				if (j < method.getInputs().getInput().length - 1) {
-					methodString += ",";
-				}
-			}
-		}
-		methodString += ")";
-
-		return methodString;
-	}
-
-
-	public static List buildServicesClientHandleClassNameList(ServiceInformation serviceInfo) {
-		List list = new ArrayList();
-		if ((serviceInfo.getServices() != null) && (serviceInfo.getServices().getService() != null)) {
-			for (int i = 0; i < serviceInfo.getServices().getService().length; i++) {
-				ServiceType thisservice = serviceInfo.getServices().getService(i);
-				list.add(thisservice.getPackageName() + ".client." + thisservice.getName() + "Client");
-			}
-		}
-		return list;
-	}
-
-
-	public static String createUnBoxedSignatureStringFromMethod(JavaMethod method, ServiceInformation serviceInfo)
-		throws Exception {
-		String methodString = "";
-		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
-		String returnType = "";
-		if (buildServicesClientHandleClassNameList(serviceInfo).contains(
-			method.getType().getPackageName() + "." + method.getType().getClassName())) {
-			returnType += IntroduceConstants.WSADDRESSING_EPR_CLASSNAME;
-		} else {
-			if (method.getType().getPackageName().length() > 0) {
-				returnType += method.getType().getPackageName() + ".";
-			}
-			returnType += method.getType().getClassName();
-		}
-		if (method.getType().isArray()) {
-			returnType += "[]";
-		}
-		methodString += "public " + returnType + " " + methodName + "(";
-		Parameter[] inputs = method.getParams();
-		for (int j = 0; j < inputs.length; j++) {
-			String classType = null;
-			if (inputs[j].getType().getPackageName().length() > 0) {
-				classType = inputs[j].getType().getPackageName() + "." + inputs[j].getType().getClassName();
-			} else {
-				classType = inputs[j].getType().getClassName();
-			}
-			if (inputs[j].getType().isArray()) {
-				classType += "[]";
-			}
-			String paramName = inputs[j].getName();
-			methodString += classType + " " + paramName;
-			if (j < inputs.length - 1) {
-				methodString += ",";
-			}
-		}
-		methodString += ")";
-		return methodString;
-	}
-
-
-	public String createClientUnBoxedSignatureStringFromMethod(JavaMethod method) throws Exception {
-		String methodString = "";
-		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
-		String returnType = "";
-		if (method.getType().getPackageName().length() > 0) {
-			returnType += method.getType().getPackageName() + ".";
-		}
-		returnType += method.getType().getClassName();
-		if (method.getType().isArray()) {
-			returnType += "[]";
-		}
-		methodString += "public " + returnType + " " + methodName + "(";
-		Parameter[] inputs = method.getParams();
-		for (int j = 0; j < inputs.length; j++) {
-			String classType = null;
-			if (inputs[j].getType().getPackageName().length() > 0) {
-				classType = inputs[j].getType().getPackageName() + "." + inputs[j].getType().getClassName();
-			} else {
-				classType = inputs[j].getType().getClassName();
-			}
-			if (inputs[j].getType().isArray()) {
-				classType += "[]";
-			}
-			String paramName = inputs[j].getName();
-			methodString += classType + " " + paramName;
-			if (j < inputs.length - 1) {
-				methodString += ",";
-			}
-		}
-		methodString += ")";
-		return methodString;
-	}
-
-
-	public String createBoxedSignatureStringFromMethod(MethodType method) {
-		String methodString = "";
-
-		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
-
-		if (method.getOutputMessageClass() != null) {
-			methodString += "public " + method.getOutputMessageClass() + " " + methodName + "(";
-		} else {
-			methodString += "public void " + methodName + "(";
-		}
-
-		if (method.getInputMessageClass() != null) {
-			methodString += method.getInputMessageClass() + " params";
-		}
-
-		methodString += ")";
-		return methodString;
-	}
-
-
-	public String createBoxedSignatureStringFromMethod(JavaMethod method) {
-		String methodString = "";
-
-		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
-
-		methodString += "public " + method.getType().getPackageName() + "." + method.getType().getClassName() + " "
-			+ methodName + "(";
-
-		methodString += method.getParams()[0].getType().getPackageName() + "."
-			+ method.getParams()[0].getType().getClassName() + " params";
-
-		methodString += ")";
-		return methodString;
-	}
-
-
-	public void addMethods(List additions) throws Exception {
+    
+	public void addMethods(List additions) throws SynchronizationException {
 		for (int i = 0; i < additions.size(); i++) {
 			// add it to the interface
 			MethodType method = (MethodType) additions.get(i);
@@ -414,31 +74,32 @@ public class SyncSource {
 				StringBuffer fileContent = null;
 				try {
 					fileContent = Utils.fileToStringBuffer(new File(serviceInterface));
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (IOException e) {
+					throw new SynchronizationException(
+                        "Error loading service interface file: " + e.getMessage(), e);
 				}
 
 				// insert the new client method
 				int endOfClass = fileContent.lastIndexOf("}");
-				String clientMethod = null;
+				StringBuffer clientMethod = new StringBuffer();
 				if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 					&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-					clientMethod = createJavaDoc(method) + "\n" + TAB + createBoxedSignatureStringFromMethod(method)
-						+ " " + createClientExceptions(method);
+					clientMethod.append(SyncHelper.createJavaDoc(method)).append("\n").append(TAB).append(SyncHelper.createBoxedSignatureStringFromMethod(method))
+						.append(" ").append(SyncHelper.createClientExceptions(method, serviceInfo));
 				} else {
-					clientMethod = createJavaDoc(method) + "\n" + TAB
-						+ createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
-						+ createClientExceptions(method);
+					clientMethod.append(SyncHelper.createJavaDoc(method)).append("\n").append(TAB)
+						.append(SyncHelper.createClientUnBoxedSignatureStringFromMethod(method, serviceInfo)).append(" ")
+						.append(SyncHelper.createClientExceptions(method, serviceInfo));
 				}
-				clientMethod += ";\n\n";
+				clientMethod.append(";\n\n");
 
 				fileContent.insert(endOfClass, clientMethod);
 				try {
 					FileWriter fw = new FileWriter(new File(serviceInterface));
-					fw.write(removeMultiNewLines(fileContent.toString()));
+					fw.write(SyncHelper.removeMultiNewLines(fileContent.toString()));
 					fw.close();
 				} catch (IOException e1) {
-					e1.printStackTrace();
+					throw new SynchronizationException("Error writing service interface: " + e1.getMessage(), e1);
 				}
 
 				if (!method.isIsProvided()) {
@@ -455,7 +116,7 @@ public class SyncSource {
 	}
 
 
-	public void modifyMethods(List modifiedMethods) throws Exception {
+	public void modifyMethods(List modifiedMethods) throws SynchronizationException {
 		for (int i = 0; i < modifiedMethods.size(); i++) {
 			// add it to the interface
 			Modification mod = (Modification) modifiedMethods.get(i);
@@ -464,8 +125,8 @@ public class SyncSource {
 				StringBuffer fileContent = null;
 				try {
 					fileContent = Utils.fileToStringBuffer(new File(serviceInterface));
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (IOException e) {
+					throw new SynchronizationException("Error loading service interface file: " + e.getMessage(), e);
 				}
 
 				// remove the old interface method
@@ -473,14 +134,14 @@ public class SyncSource {
 
 				if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 					&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-					clientMethod = createBoxedSignatureStringFromMethod(mod.getIMethod());
+					clientMethod = SyncHelper.createBoxedSignatureStringFromMethod(mod.getIMethod());
 				} else {
-					clientMethod = createClientUnBoxedSignatureStringFromMethod(mod.getIMethod());
+                    clientMethod = SyncHelper.createClientUnBoxedSignatureStringFromMethod(mod.getIMethod());
 				}
-				int startOfMethod = startOfSignature(fileContent, clientMethod);
+				int startOfMethod = SyncHelper.startOfSignature(fileContent, clientMethod);
 				String restOfFile = fileContent.substring(startOfMethod);
 				int endOfMethod = startOfMethod + restOfFile.indexOf(";") + 1;
-				startOfMethod = startOfJavaDoc(fileContent, startOfMethod);
+				startOfMethod = SyncHelper.startOfJavaDoc(fileContent, startOfMethod);
 
 				if ((startOfMethod == -1) || (endOfMethod == -1)) {
 					System.err.println("WARNING: Unable to locate method in I : "
@@ -495,22 +156,22 @@ public class SyncSource {
 
 				if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 					&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-					clientMethod = createJavaDoc(method) + "\n" + TAB + createBoxedSignatureStringFromMethod(method)
-						+ " " + createClientExceptions(method);
+					clientMethod = SyncHelper.createJavaDoc(method) + "\n" + TAB + SyncHelper.createBoxedSignatureStringFromMethod(method)
+						+ " " + SyncHelper.createClientExceptions(method, serviceInfo);
 				} else {
-					clientMethod = createJavaDoc(method) + "\n" + TAB
-						+ createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
-						+ createClientExceptions(method);
+					clientMethod = SyncHelper.createJavaDoc(method) + "\n" + TAB
+						+ SyncHelper.createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+						+ SyncHelper.createClientExceptions(method, serviceInfo);
 				}
 				clientMethod += ";\n\n";
 
 				fileContent.insert(endOfClass, clientMethod);
 				try {
 					FileWriter fw = new FileWriter(new File(serviceInterface));
-					fw.write(removeMultiNewLines(fileContent.toString()));
+					fw.write(SyncHelper.removeMultiNewLines(fileContent.toString()));
 					fw.close();
 				} catch (IOException e1) {
-					e1.printStackTrace();
+					throw new SynchronizationException("Error saving service interface: " + e1.getMessage(), e1);
 				}
 			}
 
@@ -529,12 +190,13 @@ public class SyncSource {
 	}
 
 
-	public void addClientImpl(MethodType method) {
+	public void addClientImpl(MethodType method) throws SynchronizationException {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(serviceClient));
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			throw new SynchronizationException(
+                "Error loading service client: " + e.getMessage(), e);
 		}
 
 		// insert the new client method
@@ -544,24 +206,24 @@ public class SyncSource {
 	}
 
 
-	public void addClientImpl(MethodType method, int fileLocation) {
-
+	public void addClientImpl(MethodType method, int fileLocation) throws SynchronizationException {
 		StringBuffer fileContent = null;
 		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(serviceClient));
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new SynchronizationException(
+                "Error loading service client: " + e.getMessage(), e);
 		}
 
 		// insert the new client method
 		String clientMethod = null;
 		if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-			clientMethod = TAB + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
+			clientMethod = TAB + SyncHelper.createBoxedSignatureStringFromMethod(method) + " " + SyncHelper.createClientExceptions(method, serviceInfo);
 		} else {
-			clientMethod = TAB + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
-				+ createClientExceptions(method);
+			clientMethod = TAB + SyncHelper.createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+				+ SyncHelper.createClientExceptions(method, serviceInfo);
 		}
 		clientMethod += "{\n";
 		clientMethod += DOUBLE_TAB + "synchronized(portTypeMutex){\n";
@@ -650,10 +312,9 @@ public class SyncSource {
 					}
 				}
 			}
-
 		} else {
-			// is the method is unboxable then i need to just call it straight
-			// up.
+			// if the method is unboxable then i need to just 
+            // call it straight up.
 
 			if (method.getOutputMessageClass() != null) {
 				methodString += "return ";
@@ -672,22 +333,23 @@ public class SyncSource {
 
 		fileContent.insert(fileLocation, clientMethod);
 		try {
-			FileWriter fw = new FileWriter(new File(removeMultiNewLines(serviceClient)));
-			fw.write(removeMultiNewLines(fileContent.toString()));
+			FileWriter fw = new FileWriter(new File(SyncHelper.removeMultiNewLines(serviceClient)));
+			fw.write(SyncHelper.removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			throw new SynchronizationException(
+                "Error saving service client: " + e1.getMessage(), e1);
 		}
-
 	}
 
 
-	public void addImpl(MethodType method) {
+	public void addImpl(MethodType method) throws SynchronizationException {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(serviceImpl));
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			throw new SynchronizationException(
+                "Error loading service impl: " + e.getMessage(), e);
 		}
 
 		String clientMethod = null;
@@ -695,10 +357,10 @@ public class SyncSource {
 		int endOfClass = fileContent.lastIndexOf("}");
 		if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-			clientMethod = TAB + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
+			clientMethod = TAB + SyncHelper.createBoxedSignatureStringFromMethod(method) + " " + SyncHelper.createClientExceptions(method, serviceInfo);
 		} else {
-			clientMethod = TAB + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
-				+ createExceptions(method, serviceInfo, service);
+			clientMethod = TAB + SyncHelper.createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+				+ SyncHelper.createExceptions(method, serviceInfo);
 		}
 
 		clientMethod += "{\n";
@@ -710,21 +372,21 @@ public class SyncSource {
 		try {
 			String fileContentString = fileContent.toString();
 			FileWriter fw = new FileWriter(new File(serviceImpl));
-			fw.write(removeMultiNewLines(fileContentString));
+			fw.write(SyncHelper.removeMultiNewLines(fileContentString));
 			fw.close();
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			throw new SynchronizationException("Error saving service impl: " + e1.getMessage(), e1);
 		}
 	}
 
 
-	public void addProviderImpl(MethodType method) throws Exception {
-
+	public void addProviderImpl(MethodType method) throws SynchronizationException {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(serviceProviderImpl));
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new SynchronizationException(
+                "Error loading service provider impl: " + e.getMessage(), e);
 		}
 
 		// insert the new client method
@@ -743,8 +405,8 @@ public class SyncSource {
 			// slh -- in migration to globus 4 we need to check here for
 			// autoboxing
 			// and get appropriate
-			clientMethod = DOUBLE_TAB + createBoxedSignatureStringFromMethod(method) + " "
-				+ createExceptions(method, serviceInfo, service);
+			clientMethod = DOUBLE_TAB + SyncHelper.createBoxedSignatureStringFromMethod(method) + " "
+				+ SyncHelper.createExceptions(method, serviceInfo);
 
 			// clientMethod += " throws RemoteException";
 			clientMethod += "{\n";
@@ -817,11 +479,10 @@ public class SyncSource {
 			methodString += "return boxedResult;\n";
 			clientMethod += methodString;
 			clientMethod += TAB + "}\n\n";
-
 		} else {
 			// create a boxed call
-			clientMethod = TAB + createBoxedSignatureStringFromMethod(method) + " "
-				+ createExceptions(method, serviceInfo, service);
+			clientMethod = TAB + SyncHelper.createBoxedSignatureStringFromMethod(method) + " "
+				+ SyncHelper.createExceptions(method, serviceInfo);
 			clientMethod += "{\n" + DOUBLE_TAB;
 			if (method.getOutputMessageClass() != null) {
 				clientMethod += "return ";
@@ -841,33 +502,34 @@ public class SyncSource {
 
 		try {
 			FileWriter fw = new FileWriter(new File(serviceProviderImpl));
-			fw.write(removeMultiNewLines(fileContent.toString()));
+			fw.write(SyncHelper.removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			throw new SynchronizationException(
+                "Error saving service provider impl: " + e1.getMessage(), e1);
 		}
-
 	}
 
 
-	public void removeMethods(List removals) throws Exception {
+	public void removeMethods(List removals) throws SynchronizationException {
 		for (int i = 0; i < removals.size(); i++) {
 			JavaMethod method = (JavaMethod) removals.get(i);
 
 			StringBuffer fileContent = null;
 			try {
 				fileContent = Utils.fileToStringBuffer(new File(serviceInterface));
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (IOException e) {
+				throw new SynchronizationException(
+                    "Error loading service interface: " + e.getMessage(), e);
 			}
 
 			// remove the method
-			String clientMethod = createClientUnBoxedSignatureStringFromMethod(method);
+			String clientMethod = SyncHelper.createClientUnBoxedSignatureStringFromMethod(method);
 			System.err.println("Looking to remove method: |" + clientMethod + "|");
-			int startOfMethod = startOfSignature(fileContent, clientMethod);
+			int startOfMethod = SyncHelper.startOfSignature(fileContent, clientMethod);
 			String restOfFile = fileContent.substring(startOfMethod);
 			int endOfMethod = startOfMethod + restOfFile.indexOf(";") + 1;
-			startOfMethod = startOfJavaDoc(fileContent, startOfMethod);
+			startOfMethod = SyncHelper.startOfJavaDoc(fileContent, startOfMethod);
 
 			if ((startOfMethod == -1) || (endOfMethod == -1)) {
 				System.err.println("WARNING: Unable to locate method in I : " + method.getName());
@@ -878,10 +540,10 @@ public class SyncSource {
 
 			try {
 				FileWriter fw = new FileWriter(new File(serviceInterface));
-				fw.write(removeMultiNewLines(fileContent.toString()));
+				fw.write(SyncHelper.removeMultiNewLines(fileContent.toString()));
 				fw.close();
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				throw new SynchronizationException("Error saving service interface: " + e1.getMessage(), e1);
 			}
 
 			// fail silent here in caase the method was not implemented
@@ -900,18 +562,18 @@ public class SyncSource {
 	}
 
 
-	public void removeClientImpl(JavaMethod method) throws Exception {
+	public void removeClientImpl(JavaMethod method) throws SynchronizationException {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(serviceClient));
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			throw new SynchronizationException("Error loading service client: " + e.getMessage(), e);
 		}
 
 		// remove the method
-		String clientMethod = createClientUnBoxedSignatureStringFromMethod(method);
-		int startOfMethod = startOfSignature(fileContent, clientMethod);
-		int endOfMethod = bracketMatch(fileContent, startOfMethod);
+		String clientMethod = SyncHelper.createClientUnBoxedSignatureStringFromMethod(method);
+		int startOfMethod = SyncHelper.startOfSignature(fileContent, clientMethod);
+		int endOfMethod = SyncHelper.bracketMatch(fileContent, startOfMethod);
 
 		if ((startOfMethod == -1) || (endOfMethod == -1)) {
 			System.err.println("WARNING: Unable to locate method in clientImpl : " + method.getName());
@@ -922,20 +584,20 @@ public class SyncSource {
 
 		try {
 			FileWriter fw = new FileWriter(new File(serviceClient));
-			fw.write(removeMultiNewLines(fileContent.toString()));
+			fw.write(SyncHelper.removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			throw new SynchronizationException("Error writing service client: " + e1.getMessage(), e1);
 		}
 	}
 
 
-	public void removeProviderImpl(JavaMethod method) throws Exception {
+	public void removeProviderImpl(JavaMethod method) throws SynchronizationException {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(serviceProviderImpl));
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			throw new SynchronizationException("Error loading service provider impl: " + e.getMessage(), e);
 		}
 
 		// find the method
@@ -1026,12 +688,12 @@ public class SyncSource {
 				startLocation = index;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new SynchronizationException("Error reading impl: " + e.getMessage(), e);
 		}
 
 		// remove the method
 		int startOfMethod = startLocation;
-		int endOfMethod = bracketMatch(fileContent, startOfMethod);
+		int endOfMethod = SyncHelper.bracketMatch(fileContent, startOfMethod);
 
 		if ((startOfMethod == -1) || (endOfMethod == -1)) {
 			System.err.println("WARNING: Unable to locate method in providerImpl: " + method.getName());
@@ -1042,36 +704,35 @@ public class SyncSource {
 
 		try {
 			FileWriter fw = new FileWriter(new File(serviceProviderImpl));
-			fw.write(removeMultiNewLines(fileContent.toString()));
+			fw.write(SyncHelper.removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			throw new SynchronizationException("Error saving service provider impl: " + e1.getMessage(), e1);
 		}
-
 	}
 
 
-	public void modifyImpl(Modification mod) throws Exception {
+	public void modifyImpl(Modification mod) throws SynchronizationException {
 		MethodType method = mod.getMethodType();
 		JavaMethod oldMethod = mod.getImplMethod();
 
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(serviceImpl));
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			throw new SynchronizationException("Error loading service impl: " + e.getMessage(), e);
 		}
 
 		// remove the old method signature
 		String clientMethod = "";
 		if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-			clientMethod = createBoxedSignatureStringFromMethod(oldMethod);
+			clientMethod = SyncHelper.createBoxedSignatureStringFromMethod(oldMethod);
 		} else {
-			clientMethod = createClientUnBoxedSignatureStringFromMethod(oldMethod);
+			clientMethod = SyncHelper.createClientUnBoxedSignatureStringFromMethod(oldMethod);
 		}
-		int startOfMethod = startOfSignature(fileContent, clientMethod);
-		int endOfSignature = endOfSignature(fileContent, startOfMethod);
+		int startOfMethod = SyncHelper.startOfSignature(fileContent, clientMethod);
+		int endOfSignature = SyncHelper.endOfSignature(fileContent, startOfMethod);
 
 		if ((startOfMethod == -1) || (endOfSignature == -1)) {
 			System.err.println("WARNING: Unable to locate method in Impl : " + oldMethod.getName());
@@ -1083,37 +744,37 @@ public class SyncSource {
 		// add in the new modified signature
 		if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-			clientMethod = TAB + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
+			clientMethod = TAB + SyncHelper.createBoxedSignatureStringFromMethod(method) + " " + SyncHelper.createClientExceptions(method, serviceInfo);
 		} else {
-			clientMethod = TAB + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
-				+ createExceptions(method, serviceInfo, service);
+			clientMethod = TAB + SyncHelper.createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+				+ SyncHelper.createExceptions(method, serviceInfo);
 		}
 		clientMethod += "{";
 		fileContent.insert(startOfMethod, clientMethod);
 
 		try {
 			FileWriter fw = new FileWriter(new File(serviceImpl));
-			fw.write(removeMultiNewLines(fileContent.toString()));
+			fw.write(SyncHelper.removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			throw new SynchronizationException("Error saving service impl: " + e1.getMessage(), e1);
 		}
-
 	}
 
 
-	public void removeImpl(JavaMethod method) throws Exception {
+	public void removeImpl(JavaMethod method) throws SynchronizationException {
 		StringBuffer fileContent = null;
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(serviceImpl));
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			throw new SynchronizationException(
+                "Error loading service impl: " + e.getMessage(), e);
 		}
 
 		// remove the method
-		String clientMethod = createUnBoxedSignatureStringFromMethod(method, serviceInfo);
-		int startOfMethod = startOfSignature(fileContent, clientMethod);
-		int endOfMethod = bracketMatch(fileContent, startOfMethod);
+		String clientMethod = SyncHelper.createUnBoxedSignatureStringFromMethod(method, serviceInfo);
+		int startOfMethod = SyncHelper.startOfSignature(fileContent, clientMethod);
+		int endOfMethod = SyncHelper.bracketMatch(fileContent, startOfMethod);
 
 		if ((startOfMethod == -1) || (endOfMethod == -1)) {
 			System.err.println("WARNING: Unable to locate method in Impl : " + method.getName());
@@ -1124,202 +785,14 @@ public class SyncSource {
 
 		try {
 			FileWriter fw = new FileWriter(new File(serviceImpl));
-			fw.write(removeMultiNewLines(fileContent.toString()));
+			fw.write(SyncHelper.removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			throw new SynchronizationException(
+                "Error saving service impl: " + e1.getMessage(), e1);
 		}
-
 	}
-
-
-	public static int bracketMatch(StringBuffer sb, int startingIndex) {
-		// logger.debug("Starting to look for brackets on this string:");
-		// logger.debug(sb.toString().substring(startingIndex));
-		int parenCount = 0;
-		int index = startingIndex;
-		boolean found = false;
-		boolean canFind = false;
-		while (!found && (index < sb.length()) && (index >= 0)) {
-			char ch = sb.charAt(index);
-			if (ch == '{') {
-				canFind = true;
-				parenCount++;
-			} else if (ch == '}') {
-				parenCount--;
-				if (canFind == true) {
-					if (parenCount == 0) {
-						found = true;
-					}
-				}
-			}
-			index++;
-		}
-		if (found) {
-			char ch = sb.charAt(index);
-			while ((ch == '\t') || (ch == ' ')) {
-				ch = sb.charAt(++index);
-			}
-			return index;
-		} else {
-			return -1;
-		}
-
-	}
-
-
-	public static int endOfSignature(StringBuffer sb, int startingIndex) {
-		int index = startingIndex;
-		if (index < 0) {
-			return index;
-		}
-		boolean found = false;
-		while (!found) {
-			char ch = sb.charAt(index);
-			if (ch == '{') {
-				found = true;
-			}
-			index++;
-		}
-		return index;
-	}
-
-
-	public static int startOfJavaDoc(StringBuffer sb, int startOfMethod) {
-		BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
-		List backwardsBuffer = new ArrayList();
-		try {
-			String line = br.readLine() + "\n";
-			int totalRead = 0;
-			totalRead += line.length();
-			if (totalRead < startOfMethod) {
-				backwardsBuffer.add(0, line);
-			}
-			while ((line != null) && (totalRead < startOfMethod)) {
-				line = br.readLine() + "\n";
-				totalRead += line.length();
-				if (totalRead <= startOfMethod) {
-					backwardsBuffer.add(0, line);
-				}
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return startOfMethod;
-		}
-
-		int javaDocLength = 0;
-		boolean stillSearch = true;
-		int lineBack = 0;
-		while (stillSearch) {
-			String line = (String) backwardsBuffer.get(lineBack++);
-			String trimmedLine = line.trim();
-			if (trimmedLine.startsWith("\n")) {
-				javaDocLength += line.length();
-			} else if (trimmedLine.startsWith("*")) {
-				javaDocLength += line.length();
-			} else if (trimmedLine.startsWith("/*")) {
-				javaDocLength += line.length();
-				stillSearch = false;
-			} else {
-				javaDocLength = 0;
-				stillSearch = false;
-			}
-		}
-
-		return startOfMethod - javaDocLength;
-	}
-
-
-	public static int startOfSignature(StringBuffer sb, String searchString) {
-		BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
-		// tokenizer to compress all parts, then start matching the parts
-		int charsRead = 0;
-		try {
-			String line1 = null;
-			String line2 = null;
-			String line3 = null;
-
-			line1 = br.readLine();
-			if (line1 != null) {
-				line1 += "\n";
-				line2 = br.readLine();
-				if (line2 != null) {
-					line2 += "\n";
-					line3 = br.readLine();
-					if (line3 != null) {
-						line3 += "\n";
-					}
-				}
-			}
-
-			String matchedLine = null;
-			boolean found = false;
-
-			while ((line1 != null) && !found) {
-				matchedLine = line1;
-				// if the line is empty just skip it...
-				if (!line1.equals("\n")) {
-					if (line2 != null) {
-						matchedLine += line2;
-						if (line3 != null) {
-							matchedLine += line3;
-						}
-					}
-
-					StringTokenizer searchStringTokenizer = new StringTokenizer(searchString, " \t\n\r\f(),");
-					StringTokenizer lineTokenizer = new StringTokenizer(matchedLine, " \t\n\r\f(),");
-					int matchCount = 0;
-					// this could be advanced to support multiple lines......
-					while (searchStringTokenizer.hasMoreTokens() && lineTokenizer.hasMoreTokens()) {
-						String searchToken = searchStringTokenizer.nextToken();
-						String lineToken = lineTokenizer.nextToken();
-						if (searchToken.equals(lineToken)) {
-							matchCount++;
-							if (matchCount == 3) {
-								found = true;
-								break;
-							}
-						} else {
-							break;
-						}
-					}
-				}
-				if (!found) {
-					charsRead += line1.length();
-					line1 = line2;
-					line2 = line3;
-					line3 = br.readLine();
-					if (line3 != null) {
-						line3 += "\n";
-					}
-				}
-			}
-			if (found) {
-				// logger.debug("Found start of method: " + matchedLine);
-			} else {
-				logger.debug("Did not find the appropriate match");
-			}
-			// if the last line i found the match then lets look for the start
-			// of the method
-			if (found) {
-				StringTokenizer searchStringTokenizer = new StringTokenizer(searchString);
-				String startToken = searchStringTokenizer.nextToken();
-				int index = charsRead + matchedLine.indexOf(startToken);
-
-				char prevChar = sb.toString().charAt(--index);
-				while ((prevChar != '\n') && ((prevChar == ' ') || (prevChar == '\t'))) {
-					prevChar = sb.toString().charAt(--index);
-				}
-				index++;
-				return index;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return -1;
-	}
-
+    
 
 	public ServiceType getService() {
 		return service;

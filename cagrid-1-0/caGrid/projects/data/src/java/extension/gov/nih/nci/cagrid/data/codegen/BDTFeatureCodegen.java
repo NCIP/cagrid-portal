@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
+import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncHelper;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
@@ -20,7 +20,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 1:10:16 PM
- * @version $Id: BDTFeatureCodegen.java,v 1.7 2007-03-21 16:38:42 dervin Exp $ 
+ * @version $Id: BDTFeatureCodegen.java,v 1.8 2007-04-04 19:55:21 dervin Exp $ 
  */
 public class BDTFeatureCodegen extends FeatureCodegen {
 	// public static final String NL = System.getProperties().getProperty("line.separator");
@@ -92,8 +92,23 @@ public class BDTFeatureCodegen extends FeatureCodegen {
             throw new CodegenExtensionException("No BDT query method found!");
         }
         
-        String methodSignatureStart = SyncSource.createUnBoxedSignatureStringFromMethod(
+        /*
+        String methodSignatureStart = SyncHelper.createUnBoxedSignatureStringFromMethod(
             bdtQueryMethod, getServiceInformation());
+        */
+
+        String methodSignatureStart = null;
+        // insert the new client method
+        if (bdtQueryMethod.isIsImported() && (bdtQueryMethod.getImportInformation().getFromIntroduce() != null)
+            && !bdtQueryMethod.getImportInformation().getFromIntroduce().booleanValue()) {
+            methodSignatureStart = SyncHelper.createBoxedSignatureStringFromMethod(bdtQueryMethod) + " " 
+                + SyncHelper.createClientExceptions(bdtQueryMethod, getServiceInformation());
+        } else {
+            methodSignatureStart = SyncHelper.createUnBoxedSignatureStringFromMethod(bdtQueryMethod, getServiceInformation()) + " "
+                + SyncHelper.createExceptions(bdtQueryMethod, getServiceInformation());
+        }
+        System.out.println("Searching for method with signature:");
+        System.out.println("\t" + methodSignatureStart);
         
 		String serviceName = getServiceInformation().getServices().getService()[0].getName();
 		String basePackage = getServiceInformation().getServices().getService()[0].getPackageName();
@@ -114,11 +129,9 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 		StringBuffer edit = new StringBuffer();
 		edit.append(SERVICE_LINE1).append(SERVICE_LINE2).append(SERVICE_LINE3);
 		if (source.indexOf(edit.toString()) == -1) {
-            System.out.println("BDT impl has never been edited. Adding DS implementation");
-            System.out.println("BDT impl has never been edited. Adding DS implementation");
-            System.out.println("BDT impl has never been edited. Adding DS implementation");
-            
-			// edit has never been performed, perform edits
+            System.out.println("Source File Contents:");
+            System.out.println(source.toString());
+            // edit has never been performed, perform edits
             // find method start
             int methodStart = source.indexOf(methodSignatureStart);
             if (methodStart == -1) {

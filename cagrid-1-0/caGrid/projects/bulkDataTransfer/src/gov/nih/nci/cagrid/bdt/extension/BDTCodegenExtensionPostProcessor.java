@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
+import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncHelper;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
@@ -172,7 +172,8 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
                 // check the output QName
                 QName outputName = methodOutput.getQName();
                 return outputName.getLocalPart().equals(service.getName() + "BulkDataHandlerReference")
-                    || outputName.equals(BDT_HANDLER_REFERENCE_QNAME);
+                    || (BDT_HANDLER_REFERENCE_QNAME.getLocalPart().equals(outputName.getLocalPart()) 
+                        && BDT_HANDLER_REFERENCE_QNAME.getNamespaceURI().equals(outputName.getNamespaceURI()));
             }
         }
         return false;
@@ -182,9 +183,9 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
     private void implementBdtMethod(StringBuffer implSource, ServiceInformation info, MethodType method)
         throws CodegenExtensionException {
         try {
-            String methodSignature = SyncSource.createUnBoxedSignatureStringFromMethod(method, info);
-            int startOfMethod = SyncSource.startOfSignature(implSource, methodSignature);
-            int endOfMethod = SyncSource.bracketMatch(implSource, startOfMethod);
+            String methodSignature = SyncHelper.createUnBoxedSignatureStringFromMethod(method, info);
+            int startOfMethod = SyncHelper.startOfSignature(implSource, methodSignature);
+            int endOfMethod = SyncHelper.bracketMatch(implSource, startOfMethod);
 
             if (startOfMethod == -1 || endOfMethod == -1) {
                 System.err.println("WARNING: Unable to locate method in Impl : " + method.getName());
@@ -204,8 +205,8 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
             // insert the new client method
             ServiceType mainService = info.getServices().getService(0);
             // create the new signature, including exceptions
-            String bdtMethodImpl = "\n\t" + SyncSource.createUnBoxedSignatureStringFromMethod(method, info) + " "
-                + SyncSource.createExceptions(method, info, mainService);
+            String bdtMethodImpl = "\n\t" + SyncHelper.createUnBoxedSignatureStringFromMethod(method, info) + " "
+                + SyncHelper.createExceptions(method, info);
             // open the method body
             bdtMethodImpl += "{\n";
 
