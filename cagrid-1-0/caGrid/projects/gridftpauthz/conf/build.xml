@@ -12,12 +12,12 @@
 		<!-- check that GLOBUS_LOCATION is set -->
 		<fail>
 			<condition>
-				<isset property="${env.GLOBUS_LOCATION}"/>
+				<isset property="${env.GRIDFTP_ROOT}"/>
 			</condition>
 		</fail>
 
 		<!-- make replacements in the bashrc file and the gridftp service startup file -->
-		<replace file="${gridftp_auth_config.file}" token="@@GRIDFTP_ROOT@@" value="${env.GLOBUS_LOCATION}"/>
+		<replace file="${gridftp_auth_config.file}" token="@@GRIDFTP_ROOT@@" value="${env.GRIDFTP_ROOT}"/>
 
 	</target>
 

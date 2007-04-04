@@ -14,16 +14,4 @@
  		</MembershipQuery>
 	</MembershipExpression> 		
 </rule>
-<rule>
-	<action>read</action>
-	<path>/*</path>
-	<MembershipExpression xmlns="http://cagrid.nci.nih.gov/1/GridGrouper" xmlns:ns1="http://cagrid.nci.nih.gov/1/GridGrouper" ns1:logicRelation="AND">
-		<MembershipQuery ns1:MembershipStatus="MEMBER_OF">
-			<GroupIdentifier>
-				<gridGrouperURL>https://training.cagrid.org:8443/wsrf/services/cagrid/GridGrouper</gridGrouperURL>
-				<GroupName>training:trainees</GroupName>
-			</GroupIdentifier>
-		</MembershipQuery>
-	</MembershipExpression> 		
-</rule>
 </GridFTPGrouperConfig>
