@@ -42,6 +42,12 @@ public class GlobusHelperTest extends Story {
 
 
     @Override
+    public String getName() {
+        return "GlobusHelper Story";
+    }
+
+
+    @Override
     protected boolean storySetUp() throws Throwable {
         return true;
     }
@@ -71,7 +77,7 @@ public class GlobusHelperTest extends Story {
         steps.add(new GlobusCreateStep(this.globus));
         steps.add(new GlobusStartStep(this.globus));
         steps.add(new GlobusCheckRunningStep(this.globus));
-        
+
         steps.add(new GlobusCreateStep(this.secureGlobus));
         steps.add(new GlobusInstallSecurityDescriptorStep(this.secureGlobus));
         steps.add(new GlobusStartStep(this.secureGlobus));
@@ -82,7 +88,6 @@ public class GlobusHelperTest extends Story {
         steps.add(new GlobusStopStep(this.secureGlobus));
         steps.add(new GlobusCleanupStep(this.secureGlobus));
 
-        
         return steps;
     }
 
