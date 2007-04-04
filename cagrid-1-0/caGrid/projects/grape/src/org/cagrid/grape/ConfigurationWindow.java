@@ -59,7 +59,6 @@ public class ConfigurationWindow extends JDialog {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() throws Exception {
 		this.setSize(300, 200);

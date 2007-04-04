@@ -71,7 +71,6 @@ public class GeneralConfigurationEditor extends ConfigurationBasePanel {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 
