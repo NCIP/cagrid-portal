@@ -340,10 +340,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 			view.setIcon(GridGrouperLookAndFeel.getQueryIcon());
 			view.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO
-					// Auto-generated
-					// Event stub
-					// actionPerformed()
+					getGroups().doubleClick();
 				}
 			});
 		}

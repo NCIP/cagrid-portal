@@ -9,8 +9,9 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.table.GrapeBaseTable;
-
+import org.cagrid.grape.utils.ErrorDialog;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -22,11 +23,12 @@ import org.cagrid.grape.table.GrapeBaseTable;
  */
 public class MyGroupsTable extends GrapeBaseTable {
 	public final static String GROUP = "Groups";
+
 	public final static String GRIDGROUPER_URI = "Grid Grouper";
+
 	public final static String NAMESPACE = "Namespace";
 
 	public final static String NAME = "Name";
-
 
 	public MyGroupsTable() {
 		super(createTableModel());
@@ -40,7 +42,6 @@ public class MyGroupsTable extends GrapeBaseTable {
 
 	}
 
-
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(GROUP);
@@ -49,7 +50,6 @@ public class MyGroupsTable extends GrapeBaseTable {
 		model.addColumn(NAME);
 		return model;
 	}
-
 
 	public synchronized void addGroup(final Group group) {
 		Vector v = new Vector();
@@ -61,14 +61,12 @@ public class MyGroupsTable extends GrapeBaseTable {
 		addRow(v);
 	}
 
-
 	public synchronized void addGroups(final Set set) {
 		Iterator<Group> itr = set.iterator();
 		while (itr.hasNext()) {
 			addGroup(itr.next());
 		}
 	}
-
 
 	public synchronized Group getSelectedGroup() throws Exception {
 		int row = getSelectedRow();
@@ -79,13 +77,17 @@ public class MyGroupsTable extends GrapeBaseTable {
 		}
 	}
 
-
-	public void doubleClick() throws Exception {
+	public void doubleClick() {
+		try {
+			GridApplication.getContext().addApplicationComponent(
+					new MyGroupViewer(getSelectedGroup()), 500, 400);
+		} catch (Exception e) {
+			ErrorDialog.showError(e);
+		}
 
 	}
 
-
-	public void singleClick() throws Exception {
+	public void singleClick() {
 		// TODO Auto-generated method stub
 
 	}
