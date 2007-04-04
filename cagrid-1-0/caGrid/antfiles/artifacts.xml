@@ -37,6 +37,11 @@
                 <include name="*.jar" />
             </fileset>
         </artifact>
+        <artifact track="main" type="jars" id="jdom.jars">
+            <fileset dir="${share.dir}/lib/jdom">
+                <include name="*.jar" />
+            </fileset>
+        </artifact>
         <artifact track="main" type="jars" id="mds.jars">
             <fileset dir="${share.dir}/lib/mds">
                 <include name="*.jar" />

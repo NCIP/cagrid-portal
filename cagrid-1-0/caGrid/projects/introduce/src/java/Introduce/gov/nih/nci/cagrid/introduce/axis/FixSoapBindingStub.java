@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.introduce.axis;
 
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,13 +7,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
+import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import org.apache.axis.utils.XMLUtils;
-import org.globus.wsrf.encoding.ObjectDeserializer;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.Namespace;
+import org.projectmobius.common.XMLUtilities;
 
 
 public class FixSoapBindingStub {
@@ -96,23 +95,19 @@ public class FixSoapBindingStub {
 
 
 	public static void main(String[] args) {
-		ServiceDescription introService = null;
+		Document doc = null;
 		try {
-			InputStream inputStream = null;
-
-			inputStream = new FileInputStream(args[0] + File.separator + "introduce.xml");
-			org.w3c.dom.Document doc = XMLUtils.newDocument(inputStream);
-			introService = (ServiceDescription) ObjectDeserializer.toObject(doc.getDocumentElement(),
-				ServiceDescription.class);
-			inputStream.close();
+			doc = XMLUtilities.fileNameToDocument(args[0] + File.separator + "introduce.xml");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;
 		}
 
 		Properties props = new Properties();
+		String excludeArgs = null;
 		try {
 			props.load(new FileInputStream(new File(args[0] + File.separator + "introduce.properties")));
+			excludeArgs = (String) props.get("introduce.soap.binding.excludes");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return;
@@ -121,13 +116,12 @@ public class FixSoapBindingStub {
 			return;
 		}
 
-		String excludeArgs = (String) props.get("introduce.soap.binding.excludes");
-		ServiceType[] services = introService.getServices().getService();
-		String mainServiceName = services[0].getName();
-		for (int i = 0; i < services.length; i++) {
+		List services = doc.getRootElement().getChild("Services",Namespace.getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Services")).getChildren("Service", Namespace.getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Services"));
+		String mainServiceName = ((Element)services.get(0)).getAttributeValue("name");
+		for (int i = 0; i < services.size(); i++) {
 			String stubFileName = args[0] + File.separator + "build" + File.separator + "stubs-" + mainServiceName
-				+ File.separator + "src" + File.separator + services[i].getPackageName().replace(".", File.separator)
-				+ File.separator + "stubs" + File.separator + "bindings" + File.separator + services[i].getName()
+				+ File.separator + "src" + File.separator + ((Element)services.get(i)).getAttributeValue("packageName").replace(".", File.separator)
+				+ File.separator + "stubs" + File.separator + "bindings" + File.separator + ((Element)services.get(i)).getAttributeValue("name")
 				+ "PortTypeSOAPBindingStub.java";
 			FixSoapBindingStub stubFixer = new FixSoapBindingStub(stubFileName, excludeArgs);
 			stubFixer.execute();
