@@ -133,7 +133,7 @@ public class ErrorDialog extends JDialog {
 	public static void showErrorDialog(String error, String[] detail) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < detail.length; i++) {
-			builder.append(detail).append("\n");
+			builder.append(detail[i]).append("\n");
 		}
 		addError(error, builder.toString());
 	}
@@ -390,8 +390,9 @@ public class ErrorDialog extends JDialog {
 							text.append("\t").append(details[j]).append(nl);
 						}
 					}
-					if (i + 1 < getErrorList().getModel().getSize());
-					text.append("---- ---- ---- ----").append(nl);
+					if (i + 1 < getErrorList().getModel().getSize()) {
+					    text.append("---- ---- ---- ----").append(nl);
+                    }
 				}
 			}
 			try {

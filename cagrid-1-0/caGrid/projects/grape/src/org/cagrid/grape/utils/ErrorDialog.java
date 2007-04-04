@@ -36,7 +36,7 @@ import javax.swing.event.ListSelectionListener;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Oct 2, 2006
- * @version $Id: ErrorDialog.java,v 1.2 2007-04-03 04:04:25 langella Exp $
+ * @version $Id: ErrorDialog.java,v 1.3 2007-04-04 13:40:47 dervin Exp $
  */
 public class ErrorDialog extends JDialog {
 
@@ -138,7 +138,7 @@ public class ErrorDialog extends JDialog {
 	public static void showError(String error, String[] detail) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < detail.length; i++) {
-			builder.append(detail).append("\n");
+			builder.append(detail[i]).append("\n");
 		}
 		addError(error, builder.toString());
 	}
@@ -395,9 +395,9 @@ public class ErrorDialog extends JDialog {
 							text.append("\t").append(details[j]).append(nl);
 						}
 					}
-					if (i + 1 < getErrorList().getModel().getSize())
-						;
-					text.append("---- ---- ---- ----").append(nl);
+					if (i + 1 < getErrorList().getModel().getSize()) {
+					    text.append("---- ---- ---- ----").append(nl);
+                    }
 				}
 			}
 			try {
