@@ -17,17 +17,6 @@
             <showIcons>true</showIcons>
             <components>
                 <component>
-                    <title>My Groups</title>
-                    <description>View the groups in which you are a member of.</description>
-                    <classname>gov.nih.nci.cagrid.gridgrouper.ui.mygroups.MyGroupsWindow</classname>
-                    <icon>/grouper_logo_no_background_22x22.png</icon>
-                    <showOnToolBar>true</showOnToolBar>
-                    <dimensions>
-                        <width>800</width>
-                        <height>300</height>
-                    </dimensions>
-                </component>
-                <component>
                     <title>Group Browser</title>
                     <description>Browsing and Administration of groups.</description>
                     <classname>gov.nih.nci.cagrid.gridgrouper.ui.GroupManagementBrowser</classname>
