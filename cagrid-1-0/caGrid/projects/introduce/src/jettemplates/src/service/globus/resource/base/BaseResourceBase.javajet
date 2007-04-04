@@ -12,19 +12,21 @@ package <%=arguments.getService().getPackageName()%>.service.globus.resource;
 
 import java.util.Calendar;
 
-import org.globus.wsrf.Resource;
+import org.globus.wsrf.security.SecureResource;
 import org.globus.wsrf.ResourceIdentifier;
 import org.globus.wsrf.RemoveCallback;
 import org.globus.wsrf.jndi.Initializable;
+import org.globus.wsrf.impl.security.descriptor.ResourceSecurityDescriptor;
 
 import org.apache.axis.components.uuid.UUIDGenFactory;
 import org.apache.axis.components.uuid.UUIDGen;
 
-public abstract class BaseResourceBase implements Resource, RemoveCallback, ResourceIdentifier, Initializable {
+public abstract class BaseResourceBase implements SecureResource, RemoveCallback, ResourceIdentifier, Initializable {
 
 	/** the identifier of this resource... should be unique in the service */
 	private Object id;
 	private static final UUIDGen UUIDGEN = UUIDGenFactory.getUUIDGen();
+	private ResourceSecurityDescriptor desc;
 
 
 	/**
@@ -40,7 +42,23 @@ public abstract class BaseResourceBase implements Resource, RemoveCallback, Reso
 	 */
 	public final void initialize() throws Exception {
 		this.id = UUIDGEN.nextUUID();
+		this.desc = null;
 	}
 	
+    /**
+     * Sets the security descriptor for this resource.  The default resource
+     * security will be null so it will fall back to method level then service
+     * level security.  If you want to protect this particular instance of this
+     * resource then provide a resource security descriptor to this resource
+     * through this method.
+     */
+	public void setSecurityDescriptor(ResourceSecurityDescriptor desc) {
+		this.desc = desc;
+	}
+	
+	
+	public ResourceSecurityDescriptor getSecurityDescriptor() {
+		return this.desc;
+	}
 
 }
