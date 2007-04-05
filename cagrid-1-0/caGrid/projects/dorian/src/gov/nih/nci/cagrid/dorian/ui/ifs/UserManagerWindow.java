@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
@@ -32,14 +33,13 @@ import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.6 2007-04-03 04:04:23 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.7 2007-04-05 16:08:05 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -323,7 +323,7 @@ public class UserManagerWindow extends ApplicationComponent {
 
 	public void showUser() {
 
-		MobiusRunnable runner = new MobiusRunnable() {
+		Runner runner = new Runner() {
 			public void execute() {
 				try {
 					IFSUser user = getUsersTable().getSelectedUser();
@@ -449,7 +449,7 @@ public class UserManagerWindow extends ApplicationComponent {
 			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							findUsers();
 						}
@@ -811,7 +811,7 @@ public class UserManagerWindow extends ApplicationComponent {
 			this.lastService = serviceUrl;
 			this.lastGridIdentity = caddy.getIdentity();
 
-			MobiusRunnable runner = new MobiusRunnable() {
+			Runner runner = new Runner() {
 				public void execute() {
 					updateIdPs(serviceUrl, caddy.getProxy());
 				}
@@ -923,7 +923,7 @@ public class UserManagerWindow extends ApplicationComponent {
 			removeUser.setText("Remove User");
 			removeUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							removeUser();
 						}

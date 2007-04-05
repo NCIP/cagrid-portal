@@ -43,6 +43,7 @@
 
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 import gov.nih.nci.cagrid.gridgrouper.client.Stem;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
@@ -55,7 +56,6 @@ import javax.swing.ImageIcon;
 
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -109,7 +109,7 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 		Iterator itr = old.values().iterator();
 		while (itr.hasNext()) {
 			final StemTreeNode node = (StemTreeNode) itr.next();
-			MobiusRunnable runner = new MobiusRunnable() {
+			Runner runner = new Runner() {
 				public void execute() {
 					addGridGrouper(node.getGridGrouper());
 				}

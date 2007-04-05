@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gts.ui;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
@@ -28,7 +29,6 @@ import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -308,7 +308,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 			viewTrustedAuthority.setIcon(GTSLookAndFeel.getModifyTrustedAuthorityIcon());
 			viewTrustedAuthority.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							disableAllActions();
 							showTrustedAuthority();
@@ -438,7 +438,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 			query.setIcon(GTSLookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							disableAllActions();
 							findTrustedAuthorities();
@@ -591,7 +591,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 			removeTrustedAuthorityButton.setText("Remove Trusted Authority");
 			removeTrustedAuthorityButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							disableAllActions();
 							removeTrustedAuthority();

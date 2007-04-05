@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.idp;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
@@ -29,14 +30,13 @@ import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.5 2007-04-03 04:04:23 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.6 2007-04-05 16:08:05 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -345,7 +345,7 @@ public class UserManagerWindow extends ApplicationComponent {
 		final int row = getUsersTable().getSelectedRow();
 
 		if ((row >= 0) && (row < getUsersTable().getRowCount())) {
-			MobiusRunnable runner = new MobiusRunnable() {
+			Runner runner = new Runner() {
 				public void execute() {
 					IdPUser user = (IdPUser) getUsersTable().getValueAt(row, 0);
 					String serviceName = ((DorianServiceListComboBox) getService()).getSelectedService();
@@ -862,7 +862,7 @@ public class UserManagerWindow extends ApplicationComponent {
 			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							findUsers();
 						}
@@ -1100,7 +1100,7 @@ public class UserManagerWindow extends ApplicationComponent {
 			removeUser.setText("Remove User");
 			removeUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							removeUser();
 						}

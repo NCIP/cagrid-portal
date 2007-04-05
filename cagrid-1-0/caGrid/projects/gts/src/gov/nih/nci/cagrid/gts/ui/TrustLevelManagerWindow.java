@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gts.ui;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
@@ -23,7 +24,6 @@ import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -239,7 +239,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 			addTrustLevel.setIcon(GTSLookAndFeel.getAddTrustLevelIcon());
 			addTrustLevel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							disableAllActions();
 							addTrustLevel();
@@ -379,7 +379,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 			query.setIcon(GTSLookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							disableAllActions();
 							getTrustLevels();
@@ -509,7 +509,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 			removeTrustLevelButton.setText("Remove Trust Level");
 			removeTrustLevelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							disableAllActions();
 							removeTrustLevel();

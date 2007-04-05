@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.idp;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.dorian.client.IdPRegistrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
@@ -20,7 +21,6 @@ import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -730,7 +730,7 @@ public class ApplicationWindow extends ApplicationComponent {
 			a.setEmail(this.getEmail().getText());
 			final String serviceUrl = ((DorianServiceListComboBox) this.getService()).getSelectedService();
 
-			MobiusRunnable runner = new MobiusRunnable() {
+			Runner runner = new Runner() {
 				public void execute() {
 					try {
 						IdPRegistrationClient client = new IdPRegistrationClient(serviceUrl);

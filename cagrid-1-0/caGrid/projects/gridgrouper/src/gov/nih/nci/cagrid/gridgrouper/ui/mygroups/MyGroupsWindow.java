@@ -1,14 +1,18 @@
 package gov.nih.nci.cagrid.gridgrouper.ui.mygroups;
 
+import gov.nih.nci.cagrid.common.Runner;
+import gov.nih.nci.cagrid.common.RunnerGroup;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperUIUtils;
 
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -19,10 +23,6 @@ import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.cagrid.grape.utils.MultiEventProgressBar;
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.common.MobiusRunnableGroup;
-import java.awt.FlowLayout;
-import javax.swing.JButton;
 
 
 /**
@@ -96,7 +96,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 				return;
 			}
 
-			MobiusRunnableGroup grp = new MobiusRunnableGroup();
+			RunnerGroup grp = new RunnerGroup();
 			List services = GridGrouperUIUtils.getGridGrouperServices();
 			for (int i = 0; i < services.size(); i++) {
 				MyGroupFinder finder = new MyGroupFinder((String) services.get(i), cred, getGroups());
@@ -129,7 +129,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 		this.setSize(300, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("JFrame");
-		MobiusRunnable runner = new MobiusRunnable() {
+		Runner runner = new Runner() {
 			public void execute() {
 				findGroups();
 			}
@@ -360,7 +360,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 			refresh.setIcon(GridGrouperLookAndFeel.getLoadIcon());
 			refresh.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							findGroups();
 						}

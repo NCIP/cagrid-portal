@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gts.ui;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
@@ -23,7 +24,6 @@ import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -254,7 +254,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			addAuthority.setIcon(GTSLookAndFeel.getAuthorityAddIcon());
 			addAuthority.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							disableAllActions();
 							addAuthority();
@@ -396,7 +396,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					disableAllActions();
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							getAuthorities();
 						}
@@ -529,7 +529,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			removeAuthority.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					disableAllActions();
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							removeAuthority();
 							enableAllActions();
@@ -613,7 +613,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			viewModifyButton.setText("View / Modify Authority");
 			viewModifyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							disableAllActions();
 							try {
@@ -713,7 +713,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			updatePriorities.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					disableAllActions();
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							updatePriorities();
 							enableAllActions();

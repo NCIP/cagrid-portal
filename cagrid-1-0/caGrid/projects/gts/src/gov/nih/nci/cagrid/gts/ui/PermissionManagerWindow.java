@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gts.ui;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
@@ -23,7 +24,6 @@ import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -248,7 +248,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 			addPermission.setIcon(GTSLookAndFeel.getAddPermissionIcon());
 			addPermission.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							disableAllActions();
 							addPermission();
@@ -377,7 +377,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 			query.setIcon(GTSLookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							disableAllActions();
 							findPermissions();
@@ -436,7 +436,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 			service = new GTSServiceListComboBox();
 			service.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							syncServices();
 						}
@@ -527,7 +527,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 			removePermissionButton.setText("Remove Permission");
 			removePermissionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							disableAllActions();
 							removePermission();

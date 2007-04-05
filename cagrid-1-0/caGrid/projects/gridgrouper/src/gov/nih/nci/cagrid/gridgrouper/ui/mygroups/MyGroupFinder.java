@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.gridgrouper.ui.mygroups;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -15,7 +15,7 @@ import org.projectmobius.common.MobiusRunnable;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class MyGroupFinder extends MobiusRunnable {
+public class MyGroupFinder extends Runner {
 
 	private String gridGrouperURI;
 	private GlobusCredential proxy;

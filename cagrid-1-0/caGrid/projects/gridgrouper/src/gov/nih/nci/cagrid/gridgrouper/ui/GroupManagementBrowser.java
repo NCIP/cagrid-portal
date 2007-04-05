@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
+import gov.nih.nci.cagrid.common.Runner;
+
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,7 +15,6 @@ import javax.swing.JSplitPane;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -243,7 +244,7 @@ public class GroupManagementBrowser extends ApplicationComponent {
 			addGridGrouper.setIcon(GridGrouperLookAndFeel.getGrouperAddIcon22x22());
 			addGridGrouper.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							GridApplication.getContext().addApplicationComponent(
 								new AddGridGrouperWindow(getGroupTree().getRootNode()), 400, 150);
@@ -274,7 +275,7 @@ public class GroupManagementBrowser extends ApplicationComponent {
 			removeGridGrouper.setIcon(GridGrouperLookAndFeel.getGrouperRemoveIcon22x22());
 			removeGridGrouper.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							getGroupTree().getRootNode().removeSelectedGridGrouper();
 						}
@@ -304,7 +305,7 @@ public class GroupManagementBrowser extends ApplicationComponent {
 			view.setIcon(GridGrouperLookAndFeel.getQueryIcon());
 			view.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							getContentManager().addNode(getGroupTree().getCurrentNode());
 						}
@@ -334,7 +335,7 @@ public class GroupManagementBrowser extends ApplicationComponent {
 			refresh.setIcon(GridGrouperLookAndFeel.getLoadIcon());
 			refresh.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							GridGrouperBaseTreeNode node = getGroupTree().getCurrentNode();
 							if (node != null) {

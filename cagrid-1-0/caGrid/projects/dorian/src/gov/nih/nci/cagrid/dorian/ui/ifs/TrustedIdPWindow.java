@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
@@ -36,14 +37,13 @@ import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.6 2007-04-03 04:04:23 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.7 2007-04-05 16:08:05 langella Exp $
  */
 public class TrustedIdPWindow extends ApplicationComponent {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
@@ -319,7 +319,7 @@ public class TrustedIdPWindow extends ApplicationComponent {
 
 			updateTrustedIdP.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							updateTrustedIdP();
 						}

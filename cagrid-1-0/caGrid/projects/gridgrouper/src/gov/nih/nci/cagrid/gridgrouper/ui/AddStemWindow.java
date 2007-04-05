@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 
@@ -18,7 +19,6 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -227,7 +227,7 @@ public class AddStemWindow extends ApplicationComponent {
 			addChildStem.setText("Add Stem");
 			addChildStem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							StemI stem = node.getStem();
 							int eid = node.getBrowser().getProgress().startEvent("Adding a child stem....");

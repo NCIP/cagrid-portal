@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gts.ui;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.gridca.ui.ProxyCaddy;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
@@ -18,7 +19,6 @@ import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -173,7 +173,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 			gts = new GTSServiceListComboBox();
 			gts.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							syncServices();
 						}
@@ -231,7 +231,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 			addButton.setIcon(GTSLookAndFeel.getAddPermissionIcon());
 			addButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							addPermission();
 						}

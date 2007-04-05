@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import edu.internet2.middleware.subject.Subject;
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 
@@ -25,7 +26,6 @@ import javax.swing.JTextField;
 
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -804,7 +804,7 @@ public class StemBrowser extends JPanel {
 			updateStem.setIcon(GridGrouperLookAndFeel.getStemIcon16x16());
 			updateStem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							updateStem();
 						}
@@ -938,7 +938,7 @@ public class StemBrowser extends JPanel {
 
 
 	protected void loadPrivileges() {
-		MobiusRunnable runner = new MobiusRunnable() {
+		Runner runner = new Runner() {
 			public void execute() {
 
 				synchronized (getPrivs()) {
@@ -1005,7 +1005,7 @@ public class StemBrowser extends JPanel {
 			updatePrivilege.setIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
 			updatePrivilege.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							try {
 								getPrivs().doubleClick();
@@ -1184,7 +1184,7 @@ public class StemBrowser extends JPanel {
 			addChildStem.setIcon(GridGrouperLookAndFeel.getAddIcon());
 			addChildStem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							int eid = node.getBrowser().getProgress().startEvent("Adding a child stem....");
 							try {
@@ -1284,7 +1284,7 @@ public class StemBrowser extends JPanel {
 			removeStem.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
 			removeStem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 
 							StemTreeNode child = null;
@@ -1491,7 +1491,7 @@ public class StemBrowser extends JPanel {
 			removeButton.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 
 							GroupTreeNode child = null;
@@ -1566,7 +1566,7 @@ public class StemBrowser extends JPanel {
 			addGroup.setIcon(GridGrouperLookAndFeel.getAddIcon());
 			addGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							int eid = node.getBrowser().getProgress().startEvent("Adding a child group....");
 							try {
@@ -1675,7 +1675,7 @@ public class StemBrowser extends JPanel {
 			final StemBrowser sb = this;
 			addPrivileges.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							try {
 								GridApplication.getContext().addApplicationComponent(new StemPrivilegeWindow(sb), 500,

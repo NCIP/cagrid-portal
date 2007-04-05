@@ -1,5 +1,8 @@
 package org.cagrid.grape;
 
+import gov.nih.nci.cagrid.common.Runner;
+import gov.nih.nci.cagrid.common.RunnerGroup;
+
 import java.awt.Dimension;
 import java.awt.Window;
 
@@ -7,8 +10,6 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import org.cagrid.grape.model.Component;
-import org.projectmobius.common.MobiusRunnable;
-import org.projectmobius.common.MobiusRunnableGroup;
 
 
 /**
@@ -57,22 +58,22 @@ public class ApplicationContext {
 	}
 
 
-	public void executeInBackground(MobiusRunnable r) throws Exception {
+	public void executeInBackground(Runner r) throws Exception {
 		this.application.getThreadManager().executeInBackground(r);
 	}
 
 
-	public void executeInBackground(MobiusRunnableGroup grp) throws Exception {
+	public void executeInBackground(RunnerGroup grp) throws Exception {
 		this.application.getThreadManager().executeGroupInBackground(grp);
 	}
 
 
-	public void execute(MobiusRunnable r) throws Exception {
+	public void execute(Runner r) throws Exception {
 		this.application.getThreadManager().execute(r);
 	}
 
 
-	public void execute(MobiusRunnableGroup grp) throws Exception {
+	public void execute(RunnerGroup grp) throws Exception {
 		this.application.getThreadManager().executeGroup(grp);
 	}
 

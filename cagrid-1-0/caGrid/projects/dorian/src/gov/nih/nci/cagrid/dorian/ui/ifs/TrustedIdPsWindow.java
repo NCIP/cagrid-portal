@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
@@ -27,14 +28,13 @@ import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.5 2007-04-03 04:04:23 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.6 2007-04-05 16:08:05 langella Exp $
  */
 public class TrustedIdPsWindow extends ApplicationComponent {
 
@@ -248,7 +248,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			viewTrustedIdP.setIcon(DorianLookAndFeel.getTrustedIdPIcon());
 			viewTrustedIdP.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							showTrustedIdP();
 						}
@@ -387,7 +387,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							findTrustedIdPs();
 						}
@@ -540,7 +540,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			removeTrustedIdPButton.setText("Remove TrustedIdP");
 			removeTrustedIdPButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							removeTrustedIdP();
 						}
@@ -582,7 +582,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			addUser.setText("Add Trusted IdP");
 			addUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							addTrustedIdP();
 						}

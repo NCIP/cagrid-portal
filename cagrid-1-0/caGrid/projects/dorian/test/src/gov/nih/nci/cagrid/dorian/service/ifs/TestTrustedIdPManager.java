@@ -130,6 +130,9 @@ public class TestTrustedIdPManager extends TestCase {
 			String name = "Test IdP";
 			IdPContainer cont = getTrustedIdp(name);
 			TrustedIdP idp = cont.getIdp();
+			SAMLAuthenticationMethod[] auth = new SAMLAuthenticationMethod[1];
+			auth[0] = SAMLAuthenticationMethod.value1;
+			cont.getIdp().setAuthenticationMethod(auth);
 			idp = tm.addTrustedIdP(idp);
 			assertEquals(1, tm.getTrustedIdPs().length);
 			assertEquals(idp.getAuthenticationMethod().length, tm.getAuthenticationMethods(idp.getId()).length);
@@ -167,7 +170,6 @@ public class TestTrustedIdPManager extends TestCase {
 			assertEquals(idp, temp3);
 			assertTrue(tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
 			assertEquals(idp, tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
-
 			tm.removeTrustedIdP(idp.getId());
 			assertEquals(0, tm.getTrustedIdPs().length);
 		} catch (Exception e) {

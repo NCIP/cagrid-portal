@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.dorian.client.DorianCertifcateAuthorityClient;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.ui.DorianServiceListComboBox;
@@ -19,7 +20,6 @@ import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.projectmobius.common.MobiusRunnable;
 
 
 public class ViewCACertificateWindow extends ApplicationComponent {
@@ -169,7 +169,7 @@ public class ViewCACertificateWindow extends ApplicationComponent {
 			viewCAButton.setText("View CA Certificate");
 			viewCAButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							getCACertificate();
 						}

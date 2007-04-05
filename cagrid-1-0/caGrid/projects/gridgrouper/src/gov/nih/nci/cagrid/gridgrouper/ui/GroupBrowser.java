@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import edu.internet2.middleware.subject.Subject;
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.gridgrouper.client.Membership;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 
@@ -27,7 +28,6 @@ import javax.swing.JTextField;
 
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -801,7 +801,7 @@ public class GroupBrowser extends JPanel {
 			updateGroup.setIcon(GridGrouperLookAndFeel.getGroupIcon22x22());
 			updateGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							updateGroup();
 						}
@@ -988,7 +988,7 @@ public class GroupBrowser extends JPanel {
 			listMembers.setIcon(GridGrouperLookAndFeel.getQueryIcon());
 			listMembers.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							listMembers();
 						}
@@ -1106,7 +1106,7 @@ public class GroupBrowser extends JPanel {
 			final GroupBrowser gp = this;
 			addMember.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							if (node.getGroup().hasComposite()) {
 								ErrorDialog.showError("You cannot add a member to a composite group!!!");
@@ -1142,7 +1142,7 @@ public class GroupBrowser extends JPanel {
 			removeMemberButton.setText("Remove Member");
 			removeMemberButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 
 							try {
@@ -1183,7 +1183,7 @@ public class GroupBrowser extends JPanel {
 			removeCompositeButton.setText("Remove Composite Member");
 			removeCompositeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 
 							try {
@@ -1257,7 +1257,7 @@ public class GroupBrowser extends JPanel {
 
 
 	protected void loadPrivileges() {
-		MobiusRunnable runner = new MobiusRunnable() {
+		Runner runner = new Runner() {
 			public void execute() {
 				synchronized (getPrivilegesTable()) {
 					int eid = node.getBrowser().getProgress().startEvent(
@@ -1400,7 +1400,7 @@ public class GroupBrowser extends JPanel {
 			final GroupBrowser gb = this;
 			addPrivilege.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							try {
 								GridApplication.getContext().addApplicationComponent(new GroupPrivilegeWindow(gb), 500,
@@ -1435,7 +1435,7 @@ public class GroupBrowser extends JPanel {
 			updatePrivileges.setIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
 			updatePrivileges.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							try {
 								getPrivilegesTable().doubleClick();

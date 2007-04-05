@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gridgrouper.ui;
 import edu.internet2.middleware.grouper.AccessPrivilege;
 import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.subject.Subject;
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.client.Group;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
@@ -25,7 +26,6 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -350,7 +350,7 @@ public class GroupPrivilegeWindow extends ApplicationComponent {
 			remove.setIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
 			remove.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							addUpdatePrivileges();
 						}

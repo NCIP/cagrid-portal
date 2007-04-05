@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import edu.internet2.middleware.grouper.CompositeType;
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 
@@ -25,7 +26,6 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -377,7 +377,7 @@ public class AddMemberWindow extends ApplicationComponent {
 			addMember.setIcon(GridGrouperLookAndFeel.getAddIcon());
 			addMember.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							addMember();
 						}

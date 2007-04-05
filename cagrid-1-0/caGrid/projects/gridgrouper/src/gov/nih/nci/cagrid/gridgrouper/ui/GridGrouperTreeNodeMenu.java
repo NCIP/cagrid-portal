@@ -1,10 +1,11 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
+import gov.nih.nci.cagrid.common.Runner;
+
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.cagrid.grape.GridApplication;
-import org.projectmobius.common.MobiusRunnable;
 
 
 /**
@@ -60,7 +61,7 @@ public abstract class GridGrouperTreeNodeMenu extends JPopupMenu {
 			view.setIcon(GridGrouperLookAndFeel.getQueryIcon());
 			view.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							getBrowser().getContentManager().addNode(getGridGrouperTree().getCurrentNode());
 						}
@@ -100,7 +101,7 @@ public abstract class GridGrouperTreeNodeMenu extends JPopupMenu {
 			refresh.setIcon(GridGrouperLookAndFeel.getLoadIcon());
 			refresh.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							getGridGrouperTree().getCurrentNode().refresh();
 						}
@@ -135,7 +136,7 @@ public abstract class GridGrouperTreeNodeMenu extends JPopupMenu {
 			remove.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
 			remove.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
+					Runner runner = new Runner() {
 						public void execute() {
 							removeNode();
 						}
