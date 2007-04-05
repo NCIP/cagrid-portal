@@ -18,7 +18,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 30, 2006 
- * @version $Id: CreateEnumerationTests.java,v 1.2 2007-03-22 14:21:25 dervin Exp $ 
+ * @version $Id: CreateEnumerationTests.java,v 1.3 2007-04-05 16:57:58 dervin Exp $ 
  */
 public class CreateEnumerationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -27,6 +27,11 @@ public class CreateEnumerationTests extends Story {
 	+ "test" + File.separator + "TestEnumerationDataService";
 	public static final String PACKAGE_NAME = "gov.nih.nci.cagrid.test.enumds";
 	public static final String SERVICE_NAMESPACE = "http://" + PACKAGE_NAME + "/" + SERVICE_NAME;
+    
+    public String getName() {
+        return "Enumeration Data Service Creation Tests";
+    }
+    
 	
 	public String getDescription() {
 		return "Tests creation of an enumeration supporting caGrid 1.0 Data Service";

@@ -11,7 +11,7 @@ import com.atomicobject.haste.framework.Story;
 
 /** 
  *  CreationTests
- *  TODO:DOCUMENT ME
+ *  Tests for creation of a data service
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
@@ -24,6 +24,11 @@ public class CreationTests extends Story {
 	public static final String SERVICE_DIR = (new File("..")).getAbsolutePath() + File.separator + "data" + File.separator + "test" + File.separator + "TestDataService";
 	public static final String PACKAGE_NAME = "gov.nih.nci.cagrid.testds";
 	public static final String SERVICE_NAMESPACE = "http://" + PACKAGE_NAME + "/" + SERVICE_NAME;
+    
+    public String getName() {
+        return "Data Service Creation Tests";
+    }
+    
 	
 	public String getDescription() {
 		return "Testing the data service creation extension for Introduce"; 

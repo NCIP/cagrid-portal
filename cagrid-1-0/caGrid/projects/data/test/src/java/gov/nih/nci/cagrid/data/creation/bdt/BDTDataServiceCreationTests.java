@@ -19,7 +19,7 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 2:41:25 PM
- * @version $Id: BDTDataServiceCreationTests.java,v 1.3 2007-03-22 14:31:50 dervin Exp $ 
+ * @version $Id: BDTDataServiceCreationTests.java,v 1.4 2007-04-05 16:57:58 dervin Exp $ 
  */
 public class BDTDataServiceCreationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -28,6 +28,10 @@ public class BDTDataServiceCreationTests extends Story {
 		+ File.separator + "test" + File.separator + SERVICE_NAME;
 	public static final String PACKAGE_NAME = "gov.nih.nci.cagrid.testbdtds";
 	public static final String SERVICE_NAMESPACE = "http://" + PACKAGE_NAME + "/" + SERVICE_NAME;
+    
+    public String getName() {
+        return "BDT Data Service Creation Tests";
+    }
 	
 
 	public String getDescription() {

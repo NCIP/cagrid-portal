@@ -32,7 +32,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:19:42 PM
- * @version $Id: BDTDataServiceSystemTests.java,v 1.2 2007-03-22 14:21:25 dervin Exp $ 
+ * @version $Id: BDTDataServiceSystemTests.java,v 1.3 2007-04-05 16:57:58 dervin Exp $ 
  */
 public class BDTDataServiceSystemTests extends BaseSystemTest {
 	private static GlobusHelper globusHelper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
@@ -41,6 +41,11 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 	public String getDescription() {
 		return "System tests for BDT Data Service";
 	}
+    
+    
+    public String getName() {
+        return "BDT Data Service System Tests";
+    }
 	
 	
 	protected boolean storySetUp() {

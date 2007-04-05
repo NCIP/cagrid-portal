@@ -43,6 +43,11 @@ public class EnumerationSystemTests extends BaseSystemTest {
 	public EnumerationSystemTests() {
 		this.setName("Data Service System Tests");
 	}
+    
+    
+    public String getName() {
+        return "Enumeration Data Service System Tests";
+    }
 
 
 	public String getDescription() {

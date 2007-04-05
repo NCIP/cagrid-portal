@@ -21,7 +21,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.13 2007-03-22 14:21:25 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.14 2007-04-05 16:57:58 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     private static GlobusHelper globusHelper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
@@ -30,6 +30,11 @@ public class SystemTests extends BaseSystemTest {
 
     public SystemTests() {
         this.setName("Data Service System Tests");
+    }
+    
+    
+    public String getName() {
+        return "Data Service System Tests";
     }
 
 
