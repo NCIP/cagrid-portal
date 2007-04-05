@@ -20,7 +20,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 1:10:16 PM
- * @version $Id: BDTFeatureCodegen.java,v 1.8 2007-04-04 19:55:21 dervin Exp $ 
+ * @version $Id: BDTFeatureCodegen.java,v 1.9 2007-04-05 13:43:39 dervin Exp $ 
  */
 public class BDTFeatureCodegen extends FeatureCodegen {
 	// public static final String NL = System.getProperties().getProperty("line.separator");
@@ -92,11 +92,6 @@ public class BDTFeatureCodegen extends FeatureCodegen {
             throw new CodegenExtensionException("No BDT query method found!");
         }
         
-        /*
-        String methodSignatureStart = SyncHelper.createUnBoxedSignatureStringFromMethod(
-            bdtQueryMethod, getServiceInformation());
-        */
-
         String methodSignatureStart = null;
         // insert the new client method
         if (bdtQueryMethod.isIsImported() && (bdtQueryMethod.getImportInformation().getFromIntroduce() != null)

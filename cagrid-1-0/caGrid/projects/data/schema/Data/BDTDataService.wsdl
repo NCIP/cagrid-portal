@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gov.nih.nci.cagrid.data.bdt/BDTDataService" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://gov.nih.nci.cagrid.data/DataService" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns6="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:ns5="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:ns11="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns10="http://gov.nih.nci.cagrid.data/DataServiceExceptions" xmlns:ns9="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:ns0="BDTDataService/types" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns4="http://schemas.xmlsoap.org/ws/2004/09/enumeration" xmlns:ns2="http://cagrid.nci.nih.gov/1/BulkDataTransferMetadata" xmlns:ns13="BDTDataServiceBDT/types" xmlns:ns7="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" xmlns:ns12="http://cagrid.nci.nih.gov/BulkDataHandlerReference" xmlns:ns3="http://www.globus.org/transfer" name="BDTDataService" targetNamespace="http://gov.nih.nci.cagrid.data.bdt/BDTDataService">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gov.nih.nci.cagrid.data.bdt/BDTDataService" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns0="http://gov.nih.nci.cagrid.data.bdt/BDTDataService/types" xmlns:ns3="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:ns12="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns7="http://gov.nih.nci.cagrid.data/DataServiceExceptions" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns11="http://schemas.xmlsoap.org/ws/2004/09/enumeration" xmlns:ns13="http://gov.nih.nci.cagrid.data.bdt/BDTDataServiceBDT/types" xmlns:ns8="http://cagrid.nci.nih.gov/1/BulkDataTransferMetadata" xmlns:ns9="http://cagrid.nci.nih.gov/BulkDataHandlerReference" xmlns:ns10="http://www.globus.org/transfer" name="BDTDataService" targetNamespace="http://gov.nih.nci.cagrid.data.bdt/BDTDataService">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
-  <import namespace="http://gov.nih.nci.cagrid.data/DataService" location="./DataService.wsdl" />
   <import namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" location="./ServiceSecurity.wsdl" />
   <!--============================================================
 
@@ -12,12 +11,15 @@
   <types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://gov.nih.nci.cagrid.data.bdt/BDTDataService" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
+      <import namespace="http://gov.nih.nci.cagrid.data.bdt/BDTDataService/types" schemaLocation="./BDTDataServiceTypes.xsd" />
       <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" schemaLocation="./1_gov.nih.nci.cagrid.CQLQuery.xsd" />
       <import namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing" schemaLocation="./addressing.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd" />
       <import namespace="http://gov.nih.nci.cagrid.data/DataServiceExceptions" schemaLocation="./DataServiceExceptions.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" schemaLocation="./xsd/cagrid/types/data/data.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/security.xsd" />
+      <import namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" schemaLocation="./enumeration.xsd" />
+      <import namespace="http://gov.nih.nci.cagrid.data.bdt/BDTDataServiceBDT/types" schemaLocation="./BDTDataServiceBulkDataHandlerTypes.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/1/BulkDataTransferMetadata" schemaLocation="./BulkDataTransferServiceMetadata.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/BulkDataHandlerReference" schemaLocation="./BulkDataHandlerReference.xsd" />
       <element name="BdtQueryRequest">
@@ -26,7 +28,7 @@
             <element name="cqlQuery">
               <complexType>
                 <sequence>
-                  <element ref="ns6:CQLQuery" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns3:CQLQuery" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -36,15 +38,16 @@
       <element name="BdtQueryResponse">
         <complexType>
           <sequence>
-            <element ref="ns12:BulkDataHandlerReference" minOccurs="1" maxOccurs="1" />
+            <element ref="ns9:BulkDataHandlerReference" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
       <element name="BDTDataServiceResourceProperties">
         <complexType>
           <sequence>
-            <element ref="ns2:BulkDataTransferMetadata" />
-            <element ref="ns9:DomainModel" />
+            <element ref="ns2:ServiceMetadata" />
+            <element ref="ns8:BulkDataTransferMetadata" />
+            <element ref="ns6:DomainModel" />
           </sequence>
         </complexType>
       </element>
@@ -57,6 +60,12 @@
   <message name="BdtQueryResponse">
     <part name="parameters" element="tns:BdtQueryResponse" />
   </message>
+  <message name="MalformedQueryExceptionFaultMessage">
+    <part name="fault" element="ns7:MalformedQueryException" />
+  </message>
+  <message name="QueryProcessingExceptionFaultMessage">
+    <part name="fault" element="ns7:QueryProcessingException" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -66,6 +75,8 @@
     <operation name="bdtQuery">
       <input message="tns:BdtQueryRequest" wsa:Action="http://gov.nih.nci.cagrid.data.bdt/BDTDataService/BdtQueryRequest" />
       <output message="tns:BdtQueryResponse" wsa:Action="http://gov.nih.nci.cagrid.data.bdt/BDTDataService/BdtQueryResponse" />
+      <fault name="MalformedQueryException" message="tns:MalformedQueryExceptionFaultMessage" wsa:Action="http://gov.nih.nci.cagrid.data.bdt/BDTDataService/MalformedQueryExceptionFaultMessage" />
+      <fault name="QueryProcessingException" message="tns:QueryProcessingExceptionFaultMessage" wsa:Action="http://gov.nih.nci.cagrid.data.bdt/BDTDataService/QueryProcessingExceptionFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />
