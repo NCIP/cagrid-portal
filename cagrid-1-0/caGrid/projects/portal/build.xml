@@ -68,7 +68,7 @@
 
     <!--Custom javac                        -->
     <presetdef name="portal.javac">
-        <javac source="1.4"/>
+        <javac source="1.5"/>
     </presetdef>
 
     <target name="setClasspath">
@@ -343,7 +343,7 @@
     <!-- Compile up generated stuff                                      -->
     <!-- ============================================================== -->
     <target name="compile" depends="init">
-        <javac source="1.4" destdir="${build.classes.dir}" classpathref="portal.classpath" debug="on">
+        <javac source="1.5" destdir="${build.classes.dir}" classpathref="portal.classpath" debug="on">
             <src>
                 <pathelement path="${generated.src.dir}"/>
                 <pathelement path="${java.src.dir}"/>
@@ -357,7 +357,7 @@
     </target>
 
     <target name="compileTests" depends="compile">
-        <javac srcdir="${test.src.dir}" classpathref="test.classpath" destdir="${test.classes.dir}" debug="on"
+        <javac source="1.5" srcdir="${test.src.dir}" classpathref="test.classpath" destdir="${test.classes.dir}" debug="on"
                failonerror="true"/>
     </target>
 
