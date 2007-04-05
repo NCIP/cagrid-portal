@@ -42,12 +42,12 @@
     <!--                          DEFINE THE SUB PROJECTS                                 -->
     <!-- ================================================================================ -->
     <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-    <property name="projects.list" value="authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, grape, graph, gridca, gridftpauthz, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, sdkQuery32, syncgts, workflow/WorkflowFactoryService, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider" />
+    <property name="projects.list" value="authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, grape, graph, gridca, gridftpauthz, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, sdkQuery32, syncgts, workflow/WorkflowFactoryService, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider, rav" />
     <!-- ================================================================================ -->
     <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT UNIT TESTING               -->
     <!-- ================================================================================ -->
     <!-- This should be a subset of the projects above -->
-    <property name="unit.testable.projects.list" value="introduce, cabigextensions, core, discovery, cadsr, evs, fqp, gridca, gridftpauthz, gts, data, sdkQuery, sdkQuery32, gridgrouper, wsEnum, metadatautils, dorian, bulkDataTransfer" />
+    <property name="unit.testable.projects.list" value="introduce, cabigextensions, core, discovery, cadsr, evs, fqp, gridca, gridftpauthz, gts, data, sdkQuery, sdkQuery32, gridgrouper, wsEnum, metadatautils, dorian, bulkDataTransfer, rav" />
     <!-- ================================================================================ -->
     <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT SYSTEM TESTING             -->
     <!-- ================================================================================ -->
@@ -57,7 +57,7 @@
     <!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
     <!-- ================================================================================ -->
     <!-- This should be a subset of the projects above -->
-    <property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data, bulkDataTransfer" />
+    <property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data, bulkDataTransfer, rav" />
     <property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
 
 
@@ -457,6 +457,18 @@
             <artifact refid="servicesecurity.wsdl" />
         </resolveDependencies>
         <ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
+    </target>
+	
+    <!-- =============================================================== -->
+    <!-- REMOTE APPLICATION VIRTUALIZATION EXTENSION:                                                      -->
+    <!-- =============================================================== -->
+    <target name="build-rav" depends="prepare" description="Builds the Remote Virtualization Extension">
+        <resolveDependencies extdir="${projects.dir}/rav/ext">
+            <artifact refid="introduce.jars" />
+            <artifact refid="introduce.resources" />
+            <artifact refid="core.jars" />
+        </resolveDependencies>
+    	<ant dir="${projects.dir}/rav" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
     <!-- =============================================================== -->
