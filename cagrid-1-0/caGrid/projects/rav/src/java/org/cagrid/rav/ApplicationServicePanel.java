@@ -1,8 +1,14 @@
 package org.cagrid.rav;
 
 
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.extension.CreationExtensionUIDialog;
+
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
+
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
@@ -10,11 +16,15 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import java.awt.ComponentOrientation;
 import javax.swing.SwingConstants;
+
+import java.awt.ComponentOrientation;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import java.io.File;
 
-public class ApplicationServicePanel extends JPanel {
+public class ApplicationServicePanel extends CreationExtensionUIDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel browserPanel = null;
@@ -30,8 +40,9 @@ public class ApplicationServicePanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public ApplicationServicePanel() {
-		super();
+	public ApplicationServicePanel(Frame f, 
+			ServiceExtensionDescriptionType desc, ServiceInformation info) {
+		super(f, desc, info);
 		initialize();
 	}
 
@@ -127,6 +138,16 @@ public class ApplicationServicePanel extends JPanel {
 		if (jTextField == null) {
 			jTextField = new JTextField();
 		}
+		jTextField.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				if (getJTextField().getText() != null) {
+					getJButton().setEnabled(true);
+				}
+				
+			}
+			
+		});
 		return jTextField;
 	}
 
@@ -147,7 +168,7 @@ public class ApplicationServicePanel extends JPanel {
 			           appName = 
 			                  fileChooser.getSelectedFile();
 			             getJTextField().setText(appName.getAbsolutePath());
-			             if(appName != null) {
+			             if(getJTextField().getText() != null) {
 			            	 getJButton1().setEnabled(true);
 			             }
 			           }
@@ -168,6 +189,11 @@ public class ApplicationServicePanel extends JPanel {
 			jButton1.setText("OK");
 			jButton1.setEnabled(false);
 			jButton1.setHorizontalAlignment(SwingConstants.RIGHT);
+			jButton1.addActionListener(new ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dispose();
+				}
+			});
 		}
 		return jButton1;
 	}

@@ -3,5 +3,7 @@
 	<classpathentry kind="src" path="test/src/java"/>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
