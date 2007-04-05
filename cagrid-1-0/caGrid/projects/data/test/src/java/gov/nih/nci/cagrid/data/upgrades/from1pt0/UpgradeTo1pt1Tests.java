@@ -18,7 +18,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTo1pt1Tests.java,v 1.5 2007-04-05 16:59:23 dervin Exp $ 
+ * @version $Id: UpgradeTo1pt1Tests.java,v 1.6 2007-04-05 18:12:05 dervin Exp $ 
  */
 public class UpgradeTo1pt1Tests extends Story {
 	public static final String TEST_DIR = "../data/test";
@@ -35,7 +35,7 @@ public class UpgradeTo1pt1Tests extends Story {
     
     
     public String getName() {
-        return "Data Service 1.0 to 1.1 Upgrade Tests";
+        return "Data Service 1_0 to 1_1 Upgrade Tests";
     }
 	
 
