@@ -900,7 +900,7 @@ public class QueryBuilder extends JFrame {
 	
 	private void enableQueryBuildingButtons(JButton[] buttons) {
 		Set enabledButtons = new HashSet();
-		Collections.addAll(enabledButtons, buttons);
+		Collections.addAll(enabledButtons, (java.lang.Object[]) buttons);
 		for (int i = 0; i < getContextButtonPanel().getComponentCount(); i++) {
 			JButton button = (JButton) getContextButtonPanel().getComponent(i);
 			button.setEnabled(enabledButtons.contains(button));
