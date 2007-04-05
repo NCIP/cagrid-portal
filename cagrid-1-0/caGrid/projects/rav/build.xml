@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!-- ================================================================= -->
-<!-- caGrid 1.0 discovery build file                                        -->
+<!-- caGrid 1.0 rav build file                                        -->
 <!-- ================================================================= -->
 
 <project name="rav" default="compile" basedir=".">
 	<!-- Environment -->
-	<property environment="rav" />
+	<property environment="env" />
 	<property file="${basedir}/build.properties" />
 	<property file="${user.dir}/build.properties" />
 	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
@@ -50,6 +50,7 @@
 		<fail message="Globus installation is not set in either GLOBUS_LOCATION or ext.globus.dir" if="globus.not.found" />
 		<echo message="Globus: ${ext.globus.dir}" />
 	</target>
+	
 	<target name="setGlobus" if="env.GLOBUS_LOCATION">
 		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
 	</target>
