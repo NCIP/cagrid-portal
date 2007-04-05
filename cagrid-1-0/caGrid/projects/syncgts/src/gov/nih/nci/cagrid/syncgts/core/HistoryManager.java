@@ -168,6 +168,21 @@ public class HistoryManager {
 		}
 	}
 
+	private boolean isAfter(DateFilter start, DateFilter end){
+		if(start.getYear()<=end.getYear()){
+			if(start.getMonth()<=end.getMonth()){
+				if(start.getDay()<=end.getDay()){
+					return false;
+				}else{
+					return true;
+				}
+			}else{
+				return true;
+			}
+		}else{
+			return true;
+		}
+	}
 
 	public void prune(DateFilter filter) throws Exception {
 		DateFilter start = getEarliestFitler();
@@ -184,7 +199,7 @@ public class HistoryManager {
 		end.setMonth(c.get(Calendar.MONTH) + 1);
 		end.setYear(c.get(Calendar.YEAR));
 
-		while (!start.equals(end)) {
+		while (!isAfter(start, end)) {
 			File startDir = getDirectory(start);
 			if ((startDir.exists()) && (startDir.isDirectory())) {
 				File[] fileList = startDir.listFiles();
