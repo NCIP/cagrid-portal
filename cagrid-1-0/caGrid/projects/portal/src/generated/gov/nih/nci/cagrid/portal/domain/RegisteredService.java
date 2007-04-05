@@ -17,7 +17,7 @@ import java.util.Set;
 public class RegisteredService implements GridService, Comparable {
 
     public static final String DATA_SERVICE = "Data Service";
-    public static final String ANALYTICAL_SERVICE = "Analyitcal Service";
+    public static final String ANALYTICAL_SERVICE = "Analytical Service";
 
     // Properties
     private Integer pk;
@@ -25,10 +25,10 @@ public class RegisteredService implements GridService, Comparable {
     private String version;
     private String name;
     private String description;
-    //service type defaults to Analytical Service
+    // service type defaults to Analytical Service
     private String type = RegisteredService.ANALYTICAL_SERVICE;
 
-    //Associations
+    // Associations
     private ResearchCenter rc;
     private Set operationCollection = new HashSet();
     private DomainModel domainModel;
@@ -38,16 +38,18 @@ public class RegisteredService implements GridService, Comparable {
     public RegisteredService() {
     }
 
+
     public RegisteredService(String epr) throws URI.MalformedURIException {
         this(GridUtils.getEPR(epr));
     }
+
 
     public RegisteredService(EndpointReferenceType handle) {
         this.setHandle(handle);
     }
 
-    public RegisteredService(EndpointReferenceType handle, boolean loadMetadata)
-            throws MetadataRetreivalException {
+
+    public RegisteredService(EndpointReferenceType handle, boolean loadMetadata) throws MetadataRetreivalException {
         this(handle);
 
         if (loadMetadata) {
@@ -57,28 +59,29 @@ public class RegisteredService implements GridService, Comparable {
         }
     }
 
+
     /**
-     * @hibernate.id generator-class="increment"
-     * default-value="-1"
-     * column="ID_KEY"
+     * @hibernate.id generator-class="increment" default-value="-1"
+     *               column="ID_KEY"
      */
     public Integer getPk() {
-        return pk;
+        return this.pk;
     }
+
 
     public void setPk(Integer pk) {
         this.pk = pk;
     }
 
+
     /**
-     * @hibernate.property column="SERVICE_EPR"
-     * type="string"
-     * unique="true"
-     * not-null="true"
+     * @hibernate.property column="SERVICE_EPR" type="string" unique="true"
+     *                     not-null="true"
      */
     public String getEPR() {
-        return EPR;
+        return this.EPR;
     }
+
 
     private void setEPR(String EPR) throws URI.MalformedURIException {
         this.EPR = EPR;
@@ -87,48 +90,54 @@ public class RegisteredService implements GridService, Comparable {
         setHandle(GridUtils.getEPR(EPR));
     }
 
+
     public EndpointReferenceType getHandle() {
         return this.handle;
     }
 
+
     /**
      * @return
-     * @hibernate.property column="NAME"
-     * type="string"
+     * @hibernate.property column="NAME" type="string"
      */
     public String getName() {
-        return name;
+        return this.name;
     }
+
 
     public void setName(String name) {
         this.name = name;
     }
 
+
     /**
      * @return
-     * @hibernate.property column="DESCRIPTION"
-     * type="string"
+     * @hibernate.property column="DESCRIPTION" type="string"
      */
     public String getDescription() {
-        return description;
+        return this.description;
     }
+
 
     public void setDescription(String description) {
         this.description = description;
     }
+
 
     public void setHandle(EndpointReferenceType handle) {
         this.handle = handle;
         this.EPR = handle.getAddress().toString();
     }
 
+
     /**
      * @hibernate.one-to-one class="gov.nih.nci.cagrid.portal.domain.ResearchCenter"
-     * cascade="all"
+     *                       cascade="all"
      */
     private ResearchCenter getRc() {
-        return rc;
+        return this.rc;
     }
+
 
     private void setRc(ResearchCenter rc) {
         this.rc = rc;
@@ -136,32 +145,34 @@ public class RegisteredService implements GridService, Comparable {
 
 
     public ResearchCenter getResearchCenter() {
-        return rc;
+        return this.rc;
     }
+
 
     public void setResearchCenter(ResearchCenter researchCenter) {
         this.rc = researchCenter;
         researchCenter.setRegisteredService(this);
     }
 
+
     /**
-     * @hibernate.set cascade="all"
-     * update="false"
-     * inverse="true"
+     * @hibernate.set cascade="all" update="false" inverse="true"
      * @hibernate.collection-key column="SERVICE_ID_KEY"
      * @hibernate.collection-one-to-many class="gov.nih.nci.cagrid.portal.domain.Operation"
      */
     public Set getOperationCollection() {
-        return operationCollection;
+        return this.operationCollection;
     }
+
 
     private void setOperationCollection(Set operationCollection) {
         this.operationCollection = operationCollection;
     }
 
+
     /**
      * Public method to add operations
-     *
+     * 
      * @param oper
      */
     public void addOperation(Operation oper) {
@@ -169,72 +180,92 @@ public class RegisteredService implements GridService, Comparable {
         this.operationCollection.add(oper);
     }
 
+
     /**
      * @hibernate.one-to-one class="gov.nih.nci.cagrid.portal.domain.DomainModel"
-     * cascade="all"
+     *                       cascade="all"
      */
     public DomainModel getDomainModel() {
-        return domainModel;
+        return this.domainModel;
     }
+
 
     private void setDomainModel(DomainModel domainModel) {
         this.domainModel = domainModel;
     }
 
-    //public method to set domain model
+
+    // public method to set domain model
     public void setObjectModel(DomainModel domainModel) {
         this.domainModel = domainModel;
         domainModel.setRegisteredService(this);
 
     }
 
+
     public boolean isActive() {
-        return false; //To change body of implemented methods use File | Settings | File Templates.
+        return false; // To change body of implemented methods use File |
+                        // Settings | File Templates.
     }
+
 
     /**
      * @return
-     * @hibernate.property column="VERSION"
-     * type="string"
+     * @hibernate.property column="VERSION" type="string"
      */
     public String getVersion() {
-        return version;
+        return this.version;
     }
+
 
     public void setVersion(String version) {
         this.version = version;
     }
 
+
     /**
      * ToDo should be in DB
-     *
+     * 
      * @return
      */
     public String getType() {
         if (this.domainModel != null) {
             return RegisteredService.DATA_SERVICE;
-        } else
-            return type;
+        } else {
+            return this.type;
+        }
     }
+
 
     public void setType(String type) {
         this.type = type;
     }
 
+
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         final RegisteredService that = (RegisteredService) o;
 
-        if (EPR != null ? !EPR.equals(that.EPR) : that.EPR != null) return false;
+        if (this.EPR != null ? !this.EPR.equals(that.EPR) : that.EPR != null) {
+            return false;
+        }
 
         return true;
     }
 
+
+    @Override
     public int hashCode() {
-        return (EPR != null ? EPR.hashCode() : 0);
+        return (this.EPR != null ? this.EPR.hashCode() : 0);
     }
+
 
     public int compareTo(Object o) {
         if ((o == null)) {
@@ -242,8 +273,8 @@ public class RegisteredService implements GridService, Comparable {
         }
 
         final RegisteredService that = (RegisteredService) o;
-        //if any name attribute is null
-        //send it to the end of the list
+        // if any name attribute is null
+        // send it to the end of the list
         if (this.getName() == null) {
             return 1;
         } else if (that.getName() == null) {
