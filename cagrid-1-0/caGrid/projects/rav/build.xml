@@ -3,9 +3,9 @@
 <!-- caGrid 1.0 discovery build file                                        -->
 <!-- ================================================================= -->
 
-<project name="eve" default="compile" basedir=".">
+<project name="rav" default="compile" basedir=".">
 	<!-- Environment -->
-	<property environment="env" />
+	<property environment="rav" />
 	<property file="${basedir}/build.properties" />
 	<property file="${user.dir}/build.properties" />
 	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
@@ -222,25 +222,12 @@
 			</fileset>
 		</copy>
 
-		<delete dir="${introduce.extensions.dir}/@{extension.name}" />
-		<mkdir dir="${introduce.extensions.dir}/@{extension.name}" />
+		<delete dir="${introduce.extensions.dir}/${ant.project.name}" />
+		<mkdir dir="${introduce.extensions.dir}/${ant.project.name}" />
 
 		<!-- extension description file -->
-		<copy todir="${introduce.extensions.dir}/@{extension.name}" file="${extensions.dir}/@{extension.name}/extension.xml" />
+		<copy todir="${introduce.extensions.dir}/${ant.project.name}" file="${extensions.dir}/${ant.project.name}/extension.xml" />
 
-		<if>
-			<isreference refid="@{extension.name}.schema.fileset" />
-			<then>
-				<echo message="Copying schemas for extension: @{extension.name}." />
-				<mkdir dir="${introduce.extensions.dir}/@{extension.name}/schema" />
-				<copy todir="${introduce.extensions.dir}/@{extension.name}/schema">
-					<fileset refid="@{extension.name}.schema.fileset" />
-				</copy>
-			</then>
-			<else>
-				<echo message="Skipping copying of schemas for extension: @{extension.name}." />
-			</else>
-		</if>
 	</target>
 
 	<!-- ============================================================== -->
