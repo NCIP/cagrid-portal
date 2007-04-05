@@ -3,7 +3,9 @@ package gov.nih.nci.cagrid.data.system.bdt;
 import gov.nih.nci.cagrid.bdt.client.BulkDataHandlerClient;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.bdt.client.BDTDataServiceClient;
+import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import javax.xml.soap.SOAPElement;
@@ -12,7 +14,9 @@ import org.apache.axis.message.MessageElement;
 import org.globus.transfer.AnyXmlType;
 import org.globus.transfer.EmptyType;
 import org.globus.ws.enumeration.ClientEnumIterator;
+import org.jdom.Element;
 import org.projectmobius.bookstore.Book;
+import org.projectmobius.common.XMLUtilities;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse;
 
 import com.atomicobject.haste.framework.Step;
@@ -24,7 +28,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:37:02 PM
- * @version $Id: InvokeBDTDataServiceStep.java,v 1.1 2007-03-20 17:32:43 dervin Exp $ 
+ * @version $Id: InvokeBDTDataServiceStep.java,v 1.2 2007-04-05 15:28:54 dervin Exp $ 
  */
 public class InvokeBDTDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
@@ -54,6 +58,8 @@ public class InvokeBDTDataServiceStep extends Step {
         iterateEnumeration(bdtHandlerClient);
         
         invokeTransfer(bdtHandlerClient);
+        
+        // TODO: invoke getGridFTPURls()
 	}
     
     
@@ -108,8 +114,23 @@ public class InvokeBDTDataServiceStep extends Step {
         AnyXmlType any = client.get(new EmptyType());
         MessageElement[] anyElements = any.get_any();
         assertNotNull("Content from transfer was null", anyElements);
-        // TODO: get content from any type, deserialize as CQLQueryResults, iterate objects
+        assertTrue("Content from transfer was empty", anyElements.length != 0);
         
+        Element resultsElement = AxisJdomUtils.fromMessageElement(anyElements[0]);
+        // get object results out of it
+        int resultCount = 0;
+        Iterator objectElementIter = resultsElement.getChildren(
+            "ObjectResult", resultsElement.getNamespace()).iterator();
+        while (objectElementIter.hasNext()) {
+            resultCount++;
+            Element objectResultElement = (Element) objectElementIter.next();
+            Element objectElement = (Element) objectResultElement.getChildren().get(0);
+            // convert the object element back to a string
+            String elementString = XMLUtilities.elementToString(objectElement);
+            assertTrue("Element did not contain a Book object", 
+                elementString.indexOf("Book") != -1);
+        }
+        assertTrue("Object results were not returned", resultCount != 0);
     }
 	
 	
