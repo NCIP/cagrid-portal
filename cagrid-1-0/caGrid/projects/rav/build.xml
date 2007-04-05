@@ -226,8 +226,11 @@
 		<mkdir dir="${introduce.extensions.dir}/${ant.project.name}" />
 
 		<!-- extension description file -->
-		<copy todir="${introduce.extensions.dir}/${ant.project.name}" file="${extensions.dir}/${ant.project.name}/extension.xml" />
-
+		<copy todir="${introduce.extensions.dir}/${ant.project.name}">
+			<fileset dir="${basedir}/extension">
+				<include name="**/*" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- ============================================================== -->
