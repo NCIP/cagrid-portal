@@ -12,8 +12,6 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.ComponentOrientation;
 import javax.swing.SwingConstants;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.io.File;
 
 public class ApplicationServicePanel extends JPanel {

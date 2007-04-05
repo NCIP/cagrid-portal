@@ -1,6 +1,7 @@
 <ns1:ExtensionDescription extensionType="SERVICE"
     xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension">
-    <ns1:ServiceExtensionDescription displayName="Remote Application Virtualization" name="eve">
+    <ns1:ServiceExtensionDescription displayName="Remote Application Virtualization" name="rav">
+    <ns1:CreationUIDialog>org.cagrid.rav.ApplicationServicePanel</ns1:CreationUIDialog>
         <ns1:Properties> 
         </ns1:Properties>
     </ns1:ServiceExtensionDescription>
