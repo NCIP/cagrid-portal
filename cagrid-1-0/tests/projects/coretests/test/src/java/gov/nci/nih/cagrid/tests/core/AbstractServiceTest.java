@@ -29,12 +29,6 @@ public abstract class AbstractServiceTest extends Story {
 
 
     @Override
-    protected Vector steps() {
-        return null;
-    }
-
-
-    @Override
     public String getName() {
         String name = "";
         if (this.helper != null) {
@@ -92,11 +86,6 @@ public abstract class AbstractServiceTest extends Story {
     }
 
 
-    public File getCadsrServiceDir() {
-        return this.helper.getCadsrServiceDir();
-    }
-
-
     public ServiceCreateStep getCreateServiceStep() {
         return this.helper.getCreateServiceStep();
     }
@@ -109,11 +98,6 @@ public abstract class AbstractServiceTest extends Story {
 
     public GlobusHelper getGlobus() {
         return this.helper.getGlobus();
-    }
-
-
-    public File getGmeServiceDir() {
-        return this.helper.getGmeServiceDir();
     }
 
 

@@ -4,7 +4,6 @@
 package gov.nci.nih.cagrid.tests.core;
 
 import gov.nci.nih.cagrid.tests.core.steps.EvsCheckServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.EvsServiceConfigStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
@@ -80,7 +79,6 @@ public class EvsServiceTest extends Story {
         Vector steps = new Vector();
         steps.add(new GlobusCreateStep(this.globus));
         steps.add(new GlobusDeployServiceStep(this.globus, this.serviceDir));
-        steps.add(new EvsServiceConfigStep(this.globus));
         steps.add(new GlobusStartStep(this.globus));
         try {
             steps.add(new EvsCheckServiceStep(this.globus.getServiceEPR(EvsCheckServiceStep.SERVICE_DEPLOYMENT_PATH)));

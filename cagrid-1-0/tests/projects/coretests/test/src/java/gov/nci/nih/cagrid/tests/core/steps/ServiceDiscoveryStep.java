@@ -30,12 +30,14 @@ public class ServiceDiscoveryStep extends Step {
     private EndpointReferenceType domainServiceEndpoint;
     private String domainServicePath;
     private ServiceMetadata metadata;
+    private boolean shouldBeFound = true;
 
 
     public ServiceDiscoveryStep(EndpointReferenceType indexServiceEndpoint,
-        EndpointReferenceType domainServiceEndpoint, File metadataFile) throws Exception {
+        EndpointReferenceType domainServiceEndpoint, File metadataFile, boolean shouldBeFound) throws Exception {
         super();
 
+        this.shouldBeFound = shouldBeFound;
         this.indexServiceEndpoint = indexServiceEndpoint;
         this.metadata = (ServiceMetadata) Utils.deserializeDocument(metadataFile.toString(), ServiceMetadata.class);
 
@@ -50,33 +52,35 @@ public class ServiceDiscoveryStep extends Step {
     @Override
     public void runStep() throws Throwable {
         DiscoveryClient client = new DiscoveryClient(this.indexServiceEndpoint);
-        assertTrue(foundService(client.getAllServices(false)));
-        assertTrue(foundService(client.getAllServices(true)));
+        assertEquals(this.shouldBeFound, foundService(client.getAllServices(false)));
+        assertEquals(this.shouldBeFound, foundService(client.getAllServices(true)));
 
         // service
-        assertTrue(foundService(client.discoverServicesByName(this.metadata.getServiceDescription().getService()
-            .getName())));
+        assertEquals(this.shouldBeFound, foundService(client.discoverServicesByName(this.metadata
+            .getServiceDescription().getService().getName())));
         for (ServiceContext context : this.metadata.getServiceDescription().getService().getServiceContextCollection()
             .getServiceContext()) {
             for (Operation operation : context.getOperationCollection().getOperation()) {
-                assertTrue(foundService(client.discoverServicesByOperationName(operation.getName())));
+                assertEquals(this.shouldBeFound, foundService(client.discoverServicesByOperationName(operation
+                    .getName())));
             }
         }
 
         // center
-        assertTrue(foundService(client.discoverServicesByResearchCenter(this.metadata.getHostingResearchCenter()
-            .getResearchCenter().getShortName())));
-        assertTrue(foundService(client.discoverServicesByResearchCenter(this.metadata.getHostingResearchCenter()
-            .getResearchCenter().getDisplayName())));
+        assertEquals(this.shouldBeFound, foundService(client.discoverServicesByResearchCenter(this.metadata
+            .getHostingResearchCenter().getResearchCenter().getShortName())));
+        assertEquals(this.shouldBeFound, foundService(client.discoverServicesByResearchCenter(this.metadata
+            .getHostingResearchCenter().getResearchCenter().getDisplayName())));
         for (PointOfContact poc : this.metadata.getHostingResearchCenter().getResearchCenter()
             .getPointOfContactCollection().getPointOfContact()) {
-            assertTrue(foundService(client.discoverServicesByPointOfContact(poc)));
+            assertEquals(this.shouldBeFound, foundService(client.discoverServicesByPointOfContact(poc)));
         }
 
         // model
         DomainModel model = MetadataUtils.getDomainModel(this.domainServiceEndpoint);
-        assertTrue(foundService(client.discoverDataServicesByModelConceptCode(model.getExposedUMLClassCollection()
-            .getUMLClass()[0].getUmlAttributeCollection().getUMLAttribute(0).getSemanticMetadata(0).getConceptCode())));
+        assertEquals(this.shouldBeFound, foundService(client.discoverDataServicesByModelConceptCode(model
+            .getExposedUMLClassCollection().getUMLClass()[0].getUmlAttributeCollection().getUMLAttribute(0)
+            .getSemanticMetadata(0).getConceptCode())));
     }
 
 

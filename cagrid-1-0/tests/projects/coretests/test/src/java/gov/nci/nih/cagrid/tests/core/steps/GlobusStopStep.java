@@ -21,7 +21,6 @@ public class GlobusStopStep extends Step {
 
     public GlobusStopStep(GlobusHelper globus) {
         super();
-
         this.globus = globus;
 
     }
@@ -30,5 +29,6 @@ public class GlobusStopStep extends Step {
     @Override
     public void runStep() throws Throwable {
         this.globus.stopGlobus();
+        assertFalse(this.globus.isGlobusRunning());
     }
 }

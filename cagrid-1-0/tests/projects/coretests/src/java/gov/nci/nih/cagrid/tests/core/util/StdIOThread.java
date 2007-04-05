@@ -8,26 +8,36 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class StdIOThread
-	extends Thread
-{
-	private BufferedReader br;
-	
-	public StdIOThread(InputStream is)
-	{
-		super();
-		this.br = new BufferedReader(new InputStreamReader(is));
-		super.setDaemon(true);
-	}
-	
-	public void run()
-	{
-		try {
-			String line = null;
-			while ((line = br.readLine()) != null) System.out.println(line);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+
+public class StdIOThread extends Thread {
+    private BufferedReader br;
+
+
+    public StdIOThread(InputStream is) {
+        super();
+        this.br = new BufferedReader(new InputStreamReader(is));
+        super.setDaemon(true);
+    }
+
+
+    @Override
+    public void run() {
+        try {
+            String line = null;
+            while ((line = this.br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (this.br != null) {
+                    this.br.close();
+                }
+            } catch (IOException ex) {
+
+            }
+        }
+    }
 
 }
