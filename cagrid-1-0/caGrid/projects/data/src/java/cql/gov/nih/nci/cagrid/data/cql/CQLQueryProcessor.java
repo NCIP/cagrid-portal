@@ -130,4 +130,21 @@ public abstract class CQLQueryProcessor {
 	public Properties getRequiredParameters() {
 		return new Properties();
 	}
+    
+    
+    /**
+     * Get the classname of the configuration user interface for 
+     * this CQL Query Processor.  This class should exist in the same 
+     * JAR as the query processor, as well as any (non-java / caGrid)
+     * classes it depends on.  This class <i><b>MUST</b></i>
+     * implement the abstract base class
+     * <code>gov.nih.nci.cagrid.data.cql.ui.CQLQueryProcessorConfigUI</code>
+     *  
+     * @return
+     *      The class name of the configuration user interface,
+     *      or <code>null</code> if no UI is provided
+     */
+    public String getConfigurationUiClassname() {
+        return null;
+    }
 }
