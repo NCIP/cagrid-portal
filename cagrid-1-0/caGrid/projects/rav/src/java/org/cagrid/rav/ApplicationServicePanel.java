@@ -14,6 +14,7 @@ import java.awt.Insets;
 
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -37,6 +38,8 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 	private File appName = null;
 	
 	private JFileChooser fileChooser = null;
+	
+	
 	/**
 	 * This is the default constructor
 	 */
@@ -70,6 +73,7 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 		this.setName("ApplicationServicePanel");
 		this.add(getBrowserPanel(), gridBagConstraints);
 		this.add(getArgsPanel(), gridBagConstraints1);
+		this.setTitle("Remote Application Virtualization Environment");
 	}
 
 	/**
@@ -168,9 +172,6 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 			           appName = 
 			                  fileChooser.getSelectedFile();
 			             getJTextField().setText(appName.getAbsolutePath());
-			             if(getJTextField().getText() != null) {
-			            	 getJButton1().setEnabled(true);
-			             }
 			           }
 				}
 			});
@@ -187,11 +188,17 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 		if (jButton1 == null) {
 			jButton1 = new JButton();
 			jButton1.setText("OK");
-			jButton1.setEnabled(false);
+			jButton1.setEnabled(true);
 			jButton1.setHorizontalAlignment(SwingConstants.RIGHT);
 			jButton1.addActionListener(new ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
+					if(!(getJTextField().getText().trim()).equals("")) {
+						dispose();	
+					} else {
+						JOptionPane.showMessageDialog(ApplicationServicePanel.this, 
+								"Error: Empty Application/Executable path ");
+					}
+					
 				}
 			});
 		}
