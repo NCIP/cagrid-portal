@@ -1,8 +1,10 @@
 package gov.nih.nci.cagrid.data.utilities.vizquery;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.cqlquery.Association;
+import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlquery.Group;
 import gov.nih.nci.cagrid.cqlquery.Object;
@@ -14,7 +16,9 @@ import gov.nih.nci.cagrid.data.utilities.query.cqltree.GroupTreeNode;
 import gov.nih.nci.cagrid.data.utilities.query.cqltree.IconTreeNode;
 import gov.nih.nci.cagrid.data.utilities.query.cqltree.QueryTree;
 import gov.nih.nci.cagrid.data.utilities.query.cqltree.QueryTreeNode;
+import gov.nih.nci.cagrid.data.utilities.query.cqltree.RebuildableTreeNode;
 import gov.nih.nci.cagrid.data.utilities.query.cqltree.TargetTreeNode;
+import gov.nih.nci.cagrid.data.utilities.vizquery.attributes.SetAttributePredicateDialog;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
@@ -40,7 +44,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
+import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -56,7 +60,7 @@ import org.apache.axis.message.addressing.EndpointReference;
  * @author David Ervin
  * 
  * @created Mar 30, 2007 3:46:34 PM
- * @version $Id: VisualQueryBuilder.java,v 1.1 2007-04-05 18:52:18 dervin Exp $ 
+ * @version $Id: VisualQueryBuilder.java,v 1.2 2007-04-06 14:50:14 dervin Exp $ 
  */
 public class VisualQueryBuilder extends JFrame {
     
@@ -76,7 +80,7 @@ public class VisualQueryBuilder extends JFrame {
     private JScrollPane cqlQueryTreeScrollPane = null;
     private JSplitPane mainSplitPane = null;
     private JPanel queryBuildingPanel = null;
-    private JToolBar queryBuildingToolBar = null;
+    private JMenuBar queryBuildingMenuBar = null;
     private JMenu queryAddMenu = null;
     private JMenu querySetMenu = null;
     private JMenu queryRemoveMenu = null;
@@ -154,7 +158,7 @@ public class VisualQueryBuilder extends JFrame {
                             IconTreeNode node = (IconTreeNode) selectionPath.getLastPathComponent();
                             if (node instanceof QueryTreeNode) {
                                 // root of the query
-                                PortalUtils.setContainerEnabled(getQueryBuildingToolBar(), false);
+                                PortalUtils.setContainerEnabled(getQueryBuildingMenuBar(), false);
                                 if (((QueryTreeNode) node).getQuery().getTarget() == null) {
                                     getQuerySetMenu().setEnabled(true);
                                     getSetTargetMenuItem().setEnabled(true);   
@@ -162,7 +166,7 @@ public class VisualQueryBuilder extends JFrame {
                             } else if (node instanceof TargetTreeNode) {
                                 // query target selected
                                 // disable most of the query building toolbar
-                                PortalUtils.setContainerEnabled(getQueryBuildingToolBar(), false);
+                                PortalUtils.setContainerEnabled(getQueryBuildingMenuBar(), false);
                                 // can always remove stuff
                                 PortalUtils.setContainerEnabled(getQueryRemoveMenu(), true);
                                 // if target has no children, it can be added to
@@ -175,7 +179,7 @@ public class VisualQueryBuilder extends JFrame {
                             } else if (node instanceof GroupTreeNode) {
                                 // group selected
                                 // disable most of the query building toolbar
-                                PortalUtils.setContainerEnabled(getQueryBuildingToolBar(), false);
+                                PortalUtils.setContainerEnabled(getQueryBuildingMenuBar(), false);
                                 // can always remove stuff
                                 PortalUtils.setContainerEnabled(getQueryRemoveMenu(), true);
                                 // groups can always be added to
@@ -186,7 +190,7 @@ public class VisualQueryBuilder extends JFrame {
                             } else if (node instanceof AssociationTreeNode) {
                                 // association selected
                                 // disable most of the query building toolbar
-                                PortalUtils.setContainerEnabled(getQueryBuildingToolBar(), false);
+                                PortalUtils.setContainerEnabled(getQueryBuildingMenuBar(), false);
                                 // can always remove stuff
                                 PortalUtils.setContainerEnabled(getQueryRemoveMenu(), true);
                                 // see what (if any) further restrictions exist on the association
@@ -200,7 +204,7 @@ public class VisualQueryBuilder extends JFrame {
                             } else if (node instanceof AttributeTreeNode) {
                                 // attribute selected
                                 // disable everything in the query builing toolbar
-                                PortalUtils.setContainerEnabled(getQueryBuildingToolBar(), false);
+                                PortalUtils.setContainerEnabled(getQueryBuildingMenuBar(), false);
                                 // can always remove stuff
                                 PortalUtils.setContainerEnabled(getQueryRemoveMenu(), true);
                                 // enable a few choice items
@@ -486,7 +490,7 @@ public class VisualQueryBuilder extends JFrame {
             queryBuildingPanel = new JPanel();
             queryBuildingPanel.setLayout(new GridBagLayout());
             queryBuildingPanel.add(getCqlQueryTreeScrollPane(), gridBagConstraints2);
-            queryBuildingPanel.add(getQueryBuildingToolBar(), gridBagConstraints3);
+            queryBuildingPanel.add(getQueryBuildingMenuBar(), gridBagConstraints3);
         }
         return queryBuildingPanel;
     }
@@ -497,15 +501,14 @@ public class VisualQueryBuilder extends JFrame {
      * 	
      * @return javax.swing.JToolBar	
      */
-    private JToolBar getQueryBuildingToolBar() {
-        if (queryBuildingToolBar == null) {
-            queryBuildingToolBar = new JToolBar();
-            queryBuildingToolBar.setFloatable(false);
-            queryBuildingToolBar.add(getQueryAddMenu());
-            queryBuildingToolBar.add(getQuerySetMenu());
-            queryBuildingToolBar.add(getQueryRemoveMenu());
+    private JMenuBar getQueryBuildingMenuBar() {
+        if (queryBuildingMenuBar == null) {
+            queryBuildingMenuBar = new JMenuBar();
+            queryBuildingMenuBar.add(getQueryAddMenu());
+            queryBuildingMenuBar.add(getQuerySetMenu());
+            queryBuildingMenuBar.add(getQueryRemoveMenu());
         }
-        return queryBuildingToolBar;
+        return queryBuildingMenuBar;
     }
 
 
@@ -571,7 +574,28 @@ public class VisualQueryBuilder extends JFrame {
             addGroupMenuItem.setText("Group");
             addGroupMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    // create the new group
+                    Group group = new Group();
+                    SetGroupLogicDialog.setLogic(VisualQueryBuilder.this, group);
+                    // attach the group to the selected node
+                    RebuildableTreeNode selectedNode = (RebuildableTreeNode) getCqlQueryTree()
+                        .getSelectionPath().getLastPathComponent();
+                    if (selectedNode instanceof TargetTreeNode) {
+                        ((TargetTreeNode) selectedNode).getTarget().setGroup(group);
+                    } else if (selectedNode instanceof AssociationTreeNode) {
+                        ((AssociationTreeNode) selectedNode).getAssociation().setGroup(group);
+                    } else if (selectedNode instanceof GroupTreeNode) {
+                        Group selectedGroup = ((GroupTreeNode) selectedNode).getGroup();
+                        Group[] childGroups = selectedGroup.getGroup();
+                        if (childGroups == null) {
+                            childGroups = new Group[] {group};
+                        } else {
+                            childGroups = (Group[]) Utils.appendToArray(childGroups, group);
+                        }
+                        selectedGroup.setGroup(childGroups);
+                    }
+                    // rebuild the diplay
+                    selectedNode.rebuild();
                 }
             });
         }
@@ -590,7 +614,28 @@ public class VisualQueryBuilder extends JFrame {
             addAssociationMenuItem.setText("Association");
             addAssociationMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    // create the association
+                    Association association = new Association();
+                    association.setName(getAssociationInfoPanel().getTargetClassName());
+                    association.setRoleName(getAssociationInfoPanel().getSourceRoleName());
+                    // get the selected query point
+                    RebuildableTreeNode selectedNode = (RebuildableTreeNode) getCqlQueryTree().getSelectionPath().getLastPathComponent();
+                    if (selectedNode instanceof TargetTreeNode) {
+                        ((TargetTreeNode) selectedNode).getTarget().setAssociation(association);
+                    } else if (selectedNode instanceof AssociationTreeNode) {
+                        ((AssociationTreeNode) selectedNode).getAssociation().setAssociation(association);
+                    } else if (selectedNode instanceof GroupTreeNode) {
+                        Group currentGroup = ((GroupTreeNode) selectedNode).getGroup();
+                        Association[] groupAssociations = currentGroup.getAssociation();
+                        if (groupAssociations == null) {
+                            groupAssociations = new Association[] {association};
+                        } else {
+                            groupAssociations = (Association[]) Utils.appendToArray(
+                                groupAssociations, association);
+                        }
+                        currentGroup.setAssociation(groupAssociations);
+                    }
+                    selectedNode.rebuild();
                 }
             });
         }
@@ -691,7 +736,15 @@ public class VisualQueryBuilder extends JFrame {
             setAttributePredicateMenuItem.setText("Attribute Predicate");
             setAttributePredicateMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    // get the attribute
+                    AttributeTreeNode selectedNode = (AttributeTreeNode) 
+                        getCqlQueryTree().getSelectionPath().getLastPathComponent();
+                    Attribute attrib = selectedNode.getAttribute();
+                    // set the new value
+                    SetAttributePredicateDialog.setAttributePredicate(
+                        VisualQueryBuilder.this, attrib);
+                    // rebuild the GUI
+                    selectedNode.rebuild();
                 }
             });
         }
@@ -742,6 +795,11 @@ public class VisualQueryBuilder extends JFrame {
 
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ex) {
+            System.err.println("Error setting system look and feel");
+        }
         JFrame app = new VisualQueryBuilder();
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         app.setVisible(true);

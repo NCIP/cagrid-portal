@@ -23,7 +23,7 @@ import javax.swing.JTextField;
  * @author David Ervin
  * 
  * @created Apr 2, 2007 10:37:00 AM
- * @version $Id: AssociationInformationPanel.java,v 1.1 2007-04-05 18:52:18 dervin Exp $
+ * @version $Id: AssociationInformationPanel.java,v 1.2 2007-04-06 14:50:14 dervin Exp $
  */
 public class AssociationInformationPanel extends JPanel {
 
@@ -35,6 +35,7 @@ public class AssociationInformationPanel extends JPanel {
     private JTextField sourceRoleNameTextField = null;
     private JTextField targetClassTextField = null;
     private JTextField targetRoleNameTextField = null;
+    private UMLAssociation currentAssociation = null;
 
 
     public AssociationInformationPanel() {
@@ -137,6 +138,32 @@ public class AssociationInformationPanel extends JPanel {
             getTargetClassTextField().setText("");
             getTargetRoleNameTextField().setText("");
         }
+        currentAssociation = association;
+    }
+    
+    
+    public UMLAssociation getCurrentAssociation() {
+        return currentAssociation;
+    }
+    
+    
+    public String getSourceClassName() {
+        return getSourceClassTextField().getText();
+    }
+    
+    
+    public String getSourceRoleName() {
+        return getSourceRoleNameTextField().getText();
+    }
+    
+    
+    public String getTargetClassName() {
+        return getTargetClassTextField().getText();
+    }
+    
+    
+    public String getTargetRoleName() {
+        return getTargetRoleNameTextField().getText();
     }
 
 
