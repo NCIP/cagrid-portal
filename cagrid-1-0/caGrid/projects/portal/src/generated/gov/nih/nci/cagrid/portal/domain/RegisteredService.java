@@ -204,8 +204,7 @@ public class RegisteredService implements GridService, Comparable {
 
 
     public boolean isActive() {
-        return false; // To change body of implemented methods use File |
-                        // Settings | File Templates.
+        return false;
     }
 
 
@@ -242,7 +241,6 @@ public class RegisteredService implements GridService, Comparable {
     }
 
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -261,7 +259,6 @@ public class RegisteredService implements GridService, Comparable {
     }
 
 
-    @Override
     public int hashCode() {
         return (this.EPR != null ? this.EPR.hashCode() : 0);
     }
