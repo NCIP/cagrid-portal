@@ -330,10 +330,11 @@ public class GlobusHelper {
         } else {
             // anonymous
             opts.add("-a");
-            // no auth
-            opts.add("-z");
-            opts.add("none");
         }
+
+        // no auth
+        opts.add("-z");
+        opts.add("none");
 
         String shutdown = getServiceEPR("ShutdownService").getAddress().toString();
         opts.add("-s");
