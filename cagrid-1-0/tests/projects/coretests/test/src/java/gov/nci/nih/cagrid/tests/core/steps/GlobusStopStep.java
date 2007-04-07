@@ -28,7 +28,9 @@ public class GlobusStopStep extends Step {
 
     @Override
     public void runStep() throws Throwable {
-        this.globus.stopGlobus();
+        // assert successful "clean" shutdown
+        assertTrue(this.globus.stopGlobus());
+        // assert its actually not running
         assertFalse(this.globus.isGlobusRunning());
     }
 }

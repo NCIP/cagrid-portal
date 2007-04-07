@@ -91,6 +91,23 @@
                 <include name="**" />
             </fileset>
         </artifact>
+        <artifact track="main" type="jars" id="advertisement.jars">
+            <generatingantcall target="build-advertisement" />
+            <fileset dir="${projects.dir}/advertisement/build/jars">
+                <include name="*.jar" />
+                <exclude name="*test*.jar" />
+            </fileset>
+            <fileset dir="${projects.dir}/advertisement/lib">
+                <include name="*.jar" />
+                <exclude name="*test*.jar" />
+            </fileset>
+            <fileset dir="${projects.dir}/advertisement/ext/lib">
+                <include name="*.jar" />
+                <exclude name="*test*.jar" />
+                <exclude name="*mobius*.jar" />
+                <exclude name="*castor*.jar" />
+            </fileset>
+        </artifact>
         <artifact track="main" type="jars" id="common.metadata.jars">
             <generatingantcall target="build-metadata" />
             <fileset dir="${projects.dir}/metadata/build/lib">

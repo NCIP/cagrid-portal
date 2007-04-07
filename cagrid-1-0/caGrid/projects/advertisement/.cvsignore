@@ -1,0 +1,8 @@
+build
+*.gar
+ext
+bin
+*.log*
+*.tmp
+*.sh
+*.bat

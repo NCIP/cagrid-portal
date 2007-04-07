@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.discovery;
+package gov.nih.nci.cagrid.metadata;
 
 import java.util.Iterator;
 import java.util.Map;

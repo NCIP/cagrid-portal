@@ -116,11 +116,9 @@ public class IndexServiceTest extends AbstractServiceTest {
         steps.add(new GlobusStopStep(getGlobus()));
 
         // make sure the sweeper has run and the service is gone
-        steps.add(new SleepStep(duration * 2));
+        steps.add(new SleepStep(duration * 3));
         try {
-            // TODO: add this back to check for unregistration
-            // steps.add(new ServiceDiscoveryStep(indexEPR, getEndpoint(),
-            // getMetadataFile(), false));
+            steps.add(new ServiceDiscoveryStep(indexEPR, getEndpoint(), getMetadataFile(), false));
         } catch (Exception e) {
             fail("could not add discovery step");
         }

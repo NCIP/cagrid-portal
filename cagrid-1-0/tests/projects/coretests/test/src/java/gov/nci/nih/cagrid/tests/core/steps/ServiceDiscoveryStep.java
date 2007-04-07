@@ -77,10 +77,12 @@ public class ServiceDiscoveryStep extends Step {
         }
 
         // model
-        DomainModel model = MetadataUtils.getDomainModel(this.domainServiceEndpoint);
-        assertEquals(this.shouldBeFound, foundService(client.discoverDataServicesByModelConceptCode(model
-            .getExposedUMLClassCollection().getUMLClass()[0].getUmlAttributeCollection().getUMLAttribute(0)
-            .getSemanticMetadata(0).getConceptCode())));
+        if (shouldBeFound) {
+            DomainModel model = MetadataUtils.getDomainModel(this.domainServiceEndpoint);
+            assertEquals(this.shouldBeFound, foundService(client.discoverDataServicesByModelConceptCode(model
+                .getExposedUMLClassCollection().getUMLClass()[0].getUmlAttributeCollection().getUMLAttribute(0)
+                .getSemanticMetadata(0).getConceptCode())));
+        }
     }
 
 

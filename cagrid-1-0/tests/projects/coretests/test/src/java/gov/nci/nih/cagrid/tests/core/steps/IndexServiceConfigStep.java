@@ -74,7 +74,7 @@ public class IndexServiceConfigStep extends Step {
                         // get the params
                         Element params = resourceEl.getChild("resourceParams", resourceEl.getNamespace());
                         // make a new param
-                        Element param = new Element("paramter", params.getNamespace());
+                        Element param = new Element("parameter", params.getNamespace());
                         // make the name
                         Element paramName = new Element("name", params.getNamespace());
                         paramName.setText(SWEEPER_DELAY);

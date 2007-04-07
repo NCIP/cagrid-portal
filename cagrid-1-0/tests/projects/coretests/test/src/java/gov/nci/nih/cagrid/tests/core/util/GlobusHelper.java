@@ -1,9 +1,15 @@
 package gov.nci.nih.cagrid.tests.core.util;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.rpc.ServiceException;
 
@@ -17,7 +23,11 @@ import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.globus.axis.gsi.GSIConstants;
 import org.globus.wsrf.impl.security.authorization.NoAuthorization;
+import org.jdom.Document;
+import org.jdom.Element;
 import org.oasis.wsrf.lifetime.Destroy;
+import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.XMLUtilities;
 
 import com.counter.CounterPortType;
 import com.counter.CreateCounter;
@@ -27,6 +37,7 @@ import com.counter.service.CounterServiceAddressingLocator;
 
 public class GlobusHelper {
 
+    private static final int PROCESS_WAIT_TIME = 20;
     private boolean secure;
     private File securityDescriptor;
     private Integer port;
@@ -83,6 +94,53 @@ public class GlobusHelper {
 
         // copy globus to tmp location
         FileUtils.copyRecursive(new File(globusLocation), this.tmpGlobusLocation, null);
+
+        // remove security descriptors for insecure deployment (so we can run
+        // shutdown)
+        editShutdownServiceDescriptor();
+
+    }
+
+
+    protected void editShutdownServiceDescriptor() throws IOException {
+        if (this.secure) {
+            return;
+        }
+        File coreWSDD = new File(this.tmpGlobusLocation, "etc/globus_wsrf_core/server-config.wsdd");
+        Document coreWSDDDoc = null;
+        try {
+            coreWSDDDoc = XMLUtilities.fileNameToDocument(coreWSDD.getAbsolutePath());
+        } catch (MobiusException e) {
+            e.printStackTrace();
+            throw new IOException("Problem loading WSRF Core Service config (" + coreWSDD.getAbsolutePath() + "):"
+                + e.getMessage());
+        }
+
+        List serviceEls = coreWSDDDoc.getRootElement().getChildren("service",
+            coreWSDDDoc.getRootElement().getNamespace());
+        for (int serviceI = 0; serviceI < serviceEls.size(); serviceI++) {
+            Element serviceEl = (Element) serviceEls.get(serviceI);
+            String serviceName = serviceEl.getAttributeValue("name");
+            if (serviceName.equals("ShutdownService")) {
+                List servParamElms = serviceEl.getChildren("parameter", serviceEl.getNamespace());
+                for (int serviceParamsI = 0; serviceParamsI < servParamElms.size(); serviceParamsI++) {
+                    Element serviceParam = (Element) servParamElms.get(serviceParamsI);
+                    if (serviceParam.getAttributeValue("name").equals("securityDescriptor")) {
+                        servParamElms.remove(serviceParamsI);
+                    }
+                }
+            }
+        }
+
+        try {
+            FileWriter fw = new FileWriter(coreWSDD);
+            fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(coreWSDDDoc)));
+            fw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException("Problem writting out config:" + coreWSDD.getAbsolutePath());
+
+        }
     }
 
 
@@ -260,40 +318,62 @@ public class GlobusHelper {
     }
 
 
-    public synchronized void stopGlobus() throws IOException {
+    public synchronized boolean stopGlobus() throws IOException {
         if (this.globusProcess == null) {
-            return;
+            return true;
         }
 
         ArrayList<String> opts = new ArrayList<String>();
         if (this.secure && getSecurityDescriptor() != null) {
             opts.add("-f");
             opts.add(getSecurityDescriptor().toString());
-
-            String shutdown = getServiceEPR("ShutdownService").getAddress().toString();
-            opts.add("-s");
-            System.out.println("Contacting shutown service:" + shutdown);
-            opts.add(shutdown);
-
-            // force a JVM kill
-            // opts.add("hard");
-
-            runGlobusCommand("org.globus.wsrf.container.ShutdownClient", opts);
-            sleep(2000);
         } else {
-            // TODO: on create globus, edit the shutdown service to remove
-            // security
-            // descriptor so we can do this
-
-            // // anonymous
-            // opts.add("-a");
-            // // no auth
-            // opts.add("-z");
-            // opts.add("none");
+            // anonymous
+            opts.add("-a");
+            // no auth
+            opts.add("-z");
+            opts.add("none");
         }
 
-        this.globusProcess.destroy();
+        String shutdown = getServiceEPR("ShutdownService").getAddress().toString();
+        opts.add("-s");
+        System.out.println("Contacting shutown service:" + shutdown);
+        opts.add(shutdown);
+
+        // force a JVM kill
+        // opts.add("hard");
+
+        boolean success = false;
+        final Process process = runGlobusCommand("org.globus.wsrf.container.ShutdownClient", opts);
+
+        // create a Future to get the boolean success status
+        FutureTask<Boolean> future = new FutureTask<Boolean>(new Callable<Boolean>() {
+            public Boolean call() {
+                try {
+                    process.waitFor();
+                } catch (InterruptedException e) {
+                    // this may happen if we timeout
+                }
+                // return true if the status is 0
+                return Boolean.valueOf(process.exitValue() == 0);
+            }
+        });
+
+        // execute the task of waiting for completion and getting the status
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(future);
+
+        try {
+            // try to get the status
+            success = future.get(PROCESS_WAIT_TIME, TimeUnit.SECONDS).booleanValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+            this.globusProcess.destroy();
+        }
+
         this.globusProcess = null;
+
+        return success;
     }
 
 
