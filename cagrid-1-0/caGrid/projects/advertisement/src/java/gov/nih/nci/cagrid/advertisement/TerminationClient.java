@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.xml.rpc.ServiceException;
 
+import org.apache.axis.client.Stub;
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.commons.logging.Log;
@@ -42,6 +43,8 @@ import org.oasis.wsrf.lifetime.WSResourceLifetimeServiceAddressingLocator;
  */
 public class TerminationClient {
     protected EndpointReferenceType indexEPR;
+
+    private String securityDescriptorFile;
 
     protected static Log LOG = LogFactory.getLog(TerminationClient.class.getName());
 
@@ -182,6 +185,7 @@ public class TerminationClient {
 
         WSResourceLifetimeServiceAddressingLocator lifetimeloc = new WSResourceLifetimeServiceAddressingLocator();
         ScheduledResourceTermination lifetimePort = lifetimeloc.getScheduledResourceTerminationPort(entryEPR);
+        setSecurityProperties((Stub) lifetimePort);
 
         SetTerminationTime setTermTimeReq = new SetTerminationTime();
         // terminate now (in 5 seconds)
@@ -196,6 +200,28 @@ public class TerminationClient {
         }
 
         return response.getNewTerminationTime();
+    }
+
+
+    protected void setSecurityProperties(Stub port) {
+        if (port == null) {
+            return;
+        }
+        try {
+            if (this.securityDescriptorFile != null) {
+                (port)._setProperty(org.globus.wsrf.impl.security.authentication.Constants.CLIENT_DESCRIPTOR_FILE,
+                    this.securityDescriptorFile);
+            } else { // default to anonymous
+                port._setProperty(org.globus.wsrf.impl.security.authentication.Constants.GSI_ANONYMOUS, Boolean.TRUE);
+                port._setProperty(org.globus.wsrf.impl.security.authentication.Constants.AUTHORIZATION,
+                    org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
+                port._setProperty(org.globus.axis.gsi.GSIConstants.GSI_AUTHORIZATION,
+                    org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
+            }
+
+        } catch (Exception e) {
+            LOG.warn("Exception while setting security properties on stub" + e.toString());
+        }
     }
 
 
@@ -221,6 +247,14 @@ public class TerminationClient {
                 LOG.debug("Problem querying RPs for debug purposes:", e);
             }
         }
+    }
+
+
+    /**
+     * @param securityDescriptorFile
+     */
+    public void setSecurityDescriptorFile(String securityDescriptorFile) {
+        this.securityDescriptorFile = securityDescriptorFile;
     }
 
 }

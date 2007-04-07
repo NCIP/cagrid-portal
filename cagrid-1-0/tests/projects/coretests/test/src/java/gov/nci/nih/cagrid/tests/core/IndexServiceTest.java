@@ -2,6 +2,7 @@ package gov.nci.nih.cagrid.tests.core;
 
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusInstallSecurityDescriptorStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 import gov.nci.nih.cagrid.tests.core.steps.IndexServiceConfigStep;
@@ -68,7 +69,7 @@ public class IndexServiceTest extends AbstractServiceTest {
             e1.printStackTrace();
             fail("Problem getting index port:" + e1.getMessage());
         }
-        this.indexGlobus = new GlobusHelper(false, indexPortPref);
+        this.indexGlobus = new GlobusHelper(true, indexPortPref);
 
         EndpointReferenceType indexEPR = null;
         try {
@@ -85,6 +86,9 @@ public class IndexServiceTest extends AbstractServiceTest {
 
         // stand up Index Service
         steps.add(new GlobusCreateStep(this.indexGlobus));
+        if (this.indexGlobus.isSecure()) {
+            steps.add(new GlobusInstallSecurityDescriptorStep(this.indexGlobus));
+        }
         steps.add(new GlobusDeployServiceStep(this.indexGlobus, indexServiceDir, "deployIndexGlobus"));
         steps.add(new IndexServiceConfigStep(this.indexGlobus, duration));
         steps.add(new GlobusStartStep(this.indexGlobus));

@@ -7,24 +7,25 @@ import com.atomicobject.haste.framework.Step;
 
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 
+
 /**
- * This step creates a temporary globus container by copying GLOBUS_LOCATION to a temp directory.
+ * This step creates a temporary globus container by copying GLOBUS_LOCATION to
+ * a temp directory.
+ * 
  * @author Patrick McConnell
  */
-public class GlobusCreateStep
-	extends Step
-{
-	private GlobusHelper globus;
-	
-	public GlobusCreateStep(GlobusHelper globus)
-	{
-		super();
-		
-		this.globus = globus;
-	}
-	
-	public void runStep() throws Throwable
-	{
-		globus.createTempGlobus();
-	}
+public class GlobusCreateStep extends Step {
+    private GlobusHelper globus;
+
+
+    public GlobusCreateStep(GlobusHelper globus) {
+        super();
+        this.globus = globus;
+    }
+
+
+    @Override
+    public void runStep() throws Throwable {
+        this.globus.createTempGlobus();
+    }
 }

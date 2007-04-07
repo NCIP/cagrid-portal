@@ -140,6 +140,9 @@ public class AdvertisementClient {
         LOG.info("Unregistering " + printServiceGroupRegistrationParameters(this.sgParams));
         this.client.terminate();
         TerminationClient termClient = new TerminationClient(this.sgParams.getServiceGroupEPR());
+        if (this.sgParams.getSecurityDescriptorFile() != null) {
+            termClient.setSecurityDescriptorFile(this.sgParams.getSecurityDescriptorFile());
+        }
         int unregisterCount = termClient.unregister(this.sgParams.getRegistrantEPR());
         LOG.info("Unregistered " + unregisterCount + " service entries.");
     }
@@ -165,7 +168,8 @@ public class AdvertisementClient {
      * Logs status information.
      * 
      * @created Apr 5, 2007 11:25:48 PM
-     * @version $Id: AdvertisementClient.java,v 1.1 2007-04-07 21:04:15 oster Exp $
+     * @version $Id: AdvertisementClient.java,v 1.1 2007/04/07 21:04:15 oster
+     *          Exp $
      */
     protected class Callback implements ServiceGroupRegistrationClientCallback {
         public boolean setRegistrationStatus(ServiceGroupRegistrationParameters regParams, boolean wasSuccessful,
