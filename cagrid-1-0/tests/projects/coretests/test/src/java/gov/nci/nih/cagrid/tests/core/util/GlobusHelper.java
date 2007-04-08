@@ -332,9 +332,9 @@ public class GlobusHelper {
             opts.add("-a");
         }
 
-        // no auth
-        opts.add("-z");
-        opts.add("none");
+        // no auth (is the default)
+        // opts.add("-z");
+        // opts.add("none");
 
         String shutdown = getServiceEPR("ShutdownService").getAddress().toString();
         opts.add("-s");
