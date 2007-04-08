@@ -113,6 +113,10 @@
 	<!-- =============================================================== -->
 	<target name="defineClasspaths" depends="checkGlobus">
 		<path id="build.classpath">
+            <fileset dir="${jar.dir}">
+                <include name="**/${project.name}-stubs.jar"/>
+            </fileset>
+
 			<fileset dir="${lib.dir}">
 				<include name="**/*.jar" />
 			</fileset>
