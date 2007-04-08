@@ -13,7 +13,7 @@
 	<!-- Information -->
 	<property name="project.version" value="1.0" />
 	<property name="project.name" value="caGrid-${project.version}-${ant.project.name}" />
-
+    <property name="java.source" value="1.5" />
 	<property name="src.dir" value="${basedir}/src/java" />
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
@@ -32,10 +32,54 @@
 	<property name="test.logs.dir" location="${test.dir}/logs" />
 	<property name="test.project.jar" location="${jar.dir}/${project.name}-tests.jar" />
 
-	<import file="test/test.xml" />
+	<property name="stubs.dir" location="${build.dir}/stubs" />
+    <property name="test.stubs.dir" location="${stubs.dir}/test"/>
+    <property name="stubs.src" location="${stubs.dir}/src" />
+    <property name="test.stubs.src" location="${test.stubs.dir}/src"/>
+    <property name="stubs.dest" location="${stubs.dir}/classes" />
+    <property name="test.stubs.dest" location="${test.stubs.dir}/classes"/>
+    <property name="stubs.jar.name" value="${project.name}-stubs.jar" />
+     <property name="build.jars.dir" location="build/lib" />
+    <property name="stubs.jar.file" value="${build.jars.dir}/${stubs.jar.name}" />
+    <property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+    <property name="schema.dest" location="${build.dir}/schema" />
+    <import file="test/test.xml" />
 
 
-	<!-- ============================================================== -->
+	
+    <target name="init">
+        <mkdir dir="${build.dir}" />
+        <mkdir dir="${build.jars.dir}" />
+        <mkdir dir="${test.classes.dir}" />
+        <mkdir dir="${stubs.dir}" />
+        <mkdir dir="${test.stubs.dir}"/>
+        <mkdir dir="${stubs.src}" />
+        <mkdir dir="${test.stubs.src}" />
+        <mkdir dir="${stubs.dest}" />
+        <mkdir dir="${test.stubs.dest}" />
+        <mkdir dir="${schema.dest}" />
+        <!-- copy schemas to the output directory -->
+        <copy toDir="${schema.dest}">
+            <fileset dir="schema" casesensitive="yes">
+                <include name="rav/**/*.xsd" />
+                <include name="rav/**/*.wsdl" />
+            </fileset>
+        </copy>
+        <available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
+    </target>
+
+    <path id="base.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar" />
+        </fileset>
+        <fileset dir="${ext.lib.dir}">
+            <include name="*.jar" />
+        </fileset>
+        <fileset dir="${globus.dir}/lib">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+    <!-- ============================================================== -->
 	<!-- Globus properties                                              -->
 	<!-- ============================================================== -->
 	<target name="checkGlobus" depends="setGlobus">
@@ -54,7 +98,15 @@
 	<target name="setGlobus" if="env.GLOBUS_LOCATION">
 		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
 	</target>
-
+    
+    
+    <target name="stubs" unless="stubs.present" depends="init,setGlobus">
+        <ant antfile="${ant.build.stubs}" target="generateStubs">
+        <property name="source.stubs.dir" location="${schema.dest}/rav" />
+        <property name="wsdl.file" value="jsdl.wsdl" />
+        <property name="target.stubs.dir" location="${stubs.src}" />
+        </ant>
+    </target>
 
 	<!-- =============================================================== -->
 	<!-- Define the Classpaths                                           -->
@@ -117,11 +169,32 @@
 		<mkdir dir="${build.dir}" />
 	</target>
 
+ <target name="compileStubs" depends="stubs">
+        <delete dir="${stubs.src}/org/apache" />
+        <javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}" source="${java.source}">
+            <include name="**/*.java" />
+            <classpath>
+                <path refid="base.classpath"/>
+                <fileset dir="${globus.dir}/lib">
+                    <include name="*.jar" />
+                </fileset>
+            </classpath>
+        </javac>
+        <javac srcdir="${test.stubs.src}" destdir="${test.stubs.dest}" debug="${java.debug}" source="${java.source}">
+            <include name="**/*.java"/>
+            <classpath>
+                <path refid="base.classpath"/>
+                <fileset dir="${globus.dir}/lib">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
 
 	<!-- =============================================================== -->
 	<!-- Compiles the source code                                        -->
 	<!-- =============================================================== -->
-	<target name="compile" depends="prepare" description="compiles.">
+	<target name="compile" depends="prepare, compileStubs" description="compiles.">
 		<mkdir dir="${classes.dir}" />
 		<javac srcdir="${src.dir}" destdir="${classes.dir}" source="1.3" target="1.1" debug="on" deprecation="off" optimize="off">
 			<classpath refid="build.classpath" />
@@ -151,6 +224,18 @@
 		<delete dir="${build.dir}" />
 	</target>
 
+ <target name="jarStubs" depends="compileStubs" description="Builds and jars just the stubs and beans">
+		<mkdir dir="${jar.dir}" />
+        <jar destfile="${stubs.jar.file}">
+            <fileset dir="${stubs.dest}">
+                <include name="**/*.class" />
+            </fileset>
+            <fileset dir="${stubs.src}">
+                <include name="**/*.java" />
+            </fileset>
+        </jar>
+        <copy toDir="${jar.dir}" file="${stubs.jar.file}"/>
+    </target>
 
 	<!-- ============================================================== -->
 	<!-- Creates the test jar files                                          -->
@@ -233,10 +318,12 @@
 			</fileset>
 		</copy>
 	</target>
+    
+    
 
 	<!-- ============================================================== -->
 	<!-- Builds from scratch                                                -->
 	<!-- ============================================================== -->
-	<target name="all" description="Builds the entire application" depends="jar,jar-tests" />
+	<target name="all" description="Builds the entire application" depends="jarStubs,jar,jar-tests" />
 </project>
 

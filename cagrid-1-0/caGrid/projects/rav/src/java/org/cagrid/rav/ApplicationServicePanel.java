@@ -23,6 +23,8 @@ import java.awt.ComponentOrientation;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import org.ggf.schemas.jsdl._2005._11.jsdl.Application_Type;
+
 import java.io.File;
 
 public class ApplicationServicePanel extends CreationExtensionUIDialog {
@@ -35,10 +37,18 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 	private JButton jButton = null;
 	private JButton jButton1 = null;
 	
+	private JLabel jLabel1 = null;
+	private JTextField jTextField1 = null;
+	private JLabel jLabel2 = null;
+	private JTextField jTextField2 = null;
+	private JLabel jLabel3 = null;
+	private JTextField jTextField3 = null;
+	
 	private File appName = null;
 	
 	private JFileChooser fileChooser = null;
 	
+	private Application_Type appType = null;
 	
 	/**
 	 * This is the default constructor
@@ -68,7 +78,7 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.gridy = 0;
-		this.setSize(466, 98);
+		this.setSize(536, 191);
 		this.setLayout(new GridBagLayout());
 		this.setName("ApplicationServicePanel");
 		this.add(getBrowserPanel(), gridBagConstraints);
@@ -101,12 +111,80 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 			gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints2.anchor = GridBagConstraints.WEST;
 			gridBagConstraints2.weightx = 1.0;
+			
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.gridx = 2;
+			gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints5.gridwidth = 1;
+			gridBagConstraints5.anchor = GridBagConstraints.WEST;
+			gridBagConstraints5.gridy = 1;
+			
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.anchor = GridBagConstraints.WEST;
+			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.gridy = 1;
+			gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
+			
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints7.gridx = 1;
+			gridBagConstraints7.gridy = 1;
+			gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints7.anchor = GridBagConstraints.WEST;
+			gridBagConstraints7.weightx = 1.0;
+			
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.anchor = GridBagConstraints.WEST;
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.gridy = 2;
+			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+			
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints9.gridx = 1;
+			gridBagConstraints9.gridy = 3;
+			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints9.anchor = GridBagConstraints.WEST;
+			gridBagConstraints9.weightx = 1.0;
+			
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = GridBagConstraints.WEST;
+			gridBagConstraints10.gridx = 0;
+			gridBagConstraints10.gridy = 3;
+			gridBagConstraints10.insets = new Insets(2, 2, 2, 2);
+			
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.gridy = 2;
+			gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints11.anchor = GridBagConstraints.WEST;
+			gridBagConstraints11.weightx = 1.0;
+			
 			jLabel = new JLabel();
 			jLabel.setText("Application/Executable");
+			jLabel1 = new JLabel();
+			jLabel1.setText("Application Description");
+			
+			jLabel2 = new JLabel();
+			jLabel2.setText("Application Version");
+			
+			jLabel3 = new JLabel();
+			jLabel3.setText("Extensions");
 			browserPanel = new JPanel();
 			browserPanel.setLayout(new GridBagLayout());
 			browserPanel.add(jLabel, gridBagConstraints3);
 			browserPanel.add(getJTextField(), gridBagConstraints2);
+			
+			browserPanel.add(jLabel1, gridBagConstraints6);
+			browserPanel.add(getJTextField1(), gridBagConstraints7);
+			
+			browserPanel.add(jLabel2, gridBagConstraints8);
+			browserPanel.add(getJTextField2(), gridBagConstraints9);
+			
+			browserPanel.add(jLabel3, gridBagConstraints10);
+			browserPanel.add(getJTextField3(), gridBagConstraints11);
+			
 			browserPanel.add(getJButton(), gridBagConstraints4);
 		}
 		return browserPanel;
@@ -193,6 +271,7 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 			jButton1.addActionListener(new ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if(!(getJTextField().getText().trim()).equals("")) {
+						appType.setApplicationName(getJTextField().getText().trim());
 						dispose();	
 					} else {
 						JOptionPane.showMessageDialog(ApplicationServicePanel.this, 
@@ -203,6 +282,39 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 			});
 		}
 		return jButton1;
+	}
+
+	/**
+	 * @return the jTextField1
+	 */
+	public JTextField getJTextField1() {
+		if (jTextField1 != null) {
+			jTextField1 = new JTextField();
+		}
+		return jTextField1;
+	}
+
+	
+
+	/**
+	 * @return the jTextField2
+	 */
+	public JTextField getJTextField2() {
+		if (jTextField2 != null) {
+			jTextField2 = new JTextField();
+		}
+		return jTextField2;
+	}
+
+	
+	/**
+	 * @return the jTextField3
+	 */
+	public JTextField getJTextField3() {
+		if (jTextField3 != null) {
+			jTextField3 = new JTextField();
+		}
+		return jTextField3;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="8,8"
