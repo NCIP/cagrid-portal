@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.cql.ui;
 
+import java.awt.Dimension;
 import java.util.Properties;
 
 import javax.swing.JPanel;
@@ -11,7 +12,7 @@ import javax.swing.JPanel;
  * @author David Ervin
  * 
  * @created Apr 6, 2007 12:45:01 PM
- * @version $Id: CQLQueryProcessorConfigUI.java,v 1.1 2007-04-06 17:03:12 dervin Exp $ 
+ * @version $Id: CQLQueryProcessorConfigUI.java,v 1.2 2007-04-09 14:19:14 dervin Exp $ 
  */
 public abstract class CQLQueryProcessorConfigUI extends JPanel {
 
@@ -27,7 +28,7 @@ public abstract class CQLQueryProcessorConfigUI extends JPanel {
      * 
      * @param cqlProcessorProperties
      */
-    protected abstract void setUpUi(Properties cqlProcessorProperties);
+    public abstract void setUpUi(Properties cqlProcessorProperties);
     
     
     /**
@@ -38,5 +39,16 @@ public abstract class CQLQueryProcessorConfigUI extends JPanel {
      * @return
      *      CQL Query Processor configuration properties
      */
-    protected abstract Properties getConfiguredProperties();
+    public abstract Properties getConfiguredProperties();
+    
+    
+    /**
+     * Subclasses may override this method to specify the dimension at which
+     * they wish the UI panel to be displayed.  The default is 400x350
+     * @return
+     *      The preferred display size
+     */
+    public Dimension getPreferredDimension() {
+        return new Dimension(400, 350);
+    }
 }

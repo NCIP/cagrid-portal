@@ -13,6 +13,8 @@ import gov.nih.nci.cagrid.common.portal.PromptButtonDialog;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.codegen.DomainModelCreationUtil;
+import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
+import gov.nih.nci.cagrid.data.cql.ui.CQLQueryProcessorConfigUI;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
@@ -32,6 +34,7 @@ import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionListener;
 import gov.nih.nci.cagrid.data.ui.tree.uml.UMLClassTreeNode;
 import gov.nih.nci.cagrid.data.ui.tree.uml.UMLPackageTreeNode;
 import gov.nih.nci.cagrid.data.ui.tree.uml.UMLProjectTree;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -48,13 +51,17 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
 import java.io.FileReader;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.ButtonModel;
 import javax.swing.JButton;
@@ -111,12 +118,13 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private JPanel detailConfigPanel = null;
 	private QueryProcessorParametersTable qpParamsTable = null;
 	private JScrollPane qpParamsScrollPane = null;
+    private JButton visualizeDomainModelButton = null;
+    private JPanel processorConfigurationPanel = null;
+    private JButton launchProcessorConfigButton = null;
 
 	private transient Project mostRecentProject = null;
 	private transient Map packageToNamespace = null;
 	private transient Map packageToClassMap = null;
-    private JButton visualizeDomainModelButton = null;
-
 
 	public DataServiceModificationPanel(ServiceExtensionDescriptionType desc, ServiceInformation info) {
 		super(desc, info);
@@ -450,8 +458,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private ClassBrowserPanel getClassBrowserPanel() {
 		if (classBrowserPanel == null) {
 			classBrowserPanel = new ClassBrowserPanel(getExtensionTypeExtensionData(), getServiceInfo());
-			// classBrowserPanel = new ClassBrowserPanel(null, null); //
-			// uncomment this line to edit in VE
+			// classBrowserPanel = new ClassBrowserPanel(null, null); //uncomment this line to edit in VE
 			classBrowserPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
 				"Query Processor Class Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
@@ -1005,22 +1012,21 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	 */
 	private JPanel getProcessorConfigPanel() {
 		if (processorConfigPanel == null) {
+			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+			gridBagConstraints22.gridx = 0;
+            gridBagConstraints22.gridy = 1;
+			gridBagConstraints22.fill = GridBagConstraints.BOTH;
+            gridBagConstraints22.weightx = 1.0D;
+            gridBagConstraints22.weighty = 1.0D;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			gridBagConstraints16.gridx = 0;
 			gridBagConstraints16.weightx = 1.0D;
 			gridBagConstraints16.gridy = 0;
 			gridBagConstraints16.fill = GridBagConstraints.HORIZONTAL;
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.gridx = 0;
-			gridBagConstraints17.gridy = 1;
-			gridBagConstraints17.weightx = 1.0D;
-			gridBagConstraints17.weighty = 1.0D;
-			gridBagConstraints17.fill = GridBagConstraints.BOTH;
-			gridBagConstraints17.insets = new java.awt.Insets(6, 6, 6, 6);
 			processorConfigPanel = new JPanel();
 			processorConfigPanel.setLayout(new GridBagLayout());
 			processorConfigPanel.add(getClassBrowserPanel(), gridBagConstraints16);
-			processorConfigPanel.add(getQpParamsScrollPane(), gridBagConstraints17);
+			processorConfigPanel.add(getProcessorConfigurationPanel(), gridBagConstraints22);
 		}
 		return processorConfigPanel;
 	}
@@ -1055,6 +1061,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private QueryProcessorParametersTable getQpParamsTable() {
 		if (qpParamsTable == null) {
 			qpParamsTable = new QueryProcessorParametersTable(getExtensionTypeExtensionData(), getServiceInfo());
+            // uncomment the following to edit with VE
+            // qpParamsTable = new QueryProcessorParametersTable(null, null);
 		}
 		return qpParamsTable;
 	}
@@ -1557,5 +1565,91 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
             });
         }
         return visualizeDomainModelButton;
+    }
+
+
+    /**
+     * This method initializes processorConfigurationPanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getProcessorConfigurationPanel() {
+        if (processorConfigurationPanel == null) {
+            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+            gridBagConstraints21.gridx = 0;
+            gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints21.gridy = 0;
+            GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+            gridBagConstraints20.fill = GridBagConstraints.BOTH;
+            gridBagConstraints20.gridx = 0;
+            gridBagConstraints20.gridy = 1;
+            gridBagConstraints20.weightx = 1.0D;
+            gridBagConstraints20.weighty = 1.0D;
+            gridBagConstraints20.insets = new Insets(6, 6, 6, 6);
+            processorConfigurationPanel = new JPanel();
+            processorConfigurationPanel.setLayout(new GridBagLayout());
+            processorConfigurationPanel.add(getQpParamsScrollPane(), gridBagConstraints20);
+            processorConfigurationPanel.add(getLaunchProcessorConfigButton(), gridBagConstraints21);
+        }
+        return processorConfigurationPanel;
+    }
+
+
+    /**
+     * This method initializes launchProcessorConfigButton	
+     * 	
+     * @return javax.swing.JButton	
+     */
+    private JButton getLaunchProcessorConfigButton() {
+        if (launchProcessorConfigButton == null) {
+            launchProcessorConfigButton = new JButton();
+            launchProcessorConfigButton.setText("Launch Query Processor Configurator");
+            launchProcessorConfigButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String qpClassname = getClassBrowserPanel().getSelectedClassName();
+                    try {
+                        // reflect-load the class
+                        String[] libs = getJarFilenames();
+                        URL[] urls = new URL[libs.length];
+                        for (int i = 0; i < libs.length; i++) {
+                            File libFile = new File(libs[i]);
+                            urls[i] = libFile.toURL();
+                        }
+                        ClassLoader loader = new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
+                        Class qpClass = loader.loadClass(qpClassname);
+                        CQLQueryProcessor processorInstance = (CQLQueryProcessor) qpClass.newInstance();
+                        String configUiCLassname = processorInstance.getConfigurationUiClassname();
+                        if (configUiCLassname != null) {
+                            Class uiClass = loader.loadClass(configUiCLassname);
+                            CQLQueryProcessorConfigUI uiPanel = (CQLQueryProcessorConfigUI) uiClass.newInstance();
+                            // TODO: build a Properties object and pass it along
+                            QueryProcessorConfigurationDialog.showConfigurationUi(uiPanel, new Properties());
+                        } else {
+                            PortalUtils.showMessage(new String[] {
+                                "The query processor " + qpClassname,
+                                "did not supply a configuration UI"});
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        ErrorDialog.showErrorDialog("Error loading query processor class: " + ex.getMessage(), ex);
+                    }
+                }
+            });
+        }
+        return launchProcessorConfigButton;
+    }
+    
+    
+    private String[] getJarFilenames() {
+        String libDir = getServiceInfo().getIntroduceServiceProperties().getProperty(
+            IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+            + File.separator + "lib";
+        String[] qpJarNames = getClassBrowserPanel().getAdditionalJars();
+        if (qpJarNames != null) {
+            for (int i = 0; i < qpJarNames.length; i++) {
+                qpJarNames[i] = libDir + File.separator + qpJarNames[i];
+            }
+        }
+        return qpJarNames;
     }
 }
