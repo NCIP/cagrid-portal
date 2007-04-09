@@ -18,6 +18,10 @@ support registration on resources
 
 To Do:  
 
+need to use a different dir besides ext/lib for jars that don't need deployed with service, such as the soapFix jar.
+
+need to not build service after an upgrade and let the user know that the service build files may need to be altered.  
+
 when updating introduce software there will be a problem with the files in the users home space that will need to also be updated.
 
 need to clean up config params and deploy params to have "display" names

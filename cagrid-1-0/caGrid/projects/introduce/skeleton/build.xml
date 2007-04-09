@@ -18,8 +18,8 @@
     <!-- Important directories and files -->
     <property name="src.dir" value="src" />
     <property name="lib.dir" value="lib" />
-    <property name="ext.lib.dir" value="ext/lib" />
     <property name="etc.dir" value="etc" />
+	<property name="etc.lib.dir" value="etc/lib" />
     <property name="schema.dir" value="schema" />
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
     <property name="common.jar.name" value="${service.name}-common.jar" />
@@ -77,7 +77,7 @@
     <!-- using ant contrib for contidionals, looping , and runtarget -->
     <taskdef resource="net/sf/antcontrib/antlib.xml">
         <classpath>
-            <pathelement location="${ext.lib.dir}/ant-contrib.jar" />
+            <pathelement location="${etc.lib.dir}/ant-contrib.jar" />
         </classpath>
     </taskdef>
 
@@ -180,7 +180,7 @@
             <path refid="run.extended.classpath" />
         </path>
         <path id="processor.run.classpath">
-            <fileset dir="${ext.lib.dir}">
+            <fileset dir="${etc.lib.dir}">
                 <include name="*.jar" />
             </fileset>
             <path refid="run.classpath" />
