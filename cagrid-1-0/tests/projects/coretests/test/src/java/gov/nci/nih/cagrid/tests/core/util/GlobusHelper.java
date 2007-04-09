@@ -369,9 +369,10 @@ public class GlobusHelper {
             success = future.get(PROCESS_WAIT_TIME, TimeUnit.SECONDS).booleanValue();
         } catch (Exception e) {
             e.printStackTrace();
-            this.globusProcess.destroy();
         }
 
+        // destroy it for saftey sake
+        this.globusProcess.destroy();
         this.globusProcess = null;
 
         return success;
