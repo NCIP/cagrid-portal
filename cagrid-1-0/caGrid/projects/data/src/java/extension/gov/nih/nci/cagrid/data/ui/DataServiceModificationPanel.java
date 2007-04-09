@@ -82,7 +82,8 @@ import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
- * DataServiceModificationPanel Panel for configuring a caGrid data service from
+ * DataServiceModificationPanel 
+ * Panel for configuring a caGrid data service from
  * within the Introduce Toolkit
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
@@ -260,7 +261,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 							storeClassMapping(packName, mapping);
 						} catch (Exception ex) {
 							ex.printStackTrace();
-							ErrorDialog.showErrorDialog("Error getting mapping for " + packName + "." + className, ex);
+							ErrorDialog.showErrorDialog(
+                                "Error getting mapping for " + packName + "." + className, ex);
 						}
 					}
 				}
@@ -292,15 +294,17 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 					// get the old element name mapping for this class
 					String oldElementName = (String) classToElement.get(e.getClassName());
 					// get the namespace type for the class
-					NamespaceType nsType = CommonTools.getNamespaceType(getServiceInfo().getNamespaces(), e
-						.getNamespace());
+					NamespaceType nsType = CommonTools.getNamespaceType(
+                        getServiceInfo().getNamespaces(), e.getNamespace());
 					// find the schema element type
-					SchemaElementType schemaType = NamespaceUtils.getElementByName(nsType, e.getElementName());
-					if ((schemaType == null) && (oldElementName != null) && (oldElementName.length() != 0)) {
+					SchemaElementType schemaType = NamespaceUtils.getElementByName(
+                        nsType, e.getElementName());
+					if (schemaType == null && oldElementName != null && oldElementName.length() != 0) {
 						// WARNING: You've selected a non-existant element name,
 						// AND the old element name was NOT non existant as well
-						ErrorDialog.showErrorDialog("No element named " + e.getElementName() + " in namespace "
-							+ e.getNamespace());
+						ErrorDialog.showErrorDialog(
+                            "No element named " + e.getElementName() 
+                            + " in namespace " + e.getNamespace());
 					}
 					// change the element name mapping
 					classToElement.put(e.getClassName(), e.getElementName());
@@ -318,10 +322,11 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 
 				public void serializationChanged(ClassChangeEvent e) {
 					// get the namespace type for the class
-					NamespaceType nsType = CommonTools.getNamespaceType(getServiceInfo().getNamespaces(), e
-						.getNamespace());
+					NamespaceType nsType = CommonTools.getNamespaceType(
+                        getServiceInfo().getNamespaces(), e.getNamespace());
 					// find the schema element type
-					SchemaElementType schemaType = NamespaceUtils.getElementByName(nsType, e.getElementName());
+					SchemaElementType schemaType = NamespaceUtils.getElementByName(
+                        nsType, e.getElementName());
 					// user may have selected an element type name which is not
 					// in the namespace type.
 					// TODO: what do I do in that case? maybe prevent that in
@@ -388,8 +393,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 					try {
 						// use the caDSR client to get all the packages from the
 						// selected project
-						CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getCadsrBrowserPanel().getCadsr()
-							.getText());
+						CaDSRServiceClient cadsrClient = new CaDSRServiceClient(
+                            getCadsrBrowserPanel().getCadsr().getText());
 						UMLPackageMetadata[] packages = cadsrClient.findPackagesInProject(selectedProject);
 						handlePackageAddition(selectedProject, packages);
 					} catch (Exception ex) {
@@ -416,8 +421,9 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Project selectedProject = getCadsrBrowserPanel().getSelectedProject();
 					UMLPackageMetadata selectedPackage = getCadsrBrowserPanel().getSelectedPackage();
-					if ((selectedProject != null) && projectEquals(selectedProject, mostRecentProject)
-						&& (selectedPackage != null) && packageToNamespace.containsKey(selectedPackage.getName())) {
+					if (selectedProject != null && projectEquals(selectedProject, mostRecentProject)
+						&& selectedPackage != null 
+                        && packageToNamespace.containsKey(selectedPackage.getName())) {
 						String packName = selectedPackage.getName();
 						// get the selected classes from this package
 						String[] classNames = getUmlTree().getSelectedClassNames(packName);
@@ -432,11 +438,11 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 							.getNamespaceType(getServiceInfo().getNamespaces(), namespace);
 						// if the namespace type is no longer in use, remove it
 						// from the service
-						if ((nsType != null)
-							&& !CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
+						if ((nsType != null) && !CommonTools.isNamespaceTypeInUse(
+                                nsType, getServiceInfo().getServiceDescriptor())) {
 							NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
-							NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(allNamespaces,
-								nsType);
+							NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
+                                allNamespaces, nsType);
 							getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
 						}
 						// remove namespace from the packageMapping
@@ -446,7 +452,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 						// store the new information in the extension data
 						storeUpdatedPackageInformation();
 					} else {
-						PortalUtils.showMessage("Please select a package involved in the current domain model.");
+						PortalUtils.showMessage(
+                            "Please select a package involved in the current domain model.");
 					}
 				}
 			});
@@ -461,7 +468,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			// classBrowserPanel = new ClassBrowserPanel(null, null); //uncomment this line to edit in VE
 			classBrowserPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
 				"Query Processor Class Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, 
+                null, PortalLookAndFeel.getPanelLabelColor()));
 			// listen for class selection events
 			classBrowserPanel.addClassSelectionListener(new ClassSelectionListener() {
 				public void classSelectionChanged(ClassSelectionEvent e) {
@@ -469,7 +477,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 						saveProcessorClassName(classBrowserPanel.getSelectedClassName());
 					} catch (Exception ex) {
 						ex.printStackTrace();
-						ErrorDialog.showErrorDialog("Error setting the query processor class: " + ex.getMessage(), ex);
+						ErrorDialog.showErrorDialog(
+                            "Error setting the query processor class: " + ex.getMessage(), ex);
 					}
 				}
 			});
@@ -529,7 +538,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private JTextField getDomainModelNameTextField() {
 		if (domainModelNameTextField == null) {
 			domainModelNameTextField = new JTextField();
-			domainModelNameTextField.setToolTipText("Optional xml file name of an existing domain model");
+			domainModelNameTextField.setToolTipText(
+                "Optional xml file name of an existing domain model");
 			domainModelNameTextField.setEditable(false);
 		}
 		return domainModelNameTextField;
@@ -557,7 +567,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			domainModelSelectionPanel.setLayout(new GridBagLayout());
 			domainModelSelectionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
 				"Supplied Domain Model", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, 
+                null, PortalLookAndFeel.getPanelLabelColor()));
 			domainModelSelectionPanel.add(getDomainModelNameTextField(), gridBagConstraints6);
 			domainModelSelectionPanel.add(getSelectDomainModelButton(), gridBagConstraints7);
 		}
@@ -607,21 +618,22 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			Iterator packageNameIter = packageClasses.keySet().iterator();
 			while (packageNameIter.hasNext()) {
 				String packName = (String) packageNameIter.next();
-				String mappedNamespace = NamespaceUtils.createNamespaceString(model.getProjectShortName(), model
-					.getProjectVersion(), packName);
+				String mappedNamespace = NamespaceUtils.createNamespaceString(
+                    model.getProjectShortName(), model.getProjectVersion(), packName);
 				CadsrPackage pack = new CadsrPackage();
 				pack.setName(packName);
 				pack.setMappedNamespace(mappedNamespace);
 				// does the mapped namespace exist in the service?
-				NamespaceType packageNamespace = CommonTools.getNamespaceType(getServiceInfo().getNamespaces(),
-					mappedNamespace);
+				NamespaceType packageNamespace = CommonTools.getNamespaceType(
+                    getServiceInfo().getNamespaces(), mappedNamespace);
 				if (packageNamespace == null) {
 					String[] message = {"The imported domain model has a package which maps to the namespace",
 							mappedNamespace + ".", "This namespace is not loaded into the service.",
 							"Please locate a suitable namespace."};
 					JOptionPane.showMessageDialog(this, message);
-					NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(getServiceInfo(), pack);
-					if ((resolved == null) || (resolved.length == 0)) {
+					NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(
+                        getServiceInfo(), pack);
+					if (resolved == null || resolved.length == 0) {
 						String[] error = {"The package " + packName + " was not mapped to a namespace.",
 								"This can cause errors when the service builds."};
 						ErrorDialog.showErrorDialog("No namespace mapping provided", error);
@@ -658,8 +670,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 
 			// copy the selected file into the service's etc directory
 			File originalFile = new File(filename);
-			File localFile = new File(getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator + "etc"
-				+ File.separator + originalFile.getName());
+			File localFile = new File(getServiceInfo().getBaseDirectory().getAbsolutePath() 
+                + File.separator + "etc" + File.separator + originalFile.getName());
 			Utils.copyFile(originalFile, localFile);
 
 			// get the domain model resource property
@@ -679,7 +691,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			PortalUtils.showMessage(message);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error loading existing caDSR information: " + ex.getMessage(), ex);
+			ErrorDialog.showErrorDialog(
+                "Error loading existing caDSR information: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -693,16 +706,18 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			cqlSyntaxValidationCheckBox.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
 					CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(),
-						DataServiceConstants.VALIDATE_CQL_FLAG, String.valueOf(getCqlSyntaxValidationCheckBox()
-							.isSelected()), false);
+						DataServiceConstants.VALIDATE_CQL_FLAG, String.valueOf(
+                            getCqlSyntaxValidationCheckBox().isSelected()), false);
 				}
 			});
 			// set the check box selection
 			if (CommonTools.servicePropertyExists(getServiceInfo().getServiceDescriptor(),
 				DataServiceConstants.VALIDATE_CQL_FLAG)) {
 				try {
-					cqlSyntaxValidationCheckBox.setSelected(Boolean.parseBoolean(CommonTools.getServicePropertyValue(
-						getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_CQL_FLAG)));
+					cqlSyntaxValidationCheckBox.setSelected(Boolean.parseBoolean(
+                        CommonTools.getServicePropertyValue(
+                            getServiceInfo().getServiceDescriptor(), 
+                            DataServiceConstants.VALIDATE_CQL_FLAG)));
 				} catch (Exception ex) {
 					ex.printStackTrace();
 					ErrorDialog.showErrorDialog("Error getting service property value for "
@@ -736,8 +751,10 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			if (CommonTools.servicePropertyExists(getServiceInfo().getServiceDescriptor(),
 				DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)) {
 				try {
-					domainModelValidationCheckBox.setSelected(Boolean.parseBoolean(CommonTools.getServicePropertyValue(
-						getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)));
+					domainModelValidationCheckBox.setSelected(Boolean.parseBoolean(
+                        CommonTools.getServicePropertyValue(
+                            getServiceInfo().getServiceDescriptor(), 
+                            DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)));
 				} catch (Exception ex) {
 					ex.printStackTrace();
 					ErrorDialog.showErrorDialog("Error getting service property value for "
@@ -759,7 +776,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			classConfigScrollPane = new JScrollPane();
 			classConfigScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
 				"Exposed Class Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, 
+                null, PortalLookAndFeel.getPanelLabelColor()));
 			classConfigScrollPane.setViewportView(getClassConfigTable());
 			classConfigScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		}
@@ -784,9 +802,10 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			gridBagConstraints.gridy = 0;
 			validationCheckPanel = new JPanel();
 			validationCheckPanel.setLayout(new GridBagLayout());
-			validationCheckPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Query Validation",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			validationCheckPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                null, "Query Validation", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, 
+                null, PortalLookAndFeel.getPanelLabelColor()));
 			validationCheckPanel.add(getCqlSyntaxValidationCheckBox(), gridBagConstraints);
 			validationCheckPanel.add(getDomainModelValidationCheckBox(), gridBagConstraints1);
 		}
@@ -802,9 +821,10 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private JScrollPane getUmlClassScrollPane() {
 		if (umlClassScrollPane == null) {
 			umlClassScrollPane = new JScrollPane();
-			umlClassScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "UML Class Selection",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			umlClassScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                null, "UML Class Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, 
+                null, PortalLookAndFeel.getPanelLabelColor()));
 			umlClassScrollPane.setViewportView(getUmlTree());
 		}
 		return umlClassScrollPane;
@@ -909,9 +929,10 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			gridBagConstraints5.gridy = 0;
 			domainModelSourcePanel = new JPanel();
 			domainModelSourcePanel.setLayout(new GridBagLayout());
-			domainModelSourcePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Domain Model Source",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			domainModelSourcePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                null, "Domain Model Source", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
+                PortalLookAndFeel.getPanelLabelColor()));
 			domainModelSourcePanel.add(getNoDomainModelRadioButton(), gridBagConstraints5);
 			domainModelSourcePanel.add(getCadsrDomainModelRadioButton(), gridBagConstraints8);
 			domainModelSourcePanel.add(getSuppliedDomainModelRadioButton(), gridBagConstraints9);
@@ -1090,7 +1111,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	 */
 	private boolean projectEquals(Project p1, Project p2) {
 		if (p2 != null) {
-			return p1.getLongName().equals(p2.getLongName()) && p1.getVersion().equals(p2.getVersion());
+			return p1.getLongName().equals(p2.getLongName()) 
+                && p1.getVersion().equals(p2.getVersion());
 		}
 		return false;
 	}
@@ -1100,9 +1122,11 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		// if there's existing cadsr configuration, apply it
 		CadsrInformation cadsrInfo = null;
 		try {
-			cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
+			cadsrInfo = ExtensionDataUtils.getExtensionData(
+                getExtensionTypeExtensionData()).getCadsrInformation();
 		} catch (Exception ex) {
-			ErrorDialog.showErrorDialog("Error getting caDSR information from extension data: " + ex.getMessage(), ex);
+			ErrorDialog.showErrorDialog(
+                "Error getting caDSR information from extension data: " + ex.getMessage(), ex);
 		}
 		if (cadsrInfo != null) {
 			getUmlTree().setEnabled(false);
@@ -1125,10 +1149,11 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			// set the domain model filename if there is one
 			if (cadsrInfo.isUseSuppliedModel()) {
 				// get the supplied domain model filename
-				ResourcePropertyType dmResourceProp = CommonTools.getResourcePropertiesOfType(getServiceInfo()
-					.getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
-				File domainModelFile = new File(getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator
-					+ "etc" + File.separator + dmResourceProp.getFileLocation());
+				ResourcePropertyType dmResourceProp = CommonTools.getResourcePropertiesOfType(
+                    getServiceInfo().getServices().getService(0), 
+                    DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
+				File domainModelFile = new File(getServiceInfo().getBaseDirectory().getAbsolutePath() 
+                    + File.separator + "etc" + File.separator + dmResourceProp.getFileLocation());
 				getDomainModelNameTextField().setText(domainModelFile.getAbsolutePath());
 				getUmlTree().setEnabled(false);
 			}
@@ -1156,7 +1181,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 					// prepare a mapping of class to element names
 					Map classToElementNames = new HashMap();
 					packageToClassMap.put(packageName, classToElementNames);
-					for (int j = 0; (pack.getCadsrClass() != null) && (j < pack.getCadsrClass().length); j++) {
+					for (int j = 0; pack.getCadsrClass() != null && j < pack.getCadsrClass().length; j++) {
 						ClassMapping map = pack.getCadsrClass(j);
 						classToElementNames.put(map.getClassName(), map.getElementName());
 						// add the classes for the uml package to the tree
@@ -1179,8 +1204,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		// store the property
 		CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(),
 			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
-		// remove all query processor config properties from the service
-		// properties
+		// remove all query processor config properties from the service properties
 		ServicePropertiesProperty[] oldProperties = getServiceInfo().getServiceProperties().getProperty();
 		List keptProperties = new ArrayList();
 		for (int i = 0; i < oldProperties.length; i++) {
@@ -1196,18 +1220,20 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	}
 
 
-	private void handlePackageAddition(final Project selectedProject, final UMLPackageMetadata[] selectedPackages) {
+	private void handlePackageAddition(
+        final Project selectedProject, final UMLPackageMetadata[] selectedPackages) {
 		// verify we're in the same project as the other packages
 		boolean shouldAddPackages = true;
 		if ((mostRecentProject != null)
-			&& (!mostRecentProject.getLongName().equals(selectedProject.getLongName()) || !mostRecentProject
-				.getVersion().equals(selectedProject.getVersion()))) {
+			&& (!mostRecentProject.getLongName().equals(selectedProject.getLongName()) || 
+                !mostRecentProject.getVersion().equals(selectedProject.getVersion()))) {
 			// not the same project, can't allow packages from more than one
 			// project!
 			String[] choices = {"Remove all other packages and insert", "Cancel"};
 			String[] message = {"Domain models may only be derived from one project.",
 					"To add the package you've selected, all other packages",
-					"currently in the domain model will have to be removed.", "Should this operation procede?"};
+					"currently in the domain model will have to be removed.", 
+                    "Should this operation procede?"};
 			String choice = PromptButtonDialog.prompt(PortalResourceManager.getInstance().getGridPortal(),
 				"Package incompatability...", message, choices, choices[1]);
 			if (choice == choices[0]) {
@@ -1215,11 +1241,14 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				Iterator nsNameIter = packageToNamespace.values().iterator();
 				while (nsNameIter.hasNext()) {
 					String namespace = (String) nsNameIter.next();
-					NamespaceType nsType = CommonTools.getNamespaceType(getServiceInfo().getNamespaces(), namespace);
-					if (!CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
-						NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
-						NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(allNamespaces,
-							nsType);
+					NamespaceType nsType = CommonTools.getNamespaceType(
+                        getServiceInfo().getNamespaces(), namespace);
+					if (!CommonTools.isNamespaceTypeInUse(
+                        nsType, getServiceInfo().getServiceDescriptor())) {
+						NamespaceType[] allNamespaces = 
+                            getServiceInfo().getNamespaces().getNamespace();
+						NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
+                            allNamespaces, nsType);
 						getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
 					}
 				}
@@ -1251,16 +1280,20 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		if (!packageToNamespace.containsKey(pack.getName())) {
 			// determine if the namespace type already exists in the service
 			String namespaceUri = NamespaceUtils.createNamespaceString(project, pack);
-			NamespaceType nsType = NamespaceUtils.getServiceNamespaceType(getServiceInfo(), namespaceUri);
+			NamespaceType nsType = NamespaceUtils.getServiceNamespaceType(
+                getServiceInfo(), namespaceUri);
 			if (nsType == null) {
 				// ask the user to locate the schemas
-				String[] message = {"No namespace is present in the service for the package", pack.getName() + ".",
-						"Please specify a schema."};
+				String[] message = {
+                    "No namespace is present in the service for the package", 
+                    pack.getName() + ".",
+                    "Please specify a schema."};
 				JOptionPane.showMessageDialog(this, message);
 				CadsrPackage tempPackage = new CadsrPackage();
 				tempPackage.setName(pack.getName());
 				tempPackage.setMappedNamespace(namespaceUri);
-				NamespaceType[] namespaces = SchemaResolutionDialog.resolveSchemas(getServiceInfo(), tempPackage);
+				NamespaceType[] namespaces = SchemaResolutionDialog.resolveSchemas(
+                    getServiceInfo(), tempPackage);
 				if ((namespaces != null) && (namespaces.length != 0)) {
 					nsType = namespaces[0];
 					// add the new namespaces to the service
@@ -1440,7 +1473,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				data.setCadsrInformation(info);
 			}
 			CadsrPackage pack = null;
-			for (int i = 0; (info.getPackages() != null) && (i < info.getPackages().length); i++) {
+			for (int i = 0; info.getPackages() != null && i < info.getPackages().length; i++) {
 				if (info.getPackages(i).getName().equals(packName)) {
 					pack = info.getPackages(i);
 					break;
@@ -1448,11 +1481,12 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			}
 			if (pack == null) {
 				// no package found
-				throw new IllegalArgumentException("Package " + packName + " is not stored in the extension data");
+				throw new IllegalArgumentException(
+                    "Package " + packName + " is not stored in the extension data");
 			}
 			// see if the class mapping is already in the package
 			boolean found = false;
-			for (int i = 0; (pack.getCadsrClass() != null) && (i < pack.getCadsrClass().length); i++) {
+			for (int i = 0; pack.getCadsrClass() != null && i < pack.getCadsrClass().length; i++) {
 				if (pack.getCadsrClass(i).getClassName().equals(mapping.getClassName())) {
 					pack.setCadsrClass(i, mapping);
 					found = true;
@@ -1486,7 +1520,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			}
 			// find the package
 			CadsrPackage pack = null;
-			for (int i = 0; (info.getPackages() != null) && (i < info.getPackages().length); i++) {
+			for (int i = 0; info.getPackages() != null && i < info.getPackages().length; i++) {
 				if (info.getPackages(i).getName().equals(packName)) {
 					pack = info.getPackages(i);
 					break;
@@ -1494,7 +1528,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			}
 			if (pack != null) {
 				// find the class mapping
-				for (int i = 0; (pack.getCadsrClass() != null) && (i < pack.getCadsrClass().length); i++) {
+				for (int i = 0; pack.getCadsrClass() != null 
+                    && i < pack.getCadsrClass().length; i++) {
 					if (pack.getCadsrClass(i).getClassName().equals(className)) {
 						pack.getCadsrClass(i).setSelected(false);
 						break;
@@ -1544,18 +1579,21 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                                 new FileReader(filename));
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            ErrorDialog.showErrorDialog("Error loading domain model: " + ex.getMessage(), ex);
+                            ErrorDialog.showErrorDialog(
+                                "Error loading domain model: " + ex.getMessage(), ex);
                         }
                     } else if (getCadsrDomainModelRadioButton().isSelected()) {
                         // build the domain model
                         try {
-                            Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+                            Data data = ExtensionDataUtils.getExtensionData(
+                                getExtensionTypeExtensionData());
                             CadsrInformation info = data.getCadsrInformation();
                             // TODO: busy dialog runnable
                             model = DomainModelCreationUtil.createDomainModel(info);
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            ErrorDialog.showErrorDialog("Error getting caDSR information: " + ex.getMessage(), ex);
+                            ErrorDialog.showErrorDialog(
+                                "Error getting caDSR information: " + ex.getMessage(), ex);
                         }   
                     }
                     if (model != null) {
@@ -1606,33 +1644,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
             launchProcessorConfigButton.setText("Launch Query Processor Configurator");
             launchProcessorConfigButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    String qpClassname = getClassBrowserPanel().getSelectedClassName();
-                    try {
-                        // reflect-load the class
-                        String[] libs = getJarFilenames();
-                        URL[] urls = new URL[libs.length];
-                        for (int i = 0; i < libs.length; i++) {
-                            File libFile = new File(libs[i]);
-                            urls[i] = libFile.toURL();
-                        }
-                        ClassLoader loader = new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
-                        Class qpClass = loader.loadClass(qpClassname);
-                        CQLQueryProcessor processorInstance = (CQLQueryProcessor) qpClass.newInstance();
-                        String configUiCLassname = processorInstance.getConfigurationUiClassname();
-                        if (configUiCLassname != null) {
-                            Class uiClass = loader.loadClass(configUiCLassname);
-                            CQLQueryProcessorConfigUI uiPanel = (CQLQueryProcessorConfigUI) uiClass.newInstance();
-                            // TODO: build a Properties object and pass it along
-                            QueryProcessorConfigurationDialog.showConfigurationUi(uiPanel, new Properties());
-                        } else {
-                            PortalUtils.showMessage(new String[] {
-                                "The query processor " + qpClassname,
-                                "did not supply a configuration UI"});
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error loading query processor class: " + ex.getMessage(), ex);
-                    }
+                    launchQueryProcessorConfigUi();
                 }
             });
         }
@@ -1651,5 +1663,69 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
             }
         }
         return qpJarNames;
+    }
+    
+    
+    private void launchQueryProcessorConfigUi() {
+        String qpClassname = getClassBrowserPanel().getSelectedClassName();
+        try {
+            // reflect-load the class
+            String[] libs = getJarFilenames();
+            URL[] urls = new URL[libs.length];
+            for (int i = 0; i < libs.length; i++) {
+                File libFile = new File(libs[i]);
+                urls[i] = libFile.toURL();
+            }
+            ClassLoader loader = new URLClassLoader(
+                urls, Thread.currentThread().getContextClassLoader());
+            Class qpClass = loader.loadClass(qpClassname);
+            CQLQueryProcessor processorInstance = (CQLQueryProcessor) qpClass.newInstance();
+            String configUiCLassname = processorInstance.getConfigurationUiClassname();
+            if (configUiCLassname != null) {
+                Class uiClass = loader.loadClass(configUiCLassname);
+                CQLQueryProcessorConfigUI uiPanel = 
+                    (CQLQueryProcessorConfigUI) uiClass.newInstance();
+                // get the current configuration out of the table
+                Properties currentConfig = getQpParamsTable().getNonPrefixedConfiguredProperties();
+                Properties postUiConfig = QueryProcessorConfigurationDialog
+                    .showConfigurationUi(uiPanel, currentConfig);
+                // store the configuration that came back from the UI config dialog
+                // start by removing the old query processor properties
+                ServicePropertiesProperty[] oldProperties = 
+                    getServiceInfo().getServiceProperties().getProperty();
+                List<ServicePropertiesProperty> keptProperties = new ArrayList();
+                for (ServicePropertiesProperty prop : oldProperties) {
+                    if (!prop.getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
+                        keptProperties.add(prop);
+                    }
+                }
+                // add the changed properties
+                Iterator postUiPropKeys = postUiConfig.keySet().iterator();
+                while (postUiPropKeys.hasNext()) {
+                    String key = (String) postUiPropKeys.next();
+                    String value = postUiConfig.getProperty(key);
+                    String prefixedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + key;
+                    ServicePropertiesProperty configProperty = new ServicePropertiesProperty();
+                    configProperty.setKey(prefixedKey);
+                    configProperty.setValue(value);
+                    configProperty.setIsFromETC(Boolean.FALSE);
+                    keptProperties.add(configProperty);
+                }
+                // set the properties into the model
+                ServicePropertiesProperty[] properties = 
+                    new ServicePropertiesProperty[keptProperties.size()];
+                keptProperties.toArray(properties);
+                getServiceInfo().getServiceDescriptor().getServiceProperties().setProperty(properties);
+                // inform the parameters table that it should update
+                getQpParamsTable().classChanged();
+            } else {
+                PortalUtils.showMessage(new String[] {
+                    "The query processor " + qpClassname,
+                    "did not supply a configuration UI"});
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorDialog.showErrorDialog("Error loading query processor class: " + ex.getMessage(), ex);
+        }
     }
 }

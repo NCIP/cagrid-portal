@@ -145,6 +145,17 @@ public class QueryProcessorParametersTable extends JTable {
 			((DefaultTableModel) getModel()).removeRow(0);
 		}
 	}
+    
+    
+    public Properties getNonPrefixedConfiguredProperties() {
+        Properties props = new Properties();
+        for (int i = 0; i < getRowCount(); i++) {
+            String key = (String) getValueAt(i, 0);
+            String value = (String) getValueAt(i, 2);
+            props.put(key, value);
+        }
+        return props;
+    }
 
 
 	private String getQpClassname() throws Exception {
