@@ -103,9 +103,9 @@ public class GlobusHelper {
 
 
     protected void editShutdownServiceDescriptor() throws IOException {
-        if (this.secure) {
-            return;
-        }
+        // if (this.secure) {
+        // return;
+        // }
         File coreWSDD = new File(this.tmpGlobusLocation, "etc/globus_wsrf_core/server-config.wsdd");
         Document coreWSDDDoc = null;
         try {
