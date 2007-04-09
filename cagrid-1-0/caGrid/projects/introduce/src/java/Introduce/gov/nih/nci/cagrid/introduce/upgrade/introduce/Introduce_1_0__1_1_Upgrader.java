@@ -114,11 +114,21 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             }
         }
 
-        // need to add the soapFix.jar to the ext lib directory
+        // need to add the soapFix.jar to the tools lib directory
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "ext" + File.separator + "lib"
             + File.separator + "caGrid-1.0-Introduce-1.1-soapBindingFix.jar"), new File(getServicePath()
-            + File.separator + "ext" + File.separator + "lib" + File.separator
+            + File.separator + "tools" + File.separator + "lib" + File.separator
             + "caGrid-1.0-Introduce-1.1-soapBindingFix.jar"));
+        
+        // need to move the ant-contrib.jar to the tools lib directory
+        File currentContribFile = new File(getServicePath()
+            + File.separator + "lib" + File.separator
+            + "ant-contrib.jar");
+        Utils.copyFile(currentContribFile , new File(getServicePath()
+            + File.separator + "tools" + File.separator + "lib" + File.separator
+            + "ant-contrib.jar"));
+        currentContribFile.delete();
+        
 
         upgradeJars();
 
