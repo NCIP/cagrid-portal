@@ -6,8 +6,8 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal.jar"/>
 	<classpathentry kind="lib" path="build/jars/caGrid-1.0-rav-stubs.jar"/>
-	<classpathentry kind="lib" path="C:/cygdrive/c/globus/install/lib/addressing-1.0.jar"/>
-	<classpathentry kind="lib" path="C:/cygdrive/c/globus/install/lib/axis.jar"/>
-	<classpathentry kind="lib" path="C:/cygdrive/c/globus/install/lib/axis-url.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar" sourcepath="/GT4_LOCATION/ws-core-4.0.3-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
