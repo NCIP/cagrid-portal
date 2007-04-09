@@ -103,7 +103,6 @@ public class TrustedAuthorityManager {
 						select.addClause("(" + TrustedAuthorityTable.EXPIRES + "=0 OR " + TrustedAuthorityTable.EXPIRES
 							+ ">" + time + ")");
 					} else if (filter.getLifetime().equals(Lifetime.Expired)) {
-
 						Calendar cal = new GregorianCalendar();
 						long time = cal.getTimeInMillis();
 						select.addClause("(" + TrustedAuthorityTable.EXPIRES + "<>0 AND "
