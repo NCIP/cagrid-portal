@@ -32,14 +32,6 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
 
     protected void upgrade() throws Exception {
-        // need to create /ext/lib
-        File extlibdir = new File(getServicePath() + File.separator + "ext" + File.separator + "lib");
-        extlibdir.mkdirs();
-
-        // move ant contrib
-        File oldcontribjar = new File(getServicePath() + File.separator + "lib" + File.separator + "ant-contrib.jar");
-        Utils.copyFile(oldcontribjar, new File(extlibdir + File.separator + "ant-contrib.jar"));
-        oldcontribjar.delete();
 
         // need to replace the build.xml
         Utils.copyFile(new File(getServicePath() + File.separator + "build.xml"), new File(getServicePath()
