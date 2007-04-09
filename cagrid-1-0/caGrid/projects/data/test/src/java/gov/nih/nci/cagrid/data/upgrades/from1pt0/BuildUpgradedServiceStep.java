@@ -12,7 +12,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: BuildUpgradedServiceStep.java,v 1.1 2007-02-21 16:09:50 dervin Exp $ 
+ * @version $Id: BuildUpgradedServiceStep.java,v 1.2 2007-04-09 15:26:14 dervin Exp $ 
  */
 public class BuildUpgradedServiceStep extends Step {
 	
@@ -34,7 +34,7 @@ public class BuildUpgradedServiceStep extends Step {
 		String cmd = CommonTools.getAntCommand("clean", new File(serviceDir).getAbsolutePath());
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertTrue("Service cleaned successfully", p.exitValue() == 0);
+		assertTrue("Call to '" + cmd + "' failed", p.exitValue() == 0);
 	}
 	
 	
@@ -43,6 +43,6 @@ public class BuildUpgradedServiceStep extends Step {
 		String cmd = CommonTools.getAntAllCommand(serviceDir);
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertTrue("Build process completed successfully", p.exitValue() == 0);	
+		assertTrue("Build process failed", p.exitValue() == 0);	
 	}
 }

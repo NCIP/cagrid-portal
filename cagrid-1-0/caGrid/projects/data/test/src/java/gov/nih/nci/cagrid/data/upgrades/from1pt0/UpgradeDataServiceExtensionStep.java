@@ -15,7 +15,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeDataServiceExtensionStep.java,v 1.1 2007-02-21 16:09:50 dervin Exp $ 
+ * @version $Id: UpgradeDataServiceExtensionStep.java,v 1.2 2007-04-09 15:26:14 dervin Exp $ 
  */
 public class UpgradeDataServiceExtensionStep extends Step {
 	private String serviceDir;
@@ -32,7 +32,7 @@ public class UpgradeDataServiceExtensionStep extends Step {
 		ExtensionsUpgradeManager extUpgrader = new ExtensionsUpgradeManager(
 			serviceDesc, new File(serviceDir).getAbsolutePath());
 		// verify that the service is in need of an upgrade
-		assertTrue("Service must be upgraded", extUpgrader.needsUpgrading());
+		assertTrue("Service should have required upgrading", extUpgrader.needsUpgrading());
 		// upgrade the service
 		extUpgrader.upgrade();
 	}

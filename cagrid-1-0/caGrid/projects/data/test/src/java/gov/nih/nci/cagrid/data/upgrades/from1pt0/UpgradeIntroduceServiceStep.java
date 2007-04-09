@@ -14,7 +14,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradeIntroduceServiceStep.java,v 1.1 2007-02-21 16:09:50 dervin Exp $ 
+ * @version $Id: UpgradeIntroduceServiceStep.java,v 1.2 2007-04-09 15:26:14 dervin Exp $ 
  */
 public class UpgradeIntroduceServiceStep extends Step {
 	private String serviceDir;
@@ -30,7 +30,7 @@ public class UpgradeIntroduceServiceStep extends Step {
 			serviceDir + File.separator + "introduce.xml", ServiceDescription.class);
 		// create the introduce upgrade manager
 		IntroduceUpgradeManager upgrader = new IntroduceUpgradeManager(serviceDesc, serviceDir);
-		assertTrue("Introduce service needs to be upgraded to 1.1", upgrader.needsUpgrading());
+		assertTrue("Introduce service should have required upgrade to 1.1", upgrader.needsUpgrading());
 		upgrader.upgrade();
 	}
 }
