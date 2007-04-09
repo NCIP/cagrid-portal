@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -27,6 +28,8 @@ import org.apache.tools.ant.Task;
 public class SkeletonCreator extends Task {
 
 	public SkeletonCreator() {
+	    PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+            + "log4j.properties");
 	}
 
 

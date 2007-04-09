@@ -69,6 +69,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.jdom.Document;
 import org.jdom.Namespace;
 import org.projectmobius.common.MalformedNamespaceException;
@@ -210,6 +211,8 @@ public class SyncTools {
 
 
 	public SyncTools(File directory) {
+	    PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+            + "log4j.properties");
 		baseDirectory = directory;
 	}
 
