@@ -653,39 +653,40 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 				} catch (Exception ex) {
 					this.log.error(
 						"Error synchronizing with the authorities, could not obtain a list of authorities!!!", ex);
-					return;
 				}
 
-				TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
-				filter.setStatus(Status.Trusted);
-				filter.setLifetime(Lifetime.Valid);
+				if (auths != null) {
+					TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
+					filter.setStatus(Status.Trusted);
+					filter.setLifetime(Lifetime.Valid);
 
-				for (int i = 0; i < auths.length; i++) {
-					TrustLevel[] levels = null;
-					TrustedAuthority[] trusted = null;
-					try {
-						EndpointReferenceType endpoint = new EndpointReferenceType();
-						endpoint.setAddress(new Address(auths[i].getServiceURI()));
-						GTSClient client = new GTSClient(endpoint);
+					for (int i = 0; i < auths.length; i++) {
+						TrustLevel[] levels = null;
+						TrustedAuthority[] trusted = null;
+						try {
+							EndpointReferenceType endpoint = new EndpointReferenceType();
+							endpoint.setAddress(new Address(auths[i].getServiceURI()));
+							GTSClient client = new GTSClient(endpoint);
 
-						if (auths[i].isPerformAuthorization()) {
-							IdentityAuthorization ia = new IdentityAuthorization(auths[i].getServiceIdentity());
-							client.setAuthorization(ia);
+							if (auths[i].isPerformAuthorization()) {
+								IdentityAuthorization ia = new IdentityAuthorization(auths[i].getServiceIdentity());
+								client.setAuthorization(ia);
+							}
+							levels = client.getTrustLevels();
+							trusted = client.findTrustedAuthorities(filter);
+
+						} catch (Exception ex) {
+							this.log.error("Error synchronizing with the authority " + auths[i].getServiceURI() + ": "
+								+ ex.getMessage(), ex);
+							continue;
 						}
-						levels = client.getTrustLevels();
-						trusted = client.findTrustedAuthorities(filter);
 
-					} catch (Exception ex) {
-						this.log.error("Error synchronizing with the authority " + auths[i].getServiceURI() + ": "
-							+ ex.getMessage(), ex);
-						continue;
+						// Synchronize the Trust Levels
+						this.synchronizeTrustLevels(auths[i].getServiceURI(), levels);
+
+						// Synchronize the Trusted Authorities
+						this.synchronizeTrustedAuthorities(auths[i].getServiceURI(), trusted);
 					}
-
-					// Synchronize the Trust Levels
-					this.synchronizeTrustLevels(auths[i].getServiceURI(), levels);
-
-					// Synchronize the Trusted Authorities
-					this.synchronizeTrustedAuthorities(auths[i].getServiceURI(), trusted);
 				}
 				try {
 					Thread.sleep(sleep);
