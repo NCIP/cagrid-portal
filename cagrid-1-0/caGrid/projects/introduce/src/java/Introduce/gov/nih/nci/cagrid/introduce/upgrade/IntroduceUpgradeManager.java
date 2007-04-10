@@ -93,10 +93,6 @@ public class IntroduceUpgradeManager {
 					vers = newVersion;
 				}
 
-				Utils.serializeDocument(pathToService + File.separator
-						+ "introduce.xml", service,
-						IntroduceConstants.INTRODUCE_SKELETON_QNAME);
-
 			} else {
 				throw new Exception(
 						"ERROR: The service"
