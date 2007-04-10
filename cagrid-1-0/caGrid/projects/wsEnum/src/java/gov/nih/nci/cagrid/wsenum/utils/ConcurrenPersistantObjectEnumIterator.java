@@ -35,7 +35,7 @@ import org.globus.wsrf.encoding.SerializationException;
  * @author David Ervin
  * 
  * @created Apr 10, 2007 10:02:57 AM
- * @version $Id: ConcurrenPersistantObjectEnumIterator.java,v 1.1 2007-04-10 15:34:37 dervin Exp $ 
+ * @version $Id: ConcurrenPersistantObjectEnumIterator.java,v 1.2 2007-04-10 15:41:36 dervin Exp $ 
  */
 public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator {
     
@@ -210,7 +210,7 @@ public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator
                 // first, try to use up any overflow elements
                 if (overflowElements.size() != 0) {
                     Iterator<SOAPElement> overflowIter = overflowElements.iterator();
-                    while (overflowIter.hasNext()) {
+                    while (overflowIter.hasNext() && soapElements.size() < constraints.getMaxElements()) {
                         SOAPElement element = overflowIter.next();
                         int elemLength = element.getValue().length();
                         int currentLength = countSoapElementChars(soapElements);
