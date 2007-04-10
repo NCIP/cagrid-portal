@@ -239,6 +239,12 @@ public class SyncTools {
 	public void sync() throws Exception {
 	    //instatiate and load up service information
 		ServiceInformation info = new ServiceInformation(baseDirectory);
+		
+		if ((info.getServiceDescriptor().getIntroduceVersion() == null)
+            || !info.getServiceDescriptor().getIntroduceVersion().equals(CommonTools.getIntroduceVersion())) {
+            throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( "
+                + CommonTools.getIntroduceVersion() + " ): " + info.getServiceDescriptor().getIntroduceVersion());
+        }
 
 		// have to set the service directory in the service properties
 		info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, baseDirectory
