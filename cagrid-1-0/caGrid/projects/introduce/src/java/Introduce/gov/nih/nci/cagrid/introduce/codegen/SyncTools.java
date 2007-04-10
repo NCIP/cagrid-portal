@@ -1,11 +1,8 @@
 package gov.nih.nci.cagrid.introduce.codegen;
 
-import gov.nih.nci.cagrid.common.SchemaValidationException;
-import gov.nih.nci.cagrid.common.SchemaValidator;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -43,7 +40,6 @@ import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceXSDTemplate;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -52,7 +48,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
