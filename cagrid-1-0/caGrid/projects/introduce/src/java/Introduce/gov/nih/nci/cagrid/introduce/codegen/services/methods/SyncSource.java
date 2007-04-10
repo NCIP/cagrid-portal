@@ -6,10 +6,9 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
-import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.SchemaInformation;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -145,7 +144,7 @@ public class SyncSource {
 
 				if ((startOfMethod == -1) || (endOfMethod == -1)) {
 					System.err.println("WARNING: Unable to locate method in I : "
-						+ TemplateUtils.lowerCaseFirstCharacter(method.getName()));
+						+ CommonTools.lowerCaseFirstCharacter(method.getName()));
 					return;
 				}
 
@@ -208,7 +207,7 @@ public class SyncSource {
 
 	public void addClientImpl(MethodType method, int fileLocation) throws SynchronizationException {
 		StringBuffer fileContent = null;
-		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
+		String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(serviceClient));
 		} catch (Exception e) {
@@ -228,7 +227,7 @@ public class SyncSource {
 		clientMethod += "{\n";
 		clientMethod += DOUBLE_TAB + "synchronized(portTypeMutex){\n";
 		clientMethod += TRIPPLE_TAB + "configureStubSecurity((Stub)portType,\""
-			+ TemplateUtils.lowerCaseFirstCharacter(method.getName()) + "\");\n";
+			+ CommonTools.lowerCaseFirstCharacter(method.getName()) + "\");\n";
 
 		// put in the call to the client
 		String var = "portType";
@@ -249,11 +248,11 @@ public class SyncSource {
 						method.getInputs().getInput(j).getQName());
 					String paramName = method.getInputs().getInput(j).getName();
 					String containerClassName = method.getInputs().getInput(j).getContainerClass();
-					String containerMethodCall = TemplateUtils.upperCaseFirstCharacter(JavaUtils
+					String containerMethodCall = CommonTools.upperCaseFirstCharacter(JavaUtils
 						.xmlNameToJava(inNamespace.getType().getType()));
 					methodString += DOUBLE_TAB;
 					if (inNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-						methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "("
+						methodString += "params.set" + CommonTools.upperCaseFirstCharacter(paramName) + "("
 							+ paramName + ");\n";
 					} else {
 						methodString += containerClassName + " " + paramName + "Container = new " + containerClassName
@@ -261,7 +260,7 @@ public class SyncSource {
 						methodString += DOUBLE_TAB;
 						methodString += paramName + "Container.set" + containerMethodCall + "(" + paramName + ");\n";
 						methodString += DOUBLE_TAB;
-						methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "("
+						methodString += "params.set" + CommonTools.upperCaseFirstCharacter(paramName) + "("
 							+ paramName + "Container);\n";
 					}
 				}
@@ -301,14 +300,14 @@ public class SyncSource {
 							methodString += DOUBLE_TAB + "return clientArray;\n";
 						} else {
 							methodString += "EndpointReferenceType ref = boxedResult.get";
-							methodString += TemplateUtils.upperCaseFirstCharacter(info.getType().getType())
+							methodString += CommonTools.upperCaseFirstCharacter(info.getType().getType())
 								+ "().getEndpointReference();\n";
 							methodString += DOUBLE_TAB + "return new " + returnTypeEl.getClientHandleClass()
 								+ "(ref);\n";
 						}
 					} else {
 						methodString += "return boxedResult.get"
-							+ TemplateUtils.upperCaseFirstCharacter(info.getType().getType()) + "();\n";
+							+ CommonTools.upperCaseFirstCharacter(info.getType().getType()) + "();\n";
 					}
 				}
 			}
@@ -319,7 +318,7 @@ public class SyncSource {
 			if (method.getOutputMessageClass() != null) {
 				methodString += "return ";
 			}
-			methodString += var + "." + TemplateUtils.lowerCaseFirstCharacter(method.getName());
+			methodString += var + "." + CommonTools.lowerCaseFirstCharacter(method.getName());
 			if (method.getInputMessageClass() != null) {
 				methodString += "(params);\n";
 			} else {
@@ -393,7 +392,7 @@ public class SyncSource {
 		int endOfClass = fileContent.lastIndexOf("}");
 
 		String var = "impl";
-		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
+		String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
 
 		String clientMethod = "";
 		String methodString = "";
@@ -428,15 +427,15 @@ public class SyncSource {
 						if (inNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 							if (inNamespace.getType().getType().equals("boolean")
 								&& !method.getInputs().getInput(j).isIsArray()) {
-								params += "params.is" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
+								params += "params.is" + CommonTools.upperCaseFirstCharacter(paramName) + "()";
 							} else {
-								params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
+								params += "params.get" + CommonTools.upperCaseFirstCharacter(paramName) + "()";
 							}
 						} else {
 							params += "params.get"
-								+ TemplateUtils.upperCaseFirstCharacter(paramName)
+								+ CommonTools.upperCaseFirstCharacter(paramName)
 								+ "().get"
-								+ TemplateUtils.upperCaseFirstCharacter(JavaUtils.xmlNameToJava(inNamespace.getType()
+								+ CommonTools.upperCaseFirstCharacter(JavaUtils.xmlNameToJava(inNamespace.getType()
 									.getType())) + "()";
 						}
 						if (j < method.getInputs().getInput().length - 1) {
@@ -471,7 +470,7 @@ public class SyncSource {
 					methodString += "boxedResult.setResponse(" + var + "." + methodName + "(" + params + "));\n";
 				} else {
 					methodString += "boxedResult.set"
-						+ TemplateUtils.upperCaseFirstCharacter(outputNamespace.getType().getType()) + "(" + var + "."
+						+ CommonTools.upperCaseFirstCharacter(outputNamespace.getType().getType()) + "(" + var + "."
 						+ methodName + "(" + params + "));\n";
 				}
 			}

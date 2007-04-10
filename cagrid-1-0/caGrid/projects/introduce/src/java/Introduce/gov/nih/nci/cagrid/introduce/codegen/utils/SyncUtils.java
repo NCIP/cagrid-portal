@@ -5,10 +5,9 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
-import gov.nih.nci.cagrid.introduce.info.ImportInformation;
-import gov.nih.nci.cagrid.introduce.info.NamespaceInformation;
-import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.ImportInformation;
+import gov.nih.nci.cagrid.introduce.common.NamespaceInformation;
+import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -34,32 +33,8 @@ import org.projectmobius.common.XMLUtilities;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class TemplateUtils {
-	private static final Logger logger = Logger.getLogger(TemplateUtils.class);
-
-	/**
-	 * Returns the input string with the first character converted to lowercase
-	 * 
-	 * @param variableName
-	 *            string to fix
-	 * @return the input string with the first character converted to lowercase
-	 */
-	public static String lowerCaseFirstCharacter(String variableName) {
-		return variableName.substring(0, 1).toLowerCase() + variableName.substring(1);
-	}
-
-
-	/**
-	 * Returns the input string with the first character converted to uppercase
-	 * 
-	 * @param variableName
-	 *            string to fix
-	 * @return the input string with the first character converted to uppercase
-	 */
-	public static String upperCaseFirstCharacter(String variableName) {
-		return variableName.substring(0, 1).toUpperCase() + variableName.substring(1);
-	}
-
+public class SyncUtils {
+	private static final Logger logger = Logger.getLogger(SyncUtils.class);
 
 	public static Map buildMasterNamespaceInformationMap(ServiceDescription desc) {
 		Map map = new HashMap();

@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.codegen.common;
 
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.io.File;
 

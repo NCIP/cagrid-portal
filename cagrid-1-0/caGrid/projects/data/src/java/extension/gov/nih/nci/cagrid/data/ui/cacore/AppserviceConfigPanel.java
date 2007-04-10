@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.data.ui.cacore.appservice.Appservice32ConfigPanel;
 import gov.nih.nci.cagrid.data.ui.cacore.appservice.BaseAppserviceConfigPanel;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -30,7 +30,7 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created Mar 23, 2007 3:35:47 PM
- * @version $Id: AppserviceConfigPanel.java,v 1.8 2007-03-28 17:33:11 dervin Exp $ 
+ * @version $Id: AppserviceConfigPanel.java,v 1.9 2007-04-10 14:30:28 hastings Exp $ 
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
 

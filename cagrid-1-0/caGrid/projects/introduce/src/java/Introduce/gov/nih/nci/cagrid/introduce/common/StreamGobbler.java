@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 
 class StreamGobbler extends Thread {
-	private static final Logger logger = Logger.getLogger(SyncTools.class);
+	private static final Logger logger = Logger.getLogger(StreamGobbler.class);
 	InputStream is;
 	String type;
 	OutputStream os;

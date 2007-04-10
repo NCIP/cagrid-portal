@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.bdt.service.globus.resource;
 
-import java.rmi.RemoteException;
-
 import org.globus.transfer.AnyXmlType;
 import org.globus.ws.enumeration.EnumIterator;
 import org.globus.wsrf.ResourceException;

@@ -1,6 +1,6 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.service" class="ServiceImplBaseTemplate" 
-imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
-<% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
+imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
+<% gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation) argument; 
    String serviceName = info.getService().getName();
    ResourcePropertiesListType metadataList = info.getService().getResourcePropertiesList();
    ServiceType baseService = info.getServices().getService(0);
@@ -65,14 +65,14 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 	   if(!tserv.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)){
 	%>
 	public <%=tserv.getPackageName()%>.service.globus.resource.BaseResourceHome get<%=tserv.getName()%>ResourceHome() throws Exception {
-		ResourceHome resource = getResourceHome("<%=TemplateUtils.lowerCaseFirstCharacter(tserv.getName())%>Home");
+		ResourceHome resource = getResourceHome("<%=CommonTools.lowerCaseFirstCharacter(tserv.getName())%>Home");
 		return (<%=tserv.getPackageName()%>.service.globus.resource.BaseResourceHome)resource;
 	}
 	<%
 		  } else {
 	%>
 	public ResourceHome get<%=tserv.getName()%>ResourceHome() throws Exception {
-		ResourceHome resource = getResourceHome("<%=TemplateUtils.lowerCaseFirstCharacter(tserv.getName())%>Home");
+		ResourceHome resource = getResourceHome("<%=CommonTools.lowerCaseFirstCharacter(tserv.getName())%>Home");
 		return resource;
 	}
 	<%
@@ -108,7 +108,7 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 	%>
 	
 	
-	protected <%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD(){
+	protected <%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=CommonTools.upperCaseFirstCharacter(name)%>MD(){
 		BaseResource serviceBaseResource;
 		try {
 			serviceBaseResource = (BaseResource)ResourceContext.getResourceContext().getResource();
@@ -117,7 +117,7 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 		} catch (ResourceException e) {
 			return null;
 		}
-		return serviceBaseResource.get<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD();
+		return serviceBaseResource.get<%=CommonTools.upperCaseFirstCharacter(name)%>MD();
 	}
 
 	<%	}

@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.data.codegen;
 
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.util.Properties;
 
@@ -13,7 +13,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Mar 12, 2007 1:18:19 PM
- * @version $Id: FeatureCodegen.java,v 1.1 2007-03-13 18:34:28 dervin Exp $ 
+ * @version $Id: FeatureCodegen.java,v 1.2 2007-04-10 14:30:29 hastings Exp $ 
  */
 public abstract class FeatureCodegen {
 

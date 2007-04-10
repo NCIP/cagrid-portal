@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.data.creation;
 
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.util.Properties;
 

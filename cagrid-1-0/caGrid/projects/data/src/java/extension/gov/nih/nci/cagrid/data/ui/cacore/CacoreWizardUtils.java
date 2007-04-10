@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.data.ui.cacore;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 /** 
  *  CacoreWizardConstants

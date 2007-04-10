@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"  imports="javax.xml.namespace.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.namespace.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceWSDLTemplate"  imports="javax.xml.namespace.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.namespace.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.*" %>
 <%  SpecificServiceInformation info = (SpecificServiceInformation) argument; 
     ServiceType service = info.getService();
     String modifiedServiceName = service.getName();
@@ -18,7 +18,7 @@
     xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
     xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
 <%
-	Map imprefixmap=TemplateUtils.buildWSDLImportMap(info.getService());
+	Map imprefixmap=SyncUtils.buildWSDLImportMap(info.getService());
 	Iterator imiterator = imprefixmap.keySet().iterator();
 		while(imiterator.hasNext()){
 			String namespace = (String)imiterator.next();
@@ -26,7 +26,7 @@
 %>    xmlns:<%=importInformation.getPrefix()%>="<%=importInformation.getInformation().getNamespace()%>"
 <%  		
 		}
-			Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
+			Map prefixmap=SyncUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
 	Iterator iterator = prefixmap.keySet().iterator();
 		while(iterator.hasNext()){
 			String namespace = (String)iterator.next();
@@ -67,7 +67,7 @@
             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 <%
-		prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
+		prefixmap=SyncUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
   		iterator = prefixmap.keySet().iterator();
 		while(iterator.hasNext()){
 			String namespace = (String)iterator.next();
@@ -87,7 +87,7 @@
 	      			MethodType method = methods.getMethod(methodsI);
 	      			if(!method.isIsImported()){
 	      			%>
-				<element name="<%=TemplateUtils.upperCaseFirstCharacter(method.getName())%>Request">
+				<element name="<%=CommonTools.upperCaseFirstCharacter(method.getName())%>Request">
 					<complexType>
 						<sequence>
           		  			<% 
@@ -131,7 +131,7 @@
 	      			</complexType>
 	      		</element>
   		       
-				<element name="<%=TemplateUtils.upperCaseFirstCharacter(method.getName())%>Response">
+				<element name="<%=CommonTools.upperCaseFirstCharacter(method.getName())%>Response">
 					<complexType>
 						<sequence>
           		  <%
@@ -196,7 +196,7 @@
                     <sequence>
                         <%
         if(metadataList!=null && metadataList.getResourceProperty()!=null){
-       	  prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
+       	  prefixmap=SyncUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
           for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
             ResourcePropertyType metadata = metadataList.getResourceProperty(i);
 			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(info.getNamespaces(),metadata.getQName());
@@ -223,12 +223,12 @@ if(methods!=null && methods.getMethod()!=null){
 		MethodType method = methods.getMethod(methodsI);
 		if(!method.isIsImported()){
 %>
-	<message name="<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request">
-		<part name="parameters" element="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request"/>
+	<message name="<%=CommonTools.upperCaseFirstCharacter(method.getName()) %>Request">
+		<part name="parameters" element="tns:<%=CommonTools.upperCaseFirstCharacter(method.getName()) %>Request"/>
 	</message>
 	
-	<message name="<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response">
-		<part name="parameters" element="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response"/>
+	<message name="<%=CommonTools.upperCaseFirstCharacter(method.getName()) %>Response">
+		<part name="parameters" element="tns:<%=CommonTools.upperCaseFirstCharacter(method.getName()) %>Response"/>
 	</message>
 <%
 	}
@@ -263,8 +263,8 @@ if(methods!=null && methods.getMethod()!=null){
 		if(!method.isIsImported()){
 %>
 		<operation name="<%=method.getName() %>">
-            <input message="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request" wsa:Action="<%=service.getNamespace()%>/<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Request"/>
-            <output message="tns:<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response" wsa:Action="<%=service.getNamespace()%>/<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>Response"/>
+            <input message="tns:<%=CommonTools.upperCaseFirstCharacter(method.getName()) %>Request" wsa:Action="<%=service.getNamespace()%>/<%=CommonTools.upperCaseFirstCharacter(method.getName()) %>Request"/>
+            <output message="tns:<%=CommonTools.upperCaseFirstCharacter(method.getName()) %>Response" wsa:Action="<%=service.getNamespace()%>/<%=CommonTools.upperCaseFirstCharacter(method.getName()) %>Response"/>
             <%
        		if(method.getExceptions()!=null && method.getExceptions().getException()!=null){
        			for(int faultI = 0; faultI < method.getExceptions().getException().length; faultI++){

@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.utilities.CastorMappingUtil;
 import gov.nih.nci.cagrid.data.utilities.WsddUtil;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -15,10 +14,10 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.ExtensionUpgraderBase;
 
 import java.io.File;
@@ -47,9 +46,9 @@ import org.jdom.JDOMException;
  */
 public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 
-	public DataServiceUpgrade1pt0to1pt1(ExtensionType extensionType, ServiceDescription serviceDescription,
+	public DataServiceUpgrade1pt0to1pt1(ExtensionType extensionType, ServiceInformation serviceInformation,
 		String servicePath, String fromVersion, String toVersion) {
-		super(extensionType, serviceDescription, servicePath, fromVersion, toVersion);
+		super(extensionType, serviceInformation, servicePath, fromVersion, toVersion);
 	}
 
 
@@ -253,9 +252,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 				throw new UpgradeException(
 					"Error loading introduce properties for this service: " + ex.getMessage(), ex);
 			}
-			ServiceInformation serviceInfo = new ServiceInformation(getServiceDescription(), introduceProperties,
-				new File(getServicePath()));
-			File newCastorMapping = new File(CastorMappingUtil.getCustomCastorMappingFileName(serviceInfo));
+			
+			File newCastorMapping = new File(CastorMappingUtil.getCustomCastorMappingFileName(getServiceInformation()));
 			try {
 				Utils.copyFile(oldCastorMapping, newCastorMapping);
 			} catch (IOException ex) {
@@ -264,17 +262,17 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			// fix the server-config.wsdd file's castrorMapping parameter
 			File serverConfigFile = new File(getServicePath() + File.separator + "server-config.wsdd");
 			try {
-				WsddUtil.setServiceParameter(serverConfigFile.getAbsolutePath(), serviceInfo.getServices()
+				WsddUtil.setServiceParameter(serverConfigFile.getAbsolutePath(), getServiceInformation().getServices()
 					.getService(0).getName(), DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, CastorMappingUtil
-					.getCustomCastorMappingName(serviceInfo));
+					.getCustomCastorMappingName(getServiceInformation()));
 			} catch (Exception ex) {
 				throw new UpgradeException("Error setting castor mapping parameter in server-config.wsdd: "
 					+ ex.getMessage(), ex);
 			}
 			// fix the client config file
-			String mainServiceName = serviceInfo.getIntroduceServiceProperties().getProperty(
+			String mainServiceName = getServiceInformation().getIntroduceServiceProperties().getProperty(
 				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-			ServiceType mainService = CommonTools.getService(serviceInfo.getServices(), mainServiceName);
+			ServiceType mainService = CommonTools.getService(getServiceInformation().getServices(), mainServiceName);
 			String servicePackageName = mainService.getPackageName();
 			String packageDir = servicePackageName.replace('.', File.separatorChar);
 			File clientConfigFile = new File(getServicePath() + File.separator + "src" + File.separator + packageDir
@@ -282,7 +280,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			try {
 				WsddUtil.setGlobalClientParameter(clientConfigFile.getAbsolutePath(),
 					DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, CastorMappingUtil
-						.getCustomCastorMappingName(serviceInfo));
+						.getCustomCastorMappingName(getServiceInformation()));
 			} catch (Exception ex) {
 				throw new UpgradeException("Error setting castor mapping parameter in client-config.wsdd: "
 					+ ex.getMessage(), ex);
@@ -293,7 +291,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 	
 	
 	private void updateDataSchemas() throws UpgradeException {
-		String serviceName = getServiceDescription().getServices().getService(0).getName();
+		String serviceName = getServiceInformation().getServices().getService(0).getName();
 		// extension data has been updated
 		File serviceExtensionDataSchema = new File(getServicePath() + File.separator + "schema" 
 			+ File.separator + serviceName + "DataServiceExtensionData.xsd");
@@ -341,7 +339,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		// locate the query processor class property
 		String queryProcessorClassName = null;
 		try {
-			queryProcessorClassName = CommonTools.getServicePropertyValue(getServiceDescription(),
+			queryProcessorClassName = CommonTools.getServicePropertyValue(getServiceInformation().getServiceDescriptor(),
 				"queryProcessorClass");
 		} catch (Exception ex) {
 			throw new UpgradeException("Error getting query processor class name: " + ex.getMessage(), ex);
@@ -360,7 +358,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			}
 			// add the property to the service properties
 			String extendedKey = "cqlQueryProcessorConfig_" + key;
-			CommonTools.setServiceProperty(getServiceDescription(), extendedKey, value, false);
+			CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), extendedKey, value, false);
 		}
 	}
 
@@ -407,7 +405,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		// get the query method
 		MethodType queryMethod = null;
 		MethodType enumerationMethod = null;
-		MethodType[] allMethods = getServiceDescription().getServices().getService(0).getMethods().getMethod();
+		MethodType[] allMethods = getServiceInformation().getServices().getService(0).getMethods().getMethod();
 		for (int i = 0; i < allMethods.length; i++) {
 			if (allMethods[i].getName().equals(DataServiceConstants.QUERY_METHOD_NAME)) {
 				queryMethod = allMethods[i];

@@ -1,6 +1,6 @@
-<%@ jet package="gov.nih.nci.cagrid.bdt.templates" class="BDTResourceCreatorTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.bdt.extension.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*"%>
+<%@ jet package="gov.nih.nci.cagrid.bdt.templates" class="BDTResourceCreatorTemplate" imports="gov.nih.nci.cagrid.bdt.extension.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*"%>
 <%  BDTTemplateInformationHolder holder = (BDTTemplateInformationHolder) argument;
-    gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = holder.getSsi();
+    gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation arguments = holder.getSsi();
   	Properties properties = arguments.getIntroduceServiceProperties();
 	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
 	String serviceName = arguments.getService().getName();
@@ -14,7 +14,7 @@
 		org.globus.wsrf.ResourceKey bdtResourceKey = null;
 		org.apache.axis.MessageContext ctx = org.apache.axis.MessageContext.getCurrentContext();
 		String servicePath = ctx.getTargetService();
-		String bdtHomeName = org.globus.wsrf.Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/" + "<%=TemplateUtils.lowerCaseFirstCharacter(serviceName) %>BulkDataHandlerHome";
+		String bdtHomeName = org.globus.wsrf.Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/" + "<%=CommonTools.lowerCaseFirstCharacter(serviceName) %>BulkDataHandlerHome";
 
 		try {
 			javax.naming.Context initialContext = new javax.naming.InitialContext();

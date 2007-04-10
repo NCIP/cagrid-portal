@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.UpgradeDescriptionType;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
 import java.io.File;
@@ -14,17 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExtensionsUpgradeManager {
-	private ServiceDescription service;
+	private ServiceInformation serviceInformation;
 	private String pathToService;
 
-	public ExtensionsUpgradeManager(ServiceDescription service,
+	public ExtensionsUpgradeManager(ServiceInformation serviceInformation,
 			String pathToService) {
-		this.service = service;
+		this.serviceInformation = serviceInformation;
 		this.pathToService = pathToService;
 	}
 
 	public boolean needsUpgrading() {
-		ExtensionType[] extensions = service.getExtensions().getExtension();
+		ExtensionType[] extensions = serviceInformation.getServiceDescriptor().getExtensions().getExtension();
 		if (extensions != null) {
 			for (int extensionI = 0; extensionI < extensions.length; extensionI++) {
 				ExtensionType extension = extensions[extensionI];
@@ -50,7 +51,7 @@ public class ExtensionsUpgradeManager {
 		System.out.println("Trying to upgrade the service");
 		List error = new ArrayList();
 
-		ExtensionType[] extensions = service.getExtensions().getExtension();
+		ExtensionType[] extensions = serviceInformation.getServiceDescriptor().getExtensions().getExtension();
 		for (int extensionI = 0; extensionI < extensions.length; extensionI++) {
 			ExtensionType extension = extensions[extensionI];
 			String serviceExtensionVersion = extension.getVersion();
@@ -119,15 +120,11 @@ public class ExtensionsUpgradeManager {
 							ExtensionType.class, ServiceDescription.class,
 							String.class, String.class, String.class });
 					UpgraderI upgrader = (UpgraderI) con
-							.newInstance(new Object[] { extension, service,
+							.newInstance(new Object[] { extension, serviceInformation,
 									pathToService, upgrade.getFromVersion(),
 									upgrade.getToVersion() });
 					upgrader.execute();
 				}
-
-				Utils.serializeDocument(pathToService + File.separator
-						+ "introduce.xml", service,
-						IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 			}
 		}

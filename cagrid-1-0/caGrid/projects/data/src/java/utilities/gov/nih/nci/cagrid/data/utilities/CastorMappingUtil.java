@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.data.utilities;
 
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.io.File;
 import java.util.Iterator;

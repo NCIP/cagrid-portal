@@ -1,17 +1,17 @@
 package gov.nih.nci.cagrid.introduce.upgrade;
 
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 public abstract class UpgraderBase implements UpgraderI {
 
-	ServiceDescription serviceDescription;
+	ServiceInformation serviceInformation;
 	String fromVersion;
 	String toVersion;
 	String servicePath;
 
-	UpgraderBase(ServiceDescription serviceDescription, String servicePath,
+	UpgraderBase(ServiceInformation serviceInformation, String servicePath,
 			String fromVersion, String toVersion) {
-		this.serviceDescription = serviceDescription;
+		this.serviceInformation = serviceInformation;
 		this.fromVersion = fromVersion;
 		this.toVersion = toVersion;
 		this.servicePath = servicePath;
@@ -39,12 +39,12 @@ public abstract class UpgraderBase implements UpgraderI {
 		this.upgrade();
 	}
 
-	public ServiceDescription getServiceDescription() {
-		return serviceDescription;
+	public ServiceInformation getServiceInformation() {
+		return serviceInformation;
 	}
 
-	public void setServiceDescription(ServiceDescription serviceDescription) {
-		this.serviceDescription = serviceDescription;
+	public void setServiceInformation(ServiceInformation serviceInformation) {
+		this.serviceInformation = serviceInformation;
 	}
 
 	public String getServicePath() {

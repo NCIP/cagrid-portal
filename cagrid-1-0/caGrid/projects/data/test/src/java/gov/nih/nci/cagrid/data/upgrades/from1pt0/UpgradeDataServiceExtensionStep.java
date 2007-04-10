@@ -1,10 +1,9 @@
 package gov.nih.nci.cagrid.data.upgrades.from1pt0;
 
-import java.io.File;
-
-import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.ExtensionsUpgradeManager;
+
+import java.io.File;
 
 import com.atomicobject.haste.framework.Step;
 
@@ -15,7 +14,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeDataServiceExtensionStep.java,v 1.2 2007-04-09 15:26:14 dervin Exp $ 
+ * @version $Id: UpgradeDataServiceExtensionStep.java,v 1.3 2007-04-10 14:30:28 hastings Exp $ 
  */
 public class UpgradeDataServiceExtensionStep extends Step {
 	private String serviceDir;
@@ -27,10 +26,10 @@ public class UpgradeDataServiceExtensionStep extends Step {
 
 	public void runStep() throws Throwable {
 		// get the service description
-		ServiceDescription serviceDesc = (ServiceDescription) Utils.deserializeDocument(
-			serviceDir + File.separator + "introduce.xml", ServiceDescription.class);
+	    ServiceInformation info = new ServiceInformation(new File(serviceDir + File.separator + "introduce.xml"));
+
 		ExtensionsUpgradeManager extUpgrader = new ExtensionsUpgradeManager(
-			serviceDesc, new File(serviceDir).getAbsolutePath());
+			info, new File(serviceDir).getAbsolutePath());
 		// verify that the service is in need of an upgrade
 		assertTrue("Service should have required upgrading", extUpgrader.needsUpgrading());
 		// upgrade the service

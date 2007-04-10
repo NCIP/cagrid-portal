@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.bdt.extension;
 
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 
 public class BDTTemplateInformationHolder {
 	

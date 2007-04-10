@@ -1,6 +1,6 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NewServiceJNDIConfigTemplate" 
-imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
-<% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument;
+imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
+<% gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation) argument;
    ServiceProperties properties = info.getServiceProperties();
    ServiceType baseService = info.getServices().getService(0);
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.namespace.domain");
@@ -55,7 +55,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 			ServiceType oservice = info.getServices().getService(i);
 			if(!oservice.getName().equals(service.getName())){
 			%>
-		<resourceLink name="<%=TemplateUtils.lowerCaseFirstCharacter(oservice.getName())%>Home" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/<%=oservice.getName()%>/home" />
+		<resourceLink name="<%=CommonTools.lowerCaseFirstCharacter(oservice.getName())%>Home" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/<%=oservice.getName()%>/home" />
 			<%
 			}
 		}

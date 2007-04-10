@@ -11,7 +11,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.SecuritySetting;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.metadata.security.CommunicationMechanism;
 import gov.nih.nci.cagrid.metadata.security.GSISecureConversation;
 import gov.nih.nci.cagrid.metadata.security.GSISecureMessage;

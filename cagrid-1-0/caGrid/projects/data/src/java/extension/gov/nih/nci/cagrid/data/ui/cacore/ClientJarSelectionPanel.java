@@ -11,7 +11,7 @@ import gov.nih.nci.cagrid.data.utilities.CastorMappingUtil;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -40,7 +40,7 @@ import javax.swing.ScrollPaneConstants;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Jan 8, 2007 
- * @version $Id: ClientJarSelectionPanel.java,v 1.4 2007-03-09 16:53:50 dervin Exp $ 
+ * @version $Id: ClientJarSelectionPanel.java,v 1.5 2007-04-10 14:30:28 hastings Exp $ 
  */
 public class ClientJarSelectionPanel extends AbstractWizardPanel {
 	

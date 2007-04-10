@@ -16,8 +16,8 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
-import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 
 import org.projectmobius.common.XMLUtilities;
 
@@ -178,7 +178,7 @@ public class SecurityDescriptorGenerator {
 
 			StringBuffer xml = new StringBuffer();
 			if (determineWriteMethod(service, ms)) {
-				xml.append("<method name=\"" + TemplateUtils.lowerCaseFirstCharacter(method.getName()) + "\">");
+				xml.append("<method name=\"" + CommonTools.lowerCaseFirstCharacter(method.getName()) + "\">");
 				if ((ms.getSecuritySetting() != null) && (ms.getSecuritySetting().equals(SecuritySetting.Custom))) {
 					xml.append("<auth-method>");
 					xml.append(getSecureConversationSettings(ms.getSecureConversation()));

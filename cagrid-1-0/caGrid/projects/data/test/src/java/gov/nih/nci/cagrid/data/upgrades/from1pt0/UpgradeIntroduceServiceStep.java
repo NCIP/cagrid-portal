@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.upgrades.from1pt0;
 
-import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.IntroduceUpgradeManager;
 
 import java.io.File;
@@ -14,7 +13,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradeIntroduceServiceStep.java,v 1.2 2007-04-09 15:26:14 dervin Exp $ 
+ * @version $Id: UpgradeIntroduceServiceStep.java,v 1.3 2007-04-10 14:30:28 hastings Exp $ 
  */
 public class UpgradeIntroduceServiceStep extends Step {
 	private String serviceDir;
@@ -26,10 +25,9 @@ public class UpgradeIntroduceServiceStep extends Step {
 
 	public void runStep() throws Throwable {
 		// get the service description
-		ServiceDescription serviceDesc = (ServiceDescription) Utils.deserializeDocument(
-			serviceDir + File.separator + "introduce.xml", ServiceDescription.class);
+	    ServiceInformation info = new ServiceInformation(new File(serviceDir + File.separator + "introduce.xml"));
 		// create the introduce upgrade manager
-		IntroduceUpgradeManager upgrader = new IntroduceUpgradeManager(serviceDesc, serviceDir);
+		IntroduceUpgradeManager upgrader = new IntroduceUpgradeManager(info, serviceDir);
 		assertTrue("Introduce service should have required upgrade to 1.1", upgrader.needsUpgrading());
 		upgrader.upgrade();
 	}

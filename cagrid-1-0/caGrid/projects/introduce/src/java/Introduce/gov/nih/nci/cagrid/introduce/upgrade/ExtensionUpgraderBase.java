@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.upgrade;
 
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 /**
  * Class must be extended to provide an extension upgrader. An extension
@@ -20,9 +20,9 @@ public abstract class ExtensionUpgraderBase extends UpgraderBase {
 	ExtensionType extensionType;
 
 	public ExtensionUpgraderBase(ExtensionType extensionType,
-			ServiceDescription serviceDescription, String servicePath,
+			ServiceInformation serviceInformation, String servicePath,
 			String fromVersion, String toVersion) {
-		super(serviceDescription, servicePath, fromVersion, toVersion);
+		super(serviceInformation, servicePath, fromVersion, toVersion);
 		this.extensionType = extensionType;
 	}
 

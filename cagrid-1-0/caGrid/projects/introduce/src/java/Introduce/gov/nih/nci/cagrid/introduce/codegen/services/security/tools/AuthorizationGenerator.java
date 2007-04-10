@@ -6,7 +6,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.security.CSMAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ProtectionMethod;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -162,7 +162,7 @@ public class AuthorizationGenerator {
 			gg.append(lineStart + "\t" + "try{\n");
 			gg.append(lineStart + "\t\t"
 				+ "isMember=gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils.isMember(gridGrouperAuthorize"
-				+ TemplateUtils.upperCaseFirstCharacter(method.getName()) + ",gridIdentity);\n");
+				+ CommonTools.upperCaseFirstCharacter(method.getName()) + ",gridIdentity);\n");
 			gg.append(lineStart + "\t" + "}catch(Exception e){\n");
 			gg.append(lineStart + "\t\t" + "e.printStackTrace();\n");
 			gg

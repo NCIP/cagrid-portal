@@ -290,6 +290,7 @@ public class ResourceManager {
 
 		// Create the ZIP file
 		String outFilename = introduceCache + File.separator + serviceName + "_" + id + CACHE_POSTFIX;
+		logger.debug("Creating service archive: " + outFilename);
 		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
 
 		// Compress the files
@@ -365,6 +366,8 @@ public class ResourceManager {
 		introduceCache.mkdir();
 		File cachedFile = new File(introduceCache.getAbsolutePath() + File.separator + serviceName + "_" + currentId
 			+ CACHE_POSTFIX);
+		
+		logger.debug("Restoring service from archive:" + cachedFile.getAbsolutePath());
 
 		InputStream in = new BufferedInputStream(new FileInputStream(cachedFile));
 		ZipInputStream zin = new ZipInputStream(in);

@@ -3,8 +3,8 @@ package gov.nih.nci.cagrid.introduce.upgrade.introduce;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistrationTemplate;
 import gov.nih.nci.cagrid.introduce.upgrade.IntroduceUpgraderBase;
 
@@ -26,8 +26,8 @@ import org.projectmobius.common.XMLUtilities;
 
 public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
-    public Introduce_1_0__1_1_Upgrader(ServiceDescription sd, String servicePath) {
-        super(sd, servicePath, "1.0", "1.1");
+    public Introduce_1_0__1_1_Upgrader(ServiceInformation serviceInformation, String servicePath) {
+        super(serviceInformation, servicePath, "1.0", "1.1");
     }
 
 
@@ -53,14 +53,12 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
         Properties serviceProperties = new Properties();
         serviceProperties.load(new FileInputStream(new File(getServicePath() + File.separator
             + IntroduceConstants.INTRODUCE_PROPERTIES_FILE)));
-        ServiceInformation info = new ServiceInformation(getServiceDescription(), serviceProperties, new File(
-            getServicePath()));
 
         Utils.copyFile(new File(getServicePath() + File.separator + "etc" + File.separator + "registration.xml"),
             new File(getServicePath() + File.separator + "etc" + File.separator + "registration.xml.OLD"));
 
         RegistrationTemplate registrationT = new RegistrationTemplate();
-        String registrationS = registrationT.generate(info);
+        String registrationS = registrationT.generate(getServiceInformation());
         File registrationF = new File(getServicePath() + File.separator + "etc" + File.separator + "registration.xml");
         FileWriter registrationFW = new FileWriter(registrationF);
         registrationFW.write(registrationS);

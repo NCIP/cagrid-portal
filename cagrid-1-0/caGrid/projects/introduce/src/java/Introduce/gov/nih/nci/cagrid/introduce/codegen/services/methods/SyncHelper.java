@@ -6,10 +6,9 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.SchemaInformation;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,7 +28,7 @@ import org.apache.ws.jaxme.js.Parameter;
  * @author David Ervin
  * 
  * @created Apr 4, 2007 1:32:03 PM
- * @version $Id: SyncHelper.java,v 1.1 2007-04-04 19:55:22 dervin Exp $ 
+ * @version $Id: SyncHelper.java,v 1.2 2007-04-10 14:30:29 hastings Exp $ 
  */
 public class SyncHelper {
     private static final Logger logger = Logger.getLogger(SyncHelper.class);
@@ -59,7 +58,7 @@ public class SyncHelper {
                 SchemaInformation info = CommonTools
                     .getSchemaInformation(serviceInfo.getNamespaces(), fault.getQname());
                 String ex = info.getType().getPackageName() + "."
-                    + TemplateUtils.upperCaseFirstCharacter(
+                    + CommonTools.upperCaseFirstCharacter(
                         info.getType().getClassName() != null ? 
                             info.getType().getClassName() : info.getType().getType());
                 exceptions.append(ex);
@@ -88,7 +87,7 @@ public class SyncHelper {
     public static String createUnBoxedSignatureStringFromMethod(MethodType method, ServiceInformation serviceInfo) {
         StringBuffer methodString = new StringBuffer();
         MethodTypeOutput returnTypeEl = method.getOutput();
-        String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
+        String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
         String returnType = null;
         if (returnTypeEl.getQName().getNamespaceURI().equals("")
             && returnTypeEl.getQName().getLocalPart().equals("void")) {
@@ -168,7 +167,7 @@ public class SyncHelper {
     public static String createUnBoxedSignatureStringFromMethod(
         JavaMethod method, ServiceInformation serviceInfo) {
         StringBuffer methodString = new StringBuffer();
-        String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
+        String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
         String returnType = "";
         if (buildServicesClientHandleClassNameList(serviceInfo).contains(
             method.getType().getPackageName() + "." + method.getType().getClassName())) {
@@ -290,7 +289,7 @@ public class SyncHelper {
                 SchemaInformation info = CommonTools
                     .getSchemaInformation(serviceInfo.getNamespaces(), fault.getQname());
                 String ex = info.getType().getPackageName() + "."
-                    + TemplateUtils.upperCaseFirstCharacter(
+                    + CommonTools.upperCaseFirstCharacter(
                         info.getType().getClassName() != null ? 
                             info.getType().getClassName() : info.getType().getType());
                 exceptions.append(ex);
@@ -321,7 +320,7 @@ public class SyncHelper {
     public static String createClientUnBoxedSignatureStringFromMethod(MethodType method, ServiceInformation serviceInfo) {
         StringBuffer methodString = new StringBuffer();
         MethodTypeOutput returnTypeEl = method.getOutput();
-        String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
+        String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
         String returnType = null;
         if (returnTypeEl.getQName().getNamespaceURI().equals("")
             && returnTypeEl.getQName().getLocalPart().equals("void")) {
@@ -384,7 +383,7 @@ public class SyncHelper {
      */
     public static String createClientUnBoxedSignatureStringFromMethod(JavaMethod method) {
         StringBuffer methodString = new StringBuffer();
-        String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
+        String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
         String returnType = "";
         if (method.getType().getPackageName().length() > 0) {
             returnType += method.getType().getPackageName() + ".";
@@ -427,7 +426,7 @@ public class SyncHelper {
     public static String createBoxedSignatureStringFromMethod(MethodType method) {
         StringBuffer methodString = new StringBuffer();
 
-        String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
+        String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
 
         if (method.getOutputMessageClass() != null) {
             methodString.append("public ").append(method.getOutputMessageClass())
@@ -456,7 +455,7 @@ public class SyncHelper {
     public static String createBoxedSignatureStringFromMethod(JavaMethod method) {
         StringBuffer methodString = new StringBuffer();
 
-        String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
+        String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
 
         methodString.append("public ").append(method.getType().getPackageName())
             .append(".").append(method.getType().getClassName()).append(" ")

@@ -27,10 +27,10 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
@@ -122,8 +122,6 @@ public class ModificationViewer extends GridPortalComponent {
 	private JScrollPane methodsScrollPane = null;
 
 	private File methodsDirectory = null;
-
-	private Properties serviceProperties = null;
 
 	private JButton addMethodButton = null;
 
@@ -296,18 +294,20 @@ public class ModificationViewer extends GridPortalComponent {
 	}
 
 
-	private void loadServiceProps() {
+	private Properties loadServiceProps() {
 		try {
-			serviceProperties = new Properties();
+			Properties serviceProperties = new Properties();
 			serviceProperties.load(new FileInputStream(methodsDirectory.getAbsolutePath() + File.separator
 				+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
 			serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, methodsDirectory
 				.getAbsolutePath());
+			return serviceProperties;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 
@@ -349,11 +349,10 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private void initialize() throws Exception {
 		if (methodsDirectory != null) {
-			ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(methodsDirectory
-				.getAbsolutePath()
-				+ File.separator + "introduce.xml", ServiceDescription.class);
-
-			UpgradeManager upgrader = new UpgradeManager(introService, methodsDirectory.getAbsolutePath());
+			
+			info = new ServiceInformation(methodsDirectory);
+			
+			UpgradeManager upgrader = new UpgradeManager(info, methodsDirectory.getAbsolutePath());
 
 			if (upgrader.canIntroduceBeUpgraded() || upgrader.canExtensionsBeUpgraded()) {
 				int answer = JOptionPane
@@ -364,9 +363,6 @@ public class ModificationViewer extends GridPortalComponent {
 
 					try {
 						upgrader.upgrade();
-						introService = (ServiceDescription) Utils.deserializeDocument(methodsDirectory
-							.getAbsolutePath()
-							+ File.separator + "introduce.xml", ServiceDescription.class);
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw new Exception(
@@ -374,10 +370,10 @@ public class ModificationViewer extends GridPortalComponent {
 					}
 				}
 			}
+			
+			//reload the info incase it has changed during upgrading.....
+			info = new ServiceInformation(methodsDirectory);
 
-			loadServiceProps();
-
-			info = new ServiceInformation(introService, serviceProperties, methodsDirectory);
 			this.setContentPane(getMainPanel());
 			this.setTitle("Modify Service Interface");
 			this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
@@ -599,7 +595,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private MethodsTable getMethodsTable() {
 		if (methodsTable == null) {
-			methodsTable = new MethodsTable(info.getServices().getService(0), methodsDirectory, serviceProperties);
+			methodsTable = new MethodsTable(info.getServices().getService(0), methodsDirectory, info.getIntroduceServiceProperties());
 			methodsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
 				public void valueChanged(ListSelectionEvent e) {
@@ -897,11 +893,11 @@ public class ModificationViewer extends GridPortalComponent {
 								try {
 									if (!dirty) {
 										setProgressText("restoring from local cache");
-										String timestamp = serviceProperties
+										String timestamp = info.getIntroduceServiceProperties()
 											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP);
-										String name = serviceProperties
+										String name = info.getIntroduceServiceProperties()
 											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-										String destDir = serviceProperties
+										String destDir = info.getIntroduceServiceProperties()
 											.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
 										ResourceManager.restoreLatest(timestamp, name, destDir);
 									}
@@ -1005,7 +1001,7 @@ public class ModificationViewer extends GridPortalComponent {
 			serviceName = new JTextField();
 			serviceName.setEditable(false);
 			serviceName.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
-			serviceName.setText(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+			serviceName.setText(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		}
 		return serviceName;
 	}
@@ -1019,7 +1015,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private JTextField getNamespace() {
 		if (namespace == null) {
 			namespace = new JTextField();
-			namespace.setText(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
+			namespace.setText(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
 			namespace.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
 			namespace.setEditable(false);
 		}
@@ -1037,7 +1033,7 @@ public class ModificationViewer extends GridPortalComponent {
 			lastSaved = new JTextField();
 			lastSaved.setEditable(false);
 			lastSaved.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
-			setLastSaved(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
+			setLastSaved(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
 		}
 		return lastSaved;
 	}
@@ -1473,8 +1469,8 @@ public class ModificationViewer extends GridPortalComponent {
 						}
 						dirty = false;
 						setProgressText("loading service properties");
-						loadServiceProps();
-						setLastSaved(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
+						info.setIntroduceServiceProperties(loadServiceProps());
+						setLastSaved(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
 						this.setProgressText("");
 					} catch (Exception e1) {
 						e1.printStackTrace();

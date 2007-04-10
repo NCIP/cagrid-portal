@@ -4,15 +4,16 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
 
 public class IntroduceUpgradeManager {
-	private ServiceDescription service;
+	private ServiceInformation service;
 	private String pathToService;
 
-	public IntroduceUpgradeManager(ServiceDescription service,
+	public IntroduceUpgradeManager(ServiceInformation service,
 			String pathToService) {
 		this.service = service;
 		this.pathToService = pathToService;
@@ -34,8 +35,8 @@ public class IntroduceUpgradeManager {
 	}
 
 	public boolean needsUpgrading() {
-		if ((service.getIntroduceVersion() == null)
-				|| !service.getIntroduceVersion().equals(
+		if ((service.getServiceDescriptor().getIntroduceVersion() == null)
+				|| !service.getServiceDescriptor().getIntroduceVersion().equals(
 						CommonTools.getIntroduceVersion())) {
 			return true;
 		}
@@ -54,13 +55,13 @@ public class IntroduceUpgradeManager {
 	public void upgrade() throws Exception {
 		System.out.println("Trying to upgrade the service");
 
-		if (canBeUpgraded(service.getIntroduceVersion())) {
+		if (canBeUpgraded(service.getServiceDescriptor().getIntroduceVersion())) {
 
 			// upgrade the introduce service
 			String version = CommonTools.getIntroduceVersion();
 			if (version != null) {
 
-				String vers = service.getIntroduceVersion();
+				String vers = service.getServiceDescriptor().getIntroduceVersion();
 
 				while (canBeUpgraded(vers)) {
 					String newVersion = getUpgradeVersion(vers);

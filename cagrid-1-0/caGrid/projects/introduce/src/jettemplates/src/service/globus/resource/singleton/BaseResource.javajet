@@ -1,5 +1,5 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource.singleton" class="SingletonResourceTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*"%>
-<%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource.singleton" class="SingletonResourceTemplate" imports="gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*"%>
+<%  gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation) argument; 
   	Properties properties = arguments.getIntroduceServiceProperties();
 	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
 	String serviceName = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
@@ -218,7 +218,7 @@ public class BaseResource implements Resource, ResourceProperties {
 			if(metadata.isPopulateFromFile()){
 				String name=CommonTools.getResourcePropertyVariableName(metadataList, i);
 	%>
-		load<%=TemplateUtils.upperCaseFirstCharacter(name)%>FromFile();
+		load<%=CommonTools.upperCaseFirstCharacter(name)%>FromFile();
 	<%		}
 		}
 		}
@@ -234,10 +234,10 @@ public class BaseResource implements Resource, ResourceProperties {
 				String name=CommonTools.getResourcePropertyVariableName(metadataList, i);
 				String className=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName();
 	%>
-	private void load<%=TemplateUtils.upperCaseFirstCharacter(name)%>FromFile() {
+	private void load<%=CommonTools.upperCaseFirstCharacter(name)%>FromFile() {
 		try {
 			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
-					+ getConfiguration().get<%=TemplateUtils.upperCaseFirstCharacter(name)%>File());
+					+ getConfiguration().get<%=CommonTools.upperCaseFirstCharacter(name)%>File());
 			this.<%=name%>MD = (<%=className%>) Utils.deserializeDocument(dataFile.getAbsolutePath(),
 				<%=className%>.class);
 		} catch (Exception e) {

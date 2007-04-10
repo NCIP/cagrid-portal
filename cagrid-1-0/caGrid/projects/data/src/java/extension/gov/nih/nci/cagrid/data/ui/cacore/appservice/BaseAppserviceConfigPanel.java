@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.data.ui.cacore.appservice;
 
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import javax.swing.JPanel;
  * @author David Ervin
  * 
  * @created Mar 23, 2007 1:46:03 PM
- * @version $Id: BaseAppserviceConfigPanel.java,v 1.1 2007-03-28 17:33:11 dervin Exp $ 
+ * @version $Id: BaseAppserviceConfigPanel.java,v 1.2 2007-04-10 14:30:30 hastings Exp $ 
  */
 public abstract class BaseAppserviceConfigPanel extends JPanel {
     private ExtensionTypeExtensionData extensionData;

@@ -1,5 +1,5 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus" class="ServiceConfigurationTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.property.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.common.*" %>
-<%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus" class="ServiceConfigurationTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.property.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.common.*" %>
+<%  gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation) argument; 
   	Properties properties = arguments.getIntroduceServiceProperties();
     ServiceProperties sproperties = arguments.getServiceProperties();
     String serviceName = arguments.getService().getName();
@@ -67,20 +67,20 @@ public class ServiceConfiguration {
 		ServicePropertiesProperty prop = sproperties.getProperty(i);
 		if (prop.getIsFromETC() !=null && prop.getIsFromETC().booleanValue()) {
 	%>
-	public String get<%=TemplateUtils.upperCaseFirstCharacter(prop.getKey())%>() {
+	public String get<%=CommonTools.upperCaseFirstCharacter(prop.getKey())%>() {
 		return ContainerConfig.getBaseDirectory() + File.separator + <%=prop.getKey()%>;
 	}
 	<%
 	     } else {
 	%>
-	public String get<%=TemplateUtils.upperCaseFirstCharacter(prop.getKey())%>() {
+	public String get<%=CommonTools.upperCaseFirstCharacter(prop.getKey())%>() {
 		return <%=prop.getKey()%>;
 	}
 	<%
 	     }
 	%>
 	
-	public void set<%=TemplateUtils.upperCaseFirstCharacter(prop.getKey())%>(String <%=prop.getKey()%>) {
+	public void set<%=CommonTools.upperCaseFirstCharacter(prop.getKey())%>(String <%=prop.getKey()%>) {
 		this.<%=prop.getKey()%> = <%=prop.getKey()%>;
 	}
 

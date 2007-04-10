@@ -2,9 +2,10 @@ package gov.nih.nci.cagrid.bdt.service.globus.resource;
 
 import java.util.Calendar;
 
+import org.apache.axis.components.uuid.UUIDGen;
+import org.apache.axis.components.uuid.UUIDGenFactory;
 import org.globus.wsrf.RemoveCallback;
 import org.globus.wsrf.Resource;
-import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceIdentifier;
 import org.globus.wsrf.ResourceLifetime;
 import org.globus.wsrf.ResourceProperties;
@@ -14,9 +15,6 @@ import org.globus.wsrf.impl.ReflectionResourceProperty;
 import org.globus.wsrf.impl.SimpleResourcePropertyMetaData;
 import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.jndi.Initializable;
-
-import org.apache.axis.components.uuid.UUIDGenFactory;
-import org.apache.axis.components.uuid.UUIDGen;
 
 public abstract class BDTResourceBase implements Resource, RemoveCallback, ResourceIdentifier, ResourceLifetime, ResourceProperties, Initializable {
 

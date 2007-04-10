@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.upgrade.UpgradeManager;
 
@@ -24,8 +25,11 @@ public class UpgradesStep extends BaseStep {
 				.deserializeDocument(getBaseDir() + File.separator
 						+ tci.getDir() + File.separator + "introduce.xml",
 						ServiceDescription.class);
+		
+		ServiceInformation info = new ServiceInformation(new File(getBaseDir() + File.separator
+                        + tci.getDir() + File.separator));
 
-		UpgradeManager upgrader = new UpgradeManager(introService, tci.getDir());
+		UpgradeManager upgrader = new UpgradeManager(info, tci.getDir());
 
 		try {
 			upgrader.upgrade();

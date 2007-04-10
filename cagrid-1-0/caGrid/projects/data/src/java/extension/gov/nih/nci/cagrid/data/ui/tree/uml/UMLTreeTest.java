@@ -8,14 +8,14 @@ import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionEvent;
 import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionListener;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /** 
  *  UMLTreeTest

@@ -1,5 +1,5 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.* org.projectmobius.common.* java.io.* java.util.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.*"%>
-<% gov.nih.nci.cagrid.introduce.info.ServiceInformation info = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument;
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.* org.projectmobius.common.* java.io.* java.util.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.*"%>
+<% gov.nih.nci.cagrid.introduce.common.ServiceInformation info = (gov.nih.nci.cagrid.introduce.common.ServiceInformation) argument;
    String serviceName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.service.name");
    if (info.getServices() != null && info.getServices().getService() != null) {
 	for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
@@ -26,7 +26,7 @@
 		}
 	}
 
-		Map prefixmap = TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
+		Map prefixmap = SyncUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
 		Set importNamespaces = new HashSet();
 		Set writtenNamespaces = new HashSet();
   		Iterator iterator = prefixmap.keySet().iterator();
@@ -48,7 +48,7 @@
 					newnewLine = newnewLine.replaceFirst("\\Q\\\\\\\\:\\E", "\\\\:");	
 			
 					//get all the imports if there are any for this schema and write there namespace to package maps down		
-					TemplateUtils.walkSchemasGetNamespaces(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName + 
+					SyncUtils.walkSchemasGetNamespaces(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema" + File.separator + serviceName + 
 						File.separator + namespaceInformation.getNamespace().getLocation(), importNamespaces , new HashSet(IntroduceConstants.GLOBUS_NAMESPACES), new HashSet());
 	
 %>

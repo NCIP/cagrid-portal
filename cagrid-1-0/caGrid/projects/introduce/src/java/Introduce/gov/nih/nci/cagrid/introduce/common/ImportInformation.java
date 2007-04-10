@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.info;
+package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 

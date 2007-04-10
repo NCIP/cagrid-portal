@@ -24,8 +24,11 @@ import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.properties.SyncProperties;
 import gov.nih.nci.cagrid.introduce.codegen.serializers.SyncSerialization;
 import gov.nih.nci.cagrid.introduce.codegen.services.SyncServices;
-import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
+import gov.nih.nci.cagrid.introduce.codegen.utils.SyncUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.SchemaInformation;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.creator.SkeletonSchemaCreator;
 import gov.nih.nci.cagrid.introduce.creator.SkeletonSecurityOperationProviderCreator;
 import gov.nih.nci.cagrid.introduce.creator.SkeletonSourceCreator;
@@ -33,9 +36,6 @@ import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPreProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NewServerConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NewServiceJNDIConfigTemplate;
@@ -237,37 +237,13 @@ public class SyncTools {
 
 
 	public void sync() throws Exception {
-		String introduceXML = baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
-		File introduceXMLFile = new File(introduceXML);
-		if (!introduceXMLFile.exists() || !introduceXMLFile.canRead()) {
-			throw new Exception("Unable to read the Introduce document:" + introduceXML);
-		}
-
-		// STEP 0: validate the instance document
-		try {
-			SchemaValidator.validate(getIntroduceXSD(), introduceXMLFile);
-		} catch (SchemaValidationException e) {
-			throw new SchemaValidationException("The Introduce XML document does not adhere to the schema:\n"
-				+ e.getMessage(), e);
-		}
-
-		// STEP 1: populate the object model representation of the service
-		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(introduceXML,
-			ServiceDescription.class);
-		if ((introService.getIntroduceVersion() == null)
-			|| !introService.getIntroduceVersion().equals(CommonTools.getIntroduceVersion())) {
-			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( "
-				+ CommonTools.getIntroduceVersion() + " ): " + introService.getIntroduceVersion());
-		}
-		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator
-			+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
-		Properties serviceProperties = new Properties();
-		serviceProperties.load(new FileInputStream(servicePropertiesFile));
+	    //instatiate and load up service information
+		ServiceInformation info = new ServiceInformation(baseDirectory);
 
 		// have to set the service directory in the service properties
-		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, baseDirectory
+		info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, baseDirectory
 			.getAbsolutePath());
-		ServiceInformation info = new ServiceInformation(introService, serviceProperties, baseDirectory);
+
 		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
 
 		// STEP 2: make a backup of the service implementation
@@ -318,7 +294,7 @@ public class SyncTools {
 			String namespace = (String) iter.next();
 			excludeLine += " -x " + namespace;
 		}
-		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludeLine);
+		info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludeLine);
 
 		Set excludeSOAPStubSet = generateSOAPStubExcludesSet(info);
 		String soapBindingExcludeLine = " ";
@@ -329,7 +305,7 @@ public class SyncTools {
 				soapBindingExcludeLine += " ";
 			}
 		}
-		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SB_EXCLUDES, soapBindingExcludeLine);
+		info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SB_EXCLUDES, soapBindingExcludeLine);
 
 		// write all the services into the services list property
 		String servicesList = "";
@@ -342,15 +318,13 @@ public class SyncTools {
 				}
 			}
 		}
-		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICES_LIST, servicesList);
+		info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICES_LIST, servicesList);
 
-		// store the modified properties back out....
-		serviceProperties.store(new FileOutputStream(servicePropertiesFile), "Introduce Properties");
-
+		
 		logger.info("Synchronizing with pre processing extensions");
 		// run any extensions that need to be ran
-		if ((introService.getExtensions() != null) && (introService.getExtensions().getExtension() != null)) {
-			ExtensionType[] extensions = introService.getExtensions().getExtension();
+		if ((info.getExtensions() != null) && (info.getExtensions().getExtension() != null)) {
+			ExtensionType[] extensions = info.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
 				ExtensionType element = extensions[i];
 				CodegenExtensionPreProcessor pp = ExtensionTools.getCodegenPreProcessor(element.getName());
@@ -362,11 +336,10 @@ public class SyncTools {
 			}
 		}
 
-		// serialize the possibly modified model back to disk
-		logger.info("Serializing service model to disk");
-		Utils.serializeDocument(baseDirectory.getAbsolutePath() + File.separator
-			+ IntroduceConstants.INTRODUCE_XML_FILE, introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
-
+		//persit the changed information model back to the service diretory
+		info.persistInformation();
+		
+		
 		// STEP 4: write out namespace mappings and flatten the wsdl file then
 		// merge namespace
 		syncWSDL(info, schemaDir);
@@ -406,8 +379,8 @@ public class SyncTools {
 		// STEP 8: run the extensions
 		logger.info("Synchronizing with post processing extensions");
 		// run any extensions that need to be ran
-		if ((introService.getExtensions() != null) && (introService.getExtensions().getExtension() != null)) {
-			ExtensionType[] extensions = introService.getExtensions().getExtension();
+		if ((info.getExtensions() != null) && (info.getExtensions().getExtension() != null)) {
+			ExtensionType[] extensions = info.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
 				ExtensionType element = extensions[i];
 				CodegenExtensionPostProcessor pp = ExtensionTools.getCodegenPostProcessor(element.getName());
@@ -423,14 +396,6 @@ public class SyncTools {
 		System.gc();
 	}
 
-
-	/**
-	 * TODO: requires running directory to be introduce's directory... need a
-	 * better way
-	 */
-	private String getIntroduceXSD() {
-		return new File("schema" + File.separator + IntroduceConstants.INTRODUCE_XML_XSD_FILE).getAbsolutePath();
-	}
 
 
 	private void populateClassnames(ServiceInformation info, MultiServiceSymbolTable table)
@@ -513,11 +478,11 @@ public class SyncTools {
 										QName qname = null;
 										if (mtype.isIsImported()) {
 											qname = new QName(mtype.getImportInformation().getNamespace(), ">>"
-												+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
+												+ CommonTools.upperCaseFirstCharacter(mtype.getName()) + "Request>"
 												+ inputParam.getName());
 										} else {
 											qname = new QName(service.getNamespace(), ">>"
-												+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
+												+ CommonTools.upperCaseFirstCharacter(mtype.getName()) + "Request>"
 												+ inputParam.getName());
 										}
 
@@ -557,11 +522,11 @@ public class SyncTools {
 							&& !mtype.getImportInformation().getInputMessage().equals("")) {
 							messageQName = mtype.getImportInformation().getInputMessage();
 						} else if (mtype.isIsImported()) {
-							messageQName = new QName(mtype.getImportInformation().getNamespace(), TemplateUtils
+							messageQName = new QName(mtype.getImportInformation().getNamespace(), CommonTools
 								.upperCaseFirstCharacter(mtype.getName())
 								+ "Request");
 						} else {
-							messageQName = new QName(service.getNamespace(), TemplateUtils
+							messageQName = new QName(service.getNamespace(), CommonTools
 								.upperCaseFirstCharacter(mtype.getName())
 								+ "Request");
 						}
@@ -574,13 +539,13 @@ public class SyncTools {
 								Element element = table.getElement(messagePart.getElementName());
 
 								mtype.setInputMessageClass(element.getName());
-								mtype.setBoxedInputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
+								mtype.setBoxedInputParameter(CommonTools.lowerCaseFirstCharacter(messagePart
 									.getName()));
 							} else if (messagePart.getTypeName() != null) {
 								Type messtype = table.getType(messagePart.getTypeName());
 								if (messtype != null) {
 									mtype.setInputMessageClass(messtype.getName());
-									mtype.setBoxedInputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
+									mtype.setBoxedInputParameter(CommonTools.lowerCaseFirstCharacter(messagePart
 										.getName()));
 								}
 							}
@@ -594,11 +559,11 @@ public class SyncTools {
 							&& !mtype.getImportInformation().getOutputMessage().equals("")) {
 							messageQName = mtype.getImportInformation().getOutputMessage();
 						} else if (mtype.isIsImported()) {
-							messageQName = new QName(mtype.getImportInformation().getNamespace(), TemplateUtils
+							messageQName = new QName(mtype.getImportInformation().getNamespace(), CommonTools
 								.upperCaseFirstCharacter(mtype.getName())
 								+ "Response");
 						} else {
-							messageQName = new QName(service.getNamespace(), TemplateUtils
+							messageQName = new QName(service.getNamespace(), CommonTools
 								.upperCaseFirstCharacter(mtype.getName())
 								+ "Response");
 						}
@@ -611,13 +576,13 @@ public class SyncTools {
 								if (messagePart.getElementName() != null) {
 									Element element = table.getElement(messagePart.getElementName());
 									mtype.setOutputMessageClass(element.getName());
-									mtype.setBoxedOutputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
+									mtype.setBoxedOutputParameter(CommonTools.lowerCaseFirstCharacter(messagePart
 										.getName()));
 
 								} else if (messagePart.getTypeName() != null) {
 									Type messType = table.getType(messagePart.getTypeName());
 									mtype.setOutputMessageClass(messType.getName());
-									mtype.setBoxedOutputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
+									mtype.setBoxedOutputParameter(CommonTools.lowerCaseFirstCharacter(messagePart
 										.getName()));
 								}
 							} else {
@@ -693,7 +658,7 @@ public class SyncTools {
 				// />
 				org.jdom.Element resourceLinkEl = new org.jdom.Element("resourceLink", Namespace
 					.getNamespace("http://wsrf.globus.org/jndi/config"));
-				resourceLinkEl.setAttribute("name", TemplateUtils.lowerCaseFirstCharacter(newService.getName())
+				resourceLinkEl.setAttribute("name", CommonTools.lowerCaseFirstCharacter(newService.getName())
 					+ "Home");
 				resourceLinkEl.setAttribute("target", "java:comp/env/services/SERVICE-INSTANCE-PREFIX/"
 					+ newService.getName() + "/home");
@@ -852,7 +817,7 @@ public class SyncTools {
 				if ((ntype.getGenerateStubs() != null) && !ntype.getGenerateStubs().booleanValue()) {
 					// the model explictly says not to generate stubs
 					excludeSet.add(ntype.getNamespace());
-					TemplateUtils.walkSchemasGetNamespaces(schemaDir + File.separator + ntype.getLocation(),
+					SyncUtils.walkSchemasGetNamespaces(schemaDir + File.separator + ntype.getLocation(),
 						excludeSet, new HashSet(), new HashSet());
 				} else if (ntype.getSchemaElement() != null) {
 					for (int j = 0; j < ntype.getSchemaElement().length; j++) {
@@ -863,7 +828,7 @@ public class SyncTools {
 								// beans... so don't generate stubs
 
 								excludeSet.add(ntype.getNamespace());
-								TemplateUtils.walkSchemasGetNamespaces(
+								SyncUtils.walkSchemasGetNamespaces(
 									schemaDir + File.separator + ntype.getLocation(), excludeSet, new HashSet(),
 									new HashSet());
 								// this schema is excluded.. no need to check
@@ -899,7 +864,7 @@ public class SyncTools {
 								// beans... so don't generate stubs
 
 								excludeSet.add(ntype.getNamespace());
-								TemplateUtils.walkSchemasGetNamespaces(
+								SyncUtils.walkSchemasGetNamespaces(
 									schemaDir + File.separator + ntype.getLocation(), excludeSet, new HashSet(),
 									new HashSet());
 								// this schema is excluded.. no need to check
@@ -965,7 +930,7 @@ public class SyncTools {
 					for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
 						MethodType method = service.getMethods().getMethod(methodI);
 						if (method.isIsImported()) {
-							TemplateUtils.addImportedOperationToService(method, new SpecificServiceInformation(info,
+							SyncUtils.addImportedOperationToService(method, new SpecificServiceInformation(info,
 								service));
 						}
 					}

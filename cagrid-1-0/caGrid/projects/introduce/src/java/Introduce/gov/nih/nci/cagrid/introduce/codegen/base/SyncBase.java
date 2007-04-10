@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.introduce.codegen.base;
 
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistrationTemplate;
 
 import java.io.File;

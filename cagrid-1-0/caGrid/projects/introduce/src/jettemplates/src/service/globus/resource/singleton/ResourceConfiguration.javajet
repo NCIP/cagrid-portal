@@ -1,5 +1,5 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource.singleton" class="SingletonConfigurationTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*" %>
-<%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource.singleton" class="SingletonConfigurationTemplate" imports="gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*" %>
+<%  gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation) argument; 
   	Properties properties = arguments.getIntroduceServiceProperties();
 	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
     String serviceName = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
@@ -54,12 +54,12 @@ public class ResourceConfiguration {
 		%>
 	
 	
-	public String get<%=TemplateUtils.upperCaseFirstCharacter(name)%>File() {
+	public String get<%=CommonTools.upperCaseFirstCharacter(name)%>File() {
 		return <%=name%>File;
 	}
 	
 	
-	public void set<%=TemplateUtils.upperCaseFirstCharacter(name)%>File(String <%=name%>File) {
+	public void set<%=CommonTools.upperCaseFirstCharacter(name)%>File(String <%=name%>File) {
 		this.<%=name%>File = <%=name%>File;
 	}
 	<%			}

@@ -8,7 +8,7 @@ import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -34,7 +34,7 @@ import javax.swing.event.DocumentEvent;
  * @author David Ervin
  * 
  * @created Mar 28, 2007 10:00:18 AM
- * @version $Id: Appservice32ConfigPanel.java,v 1.1 2007-03-28 17:33:11 dervin Exp $
+ * @version $Id: Appservice32ConfigPanel.java,v 1.2 2007-04-10 14:30:30 hastings Exp $
  */
 public class Appservice32ConfigPanel extends BaseAppserviceConfigPanel {
 

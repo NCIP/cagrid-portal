@@ -15,8 +15,8 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
@@ -35,7 +35,7 @@ import org.jdom.Element;
 
 public class ExtensionTools {
 	public static CreationExtensionUIDialog getCreationUIDialog(Frame owner, String extensionName,
-		gov.nih.nci.cagrid.introduce.info.ServiceInformation info) throws Exception {
+		gov.nih.nci.cagrid.introduce.common.ServiceInformation info) throws Exception {
 		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getServiceExtension(
 			extensionName);
 		if ((extensionDesc != null) && (extensionDesc.getCreationUIDialog() != null)
@@ -51,7 +51,7 @@ public class ExtensionTools {
 
 
 	public static ServiceModificationUIPanel getServiceModificationUIPanel(String extensionName,
-		gov.nih.nci.cagrid.introduce.info.ServiceInformation info) throws Exception {
+		gov.nih.nci.cagrid.introduce.common.ServiceInformation info) throws Exception {
 		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getServiceExtension(
 			extensionName);
 		if ((extensionDesc != null) && (extensionDesc.getServiceModificationUIPanel() != null)

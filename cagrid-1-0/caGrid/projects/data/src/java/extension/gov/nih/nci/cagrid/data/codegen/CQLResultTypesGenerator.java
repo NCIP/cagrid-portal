@@ -2,8 +2,8 @@ package gov.nih.nci.cagrid.data.codegen;
 
 import gov.nih.nci.cagrid.data.codegen.templates.CQLResultTypesTemplate;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
 import java.io.FileWriter;

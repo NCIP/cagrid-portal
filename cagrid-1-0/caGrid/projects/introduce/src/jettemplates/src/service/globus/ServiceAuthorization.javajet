@@ -1,5 +1,5 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus" class="ServiceAuthorizationTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.services.security.tools.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
-<% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus" class="ServiceAuthorizationTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.services.security.tools.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
+<% gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation) argument; 
    String serviceName = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
    String modifiedServiceName = serviceName;
@@ -66,7 +66,7 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 							try {
 							written = true;
 %>
-    public static final String gridGrouperAuthorize<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %> = <%=AuthorizationGenerator.generateGridGrouperQuery(method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization())%>
+    public static final String gridGrouperAuthorize<%=CommonTools.upperCaseFirstCharacter(method.getName()) %> = <%=AuthorizationGenerator.generateGridGrouperQuery(method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization())%>
 <%
 							} catch(Exception e ) {
 							   e.printStackTrace();
@@ -82,7 +82,7 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 							if (info.getService().getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization() != null) {
 							try{
 %>
-    public static final String gridGrouperAuthorize<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %> = <%=AuthorizationGenerator.generateGridGrouperQuery(info.getService().getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization())%>
+    public static final String gridGrouperAuthorize<%=CommonTools.upperCaseFirstCharacter(method.getName()) %> = <%=AuthorizationGenerator.generateGridGrouperQuery(info.getService().getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization())%>
 <%
 							} catch(Exception e ) {
 							   e.printStackTrace();
@@ -94,7 +94,7 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 					}
 				
 %>				
-	public static void authorize<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>() throws RemoteException {
+	public static void authorize<%=CommonTools.upperCaseFirstCharacter(method.getName()) %>() throws RemoteException {
 		<%
 		 String auth = "";
 		  try {
@@ -124,9 +124,9 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 				MethodType method = info.getService().getMethods().getMethod(methodIndex);	
 				if(methodIndex==0){	
 %>
-		if(operation.getLocalPart().equals("<%=TemplateUtils.lowerCaseFirstCharacter(method.getName())%>")){
+		if(operation.getLocalPart().equals("<%=CommonTools.lowerCaseFirstCharacter(method.getName())%>")){
 			try{
-				authorize<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>();
+				authorize<%=CommonTools.upperCaseFirstCharacter(method.getName()) %>();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
@@ -134,9 +134,9 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 			}
 		} <%				
 				} else {
-%>else if(operation.getLocalPart().equals("<%=TemplateUtils.lowerCaseFirstCharacter(method.getName())%>")){
+%>else if(operation.getLocalPart().equals("<%=CommonTools.lowerCaseFirstCharacter(method.getName())%>")){
 			try{
-				authorize<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %>();
+				authorize<%=CommonTools.upperCaseFirstCharacter(method.getName()) %>();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

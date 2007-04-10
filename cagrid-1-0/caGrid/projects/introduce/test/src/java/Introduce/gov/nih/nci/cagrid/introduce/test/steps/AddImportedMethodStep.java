@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.introduce.test.steps;
 
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
-import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
@@ -36,9 +35,9 @@ public class AddImportedMethodStep extends BaseStep {
 		ii.setPortTypeName(importedTCI.getName() + "PortType");
 		ii.setPackageName(importedTCI.getPackageName() + ".stubs");
 		ii.setWsdlFile(importedTCI.getName() + ".wsdl");
-		ii.setInputMessage(new QName(importedTCI.getNamespace(), TemplateUtils.upperCaseFirstCharacter(methodName)
+		ii.setInputMessage(new QName(importedTCI.getNamespace(), CommonTools.upperCaseFirstCharacter(methodName)
 			+ "Request"));
-		ii.setOutputMessage(new QName(importedTCI.getNamespace(), TemplateUtils.upperCaseFirstCharacter(methodName)
+		ii.setOutputMessage(new QName(importedTCI.getNamespace(), CommonTools.upperCaseFirstCharacter(methodName)
 			+ "Response"));
 
 		CommonTools.importMethod(ii, new File(getBaseDir() + File.separator + importedTCI.getDir()), new File(
