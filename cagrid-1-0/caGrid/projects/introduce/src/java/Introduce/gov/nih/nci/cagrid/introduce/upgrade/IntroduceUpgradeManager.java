@@ -85,7 +85,7 @@ public class IntroduceUpgradeManager {
 					// upgrade the introduce service
 					Class clazz = Class.forName(className);
 					Constructor con = clazz.getConstructor(new Class[] {
-							ServiceDescription.class, String.class });
+							ServiceInformation.class, String.class });
 					UpgraderI upgrader = (UpgraderI) con
 							.newInstance(new Object[] { service, pathToService });
 					upgrader.execute();

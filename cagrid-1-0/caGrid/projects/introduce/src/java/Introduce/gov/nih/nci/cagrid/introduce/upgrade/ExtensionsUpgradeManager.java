@@ -117,7 +117,7 @@ public class ExtensionsUpgradeManager {
 							.get(i);
 					Class clazz = Class.forName(upgrade.getUpgradeClass());
 					Constructor con = clazz.getConstructor(new Class[] {
-							ExtensionType.class, ServiceDescription.class,
+							ExtensionType.class, ServiceInformation.class,
 							String.class, String.class, String.class });
 					UpgraderI upgrader = (UpgraderI) con
 							.newInstance(new Object[] { extension, serviceInformation,
