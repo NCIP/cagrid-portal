@@ -46,7 +46,7 @@ import org.xml.sax.InputSource;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Nov 3, 2006 
- * @version $Id: ConcurrentEnumIterTestCase.java,v 1.1 2007-04-10 15:34:37 dervin Exp $ 
+ * @version $Id: ConcurrentEnumIterTestCase.java,v 1.2 2007-04-10 15:49:45 dervin Exp $ 
  */
 public class ConcurrentEnumIterTestCase extends TestCase {
 	
@@ -95,7 +95,7 @@ public class ConcurrentEnumIterTestCase extends TestCase {
 			enumIterator.next(new IterationConstraints());
 			fail("Enumeration released, but did not throw exception on next() call");
 		} catch (Exception ex) {
-			assertTrue("Enumeration released, threw " + NoSuchElementException.class.getName() + " on next()", 
+			assertTrue("Enumeration was released should have thrown " + NoSuchElementException.class.getName() + " on next()", 
 				ex instanceof NoSuchElementException);
 			enumIterator = null;
 		}
@@ -199,10 +199,46 @@ public class ConcurrentEnumIterTestCase extends TestCase {
 		IterationConstraints cons = new IterationConstraints(objectList.size(), charCount, null);
 		IterationResult result = enumIterator.next(cons);
 		SOAPElement[] rawResults = result.getItems();
-		assertTrue("Enumeration returned results", rawResults != null);
+		assertTrue("Enumeration did not return results", rawResults != null);
 		assertFalse("Enumeration returned all results", rawResults.length == objectList.size());
-		assertTrue("Enumeration returned only one result", rawResults.length == 1);
+		assertTrue("Enumeration returned " + rawResults.length + " results, expected 1", rawResults.length == 1);
 	}
+    
+    
+    public void testCharLimitExceded2() {
+        // ask for all the results, but only enough chars for the first element
+        int charCount = -1;
+        StringWriter writer = new StringWriter();
+        try {
+            Utils.serializeObject(objectList.get(0), geneQname, writer, new FileInputStream(wsddFilename));
+            charCount = writer.getBuffer().length();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Error determining object char count: " + ex.getMessage());
+        }
+        IterationConstraints cons = new IterationConstraints(objectList.size(), charCount, null);
+        IterationResult result = enumIterator.next(cons);
+        SOAPElement[] rawResults = result.getItems();
+        assertTrue("Enumeration did not return results", rawResults != null);
+        assertFalse("Enumeration returned all results", rawResults.length == objectList.size());
+        assertTrue("Enumeration returned " + rawResults.length + " results, expected 1", rawResults.length == 1);
+        
+        // ask for results again, should get the next object
+        writer = new StringWriter();
+        try {
+            Utils.serializeObject(objectList.get(1), geneQname, writer, new FileInputStream(wsddFilename));
+            charCount = writer.getBuffer().length();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Error determining object char count: " + ex.getMessage());
+        }
+        cons = new IterationConstraints(objectList.size(), charCount, null);
+        result = enumIterator.next(cons);
+        rawResults = result.getItems();
+        assertTrue("Enumeration did not return results", rawResults != null);
+        assertFalse("Enumeration returned all results", rawResults.length == objectList.size());
+        assertTrue("Enumeration returned " + rawResults.length + " results, expected 1", rawResults.length == 1);
+    }
 	
 	
 	private boolean geneInOriginalList(Gene g) {
