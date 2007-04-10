@@ -46,7 +46,7 @@ import org.xml.sax.InputSource;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Nov 3, 2006 
- * @version $Id: ConcurrentEnumIterTestCase.java,v 1.2 2007-04-10 15:49:45 dervin Exp $ 
+ * @version $Id: ConcurrentEnumIterTestCase.java,v 1.3 2007-04-10 16:00:56 dervin Exp $ 
  */
 public class ConcurrentEnumIterTestCase extends TestCase {
 	
@@ -202,6 +202,18 @@ public class ConcurrentEnumIterTestCase extends TestCase {
 		assertTrue("Enumeration did not return results", rawResults != null);
 		assertFalse("Enumeration returned all results", rawResults.length == objectList.size());
 		assertTrue("Enumeration returned " + rawResults.length + " results, expected 1", rawResults.length == 1);
+        // verify content
+        Gene original = null;
+        Gene returned = null;
+        try {
+            original = (Gene) deserializeDocumentString(writer.getBuffer().toString(), Gene.class);
+            returned = (Gene) deserializeDocumentString(rawResults[0].getValue().toString(), Gene.class);
+        } catch (Exception ex) {
+            fail("Error deserializing objects: " + ex.getMessage());
+        }
+        boolean equal = original.getSymbol().equals(returned.getSymbol()) 
+            && original.getFullName().equals(returned.getFullName());
+        assertTrue("Expected gene and returned gene do not match", equal);
 	}
     
     
@@ -222,6 +234,19 @@ public class ConcurrentEnumIterTestCase extends TestCase {
         assertTrue("Enumeration did not return results", rawResults != null);
         assertFalse("Enumeration returned all results", rawResults.length == objectList.size());
         assertTrue("Enumeration returned " + rawResults.length + " results, expected 1", rawResults.length == 1);
+        // verify content
+//      verify content
+        Gene original = null;
+        Gene returned = null;
+        try {
+            original = (Gene) deserializeDocumentString(writer.getBuffer().toString(), Gene.class);
+            returned = (Gene) deserializeDocumentString(rawResults[0].getValue().toString(), Gene.class);
+        } catch (Exception ex) {
+            fail("Error deserializing objects: " + ex.getMessage());
+        }
+        boolean equal = original.getSymbol().equals(returned.getSymbol()) 
+            && original.getFullName().equals(returned.getFullName());
+        assertTrue("Expected gene and returned gene do not match", equal);
         
         // ask for results again, should get the next object
         writer = new StringWriter();
@@ -238,6 +263,16 @@ public class ConcurrentEnumIterTestCase extends TestCase {
         assertTrue("Enumeration did not return results", rawResults != null);
         assertFalse("Enumeration returned all results", rawResults.length == objectList.size());
         assertTrue("Enumeration returned " + rawResults.length + " results, expected 1", rawResults.length == 1);
+        // verify content
+        try {
+            original = (Gene) deserializeDocumentString(writer.getBuffer().toString(), Gene.class);
+            returned = (Gene) deserializeDocumentString(rawResults[0].getValue().toString(), Gene.class);
+        } catch (Exception ex) {
+            fail("Error deserializing objects: " + ex.getMessage());
+        }
+        equal = original.getSymbol().equals(returned.getSymbol()) 
+            && original.getFullName().equals(returned.getFullName());
+        assertTrue("Expected gene and returned gene do not match", equal);
     }
 	
 	
