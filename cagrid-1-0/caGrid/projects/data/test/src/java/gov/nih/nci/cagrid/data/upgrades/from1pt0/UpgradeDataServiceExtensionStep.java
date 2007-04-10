@@ -14,7 +14,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeDataServiceExtensionStep.java,v 1.3 2007-04-10 14:30:28 hastings Exp $ 
+ * @version $Id: UpgradeDataServiceExtensionStep.java,v 1.4 2007-04-10 14:59:44 hastings Exp $ 
  */
 public class UpgradeDataServiceExtensionStep extends Step {
 	private String serviceDir;
@@ -26,7 +26,7 @@ public class UpgradeDataServiceExtensionStep extends Step {
 
 	public void runStep() throws Throwable {
 		// get the service description
-	    ServiceInformation info = new ServiceInformation(new File(serviceDir + File.separator + "introduce.xml"));
+	    ServiceInformation info = new ServiceInformation(new File(serviceDir));
 
 		ExtensionsUpgradeManager extUpgrader = new ExtensionsUpgradeManager(
 			info, new File(serviceDir).getAbsolutePath());
