@@ -23,99 +23,104 @@ import junit.textui.TestRunner;
 
 import com.atomicobject.haste.framework.Story;
 
+
 public class UpgradesTest extends Story {
-	private TestCaseInfo tci1;
+    private TestCaseInfo tci1;
 
-	private GlobusHelper helper;
+    private GlobusHelper helper;
 
-	public UpgradesTest() {
-		this.setName("Introduce Upgrades System Test");
-	}
 
-	protected Vector steps() {
-		tci1 = new TestCaseInfo1();
-		helper = new GlobusHelper(false, new File(
-				IntroduceTestConstants.TEST_TEMP),
-				IntroduceTestConstants.TEST_PORT);
-		Vector steps = new Vector();
+    public UpgradesTest() {
+        this.setName("Introduce Upgrades System Test");
+    }
 
-		try {
-			steps.add(new CreateGlobusStep(helper));
-			steps.add(new UnzipOldServiceStep("." + File.separator + "test"
-					+ File.separator + "resources" + File.separator
-					+ "serviceVersions" + File.separator + "IntroduceTest.zip",
-					tci1));
-			steps.add(new UpgradesStep(tci1, true));
-			steps.add(new DeployGlobusServiceStep(helper, tci1));
-			steps.add(new StartGlobusStep(helper));
-			steps.add(new InvokeSimpleMethodImplStep(tci1, "newMethod", false));
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
-		return steps;
-	}
 
-	public String getDescription() {
-		return "Testing the Introduce code generation tools";
-	}
+    protected Vector steps() {
+        this.tci1 = new TestCaseInfo1();
+        this.helper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
+            IntroduceTestConstants.TEST_PORT);
+        Vector steps = new Vector();
 
-	protected boolean storySetUp() throws Throwable {
+        try {
+            steps.add(new CreateGlobusStep(this.helper));
+            steps.add(new UnzipOldServiceStep("." + File.separator + "test" + File.separator + "resources"
+                + File.separator + "serviceVersions" + File.separator + "IntroduceTest.zip", this.tci1));
+            steps.add(new UpgradesStep(this.tci1, true));
+            steps.add(new DeployGlobusServiceStep(this.helper, this.tci1));
+            steps.add(new StartGlobusStep(this.helper));
+            steps.add(new InvokeSimpleMethodImplStep(this.tci1, "newMethod", false));
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+        return steps;
+    }
 
-		super.storySetUp();
 
-		StopGlobusStep step2 = new StopGlobusStep(helper);
-		try {
-			step2.runStep();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+    public String getDescription() {
+        return "Testing the Introduce code generation tools";
+    }
 
-		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
-		try {
-			step1.runStep();
-		} catch (Throwable e) {
 
-			e.printStackTrace();
-		}
-		return true;
-	}
+    protected boolean storySetUp() throws Throwable {
 
-	protected void storyTearDown() throws Throwable {
-		super.storyTearDown();
-		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
-		try {
-			step1.runStep();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		StopGlobusStep step2 = new StopGlobusStep(helper);
-		try {
-			step2.runStep();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		CleanupGlobusStep step3 = new CleanupGlobusStep(helper);
-		try {
-			step3.runStep();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-	}
+        super.storySetUp();
 
-	// used to make sure that if we are going to use a junit testsuite to test
-	// this
-	// that the test suite will not error out looking for a single test......
-	public void testDummy() throws Throwable {
-	}
+        StopGlobusStep step2 = new StopGlobusStep(this.helper);
+        try {
+            step2.runStep();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
 
-	/**
-	 * Convenience method for running all the Steps in this Story.
-	 */
-	public static void main(String args[]) {
-		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(UpgradesTest.class));
-		System.exit(result.errorCount() + result.failureCount());
-	}
+        RemoveSkeletonStep step1 = new RemoveSkeletonStep(this.tci1);
+        try {
+            step1.runStep();
+        } catch (Throwable e) {
+
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+
+    protected void storyTearDown() throws Throwable {
+        super.storyTearDown();
+        RemoveSkeletonStep step1 = new RemoveSkeletonStep(this.tci1);
+        try {
+            step1.runStep();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        StopGlobusStep step2 = new StopGlobusStep(this.helper);
+        try {
+            step2.runStep();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        CleanupGlobusStep step3 = new CleanupGlobusStep(this.helper);
+        try {
+            step3.runStep();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // used to make sure that if we are going to use a junit testsuite to test
+    // this
+    // that the test suite will not error out looking for a single test......
+    public void testDummy() throws Throwable {
+    }
+
+
+    /**
+     * Convenience method for running all the Steps in this Story.
+     */
+    public static void main(String args[]) {
+        TestRunner runner = new TestRunner();
+        TestResult result = runner.doRun(new TestSuite(UpgradesTest.class));
+        System.exit(result.errorCount() + result.failureCount());
+    }
 
 }

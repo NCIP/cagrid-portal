@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.codegen.services;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncMethods;
@@ -31,87 +30,88 @@ import org.apache.log4j.Logger;
  *          Exp $
  */
 public class SyncServices extends SyncTool {
-	private static final Logger logger = Logger.getLogger(SyncServices.class);
-	
-	public SyncServices(File baseDirectory, ServiceInformation info) {
-		super(baseDirectory, info);
-	}
+    private static final Logger logger = Logger.getLogger(SyncServices.class);
 
 
-	public void sync() throws SynchronizationException {
+    public SyncServices(File baseDirectory, ServiceInformation info) {
+        super(baseDirectory, info);
+    }
 
-		// sync each sub service
-		if ((getServiceInformation().getServices() != null)
-			&& (getServiceInformation().getServices().getService() != null)) {
-			for (int serviceI = 0; serviceI < getServiceInformation().getServices().getService().length; serviceI++) {
 
-				int serviceIndex = serviceI;
+    public void sync() throws SynchronizationException {
 
-				try {
+        // sync each sub service
+        if ((getServiceInformation().getServices() != null)
+            && (getServiceInformation().getServices().getService() != null)) {
+            for (int serviceI = 0; serviceI < getServiceInformation().getServices().getService().length; serviceI++) {
 
-					SpecificServiceInformation ssi = new SpecificServiceInformation(getServiceInformation(),
-						getServiceInformation().getServices().getService(serviceIndex));
+                int serviceIndex = serviceI;
 
-					// regenerate the services globus layer "ImplBase"
-					ServiceImplBaseTemplate implBaseT = new ServiceImplBaseTemplate();
-					String implBaseS = implBaseT.generate(new SpecificServiceInformation(getServiceInformation(), ssi
-						.getService()));
-					File implBaseF = new File(getBaseDirectory() + File.separator + "src" + File.separator
-						+ CommonTools.getPackageDir(ssi.getService()) + File.separator + "service" + File.separator
-						+ ssi.getService().getName() + "ImplBase.java");
-					FileWriter implBaseFW = new FileWriter(implBaseF);
-					implBaseFW.write(implBaseS);
-					implBaseFW.close();
+                try {
 
-					// execute the source synchronization to make any necessary
-					// changes to source
-					// code for new/modified/removed methods
-					SyncMethods methodSync = new SyncMethods(getBaseDirectory(), getServiceInformation(),
-						getServiceInformation().getServices().getService(serviceIndex));
-					methodSync.sync();
-					SyncResource resourceSync = new SyncResource(getBaseDirectory(), getServiceInformation(),
-						getServiceInformation().getServices().getService(serviceIndex));
-					resourceSync.sync();
+                    SpecificServiceInformation ssi = new SpecificServiceInformation(getServiceInformation(),
+                        getServiceInformation().getServices().getService(serviceIndex));
 
-					// resync the security configuration files and authorization
-					// callbacks
-					SyncSecurity securitySync = new SyncSecurity(getBaseDirectory(), getServiceInformation(),
-						getServiceInformation().getServices().getService(serviceIndex));
-					securitySync.sync();
+                    // regenerate the services globus layer "ImplBase"
+                    ServiceImplBaseTemplate implBaseT = new ServiceImplBaseTemplate();
+                    String implBaseS = implBaseT.generate(new SpecificServiceInformation(getServiceInformation(), ssi
+                        .getService()));
+                    File implBaseF = new File(getBaseDirectory() + File.separator + "src" + File.separator
+                        + CommonTools.getPackageDir(ssi.getService()) + File.separator + "service" + File.separator
+                        + ssi.getService().getName() + "ImplBase.java");
+                    FileWriter implBaseFW = new FileWriter(implBaseF);
+                    implBaseFW.write(implBaseS);
+                    implBaseFW.close();
 
-					// if there is a description on the service then add it to
-					// the interfaces javadoc
-					if ((ssi.getService().getDescription() != null) && (ssi.getService().getDescription().length() > 0)) {
-						StringBuffer fileContent = null;
-						String serviceInf = null;
-						serviceInf = getBaseDirectory().getAbsolutePath() + File.separator + "src" + File.separator
-							+ CommonTools.getPackageDir(ssi.getService()) + File.separator + "common" + File.separator
-							+ ssi.getService().getName() + "I.java";
-						fileContent = Utils.fileToStringBuffer(new File(serviceInf));
+                    // execute the source synchronization to make any necessary
+                    // changes to source
+                    // code for new/modified/removed methods
+                    SyncMethods methodSync = new SyncMethods(getBaseDirectory(), getServiceInformation(),
+                        getServiceInformation().getServices().getService(serviceIndex));
+                    methodSync.sync();
+                    SyncResource resourceSync = new SyncResource(getBaseDirectory(), getServiceInformation(),
+                        getServiceInformation().getServices().getService(serviceIndex));
+                    resourceSync.sync();
 
-						BufferedReader reader = new BufferedReader(new StringReader(ssi.getService().getDescription()));
-						String line = reader.readLine();
-						String descriptionString = "\n";
-						while (line != null) {
-							descriptionString += " * " + line + "\n";
-							line = reader.readLine();
-						}
-						descriptionString += "\n";
-						int startofjavadoc = fileContent.indexOf("/**");
-						int startofoldfirstline = fileContent.indexOf(" * This class is autogenerated, DO NOT EDIT.\n");
-						fileContent.replace(startofjavadoc + 3, startofoldfirstline, descriptionString);
-						String fileContentString = fileContent.toString();
-						FileWriter fw = new FileWriter(new File(serviceInf));
-						fw.write(fileContentString);
-						fw.close();
+                    // resync the security configuration files and authorization
+                    // callbacks
+                    SyncSecurity securitySync = new SyncSecurity(getBaseDirectory(), getServiceInformation(),
+                        getServiceInformation().getServices().getService(serviceIndex));
+                    securitySync.sync();
 
-					}
+                    // if there is a description on the service then add it to
+                    // the interfaces javadoc
+                    if ((ssi.getService().getDescription() != null) && (ssi.getService().getDescription().length() > 0)) {
+                        StringBuffer fileContent = null;
+                        String serviceInf = null;
+                        serviceInf = getBaseDirectory().getAbsolutePath() + File.separator + "src" + File.separator
+                            + CommonTools.getPackageDir(ssi.getService()) + File.separator + "common" + File.separator
+                            + ssi.getService().getName() + "I.java";
+                        fileContent = Utils.fileToStringBuffer(new File(serviceInf));
 
-				} catch (Exception e) {
-					throw new SynchronizationException(e.getMessage(), e);
-				}
+                        BufferedReader reader = new BufferedReader(new StringReader(ssi.getService().getDescription()));
+                        String line = reader.readLine();
+                        String descriptionString = "\n";
+                        while (line != null) {
+                            descriptionString += " * " + line + "\n";
+                            line = reader.readLine();
+                        }
+                        descriptionString += "\n";
+                        int startofjavadoc = fileContent.indexOf("/**");
+                        int startofoldfirstline = fileContent.indexOf("This class is autogenerated, DO NOT EDIT.\n");
+                        fileContent.replace(startofjavadoc + 3, startofoldfirstline, descriptionString);
+                        String fileContentString = fileContent.toString();
+                        FileWriter fw = new FileWriter(new File(serviceInf));
+                        fw.write(fileContentString);
+                        fw.close();
 
-			}
-		}
-	}
+                    }
+
+                } catch (Exception e) {
+                    throw new SynchronizationException(e.getMessage(), e);
+                }
+
+            }
+        }
+    }
 }
