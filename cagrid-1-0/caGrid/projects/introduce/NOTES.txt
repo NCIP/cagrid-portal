@@ -18,6 +18,11 @@ support registration on resources
 
 To Do:  
 
+may need to have a model upgrader that runs before the upgrader that enables hte model to be moved forwared
+so that the beans will actually work....
+
+look at new build files and make sure they are being called correctly......
+
 need to not build service after an upgrade and let the user know that the service build files may need to be altered.  
 
 when updating introduce software there will be a problem with the files in the users home space that will need to also be updated.
