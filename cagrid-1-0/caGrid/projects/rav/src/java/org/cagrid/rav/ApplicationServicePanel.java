@@ -1,32 +1,43 @@
 package org.cagrid.rav;
 
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.CreationExtensionUIDialog;
 
-import java.awt.ComponentOrientation;
+import java.awt.GridBagLayout;
+import javax.swing.JPanel;
+
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
+import java.awt.ComponentOrientation;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import org.apache.axis.message.MessageElement;
 import org.ggf.schemas.jsdl._2005._11.jsdl.Application_Type;
+
+import java.io.File;
 
 public class ApplicationServicePanel extends CreationExtensionUIDialog {
 
 	private static final long serialVersionUID = 1L;
+	public static final String RAV_EXTENSION = "RAVE";  //  @jve:decl-index=0:
 	private JPanel browserPanel = null;
 	private JPanel argsPanel = null;
 	private JLabel jLabel = null;
@@ -268,7 +279,15 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 			jButton1.addActionListener(new ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if(!(getJTextField().getText().trim()).equals("")) {
+						appType = new Application_Type();
 						appType.setApplicationName(getJTextField().getText().trim());
+						appType.setApplicationVersion(getJTextField1().getText().trim());
+						appType.setDescription(getJTextField2().getText().trim());
+						//TODO: Handle the extension elements to JSDL Application_Type properly
+						MessageElement[] any_element = new MessageElement[1];
+						any_element[0] = new MessageElement(getJTextField3().getText().trim(), "foo");
+						appType.set_any(any_element);
+						setExtensionData();
 						dispose();	
 					} else {
 						JOptionPane.showMessageDialog(ApplicationServicePanel.this, 
@@ -285,7 +304,7 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 	 * @return the jTextField1
 	 */
 	public JTextField getJTextField1() {
-		if (jTextField1 != null) {
+		if (jTextField1 == null) {
 			jTextField1 = new JTextField();
 		}
 		return jTextField1;
@@ -297,7 +316,7 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 	 * @return the jTextField2
 	 */
 	public JTextField getJTextField2() {
-		if (jTextField2 != null) {
+		if (jTextField2 == null) {
 			jTextField2 = new JTextField();
 		}
 		return jTextField2;
@@ -308,10 +327,31 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 	 * @return the jTextField3
 	 */
 	public JTextField getJTextField3() {
-		if (jTextField3 != null) {
+		if (jTextField3 == null) {
 			jTextField3 = new JTextField();
 		}
 		return jTextField3;
+	}
+	
+	private void setExtensionData() {
+		ExtensionType ravExtension = new ExtensionType();
+		ravExtension.setName(RAV_EXTENSION);
+		ravExtension.setExtensionType("Remote Application Virtualization");
+		ravExtension.setVersion("1.0");
+		ExtensionTypeExtensionData data = new ExtensionTypeExtensionData();
+		MessageElement element = new MessageElement(Application_Type.getTypeDesc().getXmlType(), appType);
+		ExtensionTools.updateExtensionDataElement(data, element);
+		// set the selected service features
+//		ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
+		try {
+
+			//Data extData = ExtensionDataUtils.getExtensionData(data);
+			//extData.setServiceFeatures(features);
+			//ExtensionDataUtils.storeExtensionData(data, extData);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ErrorDialog.showErrorDialog("Error storing configuration: " + ex.getMessage(), ex);
+		}
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="8,8"
