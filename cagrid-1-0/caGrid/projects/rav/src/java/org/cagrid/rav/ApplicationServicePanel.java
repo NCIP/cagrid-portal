@@ -1,7 +1,6 @@
 package org.cagrid.rav;
 
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -350,7 +349,7 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 			//ExtensionDataUtils.storeExtensionData(data, extData);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error storing configuration: " + ex.getMessage(), ex);
+			//ErrorDialog.showErrorDialog("Error storing configuration: " + ex.getMessage(), ex);
 		}
 	}
 
