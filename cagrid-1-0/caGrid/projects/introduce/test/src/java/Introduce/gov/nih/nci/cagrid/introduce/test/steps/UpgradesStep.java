@@ -20,10 +20,9 @@ public class UpgradesStep extends BaseStep {
 
     public void runStep() throws Throwable {
         System.out.println("Upgrading Service");
-        ServiceInformation info = new ServiceInformation(new File(getBaseDir() + File.separator + this.tci.getDir()
-            + File.separator));
 
-        UpgradeManager upgrader = new UpgradeManager(info, this.tci.getDir());
+
+        UpgradeManager upgrader = new UpgradeManager(this.tci.getDir());
 
         try {
             upgrader.upgrade();
@@ -31,6 +30,9 @@ public class UpgradesStep extends BaseStep {
             e.printStackTrace();
             fail(e.getMessage());
         }
+        
+        ServiceInformation info = new ServiceInformation(new File(getBaseDir() + File.separator + this.tci.getDir()
+            + File.separator));
 
         try {
             SyncTools sync = new SyncTools(new File(getBaseDir() + File.separator + this.tci.getDir()));

@@ -1,15 +1,13 @@
 package gov.nih.nci.cagrid.introduce.upgrade;
 
-import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.UpgradeDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.upgrade.common.ExtensionUpgraderI;
+import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
 
-import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +45,7 @@ public class ExtensionsUpgradeManager {
 		return false;
 	}
 
-	public void upgrade() throws Exception {
+	public void upgrade(IntroduceUpgradeStatus status) throws Exception {
 		System.out.println("Trying to upgrade the service");
 		List error = new ArrayList();
 
@@ -119,11 +117,11 @@ public class ExtensionsUpgradeManager {
 					Constructor con = clazz.getConstructor(new Class[] {
 							ExtensionType.class, ServiceInformation.class,
 							String.class, String.class, String.class });
-					UpgraderI upgrader = (UpgraderI) con
+					ExtensionUpgraderI upgrader = (ExtensionUpgraderI) con
 							.newInstance(new Object[] { extension, serviceInformation,
 									pathToService, upgrade.getFromVersion(),
 									upgrade.getToVersion() });
-					upgrader.execute();
+					status.addExtensionUpgradeStatus(upgrader.execute());
 				}
 
 			}

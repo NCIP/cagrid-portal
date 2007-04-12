@@ -1,0 +1,86 @@
+package gov.nih.nci.cagrid.introduce.upgrade.two.zero;
+
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
+import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgraderI;
+
+
+public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
+    ServiceInformation serviceInformation;
+    IntroduceUpgradeStatus status;
+    String fromVersion;
+    String toVersion;
+    String servicePath;
+
+
+    public IntroduceUpgraderBase(IntroduceUpgradeStatus status, ServiceInformation serviceInformation, String servicePath, String fromVersion,
+        String toVersion) {
+        this.status = status;
+        this.serviceInformation = serviceInformation;
+        this.fromVersion = fromVersion;
+        this.toVersion = toVersion;
+        this.servicePath = servicePath;
+    }
+
+
+    public void execute() throws Exception {
+        System.out.println("Upgrading Introduce Service From Version " + this.getFromVersion() + " to Version "
+            + this.getToVersion());
+        upgrade();
+        getServiceInformation().getServiceDescriptor().setIntroduceVersion(getToVersion());
+    }
+
+
+    public String getFromVersion() {
+        return fromVersion;
+    }
+
+
+    public void setFromVersion(String fromVersion) {
+        this.fromVersion = fromVersion;
+    }
+
+
+    public String getToVersion() {
+        return toVersion;
+    }
+
+
+    public void setToVersion(String toVersion) {
+        this.toVersion = toVersion;
+    }
+
+
+    protected abstract void upgrade() throws Exception;
+
+
+    public ServiceInformation getServiceInformation() {
+        return serviceInformation;
+    }
+
+
+    public void setServiceInformation(ServiceInformation serviceInformation) {
+        this.serviceInformation = serviceInformation;
+    }
+
+
+    public String getServicePath() {
+        return servicePath;
+    }
+
+
+    public void setServicePath(String servicePath) {
+        this.servicePath = servicePath;
+    }
+
+
+    public IntroduceUpgradeStatus getStatus() {
+        return status;
+    }
+
+
+    public void setStatus(IntroduceUpgradeStatus status) {
+        this.status = status;
+    }
+
+}

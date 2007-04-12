@@ -14,6 +14,21 @@ new extensions architecture to support callbacks for different areas of editing.
 
 support registration on resources
 
+==================================================================================================
+Upgrade Manager:
+
+Prerequisite:
+Older versions of the introduce model will be packeged in a new package and will be passed into 
+older version upgraders
+
+Upgrade Cycle
+1. run the model upgrader to bring the model to the next minor version of introduce version so that the model can be used
+2. run the introduce upgrader for that next version so that introduce managed service files can be brought up to the intermediate version of introduce
+   a. for each minor version increment call any available extension upgraders that can upgrade
+       an extension for the current version of introduce.  The current versions model will be
+       passed into the extension upgrader.
+   b. rinse and repeat.
+
 ==============================================================================================================================
 
 To Do:  

@@ -18,7 +18,8 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
-import gov.nih.nci.cagrid.introduce.upgrade.ExtensionUpgraderBase;
+import gov.nih.nci.cagrid.introduce.upgrade.common.ExtensionUpgradeStatus;
+import gov.nih.nci.cagrid.introduce.upgrade.one.one.ExtensionUpgraderBase;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -52,7 +53,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 	}
 
 
-	protected void upgrade() throws Exception {
+	protected ExtensionUpgradeStatus upgrade() throws Exception {
+	    ExtensionUpgradeStatus status = new ExtensionUpgradeStatus();
 		// ensure we're upgrading appropriatly
 		validateUpgrade();
 		// get the extension data in raw form
@@ -76,6 +78,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		moveCastorMappingFile();
 		// store the modified extension data back into the service model
 		setExtensionDataElement(extensionData);
+		
+		return status;
 	}
 
 

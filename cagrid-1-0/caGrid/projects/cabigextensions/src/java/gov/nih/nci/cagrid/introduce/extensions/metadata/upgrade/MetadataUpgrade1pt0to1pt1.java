@@ -14,7 +14,9 @@ import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extensions.metadata.common.MetadataExtensionHelper;
-import gov.nih.nci.cagrid.introduce.upgrade.ExtensionUpgraderBase;
+import gov.nih.nci.cagrid.introduce.upgrade.common.ExtensionUpgradeStatus;
+import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
+import gov.nih.nci.cagrid.introduce.upgrade.one.one.ExtensionUpgraderBase;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.service.ContextProperty;
 import gov.nih.nci.cagrid.metadata.service.Fault;
@@ -63,19 +65,23 @@ public class MetadataUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         this.helper = new MetadataExtensionHelper(serviceInfo);
     }
 
-
-    @Override
-    protected void upgrade() throws Exception {
+    protected ExtensionUpgradeStatus upgrade() throws Exception {
+        ExtensionUpgradeStatus status  = new ExtensionUpgradeStatus();
         if (this.helper.getExistingServiceMetdata() == null) {
             LOG.info("Unable to locate service metdata; no metadata upgrade will be performed.");
             // return false
-            return;
+            status.addDescriptionLine("Unable to locate service metdata; no metadata upgrade will be performed.");
+            status.setStatus(StatusBase.UPGRADE_OK);
+            return status ;
         }
         // make a copy of the metadata backup
         writeBackupServiceMetadata();
 
         processService(this.helper.getExistingServiceMetdata().getServiceDescription().getService(),
             getServiceInformation().getServiceDescriptor());
+       
+        status.setStatus(StatusBase.UPGRADE_OK);
+        return status ;
     }
 
 

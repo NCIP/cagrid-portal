@@ -1,17 +1,17 @@
-package gov.nih.nci.cagrid.introduce.upgrade;
+package gov.nih.nci.cagrid.introduce.upgrade.common;
 
-import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
-public abstract class UpgraderBase implements UpgraderI {
 
-	ServiceInformation serviceInformation;
+public abstract class ModelUpgraderBase implements ModelUpgraderI {
+
 	String fromVersion;
 	String toVersion;
 	String servicePath;
+	IntroduceUpgradeStatus status;
 
-	UpgraderBase(ServiceInformation serviceInformation, String servicePath,
+	public ModelUpgraderBase(IntroduceUpgradeStatus status, String servicePath,
 			String fromVersion, String toVersion) {
-		this.serviceInformation = serviceInformation;
+	    this.status = status;
 		this.fromVersion = fromVersion;
 		this.toVersion = toVersion;
 		this.servicePath = servicePath;
@@ -23,6 +23,10 @@ public abstract class UpgraderBase implements UpgraderI {
 
 	public void setFromVersion(String fromVersion) {
 		this.fromVersion = fromVersion;
+	}
+	
+	public IntroduceUpgradeStatus getStatus(){
+	    return this.status;
 	}
 
 	public String getToVersion() {
@@ -36,15 +40,10 @@ public abstract class UpgraderBase implements UpgraderI {
 	protected abstract void upgrade() throws Exception;
 
 	public void execute() throws Exception {
+	    System.out.println("Upgrading introduce model"
+            + " from Version " + this.getFromVersion()
+            + " to Version " + this.getToVersion());
 		this.upgrade();
-	}
-
-	public ServiceInformation getServiceInformation() {
-		return serviceInformation;
-	}
-
-	public void setServiceInformation(ServiceInformation serviceInformation) {
-		this.serviceInformation = serviceInformation;
 	}
 
 	public String getServicePath() {

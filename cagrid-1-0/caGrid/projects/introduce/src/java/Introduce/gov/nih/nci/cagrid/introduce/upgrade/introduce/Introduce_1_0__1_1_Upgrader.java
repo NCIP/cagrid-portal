@@ -2,11 +2,12 @@ package gov.nih.nci.cagrid.introduce.upgrade.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistrationTemplate;
-import gov.nih.nci.cagrid.introduce.upgrade.IntroduceUpgraderBase;
+import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
+import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
+import gov.nih.nci.cagrid.introduce.upgrade.one.one.IntroduceUpgraderBase;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -26,8 +27,8 @@ import org.projectmobius.common.XMLUtilities;
 
 public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
-    public Introduce_1_0__1_1_Upgrader(ServiceInformation serviceInformation, String servicePath) {
-        super(serviceInformation, servicePath, "1.0", "1.1");
+    public Introduce_1_0__1_1_Upgrader(IntroduceUpgradeStatus status,ServiceInformation serviceInformation, String servicePath) {
+        super(status,serviceInformation, servicePath, "1.0", "1.1");
     }
 
 
@@ -40,6 +41,8 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             getServicePath() + File.separator + "build.xml"));
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "dev-build.xml"), new File(
             getServicePath() + File.separator + "dev-build.xml"));
+        getStatus().addDescriptionLine("replaced build.xml with new version");
+        getStatus().addIssue("Replaced the build.xml file.", "Put any additions you need to the service build in the dev-build.xml file which has now been created.");
 
         // need to replace the build-deploy.xml
         Utils.copyFile(new File(getServicePath() + File.separator + "build-deploy.xml"), new File(getServicePath()
@@ -48,7 +51,9 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             getServicePath() + File.separator + "build-deploy.xml"));
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "dev-build-deploy.xml"), new File(
             getServicePath() + File.separator + "dev-build-deploy.xml"));
-
+        getStatus().addDescriptionLine("replaced build-deploy.xml with new version");
+        getStatus().addIssue("Replaced the build-deploy.xml file.", "Put any additions you need to the service deployment in the dev-build-deploy.xml file which has now been created.");
+        
         // need to replace the registration.xml
         Properties serviceProperties = new Properties();
         serviceProperties.load(new FileInputStream(new File(getServicePath() + File.separator
@@ -56,13 +61,14 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
         Utils.copyFile(new File(getServicePath() + File.separator + "etc" + File.separator + "registration.xml"),
             new File(getServicePath() + File.separator + "etc" + File.separator + "registration.xml.OLD"));
-
+        
         RegistrationTemplate registrationT = new RegistrationTemplate();
         String registrationS = registrationT.generate(getServiceInformation());
         File registrationF = new File(getServicePath() + File.separator + "etc" + File.separator + "registration.xml");
         FileWriter registrationFW = new FileWriter(registrationF);
         registrationFW.write(registrationS);
         registrationFW.close();
+        getStatus().addDescriptionLine("replaced etc/registration.xml with new version");
 
         // need to add to the deploy.properties
         Properties deployProperties = new Properties();
@@ -73,7 +79,8 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
         deployProperties.put("perform.index.service.registration", "true");
         deployProperties.store(new FileOutputStream(new File(getServicePath() + File.separator
             + IntroduceConstants.DEPLOY_PROPERTIES_FILE)), "Service Deployment Properties");
-
+        getStatus().addDescriptionLine("adding new deployment variables to deploy.properties");
+        
         // need to add the new template var to the jndi so that it can be
         // replaced
         // by the new property for shutting off registration
@@ -103,12 +110,14 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
                 }
             }
         }
+        getStatus().addDescriptionLine("retemplated jndi file");
 
         // need to add the soapFix.jar to the tools lib directory
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "tools" + File.separator + "lib"
             + File.separator + "caGrid-1.0-Introduce-1.1-soapBindingFix.jar"), new File(getServicePath()
             + File.separator + "tools" + File.separator + "lib" + File.separator
             + "caGrid-1.0-Introduce-1.1-soapBindingFix.jar"));
+        getStatus().addDescriptionLine("added soapFix jar to enable patching the soap bindings that get generated for custom beans");
         
         // need to move the ant-contrib.jar to the tools lib directory
         File currentContribFile = new File(getServicePath()
@@ -118,14 +127,18 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             + File.separator + "tools" + File.separator + "lib" + File.separator
             + "ant-contrib.jar"));
         currentContribFile.delete();
+        getStatus().addDescriptionLine("moving ant-contrib to a location which will not cause it to be deployed with the service");
         
 
         upgradeJars();
+        getStatus().addDescriptionLine("updating service with the new version of the jars");
 
         // recreate the authorization class
         // recreate the service descriptor
         // recreate the provider impl
         // those will be done during the resync
+        
+        getStatus().setStatus(StatusBase.UPGRADE_OK);
     }
 
 
