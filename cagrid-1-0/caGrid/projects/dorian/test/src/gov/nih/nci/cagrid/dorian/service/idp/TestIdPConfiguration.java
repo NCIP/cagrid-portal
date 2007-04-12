@@ -29,6 +29,8 @@ public class TestIdPConfiguration extends TestCase {
 
 	public final static String DEFAULT_KEY_PASSWORD = "idpkey";
 
+	public final static String DEFAULT_IDP_NAME = "Dorian IdP";
+
 	private final static String DEFAULT_REGISTRATION_POLICY = ManualRegistrationPolicy.class.getName();
 
 
@@ -44,6 +46,7 @@ public class TestIdPConfiguration extends TestCase {
 			assertEquals(DEFAULT_MAX_UID_LENGTH, conf.getUIDLength().getMax());
 			assertEquals(DEFAULT_REGISTRATION_POLICY, conf.getRegistrationPolicy());
 			assertEquals(DEFAULT_KEY_PASSWORD, conf.getAssertingCredentials().getKeyPassword());
+			assertEquals(DEFAULT_IDP_NAME, conf.getIdentityProviderName());
 
 			assertEquals(true, conf.getAssertingCredentials().isAutoRenew());
 		} catch (Exception e) {

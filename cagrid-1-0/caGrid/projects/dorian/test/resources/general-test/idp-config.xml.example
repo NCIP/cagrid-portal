@@ -1,8 +1,9 @@
  <IdentityProviderConfiguration xmlns="http://cagrid.nci.nih.gov/dorian/conf"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:dorian="http://cagrid.nci.nih.gov/dorian/conf">
-        <UIDLength dorian:min="4" dorian:max="10"/>
-        <PasswordLength dorian:min="6" dorian:max="10"/>
+        <IdentityProviderName>Dorian IdP</IdentityProviderName>
+        <UIDLength min="4" max="10"/>
+        <PasswordLength min="6" max="10"/>
         <RegistrationPolicy>gov.nih.nci.cagrid.dorian.service.idp.ManualRegistrationPolicy</RegistrationPolicy>
         <AssertingCredentials>
             <AutoRenew>true</AutoRenew>

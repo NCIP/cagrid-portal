@@ -79,7 +79,7 @@ public class Dorian {
 			this.identityProvider = new IdentityProvider(configuration.getIdentityProviderConfiguration(), db, ca);
 
 			TrustedIdP idp = new TrustedIdP();
-			idp.setName(serviceId);
+			idp.setName(conf.getIdentityProviderConfiguration().getIdentityProviderName());
 			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
 			methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
 			idp.setAuthenticationMethod(methods);

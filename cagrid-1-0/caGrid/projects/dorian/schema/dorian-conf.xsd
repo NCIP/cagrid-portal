@@ -25,6 +25,7 @@
     <xs:complexType name="IdentityFederationConfiguration">
         <xs:sequence>
             <xs:element name="IdentityProviderNameLength" type="dorian:length" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="IdentityAssignmentPolicy" type="dorian:IdentityAssignmentPolicy" minOccurs="1" maxOccurs="1"/>
             <xs:element name="CredentialPolicy" type="dorian:CredentialPolicy" minOccurs="1" maxOccurs="1"/>
             <xs:element name="ProxyPolicy" type="dorian:ProxyPolicy" minOccurs="1" maxOccurs="1"/>
             <xs:element name="AccountPolicies" type="dorian:AccountPolicies" minOccurs="1" maxOccurs="1"/>
@@ -33,6 +34,7 @@
     </xs:complexType>
     <xs:complexType name="IdentityProviderConfiguration">
         <xs:sequence>
+            <xs:element name="IdentityProviderName" type="xs:string" minOccurs="1" maxOccurs="1"/>
             <xs:element name="UIDLength" type="dorian:length" minOccurs="1" maxOccurs="1"/>
             <xs:element name="PasswordLength" type="dorian:length" minOccurs="1" maxOccurs="1"/>
             <xs:element name="RegistrationPolicy" type="xs:string" minOccurs="1" maxOccurs="1"/>
@@ -88,7 +90,7 @@
             <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
             <xs:element name="classname" type="xs:string" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
-    </xs:complexType> 
+    </xs:complexType>
     
     <xs:complexType name="DorianCAConfiguration">
         <xs:sequence>
@@ -104,4 +106,10 @@
             <xs:element name="lifetime" type="dorian:CredentialLifetime" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType> 
+    <xs:simpleType name="IdentityAssignmentPolicy">
+   			<xs:restriction base="xs:string">
+   				<xs:enumeration value="id"/>
+   				<xs:enumeration value="name"/>
+  			</xs:restriction>
+    </xs:simpleType>
 </xs:schema>

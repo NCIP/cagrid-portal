@@ -1,7 +1,8 @@
  <IdentityFederationConfiguration xmlns="http://cagrid.nci.nih.gov/dorian/conf"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:dorian="http://cagrid.nci.nih.gov/dorian/conf">
-        <IdentityProviderNameLength dorian:min="1" dorian:max="2"/>
+        <IdentityProviderNameLength min="1" max="2"/>
+        <IdentityAssignmentPolicy>id</IdentityAssignmentPolicy>
         <CredentialPolicy>
             <CredentialLifetime years="3" months="4" days="5" hours="6" minutes="7" seconds="8"/>
         </CredentialPolicy>
