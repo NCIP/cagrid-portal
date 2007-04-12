@@ -90,7 +90,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-opensaml-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-grape.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-grape-resources.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar" sourcepath="/mobius"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
