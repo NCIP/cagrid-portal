@@ -531,13 +531,9 @@
                 <include name="csmapi.jar" />
                 <include name="dom4j-1.6.1.jar" />
                 <include name="ehcache-1.1.jar" />
-                <include name="hibernate-3.0.5.jar" />
-                <include name="jdom.jar" />
                 <include name="jta.jar" />
                 <include name="jtds-1.2.jar" />
                 <include name="mysql-connector-java-3.1.11-bin.jar" />
-                <include name="spring-core.jar" />
-                <include name="spring-beans.jar" />
             </fileset>
             <fileset dir="${projects.dir}/authz/ext/lib">
                 <include name="caGrid-1.0-core.jar" />
@@ -553,11 +549,14 @@
                 <include name="caGrid-1.0-ServiceSecurityProvider-stubs.jar" />
                 <include name="cglib-nodep-2.1_3.jar" />
                 <include name="grouper.jar" />
+            	<include name="hibernate3.jar" />
+                <include name="jdom-1.0.jar" />
                 <include name="mobius_common_client.jar" />
                 <include name="mobius_factories.jar" />
                 <include name="mobius_gme_client.jar" />
                 <include name="mobius_mako_client.jar" />
                 <include name="mobius_tools.jar" />
+            	<include name="spring.jar"/>
                 <include name="subject-0.2.1.jar" />
             </fileset>
         </artifact>
@@ -589,9 +588,20 @@
         <!-- Authz uses this as a dependency. If you need to use 
 		Authz in your project, don't use this. Use authz.jars -->
         <artifact id="authz.misc.jars" track="main" type="jars">
+        	<!--
             <fileset dir="${share.dir}/lib/caCORE">
                 <include name="cglib-nodep-2.1_3.jar" />
             </fileset>
+            -->
+        	<fileset dir="${share.dir}/lib/caCORE32">
+        		<include name="asm.jar" />
+        		<include name="cglib-2.1.3.jar" />
+        		<include name="hibernate3.jar" />
+        		<include name="spring.jar"/>
+        	</fileset>
+        	<fileset dir="${share.dir}/lib/jdom">
+        		<include name="jdom-1.0.jar"/>
+        	</fileset>
             <fileset dir="${test.lib.dir}">
                 <include name="cobertura/asm-2.2.1.jar" />
                 <include name="junit.jar" />
