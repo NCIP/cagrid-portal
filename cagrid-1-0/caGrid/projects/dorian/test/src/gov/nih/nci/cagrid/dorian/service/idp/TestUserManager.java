@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.dorian.common.Crypt;
 import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import junit.framework.TestCase;
 
@@ -31,7 +32,7 @@ public class TestUserManager extends TestCase {
 
 	private int count = 0;
 
-	private IdPConfiguration conf;
+	private IdentityProviderConfiguration conf;
 
 	public void testMultipleUsers() {
 		int userCount = 20;
@@ -632,11 +633,9 @@ public class TestUserManager extends TestCase {
 			count = 0;
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
-			InputStream resource = TestCase.class
-					.getResourceAsStream(Constants.IDP_CONFIG);
-			SimpleResourceManager trm = new SimpleResourceManager(resource);
-			this.conf = (IdPConfiguration) trm
-					.getResource(IdPConfiguration.RESOURCE);
+			InputStream resource = TestCase.class.getResourceAsStream(Constants.IDP_CONFIG);
+			this.conf = (IdentityProviderConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
+				new InputStreamReader(resource), IdentityProviderConfiguration.class);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

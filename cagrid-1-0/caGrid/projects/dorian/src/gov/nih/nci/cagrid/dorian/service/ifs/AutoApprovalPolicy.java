@@ -15,7 +15,7 @@ import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
  *          Exp $
  */
 
-public class AutoApprovalPolicy extends UserPolicy {
+public class AutoApprovalPolicy extends AccountPolicy {
 	public void applyPolicy(IFSUser user) throws DorianInternalFault,
 			UserPolicyFault {
 		UserManager um = getUserManager();

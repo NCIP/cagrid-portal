@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
+import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
@@ -47,7 +48,9 @@ public class DorianImpl {
 			EndpointReferenceType type = AddressingUtils.createEndpointReference(null);
 			String configFileEnd = (String) MessageContext.getCurrentContext().getProperty(DORIAN_CONFIG);
 			String configFile = ContainerConfig.getBaseDirectory() + File.separator + configFileEnd;
-			this.dorian = new Dorian(configFile, type.getAddress().toString());
+			DorianConfiguration conf = (DorianConfiguration) Utils.deserializeDocument(configFile,
+				gov.nih.nci.cagrid.dorian.conf.DorianConfiguration.class);
+			this.dorian = new Dorian(conf, type.getAddress().toString());
 		} catch (Exception e) {
 			FaultHelper.printStackTrace(e);
 			throw new RemoteException(Utils.getExceptionMessage(e));
@@ -278,7 +281,7 @@ public class DorianImpl {
 			BasicAuthCredential cred = new BasicAuthCredential();
 			cred.setUserId(credential.getBasicAuthenticationCredential().getUserId());
 			cred.setPassword(credential.getBasicAuthenticationCredential().getPassword());
-		
+
 			try {
 				SAMLAssertion saml = dorian.authenticate(cred);
 				String xml = SAMLUtils.samlAssertionToString(saml);

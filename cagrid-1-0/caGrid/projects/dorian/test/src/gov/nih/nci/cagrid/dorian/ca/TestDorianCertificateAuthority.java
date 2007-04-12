@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.dorian.ca;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
+import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
@@ -17,6 +19,7 @@ import junit.framework.TestCase;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -31,10 +34,10 @@ public class TestDorianCertificateAuthority extends TestCase {
 
 	private Database db;
 
+
 	public void testNoCACredentials() {
 
-		DorianCertificateAuthorityConf conf = this
-				.getDorianCAConfNoAutoRenewalLong();
+		DorianCAConfiguration conf = this.getDorianCAConfNoAutoRenewalLong();
 		DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 		try {
 			ca.clearDatabase();
@@ -68,9 +71,9 @@ public class TestDorianCertificateAuthority extends TestCase {
 		}
 	}
 
+
 	public void testNoCACredentialsWithAutoRenew() {
-		DorianCertificateAuthorityConf conf = this
-				.getDorianCAConfAutoRenewalLong();
+		DorianCAConfiguration conf = this.getDorianCAConfAutoRenewalLong();
 		DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 		try {
 			ca.clearDatabase();
@@ -103,9 +106,9 @@ public class TestDorianCertificateAuthority extends TestCase {
 		}
 	}
 
+
 	public void testSetCACredentials() {
-		DorianCertificateAuthorityConf conf = this
-				.getDorianCAConfAutoRenewalLong();
+		DorianCAConfiguration conf = this.getDorianCAConfAutoRenewalLong();
 		DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 		try {
 			ca.clearDatabase();
@@ -123,9 +126,9 @@ public class TestDorianCertificateAuthority extends TestCase {
 		}
 	}
 
+
 	public void testRequestCertificate() {
-		DorianCertificateAuthorityConf conf = this
-				.getDorianCAConfAutoRenewalLong();
+		DorianCAConfiguration conf = this.getDorianCAConfAutoRenewalLong();
 		DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 		try {
 			ca.clearDatabase();
@@ -148,9 +151,9 @@ public class TestDorianCertificateAuthority extends TestCase {
 		}
 	}
 
+
 	public void testRequestCertificateBadDate() {
-		DorianCertificateAuthorityConf conf = this
-				.getDorianCAConfAutoRenewalLong();
+		DorianCAConfiguration conf = this.getDorianCAConfAutoRenewalLong();
 		DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 		try {
 			ca.clearDatabase();
@@ -162,10 +165,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 			submitCertificateRequest(ca, SUBJECT_PREFIX, start, end);
 			assertTrue(false);
 		} catch (CertificateAuthorityFault f) {
-			if (f
-					.getFaultString()
-					.indexOf(
-							"Certificate expiration date is after the CA certificates expiration date") == -1) {
+			if (f.getFaultString().indexOf("Certificate expiration date is after the CA certificates expiration date") == -1) {
 
 				FaultUtil.printFault(f);
 				assertTrue(false);
@@ -182,9 +182,9 @@ public class TestDorianCertificateAuthority extends TestCase {
 		}
 	}
 
+
 	public void testRequestCertificateBadSubject() {
-		DorianCertificateAuthorityConf conf = this
-				.getDorianCAConfAutoRenewalLong();
+		DorianCAConfiguration conf = this.getDorianCAConfAutoRenewalLong();
 		DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 		try {
 			ca.clearDatabase();
@@ -193,8 +193,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 			Date start = cal.getTime();
 			cal.add(Calendar.DAY_OF_MONTH, 5);
 			Date end = cal.getTime();
-			submitCertificateRequest(ca, "O=OSU,OU=BMI,OU=MSCL,CN=foo", start,
-					end);
+			submitCertificateRequest(ca, "O=OSU,OU=BMI,OU=MSCL,CN=foo", start, end);
 			assertTrue(false);
 		} catch (CertificateAuthorityFault f) {
 			if (f.getFaultString().indexOf("Invalid certificate subject") == -1) {
@@ -214,13 +213,14 @@ public class TestDorianCertificateAuthority extends TestCase {
 		}
 	}
 
+
 	public void testExpiredCACredentialsWithRenewal() {
-		DorianCertificateAuthorityConf conf = this
-				.getDorianCAConfAutoRenewalLong();
+		DorianCAConfiguration conf = this.getDorianCAConfAutoRenewalLong();
 		DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 		try {
 			ca.clearDatabase();
-//			give a chance for others to run right before we enter timing sensitive code
+			// give a chance for others to run right before we enter timing
+			// sensitive code
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			Thread.currentThread().yield();
 			X509Certificate origRoot = createAndStoreCAShort(ca);
@@ -243,13 +243,15 @@ public class TestDorianCertificateAuthority extends TestCase {
 		}
 	}
 
+
 	public void testExpiredCACredentialsNoRenewal() {
-		DorianCertificateAuthorityConf conf = getDorianCAConfNoAutoRenewalLong();
+		DorianCAConfiguration conf = getDorianCAConfNoAutoRenewalLong();
 		DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 		try {
 			ca.clearDatabase();
 			// ca.destroyTable();
-//			give a chance for others to run right before we enter timing sensitive code
+			// give a chance for others to run right before we enter timing
+			// sensitive code
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			Thread.currentThread().yield();
 			createAndStoreCAShort(ca);
@@ -282,28 +284,27 @@ public class TestDorianCertificateAuthority extends TestCase {
 		}
 	}
 
-	private DorianCertificateAuthorityConf getDorianCAConfAutoRenewalLong() {
-		DorianCertificateAuthorityConf conf = new DorianCertificateAuthorityConf();
-		conf.setCaPassword("password");
-		conf.setAutoRenewal(true);
-		conf.setAutoRenewalYears(5);
-		conf.setAutoRenewalMonths(0);
-		conf.setAutoRenewalDays(0);
-		conf.setAutoRenewalHours(0);
-		conf.setAutoRenewalMinutes(0);
-		conf.setAutoRenewalSeconds(0);
+
+	private DorianCAConfiguration getDorianCAConfAutoRenewalLong() {
+		DorianCAConfiguration conf = new DorianCAConfiguration();
+		conf.setCertificateAuthorityPassword("password");
+		CredentialLifetime lifetime = new CredentialLifetime();
+		lifetime.setYears(5);
+		lifetime.setMonths(0);
+		lifetime.setDays(0);
+		conf.setAutoRenewal(lifetime);
 		return conf;
 	}
 
-	private DorianCertificateAuthorityConf getDorianCAConfNoAutoRenewalLong() {
-		DorianCertificateAuthorityConf conf = new DorianCertificateAuthorityConf();
-		conf.setCaPassword("password");
-		conf.setAutoRenewal(false);
+
+	private DorianCAConfiguration getDorianCAConfNoAutoRenewalLong() {
+		DorianCAConfiguration conf = new DorianCAConfiguration();
+		conf.setCertificateAuthorityPassword("password");
 		return conf;
 	}
 
-	private void createAndStoreCA(DorianCertificateAuthority ca)
-			throws Exception {
+
+	private void createAndStoreCA(DorianCertificateAuthority ca) throws Exception {
 		KeyPair rootPair = KeyUtil.generateRSAKeyPair1024();
 		assertNotNull(rootPair);
 		String rootSub = SUBJECT_PREFIX + "Temp Certificate Authority";
@@ -312,8 +313,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 		Date start = cal.getTime();
 		cal.add(Calendar.YEAR, 1);
 		Date end = cal.getTime();
-		X509Certificate root = CertUtil.generateCACertificate(rootSubject,
-				start, end, rootPair);
+		X509Certificate root = CertUtil.generateCACertificate(rootSubject, start, end, rootPair);
 		assertNotNull(root);
 		ca.setCACredentials(root, rootPair.getPrivate());
 		X509Certificate r = ca.getCACertificate();
@@ -321,8 +321,8 @@ public class TestDorianCertificateAuthority extends TestCase {
 		assertEquals(r, root);
 	}
 
-	private X509Certificate createAndStoreCAShort(DorianCertificateAuthority ca)
-			throws Exception {
+
+	private X509Certificate createAndStoreCAShort(DorianCertificateAuthority ca) throws Exception {
 		KeyPair rootPair = KeyUtil.generateRSAKeyPair1024();
 		assertNotNull(rootPair);
 		String rootSub = SUBJECT_PREFIX + "Temp Certificate Authority";
@@ -331,8 +331,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 		Date start = cal.getTime();
 		cal.add(Calendar.SECOND, 5);
 		Date end = cal.getTime();
-		X509Certificate root = CertUtil.generateCACertificate(rootSubject,
-				start, end, rootPair);
+		X509Certificate root = CertUtil.generateCACertificate(rootSubject, start, end, rootPair);
 		assertNotNull(root);
 		ca.setCACredentials(root, rootPair.getPrivate());
 		X509Certificate r = ca.getCACertificate();
@@ -341,17 +340,18 @@ public class TestDorianCertificateAuthority extends TestCase {
 		return r;
 	}
 
-	private void submitCertificateRequest(DorianCertificateAuthority ca,
-			String prefix, Date start, Date end) throws Exception {
+
+	private void submitCertificateRequest(DorianCertificateAuthority ca, String prefix, Date start, Date end)
+		throws Exception {
 		String subject = prefix + "User";
-		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(
-				subject, KeyUtil.generateRSAKeyPair1024());
+		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, KeyUtil.generateRSAKeyPair1024());
 		assertNotNull(req);
 		X509Certificate cert = ca.requestCertificate(req, start, end);
 		assertEquals(0, db.getUsedConnectionCount());
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
 	}
+
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -364,6 +364,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	protected void tearDown() throws Exception {
 		super.setUp();

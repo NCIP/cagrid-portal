@@ -13,7 +13,7 @@ import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
  *          Exp $
  */
 
-public class ManualApprovalPolicy extends UserPolicy {
+public class ManualApprovalPolicy extends AccountPolicy {
 	public void applyPolicy(IFSUser user) throws DorianInternalFault,
 			UserPolicyFault {
 	

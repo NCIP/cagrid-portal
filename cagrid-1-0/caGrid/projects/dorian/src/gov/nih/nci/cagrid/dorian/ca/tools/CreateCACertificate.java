@@ -1,11 +1,10 @@
 package gov.nih.nci.cagrid.dorian.ca.tools;
 
 import gov.nih.nci.cagrid.common.IOUtils;
-import gov.nih.nci.cagrid.common.SimpleResourceManager;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
-import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.service.DorianConfiguration;
+import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
@@ -94,16 +93,12 @@ public class CreateCACertificate {
 				System.exit(0);
 			} else {
 				String configFile = line.getOptionValue(CONFIG_FILE_OPT);
-				SimpleResourceManager rm = new SimpleResourceManager(configFile);
-				DorianCertificateAuthorityConf conf = (DorianCertificateAuthorityConf) rm
-						.getResource(DorianCertificateAuthorityConf.RESOURCE);
-				DorianConfiguration c = (DorianConfiguration) rm
-				.getResource(DorianConfiguration.RESOURCE);
-				Database db = new Database(c
-						.getConnectionManager(), c
+				DorianConfiguration c = (DorianConfiguration) Utils.deserializeDocument(configFile,
+					gov.nih.nci.cagrid.dorian.conf.DorianConfiguration.class);
+				Database db = new Database(c.getDatabase(), c
 						.getDorianInternalId());
 				db.createDatabaseIfNeeded();
-				DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
+				DorianCertificateAuthority ca = new DorianCertificateAuthority(db, c.getDorianCAConfiguration());
 				boolean interactive = false;
 				if (line.hasOption(INTERACTIVE_MODE_OPT)) {
 					interactive = true;

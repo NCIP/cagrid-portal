@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
+import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
@@ -12,25 +13,28 @@ import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public abstract class UserPolicy {
+public abstract class AccountPolicy {
 
-	private IFSConfiguration configuration;
+	private IdentityFederationConfiguration configuration;
 
 	private UserManager userManager;
 
-	public void configure(IFSConfiguration conf, UserManager um) {
+
+	public void configure(IdentityFederationConfiguration conf, UserManager um) {
 		this.configuration = conf;
 		this.userManager = um;
 	}
 
-	public abstract void applyPolicy(IFSUser user) throws DorianInternalFault,
-			UserPolicyFault;
 
-	public IFSConfiguration getConfiguration() {
+	public abstract void applyPolicy(IFSUser user) throws DorianInternalFault, UserPolicyFault;
+
+
+	public IdentityFederationConfiguration getConfiguration() {
 		return configuration;
 	}
 
+
 	public UserManager getUserManager() {
 		return userManager;
-	}	
+	}
 }

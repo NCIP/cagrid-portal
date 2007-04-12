@@ -4,6 +4,11 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
+import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
+import gov.nih.nci.cagrid.dorian.conf.CredentialPolicy;
+import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
+import gov.nih.nci.cagrid.dorian.conf.Length;
+import gov.nih.nci.cagrid.dorian.conf.ProxyPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
@@ -457,19 +462,37 @@ public class TestUserManager extends TestCase {
 			assertTrue(false);
 		}
 	}
+	
+	
+	private IdentityFederationConfiguration getOneYearConf() throws Exception {
+		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
+		CredentialPolicy cp = new CredentialPolicy();
+		CredentialLifetime l = new CredentialLifetime();
+		l.setYears(1);
+		l.setMonths(0);
+		l.setDays(0);
+		l.setHours(0);
+		l.setMinutes(0);
+		l.setSeconds(0);
+		cp.setCredentialLifetime(l);
+		conf.setCredentialPolicy(cp);
+		Length len = new Length();
+		len.setMin(MIN_NAME_LENGTH);
+		len.setMax(MAX_NAME_LENGTH);
+		conf.setIdentityProviderNameLength(len);
 
-
-	private IFSConfiguration getOneYearConf() throws Exception {
-		IFSConfiguration conf = new IFSConfiguration();
-		conf.setCredentialsValidYears(1);
-		conf.setCredentialsValidMonths(0);
-		conf.setCredentialsValidDays(0);
-		conf.setCredentialsValidHours(0);
-		conf.setCredentialsValidMinutes(0);
-		conf.setCredentialsValidSeconds(0);
-		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
-		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
-		conf.setUserPolicies(Utils.getUserPolicies());
+		ProxyPolicy policy = new ProxyPolicy();
+		gov.nih.nci.cagrid.dorian.conf.ProxyLifetime pl = new gov.nih.nci.cagrid.dorian.conf.ProxyLifetime();
+		pl.setHours(12);
+		pl.setMinutes(0);
+		pl.setSeconds(0);
+		policy.setProxyLifetime(pl);
+		conf.setProxyPolicy(policy);
+		conf.setAccountPolicies(Utils.getAccountPolicies());
+		return conf;
+	}
+	
+	private IFSDefaults getDefaults() throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName("Initial IdP");
 
@@ -518,10 +541,11 @@ public class TestUserManager extends TestCase {
 		usr.setEmail("inital_admin@test.com");
 		usr.setUserStatus(IFSUserStatus.Active);
 		usr.setUserRole(IFSUserRole.Administrator);
-		conf.setInitalTrustedIdP(idp);
-		conf.setInitialUser(usr);
-		return conf;
+		return new IFSDefaults(idp, usr);
 	}
+
+
+	
 
 
 	protected void setUp() throws Exception {
@@ -530,9 +554,9 @@ public class TestUserManager extends TestCase {
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = Utils.getCA(db);
-			IFSConfiguration conf = getOneYearConf();
+			IdentityFederationConfiguration conf = getOneYearConf();
 			TrustedIdPManager tm = new TrustedIdPManager(conf, db);
-			um = new UserManager(db, conf, ca, tm);
+			um = new UserManager(db, conf, ca, tm,getDefaults());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

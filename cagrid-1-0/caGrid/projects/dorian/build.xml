@@ -207,6 +207,13 @@
 				<property name="wsdl.file" value="${interface.name}_service.wsdl" />
 				<property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
 			</ant>
+	        <!-- DORIAN CONFIGURATION SCHEMA -->
+		    <ant antfile="${build.stubs}" target="generateStubs">
+				  <property name="source.stubs.dir" location="${schema.dest}" />
+				  <property name="wsdl.file" value="DorianConfiguration.wsdl" />
+				  <property name="target.stubs.dir" location="${stubs.src}" />
+				  <property name="ns.excludes" value="${GT4.ns.excludes}" />
+			</ant>
 		</target>
 
 	

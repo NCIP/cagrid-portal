@@ -13,11 +13,12 @@ import org.projectmobius.db.ConnectionManager;
 import org.projectmobius.db.DatabaseException;
 import org.projectmobius.db.Query;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.23 2007-02-12 20:06:47 langella Exp $
+ * @version $Id: Database.java,v 1.24 2007-04-12 14:42:38 langella Exp $
  */
 public class Database extends LoggingObject {
 
@@ -29,34 +30,39 @@ public class Database extends LoggingObject {
 
 	private boolean dbBuilt = false;
 
-	public Database(ConnectionManager rootConnectionManager, String database) {
+	private gov.nih.nci.cagrid.dorian.conf.Database conf;
+
+
+	public Database(gov.nih.nci.cagrid.dorian.conf.Database conf, String database) throws Exception {
 		this.database = database;
-		this.root = rootConnectionManager;
+		this.conf = conf;
+		String driver = "com.mysql.jdbc.Driver";
+		String dbURL = "jdbc:mysql://" + conf.getHost() + ":" + conf.getPort() + "/";
+		this.root = new ConnectionManager("", dbURL, driver, conf.getUsername(), conf.getPassword());
 	}
+
 
 	public void createDatabaseIfNeeded() throws DorianInternalFault {
 
 		try {
 			if (!dbBuilt) {
 				if (!databaseExists(database)) {
-					
-					//Query.update(this.root, "create database " + database+ " COLLATE ascii_bin");
+
+					// Query.update(this.root, "create database " + database+ "
+					// COLLATE ascii_bin");
 					Query.update(this.root, "create database " + database);
 				}
 				if (dorian == null) {
-					dorian = new ConnectionManager(database, root
-							.getUrlPrefix(), root.getDriver(), root.getHost(),
-							root.getPort(), root.getUsername(), root
-									.getPassword());
+					String driver = "com.mysql.jdbc.Driver";
+					String dbURL = "jdbc:mysql://" + conf.getHost() + ":" + conf.getPort() + "/" + database;
+					dorian = new ConnectionManager(database, dbURL, driver, conf.getUsername(), conf.getPassword());
 				}
 				dbBuilt = true;
 			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("An error occured while trying to create the Dorian database ("
-							+ database + ")");
+			fault.setFaultString("An error occured while trying to create the Dorian database (" + database + ")");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -64,6 +70,7 @@ public class Database extends LoggingObject {
 		}
 
 	}
+
 
 	public void destroyDatabase() throws DorianInternalFault {
 		try {
@@ -81,9 +88,7 @@ public class Database extends LoggingObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("An error occured while trying to destroy the Dorian database ("
-							+ database + ")");
+			fault.setFaultString("An error occured while trying to destroy the Dorian database (" + database + ")");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -91,14 +96,14 @@ public class Database extends LoggingObject {
 		}
 	}
 
+
 	public boolean tableExists(String tableName) throws DorianInternalFault {
 		Connection c = null;
 		PreparedStatement stmt = null;
 		ResultSet results = null;
 		try {
 			c = this.dorian.getConnection();
-			stmt = c.prepareStatement("SELECT COUNT(*) FROM " + tableName
-					+ " WHERE 1 = 2");
+			stmt = c.prepareStatement("SELECT COUNT(*) FROM " + tableName + " WHERE 1 = 2");
 			results = stmt.executeQuery();
 			return true; // if table does exist, no rows will ever be
 			// returned
@@ -132,6 +137,7 @@ public class Database extends LoggingObject {
 		}
 	}
 
+
 	public void update(String sql) throws DorianInternalFault {
 		try {
 			Query.update(dorian, sql);
@@ -144,6 +150,7 @@ public class Database extends LoggingObject {
 			throw (DorianInternalFault) helper.getFault();
 		}
 	}
+
 
 	public long insertGetId(String sql) throws DorianInternalFault {
 		try {
@@ -158,13 +165,16 @@ public class Database extends LoggingObject {
 		}
 	}
 
+
 	public void releaseConnection(Connection c) {
 		this.dorian.releaseConnection(c);
 	}
 
+
 	public Connection getConnection() throws DatabaseException {
 		return this.dorian.getConnection();
 	}
+
 
 	private boolean databaseExists(String db) throws DorianInternalFault {
 		boolean exists = false;
@@ -197,13 +207,16 @@ public class Database extends LoggingObject {
 		return exists;
 	}
 
+
 	public int getUsedConnectionCount() {
 		return this.dorian.getUsedConnectionCount();
 	}
 
+
 	public int getRootUsedConnectionCount() {
 		return this.root.getUsedConnectionCount();
 	}
+
 
 	public String getDatabaseName() {
 		return database;

@@ -1,49 +1,63 @@
-<dorian>
-	<resource name="DorianConfiguration" class="gov.nih.nci.cagrid.dorian.service.DorianConfiguration">
-		<dorian-config>
-			<dorian-internal-id>test_dorian</dorian-internal-id>
-		    <database>
-			<name/>
-			<driver>com.mysql.jdbc.Driver</driver>
-            <urlPrefix>jdbc:mysql:</urlPrefix>
-			<host>localhost</host>
-			<port>3306</port>
-			<username>root</username>
-			<password></password>
-			<pool>1</pool>
-		</database>
-		<outgoing-email host="columbus.bmi.ohio-state.edu" port="25" protocol="smtp"/>
-        </dorian-config>
-	</resource>	
-	
-	<resource name="IdPConfiguration" class="gov.nih.nci.cagrid.dorian.service.idp.IdPConfiguration">
-		<idp-config>
-			<uid-length min="4" max="10"/>
-		    <password-length min="6" max="10"/>
-		    <registration-policy class="gov.nih.nci.cagrid.dorian.service.idp.ManualRegistrationPolicy"/>
-		    <asserting-credentials auto="true" renew="true" key-password="idpkey"/>
-		    <!-- <asserting-credentials auto="false" renew="false" cert="" key="" key-password=""/> -->
-		</idp-config>
-	</resource>	
-	
-	<resource name="IFSConfiguration" class="gov.nih.nci.cagrid.dorian.service.ifs.IFSConfiguration">
-		<ifs-config>
-			<idp-name-length min="4" max="10"/>
-			<credentials-valid years="12" months="0" days="0" hours="0" minutes="0" seconds="0"/>
-			<max-proxy-lifetime hours="12" minutes="0" seconds="0"/>
-			<policies>
-				<policy name="Auto Approval/Auto Renewal" class="gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy"/>
-				<policy name="Manual Approval/Auto Renewal" class="gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalAutoRenewalPolicy"/>
-				<policy name="Manual Approval/Manual Renewal" class="gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalPolicy"/>
-				<policy name="Auto Approval/Manual Renewal" class="gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalPolicy"/>
-			</policies>
-		</ifs-config>
-	</resource>	
-		
-	<resource name="DorianCertificateAuthorityConf" class="gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf">
-		<dorian-ca-config>
-		    <ca-password value="password"/>
-		  	<auto-renewal enabled="true" years="0" months="60" days="0" hours="0" minutes="0" seconds="0"/>
-		</dorian-ca-config>
-	</resource>	
-</dorian>
+<?xml version="1.0" encoding="UTF-8"?>
+<DorianConfiguration xmlns="http://cagrid.nci.nih.gov/dorian/conf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dorian="http://cagrid.nci.nih.gov/dorian/conf">
+    <DorianInternalId>TEST_DORIAN</DorianInternalId>
+    <database>
+        <host>localhost</host>
+        <port>3306</port>
+        <username>root</username>
+        <password></password>
+    </database>
+    <IdentityProviderConfiguration>
+        <UIDLength dorian:min="4" dorian:max="10"/>
+        <PasswordLength dorian:min="6" dorian:max="10"/>
+        <RegistrationPolicy>gov.nih.nci.cagrid.dorian.service.idp.ManualRegistrationPolicy</RegistrationPolicy>
+        <AssertingCredentials>
+            <AutoRenew>true</AutoRenew>
+            <KeyPassword>idpkey</KeyPassword>
+        </AssertingCredentials>
+    </IdentityProviderConfiguration>
+    <IdentityFederationConfiguration>
+        <IdentityProviderNameLength dorian:min="3" dorian:max="255"/>
+        <CredentialPolicy>
+            <CredentialLifetime years="1" months="0" days="0" hours="0" minutes="0" seconds="0"/>
+        </CredentialPolicy>
+        <ProxyPolicy>
+            <ProxyLifetime hours="12" minutes="0" seconds="0"/>
+        </ProxyPolicy>
+        <AccountPolicies>
+            <AccountPolicy>
+                <name>Manual Approval / Manual Renewal</name>
+                <classname>gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalPolicy</classname>
+            </AccountPolicy>
+            <AccountPolicy>
+                <name>Manual Approval / Auto Renewal</name>
+                <classname>gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalAutoRenewalPolicy</classname>
+            </AccountPolicy>
+            <AccountPolicy>
+                <name>Auto Approval / Manual Renewal</name>
+                <classname>gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalPolicy</classname>
+            </AccountPolicy>
+            <AccountPolicy>
+                <name>Auto Approval / Auto Renewal</name>
+                <classname>gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy</classname>
+            </AccountPolicy>
+        </AccountPolicies>
+        <!--
+        <CRLPublish>
+            <gts>https://cagrid01.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GTS</gts>
+        </CRLPublish>
+        -->
+    </IdentityFederationConfiguration>
+    <DorianCAConfiguration>
+        <CertificateAuthorityPassword>password</CertificateAuthorityPassword>
+        <AutoCreate>
+            <CASubject>O=OSU,OU=BMI,OU=caGrid,OU=Dorian,OU=localhost,CN=caGrid Dorian CA</CASubject>
+            <lifetime years="10" months="0" days="0" hours="0" minutes="0" seconds="0"/>
+        </AutoCreate>
+        <AutoRenewal years="10" months="0" days="0" hours="0" minutes="0" seconds="0"/>
+    </DorianCAConfiguration>
+</DorianConfiguration>
+
+

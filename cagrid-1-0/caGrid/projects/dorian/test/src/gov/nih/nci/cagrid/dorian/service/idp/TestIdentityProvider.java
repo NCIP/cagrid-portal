@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
+import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
@@ -23,6 +23,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 
 import junit.framework.TestCase;
@@ -37,7 +38,7 @@ import junit.framework.TestCase;
  */
 public class TestIdentityProvider extends TestCase {
 
-	private IdPConfiguration conf;
+	private IdentityProviderConfiguration conf;
 
 	private Database db;
 
@@ -49,10 +50,9 @@ public class TestIdentityProvider extends TestCase {
 	public void testAutomaticRegistration() {
 		IdentityProvider idp = null;
 		try {
-
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
 			idp = new IdentityProvider(conf, db, ca);
-			conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -65,7 +65,7 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				idp.clearDatabase();
 			} catch (Exception e) {
@@ -78,10 +78,9 @@ public class TestIdentityProvider extends TestCase {
 	public void testManualRegistration() {
 		IdentityProvider idp = null;
 		try {
-
+			conf.setRegistrationPolicy(ManualRegistrationPolicy.class.getName());
 			idp = new IdentityProvider(conf, db, ca);
-			conf.setRegistrationPolicy(new ManualRegistrationPolicy());
-			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
+			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -99,7 +98,7 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				idp.clearDatabase();
 			} catch (Exception e) {
@@ -112,10 +111,9 @@ public class TestIdentityProvider extends TestCase {
 	public void testBadRegisterWithIdP() {
 		IdentityProvider idp = null;
 		try {
-
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
 			idp = new IdentityProvider(conf, db, ca);
-			conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
 			// Application a = createApplication();
 			// idp.register(a);
 			// test the password length too long
@@ -152,7 +150,7 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				idp.clearDatabase();
 			} catch (Exception e) {
@@ -165,10 +163,9 @@ public class TestIdentityProvider extends TestCase {
 	public void testBadRemoveIdPUserNoSuchUser() {
 		IdentityProvider idp = null;
 		try {
-
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
 			idp = new IdentityProvider(conf, db, ca);
-			conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -186,7 +183,7 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				idp.clearDatabase();
 			} catch (Exception e) {
@@ -199,10 +196,9 @@ public class TestIdentityProvider extends TestCase {
 	public void testBadRegisterWithIdPTwoIdenticalUsers() {
 		IdentityProvider idp = null;
 		try {
-
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
 			idp = new IdentityProvider(conf, db, ca);
-			conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
 			Application a = createApplication();
 			idp.register(a);
 			Application b = a;
@@ -212,7 +208,7 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				idp.clearDatabase();
 			} catch (Exception e) {
@@ -225,9 +221,9 @@ public class TestIdentityProvider extends TestCase {
 	public void testMultipleUsers() {
 		IdentityProvider idp = null;
 		try {
+			conf.setRegistrationPolicy(ManualRegistrationPolicy.class.getName());
 			idp = new IdentityProvider(conf, db, ca);
-			conf.setRegistrationPolicy(new ManualRegistrationPolicy());
-			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
+			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
 			BasicAuthCredential cred = getAdminCreds();
 			int times = 3;
 			for (int i = 0; i < times; i++) {
@@ -280,7 +276,7 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				idp.clearDatabase();
 			} catch (Exception e) {
@@ -455,8 +451,8 @@ public class TestIdentityProvider extends TestCase {
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = Utils.getCA();
 			InputStream resource = TestCase.class.getResourceAsStream(Constants.IDP_CONFIG);
-			SimpleResourceManager trm = new SimpleResourceManager(resource);
-			this.conf = (IdPConfiguration) trm.getResource(IdPConfiguration.RESOURCE);
+			this.conf = (IdentityProviderConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
+				new InputStreamReader(resource), IdentityProviderConfiguration.class);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

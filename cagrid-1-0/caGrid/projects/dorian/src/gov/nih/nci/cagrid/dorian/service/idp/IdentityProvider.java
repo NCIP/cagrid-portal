@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Crypt;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
+import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.ApplicationReview;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
@@ -24,6 +25,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.security.cert.X509Certificate;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -40,20 +42,20 @@ public class IdentityProvider extends LoggingObject {
 
 	public static String ADMIN_PASSWORD = "password";
 
-	private IdPConfiguration conf;
-
 	private AssertionCredentialsManager assertionManager;
 
 	private CertificateAuthority ca;
 
-	public IdentityProvider(IdPConfiguration conf, Database db,
-			CertificateAuthority ca) throws DorianInternalFault {
+	private IdPRegistrationPolicy registrationPolicy;
+
+
+	public IdentityProvider(IdentityProviderConfiguration conf, Database db, CertificateAuthority ca)
+		throws DorianInternalFault {
 		try {
-			this.conf = conf;
+			this.registrationPolicy = (IdPRegistrationPolicy) Class.forName(conf.getRegistrationPolicy()).newInstance();
 			this.ca = ca;
 			this.userManager = new UserManager(db, conf);
-			this.assertionManager = new AssertionCredentialsManager(conf, ca,
-					db);
+			this.assertionManager = new AssertionCredentialsManager(conf, ca, db);
 
 			if (!this.userManager.userExists(ADMIN_USER_ID)) {
 				IdPUser u = new IdPUser();
@@ -78,8 +80,7 @@ public class IdentityProvider extends LoggingObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Error initializing the Identity Manager Provider.");
+			fault.setFaultString("Error initializing the Identity Manager Provider.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -87,23 +88,21 @@ public class IdentityProvider extends LoggingObject {
 		}
 	}
 
-	public SAMLAssertion authenticate(BasicAuthCredential credential)
-			throws DorianInternalFault, PermissionDeniedFault {
+
+	public SAMLAssertion authenticate(BasicAuthCredential credential) throws DorianInternalFault, PermissionDeniedFault {
 		IdPUser requestor = authenticateAndVerifyUser(credential);
-		return assertionManager.getAuthenticationAssertion(requestor
-				.getUserId(), requestor.getFirstName(),
-				requestor.getLastName(), requestor.getEmail());
+		return assertionManager.getAuthenticationAssertion(requestor.getUserId(), requestor.getFirstName(), requestor
+			.getLastName(), requestor.getEmail());
 	}
+
 
 	public X509Certificate getIdPCertificate() throws DorianInternalFault {
 		return assertionManager.getIdPCertificate();
 	}
 
-	public String register(Application a) throws DorianInternalFault,
-			InvalidUserPropertyFault {
 
-		IdPRegistrationPolicy policy = conf.getRegistrationPolicy();
-		ApplicationReview ar = policy.register(a);
+	public String register(Application a) throws DorianInternalFault, InvalidUserPropertyFault {
+		ApplicationReview ar = this.registrationPolicy.register(a);
 		IdPUserStatus status = ar.getStatus();
 		IdPUserRole role = ar.getRole();
 		String message = ar.getMessage();
@@ -138,27 +137,30 @@ public class IdentityProvider extends LoggingObject {
 		return message;
 	}
 
-	public IdPUser getUser(String requestorUID, String uid)
-			throws DorianInternalFault, PermissionDeniedFault, NoSuchUserFault {
+
+	public IdPUser getUser(String requestorUID, String uid) throws DorianInternalFault, PermissionDeniedFault,
+		NoSuchUserFault {
 		IdPUser requestor = verifyUser(requestorUID);
 		verifyAdministrator(requestor);
 		return this.userManager.getUser(uid);
 	}
 
-	public IdPUser[] findUsers(String requestorUID, IdPUserFilter filter)
-			throws DorianInternalFault, PermissionDeniedFault {
+
+	public IdPUser[] findUsers(String requestorUID, IdPUserFilter filter) throws DorianInternalFault,
+		PermissionDeniedFault {
 		IdPUser requestor = verifyUser(requestorUID);
 		verifyAdministrator(requestor);
 		return this.userManager.getUsers(filter, false);
 	}
 
-	public void updateUser(String requestorUID, IdPUser u)
-			throws DorianInternalFault, PermissionDeniedFault, NoSuchUserFault,
-			InvalidUserPropertyFault {
+
+	public void updateUser(String requestorUID, IdPUser u) throws DorianInternalFault, PermissionDeniedFault,
+		NoSuchUserFault, InvalidUserPropertyFault {
 		IdPUser requestor = verifyUser(requestorUID);
 		verifyAdministrator(requestor);
 		this.userManager.updateUser(u);
 	}
+
 
 	private void verifyAdministrator(IdPUser u) throws PermissionDeniedFault {
 		if (!u.getRole().equals(IdPUserRole.Administrator)) {
@@ -168,8 +170,8 @@ public class IdentityProvider extends LoggingObject {
 		}
 	}
 
-	private IdPUser verifyUser(String uid) throws DorianInternalFault,
-			PermissionDeniedFault {
+
+	private IdPUser verifyUser(String uid) throws DorianInternalFault, PermissionDeniedFault {
 		try {
 			IdPUser u = this.userManager.getUser(uid);
 			verifyUser(u);
@@ -181,8 +183,8 @@ public class IdentityProvider extends LoggingObject {
 		}
 	}
 
-	private void verifyUser(IdPUser u) throws DorianInternalFault,
-			PermissionDeniedFault {
+
+	private void verifyUser(IdPUser u) throws DorianInternalFault, PermissionDeniedFault {
 
 		if (!u.getStatus().equals(IdPUserStatus.Active)) {
 			if (u.getStatus().equals(IdPUserStatus.Suspended)) {
@@ -192,14 +194,12 @@ public class IdentityProvider extends LoggingObject {
 
 			} else if (u.getStatus().equals(IdPUserStatus.Rejected)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault
-						.setFaultString("The application for the account was rejected.");
+				fault.setFaultString("The application for the account was rejected.");
 				throw fault;
 
 			} else if (u.getStatus().equals(IdPUserStatus.Pending)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault
-						.setFaultString("The application for this account has not yet been reviewed.");
+				fault.setFaultString("The application for this account has not yet been reviewed.");
 				throw fault;
 			} else {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
@@ -210,8 +210,9 @@ public class IdentityProvider extends LoggingObject {
 
 	}
 
-	private IdPUser authenticateAndVerifyUser(BasicAuthCredential credential)
-			throws DorianInternalFault, PermissionDeniedFault {
+
+	private IdPUser authenticateAndVerifyUser(BasicAuthCredential credential) throws DorianInternalFault,
+		PermissionDeniedFault {
 		try {
 			IdPUser u = this.userManager.getUser(credential.getUserId());
 			if (!u.getPassword().equals(Crypt.crypt(credential.getPassword()))) {
@@ -229,12 +230,13 @@ public class IdentityProvider extends LoggingObject {
 
 	}
 
-	public void removeUser(String requestorUID, String userId)
-			throws DorianInternalFault, PermissionDeniedFault {
+
+	public void removeUser(String requestorUID, String userId) throws DorianInternalFault, PermissionDeniedFault {
 		IdPUser requestor = verifyUser(requestorUID);
 		verifyAdministrator(requestor);
 		userManager.removeUser(userId);
 	}
+
 
 	public void clearDatabase() throws DorianInternalFault {
 		assertionManager.clearDatabase();

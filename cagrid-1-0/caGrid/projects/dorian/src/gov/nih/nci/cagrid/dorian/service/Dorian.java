@@ -3,9 +3,10 @@ package gov.nih.nci.cagrid.dorian.service;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
-import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
+import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
+import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
@@ -20,11 +21,10 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.dorian.service.idp.IdPConfiguration;
 import gov.nih.nci.cagrid.dorian.service.idp.IdentityProvider;
 import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.dorian.service.ifs.IFS;
-import gov.nih.nci.cagrid.dorian.service.ifs.IFSConfiguration;
+import gov.nih.nci.cagrid.dorian.service.ifs.IFSDefaults;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault;
@@ -37,14 +37,8 @@ import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
-
-import org.projectmobius.common.MobiusConfigurator;
-import org.projectmobius.common.MobiusResourceManager;
 
 
 /**
@@ -54,7 +48,7 @@ import org.projectmobius.common.MobiusResourceManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class Dorian extends MobiusResourceManager {
+public class Dorian {
 
 	private Database db;
 
@@ -68,28 +62,21 @@ public class Dorian extends MobiusResourceManager {
 
 	private IFS ifs;
 
-	private IFSConfiguration ifsConfiguration;
+	private IdentityFederationConfiguration ifsConfiguration;
+
+	private DorianConfiguration configuration;
 
 
-	public Dorian(String confFile, String serviceId) throws DorianInternalFault {
-		this(getFileInputStream(confFile), serviceId);
-	}
-
-
-	public Dorian(InputStream in, String serviceId) throws DorianInternalFault {
+	public Dorian(DorianConfiguration conf, String serviceId) throws DorianInternalFault {
 		try {
-			MobiusConfigurator.parseMobiusConfiguration(in, this);
 
+			this.configuration = conf;
 			IdentityProvider.ADMIN_USER_ID = IDP_ADMIN_USER_ID;
 			IdentityProvider.ADMIN_PASSWORD = IDP_ADMIN_PASSWORD;
-
-			this.db = new Database(getConfiguration().getConnectionManager(), getConfiguration().getDorianInternalId());
+			this.db = new Database(conf.getDatabase(), getConfiguration().getDorianInternalId());
 			this.db.createDatabaseIfNeeded();
-			DorianCertificateAuthorityConf caconf = (DorianCertificateAuthorityConf) getResource(DorianCertificateAuthorityConf.RESOURCE);
-			this.ca = new DorianCertificateAuthority(db, caconf);
-
-			IdPConfiguration idpConf = (IdPConfiguration) getResource(IdPConfiguration.RESOURCE);
-			this.identityProvider = new IdentityProvider(idpConf, db, ca);
+			this.ca = new DorianCertificateAuthority(db, configuration.getDorianCAConfiguration());
+			this.identityProvider = new IdentityProvider(configuration.getIdentityProviderConfiguration(), db, ca);
 
 			TrustedIdP idp = new TrustedIdP();
 			idp.setName(serviceId);
@@ -125,30 +112,13 @@ public class Dorian extends MobiusResourceManager {
 			usr.setFirstName(idpUsr.getFirstName());
 			usr.setLastName(idpUsr.getLastName());
 			usr.setEmail(idpUsr.getEmail());
-			// usr.setUID(IDP_ADMIN_USER_ID);
-			// usr.setEmail(idpUser.getEmail());
 			usr.setUserStatus(IFSUserStatus.Active);
 			usr.setUserRole(IFSUserRole.Administrator);
 
-			ifsConfiguration = (IFSConfiguration) getResource(IFSConfiguration.RESOURCE);
-			ifsConfiguration.setInitalTrustedIdP(idp);
-			ifsConfiguration.setInitialUser(usr);
-			this.ifs = new IFS(ifsConfiguration, db, ca);
+			ifsConfiguration = configuration.getIdentityFederationConfiguration();
+			IFSDefaults defaults = new IFSDefaults(idp, usr);
+			this.ifs = new IFS(ifsConfiguration, db, ca, defaults);
 
-		} catch (Exception e) {
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("An unexpected error occurred in configuring the service.");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
-		}
-	}
-
-
-	private static FileInputStream getFileInputStream(String file) throws DorianInternalFault {
-		try {
-			return new FileInputStream(new File(file));
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("An unexpected error occurred in configuring the service.");
@@ -161,7 +131,7 @@ public class Dorian extends MobiusResourceManager {
 
 
 	public DorianConfiguration getConfiguration() {
-		return (DorianConfiguration) this.getResource(DorianConfiguration.RESOURCE);
+		return configuration;
 	}
 
 

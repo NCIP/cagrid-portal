@@ -1,14 +1,14 @@
 package gov.nih.nci.cagrid.dorian.ca.tools;
 
-import gov.nih.nci.cagrid.common.SimpleResourceManager;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
-import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
 import gov.nih.nci.cagrid.dorian.common.Database;
-import gov.nih.nci.cagrid.dorian.service.DorianConfiguration;
+import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.File;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -19,25 +19,18 @@ import java.io.File;
  */
 public class WriteCACertificate {
 
-
 	public static void main(String[] args) {
 
-
 		try {
-		
-				String configFile = "etc/dorian-conf.xml";
-				SimpleResourceManager rm = new SimpleResourceManager(configFile);
-				DorianCertificateAuthorityConf conf = (DorianCertificateAuthorityConf) rm
-						.getResource(DorianCertificateAuthorityConf.RESOURCE);
-				DorianConfiguration c = (DorianConfiguration) rm
-				.getResource(DorianConfiguration.RESOURCE);
-				Database db = new Database(c
-						.getConnectionManager(), c
-						.getDorianInternalId());
-				db.createDatabaseIfNeeded();
-				DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
-				CertUtil.writeCertificate(ca.getCACertificate(), new File("dorian-ca-cert.pem"));
-				KeyUtil.writePrivateKey(ca.getCAPrivateKey(), new File("dorian-ca-key.pem"));
+
+			String configFile = "etc/dorian-configuration.xml";
+			DorianConfiguration c = (DorianConfiguration) Utils.deserializeDocument(configFile,
+				gov.nih.nci.cagrid.dorian.conf.DorianConfiguration.class);
+			Database db = new Database(c.getDatabase(), c.getDorianInternalId());
+			db.createDatabaseIfNeeded();
+			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, c.getDorianCAConfiguration());
+			CertUtil.writeCertificate(ca.getCACertificate(), new File("dorian-ca-cert.pem"));
+			KeyUtil.writePrivateKey(ca.getCAPrivateKey(), new File("dorian-ca-key.pem"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);

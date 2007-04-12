@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
+import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
+import gov.nih.nci.cagrid.dorian.conf.Length;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
@@ -444,10 +446,13 @@ public class TestTrustedIdPManager extends TestCase {
 			org.apache.xml.security.Init.init();
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
-			IFSConfiguration conf = new IFSConfiguration();
-			conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
-			conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
-			conf.setUserPolicies(Utils.getUserPolicies());
+			IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
+
+			Length len = new Length();
+			len.setMin(MIN_NAME_LENGTH);
+			len.setMax(MAX_NAME_LENGTH);
+			conf.setIdentityProviderNameLength(len);
+			conf.setAccountPolicies(Utils.getAccountPolicies());
 			ca = Utils.getCA(db);
 			tm = new TrustedIdPManager(conf, db);
 			tm.clearDatabase();

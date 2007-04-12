@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
+import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
@@ -51,16 +52,17 @@ public class IFS extends LoggingObject {
 
 	private TrustedIdPManager tm;
 
-	private IFSConfiguration conf;
+	private IdentityFederationConfiguration conf;
 
 	private CertificateAuthority ca;
 
 
-	public IFS(IFSConfiguration conf, Database db, CertificateAuthority ca) throws DorianInternalFault {
+	public IFS(IdentityFederationConfiguration conf, Database db, CertificateAuthority ca, IFSDefaults defaults)
+		throws DorianInternalFault {
 		this.conf = conf;
 		this.ca = ca;
 		tm = new TrustedIdPManager(conf, db);
-		um = new UserManager(db, conf, ca, tm);
+		um = new UserManager(db, conf, ca, tm, defaults);
 		um.buildDatabase();
 		um.publishCRL();
 	}
@@ -70,7 +72,7 @@ public class IFS extends LoggingObject {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
-		return conf.getUserPolicies();
+		return tm.getAccountPolicies();
 	}
 
 
@@ -315,19 +317,23 @@ public class IFS extends LoggingObject {
 		}
 
 		// Validate that the proxy is of valid length
-		if (IFSUtils.getProxyValid(lifetime).after(conf.getMaxProxyLifetime())) {
+
+		
+
+		if (IFSUtils.getProxyValid(lifetime).after(IFSUtils.getMaxProxyLifetime(conf))) {
 			InvalidProxyFault fault = new InvalidProxyFault();
 			fault.setFaultString("The proxy valid length exceeds the maximum proxy valid length (hrs="
-				+ conf.getMaxProxyLifetimeHours() + ", mins=" + conf.getMaxProxyLifetimeMinutes() + ", sec="
-				+ conf.getMaxProxyLifetimeSeconds() + ")");
+				+ conf.getProxyPolicy().getProxyLifetime().getHours() + ", mins="
+				+ conf.getProxyPolicy().getProxyLifetime().getMinutes() + ", sec="
+				+ conf.getProxyPolicy().getProxyLifetime().getSeconds() + ")");
 			throw fault;
 		}
 
 		// Run the policy
-		UserPolicy policy = null;
+		AccountPolicy policy = null;
 		try {
 			Class c = Class.forName(idp.getUserPolicyClass());
-			policy = (UserPolicy) c.newInstance();
+			policy = (AccountPolicy) c.newInstance();
 			policy.configure(conf, um);
 
 		} catch (Exception e) {

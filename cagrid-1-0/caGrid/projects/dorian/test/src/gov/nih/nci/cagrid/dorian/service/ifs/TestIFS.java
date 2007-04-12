@@ -5,6 +5,11 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
+import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
+import gov.nih.nci.cagrid.dorian.conf.CredentialPolicy;
+import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
+import gov.nih.nci.cagrid.dorian.conf.Length;
+import gov.nih.nci.cagrid.dorian.conf.ProxyPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
@@ -78,10 +83,10 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IFSConfiguration conf = getConf();
-			conf.setInitalTrustedIdP(idp.getIdp());
-
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
 			String uid = "user";
 			String adminSubject = UserManager.getUserSubject(ca.getCACertificate().getSubjectDN().getName(), idp
 				.getIdp().getId(), INITIAL_ADMIN);
@@ -130,9 +135,10 @@ public class TestIFS extends TestCase {
 		try {
 			int times = 3;
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IFSConfiguration conf = getConf();
-			conf.setInitalTrustedIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
 			String uidPrefix = "user";
 			String adminSubject = UserManager.getUserSubject(ca.getCACertificate().getSubjectDN().getName(), idp
 				.getIdp().getId(), INITIAL_ADMIN);
@@ -197,9 +203,10 @@ public class TestIFS extends TestCase {
 		try {
 
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IFSConfiguration conf = getConf();
-			conf.setInitalTrustedIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
@@ -226,9 +233,10 @@ public class TestIFS extends TestCase {
 
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			idp.getIdp().setStatus(TrustedIdPStatus.Suspended);
-			IFSConfiguration conf = getConf();
-			conf.setInitalTrustedIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
@@ -260,12 +268,13 @@ public class TestIFS extends TestCase {
 			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
-			IFSConfiguration conf = getExpiringCredentialsConf();
-			conf.setInitalTrustedIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
-				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
-			
+				.getSubjectDN().getName(), idp.getIdp().getId(), defaults.getDefaultUser().getUID()));
+
 			// give a chance for others to run right before we enter timing
 			// sensitive code
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
@@ -277,7 +286,7 @@ public class TestIFS extends TestCase {
 
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			try {
-				
+
 				PublicKey publicKey2 = pair2.getPublic();
 				ifs
 					.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort(),
@@ -307,12 +316,13 @@ public class TestIFS extends TestCase {
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpManualApprove("My IdP");
-			IFSConfiguration conf = getExpiringCredentialsConf();
-			conf.setInitalTrustedIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
-				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
-		
+				.getSubjectDN().getName(), idp.getIdp().getId(), defaults.getDefaultUser().getUID()));
+
 			try {
 				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
 				fail("Should have thrown exception attempting to create proxy.");
@@ -340,15 +350,16 @@ public class TestIFS extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
-			
+
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			String username = "user";
-			IFSConfiguration conf = getExpiringCredentialsConf();
-			conf.setInitalTrustedIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
-				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
-		
+				.getSubjectDN().getName(), idp.getIdp().getId(), defaults.getDefaultUser().getUID()));
+
 			PublicKey publicKey2 = pair2.getPublic();
 			// give a chance for others to run right before we enter timing
 			// sensitive code
@@ -360,7 +371,7 @@ public class TestIFS extends TestCase {
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			IFSUser before = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
-			
+
 			certs = ifs.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort(),
 				DELEGATION_LENGTH);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
@@ -391,11 +402,12 @@ public class TestIFS extends TestCase {
 			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpManualApproveAutoRenew("My IdP");
-			IFSConfiguration conf = getExpiringCredentialsConf();
-			conf.setInitalTrustedIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
-				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
+				.getSubjectDN().getName(), idp.getIdp().getId(), defaults.getDefaultUser().getUID()));
 
 			try {
 				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
@@ -444,9 +456,10 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IFSConfiguration conf = getConf();
-			conf.setInitalTrustedIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
 			Thread.sleep(500);
 			try {
 				ProxyLifetime valid = new ProxyLifetime();
@@ -477,9 +490,10 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IFSConfiguration conf = getConf();
-			conf.setInitalTrustedIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
@@ -508,9 +522,11 @@ public class TestIFS extends TestCase {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IdPContainer idp2 = this.getTrustedIdpAutoApproveAutoRenew("My IdP 2");
 
-			IFSConfiguration conf = getConf();
-			conf.setInitalTrustedIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
+
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
@@ -536,9 +552,10 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IFSConfiguration conf = getConf();
-			conf.setInitalTrustedIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
@@ -564,11 +581,12 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp0 = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IFSConfiguration conf = getExpiringCredentialsConf();
-			conf.setInitalTrustedIdP(idp0.getIdp());
-			ifs = new IFS(conf, db, ca);
+			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp0.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
-				.getSubjectDN().getName(), idp0.getIdp().getId(), conf.getInitialUser().getUID()));
+				.getSubjectDN().getName(), idp0.getIdp().getId(), defaults.getDefaultUser().getUID()));
 			int times = 3;
 			String baseName = "Test IdP";
 			String baseUpdateName = "Updated IdP";
@@ -617,20 +635,65 @@ public class TestIFS extends TestCase {
 	}
 
 
-	private IFSConfiguration getConf() throws Exception {
-		IFSConfiguration conf = new IFSConfiguration();
-		conf.setCredentialsValidYears(1);
-		conf.setCredentialsValidMonths(0);
-		conf.setCredentialsValidDays(0);
-		conf.setCredentialsValidHours(0);
-		conf.setCredentialsValidMinutes(0);
-		conf.setCredentialsValidSeconds(0);
-		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
-		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
-		conf.setMaxProxyLifetimeHours(12);
-		conf.setMaxProxyLifetimeMinutes(0);
-		conf.setMaxProxyLifetimeSeconds(0);
-		conf.setUserPolicies(Utils.getUserPolicies());
+	private IdentityFederationConfiguration getConf() throws Exception {
+		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
+		CredentialPolicy cp = new CredentialPolicy();
+		CredentialLifetime l = new CredentialLifetime();
+		l.setYears(1);
+		l.setMonths(0);
+		l.setDays(0);
+		l.setHours(0);
+		l.setMinutes(0);
+		l.setSeconds(0);
+		cp.setCredentialLifetime(l);
+		conf.setCredentialPolicy(cp);
+		Length len = new Length();
+		len.setMin(MIN_NAME_LENGTH);
+		len.setMax(MAX_NAME_LENGTH);
+		conf.setIdentityProviderNameLength(len);
+
+		ProxyPolicy policy = new ProxyPolicy();
+		gov.nih.nci.cagrid.dorian.conf.ProxyLifetime pl = new gov.nih.nci.cagrid.dorian.conf.ProxyLifetime();
+		pl.setHours(12);
+		pl.setMinutes(0);
+		pl.setSeconds(0);
+		policy.setProxyLifetime(pl);
+		conf.setProxyPolicy(policy);
+		conf.setAccountPolicies(Utils.getAccountPolicies());
+		return conf;
+	}
+
+
+	private IdentityFederationConfiguration getExpiringCredentialsConf() throws Exception {
+		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
+		CredentialPolicy cp = new CredentialPolicy();
+		CredentialLifetime l = new CredentialLifetime();
+		l.setYears(0);
+		l.setMonths(0);
+		l.setDays(0);
+		l.setHours(0);
+		l.setMinutes(0);
+		l.setSeconds(SHORT_CREDENTIALS_VALID);
+		cp.setCredentialLifetime(l);
+		conf.setCredentialPolicy(cp);
+		Length len = new Length();
+		len.setMin(MIN_NAME_LENGTH);
+		len.setMax(MAX_NAME_LENGTH);
+		conf.setIdentityProviderNameLength(len);
+
+		ProxyPolicy policy = new ProxyPolicy();
+		gov.nih.nci.cagrid.dorian.conf.ProxyLifetime pl = new gov.nih.nci.cagrid.dorian.conf.ProxyLifetime();
+		pl.setHours(12);
+		pl.setMinutes(0);
+		pl.setSeconds(0);
+		policy.setProxyLifetime(pl);
+		conf.setProxyPolicy(policy);
+		conf.setAccountPolicies(Utils.getAccountPolicies());
+		return conf;
+	}
+
+
+	private IFSDefaults getDefaults() throws Exception {
 		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP").getIdp();
 		IFSUser usr = new IFSUser();
 		usr.setUID(INITIAL_ADMIN);
@@ -639,37 +702,7 @@ public class TestIFS extends TestCase {
 		usr.setEmail(INITIAL_ADMIN + "@test.com");
 		usr.setUserStatus(IFSUserStatus.Active);
 		usr.setUserRole(IFSUserRole.Administrator);
-		conf.setInitalTrustedIdP(idp);
-		conf.setInitialUser(usr);
-		return conf;
-	}
-
-
-	private IFSConfiguration getExpiringCredentialsConf() throws Exception {
-		IFSConfiguration conf = new IFSConfiguration();
-		conf.setCredentialsValidYears(0);
-		conf.setCredentialsValidMonths(0);
-		conf.setCredentialsValidDays(0);
-		conf.setCredentialsValidHours(0);
-		conf.setCredentialsValidMinutes(0);
-		conf.setCredentialsValidSeconds(SHORT_CREDENTIALS_VALID);
-		conf.setMinimumIdPNameLength(MIN_NAME_LENGTH);
-		conf.setMaximumIdPNameLength(MAX_NAME_LENGTH);
-		conf.setMaxProxyLifetimeHours(12);
-		conf.setMaxProxyLifetimeMinutes(0);
-		conf.setMaxProxyLifetimeSeconds(0);
-		conf.setUserPolicies(Utils.getUserPolicies());
-		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP").getIdp();
-		IFSUser usr = new IFSUser();
-		usr.setUID("inital_admin");
-		usr.setFirstName("Mr");
-		usr.setLastName("Admin");
-		usr.setEmail("inital_admin@test.com");
-		usr.setUserStatus(IFSUserStatus.Active);
-		usr.setUserRole(IFSUserRole.Administrator);
-		conf.setInitalTrustedIdP(idp);
-		conf.setInitialUser(usr);
-		return conf;
+		return new IFSDefaults(idp, usr);
 	}
 
 

@@ -1,11 +1,15 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.common.Runner;
+import gov.nih.nci.cagrid.common.ThreadManager;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
+import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
+import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.CredentialsFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
@@ -38,8 +42,7 @@ import java.util.List;
 
 import org.bouncycastle.asn1.x509.CRLReason;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.projectmobius.common.MobiusPoolManager;
-import org.projectmobius.common.MobiusRunnable;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -58,35 +61,39 @@ public class UserManager extends LoggingObject {
 
 	private CredentialsManager credentialsManager;
 
-	private IFSConfiguration conf;
+	private IdentityFederationConfiguration conf;
 
 	private CertificateAuthority ca;
 
 	private TrustedIdPManager tm;
 
-	private MobiusPoolManager poolManager;
+	private ThreadManager poolManager;
 
 	private Object mutex = new Object();
 
-	public UserManager(Database db, IFSConfiguration conf,
-			CertificateAuthority ca, TrustedIdPManager tm) {
+	private IFSDefaults defaults;
+
+
+	public UserManager(Database db, IdentityFederationConfiguration conf, CertificateAuthority ca,
+		TrustedIdPManager tm, IFSDefaults defaults) {
 		this.db = db;
 		this.tm = tm;
+		this.defaults = defaults;
 		this.credentialsManager = new CredentialsManager(db);
 		this.conf = conf;
 		this.ca = ca;
-		poolManager = new MobiusPoolManager();
+		poolManager = new ThreadManager();
 	}
 
-	public synchronized boolean determineIfUserExists(long idpId, String uid)
-			throws DorianInternalFault {
+
+	public synchronized boolean determineIfUserExists(long idpId, String uid) throws DorianInternalFault {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select count(*) from "
-					+ USERS_TABLE + " WHERE IDP_ID= ? AND UID= ?");
+			PreparedStatement s = c.prepareStatement("select count(*) from " + USERS_TABLE
+				+ " WHERE IDP_ID= ? AND UID= ?");
 			s.setLong(1, idpId);
 			s.setString(2, uid);
 
@@ -112,20 +119,19 @@ public class UserManager extends LoggingObject {
 		return exists;
 	}
 
+
 	private String getCredentialsManagerUID(long idpId, String uid) {
 		return "[IdPId=" + idpId + ", UID=" + uid + "]";
 	}
 
-	public PrivateKey getUsersPrivateKey(IFSUser user)
-			throws DorianInternalFault {
+
+	public PrivateKey getUsersPrivateKey(IFSUser user) throws DorianInternalFault {
 		try {
-			return this.credentialsManager.getPrivateKey(
-					getCredentialsManagerUID(user.getIdPId(), user.getUID()),
-					null);
+			return this.credentialsManager
+				.getPrivateKey(getCredentialsManagerUID(user.getIdPId(), user.getUID()), null);
 		} catch (InvalidPasswordFault e) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Error loading the user " + user.getGridId()
-					+ "'s private key.");
+			fault.setFaultString("Error loading the user " + user.getGridId() + "'s private key.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -133,10 +139,9 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	public synchronized IFSUser renewUserCredentials(IFSUser user)
-			throws DorianInternalFault, InvalidUserFault {
-		X509Certificate cert = createUserCredentials(user.getIdPId(), user
-				.getUID());
+
+	public synchronized IFSUser renewUserCredentials(IFSUser user) throws DorianInternalFault, InvalidUserFault {
+		X509Certificate cert = createUserCredentials(user.getIdPId(), user.getUID());
 		user.setGridId(subjectToIdentity(cert.getSubjectDN().getName()));
 		try {
 			this.updateUser(user);
@@ -145,21 +150,16 @@ public class UserManager extends LoggingObject {
 				publishCRL();
 			}
 		} catch (InvalidUserFault iuf) {
-			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
-					user.getIdPId(), user.getUID()));
+			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
 			throw iuf;
 		} catch (DorianInternalFault gif) {
-			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
-					user.getIdPId(), user.getUID()));
+			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
 			throw gif;
 		}
 		try {
-			user
-					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(
-							CertUtil.writeCertificate(cert)));
+			user.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 		} catch (IOException ioe) {
-			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
-					user.getIdPId(), user.getUID()));
+			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error renewing credentials.");
 			FaultHelper helper = new FaultHelper(fault);
@@ -171,6 +171,7 @@ public class UserManager extends LoggingObject {
 		return user;
 	}
 
+
 	public static String getUserSubject(String caSubject, long idpId, String uid) {
 		int caindex = caSubject.lastIndexOf(",");
 		String caPreSub = caSubject.substring(0, caindex);
@@ -178,28 +179,26 @@ public class UserManager extends LoggingObject {
 		return sub;
 	}
 
-	private synchronized X509Certificate createUserCredentials(long idpId,
-			String uid) throws DorianInternalFault {
+
+	private synchronized X509Certificate createUserCredentials(long idpId, String uid) throws DorianInternalFault {
 		try {
 
 			String caSubject = ca.getCACertificate().getSubjectDN().getName();
 			String sub = getUserSubject(caSubject, idpId, uid);
 			Calendar c = new GregorianCalendar();
 			Date start = c.getTime();
-			Date end = conf.getCredentialsValid();
+			CredentialLifetime lifetime = conf.getCredentialPolicy().getCredentialLifetime();
+			Date end = gov.nih.nci.cagrid.dorian.common.Utils.getExpiredDate(lifetime);
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
 			}
 
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 
-			PKCS10CertificationRequest req = CertUtil
-					.generateCertficateRequest(sub, pair);
+			PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(sub, pair);
 			X509Certificate cert = ca.requestCertificate(req, start, end);
-			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(
-					idpId, uid));
-			this.credentialsManager.addCredentials(getCredentialsManagerUID(
-					idpId, uid), null, cert, pair.getPrivate());
+			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(idpId, uid));
+			this.credentialsManager.addCredentials(getCredentialsManagerUID(idpId, uid), null, cert, pair.getPrivate());
 			return cert;
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
@@ -212,15 +211,14 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	public synchronized IFSUser getUser(long idpId, String uid)
-			throws DorianInternalFault, InvalidUserFault {
+
+	public synchronized IFSUser getUser(long idpId, String uid) throws DorianInternalFault, InvalidUserFault {
 		this.buildDatabase();
 		IFSUser user = new IFSUser();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select * from "
-					+ USERS_TABLE + " WHERE IDP_ID= ? AND UID= ?");
+			PreparedStatement s = c.prepareStatement("select * from " + USERS_TABLE + " WHERE IDP_ID= ? AND UID= ?");
 			s.setLong(1, idpId);
 			s.setString(2, uid);
 			ResultSet rs = s.executeQuery();
@@ -229,8 +227,7 @@ public class UserManager extends LoggingObject {
 				user.setUID(rs.getString("UID"));
 				user.setGridId(rs.getString("GID"));
 				String firstName = rs.getString("FIRST_NAME");
-				if ((firstName != null)
-						&& (!firstName.equalsIgnoreCase("null"))) {
+				if ((firstName != null) && (!firstName.equalsIgnoreCase("null"))) {
 					user.setFirstName(firstName);
 				}
 
@@ -242,21 +239,16 @@ public class UserManager extends LoggingObject {
 				if ((email != null) && (!email.equals("null"))) {
 					user.setEmail(email);
 				}
-				user.setUserStatus(IFSUserStatus.fromValue(rs
-						.getString("STATUS")));
+				user.setUserStatus(IFSUserStatus.fromValue(rs.getString("STATUS")));
 				String role = rs.getString("ROLE");
 				user.setUserRole(IFSUserRole.fromValue(role));
-				X509Certificate cert = credentialsManager
-						.getCertificate(getCredentialsManagerUID(user
-								.getIdPId(), user.getUID()));
+				X509Certificate cert = credentialsManager.getCertificate(getCredentialsManagerUID(user.getIdPId(), user
+					.getUID()));
 				user
-						.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(
-								CertUtil.writeCertificate(cert)));
+					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 			} else {
 				InvalidUserFault fault = new InvalidUserFault();
-				fault.setFaultString("No such user "
-						+ getCredentialsManagerUID(user.getIdPId(), user
-								.getUID()));
+				fault.setFaultString("No such user " + getCredentialsManagerUID(user.getIdPId(), user.getUID()));
 				throw fault;
 
 			}
@@ -268,7 +260,7 @@ public class UserManager extends LoggingObject {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Error, could not obtain the user "
-					+ getCredentialsManagerUID(user.getIdPId(), user.getUID()));
+				+ getCredentialsManagerUID(user.getIdPId(), user.getUID()));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -279,15 +271,14 @@ public class UserManager extends LoggingObject {
 		return user;
 	}
 
-	public synchronized IFSUser getUser(String gridId)
-			throws DorianInternalFault, InvalidUserFault {
+
+	public synchronized IFSUser getUser(String gridId) throws DorianInternalFault, InvalidUserFault {
 		this.buildDatabase();
 		IFSUser user = new IFSUser();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select * from "
-					+ USERS_TABLE + " WHERE GID= ?");
+			PreparedStatement s = c.prepareStatement("select * from " + USERS_TABLE + " WHERE GID= ?");
 			s.setString(1, gridId);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -295,8 +286,7 @@ public class UserManager extends LoggingObject {
 				user.setUID(rs.getString("UID"));
 				user.setGridId(rs.getString("GID"));
 				String firstName = rs.getString("FIRST_NAME");
-				if ((firstName != null)
-						&& (!firstName.equalsIgnoreCase("null"))) {
+				if ((firstName != null) && (!firstName.equalsIgnoreCase("null"))) {
 					user.setFirstName(firstName);
 				}
 
@@ -308,16 +298,13 @@ public class UserManager extends LoggingObject {
 				if ((email != null) && (!email.equalsIgnoreCase("null"))) {
 					user.setEmail(email);
 				}
-				user.setUserStatus(IFSUserStatus.fromValue(rs
-						.getString("STATUS")));
+				user.setUserStatus(IFSUserStatus.fromValue(rs.getString("STATUS")));
 				String role = rs.getString("ROLE");
 				user.setUserRole(IFSUserRole.fromValue(role));
-				X509Certificate cert = credentialsManager
-						.getCertificate(getCredentialsManagerUID(user
-								.getIdPId(), user.getUID()));
+				X509Certificate cert = credentialsManager.getCertificate(getCredentialsManagerUID(user.getIdPId(), user
+					.getUID()));
 				user
-						.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(
-								CertUtil.writeCertificate(cert)));
+					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 			} else {
 				InvalidUserFault fault = new InvalidUserFault();
 				fault.setFaultString("No such user " + gridId);
@@ -331,8 +318,7 @@ public class UserManager extends LoggingObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Unexpected Error, could not obtain the user "
-					+ gridId);
+			fault.setFaultString("Unexpected Error, could not obtain the user " + gridId);
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -343,8 +329,8 @@ public class UserManager extends LoggingObject {
 		return user;
 	}
 
-	public synchronized IFSUser[] getUsers(IFSUserFilter filter)
-			throws DorianInternalFault {
+
+	public synchronized IFSUser[] getUsers(IFSUserFilter filter) throws DorianInternalFault {
 
 		this.buildDatabase();
 		Connection c = null;
@@ -354,9 +340,9 @@ public class UserManager extends LoggingObject {
 			PreparedStatement s = null;
 			if (filter != null) {
 				s = c
-						.prepareStatement("select * from  "
-								+ USERS_TABLE
-								+ " WHERE IDP_ID>= ? AND IDP_ID<= ? AND UID LIKE ? AND GID LIKE ? AND STATUS LIKE ? AND ROLE LIKE ? AND FIRST_NAME LIKE ? AND LAST_NAME LIKE ? AND EMAIL LIKE ?");
+					.prepareStatement("select * from  "
+						+ USERS_TABLE
+						+ " WHERE IDP_ID>= ? AND IDP_ID<= ? AND UID LIKE ? AND GID LIKE ? AND STATUS LIKE ? AND ROLE LIKE ? AND FIRST_NAME LIKE ? AND LAST_NAME LIKE ? AND EMAIL LIKE ?");
 
 				if (filter.getIdPId() > 0) {
 					s.setLong(1, filter.getIdPId());
@@ -418,8 +404,7 @@ public class UserManager extends LoggingObject {
 				user.setUID(rs.getString("UID"));
 				user.setGridId(rs.getString("GID"));
 				String firstName = rs.getString("FIRST_NAME");
-				if ((firstName != null)
-						&& (!firstName.equalsIgnoreCase("null"))) {
+				if ((firstName != null) && (!firstName.equalsIgnoreCase("null"))) {
 					user.setFirstName(firstName);
 				}
 
@@ -431,16 +416,13 @@ public class UserManager extends LoggingObject {
 				if ((email != null) && (!email.equals("null"))) {
 					user.setEmail(email);
 				}
-				user.setUserStatus(IFSUserStatus.fromValue(rs
-						.getString("STATUS")));
+				user.setUserStatus(IFSUserStatus.fromValue(rs.getString("STATUS")));
 				String role = rs.getString("ROLE");
 				user.setUserRole(IFSUserRole.fromValue(role));
-				X509Certificate cert = credentialsManager
-						.getCertificate(getCredentialsManagerUID(user
-								.getIdPId(), user.getUID()));
+				X509Certificate cert = credentialsManager.getCertificate(getCredentialsManagerUID(user.getIdPId(), user
+					.getUID()));
 				user
-						.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(
-								CertUtil.writeCertificate(cert)));
+					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 				users.add(user);
 			}
 			rs.close();
@@ -455,8 +437,7 @@ public class UserManager extends LoggingObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Unexpected Error, could not obtain a list of users");
+			fault.setFaultString("Unexpected Error, could not obtain a list of users");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -466,22 +447,18 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	public synchronized IFSUser addUser(IFSUser user)
-			throws DorianInternalFault, CredentialsFault, InvalidUserFault {
+
+	public synchronized IFSUser addUser(IFSUser user) throws DorianInternalFault, CredentialsFault, InvalidUserFault {
 		this.buildDatabase();
 		if (!determineIfUserExists(user.getIdPId(), user.getUID())) {
-			X509Certificate cert = createUserCredentials(user.getIdPId(), user
-					.getUID());
+			X509Certificate cert = createUserCredentials(user.getIdPId(), user.getUID());
 			Connection c = null;
 			try {
 
 				// Write method for creating and setting a users credentials
 				user
-						.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(
-								CertUtil.writeCertificate(cert)));
-				user
-						.setGridId(subjectToIdentity(cert.getSubjectDN()
-								.toString()));
+					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
+				user.setGridId(subjectToIdentity(cert.getSubjectDN().toString()));
 				user.setUserRole(IFSUserRole.Non_Administrator);
 				user.setUserStatus(IFSUserStatus.Pending);
 				try {
@@ -496,10 +473,8 @@ public class UserManager extends LoggingObject {
 				validateSpecifiedField("First Name", user.getFirstName());
 				validateSpecifiedField("Last Name", user.getLastName());
 				c = db.getConnection();
-				PreparedStatement s = c
-						.prepareStatement("INSERT INTO "
-								+ USERS_TABLE
-								+ " SET IDP_ID= ?,UID= ?,GID= ?, STATUS=?,ROLE= ? , FIRST_NAME=?, LAST_NAME= ?, EMAIL=?");
+				PreparedStatement s = c.prepareStatement("INSERT INTO " + USERS_TABLE
+					+ " SET IDP_ID= ?,UID= ?,GID= ?, STATUS=?,ROLE= ? , FIRST_NAME=?, LAST_NAME= ?, EMAIL=?");
 				s.setLong(1, user.getIdPId());
 				s.setString(2, user.getUID());
 				s.setString(3, user.getGridId());
@@ -523,19 +498,15 @@ public class UserManager extends LoggingObject {
 				}
 
 				try {
-					this.credentialsManager
-							.deleteCredentials(getCredentialsManagerUID(user
-									.getIdPId(), user.getUID()));
+					this.credentialsManager.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
 				} catch (Exception ex) {
 
 				}
 				logError(e.getMessage(), e);
 				DorianInternalFault fault = new DorianInternalFault();
-				fault
-						.setFaultString("Error adding the user "
-								+ getCredentialsManagerUID(user.getIdPId(),
-										user.getUID())
-								+ " to the IFS, an unexpected database error occurred.");
+				fault.setFaultString("Error adding the user "
+					+ getCredentialsManagerUID(user.getIdPId(), user.getUID())
+					+ " to the IFS, an unexpected database error occurred.");
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
 				fault = (DorianInternalFault) helper.getFault();
@@ -546,9 +517,8 @@ public class UserManager extends LoggingObject {
 
 		} else {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Error adding the user, "
-					+ getCredentialsManagerUID(user.getIdPId(), user.getUID())
-					+ ", the user already exists!!!");
+			fault.setFaultString("Error adding the user, " + getCredentialsManagerUID(user.getIdPId(), user.getUID())
+				+ ", the user already exists!!!");
 			throw fault;
 
 		}
@@ -556,8 +526,8 @@ public class UserManager extends LoggingObject {
 		return user;
 	}
 
-	public synchronized void updateUser(IFSUser u) throws DorianInternalFault,
-			InvalidUserFault {
+
+	public synchronized void updateUser(IFSUser u) throws DorianInternalFault, InvalidUserFault {
 		this.buildDatabase();
 		String credId = getCredentialsManagerUID(u.getIdPId(), u.getUID());
 		boolean publishCRL = false;
@@ -568,20 +538,17 @@ public class UserManager extends LoggingObject {
 
 				IFSUser curr = this.getUser(u.getIdPId(), u.getUID());
 
-				if ((u.getFirstName() != null)
-						&& (!u.getFirstName().equals(curr.getFirstName()))) {
+				if ((u.getFirstName() != null) && (!u.getFirstName().equals(curr.getFirstName()))) {
 					validateSpecifiedField("First Name", u.getFirstName());
 					curr.setFirstName(u.getFirstName());
 				}
 
-				if ((u.getLastName() != null)
-						&& (!u.getLastName().equals(curr.getLastName()))) {
+				if ((u.getLastName() != null) && (!u.getLastName().equals(curr.getLastName()))) {
 					validateSpecifiedField("Last Name", u.getLastName());
 					curr.setLastName(u.getLastName());
 				}
 
-				if ((u.getEmail() != null)
-						&& (!u.getEmail().equals(curr.getEmail()))) {
+				if ((u.getEmail() != null) && (!u.getEmail().equals(curr.getEmail()))) {
 					try {
 						AddressValidator.validateEmail(u.getEmail());
 					} catch (IllegalArgumentException e) {
@@ -592,24 +559,17 @@ public class UserManager extends LoggingObject {
 					curr.setEmail(u.getEmail());
 				}
 
-				if ((u.getGridId() != null)
-						&& (!u.getGridId().equals(curr.getGridId()))) {
+				if ((u.getGridId() != null) && (!u.getGridId().equals(curr.getGridId()))) {
 					validateSpecifiedField("Grid Id", u.getGridId());
 					curr.setGridId(u.getGridId());
 				}
 
-				if ((u.getUserStatus() != null)
-						&& (!u.getUserStatus().equals(curr.getUserStatus()))) {
-					if (accountCreated(curr.getUserStatus())
-							&& !accountCreated(u.getUserStatus())) {
+				if ((u.getUserStatus() != null) && (!u.getUserStatus().equals(curr.getUserStatus()))) {
+					if (accountCreated(curr.getUserStatus()) && !accountCreated(u.getUserStatus())) {
 						InvalidUserFault fault = new InvalidUserFault();
-						fault
-								.setFaultString("Error, cannot change "
-										+ credId
-										+ "'s status from a post-created account status ("
-										+ curr.getUserStatus()
-										+ ") to a pre-created account status ("
-										+ u.getUserStatus() + ").");
+						fault.setFaultString("Error, cannot change " + credId
+							+ "'s status from a post-created account status (" + curr.getUserStatus()
+							+ ") to a pre-created account status (" + u.getUserStatus() + ").");
 						throw fault;
 					}
 					if (curr.getUserStatus().equals(IFSUserStatus.Active)) {
@@ -620,15 +580,12 @@ public class UserManager extends LoggingObject {
 					curr.setUserStatus(u.getUserStatus());
 				}
 
-				if ((u.getUserRole() != null)
-						&& (!u.getUserRole().equals(curr.getUserRole()))) {
+				if ((u.getUserRole() != null) && (!u.getUserRole().equals(curr.getUserRole()))) {
 					curr.setUserRole(u.getUserRole());
 				}
 				c = db.getConnection();
-				PreparedStatement s = c
-						.prepareStatement("UPDATE "
-								+ USERS_TABLE
-								+ " SET GID= ?, STATUS=?,ROLE= ? , FIRST_NAME=?, LAST_NAME= ?, EMAIL=? where IDP_ID= ? AND UID= ?");
+				PreparedStatement s = c.prepareStatement("UPDATE " + USERS_TABLE
+					+ " SET GID= ?, STATUS=?,ROLE= ? , FIRST_NAME=?, LAST_NAME= ?, EMAIL=? where IDP_ID= ? AND UID= ?");
 				s.setString(1, curr.getGridId());
 				s.setString(2, curr.getUserStatus().getValue());
 				s.setString(3, curr.getUserRole().getValue());
@@ -644,11 +601,8 @@ public class UserManager extends LoggingObject {
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
 				DorianInternalFault fault = new DorianInternalFault();
-				fault
-						.setFaultString("Error updating the user "
-								+ getCredentialsManagerUID(u.getIdPId(), u
-										.getUID())
-								+ " to the IFS, an unexpected database error occurred.");
+				fault.setFaultString("Error updating the user " + getCredentialsManagerUID(u.getIdPId(), u.getUID())
+					+ " to the IFS, an unexpected database error occurred.");
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
 				fault = (DorianInternalFault) helper.getFault();
@@ -659,11 +613,11 @@ public class UserManager extends LoggingObject {
 
 		} else {
 			InvalidUserFault fault = new InvalidUserFault();
-			fault.setFaultString("Could not update user, the user " + credId
-					+ " does not exist.");
+			fault.setFaultString("Could not update user, the user " + credId + " does not exist.");
 			throw fault;
 		}
 	}
+
 
 	private boolean accountCreated(IFSUserStatus status) {
 		if (status.equals(IFSUserStatus.Pending)) {
@@ -673,35 +627,32 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	public synchronized void removeUser(IFSUser user)
-			throws DorianInternalFault, InvalidUserFault {
+
+	public synchronized void removeUser(IFSUser user) throws DorianInternalFault, InvalidUserFault {
 		this.buildDatabase();
 		if (determineIfUserExists(user.getIdPId(), user.getUID())) {
 			this.removeUser(user.getIdPId(), user.getUID());
 		} else {
 			InvalidUserFault fault = new InvalidUserFault();
-			fault
-					.setFaultString("Could not remove user, the specified user does not exist.");
+			fault.setFaultString("Could not remove user, the specified user does not exist.");
 			throw fault;
 		}
 	}
 
-	public synchronized void removeUser(long idpId, String uid)
-			throws DorianInternalFault {
+
+	public synchronized void removeUser(long idpId, String uid) throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("delete from "
-					+ USERS_TABLE + " WHERE IDP_ID= ? AND UID= ?");
+			PreparedStatement s = c.prepareStatement("delete from " + USERS_TABLE + " WHERE IDP_ID= ? AND UID= ?");
 			s.setLong(1, idpId);
 			s.setString(2, uid);
 			s.execute();
 			s.close();
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Unexpected Database Error - Could not remove user!!!");
+			fault.setFaultString("Unexpected Database Error - Could not remove user!!!");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -711,19 +662,18 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	private void validateSpecifiedField(String type, String name)
-			throws InvalidUserFault {
+
+	private void validateSpecifiedField(String type, String name) throws InvalidUserFault {
 		name = Utils.clean(name);
 		if (name == null) {
 			throw new IllegalArgumentException("No " + type + " specified.");
 		}
 		if (name.length() > 255) {
-			throw new IllegalArgumentException(
-					"The "
-							+ type
-							+ " specified is too long, it must be less than 255 characters.");
+			throw new IllegalArgumentException("The " + type
+				+ " specified is too long, it must be less than 255 characters.");
 		}
 	}
+
 
 	public List getDisabledUsersSerialIds() throws DorianInternalFault {
 
@@ -736,17 +686,13 @@ public class UserManager extends LoggingObject {
 			Statement s = c.createStatement();
 
 			StringBuffer sql = new StringBuffer();
-			sql.append("select IDP_ID,UID from " + USERS_TABLE
-					+ " WHERE STATUS='" + IFSUserStatus.Suspended
-					+ "' OR STATUS='" + IFSUserStatus.Pending + "' OR STATUS='"
-					+ IFSUserStatus.Rejected + "' OR STATUS='"
-					+ IFSUserStatus.Expired + "'");
+			sql.append("select IDP_ID,UID from " + USERS_TABLE + " WHERE STATUS='" + IFSUserStatus.Suspended
+				+ "' OR STATUS='" + IFSUserStatus.Pending + "' OR STATUS='" + IFSUserStatus.Rejected + "' OR STATUS='"
+				+ IFSUserStatus.Expired + "'");
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
-				String id = getCredentialsManagerUID(rs.getLong("IDP_ID"), rs
-						.getString("UID"));
-				sn.add(new Long(credentialsManager
-						.getCertificateSerialNumber(id)));
+				String id = getCredentialsManagerUID(rs.getLong("IDP_ID"), rs.getString("UID"));
+				sn.add(new Long(credentialsManager.getCertificateSerialNumber(id)));
 			}
 			rs.close();
 			s.close();
@@ -757,14 +703,11 @@ public class UserManager extends LoggingObject {
 				for (int i = 0; i < idp.length; i++) {
 					Statement stmt = c.createStatement();
 					StringBuffer sb = new StringBuffer();
-					sb.append("select IDP_ID,UID from " + USERS_TABLE
-							+ " WHERE IDP_ID=" + idp[i].getId());
+					sb.append("select IDP_ID,UID from " + USERS_TABLE + " WHERE IDP_ID=" + idp[i].getId());
 					ResultSet result = stmt.executeQuery(sb.toString());
 					while (result.next()) {
-						String id = getCredentialsManagerUID(result
-								.getLong("IDP_ID"), result.getString("UID"));
-						sn.add(new Long(credentialsManager
-								.getCertificateSerialNumber(id)));
+						String id = getCredentialsManagerUID(result.getLong("IDP_ID"), result.getString("UID"));
+						sn.add(new Long(credentialsManager.getCertificateSerialNumber(id)));
 					}
 					stmt.close();
 					result.close();
@@ -775,8 +718,7 @@ public class UserManager extends LoggingObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Unexpected Error, could not obtain a list of users");
+			fault.setFaultString("Unexpected Error, could not obtain a list of users");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -786,6 +728,7 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
+
 	public void clearDatabase() throws DorianInternalFault {
 		db.update("DROP TABLE IF EXISTS " + USERS_TABLE);
 		this.tm.clearDatabase();
@@ -793,26 +736,22 @@ public class UserManager extends LoggingObject {
 		this.dbBuilt = false;
 	}
 
+
 	public void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(USERS_TABLE)) {
-				String users = "CREATE TABLE " + USERS_TABLE + " ("
-						+ "IDP_ID INT NOT NULL," + "UID VARCHAR(255) NOT NULL,"
-						+ "FIRST_NAME VARCHAR(255) NOT NULL,"
-						+ "LAST_NAME VARCHAR(255) NOT NULL,"
-						+ "GID VARCHAR(255) NOT NULL,"
-						+ "STATUS VARCHAR(50) NOT NULL,"
-						+ "ROLE VARCHAR(50) NOT NULL, "
-						+ "EMAIL VARCHAR(255) NOT NULL, "
-						+ "INDEX document_index (UID));";
+				String users = "CREATE TABLE " + USERS_TABLE + " (" + "IDP_ID INT NOT NULL,"
+					+ "UID VARCHAR(255) NOT NULL," + "FIRST_NAME VARCHAR(255) NOT NULL,"
+					+ "LAST_NAME VARCHAR(255) NOT NULL," + "GID VARCHAR(255) NOT NULL,"
+					+ "STATUS VARCHAR(50) NOT NULL," + "ROLE VARCHAR(50) NOT NULL, " + "EMAIL VARCHAR(255) NOT NULL, "
+					+ "INDEX document_index (UID));";
 				db.update(users);
 
 				try {
 
-					if (conf.getInitalTrustedIdP() != null) {
-						TrustedIdP idp = tm.addTrustedIdP(conf
-								.getInitalTrustedIdP());
-						IFSUser usr = conf.getInitialUser();
+					if (defaults.getDefaultIdP() != null) {
+						TrustedIdP idp = tm.addTrustedIdP(defaults.getDefaultIdP());
+						IFSUser usr = defaults.getDefaultUser();
 						usr.setIdPId(idp.getId());
 						if (usr != null) {
 							this.addUser(usr);
@@ -822,13 +761,13 @@ public class UserManager extends LoggingObject {
 						} else {
 							DorianInternalFault fault = new DorianInternalFault();
 							fault
-									.setFaultString("Unexpected error initializing the User Manager, No initial IFS user specified.");
+								.setFaultString("Unexpected error initializing the User Manager, No initial IFS user specified.");
 							throw fault;
 						}
 					} else {
 						DorianInternalFault fault = new DorianInternalFault();
 						fault
-								.setFaultString("Unexpected error initializing the User Manager, No initial trusted IdP specified.");
+							.setFaultString("Unexpected error initializing the User Manager, No initial trusted IdP specified.");
 						throw fault;
 					}
 
@@ -837,8 +776,7 @@ public class UserManager extends LoggingObject {
 
 				} catch (Exception e) {
 					DorianInternalFault fault = new DorianInternalFault();
-					fault
-							.setFaultString("Unexpected error initializing the User Manager.");
+					fault.setFaultString("Unexpected error initializing the User Manager.");
 					FaultHelper helper = new FaultHelper(fault);
 					helper.addDescription(Utils.getExceptionMessage(e));
 					helper.addFaultCause(e);
@@ -852,13 +790,13 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
+
 	public X509CRL getCRL() throws DorianInternalFault {
 		List sn = this.getDisabledUsersSerialIds();
 		CRLEntry[] entries = new CRLEntry[sn.size()];
 		for (int i = 0; i < sn.size(); i++) {
 			Long l = (Long) sn.get(i);
-			entries[i] = new CRLEntry(BigInteger.valueOf(l.longValue()),
-					CRLReason.PRIVILEGE_WITHDRAWN);
+			entries[i] = new CRLEntry(BigInteger.valueOf(l.longValue()), CRLReason.PRIVILEGE_WITHDRAWN);
 		}
 		try {
 			X509CRL crl = ca.getCRL(entries);
@@ -875,62 +813,55 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
+
 	protected void publishCRL() {
-		List services = conf.getGTSServices();
-		if ((services != null) && (services.size() > 0)) {
-			MobiusRunnable runner = new MobiusRunnable() {
-				public void execute() {
-					synchronized (mutex) {
-						List serviceList = conf.getGTSServices();
-						if ((serviceList != null) && (serviceList.size() > 0)) {
-							try {
-								X509CRL crl = getCRL();
-								gov.nih.nci.cagrid.gts.bean.X509CRL x509 = new gov.nih.nci.cagrid.gts.bean.X509CRL();
-								x509
-										.setCrlEncodedString(CertUtil
-												.writeCRL(crl));
-								String authName = ca.getCACertificate()
-										.getSubjectDN().getName();
-								for (int i = 0; i < serviceList.size(); i++) {
-									String uri = (String) serviceList.get(i);
-									try {
-										debug("Publishing CRL to the GTS "
-												+ uri);
-										GTSAdminClient client = new GTSAdminClient(
-												uri, null);
-										client.updateCRL(authName, x509);
-										debug("Published CRL to the GTS " + uri);
-									} catch (Exception ex) {
-										getLog().error(
-												"Error publishing the CRL to the GTS "
-														+ uri + "!!!", ex);
+		if (conf.getCRLPublish() != null) {
+			if ((conf.getCRLPublish().getGts() != null) && (conf.getCRLPublish().getGts().length > 0)) {
+				Runner runner = new Runner() {
+					public void execute() {
+						synchronized (mutex) {
+							String[] services = conf.getCRLPublish().getGts();
+							if ((services != null) && (services.length > 0)) {
+								try {
+									X509CRL crl = getCRL();
+									gov.nih.nci.cagrid.gts.bean.X509CRL x509 = new gov.nih.nci.cagrid.gts.bean.X509CRL();
+									x509.setCrlEncodedString(CertUtil.writeCRL(crl));
+									String authName = ca.getCACertificate().getSubjectDN().getName();
+									for (int i = 0; i < services.length; i++) {
+										String uri = services[i];
+										try {
+											debug("Publishing CRL to the GTS " + uri);
+											GTSAdminClient client = new GTSAdminClient(uri, null);
+											client.updateCRL(authName, x509);
+											debug("Published CRL to the GTS " + uri);
+										} catch (Exception ex) {
+											getLog().error("Error publishing the CRL to the GTS " + uri + "!!!", ex);
+										}
+
 									}
 
+								} catch (Exception e) {
+									getLog().error("Unexpected Error publishing the CRL!!!", e);
 								}
-
-							} catch (Exception e) {
-								getLog()
-										.error(
-												"Unexpected Error publishing the CRL!!!",
-												e);
 							}
 						}
 					}
+				};
+				try {
+					poolManager.executeInBackground(runner);
+				} catch (Exception t) {
+					t.getMessage();
 				}
-			};
-			try {
-				poolManager.executeInBackground(runner);
-			} catch (Exception t) {
-				t.getMessage();
 			}
 		}
-
 	}
+
 
 	public static String identityToSubject(String identity) {
 		String s = identity.substring(1);
 		return s.replace('/', ',');
 	}
+
 
 	public static String subjectToIdentity(String subject) {
 		return "/" + subject.replace(',', '/');

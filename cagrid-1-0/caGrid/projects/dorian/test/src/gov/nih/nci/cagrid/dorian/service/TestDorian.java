@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
+import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
@@ -44,6 +45,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLSubject;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -79,7 +81,7 @@ public class TestDorian extends TestCase {
 	private int count = 0;
 
 	private CertificateAuthority ca;
-	
+
 	private static final int DELEGATION_LENGTH = 5;
 
 	private static final int SHORT_PROXY_VALID = 2;
@@ -100,7 +102,9 @@ public class TestDorian extends TestCase {
 	public void testAuthenticate() {
 		try {
 			// initialize a Dorian object
-			jm = new Dorian(resource, "localhost");
+			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
+				new InputStreamReader(resource), DorianConfiguration.class);
+			jm = new Dorian(conf, "localhost");
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 
@@ -204,7 +208,9 @@ public class TestDorian extends TestCase {
 
 	public void testFindUpdateRemoveIdPUser() {
 		try {
-			jm = new Dorian(resource, "localhost");
+			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
+				new InputStreamReader(resource), DorianConfiguration.class);
+			jm = new Dorian(conf, "localhost");
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 
@@ -309,7 +315,9 @@ public class TestDorian extends TestCase {
 
 	public void testCreateProxy() {
 		try {
-			jm = new Dorian(resource, "localhost");
+			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
+				new InputStreamReader(resource), DorianConfiguration.class);
+			jm = new Dorian(conf, "localhost");
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 			BasicAuthCredential auth = new BasicAuthCredential();
@@ -319,8 +327,8 @@ public class TestDorian extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime,DELEGATION_LENGTH);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,DELEGATION_LENGTH);
+			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime, DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -339,7 +347,9 @@ public class TestDorian extends TestCase {
 
 	public void testAutoApprovalAutoRenewal() {
 		try {
-			jm = new Dorian(expiringCredentialsResource, "localhost");
+			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
+				new InputStreamReader(expiringCredentialsResource), DorianConfiguration.class);
+			jm = new Dorian(conf, "localhost");
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 
@@ -351,8 +361,9 @@ public class TestDorian extends TestCase {
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,DELEGATION_LENGTH);
+			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,
+				DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
 
 			IFSUserFilter filter = new IFSUserFilter();
 			filter.setUID(username);
@@ -362,7 +373,7 @@ public class TestDorian extends TestCase {
 			IFSUser before = ifsUser[0];
 			assertEquals(before.getUserStatus(), IFSUserStatus.Active);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
-			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
+			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
 			ifsUser = jm.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -388,7 +399,9 @@ public class TestDorian extends TestCase {
 
 	public void testManualApprovalAutoRenewal() {
 		try {
-			jm = new Dorian(expiringCredentialsResource, "localhost");
+			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
+				new InputStreamReader(expiringCredentialsResource), DorianConfiguration.class);
+			jm = new Dorian(conf, "localhost");
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 
@@ -402,7 +415,8 @@ public class TestDorian extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			try {
-				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),DELEGATION_LENGTH);
+				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
+					DELEGATION_LENGTH);
 				fail("Should not be able to create a proxy with an IdP that is not approved");
 			} catch (PermissionDeniedFault f) {
 
@@ -417,9 +431,9 @@ public class TestDorian extends TestCase {
 			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
 			before.setUserStatus(IFSUserStatus.Active);
 			jm.updateIFSUser(gridId, before);
-			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
-			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
 			ifsUser = jm.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -446,7 +460,9 @@ public class TestDorian extends TestCase {
 
 	public void testAutoApprovalManualRenewal() {
 		try {
-			jm = new Dorian(expiringCredentialsResource, "localhost");
+			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
+				new InputStreamReader(expiringCredentialsResource), DorianConfiguration.class);
+			jm = new Dorian(conf, "localhost");
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 
@@ -458,7 +474,7 @@ public class TestDorian extends TestCase {
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
 
 			IFSUserFilter filter = new IFSUserFilter();
 			filter.setUID(username);
@@ -472,14 +488,15 @@ public class TestDorian extends TestCase {
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 
 			try {
-				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),DELEGATION_LENGTH);
+				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
+					DELEGATION_LENGTH);
 				fail("Should not be able to create a proxy with an IdP that has not been renewed");
 			} catch (PermissionDeniedFault f) {
 
 			}
 			jm.renewIFSUserCredentials(gridId, ifsUser[0]);
 
-			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
 			ifsUser = jm.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -506,7 +523,9 @@ public class TestDorian extends TestCase {
 
 	public void testManualApprovalManualRenewal() {
 		try {
-			jm = new Dorian(expiringCredentialsResource, "localhost");
+			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
+				new InputStreamReader(expiringCredentialsResource), DorianConfiguration.class);
+			jm = new Dorian(conf, "localhost");
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 
@@ -520,7 +539,8 @@ public class TestDorian extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			try {
-				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),DELEGATION_LENGTH);
+				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
+					DELEGATION_LENGTH);
 				fail("Should not be able to create a proxy with an IdP that has not been approved");
 			} catch (PermissionDeniedFault f) {
 
@@ -535,19 +555,20 @@ public class TestDorian extends TestCase {
 			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
 			before.setUserStatus(IFSUserStatus.Active);
 			jm.updateIFSUser(gridId, before);
-			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
 			X509Certificate certBefore = CertUtil.loadCertificate(before.getCertificate().getCertificateAsString());
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 
 			try {
-				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),DELEGATION_LENGTH);
+				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
+					DELEGATION_LENGTH);
 				fail("Should not be able to create a proxy with an IdP that has not been renewed");
 			} catch (PermissionDeniedFault f) {
 
 			}
 			jm.renewIFSUserCredentials(gridId, ifsUser[0]);
 
-			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
 			ifsUser = jm.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -740,8 +761,8 @@ public class TestDorian extends TestCase {
 	}
 
 
-	private void createAndCheckProxyLifetime(ProxyLifetime lifetime, PrivateKey key, X509Certificate[] certs, int delegationLength)
-		throws Exception {
+	private void createAndCheckProxyLifetime(ProxyLifetime lifetime, PrivateKey key, X509Certificate[] certs,
+		int delegationLength) throws Exception {
 		assertNotNull(certs);
 		assertEquals(2, certs.length);
 		GlobusCredential cred = new GlobusCredential(key, certs);
