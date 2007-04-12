@@ -124,7 +124,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-ui.jar"/>
 	<classpathentry kind="lib" path="lib/wizard-0.1.12.jar" sourcepath="C:/projectsOLD/cagrid/ivi-middleware-top/IVIWizard/lib/wizard-0.1.12-src.jar"/>
-	<classpathentry kind="lib" path="lib/commons-jxpath-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
