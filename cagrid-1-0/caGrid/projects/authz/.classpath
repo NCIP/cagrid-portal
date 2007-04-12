@@ -7,7 +7,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wss4j.jar"/>
-	<classpathentry sourcepath="/globussource" kind="var" path="GT4_LOCATION/lib/wsrf_core.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" sourcepath="/globussource"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_common.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsdl4j.jar"/>
@@ -29,10 +29,10 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-discovery.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-collections-3.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commonj.jar"/>
-	<classpathentry sourcepath="/GT4_LOCATION/cog-1.2-src.zip" kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" sourcepath="/GT4_LOCATION/cog-1.2-src.zip"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
-	<classpathentry sourcepath="/AXIS_HOME" kind="var" path="GT4_LOCATION/lib/axis.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/subject-0.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
@@ -42,7 +42,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/lib/grouper.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-common.jar"/>
@@ -54,8 +53,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="lib" path="lib/spring-core.jar"/>
-	<classpathentry kind="lib" path="lib/spring-beans.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-3.1.11-bin.jar"/>
 	<classpathentry kind="lib" path="lib/jtds-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jta.jar"/>
@@ -69,5 +66,6 @@
 	<classpathentry kind="lib" path="lib/hibernate-3.0.5.jar"/>
 	<classpathentry kind="lib" path="lib/csmapi.jar"/>
 	<classpathentry kind="lib" path="lib/clm.jar"/>
+	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

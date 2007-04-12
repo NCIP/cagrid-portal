@@ -44,7 +44,6 @@
         <include name="xercesImpl.jar"/>
         <include name="xmlsec.jar"/>
         <include name="xml-apis.jar"/>
-        
     </patternset>
     
     <!-- Jars from other caGrid projects -->
@@ -62,12 +61,15 @@
         <include name="caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
         <include name="cglib-nodep-2.1_3.jar"/>
         <include name="grouper.jar"/>
+    	<include name="hibernate3.jar" />
+        <include name="jdom-1.0.jar" />    	
         <include name="junit.jar"/>
         <include name="mobius_common_client.jar"/>
         <include name="mobius_factories.jar"/>
         <include name="mobius_gme_client.jar"/>
         <include name="mobius_mako_client.jar"/>
         <include name="mobius_tools.jar"/>
+    	<include name="spring.jar"/>
         <include name="subject-0.2.1.jar"/>
     </patternset>
     
@@ -81,21 +83,13 @@
         <include name="csmapi.jar"/>
         <include name="dom4j-1.6.1.jar"/>
         <include name="ehcache-1.1.jar"/>
-        <include name="hibernate-3.0.5.jar"/>
-        <include name="jdom.jar"/>
         <include name="jta.jar"/>
         <include name="jtds-1.2.jar"/>
         <include name="mysql-connector-java-3.1.11-bin.jar"/>
     </patternset>
     
-    <patternset id="other.jars">
-        <include name="spring-core.jar"/>
-        <include name="spring-beans.jar"/>
-    </patternset>
-
     <path id="compile.cp">
         <fileset dir="${lib.dir}">
-            <patternset refid="other.jars"/>
             <patternset refid="csm.jars"/>
         </fileset>
         <fileset dir="${ext.lib.dir}">
@@ -118,13 +112,13 @@
     </target>
     
     <target name="compile" depends="init">
-        <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}">
+        <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" debug="true">
             <classpath refid="compile.cp"/>
         </javac>
     </target>
     
     <target name="compile-test" depends="compile">
-        <javac srcdir="${test.src.java.dir}" destdir="${build.classes.dir}">
+        <javac srcdir="${test.src.java.dir}" destdir="${build.classes.dir}" debug="true">
             <classpath refid="compile.cp"/>
         </javac>
     </target>
