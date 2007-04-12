@@ -323,7 +323,6 @@
             <artifact refid="test.coverage.jars" />
             <artifact refid="core.test.jars" />
             <artifact refid="gridca.jars" />
-            <artifact refid="mobius.jars" />
             <artifact refid="authentication.service.client.jars" />
             <artifact refid="opensaml.jars" />
             <artifact refid="opensaml.endorsed" />

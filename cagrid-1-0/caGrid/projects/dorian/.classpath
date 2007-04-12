@@ -91,6 +91,8 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-grape.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-grape-resources.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-dbcp-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-pool-1.2.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-collections-3.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

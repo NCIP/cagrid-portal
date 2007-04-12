@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.projectmobius.db.Query;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -814,7 +812,7 @@ public class TrustedIdPManager extends LoggingObject {
 				s.setString(12, idp.getEmailAttributeDescriptor().getNamespaceURI());
 				s.setString(13, idp.getEmailAttributeDescriptor().getName());
 				s.execute();
-				idp.setId(Query.getLastAutoId(c));
+				idp.setId(db.getLastAutoId(c));
 				s.close();
 				if (idp.getAuthenticationMethod() != null) {
 					for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
