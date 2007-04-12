@@ -64,6 +64,11 @@
                 <include name="*.jar" />
             </fileset>
         </artifact>
+        <artifact track="test" type="jars" id="system.test.jars">
+            <fileset dir="${test.lib.dir}">
+                <include name="*haste*.jar" />
+            </fileset>
+        </artifact>
         <!-- Project Created Artifacts -->
         <artifact track="main" type="jars" id="core.jars">
             <generatingantcall target="build-core" />
@@ -234,20 +239,20 @@
                 <include name="*.xsd" />
             </fileset>
         </artifact>
-    	
-    	  <artifact track="main" type="jars" id="grape.jars">
-    	            <generatingantcall target="build-grape" />
-    	            <fileset dir="${projects.dir}/grape/build/lib">
-    	                <include name="caGrid-*-grape.jar" />
-    	                <include name="caGrid-*-grape-resources.jar" />
-    	            </fileset>
-    	            <fileset dir="${projects.dir}/grape/ext/lib">
-    	                <include name="*.jar" />
-    	                <exclude name="*test*.jar" />
-    	            </fileset>
-    	        </artifact>
-    	
-    	
+
+        <artifact track="main" type="jars" id="grape.jars">
+            <generatingantcall target="build-grape" />
+            <fileset dir="${projects.dir}/grape/build/lib">
+                <include name="caGrid-*-grape.jar" />
+                <include name="caGrid-*-grape-resources.jar" />
+            </fileset>
+            <fileset dir="${projects.dir}/grape/ext/lib">
+                <include name="*.jar" />
+                <exclude name="*test*.jar" />
+            </fileset>
+        </artifact>
+
+
         <artifact track="main" type="jars" id="dorian.ui.jars">
             <generatingantcall target="build-dorian" />
             <fileset dir="${projects.dir}/dorian/build/lib">
@@ -433,12 +438,21 @@
 				<include name="**" />
 			</fileset>
 		</artifact>
--->
+        -->
         <artifact track="main" type="jars" id="introduce.jars">
             <generatingantcall target="build-introduce" />
             <fileset dir="${projects.dir}/introduce/build/jars">
                 <include name="*.jar" />
                 <exclude name="*tests*.jar" />
+            </fileset>
+        </artifact>
+        <artifact track="test" type="jars" id="introduce.full.test.jars">
+            <generatingantcall target="build-introduce" />
+            <fileset dir="${projects.dir}/introduce/build/jars">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${projects.dir}/introduce/lib">
+                <include name="*.jar" />
             </fileset>
         </artifact>
         <artifact track="test" type="jars" id="introduce.core.test.jars">
@@ -560,12 +574,12 @@
 
         <artifact track="main" type="jars" id="gridftp.authz.jars">
             <generatingantcall target="build-gridftpauthz" />
-			<property name="gridftpauthz.dir" value="gridftpauthz"/>
+            <property name="gridftpauthz.dir" value="gridftpauthz" />
             <fileset dir="${projects.dir}/${gridftpauthz.dir}/build/lib">
                 <include name="*-gridftpauthz*.jar" />
                 <exclude name="*test*.jar" />
             </fileset>
-			<!-- dependent project would need hsqldb.jar -->
+            <!-- dependent project would need hsqldb.jar -->
             <fileset dir="${projects.dir}/${gridftpauthz.dir}/lib">
                 <include name="hsqldb.jar" />
             </fileset>
@@ -583,13 +597,13 @@
                 <include name="junit.jar" />
             </fileset>
         </artifact>
-    	
-    	<!-- BDT libraries -->
-    	<artifact id="bdt.jars" track="main" type="jars">
+
+        <!-- BDT libraries -->
+        <artifact id="bdt.jars" track="main" type="jars">
             <generatingantcall target="build-bulkDataTransfer" />
-    		<fileset dir="${projects.dir}/bulkDataTransfer/build/lib">
-    			<include name="*.jar"/>
-    		</fileset>
-    	</artifact>
+            <fileset dir="${projects.dir}/bulkDataTransfer/build/lib">
+                <include name="*.jar" />
+            </fileset>
+        </artifact>
     </target>
 </project>

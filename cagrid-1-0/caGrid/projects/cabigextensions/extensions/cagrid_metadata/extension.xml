@@ -1,5 +1,4 @@
-<ns1:ExtensionDescription extensionType="SERVICE"
-	xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension">
+<ns1:ExtensionDescription extensionType="SERVICE" version="1.1"	xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension">
 	<ns1:ServiceExtensionDescription displayName="caGrid Metadata" name="cagrid_metadata">
 		<ns1:CreationPostProcessor>gov.nih.nci.cagrid.introduce.extensions.metadata.creation.ServiceMetadataCreationPostProcessor</ns1:CreationPostProcessor>
 		<ns1:CodegenPreProcessor>gov.nih.nci.cagrid.introduce.extensions.metadata.codegen.MetadataCodegenPreProcessor</ns1:CodegenPreProcessor>
@@ -8,4 +7,7 @@
 			<property makeGlobal="true" type="SERVICE_URL" key="CADSR_URL" value="http://cagrid05.bmi.ohio-state.edu:8080/wsrf/services/cagrid/CaDSRService"/> 
 		</ns1:Properties>
 	</ns1:ServiceExtensionDescription>
+	<ns1:UpgradesDescription>
+		<ns1:UpgradeDescription upgradeClass="gov.nih.nci.cagrid.introduce.extensions.metadata.upgrade.MetadataUpgrade1pt0to1pt1" toVersion="1.1"/>
+	</ns1:UpgradesDescription>
 </ns1:ExtensionDescription>

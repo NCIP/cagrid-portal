@@ -2,316 +2,322 @@
 <!-- caGrid Data Services test build file                                    -->
 <!-- ======================================================================= -->
 <project name="caGrid-data_tests_harness" basedir=".">
-	<property name="junit.results.dir" value="${test.logs.dir}/junit"/>
-	<property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes"/>
-	<property name="cobertura.report.dir" value="${build.dir}/coverage"/>
-	<property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser"/>
-	<property name="introduce.dir" location="../introduce"/>
+    <property name="junit.results.dir" value="${test.logs.dir}/junit" />
+    <property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes" />
+    <property name="cobertura.report.dir" value="${build.dir}/coverage" />
+    <property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" />
+    <property name="introduce.dir" location="../introduce" />
 
-	<target name="prepareClasspaths">
-		<path id="Introduce.test.classpath">
-			<fileset dir="${introduce.dir}/lib">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${introduce.dir}/ext/lib">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${introduce.dir}/build/jars">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${introduce.dir}/test/lib">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${introduce.dir}/ext/test/lib">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${ant.library.dir}">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${ext.globus.dir}/lib">
-				<include name="*.jar"/>
-			</fileset>
-		</path>
-		<path id="all.test.classpath">
-			<path refid="test.classpath"/>
-			<path refid="Introduce.test.classpath" />
-		</path>
-	</target>
+    <target name="prepareClasspaths">
+        <path id="Introduce.test.classpath">
+            <fileset dir="${introduce.dir}/lib">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${introduce.dir}/ext/lib">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${introduce.dir}/build/jars">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${introduce.dir}/test/lib">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${introduce.dir}/ext/test/lib">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${ant.library.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${ext.globus.dir}/lib">
+                <include name="*.jar" />
+            </fileset>
+        </path>
+        <path id="all.test.classpath">
+            <path refid="test.classpath" />
+            <path refid="Introduce.test.classpath" />
+        </path>
+    </target>
 
-	<target name="instrument">
-		<taskdef classpathref="test.classpath" resource="tasks.properties"/>
-		<mkdir dir="${instrumented.classes.dir}"/>
-		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
-			<fileset dir="${build.utils.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${build.extension.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${build.service.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${build.common.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${build.validation.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-		</cobertura-instrument>
-	</target>
+    <target name="instrument">
+        <taskdef classpathref="test.classpath" resource="tasks.properties" />
+        <mkdir dir="${instrumented.classes.dir}" />
+        <cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
+            <fileset dir="${build.utils.dest}">
+                <include name="**/*.class" />
+            </fileset>
+            <fileset dir="${build.extension.dest}">
+                <include name="**/*.class" />
+            </fileset>
+            <fileset dir="${build.service.dest}">
+                <include name="**/*.class" />
+            </fileset>
+            <fileset dir="${build.common.dest}">
+                <include name="**/*.class" />
+            </fileset>
+            <fileset dir="${build.validation.dest}">
+                <include name="**/*.class" />
+            </fileset>
+        </cobertura-instrument>
+    </target>
 
-	<!-- calls every test -->
-	<target name="testEverything" depends="test, systemTest" description="Runs all system and non-system tests"/>
-
-
-	<!-- tests everything but system -->
-	<target name="test" depends="instrument, testCore, testCreation, testEnumerationCreation, testBdtCreation, testUpgradeFrom1pt0to1pt1" description="Runs all non-system tests."/>
+    <!-- calls every test -->
+    <target name="testEverything" depends="test, systemTest" description="Runs all system and non-system tests" />
 
 
-	<!-- tests data service core components -->
-	<target name="testCore" depends="setGlobus" description="Runs the base set of tests for the data service core">
-		<!-- assumes all code has been compiled -->
-		<mkdir dir="${junit.results.dir}"/>
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
-			<sysproperty key="build.dirs" value="${build.utils.dest};${build.extension.dest};${build.service.dest}"/>
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
-			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
-			<jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
-			<jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples"/>
-			<classpath location="${instrumented.classes.dir}"/>
-			<classpath refid="all.test.classpath"/>
-			<classpath>
-				<pathelement path="${test.classes.dir}"/>
-			</classpath>
-			<formatter type="xml"/>
-			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
-			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/*TestCase.java"/>
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed"/>
-	</target>
+    <!-- tests everything but system -->
+    <target name="test" depends="instrument, testCore, testCreation, testEnumerationCreation, testBdtCreation, testUpgradeFrom1pt0to1pt1" description="Runs all non-system tests." />
 
 
-	<!-- tests creation of a basic data service -->
-	<target name="testCreation" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Runs the service creation tests" unless="base.service.created">
-		<mkdir dir="${junit.results.dir}"/>
-		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
-			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
-			<jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
-			<jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples"/>
-			<classpath location="${instrumented.classes.dir}"/>
-			<classpath refid="all.test.classpath"/>
-			<classpath>
-				<pathelement path="${test.classes.dir}"/>
-			</classpath>
-			<formatter type="xml"/>
-			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
-			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/CreationTests.java"/>
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed"/>
-		<property name="base.service.created" value="true"/>
-	</target>
+    <!-- tests data service core components -->
+    <target name="testCore" depends="setGlobus" description="Runs the base set of tests for the data service core">
+        <!-- assumes all code has been compiled -->
+        <mkdir dir="${junit.results.dir}" />
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+            <sysproperty key="build.dirs" value="${build.utils.dest};${build.extension.dest};${build.service.dest}" />
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+            <jvmarg value="-Dintroduce.base.dir=../introduce" />
+            <jvmarg value="-Dbuild.dir=${test.classes.dir}" />
+            <jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples" />
+            <classpath location="${instrumented.classes.dir}" />
+            <classpath refid="all.test.classpath" />
+            <classpath>
+                <pathelement path="${test.classes.dir}" />
+            </classpath>
+            <formatter type="xml" />
+            <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+            <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/*TestCase.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />
+    </target>
 
 
-	<!-- tests creation of an enumeration supporting data service -->
-	<target name="testEnumerationCreation" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="enumeration.service.created">
-		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
-			<jvmarg value="-Dintroduce.base.dir=../introduce" />
-			<jvmarg value="-Dbuild.dir=${test.classes.dir}" />
-			<jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples" />
-			<classpath location="${instrumented.classes.dir}" />
-			<classpath refid="all.test.classpath" />
-			<classpath>
-				<pathelement path="${test.classes.dir}" />
-			</classpath>
-			<formatter type="xml" />
-			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
-			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/CreateEnumerationTests.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed" />
-		<property name="enumeration.service.created" value="true" />
-	</target>
+    <!-- tests creation of a basic data service -->
+    <target name="testCreation" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Runs the service creation tests" unless="base.service.created">
+        <mkdir dir="${junit.results.dir}" />
+        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+            <jvmarg value="-Dintroduce.base.dir=../introduce" />
+            <jvmarg value="-Dbuild.dir=${test.classes.dir}" />
+            <jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples" />
+            <classpath location="${instrumented.classes.dir}" />
+            <classpath refid="all.test.classpath" />
+            <classpath>
+                <pathelement path="${test.classes.dir}" />
+            </classpath>
+            <formatter type="xml" />
+            <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+            <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/CreationTests.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />
+        <property name="base.service.created" value="true" />
+    </target>
 
 
-	<!-- tests creation of a BDT data service -->
-	<target name="testBdtCreation" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="bdt.service.created">
-		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
-			<jvmarg value="-Dintroduce.base.dir=../introduce" />
-			<jvmarg value="-Dbuild.dir=${test.classes.dir}" />
-			<jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples" />
-			<classpath location="${instrumented.classes.dir}" />
-			<classpath refid="all.test.classpath" />
-			<classpath>
-				<pathelement path="${test.classes.dir}" />
-			</classpath>
-			<formatter type="xml" />
-			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
-			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/BDTDataServiceCreationTests.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed" />
-		<property name="bdt.service.created" value="true" />
-	</target>
+    <!-- tests creation of an enumeration supporting data service -->
+    <target name="testEnumerationCreation" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="enumeration.service.created">
+        <mkdir dir="${junit.results.dir}" />
+        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+            <jvmarg value="-Dintroduce.base.dir=../introduce" />
+            <jvmarg value="-Dbuild.dir=${test.classes.dir}" />
+            <jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples" />
+            <classpath location="${instrumented.classes.dir}" />
+            <classpath refid="all.test.classpath" />
+            <classpath>
+                <pathelement path="${test.classes.dir}" />
+            </classpath>
+            <formatter type="xml" />
+            <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+            <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/CreateEnumerationTests.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />
+        <property name="enumeration.service.created" value="true" />
+    </target>
 
 
-	<!-- tests overall system -->
-	<target name="systemTest" depends="setGlobus, prepareClasspaths, testBasicSystem, testEnumerationSystem, testBdtSystem, testUpgradedFrom1pt0to1pt1System" description="Runs system tests (deploy, invoke, etc)" />
+    <!-- tests creation of a BDT data service -->
+    <target name="testBdtCreation" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="bdt.service.created">
+        <mkdir dir="${junit.results.dir}" />
+        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+            <jvmarg value="-Dintroduce.base.dir=../introduce" />
+            <jvmarg value="-Dbuild.dir=${test.classes.dir}" />
+            <jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples" />
+            <classpath location="${instrumented.classes.dir}" />
+            <classpath refid="all.test.classpath" />
+            <classpath>
+                <pathelement path="${test.classes.dir}" />
+            </classpath>
+            <formatter type="xml" />
+            <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+            <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/BDTDataServiceCreationTests.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />
+        <property name="bdt.service.created" value="true" />
+    </target>
 
 
-	<!-- system tests against the basic data service -->
-	<target name="testBasicSystem" depends="setGlobus, installIntroduceExtensions, prepareClasspaths, testCreation" description="Runs the service creation and then system tests">
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
-			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
-			<classpath location="${instrumented.classes.dir}"/>
-			<classpath refid="all.test.classpath"/>
-			<classpath>
-				<pathelement path="${test.classes.dir}"/>
-			</classpath>
-			<formatter type="xml"/>
-			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
-			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/SystemTests.java"/>
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed"/>
-	</target>
+    <!-- tests overall system -->
+    <target name="systemTest" depends="setGlobus, prepareClasspaths, testBasicSystem, testEnumerationSystem, testBdtSystem, testUpgradedFrom1pt0to1pt1System" description="Runs system tests (deploy, invoke, etc)" />
 
 
-	<!-- system tests against the enumeration data service -->
-	<target name="testEnumerationSystem" depends="setGlobus, testEnumerationCreation" description="Tests the enumeration data service system">
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
-			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
-			<classpath location="${instrumented.classes.dir}"/>
-			<classpath refid="all.test.classpath"/>
-			<classpath>
-				<pathelement path="${test.classes.dir}"/>
-			</classpath>
-			<formatter type="xml"/>
-			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
-			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/EnumerationSystemTests.java"/>
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed"/>
-	</target>
+    <!-- system tests against the basic data service -->
+    <target name="testBasicSystem" depends="setGlobus, installIntroduceExtensions, prepareClasspaths, testCreation" description="Runs the service creation and then system tests">
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+            <jvmarg value="-Dintroduce.base.dir=../introduce" />
+            <classpath location="${instrumented.classes.dir}" />
+            <classpath refid="all.test.classpath" />
+            <classpath>
+                <pathelement path="${test.classes.dir}" />
+            </classpath>
+            <formatter type="xml" />
+            <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+            <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/SystemTests.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />
+    </target>
 
 
-	<!-- tests upgrading a 1.0 service to 1.1 -->
-	<target name="testUpgradeFrom1pt0to1pt1" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to 1.1" unless="upgrade.1pt0.to.1pt1.completed">
-		<mkdir dir="${junit.results.dir}"/>
-		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
-			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
-			<classpath location="${instrumented.classes.dir}"/>
-			<classpath refid="all.test.classpath"/>
-			<classpath>
-				<pathelement path="${test.classes.dir}"/>
-			</classpath>
-			<formatter type="xml"/>
-			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
-			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/UpgradeTo1pt1Tests.java"/>
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Upgrade 1.0 to 1.1 tests failed!" if="test.failed"/>
-		<property name="upgrade.1pt0.to.1pt1.completed" value="true"/>
-	</target>
+    <!-- system tests against the enumeration data service -->
+    <target name="testEnumerationSystem" depends="setGlobus, testEnumerationCreation" description="Tests the enumeration data service system">
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+            <jvmarg value="-Dintroduce.base.dir=../introduce" />
+            <classpath location="${instrumented.classes.dir}" />
+            <classpath refid="all.test.classpath" />
+            <classpath>
+                <pathelement path="${test.classes.dir}" />
+            </classpath>
+            <formatter type="xml" />
+            <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+            <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/EnumerationSystemTests.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />
+    </target>
 
 
-	<!-- system tests against the service upgraded from 1.0 to 1.1 -->
-	<target name="testUpgradedFrom1pt0to1pt1System" depends="setGlobus, testUpgradeFrom1pt0to1pt1" description="Performs system tests on the upgraded (1.0 to 1.1) service">
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
-			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
-			<classpath location="${instrumented.classes.dir}"/>
-			<classpath refid="all.test.classpath"/>
-			<classpath>
-				<pathelement path="${test.classes.dir}"/>
-			</classpath>
-			<formatter type="xml"/>
-			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
-			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/system/UpgradedServiceSystemTest.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed"/>
-	</target>
-	
-	
-	<!-- system tests for the BDT data service -->
-	<target name="testBdtSystem" depends="setGlobus, testBdtCreation" description="Tests invocation of the BDT data service">
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
-			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
-			<classpath location="${instrumented.classes.dir}"/>
-			<classpath refid="all.test.classpath"/>
-			<classpath>
-				<pathelement path="${test.classes.dir}"/>
-			</classpath>
-			<formatter type="xml"/>
-			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
-			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/system/bdt/BDTDataServiceSystemTests.java"/>
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed"/>
-	</target>
+    <!-- tests upgrading a 1.0 service to 1.1 -->
+    <target name="testUpgradeFrom1pt0to1pt1" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to 1.1" unless="upgrade.1pt0.to.1pt1.completed">
+        <mkdir dir="${junit.results.dir}" />
+        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+            <jvmarg value="-Dintroduce.base.dir=../introduce" />
+            <classpath location="${instrumented.classes.dir}" />
+            <classpath refid="all.test.classpath" />
+            <classpath>
+                <pathelement path="${test.classes.dir}" />
+            </classpath>
+            <!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
+            <classpath>
+                <fileset dir="${introduce.dir}/extensions/lib">
+                    <include name="*.jar" />
+                </fileset>
+            </classpath>
+            <formatter type="xml" />
+            <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+            <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/UpgradeTo1pt1Tests.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Upgrade 1.0 to 1.1 tests failed!" if="test.failed" />
+        <property name="upgrade.1pt0.to.1pt1.completed" value="true" />
+    </target>
 
 
-	<target name="coverageReport" depends="test" description="Runs the tests and generates a test
+    <!-- system tests against the service upgraded from 1.0 to 1.1 -->
+    <target name="testUpgradedFrom1pt0to1pt1System" depends="setGlobus, testUpgradeFrom1pt0to1pt1" description="Performs system tests on the upgraded (1.0 to 1.1) service">
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+            <jvmarg value="-Dintroduce.base.dir=../introduce" />
+            <classpath location="${instrumented.classes.dir}" />
+            <classpath refid="all.test.classpath" />
+            <classpath>
+                <pathelement path="${test.classes.dir}" />
+            </classpath>
+            <formatter type="xml" />
+            <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+            <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/system/UpgradedServiceSystemTest.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />
+    </target>
+
+
+    <!-- system tests for the BDT data service -->
+    <target name="testBdtSystem" depends="setGlobus, testBdtCreation" description="Tests invocation of the BDT data service">
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+            <jvmarg value="-Dintroduce.base.dir=../introduce" />
+            <classpath location="${instrumented.classes.dir}" />
+            <classpath refid="all.test.classpath" />
+            <classpath>
+                <pathelement path="${test.classes.dir}" />
+            </classpath>
+            <formatter type="xml" />
+            <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+            <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/system/bdt/BDTDataServiceSystemTests.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />
+    </target>
+
+
+    <target name="coverageReport" depends="test" description="Runs the tests and generates a test
 		coverage report.">
-		<cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
-			<fileset dir="${cql.src.dir}">
-				<include name="**/*.java"/>
-			</fileset>
-			<fileset dir="${common.src.dir}">
-				<include name="**/*.java"/>
-			</fileset>
-			<fileset dir="${validation.src.dir}">
-				<include name="**/*.java"/>
-			</fileset>
-			<fileset dir="${service.src.dir}">
-				<include name="**/*.java"/>
-			</fileset>
-			<fileset dir="${extension.src.dir}">
-				<include name="**/*.java"/>
-			</fileset>
-			<fileset dir="${utils.src.dir}">
-				<include name="**/*.java"/>
-			</fileset>
-			<fileset dir="${test.src.dir}">
-				<include name="**/*.java"/>
-			</fileset>
-		</cobertura-report>
-	</target>
+        <cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
+            <fileset dir="${cql.src.dir}">
+                <include name="**/*.java" />
+            </fileset>
+            <fileset dir="${common.src.dir}">
+                <include name="**/*.java" />
+            </fileset>
+            <fileset dir="${validation.src.dir}">
+                <include name="**/*.java" />
+            </fileset>
+            <fileset dir="${service.src.dir}">
+                <include name="**/*.java" />
+            </fileset>
+            <fileset dir="${extension.src.dir}">
+                <include name="**/*.java" />
+            </fileset>
+            <fileset dir="${utils.src.dir}">
+                <include name="**/*.java" />
+            </fileset>
+            <fileset dir="${test.src.dir}">
+                <include name="**/*.java" />
+            </fileset>
+        </cobertura-report>
+    </target>
 </project>

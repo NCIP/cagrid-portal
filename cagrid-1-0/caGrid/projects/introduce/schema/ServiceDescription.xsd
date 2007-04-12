@@ -33,6 +33,7 @@
                                             <xs:element ref="property:ServiceProperties" minOccurs="0" maxOccurs="1"/>
                                  </xs:sequence>
                                  <xs:attribute name="introduceVersion" type="xs:string" use="optional"/>
+                                 <xs:attribute name="description" type="xs:string" use="optional"/>
                       </xs:complexType>
            </xs:element>
 </xs:schema>

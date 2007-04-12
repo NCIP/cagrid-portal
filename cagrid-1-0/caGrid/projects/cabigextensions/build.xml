@@ -181,7 +181,7 @@
     <!-- =============================================================== -->
     <target name="compile" depends="prepare" description="compiles.">
         <mkdir dir="${classes.dir}" />
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" source="1.3" target="1.1" debug="on" deprecation="off" optimize="off">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" source="1.5" debug="on" deprecation="off" optimize="off">
             <classpath refid="build.classpath" />
         </javac>
         <copy toDir="${classes.dir}">
@@ -197,7 +197,7 @@
     <!-- =============================================================== -->
     <target name="compileStubs" depends="serviceStubs">
         <mkdir dir="${stubs.classes.dir}" />
-        <javac srcdir="${stubs.src}" destdir="${stubs.classes.dir}" source="1.4" debug="on">
+        <javac srcdir="${stubs.src}" destdir="${stubs.classes.dir}" source="1.5" debug="on">
             <classpath refid="build.classpath" />
         </javac>
     </target>
@@ -207,7 +207,7 @@
     <!-- =============================================================== -->
     <target name="compile-tests" depends="prepare" description="compiles.">
         <mkdir dir="${test.classes.dir}" />
-        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" source="1.3" target="1.1" debug="on" deprecation="off" optimize="off">
+        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" source="1.5" debug="on" deprecation="off" optimize="off">
             <classpath refid="test.classpath" />
         </javac>
     </target>
@@ -335,5 +335,5 @@
     <!-- ============================================================== -->
     <!-- Builds from scratch                                                -->
     <!-- ============================================================== -->
-    <target name="all" description="Builds the entire application" depends="jar, jarStubs, jar-tests" />
+    <target name="all" description="Builds the entire application" depends="jarStubs, jar, jar-tests" />
 </project>
