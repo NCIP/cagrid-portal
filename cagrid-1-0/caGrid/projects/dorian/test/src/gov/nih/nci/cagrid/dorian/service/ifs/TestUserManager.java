@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.CredentialPolicy;
+import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.conf.Length;
 import gov.nih.nci.cagrid.dorian.conf.ProxyPolicy;
@@ -48,15 +49,57 @@ public class TestUserManager extends TestCase {
 	private static final int MAX_NAME_LENGTH = 50;
 
 	private static final int INIT_USER = 1;
+	private static final String DEFAULT_IDP_NAME = "Dorian IdP";
 
 	private Database db;
-
-	private UserManager um;
 
 	private CertificateAuthority ca;
 
 
-	public void testSingleUser() {
+	public void testSingleUserIdPNameBasedIdentitfiers() {
+		try {
+			checkSingleUser(getUserManagerNameBasedIdentities());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+
+	}
+
+
+	public void testSingleUserIdPIdBasedIdentitfiers() {
+		try {
+			checkSingleUser(getUserManagerIdBasedIdentities());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+
+	}
+	
+	public void testMultipleUsersIdPNameBasedIdentitfiers() {
+		try {
+			checkMultipleUsers(getUserManagerNameBasedIdentities());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+
+	}
+
+
+	public void testMultipleUsersIdPIdBasedIdentitfiers() {
+		try {
+			checkMultipleUsers(getUserManagerIdBasedIdentities());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+
+	}
+
+
+	public void checkSingleUser(UserManager um) {
 		try {
 			// Test adding user
 			IFSUser user = new IFSUser();
@@ -65,7 +108,7 @@ public class TestUserManager extends TestCase {
 			user.setFirstName("John");
 			user.setLastName("Doe");
 			user.setEmail("user@user.com");
-			user = um.addUser(user);
+			user = um.addUser(getIdp(user), user);
 			assertNotNull(user.getCertificate());
 			assertNotNull(user.getGridId());
 			assertNotNull(user.getUserRole());
@@ -213,7 +256,7 @@ public class TestUserManager extends TestCase {
 			assertEquals(u5, um.getUser(u5.getGridId()));
 
 			// Now we test updating credentials
-			um.renewUserCredentials(u5);
+			um.renewUserCredentials(getIdp(u5), u5);
 			assertEquals(u5, um.getUser(u5.getGridId()));
 			StringReader r = new StringReader(u5.getCertificate().getCertificateAsString());
 			X509Certificate newCert = CertUtil.loadCertificate(r);
@@ -243,7 +286,7 @@ public class TestUserManager extends TestCase {
 	}
 
 
-	public void testMultipleUsers() {
+	public void checkMultipleUsers(UserManager um) {
 		try {
 
 			String prefix = "user";
@@ -268,7 +311,7 @@ public class TestUserManager extends TestCase {
 				user.setFirstName(firstName);
 				user.setLastName(lastName);
 				user.setEmail(uname + "@user.com");
-				user = um.addUser(user);
+				user = um.addUser(getIdp(user), user);
 				assertNotNull(user.getCertificate());
 				assertNotNull(user.getGridId());
 				assertNotNull(user.getUserRole());
@@ -437,7 +480,7 @@ public class TestUserManager extends TestCase {
 				assertEquals(u5, um.getUser(u5.getGridId()));
 
 				// Now we test updating credentials
-				um.renewUserCredentials(u5);
+				um.renewUserCredentials(getIdp(u5), u5);
 				assertEquals(u5, um.getUser(u5.getGridId()));
 				StringReader r = new StringReader(u5.getCertificate().getCertificateAsString());
 				X509Certificate newCert = CertUtil.loadCertificate(r);
@@ -462,10 +505,11 @@ public class TestUserManager extends TestCase {
 			assertTrue(false);
 		}
 	}
-	
-	
-	private IdentityFederationConfiguration getOneYearConf() throws Exception {
+
+
+	private IdentityFederationConfiguration getConf(IdentityAssignmentPolicy p) throws Exception {
 		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
+		conf.setIdentityAssignmentPolicy(p);
 		CredentialPolicy cp = new CredentialPolicy();
 		CredentialLifetime l = new CredentialLifetime();
 		l.setYears(1);
@@ -491,7 +535,8 @@ public class TestUserManager extends TestCase {
 		conf.setAccountPolicies(Utils.getAccountPolicies());
 		return conf;
 	}
-	
+
+
 	private IFSDefaults getDefaults() throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName("Initial IdP");
@@ -545,18 +590,13 @@ public class TestUserManager extends TestCase {
 	}
 
 
-	
-
-
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = Utils.getCA(db);
-			IdentityFederationConfiguration conf = getOneYearConf();
-			TrustedIdPManager tm = new TrustedIdPManager(conf, db);
-			um = new UserManager(db, conf, ca, tm,getDefaults());
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -564,15 +604,40 @@ public class TestUserManager extends TestCase {
 	}
 
 
+	public UserManager getUserManagerNameBasedIdentities() throws Exception {
+		IdentityFederationConfiguration conf = getConf(IdentityAssignmentPolicy.name);
+		TrustedIdPManager tm = new TrustedIdPManager(conf, db);
+		UserManager um = new UserManager(db, conf, ca, tm, getDefaults());
+		um.clearDatabase();
+		return um;
+	}
+
+
+	public UserManager getUserManagerIdBasedIdentities() throws Exception {
+		IdentityFederationConfiguration conf = getConf(IdentityAssignmentPolicy.id);
+		TrustedIdPManager tm = new TrustedIdPManager(conf, db);
+		UserManager um = new UserManager(db, conf, ca, tm, getDefaults());
+		um.clearDatabase();
+		return um;
+	}
+
+
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
-			um.clearDatabase();
 			assertEquals(0, db.getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
+	}
+
+
+	private TrustedIdP getIdp(IFSUser usr) {
+		TrustedIdP idp = new TrustedIdP();
+		idp.setId(usr.getIdPId());
+		idp.setName(DEFAULT_IDP_NAME + usr.getIdPId());
+		return idp;
 	}
 
 }

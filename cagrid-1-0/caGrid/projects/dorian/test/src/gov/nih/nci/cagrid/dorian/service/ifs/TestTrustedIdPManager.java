@@ -53,7 +53,7 @@ public class TestTrustedIdPManager extends TestCase {
 
 	private TrustedIdPManager tm;
 
-	private List list;
+	private SAMLAuthenticationMethod[] methods;
 
 	private CertificateAuthority ca;
 
@@ -90,7 +90,47 @@ public class TestTrustedIdPManager extends TestCase {
 	}
 
 
-	public void testSingleIdPNoAuthenticationMethods() {
+	public void testUniqueNames() {
+		try {
+			String name = "Test IdP";
+			TrustedIdP idp1 = getTrustedIdp(name).getIdp();
+			idp1 = tm.addTrustedIdP(idp1);
+			assertEquals(1, tm.getTrustedIdPs().length);
+			TrustedIdP idp2 = getTrustedIdp(name, true).getIdp();
+			try {
+				idp2 = tm.addTrustedIdP(idp2);
+				assertTrue(false);
+			} catch (InvalidTrustedIdPFault f) {
+
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+
+	}
+
+
+	public void testNameUpdate() {
+		try {
+			String name = "Test IdP";
+			TrustedIdP idp = getTrustedIdp(name).getIdp();
+			idp = tm.addTrustedIdP(idp);
+			idp.setName("Updated " + name);
+			try {
+				tm.updateIdP(idp);
+				assertTrue(false);
+			} catch (InvalidTrustedIdPFault f) {
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+
+	}
+
+
+	public void testSingleIdPNullAuthenticationMethods() {
 		try {
 			// We want to run this multiple times
 			assertNotNull(tm);
@@ -124,7 +164,43 @@ public class TestTrustedIdPManager extends TestCase {
 	}
 
 
-	public void testSingleIdPUpdateNoAuthenticationMethods() {
+	public void testSingleIdPNoAuthenticationMethods() {
+		try {
+			// We want to run this multiple times
+			assertNotNull(tm);
+			assertEquals(0, tm.getTrustedIdPs().length);
+			String name = "Test IdP";
+			IdPContainer cont = getTrustedIdp(name);
+			SAMLAuthenticationMethod[] m = new SAMLAuthenticationMethod[0];
+			cont.getIdp().setAuthenticationMethod(m);
+			TrustedIdP idp = cont.getIdp();
+			idp = tm.addTrustedIdP(idp);
+			idp.setAuthenticationMethod(null);
+			assertEquals(1, tm.getTrustedIdPs().length);
+			assertEquals(null, tm.getAuthenticationMethods(idp.getId()));
+			TrustedIdP[] idps = tm.getTrustedIdPs();
+			assertEquals(idp, idps[0]);
+			assertTrue(tm.determineTrustedIdPExistsByName(name));
+			TrustedIdP temp = tm.getTrustedIdPByName(idp.getName());
+			assertEquals(idp, temp);
+			TrustedIdP temp2 = tm.getTrustedIdPById(idp.getId());
+			assertEquals(idp, temp2);
+			TrustedIdP temp3 = tm.getTrustedIdP(cont.getSAMLAssertion());
+			assertEquals(idp, temp3);
+			StringReader reader = new StringReader(idp.getIdPCertificate());
+			X509Certificate cert = CertUtil.loadCertificate(reader);
+			assertTrue(tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
+			assertEquals(idp, tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
+			tm.removeTrustedIdP(idp.getId());
+			assertEquals(0, tm.getTrustedIdPs().length);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+
+
+	public void testSingleIdPUpdateNullAuthenticationMethods() {
 		try {
 			// We want to run this multiple times
 			assertNotNull(tm);
@@ -190,74 +266,143 @@ public class TestTrustedIdPManager extends TestCase {
 	}
 
 
-	public void testSingleIdP() {
+	public void testSingleIdPAllAuthenticationMethods() {
 		try {
-			// We want to run this multiple times
-			int times = getAuthenticationMethods().size();
-			for (int i = 0; i < times; i++) {
-				assertNotNull(tm);
-				assertEquals(0, tm.getTrustedIdPs().length);
-				String name = "Test IdP";
-				IdPContainer cont = getTrustedIdp(name);
-				TrustedIdP idp = cont.getIdp();
-				idp = tm.addTrustedIdP(idp);
-				assertEquals(1, tm.getTrustedIdPs().length);
-				checkAuthenticationMethodLength(idp);
-				TrustedIdP[] idps = tm.getTrustedIdPs();
-				assertEquals(idp, idps[0]);
-				assertTrue(tm.determineTrustedIdPExistsByName(name));
-				TrustedIdP temp = tm.getTrustedIdPByName(idp.getName());
-				assertEquals(idp, temp);
-				TrustedIdP temp2 = tm.getTrustedIdPById(idp.getId());
-				assertEquals(idp, temp2);
-				TrustedIdP temp3 = tm.getTrustedIdP(cont.getSAMLAssertion());
-				assertEquals(idp, temp3);
+			assertNotNull(tm);
+			assertEquals(0, tm.getTrustedIdPs().length);
+			String name = "Test IdP";
+			IdPContainer cont = getTrustedIdp(name);
+			TrustedIdP idp = cont.getIdp();
+			idp = tm.addTrustedIdP(idp);
+			assertEquals(1, tm.getTrustedIdPs().length);
+			checkAuthenticationMethodLength(idp);
+			TrustedIdP[] idps = tm.getTrustedIdPs();
+			assertEquals(idp, idps[0]);
+			assertTrue(tm.determineTrustedIdPExistsByName(name));
+			TrustedIdP temp = tm.getTrustedIdPByName(idp.getName());
+			assertEquals(idp, temp);
+			TrustedIdP temp2 = tm.getTrustedIdPById(idp.getId());
+			assertEquals(idp, temp2);
+			TrustedIdP temp3 = tm.getTrustedIdP(cont.getSAMLAssertion());
+			assertEquals(idp, temp3);
 
-				// Test for bad assertion
-				IdPContainer bad = getTrustedIdp("BAD ASSERTION");
-				try {
-					tm.getTrustedIdP(bad.getSAMLAssertion());
-					assertTrue(false);
-				} catch (InvalidAssertionFault f) {
+			// Test for bad assertion
+			IdPContainer bad = getTrustedIdp("BAD ASSERTION");
+			try {
+				tm.getTrustedIdP(bad.getSAMLAssertion());
+				assertTrue(false);
+			} catch (InvalidAssertionFault f) {
 
-				}
-
-				StringReader reader = new StringReader(idp.getIdPCertificate());
-				X509Certificate cert = CertUtil.loadCertificate(reader);
-				assertTrue(tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
-				assertEquals(idp, tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
-
-				// Test Updates
-				String updatedName = "Update IdP";
-				IdPContainer updatedCont = getTrustedIdp(updatedName);
-				TrustedIdP updateIdp = updatedCont.getIdp();
-				updateIdp.setId(idp.getId());
-				updateIdp.setStatus(TrustedIdPStatus.Suspended);
-				tm.updateIdP(updateIdp);
-
-				TrustedIdP[] ulist = tm.getTrustedIdPs();
-				assertEquals(1, ulist.length);
-				assertEquals(updateIdp, ulist[0]);
-				assertEquals(TrustedIdPStatus.Suspended, ulist[0].getStatus());
-				assertTrue(!tm.determineTrustedIdPExistsByName(name));
-				assertTrue(tm.determineTrustedIdPExistsByName(updatedName));
-				TrustedIdP utemp = tm.getTrustedIdPByName(updateIdp.getName());
-				assertEquals(updateIdp, utemp);
-				TrustedIdP utemp2 = tm.getTrustedIdPById(updateIdp.getId());
-				assertEquals(updateIdp, utemp2);
-				TrustedIdP utemp3 = tm.getTrustedIdP(updatedCont.getSAMLAssertion());
-				assertEquals(updateIdp, utemp3);
-
-				StringReader ureader = new StringReader(updateIdp.getIdPCertificate());
-				X509Certificate ucert = CertUtil.loadCertificate(ureader);
-				assertTrue(!tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
-				assertTrue(tm.determineTrustedIdPExistsByDN(ucert.getSubjectDN().toString()));
-				assertEquals(updateIdp, tm.getTrustedIdPByDN(ucert.getSubjectDN().toString()));
-
-				tm.removeTrustedIdP(idp.getId());
-				assertEquals(0, tm.getTrustedIdPs().length);
-				assertEquals(null, tm.getAuthenticationMethods(idp.getId()));
 			}
+
+			StringReader reader = new StringReader(idp.getIdPCertificate());
+			X509Certificate cert = CertUtil.loadCertificate(reader);
+			assertTrue(tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
+			assertEquals(idp, tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
+
+			// Test Updates
+
+			IdPContainer updatedCont = getTrustedIdp(name, true);
+			TrustedIdP updateIdp = updatedCont.getIdp();
+			updateIdp.setId(idp.getId());
+			updateIdp.setStatus(TrustedIdPStatus.Suspended);
+			tm.updateIdP(updateIdp);
+
+			TrustedIdP[] ulist = tm.getTrustedIdPs();
+			assertEquals(1, ulist.length);
+			assertEquals(updateIdp, ulist[0]);
+			assertEquals(TrustedIdPStatus.Suspended, ulist[0].getStatus());
+			assertTrue(tm.determineTrustedIdPExistsByName(name));
+			TrustedIdP utemp = tm.getTrustedIdPByName(updateIdp.getName());
+			assertEquals(updateIdp, utemp);
+			TrustedIdP utemp2 = tm.getTrustedIdPById(updateIdp.getId());
+			assertEquals(updateIdp, utemp2);
+			TrustedIdP utemp3 = tm.getTrustedIdP(updatedCont.getSAMLAssertion());
+			assertEquals(updateIdp, utemp3);
+
+			StringReader ureader = new StringReader(updateIdp.getIdPCertificate());
+			X509Certificate ucert = CertUtil.loadCertificate(ureader);
+			assertTrue(!tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
+			assertTrue(tm.determineTrustedIdPExistsByDN(ucert.getSubjectDN().toString()));
+			assertEquals(updateIdp, tm.getTrustedIdPByDN(ucert.getSubjectDN().toString()));
+
+			tm.removeTrustedIdP(idp.getId());
+			assertEquals(0, tm.getTrustedIdPs().length);
+			assertEquals(null, tm.getAuthenticationMethods(idp.getId()));
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+
+
+	public void testSingleIdPOneAuthenticationMethods() {
+		try {
+			assertNotNull(tm);
+			assertEquals(0, tm.getTrustedIdPs().length);
+			String name = "Test IdP";
+			IdPContainer cont = getTrustedIdp(name);
+			TrustedIdP idp = cont.getIdp();
+			SAMLAuthenticationMethod[] m = new SAMLAuthenticationMethod[1];
+			m[0] = getAuthenticationMethods()[0];
+			idp.setAuthenticationMethod(m);
+			idp = tm.addTrustedIdP(idp);
+			assertEquals(1, tm.getTrustedIdPs().length);
+			checkAuthenticationMethodLength(idp);
+			TrustedIdP[] idps = tm.getTrustedIdPs();
+			assertEquals(idp, idps[0]);
+			assertTrue(tm.determineTrustedIdPExistsByName(name));
+			TrustedIdP temp = tm.getTrustedIdPByName(idp.getName());
+			assertEquals(idp, temp);
+			TrustedIdP temp2 = tm.getTrustedIdPById(idp.getId());
+			assertEquals(idp, temp2);
+			TrustedIdP temp3 = tm.getTrustedIdP(cont.getSAMLAssertion());
+			assertEquals(idp, temp3);
+
+			// Test for bad assertion
+			IdPContainer bad = getTrustedIdp("BAD ASSERTION");
+			try {
+				tm.getTrustedIdP(bad.getSAMLAssertion());
+				assertTrue(false);
+			} catch (InvalidAssertionFault f) {
+
+			}
+
+			StringReader reader = new StringReader(idp.getIdPCertificate());
+			X509Certificate cert = CertUtil.loadCertificate(reader);
+			assertTrue(tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
+			assertEquals(idp, tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
+
+			// Test Updates
+
+			IdPContainer updatedCont = getTrustedIdp(name, true);
+			TrustedIdP updateIdp = updatedCont.getIdp();
+			updateIdp.setId(idp.getId());
+			updateIdp.setStatus(TrustedIdPStatus.Suspended);
+			tm.updateIdP(updateIdp);
+
+			TrustedIdP[] ulist = tm.getTrustedIdPs();
+			assertEquals(1, ulist.length);
+			assertEquals(updateIdp, ulist[0]);
+			assertEquals(TrustedIdPStatus.Suspended, ulist[0].getStatus());
+			assertTrue(tm.determineTrustedIdPExistsByName(name));
+			TrustedIdP utemp = tm.getTrustedIdPByName(updateIdp.getName());
+			assertEquals(updateIdp, utemp);
+			TrustedIdP utemp2 = tm.getTrustedIdPById(updateIdp.getId());
+			assertEquals(updateIdp, utemp2);
+			TrustedIdP utemp3 = tm.getTrustedIdP(updatedCont.getSAMLAssertion());
+			assertEquals(updateIdp, utemp3);
+
+			StringReader ureader = new StringReader(updateIdp.getIdPCertificate());
+			X509Certificate ucert = CertUtil.loadCertificate(ureader);
+			assertTrue(!tm.determineTrustedIdPExistsByDN(cert.getSubjectDN().toString()));
+			assertTrue(tm.determineTrustedIdPExistsByDN(ucert.getSubjectDN().toString()));
+			assertEquals(updateIdp, tm.getTrustedIdPByDN(ucert.getSubjectDN().toString()));
+
+			tm.removeTrustedIdP(idp.getId());
+			assertEquals(0, tm.getTrustedIdPs().length);
+			assertEquals(null, tm.getAuthenticationMethods(idp.getId()));
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -269,9 +414,8 @@ public class TestTrustedIdPManager extends TestCase {
 	public void testMultipleIdPs() {
 		try {
 			// We want to run this multiple times
-			int times = getAuthenticationMethods().size();
+			int times = 3;
 			String baseName = "Test IdP";
-			String baseUpdateName = "Updated IdP";
 			for (int i = 0; i < times; i++) {
 				assertNotNull(tm);
 				assertEquals(i, tm.getTrustedIdPs().length);
@@ -304,16 +448,14 @@ public class TestTrustedIdPManager extends TestCase {
 				assertEquals(idp, tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
 
 				// Test Updates
-				String updatedName = baseUpdateName + " " + i;
-				IdPContainer updateCont = getTrustedIdp(updatedName);
+				IdPContainer updateCont = getTrustedIdp(name, true);
 				TrustedIdP updateIdp = updateCont.getIdp();
 				updateIdp.setId(idp.getId());
 				updateIdp.setStatus(TrustedIdPStatus.Suspended);
 				tm.updateIdP(updateIdp);
 
 				assertEquals((i + 1), tm.getTrustedIdPs().length);
-				assertTrue(!tm.determineTrustedIdPExistsByName(name));
-				assertTrue(tm.determineTrustedIdPExistsByName(updatedName));
+				assertTrue(tm.determineTrustedIdPExistsByName(name));
 				TrustedIdP utemp = tm.getTrustedIdPByName(updateIdp.getName());
 				assertEquals(updateIdp, utemp);
 				assertEquals(TrustedIdPStatus.Suspended, utemp.getStatus());
@@ -351,10 +493,10 @@ public class TestTrustedIdPManager extends TestCase {
 	public void testUpdateAuthMethodsOnly() {
 		try {
 			TrustedIdP idp = getTrustedIdp("Test IdP").getIdp();
-			int count = getAuthenticationMethods().size() / 2;
+			int count = getAuthenticationMethods().length / 2;
 			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[count];
 			for (int i = 0; i < count; i++) {
-				methods[i] = (SAMLAuthenticationMethod) getAuthenticationMethods().get(i);
+				methods[i] = getAuthenticationMethods()[i];
 			}
 			idp.setAuthenticationMethod(methods);
 			idp = tm.addTrustedIdP(idp);
@@ -362,7 +504,7 @@ public class TestTrustedIdPManager extends TestCase {
 
 			methods = new SAMLAuthenticationMethod[count - 1];
 			for (int i = 0; i < (count - 1); i++) {
-				methods[i] = (SAMLAuthenticationMethod) getAuthenticationMethods().get(i);
+				methods[i] = getAuthenticationMethods()[i];
 			}
 			idp.setAuthenticationMethod(methods);
 			tm.updateIdP(idp);
@@ -377,11 +519,16 @@ public class TestTrustedIdPManager extends TestCase {
 
 
 	private IdPContainer getTrustedIdp(String name) throws Exception {
+		return getTrustedIdp(name, false);
+	}
+
+
+	private IdPContainer getTrustedIdp(String name, boolean nonStandartCert) throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(name);
 		idp.setStatus(TrustedIdPStatus.Active);
 		idp.setUserPolicyClass(AutoApprovalPolicy.class.getName());
-		idp.setAuthenticationMethod(getRandomMethodList());
+		idp.setAuthenticationMethod(getAuthenticationMethods());
 		SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
 		uid.setNamespaceURI(SAMLConstants.UID_ATTRIBUTE_NAMESPACE);
 		uid.setName(SAMLConstants.UID_ATTRIBUTE);
@@ -403,7 +550,12 @@ public class TestTrustedIdPManager extends TestCase {
 		idp.setEmailAttributeDescriptor(email);
 
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-		String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
+		String subject = null;
+		if (nonStandartCert) {
+			subject = Utils.CA_SUBJECT_PREFIX + ",CN=Non Standard" + name;
+		} else {
+			subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
+		}
 		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
 		assertNotNull(req);
 		GregorianCalendar cal = new GregorianCalendar();
@@ -475,28 +627,9 @@ public class TestTrustedIdPManager extends TestCase {
 	}
 
 
-	private SAMLAuthenticationMethod[] getRandomMethodList() {
-		double val = Math.random();
-		int size = getAuthenticationMethods().size() + 1;
-		double num = 1 / ((double) size);
-
-		int count = (int) (val / num);
-
-		if (count == 0) {
-			return null;
-		} else {
-			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[count];
-			for (int i = 0; i < count; i++) {
-				methods[i] = (SAMLAuthenticationMethod) getAuthenticationMethods().get(i);
-			}
-			return methods;
-		}
-	}
-
-
-	public List getAuthenticationMethods() {
-		if (list == null) {
-			list = new ArrayList();
+	public SAMLAuthenticationMethod[] getAuthenticationMethods() {
+		if (methods == null) {
+			List list = new ArrayList();
 
 			Field[] fields = SAMLAuthenticationMethod.class.getFields();
 
@@ -510,8 +643,13 @@ public class TestTrustedIdPManager extends TestCase {
 					}
 				}
 			}
+			methods = new SAMLAuthenticationMethod[list.size()];
+			for (int i = 0; i < list.size(); i++) {
+				methods[i] = (SAMLAuthenticationMethod) list.get(i);
+			}
 		}
-		return list;
+
+		return methods;
 	}
 
 

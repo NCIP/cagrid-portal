@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
 
@@ -16,8 +17,7 @@ import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
  */
 
 public class AutoApprovalPolicy extends AccountPolicy {
-	public void applyPolicy(IFSUser user) throws DorianInternalFault,
-			UserPolicyFault {
+	public void applyPolicy(TrustedIdP idp, IFSUser user) throws DorianInternalFault, UserPolicyFault {
 		UserManager um = getUserManager();
 		// First we approve if the user has not been approved.
 		if (user.getUserStatus().equals(IFSUserStatus.Pending)) {
@@ -26,8 +26,7 @@ public class AutoApprovalPolicy extends AccountPolicy {
 				um.updateUser(user);
 			} catch (Exception e) {
 				DorianInternalFault fault = new DorianInternalFault();
-				fault.setFaultString("Error updating the status of the user "
-						+ user.getGridId());
+				fault.setFaultString("Error updating the status of the user " + user.getGridId());
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
 				fault = (DorianInternalFault) helper.getFault();

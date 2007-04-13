@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.CredentialPolicy;
+import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.conf.Length;
 import gov.nih.nci.cagrid.dorian.conf.ProxyPolicy;
@@ -88,8 +89,8 @@ public class TestIFS extends TestCase {
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, ca, defaults);
 			String uid = "user";
-			String adminSubject = UserManager.getUserSubject(ca.getCACertificate().getSubjectDN().getName(), idp
-				.getIdp().getId(), INITIAL_ADMIN);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
@@ -140,8 +141,8 @@ public class TestIFS extends TestCase {
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, ca, defaults);
 			String uidPrefix = "user";
-			String adminSubject = UserManager.getUserSubject(ca.getCACertificate().getSubjectDN().getName(), idp
-				.getIdp().getId(), INITIAL_ADMIN);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
 			int ucount = 1;
 			for (int i = 0; i < times; i++) {
@@ -272,8 +273,8 @@ public class TestIFS extends TestCase {
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, ca, defaults);
-			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
-				.getSubjectDN().getName(), idp.getIdp().getId(), defaults.getDefaultUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN));
 
 			// give a chance for others to run right before we enter timing
 			// sensitive code
@@ -320,8 +321,8 @@ public class TestIFS extends TestCase {
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, ca, defaults);
-			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
-				.getSubjectDN().getName(), idp.getIdp().getId(), defaults.getDefaultUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), defaults.getDefaultUser().getUID()));
 
 			try {
 				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
@@ -357,8 +358,8 @@ public class TestIFS extends TestCase {
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, ca, defaults);
-			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
-				.getSubjectDN().getName(), idp.getIdp().getId(), defaults.getDefaultUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), defaults.getDefaultUser().getUID()));
 
 			PublicKey publicKey2 = pair2.getPublic();
 			// give a chance for others to run right before we enter timing
@@ -406,8 +407,8 @@ public class TestIFS extends TestCase {
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, ca, defaults);
-			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
-				.getSubjectDN().getName(), idp.getIdp().getId(), defaults.getDefaultUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), defaults.getDefaultUser().getUID()));
 
 			try {
 				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
@@ -585,8 +586,8 @@ public class TestIFS extends TestCase {
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp0.getIdp());
 			ifs = new IFS(conf, db, ca, defaults);
-			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
-				.getSubjectDN().getName(), idp0.getIdp().getId(), defaults.getDefaultUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp0.getIdp(), defaults.getDefaultUser().getUID()));
 			int times = 3;
 			String baseName = "Test IdP";
 			String baseUpdateName = "Updated IdP";
@@ -602,7 +603,7 @@ public class TestIFS extends TestCase {
 
 				// Test Updates
 				String updatedName = baseUpdateName + " " + i;
-				IdPContainer updateCont = getTrustedIdpManualApproveAutoRenew(updatedName);
+				IdPContainer updateCont = getTrustedIdpManualApproveAutoRenew(name);
 				TrustedIdP updateIdp = updateCont.getIdp();
 				updateIdp.setId(idp.getId());
 				ifs.updateTrustedIdP(gridId, updateIdp);
@@ -637,6 +638,7 @@ public class TestIFS extends TestCase {
 
 	private IdentityFederationConfiguration getConf() throws Exception {
 		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
+		conf.setIdentityAssignmentPolicy(IdentityAssignmentPolicy.name);
 		CredentialPolicy cp = new CredentialPolicy();
 		CredentialLifetime l = new CredentialLifetime();
 		l.setYears(1);
@@ -666,6 +668,7 @@ public class TestIFS extends TestCase {
 
 	private IdentityFederationConfiguration getExpiringCredentialsConf() throws Exception {
 		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
+		conf.setIdentityAssignmentPolicy(IdentityAssignmentPolicy.name);
 		CredentialPolicy cp = new CredentialPolicy();
 		CredentialLifetime l = new CredentialLifetime();
 		l.setYears(0);

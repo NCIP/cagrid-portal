@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
 
@@ -14,8 +15,7 @@ import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
  */
 
 public class ManualApprovalPolicy extends AccountPolicy {
-	public void applyPolicy(IFSUser user) throws DorianInternalFault,
-			UserPolicyFault {
-	
+	public void applyPolicy(TrustedIdP idp, IFSUser user) throws DorianInternalFault, UserPolicyFault {
+
 	}
 }

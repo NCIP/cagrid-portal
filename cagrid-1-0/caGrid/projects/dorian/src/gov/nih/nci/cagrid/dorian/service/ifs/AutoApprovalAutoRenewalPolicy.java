@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
@@ -18,8 +19,8 @@ import java.security.cert.X509Certificate;
  *          Exp $
  */
 public class AutoApprovalAutoRenewalPolicy extends AutoApprovalPolicy {
-	public void applyPolicy(IFSUser user) throws DorianInternalFault, UserPolicyFault {
-		super.applyPolicy(user);
+	public void applyPolicy(TrustedIdP idp, IFSUser user) throws DorianInternalFault, UserPolicyFault {
+		super.applyPolicy(idp, user);
 		UserManager um = getUserManager();
 		IdentityFederationConfiguration conf = getConfiguration();
 
@@ -27,9 +28,9 @@ public class AutoApprovalAutoRenewalPolicy extends AutoApprovalPolicy {
 			// Next we check if the user's credentials have expired
 			X509Certificate cert = CertUtil.loadCertificate(user.getCertificate().getCertificateAsString());
 			if (CertUtil.isExpired(cert)) {
-				um.renewUserCredentials(user);
+				um.renewUserCredentials(idp, user);
 			} else if (IFSUtils.getMaxProxyLifetime(conf).after(cert.getNotAfter())) {
-				um.renewUserCredentials(user);
+				um.renewUserCredentials(idp, user);
 			}
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();

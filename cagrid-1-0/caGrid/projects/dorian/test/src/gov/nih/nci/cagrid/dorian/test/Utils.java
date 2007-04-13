@@ -6,11 +6,14 @@ import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.conf.AccountPolicies;
 import gov.nih.nci.cagrid.dorian.conf.AccountPolicy;
 import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
+import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalPolicy;
 import gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalPolicy;
+import gov.nih.nci.cagrid.dorian.service.ifs.UserManager;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
@@ -70,6 +73,19 @@ public class Utils {
 		policies[3].setClassname(AutoApprovalPolicy.class.getName());
 		ap.setAccountPolicy(policies);
 		return ap;
+	}
+	
+	
+	
+	public static String getDorianIdPUserId(IdentityAssignmentPolicy policy, String idpName, String caSubject, String uid) throws Exception {
+		TrustedIdP idp = new TrustedIdP();
+		idp.setId(1);
+		idp.setName(idpName);
+		return UserManager.getUserSubject(policy, caSubject, idp, uid);
+	}
+	
+	public static String getDorianIdPUserId(IdentityAssignmentPolicy policy, String caSubject, String uid) throws Exception {
+		return getDorianIdPUserId(policy, "Dorian IdP", caSubject, uid);
 	}
 
 

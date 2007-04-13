@@ -204,10 +204,17 @@ public class IFS extends LoggingObject {
 
 	public IFSUser renewUserCredentials(String callerGridIdentity, IFSUser usr) throws DorianInternalFault,
 		InvalidUserFault, PermissionDeniedFault {
-		IFSUser caller = um.getUser(callerGridIdentity);
-		verifyActiveUser(caller);
-		verifyAdminUser(caller);
-		return um.renewUserCredentials(usr);
+		try {
+			IFSUser caller = um.getUser(callerGridIdentity);
+			verifyActiveUser(caller);
+			verifyAdminUser(caller);
+			return um.renewUserCredentials(tm.getTrustedIdPById(usr.getIdPId()), usr);
+		} catch (InvalidTrustedIdPFault f) {
+			logError(f.getFaultString(), f);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected error occurred renewing the user's credentials.");
+			throw fault;
+		}
 	}
 
 
@@ -272,7 +279,7 @@ public class IFS extends LoggingObject {
 				usr.setEmail(email);
 				usr.setUserRole(IFSUserRole.Non_Administrator);
 				usr.setUserStatus(IFSUserStatus.Pending);
-				usr = um.addUser(usr);
+				usr = um.addUser(idp, usr);
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
 				DorianInternalFault fault = new DorianInternalFault();
@@ -318,8 +325,6 @@ public class IFS extends LoggingObject {
 
 		// Validate that the proxy is of valid length
 
-		
-
 		if (IFSUtils.getProxyValid(lifetime).after(IFSUtils.getMaxProxyLifetime(conf))) {
 			InvalidProxyFault fault = new InvalidProxyFault();
 			fault.setFaultString("The proxy valid length exceeds the maximum proxy valid length (hrs="
@@ -345,7 +350,7 @@ public class IFS extends LoggingObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
-		policy.applyPolicy(usr);
+		policy.applyPolicy(idp, usr);
 
 		// Check to see if authorized
 		this.verifyActiveUser(usr);

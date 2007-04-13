@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
+import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
@@ -108,8 +109,7 @@ public class TestDorian extends TestCase {
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 
-			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(), 1,
-				Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, jm, Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 
 			// test authentication with an active user
@@ -214,8 +214,7 @@ public class TestDorian extends TestCase {
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 
-			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(), 1,
-				Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, jm, Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 
 			Application a = createApplication();
@@ -353,8 +352,7 @@ public class TestDorian extends TestCase {
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 
-			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(), 1,
-				Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, jm, Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			idp.getIdp().setId(jm.addTrustedIdP(gridId, idp.getIdp()).getId());
@@ -405,8 +403,7 @@ public class TestDorian extends TestCase {
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 
-			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(), 1,
-				Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, jm, Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 
 			IdPContainer idp = this.getTrustedIdpManualApproveAutoRenew("My IdP");
@@ -466,8 +463,7 @@ public class TestDorian extends TestCase {
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 
-			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(), 1,
-				Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, jm, Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
 			idp.getIdp().setId(jm.addTrustedIdP(gridId, idp.getIdp()).getId());
@@ -529,8 +525,7 @@ public class TestDorian extends TestCase {
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
 
-			String gridSubject = UserManager.getUserSubject(jm.getCACertificate().getSubjectDN().getName(), 1,
-				Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, jm, Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 
 			IdPContainer idp = this.getTrustedIdpManualApprove("My IdP");
@@ -916,6 +911,17 @@ public class TestDorian extends TestCase {
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
+	}
+
+
+	private String getDorianIdPUserId(DorianConfiguration conf, Dorian d, String uid) throws Exception {
+		String caSubject = d.getCACertificate().getSubjectDN().getName();
+		IdentityAssignmentPolicy policy = conf.getIdentityFederationConfiguration().getIdentityAssignmentPolicy();
+		TrustedIdP idp = new TrustedIdP();
+		idp.setId(1);
+		idp.setName(conf.getIdentityProviderConfiguration().getIdentityProviderName());
+		return Utils.getDorianIdPUserId(policy, conf.getIdentityProviderConfiguration().getIdentityProviderName(),
+			caSubject, uid);
 	}
 
 }

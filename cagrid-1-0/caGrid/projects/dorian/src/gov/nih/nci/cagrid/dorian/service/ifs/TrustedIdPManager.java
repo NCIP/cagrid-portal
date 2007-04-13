@@ -50,9 +50,6 @@ public class TrustedIdPManager extends LoggingObject {
 	private IFSUserPolicy[] accountPolicies;
 
 
-
-
-
 	public TrustedIdPManager(IdentityFederationConfiguration conf, Database db) throws DorianInternalFault {
 		this.db = db;
 		this.conf = conf;
@@ -81,7 +78,8 @@ public class TrustedIdPManager extends LoggingObject {
 			accountPolicies[i].setClassName(policies[i].getClassname());
 		}
 	}
-	
+
+
 	public IFSUserPolicy[] getAccountPolicies() {
 		return accountPolicies;
 	}
@@ -218,14 +216,9 @@ public class TrustedIdPManager extends LoggingObject {
 		boolean needsUpdate = false;
 		String name = curr.getName();
 		if ((clean(idp.getName()) != null) && (!idp.getName().equals(curr.getName()))) {
-			if (determineTrustedIdPExistsByName(idp.getName())) {
-				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-				fault.setFaultString("The name of Trusted IdP " + curr.getName() + " cannot be changed to "
-					+ idp.getName() + " and IdP with that name already exists");
-				throw fault;
-			}
-			needsUpdate = true;
-			name = validateAndGetName(idp);
+			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
+			fault.setFaultString("The name of a TrustedIdP cannot be changed.");
+			throw fault;
 		}
 		String policy = curr.getUserPolicyClass();
 
@@ -662,6 +655,7 @@ public class TrustedIdPManager extends LoggingObject {
 				+ conf.getIdentityProviderNameLength().getMax() + " in length.");
 			throw fault;
 		}
+
 		return name.trim();
 	}
 
@@ -841,7 +835,7 @@ public class TrustedIdPManager extends LoggingObject {
 
 		} else {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
-			fault.setFaultString("Cannot add the Trusted IdP, " + idp.getName() + " because it already exists.");
+			fault.setFaultString("Cannot not add IdP, an IdP with the name " + idp.getName() + " already exists.");
 			throw fault;
 		}
 		return idp;

@@ -43,7 +43,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.7 2007-04-05 16:08:05 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.8 2007-04-13 14:55:55 langella Exp $
  */
 public class TrustedIdPWindow extends ApplicationComponent {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
@@ -720,6 +720,9 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			idpName = new JTextField();
 			if (!newTrustedIdP) {
 				idpName.setText(idp.getName());
+				if (!this.newTrustedIdP) {
+					idpName.setEditable(false);
+				}
 			}
 		}
 		return idpName;

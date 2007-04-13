@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
+import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.CredentialsFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
@@ -140,8 +141,9 @@ public class UserManager extends LoggingObject {
 	}
 
 
-	public synchronized IFSUser renewUserCredentials(IFSUser user) throws DorianInternalFault, InvalidUserFault {
-		X509Certificate cert = createUserCredentials(user.getIdPId(), user.getUID());
+	public synchronized IFSUser renewUserCredentials(TrustedIdP idp, IFSUser user) throws DorianInternalFault,
+		InvalidUserFault {
+		X509Certificate cert = createUserCredentials(idp, user.getUID());
 		user.setGridId(subjectToIdentity(cert.getSubjectDN().getName()));
 		try {
 			this.updateUser(user);
@@ -172,19 +174,27 @@ public class UserManager extends LoggingObject {
 	}
 
 
-	public static String getUserSubject(String caSubject, long idpId, String uid) {
-		int caindex = caSubject.lastIndexOf(",");
-		String caPreSub = caSubject.substring(0, caindex);
-		String sub = caPreSub + ",OU=IdP [" + idpId + "],CN=" + uid;
-		return sub;
+	public String getUserSubject(String caSubject, TrustedIdP idp, String uid) {
+		return getUserSubject(this.conf.getIdentityAssignmentPolicy(), caSubject, idp, uid);
 	}
 
 
-	private synchronized X509Certificate createUserCredentials(long idpId, String uid) throws DorianInternalFault {
+	public static String getUserSubject(IdentityAssignmentPolicy policy, String caSubject, TrustedIdP idp, String uid) {
+		int caindex = caSubject.lastIndexOf(",");
+		String caPreSub = caSubject.substring(0, caindex);
+		if (policy.equals(IdentityAssignmentPolicy.id)) {
+			return caPreSub + ",OU=IdP [" + idp.getId() + "],CN=" + uid;
+		} else {
+			return caPreSub + ",OU=" + idp.getName() + ",CN=" + uid;
+		}
+	}
+
+
+	private synchronized X509Certificate createUserCredentials(TrustedIdP idp, String uid) throws DorianInternalFault {
 		try {
 
 			String caSubject = ca.getCACertificate().getSubjectDN().getName();
-			String sub = getUserSubject(caSubject, idpId, uid);
+			String sub = getUserSubject(caSubject, idp, uid);
 			Calendar c = new GregorianCalendar();
 			Date start = c.getTime();
 			CredentialLifetime lifetime = conf.getCredentialPolicy().getCredentialLifetime();
@@ -197,8 +207,9 @@ public class UserManager extends LoggingObject {
 
 			PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(sub, pair);
 			X509Certificate cert = ca.requestCertificate(req, start, end);
-			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(idpId, uid));
-			this.credentialsManager.addCredentials(getCredentialsManagerUID(idpId, uid), null, cert, pair.getPrivate());
+			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(idp.getId(), uid));
+			this.credentialsManager.addCredentials(getCredentialsManagerUID(idp.getId(), uid), null, cert, pair
+				.getPrivate());
 			return cert;
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
@@ -448,10 +459,11 @@ public class UserManager extends LoggingObject {
 	}
 
 
-	public synchronized IFSUser addUser(IFSUser user) throws DorianInternalFault, CredentialsFault, InvalidUserFault {
+	public synchronized IFSUser addUser(TrustedIdP idp, IFSUser user) throws DorianInternalFault, CredentialsFault,
+		InvalidUserFault {
 		this.buildDatabase();
 		if (!determineIfUserExists(user.getIdPId(), user.getUID())) {
-			X509Certificate cert = createUserCredentials(user.getIdPId(), user.getUID());
+			X509Certificate cert = createUserCredentials(idp, user.getUID());
 			Connection c = null;
 			try {
 
@@ -754,7 +766,7 @@ public class UserManager extends LoggingObject {
 						IFSUser usr = defaults.getDefaultUser();
 						usr.setIdPId(idp.getId());
 						if (usr != null) {
-							this.addUser(usr);
+							this.addUser(idp, usr);
 							usr.setUserRole(IFSUserRole.Administrator);
 							usr.setUserStatus(IFSUserStatus.Active);
 							this.updateUser(usr);
