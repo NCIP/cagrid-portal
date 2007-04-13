@@ -14,7 +14,7 @@ import java.lang.reflect.Constructor;
 
 public class IntroduceUpgradeManager {
     private ExtensionsUpgradeManager eUpgrader;
-    String pathToService;
+    private String pathToService;
 
 
     public IntroduceUpgradeManager(String pathToService) {
@@ -46,7 +46,7 @@ public class IntroduceUpgradeManager {
     }
 
 
-    public boolean needsUpgrading() {
+    protected boolean needsUpgrading() {
         try {
             String serviceVersion = UpgradeUtilities.getCurrentServiceVersion(pathToService + File.separator + "introduce.xml");
             if ((serviceVersion == null) || !serviceVersion.equals(CommonTools.getIntroduceVersion())) {
@@ -60,7 +60,7 @@ public class IntroduceUpgradeManager {
     }
 
 
-    public boolean canBeUpgraded(String version) {
+    protected boolean canBeUpgraded(String version) {
         if ((getUpgradeVersion(version) != null) && (getIntroduceUpgradeClass(getUpgradeVersion(version)) != null)) {
             return true;
         } else {
@@ -69,10 +69,8 @@ public class IntroduceUpgradeManager {
     }
 
 
-    public UpgradeStatus upgrade() throws Exception {
+    protected void upgrade(UpgradeStatus status) throws Exception {
         System.out.println("Trying to upgrade the service");
-        
-        UpgradeStatus status = new UpgradeStatus();
 
         String serviceVersion = UpgradeUtilities.getCurrentServiceVersion(pathToService + File.separator + "introduce.xml");
 
@@ -101,6 +99,7 @@ public class IntroduceUpgradeManager {
                     }
                     
                     IntroduceUpgradeStatus iStatus = new IntroduceUpgradeStatus();
+                    status.addIntroduceUpgradeStatus(iStatus);
 
                     // upgrade the introduce service
                     Class clazz = Class.forName(className);
@@ -149,7 +148,5 @@ public class IntroduceUpgradeManager {
         } else {
             throw new Exception("ERROR: The service" + " needs to be upgraded but no upgrader can be found");
         }
-        
-        return status;
     }
 }

@@ -28,16 +28,23 @@ public class UpgradeManager {
 
 
     public boolean canIntroduceBeUpgraded() {
-        if (iUpgrader.needsUpgrading()) {
-            return true;
-        } else {
+        try {
+            if (iUpgrader.needsUpgrading()
+                && iUpgrader.canBeUpgraded(UpgradeUtilities.getCurrentServiceVersion(pathToService + File.separator
+                    + "introduce.xml"))) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
 
     }
 
 
-    public boolean canExtensionsBeUpgraded() {
+    public boolean extensionsNeedUpgraded() {
         if (!canIntroduceBeUpgraded()) {
             ServiceInformation info = null;
             try {
@@ -76,22 +83,25 @@ public class UpgradeManager {
 
 
     public UpgradeStatus upgrade() throws Exception {
+        UpgradeStatus status = new UpgradeStatus();
         backup();
 
         if (canIntroduceBeUpgraded()) {
-            return upgradeIntroduce();
-        } else {
-            UpgradeStatus status = new UpgradeStatus();
+           upgradeIntroduce(status);
+           return status;
+        } else if (extensionsNeedUpgraded()) {
             status.addIntroduceUpgradeStatus(upgradeExtensionsOnly());
+            return status;
+        } else {
             return status;
         }
     }
 
 
-    private UpgradeStatus upgradeIntroduce() throws Exception {
+    private void upgradeIntroduce(UpgradeStatus status) throws Exception {
         if (iUpgrader.needsUpgrading()) {
             try {
-                return iUpgrader.upgrade();
+                iUpgrader.upgrade(status);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new Exception(
@@ -99,7 +109,6 @@ public class UpgradeManager {
             }
 
         }
-        return null;
     }
 
 

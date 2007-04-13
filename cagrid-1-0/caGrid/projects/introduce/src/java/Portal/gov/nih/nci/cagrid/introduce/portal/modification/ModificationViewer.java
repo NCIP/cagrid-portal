@@ -356,7 +356,7 @@ public class ModificationViewer extends GridPortalComponent {
 
             UpgradeManager upgrader = new UpgradeManager(methodsDirectory.getAbsolutePath());
 
-            if (upgrader.canIntroduceBeUpgraded() || upgrader.canExtensionsBeUpgraded()) {
+            if (upgrader.canIntroduceBeUpgraded() || upgrader.extensionsNeedUpgraded()) {
                 int answer = JOptionPane
                     .showConfirmDialog(
                         this,

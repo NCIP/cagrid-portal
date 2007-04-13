@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class UpgradeStatus {
+public class UpgradeStatus extends StatusBase {
 
     List introduceUpgradesStatus;
 

@@ -32,19 +32,26 @@ public class UpgadeTestCase extends TestCase {
 
     }
 
-    public void testNotUpgradable() {
+    public void testNotUpgradable01b() {
 
         UpgradeManager um = new UpgradeManager("test" + File.separator + "resources" + File.separator + "gold"
             + File.separator + "01b");
+        assertFalse(um.canIntroduceBeUpgraded());
+    }
+
+    public void testUpgradable10() {
+
+        UpgradeManager um = new UpgradeManager("test" + File.separator + "resources" + File.separator + "gold"
+            + File.separator + "10");
         assertTrue(um.canIntroduceBeUpgraded());
-        try {
-            um.upgrade();
-        } catch (Exception e) {
-            return;
-        }
-        fail();
     }
     
+    public void testNotUpgradable11() {
+
+        UpgradeManager um = new UpgradeManager("test" + File.separator + "resources" + File.separator + "gold"
+            + File.separator + "11");
+        assertFalse(um.canIntroduceBeUpgraded());
+    }
     
 
 }
