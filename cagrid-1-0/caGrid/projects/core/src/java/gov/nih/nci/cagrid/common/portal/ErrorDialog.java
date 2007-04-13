@@ -1,5 +1,9 @@
 package gov.nih.nci.cagrid.common.portal;
 
+import gov.nih.nci.cagrid.common.portal.errors.ErrorContainer;
+import gov.nih.nci.cagrid.common.portal.errors.ErrorDialogTable;
+import gov.nih.nci.cagrid.common.portal.errors.ErrorDialogTableListener;
+
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
@@ -9,22 +13,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.DateFormat;
 import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -40,11 +41,11 @@ import org.projectmobius.portal.PortalResourceManager;
 public class ErrorDialog extends JDialog {
 	
 	private static Frame ownerFrame = null;
-	private static Vector errors = null;
+	private static Vector<ErrorContainer> errors = null;
 	private static ErrorDialog dialog = null;
 	private static String lastFileLocation = null;
 	
-	private JList errorList = null;
+    private ErrorDialogTable errorTable = null;
 	private JScrollPane errorScrollPane = null;
 	private JTextArea detailTextArea = null;
 	private JScrollPane detailScrollPane = null;
@@ -53,7 +54,7 @@ public class ErrorDialog extends JDialog {
 	private JButton hideDialogButton = null;
 	private JButton logErrorsButton = null;
 	private JPanel buttonPanel = null;
-	private JSplitPane errorsSplitPane = null;
+    private JSplitPane errorsSplitPane = null;
 
 	private ErrorDialog(Frame parentFrame) {
 		super(parentFrame);
@@ -81,22 +82,30 @@ public class ErrorDialog extends JDialog {
 	}
 	
 	
-	private static void addError(final String error, final String detail) {
+    /**
+     * Only message is required.  Detail will be shown when asked for, exception shown
+     * when asked for, each only if != null
+     * 
+     * @param message
+     * @param detail
+     * @param error
+     */
+	private static void addError(final String message, final String detail, final Throwable error) {
 		if (dialog == null) {
 			dialog = new ErrorDialog(getOwnerFrame());	
 		}
 		Runnable r = new Runnable() {
 			public void run() {
 				dialog.setAlwaysOnTop(true);
-				ErrorContainer container = new ErrorContainer(error, detail);
+				ErrorContainer container = new ErrorContainer(message, detail, error);
 				if (errors == null) {
-					errors = new Vector();
+					errors = new Vector<ErrorContainer>();
 				}
 				errors.add(container);
-				dialog.getErrorList().setListData(errors);
+				dialog.getErrorTable().addError(container);
 				if (!dialog.isVisible()) {
 					dialog.setModal(true);
-					dialog.pack();
+					// dialog.pack();
 					dialog.setSize(500, 450);
 					// attempt to center the dialog
 					centerDialog();
@@ -108,69 +117,117 @@ public class ErrorDialog extends JDialog {
 	}
 	
 	
-	public static void showErrorDialog(Exception ex) {
+    /**
+     * Shows an error message from an exception.  The message presented will
+     * be the exception's message, or the exception's class name
+     * if no message is present
+     * 
+     * @param ex
+     */
+	public static void showErrorDialog(Throwable ex) {
 		String message = ex.getMessage();
 		if (message == null) {
 			message = ex.getClass().getName();
 		}
-		StringWriter writer = new StringWriter();
-		ex.printStackTrace(new PrintWriter(writer));
-		String detail = writer.getBuffer().toString();
-		addError(message, detail);
+		addError(message, null, ex);
 	}
 	
 	
+    /**
+     * Shows an error message with no detail or exception
+     * 
+     * @param error
+     */
 	public static void showErrorDialog(String error) {
-		addError(error, "");
+		addError(error, null, null);
 	}
 	
 	
+    /**
+     * Shows an error message with details
+     * @param error
+     * @param detail
+     */
 	public static void showErrorDialog(String error, String detail) {
-		addError(error, detail);
+		addError(error, detail, null);
 	}
 	
 	
+    /**
+     * Shows an error message with multi-line details
+     * 
+     * @param error
+     * @param detail
+     */
 	public static void showErrorDialog(String error, String[] detail) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < detail.length; i++) {
 			builder.append(detail[i]).append("\n");
 		}
-		addError(error, builder.toString());
+		addError(error, builder.toString(), null);
 	}
 	
 	
-	public static void showErrorDialog(String message, Exception ex) {
-		StringWriter writer = new StringWriter();
-		ex.printStackTrace(new PrintWriter(writer));
-		String detail = writer.getBuffer().toString();
-		addError(message, detail);
+    /**
+     * Shows an error message with an exception
+     * 
+     * @param message
+     * @param ex
+     */
+	public static void showErrorDialog(String message, Throwable ex) {
+		addError(message, null, ex);
 	}
+    
+    
+    /**
+     * Shows an error message with a multi-line detail message and exception
+     * 
+     * @param message
+     * @param details
+     * @param ex
+     */
+	public static void showErrorDialog(String message, String[] details, Throwable ex) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < details.length; i++) {
+            builder.append(details[i]).append("\n");
+        }
+        addError(message, builder.toString(), ex);
+    }
+
+    
+    /**
+     * Shows an error message with a detail message and exception
+     * 
+     * @param message
+     * @param details
+     * @param ex
+     */
+    public static void showErrorDialog(String message, String details, Throwable ex) {
+        addError(message, details, ex);
+    }
 
 	
-	/**
-	 * This method initializes jList	
-	 * 	
-	 * @return javax.swing.JList	
-	 */
-	private JList getErrorList() {
-		if (errorList == null) {
-			errorList = new JList();
-			errorList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			errorList.addListSelectionListener(new ListSelectionListener() {
-				public void valueChanged(ListSelectionEvent e) {
-					int index = errorList.getSelectedIndex();
-					if (index != -1) {
-						ErrorContainer cont = (ErrorContainer) getErrorList().getSelectedValue();
-						getDetailTextArea().setText(cont.getDetail());
-					}
-				}
-			});
-			if (errors != null) {
-				errorList.setListData(errors);
-			}
-		}
-		return errorList;
-	}
+	private ErrorDialogTable getErrorTable() {
+	    if (errorTable == null) {
+	        errorTable = new ErrorDialogTable();
+            errorTable.addErrorTableListener(new ErrorDialogTableListener() {
+                public void showDetailsClicked(ErrorContainer container) {
+                    getErrorsSplitPane().setDividerLocation(0.5D);
+                    getDetailTextArea().setText(container.getDetail());
+                }
+                
+                
+                public void showErrorClicked(ErrorContainer container) {
+                    StringWriter writer = new StringWriter();
+                    PrintWriter printWriter = new PrintWriter(writer);
+                    container.getError().printStackTrace(printWriter);
+                    getErrorsSplitPane().setDividerLocation(0.5D);
+                    getDetailTextArea().setText(writer.getBuffer().toString());
+                }
+            });
+        }
+        return errorTable;
+    }
 
 	
 	/**
@@ -184,7 +241,7 @@ public class ErrorDialog extends JDialog {
 			errorScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
 				null, "Errors", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-			errorScrollPane.setViewportView(getErrorList());
+			errorScrollPane.setViewportView(getErrorTable());
 			errorScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		}
 		return errorScrollPane;
@@ -238,7 +295,9 @@ public class ErrorDialog extends JDialog {
 			clearButton.setToolTipText("Clears the dialog of any errors and closes it");
 			clearButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    getErrorsSplitPane().setDividerLocation(1.0D);
 					errors.clear();
+                    getErrorTable().clearTable();
 					dispose();
 				}
 			});
@@ -282,10 +341,12 @@ public class ErrorDialog extends JDialog {
 	private JButton getHideDialogButton() {
 		if (hideDialogButton == null) {
 			hideDialogButton = new JButton();
-			hideDialogButton.setToolTipText("Simply hides the dialog, preserving all displayed errors");
+			hideDialogButton.setToolTipText(
+                "Simply hides the dialog, preserving all displayed errors");
 			hideDialogButton.setText("Hide");
 			hideDialogButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    getErrorsSplitPane().setDividerLocation(1.0D);
 					dispose();
 				}
 			});
@@ -349,7 +410,7 @@ public class ErrorDialog extends JDialog {
 		if (errorsSplitPane == null) {
 			errorsSplitPane = new JSplitPane();
 			errorsSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-			// errorsSplitPane.setResizeWeight(0.3D);
+			errorsSplitPane.setResizeWeight(1.0D);
 			errorsSplitPane.setTopComponent(getErrorScrollPane());
 			errorsSplitPane.setBottomComponent(getDetailScrollPane());
 			errorsSplitPane.setOneTouchExpandable(true);
@@ -380,20 +441,30 @@ public class ErrorDialog extends JDialog {
 			File file = chooser.getSelectedFile();
 			lastFileLocation = file.getAbsolutePath();
 			StringBuilder text = new StringBuilder();
-			synchronized (getErrorList()) {
-				for (int i = 0; i < getErrorList().getModel().getSize(); i++) {
-					ErrorContainer err = (ErrorContainer) getErrorList().getModel().getElementAt(i);
-					text.append(err.getMessage()).append(nl);
-					if (err.getDetail() != null) {
-						String[] details = err.getDetail().split("\n");
-						for (int j = 0; j < details.length; j++) {
-							text.append("\t").append(details[j]).append(nl);
-						}
-					}
-					if (i + 1 < getErrorList().getModel().getSize()) {
-					    text.append("---- ---- ---- ----").append(nl);
+			synchronized (errors) {
+                for (ErrorContainer container : errors) {
+                    text.append(container.getMessage()).append(" -- ")
+                        .append(DateFormat.getDateTimeInstance().format(
+                            container.getErrorDate())).append(nl);
+                    if (container.getDetail() != null) {
+                        text.append("DETAILS:").append(nl);
+                        String[] details = container.getDetail().split("\n");
+                        for (String detail : details) {
+                            text.append(detail).append(nl);
+                        }
                     }
-				}
+                    if (container.getError() != null) {
+                        text.append("EXCEPTION:").append(nl);
+                        StringWriter writer = new StringWriter();
+                        PrintWriter printWriter = new PrintWriter(writer);
+                        container.getError().printStackTrace(printWriter);
+                        String[] lines = writer.getBuffer().toString().split("\n");
+                        for (String line : lines) {
+                            text.append(line).append(nl);
+                        }
+                    }
+                    text.append("---- ---- ---- ----").append(nl);
+                }
 			}
 			try {
 				FileWriter writer = new FileWriter(file);
@@ -420,33 +491,8 @@ public class ErrorDialog extends JDialog {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			ErrorDialog.showErrorDialog(new Exception("Oh Noes!"));		
-		}
-	}
-	
-	
-	private static class ErrorContainer {
-		private String message;
-		private String detail;
-		
-		public ErrorContainer(String message, String detail) {
-			this.message = message;
-			this.detail = detail;
-		}
-		
-		
-		public String getMessage() {
-			return message;
-		}
-		
-		
-		public String getDetail() {
-			return detail;
-		}
-		
-		
-		public String toString() {
-			return this.getMessage();
+			ErrorDialog.showErrorDialog("Test error", "Test detail",
+                new Exception("Oh Noes!"));		
 		}
 	}
 }
