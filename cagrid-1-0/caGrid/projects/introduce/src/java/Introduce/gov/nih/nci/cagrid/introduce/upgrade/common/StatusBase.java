@@ -33,12 +33,24 @@ public class StatusBase {
     public static final String UPGRADE_OK = "Upgrade OK";
     public static final String UPGRADE_FAIL = "Upgrade FAILED";
     public static final String UPGRADE_NOT_AVAILABLE = "Upgrade Not Available";
+    public static final String UPGRADE_TYPE_INTRODUCE = "Introduce";
+    public static final String UPGRADE_TYPE_EXTENSION = "Extension";
     
-    private String status = null;
+    
+    private String type = "";
+    private String fromVersion = "";
+    private String toVersion = "";
+    private String status = "";
     private String description = "";
+    private String name = "";
     private List issues;
-    public StatusBase(String status){
-        this.status = status;
+ 
+    
+    public StatusBase(String name, String type, String fromVersion, String toVersion){
+        this.name = name;
+        this.type = type;
+        this.fromVersion = fromVersion;
+        this.toVersion = toVersion;
         this.issues = new ArrayList();
     }
     
@@ -68,6 +80,38 @@ public class StatusBase {
     
     public List getIssues(){
         return this.issues;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getFromVersion() {
+        return fromVersion;
+    }
+
+    public void setFromVersion(String fromVersion) {
+        this.fromVersion = fromVersion;
+    }
+
+    public String getToVersion() {
+        return toVersion;
+    }
+
+    public void setToVersion(String toVersion) {
+        this.toVersion = toVersion;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
     
     

@@ -365,6 +365,7 @@ public class ModificationViewer extends GridPortalComponent {
 
                     try {
                         UpgradeStatus status = upgrader.upgrade();
+                        logger.info("SERVICE UPGRADE STATUS:\n" + status);
                         answer = JOptionPane
                             .showConfirmDialog(
                                 this,

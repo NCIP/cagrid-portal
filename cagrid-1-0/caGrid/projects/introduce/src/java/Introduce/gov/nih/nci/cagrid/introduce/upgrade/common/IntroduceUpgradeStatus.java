@@ -6,11 +6,7 @@ import java.util.List;
 public class IntroduceUpgradeStatus extends StatusBase {
 
     private List extensionUpgradesStatus = null;
-    public IntroduceUpgradeStatus(String status) {
-        super(status);
-        extensionUpgradesStatus = new ArrayList();
-    }
-    
+
     public IntroduceUpgradeStatus() {
         extensionUpgradesStatus = new ArrayList();
     }

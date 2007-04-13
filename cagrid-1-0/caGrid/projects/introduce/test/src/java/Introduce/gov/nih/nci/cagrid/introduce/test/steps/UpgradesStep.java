@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.upgrade.UpgradeManager;
+import gov.nih.nci.cagrid.introduce.upgrade.common.UpgradeStatus;
 
 import java.io.File;
 
@@ -25,7 +26,8 @@ public class UpgradesStep extends BaseStep {
         UpgradeManager upgrader = new UpgradeManager(this.tci.getDir());
 
         try {
-            upgrader.upgrade();
+            UpgradeStatus status = upgrader.upgrade();
+            System.out.println(status);
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());

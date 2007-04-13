@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.upgrade.two.zero;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgraderI;
+import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
 
 
 public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
@@ -20,6 +21,10 @@ public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
         this.fromVersion = fromVersion;
         this.toVersion = toVersion;
         this.servicePath = servicePath;
+        status.setFromVersion(fromVersion);
+        status.setToVersion(toVersion);
+        status.setType(StatusBase.UPGRADE_TYPE_INTRODUCE);
+        status.setName("IntroduceUpgrader " + fromVersion + " - " + toVersion);
     }
 
 
