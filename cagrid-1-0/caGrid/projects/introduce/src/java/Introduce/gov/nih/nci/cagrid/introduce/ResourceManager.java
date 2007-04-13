@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.awt.Component;
 import java.io.BufferedInputStream;
