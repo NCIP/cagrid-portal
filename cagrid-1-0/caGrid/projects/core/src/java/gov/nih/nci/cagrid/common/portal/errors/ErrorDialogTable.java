@@ -23,7 +23,7 @@ import org.projectmobius.portal.JComponentCellEditor;
  * @author David Ervin
  * 
  * @created Apr 13, 2007 9:20:12 AM
- * @version $Id: ErrorDialogTable.java,v 1.1 2007-04-13 17:19:32 dervin Exp $ 
+ * @version $Id: ErrorDialogTable.java,v 1.2 2007-04-13 19:05:26 dervin Exp $ 
  */
 public class ErrorDialogTable extends JTable {
     private DefaultTableModel model = null;
@@ -97,7 +97,6 @@ public class ErrorDialogTable extends JTable {
     
     protected void fireDetailsClicked() {
         Integer row = Integer.valueOf(getEditingRow());
-        System.out.println("Row: " + row);
         ErrorContainer container = rowData.get(row);
         for (ErrorDialogTableListener listener : tableListeners) {
             listener.showDetailsClicked(container);
@@ -107,7 +106,6 @@ public class ErrorDialogTable extends JTable {
     
     protected void fireExceptionClicked() {
         Integer row = Integer.valueOf(getEditingRow());
-        System.out.println("Row: " + row);
         ErrorContainer container = rowData.get(row);
         for (ErrorDialogTableListener listener : tableListeners) {
             listener.showErrorClicked(container);
