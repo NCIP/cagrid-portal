@@ -5,8 +5,10 @@ import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTree;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /** 
  *  UMLProjectTree
@@ -18,12 +20,19 @@ import java.util.Map;
  * @version $Id$ 
  */
 public class UMLProjectTree extends CheckBoxTree {
-	private Map packageNodes;
+	private Map<String, UMLPackageTreeNode> packageNodes;
 
 	public UMLProjectTree() {
 		super();
 		packageNodes = new HashMap();
 	}
+    
+    
+    public Set<String> getPackagesInTree() {
+        Set<String> packageNames = new HashSet();
+        packageNames.addAll(packageNodes.keySet());
+        return packageNames;
+    }
 	
 	
 	public UMLPackageTreeNode addUmlPackage(String packageName) {
@@ -48,7 +57,7 @@ public class UMLProjectTree extends CheckBoxTree {
 	
 	
 	public void removeUmlPackage(String packageName) {
-		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.remove(packageName);
+		UMLPackageTreeNode packNode = packageNodes.remove(packageName);
 		if (packNode == null) {
 			throw new IllegalArgumentException("Package " + packageName + " is not in this tree!");
 		}
@@ -59,7 +68,7 @@ public class UMLProjectTree extends CheckBoxTree {
 	
 	public UMLClassTreeNode addUmlClass(String packageName, String className) {
 		// find the packag node
-		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(packageName);
+		UMLPackageTreeNode packNode = packageNodes.get(packageName);
 		if (packNode == null) {
 			throw new IllegalArgumentException("Package " + packageName + " is not in this tree!");
 		}
@@ -87,7 +96,7 @@ public class UMLProjectTree extends CheckBoxTree {
 	
 	public void removeUmlClass(String packageName, String className) {
 		// find the package node
-		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(packageName);
+		UMLPackageTreeNode packNode = packageNodes.get(packageName);
 		if (packNode == null) {
 			throw new IllegalArgumentException("Package " + packageName + " is not in this tree!");
 		}
