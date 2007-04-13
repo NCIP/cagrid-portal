@@ -55,7 +55,7 @@
     <DorianCAConfiguration>
         <CertificateAuthorityPassword>password</CertificateAuthorityPassword>
         <AutoCreate>
-            <CASubject>O=OSU,OU=BMI,OU=caGrid,OU=Dorian,OU=localhost,CN=caGrid Dorian CA</CASubject>
+            <CASubject>C=US,O=abc,OU=xyz,OU=caGrid,OU=Users,CN=caGrid Dorian CA</CASubject>
             <lifetime years="10" months="0" days="0" hours="0" minutes="0" seconds="0"/>
         </AutoCreate>
         <AutoRenewal years="10" months="0" days="0" hours="0" minutes="0" seconds="0"/>
