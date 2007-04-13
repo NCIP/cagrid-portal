@@ -161,18 +161,18 @@ public class GridApplication extends JFrame {
 			Application app = (Application) Utils.deserializeDocument(file.getAbsolutePath(), Application.class);
 
 			// launch the portal with the passed config
-			GridApplication application = GridApplication.getInstance(app);
+			GridApplication applicationInstance = GridApplication.getInstance(app);
 			Dimension d = new Dimension(app.getDimensions().getWidth(), app.getDimensions().getHeight());
 
 			try {
-				application.pack();
+				applicationInstance.pack();
 			} catch (Exception e) {
-				application.setIconImage(null);
-				application.pack();
+				applicationInstance.setIconImage(null);
+				applicationInstance.pack();
 			}
-			application.setSize(d);
-			application.setVisible(true);
-			application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			applicationInstance.setSize(d);
+			applicationInstance.setVisible(true);
+			applicationInstance.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -248,9 +248,6 @@ public class GridApplication extends JFrame {
 	}
 
 
-	/**
-	 * @return
-	 */
 	private JScrollPane getJScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -290,7 +287,7 @@ public class GridApplication extends JFrame {
 	private javax.swing.JMenu getMenu(List toolbarComponents, Menu parent, Menu menu) {
 		javax.swing.JMenu jmenu = new javax.swing.JMenu();
 		jmenu.setText(menu.getTitle());
-		if ((parent != null) && (parent.getShowIcons())) {
+		if ((parent != null) && (parent.getShowIcons().booleanValue())) {
 			jmenu.setIcon(IconUtils.loadIcon(menu.getIcon()));
 		}
 		jmenu.setMnemonic(java.awt.event.KeyEvent.VK_F);
@@ -310,7 +307,7 @@ public class GridApplication extends JFrame {
 			Component[] comp = comps.getComponent();
 			if (comp != null) {
 				for (int i = 0; i < comp.length; i++) {
-					jmenu.add(getComponentItem(comp[i], menu.getShowIcons()));
+					jmenu.add(getComponentItem(comp[i], menu.getShowIcons().booleanValue()));
 					if (comp[i].isShowOnToolBar()) {
 						toolbarComponents.add(comp[i]);
 					}
