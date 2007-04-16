@@ -390,18 +390,18 @@ public class ModificationViewer extends GridPortalComponent {
                         answer = JOptionPane
                             .showConfirmDialog(
                                 this,
-                                "The service had the following error during the upgrade process: \n"
+                                "The service had the following fatal error during the upgrade process: \n"
                                     + e.getMessage()
-                                    + "\n  This could be due to modifications you may have made to Introduce managed files such as the build files or wsdl files.\nIf you would like to attemt to fix this service please select the ok option and Introduce will close this modification window and enable you to fix the service and try opening again later. \nElse Introduce will roll your service back to before it was upgraded.");
+                                    + "\n  This could be due to modifications you may have made to Introduce managed files such as the build files, source files or wsdl files.\nIf you select OK Introduce will roll your service back to its previous state before the upgrade attempt");
                         if (answer == JOptionPane.OK_OPTION) {
-                            ModificationViewer.this.dispose();
-                            this.beenDisposed = true;
-                        } else {
                             try {
                                 upgrader.recover();
                             } catch (Exception ex) {
                                 ErrorDialog.showErrorDialog(e);
                             }
+                            ModificationViewer.this.dispose();
+                            this.beenDisposed = true;
+                        } else {
                             ModificationViewer.this.dispose();
                             this.beenDisposed = true;
                         }
