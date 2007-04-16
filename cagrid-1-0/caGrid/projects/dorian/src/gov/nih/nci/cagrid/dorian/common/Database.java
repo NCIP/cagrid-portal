@@ -17,7 +17,7 @@ import org.apache.commons.dbcp.BasicDataSource;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.25 2007-04-12 17:40:26 langella Exp $
+ * @version $Id: Database.java,v 1.26 2007-04-16 13:58:31 langella Exp $
  */
 public class Database extends LoggingObject {
 
@@ -42,6 +42,7 @@ public class Database extends LoggingObject {
 		root.setUsername(conf.getUsername());
 		root.setPassword(conf.getPassword());
 		root.setUrl(dbURL);
+		root.setTestOnBorrow(true);
 	}
 
 
@@ -94,6 +95,7 @@ public class Database extends LoggingObject {
 					dorian.setUsername(conf.getUsername());
 					dorian.setPassword(conf.getPassword());
 					dorian.setUrl(dbURL);
+					dorian.setTestOnBorrow(true);
 				}
 				dbBuilt = true;
 			}
