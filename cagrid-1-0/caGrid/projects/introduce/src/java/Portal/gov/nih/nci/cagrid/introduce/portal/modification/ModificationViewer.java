@@ -30,6 +30,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
+import gov.nih.nci.cagrid.introduce.portal.Introduce;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
@@ -49,6 +50,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeN
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.modification.upgrade.UpgradeStatusView;
 import gov.nih.nci.cagrid.introduce.statistics.StatisticsClient;
 import gov.nih.nci.cagrid.introduce.upgrade.UpgradeManager;
 import gov.nih.nci.cagrid.introduce.upgrade.common.UpgradeStatus;
@@ -63,6 +65,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -80,6 +84,7 @@ import java.util.Set;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -90,6 +95,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -233,6 +239,8 @@ public class ModificationViewer extends GridPortalComponent {
 
     private JTextField servicePropertyDescriptionTextField = null;
 
+    private boolean beenDisposed = false;
+
 
     /**
      * This is the default constructor
@@ -276,7 +284,7 @@ public class ModificationViewer extends GridPortalComponent {
                 if (file.exists() && file.canRead()) {
                     try {
                         initialize();
-                        if (ModificationViewer.this != null) {
+                        if (!beenDisposed) {
                             ModificationViewer.this.pack();
                             ModificationViewer.this.setMaximum(true);
                         }
@@ -366,15 +374,16 @@ public class ModificationViewer extends GridPortalComponent {
                     try {
                         UpgradeStatus status = upgrader.upgrade();
                         logger.info("SERVICE UPGRADE STATUS:\n" + status);
-                        answer = JOptionPane
-                            .showConfirmDialog(
-                                this,
-                                status.toString()
-                                    + "\n\nnThe service upgrade status is above.\nIf you would like to proceed click ok otherwise click clancel.");
-                        if (answer == JOptionPane.OK_OPTION) {
+                        answer = UpgradeStatusView.showUpgradeStatusView(status);
+                        if (answer == UpgradeStatusView.PROCEED) {
 
-                        } else {
+                        } else if (answer == UpgradeStatusView.ROLL_BACK) {
+                            upgrader.recover();
                             ModificationViewer.this.dispose();
+                            this.beenDisposed = true;
+                        } else if (answer == UpgradeStatusView.CANCEL) {
+                            ModificationViewer.this.dispose();
+                            this.beenDisposed = true;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -386,6 +395,7 @@ public class ModificationViewer extends GridPortalComponent {
                                     + "\n  This could be due to modifications you may have made to Introduce managed files such as the build files or wsdl files.\nIf you would like to attemt to fix this service please select the ok option and Introduce will close this modification window and enable you to fix the service and try opening again later. \nElse Introduce will roll your service back to before it was upgraded.");
                         if (answer == JOptionPane.OK_OPTION) {
                             ModificationViewer.this.dispose();
+                            this.beenDisposed = true;
                         } else {
                             try {
                                 upgrader.recover();
@@ -393,6 +403,7 @@ public class ModificationViewer extends GridPortalComponent {
                                 ErrorDialog.showErrorDialog(e);
                             }
                             ModificationViewer.this.dispose();
+                            this.beenDisposed = true;
                         }
                     }
                 }

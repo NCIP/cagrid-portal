@@ -35,7 +35,6 @@ public class UpgradeStatus extends StatusBase {
             sb.append("To Version: " + iStatus.getToVersion() + "\n");
             sb.append("Status: " + iStatus.getStatus() + "\n\n");
             sb.append("Description: \n" + iStatus.getDescription() + "\n");
-            sb.append("Issues: \n" + iStatus.getDescription());
             List issues = iStatus.getIssues();
             Iterator issuesI = issues.iterator();
             while(issuesI.hasNext()){
@@ -43,6 +42,7 @@ public class UpgradeStatus extends StatusBase {
                 sb.append("\tIssue: " + issue.getIssue() + "\n");
                 sb.append("\tResolution: " + issue.getResolution() + "\n\n");
             }
+            sb.append("\n\n");
             
             Iterator eStatusI = iStatus.getExtensionUgradesStatus().iterator();
             while(eStatusI.hasNext()){
@@ -53,7 +53,6 @@ public class UpgradeStatus extends StatusBase {
                 sb.append("  To Version: " + eStatus.getToVersion() + "\n");
                 sb.append("  Status: " + eStatus.getStatus() + "\n\n");
                 sb.append("  Description: \n" + eStatus.getDescription() + "\n");
-                sb.append("  Issues: \n" + eStatus.getDescription());
                 issues = eStatus.getIssues();
                 issuesI = issues.iterator();
                 while(issuesI.hasNext()){
