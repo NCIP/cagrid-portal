@@ -18,7 +18,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTo1pt1Tests.java,v 1.7 2007-04-12 22:02:05 hastings Exp $ 
+ * @version $Id: UpgradeTo1pt1Tests.java,v 1.8 2007-04-16 13:36:12 dervin Exp $ 
  */
 public class UpgradeTo1pt1Tests extends Story {
 	public static final String TEST_DIR = "../data/test";
@@ -46,9 +46,6 @@ public class UpgradeTo1pt1Tests extends Story {
 		steps.add(new DeleteOldServiceStep(info));
 		steps.add(new UnzipOldServiceStep(TEST_DIR));
 		steps.add(new UpgradeIntroduceServiceStep(info.getDir()));
-		//slh cant do this anymore, it is done automatically in the introduce
-		//upgrade test....
-		//steps.add(new UpgradeDataServiceExtensionStep(info.getDir()));
 		steps.add(new BuildUpgradedServiceStep(info.getDir()));
 		
 		return steps;
