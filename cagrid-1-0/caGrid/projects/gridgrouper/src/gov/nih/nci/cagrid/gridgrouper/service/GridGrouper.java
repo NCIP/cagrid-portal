@@ -1050,12 +1050,9 @@ public class GridGrouper {
 	}
 
 
-	public boolean isMemberOf(String gridIdentity, GroupIdentifier group, String member, MemberFilter filter)
+	public boolean isMemberOf(GrouperSession session, GroupIdentifier group, String member, MemberFilter filter)
 		throws GridGrouperRuntimeFault, GroupNotFoundFault {
-		GrouperSession session = null;
 		try {
-			Subject caller = SubjectFinder.findById(gridIdentity);
-			session = GrouperSession.start(caller);
 			Group target = GroupFinder.findByName(session, group.getGroupName());
 			if (filter.equals(MemberFilter.All)) {
 				return target.hasMember(SubjectFinder.findById(member));
@@ -1074,6 +1071,30 @@ public class GridGrouper {
 			helper.addFaultCause(e);
 			fault = (GroupNotFoundFault) helper.getFault();
 			throw fault;
+		} catch (Exception e) {
+			this.log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Error occurred determining if " + member + " is a member of the group "
+				+ group.getGroupName() + ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} 
+	}
+
+
+	public boolean isMemberOf(String gridIdentity, GroupIdentifier group, String member, MemberFilter filter)
+		throws GridGrouperRuntimeFault, GroupNotFoundFault {
+		GrouperSession session = null;
+		try {
+			Subject caller = SubjectFinder.findById(gridIdentity);
+			session = GrouperSession.start(caller);
+			return isMemberOf(session, group, member, filter);
+		} catch (GridGrouperRuntimeFault e) {
+			throw e;
+		} catch (GroupNotFoundFault e) {
+			throw e;
 		} catch (Exception e) {
 			this.log.error(e.getMessage(), e);
 			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
