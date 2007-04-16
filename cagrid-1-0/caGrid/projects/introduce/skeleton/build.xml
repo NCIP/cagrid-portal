@@ -8,8 +8,6 @@
     <!-- Define the environment variable -->
     <property environment="env" />
 
-    <!-- 
-    -->
     <property file="introduce.properties" />
     <property name="introduce.ns.excludes" value="" />
     <property name="service.name" value="${introduce.skeleton.service.name}" />
@@ -19,10 +17,15 @@
     <property name="src.dir" value="src" />
     <property name="lib.dir" value="lib" />
     <property name="etc.dir" value="etc" />
-	<property name="tools.dir" value="tools" />
-	<property name="tools.lib.dir" value="tools/lib" />
+    <property name="tools.dir" value="tools" />
+    <property name="tools.lib.dir" value="tools/lib" />
     <property name="schema.dir" value="schema" />
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
+
+    <!--import developers targets and properties (which can be overridden)-->
+    <import file="dev-build.xml" />
+
+    <!-- Jars -->
     <property name="common.jar.name" value="${service.name}-common.jar" />
     <property name="client.jar.name" value="${service.name}-client.jar" />
     <property name="service.jar.name" value="${service.name}-service.jar" />
@@ -54,22 +57,18 @@
     <property name="stubs.src" location="${stubs.dir}/src" />
     <!-- Compiled stub classes -->
     <property name="stubs.dest" location="${stubs.dir}/classes" />
-
     <!-- Where we have to copy schema files inside the build directory -->
     <property name="schema.dest" location="${build.dir}/schema" />
 
-
+        
     <!-- We want detailed error messages -->
     <property name="java.debug" value="on" />
-
-    <!--import deployment ant files -->
-    <import file="build-deploy.xml" />
 
     <!--import run ant files -->
     <import file="run-tools.xml" />
 
-    <!--import developers targets and properties -->
-    <import file="dev-build.xml" />
+    <!--import deployment ant files -->
+    <import file="build-deploy.xml" />
 
     <!--import developers deploy targets and properties -->
     <import file="dev-build-deploy.xml" />
