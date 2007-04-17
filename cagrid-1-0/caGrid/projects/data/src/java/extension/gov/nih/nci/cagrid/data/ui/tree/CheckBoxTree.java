@@ -117,7 +117,7 @@ public class CheckBoxTree extends JTree {
 		selected.toArray(types);
 		return types;
 	}
-	
+    
 	
 	private static class CellRenderer extends DefaultTreeCellRenderer {
 		
@@ -129,11 +129,13 @@ public class CheckBoxTree extends JTree {
 		public Component getTreeCellRendererComponent(JTree tree, Object value,
 			boolean sel, boolean expanded, boolean leaf, int row, boolean focused) {
 			super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focused);
-			if (value instanceof CheckBoxTreeNode) {
+            if (value instanceof CheckBoxTreeNode) {
 				CheckBoxTreeNode cbNode = (CheckBoxTreeNode) value;
 				cbNode.getCheckBox().setBackground(getBackground());
+                cbNode.getCheckBox().setEnabled(tree.isEnabled());
 				return cbNode.getCheckBox();
 			}
+            setEnabled(tree.isEnabled());
 			return this;
 		}
 	}
