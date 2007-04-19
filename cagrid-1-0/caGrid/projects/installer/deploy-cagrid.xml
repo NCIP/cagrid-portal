@@ -1,0 +1,904 @@
+<project name="deploy-cagrid" default="usage">
+
+	<property environment="env" />
+	<property name="temp.dir" value="temp" />
+	<property name="software.dir" value="software" />
+	<property name="tomcat.zip"
+		value="${software.dir}/jakarta-tomcat-5.0.28.zip" />
+	<property name="globus.zip"
+		value="${software.dir}/ws-core-4.0.3-bin.zip" />
+	<property name="tomcat.release" value="jakarta-tomcat-5.0.28" />
+	<property name="globus.release" value="ws-core-4.0.3" />
+	<property name="tomcat.secure.port" value="8443" />
+	<property name="tomcat.key" value="certs/server.key" />
+	<property name="tomcat.cert" value="certs/server.cert" />
+	<property name="tomcat.key.path" value="conf/certs/server.key" />
+	<property name="tomcat.cert.path" value="conf/certs/server.cert" />
+	<property name="cagrid.home"
+		value="/Users/joshua/dev/cagrid/cagrid_head" />
+	<property name="gridca-build-file"
+		value="${cagrid.home}/caGrid/projects/gridca/build.xml" />
+
+	<property name="certs.dir" value="${basedir}/certs" />
+
+	<property name="ca.service.dn.input"
+		value="O=NIH,OU=NCI,OU=NCICB,OU=caBIG Service Group,CN=caBIG Service CA" />
+	<property name="ca.service.days.input" value="1825" />
+	<property name="ca.service.password.input" value="caGrid" />
+	<property name="ca.service.cert.deploy.filename"
+		value="NCI_ROOT_CA_CERT.0" />
+	<property name="ca.service.key.filename"
+		value="NCI_ROOT_CA_KEY.pem" />
+	<property name="ca.service.cert.filename"
+		value="NCI_ROOT_CA_CERT.pem" />
+	<property name="ca.service.key.input"
+		value="${certs.dir}/${ca.service.key.filename}" />
+	<property name="ca.service.cert.input"
+		value="${certs.dir}/${ca.service.cert.filename}" />
+
+	<property name="ca.trust.dn.input"
+		value="O=NIH,OU=NCI,OU=NCICB,OU=caBIG Trust Group,CN=caBIG Trust CA" />
+	<property name="ca.trust.days.input" value="1825" />
+	<property name="ca.trust.password.input" value="caGrid" />
+	<property name="ca.trust.cert.deploy.filename"
+		value="GTS_CA_CERT.0" />
+	<property name="ca.trust.key.filename" value="GTS_CA_KEY.pem" />
+	<property name="ca.trust.cert.filename" value="GTS_CA_CERT.pem" />
+	<property name="ca.trust.key.input"
+		value="${certs.dir}/${ca.trust.key.filename}" />
+	<property name="ca.trust.cert.input"
+		value="${certs.dir}/${ca.trust.cert.filename}" />
+
+	<property name="ca.dorian.dn.input"
+		value="O=NIH,OU=NCI,OU=NCICB,OU=caBIG User Group,CN=caBIG Dorian CA" />
+	<property name="ca.dorian.days.input" value="1825" />
+	<property name="ca.dorian.password.input" value="caGrid" />
+	<property name="ca.dorian.cert.deploy.filename"
+		value="DORIAN_CA_CERT.0" />
+	<property name="ca.dorian.key.filename" value="DORIAN_CA_KEY.pem" />
+	<property name="ca.dorian.cert.filename" value="DORIAN_CA_CERT.pem" />
+	<property name="ca.dorian.key.input"
+		value="${certs.dir}/${ca.dorian.key.filename}" />
+	<property name="ca.dorian.cert.input"
+		value="${certs.dir}/${ca.dorian.cert.filename}" />
+
+	<property name="ca.authn.dn.input"
+		value="O=NIH,OU=NCI,OU=NCICB,OU=caBIG AuthnSvc Group,CN=caBIG AuthnSvc CA" />
+	<property name="ca.authn.days.input" value="1825" />
+	<property name="ca.authn.password.input" value="caGrid" />
+	<property name="ca.authn.cert.deploy.filename"
+		value="AUTHNSVC_CA_CERT.0" />
+	<property name="ca.authn.key.filename" value="AUTHNSVC_CA_KEY.pem" />
+	<property name="ca.authn.cert.filename"
+		value="AUTHNSVC_CA_CERT.pem" />
+	<property name="ca.authn.key.input"
+		value="${certs.dir}/${ca.authn.key.filename}" />
+	<property name="ca.authn.cert.input"
+		value="${certs.dir}/${ca.authn.cert.filename}" />
+
+
+	<property name="host.days.input" value="365" />
+
+	<!-- 
+		<property name="nodes.list" value="node1,node2,node3,node4,node5,node6,node7"/>
+		
+		
+		<property name="nodes.list" value="node1,node3,node4,node5,node7" />
+	-->
+	<property name="nodes.list" value="node7" />
+	<property name="node1.host" value="cbiovdev5012.nci.nih.gov" />
+	<property name="node2.host" value="cbiovdev5017.nci.nih.gov" />
+	<property name="node3.host" value="cbiovdev5034.nci.nih.gov" />
+	<property name="node4.host" value="cbiovdev5035.nci.nih.gov" />
+	<property name="node5.host" value="cbiovdev5036.nci.nih.gov" />
+	<property name="node6.host" value="cbiovdev5037.nci.nih.gov" />
+	<property name="node7.host" value="cbiovdev5038.nci.nih.gov" />
+
+	<property name="db.host" value="cbiodb590.nci.nih.gov" />
+	<property name="db.port" value="3628" />
+	<property name="db.username" value="cagradmin" />
+	<property name="db.password" value="cagr#694" />
+
+	<property name="host.catalina.home"
+		value="/usr/local/jakarta-tomcat-5.0.28" />
+
+	<property name="manager.identity"
+		value="/O=NIH/OU=NCI/OU=NCICB/OU=caBIG User Group/OU=IdP [1]/CN=manager" />
+
+	<property name="authn.ldapHost"
+		value="ldaps://cbioweb.nci.nih.gov:636" />
+	<property name="authn.ldapSearchableBase" value="ou=nci,o=nih" />
+	<property name="authn.ldapUserIdLabel" value="cn" />
+	<property name="authn.USER_FIRST_NAME" value="givenName" />
+	<property name="authn.USER_LAST_NAME" value="sn" />
+	<property name="authn.USER_EMAIL_ID" value="mail" />
+	<property name="authn.csm.app.context" value="AUTHSVC" />
+	<property name="authn.cert.filename" value="AUTHNSVC_CA_CERT.pem" />
+	<property name="authn.key.filename" value="AUTHNSVC_CA_KEY.pem" />
+	<property name="authn.cert.path"
+		value="conf/certs/${authn.cert.filename}" />
+	<property name="authn.key.path"
+		value="conf/certs/${authn.key.filename}" />
+	<property name="authn.saml.provider.crt"
+		value="${host.catalina.home}/${authn.cert.path}" />
+	<property name="authn.saml.provider.key"
+		value="${host.catalina.home}/${authn.key.path}" />
+	<property name="authn.saml.provider.pwd" value="caGrid" />
+
+
+	<path id="xmltaskdef.cp">
+		<fileset dir="lib">
+			<include name="xmltask-v1.14.jar" />
+		</fileset>
+	</path>
+
+	<taskdef name="xmltask"
+		classname="com.oopsconsultancy.xmltask.ant.XmlTask"
+		classpathref="xmltaskdef.cp" />
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<fileset dir="${cagrid.home}/caGrid/share/lib">
+				<include name="ant-contrib*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+
+	<target name="unzip-tomcat">
+		<unzip src="${tomcat.zip}" dest="${temp.dir}" />
+	</target>
+	<target name="unzip-globus">
+		<unzip src="${globus.zip}" dest="${temp.dir}" />
+	</target>
+
+	<target name="insert-secure-connector">
+		<xmltask source="${temp.dir}/${tomcat.release}/conf/server.xml"
+			dest="${temp.dir}/${tomcat.release}/conf/server.xml">
+			<insert path="/Server/Service[@name='Catalina']">
+				<![CDATA[
+				<Connector
+				  className="org.globus.tomcat.coyote.net.HTTPSConnector"
+				  port="${tomcat.secure.port}" maxThreads="150" minSpareThreads="25" maxSpareThreads="75" 
+				  autoFlush="true"
+				  disableUploadTimeout="true" scheme="https"
+				  enableLookups="true" acceptCount="10" debug="0" 
+				   cert="${tomcat.cert.path}"
+				   key="${tomcat.key.path}"/>
+				]]>
+			</insert>
+		</xmltask>
+	</target>
+
+	<target name="insert-valve">
+
+		<xmltask source="${temp.dir}/${tomcat.release}/conf/server.xml"
+			dest="${temp.dir}/${tomcat.release}/conf/server.xml">
+			<insert
+				path="/Server/Service[@name='Catalina']/Engine[@name='Catalina']">
+				<![CDATA[
+						<Valve className="org.globus.tomcat.coyote.valves.HTTPSValve"/>
+						]]>
+			</insert>
+		</xmltask>
+	</target>
+
+	<target name="set-global-cert-and-key-paths">
+		<property name="secdesc.file"
+			value="${temp.dir}/${tomcat.release}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core/global_security_descriptor.xml" />
+		<xmltask source="${secdesc.file}" dest="${secdesc.file}">
+			<attr
+				path="/*[local-name()='securityConfig']/*[local-name()='credential']/*[local-name()='key-file']"
+				attr="value" value="${tomcat.key.path}" />
+			<attr
+				path="/*[local-name()='securityConfig']/*[local-name()='credential']/*[local-name()='cert-file']"
+				attr="value" value="${tomcat.cert.path}" />
+		</xmltask>
+	</target>
+
+	<target name="copy-global-cert-and-key">
+		<property name="tomcat.cert.dest"
+			value="${temp.dir}/${tomcat.release}/${tomcat.cert.path}" />
+		<property name="tomcat.key.dest"
+			value="${temp.dir}/${tomcat.release}/${tomcat.key.path}" />
+
+		<touch mkdirs="true" file="${tomcat.cert.dest}" />
+		<touch mkdirs="true" file="${tomcat.key.dest}" />
+
+		<copy file="${tomcat.cert}" tofile="${tomcat.cert.dest}"
+			overwrite="true" />
+		<copy file="${tomcat.key}" tofile="${tomcat.key.dest}"
+			overwrite="true" />
+	</target>
+
+	<target name="fix-web-xml">
+		<property name="web.xml.file"
+			value="${temp.dir}/${tomcat.release}/webapps/wsrf/WEB-INF/web.xml" />
+		<xmltask source="${web.xml.file}" dest="${web.xml.file}">
+			<insert
+				path="/web-app/servlet[servlet-name='WSRFServlet']/servlet-class"
+				position="after">
+				<![CDATA[
+				         <init-param>
+				<param-name>defaultProtocol</param-name>
+				<param-value>https</param-value>
+			</init-param>
+			<init-param>
+				<param-name>defaultPort</param-name>
+				<param-value>${tomcat.secure.port}</param-value>
+			</init-param>
+				]]>
+			</insert>
+		</xmltask>
+	</target>
+
+	<target name="fix-server-wsdd">
+		<property name="host.name" value="localhost" />
+		<property name="server.wsdd.file"
+			value="${temp.dir}/${tomcat.release}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core/server-config.wsdd" />
+		<xmltask source="${server.wsdd.file}"
+			dest="${server.wsdd.file}">
+			<insert
+				path="/*[local-name()='deployment']/*[local-name()='globalConfiguration']/*[local-name()='parameter' and position() = 1]"
+				position="before">
+				<![CDATA[
+					<parameter name="logicalHost" value="${host.name}" xmlns="http://xml.apache.org/axis/wsdd/"/>
+			<parameter name="publishHostName" value="true" xmlns="http://xml.apache.org/axis/wsdd/"/>
+				]]>
+			</insert>
+		</xmltask>
+	</target>
+
+	<target name="globus-deploy-secure-tomcat">
+
+		<property name="old.tomcat.build.file"
+			value="${temp.dir}/${globus.release}/share/globus_wsrf_common/tomcat/tomcat.xml" />
+		<property name="new.tomcat.build.file"
+			value="${temp.dir}/${globus.release}/share/globus_wsrf_common/tomcat/tomcat-fixed.xml" />
+
+		<xmltask source="${old.tomcat.build.file}"
+			dest="${new.tomcat.build.file}">
+			<attr
+				path="/project/target[@name='_baseTomcatDeploy']/copy[contains(@file, 'web.xml')]"
+				attr="file"
+				value="${basedir}/${temp.dir}/${globus.release}/share/globus_wsrf_common/tomcat/web.xml" />
+		</xmltask>
+
+		<ant antfile="${new.tomcat.build.file}" dir="."
+			target="deploySecureTomcat">
+			<property name="tomcat.dir"
+				value="${temp.dir}/${tomcat.release}" />
+		</ant>
+	</target>
+
+	<target name="zip-deploy-tomcat">
+		<echo>Zipping: ${temp.dir}/${tomcat.release}</echo>
+		<zip destfile="${temp.dir}/${tomcat.release}.zip"
+			basedir="${temp.dir}/${tomcat.release}" />
+	</target>
+
+	<target name="package-tomcat">
+		<mkdir dir="${temp.dir}" />
+		<antcall target="unzip-tomcat" />
+		<antcall target="unzip-globus" />
+		<antcall target="globus-deploy-secure-tomcat" />
+		<antcall target="insert-secure-connector" />
+		<antcall target="insert-valve" />
+		<antcall target="set-global-cert-and-key-paths" />
+		<antcall target="copy-global-cert-and-key" />
+		<antcall target="fix-web-xml" />
+		<antcall target="fix-server-wsdd" />
+		<antcall target="zip-deploy-tomcat" />
+	</target>
+
+	<target name="generate-service-ca-cert">
+		<ant inheritAll="false" inheritRefs="false"
+			antfile="${gridca-build-file}" target="generateCA">
+			<property name="dn.input" value="${ca.service.dn.input}" />
+			<property name="days.input"
+				value="${ca.service.days.input}" />
+			<property name="password.input"
+				value="${ca.service.password.input}" />
+			<property name="key.input" value="${ca.service.key.input}" />
+			<property name="cert.input"
+				value="${ca.service.cert.input}" />
+		</ant>
+	</target>
+
+	<target name="generate-trust-ca-cert">
+		<ant inheritAll="false" inheritRefs="false"
+			antfile="${gridca-build-file}" target="generateCA">
+			<property name="dn.input" value="${ca.trust.dn.input}" />
+			<property name="days.input" value="${ca.trust.days.input}" />
+			<property name="password.input"
+				value="${ca.trust.password.input}" />
+			<property name="key.input" value="${ca.trust.key.input}" />
+			<property name="cert.input" value="${ca.trust.cert.input}" />
+		</ant>
+	</target>
+
+	<target name="generate-dorian-ca-cert">
+		<ant inheritAll="false" inheritRefs="false"
+			antfile="${gridca-build-file}" target="generateCA">
+			<property name="dn.input" value="${ca.dorian.dn.input}" />
+			<property name="days.input" value="${ca.dorian.days.input}" />
+			<property name="password.input"
+				value="${ca.dorian.password.input}" />
+			<property name="key.input" value="${ca.dorian.key.input}" />
+			<property name="cert.input" value="${ca.dorian.cert.input}" />
+		</ant>
+	</target>
+
+	<target name="generate-gts-service-cert">
+		<ant inheritAll="false" inheritRefs="false"
+			antfile="${gridca-build-file}"
+			target="createAndSignHostCertificate">
+			<property name="key.input" value="${ca.trust.key.input}" />
+			<property name="password.input"
+				value="${ca.trust.password.input}" />
+			<property name="ca.input" value="${ca.trust.cert.input}" />
+			<property name="hostname.input" value="${host}" />
+			<property name="days.input" value="${host.days.input}" />
+			<property name="hostkey.input"
+				value="${certs.dir}/${host}.key" />
+			<property name="cert.input"
+				value="${certs.dir}/${host}.cert" />
+		</ant>
+	</target>
+
+	<target name="generate-authn-ca-cert">
+		<ant inheritAll="false" inheritRefs="false"
+			antfile="${gridca-build-file}" target="generateCA">
+			<property name="dn.input" value="${ca.authn.dn.input}" />
+			<property name="days.input" value="${ca.authn.days.input}" />
+			<property name="password.input"
+				value="${ca.authn.password.input}" />
+			<property name="key.input" value="${ca.authn.key.input}" />
+			<property name="cert.input" value="${ca.authn.cert.input}" />
+		</ant>
+	</target>
+
+	<!-- 
+		<target name="generate-authn-service-cert">
+		<ant inheritAll="false" inheritRefs="false"
+		antfile="${gridca-build-file}"
+		target="createAndSignHostCertificate">
+		<property name="key.input" value="${ca.authn.key.input}" />
+		<property name="password.input"
+		value="${ca.authn.password.input}" />
+		<property name="ca.input" value="${ca.authn.cert.input}" />
+		<property name="hostname.input" value="${node7.host}" />
+		<property name="days.input" value="${host.days.input}" />
+		<property name="hostkey.input"
+		value="${certs.dir}/${authn.key.filename}" />
+		<property name="cert.input"
+		value="${certs.dir}/${authn.cert.filename}" />
+		</ant>
+		</target>
+	-->
+
+	<target name="generate-host-certs">
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<ant inheritAll="false" inheritRefs="false"
+					antfile="${gridca-build-file}"
+					target="createAndSignHostCertificate">
+					<property name="key.input"
+						value="${ca.service.key.input}" />
+					<property name="password.input"
+						value="${ca.service.password.input}" />
+					<property name="ca.input"
+						value="${ca.service.cert.input}" />
+					<property name="hostname.input"
+						value="${@{node}.host}" />
+					<property name="days.input"
+						value="${host.days.input}" />
+					<property name="hostkey.input"
+						value="${certs.dir}/${@{node}.host}.key" />
+					<property name="cert.input"
+						value="${certs.dir}/${@{node}.host}.cert" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="generate-certs">
+		<mkdir dir="certs" />
+		<antcall target="generate-service-ca-cert" />
+		<antcall target="generate-trust-ca-cert" />
+		<antcall target="generate-dorian-ca-cert" />
+		<antcall target="generate-host-certs" />
+	</target>
+
+	<target name="package-tomcats">
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<antcall target="package-tomcat">
+					<param name="temp.dir" value="${temp.dir}/@{node}" />
+					<param name="host.name" value="${@{node}.host}" />
+					<param name="tomcat.key"
+						value="${certs.dir}/${@{node}.host}.key" />
+					<param name="tomcat.cert"
+						value="${certs.dir}/${@{node}.host}.cert" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="shutdown-tomcat">
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="source .bash_profile; cd ${catalina.home}; ./bin/shutdown.sh" />
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="ps -ef | grep tomcat | grep -v grep | awk '{print $2}' | xargs kill" />
+	</target>
+
+	<target name="startup-tomcat">
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="source .bash_profile; cd ${catalina.home}; ./bin/startup.sh" />
+	</target>
+
+	<target name="shutdown-tomcats">
+		<input message="Username: " addproperty="host.username" />
+		<input message="Password: " addproperty="host.password" />
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<antcall target="shutdown-tomcat">
+					<param name="host" value="${@{node}.host}" />
+					<param name="username" value="${host.username}" />
+					<param name="password" value="${host.password}" />
+					<param name="catalina.home"
+						value="${host.catalina.home}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="startup-tomcats">
+		<input message="Username: " addproperty="host.username" />
+		<input message="Password: " addproperty="host.password" />
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<antcall target="startup-tomcat">
+					<param name="host" value="${@{node}.host}" />
+					<param name="username" value="${host.username}" />
+					<param name="password" value="${host.password}" />
+					<param name="catalina.home"
+						value="${host.catalina.home}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="deploy-tomcat">
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S rm -Rf ${catalina.home}" />
+		<scp file="${tomcat.deploy.zip}"
+			remoteToDir="${username}:${password}@${host}:~" />
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S mkdir -p ${catalina.home}" />
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S unzip ~/jakarta-tomcat-5.0.28.zip -d ${catalina.home}" />
+
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S chown -R globus:globus ${catalina.home}" />
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S chmod u+x ${catalina.home}/bin/*.sh" />
+	</target>
+
+	<target name="deploy-tomcats">
+		<input message="Username: " addproperty="host.username" />
+		<input message="Password: " addproperty="host.password" />
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<antcall target="deploy-tomcat">
+					<param name="host" value="${@{node}.host}" />
+					<param name="username" value="${host.username}" />
+					<param name="password" value="${host.password}" />
+					<param name="catalina.home"
+						value="${host.catalina.home}" />
+					<param name="tomcat.deploy.zip"
+						value="${temp.dir}/@{node}/${tomcat.release}.zip" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="deploy-node1">
+		<echo>Deploying services on host: ${host}</echo>
+		<antcall target="deploy-index-service" />
+	</target>
+
+	<target name="deploy-node3">
+		<echo>Deploying services on host: ${host}</echo>
+		<antcall target="deploy-dorian-service" />
+	</target>
+
+	<target name="deploy-node4">
+		<echo>Deploying services on host: ${host}</echo>
+		<antcall target="deploy-gts-service">
+			<param name="db.name" value="gts_master" />
+		</antcall>
+	</target>
+
+	<target name="deploy-node5">
+		<echo>Deploying services on host: ${host}</echo>
+		<antcall target="deploy-gts-service">
+			<param name="db.name" value="gts_slave" />
+		</antcall>
+	</target>
+
+	<target name="deploy-node7">
+		<echo>Deploying services on host: ${host}</echo>
+		<!-- antcall target="deploy-authn-service" / -->
+		<antcall target="deploy-gridgrouper-service" />
+	</target>
+
+	<target name="deploy-gridgrouper-service">
+		<antcall target="configure-grouper-hibernate-properties" />
+		
+		<!-- TODO: one-time things -->
+		<antcall target="gridgrouper-init" />
+		<antcall target="gridgrouper-add-admin" />
+		
+		<antcall target="deploy-service">
+			<param name="service.name" value="gridgrouper" />
+		</antcall>
+		
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="rm -f ${catalina.home}/common/lib/commons-collections*.jar" />		
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="mv ${catalina.home}/webapps/wsrf/WEB-INF/lib/commons-collections-3.2.jar ${catalina.home}/common/lib/" />
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="rm -f ${catalina.home}/webapps/wsrf/WEB-INF/lib/commons-collections*.jar" />		
+		
+	</target>
+
+	<target name="gridgrouper-init">
+		<ant
+			antfile="${cagrid.home}/caGrid/projects/gridgrouper/build.xml"
+			inheritAll="false" inheritRefs="false" target="grouperInit" />
+
+	</target>
+
+	<target name="gridgrouper-add-admin">
+		<ant
+			antfile="${cagrid.home}/caGrid/projects/gridgrouper/build.xml"
+			inheritAll="false" inheritRefs="false" target="addAdmin">
+			<property name="gridId.input" value="${manager.identity}" />
+		</ant>
+	</target>
+
+	<target name="configure-grouper-hibernate-properties">
+		<propertyfile
+			file="${cagrid.home}/caGrid/projects/gridgrouper/resources/conf/grouper.hibernate.properties">
+			<entry key="hibernate.connection.url"
+				value="jdbc:mysql://${db.host}:${db.port}/grouper" />
+			<entry key="hibernate.connection.username"
+				value="${db.username}" />
+			<entry key="hibernate.connection.password"
+				value="${db.password}" />
+		</propertyfile>
+	</target>
+
+	<target name="create-jaas-config">
+		<delete file="${temp.dir}/.java.login.config" />
+		<concat destfile="${temp.dir}/.java.login.config">
+			${authn.csm.app.context}{
+			gov.nih.nci.security.authentication.loginmodules.LDAPLoginModule
+			required ldapHost="${authn.ldapHost}"
+			ldapSearchableBase="${authn.ldapSearchableBase}"
+			ldapUserIdLabel="${authn.ldapUserIdLabel}"
+			USER_FIRST_NAME="${authn.USER_FIRST_NAME}"
+			USER_LAST_NAME="${authn.USER_LAST_NAME}"
+			USER_EMAIL_ID="${authn.USER_EMAIL_ID}"; };
+		</concat>
+	</target>
+
+	<target name="set-authn-service-deploy-properties">
+		<propertyfile
+			file="${cagrid.home}/caGrid/projects/authentication-service/deploy.properties">
+			<entry key="csm.app.context"
+				value="${authn.csm.app.context}" />
+			<entry key="saml.provider.crt"
+				value="${authn.saml.provider.crt}" />
+			<entry key="saml.provider.key"
+				value="${authn.saml.provider.key}" />
+			<entry key="saml.provider.pwd"
+				value="${authn.saml.provider.pwd}" />
+		</propertyfile>
+	</target>
+
+	<target name="deploy-authn-service">
+
+		<antcall target="create-jaas-config" />
+
+		<antcall target="set-authn-service-deploy-properties" />
+
+		<antcall target="deploy-service">
+			<param name="service.name" value="authentication-service" />
+		</antcall>
+
+		<!-- TODO: this is a one-time thing
+			<antcall target="generate-authn-service-cert"/>
+		-->
+
+		<scp file="${certs.dir}/${authn.cert.filename}"
+			remoteToFile="${username}:${password}@${host}:${catalina.home}/${authn.cert.path}" />
+		<scp file="${certs.dir}/${host}.key"
+			remoteToFile="${username}:${password}@${host}:${catalina.home}/${authn.key.path}" />
+		<scp file="${temp.dir}/.java.login.config"
+			remoteToFile="${username}:${password}@${host}:~/.java.login.config" />
+
+	</target>
+
+	<target name="deploy-gts-service">
+		<antcall target="configure-gts-conf" />
+
+		<!-- TODO: this is a one-time thing 
+			<antcall target="add-gts-admin"/>
+		-->
+
+		<antcall target="deploy-service">
+			<param name="service.name" value="gts" />
+		</antcall>
+
+		<antcall target="generate-gts-service-cert" />
+
+		<scp file="${certs.dir}/${host}.cert"
+			remoteToFile="${username}:${password}@${host}:${catalina.home}/${tomcat.cert.path}" />
+		<scp file="${certs.dir}/${host}.key"
+			remoteToFile="${username}:${password}@${host}:${catalina.home}/${tomcat.key.path}" />
+
+	</target>
+
+	<target name="deploy-service">
+		<property name="build.dir"
+			value="${basedir}/${temp.dir}/${service.name}-service" />
+		<property name="zip.file.name"
+			value="${service.name}-service.zip" />
+		<property name="zip.file.path"
+			value="${basedir}/${temp.dir}/${zip.file.name}" />
+		<mkdir dir="${build.dir}" />
+		<ant
+			antfile="${cagrid.home}/caGrid/projects/${service.name}/build.xml"
+			inheritAll="false" inheritRefs="false" target="deployTomcat">
+			<property name="tomcat.dir" value="${build.dir}" />
+			<property name="index.service.url"
+				value="http://${node1.host}:8080/wsrf/services/DefaultIndexService" />
+		</ant>
+
+		<zip destfile="${zip.file.path}" basedir="${build.dir}" />
+
+		<scp file="${zip.file.path}"
+			remoteToDir="${username}:${password}@${host}:~" />
+
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S chown -R globus:globus ${catalina.home}" />
+
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="unzip -o -q ~/${zip.file.name} -d ${catalina.home}" />
+
+		<scp file="${ca.service.cert.input}"
+			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.service.cert.deploy.filename}" />
+		<scp file="${ca.trust.cert.input}"
+			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.trust.cert.deploy.filename}" />
+		<scp file="${ca.dorian.cert.input}"
+			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.dorian.cert.deploy.filename}" />
+	</target>
+
+	<target name="add-gts-admin">
+		<ant antfile="${cagrid.home}/caGrid/projects/gts/build.xml"
+			inheritAll="false" inheritRefs="false" target="addAdmin">
+			<property name="gridId.input" value="${manager.identity}" />
+		</ant>
+	</target>
+
+	<target name="configure-gts-conf">
+		<property name="config.file"
+			value="${cagrid.home}/caGrid/projects/gts/etc/gts-conf.xml" />
+		<xmltask source="${config.file}" dest="${config.file}">
+			<replace path="/gts/resource/gts-config/gts-internal-id">
+				<![CDATA[
+					<gts-internal-id>${db.name}</gts-internal-id>
+				]]>
+
+			</replace>
+			<replace path="/gts/resource/gts-config/database/host">
+				<![CDATA[
+					<host>${db.host}</host>
+				]]>
+
+			</replace>
+			<replace path="/gts/resource/gts-config/database/port">
+				<![CDATA[
+					<port>${db.port}</port>
+				]]>
+
+			</replace>
+			<replace
+				path="/gts/resource/gts-config/database/username">
+				<![CDATA[
+					<username>${db.username}</username>
+				]]>
+
+			</replace>
+			<replace
+				path="/gts/resource/gts-config/database/password">
+				<![CDATA[
+					<password>${db.password}</password>
+				]]>
+
+			</replace>
+		</xmltask>
+	</target>
+
+	<target name="import-dorian-ca">
+		<ant antfile="${cagrid.home}/caGrid/projects/dorian/build.xml"
+			inheritAll="false" inheritRefs="false" target="importCA">
+			<property name="cacert.input"
+				value="${ca.dorian.cert.input}" />
+			<property name="cakey.input" value="${ca.dorian.key.input}" />
+			<property name="password.input"
+				value="${ca.dorian.password.input}" />
+		</ant>
+	</target>
+
+	<target name="deploy-dorian-service">
+
+		<antcall target="configure-dorian-conf" />
+
+		<!-- TODO: this should only happen if all of the certs are re-generated
+			<antcall target="import-dorian-ca"/>
+		-->
+		<antcall target="deploy-service">
+			<param name="service.name" value="dorian" />
+		</antcall>
+
+	</target>
+
+	<target name="configure-dorian-conf">
+
+		<property name="config.file"
+			value="${cagrid.home}/caGrid/projects/dorian/etc/dorian-conf.xml" />
+		<xmltask source="${config.file}" dest="${config.file}">
+			<replace
+				path="/*[local-name()='DorianConfiguration']/*[local-name()='database']/*[local-name()='host']">
+				<![CDATA[
+					<host xmlns="http://cagrid.nci.nih.gov/dorian/conf">${db.host}</host>
+				]]>
+
+			</replace>
+			<replace
+				path="/*[local-name()='DorianConfiguration']/*[local-name()='database']/*[local-name()='port']">
+				<![CDATA[
+					<port xmlns="http://cagrid.nci.nih.gov/dorian/conf">${db.port}</port>
+				]]>
+
+			</replace>
+			<replace
+				path="/*[local-name()='DorianConfiguration']/*[local-name()='database']/*[local-name()='username']">
+				<![CDATA[
+					<username xmlns="http://cagrid.nci.nih.gov/dorian/conf">${db.username}</username>
+				]]>
+
+			</replace>
+			<replace
+				path="/*[local-name()='DorianConfiguration']/*[local-name()='database']/*[local-name()='password']">
+				<![CDATA[
+					<password xmlns="http://cagrid.nci.nih.gov/dorian/conf">${db.password}</password>
+				]]>
+
+			</replace>
+		</xmltask>
+
+		<!-- TODO: configure GTS service -->
+	</target>
+
+	<!-- 
+		<target name="configure-dorian-conf-1-0">
+		
+		<property name="config.file"
+		value="${cagrid.home}/caGrid/projects/dorian/etc/dorian-conf.xml" />
+		<xmltask source="${config.file}" dest="${config.file}">
+		<replace
+		path="/dorian/resource/dorian-config/database/host">
+		<![CDATA[
+		<host>${db.host}</host>
+		]]>
+		
+		</replace>
+		<replace
+		path="/dorian/resource/dorian-config/database/port">
+		<![CDATA[
+		<port>${db.port}</port>
+		]]>
+		
+		</replace>
+		<replace
+		path="/dorian/resource/dorian-config/database/username">
+		<![CDATA[
+		<username>${db.username}</username>
+		]]>
+		
+		</replace>
+		<replace
+		path="/dorian/resource/dorian-config/database/password">
+		<![CDATA[
+		<password>${db.password}</password>
+		]]>
+		
+		</replace>
+		</xmltask>
+		
+		</target>	
+	-->
+
+	<target name="deploy-index-service">
+
+		<property name="build.dir"
+			value="${basedir}/${temp.dir}/index-service" />
+		<property name="zip.file.name" value="index-service.zip" />
+		<property name="zip.file.path"
+			value="${basedir}/${temp.dir}/${zip.file.name}" />
+		<mkdir dir="${build.dir}" />
+		<ant antfile="${cagrid.home}/caGrid/projects/index/build.xml"
+			inheritAll="false" inheritRefs="false" target="deployIndexTomcat">
+			<property name="tomcat.dir" value="${build.dir}" />
+		</ant>
+		<zip destfile="${zip.file.path}" basedir="${build.dir}" />
+
+		<scp file="${zip.file.path}"
+			remoteToDir="${username}:${password}@${host}:~" />
+
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S unzip ~/${zip.file.name} -d ${catalina.home}" />
+
+		<scp file="${ca.service.cert.input}"
+			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.service.cert.deploy.filename}" />
+		<scp file="${ca.trust.cert.input}"
+			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.trust.cert.deploy.filename}" />
+
+	</target>
+
+
+
+	<target name="deploy-nodes">
+		<input message="Username: " addproperty="host.username" />
+		<input message="Password: " addproperty="host.password" />
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<antcall target="deploy-@{node}">
+					<param name="username" value="${host.username}" />
+					<param name="password" value="${host.password}" />
+					<param name="host" value="${@{node}.host}" />
+					<param name="temp.dir" value="${temp.dir}/@{node}" />
+					<param name="catalina.home"
+						value="${host.catalina.home}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="clean">
+		<delete dir="${temp.dir}" />
+	</target>
+
+
+	<target name="usage">
+		<echo>Howdy!</echo>
+	</target>
+
+</project>
