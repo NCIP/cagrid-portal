@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import org.projectmobius.portal.JComponentCellEditor;
 
@@ -23,7 +24,7 @@ import org.projectmobius.portal.JComponentCellEditor;
  * @author David Ervin
  * 
  * @created Apr 13, 2007 9:20:12 AM
- * @version $Id: ErrorDialogTable.java,v 1.2 2007-04-13 19:05:26 dervin Exp $ 
+ * @version $Id: ErrorDialogTable.java,v 1.3 2007-04-19 04:23:10 dervin Exp $ 
  */
 public class ErrorDialogTable extends JTable {
     private DefaultTableModel model = null;
@@ -47,9 +48,22 @@ public class ErrorDialogTable extends JTable {
         setDefaultEditor(Component.class, new JComponentCellEditor());
         model.addColumn("Message");
         model.addColumn("Details");
-        getColumn("Details").setPreferredWidth(50);
         model.addColumn("Exception");
-        getColumn("Exception").setPreferredWidth(50);
+        Component detailsComponent = getCellRenderer(0, 1).getTableCellRendererComponent(
+            this, new JButton("Details"), false, false, 0, 1);
+        Component exceptionComponent = getCellRenderer(0, 2).getTableCellRendererComponent(
+            this, new JButton("Exception"), false, false, 0, 2);
+        int detailsWidth = (int) detailsComponent.getPreferredSize().getWidth() + (2 * getIntercellSpacing().width);
+        int exceptionWidth = (int) exceptionComponent.getPreferredSize().getWidth() + (2 * getIntercellSpacing().width);
+        // set the width on button columns smaller
+        TableColumn detailsColumn = getColumn("Details");
+        detailsColumn.setPreferredWidth(detailsWidth);
+        detailsColumn.setWidth(detailsWidth);
+        detailsColumn.setMaxWidth(detailsWidth);
+        TableColumn exceptionColumn = getColumn("Exception");
+        exceptionColumn.setPreferredWidth(exceptionWidth);
+        exceptionColumn.setWidth(exceptionWidth);
+        exceptionColumn.setMaxWidth(exceptionWidth);
     }
     
     
