@@ -44,6 +44,10 @@ public class ErrorDialog extends JDialog {
 	private static Vector<ErrorContainer> errors = null;
 	private static ErrorDialog dialog = null;
 	private static String lastFileLocation = null;
+    
+    private ErrorContainer currentError = null;
+    private boolean showingErrorDetails = false;
+    private boolean showingErrorException = false;
 	
     private ErrorDialogTable errorTable = null;
 	private JScrollPane errorScrollPane = null;
@@ -212,17 +216,37 @@ public class ErrorDialog extends JDialog {
 	        errorTable = new ErrorDialogTable();
             errorTable.addErrorTableListener(new ErrorDialogTableListener() {
                 public void showDetailsClicked(ErrorContainer container) {
-                    getErrorsSplitPane().setDividerLocation(0.5D);
-                    getDetailTextArea().setText(container.getDetail());
+                    if (container == currentError && showingErrorDetails) {
+                        getErrorsSplitPane().setDividerLocation(1.0D);
+                        getDetailTextArea().setText("");
+                        showingErrorDetails = false;
+                        showingErrorException = false;
+                    } else {
+                        currentError = container;
+                        showingErrorDetails = true;
+                        showingErrorException = false;
+                        getErrorsSplitPane().setDividerLocation(0.5D);
+                        getDetailTextArea().setText(container.getDetail());
+                    }
                 }
                 
                 
                 public void showErrorClicked(ErrorContainer container) {
-                    StringWriter writer = new StringWriter();
-                    PrintWriter printWriter = new PrintWriter(writer);
-                    container.getError().printStackTrace(printWriter);
-                    getErrorsSplitPane().setDividerLocation(0.5D);
-                    getDetailTextArea().setText(writer.getBuffer().toString());
+                    if (container == currentError && showingErrorException) {
+                        getErrorsSplitPane().setDividerLocation(1.0D);
+                        getDetailTextArea().setText("");
+                        showingErrorDetails = false;
+                        showingErrorException = false;
+                    } else {
+                        currentError = container;
+                        showingErrorException = true;
+                        showingErrorDetails = false;
+                        StringWriter writer = new StringWriter();
+                        PrintWriter printWriter = new PrintWriter(writer);
+                        container.getError().printStackTrace(printWriter);
+                        getErrorsSplitPane().setDividerLocation(0.5D);
+                        getDetailTextArea().setText(writer.getBuffer().toString());
+                    }
                 }
             });
         }
