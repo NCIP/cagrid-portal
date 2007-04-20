@@ -80,7 +80,6 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
@@ -263,14 +262,14 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 					if (gmeSchemaLocatorPanel.currentNode != null) {
 						try {
 							getSchemaTextPane().setText(
-								XMLUtilities.formatXML(gmeSchemaLocatorPanel.currentNode.getSchemaContents()));
+								XMLUtilities.formatXML(
+                                    gmeSchemaLocatorPanel.currentNode.getSchemaContents()));
 						} catch (MobiusException e1) {
 							e1.printStackTrace();
 						}
 						getSchemaTextPane().setCaretPosition(0);
 					}
 				}
-
 			});
 		}
 		return gmeSchemaLocatorPanel;
@@ -497,8 +496,9 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 			JFrame frame = new JFrame();
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-			ExtensionDescription ext = (ExtensionDescription) Utils.deserializeDocument("extensions" + File.separator
-				+ "gme_discovery" + File.separator + "extension.xml", ExtensionDescription.class);
+			ExtensionDescription ext = (ExtensionDescription) Utils.deserializeDocument(
+                "extensions" + File.separator + "gme_discovery" 
+                + File.separator + "extension.xml", ExtensionDescription.class);
 			final GMEViewer panel = new GMEViewer(ext.getDiscoveryExtensionDescription());
 			frame.getContentPane().setLayout(new BorderLayout());
 			frame.getContentPane().add(panel, BorderLayout.CENTER);
@@ -509,5 +509,4 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 			e.printStackTrace();
 		}
 	}
-
-} // @jve:decl-index=0:visual-constraint="10,4"
+}

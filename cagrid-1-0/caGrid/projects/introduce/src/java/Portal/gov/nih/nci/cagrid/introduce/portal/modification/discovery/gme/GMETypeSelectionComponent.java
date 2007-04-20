@@ -270,8 +270,4 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 			}
 		}
 	}
-
-
-	public static void main(String[] args) {
-	}
 }
