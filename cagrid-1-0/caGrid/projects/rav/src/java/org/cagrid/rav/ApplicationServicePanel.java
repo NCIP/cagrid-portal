@@ -1,12 +1,9 @@
 package org.cagrid.rav;
 
 
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.CreationExtensionUIDialog;
 
@@ -30,13 +27,12 @@ import java.awt.event.ActionListener;
 
 import org.apache.axis.message.MessageElement;
 import org.ggf.schemas.jsdl._2005._11.jsdl.Application_Type;
-
 import java.io.File;
 
 public class ApplicationServicePanel extends CreationExtensionUIDialog {
 
 	private static final long serialVersionUID = 1L;
-	public static final String RAV_EXTENSION = "RAVE";  //  @jve:decl-index=0:
+	public static final String RAV_EXTENSION = "rav";  //  @jve:decl-index=0:
 	private JPanel browserPanel = null;
 	private JPanel argsPanel = null;
 	private JLabel jLabel = null;
@@ -55,7 +51,7 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 	
 	private JFileChooser fileChooser = null;
 	
-	private Application_Type appType = null;
+	private Application_Type appType = null;  //  @jve:decl-index=0:
 	
 	/**
 	 * This is the default constructor
@@ -91,6 +87,7 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 		this.add(getBrowserPanel(), gridBagConstraints);
 		this.add(getArgsPanel(), gridBagConstraints1);
 		this.setTitle("Remote Application Virtualization Environment");
+		appType = new Application_Type();
 	}
 
 	/**
@@ -278,7 +275,7 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 			jButton1.addActionListener(new ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if(!(getJTextField().getText().trim()).equals("")) {
-						appType = new Application_Type();
+					
 						appType.setApplicationName(getJTextField().getText().trim());
 						appType.setApplicationVersion(getJTextField1().getText().trim());
 						appType.setDescription(getJTextField2().getText().trim());
@@ -286,7 +283,13 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 						MessageElement[] any_element = new MessageElement[1];
 						any_element[0] = new MessageElement(getJTextField3().getText().trim(), "foo");
 						appType.set_any(any_element);
-						setExtensionData();
+						try {
+							setExtensionData();
+						} catch (Exception e1) {
+							JOptionPane.showMessageDialog(ApplicationServicePanel.this, 
+							"Error: setting the extensions ");
+							e1.printStackTrace();
+						}
 						dispose();	
 					} else {
 						JOptionPane.showMessageDialog(ApplicationServicePanel.this, 
@@ -332,25 +335,18 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 		return jTextField3;
 	}
 	
-	private void setExtensionData() {
-		ExtensionType ravExtension = new ExtensionType();
-		ravExtension.setName(RAV_EXTENSION);
-		ravExtension.setExtensionType("Remote Application Virtualization");
-		ravExtension.setVersion("1.0");
-		ExtensionTypeExtensionData data = new ExtensionTypeExtensionData();
-		MessageElement element = new MessageElement(Application_Type.getTypeDesc().getXmlType(), appType);
+	private void setExtensionData() throws Exception {
+		ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
+		Application_Type appType1 = ExtensionDataUtils.getExtensionData(data);
+		appType1.setApplicationName(appType.getApplicationName());
+		appType1.setApplicationVersion(appType.getApplicationVersion());
+		appType1.setDescription(appType.getDescription());
+		appType1.set_any(appType.get_any());
+		System.out.println(appType.getApplicationName() + appType.getApplicationVersion() +
+				appType.getDescription() );
+		MessageElement element = new MessageElement(Application_Type.getTypeDesc().getXmlType(), appType1);
 		ExtensionTools.updateExtensionDataElement(data, element);
-		// set the selected service features
-//		ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
-		try {
-
-			//Data extData = ExtensionDataUtils.getExtensionData(data);
-			//extData.setServiceFeatures(features);
-			//ExtensionDataUtils.storeExtensionData(data, extData);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			//ErrorDialog.showErrorDialog("Error storing configuration: " + ex.getMessage(), ex);
-		}
 	}
+	
 
 }  //  @jve:decl-index=0:visual-constraint="8,8"
