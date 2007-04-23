@@ -99,14 +99,14 @@ public class ExtensionTools {
 
 
 	public static ResourcePropertyEditorPanel getMetadataEditorComponent(String extensionName,
-		InputStream rpDataStream, File schemaFile, File schemaDir) throws Exception {
+		String rpData, File schemaFile, File schemaDir) throws Exception {
 		ResourcePropertyEditorExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance()
 			.getResourcePropertyEditorExtension(extensionName);
 		if ((extensionDesc != null) && (extensionDesc.getResourcePropertyEditorPanel() != null)
 			&& !extensionDesc.getResourcePropertyEditorPanel().equals("")) {
 			Class c = Class.forName(extensionDesc.getResourcePropertyEditorPanel());
-			Constructor con = c.getConstructor(new Class[]{InputStream.class, File.class, File.class});
-			Object obj = con.newInstance(new Object[]{rpDataStream, schemaFile, schemaDir});
+			Constructor con = c.getConstructor(new Class[]{String.class, File.class, File.class});
+			Object obj = con.newInstance(new Object[]{rpData, schemaFile, schemaDir});
 
 			return (ResourcePropertyEditorPanel) obj;
 		}

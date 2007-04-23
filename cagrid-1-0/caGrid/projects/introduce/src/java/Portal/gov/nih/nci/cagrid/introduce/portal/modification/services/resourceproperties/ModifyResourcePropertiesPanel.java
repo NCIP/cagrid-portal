@@ -41,6 +41,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.xml.namespace.QName;
 
+import org.projectmobius.common.XMLUtilities;
+
 
 public class ModifyResourcePropertiesPanel extends JPanel {
 
@@ -445,14 +447,17 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 							ResourcePropertyType type = getResourcePropertiesTable().getRowData(
 								getResourcePropertiesTable().getSelectedRow());
 							if (type.isPopulateFromFile()) {
-								InputStream rpDataStream = null;
+								String rpData = null;
 								File resourcePropertyFile = null;
-								if (type.getFileLocation() != null && !type.getFileLocation().equals("")) {
+								
+								if(type.getFileLocation() !=null){
+								    resourcePropertyFile = new File(etcDir.getAbsolutePath() + File.separator
+                                        + type.getFileLocation());
+								}
+								if (resourcePropertyFile!=null && resourcePropertyFile.exists()) {
 									// file has already been created
-									resourcePropertyFile = new File(etcDir.getAbsolutePath() + File.separator
-										+ type.getFileLocation());
 									System.out.println("Loading resource properties file : " + resourcePropertyFile);
-									rpDataStream = new FileInputStream(new File(resourcePropertyFile.getAbsolutePath()));
+									rpData = XMLUtilities.fileNameToString(resourcePropertyFile.getAbsolutePath());
 								} else {
 									// file has not been created yet, we will
 									// create it, set the path to file, and then
@@ -464,13 +469,11 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 										}
 									}
 									System.out.println("Creating a new resource properties file");
-									type.setFileLocation(service.getName()
-										+ "_"
-										+ CommonTools.getResourcePropertyVariableName(service
-											.getResourcePropertiesList(), i) + ".xml");
-									resourcePropertyFile = new File(etcDir.getAbsolutePath() + File.separator
-										+ type.getFileLocation());
-									rpDataStream = new FileInputStream(new File(resourcePropertyFile.getAbsolutePath()));
+									boolean created = resourcePropertyFile.createNewFile();
+									if(!created){
+									    throw new Exception("Could not create file" +  resourcePropertyFile.getAbsolutePath());
+									}
+									rpData = XMLUtilities.fileNameToString(resourcePropertyFile.getAbsolutePath());
 								}
 
 								QName qname = type.getQName();
@@ -482,12 +485,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 								ResourcePropertyEditorPanel mdec = null;
 
 								if (mde != null) {
-									mdec = ExtensionTools.getMetadataEditorComponent(mde.getName(), rpDataStream,
+									mdec = ExtensionTools.getMetadataEditorComponent(mde.getName(), rpData,
 										new File(schemaDir.getAbsolutePath() + File.separator + nsType.getLocation()),
 										schemaDir);
 								} else {
 									// use the default editor....
-									mdec = new XMLEditorViewer(rpDataStream, new File(schemaDir.getAbsolutePath()
+									mdec = new XMLEditorViewer(rpData, new File(schemaDir.getAbsolutePath()
 										+ File.separator + nsType.getLocation()), schemaDir);
 								}
 								ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(

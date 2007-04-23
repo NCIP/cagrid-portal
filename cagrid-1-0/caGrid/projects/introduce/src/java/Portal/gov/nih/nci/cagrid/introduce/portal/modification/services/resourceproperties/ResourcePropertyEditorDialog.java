@@ -117,7 +117,7 @@ public class ResourcePropertyEditorDialog extends JDialog {
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (component.save()) {
-						InputStream doc = component.getResultRPInputStream();
+						
 
 						// write the xml file back out for this
 						// properties
@@ -125,7 +125,7 @@ public class ResourcePropertyEditorDialog extends JDialog {
 						try {
 							fw = new FileWriter(resourcePropertyFile);
 							// TODO: validate here?
-							fw.write(XMLUtilities.formatXML(XMLUtilities.streamToString(doc)));
+							fw.write(XMLUtilities.formatXML(component.getResultRPString()));
 							fw.close();
 						} catch (Exception e1) {
 							e1.printStackTrace();

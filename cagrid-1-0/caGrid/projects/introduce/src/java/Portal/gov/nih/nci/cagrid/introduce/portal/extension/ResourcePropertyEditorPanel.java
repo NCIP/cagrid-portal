@@ -7,13 +7,13 @@ import javax.swing.JPanel;
 
 
 public abstract class ResourcePropertyEditorPanel extends JPanel {
-	private InputStream rpInputStream;
+	private String rpString;
 	private File schemaFile;
 	private File schemaDir;
 
 
-	public ResourcePropertyEditorPanel(InputStream doc, File schemaFile, File schemaDir) {
-		this.rpInputStream = doc;
+	public ResourcePropertyEditorPanel(String doc, File schemaFile, File schemaDir) {
+		this.rpString = doc;
 		this.schemaFile = schemaFile;
 		this.schemaDir = schemaDir;
 	}
@@ -22,11 +22,11 @@ public abstract class ResourcePropertyEditorPanel extends JPanel {
 	public abstract boolean save();
 
 
-	public abstract InputStream getResultRPInputStream();
+	public abstract String getResultRPString();
 
 
-	protected InputStream getRPInputStream() {
-		return rpInputStream;
+	protected String getRPString() {
+		return rpString;
 	}
 
 
