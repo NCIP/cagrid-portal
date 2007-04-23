@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data.ui.cacore.appservice;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
@@ -34,7 +35,7 @@ import javax.swing.event.DocumentEvent;
  * @author David Ervin
  * 
  * @created Mar 28, 2007 10:00:18 AM
- * @version $Id: Appservice32ConfigPanel.java,v 1.2 2007-04-10 14:30:30 hastings Exp $
+ * @version $Id: Appservice32ConfigPanel.java,v 1.3 2007-04-23 15:08:33 dervin Exp $
  */
 public class Appservice32ConfigPanel extends BaseAppserviceConfigPanel {
 
