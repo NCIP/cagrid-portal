@@ -54,6 +54,8 @@ public class CommonTools {
 	public static final String ALLOWED_JAVA_CLASS_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
 
 	public static final String ALLOWED_JAVA_FIELD_REGEX = "[a-z\\_]++[A-Za-z0-9\\_\\$]*";
+	
+	public static final String ALLOWED_JAVA_OP_NAME = "[a-zA-Z\\_]++[A-Za-z0-9\\_]*";
 
 	public static final String ALLOWED_JAVA_PACKAGE_REGEX = "[a-z\\_]++[A-Za-z0-9\\_\\$]*";
 
@@ -188,6 +190,14 @@ public class CommonTools {
 		return true;
 	}
 
+	   public static boolean isValidJavaMethod(String methodName) {
+	        if (methodName.length() > 0) {
+	            if (!methodName.matches(ALLOWED_JAVA_OP_NAME)) {
+	                return false;
+	            }
+	        }
+	        return true;
+	    }
 
 	public static String getAntCommand(String antCommand, String buildFileDir) throws Exception {
 		String cmd = " " + antCommand;
