@@ -64,7 +64,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.1 2007-04-23 17:05:49 dervin Exp $ 
+ * @version $Id: DomainModelConfigPanel.java,v 1.2 2007-04-23 17:26:43 dervin Exp $ 
  */
 public class DomainModelConfigPanel extends JPanel {
 
@@ -93,7 +93,8 @@ public class DomainModelConfigPanel extends JPanel {
     private JScrollPane umlClassScrollPane = null;
     private UMLProjectTree umlTree = null;
     
-    public DomainModelConfigPanel(ExtensionTypeExtensionData extensionData, ServiceInformation info, ExtensionDataManager dataManager) {
+    public DomainModelConfigPanel(ExtensionTypeExtensionData extensionData,
+        ServiceInformation info, ExtensionDataManager dataManager) {
         this.extensionTypeExtensionData = extensionData;
         this.serviceInfo = info;
         this.extensionDataManager = dataManager;
@@ -118,10 +119,12 @@ public class DomainModelConfigPanel extends JPanel {
                 // get the project from cadsr that has been selected
                 String projectLongName = extensionDataManager.getCadsrProjectLongName();
                 String projectVersion = extensionDataManager.getCadsrProjectVersion();
-                CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getCadsrBrowserPanel().getCadsr().getText());
+                CaDSRServiceClient cadsrClient = new CaDSRServiceClient(
+                    getCadsrBrowserPanel().getCadsr().getText());
                 Project[] allProjects = cadsrClient.findAllProjects();
                 for (Project proj : allProjects) {
-                    if (proj.getLongName().equals(projectLongName) && proj.getVersion().equals(projectVersion)) {
+                    if (proj.getLongName().equals(projectLongName) 
+                        && proj.getVersion().equals(projectVersion)) {
                         mostRecentProject = proj;
                         break;
                     }
@@ -132,18 +135,19 @@ public class DomainModelConfigPanel extends JPanel {
                 if (packageNames != null) {
                     for (String packName : packageNames) {
                         getUmlTree().addUmlPackage(packName);
-                        List<ClassMapping> mappings = extensionDataManager.getClassMappingsInPackage(packName);
+                        List<ClassMapping> mappings = 
+                            extensionDataManager.getClassMappingsInPackage(packName);
                         for (ClassMapping mapping : mappings) {
-                            UMLClassTreeNode classNode = getUmlTree().addUmlClass(packName, mapping.getClassName());
+                            UMLClassTreeNode classNode = getUmlTree().addUmlClass(
+                                packName, mapping.getClassName());
                             classNode.getCheckBox().setSelected(mapping.isSelected());
-                            // checking the node fires the class addition
-                            // fireClassAdded(packName, mapping, packageNamespace);
                         }
                     }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error loading cadsr domain model information", ex.getMessage(), ex);
+                ErrorDialog.showErrorDialog("Error loading cadsr domain model information", 
+                    ex.getMessage(), ex);
             }
         }
     }
@@ -192,7 +196,8 @@ public class DomainModelConfigPanel extends JPanel {
                             getSuppliedDomainModelRadioButton().isSelected());
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing domain model source: " + ex.getMessage(), ex);
+                        ErrorDialog.showErrorDialog("Error storing domain model source", 
+                            ex.getMessage(), ex);
                     }
                     
                     // enable / disable panels and components as needed
@@ -351,8 +356,8 @@ public class DomainModelConfigPanel extends JPanel {
                                     + File.separator + "etc" + File.separator + inFile.getName());
                                 Utils.copyFile(inFile, outFile);
                                 // set up the domain model resource property
-                                ResourcePropertyType dmResourceProp = CommonTools.getResourcePropertiesOfType(serviceInfo
-                                    .getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
+                                ResourcePropertyType dmResourceProp = CommonTools.getResourcePropertiesOfType(
+                                    serviceInfo.getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
                                 dmResourceProp.setFileLocation(outFile.getName());
                                 dmResourceProp.setPopulateFromFile(true);
                                 // change the domain model text field
@@ -420,7 +425,6 @@ public class DomainModelConfigPanel extends JPanel {
             }
             cadsrBrowserPanel.getCadsr().setText(cadsrUrl);
             // add listener to the cadsr URL text field
-            // TODO: this is probably really slow; make it better
             cadsrBrowserPanel.getCadsr().getDocument().addDocumentListener(new DocumentChangeAdapter() {
                 public void documentEdited(DocumentEvent e) {
                     try {
@@ -428,7 +432,8 @@ public class DomainModelConfigPanel extends JPanel {
                             getCadsrBrowserPanel().getCadsr().getText());
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing domain model source: " + ex.getMessage(), ex);
+                        ErrorDialog.showErrorDialog("Error storing domain model source", 
+                            ex.getMessage(), ex);
                     }
                 }
             });
@@ -616,7 +621,7 @@ public class DomainModelConfigPanel extends JPanel {
                             Data data = ExtensionDataUtils.getExtensionData(
                                 extensionTypeExtensionData);
                             final CadsrInformation info = data.getCadsrInformation();
-                            // TODO: concurrent
+                            // TODO: thread this out
                             model = DomainModelCreationUtil.createDomainModel(info);
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -625,7 +630,8 @@ public class DomainModelConfigPanel extends JPanel {
                         }   
                     }
                     if (model != null) {
-                        new DomainModelVisualizationDialog(model);
+                        new DomainModelVisualizationDialog(
+                            PortalResourceManager.getInstance().getGridPortal(), model);
                     }
                 }
             });
@@ -682,7 +688,8 @@ public class DomainModelConfigPanel extends JPanel {
         
         // walk classes from the model, grouping classes by package
         Map<String, List<String>> packageToClass = new HashMap();
-        if (model.getExposedUMLClassCollection() != null && model.getExposedUMLClassCollection().getUMLClass() != null) {
+        if (model.getExposedUMLClassCollection() != null 
+            && model.getExposedUMLClassCollection().getUMLClass() != null) {
             for (UMLClass umlClass : model.getExposedUMLClassCollection().getUMLClass()) {
                 String packName = umlClass.getPackageName();
                 List<String> classList = packageToClass.get(packName);
@@ -736,7 +743,8 @@ public class DomainModelConfigPanel extends JPanel {
     }
     
     
-    private ClassMapping[] createClassMappings(String packageName, NamespaceType packageNamespace, List<String> classNames) {
+    private ClassMapping[] createClassMappings(String packageName, 
+        NamespaceType packageNamespace, List<String> classNames) {
         CadsrPackage pack = new CadsrPackage();
         pack.setName(packageName);
         pack.setMappedNamespace(packageNamespace.getNamespace());
@@ -751,9 +759,6 @@ public class DomainModelConfigPanel extends JPanel {
             mapping.setSelected(true);
             mapping.setTargetable(true);
             mappingList.add(mapping);
-            // notify the addition of a class to the mapping
-            // fireClassAdded(pack.getName(), mapping, packageNamespace);
-            // TODO: add classes to gui?
         }
         ClassMapping[] mappings = new ClassMapping[classNames.size()];
         mappingList.toArray(mappings);
@@ -761,13 +766,14 @@ public class DomainModelConfigPanel extends JPanel {
     }
     
     
-    private NamespaceType getNamespaceForPackage(String projectShortName, String projectVersion, String packageName) {
+    private NamespaceType getNamespaceForPackage(String projectShortName, 
+        String projectVersion, String packageName) {
         String mappedNamespace = null;
         try {
             mappedNamespace = extensionDataManager.getMappedNamespaceForPackage(packageName);
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error loading mapped namespace: " + ex.getMessage(), ex);
+            ErrorDialog.showErrorDialog("Error loading mapped namespace", ex.getMessage(), ex);
         }
         if (mappedNamespace == null) {
             // fall back to the default mapping
@@ -821,7 +827,8 @@ public class DomainModelConfigPanel extends JPanel {
         
         // can now add the package's contents to the UI
         // do we have a namespace for the package?
-        NamespaceType packageNamespace = getNamespaceForPackage(project.getShortName(), project.getVersion(), pack.getName());
+        NamespaceType packageNamespace = getNamespaceForPackage(
+            project.getShortName(), project.getVersion(), pack.getName());
         if (packageNamespace == null) {
             return false;
         }
@@ -850,7 +857,8 @@ public class DomainModelConfigPanel extends JPanel {
             for (UMLClassMetadata currentClass : classes) {
                 classNames.add(currentClass.getName());
             }
-            ClassMapping[] classMappings = createClassMappings(pack.getName(), packageNamespace, classNames);
+            ClassMapping[] classMappings = createClassMappings(
+                pack.getName(), packageNamespace, classNames);
             cadsrPack.setCadsrClass(classMappings);
             extensionDataManager.storeCadsrPackage(cadsrPack);
             // add the classes to the UML tree

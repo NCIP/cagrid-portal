@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.utilities.dmviz.DomainModelVisualizationPanel;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -12,8 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import org.projectmobius.portal.PortalResourceManager;
-
 /** 
  *  DomainModelVisualizationDialog
  *  Dialog to visually display a Data Service's domain model
@@ -21,7 +20,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 2, 2007 2:02:12 PM
- * @version $Id: DomainModelVisualizationDialog.java,v 1.1 2007-04-02 18:31:35 dervin Exp $ 
+ * @version $Id: DomainModelVisualizationDialog.java,v 1.2 2007-04-23 17:26:43 dervin Exp $ 
  */
 public class DomainModelVisualizationDialog extends JDialog {
 
@@ -29,8 +28,8 @@ public class DomainModelVisualizationDialog extends JDialog {
     private JButton okButton = null;
     private JPanel mainPanel = null;
     
-    public DomainModelVisualizationDialog(DomainModel model) {
-        super(PortalResourceManager.getInstance().getGridPortal(), "Domain Model", false);
+    public DomainModelVisualizationDialog(Frame owner, DomainModel model) {
+        super(owner, "Domain Model", false);
         getDmVizPanel().setDomainModel(model);
         initialize();
     }
