@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,11 +40,11 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
 	private JLabel projectDescLabel = null;
 
 
-	public DomainModelViewer(InputStream doc, File schemaFile, File schemaDir) {
+	public DomainModelViewer(String doc, File schemaFile, File schemaDir) {
 		super(doc, schemaFile, schemaDir);
 		if (doc != null) {
 			try {
-				setDomainModel(MetadataUtils.deserializeDomainModel(new InputStreamReader(doc)));
+				setDomainModel(MetadataUtils.deserializeDomainModel(new StringReader(doc)));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -288,7 +289,7 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
 	}
 
 
-	public InputStream getResultRPInputStream() {
-		return null;
+	public String getResultRPString() {
+		return getRPString();
 	}
 }
