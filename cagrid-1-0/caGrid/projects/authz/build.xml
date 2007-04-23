@@ -1,6 +1,7 @@
 <project name="authz" default="all">
     
     <property file="build.properties"/>
+    <property file="${basedir}/ext/resources/cagrid.properties" />
     <property environment="env"/>
     <property name="globus.location" value="${env.GLOBUS_LOCATION}"/>
     <property name="build.dir" value="build"/>
@@ -9,7 +10,11 @@
     <property name="ext.lib.dir" value="ext/lib"/>
     <property name="src.java.dir" value="src/java"/>
     <property name="test.src.java.dir" value="test/src/java"/>
-    <property name="jar.name" value="caGrid-1.0-authz-common"/>
+    
+	<property name="project.version" value="${cagrid.master.project.version}" />
+	<property name="project.name" value="${cagrid.master.project.name}-${project.version}-${ant.project.name}" />
+    <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}${ant.project.name}${cagrid.master.jar.separator}" />
+    <property name="jar.name" value="${project.jar.prefix}common"/>
     
     <!-- Jars from GLOBUS_LOCATION/lib -->
     <patternset id="globus.jars">

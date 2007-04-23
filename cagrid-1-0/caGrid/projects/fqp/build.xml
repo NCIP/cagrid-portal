@@ -12,6 +12,10 @@
     <property name="introduce.ns.excludes" value="" />
     <property name="service.name" value="${introduce.skeleton.service.name}" />
     <property name="schema.path" value="${introduce.skeleton.service.name}" />
+    
+    <property file="${basedir}/ext/resources/cagrid.properties" />
+    <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}fqp-" />
+
 
     <!-- Important directories and files -->
     <property name="src.dir" value="src" />
@@ -21,12 +25,11 @@
     <property name="schema.dir" value="schema" />
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 
-	<property name="project.name" value="caGrid-1.0-fqp" />
-	<property name="common.jar.name" value="${project.name}-common.jar" />
-	<property name="client.jar.name" value="${project.name}-client.jar" />
-	<property name="service.jar.name" value="${project.name}-service.jar" />
-	<property name="stubs.jar.name" value="${project.name}-stubs.jar" />
-	<property name="test.jar.name" value="${project.name}-tests.jar" />
+	<property name="common.jar.name" value="${project.jar.prefix}common.jar" />
+	<property name="client.jar.name" value="${project.jar.prefix}client.jar" />
+	<property name="service.jar.name" value="${project.jar.prefix}service.jar" />
+	<property name="stubs.jar.name" value="${project.jar.prefix}stubs.jar" />
+	<property name="test.jar.name" value="${project.jar.prefix}tests.jar" />
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="test" />
@@ -310,7 +313,7 @@
 	<!-- Builds Code Docuementation                                          -->
 	<!-- =================================================================== -->
 	<target name="javadoc" depends="compile" description="Creates the API documentation.">
-		<javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="${project.name} API">
+		<javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="${service.name} API">
 			<sourcepath>
 				<pathelement path="${src.dir}" />
 			</sourcepath>

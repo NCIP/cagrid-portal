@@ -1,11 +1,12 @@
 <!-- ======================================================================= -->
 <!-- caGrid 1.0 Data Service Tools build file                                -->
 <!-- ======================================================================= -->
-<project name="metadata" default="all" basedir=".">
+<project name="data" default="all" basedir=".">
     <!-- Environment -->
     <property environment="env" />
     <property file="${basedir}/build.properties" />
     <property file="${user.dir}/build.properties" />
+    <property file="${basedir}/ext/resources/cagrid.properties" />
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
     <property file="introduce.properties" />
     <property name="introduce.ns.excludes" value="" />
@@ -16,8 +17,10 @@
     <property name="java.source" value="1.5" />
 
     <!-- Information -->
-    <property name="project.version" value="1.0" />
-    <property name="project.name" value="caGrid-${project.version}-data" />
+    <property name="project.version" value="${cagrid.master.project.version}" />
+    <property name="project.name" value="${cagrid.master.project.name}-${project.version}-${ant.project.name}" />
+    <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}${ant.project.name}${cagrid.master.jar.separator}" />
+
 
     <!-- build output dirs -->
     <property name="build.dir" location="build" />
@@ -27,20 +30,20 @@
     <property name="build.validation.dest" location="${build.dir}/validation/classes" />
     <property name="build.common.dest" location="${build.dir}/common/classes" />
     <property name="build.cql.dest" location="${build.dir}/cql/classes" />
-	<property name="build.tools.dest" location="${build.dir}/tools/classes" />
-	<property name="build.upgrades.dest" location="${build.dir}/upgrades/classes" />
-	<property name="build.jars.dir" location="build/lib" />
+    <property name="build.tools.dest" location="${build.dir}/tools/classes" />
+    <property name="build.upgrades.dest" location="${build.dir}/upgrades/classes" />
+    <property name="build.jars.dir" location="build/lib" />
 
     <!-- jar names -->
-    <property name="utils.jar.name" value="${project.name}-utils.jar" />
-    <property name="extension.jar.name" value="${project.name}-extension.jar" />
-    <property name="service.jar.name" value="${project.name}-service.jar" />
-    <property name="validation.jar.name" value="${project.name}-validation.jar" />
-    <property name="common.jar.name" value="${project.name}-common.jar" />
-    <property name="cql.jar.name" value="${project.name}-cql.jar" />
-	<property name="tools.jar.name" value="${project.name}-tools.jar" />
-	<property name="upgrades.jar.name" value="${project.name}-upgrades.jar" />
-	<property name="tests.jar.name" value="${project.name}-tests.jar" />
+    <property name="utils.jar.name" value="${project.jar.prefix}utils.jar" />
+    <property name="extension.jar.name" value="${project.jar.prefix}extension.jar" />
+    <property name="service.jar.name" value="${project.jar.prefix}service.jar" />
+    <property name="validation.jar.name" value="${project.jar.prefix}validation.jar" />
+    <property name="common.jar.name" value="${project.jar.prefix}common.jar" />
+    <property name="cql.jar.name" value="${project.jar.prefix}cql.jar" />
+    <property name="tools.jar.name" value="${project.jar.prefix}tools.jar" />
+    <property name="upgrades.jar.name" value="${project.jar.prefix}upgrades.jar" />
+    <property name="tests.jar.name" value="${project.jar.prefix}tests.jar" />
 
     <!-- jar files -->
     <property name="extension.jar.file" value="${build.jars.dir}/${extension.jar.name}" />
@@ -49,9 +52,9 @@
     <property name="validation.jar.file" value="${build.jars.dir}/${validation.jar.name}" />
     <property name="common.jar.file" value="${build.jars.dir}/${common.jar.name}" />
     <property name="cql.jar.file" value="${build.jars.dir}/${cql.jar.name}" />
-	<property name="tools.jar.file" value="${build.jars.dir}/${tools.jar.name}" />
-	<property name="upgrades.jar.file" value="${build.jars.dir}/${upgrades.jar.name}" />
-	<property name="tests.jar.file" value="${build.jars.dir}/${tests.jar.name}" />
+    <property name="tools.jar.file" value="${build.jars.dir}/${tools.jar.name}" />
+    <property name="upgrades.jar.file" value="${build.jars.dir}/${upgrades.jar.name}" />
+    <property name="tests.jar.file" value="${build.jars.dir}/${tests.jar.name}" />
 
     <!-- extension -->
     <property name="extension.description.file" value="${basedir}/extension/extension.xml" />
@@ -60,12 +63,12 @@
 
     <!-- stubs -->
     <property name="stubs.dir" location="${build.dir}/stubs" />
-	<property name="test.stubs.dir" location="${stubs.dir}/test"/>
+    <property name="test.stubs.dir" location="${stubs.dir}/test" />
     <property name="stubs.src" location="${stubs.dir}/src" />
-	<property name="test.stubs.src" location="${test.stubs.dir}/src"/>
+    <property name="test.stubs.src" location="${test.stubs.dir}/src" />
     <property name="stubs.dest" location="${stubs.dir}/classes" />
-	<property name="test.stubs.dest" location="${test.stubs.dir}/classes"/>
-    <property name="stubs.jar.name" value="${project.name}-stubs.jar" />
+    <property name="test.stubs.dest" location="${test.stubs.dir}/classes" />
+    <property name="stubs.jar.name" value="${project.jar.prefix}stubs.jar" />
     <property name="stubs.jar.file" value="${build.jars.dir}/${stubs.jar.name}" />
     <property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
 
@@ -77,15 +80,15 @@
 
     <!-- source directories -->
     <property name="src.dir" location="${basedir}/src" />
-	<property name="java.src.dir" location="${src.dir}/java" />
+    <property name="java.src.dir" location="${src.dir}/java" />
     <property name="utils.src.dir" location="${java.src.dir}/utilities" />
     <property name="extension.src.dir" location="${java.src.dir}/extension" />
     <property name="service.src.dir" location="${java.src.dir}/service" />
     <property name="validation.src.dir" location="${java.src.dir}/validation" />
     <property name="common.src.dir" location="${java.src.dir}/common" />
     <property name="cql.src.dir" location="${java.src.dir}/cql" />
-	<property name="upgrades.src.dir" location="${java.src.dir}/upgrades" />
-	<property name="tools.src.dir" location="${java.src.dir}/tools" />
+    <property name="upgrades.src.dir" location="${java.src.dir}/upgrades" />
+    <property name="tools.src.dir" location="${java.src.dir}/tools" />
 
     <!-- libraries -->
     <property name="lib.dir" location="${basedir}/lib" />
@@ -95,31 +98,31 @@
     <!-- testing stuff -->
     <property name="test.dir" location="${basedir}/test" />
     <property name="test.src.dir" location="${test.dir}/src/java" />
-	<property name="test.resources.dir" location="${test.dir}/resources"/>
+    <property name="test.resources.dir" location="${test.dir}/resources" />
     <property name="test.classes.dir" location="${build.dir}/test/classes" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
     <property name="test.logs.dir" location="${test.dir}/logs" />
     <import file="test/test.xml" />
 
-	
+
     <!-- =============================================================== -->
     <!-- Classpaths                                                      -->
     <!-- =============================================================== -->
-	<path id="base.classpath">
-		<fileset dir="${lib.dir}">
-	    	<include name="*.jar" />
-	    </fileset>
-	    <fileset dir="${ext.lib.dir}">
-	    	<include name="*.jar" />
-		</fileset>
-	    <fileset dir="${globus.dir}/lib">
-	    	<include name="*.jar" />
-		</fileset>
-	</path>
-	
+    <path id="base.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar" />
+        </fileset>
+        <fileset dir="${ext.lib.dir}">
+            <include name="*.jar" />
+        </fileset>
+        <fileset dir="${globus.dir}/lib">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+
     <path id="test.classpath">
-    	<path refid="base.classpath"/>
-		<pathelement location="${test.stubs.dest}"/>
+        <path refid="base.classpath" />
+        <pathelement location="${test.stubs.dest}" />
         <fileset dir="${test.lib.dir}">
             <include name="**/*.jar" />
         </fileset>
@@ -133,7 +136,7 @@
             <include name="**/*.jar" />
         </fileset>
     </path>
-	
+
 
     <!-- sets up GT4 related variables -->
     <target name="setGlobus" if="env.GLOBUS_LOCATION">
@@ -144,7 +147,7 @@
         <property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
         <!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
         <property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd -x http://schemas.xmlsoap.org/ws/2004/09/enumeration" />
-    	<property name="data.service.namespace" value="http://gov.nih.nci.cagrid.data/DataService"/>
+        <property name="data.service.namespace" value="http://gov.nih.nci.cagrid.data/DataService" />
     </target>
 
 
@@ -157,17 +160,17 @@
         <mkdir dir="${build.service.dest}" />
         <mkdir dir="${build.validation.dest}" />
         <mkdir dir="${build.cql.dest}" />
-    	<mkdir dir="${build.tools.dest}" />
-    	<mkdir dir="${build.upgrades.dest}"/>
+        <mkdir dir="${build.tools.dest}" />
+        <mkdir dir="${build.upgrades.dest}" />
         <mkdir dir="${build.jars.dir}" />
         <mkdir dir="${test.classes.dir}" />
         <mkdir dir="${stubs.dir}" />
-		<mkdir dir="${test.stubs.dir}"/>
+        <mkdir dir="${test.stubs.dir}" />
         <mkdir dir="${stubs.src}" />
-		<mkdir dir="${test.stubs.src}" />
+        <mkdir dir="${test.stubs.src}" />
         <mkdir dir="${stubs.dest}" />
-		<mkdir dir="${test.stubs.dest}" />
-    	<mkdir dir="${schema.dest}" />
+        <mkdir dir="${test.stubs.dest}" />
+        <mkdir dir="${schema.dest}" />
         <!-- copy schemas to the output directory -->
         <copy toDir="${schema.dest}">
             <fileset dir="schema" casesensitive="yes">
@@ -176,36 +179,35 @@
             </fileset>
         </copy>
         <copy todir="${schema.dest}/Data">
-        	<fileset dir="ext">
-        		<include name="xsd/**/*.xsd"/>
-        		<exclude name="xsd/**/enumeration.xsd"/>
-				<exclude name="xsd/**/enumeration.wsdl"/>
-				<exclude name="xsd/**/addressing.xsd"/>
-        	</fileset>
+            <fileset dir="ext">
+                <include name="xsd/**/*.xsd" />
+                <exclude name="xsd/**/enumeration.xsd" />
+                <exclude name="xsd/**/enumeration.wsdl" />
+                <exclude name="xsd/**/addressing.xsd" />
+            </fileset>
         </copy>
-		<copy todir="${schema.dest}/Data">
-			<fileset dir="${ext.schema.dir}">
-				<include name="enumeration.xsd"/>
-				<include name="enumeration.wsdl"/>
-				<include name="addressing.xsd"/>
-			</fileset>
-		</copy>
+        <copy todir="${schema.dest}/Data">
+            <fileset dir="${ext.schema.dir}">
+                <include name="enumeration.xsd" />
+                <include name="enumeration.wsdl" />
+                <include name="addressing.xsd" />
+            </fileset>
+        </copy>
         <available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
-    
+
         <taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
             <classpath>
                 <fileset dir="${ext.lib.dir}">
-                    <include name="boot.jar"/>
-                    <include name="osgi.jar"/>
-                    <include name="resources.jar"/>
-                    <include name="runtime.jar"/>
-                    <include name="codegen.jar"/>
-                    <include name="jdtcore.jar"/>
-                    <include name="jetc-task.jar"/>
+                    <include name="boot.jar" />
+                    <include name="osgi.jar" />
+                    <include name="resources.jar" />
+                    <include name="runtime.jar" />
+                    <include name="codegen.jar" />
+                    <include name="jdtcore.jar" />
+                    <include name="jetc-task.jar" />
                 </fileset>
             </classpath>
         </taskdef>
-        
     </target>
 
 
@@ -245,31 +247,31 @@
             <property name="wsdl.file" value="Response.wsdl" />
             <property name="target.stubs.dir" location="${stubs.src}" />
         </ant>
-    	<!-- generate stubs for DataServiceExtensionData classes -->
+        <!-- generate stubs for DataServiceExtensionData classes -->
         <ant antfile="${ant.build.stubs}" target="generateStubs">
-    		<property name="source.stubs.dir" location="${schema.dest}/Data" />
-    	    <property name="wsdl.file" value="ExtensionData.wsdl" />
-    	    <property name="target.stubs.dir" location="${stubs.src}" />
-    	</ant>
-    	<!-- generate stubs for Class to QName mapping classes -->
-    	<ant antfile="${ant.build.stubs}" target="generateStubs">
-    		<property name="source.stubs.dir" location="${schema.dest}/Data" />
-    		<property name="wsdl.file" value="ClassToQname.wsdl" />
-    		<property name="target.stubs.dir" location="${stubs.src}" />
-    	</ant>
-		<!-- generate stubs for BTD handler reference classes 
+            <property name="source.stubs.dir" location="${schema.dest}/Data" />
+            <property name="wsdl.file" value="ExtensionData.wsdl" />
+            <property name="target.stubs.dir" location="${stubs.src}" />
+        </ant>
+        <!-- generate stubs for Class to QName mapping classes -->
+        <ant antfile="${ant.build.stubs}" target="generateStubs">
+            <property name="source.stubs.dir" location="${schema.dest}/Data" />
+            <property name="wsdl.file" value="ClassToQname.wsdl" />
+            <property name="target.stubs.dir" location="${stubs.src}" />
+        </ant>
+        <!-- generate stubs for BTD handler reference classes 
 		<ant antfile="${ant.build.stubs}" target="generateStubs">
 			<property name="source.stubs.dir" location="${schema.dest}/Data"/>
 			<property name="wsdl.file" value="BulkDataHandlerReference.wsdl"/>
 			<property name="target.stubs.dir" location="${stubs.src}"/>
 		</ant>
 		-->
-		<!-- generate stubs for Bookstore classes used in testing -->
-		<ant antfile="${ant.build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${test.resources.dir}" />
-			<property name="wsdl.file" value="bookstore.wsdl"/>
-			<property name="target.stubs.dir" location="${test.stubs.src}"/>
-		</ant>
+        <!-- generate stubs for Bookstore classes used in testing -->
+        <ant antfile="${ant.build.stubs}" target="generateStubs">
+            <property name="source.stubs.dir" location="${test.resources.dir}" />
+            <property name="wsdl.file" value="bookstore.wsdl" />
+            <property name="target.stubs.dir" location="${test.stubs.src}" />
+        </ant>
         <!-- generate data service bindings for globus -->
         <ant antfile="${ant.build.stubs}" target="generateBinding">
             <property name="source.binding.dir" value="${schema.dest}/Data" />
@@ -285,36 +287,36 @@
             <property name="wsdl.file" value="DataService_service.wsdl" />
             <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
         </ant>
-    	<!-- generate enumeration query bindings for globus -->
-    	<ant antfile="${ant.build.stubs}" target="generateBinding">
-    		<property name="source.binding.dir" value="${schema.dest}/Data" />
-    		<property name="target.binding.dir" value="${schema.dest}/Data" />
-    		<property name="porttype.wsdl" value="EnumerationDataService.wsdl" />
-    		<property name="binding.root" value="EnumerationDataService" />
-    	</ant>
-    	<!-- stub generator -->
-		<ant antfile="${ant.build.stubs}" target="generateStubs">
-    		<property name="mapping.file" location="${build.dir}/NStoPkg.properties" />
-			<property name="source.stubs.dir" location="${schema.dest}/Data" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
-			<property name="wsdl.file" value="EnumerationDataService_service.wsdl" />
-			<property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes} -x ${data.service.namespace}" />
-		</ant>
-    	<!-- generate BDT query bindings for globus -->
-    	<ant antfile="${ant.build.stubs}" target="generateBinding">
-    		<property name="source.binding.dir" value="${schema.dest}/Data" />
-    	    <property name="target.binding.dir" value="${schema.dest}/Data" />
-    	    <property name="porttype.wsdl" value="BDTDataService.wsdl" />
-    	    <property name="binding.root" value="BDTDataService" />
-		</ant>
-    	<!-- stub generator -->
-    	<ant antfile="${ant.build.stubs}" target="generateStubs">
-    		<property name="mapping.file" location="${build.dir}/NStoPkg.properties" />
-    		<property name="source.stubs.dir" location="${schema.dest}/Data" />
-    		<property name="target.stubs.dir" location="${stubs.src}" />
-    		<property name="wsdl.file" value="BDTDataService_service.wsdl" />
-    		<property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes} -x ${data.service.namespace}" />
-    	</ant>
+        <!-- generate enumeration query bindings for globus -->
+        <ant antfile="${ant.build.stubs}" target="generateBinding">
+            <property name="source.binding.dir" value="${schema.dest}/Data" />
+            <property name="target.binding.dir" value="${schema.dest}/Data" />
+            <property name="porttype.wsdl" value="EnumerationDataService.wsdl" />
+            <property name="binding.root" value="EnumerationDataService" />
+        </ant>
+        <!-- stub generator -->
+        <ant antfile="${ant.build.stubs}" target="generateStubs">
+            <property name="mapping.file" location="${build.dir}/NStoPkg.properties" />
+            <property name="source.stubs.dir" location="${schema.dest}/Data" />
+            <property name="target.stubs.dir" location="${stubs.src}" />
+            <property name="wsdl.file" value="EnumerationDataService_service.wsdl" />
+            <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes} -x ${data.service.namespace}" />
+        </ant>
+        <!-- generate BDT query bindings for globus -->
+        <ant antfile="${ant.build.stubs}" target="generateBinding">
+            <property name="source.binding.dir" value="${schema.dest}/Data" />
+            <property name="target.binding.dir" value="${schema.dest}/Data" />
+            <property name="porttype.wsdl" value="BDTDataService.wsdl" />
+            <property name="binding.root" value="BDTDataService" />
+        </ant>
+        <!-- stub generator -->
+        <ant antfile="${ant.build.stubs}" target="generateStubs">
+            <property name="mapping.file" location="${build.dir}/NStoPkg.properties" />
+            <property name="source.stubs.dir" location="${schema.dest}/Data" />
+            <property name="target.stubs.dir" location="${stubs.src}" />
+            <property name="wsdl.file" value="BDTDataService_service.wsdl" />
+            <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes} -x ${data.service.namespace}" />
+        </ant>
     </target>
 
 
@@ -324,21 +326,21 @@
         <javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}" source="${java.source}">
             <include name="**/*.java" />
             <classpath>
-            	<path refid="base.classpath"/>
+                <path refid="base.classpath" />
                 <fileset dir="${globus.dir}/lib">
                     <include name="*.jar" />
                 </fileset>
             </classpath>
         </javac>
-		<javac srcdir="${test.stubs.src}" destdir="${test.stubs.dest}" debug="${java.debug}" source="${java.source}">
-			<include name="**/*.java"/>
-			<classpath>
-				<path refid="base.classpath"/>
-				<fileset dir="${globus.dir}/lib">
-					<include name="*.jar"/>
-				</fileset>
-			</classpath>
-		</javac>
+        <javac srcdir="${test.stubs.src}" destdir="${test.stubs.dest}" debug="${java.debug}" source="${java.source}">
+            <include name="**/*.java" />
+            <classpath>
+                <path refid="base.classpath" />
+                <fileset dir="${globus.dir}/lib">
+                    <include name="*.jar" />
+                </fileset>
+            </classpath>
+        </javac>
     </target>
 
 
@@ -346,7 +348,7 @@
     <target name="compileCommon" depends="compileStubs">
         <javac srcdir="${common.src.dir}" destdir="${build.common.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
-                <path refid="base.classpath"/>
+                <path refid="base.classpath" />
                 <pathelement location="${stubs.dest}" />
                 <fileset dir="${globus.dir}/lib">
                     <include name="*.jar" />
@@ -360,7 +362,7 @@
     <target name="compileUtils" depends="compileStubs, compileCommon">
         <javac srcdir="${utils.src.dir}" destdir="${build.utils.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
-            	<path refid="base.classpath"/>
+                <path refid="base.classpath" />
                 <pathelement location="${stubs.dest}" />
                 <pathelement location="${build.common.dest}" />
                 <fileset dir="${globus.dir}/lib">
@@ -376,51 +378,51 @@
     <target name="compileExtension" depends="generateJETClasses, compileStubs, compileCommon, compileService, compileCql, compileValidation, compileUtils, compileTools">
         <javac srcdir="${extension.src.dir}" destdir="${build.extension.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
-            	<path refid="base.classpath"/>
+                <path refid="base.classpath" />
                 <pathelement location="${stubs.dest}" />
                 <pathelement location="${build.service.dest}" />
                 <pathelement location="${build.common.dest}" />
                 <pathelement location="${build.cql.dest}" />
-            	<pathelement location="${build.validation.dest}"/>
-            	<pathelement location="${build.utils.dest}"/>
-				<pathelement location="${build.tools.dest}"/>
+                <pathelement location="${build.validation.dest}" />
+                <pathelement location="${build.utils.dest}" />
+                <pathelement location="${build.tools.dest}" />
                 <fileset dir="${globus.dir}/lib">
                     <include name="*.jar" />
                 </fileset>
             </classpath>
         </javac>
     </target>
-	
-	
-	<!-- compiles the upgrade source code -->
-	<target name="compileUpgrades" depends="compileStubs, compileExtension, compileUtils, compileCql, compileCommon">
-		<javac srcdir="${upgrades.src.dir}" destdir="${build.upgrades.dest}" debug="${java.debug}" source="${java.source}">
-			<classpath>
-				<path refid="base.classpath"/>
-				<pathelement location="${build.extension.dest}"/>
-				<pathelement location="${build.utils.dest}" />
-				<pathelement location="${build.cql.dest}"/>
-				<pathelement location="${build.common.dest}"/>
-				<pathelement location="${stubs.dest}"/>
-			</classpath>
-		</javac>
-	</target>
-	
-	
-	<!-- =================================================================== -->
-	<!--  Generate JET template classes                                      -->
-	<!-- =================================================================== -->
-	<target name="generateJETClasses" depends="init">
-		<jetc destdir="${extension.src.dir}" template="${src.dir}/jettemplates/codegen/CQLResultTypes.xsd.xmljet"/>
-		<jetc destdir="${extension.src.dir}" template="${src.dir}/jettemplates/creation/EnumerationServiceClient.javajet"/>
-	</target>
+
+
+    <!-- compiles the upgrade source code -->
+    <target name="compileUpgrades" depends="compileStubs, compileExtension, compileUtils, compileCql, compileCommon">
+        <javac srcdir="${upgrades.src.dir}" destdir="${build.upgrades.dest}" debug="${java.debug}" source="${java.source}">
+            <classpath>
+                <path refid="base.classpath" />
+                <pathelement location="${build.extension.dest}" />
+                <pathelement location="${build.utils.dest}" />
+                <pathelement location="${build.cql.dest}" />
+                <pathelement location="${build.common.dest}" />
+                <pathelement location="${stubs.dest}" />
+            </classpath>
+        </javac>
+    </target>
+
+
+    <!-- =================================================================== -->
+    <!--  Generate JET template classes                                      -->
+    <!-- =================================================================== -->
+    <target name="generateJETClasses" depends="init">
+        <jetc destdir="${extension.src.dir}" template="${src.dir}/jettemplates/codegen/CQLResultTypes.xsd.xmljet" />
+        <jetc destdir="${extension.src.dir}" template="${src.dir}/jettemplates/creation/EnumerationServiceClient.javajet" />
+    </target>
 
 
     <!-- compiles the service side code -->
     <target name="compileService" depends="compileStubs, compileUtils, compileValidation, compileCommon, compileCql">
         <javac srcdir="${service.src.dir}" destdir="${build.service.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
-                <path refid="base.classpath"/>
+                <path refid="base.classpath" />
                 <pathelement location="${stubs.dest}" />
                 <pathelement location="${build.utils.dest}" />
                 <pathelement location="${build.common.dest}" />
@@ -438,10 +440,10 @@
     <target name="compileValidation" depends="compileStubs, compileCommon, compileUtils">
         <javac srcdir="${validation.src.dir}" destdir="${build.validation.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
-                <path refid="base.classpath"/>
+                <path refid="base.classpath" />
                 <pathelement location="${stubs.dest}" />
                 <pathelement location="${build.common.dest}" />
-            	<pathelement location="${build.utils.dest}" />
+                <pathelement location="${build.utils.dest}" />
                 <fileset dir="${globus.dir}/lib">
                     <include name="*.jar" />
                 </fileset>
@@ -454,7 +456,7 @@
     <target name="compileCql" depends="compileStubs, compileCommon">
         <javac srcdir="${cql.src.dir}" destdir="${build.cql.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
-                <path refid="base.classpath"/>
+                <path refid="base.classpath" />
                 <pathelement location="${stubs.dest}" />
                 <pathelement location="${build.common.dest}" />
                 <fileset dir="${globus.dir}/lib">
@@ -463,26 +465,26 @@
             </classpath>
         </javac>
     </target>
-	
-	
-	<!-- compiles tools code -->
-	<target name="compileTools" depends="compileStubs, compileCommon, compileUtils, compileCql, compileValidation">
-		<javac srcdir="${tools.src.dir}" destdir="${build.tools.dest}" debug="${java.debug}" source="${java.source}">
-			<classpath>
-				<path refid="base.classpath"/>
-				<pathelement location="${stubs.dest}"/>
-				<pathelement location="${build.common.dest}"/>
-				<pathelement location="${build.utils.dest}"/>
-				<pathelement location="${build.cql.dest}"/>
-				<pathelement location="${build.validation.dest}"/>
-				<fileset dir="${globus.dir}/lib">
-					<include name="*.jar"/>
-				</fileset>
-			</classpath>
-		</javac>
-	</target>
 
-	
+
+    <!-- compiles tools code -->
+    <target name="compileTools" depends="compileStubs, compileCommon, compileUtils, compileCql, compileValidation">
+        <javac srcdir="${tools.src.dir}" destdir="${build.tools.dest}" debug="${java.debug}" source="${java.source}">
+            <classpath>
+                <path refid="base.classpath" />
+                <pathelement location="${stubs.dest}" />
+                <pathelement location="${build.common.dest}" />
+                <pathelement location="${build.utils.dest}" />
+                <pathelement location="${build.cql.dest}" />
+                <pathelement location="${build.validation.dest}" />
+                <fileset dir="${globus.dir}/lib">
+                    <include name="*.jar" />
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+
     <!-- compiles the test code -->
     <target name="compileTests" depends="compileStubs, compileUtils, compileExtension, compileService">
         <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="${java.debug}" source="${java.source}">
@@ -527,7 +529,7 @@
             </fileset>
             <fileset dir="${utils.src.dir}">
                 <include name="**/*.java" />
-            	<include name="**/*.xsd.template"/>
+                <include name="**/*.xsd.template" />
             </fileset>
         </jar>
     </target>
@@ -542,9 +544,9 @@
             <fileset dir="${extension.src.dir}">
                 <include name="**/*.java" />
             </fileset>
-        	<fileset dir="src">
-        		<include name="resources/**"/>
-        	</fileset>
+            <fileset dir="src">
+                <include name="resources/**" />
+            </fileset>
         </jar>
     </target>
 
@@ -586,60 +588,60 @@
             </fileset>
         </jar>
     </target>
-	
-	
-	<!-- jars the tools -->
-	<target name="jarTools" depends="compileTools" description="Jars the tools">
-		<jar destfile="${tools.jar.file}">
-			<fileset dir="${build.tools.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${tools.src.dir}">
-				<include name="**/*.java"/>
-				<include name="**/*.png"/>
-			</fileset>
-		</jar>
-	</target>
-	
-	
-	<!-- jars the upgrades -->
-	<target name="jarUpgrades" depends="compileUpgrades" description="Jars the upgrades">
-		<jar destfile="${upgrades.jar.file}">
-			<fileset dir="${build.upgrades.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${upgrades.src.dir}">
-				<include name="**/*"/>
-			</fileset>
-		</jar>
-	</target>
-	
-	
-	<!-- jars the tests -->
-	<target name="jarTests" depends="compileTests" description="Jars the testing code and resources">
-		<jar destfile="${tests.jar.file}">
-			<fileset dir="${test.classes.dir}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${test.stubs.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${test.resources.dir}">
-				<include name="**/*"/>
-			</fileset>
-			<fileset dir="${test.src.dir}">
-				<include name="**/*.java"/>
-			</fileset>
-		</jar>
-	</target>
-	
+
+
+    <!-- jars the tools -->
+    <target name="jarTools" depends="compileTools" description="Jars the tools">
+        <jar destfile="${tools.jar.file}">
+            <fileset dir="${build.tools.dest}">
+                <include name="**/*.class" />
+            </fileset>
+            <fileset dir="${tools.src.dir}">
+                <include name="**/*.java" />
+                <include name="**/*.png" />
+            </fileset>
+        </jar>
+    </target>
+
+
+    <!-- jars the upgrades -->
+    <target name="jarUpgrades" depends="compileUpgrades" description="Jars the upgrades">
+        <jar destfile="${upgrades.jar.file}">
+            <fileset dir="${build.upgrades.dest}">
+                <include name="**/*.class" />
+            </fileset>
+            <fileset dir="${upgrades.src.dir}">
+                <include name="**/*" />
+            </fileset>
+        </jar>
+    </target>
+
+
+    <!-- jars the tests -->
+    <target name="jarTests" depends="compileTests" description="Jars the testing code and resources">
+        <jar destfile="${tests.jar.file}">
+            <fileset dir="${test.classes.dir}">
+                <include name="**/*.class" />
+            </fileset>
+            <fileset dir="${test.stubs.dest}">
+                <include name="**/*.class" />
+            </fileset>
+            <fileset dir="${test.resources.dir}">
+                <include name="**/*" />
+            </fileset>
+            <fileset dir="${test.src.dir}">
+                <include name="**/*.java" />
+            </fileset>
+        </jar>
+    </target>
+
 
     <!-- removes all build output -->
     <target name="clean">
         <delete dir="tmp" />
         <delete dir="${build.dir}" />
         <delete dir="${extension.out.dir}" />
-    	<delete dir="${extension.src.dir}/gov/nih/nci/cagrid/data/codegen/templates" failonerror="false"/>
+        <delete dir="${extension.src.dir}/gov/nih/nci/cagrid/data/codegen/templates" failonerror="false" />
         <delete file="${extension.base.dir}/DataServiceExtension.zip" />
     </target>
 
@@ -649,13 +651,13 @@
         <delete dir="${stubs.src}" />
         <delete dir="${stubs.dest}" />
     </target>
-    
+
 
     <!-- Build and install extensions for introduce -->
     <!-- this target installs the default introduce extension, which adds an operation provider to a service
 	which MAKES it a data service -->
     <target name="installIntroduceExtensions" description="Builds and installs the Data Services extensions into Introduce.">
-        <delete dir="${introduce.extensions.dir}/data" failonerror="false"/>
+        <delete dir="${introduce.extensions.dir}/data" failonerror="false" />
         <mkdir dir="${introduce.extensions.dir}/data" />
         <mkdir dir="${introduce.extensions.dir}/data/schema" />
         <!-- extension description file -->
@@ -686,29 +688,29 @@
             </fileset>
         </copy>
     </target>
-	
-	
-	<!-- runs the query building tool -->
-	<target name="queryBuilder" depends="all" description="Runs the CQL query builder tool">
-		<java fork="true" classname="gov.nih.nci.cagrid.data.utilities.query.QueryBuilder">
-			<classpath>
-				<fileset dir="${build.jars.dir}">
-					<include name="**/*.jar"/>
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar"/>
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="**/*.jar"/>
-				</fileset>
-				<fileset dir="${globus.dir}/lib">
-					<include name="*.jar"/>
-				</fileset>
-				<pathelement location="ext/resources/portal/introduce"/>
-				<pathelement location="ext/resources/portal/common"/>
-			</classpath>
-		</java>
-	</target>
+
+
+    <!-- runs the query building tool -->
+    <target name="queryBuilder" depends="all" description="Runs the CQL query builder tool">
+        <java fork="true" classname="gov.nih.nci.cagrid.data.utilities.query.QueryBuilder">
+            <classpath>
+                <fileset dir="${build.jars.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${ext.lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${globus.dir}/lib">
+                    <include name="*.jar" />
+                </fileset>
+                <pathelement location="ext/resources/portal/introduce" />
+                <pathelement location="ext/resources/portal/common" />
+            </classpath>
+        </java>
+    </target>
 
 
     <!-- build and jar everything -->

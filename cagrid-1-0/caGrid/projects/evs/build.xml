@@ -13,20 +13,22 @@
     <property name="service.name" value="${introduce.skeleton.service.name}" />
     <property name="schema.path" value="${introduce.skeleton.service.name}" />
 
+    <property file="${basedir}/ext/resources/cagrid.properties" />
+    <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}evs-" />
+
     <!-- Important directories and files -->
     <property name="src.dir" value="src" />
     <property name="lib.dir" value="lib" />
-	<property name="ext.lib.dir" value="ext/lib" />
+    <property name="ext.lib.dir" value="ext/lib" />
     <property name="etc.dir" value="etc" />
     <property name="schema.dir" value="schema" />
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-    
-	<property name="jar.name" value="caGrid-1.0-evs" />
-	<property name="common.jar.name" value="${jar.name}-common.jar" />
-    <property name="client.jar.name" value="${jar.name}-client.jar" />
-    <property name="service.jar.name" value="${jar.name}-service.jar" />
-    <property name="stubs.jar.name" value="${jar.name}-stubs.jar" />
-	<property name="test.jar.name" value="${jar.name}-tests.jar" />
+
+    <property name="common.jar.name" value="${project.jar.prefix}common.jar" />
+    <property name="client.jar.name" value="${project.jar.prefix}client.jar" />
+    <property name="service.jar.name" value="${project.jar.prefix}service.jar" />
+    <property name="stubs.jar.name" value="${project.jar.prefix}stubs.jar" />
+    <property name="test.jar.name" value="${project.jar.prefix}tests.jar" />
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="test" />
@@ -60,7 +62,7 @@
 
     <!-- We want detailed error messages -->
     <property name="java.debug" value="on" />
-	<property name="java.source" value="1.4" />
+    <property name="java.source" value="1.4" />
 
     <!--import deployment ant files -->
     <import file="build-deploy.xml" />
@@ -133,9 +135,9 @@
             <fileset dir="${lib.dir}">
                 <include name="*.jar" />
             </fileset>
-			<fileset dir="${ext.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
+            <fileset dir="${ext.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
             <fileset dir="${ext.globus.dir}/lib">
                 <include name="*.jar" />
                 <exclude name="${stubs.jar.name}" />
@@ -156,9 +158,9 @@
             <fileset dir="${test.lib.dir}">
                 <include name="*.jar" />
             </fileset>
-			<fileset dir="${ext.test.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
+            <fileset dir="${ext.test.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
             <pathelement location="${build.dest}" />
             <path refid="service.build.classpath" />
         </path>
@@ -283,9 +285,9 @@
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" forkmode="once">
             <classpath refid="test.run.classpath" />
-			<sysproperty key="build.dir" value="${build.dest}" />
-			<jvmarg value="-Xmx512M" />
-			<jvmarg value="-Dbuild.dir=${build.dest}" />
+            <sysproperty key="build.dir" value="${build.dest}" />
+            <jvmarg value="-Xmx512M" />
+            <jvmarg value="-Dbuild.dir=${build.dest}" />
             <formatter type="xml" />
             <batchtest fork="yes" todir="${junit.results.dir}">
                 <fileset dir="${test.src.dir}">
@@ -294,7 +296,7 @@
                 </fileset>
             </batchtest>
         </junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />   
+        <fail message="Tests failed! Check test reports." if="test.failed" />
     </target>
 
     <!-- Clean up all the intermediate files -->
@@ -308,14 +310,14 @@
     <target name="all" depends="jars" description="Builds the entire service." />
 
     <target name="help" description="Prints usage information.">
-        <echo message="================================================================================"/>
-        <echo message="|    Introduce Created Grid Service                                            |"/>
-        <echo message="          Service: ${service.name}"/>
-        <echo message="--------------------------------------------------------------------------------"/>
-        <echo message="|  USAGE:                                                                      |"/>
-		<echo message="|    Type 'ant -h' for general help with Ant                                   |"/>
-		<echo message="|    Type 'ant -p' for a description of this service's build targets.          |"/>
-        <echo message="================================================================================"/>
+        <echo message="================================================================================" />
+        <echo message="|    Introduce Created Grid Service                                            |" />
+        <echo message="          Service: ${service.name}" />
+        <echo message="--------------------------------------------------------------------------------" />
+        <echo message="|  USAGE:                                                                      |" />
+        <echo message="|    Type 'ant -h' for general help with Ant                                   |" />
+        <echo message="|    Type 'ant -p' for a description of this service's build targets.          |" />
+        <echo message="================================================================================" />
     </target>
 
 </project>

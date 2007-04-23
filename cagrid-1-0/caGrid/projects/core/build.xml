@@ -8,12 +8,14 @@
 	<property environment="env" />
 	<property file="${basedir}/build.properties" />
 	<property file="${user.dir}/build.properties" />
+      <property file="${basedir}/ext/resources/cagrid.properties" />
 	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
 	<!-- Information -->
 	<property name="project.version" value="1.0" />
-	<property name="project.name" value="caGrid-${project.version}-${ant.project.name}" />
+	<property name="project.name" value="${cagrid.master.jar.prefix}${ant.project.name}" />
 	<property name="java.source" value="1.5"/>
+
 
 	<property name="src.dir" value="${basedir}/src/java" />
 	<property name="build.dir" value="${basedir}/build" />
@@ -31,11 +33,7 @@
 	<property name="test.classes.dir" location="${build.dir}/test/classes" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
-	<property name="test.project.jar" location="${jar.dir}/${project.name}-tests.jar" />
-
-	<!-- Load common util path -->
-	<import file="../../antfiles/ant-utilities.xml" />
-	<import file="../../antfiles/test-utilities.xml" />
+	<property name="test.project.jar" location="${jar.dir}/${project.name}${cagrid.master.jar.separator}tests.jar" />
 
 	<import file="test/test.xml" />
 

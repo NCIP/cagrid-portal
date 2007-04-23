@@ -1,11 +1,12 @@
 <!-- ======================================================================= -->
 <!-- caGrid 1.0 SDK (3.2) Query Processor build file                         -->
 <!-- ======================================================================= -->
-<project name="metadata" default="all" basedir=".">
+<project name="sdkQuery32" default="all" basedir=".">
     <!-- Environment -->
     <property environment="env" />
     <property file="${basedir}/build.properties" />
     <property file="${user.dir}/build.properties" />
+    <property file="${basedir}/ext/resources/cagrid.properties" />
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 	
 	<!-- build with debugging information -->
@@ -14,8 +15,9 @@
 	<property name="java.source" value="1.5" />
 
     <!-- Information -->
-	<property name="cagrid.version" value="1.0" />
-    <property name="project.name" value="sdkQuery32" />
+    <property name="project.version" value="${cagrid.master.project.version}" />
+    <property name="project.name" value="${cagrid.master.project.name}-${project.version}-${ant.project.name}" />
+    <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}${ant.project.name}${cagrid.master.jar.separator}" />
 
 	<!-- build output dirs -->
     <property name="build.dir" location="build" />
@@ -23,7 +25,7 @@
     <property name="build.jars.dir" location="build/lib" />
 	
 	<!-- jar names -->
-	<property name="project.jar.name" value="caGrid-${cagrid.version}-${project.name}.jar"/>
+    <property name="project.jar.name" value="${project.jar.prefix}core.jar"/>
 		
 	<!-- jar files -->
 	<property name="project.jar.file" value="${build.jars.dir}/${project.jar.name}"/>
@@ -42,7 +44,7 @@
 	<property name="test.classes.dir" location="${build.dir}/test/classes" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
-	<property name="test.project.jar" location="${build.jars.dir}/caGrid-${cagrid.version}-${project.name}-tests.jar" />
+	<property name="test.project.jar" location="${build.jars.dir}/${project.jar.prefix}tests.jar" />
 	<import file="test\test.xml" />
 	
 	<!-- =============================================================== -->

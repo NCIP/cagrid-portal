@@ -128,7 +128,7 @@
     </target>
 
     <!-- ============================================================== -->
-    <!-- Target for continous build. Use war/deploy target to build            -->
+    <!-- Target for continous build. Use war/deploy target to build     -->
     <!-- actual app                                                     -->
     <!-- ============================================================== -->
     <target name="all" depends="clean,compile, compileTests, hibernate.xdoclet,copyLibsLocal,copyResourcesLocal"

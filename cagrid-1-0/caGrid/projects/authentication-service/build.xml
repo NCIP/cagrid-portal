@@ -4,13 +4,14 @@
 
     <!-- Define the environment variable -->
     <property environment="env" />
-
+    <property file="${basedir}/ext/resources/cagrid.properties" />
+    
     <!-- 
 		Properties in these files will override the properties defined in this file.
     -->
     <property file="introduce.properties" />
     <property name="introduce.ns.excludes" value="" />
-    <property name="jar.prefix" value="caGrid-1.0-authentication-service" />
+    <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}authentication-service-" />
     <property name="service.name" value="${introduce.skeleton.service.name}" />
     <property name="schema.path" value="${introduce.skeleton.service.name}" />
 
@@ -24,11 +25,11 @@
     <property name="etc.dir" value="etc" />
     <property name="schema.dir" value="schema" />
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-    <property name="common.jar.name" value="${jar.prefix}-common.jar" />
-    <property name="client.jar.name" value="${jar.prefix}-client.jar" />
-    <property name="service.jar.name" value="${jar.prefix}-service.jar" />
-    <property name="stubs.jar.name" value="${jar.prefix}-stubs.jar" />
-    <property name="test.jar.name" value="${jar.prefix}-tests.jar" />
+    <property name="common.jar.name" value="${project.jar.prefix}common.jar" />
+    <property name="client.jar.name" value="${project.jar.prefix}client.jar" />
+    <property name="service.jar.name" value="${project.jar.prefix}service.jar" />
+    <property name="stubs.jar.name" value="${project.jar.prefix}stubs.jar" />
+    <property name="test.jar.name" value="${project.jar.prefix}tests.jar" />
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="test" />

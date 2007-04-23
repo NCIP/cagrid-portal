@@ -12,6 +12,11 @@
     <!-- =============================================================== -->
     <target name="defineArtifacts" depends="prepare">
         <!-- Common Jar Artifacts -->
+        <artifact track="main" type="resources" id="cagrid.properties">
+            <fileset dir="${share.dir}/resources">
+                <include name="cagrid.properties" />
+            </fileset>
+        </artifact>
         <artifact track="main" type="jars" id="mobius.jars">
             <fileset dir="${share.dir}/lib/mobius">
                 <include name="*.jar" />
@@ -69,6 +74,8 @@
                 <include name="*haste*.jar" />
             </fileset>
         </artifact>
+        
+        
         <!-- Project Created Artifacts -->
         <artifact track="main" type="jars" id="core.jars">
             <generatingantcall target="build-core" />
@@ -153,7 +160,7 @@
         <artifact track="main" type="jars" id="opensaml.jars">
             <generatingantcall target="build-opensaml" />
             <fileset dir="${projects.dir}/opensaml/dist">
-                <include name="caGrid-1.0-opensaml-1.1.jar" />
+                <include name="caGrid-*-opensaml-1.1.jar" />
             </fileset>
         </artifact>
         <artifact track="endorsed" type="jars" id="opensaml.endorsed">
@@ -243,8 +250,8 @@
         <artifact track="main" type="jars" id="grape.jars">
             <generatingantcall target="build-grape" />
             <fileset dir="${projects.dir}/grape/build/lib">
-                <include name="caGrid-*-grape.jar" />
-                <include name="caGrid-*-grape-resources.jar" />
+                <include name="caGrid-*-grape*.jar" />
+                <include name="*test*.jar" />
             </fileset>
             <fileset dir="${projects.dir}/grape/ext/lib">
                 <include name="*.jar" />
@@ -512,15 +519,15 @@
                 <include name="mobius-castor-0.9.4.3-xml.jar" />
             </fileset>
             <fileset dir="${projects.dir}/gme/build/lib">
-                <include name="caGrid-1.0-GlobalModelExchange.jar" />
-                <include name="caGrid-1.0-GlobalModelExchange_stubs.jar" />
+                <include name="*.jar" />
+                <exclude name="*test*.jar" />
             </fileset>
         </artifact>
 
         <artifact track="main" type="jars" id="authz.jars">
             <generatingantcall target="build-authz" />
             <fileset dir="${projects.dir}/authz/build">
-                <include name="caGrid-1.0-authz-common.jar" />
+                <include name="caGrid-*-authz-common.jar" />
             </fileset>
             <fileset dir="${projects.dir}/authz/lib">
                 <include name="antlr-2.7.6rc1.jar" />
@@ -536,17 +543,17 @@
                 <include name="mysql-connector-java-3.1.11-bin.jar" />
             </fileset>
             <fileset dir="${projects.dir}/authz/ext/lib">
-                <include name="caGrid-1.0-core.jar" />
-                <include name="caGrid-1.0-gridca.jar" />
-                <include name="caGrid-1.0-gridgrouper-client.jar" />
-                <include name="caGrid-1.0-gridgrouper-common.jar" />
-                <include name="caGrid-1.0-gridgrouper-stubs.jar" />
-                <include name="caGrid-1.0-metadata-common.jar" />
-                <include name="caGrid-1.0-metadata-security.jar" />
-                <include name="caGrid-1.0-ServiceSecurityProvider-client.jar" />
-                <include name="caGrid-1.0-ServiceSecurityProvider-common.jar" />
-                <include name="caGrid-1.0-ServiceSecurityProvider-service.jar" />
-                <include name="caGrid-1.0-ServiceSecurityProvider-stubs.jar" />
+                <include name="caGrid-*-core.jar" />
+                <include name="caGrid-*-gridca*.jar" />
+                <include name="caGrid-*-gridgrouper-client.jar" />
+                <include name="caGrid-*-gridgrouper-common.jar" />
+                <include name="caGrid-*-gridgrouper-stubs.jar" />
+                <include name="caGrid-*-metadata-common.jar" />
+                <include name="caGrid-*-metadata-security.jar" />
+                <include name="caGrid-*-ServiceSecurityProvider-client.jar" />
+                <include name="caGrid-*-ServiceSecurityProvider-common.jar" />
+                <include name="caGrid-*-ServiceSecurityProvider-service.jar" />
+                <include name="caGrid-*-ServiceSecurityProvider-stubs.jar" />
                 <include name="cglib-nodep-2.1_3.jar" />
                 <include name="grouper.jar" />
             	<include name="hibernate3.jar" />

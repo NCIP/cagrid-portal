@@ -7,11 +7,12 @@
 	<property environment="env" />
 	<property file="${basedir}/build.properties" />
 	<property file="${user.dir}/build.properties" />
+    <property file="${basedir}/ext/resources/cagrid.properties" />
 	
 	<!-- Information -->
 	<property name="project.name" value="Introduce" />
 	<property name="project.version" value="1.1" />
-	
+    
 	<!-- Source, Config, and Libraries -->
 	<property name="ext.dir" location="${basedir}/ext" />
 	<property name="src.dir" location="${basedir}/src/java" />
@@ -36,7 +37,7 @@
 	<property name="portal.classes.dir" location="${classes.dir}/Portal" />
 	<property name="updater.classes.dir" location="${classes.dir}/UpdateManager" />
 	<property name="jars.dir" location="${build.dir}/jars" />
-	<property name="jars.prefixname" value="caGrid-1.0-${project.name}-" />
+	<property name="jars.prefixname" value="${cagrid.master.jar.prefix}${project.name}${cagrid.master.jar.separator}${project.version}${cagrid.master.jar.separator}" />
 	<property name="jars.prefix" value="${jars.dir}/${jars.prefixname}" />
 	<property name="jars.sufix" value=".jar" />
 	<property name="junit.results.dir" value="${build.dir}/junit" />

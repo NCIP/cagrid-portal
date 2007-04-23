@@ -1,78 +1,74 @@
 
-<project name="MyProject" default="signjar" basedir=".">
+<project name="installer" default="signjar" basedir=".">
     <description>
         caGrid Installer build file
     </description>
-  <!-- set global properties for this build -->
-  <property name="src" location="src"/>
-  <property name="build" location="build"/>
-  <property name="dist"  location="dist"/>
-  <property name="lib.dir"  location="lib"/>
-  
-  
-  <path id = "build.classpath">
-  	<fileset dir="${lib.dir}" includes="**/*.jar"/>
-  </path>
+    <!-- set global properties for this build -->
+    <property name="src" location="src" />
+    <property name="build" location="build" />
+    <property name="dist" location="dist" />
+    <property name="lib.dir" location="lib" />
 
-  <target name="init" depends="clean">
-    
-    <tstamp/>
-    
-    <mkdir dir="${build}"/>
-  </target>
+    <property file="${basedir}/ext/resources/cagrid.properties" />
+    <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}${ant.project.name}${cagrid.master.jar.separator}" />
 
-  <target name="compile" depends="init"
-        description="compile the source " >
-    <!-- Compile the java code from ${src} into ${build} -->
-    <javac destdir="${build}" source="1.4">
-    <src path ="${src}"/>
-    	<classpath refid = "build.classpath"/>
-		<compilerarg value="-Xlint"/>
-    </javac>
-    <copy todir= "${build}">
-    	<fileset dir ="${src}">
-    		<exclude name ="**/*.java"/>
-    		<exclude name ="**/*.html"/>
-    		<exclude name ="**/*.psd"/>
-    	</fileset>
-    </copy>
-  </target>
+    <path id="build.classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar" />
+    </path>
 
-  <target name="dist" depends="compile"
-        description="generate the distribution" >
-   
-    <mkdir dir="${dist}/lib"/>
+    <target name="init" depends="clean">
 
-    
-    <jar jarfile="${dist}/lib/caGrid-1.0-systemCheck.jar" basedir="${build}"/>
-  	<copy todir="${dist}/lib">
-  		<fileset dir ="${lib.dir}">
-  		    		<include name ="**/*.jar"/>
-  		</fileset>
-  	</copy>
-  </target>
+        <tstamp />
 
-  
-	
-	<target name="signjar" depends="generatekey" description="signs the jars">
-	   	<signjar jar="${dist}/lib/ant.jar"
-	   	alias="installer" storepass="installerpassword" keystore="${dist}/lib/installerKeys" />
-		<signjar jar="${dist}/lib/caGrid-1.0-systemCheck.jar"
-			   	alias="installer" storepass="installerpassword" keystore="${dist}/lib/installerKeys" />
+        <mkdir dir="${build}" />
+    </target>
 
-	</target>
-	
-	<target name="generatekey"  depends="dist" description="generates keys">
-	<genkey alias="installer" storepass="installerpassword" 
-		keystore="${dist}/lib/installerKeys" dname="CN=Ant Group, OU=Jakarta Division, O=Apache.org, C=US"/>
+    <target name="compile" depends="init" description="compile the source ">
+        <!-- Compile the java code from ${src} into ${build} -->
+        <javac destdir="${build}" source="1.4">
+            <src path="${src}" />
+            <classpath refid="build.classpath" />
+            <compilerarg value="-Xlint" />
+        </javac>
+        <copy todir="${build}">
+            <fileset dir="${src}">
+                <exclude name="**/*.java" />
+                <exclude name="**/*.html" />
+                <exclude name="**/*.psd" />
+            </fileset>
+        </copy>
+    </target>
 
-	</target>
-	
-	<target name="clean"
-	        description="clean up" >
-	   
-	    <delete dir="${build}"/>
-	    <delete dir="${dist}"/>
-	  </target>
+    <target name="dist" depends="compile" description="generate the distribution">
+
+        <mkdir dir="${dist}/lib" />
+
+
+        <jar jarfile="${dist}/lib/${cagrid.master.jar.prefix}systemCheck.jar" basedir="${build}" />
+        <copy todir="${dist}/lib">
+            <fileset dir="${lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+        </copy>
+    </target>
+
+
+
+    <target name="signjar" depends="generatekey" description="signs the jars">
+        <signjar jar="${dist}/lib/ant.jar" alias="installer" storepass="installerpassword" keystore="${dist}/lib/installerKeys" />
+        <signjar jar="${dist}/lib/caGrid-1.0-systemCheck.jar" alias="installer" storepass="installerpassword" keystore="${dist}/lib/installerKeys" />
+
+    </target>
+
+    <target name="generatekey" depends="dist" description="generates keys">
+        <genkey alias="installer" storepass="installerpassword" keystore="${dist}/lib/installerKeys" dname="CN=Ant Group, OU=Jakarta Division, O=Apache.org, C=US" />
+
+    </target>
+
+    <target name="clean" description="clean up">
+
+        <delete dir="${build}" />
+        <delete dir="${dist}" />
+    </target>
 </project>
 

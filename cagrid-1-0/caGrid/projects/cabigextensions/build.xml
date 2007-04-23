@@ -3,16 +3,18 @@
 <!-- caGrid 1.0 caBIG Introduce Extensions build file                  -->
 <!-- ================================================================= -->
 
-<project name="core" default="compile" basedir=".">
+<project name="cabigextensions" default="compile" basedir=".">
     <!-- Environment -->
     <property environment="env" />
     <property file="${basedir}/build.properties" />
     <property file="${user.dir}/build.properties" />
+    <property file="${basedir}/ext/resources/cagrid.properties" />
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
     <!-- Information -->
-    <property name="project.version" value="1.0" />
-    <property name="project.name" value="caGrid-${project.version}-cabigextensions" />
+    <property name="project.version" value="${cagrid.master.project.version}" />
+    <property name="project.name" value="${cagrid.master.project.name}-${project.version}-${ant.project.name}" />
+    <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}${ant.project.name}${cagrid.master.jar.separator}" />
 
     <property name="src.dir" value="${basedir}/src/java" />
     <property name="build.dir" value="${basedir}/build" />
@@ -21,8 +23,8 @@
     <property name="classes.dir" value="${build.dir}/classes" />
     <property name="stubs.classes.dir" value="${build.dir}/stubs/classes" />
     <property name="jar.dir" value="${build.dir}/jars" />
-    <property name="project.jarfile" value="${jar.dir}/${project.name}.jar" />
-    <property name="stubs.jarfile" value="${jar.dir}/${project.name}-stubs.jar" />
+    <property name="project.jarfile" value="${jar.dir}/${project.jar.prefix}core.jar" />
+    <property name="stubs.jarfile" value="${jar.dir}/${project.jar.prefix}stubs.jar" />
     <property name="lib.dir" value="${basedir}/lib" />
     <property name="ext.lib.dir" value="${basedir}/ext/lib" />
     <property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
@@ -35,7 +37,7 @@
     <property name="test.classes.dir" location="${build.dir}/test_classes" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
     <property name="test.logs.dir" location="${test.dir}/logs" />
-    <property name="test.project.jar" location="${jar.dir}/${project.name}-tests.jar" />
+    <property name="test.project.jar" location="${jar.dir}/${project.jar.prefix}tests.jar" />
 
     <import file="test/test.xml" />
 

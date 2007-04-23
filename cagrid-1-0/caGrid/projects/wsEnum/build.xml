@@ -6,6 +6,7 @@
     <property environment="env" />
     <property file="${basedir}/build.properties" />
     <property file="${user.dir}/build.properties" />
+    <property file="${basedir}/ext/resources/cagrid.properties" />
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
     <property file="introduce.properties" />
     <property name="introduce.ns.excludes" value="" />
@@ -16,8 +17,8 @@
     <property name="java.source" value="1.5" />
 
     <!-- Information -->
-    <property name="project.version" value="1.0" />
-    <property name="project.name" value="caGrid-${project.version}-wsEnum" />
+    <property name="project.version" value="${cagrid.master.project.version}" />
+	<property name="project.name" value="${cagrid.master.jar.prefix}${ant.project.name}" />
 
     <!-- build output dirs -->
     <property name="build.dir" location="build" />
@@ -34,7 +35,7 @@
     <property name="stubs.dir" location="${build.dir}/stubs" />
     <property name="stubs.src" location="${stubs.dir}/src" />
     <property name="stubs.dest" location="${stubs.dir}/classes" />
-    <property name="stubs.jar.name" value="${project.name}-stubs.jar" />
+    <property name="stubs.jar.name" value="${project.name}${cagrid.master.jar.separator}stubs.jar" />
     <property name="stubs.jar.file" value="${build.jars.dir}/${stubs.jar.name}" />
     <property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
 
@@ -59,7 +60,7 @@
 	<property name="test.resources.dir" location="${basedir}/test/resources" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
     <property name="test.logs.dir" location="${test.dir}/logs" />
-    <property name="test.project.jar" location="${build.jars.dir}/${project.name}-tests.jar" />
+    <property name="test.project.jar" location="${build.jars.dir}/${project.jar.prefix}tests.jar" />
     <import file="test/test.xml" />
 
     <!-- =============================================================== -->

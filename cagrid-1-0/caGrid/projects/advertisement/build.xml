@@ -1,22 +1,23 @@
 <?xml version="1.0"?>
 <!-- ================================================================= -->
-<!-- caGrid 1.0 advertisement build file                                        -->
+<!-- caGrid 1.0 advertisement build file                               -->
 <!-- ================================================================= -->
 
 <project name="advertisement" default="compile" basedir=".">
     <!-- Environment -->
     <property environment="env" />
-    <property file="${basedir}/build.properties" />
+    <property file="${basedir}/build.properties" />    
     <property file="${user.dir}/build.properties" />
+    <property file="${basedir}/ext/resources/cagrid.properties" />
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
     <!-- Information -->
-	<property name="project.version" value="1.0" />
-	<property name="project.name" value="caGrid-${project.version}-${ant.project.name}" />
+	<property name="project.version" value="${cagrid.master.project.version}" />
+	<property name="project.name" value="${cagrid.master.jar.prefix}${ant.project.name}" />
 
     <property name="src.dir" value="${basedir}/src/java" />
     <property name="build.dir" value="${basedir}/build" />
-	<property name="javadoc.dir" value="${build.dir}/javadoc" />
+    <property name="javadoc.dir" value="${build.dir}/javadoc" />
     <property name="classes.dir" value="${build.dir}/classes" />
     <property name="jar.dir" value="${build.dir}/jars" />
     <property name="project.jarfile" value="${jar.dir}/${project.name}.jar" />
@@ -30,7 +31,7 @@
     <property name="test.classes.dir" location="${build.dir}/test_classes" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
     <property name="test.logs.dir" location="${test.dir}/logs" />
-    <property name="test.project.jar" location="${jar.dir}/${project.name}-tests.jar" />
+    <property name="test.project.jar" location="${jar.dir}/${project.name}${cagrid.master.jar.separator}tests.jar" />
 
     <import file="test/test.xml" />
 
@@ -152,7 +153,7 @@
 
 
     <!-- ============================================================== -->
-    <!-- Creates the test jar files                                          -->
+    <!-- Creates the test jar files                                     -->
     <!-- ============================================================== -->
     <target name="jar" depends="compile" description="Builds the Jar Files">
         <mkdir dir="${jar.dir}" />
@@ -176,27 +177,27 @@
         </jar>
     </target>
 
-	
-	<!-- =================================================================== -->
-	<!-- Builds Code Docuementation                                          -->
-	<!-- =================================================================== -->
-	<target name="javadoc" depends="compile" description="Creates the API documentation.">
-		<javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="${project.name} API">
-			<sourcepath>
-				<pathelement path="${src.dir}" />
-			</sourcepath>
 
-			<classpath>
-				<path refid="build.classpath" />
-			</classpath>
+    <!-- =================================================================== -->
+    <!-- Builds Code Docuementation                                          -->
+    <!-- =================================================================== -->
+    <target name="javadoc" depends="compile" description="Creates the API documentation.">
+        <javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="${project.name} API">
+            <sourcepath>
+                <pathelement path="${src.dir}" />
+            </sourcepath>
 
-			<tag name="todo" scope="all" description="To do:" />
-			<tag name="created" scope="all" description="Created On:" />
-		</javadoc>
-	</target>
+            <classpath>
+                <path refid="build.classpath" />
+            </classpath>
+
+            <tag name="todo" scope="all" description="To do:" />
+            <tag name="created" scope="all" description="Created On:" />
+        </javadoc>
+    </target>
 
     <!-- ============================================================== -->
-    <!-- Builds from scratch                                                -->
+    <!-- Builds from scratch                                            -->
     <!-- ============================================================== -->
     <target name="all" description="Builds the entire application" depends="jar,jar-tests" />
 </project>

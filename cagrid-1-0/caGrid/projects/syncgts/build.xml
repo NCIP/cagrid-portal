@@ -10,9 +10,11 @@
     -->
 	<property file="introduce.properties" />
 	<property name="introduce.ns.excludes" value="" />
-	<property name="jar.prefix" value="caGrid-1.0-syncgts" />
 	<property name="service.name" value="${introduce.skeleton.service.name}" />
 	<property name="schema.path" value="${introduce.skeleton.service.name}" />
+    
+    <property file="${basedir}/ext/resources/cagrid.properties" />
+    <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}syncgts-" />
 
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
@@ -23,17 +25,17 @@
 	<property name="globus.trusted.ca.dir" value="${globus.user.home.dir}/certificates/" />
 	<property name="schema.dir" value="schema" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-	<property name="common.jar.name" value="${jar.prefix}-common.jar" />
-	<property name="client.jar.name" value="${jar.prefix}-client.jar" />
-	<property name="service.jar.name" value="${jar.prefix}-service.jar" />
-	<property name="stubs.jar.name" value="${jar.prefix}-stubs.jar" />
+	<property name="common.jar.name" value="${project.jar.prefix}common.jar" />
+	<property name="client.jar.name" value="${project.jar.prefix}client.jar" />
+	<property name="service.jar.name" value="${project.jar.prefix}service.jar" />
+	<property name="stubs.jar.name" value="${project.jar.prefix}stubs.jar" />
 
 	<!-- Important test directories and files -->
 	<property name="test.dir" value="test" />
 	<property name="test.src.dir" value="${test.dir}/src" />
 	<property name="test.lib.dir" value="${test.dir}/lib" />
 	<property name="test.log.dir" value="test/logs" />
-	<property name="test.jar.name" value="${jar.prefix}-${service.name}-${service.version}-tests.jar" />
+	<property name="test.jar.name" value="${project.jar.prefix}tests.jar" />
 	<property name="ext.test.lib.dir" value="ext/test/lib" />
 	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 	<property name="force.config.replace" value="false" />

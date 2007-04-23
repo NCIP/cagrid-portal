@@ -14,9 +14,10 @@
 	<property file="build.properties" />
 	<property file="${user.home}/build.properties" />
 
-
-	<property name="project.name" value="GlobalModelExchange" />
-
+    <property file="${basedir}/ext/resources/cagrid.properties" />
+    
+	<property name="project.version" value="${cagrid.master.project.version}" />
+	<property name="project.name" value="${cagrid.master.jar.prefix}GlobalModelExchange" />
 
 	<!-- Directory where GT4 is installed -->
 	<!-- Note that the buildfile requires an environment variable GLOBUS_LOCATION
@@ -47,8 +48,8 @@
 
 
 	<!-- Name of the JAR files to be generated -->
-	<property name="jar.name" value="caGrid-1.0-${gar.filename}.jar" />
-	<property name="stubs.jar.name" value="caGrid-1.0-${gar.filename}_stubs.jar" />
+	<property name="jar.name" value="${project.name}.jar" />
+	<property name="stubs.jar.name" value="${project.name}${cagrid.master.jar.separator}stubs.jar" />
 
 
 
@@ -114,7 +115,7 @@
 	<property name="java.debug" value="on" />
 
 
-	<import file="${basedir}/antfiles/${project.name}-utils.xml" />
+	<import file="${basedir}/antfiles/GlobalModelExchange-utils.xml" />
 	<!--import deployment ant files -->
 	<import file="build-deploy.xml"/>
 

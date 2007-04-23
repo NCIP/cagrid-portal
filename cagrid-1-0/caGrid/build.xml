@@ -8,6 +8,8 @@
     <!-- Give user the chance to override properties -->
     <property environment="env" />
     <property file="build.properties" />
+    <!-- Load in project listings -->
+    <property file="project.properties" />
 
     <!-- Layout info -->
     <property name="projects.dir" location="${caGrid-Master.basedir}/projects" />
@@ -16,6 +18,8 @@
     <property name="share.lib.dir" location="${share.dir}/lib" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
     <property name="antfiles.dir" location="${caGrid-Master.basedir}/antfiles" />
+
+    <property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
 
     <condition property="isJDK1.5" value="true">
         <or>
@@ -29,37 +33,10 @@
     <!-- IMPORT THE UTILITIES TARGETS -->
     <import file="${antfiles.dir}/ant-tasks.xml" />
     <import file="${antfiles.dir}/artifacts.xml" />
-    <import file="${antfiles.dir}/ant-utilities.xml" />
-    <import file="${antfiles.dir}/test-utilities.xml" />
     <import file="${antfiles.dir}/run-utilities.xml" />
-    <import file="${antfiles.dir}/report-utilities.xml" />
 
     <!-- IMPORT THE TEST TARGET -->
     <import file="${test.dir}/test.xml" />
-
-
-    <!-- ================================================================================ -->
-    <!--                          DEFINE THE SUB PROJECTS                                 -->
-    <!-- ================================================================================ -->
-    <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-    <property name="projects.list" value="advertisement, authentication-service, authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, grape, graph, gridca, gridftpauthz, gridgrouper, gts, installer, introduce, metadata, metadatautils, opensaml, rav, sdkQuery, sdkQuery32, service-security-provider, security-ui, syncgts, workflow/WorkflowFactoryService, wsEnum, ws-transfer, ws-naming, ws-handlesystem" />
-    <!-- ================================================================================ -->
-    <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT UNIT TESTING               -->
-    <!-- ================================================================================ -->
-    <!-- This should be a subset of the projects above -->
-    <property name="unit.testable.projects.list" value="advertisement, introduce, cabigextensions, core, discovery, cadsr, evs, fqp, gridca, gridftpauthz, gts, data, sdkQuery, sdkQuery32, gridgrouper, wsEnum, metadatautils, dorian, bulkDataTransfer, rav" />
-    <!-- ================================================================================ -->
-    <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT SYSTEM TESTING             -->
-    <!-- ================================================================================ -->
-    <!-- This should be a subset of the projects from the projects.list -->
-    <property name="system.testable.projects.list" value="introduce, data, bulkDataTransfer, cabigextensions" />
-    <!-- ================================================================================ -->
-    <!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
-    <!-- ================================================================================ -->
-    <!-- This should be a subset of the projects above -->
-    <property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data, bulkDataTransfer, rav" />
-    <property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
-
 
     <!-- At parse time we clean out the custom ant task build, to be sure it gets built at parse time -->
     <delete failonerror="false" dir="${antfiles.dir}/build" />
@@ -77,6 +54,7 @@
     <!-- =============================================================== -->
     <target name="build-core" depends="prepare" description="Builds the core">
         <resolveDependencies extdir="${projects.dir}/core/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="mobius.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
@@ -89,6 +67,9 @@
     <!-- OPENSAML: This cannot have any dependencies on other projects   -->
     <!-- =============================================================== -->
     <target name="build-opensaml" depends="prepare" description="Builds opensaml">
+        <resolveDependencies extdir="${projects.dir}/opensaml/ext">
+            <artifact refid="cagrid.properties" />
+        </resolveDependencies>
         <ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
@@ -97,6 +78,9 @@
     <!-- METADATA: This may only depend on core                          -->
     <!-- =============================================================== -->
     <target name="build-metadata" depends="prepare" description="Builds the common metadata">
+        <resolveDependencies extdir="${projects.dir}/metadata/ext">
+            <artifact refid="cagrid.properties" />
+        </resolveDependencies>
         <ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
     </target>
 
@@ -105,6 +89,7 @@
     <!-- =============================================================== -->
     <target name="build-advertisement" depends="prepare" description="Builds the advertisement clients">
         <resolveDependencies extdir="${projects.dir}/advertisement/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="core.test.jars" />
@@ -119,6 +104,7 @@
     <!-- =============================================================== -->
     <target name="build-discovery" depends="prepare" description="Builds the discovery clients">
         <resolveDependencies extdir="${projects.dir}/discovery/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="core.test.jars" />
@@ -136,6 +122,7 @@
     <!-- =============================================================== -->
     <target name="build-metadatautils" depends="prepare" description="Builds the metadata utils">
         <resolveDependencies extdir="${projects.dir}/metadatautils/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="core.test.jars" />
@@ -151,6 +138,7 @@
     <!-- =============================================================== -->
     <target name="build-grape" depends="prepare" description="Builds the Grid Application Envrionment (GRAPE)">
         <resolveDependencies extdir="${projects.dir}/grape/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/grape" inheritAll="false" antfile="build.xml" target="all" />
@@ -161,6 +149,7 @@
     <!-- =============================================================== -->
     <target name="build-portal" depends="prepare" description="Builds the portal project">
         <resolveDependencies extdir="${projects.dir}/portal/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="core.test.jars" />
@@ -183,6 +172,7 @@
     <!-- =============================================================== -->
     <target name="build-cabigextensions" depends="prepare" description="Builds the caBIG Introduce extensions">
         <resolveDependencies extdir="${projects.dir}/cabigextensions/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="ant-contrib.jars" />
             <artifact refid="common.test.jars" />
@@ -210,6 +200,7 @@
     <!-- =============================================================== -->
     <target name="build-graph" depends="prepare" description="Builds graph">
         <resolveDependencies extdir="${projects.dir}/graph/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/graph" inheritAll="false" antfile="build.xml" target="all" />
@@ -221,6 +212,7 @@
     <!-- =============================================================== -->
     <target name="build-cadsr" depends="prepare" description="Builds the cadsr project">
         <resolveDependencies extdir="${projects.dir}/cadsr/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="mds.jars" />
             <artifact refid="common.test.jars" />
@@ -248,6 +240,7 @@
     <!-- =============================================================== -->
     <target name="build-evs" depends="prepare" description="Builds the evs project">
         <resolveDependencies extdir="${projects.dir}/evs/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="mds.jars" />
             <artifact refid="common.test.jars" />
@@ -270,6 +263,7 @@
     <!-- =============================================================== -->
     <target name="build-gridca" depends="prepare" description="Builds the gridca project">
         <resolveDependencies extdir="${projects.dir}/gridca/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="grape.jars" />
             <artifact refid="common.test.jars" />
@@ -285,6 +279,7 @@
     <!-- =============================================================== -->
     <target name="build-authentication-service" depends="prepare" description="Builds the Authentication Service project">
         <resolveDependencies extdir="${projects.dir}/authentication-service/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="ant-contrib.jars" />
             <artifact refid="csm.auth.jars" />
             <artifact refid="core.jars" />
@@ -302,7 +297,6 @@
             <artifact refid="opensaml.codec" />
             <artifact refid="servicesecurity.jars" />
             <artifact refid="security.metadata.jars" />
-
         </resolveDependencies>
         <delete dir="${projects.dir}/authentication-service/schema/AuthenticationService/xsd" />
         <resolveDependencies extdir="${projects.dir}/authentication-service/schema/AuthenticationService">
@@ -316,6 +310,7 @@
     <!-- =============================================================== -->
     <target name="build-dorian" depends="prepare" description="Builds the dorian project">
         <resolveDependencies extdir="${projects.dir}/dorian/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="grape.jars" />
             <artifact refid="mds.jars" />
@@ -354,6 +349,7 @@
     <!-- =============================================================== -->
     <target name="build-gridgrouper" depends="prepare" description="Builds the Grid Grouper project">
         <resolveDependencies extdir="${projects.dir}/gridgrouper/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="grape.jars" />
             <artifact refid="mds.jars" />
@@ -378,6 +374,7 @@
     <!-- =============================================================== -->
     <target name="build-gts" depends="prepare" description="Builds the GTS project">
         <resolveDependencies extdir="${projects.dir}/gts/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="grape.jars" />
             <artifact refid="mds.jars" />
@@ -403,6 +400,7 @@
     <!-- =============================================================== -->
     <target name="build-syncgts" depends="prepare" description="Builds the syncgts project">
         <resolveDependencies extdir="${projects.dir}/syncgts/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="mds.jars" />
             <artifact refid="common.test.jars" />
@@ -426,6 +424,7 @@
     <!-- =============================================================== -->
     <target name="build-introduce" depends="prepare" description="Builds Introduce">
         <resolveDependencies extdir="${projects.dir}/introduce/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
@@ -478,6 +477,7 @@
     <!-- =============================================================== -->
     <target name="build-rav" depends="prepare" description="Builds the Remote Virtualization Extension">
         <resolveDependencies extdir="${projects.dir}/rav/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="introduce.jars" />
             <artifact refid="introduce.resources" />
             <artifact refid="core.jars" />
@@ -492,6 +492,7 @@
     <!-- =============================================================== -->
     <target name="build-service-security-provider" depends="prepare" description="Builds Service Security Provider">
         <resolveDependencies extdir="${projects.dir}/service-security-provider/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="security.metadata.jars" />
         </resolveDependencies>
@@ -509,6 +510,7 @@
     <!-- =============================================================== -->
     <target name="build-gme" depends="prepare" description="Builds caGrid GME">
         <resolveDependencies extdir="${projects.dir}/gme/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="mds.jars" />
             <artifact refid="common.test.jars" />
@@ -528,6 +530,7 @@
     <!-- =============================================================== -->
     <target name="build-installer" depends="prepare" description="Builds caGrid Installer">
         <resolveDependencies extdir="${projects.dir}/installer/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="dist" />
@@ -539,6 +542,7 @@
     <!-- =============================================================== -->
     <target name="build-data" depends="prepare" description="Builds caGrid Data Services components">
         <resolveDependencies extdir="${projects.dir}/data/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="introduce.jars" />
             <artifact refid="core.test.jars" />
@@ -567,6 +571,7 @@
     <!-- =============================================================== -->
     <target name="build-bulkDataTransfer" depends="prepare" description="Builds caGrid BulkDataTransfer Services components">
         <resolveDependencies extdir="${projects.dir}/bulkDataTransfer/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="introduce.jars" />
             <artifact refid="introduce.resources" />
             <artifact refid="mds.jars" />
@@ -587,6 +592,7 @@
     <!-- =============================================================== -->
     <target name="build-wsEnum" depends="prepare" description="Builds caGrid WS-Enumeration components">
         <resolveDependencies extdir="${projects.dir}/wsEnum/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="core.test.jars" />
             <artifact refid="common.test.jars" />
@@ -625,6 +631,7 @@
     <!-- =============================================================== -->
     <target name="build-sdkQuery" depends="prepare" description="Builds caGrid SDK Query processor">
         <resolveDependencies extdir="${projects.dir}/sdkQuery/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="mds.jars" />
             <artifact refid="caCORE.jars" />
@@ -642,6 +649,7 @@
     <!-- =============================================================== -->
     <target name="build-sdkQuery32" depends="prepare" description="Builds caGrid SDK 3.2 Query Processor">
         <resolveDependencies extdir="${projects.dir}/sdkQuery32/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="caCORE.3.2.jars" />
             <artifact refid="mds.jars" />
@@ -660,6 +668,7 @@
     <!-- =============================================================== -->
     <target name="build-fqp" depends="prepare" description="Build the caGrid Federated Query Processor">
         <resolveDependencies extdir="${projects.dir}/fqp/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="core.test.jars" />
             <artifact refid="common.test.jars" />
@@ -683,6 +692,7 @@
     <!-- =============================================================== -->
     <target name="build-workflow/WorkflowFactoryService" depends="prepare" description="Builds caGrid workflow">
         <resolveDependencies extdir="${projects.dir}/workflow/WorkflowFactoryService/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="core.test.jars" />
             <artifact refid="common.test.jars" />
@@ -704,6 +714,7 @@
     <!-- =============================================================== -->
     <target name="build-authz" depends="prepare" description="Builds the authz component">
         <resolveDependencies extdir="${projects.dir}/authz/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="authz.misc.jars" />
             <artifact refid="core.jars" />
             <artifact refid="common.metadata.jars" />
@@ -718,6 +729,7 @@
     <!-- =============================================================== -->
     <target name="build-gridftpauthz" depends="prepare" description="Builds GridFTP Java Authorization API">
         <resolveDependencies extdir="${projects.dir}/gridftpauthz/ext">
+            <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="core.test.jars" />

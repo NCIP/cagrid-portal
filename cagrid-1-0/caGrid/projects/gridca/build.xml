@@ -3,314 +3,299 @@
 Adopted and modified from GSBT
 GSBT - Globus Service Build Tools
 -->
-<project default="all" name="caGrid 1.0 gridca buildfile" basedir=".">
-	<description>
+<project default="all" name="gridca" basedir=".">
+    <description>
 		caGrid 1.0 gridca buildfile
     </description>
-	<!-- Define the environment variable -->
-	<property environment="env" />
+    <!-- Define the environment variable -->
+    <property environment="env" />
 
-	<!-- 
+    <!-- 
 	Properties in these files will override the properties defined in this file.
     -->
-	<property file="build.properties" />
-	<property file="${user.home}/build.properties" />
-    <property name="jar.prefix" value="caGrid-1.0-gridca" />
+    <property file="build.properties" />
+    <property file="${user.home}/build.properties" />
+    <property file="${basedir}/ext/resources/cagrid.properties" />
+    
+	<property name="project.version" value="${cagrid.master.project.version}" />
+	<property name="project.name" value="${cagrid.master.jar.prefix}${ant.project.name}" />
+
+
     <property name="service.name" value="gridca" />
-     <property name="service.version" value="1.0" />
+    <property name="service.version" value="1.0" />
 
-    <property name="project.name" value="caGrid-gridca"/>
-	<!-- Directory where GT4 is installed -->
-	<!-- Note that the buildfile requires an environment variable GLOBUS_LOCATION
+    <!-- Directory where GT4 is installed -->
+    <!-- Note that the buildfile requires an environment variable GLOBUS_LOCATION
 	     pointing to that directory -->
-	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
+    <property name="globus.location" location="${env.GLOBUS_LOCATION}" />
 
-	<!-- GT4 build files and directories-->
-	<property name="build.packages" location="${globus.location}/share/globus_wsrf_common/build-packages.xml" />
-	<property name="build.stubs" location="${globus.location}/share/globus_wsrf_tools/build-stubs.xml" />
-	<property name="schema.src" location="${globus.location}/share/schema" />
-
-
-
-	<!-- Important directories and files -->
-	<property name="src.dir" value="src" />
-	<property name="lib.dir" value="lib" />
-	<property name="ext.lib.dir" value="ext/lib" />
-	<property name="test.dir" value="test" />
-	<property name="test.src.dir" value="test/src" />
-	<property name="test.lib.dir" value="test/lib" />
-	<property name="test.log.dir" value="test/logs" />
-	<property name="ext.test.lib.dir" value="ext/test/lib" />
-	<property name="etc.dir" value="etc" />
+    <!-- GT4 build files and directories-->
+    <property name="build.packages" location="${globus.location}/share/globus_wsrf_common/build-packages.xml" />
+    <property name="build.stubs" location="${globus.location}/share/globus_wsrf_tools/build-stubs.xml" />
+    <property name="schema.src" location="${globus.location}/share/schema" />
 
 
 
-	<!-- Name of the JAR files to be generated -->
-	<property name="jar.name" value="${jar.prefix}.jar" />
+    <!-- Important directories and files -->
+    <property name="src.dir" value="src" />
+    <property name="lib.dir" value="lib" />
+    <property name="ext.lib.dir" value="ext/lib" />
+    <property name="test.dir" value="test" />
+    <property name="test.src.dir" value="test/src" />
+    <property name="test.lib.dir" value="test/lib" />
+    <property name="test.log.dir" value="test/logs" />
+    <property name="ext.test.lib.dir" value="ext/test/lib" />
+    <property name="etc.dir" value="etc" />
 
 
 
-	<!-- Build directories -->
+    <!-- Name of the JAR files to be generated -->
+    <property name="jar.name" value="${project.name}.jar" />
 
-	<!-- Auxiliary directory where all the intermediate files will be placed -->
-	<property name="build.dir" location="build" />
-	<!-- Directory for compiled service classes -->
-	<property name="build.dest" location="${build.dir}/classes" />
-	<!-- Directory for compiled JAR files (additional library files required by
+
+
+    <!-- Build directories -->
+
+    <!-- Auxiliary directory where all the intermediate files will be placed -->
+    <property name="build.dir" location="build" />
+    <!-- Directory for compiled service classes -->
+    <property name="build.dest" location="${build.dir}/classes" />
+    <!-- Directory for compiled JAR files (additional library files required by
 	     the service will also be placed here) -->
-	<property name="build.lib.dir" location="${build.dir}/lib" />
-	<!-- Directory where stub source and class files are placed -->
+    <property name="build.lib.dir" location="${build.dir}/lib" />
+    <!-- Directory where stub source and class files are placed -->
 
 
-	<!-- Miscellaneous properties -->
+    <!-- Miscellaneous properties -->
 
-	<!-- This property is defined simply so we can write ${sep} instead of
+    <!-- This property is defined simply so we can write ${sep} instead of
 	     ${file.separator}, which makes some expressions too long -->
-	<property name="sep" value="${file.separator}" />
-	<!-- We want detailed error messages -->
-	<property name="java.debug" value="on" />
+    <property name="sep" value="${file.separator}" />
+    <!-- We want detailed error messages -->
+    <property name="java.debug" value="on" />
 
-	<!-- Load test files -->
-	<import file="test/test.xml" />
+    <!-- Load test files -->
+    <import file="test/test.xml" />
 
-	<!-- Sets up the build directory structure -->
-	<target name="init">
-		<mkdir dir="${build.dir}" />
-		<mkdir dir="${build.dest}" />
-		<mkdir dir="${build.lib.dir}" />
+    <!-- Sets up the build directory structure -->
+    <target name="init">
+        <mkdir dir="${build.dir}" />
+        <mkdir dir="${build.dest}" />
+        <mkdir dir="${build.lib.dir}" />
 
-		<copy toDir="${build.lib.dir}">
-			<fileset dir="lib/">
-				<include name="*.jar" />
-			</fileset>
-		</copy>
+        <copy toDir="${build.lib.dir}">
+            <fileset dir="lib/">
+                <include name="*.jar" />
+            </fileset>
+        </copy>
 
-		<mkdir dir="${test.log.dir}" />
+        <mkdir dir="${test.log.dir}" />
 
-		<path id="test.classpath">
-			<fileset dir="${test.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.test.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<pathelement location="${test.dir}/resources" />
-			<pathelement location="${build.dest}" />
-			<pathelement location="${stubs.dest}" />
+        <path id="test.classpath">
+            <fileset dir="${test.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${ext.test.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${ext.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <pathelement location="${test.dir}/resources" />
+            <pathelement location="${build.dest}" />
+            <pathelement location="${stubs.dest}" />
 
-			<fileset dir="${globus.location}/lib">
-				<include name="*.jar" />
-				<exclude name="${stubs.jar.name}" />
-				<exclude name="${jar.name}" />
-				<exclude name="xml-apis.jar" />
-				<exclude name="xercesImpl.jar" />
-			</fileset>
-		</path>
-	</target>
-
-
-	<!-- Compile the implementation classes (service, resource, etc.) -->
-	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
-			<classpath>
-				<pathelement location="${stubs.dest}" />
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-
-				<fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
-		</javac>
-	</target>
-
-	<!-- Compile the implementation classes (service, resource, etc.) -->
-	<target name="compileTests" depends="compile">
-		<javac srcdir="${test.src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="test.classpath" />
-	</target>
+            <fileset dir="${globus.location}/lib">
+                <include name="*.jar" />
+                <exclude name="${stubs.jar.name}" />
+                <exclude name="${jar.name}" />
+                <exclude name="xml-apis.jar" />
+                <exclude name="xercesImpl.jar" />
+            </fileset>
+        </path>
+    </target>
 
 
-	<!-- Create a JAR file with the implementation classes -->
-	<target name="jar" depends="compile, compileTests">
-		 <jar jarfile="${build.lib.dir}/${jar.name}" basedir="${build.dest}">
+    <!-- Compile the implementation classes (service, resource, etc.) -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
+            <classpath>
+                <pathelement location="${stubs.dest}" />
+                <fileset dir="${lib.dir}">
+                    <include name="*.jar" />
+                </fileset>
+                <fileset dir="${ext.lib.dir}">
+                    <include name="*.jar" />
+                </fileset>
+
+                <fileset dir="${globus.location}/lib">
+                    <include name="*.jar" />
+                    <exclude name="${jar.name}" />
+                    <exclude name="xml-apis.jar" />
+                    <exclude name="xercesImpl.jar" />
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Compile the implementation classes (service, resource, etc.) -->
+    <target name="compileTests" depends="compile">
+        <javac srcdir="${test.src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="test.classpath" />
+    </target>
+
+
+    <!-- Create a JAR file with the implementation classes -->
+    <target name="jar" depends="compile, compileTests">
+        <jar jarfile="${build.lib.dir}/${jar.name}" basedir="${build.dest}">
             <include name="**/gridca/**" />
-        	<fileset dir="resources/ui/gridca" />
+            <fileset dir="resources/ui/gridca" />
         </jar>
-	</target>
+    </target>
 
 
 
-	<!-- Clean up all the intermediate files -->
-	<target name="clean">
-		<delete dir="tmp" />
-		<delete dir="${build.dir}" />
-	</target>
+    <!-- Clean up all the intermediate files -->
+    <target name="clean">
+        <delete dir="tmp" />
+        <delete dir="${build.dir}" />
+    </target>
 
 
-	<!-- Default target "all" generates the GAR file -->
-	<target name="all" depends="jar" />
-	
-	<target name="generateCA" description="Generates a certificate authority.">
-		<input message="Please enter the DN for the new CA (ex. O=osu,OU=bmi,CN=Some CA):"
-		               addproperty="dn.input"/>
-		            <input message="Please enter the number of days the new CA will be valid for:"
-		               addproperty="days.input"/>
-		                <input message="Please enter a password for the new CA:"
-		               addproperty="password.input"/>
-		                  <input message="Please enter a location to write the new CA's private key:"
-		               addproperty="key.input"/>
-		                  <input message="Please enter a location to write the new CA's certificate:"
-		               addproperty="cert.input"/>
-		<java classname="gov.nih.nci.cagrid.gridca.common.AntGenerateCA" fork="true" newenvironment="true">
-			<arg value="${dn.input}"/>
-			<arg value="${days.input}"/>
-			<arg value="${password.input}"/>
-			<arg value="${key.input}"/>
-			<arg value="${cert.input}"/>
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-			    <fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
-		</java>
-	</target>
-	
-	<target name="createAndSignHostCertificate" description="Create and signs a host certificate.">
-		 <input message="Please enter the location of the CA's private key:"
-		               addproperty="key.input"/>
-		                  <input message="Please enter the CA's password:"
-		               addproperty="password.input"/>
-		                <input message="Please enter the location of the CA's certificate:"
-		               addproperty="ca.input"/>
-		               	<input message="Please enter the Hostname [${env.HOST}]:"
-		               addproperty="hostname.input" defaultvalue="${env.HOST}"/>
-		               <input message="Please enter the number of days the host certificate will be valid for:"
-		               addproperty="days.input"/>
-		              <input message="Please enter a location to write the host key:"
-		               addproperty="hostkey.input"/>
-		           
-		                  <input message="Please enter a location to write the host certificate:"
-		               addproperty="cert.input"/>
-		<java classname="gov.nih.nci.cagrid.gridca.common.AntCreateHostCertificate" fork="true" newenvironment="true">
-			<arg value="${key.input}"/>
-			<arg value="${password.input}"/>
-			<arg value="${ca.input}"/>
-			<arg value="${hostname.input}"/>
-			<arg value="${days.input}"/>
-			<arg value="${hostkey.input}"/>
-			<arg value="${cert.input}"/>
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-			    <fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
-		</java>
-	</target>
-	
-	<target name="requestHostCertificate" description="Requests a Host Ceritificate">
-		<input message="Please enter the Hostname [${env.HOST}]:"
-		               addproperty="hostname.input" defaultvalue="${env.HOST}"/>
-		<java classname="gov.nih.nci.cagrid.gridca.common.HostCertificateRequestUtility" fork="yes" newenvironment="true">
-			<arg value="langella@bmi.osu.edu" />
-			<arg value="caGrid 1.0 Development Host Certificate Request" />
-			<arg value="5" />
-			<arg value="${hostname.input}"/>
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
-		</java>
-	</target>
-	
-	<target name="signHostCertificate" description="Create and signs a host certificate.">
-		 <input message="Please enter the location of the CA's private key:"
-		               addproperty="key.input"/>
-		                  <input message="Please enter the CA's password:"
-		               addproperty="password.input"/>
-		                <input message="Please enter the location of the CA's certificate:"
-		               addproperty="ca.input"/>
-		               	<input message="Please enter the location to the host's public key:"
-		               addproperty="public.input"/>
-		               <input message="Please enter the number of days the host certificate will be valid for:"
-		               addproperty="days.input"/>
-		                <input message="Please enter a location to write the host certificate:"
-		               addproperty="cert.input"/>
-		            
-		<java classname="gov.nih.nci.cagrid.gridca.common.AntSignHostCertificate" fork="true" newenvironment="true">
-			<arg value="${key.input}"/>
-			<arg value="${password.input}"/>
-			<arg value="${ca.input}"/>
-			<arg value="${public.input}"/>
-			<arg value="${days.input}"/>
-            <arg value="${cert.input}"/>
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-			    <fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
-		</java>
-	</target>
+    <!-- Default target "all" generates the GAR file -->
+    <target name="all" depends="jar" />
+
+    <target name="generateCA" description="Generates a certificate authority.">
+        <input message="Please enter the DN for the new CA (ex. O=osu,OU=bmi,CN=Some CA):" addproperty="dn.input" />
+        <input message="Please enter the number of days the new CA will be valid for:" addproperty="days.input" />
+        <input message="Please enter a password for the new CA:" addproperty="password.input" />
+        <input message="Please enter a location to write the new CA's private key:" addproperty="key.input" />
+        <input message="Please enter a location to write the new CA's certificate:" addproperty="cert.input" />
+        <java classname="gov.nih.nci.cagrid.gridca.common.AntGenerateCA" fork="true" newenvironment="true">
+            <arg value="${dn.input}" />
+            <arg value="${days.input}" />
+            <arg value="${password.input}" />
+            <arg value="${key.input}" />
+            <arg value="${cert.input}" />
+            <classpath>
+                <fileset dir="${build.lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${ext.lib.dir}">
+                    <include name="*.jar" />
+                </fileset>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${globus.location}/lib">
+                    <include name="*.jar" />
+                    <exclude name="${jar.name}" />
+                    <exclude name="xml-apis.jar" />
+                    <exclude name="xercesImpl.jar" />
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="createAndSignHostCertificate" description="Create and signs a host certificate.">
+        <input message="Please enter the location of the CA's private key:" addproperty="key.input" />
+        <input message="Please enter the CA's password:" addproperty="password.input" />
+        <input message="Please enter the location of the CA's certificate:" addproperty="ca.input" />
+        <input message="Please enter the Hostname [${env.HOST}]:" addproperty="hostname.input" defaultvalue="${env.HOST}" />
+        <input message="Please enter the number of days the host certificate will be valid for:" addproperty="days.input" />
+        <input message="Please enter a location to write the host key:" addproperty="hostkey.input" />
+
+        <input message="Please enter a location to write the host certificate:" addproperty="cert.input" />
+        <java classname="gov.nih.nci.cagrid.gridca.common.AntCreateHostCertificate" fork="true" newenvironment="true">
+            <arg value="${key.input}" />
+            <arg value="${password.input}" />
+            <arg value="${ca.input}" />
+            <arg value="${hostname.input}" />
+            <arg value="${days.input}" />
+            <arg value="${hostkey.input}" />
+            <arg value="${cert.input}" />
+            <classpath>
+                <fileset dir="${build.lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${ext.lib.dir}">
+                    <include name="*.jar" />
+                </fileset>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${globus.location}/lib">
+                    <include name="*.jar" />
+                    <exclude name="${jar.name}" />
+                    <exclude name="xml-apis.jar" />
+                    <exclude name="xercesImpl.jar" />
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="requestHostCertificate" description="Requests a Host Ceritificate">
+        <input message="Please enter the Hostname [${env.HOST}]:" addproperty="hostname.input" defaultvalue="${env.HOST}" />
+        <java classname="gov.nih.nci.cagrid.gridca.common.HostCertificateRequestUtility" fork="yes" newenvironment="true">
+            <arg value="langella@bmi.osu.edu" />
+            <arg value="caGrid 1.0 Development Host Certificate Request" />
+            <arg value="5" />
+            <arg value="${hostname.input}" />
+            <classpath>
+                <fileset dir="${build.lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${ext.lib.dir}">
+                    <include name="*.jar" />
+                </fileset>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${globus.location}/lib">
+                    <include name="*.jar" />
+                    <exclude name="${jar.name}" />
+                    <exclude name="xml-apis.jar" />
+                    <exclude name="xercesImpl.jar" />
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="signHostCertificate" description="Create and signs a host certificate.">
+        <input message="Please enter the location of the CA's private key:" addproperty="key.input" />
+        <input message="Please enter the CA's password:" addproperty="password.input" />
+        <input message="Please enter the location of the CA's certificate:" addproperty="ca.input" />
+        <input message="Please enter the location to the host's public key:" addproperty="public.input" />
+        <input message="Please enter the number of days the host certificate will be valid for:" addproperty="days.input" />
+        <input message="Please enter a location to write the host certificate:" addproperty="cert.input" />
+
+        <java classname="gov.nih.nci.cagrid.gridca.common.AntSignHostCertificate" fork="true" newenvironment="true">
+            <arg value="${key.input}" />
+            <arg value="${password.input}" />
+            <arg value="${ca.input}" />
+            <arg value="${public.input}" />
+            <arg value="${days.input}" />
+            <arg value="${cert.input}" />
+            <classpath>
+                <fileset dir="${build.lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${ext.lib.dir}">
+                    <include name="*.jar" />
+                </fileset>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${globus.location}/lib">
+                    <include name="*.jar" />
+                    <exclude name="${jar.name}" />
+                    <exclude name="xml-apis.jar" />
+                    <exclude name="xercesImpl.jar" />
+                </fileset>
+            </classpath>
+        </java>
+    </target>
 
 </project>
