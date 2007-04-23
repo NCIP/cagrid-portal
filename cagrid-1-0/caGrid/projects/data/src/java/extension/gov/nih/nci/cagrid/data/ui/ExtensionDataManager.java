@@ -20,7 +20,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 10:04:04 AM
- * @version $Id: ExtensionDataManager.java,v 1.1 2007-04-23 17:05:49 dervin Exp $ 
+ * @version $Id: ExtensionDataManager.java,v 1.2 2007-04-23 17:26:34 dervin Exp $ 
  */
 public class ExtensionDataManager {
     
@@ -336,12 +336,24 @@ public class ExtensionDataManager {
     }
     
     
+    /**
+     * Gets the stored long name of the caDSR project used in the domain model
+     * @return
+     *      The project long name, or null if not found
+     * @throws Exception
+     */
     public String getCadsrProjectLongName() throws Exception {
         CadsrInformation info = getCadsrInformation();
         return info.getProjectLongName();
     }
     
     
+    /**
+     * Gets the stored version of the caDSR project used in the domain model
+     * @return
+     *      The project's version, or null if not found
+     * @throws Exception
+     */
     public String getCadsrProjectVersion() throws Exception {
         CadsrInformation info = getCadsrInformation();
         return info.getProjectVersion();
