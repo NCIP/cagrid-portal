@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -166,22 +167,32 @@ public class NamespaceUtils {
 	 * @return
 	 * 		Map from class name to element name
 	 */
-	public static Map mapClassesToElementNames(UMLClassMetadata[] classes, NamespaceType nsType) {
-		Map mapping = new HashMap();
-		for (int i = 0; i < classes.length; i++) {
-			UMLClassMetadata currentClass = classes[i];
-			SchemaElementType mappedType = null;
-			for (int j = 0; j < nsType.getSchemaElement().length; j++) {
-				SchemaElementType type = nsType.getSchemaElement(j);
-				if (type.getType().equals(currentClass.getName())) {
-					mappedType = type;
-					break;
-				}
-			}
-			mapping.put(currentClass.getName(), mappedType == null ? null : mappedType.getType());
-		}
-		return mapping;
+	public static Map<String, String> mapClassesToElementNames(UMLClassMetadata[] classes, NamespaceType nsType) {
+        List<String> classNames = new LinkedList();
+        for (UMLClassMetadata currentClass : classes) {
+            classNames.add(currentClass.getName());
+        }
+        return mapClassNamesToElementNames(classNames, nsType);
 	}
+    
+    
+    public static Map<String, String> mapClassNamesToElementNames(List<String> classNames, NamespaceType packageNamespace) {
+        Map<String, String> mapping = new HashMap();
+        for (String name : classNames) {
+            boolean nameSet = false;
+            for (SchemaElementType elemType : packageNamespace.getSchemaElement()) {
+                if (elemType.getType().equals(name)) {
+                    mapping.put(name, elemType.getType());
+                    nameSet = true;
+                    break;
+                }
+            }
+            if (!nameSet) {
+                mapping.put(name, null);
+            }
+        }
+        return mapping;
+    }
 	
 	
 	public static SchemaElementType getElementByName(NamespaceType nsType, String typeName) {
