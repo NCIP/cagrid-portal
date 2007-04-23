@@ -28,7 +28,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 3:22:07 PM
- * @version $Id: HQL313CoreQueryProcessor.java,v 1.2 2007-03-30 13:41:51 dervin Exp $ 
+ * @version $Id: HQL313CoreQueryProcessor.java,v 1.3 2007-04-23 19:44:54 dervin Exp $ 
  */
 public class HQL313CoreQueryProcessor extends CQLQueryProcessor {
 	public static final String APPSERVICE_URL = "applicationServiceUrl";
@@ -114,7 +114,7 @@ public class HQL313CoreQueryProcessor extends CQLQueryProcessor {
     }
 	
 	
-	public Properties getRequiredProperties() {
+	public Properties getRequiredParameters() {
 		Properties props = new Properties();
 		props.setProperty(APPSERVICE_URL, "");
 		props.setProperty(CASE_INSENSITIVE_QUERIES, DEFAULT_CASE_INSENSITIVE);
