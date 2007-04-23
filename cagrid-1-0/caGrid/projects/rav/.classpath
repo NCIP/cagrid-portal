@@ -3,16 +3,16 @@
 	<classpathentry kind="src" path="test/src/java"/>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar" sourcepath="/caGrid-1.0-introduce"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal.jar"/>
 	<classpathentry kind="lib" path="build/jars/caGrid-1.0-rav-stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar" sourcepath="/GT4_LOCATION/ws-core-4.0.3-src.zip"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/saaj.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" sourcepath="/GT4_LOCATION/cog-1.2-src.zip"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" sourcepath="/GT4_LOCATION"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

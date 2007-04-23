@@ -4,9 +4,12 @@ import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.Collections;
@@ -283,10 +286,21 @@ public class GMESchemaLocatorPanel extends JPanel {
 
 
 	public static void main(String[] args) {
-		GMESchemaLocatorPanel panel = new GMESchemaLocatorPanel(true);
+		final GMESchemaLocatorPanel panel = new GMESchemaLocatorPanel(true);
 		JFrame frame = new JFrame();
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        JButton getNamespaceButton = new JButton("get namespace");
+        getNamespaceButton.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+                Namespace ns = panel.getSelectedSchemaNamespace();
+                System.out.println(ns.getNamespace());
+           }
+        });
+        mainPanel.add(panel, BorderLayout.CENTER);
+        mainPanel.add(getNamespaceButton, BorderLayout.SOUTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(panel);
+        frame.setContentPane(mainPanel);
 		frame.pack();
 		frame.setVisible(true);
 	}
