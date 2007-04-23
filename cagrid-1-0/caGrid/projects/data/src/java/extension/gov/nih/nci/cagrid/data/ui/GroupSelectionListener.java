@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.data.ui;
 
+import java.util.EventListener;
+
 import javax.swing.ButtonModel;
 
 /** 
@@ -8,9 +10,9 @@ import javax.swing.ButtonModel;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 27, 2006 
- * @version $Id: GroupSelectionListener.java,v 1.1 2006-11-27 16:06:41 dervin Exp $ 
+ * @version $Id: GroupSelectionListener.java,v 1.2 2007-04-23 17:04:36 dervin Exp $ 
  */
-public interface GroupSelectionListener {
+public interface GroupSelectionListener extends EventListener {
 
 	/**
 	 * Called when the selection of buttons in a group changes
