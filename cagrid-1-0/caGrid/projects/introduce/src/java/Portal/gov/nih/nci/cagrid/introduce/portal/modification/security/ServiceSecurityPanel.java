@@ -64,7 +64,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private JRadioButton customButton = null;
 
-	private TransportLevelSecurityPanel tlsPanel = null;
+	private TransportLayerSecurityPanel tlsPanel = null;
 
 	private JCheckBox tlsButton = null;
 
@@ -580,7 +580,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private JPanel getTlsPanel() {
 		if (tlsPanel == null) {
-			tlsPanel = new TransportLevelSecurityPanel();
+			tlsPanel = new TransportLayerSecurityPanel();
 		}
 		return tlsPanel;
 	}
@@ -656,7 +656,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			jLabel3 = new JLabel();
 			jLabel3.setText("Secure Conversation");
 			jLabel2 = new JLabel();
-			jLabel2.setText("Transport Level Security");
+			jLabel2.setText("Transport Layer Security");
 			commPanel = new JPanel();
 			commPanel.add(getTlsButton(), null);
 			commPanel.add(jLabel2, null);

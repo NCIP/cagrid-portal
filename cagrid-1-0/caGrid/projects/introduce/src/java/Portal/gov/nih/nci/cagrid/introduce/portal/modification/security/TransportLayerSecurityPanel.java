@@ -20,14 +20,14 @@ import javax.swing.JPanel;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class TransportLevelSecurityPanel extends JPanel {
+public class TransportLayerSecurityPanel extends JPanel {
 
 	private boolean enabled = false;
 	private JLabel authMethodLabel = null;
 	private JComboBox communicationMethod = null;
 
 
-	public TransportLevelSecurityPanel() {
+	public TransportLayerSecurityPanel() {
 		super();
 		initialize();
 	}

@@ -62,7 +62,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private JRadioButton customButton = null;
 
-	private TransportLevelSecurityPanel tlsPanel = null;
+	private TransportLayerSecurityPanel tlsPanel = null;
 
 	private JCheckBox tlsButton = null;
 
@@ -76,7 +76,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private JLabel customLabel = null;
 
-	private JLabel transportLevelSecurityLabel = null;
+	private JLabel transportLayerSecurityLabel = null;
 
 	private JLabel secureConversationLabel = null;
 
@@ -149,13 +149,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	private void initialize() {
-		/*
-		 * setBorder(javax.swing.BorderFactory.createTitledBorder( null,
-		 * "Transport Level Security (TLS)",
-		 * javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-		 * javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-		 * IntroduceLookAndFeel.getPanelLabelColor()));
-		 */
 		GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
 		gridBagConstraints17.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints17.weighty = 1.0;
@@ -539,7 +532,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private JPanel getTlsPanel() {
 		if (tlsPanel == null) {
-			tlsPanel = new TransportLevelSecurityPanel();
+			tlsPanel = new TransportLayerSecurityPanel();
 		}
 		return tlsPanel;
 	}
@@ -615,11 +608,11 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			secureMessageLabel.setText("Secure Message");
 			secureConversationLabel = new JLabel();
 			secureConversationLabel.setText("Secure Conversation");
-			transportLevelSecurityLabel = new JLabel();
-			transportLevelSecurityLabel.setText("Transport Level Security");
+			transportLayerSecurityLabel = new JLabel();
+			transportLayerSecurityLabel.setText("Transport Layer Security");
 			commPanel = new JPanel();
 			commPanel.add(getTlsButton(), null);
-			commPanel.add(transportLevelSecurityLabel, null);
+			commPanel.add(transportLayerSecurityLabel, null);
 			commPanel.add(getSecureConversationButton(), null);
 			commPanel.add(secureConversationLabel, null);
 			commPanel.add(getSecureMessageButton(), null);
