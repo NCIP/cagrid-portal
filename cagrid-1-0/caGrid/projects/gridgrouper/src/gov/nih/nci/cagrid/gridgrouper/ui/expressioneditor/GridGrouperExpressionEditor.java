@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipStatus;
 import gov.nih.nci.cagrid.gridgrouper.client.Group;
-import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -317,7 +316,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 	protected MultiEventProgressBar getProgress() {
 		if (progress == null) {
 			progress = new MultiEventProgressBar(false);
-			progress.setForeground(GridGrouperLookAndFeel.getPanelLabelColor());
+			progress.setForeground(LookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -518,7 +517,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (addExpression == null) {
 			addExpression = new JButton();
 			addExpression.setText("Add Expression");
-			addExpression.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addExpression.setIcon(LookAndFeel.getAddIcon());
 			addExpression.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode currentNode = getExpressionTree().getCurrentNode();
@@ -545,7 +544,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (addGroup == null) {
 			addGroup = new JButton();
 			addGroup.setText("Add Group");
-			addGroup.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addGroup.setIcon(LookAndFeel.getAddIcon());
 			addGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode currentNode = getGrouperTree().getCurrentNode();
@@ -571,7 +570,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (removeExpression == null) {
 			removeExpression = new JButton();
 			removeExpression.setText("Remove");
-			removeExpression.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
+			removeExpression.setIcon(LookAndFeel.getRemoveIcon());
 			removeExpression.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode currentNode = getExpressionTree().getCurrentNode();
@@ -682,7 +681,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (removeGroup == null) {
 			removeGroup = new JButton();
 			removeGroup.setText("Remove");
-			removeGroup.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
+			removeGroup.setIcon(LookAndFeel.getRemoveIcon());
 			removeGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode currentNode = getExpressionTree().getCurrentNode();
@@ -826,7 +825,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (loadGridGrouper == null) {
 			loadGridGrouper = new JButton();
 			loadGridGrouper.setText("Load");
-			loadGridGrouper.setIcon(GridGrouperLookAndFeel.getGrouperIconNoBackground22X22());
+			loadGridGrouper.setIcon(LookAndFeel.getGrouperIconNoBackground22X22());
 			loadGridGrouper.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 

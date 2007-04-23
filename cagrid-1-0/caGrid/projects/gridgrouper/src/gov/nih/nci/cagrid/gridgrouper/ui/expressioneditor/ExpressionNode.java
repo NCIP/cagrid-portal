@@ -48,7 +48,6 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipStatus;
 import gov.nih.nci.cagrid.gridgrouper.client.Group;
-import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
@@ -237,7 +236,7 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 
 
 	public ImageIcon getIcon() {
-		return GridGrouperLookAndFeel.getMembershipExpressionIcon16x16();
+		return LookAndFeel.getMembershipExpressionIcon16x16();
 	}
 
 

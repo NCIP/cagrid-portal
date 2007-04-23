@@ -45,7 +45,6 @@ package gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor;
 
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 import gov.nih.nci.cagrid.gridgrouper.client.Group;
-import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 
 import javax.swing.ImageIcon;
 
@@ -86,7 +85,7 @@ public class GroupTreeNode extends GridGrouperBaseTreeNode {
 
 
 	public ImageIcon getIcon() {
-		return GridGrouperLookAndFeel.getGroupIcon16x16();
+		return LookAndFeel.getGroupIcon16x16();
 	}
 
 

@@ -45,7 +45,6 @@ package gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor;
 
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipStatus;
-import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
@@ -81,7 +80,7 @@ public class QueryNode extends ExpressionBaseTreeNode {
 
 
 	public ImageIcon getIcon() {
-		return GridGrouperLookAndFeel.getGroupIcon16x16();
+		return LookAndFeel.getGroupIcon16x16();
 	}
 
 

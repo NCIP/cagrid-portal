@@ -48,7 +48,6 @@ import gov.nih.nci.cagrid.gridgrouper.client.Group;
 import gov.nih.nci.cagrid.gridgrouper.client.Stem;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
-import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -136,9 +135,9 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 
 	public ImageIcon getIcon() {
 		if (this.rootStem) {
-			return GridGrouperLookAndFeel.getGrouperIcon16x16();
+			return LookAndFeel.getGrouperIcon16x16();
 		} else {
-			return GridGrouperLookAndFeel.getStemIcon16x16();
+			return LookAndFeel.getStemIcon16x16();
 		}
 	}
 

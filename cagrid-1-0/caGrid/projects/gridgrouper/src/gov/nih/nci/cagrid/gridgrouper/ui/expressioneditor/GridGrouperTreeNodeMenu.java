@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor;
 
-import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -62,7 +61,7 @@ public abstract class GridGrouperTreeNodeMenu extends JPopupMenu {
 		if (refresh == null) {
 			refresh = new JMenuItem();
 			refresh.setText("Refresh");
-			refresh.setIcon(GridGrouperLookAndFeel.getLoadIcon());
+			refresh.setIcon(LookAndFeel.getLoadIcon());
 			refresh.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
