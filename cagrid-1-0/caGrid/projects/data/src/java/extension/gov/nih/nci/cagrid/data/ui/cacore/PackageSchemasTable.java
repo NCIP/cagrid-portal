@@ -125,9 +125,11 @@ public class PackageSchemasTable extends JTable {
 	
 	private void resolveSchema(ServiceInformation info, CadsrPackage pack, int dataRow) {
 		// resolve the schemas manually
-		NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(info, pack);
+		NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(info);
 		if (resolved != null) {
 			if (resolved.length != 0) {
+                // set the mapped namespace for the package
+                pack.setMappedNamespace(resolved[0].getNamespace());
 				// see if we should actually add the package
 				if (CommonTools.getNamespaceType(
 					info.getNamespaces(), resolved[0].getNamespace()) == null) {

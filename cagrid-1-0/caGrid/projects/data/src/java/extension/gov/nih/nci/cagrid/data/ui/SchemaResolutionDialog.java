@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.ui;
 
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.ui.cacore.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -39,7 +38,6 @@ public class SchemaResolutionDialog extends JDialog {
 	public static final String SELECT_AN_ITEM = " -- SELECT AN ITEM --";
 	
 	private transient ServiceInformation serviceInfo;
-	private transient CadsrPackage cadsrPackage;
 	
 	private JButton loadSchemasButton = null;
 	private JButton cancelButton = null;
@@ -48,10 +46,9 @@ public class SchemaResolutionDialog extends JDialog {
 	private JTabbedPane discoveryTabbedPane = null;
 	private NamespaceType[] resolvedSchemas;
 	
-	private SchemaResolutionDialog(ServiceInformation info, CadsrPackage pack) {
+	private SchemaResolutionDialog(ServiceInformation info) {
 		super(PortalResourceManager.getInstance().getGridPortal(), "Schema Resolution", true);
 		this.serviceInfo = info;
-		this.cadsrPackage = pack;
 		this.resolvedSchemas = null;
 		initialize();
 	}
@@ -61,14 +58,13 @@ public class SchemaResolutionDialog extends JDialog {
 	 * Resolves schemas for the given cadsr package
 	 * 
 	 * @param info
-	 * @param pack
 	 * @return
 	 * 		null if an error occurs resolving schemas
 	 * 		an empty array (length == 0) if user cancels the dialog
 	 * 		array of NamespaceType (length != 0) if resolution was successful
 	 */
-	public static NamespaceType[] resolveSchemas(ServiceInformation info, CadsrPackage pack) {
-		SchemaResolutionDialog dialog = new SchemaResolutionDialog(info, pack);
+	public static NamespaceType[] resolveSchemas(ServiceInformation info) {
+		SchemaResolutionDialog dialog = new SchemaResolutionDialog(info);
 		return dialog.resolvedSchemas;
 	}
 	
@@ -94,7 +90,7 @@ public class SchemaResolutionDialog extends JDialog {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					resolvedSchemas = loadSchemas();
 					// set the new namespace mapping of the cadsr package
-					cadsrPackage.setMappedNamespace(resolvedSchemas[0].getNamespace());
+					// cadsrPackage.setMappedNamespace(resolvedSchemas[0].getNamespace());
 					dispose();
 				}
 			});
