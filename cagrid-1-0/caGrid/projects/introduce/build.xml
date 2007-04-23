@@ -129,6 +129,8 @@
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceConfiguration.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/ServiceProviderImpl.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/ServiceAuthorization.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/ResourceConstants.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/ResourceCreator.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/main/BaseResource.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/main/BaseResourceHome.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/main/ResourceConfiguration.javajet" />
@@ -141,7 +143,6 @@
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/singleton/BaseResource.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/singleton/BaseResourceHome.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/singleton/ResourceConfiguration.javajet" />
-		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/ResourceConstants.javajet" />
 	</target>
 	<!-- =================================================================== -->
 	<!-- Compiles the source code                                            -->

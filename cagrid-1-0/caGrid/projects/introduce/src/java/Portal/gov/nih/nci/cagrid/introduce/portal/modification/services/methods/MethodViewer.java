@@ -1900,6 +1900,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 									+ "Reference"));
 							output.setIsArray(false);
 							output.setIsClientHandle(new Boolean(true));
+							output.setResourceClientIntroduceServiceName(getServicesTypeTable()
+                                    .getSelectedRowData().getName());
+							output.setIsCreatingResourceForClientHandle(new Boolean(true));
 							output.setClientHandleClass(getServicesTypeTable()
 									.getSelectedRowData().getPackageName()
 									+ "."

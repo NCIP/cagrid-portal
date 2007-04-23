@@ -61,3 +61,5 @@ hard coded (replace the URL in you existing file with INDEX_SERVICE_URL or just 
 The build-deploy.xml file was also updated to support pushing this variable value (look at the differences or do a merge)
 index.service.url was added as a deploy.properties.
 
+changed the introduce.sh file to better work in general....
+
