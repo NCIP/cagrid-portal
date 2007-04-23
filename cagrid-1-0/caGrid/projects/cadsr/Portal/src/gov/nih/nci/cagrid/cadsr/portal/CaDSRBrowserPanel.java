@@ -15,13 +15,14 @@ import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -29,9 +30,9 @@ import javax.swing.JTextField;
 public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener, PackageSelectedListener {
 
 	private static final String NO_SELECTION = "-- SELECT AN ITEM --";
+    
 	private JPanel queryPanel = null;
 	private JButton queryButton = null;
-	protected File schemaDir;
 	private JComboBox projectComboBox = null;
 	private JComboBox packageComboBox = null;
 	private JPanel projectsPanel = null;
@@ -42,14 +43,18 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	private JLabel packageLabel = null;
 	private JComboBox classComboBox = null;
 	private JLabel classLabel = null;
+    private JPanel progressPanel = null;
+    private MultiEventProgressBar multiEventProgressBar = null;
+
+    protected File schemaDir;
 	private boolean showQueryPanel = true;
 	private boolean showClassSelection = true;
 
 	private List packageSelectionListeners = null;
 	private List projectSelectionListeners = null;
-	private List classSelectionListeners = null;
-	private JPanel progressPanel = null;
-	private MultiEventProgressBar multiEventProgressBar = null;
+	private List classSelectionListeners = null;	
+    
+    private Comparator toStringComparator = null;
 
 
 	public CaDSRBrowserPanel() {
@@ -61,6 +66,12 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 		super();
 		this.showQueryPanel = showQueryPanel;
 		this.showClassSelection = showClassSelection;
+        
+        this.toStringComparator = new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return o1.toString().compareTo(o2.toString());
+            }
+        };
 
 		packageSelectionListeners = new ArrayList();
 		projectSelectionListeners = new ArrayList();
@@ -178,21 +189,25 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 				try {
 					CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
 					Project[] projects = cadsrService.findAllProjects();
-					if (projects != null) {
-						for (int i = 0; i < projects.length; i++) {
-							getProjectComboBox().addItem(new ProjectDisplay(projects[i]));
+                    if (projects != null) {
+                        ProjectDisplay[] displayedProjects = new ProjectDisplay[projects.length];
+                        for (int i = 0; i < projects.length; i++) {
+                            displayedProjects[i] = new ProjectDisplay(projects[i]);
+                        }
+                        Arrays.sort(displayedProjects, toStringComparator);
+						for (int i = 0; i < displayedProjects.length; i++) {
+							getProjectComboBox().addItem(displayedProjects[i]);
 						}
 					}
 					makeCombosEnabled(true);
-
 				} catch (Exception e1) {
 					e1.printStackTrace();
-					ErrorDialog.showErrorDialog("Error communicating with caDSR; please check the caDSR URL!", e1);
+					ErrorDialog.showErrorDialog("Error communicating with caDSR; please check the caDSR URL!",
+                        e1.getMessage(), e1);
 				} finally {
 					getMultiEventProgressBar().stopEvent(progressEventID, "");
 				}
 			}
-
 		};
 		t.start();
 	}
@@ -275,8 +290,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 					Project project = getSelectedProject();
 					if (e.getStateChange() == ItemEvent.SELECTED && project != null) {
 						for (int i = 0; i < projectSelectionListeners.size(); i++) {
-							ProjectSelectedListener listener = (ProjectSelectedListener) projectSelectionListeners
-								.get(i);
+							ProjectSelectedListener listener = (ProjectSelectedListener) 
+                                projectSelectionListeners.get(i);
 							listener.handleProjectSelection(project);
 						}
 					}
@@ -301,8 +316,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 					UMLPackageMetadata pkg = getSelectedPackage();
 					if (e.getStateChange() == ItemEvent.SELECTED && pkg != null) {
 						for (int i = 0; i < packageSelectionListeners.size(); i++) {
-							PackageSelectedListener listener = (PackageSelectedListener) packageSelectionListeners
-								.get(i);
+							PackageSelectedListener listener = (PackageSelectedListener) 
+                                packageSelectionListeners.get(i);
 							listener.handlePackageSelection(pkg);
 						}
 					}
@@ -323,7 +338,6 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 		if (projectsPanel == null) {
 			packageLabel = new JLabel();
 			packageLabel.setText("Package:");
-
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
@@ -435,84 +449,6 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	}
 
 
-	protected class ProjectDisplay {
-		private Project project;
-
-
-		public ProjectDisplay(Project project) {
-			setProject(project);
-		}
-
-
-		public Project getProject() {
-			return project;
-		}
-
-
-		public void setProject(Project project) {
-			this.project = project;
-		}
-
-
-		public String toString() {
-			return project.getShortName() + " (version: " + project.getVersion() + ")";
-		}
-
-	}
-
-
-	protected class PackageDisplay {
-		private UMLPackageMetadata pack;
-
-
-		public PackageDisplay(UMLPackageMetadata pack) {
-			setPackage(pack);
-		}
-
-
-		public UMLPackageMetadata getPackage() {
-			return pack;
-		}
-
-
-		public void setPackage(UMLPackageMetadata pack) {
-			this.pack = pack;
-		}
-
-
-		public String toString() {
-			return pack.getName();
-		}
-
-	}
-
-
-	protected class ClassDisplay {
-		private UMLClassMetadata clazz;
-
-
-		public ClassDisplay(UMLClassMetadata clazz) {
-			setClazz(clazz);
-		}
-
-
-		public UMLClassMetadata getClazz() {
-			return clazz;
-		}
-
-
-		public void setClazz(UMLClassMetadata clazz) {
-			this.clazz = clazz;
-		}
-
-
-		public String toString() {
-			return clazz.getName();
-		}
-
-	}
-
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -547,16 +483,6 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	}
 
 
-	public static void main(String[] args) {
-		CaDSRBrowserPanel panel = new CaDSRBrowserPanel();
-		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(panel);
-		frame.pack();
-		frame.setVisible(true);
-	}
-
-
 	public void handleProjectSelection(final Project project) {
 		// System.out.println("Handle Project:" + project.getShortName());
 		makeCombosEnabled(false);
@@ -570,16 +496,21 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 				try {
 					CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
 					UMLPackageMetadata[] metadatas = cadsrService.findPackagesInProject(project);
-					if (metadatas != null) {
-						for (int i = 0; i < metadatas.length; i++) {
-							getPackageComboBox().addItem(new PackageDisplay(metadatas[i]));
+                    if (metadatas != null) {
+                        PackageDisplay[] displayedPackages = new PackageDisplay[metadatas.length];
+                        for (int i = 0; i < metadatas.length; i++) {
+                            displayedPackages[i] = new PackageDisplay(metadatas[i]);
+                        }
+                        Arrays.sort(displayedPackages, toStringComparator);
+						for (int i = 0; i < displayedPackages.length; i++) {
+							getPackageComboBox().addItem(displayedPackages[i]);
 						}
 					}
 					makeCombosEnabled(true);
 				} catch (Exception e1) {
 					e1.printStackTrace();
-					JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
-						"Error communicating with caDSR; please check the caDSR URL!");
+                    ErrorDialog.showErrorDialog("Error communicating with caDSR; please check the caDSR URL!", 
+                        e1.getMessage(), e1);
 				} finally {
 					getMultiEventProgressBar().stopEvent(progressEventID, "Done.");
 				}
@@ -611,15 +542,21 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 						CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
 						UMLClassMetadata[] metadatas = cadsrService.findClassesInPackage(
 							((ProjectDisplay) getProjectComboBox().getSelectedItem()).getProject(), pkg.getName());
-						if (metadatas != null) {
-							for (int i = 0; i < metadatas.length; i++) {
-								getClassComboBox().addItem(new ClassDisplay(metadatas[i]));
+                        if (metadatas != null) {
+                            ClassDisplay[] displayedClasses = new ClassDisplay[metadatas.length];
+                            for (int i = 0; i < metadatas.length; i++) {
+                                displayedClasses[i] = new ClassDisplay(metadatas[i]);
+                            }
+                            Arrays.sort(displayedClasses, toStringComparator);
+							for (int i = 0; i < displayedClasses.length; i++) {
+								getClassComboBox().addItem(displayedClasses[i]);
 							}
 						}
 						makeCombosEnabled(true);
 					} catch (Exception e1) {
 						e1.printStackTrace();
-						ErrorDialog.showErrorDialog("Error communicating with caDSR; please check the caDSR URL!", e1);
+						ErrorDialog.showErrorDialog("Error communicating with caDSR; please check the caDSR URL!", 
+                            e1.getMessage(), e1);
 					} finally {
 						getMultiEventProgressBar().stopEvent(progressEventID, "Done.");
 					}
@@ -627,7 +564,90 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			};
 			t.start();
 		}
-
 	}
+    
+    
+    public static void main(String[] args) {
+        CaDSRBrowserPanel panel = new CaDSRBrowserPanel();
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(panel);
+        frame.pack();
+        frame.setVisible(true);
+    }
+    
+    
+    protected class ProjectDisplay {
+        private Project project;
 
-} // @jve:decl-index=0:visual-constraint="10,10"
+
+        public ProjectDisplay(Project project) {
+            setProject(project);
+        }
+
+
+        public Project getProject() {
+            return project;
+        }
+
+
+        public void setProject(Project project) {
+            this.project = project;
+        }
+
+
+        public String toString() {
+            return project.getShortName() + " (version: " + project.getVersion() + ")";
+        }
+    }
+
+
+    protected class PackageDisplay {
+        private UMLPackageMetadata pack;
+
+
+        public PackageDisplay(UMLPackageMetadata pack) {
+            setPackage(pack);
+        }
+
+
+        public UMLPackageMetadata getPackage() {
+            return pack;
+        }
+
+
+        public void setPackage(UMLPackageMetadata pack) {
+            this.pack = pack;
+        }
+
+
+        public String toString() {
+            return pack.getName();
+        }
+    }
+
+
+    protected class ClassDisplay {
+        private UMLClassMetadata clazz;
+
+
+        public ClassDisplay(UMLClassMetadata clazz) {
+            setClazz(clazz);
+        }
+
+
+        public UMLClassMetadata getClazz() {
+            return clazz;
+        }
+
+
+        public void setClazz(UMLClassMetadata clazz) {
+            this.clazz = clazz;
+        }
+
+
+        public String toString() {
+            return clazz.getName();
+        }
+    }
+}
