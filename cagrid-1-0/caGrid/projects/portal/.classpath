@@ -69,11 +69,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-discovery.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-data.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="test/lib/spring-mock.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/commons-codec.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/commons-el.jar"/>
@@ -110,5 +108,7 @@
 	<classpathentry kind="lib" path="lib/poi/poi-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="lib" path="lib/poi/poi-contrib-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="lib" path="lib/poi/poi-scratchpad-2.5.1-final-20040804.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-discovery-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadatautils.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

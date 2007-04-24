@@ -83,7 +83,6 @@
 	<classpathentry kind="lib" path="ext/lib/GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius-castor-0.9.4.3-xml.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GlobalModelExchange_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="lib/jhall.jar"/>
@@ -123,7 +122,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-ui.jar"/>
-	<classpathentry kind="lib" path="lib/wizard-0.1.12.jar" sourcepath="C:/projectsOLD/cagrid/ivi-middleware-top/IVIWizard/lib/wizard-0.1.12-src.jar"/>
+	<classpathentry kind="lib" path="lib/wizard-0.1.12.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/boot.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-grape.jar"/>
@@ -134,5 +133,6 @@
 	<classpathentry kind="lib" path="ext/lib/osgi.jar"/>
 	<classpathentry kind="lib" path="ext/lib/resources.jar"/>
 	<classpathentry kind="lib" path="ext/lib/runtime.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GlobalModelExchange-stubs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -64,8 +64,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_stubs_enum.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_enum.jar"/>
@@ -83,5 +81,7 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-portal.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
