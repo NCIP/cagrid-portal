@@ -550,64 +550,66 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
     
     private void launchQueryProcessorConfigUi() {
         String qpClassname = getClassBrowserPanel().getSelectedClassName();
-        try {
-            // reflect-load the class
-            String[] libs = getJarFilenames();
-            URL[] urls = new URL[libs.length];
-            for (int i = 0; i < libs.length; i++) {
-                File libFile = new File(libs[i]);
-                urls[i] = libFile.toURL();
-            }
-            ClassLoader loader = new URLClassLoader(
-                urls, Thread.currentThread().getContextClassLoader());
-            Class qpClass = loader.loadClass(qpClassname);
-            CQLQueryProcessor processorInstance = (CQLQueryProcessor) qpClass.newInstance();
-            String configUiCLassname = processorInstance.getConfigurationUiClassname();
-            if (configUiCLassname != null) {
-                Class uiClass = loader.loadClass(configUiCLassname);
-                CQLQueryProcessorConfigUI uiPanel = 
-                    (CQLQueryProcessorConfigUI) uiClass.newInstance();
-                // get the current configuration out of the table
-                Properties currentConfig = getQpParamsTable().getNonPrefixedConfiguredProperties();
-                Properties postUiConfig = QueryProcessorConfigurationDialog
-                    .showConfigurationUi(uiPanel, currentConfig);
-                // store the configuration that came back from the UI config dialog
-                // start by removing the old query processor properties
-                ServicePropertiesProperty[] oldProperties = 
-                    getServiceInfo().getServiceProperties().getProperty();
-                List<ServicePropertiesProperty> keptProperties = new ArrayList();
-                for (ServicePropertiesProperty prop : oldProperties) {
-                    if (!prop.getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
-                        keptProperties.add(prop);
+        if (qpClassname != null && qpClassname.length() != 0) {
+            try {
+                // reflect-load the class
+                String[] libs = getJarFilenames();
+                URL[] urls = new URL[libs.length];
+                for (int i = 0; i < libs.length; i++) {
+                    File libFile = new File(libs[i]);
+                    urls[i] = libFile.toURL();
+                }
+                ClassLoader loader = new URLClassLoader(
+                    urls, Thread.currentThread().getContextClassLoader());
+                Class qpClass = loader.loadClass(qpClassname);
+                CQLQueryProcessor processorInstance = (CQLQueryProcessor) qpClass.newInstance();
+                String configUiCLassname = processorInstance.getConfigurationUiClassname();
+                if (configUiCLassname != null) {
+                    Class uiClass = loader.loadClass(configUiCLassname);
+                    CQLQueryProcessorConfigUI uiPanel = 
+                        (CQLQueryProcessorConfigUI) uiClass.newInstance();
+                    // get the current configuration out of the table
+                    Properties currentConfig = getQpParamsTable().getNonPrefixedConfiguredProperties();
+                    Properties postUiConfig = QueryProcessorConfigurationDialog
+                        .showConfigurationUi(uiPanel, currentConfig);
+                    // store the configuration that came back from the UI config dialog
+                    // start by removing the old query processor properties
+                    ServicePropertiesProperty[] oldProperties = 
+                        getServiceInfo().getServiceProperties().getProperty();
+                    List<ServicePropertiesProperty> keptProperties = new ArrayList();
+                    for (ServicePropertiesProperty prop : oldProperties) {
+                        if (!prop.getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
+                            keptProperties.add(prop);
+                        }
                     }
-                }
-                // add the changed properties
-                Iterator postUiPropKeys = postUiConfig.keySet().iterator();
-                while (postUiPropKeys.hasNext()) {
-                    String key = (String) postUiPropKeys.next();
-                    String value = postUiConfig.getProperty(key);
-                    String prefixedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + key;
-                    ServicePropertiesProperty configProperty = new ServicePropertiesProperty();
-                    configProperty.setKey(prefixedKey);
-                    configProperty.setValue(value);
-                    configProperty.setIsFromETC(Boolean.FALSE);
-                    keptProperties.add(configProperty);
-                }
-                // set the properties into the model
-                ServicePropertiesProperty[] properties = 
-                    new ServicePropertiesProperty[keptProperties.size()];
-                keptProperties.toArray(properties);
-                getServiceInfo().getServiceDescriptor().getServiceProperties().setProperty(properties);
-                // inform the parameters table that it should update
-                getQpParamsTable().classChanged();
-            } else {
-                PortalUtils.showMessage(new String[] {
-                    "The query processor " + qpClassname,
+                    // add the changed properties
+                    Iterator postUiPropKeys = postUiConfig.keySet().iterator();
+                    while (postUiPropKeys.hasNext()) {
+                        String key = (String) postUiPropKeys.next();
+                        String value = postUiConfig.getProperty(key);
+                        String prefixedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + key;
+                        ServicePropertiesProperty configProperty = new ServicePropertiesProperty();
+                        configProperty.setKey(prefixedKey);
+                        configProperty.setValue(value);
+                        configProperty.setIsFromETC(Boolean.FALSE);
+                        keptProperties.add(configProperty);
+                    }
+                    // set the properties into the model
+                    ServicePropertiesProperty[] properties = 
+                        new ServicePropertiesProperty[keptProperties.size()];
+                    keptProperties.toArray(properties);
+                    getServiceInfo().getServiceDescriptor().getServiceProperties().setProperty(properties);
+                    // inform the parameters table that it should update
+                    getQpParamsTable().classChanged();
+                } else {
+                    PortalUtils.showMessage(new String[] {
+                        "The query processor " + qpClassname,
                     "did not supply a configuration UI"});
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                ErrorDialog.showErrorDialog("Error loading query processor class: " + ex.getMessage(), ex);
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error loading query processor class: " + ex.getMessage(), ex);
         }
     }
 }

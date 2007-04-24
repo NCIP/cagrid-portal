@@ -25,7 +25,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 6, 2007 1:25:32 PM
- * @version $Id: QueryProcessorConfigurationDialog.java,v 1.1 2007-04-09 14:19:15 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationDialog.java,v 1.2 2007-04-24 15:51:07 dervin Exp $ 
  */
 public class QueryProcessorConfigurationDialog extends JDialog {
     private CQLQueryProcessorConfigUI configUi = null;
@@ -67,6 +67,7 @@ public class QueryProcessorConfigurationDialog extends JDialog {
         buttonCons.insets = new Insets(2, 2, 2, 2);
         mainPanel.add(doneButton, buttonCons);
         configUi.setUpUi(configProperties);
+        setContentPane(mainPanel);
     }
     
     
