@@ -295,6 +295,11 @@ public class HQLCoreQueryProcessor extends CQLQueryProcessor {
 		}
 		return Boolean.valueOf(caseInsensitiveValue).booleanValue();
 	}
+    
+    
+    public String getConfigurationUiClassname() {
+        return HQLCoreQueryProcessorConfigUi.class.getName();
+    }
 	
 	
 	public Properties getRequiredParameters() {
