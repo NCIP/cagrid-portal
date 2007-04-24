@@ -201,28 +201,19 @@ public class TrustedIdPManager extends LoggingObject {
 	}
 
 
-	private String clean(String s) {
-		if ((s == null) || (s.trim().length() == 0)) {
-			return null;
-		} else {
-			return s;
-		}
-	}
-
-
 	public synchronized void updateIdP(TrustedIdP idp) throws DorianInternalFault, InvalidTrustedIdPFault {
 
 		TrustedIdP curr = this.getTrustedIdPById(idp.getId());
 		boolean needsUpdate = false;
 		String name = curr.getName();
-		if ((clean(idp.getName()) != null) && (!idp.getName().equals(curr.getName()))) {
+		if ((Utils.clean(idp.getName()) != null) && (!idp.getName().equals(curr.getName()))) {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 			fault.setFaultString("The name of a TrustedIdP cannot be changed.");
 			throw fault;
 		}
 		String policy = curr.getUserPolicyClass();
 
-		if ((clean(idp.getUserPolicyClass()) != null) && (!idp.getUserPolicyClass().equals(curr.getUserPolicyClass()))) {
+		if ((Utils.clean(idp.getUserPolicyClass()) != null) && (!idp.getUserPolicyClass().equals(curr.getUserPolicyClass()))) {
 			needsUpdate = true;
 			policy = validateAndGetPolicy(idp.getUserPolicyClass()).getClassName();
 		}
@@ -234,7 +225,7 @@ public class TrustedIdPManager extends LoggingObject {
 		X509Certificate currcert = validateAndGetCertificate(curr);
 		String certSubject = currcert.getSubjectDN().getName();
 		String certEncoded = curr.getIdPCertificate();
-		if ((clean(idp.getIdPCertificate()) != null) && (!idp.getIdPCertificate().equals(curr.getIdPCertificate()))) {
+		if ((Utils.clean(idp.getIdPCertificate()) != null) && (!idp.getIdPCertificate().equals(curr.getIdPCertificate()))) {
 			if (!isCertificateUnique(idp.getIdPCertificate())) {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 				fault.setFaultString("Cannot update the Trusted IdP, " + idp.getName()
