@@ -63,6 +63,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadatautils.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

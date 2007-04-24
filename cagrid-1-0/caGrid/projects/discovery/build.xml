@@ -12,16 +12,15 @@
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
     <!-- Information -->
-	<property name="project.version" value="${cagrid.master.project.version}" />
-	<property name="project.name" value="${cagrid.master.project.name}-${project.version}-${ant.project.name}" />
-    <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}${ant.project.name}${cagrid.master.jar.separator}" />
+    <property name="project.version" value="${cagrid.master.project.version}" />
+    <property name="project.name" value="${cagrid.master.jar.prefix}${ant.project.name}" />
 
     <property name="src.dir" value="${basedir}/src/java" />
     <property name="build.dir" value="${basedir}/build" />
-	<property name="javadoc.dir" value="${build.dir}/javadoc" />
+    <property name="javadoc.dir" value="${build.dir}/javadoc" />
     <property name="classes.dir" value="${build.dir}/classes" />
     <property name="jar.dir" value="${build.dir}/jars" />
-    <property name="project.jarfile" value="${jar.dir}/${project.jar.prefix}core.jar" />
+    <property name="project.jarfile" value="${jar.dir}/${project.name}.jar" />
     <property name="lib.dir" value="${basedir}/lib" />
     <property name="ext.lib.dir" value="${basedir}/ext/lib" />
     <property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
@@ -32,7 +31,7 @@
     <property name="test.classes.dir" location="${build.dir}/test_classes" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
     <property name="test.logs.dir" location="${test.dir}/logs" />
-    <property name="test.project.jar" location="${jar.dir}/${project.jar.prefix}tests.jar" />
+    <property name="test.project.jar" location="${jar.dir}/${project.name}${cagrid.master.jar.separator}tests.jar" />
 
     <import file="test/test.xml" />
 
@@ -124,7 +123,7 @@
     <!-- =============================================================== -->
     <target name="compile" depends="prepare" description="compiles.">
         <mkdir dir="${classes.dir}" />
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" source="1.3" target="1.1" debug="on" deprecation="off" optimize="off">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
             <classpath refid="build.classpath" />
         </javac>
         <copy toDir="${classes.dir}">
@@ -139,7 +138,7 @@
     <!-- =============================================================== -->
     <target name="compile-tests" depends="prepare" description="compiles.">
         <mkdir dir="${test.classes.dir}" />
-        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" source="1.3" target="1.1" debug="on" deprecation="off" optimize="off">
+        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="on" deprecation="off" optimize="off">
             <classpath refid="test.classpath" />
         </javac>
     </target>
@@ -187,24 +186,24 @@
         </java>
     </target>
 
-	
-	<!-- =================================================================== -->
-	<!-- Builds Code Docuementation                                          -->
-	<!-- =================================================================== -->
-	<target name="javadoc" depends="compile" description="Creates the API documentation.">
-		<javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="${project.name} API">
-			<sourcepath>
-				<pathelement path="${src.dir}" />
-			</sourcepath>
 
-			<classpath>
-				<path refid="build.classpath" />
-			</classpath>
+    <!-- =================================================================== -->
+    <!-- Builds Code Docuementation                                          -->
+    <!-- =================================================================== -->
+    <target name="javadoc" depends="compile" description="Creates the API documentation.">
+        <javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="${project.name} API">
+            <sourcepath>
+                <pathelement path="${src.dir}" />
+            </sourcepath>
 
-			<tag name="todo" scope="all" description="To do:" />
-			<tag name="created" scope="all" description="Created On:" />
-		</javadoc>
-	</target>
+            <classpath>
+                <path refid="build.classpath" />
+            </classpath>
+
+            <tag name="todo" scope="all" description="To do:" />
+            <tag name="created" scope="all" description="Created On:" />
+        </javadoc>
+    </target>
 
     <!-- ============================================================== -->
     <!-- Builds from scratch                                                -->
