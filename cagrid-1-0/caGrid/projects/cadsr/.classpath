@@ -94,6 +94,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GlobalModelExchange-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-portal.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadatautils.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
