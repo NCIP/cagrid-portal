@@ -9,7 +9,7 @@
     <property environment="env" />
     <property file="build.properties" />
     <!-- Load in project listings -->
-    <property file="project.properties" />
+    <property file="${caGrid-Master.basedir}/project.properties" />
 
     <!-- Layout info -->
     <property name="projects.dir" location="${caGrid-Master.basedir}/projects" />
