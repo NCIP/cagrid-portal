@@ -65,6 +65,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-wsEnum.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_enum.jar"/>
 	<classpathentry kind="lib" path="ext/lib/acme.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-discovery.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-data.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jmi-1.0.jar"/>
@@ -78,6 +79,7 @@
 	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
 	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-graph.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-cql.jar"/>
@@ -126,12 +128,12 @@
 	<classpathentry kind="lib" path="ext/test/lib/xsom14.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xstream-1.0.2.jar"/>
 	<classpathentry kind="lib" path="test/lib/commons-jxpath-1.2.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-discovery-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GlobalModelExchange-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-updater.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadatautils.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GlobalModelExchange-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-Introduce-1.1-core-tests.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-Introduce-1.1-portal-tests.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-Introduce-1.1-updater-tests.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
