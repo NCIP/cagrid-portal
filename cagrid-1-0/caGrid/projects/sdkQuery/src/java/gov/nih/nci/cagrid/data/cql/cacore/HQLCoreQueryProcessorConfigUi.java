@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -24,7 +25,7 @@ import javax.swing.JTextField;
  * @author David Ervin
  * 
  * @created Apr 23, 2007 3:49:15 PM
- * @version $Id: HQLCoreQueryProcessorConfigUi.java,v 1.1 2007-04-24 15:52:54 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessorConfigUi.java,v 1.2 2007-04-25 13:45:28 dervin Exp $ 
  */
 public class HQLCoreQueryProcessorConfigUi extends CQLQueryProcessorConfigUI {
     
@@ -236,7 +237,7 @@ public class HQLCoreQueryProcessorConfigUi extends CQLQueryProcessorConfigUI {
     }
     
     
-    public void setUpUi(Properties cqlProcessorProperties) {
+    public void setUpUi(File serviceDir, Properties cqlProcessorProperties) {
         String serviceUrl = cqlProcessorProperties.getProperty(
             HQLCoreQueryProcessor.APPLICATION_SERVICE_URL);
         getUrlTextField().setText(serviceUrl);

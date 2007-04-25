@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
@@ -25,17 +26,19 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 6, 2007 1:25:32 PM
- * @version $Id: QueryProcessorConfigurationDialog.java,v 1.2 2007-04-24 15:51:07 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationDialog.java,v 1.3 2007-04-25 13:45:27 dervin Exp $ 
  */
 public class QueryProcessorConfigurationDialog extends JDialog {
     private CQLQueryProcessorConfigUI configUi = null;
+    private File serviceDir = null;
     private Properties configProperties = null;
 
     private QueryProcessorConfigurationDialog(
-        CQLQueryProcessorConfigUI configUi, Properties configProperties) {
+        CQLQueryProcessorConfigUI configUi, File serviceDir, Properties configProperties) {
         super(PortalResourceManager.getInstance().getGridPortal(), 
             "CQL Processor Configuration", true);
         this.configUi = configUi;
+        this.serviceDir = serviceDir;
         this.configProperties = configProperties;
         initialize();
     }
@@ -66,14 +69,15 @@ public class QueryProcessorConfigurationDialog extends JDialog {
         buttonCons.anchor = GridBagConstraints.EAST;
         buttonCons.insets = new Insets(2, 2, 2, 2);
         mainPanel.add(doneButton, buttonCons);
-        configUi.setUpUi(configProperties);
+        configUi.setUpUi(serviceDir, configProperties);
         setContentPane(mainPanel);
     }
     
     
     public static Properties showConfigurationUi(
-        CQLQueryProcessorConfigUI configUi, Properties configProperties) {
-        JDialog dialog = new QueryProcessorConfigurationDialog(configUi, configProperties);
+        CQLQueryProcessorConfigUI configUi, File serviceDir, Properties configProperties) {
+        JDialog dialog = new QueryProcessorConfigurationDialog(
+            configUi, serviceDir, configProperties);
         dialog.pack();
         if (configUi.getPreferredDimension() != null) {
             dialog.setSize(configUi.getPreferredDimension());

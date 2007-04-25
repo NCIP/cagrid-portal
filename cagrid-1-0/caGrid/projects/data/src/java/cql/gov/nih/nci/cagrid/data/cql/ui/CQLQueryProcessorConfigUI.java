@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data.cql.ui;
 
 import java.awt.Dimension;
+import java.io.File;
 import java.util.Properties;
 
 import javax.swing.JPanel;
@@ -12,7 +13,7 @@ import javax.swing.JPanel;
  * @author David Ervin
  * 
  * @created Apr 6, 2007 12:45:01 PM
- * @version $Id: CQLQueryProcessorConfigUI.java,v 1.2 2007-04-09 14:19:14 dervin Exp $ 
+ * @version $Id: CQLQueryProcessorConfigUI.java,v 1.3 2007-04-25 13:45:27 dervin Exp $ 
  */
 public abstract class CQLQueryProcessorConfigUI extends JPanel {
 
@@ -26,9 +27,10 @@ public abstract class CQLQueryProcessorConfigUI extends JPanel {
      * as needed based on the Properties supplied from the
      * CQL query processor's current configuration.
      * 
+     * @param serviceDir
      * @param cqlProcessorProperties
      */
-    public abstract void setUpUi(Properties cqlProcessorProperties);
+    public abstract void setUpUi(File serviceDir, Properties cqlProcessorProperties);
     
     
     /**

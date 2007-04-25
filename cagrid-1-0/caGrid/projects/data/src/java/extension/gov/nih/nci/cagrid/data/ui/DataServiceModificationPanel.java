@@ -571,7 +571,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                     // get the current configuration out of the table
                     Properties currentConfig = getQpParamsTable().getNonPrefixedConfiguredProperties();
                     Properties postUiConfig = QueryProcessorConfigurationDialog
-                        .showConfigurationUi(uiPanel, currentConfig);
+                        .showConfigurationUi(uiPanel, getServiceInfo().getBaseDirectory(), currentConfig);
                     // store the configuration that came back from the UI config dialog
                     // start by removing the old query processor properties
                     ServicePropertiesProperty[] oldProperties = 
