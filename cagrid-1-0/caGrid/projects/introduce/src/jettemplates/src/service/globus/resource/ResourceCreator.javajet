@@ -14,7 +14,7 @@
 		org.globus.wsrf.ResourceKey resourceKey = null;
 		org.apache.axis.MessageContext ctx = org.apache.axis.MessageContext.getCurrentContext();
 		String servicePath = ctx.getTargetService();
-		String homeName = org.globus.wsrf.Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/" + "<%=CommonTools.lowerCaseFirstCharacter(serviceName) %>Home";
+		String homeName = org.globus.wsrf.Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/" + "<%=CommonTools.lowerCaseFirstCharacter(resourceService.getName()) %>Home";
 
 		try {
 			javax.naming.Context initialContext = new javax.naming.InitialContext();
@@ -30,6 +30,9 @@
 			//  give it the query string.
 			
 			
+			// sample of setting creator only security.  This will only allow the caller that created
+			// this resource to be able to use it.
+			//thisResource.setSecurityDescriptor(gov.nih.nci.cagrid.introduce.servicetools.security.SecurityUtils.createCreatorOnlyResourceSecurityDescriptor());
 			
 			
 

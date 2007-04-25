@@ -20,6 +20,8 @@
 		<delete dir="${templates.created.src.dir}" />
 		<delete dir="${beans.created.src.dir}" />
 		<delete dir="${updates.dir}" />
+		<delete file="${soap.binding.fix.jar}" />
+		<delete file="${service.tools.jar}" />
 	</target>
 	<!-- =================================================================== -->
 	<!-- Prepares the build directory and classpaths                         -->
@@ -197,7 +199,12 @@
 				<attribute name="Created-By" value="${user.name}" />
 			</manifest>
 		</jar>
-		<jar jarfile="./skeleton/tools/lib/${jars.prefixname}soapBindingFix.jar" basedir="${introduce.classes.dir}" includes="gov/nih/nci/cagrid/introduce/axis/*" defaultExcludes="false" update="no">
+		<jar jarfile="${soap.binding.fix.jar}" basedir="${introduce.classes.dir}" includes="gov/nih/nci/cagrid/introduce/axis/*" defaultExcludes="false" update="no">
+			<manifest>
+				<attribute name="Created-By" value="${user.name}" />
+			</manifest>
+		</jar>
+		<jar jarfile="${service.tools.jar}" basedir="${introduce.classes.dir}" includes="gov/nih/nci/cagrid/introduce/servicetools/**/*" defaultExcludes="false" update="no">
 			<manifest>
 				<attribute name="Created-By" value="${user.name}" />
 			</manifest>

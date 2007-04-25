@@ -43,6 +43,10 @@
 	<property name="junit.results.dir" value="${build.dir}/junit" />
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
 	
+	<property name="soap.binding.fix.jar" value="${basedir}/skeleton/tools/lib/${jars.prefixname}soapBindingFix.jar"/>
+	<property name="service.tools.jar" value="${basedir}/skeleton/lib/${jars.prefixname}serviceTools.jar"/>
+	
+	
 	<property name="java.source" value="1.4" />
 	
 	<!-- testing stuff -->

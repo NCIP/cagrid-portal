@@ -291,13 +291,14 @@ public class SyncSource {
                         // then return the client handle...
                         if (returnTypeEl.isIsArray()) {
                             methodString += returnTypeEl.getClientHandleClass() + "[] clientArray = null;\n";
-                            methodString += DOUBLE_TAB + "if(boxedResult.getEndpointReference()!=null){\n";
+                            methodString += DOUBLE_TAB + "if(boxedResult.get" + CommonTools.upperCaseFirstCharacter(info.getType().getType()) + "()!=null){\n";
                             methodString += DOUBLE_TAB + "  clientArray = new " + returnTypeEl.getClientHandleClass()
-                                + "[boxedResult.getEndpointReference().length];\n";
+                                + "[boxedResult.get" + CommonTools.upperCaseFirstCharacter(info.getType().getType()) + "().length];\n";
                             methodString += DOUBLE_TAB
-                                + "  for(int i = 0; i < boxedResult.getEndpointReference().length; i++){\n";
+                                + "  for(int i = 0; i < boxedResult.get" + CommonTools.upperCaseFirstCharacter(info.getType().getType()) + "().length; i++){\n";
                             methodString += DOUBLE_TAB + "	   clientArray[i] = new "
-                                + returnTypeEl.getClientHandleClass() + "(boxedResult.getEndpointReference(i));\n";
+                                + returnTypeEl.getClientHandleClass() + "(boxedResult.get" + CommonTools.upperCaseFirstCharacter(info.getType().getType())
+                                + "(i).getEndpointReference());\n";
                             methodString += DOUBLE_TAB + "  }\n";
                             methodString += DOUBLE_TAB + "}\n";
                             methodString += DOUBLE_TAB + "return clientArray;\n";
@@ -368,10 +369,17 @@ public class SyncSource {
 
         // if this method is returning a new client handle and is creating a
         // resource to do so
-        if (method.getOutput() != null && method.getOutput().getIsClientHandle() != null
+        if (method.getOutput() != null
+            && method.getOutput().getIsClientHandle() != null
             && method.getOutput().getIsClientHandle().booleanValue()
             && method.getOutput().getIsCreatingResourceForClientHandle() != null
-            && method.getOutput().getIsCreatingResourceForClientHandle().booleanValue()) {
+            && method.getOutput().getIsCreatingResourceForClientHandle().booleanValue()
+            && !(method.getOutput().isIsArray())
+            && !(CommonTools.getService(serviceInfo.getServices(),
+                method.getOutput().getResourceClientIntroduceServiceName()).getResourceFrameworkType().equals(
+                IntroduceConstants.INTRODUCE_MAIN_RESOURCE) || CommonTools.getService(serviceInfo.getServices(),
+                method.getOutput().getResourceClientIntroduceServiceName()).getResourceFrameworkType().equals(
+                IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE))) {
             SpecificMethodInformation smi = new SpecificMethodInformation(serviceInfo, service, method);
             ResourceCreatorTemplate resourceCreatorTemplate = new ResourceCreatorTemplate();
             String createResourceCode = resourceCreatorTemplate.generate(smi);
