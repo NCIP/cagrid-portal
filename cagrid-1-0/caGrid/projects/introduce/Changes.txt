@@ -10,6 +10,9 @@
 -- Moved to PDP based authorization
 	--made the authorization file a PDP
 	--configured the service security descriptor to use the PDP
+-- Added support for resourcec creation code to automatically be generated nad placed into any method
+   which is creating and returning a client handle.
+-- Added upgrader framework to enable migration of services from 1.0 - 1.1
 	
 
 1.0B --.9999 mainstream
