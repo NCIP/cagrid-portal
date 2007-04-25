@@ -25,7 +25,7 @@ import javax.swing.JTextField;
  * @author David Ervin
  * 
  * @created Apr 23, 2007 3:49:15 PM
- * @version $Id: HQLCoreQueryProcessorConfigUi.java,v 1.2 2007-04-25 13:45:28 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessorConfigUi.java,v 1.3 2007-04-25 14:29:41 dervin Exp $ 
  */
 public class HQLCoreQueryProcessorConfigUi extends CQLQueryProcessorConfigUI {
     
@@ -269,5 +269,10 @@ public class HQLCoreQueryProcessorConfigUi extends CQLQueryProcessorConfigUI {
             String.valueOf(getUseCsmCheckBox().isSelected()));
         props.setProperty(HQLCoreQueryProcessor.CSM_CONTEXT_NAME, getCsmContextTextField().getText());
         return props;
+    }
+    
+    
+    public Dimension getPreferredSize() {
+        return new Dimension(450, 120);
     }
 }
