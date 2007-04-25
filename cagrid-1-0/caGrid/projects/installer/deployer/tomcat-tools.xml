@@ -1,0 +1,258 @@
+<project name="tomcat-tools" default="package-tomcats">
+
+	<import file="common.xml"/>
+
+	<target name="unzip-tomcat">
+		<unzip src="${tomcat.zip}" dest="${temp.dir}" />
+	</target>
+	<target name="unzip-globus">
+		<unzip src="${globus.zip}" dest="${temp.dir}" />
+	</target>
+
+	<target name="insert-secure-connector">
+		<xmltask source="${temp.dir}/${tomcat.release}/conf/server.xml"
+			dest="${temp.dir}/${tomcat.release}/conf/server.xml">
+			<insert path="/Server/Service[@name='Catalina']">
+				<![CDATA[
+				<Connector
+				  className="org.globus.tomcat.coyote.net.HTTPSConnector"
+				  port="${tomcat.secure.port}" maxThreads="150" minSpareThreads="25" maxSpareThreads="75" 
+				  autoFlush="true"
+				  disableUploadTimeout="true" scheme="https"
+				  enableLookups="true" acceptCount="10" debug="0" 
+				   cert="${tomcat.cert.path}"
+				   key="${tomcat.key.path}"/>
+				]]>
+			</insert>
+		</xmltask>
+	</target>
+
+	<target name="insert-valve">
+
+		<xmltask source="${temp.dir}/${tomcat.release}/conf/server.xml"
+			dest="${temp.dir}/${tomcat.release}/conf/server.xml">
+			<insert
+				path="/Server/Service[@name='Catalina']/Engine[@name='Catalina']">
+				<![CDATA[
+						<Valve className="org.globus.tomcat.coyote.valves.HTTPSValve"/>
+						]]>
+			</insert>
+		</xmltask>
+	</target>
+
+	<target name="set-global-cert-and-key-paths">
+		<property name="secdesc.file"
+			value="${temp.dir}/${tomcat.release}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core/global_security_descriptor.xml" />
+		<xmltask source="${secdesc.file}" dest="${secdesc.file}">
+			<attr
+				path="/*[local-name()='securityConfig']/*[local-name()='credential']/*[local-name()='key-file']"
+				attr="value" value="${tomcat.key.path}" />
+			<attr
+				path="/*[local-name()='securityConfig']/*[local-name()='credential']/*[local-name()='cert-file']"
+				attr="value" value="${tomcat.cert.path}" />
+		</xmltask>
+	</target>
+
+	<target name="copy-global-cert-and-key">
+		<property name="tomcat.cert.dest"
+			value="${temp.dir}/${tomcat.release}/${tomcat.cert.path}" />
+		<property name="tomcat.key.dest"
+			value="${temp.dir}/${tomcat.release}/${tomcat.key.path}" />
+
+		<touch mkdirs="true" file="${tomcat.cert.dest}" />
+		<touch mkdirs="true" file="${tomcat.key.dest}" />
+
+		<copy file="${tomcat.cert}" tofile="${tomcat.cert.dest}"
+			overwrite="true" />
+		<copy file="${tomcat.key}" tofile="${tomcat.key.dest}"
+			overwrite="true" />
+	</target>
+
+	<target name="fix-web-xml">
+		<property name="web.xml.file"
+			value="${temp.dir}/${tomcat.release}/webapps/wsrf/WEB-INF/web.xml" />
+		<xmltask source="${web.xml.file}" dest="${web.xml.file}">
+			<insert
+				path="/web-app/servlet[servlet-name='WSRFServlet']/servlet-class"
+				position="after">
+				<![CDATA[
+				         <init-param>
+				<param-name>defaultProtocol</param-name>
+				<param-value>https</param-value>
+			</init-param>
+			<init-param>
+				<param-name>defaultPort</param-name>
+				<param-value>${tomcat.secure.port}</param-value>
+			</init-param>
+				]]>
+			</insert>
+		</xmltask>
+	</target>
+
+	<target name="fix-server-wsdd">
+		<property name="host.name" value="localhost" />
+		<property name="server.wsdd.file"
+			value="${temp.dir}/${tomcat.release}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core/server-config.wsdd" />
+		<xmltask source="${server.wsdd.file}"
+			dest="${server.wsdd.file}">
+			<insert
+				path="/*[local-name()='deployment']/*[local-name()='globalConfiguration']/*[local-name()='parameter' and position() = 1]"
+				position="before">
+				<![CDATA[
+					<parameter name="logicalHost" value="${host.name}" xmlns="http://xml.apache.org/axis/wsdd/"/>
+			<parameter name="publishHostName" value="true" xmlns="http://xml.apache.org/axis/wsdd/"/>
+				]]>
+			</insert>
+		</xmltask>
+	</target>
+
+	<target name="globus-deploy-secure-tomcat">
+
+		<property name="old.tomcat.build.file"
+			value="${temp.dir}/${globus.release}/share/globus_wsrf_common/tomcat/tomcat.xml" />
+		<property name="new.tomcat.build.file"
+			value="${temp.dir}/${globus.release}/share/globus_wsrf_common/tomcat/tomcat-fixed.xml" />
+
+		<xmltask source="${old.tomcat.build.file}"
+			dest="${new.tomcat.build.file}">
+			<attr
+				path="/project/target[@name='_baseTomcatDeploy']/copy[contains(@file, 'web.xml')]"
+				attr="file"
+				value="${basedir}/${temp.dir}/${globus.release}/share/globus_wsrf_common/tomcat/web.xml" />
+		</xmltask>
+
+		<ant antfile="${new.tomcat.build.file}" dir="."
+			target="deploySecureTomcat">
+			<property name="tomcat.dir"
+				value="${temp.dir}/${tomcat.release}" />
+		</ant>
+	</target>
+
+	<target name="zip-deploy-tomcat">
+		<echo>Zipping: ${temp.dir}/${tomcat.release}</echo>
+		<zip destfile="${temp.dir}/${tomcat.release}.zip"
+			basedir="${temp.dir}/${tomcat.release}" />
+	</target>
+
+	<target name="package-tomcat">
+		<mkdir dir="${temp.dir}" />
+		<antcall target="unzip-tomcat" />
+		<antcall target="unzip-globus" />
+		<antcall target="globus-deploy-secure-tomcat" />
+		<antcall target="insert-secure-connector" />
+		<antcall target="insert-valve" />
+		<antcall target="set-global-cert-and-key-paths" />
+		<antcall target="copy-global-cert-and-key" />
+		<antcall target="fix-web-xml" />
+		<antcall target="fix-server-wsdd" />
+		<antcall target="zip-deploy-tomcat" />
+	</target>
+	
+	<target name="package-tomcats">
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<antcall target="package-tomcat">
+					<param name="temp.dir" value="${temp.dir}/@{node}" />
+					<param name="host.name" value="${@{node}.host}" />
+					<param name="tomcat.key"
+						value="${certs.dir}/${@{node}.host}.key" />
+					<param name="tomcat.cert"
+						value="${certs.dir}/${@{node}.host}.cert" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="shutdown-tomcat">
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="source .bash_profile; cd ${catalina.home}; ./bin/shutdown.sh" />
+		<trycatch>
+			<try>
+				<sshexec host="${host}" username="${username}"
+					password="${password}"
+					command="ps -ef | grep tomcat | grep -v grep | awk '{print $2}' | xargs kill" />
+			</try>
+			<catch>
+				<echo>Couldn't kill tomcat process on ${host}</echo>
+			</catch>
+		</trycatch>
+	</target>
+
+	<target name="startup-tomcat">
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="source .bash_profile; cd ${catalina.home}; ./bin/startup.sh" />
+	</target>
+
+	<target name="shutdown-tomcats">
+		<input message="Username: " addproperty="host.username" />
+		<input message="Password: " addproperty="host.password" />
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<antcall target="shutdown-tomcat">
+					<param name="host" value="${@{node}.host}" />
+					<param name="username" value="${host.username}" />
+					<param name="password" value="${host.password}" />
+					<param name="catalina.home"
+						value="${host.catalina.home}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="startup-tomcats">
+		<input message="Username: " addproperty="host.username" />
+		<input message="Password: " addproperty="host.password" />
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<antcall target="startup-tomcat">
+					<param name="host" value="${@{node}.host}" />
+					<param name="username" value="${host.username}" />
+					<param name="password" value="${host.password}" />
+					<param name="catalina.home"
+						value="${host.catalina.home}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="deploy-tomcat">
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S rm -Rf ${catalina.home}" />
+		<scp file="${tomcat.deploy.zip}"
+			remoteToDir="${username}:${password}@${host}:~" />
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S mkdir -p ${catalina.home}" />
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S unzip ~/jakarta-tomcat-5.0.28.zip -d ${catalina.home}" />
+
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S chown -R globus:globus ${catalina.home}" />
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S chmod u+x ${catalina.home}/bin/*.sh" />
+	</target>
+
+	<target name="deploy-tomcats">
+		<input message="Username: " addproperty="host.username" />
+		<input message="Password: " addproperty="host.password" />
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<antcall target="deploy-tomcat">
+					<param name="host" value="${@{node}.host}" />
+					<param name="username" value="${host.username}" />
+					<param name="password" value="${host.password}" />
+					<param name="catalina.home"
+						value="${host.catalina.home}" />
+					<param name="tomcat.deploy.zip"
+						value="${temp.dir}/@{node}/${tomcat.release}.zip" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>	
+</project>

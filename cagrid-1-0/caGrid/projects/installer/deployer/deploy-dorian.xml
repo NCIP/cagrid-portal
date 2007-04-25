@@ -1,0 +1,54 @@
+<project name="deploy-dorian" default="deploy-dorian-service">
+
+	<import file="common.xml"/>
+
+
+
+	<target name="deploy-dorian-service">
+
+		<antcall target="configure-dorian-conf" />
+
+		<antcall target="deploy-service">
+			<param name="deploy.service.name" value="dorian" />
+		</antcall>
+
+	</target>
+
+	<target name="configure-dorian-conf">
+
+		<property name="config.file"
+			value="${cagrid.home}/caGrid/projects/dorian/etc/dorian-conf.xml" />
+		<xmltask source="${config.file}" dest="${config.file}">
+			<replace
+				path="/*[local-name()='DorianConfiguration']/*[local-name()='database']/*[local-name()='host']">
+				<![CDATA[
+					<host xmlns="http://cagrid.nci.nih.gov/dorian/conf">${db.host}</host>
+				]]>
+
+			</replace>
+			<replace
+				path="/*[local-name()='DorianConfiguration']/*[local-name()='database']/*[local-name()='port']">
+				<![CDATA[
+					<port xmlns="http://cagrid.nci.nih.gov/dorian/conf">${db.port}</port>
+				]]>
+
+			</replace>
+			<replace
+				path="/*[local-name()='DorianConfiguration']/*[local-name()='database']/*[local-name()='username']">
+				<![CDATA[
+					<username xmlns="http://cagrid.nci.nih.gov/dorian/conf">${db.username}</username>
+				]]>
+
+			</replace>
+			<replace
+				path="/*[local-name()='DorianConfiguration']/*[local-name()='database']/*[local-name()='password']">
+				<![CDATA[
+					<password xmlns="http://cagrid.nci.nih.gov/dorian/conf">${db.password}</password>
+				]]>
+
+			</replace>
+		</xmltask>
+
+	</target>
+
+</project>

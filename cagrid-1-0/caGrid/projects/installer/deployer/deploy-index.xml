@@ -1,0 +1,38 @@
+<project name="deploy-index" default="deploy-index-service">
+
+	<import file="common.xml"/>
+
+	<target name="deploy-index-service">
+
+		<property name="build.dir"
+			value="${basedir}/${temp.dir}/index-service" />
+		<property name="zip.file.name" value="index-service.zip" />
+		<property name="zip.file.path"
+			value="${basedir}/${temp.dir}/${zip.file.name}" />
+		<mkdir dir="${build.dir}" />
+		<ant antfile="${cagrid.home}/caGrid/projects/index/build.xml"
+			inheritAll="false" inheritRefs="false" target="deployIndexTomcat">
+			<property name="tomcat.dir" value="${build.dir}" />
+		</ant>
+		<zip destfile="${zip.file.path}" basedir="${build.dir}" />
+
+		<scp file="${zip.file.path}"
+			remoteToDir="${username}:${password}@${host}:~" />
+
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S chown -R globus:globus ${catalina.home}" />
+
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="unzip -o -q ~/${zip.file.name} -d ${catalina.home}" />
+
+		<scp file="${ca.service.cert.input}"
+			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.service.cert.deploy.filename}" />
+		<scp file="${ca.trust.cert.input}"
+			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.trust.cert.deploy.filename}" />
+		<scp file="${ca.dorian.cert.input}"
+			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.dorian.cert.deploy.filename}" />
+
+	</target>
+</project>

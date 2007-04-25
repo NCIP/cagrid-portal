@@ -1,0 +1,52 @@
+<project name="deploy-authn-service" default="deploy-authn-service">
+
+	<import file="common.xml"/>
+
+	<target name="create-jaas-config">
+		<delete file="${temp.dir}/.java.login.config" />
+		<concat destfile="${temp.dir}/.java.login.config">
+			${authn.csm.app.context}{
+			gov.nih.nci.security.authentication.loginmodules.LDAPLoginModule
+			required ldapHost="${authn.ldapHost}"
+			ldapSearchableBase="${authn.ldapSearchableBase}"
+			ldapUserIdLabel="${authn.ldapUserIdLabel}"
+			USER_FIRST_NAME="${authn.USER_FIRST_NAME}"
+			USER_LAST_NAME="${authn.USER_LAST_NAME}"
+			USER_EMAIL_ID="${authn.USER_EMAIL_ID}"; };
+		</concat>
+	</target>
+
+	<target name="set-authn-service-deploy-properties">
+		<propertyfile
+			file="${cagrid.home}/caGrid/projects/authentication-service/deploy.properties">
+			<entry key="csm.app.context"
+				value="${authn.csm.app.context}" />
+			<entry key="saml.provider.crt"
+				value="${authn.saml.provider.crt}" />
+			<entry key="saml.provider.key"
+				value="${authn.saml.provider.key}" />
+			<entry key="saml.provider.pwd"
+				value="${authn.saml.provider.pwd}" />
+		</propertyfile>
+	</target>
+
+	<target name="deploy-authn-service">
+
+		<antcall target="create-jaas-config" />
+
+		<antcall target="set-authn-service-deploy-properties" />
+
+		<antcall target="deploy-service">
+			<param name="deploy.service.name"
+				value="authentication-service" />
+		</antcall>
+
+		<scp file="${certs.dir}/${authn.cert.filename}"
+			remoteToFile="${username}:${password}@${host}:${catalina.home}/${authn.cert.path}" />
+		<scp file="${certs.dir}/${host}.key"
+			remoteToFile="${username}:${password}@${host}:${catalina.home}/${authn.key.path}" />
+		<scp file="${temp.dir}/.java.login.config"
+			remoteToFile="${username}:${password}@${host}:~/.java.login.config" />
+
+	</target>
+</project>

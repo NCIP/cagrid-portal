@@ -1,0 +1,94 @@
+<project name="database-tools">
+
+	<import file="common.xml"/>
+
+	<property name="databases.list" value="dorian,grouper,gts_master,gts_slave,globusgme_gme_registry,globusgme_gme_schema_cache,globusgme_gme_schema_store"/>
+	
+	<target name="drop-databases">
+		<for list="${databases.list}" param="database" parallel="false">
+			<sequential>
+				<antcall target="drop-database">
+					<param name="db.name" value="@{database}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+	
+	<target name="create-databases">
+		<for list="${databases.list}" param="database" parallel="false">
+			<sequential>
+				<antcall target="create-database">
+					<param name="db.name" value="@{database}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>	
+	
+	<target name="do-database-operation">
+		<sql driver="com.mysql.jdbc.Driver"
+			url="jdbc:mysql://${db.host}:${db.port}/mysql"
+			userid="${db.username}" password="${db.password}"
+			onerror="continue">
+			${db.operation} database ${db.name};
+			<classpath>
+				<fileset
+					dir="${cagrid.home}/caGrid/projects/gridgrouper/lib">
+					<include name="mysql-connector-java*.jar" />
+				</fileset>
+			</classpath>
+		</sql>	
+	</target>
+	
+	<target name="drop-database">
+		<antcall target="do-database-operation">
+			<param name="db.operation" value="drop"/>
+		</antcall>
+	</target>
+	
+	<target name="create-database">
+		<antcall target="do-database-operation">
+			<param name="db.operation" value="create"/>
+		</antcall>
+	</target>	
+	
+	<target name="one-time-db-operations">
+		<antcall target="import-dorian-ca"/>
+		<antcall target="gridgrouper-init"/>
+		<antcall target="gridgrouper-add-admin"/>
+		<antcall target="add-gts-admin"/>
+	</target>	
+	
+	<target name="import-dorian-ca">
+		<ant antfile="${cagrid.home}/caGrid/projects/dorian/build.xml"
+			inheritAll="false" inheritRefs="false" target="importCA">
+			<property name="cacert.input"
+				value="${ca.dorian.cert.input}" />
+			<property name="cakey.input" value="${ca.dorian.key.input}" />
+			<property name="password.input"
+				value="${ca.dorian.password.input}" />
+		</ant>
+	</target>
+
+
+	<target name="gridgrouper-init">
+		<ant
+			antfile="${cagrid.home}/caGrid/projects/gridgrouper/build.xml"
+			inheritAll="false" inheritRefs="false" target="grouperInit" />
+	</target>
+
+	<target name="gridgrouper-add-admin">
+		<ant
+			antfile="${cagrid.home}/caGrid/projects/gridgrouper/build.xml"
+			inheritAll="false" inheritRefs="false" target="addAdmin">
+			<property name="gridId.input" value="${manager.identity}" />
+		</ant>
+	</target>
+	
+	<target name="add-gts-admin">
+		<ant antfile="${cagrid.home}/caGrid/projects/gts/build.xml"
+			inheritAll="false" inheritRefs="false" target="addAdmin">
+			<property name="gridId.input" value="${manager.identity}" />
+		</ant>
+	</target>		
+	
+</project>
