@@ -24,7 +24,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 6, 2007 1:25:32 PM
- * @version $Id: QueryProcessorConfigurationDialog.java,v 1.4 2007-04-25 14:22:58 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationDialog.java,v 1.5 2007-04-25 14:30:42 dervin Exp $ 
  */
 public class QueryProcessorConfigurationDialog extends JDialog {
     private CQLQueryProcessorConfigUI configUi = null;
@@ -74,10 +74,13 @@ public class QueryProcessorConfigurationDialog extends JDialog {
         QueryProcessorConfigurationDialog dialog = new QueryProcessorConfigurationDialog(
             configUi, serviceDir, configProperties);
         dialog.pack();
+        /*
         if (configUi.getPreferredDimension() != null) {
             dialog.setSize(configUi.getPreferredDimension());
         }
+        */
         dialog.setVisible(true);
+        
         if (dialog.canceled) {
             return null;
         }
