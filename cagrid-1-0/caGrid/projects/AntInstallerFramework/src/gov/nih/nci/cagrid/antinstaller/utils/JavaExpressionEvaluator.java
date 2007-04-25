@@ -14,7 +14,7 @@ import bsh.Interpreter;
 
 
 public class JavaExpressionEvaluator {
-	private static Logger logger = Logger.getLogger(JavaExpressionEvaluator.class.getName());
+	//private static Logger logger = Logger.getLogger(JavaExpressionEvaluator.class.getName());
 	private String expression;
 	private ArrayList variables;
 	
@@ -24,13 +24,7 @@ public class JavaExpressionEvaluator {
 		super();
 		this.expression = expression;
 		this.variables = variables;
-		try{
-			FileHandler fh = new FileHandler("c:/temp/javaexp.log");
-			logger.addHandler(fh);
-			logger.setLevel(Level.SEVERE);
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
+		
 	}
 
 	public String getExpression() {
@@ -59,39 +53,39 @@ public class JavaExpressionEvaluator {
 			rStr = StringUtilities.replaceInString(rStr,"**","&&");
 		}
 		
-		logger.info("The parsed string is:"+rStr);
+		//logger.info("The parsed string is:"+rStr);
 		
 		return rStr;
 		
 	}
    public boolean evaluate(){
-	   logger.info("Called evaluate:");
+	   //logger.info("Called evaluate:");
 	   try{
 		   Class.forName("bsh.Interpreter");
 	   }catch(Exception ex){
-		   logger.info("EXception took place looking for class:"+ex.getMessage());
+		   //logger.info("EXception took place looking for class:"+ex.getMessage());
 	   }
 	   Interpreter bsh = new Interpreter();
 	   boolean retValue = true;
 	   try{
 		   for(int i=0;i<variables.size();i++){
 			   ReferenceVariable rv = (ReferenceVariable)variables.get(i);
-			   logger.info("Value of the prop:"+rv.getValue());
+			   //logger.info("Value of the prop:"+rv.getValue());
 			   bsh.set(rv.getReplaceableKey(), rv.getValue());
 		   }
-		   logger.info("Expression is:"+expression);
+		   //logger.info("Expression is:"+expression);
 		   String str = this.getParsableString(expression,variables);
-		   logger.info("Parsed String:"+str);
+		   //logger.info("Parsed String:"+str);
 		   
 		   Boolean val = (Boolean)(bsh.eval(str));
 		   retValue = val.booleanValue();
 		   
 	   }catch(Exception ex){
-		   logger.info("EXception took place:"+ex);
+		   //logger.info("EXception took place:"+ex);
 		   
 		   ex.printStackTrace();
 	   }
-	   logger.info("Evaluated Value:"+retValue);
+	   //logger.info("Evaluated Value:"+retValue);
 	   return retValue;
    }
 

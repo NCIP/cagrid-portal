@@ -23,7 +23,7 @@ import org.tp23.antinstaller.input.SelectInput.Option;
  * which will be rendered as radio buttons in the Swing GUI </p>
  * REF: 1177206
  * @author Paul Hinds, Mark Anderson
- * @version $Id: TargetSelectInput.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: TargetSelectInput.java,v 1.2 2007-04-25 13:50:34 joshua Exp $
  */
 public class TargetSelectInput
 	extends SelectInput{

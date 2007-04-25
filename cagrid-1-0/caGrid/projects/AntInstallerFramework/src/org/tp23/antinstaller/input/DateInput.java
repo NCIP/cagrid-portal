@@ -31,7 +31,7 @@ import org.tp23.antinstaller.ValidationException;
  * <p>By default the date format is <code>dd/MM/yyyy</code> unless it
  * is overriden in teh antinstall-config.xml file. </p>
  * @author Paul Hinds
- * @version $Id: DateInput.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: DateInput.java,v 1.2 2007-04-25 13:50:34 joshua Exp $
  */
 public class DateInput
 	extends InputField{

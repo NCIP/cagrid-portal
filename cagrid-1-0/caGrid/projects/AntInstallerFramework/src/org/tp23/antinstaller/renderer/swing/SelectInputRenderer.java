@@ -118,14 +118,20 @@ public class SelectInputRenderer
 			jrb.setOverflow(SwingOutputFieldRenderer.OVERFLOW_FIELD_SIZE);
 		}
 		JPanel empty = new JPanel();
+		/**
+		 * This solves the problem of the grey check box that appears
+		 */
+		empty.setOpaque(false);
 		while(enum_.hasMoreElements()){
 			jrb = (AIRadioButton)enum_.nextElement();
+			
 			content.add(empty,cf.getCell(row,0));
 			content.add(jrb,cf.getCell(row++,1));
 			if(overflow){
 				jrb.setOverflow(SwingOutputFieldRenderer.OVERFLOW_FIELD_SIZE);
 			}
 		}
+		
 		return row;
 	}
 

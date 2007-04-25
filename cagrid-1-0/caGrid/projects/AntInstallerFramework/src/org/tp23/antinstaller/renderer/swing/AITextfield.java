@@ -29,7 +29,7 @@ import javax.swing.text.Document;
  * A JTextField with altered prefered size to facilitate fixing the width
  * but still using a GridBagLayout
  * @author Paul Hinds
- * @version $Id: AITextfield.java,v 1.2 2006-11-10 17:02:58 kumarvi Exp $
+ * @version $Id: AITextfield.java,v 1.3 2007-04-25 13:50:33 joshua Exp $
  */
 public class AITextfield extends JTextField {
 
@@ -78,10 +78,10 @@ public class AITextfield extends JTextField {
 	public JToolTip createToolTip() {
         //JToolTip tip = super.createToolTip();
     	InsatllerToolTip jmp = new InsatllerToolTip();
-    	jmp.setFixedWidth(200);
+    	jmp.setFixedWidth(300);
     	JToolTip tip = jmp;
     	
-        tip.setBackground(Color.YELLOW);
+        tip.setBackground(Color.white);
         //Rectangle r = new Rectangle(40,40);
         //tip.setBounds(r);
         

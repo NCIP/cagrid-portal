@@ -46,7 +46,7 @@ import javax.swing.border.Border;
  * <p>Copyright: Copyright (c) 2004</p>
  * <p>Company: tp23</p>
  * @author Paul Hinds
- * @version $Id: ProgressIndicator.java,v 1.2 2006-11-10 17:04:39 kumarvi Exp $
+ * @version $Id: ProgressIndicator.java,v 1.3 2007-04-25 13:50:34 joshua Exp $
  */
 public class ProgressIndicator
 	extends JFrame {

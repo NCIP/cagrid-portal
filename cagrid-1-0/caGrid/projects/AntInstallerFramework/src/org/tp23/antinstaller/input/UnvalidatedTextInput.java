@@ -24,7 +24,7 @@ import org.tp23.antinstaller.ValidationException;
  *
  * <p>Free text input type </p>
  * @author Paul Hinds
- * @version $Id: UnvalidatedTextInput.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: UnvalidatedTextInput.java,v 1.2 2007-04-25 13:50:34 joshua Exp $
  */
 public class UnvalidatedTextInput
 	extends InputField{

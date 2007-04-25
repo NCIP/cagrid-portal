@@ -101,7 +101,7 @@ class MultiLineToolTipUI extends BasicToolTipUI {
 	}
 	
 	public Dimension getPreferredSize(JComponent c) {
-		Font f = new Font("Serif", Font.PLAIN, 20);
+		Font f = new Font("Arial", Font.PLAIN, 14);
         
         
 		String tipText = ((JToolTip)c).getTipText();

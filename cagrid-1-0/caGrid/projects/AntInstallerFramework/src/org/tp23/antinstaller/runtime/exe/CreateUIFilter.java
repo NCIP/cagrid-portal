@@ -29,7 +29,7 @@ import org.tp23.antinstaller.runtime.TextRunner;
  * Creates the Runner instance for the execution and sets up an appropriate
  * message renderer.
  * @author Paul Hinds
- * @version $Id: CreateUIFilter.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: CreateUIFilter.java,v 1.2 2007-04-25 13:50:33 joshua Exp $
  */
 public class CreateUIFilter implements ExecuteFilter {
 

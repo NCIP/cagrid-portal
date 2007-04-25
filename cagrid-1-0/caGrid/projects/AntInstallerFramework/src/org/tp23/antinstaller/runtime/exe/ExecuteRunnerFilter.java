@@ -22,7 +22,7 @@ import org.tp23.antinstaller.InstallerContext;
 /**
  * Executes the Ant build part of the install
  * @author Paul Hinds
- * @version $Id: ExecuteRunnerFilter.java,v 1.2 2006-11-28 23:30:25 kumarvi Exp $
+ * @version $Id: ExecuteRunnerFilter.java,v 1.3 2007-04-25 13:50:33 joshua Exp $
  */
 public class ExecuteRunnerFilter implements ExecuteFilter {
 

@@ -23,7 +23,7 @@ package org.tp23.antinstaller.input;
  * <p>Company: tp23</p>
 * @todo insert super class called OutputField without ResultContainer
  * @author Paul Hinds
- * @version $Id: InputField.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: InputField.java,v 1.2 2007-04-25 13:50:34 joshua Exp $
  */
 public abstract class InputField
 	extends OutputField {

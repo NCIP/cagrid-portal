@@ -24,7 +24,7 @@ import org.tp23.antinstaller.InstallerContext;
  * further extension of the system,  Initiallly a hardcoded filter chain
  * will be used subsequently to be replaced by a pluggable mechanism.
  * @author Paul Hinds
- * @version $Id: ExecuteFilter.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: ExecuteFilter.java,v 1.2 2007-04-25 13:50:33 joshua Exp $
  */
 public interface ExecuteFilter {
 	public void exec(InstallerContext ctx) throws InstallException;

@@ -28,7 +28,7 @@ import org.tp23.antinstaller.ValidationException;
  * to validate a port number enterd by a user that tries to open a socket
  * on the port and returns false to the validate method if the socket is in use. 
  * @author Paul Hinds
- * @version $Id: ExtValidatedTextInput.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: ExtValidatedTextInput.java,v 1.2 2007-04-25 13:50:34 joshua Exp $
  */
 public class ExtValidatedTextInput
 	extends ValidatedTextInput{

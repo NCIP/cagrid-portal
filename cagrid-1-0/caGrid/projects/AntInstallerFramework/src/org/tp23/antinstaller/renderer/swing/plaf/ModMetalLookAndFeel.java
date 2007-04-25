@@ -23,7 +23,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
  * removed, but icons have been left as they are since they would add
  * to the download size significantly.
  * @author Paul Hinds
- * @version $Id: ModMetalLookAndFeel.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: ModMetalLookAndFeel.java,v 1.2 2007-04-25 13:50:34 joshua Exp $
  */		 
 public class ModMetalLookAndFeel extends MetalLookAndFeel {
 		

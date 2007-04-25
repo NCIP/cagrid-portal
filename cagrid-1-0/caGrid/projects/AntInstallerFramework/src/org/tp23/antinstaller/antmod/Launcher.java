@@ -42,7 +42,7 @@ import org.tp23.antinstaller.InstallerContext;
  * as the one delivered with Ant 1.6
  *
  * @since Ant 1.6
- * @version $Id: Launcher.java,v 1.2 2006-11-28 23:17:49 kumarvi Exp $
+ * @version $Id: Launcher.java,v 1.3 2007-04-25 13:50:34 joshua Exp $
  */
 public class Launcher {
 	/** The Ant Home property */
@@ -158,7 +158,18 @@ public class Launcher {
 			URL[] libJars = (URL[]) libPathURLs.toArray(new URL[0]);
 
 			// Now try and find JAVA_HOME
-			File toolsJar = Locator.getToolsJar();
+			//File toolsJar = Locator.getToolsJar();--> This was original line
+			
+			File installRoot = InstallerContext.getLatestInstallDir();
+			File resources = new File(installRoot,"resources");
+			File custom_libs = new File(resources,"custom_libs");
+			File toolsJar = new File(custom_libs,"tools.jar");
+			
+			
+			
+			
+			
+			
 
 			// determine ant library directory for system jars: use property
 			// or default using location of ant-launcher.jar
@@ -208,7 +219,7 @@ public class Launcher {
 
 			System.setProperty("java.class.path", baseClassPath.toString());
 			
-			System.out.println("Using classpath: "+baseClassPath.toString());
+			//System.out.println("Using classpath: "+baseClassPath.toString());
 			
 			/**
 			 * This is added to do away with the dependecy on jdk
@@ -216,9 +227,9 @@ public class Launcher {
 			 */
 			
 			try{
-			 	File installRoot = InstallerContext.getLatestInstallDir();
-				File resources = new File(installRoot,"resources");
-				File custom_libs = new File(resources,"custom_libs");
+			 	//File installRoot = InstallerContext.getLatestInstallDir();
+				//File resources = new File(installRoot,"resources");
+				//File custom_libs = new File(resources,"custom_libs");
 				File tools_jar = new File(custom_libs,"tools.jar");
 				File lib = new File(resources,"lib");
 				File cert_task_jar = new File(lib,"certificate_tasks.jar");

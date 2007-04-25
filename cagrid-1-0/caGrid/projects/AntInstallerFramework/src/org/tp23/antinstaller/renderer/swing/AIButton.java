@@ -26,7 +26,7 @@ import javax.swing.JButton;
  * A JButton with altered prefered size to facilitate fixing the width
  * but still using a GridBagLayout
  * @author Paul Hinds
- * @version $Id: AIButton.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: AIButton.java,v 1.2 2007-04-25 13:50:33 joshua Exp $
  */
 public class AIButton extends JButton {
 

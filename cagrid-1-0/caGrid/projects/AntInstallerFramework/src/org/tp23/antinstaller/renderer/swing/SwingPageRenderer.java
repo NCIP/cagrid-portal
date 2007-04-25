@@ -52,7 +52,7 @@ import org.tp23.antinstaller.page.Page;
  * <p>Subclasses should implement instanceInit for initialising swing components
  * on the page. </p>
  * @author Paul Hinds
- * @version $Id: SwingPageRenderer.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: SwingPageRenderer.java,v 1.2 2007-04-25 13:50:33 joshua Exp $
  */
 public abstract class SwingPageRenderer
 	extends JPanel {
@@ -61,7 +61,7 @@ public abstract class SwingPageRenderer
 
 	//public static int PAGE_WIDTH = 472;
 	public static int PAGE_WIDTH = 600;
-	public static int PAGE_HEIGHT = 400;
+	public static int PAGE_HEIGHT = 415;
 	public static int TITLE_IMAGE_HEIGHT = 100;
 
 	// gui components

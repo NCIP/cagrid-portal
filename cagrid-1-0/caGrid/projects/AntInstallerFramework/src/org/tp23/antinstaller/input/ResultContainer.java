@@ -30,7 +30,7 @@ import org.tp23.antinstaller.InstallerContext;
  * obtaining default values containing ${prop.name}/blah syntax </p>
  * @todo   Ensure in the validator (and Docs) that developers only add ${refs} for properties set on earlier pages
  * @author Paul Hinds
- * @version $Id: ResultContainer.java,v 1.4 2006-11-28 23:18:12 kumarvi Exp $
+ * @version $Id: ResultContainer.java,v 1.5 2007-04-25 13:50:34 joshua Exp $
  */
 public class ResultContainer {
 

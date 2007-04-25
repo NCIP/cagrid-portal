@@ -30,7 +30,7 @@ import org.tp23.antinstaller.renderer.MessageRenderer;
  * Tomcat, ask the user to select the tomcat root and check the existence of ./conf/tomcat-users.xml
  * and ./webapps </p>
  * @author Paul Hinds
- * @version $Id: AppRootInput.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: AppRootInput.java,v 1.2 2007-04-25 13:50:34 joshua Exp $
  */
 public class AppRootInput
 	extends DirectoryInput {

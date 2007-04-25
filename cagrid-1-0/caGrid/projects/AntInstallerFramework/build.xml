@@ -52,5 +52,24 @@
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
   </target>
+	
+	<target name="copy-src">
+		<delete dir="jptemp"/>
+		<mkdir dir="jptemp"/>
+		<copy todir="jptemp">
+			<fileset dir=".">
+				<include name="**/*"/>
+				<exclude name="**/CVS"/>
+				<exclude name="**/CVS/*"/>
+				<exclude name="jptemp"/>
+				<exclude name="**/bin/*"/>
+				<exclude name="**/bin"/>
+				<exclude name="**/build/*"/>
+				<exclude name="**/build"/>
+				<exclude name="**/dist/*"/>
+				<exclude name="**/dist"/>
+			</fileset>
+		</copy>
+	</target>
 </project>
 

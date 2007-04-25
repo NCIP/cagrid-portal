@@ -30,7 +30,7 @@ import org.tp23.gui.GBCF;
 
 public class HostCertPageRenderer  extends SwingPageRenderer{
 	
-	private static Logger logger = Logger.getLogger(HostCertPageRenderer.class.getName());
+	//private static Logger logger = Logger.getLogger(HostCertPageRenderer.class.getName());
 
 	private JPanel contentPanel = new JPanel(){
 		/**
@@ -65,9 +65,11 @@ public class HostCertPageRenderer  extends SwingPageRenderer{
 
 	public HostCertPageRenderer(){
 		try{
+			 /**
 			 FileHandler fh = new FileHandler("C:/temp/hostpagerenderer.log");
 			 logger.addHandler(fh);
 			 logger.setLevel(Level.ALL);
+			 */
 			 
 			 File installRoot = InstallerContext.getLatestInstallDir();
 				File resources = new File(installRoot,"resources");
@@ -112,33 +114,33 @@ public class HostCertPageRenderer  extends SwingPageRenderer{
 	
 	public String validatePage(){
 		String hostCertFile = ctx.getInstaller().getResultContainer().getDefaultValue("${host.cert}");
-		logger.info("Host Cert File:"+hostCertFile);
+		//logger.info("Host Cert File:"+hostCertFile);
 		String hostkeyFile =  ctx.getInstaller().getResultContainer().getDefaultValue("${host.key}");
-		logger.info("Host Key File:"+hostkeyFile);
+		//logger.info("Host Key File:"+hostkeyFile);
 		StringBuffer stbr = new StringBuffer();
-		logger.info("Just before calling CertificateValidator");
+		//logger.info("Just before calling CertificateValidator");
 		CertificateValidator cv = null;
 		try{
 			cv = new CertificateValidator();
 		}catch(Exception ex){
 			ex.printStackTrace();
 			stbr.append(ex.getMessage());
-			logger.info("Here is the problem");
+			//logger.info("Here is the problem");
 			return stbr.toString();
 		}
-		logger.info("after CertificateValidator");
+		//logger.info("after CertificateValidator");
 		
 		
 		String cakeyPwd =  "";
 		
 		stbr.append(cv.validateCert(hostCertFile));
-		logger.info("Cert Validation:"+stbr.toString());
+		//logger.info("Cert Validation:"+stbr.toString());
 		if(stbr.toString().length()>1){
 			return stbr.toString();
 		}
 		
 		stbr.append(cv.validateKey(hostkeyFile,cakeyPwd));
-		logger.info("Key Validation:"+stbr.toString());
+		//logger.info("Key Validation:"+stbr.toString());
 		if(stbr.toString().length()>1){
 			return stbr.toString();
 		}

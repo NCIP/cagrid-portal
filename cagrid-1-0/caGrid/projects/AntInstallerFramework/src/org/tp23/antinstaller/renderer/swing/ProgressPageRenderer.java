@@ -46,7 +46,7 @@ import org.tp23.gui.widget.SystemOutJTextArea;
  * <p>Company: tp23</p>
  * @todo change absolute to Border layout and panels
 *  @author Paul Hinds
- * @version $Id: ProgressPageRenderer.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: ProgressPageRenderer.java,v 1.2 2007-04-25 13:50:33 joshua Exp $
  */
 public class ProgressPageRenderer
 	extends SwingPageRenderer
@@ -127,6 +127,7 @@ public class ProgressPageRenderer
 
 	private SystemOutJTextArea outPanel = new SystemOutJTextArea();
 	private SystemOutJTextArea errPanel = new SystemOutJTextArea();
+	
 	
 	private boolean showTargets = true;
 	private JScrollPane progressScrollPane = new JScrollPane();;

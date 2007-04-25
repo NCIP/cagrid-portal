@@ -31,7 +31,7 @@ import javax.swing.JToolTip;
  * A JLabel with altered prefered size to facilitate fixing the width
  * but still using a GridBagLayout
  * @author Paul Hinds
- * @version $Id: AILabel.java,v 1.2 2006-10-27 18:23:16 kumarvi Exp $
+ * @version $Id: AILabel.java,v 1.3 2007-04-25 13:50:33 joshua Exp $
  */
 public class AILabel extends JLabel {
 

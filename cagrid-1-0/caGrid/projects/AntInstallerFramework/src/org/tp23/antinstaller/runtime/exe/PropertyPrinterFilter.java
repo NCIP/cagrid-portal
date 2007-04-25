@@ -27,7 +27,7 @@ import org.tp23.antinstaller.input.ResultContainer;
 
 /**
  * @author Paul Hinds
- * @version $Id: PropertyPrinterFilter.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: PropertyPrinterFilter.java,v 1.2 2007-04-25 13:50:33 joshua Exp $
  */
 public class PropertyPrinterFilter implements ExecuteFilter {
 

@@ -33,7 +33,7 @@ import org.tp23.antinstaller.runtime.exe.NonExtractorFilterChain;
  * the Ant property "antinstaller.jar".  The build file is automatically read
  * from the Jar.
  * @author Paul Hinds
- * @version $Id: NonExtractor.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: NonExtractor.java,v 1.2 2007-04-25 13:50:34 joshua Exp $
  */
 public class NonExtractor extends SelfExtractor{
 	/** used by AntProjectFilter */

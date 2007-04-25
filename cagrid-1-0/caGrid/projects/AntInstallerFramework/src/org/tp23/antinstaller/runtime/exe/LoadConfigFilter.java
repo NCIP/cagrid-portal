@@ -70,7 +70,7 @@ import org.xml.sax.InputSource;
  * Loads the Ant Install configuration and sets the Installer object back
  * into the context.
  * @author Paul Hinds
- * @version $Id: LoadConfigFilter.java,v 1.3 2006-11-28 23:30:50 kumarvi Exp $
+ * @version $Id: LoadConfigFilter.java,v 1.4 2007-04-25 13:50:33 joshua Exp $
  */
 public class LoadConfigFilter implements ExecuteFilter {
 

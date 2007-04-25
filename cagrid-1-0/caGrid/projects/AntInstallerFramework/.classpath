@@ -23,7 +23,7 @@
 	<classpathentry kind="lib" path="lib/antlib/ant-jmf.jar"/>
 	<classpathentry kind="lib" path="lib/antlib/ant-jsch.jar"/>
 	<classpathentry kind="lib" path="lib/antlib/ant-junit.jar"/>
-	<classpathentry kind="lib" path="lib/antlib/ant-launcher.jar"/>
+	<classpathentry kind="lib" path="lib/antlib/ant-launcher.jar" sourcepath="C:/DevTools/Ant/src/apache-ant-1.6.5/src/main"/>
 	<classpathentry kind="lib" path="lib/antlib/ant-netrexx.jar"/>
 	<classpathentry kind="lib" path="lib/antlib/ant-nodeps.jar"/>
 	<classpathentry kind="lib" path="lib/antlib/ant-starteam.jar"/>

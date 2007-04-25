@@ -42,11 +42,11 @@ import gov.nih.nci.cagrid.antinstaller.utils.ClassPathModifier;
  * of the configuration files would be impared.
  * REF: 1145496
  * @author Paul Hinds
- * @version $Id: IfPropertyHelper.java,v 1.5 2006-10-27 18:23:46 kumarvi Exp $
+ * @version $Id: IfPropertyHelper.java,v 1.6 2007-04-25 13:50:33 joshua Exp $
  */
 public class IfPropertyHelper {
 	
-	private static Logger logger = Logger.getLogger(IfPropertyHelper.class.getName());
+	//private static Logger logger = Logger.getLogger(IfPropertyHelper.class.getName());
 	
 
 	InstallerContext ctx = null;
@@ -55,13 +55,7 @@ public class IfPropertyHelper {
 		
 		
 		
-		 try{
-			 FileHandler fh = new FileHandler("C:/temp/ifpropertyhelper.log");
-			 logger.addHandler(fh);
-			 logger.setLevel(Level.OFF);
-		 }catch(Exception ex){
-			 ex.printStackTrace();
-		 }
+		 
 		 
 		 try{
 			 	File installRoot = InstallerContext.getLatestInstallDir();
@@ -71,7 +65,7 @@ public class IfPropertyHelper {
 				ClassPathModifier.addFile(bsh_jar);
 			 
 		 }catch(Exception e){
-			 logger.info("Could not configure the classpath"+e.getMessage());
+			 //logger.info("Could not configure the classpath"+e.getMessage());
 			 e.printStackTrace();
 		 }
 	}
@@ -83,13 +77,13 @@ public class IfPropertyHelper {
 	 */
 	
 	public boolean ifProperty(Page next){
-		logger.info("Called ifproperty method");
+		//logger.info("Called ifproperty method");
 		boolean retValue = true;
 		
 		if(next instanceof SimpleInputPage){
 			SimpleInputPage conditionalPage = (SimpleInputPage) next;
 			String ifProperty = conditionalPage.getIfProperty();
-			logger.info("Value of the ifproperty:"+ifProperty);
+			//logger.info("Value of the ifproperty:"+ifProperty);
 			//System.out.println("IFProperty2:"+ifProperty);
 			if (ifProperty != null) {
 				ArrayList variables = extractVariables(ifProperty);
@@ -120,11 +114,11 @@ public class IfPropertyHelper {
 				counter++;
 				String name = currStr.substring(currindex,endPos+1);
 				//System.out.println("Name:"+name);
-				logger.info("Name:"+name);
+				//logger.info("Name:"+name);
 				String propValue = ctx.getInstaller().getResultContainer().getDefaultValue(name);
-				logger.info("propValue:"+propValue);
+				//logger.info("propValue:"+propValue);
 				String key = currStr.substring(startPos,endPos);
-				logger.info("Key:"+key);
+				//logger.info("Key:"+key);
 				//System.out.println(key);
 				ReferenceVariable rf = new ReferenceVariable();
 				rf.setValue(propValue);

@@ -26,7 +26,7 @@ import javax.swing.text.Document;
  * but still using a GridBagLayout. This text field is for use inconjunction
  * with a button for example file chooser.
  * @author Paul Hinds
- * @version $Id: AIShortTextField.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: AIShortTextField.java,v 1.2 2007-04-25 13:50:33 joshua Exp $
  */
 public class AIShortTextField extends JTextField {
 

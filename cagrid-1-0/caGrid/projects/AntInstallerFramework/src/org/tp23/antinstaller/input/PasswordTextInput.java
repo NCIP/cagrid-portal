@@ -22,7 +22,7 @@ package org.tp23.antinstaller.input;
  * values are not printed in the properties file.  It is the responsibility of the renderer
  * not to show the password. Hiding is currently not supported on the console.</p>
  * @author Paul Hinds
- * @version $Id: PasswordTextInput.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: PasswordTextInput.java,v 1.2 2007-04-25 13:50:34 joshua Exp $
  */
 public class PasswordTextInput
 	extends ValidatedTextInput implements SecretPropertyField

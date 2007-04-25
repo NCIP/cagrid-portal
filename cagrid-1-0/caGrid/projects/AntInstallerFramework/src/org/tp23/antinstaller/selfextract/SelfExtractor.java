@@ -45,7 +45,7 @@ import org.tp23.antinstaller.runtime.exe.SelfExtractorFilterChain;
 * to a temporary directory </p>
  * <p> </p>
  * @author Paul Hinds
- * @version $Id: SelfExtractor.java,v 1.3 2006-11-28 23:31:07 kumarvi Exp $
+ * @version $Id: SelfExtractor.java,v 1.4 2007-04-25 13:50:34 joshua Exp $
  */
 public class SelfExtractor {
 
@@ -297,7 +297,7 @@ public class SelfExtractor {
 			imageName="MasterInstaller";
 		}
 		ProgressIndicator pi = null;
-		String components = "AuthenticationServiceInstaller,ClientInstaller,GMEServiceInstaller,GridGrouperServiceInstaller,EVSServiceInstaller,caDSRServiceInstaller,IndexServiceInstaller,MasterInstaller,DorianInstaller,GTSServiceInstaller,CoreInstaller,DeveloperInstaller,SystemCheckInstaller,WorkflowInstaller";
+		String components = "AuthenticationServiceInstaller,ClientInstaller,GMEServiceInstaller,GridGrouperServiceInstaller,EVSServiceInstaller,caDSRServiceInstaller,IndexServiceInstaller,MasterInstaller,DorianInstaller,GTSServiceInstaller,CoreInstaller,DeveloperInstaller,SystemCheckInstaller,WorkflowInstaller,caGridInfrastrctureInstaller";
 		
 		int i = components.indexOf(imageName);
 		if(i!=-1){

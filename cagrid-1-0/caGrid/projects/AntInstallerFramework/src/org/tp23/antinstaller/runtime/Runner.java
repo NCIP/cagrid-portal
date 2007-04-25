@@ -30,7 +30,7 @@ import org.tp23.antinstaller.InstallException;
  * <p>Copyright: Copyright (c) 2004</p>
  * <p>Company: tp23</p>
  * @author Paul Hinds
- * @version $Id: Runner.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: Runner.java,v 1.2 2007-04-25 13:50:33 joshua Exp $
  */
 
 public interface Runner {

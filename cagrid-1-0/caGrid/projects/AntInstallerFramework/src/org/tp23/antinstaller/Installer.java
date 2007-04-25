@@ -31,7 +31,7 @@ import org.tp23.antinstaller.page.Page;
  * to the InputFields,  All the properties in the Installer element are held at this level
  * as is the ResultContainer</p>
  * @author Paul Hinds
- * @version $Id: Installer.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: Installer.java,v 1.2 2007-04-25 13:50:33 joshua Exp $
  */
 public class Installer {
 

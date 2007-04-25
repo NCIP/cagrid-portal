@@ -26,7 +26,7 @@ import org.tp23.antinstaller.ValidationException;
  * <p>Input type for boolean choices represented as a checkbox in swing and a yes/no option
  * on the command line </p>
  * @author Paul Hinds
- * @version $Id: CheckboxInput.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: CheckboxInput.java,v 1.2 2007-04-25 13:50:34 joshua Exp $
  */
 public class CheckboxInput
 	extends InputField{

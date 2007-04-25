@@ -31,7 +31,7 @@ import org.tp23.antinstaller.page.Page;
  * <p>Output is commented as it is printed to aid debugging</p>
  * @see http://java.sun.com/docs/books/jls/second_edition/html/lexical.doc.html#100850
  * @author Paul Hinds
- * @version $Id: ExplicitPropertiesFileRenderer.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: ExplicitPropertiesFileRenderer.java,v 1.2 2007-04-25 13:50:33 joshua Exp $
  */
 public class ExplicitPropertiesFileRenderer
 	implements PropertiesFileRenderer {

@@ -43,7 +43,7 @@ import org.tp23.antinstaller.runtime.exe.AntLauncherFilter;
  * exist for the duration of the Install screens and the runing of
  * the Ant Script. </p>
  * @author Paul Hinds
- * @version $Id: InstallerContext.java,v 1.6 2006-11-28 23:15:38 kumarvi Exp $
+ * @version $Id: InstallerContext.java,v 1.7 2007-04-25 13:50:33 joshua Exp $
  */
 public class InstallerContext {
 
@@ -347,7 +347,7 @@ public class InstallerContext {
 		//System.out.println("Calling Synch Properties");
 		//System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 		String catalina_home = System.getenv("CATALINA_HOME");
-		String grid_catalina_home=(String) props.get(GRID_ENV_PREFIX+"CATALINA_HOME");
+		String grid_catalina_home=(String) props.get(GRID_ENV_PREFIX+"env.CATALINA_HOME");
 		
 		
 		if((StringUtilities.isBlank(catalina_home))&&(StringUtilities.isBlank(grid_catalina_home))){
@@ -355,39 +355,39 @@ public class InstallerContext {
 		}else{
 			   if(!StringUtilities.isBlank(catalina_home)){
 				props.put(GRID_ENV_PREFIX+"tomcat.exist","true");
-				props.put(GRID_ENV_PREFIX+"CATALINA_HOME", catalina_home);
+				props.put(GRID_ENV_PREFIX+"env.CATALINA_HOME", catalina_home);
 			   }else{
 				   props.put(GRID_ENV_PREFIX+"tomcat.exist","true");
-				   props.put(GRID_ENV_PREFIX+"CATALINA_HOME", grid_catalina_home);
+				   props.put(GRID_ENV_PREFIX+"env.CATALINA_HOME", grid_catalina_home);
 			   }
 		}
 		
 		String globus_location = System.getenv("GLOBUS_LOCATION");
 		//System.out.println("Globus location from system:"+globus_location);
-		String grid_globus_location = (String)props.get(GRID_ENV_PREFIX+"GLOBUS_LOCATION");
+		String grid_globus_location = (String)props.get(GRID_ENV_PREFIX+"env.GLOBUS_LOCATION");
 		if((StringUtilities.isBlank(globus_location))&&(StringUtilities.isBlank(grid_globus_location))){
 			props.put(GRID_ENV_PREFIX+"globus.exist", "false");
 		}else{
 				if(!StringUtilities.isBlank(globus_location)){
 					props.put(GRID_ENV_PREFIX+"globus.exist","true");
-					props.put(GRID_ENV_PREFIX+"GLOBUS_LOCATION",globus_location);
+					props.put(GRID_ENV_PREFIX+"env.GLOBUS_LOCATION",globus_location);
 				}else{
 					props.put(GRID_ENV_PREFIX+"globus.exist","true");
-					props.put(GRID_ENV_PREFIX+"GLOBUS_LOCATION",grid_globus_location);
+					props.put(GRID_ENV_PREFIX+"env.GLOBUS_LOCATION",grid_globus_location);
 				}
 		}
 		
 		String ant_home = System.getenv("ANT_HOME");
-		String grid_ant_home = (String)props.get(GRID_ENV_PREFIX+"ANT_HOME");
+		String grid_ant_home = (String)props.get(GRID_ENV_PREFIX+"env.ANT_HOME");
 		if((StringUtilities.isBlank(ant_home))&&(StringUtilities.isBlank(grid_ant_home))){
 			props.put(GRID_ENV_PREFIX+"ant.exist", "false");
 		}else{
 				if(!StringUtilities.isBlank(ant_home)){
 					props.put(GRID_ENV_PREFIX+"ant.exist","true");
-					props.put(GRID_ENV_PREFIX+"ANT_HOME",ant_home);
+					props.put(GRID_ENV_PREFIX+"env.ANT_HOME",ant_home);
 				}else{
 					props.put(GRID_ENV_PREFIX+"ant.exist","true");
-					props.put(GRID_ENV_PREFIX+"ANT_LOCATION",grid_ant_home);
+					props.put(GRID_ENV_PREFIX+"env.ANT_HOME",grid_ant_home);
 				}
 		}
 		
@@ -402,7 +402,7 @@ public class InstallerContext {
 		String non_sec_globus_on_tomcat = "false";
 		String sec_globus_on_tomcat="false";
 		if(tomcat_present.equalsIgnoreCase("true")){
-			String tomcat_home = (String)props.get(GRID_ENV_PREFIX+"CATALINA_HOME");
+			String tomcat_home = (String)props.get(GRID_ENV_PREFIX+"env.CATALINA_HOME");
 			//System.out.println("Tomcat Home:"+tomcat_home);
 			File tomcat_home_dir = new File(tomcat_home);
 			File webappdir = new File(tomcat_home_dir,"webapps");
@@ -462,21 +462,21 @@ public class InstallerContext {
 			props.put(GRID_ENV_PREFIX+"tomcat.exist", "false");
 		}else{
 			props.put(GRID_ENV_PREFIX+"tomcat.exist","true");
-			props.put(GRID_ENV_PREFIX+"CATALINA_HOME", catalina_home);
+			props.put(GRID_ENV_PREFIX+"env.CATALINA_HOME", catalina_home);
 		}
 		
 		if(globus_location==null){
 			props.put(GRID_ENV_PREFIX+"globus.exist", "false");
 		}else{
 			props.put(GRID_ENV_PREFIX+"globus.exist","true");
-			props.put(GRID_ENV_PREFIX+"GLOBUS_LOCATION",globus_location);
+			props.put(GRID_ENV_PREFIX+"env.GLOBUS_LOCATION",globus_location);
 		}
 		
 		if(ant_home==null){
 			props.put(GRID_ENV_PREFIX+"ant.exist", "false");
 		}else{
 			props.put(GRID_ENV_PREFIX+"ant.exist","true");
-			props.put(GRID_ENV_PREFIX+"ANT_HOME",ant_home);
+			props.put(GRID_ENV_PREFIX+"env.ANT_HOME",ant_home);
 		}
 		
 		props.put(GRID_ENV_PREFIX+"mysql.exist", "");
@@ -638,6 +638,5 @@ public class InstallerContext {
 	
 	
 }
-
 
 

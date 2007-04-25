@@ -26,7 +26,7 @@ import org.tp23.antinstaller.runtime.SimpleLogger;
  * throw exceptions since it is mainly for debug and we dont want to 
  * stop an install just because logging is not working
  * @author Paul Hinds
- * @version $Id: CreateLoggerFilter.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: CreateLoggerFilter.java,v 1.2 2007-04-25 13:50:33 joshua Exp $
  */
 public class CreateLoggerFilter implements ExecuteFilter {
 

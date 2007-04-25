@@ -55,7 +55,7 @@ import org.tp23.antinstaller.PropertiesFileRenderer;
  *
 * This file has been modified by Paul Hinds for Antinstaller and is not the same
 * as the one delivered with Ant 1.6
-* @version $Id: Main.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+* @version $Id: Main.java,v 1.2 2007-04-25 13:50:34 joshua Exp $
  */
 public class Main implements AntMain {
 

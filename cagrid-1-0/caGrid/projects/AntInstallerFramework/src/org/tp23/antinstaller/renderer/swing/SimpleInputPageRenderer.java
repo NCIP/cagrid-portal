@@ -51,7 +51,7 @@ import org.tp23.gui.GBCF;
  * <p>Copyright: Copyright (c) 2004</p>
  * <p>Company: tp23</p>
  * @author Paul Hinds
- * @version $Id: SimpleInputPageRenderer.java,v 1.2 2006-11-10 17:02:01 kumarvi Exp $
+ * @version $Id: SimpleInputPageRenderer.java,v 1.3 2007-04-25 13:50:33 joshua Exp $
  */
 public class SimpleInputPageRenderer
 	extends SwingPageRenderer {
@@ -170,7 +170,7 @@ public class SimpleInputPageRenderer
  * A JTextArea taht is not exditable and looks like a JLabel but uses 
  * JTextAreas ability to wrap.  Also has a fixed prefered width; 
  * @author Paul Hinds
- * @version $Id: SimpleInputPageRenderer.java,v 1.2 2006-11-10 17:02:01 kumarvi Exp $
+ * @version $Id: SimpleInputPageRenderer.java,v 1.3 2007-04-25 13:50:33 joshua Exp $
  */
 class DisplayTextArea extends JTextArea{
 	DisplayTextArea(Color back,Color fore){
