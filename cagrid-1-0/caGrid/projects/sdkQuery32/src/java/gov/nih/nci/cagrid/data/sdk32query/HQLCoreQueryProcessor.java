@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created May 2, 2006 
- * @version $Id: HQLCoreQueryProcessor.java,v 1.5 2007-03-29 13:24:38 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessor.java,v 1.6 2007-04-25 14:30:11 dervin Exp $ 
  */
 public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
     // parameter which determines the remote appservice URL
@@ -86,6 +86,11 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 		return coreResultsList.iterator();
 	}
 	
+    
+    public String getConfigurationUiClassname() {
+        return HQLCoreQueryProcessorConfigUi.class.getName();
+    }
+    
 	
 	private void checkAuthorization(CQLQuery cqlQuery) throws QueryProcessingException {
 		if (useCsmSecurity()) {
