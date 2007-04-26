@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.dorian.ui.ifs;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 
 import org.cagrid.grape.table.GrapeBaseTable;
 
@@ -11,7 +10,7 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: AdminsTable.java,v 1.2 2007-04-26 20:04:04 langella Exp $
+ * @version $Id: AdminsTable.java,v 1.3 2007-04-26 20:34:11 langella Exp $
  */
 public class AdminsTable extends GrapeBaseTable {
 	public final static String GRID_IDENTITY = "Grid Identity";
@@ -21,7 +20,6 @@ public class AdminsTable extends GrapeBaseTable {
 	public AdminsTable(AdministratorsWindow window) {
 		super(createTableModel());
 		this.window = window;
-		TableColumn c = this.getColumn(GRID_IDENTITY);
 		this.clearTable();
 	}
 

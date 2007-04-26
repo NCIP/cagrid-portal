@@ -35,7 +35,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: FindUserDialog.java,v 1.2 2007-04-26 20:33:30 langella Exp $
+ * @version $Id: FindUserDialog.java,v 1.3 2007-04-26 20:33:53 langella Exp $
  */
 public class FindUserDialog extends JDialog {
 
@@ -753,17 +753,7 @@ public class FindUserDialog extends JDialog {
 		return userId;
 	}
 
-	private void removeUser() {
-		try {
-			IFSAdministrationClient client = getSession().getAdminClient();
-			IFSUser usr = this.getUsersTable().getSelectedUser();
-			client.removeUser(usr);
-			this.getUsersTable().removeSelectedUser();
-		} catch (Exception e) {
-			ErrorDialog.showError(e);
-		}
 
-	}
 
 	/**
 	 * This method initializes firstName
