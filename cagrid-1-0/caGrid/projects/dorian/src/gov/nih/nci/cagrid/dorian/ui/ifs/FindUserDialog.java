@@ -35,7 +35,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: FindUserDialog.java,v 1.1 2007-04-26 20:04:04 langella Exp $
+ * @version $Id: FindUserDialog.java,v 1.2 2007-04-26 20:33:30 langella Exp $
  */
 public class FindUserDialog extends JDialog {
 
@@ -120,7 +120,7 @@ public class FindUserDialog extends JDialog {
 	private void initialize() {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Find Users");
-		this.setIconImage(DorianLookAndFeel.getQueryIcon().getImage());
+		//this.setIconImage(DorianLookAndFeel.getQueryIcon().getImage());
 		setSize(700, 600);
 
 	}

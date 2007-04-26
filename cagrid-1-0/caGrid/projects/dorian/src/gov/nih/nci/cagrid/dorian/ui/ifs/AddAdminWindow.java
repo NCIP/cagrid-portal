@@ -73,7 +73,7 @@ public class AddAdminWindow extends JDialog {
 		this.setSize(500, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Add Administrator");
-		this.setIconImage(DorianLookAndFeel.getAdminIcon().getImage());
+		//this.setIconImage(DorianLookAndFeel.getAdminIcon().getImage());
 	}
 
 	/**
