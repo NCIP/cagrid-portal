@@ -2,7 +2,7 @@
 # Setup #
 #########
 
-1. Build caGrid
+1. Build caGrid on sandbox
 2. Place tomcat and globus zip files in software subdirectory.
     - The software sub directory should contain:
       - jakarta-tomcat-5.0.28.zip
