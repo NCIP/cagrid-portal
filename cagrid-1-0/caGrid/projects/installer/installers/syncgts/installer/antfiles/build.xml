@@ -1,0 +1,159 @@
+<project name="certificate creation task test" default="deploy" basedir=".">
+    <description>
+        certificate test
+    </description>
+  <!-- set global properties for this build -->
+  
+
+  
+  <property file="${user.home}/.gridenv.properties"/>
+  
+  
+  
+   
+   <path id="xmltaskdef.cp">
+       	<fileset dir="${basedir}/resources/lib">
+     	   <include name="xmltask-v1.14.jar"/>
+             </fileset> 
+   </path>
+   
+   <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltaskdef.cp"/>
+  
+  
+        <!---
+          The first scenario represent the case when target container is tomcat but
+          tomcat does not exist
+        -->
+  	<condition property="sc1">
+    	            <and>
+    	                <equals arg1="${tomcat.exist}" arg2="false" />
+    	                <equals arg1="${target.container}" arg2="tomcat" />
+    	            </and>
+ 	</condition>
+ 	<!---
+	          The second scenario represent the case when target 
+	          container is globus and globus does not exist
+        -->
+ 	
+ 	<condition property="sc2">
+	    	            <and>
+	    	                <equals arg1="${globus.exist}" arg2="false" />
+	    	                <equals arg1="${target.container}" arg2="globus" />
+	    	            </and>
+ 	</condition>
+ 	<!---
+	          The third scenario represent the case when 
+	          a) target container is tomcat and it exists
+	          OR
+	          b) target container is globus and it exists
+        -->
+ 	
+ 	<condition property="sc3">
+ 	                 <OR>
+	    	            <and>
+	    	                <equals arg1="${tomcat.exist}" arg2="true" />
+	    	                <equals arg1="${target.container}" arg2="tomcat" />
+	    	                
+	    	            </and>
+	    	            <and>
+				<equals arg1="${globus.exist}" arg2="true" />
+				<equals arg1="${target.container}" arg2="globus" />
+			    	    	                
+	    	            </and>
+	    	          </OR>
+ 	</condition>
+ 	
+ 
+  	
+  	
+  <target name="Scn1"  description="Scenario 1" if="sc1">
+     
+     <echo message="Tomcat does not exist, caDSR can't be installed!" />
+     
+  </target>
+  
+  <target name="Scn2"  description="clean up" if="sc2">
+       <echo message="Globus does not exist, caDSR can't be installed!"/>
+  </target>
+  
+  <target name="Scn3"  description="clean up" if="sc3">
+       
+     <!--
+       <antcall target="configureServiceMetadata">
+	 <param name="rc.display.name" value="${cadsr.service.display.name}"/>
+         <param name="rc.short.name" value="${cadsr.service.short.name}"/>
+         <param name="rc.country.name" value="${cadsr.service.country}"/>
+         <param name="rc.postal.code" value="${cadsr.service.postal.code}"/>
+         <param name="rc.province.name" value="${cadsr.service.province}"/>
+         <param name="rc.street1.name" value="${cadsr.service.street}"/>
+         <param name="rc.poc.affiliation.name" value="${cadsr.service.rc.affiliation}"/>
+         <param name="rc.poc.email.id" value="${cadsr.service.rc.poc.email}"/>
+         <param name="rc.poc.first.name" value="${cadsr.service.rc.poc.first.name}"/>
+         <param name="rc.poc.last.name" value="${cadsr.service.rc.poc.last.name}"/>
+         <param name="rc.poc.role.name" value="${cadsr.service.rc.poc.role}"/>
+         
+         <param name="poc.affiliation.name" value="${cadsr.service.poc.affiliation}"/>
+         <param name="poc.email.id" value="${cadsr.service.poc.email}"/>
+         <param name="poc.first.name" value="${cadsr.service.poc.first.name}"/>
+         <param name="poc.last.name" value="${cadsr.service.poc.last.name}"/>
+         <param name="poc.role.name" value="${cadsr.service.poc.role}"/>
+         
+         
+     </antcall>
+     -->
+     <antcall target="deploy${target.container}"/>
+  </target>
+  
+  
+  
+  
+   <target name="installSyncGTSService" description="SyncGTS Installation">
+       
+       <antcall target="Scn1"/>
+       <antcall target="Scn2"/>
+       <antcall target="Scn3"/>
+       
+       
+  </target>
+        
+  <target name="installsource" description="Source Code Installation">
+         
+         <mkdir dir="${grid.home}/syncGTS"/>
+         <copy todir="${grid.home}/syncGTS">
+	     <fileset dir="${basedir}/resources/release">
+	       <include name="**/*.*"/>
+	     </fileset>
+	   </copy>
+
+         
+         
+  </target>
+  
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  <target name="deploytomcat">
+    <ant  dir="${basedir}/resources/release" antfile="${basedir}/resources/release/build.xml" target="deployTomcat">
+    </ant>
+  </target>
+  <target name="deployglobus">
+      <ant  dir="${basedir}/resources/release" antfile="${basedir}/resources/release/build.xml" target="deployGlobus">
+      </ant>
+  </target>
+  <target name="cleanuptarget"
+        description="clean up" >
+   
+    
+  </target>
+  <target name="finished"
+          description="clean up" >
+     
+      <echo message="we are done!"/>
+  </target>
+</project>

@@ -1,0 +1,708 @@
+<project name="certificate creation task test" default="installTomcatSecurely" basedir=".">
+    <description>
+        certificate test
+    </description>
+  <!-- set global properties for this build -->
+  
+
+  
+  <property file="${user.home}/.gridenv.properties"/>
+  
+  
+  <path id="certificate.cp">
+    	<fileset dir="${basedir}/resources/lib">
+  	   <include name="certificate_tasks.jar"/>
+          </fileset> 
+          <fileset dir="${basedir}/resources/lib/ext">
+  	   <include name="**/*.jar"/>
+          </fileset>
+   </path>
+   
+   <path id="xmltaskdef.cp">
+       	<fileset dir="${basedir}/resources/lib">
+     	   <include name="xmltask-v1.14.jar"/>
+             </fileset> 
+   </path>
+   
+   <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltaskdef.cp"/>
+  
+  
+        <!---
+          The first scenario represent the case when host key, 
+          host certificate and certificate authority is not in place
+        -->
+        
+        
+        <!--
+              ********************************************************************
+              *****************  Conditions for Globus   (Secured)****************
+              ********************************************************************
+        
+        -->
+        
+        <!--
+                                 ******************
+                                 *** cond_1    ****
+                                 ******************
+        -->
+        <condition property="requires.secure.globus.installation.and.host.credential.exist">
+	    	            <and>
+	    	                <equals arg1="${is.secure}" arg2="true" />
+	    	                <equals arg1="${system.target.container}" arg2="globus" />
+	    	                <equals arg1="${requires.config}" arg2="true" />
+	    	                <equals arg1="${globus.exist}" arg2="false" />
+	    	                <equals arg1="${system.certificate.exist}" arg2="true" />
+	    	                <equals arg1="${ca.exist}" arg2="false" />
+	    	            </and>
+ 	</condition>
+ 	
+ 	 <!--
+				 ******************
+				 *** cond_2    ****
+				 ******************
+        -->
+ 	
+ 	<condition property="requires.secure.globus.installation.and.ca.exist">
+		    	            <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="false" />
+					<equals arg1="${system.certificate.exist}" arg2="false" />
+					<equals arg1="${ca.exist}" arg2="true" />
+				    	    	                
+	    	            	    </and>
+ 	</condition>
+ 	
+ 	 <!--
+				 ******************
+				 *** cond_3    ****
+				 ******************
+        -->
+ 	
+ 	<condition property="requires.secure.globus.installation.and.ca.absent">
+		              <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="false" />
+					<equals arg1="${system.certificate.exist}" arg2="false" />
+					<equals arg1="${ca.exist}" arg2="false" />
+			    </and>
+ 	</condition>
+ 	
+ 	 <!--
+				 ******************
+				 *** cond_4    ****
+				 ******************
+        -->
+ 	                   
+ 	<condition property="requires.user.exisiting.globus.secured.and.host.credential.exist">
+		    	     <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="false" />
+					<equals arg1="${user.globus.exist}" arg2="true" />
+					<equals arg1="${system.certificate.exist}" arg2="true" />
+					<equals arg1="${ca.exist}" arg2="false" />
+			    </and>
+ 	</condition>
+ 	
+ 	 <!--
+				 ******************
+				 *** cond_5    ****
+				 ******************
+        -->
+ 	
+ 	<condition property="requires.user.exisiting.globus.secured.and.ca.exist">
+			    	<and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="false" />
+					<equals arg1="${user.globus.exist}" arg2="true" />
+					<equals arg1="${system.certificate.exist}" arg2="false" />
+					<equals arg1="${ca.exist}" arg2="true" />
+			    	</and>
+ 	</condition>
+ 	
+ 	 <!--
+				 ******************
+				 *** cond_6    ****
+				 ******************
+        -->
+ 	
+ 	
+ 	<condition property="requires.user.exsiting.globus.secured.and.ca.absent">
+			    <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="false" />
+					<equals arg1="${user.globus.exist}" arg2="true" />
+					<equals arg1="${system.certificate.exist}" arg2="false" />
+					<equals arg1="${ca.exist}" arg2="false" />
+			    	</and>
+ 	</condition>
+ 	
+ 	 <!--
+				 ******************
+				 *** cond_7    ****
+				 ******************
+        -->
+ 	
+ 	<condition property="requires.exisiting.globus.secured.and.host.credential.exist">
+				<and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="true" />
+					<equals arg1="${user.globus.exist}" arg2="false" />
+					<equals arg1="${system.certificate.exist}" arg2="true" />
+					<equals arg1="${ca.exist}" arg2="false" />
+			    </and>
+	</condition>
+	
+	 <!--
+				 ******************
+				 *** cond_8    ****
+				 ******************
+        -->
+	 	
+	<condition property="requires.exisiting.globus.secured.and.ca.exist">
+				    <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="true" />
+					<equals arg1="${user.globus.exist}" arg2="false" />
+					<equals arg1="${system.certificate.exist}" arg2="false" />
+					<equals arg1="${ca.exist}" arg2="true" />
+			    </and>
+	</condition>
+	 	
+	 <!--
+                                 ******************
+                                 *** cond_9    ****
+                                 ******************
+        --> 	
+	 	
+	<condition property="requires.exsiting.globus.secured.and.ca.absent">
+			    <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="true" />
+					<equals arg1="${user.globus.exist}" arg2="false" />
+					<equals arg1="${system.certificate.exist}" arg2="false" />
+					<equals arg1="${ca.exist}" arg2="false" />
+			    </and>
+ 	</condition>
+ 	
+ 	
+ 	<!--
+	              ********************************************************************
+	              *****************  Conditions for Globus(Non Secured)****************
+	              ********************************************************************
+	        
+        -->
+        
+         <!--
+				 ******************
+				 *** cond_10   ****
+				 ******************
+        -->
+ 	
+	<condition property="requires.nonsecure.globus.installation">
+			    <and>
+				<equals arg1="${is.secure}" arg2="false" />
+				<equals arg1="${system.target.container}" arg2="globus" />
+				
+				<equals arg1="${globus.exist}" arg2="false" />
+				
+			    </and>
+	</condition>
+	 	
+	 	
+	 <!--
+                                 ******************
+                                 *** cond_11    ****
+                                 ******************
+        --> 	
+	 	
+	 	
+	<condition property="requires.user.exisiting.nonsecure.globus.to.be.used">
+				    <and>
+					<equals arg1="${is.secure}" arg2="false" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${user.globus.exist}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="false" />
+				    				
+			    </and>
+	</condition>
+	
+	 <!--
+				 ******************
+				 *** cond_12   ****
+				 ******************
+        -->
+	 	
+	<condition property="requires.exisiting.nonsecure.globus.to.be.used">
+			    <and>
+					<equals arg1="${is.secure}" arg2="false" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${globus.exist}" arg2="true" />
+			    				    				
+			    </and>
+	</condition>
+	 	
+ 	
+ 	
+ 	
+ 	*************************************************************************************
+ 	
+ 	
+ 	 <!--
+	              ********************************************************************
+	              *****************  Conditions for Tomcat   (Secured)****************
+	              ********************************************************************
+	        
+	        -->
+	        
+	         <!--
+				 ******************
+				 *** cond_13    ****
+				 ******************
+        	-->
+	        
+	        
+	        <condition property="requires.secure.tomcat.installation.and.host.credential.exist">
+		    	     <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="tomcat" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${tomcat.exist}" arg2="false" />
+					<equals arg1="${system.certificate.exist}" arg2="true" />
+					<equals arg1="${ca.exist}" arg2="false" />
+	    	            </and>
+	 	</condition>
+	 	
+	 	 <!--
+				 ******************
+				 *** cond_14   ****
+				 ******************
+        	-->
+	 	
+	 	<condition property="requires.secure.tomcat.installation.and.ca.exist">
+			      <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+						<equals arg1="${system.certificate.exist}" arg2="false" />
+						<equals arg1="${ca.exist}" arg2="true" />
+	    	            </and>
+	 	</condition>
+	 	
+	 	 <!--
+				 ******************
+				 *** cond_15   ****
+				 ******************
+        	-->
+	 	
+	 	<condition property="requires.secure.tomcat.installation.and.ca.absent">
+				    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+						<equals arg1="${system.certificate.exist}" arg2="false" />
+						<equals arg1="${ca.exist}" arg2="false" />
+	    	            	   </and>
+	 	</condition>
+	 	
+	 	 <!--
+				 ******************
+				 *** cond_16   ****
+				 ******************
+        	-->
+	 	<condition property="requires.user.exisiting.tomcat.secured.and.host.credential.exist">
+					    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+						<equals arg1="${user.tomcat.exist}" arg2="true" />
+						<equals arg1="${system.certificate.exist}" arg2="true" />
+						<equals arg1="${ca.exist}" arg2="false" />
+	    	            	   	    </and>
+		</condition>
+		
+		 <!--
+				 ******************
+				 *** cond_17    ****
+				 ******************
+        	-->
+			 	
+		<condition property="requires.user.exisiting.tomcat.secured.and.ca.exist">
+				    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+						<equals arg1="${user.tomcat.exist}" arg2="true" />
+						<equals arg1="${system.certificate.exist}" arg2="false" />
+						<equals arg1="${ca.exist}" arg2="true" />
+	    	            	    </and>
+		</condition>
+			 	
+		 <!--
+                                 ******************
+                                 *** cond_18    ****
+                                 ******************
+       		 -->	 	
+			 	
+		<condition property="requires.user.exisiting.tomcat.secured.and.ca.absent">
+				    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+						<equals arg1="${user.tomcat.exist}" arg2="true" />
+						<equals arg1="${system.certificate.exist}" arg2="false" />
+						<equals arg1="${ca.exist}" arg2="false" />
+	    	            	    </and>
+	 	</condition>
+	 	
+	 	 <!--
+				 ******************
+				 *** cond_19   ****
+				 ******************
+        	-->
+	 	
+	 	<condition property="requires.exisiting.tomcat.secured.and.host.credential.exist">
+			    	     <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="true" />
+						
+						<equals arg1="${system.certificate.exist}" arg2="true" />
+						<equals arg1="${ca.exist}" arg2="false" />
+	    	            	    </and>
+	 	</condition>
+	 	
+	 	 <!--
+				 ******************
+				 *** cond_20   ****
+				 ******************
+        		-->
+	 	
+	 	<condition property="requires.exisiting.tomcat.secured.and.ca.exist">
+				    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="true" />
+
+						<equals arg1="${system.certificate.exist}" arg2="false" />
+						<equals arg1="${ca.exist}" arg2="true" />
+	    	            	    </and>
+	 	</condition>
+	 	
+	 	 <!--
+				 ******************
+				 *** cond_21   ****
+				 ******************
+        	-->
+	 	
+	 	<condition property="requires.exsiting.tomcat.secured.and.ca.absent">
+				    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="true" />
+
+						<equals arg1="${system.certificate.exist}" arg2="false" />
+						<equals arg1="${ca.exist}" arg2="false" />
+	    	            	    </and>
+	 	</condition>
+	 	
+	 	
+	 	<!--
+		              ********************************************************************
+		              ***************** Conditions for Tomcat(Non Secured)****************
+		              ********************************************************************
+		        
+	        -->
+	        
+	         <!--
+				 ******************
+				 *** cond_22   ****
+				 ******************
+        	-->
+	 	
+		<condition property="requires.nonsecure.tomcat.installation">
+				    <and>
+					<equals arg1="${is.secure}" arg2="false" />
+					<equals arg1="${system.target.container}" arg2="tomcat" />
+					
+					<equals arg1="${tomcat.exist}" arg2="false" />
+
+	    	            	    </and>
+		</condition>
+		 	
+		 	
+		<!--
+				 ******************
+				 *** cond_23   ****
+				 ******************
+        	--> 	
+		 	
+		 	
+		<condition property="requires.user.exisiting.nonsecure.tomcat.to.be.used">
+					   <and>
+						<equals arg1="${is.secure}" arg2="false" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+                                                <equals arg1="${user.tomcat.exist}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+					   
+	    	            	    </and>
+		</condition>
+		
+		<!--
+				 ******************
+				 *** cond_24   ****
+				 ******************
+        	-->
+		
+		<condition property="requires.exisiting.nonsecure.tomcat.to.be.used">
+				    <and>
+					<equals arg1="${is.secure}" arg2="false" />
+					<equals arg1="${system.target.container}" arg2="tomcat" />
+
+					<equals arg1="${tomcat.exist}" arg2="true" />
+							    
+	    	            	    </and>
+		</condition>
+		 	
+
+ 	
+ 	<!--
+ 	         *************************************************************************************************
+ 	         ***************       Define one target for every condition out there	          ****************
+ 	         *************************************************************************************************
+ 	 -->
+ 	 
+ 	     <!--
+	                                  ******************
+	                                  *** target_1    ****
+	                                  ******************
+	         -->
+	        <target name="requires.secure.globus.installation.and.host.credential.exist"/>
+	  	<target name="requires.secure.globus.installation.and.ca.exist" />
+	  	<target name="requires.secure.globus.installation.and.ca.absent"/>
+	  	<target name="requires.user.exisiting.globus.secured.and.host.credential.exist"/>
+	  	<target name="requires.user.exisiting.globus.secured.and.ca.exist" />
+	  	<target name="requires.user.exsiting.globus.secured.and.ca.absent" />
+	  	<target name="requires.exisiting.globus.secured.and.host.credential.exist"/>
+	 	<target name="requires.exisiting.globus.secured.and.ca.exist"/>
+	 	<target name="requires.exsiting.globus.secured.and.ca.absent"/>
+	 	<target name="requires.nonsecure.globus.installation"/>
+	 	<target name="requires.user.exisiting.nonsecure.globus.to.be.used"/>
+	 	<target name="requires.exisiting.nonsecure.globus.to.be.used" />
+		<target name="requires.secure.tomcat.installation.and.host.credential.exist"/>
+		<target name="requires.secure.tomcat.installation.and.ca.exist"/>
+		<target name="requires.secure.tomcat.installation.and.ca.absent" />
+		<target name="requires.user.exisiting.tomcat.secured.and.host.credential.exist"/>
+		<target name="requires.user.exisiting.tomcat.secured.and.ca.exist" />
+		<target name="requires.user.exisiting.tomcat.secured.and.ca.absent"/>
+		<target name="requires.exisiting.tomcat.secured.and.host.credential.exist" />
+		<target name="requires.exisiting.tomcat.secured.and.ca.exist" />
+		<target name="requires.exsiting.tomcat.secured.and.ca.absent" />
+		<target name="requires.nonsecure.tomcat.installation" />
+		<target name="requires.user.exisiting.nonsecure.tomcat.to.be.used" />
+		<target name="requires.exisiting.nonsecure.tomcat.to.be.used" />
+
+ 	 
+ 	 
+ 	 <!--
+		 *************************************************************************************************
+		 ***************   End of  Define one target for every Condition out there        ****************
+		 *************************************************************************************************
+ 	 -->
+ 	
+ 	
+ 	
+ 	<!--
+			 *************************************************************************************************
+			 ***************   Main Tagerts                                                   ****************
+			 *************************************************************************************************
+ 	 -->
+ 	 
+		<target name="requires.secure.globus.installation.and.host.credential.exist"/>
+	  	<target name="requires.secure.globus.installation.and.ca.exist" />
+	  	<target name="requires.secure.globus.installation.and.ca.absent" />
+	  	<target name="requires.user.exisiting.globus.secured.and.host.credential.exist" />
+	  	<target name="requires.user.exisiting.globus.secured.and.ca.exist" />
+	  	<target name="requires.user.exsiting.globus.secured.and.ca.absent" />
+	  	<target name="requires.exisiting.globus.secured.and.host.credential.exist"/>
+	 	<target name="requires.exisiting.globus.secured.and.ca.exist" />
+	 	<target name="requires.exsiting.globus.secured.and.ca.absent" />
+	 	<target name="requires.nonsecure.globus.installation" />
+	 	<target name="requires.exisiting.nonsecure.globus.to.be.used" />
+		<target name="requires.secure.tomcat.installation.and.host.credential.exist" />
+		<target name="requires.secure.tomcat.installation.and.ca.exist" />
+		<target name="requires.secure.tomcat.installation.and.ca.absent" />
+		<target name="requires.user.exisiting.tomcat.secured.and.host.credential.exist"/>
+		<target name="requires.user.exisiting.tomcat.secured.and.ca.exist" />
+		<target name="requires.user.exisiting.tomcat.secured.and.ca.absent"/>
+		<target name="requires.exisiting.tomcat.secured.and.host.credential.exist" />
+		<target name="requires.exisiting.tomcat.secured.and.ca.exist" />
+		<target name="requires.exsiting.tomcat.secured.and.ca.absent" />
+		<target name="requires.nonsecure.tomcat.installation" />
+		<target name="requires.user.exisiting.nonsecure.tomcat.to.be.used" />
+		<target name="requires.exisiting.nonsecure.tomcat.to.be.used" />
+ 	 
+ 	 
+ 	 
+ 	 <!--
+	 		 *************************************************************************************************
+	 		 ***************   End of Main Targets                                            ****************
+	 		 *************************************************************************************************
+ 	 -->
+ 	 
+ 	
+  	
+ 	
+ 	
+ 
+  	
+  	
+  <target name="Scn1"  description="Scenario 1" if="sc1">
+     
+     
+     <mkdir dir="${user.home}/.grid"/>
+     <mkdir dir="${user.home}/.grid/certificates"/>
+     
+     <antcall target="createCAcertAndKey">
+     	<param name="ca.cert.location" value="${user.home}/.grid/certificates"/>
+      	<param name="ca.key.location" value="${user.home}/.grid/certificates"/>
+     </antcall>
+     
+     <echo message="${user.home}/.grid/certificates/rootCA_cert.pem"/>
+     <sleep seconds="5"/>
+     <antcall target="createHostCertAndKey">
+      <param name="ca.cert.file" value="${user.home}/.grid/certificates/rootCA_cert.pem"/>
+      <param name="ca.key.file" value="${user.home}/.grid/certificates/rootCA_key.pem"/>
+     </antcall>
+     
+     
+     
+     <antcall target="configureServer.xml">
+     	 <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+         <param name="host.key.file" value="${host.key.location}/host_${host.cn}_key.pem"/>
+     </antcall>
+     
+  </target>
+  
+  <target name="Scn2"  description="clean up" if="sc2">
+       <echo message="Fire scenarion two"/> 
+       <antcall target="createHostCertAndKey"/>
+       <antcall target="configureServer.xml">
+            	 <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+                <param name="host.key.file" value="${host.key.location}/host_${host.cn}_key.pem"/>
+     </antcall>
+  </target>
+  
+  <target name="Scn3"  description="clean up" if="sc3">
+       <antcall target="configureServer.xml">
+                   	 <param name="host.cert" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+                       <param name="host.key" value="${host.key.location}/host_${host.cn}_key.pem"/>
+     </antcall>
+  </target>
+  
+  
+  
+  
+   <target name="installTomcatSecurely" description="clean up">
+       <unzip src="${basedir}/resources/release/jakarta-tomcat-5.0.28.zip" dest="${tomcat.home}"/>
+       <antcall target="Scn1"/>
+       <antcall target="Scn2"/>
+       <antcall target="Scn3"/>
+       
+  </target>
+        
+  
+  
+  <target name="createCAcertAndKey">
+  	<java classname="gov.nih.nci.cagrid.installer.customtasks.CACertificateCreator" fork="yes">
+	    	       	 <arg value="${ca.o}" />
+	    		 <arg value="${ca.ou}" />
+	    		 <arg value="${ca.cn}"/> 
+	    		 <arg value="${ca.dv}" />
+	    		 <arg value="${ca.keypwd}"/>
+	    		 <arg value="${ca.cert.location}"/>
+	    		 <arg value="${ca.key.location}"/>
+	    		 <classpath refid="certificate.cp"/>
+    	</java>
+    	
+  </target>
+  
+  <target name="createHostCertAndKey">
+  	<echo message="passed ca cert:${ca.cert.file}"/>
+  	<echo message="passed ca key:${ca.key.file}"/>
+  	<echo message="passed ca keypwd:${ca.keypwd}"/>
+  	<echo message="passed host key location:${host.key.location}"/>
+  	<echo message="passed host cert location:${host.cert.location}"/>
+  	<java classname="gov.nih.nci.cagrid.installer.customtasks.HostCertificateCreator" fork="yes">
+        	         <arg value="${ca.cert.file}" />
+        		 <arg value="${ca.key.file}" />
+        		 <arg value="${ca.keypwd}"/> 
+        		 <arg value="${host.cert.location}" />
+        		 <arg value="${host.dv}"/>
+        		 <arg value="${host.cn}"/>
+        		 <arg value="${host.key.location}"/>
+        		 <classpath refid="certificate.cp"/>
+        	<redirector output="c:/temp/hostoutput.txt"/>
+      	</java>
+      	
+  </target>
+  
+  <target name="configureServer.xml">
+  	<xmltask source="${tomcat.home}/jakarta-tomcat-5.0.28/conf/server.xml" dest="${tomcat.home}/jakarta-tomcat-5.0.28/conf/server.xml">
+	          	<remove path="/Server/Service/Connector[@port='8443']"/>
+	          	
+          </xmltask>
+          <xmltask source="${basedir}/resources/etc/serverTemplate.xml" dest="${basedir}/resources/etc/modifiedServerTemplate.xml">
+	          	<attr path="/Connector" attr="cert" value="${host.cert.file}"/>
+	          	<attr path="/Connector" attr="key" value="${host.key.file}"/>
+        </xmltask>
+        <xmltask source="${tomcat.home}/jakarta-tomcat-5.0.28/conf/server.xml" dest="${tomcat.home}/jakarta-tomcat-5.0.28/conf/server.xml">
+	      	<insert path="/Server/Service[@name='Catalina']" file="${basedir}/resources/etc/modifiedServerTemplate.xml"/>
+      </xmltask>
+  </target>
+  
+  <target name="test">
+   <antcall target="createHostCertAndKey">
+   	<param name="ca.cert" value="${user.home}/.grid/certificates/rootCA_cert.pem"/>
+      <param name="ca.key" value="${user.home}/.grid/certificates/rootCA_key.pem"/>
+   	<param name="ca.keypwd" value="xyz"/>
+   	<param name="host.cert.location" value="c:/temp/certificate"/>
+   	<param name="host.dv" value="40"/>
+   	<param name="host.cn" value="vinay"/>
+   	<param name="host.key.location" value="c:/temp/certificate"/>
+   </antcall>
+  </target>
+  <target name="cleanuptarget"
+        description="clean up" >
+   
+    
+  </target>
+  <target name="finished"
+          description="clean up" >
+     
+      <echo message="we are done!"/>
+  </target>
+</project>

@@ -1,0 +1,350 @@
+<project name="certificate creation task test" default="installDorian" basedir=".">
+    <description>
+        certificate test
+    </description>
+  <!-- set global properties for this build -->
+  
+
+  
+  <property file="${user.home}/.gridenv.properties"/>
+  <property environment="env" />
+  
+   
+   <path id="xmltaskdef.cp">
+       	<fileset dir="${basedir}/resources/lib">
+     	   <include name="xmltask-v1.14.jar"/>
+             </fileset> 
+   </path>
+   
+   <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltaskdef.cp"/>
+   
+   
+    <!-- Copied from GTS build file -->
+   
+         
+         <property name="jar.prefix" value="caGrid-1.0-gts" />
+         <property name="common.jar.name" value="${jar.prefix}-common.jar" />
+	  <property name="client.jar.name" value="${jar.prefix}-client.jar" />
+	     
+	  <property name="service.jar.name" value="${jar.prefix}-service.jar" />
+   	 <property name="stubs.jar.name" value="${jar.prefix}-stubs.jar" />
+         
+	  <property name="local.lib.dir" value="${basedir}/resources/release/lib" />
+	  <property name="local.ext.lib.dir" value="${basedir}/resources/release/ext/lib" />
+    
+   	<property name="local.build.dir" location="${basedir}/resources/release/build" />
+       
+       <property name="local.build.dest" location="${local.build.dir}/classes" />
+       <property name="local.test.build.dest" value="${local.build.dir}/test/classes" />
+      
+       <property name="local.build.lib.dir" location="${local.build.dir}/lib" />
+       
+       <property name="local.stubs.dir" location="${local.build.dir}/stubs-${service.name}" />
+       
+       <property name="local.stubs.src" location="${local.stubs.dir}/src" />
+       
+    <property name="local.stubs.dest" location="${local.stubs.dir}/classes" />
+       
+      <!-- End of copy -->  
+  
+  <!--##################################################################################################################-->
+        <!---
+          The first scenario represent the case when target container is tomcat but
+          tomcat does not exist
+        -->
+  	<condition property="sc1">
+    	            <and>
+    	                <equals arg1="${tomcat.exist}" arg2="false" />
+    	                <equals arg1="${target.container}" arg2="tomcat" />
+    	            </and>
+ 	</condition>
+ 	<!---
+	          The second scenario represent the case when target 
+	          container is globus and globus does not exist
+        -->
+ 	
+ 	<condition property="sc2">
+	    	            <and>
+	    	                <equals arg1="${globus.exist}" arg2="false" />
+	    	                <equals arg1="${target.container}" arg2="globus" />
+	    	            </and>
+ 	</condition>
+ 	<!---
+	          The third scenario represent the case when 
+	          a) target container is tomcat and it exists
+	          OR
+	          b) target container is globus and it exists
+        -->
+ 	
+ 	<condition property="sc3">
+ 	                 <OR>
+	    	            <and>
+	    	                <equals arg1="${tomcat.exist}" arg2="true" />
+	    	                <equals arg1="${target.container}" arg2="tomcat" />
+	    	                
+	    	            </and>
+	    	            <and>
+				<equals arg1="${globus.exist}" arg2="true" />
+				<equals arg1="${target.container}" arg2="globus" />
+			    	    	                
+	    	            </and>
+	    	          </OR>
+ 	</condition>
+ 	
+ 	<condition property="add.admin.now">
+		    	            <and>
+		    	                <equals arg1="${add.admin}" arg2="true" />
+		    	                
+		    	            </and>
+ 	</condition>
+ 	
+ 	 
+ <!--######################################################################################################################-->
+ 
+ <!--**************************************************************
+     ********               Targets                       *********
+     ************************************************************** -->
+ 	
+ 	<target name="defineClasspaths" depends="checkGlobus">
+	    <path id="local.base.classpath">
+	                <fileset dir="${local.lib.dir}">
+	                    <include name="*.jar" />
+	                </fileset>
+	                <fileset dir="${local.ext.lib.dir}">
+	                    <include name="*.jar" />
+	                </fileset>
+	                <fileset dir="${ext.globus.dir}/lib">
+	                    <include name="*.jar" />
+	                    <exclude name="${stubs.jar.name}" />
+	                    <exclude name="${common.jar.name}" />
+	                    <exclude name="${client.jar.name}" />
+	                    <exclude name="${service.jar.name}" />
+	                </fileset>
+	                <fileset dir="${local.build.lib.dir}">
+				<include name="*.jar" />
+	                </fileset>
+	        </path>
+	   
+     </target>   
+     
+ 	
+ 
+  	
+  	
+  <target name="Scn1"  description="Scenario 1" if="sc1">
+     
+     <echo message="Tomcat does not exist, Dorian can't be installed!" />
+     
+  </target>
+  
+  <target name="Scn2"  description="clean up" if="sc2">
+       <echo message="Globus does not exist, Dorian can't be installed!"/>
+  </target>
+  
+  <target name="Scn3"  description="clean up" if="sc3">
+       <antcall target="configureDataBaseAndSyncParams">
+            	<param name="db.host" value="${gts.database.host}"/>
+            	<param name="db.un" value="${gts.database.userid}"/>
+            	<param name="db.pwd" value="${gts.database.password}"/>
+            	<param name="db.port" value="${gts.database.port}"/>
+            	
+            	
+     </antcall>
+     
+     
+     <!--
+     <antcall target="configureSynchParams"/>
+     
+     <echo message="configureServiceMetadata:${dorian.service.display.name}"/>
+     <echo message="configureServiceMetadata:${dorian.service.short.name}"/>
+     <echo message="configureServiceMetadata:${dorian.service.short.name}"/>
+     <echo message="configureServiceMetadata:${dorian.service.country}"/>
+     -->
+       <antcall target="configureServiceMetadata">
+	 <param name="rc.display.name" value="${gts.service.display.name}"/>
+         <param name="rc.short.name" value="${gts.service.short.name}"/>
+         <param name="rc.country.name" value="${gts.service.country}"/>
+         <param name="rc.postal.code" value="${gts.service.postal.code}"/>
+         <param name="rc.province.name" value="${gts.service.province}"/>
+         <param name="rc.street1.name" value="${gts.service.street}"/>
+         <param name="rc.poc.affiliation.name" value="${gts.service.rc.affiliation}"/>
+         <param name="rc.poc.email.id" value="${gts.service.rc.poc.email}"/>
+         <param name="rc.poc.first.name" value="${gts.service.rc.poc.first.name}"/>
+         <param name="rc.poc.last.name" value="${gts.service.rc.poc.last.name}"/>
+         <param name="rc.poc.role.name" value="${gts.service.rc.poc.role}"/>
+        <!-- 
+         <param name="poc.affiliation.name" value="${dorian.service.poc.affiliation}"/>
+         <param name="poc.email.id" value="${dorian.service.poc.email}"/>
+         <param name="poc.first.name" value="${dorian.service.poc.first.name}"/>
+         <param name="poc.last.name" value="${dorian.service.poc.last.name}"/>
+         <param name="poc.role.name" value="${dorian.service.poc.role}"/>
+         -->
+         
+     </antcall>
+     <!--
+     <antcall target="configureRegistartionData">
+                 	<param name="index.service.uri" value="${index.service.epr}"/>
+                 	         	
+     </antcall>
+     -->
+     
+     
+     <antcall target="deploy${target.container}"/>
+     
+     <antcall target="addAdmin"/>
+  </target>
+  
+  
+  <target name="checkGlobus" depends="setGlobus">
+          <condition property="globus.not.found">
+              <or>
+                  <not>
+                      <isset property="ext.globus.dir" />
+                  </not>
+                  <equals arg1="${ext.globus.dir}" arg2="" />
+              </or>
+          </condition>
+          <fail message="Globus installation is not set in either GLOBUS_LOCATION or ext.globus.dir" if="globus.not.found" />
+          <echo message="Globus: ${ext.globus.dir}" />
+      </target>
+      <target name="setGlobus" if="env.GLOBUS_LOCATION">
+          <!-- GT4 build files and directories-->
+          <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
+          <property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+          <property name="schema.src" location="${ext.globus.dir}/share/schema" />
+          <property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
+          <!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
+          <property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" />
+    </target>
+    
+    
+  
+ <!--######################################################################################################################-->
+ 
+ <!--****************************************************
+     ****************************************************
+     *************  Main Targets              ***********
+     ****************************************************
+     ****************************************************-->
+  
+  
+   <target name="installGTS" description="clean up">
+       
+       <antcall target="Scn1"/>
+       <antcall target="Scn2"/>
+       <antcall target="Scn3"/>
+       
+       
+  </target>
+        
+  <target name="installsource" description="Source Code Installation">
+           
+           <mkdir dir="${user.grid.home}/gts"/>
+           <copy todir="${user.grid.home}/gts">
+  	     <fileset dir="${basedir}/resources/release">
+  	       <include name="**/*.*"/>
+  	     </fileset>
+  	   </copy>
+  
+           
+           
+  </target>
+  
+ 
+ <!--########################################################################################################################-->
+ 
+        <!-- ******************************************************
+             ******************************************************
+             ********   Reusable Targets                 **********
+             ******************************************************
+             ****************************************************** -->
+  
+  
+  
+  
+  <target name="configureDataBaseAndSyncParams">
+  
+  
+  <replace file="${basedir}/resources/templates/gts-conf.xml" >
+  	    		<replacefilter token="@PORT@" value="${db.port}"/>
+  	    		<replacefilter token="@USER@" value="${db.un}"/>
+  	    		<replacefilter token="@HOST@" value="${db.host}"/>
+  	    		<replacefilter token="@PASSWORD@" value="${db.pwd}"/>
+  	    		<replacefilter token="@HR@" value="${gts.sync.hr}"/>
+  	    		<replacefilter token="@MIN@" value="${gts.sync.min}"/>
+  	    		<replacefilter token="@SEC@" value="${gts.sync.sec}"/>
+  	    		
+  	    		
+      	</replace>
+      	<copy file="${basedir}/resources/templates/gts-conf.xml" overwrite="true" todir="${basedir}/resources/release/etc"/>
+  
+  </target>
+  
+  
+  <target name="configureServiceMetadata">
+    <xmltask source="${basedir}/resources/release/etc/ServiceMetadata.xml" dest="${basedir}/resources/release/etc/ServiceMetadata.xml">
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']"  attr="displayName" value="${rc.display.name}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']"  attr="shortName" value="${rc.short.name}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='Address']"  attr="country" value="${rc.country.name}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='Address']"  attr="postalCode" value="${rc.postal.code}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='Address']"  attr="stateProvince" value="${rc.province.name}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='Address']"  attr="street1" value="${rc.street1.name}"/>
+       	          	
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="affiliation" value="${rc.poc.affiliation.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="email" value="${rc.poc.email.id}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="firstName" value="${rc.poc.first.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="lastName" value="${rc.poc.last.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="role" value="${rc.poc.role.name}"/>
+ 			
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="affiliation" value="${poc.affiliation.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="email" value="${poc.email.id}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="firstName" value="${poc.first.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="lastName" value="${poc.last.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="role" value="${poc.role.name}"/>
+ 			
+        
+        
+        </xmltask>
+  </target>
+  <target name="configureRegistartionData">
+  	<xmltask source="${basedir}/resources/release/etc/registration.xml" dest="${basedir}/resources/release/etc/registration.xml">
+		<replace path="//*[local-name()='ServiceGroupRegistrationParameters']/*[local-name()='ServiceGroupEPR']/*[local-name()='Address']/text()" withText="${index.service.uri}"/>
+
+		
+        </xmltask>
+  </target>
+  
+  <target name="addAdmin" description="Add a administrator to the GTS" depends="defineClasspaths" if="add.admin.now">
+  	
+  		<java classname="gov.nih.nci.cagrid.gts.tools.service.AntPermissionBootstapper" fork="yes">
+  			<arg value="${basedir}/resources/release/etc/gts-conf.xml" />
+  			<arg value="${admin.identity}"/>
+  			<classpath refid="local.base.classpath"/> 
+  		</java>
+	</target>
+	
+	
+  
+  <target name="deploytomcat">
+    <ant  dir="${basedir}/resources/release" antfile="${basedir}/resources/release/build.xml" target="deployTomcat">
+    </ant>
+  </target>
+  <target name="deployglobus">
+      <ant  dir="${basedir}/resources/release" antfile="${basedir}/resources/release/build.xml" target="deployGlobus">
+      </ant>
+  </target>
+  
+  
+  <!--###########################################################################################################-->
+		
+  <target name="cleanuptarget"
+        description="clean up" >
+   
+    
+  </target>
+  <target name="finished"
+          description="clean up" >
+     
+      <echo message="we are done!"/>
+  </target>
+</project>

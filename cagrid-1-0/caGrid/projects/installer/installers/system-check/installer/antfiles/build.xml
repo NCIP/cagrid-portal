@@ -1,0 +1,2277 @@
+<project name="certificate creation task test" default="installTomcatSecurely" basedir=".">
+    <description>
+        certificate test
+    </description>
+  <!-- set global properties for this build -->
+  
+
+  
+  <property file="${user.home}/.gridenv.properties"/>
+  
+  
+  <path id="certificate.cp">
+    	<fileset dir="${basedir}/resources/lib">
+  	   <include name="certificate_tasks.jar"/>
+          </fileset> 
+          <fileset dir="${basedir}/resources/lib/ext">
+  	   <include name="**/*.jar"/>
+          </fileset>
+   </path>
+   
+   <path id="xmltaskdef.cp">
+       	<fileset dir="${basedir}/resources/lib">
+     	   <include name="xmltask-v1.14.jar"/>
+             </fileset> 
+   </path>
+   
+   <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltaskdef.cp"/>
+  
+  
+        <!---
+          The first scenario represent the case when host key, 
+          host certificate and certificate authority is not in place
+        -->
+        
+        
+        <!--
+              ********************************************************************
+              *****************  Conditions for Globus   (Secured)****************
+              ********************************************************************
+        
+        -->
+        
+        <!--
+                                 ******************
+                                 *** cond_1    ****
+                                 ******************
+        -->
+        <condition property="requires.secure.globus.installation.and.host.credential.exist">
+	    	            <and>
+	    	                <equals arg1="${is.secure}" arg2="true" />
+	    	                <equals arg1="${system.target.container}" arg2="globus" />
+	    	                <equals arg1="${requires.config}" arg2="true" />
+	    	                <equals arg1="${globus.exist}" arg2="false" />
+	    	                <equals arg1="${user.globus.exist}" arg2="false" />
+	    	                <equals arg1="${system.certificate.exist}" arg2="true" />
+	    	                
+	    	            </and>
+ 	</condition>
+ 	
+ 	 <!--
+				 ******************
+				 *** cond_2    ****
+				 ******************
+        -->
+ 	
+ 	<condition property="requires.secure.globus.installation.and.ca.exist">
+		    	            <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="false" />
+					<equals arg1="${user.globus.exist}" arg2="false" />
+					<equals arg1="${system.certificate.exist}" arg2="false" />
+					<equals arg1="${ca.exist}" arg2="true" />
+				    	    	                
+	    	            	    </and>
+ 	</condition>
+ 	
+ 	 <!--
+				 ******************
+				 *** cond_3    ****
+				 ******************
+        -->
+ 	
+ 	<condition property="requires.secure.globus.installation.and.ca.absent">
+		              <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="false" />
+					<equals arg1="${user.globus.exist}" arg2="false" />
+					<equals arg1="${system.certificate.exist}" arg2="false" />
+					<equals arg1="${ca.exist}" arg2="false" />
+			    </and>
+			    
+			    
+ 	</condition>
+ 	
+ 	 <!--
+				 ******************
+				 *** cond_4    ****
+				 ******************
+        -->
+ 	                   
+ 	<condition property="requires.user.exisiting.globus.secured.and.host.credential.exist">
+		    	     <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="false" />
+					<equals arg1="${user.globus.exist}" arg2="true" />
+					<equals arg1="${system.certificate.exist}" arg2="true" />
+					
+			    </and>
+ 	</condition>
+ 	
+ 	<!--
+				 ******************
+				 *** cond_4.1   ****
+				 ******************
+        -->
+ 	                   
+ 	<condition property="requires.user.exisiting.globus.secured_but.requires.no.security.config">
+		    	     <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="false" />
+					<equals arg1="${globus.exist}" arg2="false" />
+					<equals arg1="${user.globus.exist}" arg2="true" />
+					
+					
+			    </and>
+ 	</condition>
+ 	
+ 	 <!--
+				 ******************
+				 *** cond_5    ****
+				 ******************
+        -->
+ 	
+ 	<condition property="requires.user.exisiting.globus.secured.and.ca.exist">
+			    	<and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="false" />
+					<equals arg1="${user.globus.exist}" arg2="true" />
+					<equals arg1="${system.certificate.exist}" arg2="false" />
+					<equals arg1="${ca.exist}" arg2="true" />
+			    	</and>
+ 	</condition>
+ 	
+ 	 <!--
+				 ******************
+				 *** cond_6    ****
+				 ******************
+        -->
+ 	
+ 	
+ 	<condition property="requires.user.exsiting.globus.secured.and.ca.absent">
+			    <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="false" />
+					<equals arg1="${user.globus.exist}" arg2="true" />
+					<equals arg1="${system.certificate.exist}" arg2="false" />
+					<equals arg1="${ca.exist}" arg2="false" />
+			    	</and>
+ 	</condition>
+ 	
+ 	 <!--
+				 ******************
+				 *** cond_7    ****
+				 ******************
+        -->
+ 	
+ 	<condition property="requires.exisiting.globus.secured.and.host.credential.exist">
+				<and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="true" />
+					
+					<equals arg1="${system.certificate.exist}" arg2="true" />
+					
+			    </and>
+	</condition>
+	
+	 <!--
+				 ******************
+				 *** cond_8    ****
+				 ******************
+        -->
+	 	
+	<condition property="requires.exisiting.globus.secured.and.ca.exist">
+				    <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="true" />
+					
+					<equals arg1="${system.certificate.exist}" arg2="false" />
+					<equals arg1="${ca.exist}" arg2="true" />
+			    </and>
+	</condition>
+	 	
+	 <!--
+                                 ******************
+                                 *** cond_9    ****
+                                 ******************
+        --> 	
+	 	
+	<condition property="requires.exsiting.globus.secured.and.ca.absent">
+			    <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="true" />
+					
+					<equals arg1="${system.certificate.exist}" arg2="false" />
+					<equals arg1="${ca.exist}" arg2="false" />
+			    </and>
+ 	</condition>
+ 	
+ 	
+ 	<!--
+                                 ******************
+                                 *** cond_9.1   ****
+                                 ******************
+        --> 	
+	 	
+	<condition property="requires.exsiting.globus.secured_but.no.security.config">
+			    <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${requires.config}" arg2="false" />
+					<equals arg1="${globus.exist}" arg2="true" />
+			    </and>
+ 	</condition>
+ 	
+ 	
+ 	<!--
+	              ********************************************************************
+	              *****************  Conditions for Globus(Non Secured)****************
+	              ********************************************************************
+	        
+        -->
+        
+         <!--
+				 ******************
+				 *** cond_10   ****
+				 ******************
+        -->
+ 	
+	<condition property="requires.nonsecure.globus.installation">
+			    <and>
+				<equals arg1="${is.secure}" arg2="false" />
+				<equals arg1="${system.target.container}" arg2="globus" />
+				<equals arg1="${globus.exist}" arg2="false" />
+				<equals arg1="${user.globus.exist}" arg2="false" />
+			    </and>
+	</condition>
+	 	
+	 	
+	 <!--
+                                 ******************
+                                 *** cond_11    ****
+                                 ******************
+        --> 	
+	 	
+	 	
+	<condition property="requires.user.exisiting.nonsecure.globus.to.be.used">
+				    <and>
+					<equals arg1="${is.secure}" arg2="false" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${user.globus.exist}" arg2="true" />
+					<equals arg1="${globus.exist}" arg2="false" />
+				    				
+			    </and>
+	</condition>
+	
+	 <!--
+				 ******************
+				 *** cond_12   ****
+				 ******************
+        -->
+	 	
+	<condition property="requires.exisiting.nonsecure.globus.to.be.used">
+			    <and>
+					<equals arg1="${is.secure}" arg2="false" />
+					<equals arg1="${system.target.container}" arg2="globus" />
+					<equals arg1="${globus.exist}" arg2="true" />
+			    				    				
+			    </and>
+	</condition>
+	 	
+ 	
+ 	
+
+ 	
+ 	
+ 	 <!--
+	              ********************************************************************
+	              *****************  Conditions for Tomcat   (Secured)****************
+	              ********************************************************************
+	        
+	        -->
+	        
+	         <!--
+				 ******************
+				 *** cond_13    ****
+				 ******************
+        	-->
+	        
+	        
+	        <condition property="requires.secure.tomcat.installation.and.host.credential.exist">
+		    	     <and>
+					<equals arg1="${is.secure}" arg2="true" />
+					<equals arg1="${system.target.container}" arg2="tomcat" />
+					<equals arg1="${requires.config}" arg2="true" />
+					<equals arg1="${tomcat.exist}" arg2="false" />
+					<equals arg1="${user.tomcat.exist}" arg2="false" />
+					<equals arg1="${system.certificate.exist}" arg2="true" />
+					
+	    	            </and>
+	 	</condition>
+	 	
+	 	 <!--
+				 ******************
+				 *** cond_14   ****
+				 ******************
+        	-->
+	 	
+	 	<condition property="requires.secure.tomcat.installation.and.ca.exist">
+			      <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+						<equals arg1="${user.tomcat.exist}" arg2="false" />
+						<equals arg1="${system.certificate.exist}" arg2="false" />
+						<equals arg1="${ca.exist}" arg2="true" />
+	    	            </and>
+	 	</condition>
+	 	
+	 	 <!--
+				 ******************
+				 *** cond_15   ****
+				 ******************
+        	-->
+	 	
+	 	<condition property="requires.secure.tomcat.installation.and.ca.absent">
+				    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+						<equals arg1="${user.tomcat.exist}" arg2="false" />
+						<equals arg1="${system.certificate.exist}" arg2="false" />
+						<equals arg1="${ca.exist}" arg2="false" />
+	    	            	   </and>
+	 	</condition>
+	 	
+	 	 <!--
+				 ******************
+				 *** cond_16   ****
+				 ******************
+        	-->
+	 	<condition property="requires.user.exisiting.tomcat.secured.and.host.credential.exist">
+					    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+						<equals arg1="${user.tomcat.exist}" arg2="true" />
+						<equals arg1="${system.certificate.exist}" arg2="true" />
+						
+	    	            </and>
+		</condition>
+		
+		 <!--
+				 ******************
+				 *** cond_17    ****
+				 ******************
+        	-->
+			 	
+		<condition property="requires.user.exisiting.tomcat.secured.and.ca.exist">
+				    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+						<equals arg1="${user.tomcat.exist}" arg2="true" />
+						<equals arg1="${system.certificate.exist}" arg2="false" />
+						<equals arg1="${ca.exist}" arg2="true" />
+	    	            	    </and>
+		</condition>
+			 	
+		 
+	 	
+	 	<!--
+                                 ******************
+                                 *** cond_18    ****
+                                 ******************
+       		 -->	 	
+			 	
+		<condition property="requires.user.exisiting.tomcat.secured.and.ca.absent">
+				    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+						<equals arg1="${user.tomcat.exist}" arg2="true" />
+						<equals arg1="${system.certificate.exist}" arg2="false" />
+						<equals arg1="${ca.exist}" arg2="false" />
+	    	            	    </and>
+	 	</condition>
+	 	
+	 	<!--
+                                 ******************
+                                 *** cond_18.1    ****
+                                 ******************
+       		 -->	 	
+			 	
+		<condition property="requires.user.exisiting.tomcat.secured_but.no_security.config">
+				    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="false" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+						<equals arg1="${user.tomcat.exist}" arg2="true" />
+						
+	    	            	    </and>
+	 	</condition>
+	 	
+	 	 <!--
+				 ******************
+				 *** cond_19   ****
+				 ******************
+        	-->
+	 	
+	 	<condition property="requires.exisiting.tomcat.secured.and.host.credential.exist">
+			    	     <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="true" />
+						
+						<equals arg1="${system.certificate.exist}" arg2="true" />
+						
+	    	            	    </and>
+	 	</condition>
+	 	
+	 	 <!--
+				 ******************
+				 *** cond_20   ****
+				 ******************
+        		-->
+	 	
+	 	<condition property="requires.exisiting.tomcat.secured.and.ca.exist">
+				    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="true" />
+
+						<equals arg1="${system.certificate.exist}" arg2="false" />
+						<equals arg1="${ca.exist}" arg2="true" />
+	    	            	    </and>
+	 	</condition>
+	 	
+	 	 <!--
+				 ******************
+				 *** cond_21   ****
+				 ******************
+        	-->
+	 	
+	 	<condition property="requires.exsiting.tomcat.secured.and.ca.absent">
+				    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="true" />
+
+						<equals arg1="${system.certificate.exist}" arg2="false" />
+						<equals arg1="${ca.exist}" arg2="false" />
+	    	            	    </and>
+	 	</condition>
+	 	
+	 	<!--
+				 ******************
+				 *** cond_21.1   ****
+				 ******************
+        	-->
+	 	
+	 	<condition property="requires.exsiting.tomcat.secured_but.no.security.config">
+				    <and>
+						<equals arg1="${is.secure}" arg2="true" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+						<equals arg1="${requires.config}" arg2="false" />
+						<equals arg1="${tomcat.exist}" arg2="true" />
+
+	    	            	    </and>
+	 	</condition>
+	 	
+	 	
+	 	<!--
+		              ********************************************************************
+		              ***************** Conditions for Tomcat(Non Secured)****************
+		              ********************************************************************
+		        
+	        -->
+	        
+	         <!--
+				 ******************
+				 *** cond_22   ****
+				 ******************
+        	-->
+	 	
+		<condition property="requires.nonsecure.tomcat.installation">
+				    <and>
+					<equals arg1="${is.secure}" arg2="false" />
+					<equals arg1="${system.target.container}" arg2="tomcat" />
+					<equals arg1="${user.tomcat.exist}" arg2="false" />
+					<equals arg1="${tomcat.exist}" arg2="false" />
+
+	    	            	    </and>
+		</condition>
+		 	
+		 	
+		<!--
+				 ******************
+				 *** cond_23   ****
+				 ******************
+        	--> 	
+		 	
+		 	
+		<condition property="requires.user.exisiting.nonsecure.tomcat.to.be.used">
+					   <and>
+						<equals arg1="${is.secure}" arg2="false" />
+						<equals arg1="${system.target.container}" arg2="tomcat" />
+                                                <equals arg1="${user.tomcat.exist}" arg2="true" />
+						<equals arg1="${tomcat.exist}" arg2="false" />
+					   
+	    	            	    </and>
+		</condition>
+		
+		<!--
+				 ******************
+				 *** cond_24   ****
+				 ******************
+        	-->
+		
+		<condition property="requires.exisiting.nonsecure.tomcat.to.be.used">
+				    <and>
+					<equals arg1="${is.secure}" arg2="false" />
+					<equals arg1="${system.target.container}" arg2="tomcat" />
+                    					<equals arg1="${tomcat.exist}" arg2="true" />
+							    
+	    	            	    </and>
+		</condition>
+		 	
+
+
+			<condition property="secure.globus.does.not.exist.on.tomcat">
+				    <or>
+					<equals arg1="${sec.globus.on.tomcat}" arg2="false" />
+					<equals arg1="${sec.globus.on.tomcat}" arg2="" />
+							    
+	    	            	    </or>
+		</condition>
+		
+		
+		<condition property="globus.does.not.exist.on.tomcat">
+				    <or>
+					<equals arg1="${globus.on.tomcat}" arg2="false" />
+					<equals arg1="${globus.on.tomcat}" arg2="" />
+							    
+	    	            	    </or>
+		</condition>
+ 		
+ 		<condition property="ant.does.not.exist">
+						    <and>
+							<equals arg1="${ant.exist}" arg2="false" />
+							
+									    
+			    	            	    </and>
+		</condition>
+		
+		<condition property="globus_does_not_exist">
+						    <and>
+							<equals arg1="${globus.exist}" arg2="false" />
+							
+									    
+			    	            	    </and>
+		</condition>
+ 	<!--
+ 	         *************************************************************************************************
+ 	         ***************       Define one target for every condition out there	          ****************
+ 	         *************************************************************************************************
+ 	 -->
+ 	 
+ 	     <!--
+	                                  ******************
+	                                  *** target_1    ****
+	                                  ******************
+	         -->
+	         <target name="requires.secure.globus.installation.and.host.credential.exist" if="requires.secure.globus.installation.and.host.credential.exist">
+	 	    	      <!--
+	 	    	      <echo message="Service is secured"/>
+	 	    	      <echo message="Target container is globus"/>
+	 	    	      <echo message="Need to be configured"/>
+	 	    	      <echo message="Globus does not exist"/>
+	 	    	      <echo message="Host credentials are available"/>
+	 	    	      <echo message="Certficate Authority is not in place"/>
+	 	    	      
+	 	    	      <echo message="Get Globus from net or get from resource folder"/>
+	 	    	      <echo message="Unpack it in the install dir"/>
+	 	    	      <echo message="change the tokens in the security-desc.xml of globus template file from resource folder and make entries for the host credentials"/>
+	 	    	      <echo message="copy this file in the globus location"/>
+	 	    	      <echo message="Change the gridenv.properties file"/>
+	 	    	      <echo message="set globus.exist=true"/>
+	 	    	      <echo message="set GLOBUS_LOCATION=${installDir}/ws-core-4.0.3"/>
+                      -->
+                      <echo message="Configuring for target 1 and condition 1"/>
+                       
+	 	    	      
+	 	    	      <antcall target="download_and_install_globus403">
+	 	    	      <param name="install.dir" value="${globus.install.dir}"/>
+	 	    	      </antcall>
+	 	    	      <antcall target="alterBuildStubXML">
+	 	    	      <param name="globus.base.location" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      </antcall>
+	 	    	      <antcall target="configure_host_credential_globus">
+	 	    	      <param name="globus.base.location" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      <param name="host.cert.file" value="${host.cert}"/>
+	 	    	      <param name="host.key.file" value="${host.key}"/>
+	 	    	      </antcall>
+	 	    	      <antcall target="configure_add_logical_host_entry_globus">
+	 	    	      <param name="globus.base.location" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      <param name="logical.host.name" value="${logical.host}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="pointToSecurityDesc">
+	 	    	      <param name="dir.param" value="${globus.install.dir}/ws-core-4.0.3/etc/globus_wsrf_core"/>
+	 	    	      </antcall>
+	 	    	      <propertyfile file="${user.home}/.gridenv.properties">
+	 	    	      <entry key="env.GLOBUS_LOCATION" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      <entry key="globus.exist" value="true"/>
+	 	    	      </propertyfile>
+	  	</target>
+	  	
+	  	 <!--
+	 				 ******************
+	 				 *** target_2    ****
+	 				 ******************
+	         -->
+	  	
+	  	<target name="requires.secure.globus.installation.and.ca.exist" if="requires.secure.globus.installation.and.ca.exist">
+	 		    	            
+	 	    	 <!--           	    
+			      <echo message="Service is secured"/>
+			      <echo message="Target container is globus"/>
+			      <echo message="Need to be configured"/>
+			      <echo message="Globus does not exist"/>
+			      <echo message="Host credentials are not available"/>
+			      <echo message="Certficate Authority is in place"/>
+
+			      <echo message="Get Globus from net or get from resource folder"/>
+			      <echo message="Unpack it in the install dir"/>
+			      <echo message="change the tokens in the security-desc.xml of globus template file from resource folder and make entries for the host credentials"/>
+			      <echo message="copy this file in the globus location"/>
+			      <echo message="Change the gridenv.properties file"/>
+			      <echo message="set globus.exist=true"/>
+	 	    	      <echo message="set GLOBUS_LOCATION=${installDir}/ws-core-4.0.3"/>
+	 	    	      -->
+	 	    	      <antcall target="download_and_install_globus403">
+	 	    	      <param name="install.dir" value="${globus.install.dir}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      					 
+					 
+					 
+					 <antcall target="createHostCertAndKey">
+					  <param name="ca.cert.file.param" value="${ca.cert.file}"/>
+					  <param name="ca.key.file.param" value="${ca.key.file}"/>
+					 </antcall>
+				<antcall target="alterBuildStubXML">
+	 	    	      <param name="globus.base.location" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      </antcall>	 
+	 	    	      <antcall target="configure_host_credential_globus">
+	 	    	      <param name="globus.base.location" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+	 	    	      <param name="host.key.file" value="${host.key.location}/host_${host.cn}_key.pem"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="configure_add_logical_host_entry_globus">
+	 	    	      <param name="globus.base.location" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      <param name="logical.host.name" value="${logical.host}"/>
+	 	    	      </antcall>
+	 	    	      <antcall target="pointToSecurityDesc">
+			      	 <param name="dir.param" value="${globus.install.dir}/ws-core-4.0.3/etc/globus_wsrf_core"/>
+	 	    	      </antcall>
+	 	    	      <propertyfile file="${user.home}/.gridenv.properties">
+	 	    	      <entry key="env.GLOBUS_LOCATION" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      <entry key="globus.exist" value="true"/>
+	 	    	      </propertyfile>
+	  	</target>
+	  	
+	  	 <!--
+	 				 ******************
+	 				 *** target_3    ****
+	 				 ******************
+	         -->
+	  	
+	  	<target name="requires.secure.globus.installation.and.ca.absent" if="requires.secure.globus.installation.and.ca.absent">
+	 		              
+	 			  <!--
+	 	              <echo message="Service is secured"/>
+			      <echo message="Target container is globus"/>
+			      <echo message="Need to be configured"/>
+			      <echo message="Globus does not exist"/>
+			      <echo message="Host credentials are not available"/>
+			      <echo message="Certficate Authority is not in place"/>
+
+			      <echo message="Get Globus from net or get from resource folder"/>
+			      <echo message="Unpack it in the install dir"/>
+			      <echo message="Creat CA and host certificate"/>
+			      <echo message="change the tokens in the security-desc.xml of globus template file from resource folder and make entries for the host credentials"/>
+			      <echo message="copy this file in the globus location"/>
+			      <echo message="Change the gridenv.properties file"/>
+			      <echo message="set globus.exist=true"/>
+	 	    	      <echo message="set env.GLOBUS_LOCATION=${installDir}/ws-core-4.0.3"/>
+
+                     -->
+	 	    	      
+	 	    	      <antcall target="download_and_install_globus403">
+	 	    	      <param name="install.dir" value="${globus.install.dir}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="alterBuildStubXML">
+			      	 	    	      <param name="globus.base.location" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="createCAcertAndKey">
+						<param name="ca.cert.location" value="${root.cert.location}"/>
+						<param name="ca.key.location" value="${root.key.location}"/>
+					 </antcall>
+					 
+					 <mkdir dir="${user.home}/.globus/certificates"/>
+					 <copy file="${root.cert.location}/rootCA_cert.pem"  tofile="${user.home}/.globus/certificates/rootCA_cert.0" />
+					 
+					 <antcall target="createHostCertAndKey">
+					  <param name="ca.cert.file.param" value="${root.cert.location}/rootCA_cert.pem"/>
+					  <param name="ca.key.file.param" value="${root.key.location}/rootCA_key.pem"/>
+					 </antcall>
+					 
+	 	    	      <antcall target="configure_host_credential_globus">
+	 	    	      <param name="globus.base.location" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+	 	    	      <param name="host.key.file" value="${host.key.location}/host_${host.cn}_key.pem"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="configure_add_logical_host_entry_globus">
+	 	    	      <param name="globus.base.location" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      <param name="logical.host.name" value="${logical.host}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="pointToSecurityDesc">
+			      	 <param name="dir.param" value="${globus.install.dir}/ws-core-4.0.3/etc/globus_wsrf_core"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <propertyfile file="${user.home}/.gridenv.properties">
+	 	    	      <entry key="env.GLOBUS_LOCATION" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      <entry key="globus.exist" value="true"/>
+	 	    	      </propertyfile>
+	 	    	      
+	 	    	      
+	  	</target>
+	  	
+	  	 <!--
+	 				 ******************
+	 				 *** target_4    ****
+	 				 ******************
+	         -->
+	  	                   
+	  	<target name="requires.user.exisiting.globus.secured.and.host.credential.exist" if="requires.user.exisiting.globus.secured.and.host.credential.exist">
+	 		    	<!-- 
+	 	              <echo message="Service is secured"/>
+			      <echo message="Target container is globus"/>
+			      <echo message="Need to be configured"/>
+			      <echo message="Globus does not exist"/>
+			      <echo message="User is using some exisiting Globus installation"/>
+			      <echo message="Host credentials are available"/>
+			      <echo message="Certficate Authority is not in place"/>
+
+			      
+			      <echo message="change the tokens in the security-desc.xml of globus template file from resource folder and make entries for the host credentials"/>
+			      <echo message="copy this file in the globus location"/>
+			      <echo message="Change the gridenv.properties file"/>
+			      <echo message="set globus.exist=true"/>
+	 	    	      <echo message="set env.GLOBUS_LOCATION=to-user-given-location"/>
+	 	    	      -->
+	 	    	      
+	 	    	      <antcall target="alterBuildStubXML">
+			      	<param name="globus.base.location" value="${user.ext.globus.home}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <echo message="Target 4 is fired !!!!!!!!!!!"/>
+	 	    	      <antcall target="configure_host_credential_globus">
+	 	    	      <param name="globus.base.location" value="${user.ext.globus.home}"/>
+	 	    	      <param name="host.cert.file" value="${host.cert}"/>
+	 	    	      <param name="host.key.file" value="${host.key}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="configure_add_logical_host_entry_globus">
+	 	    	      <param name="globus.base.location" value="${user.ext.globus.home}"/>
+	 	    	      <param name="logical.host.name" value="${logical.host}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="pointToSecurityDesc">
+			      	<param name="dir.param" value="${user.ext.globus.home}/etc/globus_wsrf_core"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <propertyfile file="${user.home}/.gridenv.properties">
+	 	    	      <entry key="env.GLOBUS_LOCATION" value="${user.ext.globus.home}"/>
+	 	    	      <entry key="globus.exist" value="true"/>
+	 	    	      </propertyfile>
+	  	</target>
+	  	
+	  	<!--
+				 ******************
+				 *** target_4.1   ****
+				 ******************
+        -->
+ 	                   
+ 	<target name="requires.user.exisiting.globus.secured_but.requires.no.security.config" if="requires.user.exisiting.globus.secured_but.requires.no.security.config">
+		    	     <echo message="User wants to use exisiting globus installation but does not want to configure for security "/>
+		    	     
+		    	     <antcall target="alterBuildStubXML">
+			        <param name="globus.base.location" value="${user.ext.globus.home}"/>
+	 	    	      </antcall>
+		    	     
+		    	     <propertyfile file="${user.home}/.gridenv.properties">
+	 	    	      <entry key="env.GLOBUS_LOCATION" value="${user.ext.globus.home}"/>
+	 	    	      <entry key="globus.exist" value="true"/>
+	 	    	      </propertyfile>
+ 	</target>
+	  	
+	  	 <!--
+	 				 ******************
+	 				 *** target_5    ****
+	 				 ******************
+	         -->
+	  	
+	  	<target name="requires.user.exisiting.globus.secured.and.ca.exist" if="requires.user.exisiting.globus.secured.and.ca.exist">
+	 			   <!-- 	
+	 	              <echo message="Service is secured"/>
+			      <echo message="Target container is globus"/>
+			      <echo message="Need to be configured"/>
+			      <echo message="Globus does not exist"/>
+			      <echo message="User is using some exisiting Globus installation"/>
+			      <echo message="Host credentials are not available"/>
+			      <echo message="Certficate Authority is in place"/>
+
+                              <echo message="Create Host credentials using CA"/>
+			      <echo message="change the tokens in the security-desc.xml of globus template file from resource folder and make entries for the host credentials"/>
+			      <echo message="copy this file in the globus location"/>
+			      <echo message="Change the gridenv.properties file"/>
+			      <echo message="set globus.exist=true"/>
+      			      <echo message="set env.GLOBUS_LOCATION=to-user-given-location"/>
+      			      -->
+      			        <antcall target="createHostCertAndKey">
+					  <param name="ca.cert.file.param" value="${ca.cert.file}"/>
+					  <param name="ca.key.file.param" value="${ca.key.file}"/>
+					 </antcall>
+					 
+      			      <antcall target="configure_host_credential_globus">
+	 	    	      <param name="globus.base.location" value="${user.ext.globus.home}"/>
+	 	    	      <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+	 	    	      <param name="host.key.file" value="${host.cert.location}/host_${host.cn}_key.pem"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="alterBuildStubXML">
+			      	 <param name="globus.base.location" value="${user.ext.globus.home}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="configure_add_logical_host_entry_globus">
+	 	    	      <param name="globus.base.location" value="${user.ext.globus.home}"/>
+	 	    	      <param name="logical.host.name" value="${logical.host}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="pointToSecurityDesc">
+			      	<param name="dir.param" value="${user.ext.globus.home}/etc/globus_wsrf_core"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <propertyfile file="${user.home}/.gridenv.properties">
+	 	    	      <entry key="env.GLOBUS_LOCATION" value="${user.ext.globus.home}"/>
+	 	    	      <entry key="globus.exist" value="true"/>
+	 	    	      </propertyfile>
+      			      
+	  	</target>
+	  	
+	  	 <!--
+	 				 ******************
+	 				 *** target_6    ****
+	 				 ******************
+	         -->
+	  	
+	  	
+	  	<target name="requires.user.exsiting.globus.secured.and.ca.absent" if="requires.user.exsiting.globus.secured.and.ca.absent">
+	 			<!--    
+	 		      <echo message="Service is secured"/>
+			      <echo message="Target container is globus"/>
+			      <echo message="Need to be configured"/>
+			      <echo message="Globus does not exist"/>
+			      <echo message="User is using some exisiting Globus installation"/>
+			      <echo message="Host credentials are not available"/>
+			      <echo message="Certficate Authority is not in place"/>
+
+                              <echo message="Create CA and Host credentials"/>
+			      <echo message="change the tokens in the security-desc.xml of globus template file from resource folder and make entries for the host credentials"/>
+			      <echo message="copy this file in the globus location"/>
+			      <echo message="Change the gridenv.properties file"/>
+			      <echo message="set globus.exist=true"/>
+      			      <echo message="set env.GLOBUS_LOCATION=to-user-given-location"/>
+      			      -->
+      			      
+      			      <echo message="Target 6 is fired !!"/>
+      			      
+      			      <antcall target="createCAcertAndKey">
+						<param name="ca.cert.location" value="${root.cert.location}"/>
+						<param name="ca.key.location" value="${root.key.location}"/>
+					 </antcall>
+					 
+					 <mkdir dir="${user.home}/.globus/certificates"/>
+					 <copy file="${root.cert.location}/rootCA_cert.pem"  tofile="${user.home}/.globus/certificates/rootCA_cert.0" />
+					 
+					 <antcall target="createHostCertAndKey">
+					  <param name="ca.cert.file.param" value="${root.cert.location}/rootCA_cert.pem"/>
+					  <param name="ca.key.file.param" value="${root.key.location}/rootCA_key.pem"/>
+					 </antcall>
+					 
+      			      <antcall target="configure_host_credential_globus">
+	 	    	      <param name="globus.base.location" value="${user.ext.globus.home}"/>
+	 	    	      <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+	 	    	      <param name="host.key.file" value="${host.cert.location}/host_${host.cn}_key.pem"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="alterBuildStubXML">
+			          <param name="globus.base.location" value="${user.ext.globus.home}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="configure_add_logical_host_entry_globus">
+	 	    	      <param name="globus.base.location" value="${user.ext.globus.home}"/>
+	 	    	      <param name="logical.host.name" value="${logical.host}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="pointToSecurityDesc">
+			      	<param name="dir.param" value="${user.ext.globus.home}/etc/globus_wsrf_core"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <propertyfile file="${user.home}/.gridenv.properties">
+	 	    	      <entry key="env.GLOBUS_LOCATION" value="${user.ext.globus.home}"/>
+	 	    	      <entry key="globus.exist" value="true"/>
+	 	    	      </propertyfile>
+	  	</target>
+	  	
+	  	 <!--
+	 				 ******************
+	 				 *** target_7    ****
+	 				 ******************
+	         -->
+	  	
+	  	<target name="requires.exisiting.globus.secured.and.host.credential.exist" if="requires.exisiting.globus.secured.and.host.credential.exist">
+	 				
+	 				<!--
+	 	              <echo message="Service is secured"/>
+			      <echo message="Target container is globus"/>
+			      <echo message="Need to be configured"/>
+			      <echo message="Globus exists"/>
+			      
+			      <echo message="Host credentials are available"/>
+			      <echo message="Certficate Authority is not in place"/>
+
+				 
+			      <echo message="change the tokens in the security-desc.xml of globus template file from resource folder and make entries for the host credentials"/>
+			      <echo message="copy this file in the globus location"/>
+			      <echo message="Change the gridenv.properties file"/>
+			      -->
+			      
+					    
+			     <antcall target="alterBuildStubXML">
+			      	<param name="globus.base.location" value="${env.GLOBUS_LOCATION}"/>
+	 	    	      </antcall> 
+					 
+      			      <antcall target="configure_host_credential_globus">
+	 	    	      <param name="globus.base.location" value="${env.GLOBUS_LOCATION}"/>
+	 	    	      <param name="host.cert.file" value="${host.cert}"/>
+	 	    	      <param name="host.key.file" value="${host.key}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="configure_add_logical_host_entry_globus">
+	 	    	      <param name="globus.base.location" value="${env.GLOBUS_LOCATION}"/>
+	 	    	      <param name="logical.host.name" value="${logical.host}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="pointToSecurityDesc">
+			      	<param name="dir.param" value="${env.GLOBUS_LOCATION}/etc/globus_wsrf_core"/>
+	 	    	      </antcall>
+	 	    	     
+			      
+	 	</target>
+	 	
+	 	 <!--
+	 				 ******************
+	 				 *** target_8    ****
+	 				 ******************
+	         -->
+	 	 	
+	 	<target name="requires.exisiting.globus.secured.and.ca.exist" if="requires.exisiting.globus.secured.and.ca.exist">
+	 		<!--		    
+	 		<echo message="Service is secured"/>
+		      <echo message="Target container is globus"/>
+		      <echo message="Need to be configured"/>
+		      <echo message="Globus exists"/>
+
+		      <echo message="Host credentials are  not available"/>
+		      <echo message="Certficate Authority is in place"/>
+
+                      <echo message="Create host certificates using CA"/>
+		      <echo message="change the tokens in the security-desc.xml of globus template file from resource folder and make entries for the host credentials"/>
+		      <echo message="copy this file in the globus location"/>
+		           -->
+					<antcall target="createHostCertAndKey">
+					  <param name="ca.cert.file.param" value="${ca.cert.file}"/>
+					  <param name="ca.key.file.param" value="${ca.key.file}"/>
+					 </antcall>
+					 
+      			      <antcall target="configure_host_credential_globus">
+	 	    	      <param name="globus.base.location" value="${env.GLOBUS_LOCATION}"/>
+	 	    	      <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+	 	    	      <param name="host.key.file" value="${host.cert.location}/host_${host.cn}_key.pem"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	       <antcall target="alterBuildStubXML">
+			      	<param name="globus.base.location" value="${env.GLOBUS_LOCATION}"/>
+	 	    	      </antcall> 
+	 	    	 
+	 	    	      <antcall target="configure_add_logical_host_entry_globus">
+	 	    	      <param name="globus.base.location" value="${env.GLOBUS_LOCATION}"/>
+	 	    	      <param name="logical.host.name" value="${logical.host}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="pointToSecurityDesc">
+			      	 <param name="dir.param" value="${env.GLOBUS_LOCATION}/etc/globus_wsrf_core"/>
+	 	    	      </antcall>
+	 	    	      
+		    
+	 	</target>
+	 	 	
+	 	 <!--
+	                                  ******************
+	                                  *** target_9    ****
+	                                  ******************
+	         --> 	
+	 	 	
+	 	<target name="requires.exsiting.globus.secured.and.ca.absent" if="requires.exsiting.globus.secured.and.ca.absent">
+	 			 <!--   
+	 			    <echo message="Service is secured"/>
+				      <echo message="Target container is globus"/>
+				      <echo message="Need to be configured"/>
+				      <echo message="Globus exists"/>
+
+				      <echo message="Host credentials are  not available"/>
+				      <echo message="Certficate Authority is not in place"/>
+
+					  <echo message="Create host certificates and CA"/>
+				      <echo message="change the tokens in the security-desc.xml of globus template file from resource folder and make entries for the host credentials"/>
+		      		    <echo message="copy this file in the globus location"/>
+		      		    -->
+		      		    <antcall target="createCAcertAndKey">
+						<param name="ca.cert.location" value="${root.cert.location}"/>
+						<param name="ca.key.location" value="${root.key.location}"/>
+					 </antcall>
+					 
+					 <mkdir dir="${user.home}/.globus/certificates"/>
+					 <copy file="${root.cert.location}/rootCA_cert.pem"  tofile="${user.home}/.globus/certificates/rootCA_cert.0" />
+					 
+					 <antcall target="createHostCertAndKey">
+					  <param name="ca.cert.file.param" value="${root.cert.location}/rootCA_cert.pem"/>
+					  <param name="ca.key.file.param" value="${root.key.location}/rootCA_key.pem"/>
+					 </antcall>
+					 
+      			      <antcall target="configure_host_credential_globus">
+	 	    	      <param name="globus.base.location" value="${env.GLOBUS_LOCATION}"/>
+	 	    	      <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+	 	    	      <param name="host.key.file" value="${host.cert.location}/host_${host.cn}_key.pem"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	       <antcall target="alterBuildStubXML">
+			      	  <param name="globus.base.location" value="${env.GLOBUS_LOCATION}"/>
+	 	    	      </antcall> 
+	 	    	      
+	 	    	      <antcall target="configure_add_logical_host_entry_globus">
+	 	    	      <param name="globus.base.location" value="${env.GLOBUS_LOCATION}"/>
+	 	    	      <param name="logical.host.name" value="${logical.host}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      <antcall target="pointToSecurityDesc">
+			      	<param name="dir.param" value="${env.GLOBUS_LOCATION}/etc/globus_wsrf_core"/>
+	 	    	      </antcall>
+	  	</target>
+	  	
+	  	
+	  	<!--
+                                 ******************
+                                 *** target_9.1   ****
+                                 ******************
+        --> 	
+	 	
+	<target name="requires.exsiting.globus.secured_but.no.security.config" if="requires.exsiting.globus.secured_but.no.security.config">
+			    <echo message="Don't do anything" />
+			    
+			     <antcall target="alterBuildStubXML">
+			    			      	<param name="globus.base.location" value="${env.GLOBUS_LOCATION}"/>
+	 	    	      </antcall> 
+ 	</target>
+	  	<!--
+	 	              ********************************************************************
+	 	              *****************  targets for Globus(Non Secured)****************
+	 	              ********************************************************************
+	 	        
+	         -->
+	         
+	          <!--
+	 				 ******************
+	 				 *** target_10   ****
+	 				 ******************
+	         -->
+	  	
+	 	<target name="requires.nonsecure.globus.installation" if="requires.nonsecure.globus.installation">
+	 			    
+	 			  <!--  
+	 	         <echo message="Service is not secured"/>
+		      <echo message="Target container is globus"/>
+		      
+		      <echo message="Globus does not exists"/>
+ 		      <echo message="get globus and install it"/>
+ 		      <echo message="change the grid env props"/>
+ 		      <echo message="set globus.exist = true"/>
+ 		      <echo message="set GLOBOUS_LOCATION to install dir + ws-core-4.0.3"/>
+ 		      -->
+ 		      
+					  <antcall target="download_and_install_globus403">
+	 	    	      <param name="install.dir" value="${globus.install.dir}"/>
+	 	    	      </antcall>
+	 	    	       <antcall target="alterBuildStubXML">
+			      	<param name="globus.base.location" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      </antcall> 
+	 	    	      <antcall target="configure_add_logical_host_entry_globus">
+	 	    	      <param name="globus.base.location" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      <param name="logical.host.name" value="${logical.host}"/>
+	 	    	      </antcall>
+	 	    	      
+	 	    	      
+	 	    	      
+	 	    	      <propertyfile file="${user.home}/.gridenv.properties">
+	 	    	      <entry key="env.GLOBUS_LOCATION" value="${globus.install.dir}/ws-core-4.0.3"/>
+	 	    	      <entry key="globus.exist" value="true"/>
+	 	    	      </propertyfile>
+ 		      
+		      
+
+			  
+	 	</target>
+	 	 	
+	 	 	
+	 	 <!--
+	                                  ******************
+	                                  *** target_11    ****
+	                                  ******************
+	         --> 	
+	 	 	
+	 	 	
+	 	<target name="requires.user.exisiting.nonsecure.globus.to.be.used" if="requires.user.exisiting.nonsecure.globus.to.be.used">
+	 				<!--
+	 			    <echo message="Service is not secured"/>
+				    		      <echo message="Target container is globus"/>
+				    		      
+				    		      <echo message="Globus does not exists"/>
+				     		      <echo message="Use is using some exisiting location of globus "/>
+				     		      <echo message="change the grid env props"/>
+				     		      <echo message="set globus.exist = true"/>
+ 		      		    <echo message="set GLOBOUS_LOCATION to user given location"/>
+						-->
+						
+				<antcall target="alterBuildStubXML">
+				<param name="globus.base.location" value="${user.ext.globus.home}"/>
+	 	    	      </antcall> 
+ 		      		    <propertyfile file="${user.home}/.gridenv.properties">
+	 	    	      <entry key="env.GLOBUS_LOCATION" value="${user.ext.globus.home}"/>
+	 	    	      <entry key="globus.exist" value="true"/>
+	 	    	      </propertyfile>
+	 	</target>
+	 	
+	 	 <!--
+	 				 ******************
+	 				 *** target_12   ****
+	 				 ******************
+	         -->
+	 	 	
+	 	<target name="requires.exisiting.nonsecure.globus.to.be.used" if="requires.exisiting.nonsecure.globus.to.be.used">
+	 			    
+	 			    <echo message="Do do anything, Non secure globus is found"/>
+	 			    <antcall target="alterBuildStubXML">
+				    	<param name="globus.base.location" value="${env.GLOBUS_LOCATION}"/>
+	 	    	      </antcall> 
+	 	</target>
+	 	 	
+	  	
+	  	
+	  	
+	  	
+	  	 <!--
+	 	              ********************************************************************
+	 	              *****************  targets for Tomcat   (Secured)****************
+	 	              ********************************************************************
+	 	        
+	 	        -->
+	 	        
+	 	         <!--
+	 				 ******************
+	 				 *** target_13    ****
+	 				 ******************
+	         	-->
+	 	        
+	 	        
+	 	        <target name="requires.secure.tomcat.installation.and.host.credential.exist" if="requires.secure.tomcat.installation.and.host.credential.exist">
+	 		    	     
+	 		    	     <!--
+	 	    	            
+	 	    	              <echo message="Service is secured"/>
+				      <echo message="Target container is tomcat"/>
+				      <echo message="Need to be configured"/>
+				      <echo message="Tomcat does not exist"/>
+				      <echo message="Host credentials are available"/>
+				      <echo message="Certficate Authority is not in place"/>
+
+				      <echo message="Get Tomcat from net or get from resource folder"/>
+				      <echo message="Unpack it in the install dir"/>
+				      <echo message="change the tokens in the server.xml of tomcat template file from resource folder and make entries for the host credentials"/>
+				      <echo message="change HTTPs and valve"/>
+				      
+				      <echo message="unpack globus in tmp dir and install on Tomcat"/>
+				      <echo message="change server-config.wsdd"/>
+				      <echo message="change web.xml"/>
+				      <echo message="Change the gridenv.properties file"/>
+				      <echo message="set tomcat.exist=true"/>
+	 	    	             <echo message="set env.CATALINA_HOME=${installDir}/tomcat5.0.28"/>
+	 	    	            -->
+	 	    	            <antcall target="download_and_install_tomcat5028">
+	 	    	            <param name="install.dir" value="${tomcat.install.dir}"/>
+	 	    	            </antcall>
+	 	    	            
+	 	    	            <mkdir dir="${basedir}/globus_install_temp" />
+				    				    	 	    	            
+					    <antcall target="install_non_sec_globus">
+								  <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+								  </antcall>
+					     <antcall target="alterBuildStubXML">
+							<param name="globus.base.location" value="${globus.install.dir.with.tomcat}/ws-core-4.0.3"/>
+						</antcall>
+					    <mkdir dir="${basedir}/globus_install_temp" />
+					    <antcall target="download_and_install_globus403">
+							<param name="install.dir" value="${basedir}/globus_install_temp"/>
+					    </antcall>
+					    <antcall target="install_tomcat_on_globus_sec">
+					    <param name="globus.temp.install.dir" value="${basedir}/globus_install_temp"/>
+					    <param name="tomcat.temp.install.dir" value="${tomcat.install.dir}"/>
+	 	    	            </antcall>
+	 	    	            
+	 	    	            <antcall target="configureServer.xml">
+							 <param name="tomcat.temp.home" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28"/>
+							  <param name="host.cert.file" value="${host.cert}"/>
+							  <param name="host.key.file" value="${host.key}"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							 </antcall>
+							 <echo message="Logical Host=${logical.host}"/>
+							 <antcall target="configure_add_logical_host_entry_globus">
+							 <param name="globus.base.location" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28/webapps/wsrf/WEB-INF"/>
+							 <param name="logical.host.name" value="${logical.host}"/>
+							 </antcall>
+							 
+							 <antcall target="patchGlobusOnTomcat">
+							 <param name="webinf.dir.param" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28/webapps/wsrf/WEB-INF/etc/globus_wsrf_core"/>
+							 </antcall>
+							 
+							  <antcall target="configure_web_dot_xml_for_globus">
+							  <param name="globus.web.inf.dir" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28/webapps/wsrf/WEB-INF"/>
+							  <param name="http.scheme" value="https"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							  </antcall>
+							  
+							  <propertyfile file="${user.home}/.gridenv.properties">
+							  <entry key="env.CATALINA_HOME" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28"/>
+							  <entry key="tomcat.exist" value="true"/>
+							  <entry key="globus.on.tomcat" value="true"/>
+							  <entry key="sec.globus.on.tomcat"  value="true"/>
+							  <entry key="globus.exist" value="true"/>
+							  <entry key="env.GLOBUS_LOCATION" value="${globus.install.dir.with.tomcat}/ws-core-4.0.3"/>
+							  </propertyfile>
+	 	 	</target>
+	 	 	
+	 	 	 <!--
+	 				 ******************
+	 				 *** target_14   ****
+	 				 ******************
+	         	-->
+	 	 	
+	 	 	<target name="requires.secure.tomcat.installation.and.ca.exist" if="requires.secure.tomcat.installation.and.ca.exist">
+	 			      
+	 	    	          <!--  
+	 	    	              <echo message="Service is secured"/>
+				      <echo message="Target container is tomcat"/>
+				      <echo message="Need to be configured"/>
+				      <echo message="Tomcat does not exist"/>
+				      <echo message="Host credentials are not available"/>
+				      <echo message="Certficate Authority is in place"/>
+
+                                      <echo message="Create Host credentials"/>
+				      <echo message="Get Tomcat from net or get from resource folder"/>
+				      <echo message="Unpack it in the install dir"/>
+				      <echo message="change the tokens in the server.xml of tomcat template file from resource folder and make entries for the host credentials"/>
+				      <echo message="change HTTPs and valve"/>
+
+				      <echo message="unpack globus in tmp dir and install on Tomcat"/>
+				      <echo message="change server-config.wsdd"/>
+				      <echo message="change web.xml"/>
+				      <echo message="Change the gridenv.properties file"/>
+				      <echo message="set tomcat.exist=true"/>
+	 	    	             <echo message="set env.CATALINA_HOME=${installDir}/tomcat5.0.28"/>
+	 	    	             -->
+	 	    	             <antcall target="download_and_install_tomcat5028">
+	 	    	            <param name="install.dir" value="${tomcat.install.dir}"/>
+	 	    	            </antcall>
+	 	    	            
+	 	    	            <mkdir dir="${basedir}/globus_install_temp" />
+				    	 	    	            
+					    <antcall target="install_non_sec_globus">
+								  <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+								  </antcall>
+					     <antcall target="alterBuildStubXML">
+											<param name="globus.base.location" value="${globus.install.dir.with.tomcat}/ws-core-4.0.3"/>
+						</antcall>
+					    <mkdir dir="${basedir}/globus_install_temp" />
+					    <antcall target="download_and_install_globus403">
+							<param name="install.dir" value="${basedir}/globus_install_temp"/>
+					    </antcall>
+					    <antcall target="install_tomcat_on_globus_sec">
+					    <param name="globus.temp.install.dir" value="${basedir}/globus_install_temp"/>
+					    <param name="tomcat.temp.install.dir" value="${tomcat.install.dir}"/>
+	 	    	            </antcall>
+	 	    	            
+							<antcall target="createHostCertAndKey">
+							  <param name="ca.cert.file.param" value="${ca.cert.file}"/>
+							  <param name="ca.key.file.param" value="${ca.key.file}"/>
+							 </antcall>
+	 	    	            
+	 	    	            
+	 	    	            <antcall target="configureServer.xml">
+							 <param name="tomcat.temp.home" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28"/>
+							  <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+							  <param name="host.key.file" value="${host.cert.location}/host_${host.cn}_key.pem"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							 </antcall>
+							 <echo message="Logical Host=${logical.host}"/>
+							 <antcall target="configure_add_logical_host_entry_globus">
+							 <param name="globus.base.location" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28/webapps/wsrf/WEB-INF"/>
+							 <param name="logical.host.name" value="${logical.host}"/>
+							 </antcall>
+							 
+							 <antcall target="patchGlobusOnTomcat">
+							 	<param name="webinf.dir.param" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28/webapps/wsrf/WEB-INF/etc/globus_wsrf_core"/>
+							 </antcall>
+							  <antcall target="configure_web_dot_xml_for_globus">
+							  <param name="globus.web.inf.dir" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28/webapps/wsrf/WEB-INF"/>
+							  <param name="http.scheme" value="https"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							  </antcall>
+							  
+							  <propertyfile file="${user.home}/.gridenv.properties">
+							  <entry key="env.CATALINA_HOME" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28"/>
+							  <entry key="tomcat.exist" value="true"/>
+							  <entry key="globus.on.tomcat" value="true"/>
+							  <entry key="sec.globus.on.tomcat"  value="true"/>
+							  <entry key ="globus.exist" value="true"/>
+							  <entry key="env.GLOBUS_LOCATION" value="${globus.install.dir.with.tomcat}/ws-core-4.0.3"/>
+							  </propertyfile>
+	 	 	</target>
+	 	 	
+	 	 	 <!--
+	 				 ******************
+	 				 *** target_15   ****
+	 				 ******************
+	         	-->
+	 	 	
+	 	 	<target name="requires.secure.tomcat.installation.and.ca.absent" if="requires.secure.tomcat.installation.and.ca.absent">
+	 				    
+	 	    	         <!--   	  
+	 	    	           <echo message="Service is secured"/>
+				      <echo message="Target container is tomcat"/>
+				      <echo message="Need to be configured"/>
+				      <echo message="Tomcat does not exist"/>
+				      <echo message="Host credentials are not available"/>
+				      <echo message="Certficate Authority is not in place"/>
+
+					 <echo message="Create CA and Host credentials"/>
+				      <echo message="Get Tomcat from net or get from resource folder"/>
+				      <echo message="Unpack it in the install dir"/>
+				      <echo message="change the tokens in the server.xml of tomcat template file from resource folder and make entries for the host credentials"/>
+				      <echo message="change HTTPs and valve"/>
+
+				      <echo message="unpack globus in tmp dir and install on Tomcat"/>
+				      <echo message="change server-config.wsdd"/>
+				      <echo message="change web.xml"/>
+				      <echo message="Change the gridenv.properties file"/>
+				      <echo message="set tomcat.exist=true"/>
+	 	    	             <echo message="set env.CATALINA_HOME=${installDir}/tomcat5.0.28"/>
+	 	    	             -->
+	 	    	             <antcall target="download_and_install_tomcat5028">
+	 	    	            <param name="install.dir" value="${tomcat.install.dir}"/>
+	 	    	            </antcall>
+	 	    	            
+	 	    	            <mkdir dir="${basedir}/globus_install_temp" />
+	 	    	            
+	 	    	            <antcall target="install_non_sec_globus">
+							  <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+							  </antcall>
+				     <antcall target="alterBuildStubXML">
+				     				     		<param name="globus.base.location" value="${globus.install.dir.with.tomcat}/ws-core-4.0.3"/>
+	 	    	      		</antcall>
+	 	    	      	    <mkdir dir="${basedir}/globus_install_temp" />
+	 	    	      	    <antcall target="download_and_install_globus403">
+				    		<param name="install.dir" value="${basedir}/globus_install_temp"/>
+				    </antcall>
+	 	    	            <antcall target="install_tomcat_on_globus_sec">
+	 	    	            <param name="globus.temp.install.dir" value="${basedir}/globus_install_temp"/>
+	 	    	            <param name="tomcat.temp.install.dir" value="${tomcat.install.dir}"/>
+	 	    	            </antcall>
+	 	    	            
+	 	    	            <antcall target="createCAcertAndKey">
+						<param name="ca.cert.location" value="${root.cert.location}"/>
+						<param name="ca.key.location" value="${root.key.location}"/>
+					 </antcall>
+					 
+					 <mkdir dir="${user.home}/.globus/certificates"/>
+					 <copy file="${root.cert.location}/rootCA_cert.pem"  tofile="${user.home}/.globus/certificates/rootCA_cert.0" overwrite="true"/>
+					 
+					 <antcall target="createHostCertAndKey">
+					  <param name="ca.cert.file.param" value="${root.cert.location}/rootCA_cert.pem"/>
+					  <param name="ca.key.file.param" value="${root.key.location}/rootCA_key.pem"/>
+					 </antcall>
+	 	    	            
+							
+	 	    	            
+	 	    	            
+	 	    	            <antcall target="configureServer.xml">
+							 <param name="tomcat.temp.home" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28"/>
+							  <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+							  <param name="host.key.file" value="${host.cert.location}/host_${host.cn}_key.pem"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							 </antcall>
+							 <echo message="Logical Host=${logical.host}"/>
+							 <antcall target="configure_add_logical_host_entry_globus">
+							 <param name="globus.base.location" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28/webapps/wsrf/WEB-INF"/>
+							 <param name="logical.host.name" value="${logical.host}"/>
+							 </antcall>
+							 
+							 <antcall target="patchGlobusOnTomcat">
+							 	 <param name="webinf.dir.param" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28/webapps/wsrf/WEB-INF/etc/globus_wsrf_core"/>
+							 </antcall>
+							 
+							  <antcall target="configure_web_dot_xml_for_globus">
+							  <param name="globus.web.inf.dir" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28/webapps/wsrf/WEB-INF"/>
+							  <param name="http.scheme" value="https"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							  </antcall>
+							  
+							  <propertyfile file="${user.home}/.gridenv.properties">
+							  <entry key="env.CATALINA_HOME" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28"/>
+							  <entry key="tomcat.exist" value="true"/>
+							  <entry key="globus.on.tomcat" value="true"/>
+							  <entry key="sec.globus.on.tomcat"  value="true"/>
+							  <entry key ="globus.exist" value="true"/>
+							  <entry key="env.GLOBUS_LOCATION" value="${globus.install.dir.with.tomcat}/ws-core-4.0.3"/>
+							  </propertyfile>
+	 	 	</target>
+	 	 	
+	 	 	 <!--
+	 				 ******************
+	 				 *** target_16   ****
+	 				 ******************
+	         	-->
+	 	 	<target name="requires.user.exisiting.tomcat.secured.and.host.credential.exist" if="requires.user.exisiting.tomcat.secured.and.host.credential.exist">
+	 					  
+	 					  <!--
+	 	    	            	   	    
+	 	    	        <echo message="Service is secured"/>
+			      <echo message="Target container is tomcat"/>
+			      <echo message="Need to be configured"/>
+			      <echo message="Tomcat does not exist"/>
+			      <echo message="User is using some exisiting tomcat location"/>
+			      <echo message="Host credentials are available"/>
+			      <echo message="Certficate Authority is not in place"/>
+
+				
+			      
+			      <echo message="change the tokens in the server.xml of tomcat template file from resource folder and make entries for the host credentials"/>
+			      <echo message="change HTTPs and valve"/>
+
+			      
+			      <echo message="change server-config.wsdd"/>
+			      <echo message="change web.xml"/>
+			      <echo message="Change the gridenv.properties file"/>
+			      <echo message="set tomcat.exist=true"/>
+	 	    	             <echo message="set env.CATALINA_HOME=to user given location"/>
+				-->
+				
+				
+	 	    	            
+	 	    	             <antcall target="install_tomcat_on_globus_sec_if_does_not_exist" >
+	 	    	               <param name="tomcat.home.from.user" value="${user.ext.tomcat.home}"/>
+	 	    	             </antcall>
+	 	    	            
+	 	    	         
+	 	    	            <antcall target="install_non_sec_globus" >
+	 	    	               <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+	 	    	             </antcall>
+							
+	 	    	            
+	 	    	            
+	 	    	            <antcall target="configureServer.xml">
+							 <param name="tomcat.temp.home" value="${user.ext.tomcat.home}"/>
+							  <param name="host.cert.file" value="${host.cert}"/>
+							  <param name="host.key.file" value="${host.key}"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							 </antcall>
+							 <echo message="Logical Host=${logical.host}"/>
+							 <antcall target="configure_add_logical_host_entry_globus">
+							 <param name="globus.base.location" value="${user.ext.tomcat.home}/webapps/wsrf/WEB-INF"/>
+							 <param name="logical.host.name" value="${logical.host}"/>
+							 </antcall>
+							 
+							 <antcall target="patchGlobusOnTomcat">
+							  <param name="webinf.dir.param" value="${user.ext.tomcat.home}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core"/>
+							 </antcall>
+							 
+							  <antcall target="configure_web_dot_xml_for_globus">
+							  <param name="globus.web.inf.dir" value="${user.ext.tomcat.home}/webapps/wsrf/WEB-INF"/>
+							  <param name="http.scheme" value="https"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							  </antcall>
+							  
+							  <propertyfile file="${user.home}/.gridenv.properties">
+							  <entry key="env.CATALINA_HOME" value="${user.ext.tomcat.home}"/>
+							  <entry key="tomcat.exist" value="true"/>
+							  <entry key="globus.on.tomcat" value="true"/>
+							  <entry key="sec.globus.on.tomcat"  value="true"/>
+							  
+							  </propertyfile>
+	 	 	</target>
+	 		
+	 		
+	 		 <!--
+	 				 ******************
+	 				 *** target_17    ****
+	 				 ******************
+	         	-->
+	 			 	
+	 		<target name="requires.user.exisiting.tomcat.secured.and.ca.exist" if="requires.user.exisiting.tomcat.secured.and.ca.exist">
+	 				    
+	 				    <antcall target="install_tomcat_on_globus_sec_if_does_not_exist" >
+	 	    	               <param name="tomcat.home.from.user" value="${user.ext.tomcat.home}"/>
+	 	    	             </antcall>
+	 	    	            
+	 	    	            <antcall target="install_non_sec_globus" >
+	 	    	               <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+	 	    	             </antcall>
+	 	    	            
+							<antcall target="createHostCertAndKey">
+							  <param name="ca.cert.file.param" value="${ca.cert.file}"/>
+							  <param name="ca.key.file.param" value="${ca.key.file}"/>
+							 </antcall>
+	 	    	            
+	 	    	            
+	 	    	            <antcall target="configureServer.xml">
+							 <param name="tomcat.temp.home" value="${user.ext.tomcat.home}"/>
+							  <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+							  <param name="host.key.file" value="${host.cert.location}/host_${host.cn}_key.pem"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							 </antcall>
+	 	    	            
+	 	    	            
+	 	    	            
+							 <echo message="Logical Host=${logical.host}"/>
+							 <antcall target="configure_add_logical_host_entry_globus">
+							 <param name="globus.base.location" value="${user.ext.tomcat.home}/webapps/wsrf/WEB-INF"/>
+							 <param name="logical.host.name" value="${logical.host}"/>
+							 </antcall>
+							 
+							 <antcall target="patchGlobusOnTomcat">
+							 <param name="webinf.dir.param" value="${user.ext.tomcat.home}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core"/>
+							 </antcall>
+							  <antcall target="configure_web_dot_xml_for_globus">
+							  <param name="globus.web.inf.dir" value="${user.ext.tomcat.home}/webapps/wsrf/WEB-INF"/>
+							  <param name="http.scheme" value="https"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							  </antcall>
+							  
+							  <propertyfile file="${user.home}/.gridenv.properties">
+							  <entry key="env.CATALINA_HOME" value="${user.ext.tomcat.home}"/>
+							  <entry key="tomcat.exist" value="true"/>
+							  <entry key="globus.on.tomcat" value="true"/>
+							  <entry key="sec.globus.on.tomcat"  value="true"/>
+							  </propertyfile>
+	 	    	        
+	 		</target>
+	 			 	
+	 		 <!--
+	                                  ******************
+	                                  *** target_18    ****
+	                                  ******************
+	        		 -->	 	
+	 			 	
+	 		<target name="requires.user.exisiting.tomcat.secured.and.ca.absent" if="requires.user.exisiting.tomcat.secured.and.ca.absent">
+	 				   
+	 	    	          <antcall target="install_tomcat_on_globus_sec_if_does_not_exist" >
+	 	    	               <param name="tomcat.home.from.user" value="${user.ext.tomcat.home}"/>
+	 	    	             </antcall>
+	 	    	            
+	 	    	            <antcall target="install_non_sec_globus" >
+	 	    	               <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+	 	    	             </antcall>
+	 	    	            
+							<antcall target="createCAcertAndKey">
+						<param name="ca.cert.location" value="${root.cert.location}"/>
+						<param name="ca.key.location" value="${root.key.location}"/>
+					 </antcall>
+					 
+					 <mkdir dir="${user.home}/.globus/certificates"/>
+					 <copy file="${root.cert.location}/rootCA_cert.pem"  tofile="${user.home}/.globus/certificates/rootCA_cert.0" overwrite="true"/>
+					 
+					 <antcall target="createHostCertAndKey">
+					  <param name="ca.cert.file.param" value="${root.cert.location}/rootCA_cert.pem"/>
+					  <param name="ca.key.file.param" value="${root.key.location}/rootCA_key.pem"/>
+					 </antcall>
+	 	    	            
+	 	    	            
+	 	    	            <antcall target="configureServer.xml">
+							 <param name="tomcat.temp.home" value="${user.ext.tomcat.home}"/>
+							  <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+							  <param name="host.key.file" value="${host.cert.location}/host_${host.cn}_key.pem"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							 </antcall>
+	 	    	            
+	 	    	            
+	 	    	            
+							 <echo message="Logical Host=${logical.host}"/>
+							 <antcall target="configure_add_logical_host_entry_globus">
+							 <param name="globus.base.location" value="${user.ext.tomcat.home}/webapps/wsrf/WEB-INF"/>
+							 <param name="logical.host.name" value="${logical.host}"/>
+							 </antcall>
+							 
+							 <antcall target="patchGlobusOnTomcat">
+							   <param name="webinf.dir.param" value="${user.ext.tomcat.home}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core"/>
+							 </antcall>
+							 
+							  <antcall target="configure_web_dot_xml_for_globus">
+							  <param name="globus.web.inf.dir" value="${user.ext.tomcat.home}/webapps/wsrf/WEB-INF"/>
+							  <param name="http.scheme" value="https"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							  </antcall>
+							  
+							  <propertyfile file="${user.home}/.gridenv.properties">
+							  <entry key="env.CATALINA_HOME" value="${user.ext.tomcat.home}"/>
+							  <entry key="tomcat.exist" value="true"/>
+							  <entry key="globus.on.tomcat" value="true"/>
+							  <entry key="sec.globus.on.tomcat"  value="true"/>
+							  </propertyfile>
+	 	 	</target>
+	 	 	  <!--
+	                                  ******************
+	                                  *** target_18.1    ****
+	                                  ******************
+	        		 -->	 	
+	 	 	
+	 	 	<target name="requires.user.exisiting.tomcat.secured_but.no_security.config" if="requires.user.exisiting.tomcat.secured_but.no_security.config">
+	 	 	      <echo message="Don't do anything"/>
+	 	 	      <propertyfile file="${user.home}/.gridenv.properties">
+				  <entry key="env.CATALINA_HOME" value="${user.ext.tomcat.home}"/>
+				  <entry key="tomcat.exist" value="true"/>
+				  
+							  </propertyfile>
+	 	 	      <antcall target="install_non_sec_globus" >
+	 	    	               <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+	 	    	             </antcall>
+	 	 	</target>
+	 	 	
+	 	 	 <!--
+	 				 ******************
+	 				 *** target_19   ****
+	 				 ******************
+	         	-->
+	 	 	
+	 	 	<target name="requires.exisiting.tomcat.secured.and.host.credential.exist" if="requires.exisiting.tomcat.secured.and.host.credential.exist">
+	 			    	    
+	 	    	          <antcall target="install_tomcat_on_globus_sec_if_does_not_exist" >
+	 	    	               <param name="tomcat.home.from.user" value="${env.CATALINA_HOME}"/>
+	 	    	             </antcall>
+	 	    	            
+	 	    	            <antcall target="install_non_sec_globus" >
+	 	    	               <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+	 	    	             </antcall>
+	 	    	            
+							
+	 	    	            
+	 	    	            
+	 	    	            <antcall target="configureServer.xml">
+							 <param name="tomcat.temp.home" value="${env.CATALINA_HOME}"/>
+							  <param name="host.cert.file" value="${host.cert}"/>
+							  <param name="host.key.file" value="${host.key}"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							 </antcall>
+							 <echo message="Logical Host=${logical.host}"/>
+							 <antcall target="configure_add_logical_host_entry_globus">
+							 <param name="globus.base.location" value="${env.CATALINA_HOME}/webapps/wsrf/WEB-INF"/>
+							 <param name="logical.host.name" value="${logical.host}"/>
+							 </antcall>
+							 
+							 <antcall target="patchGlobusOnTomcat">
+							 	  <param name="webinf.dir.param" value="${env.CATALINA_HOME}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core"/>
+							 </antcall>
+							 
+							  <antcall target="configure_web_dot_xml_for_globus">
+							  <param name="globus.web.inf.dir" value="${env.CATALINA_HOME}/webapps/wsrf/WEB-INF"/>
+							  <param name="http.scheme" value="https"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							  </antcall>
+							  
+							  <propertyfile file="${user.home}/.gridenv.properties">
+							  <entry key="env.CATALINA_HOME" value="${env.CATALINA_HOME}"/>
+							  <entry key="tomcat.exist" value="true"/>
+							  <entry key="globus.on.tomcat" value="true"/>
+							  <entry key="sec.globus.on.tomcat"  value="true"/>
+							  </propertyfile>
+					      
+	 	    	             
+	 	 	</target>
+	 	 	
+	 	 	 <!--
+	 				 ******************
+	 				 *** target_20   ****
+	 				 ******************
+	         		-->
+	 	 	
+	 	 	<target name="requires.exisiting.tomcat.secured.and.ca.exist" if="requires.exisiting.tomcat.secured.and.ca.exist">
+	 				     <antcall target="install_tomcat_on_globus_sec_if_does_not_exist" >
+	 	    	               <param name="tomcat.home.from.user" value="${env.CATALINA_HOME}"/>
+	 	    	             </antcall>
+	 	    	            
+	 	    	            <antcall target="install_non_sec_globus" >
+	 	    	               <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+	 	    	             </antcall>
+	 	    	            
+							<antcall target="createHostCertAndKey">
+							  <param name="ca.cert.file.param" value="${ca.cert.file}"/>
+							  <param name="ca.key.file.param" value="${ca.key.file}"/>
+							 </antcall>
+	 	    	            
+	 	    	            
+	 	    	            <antcall target="configureServer.xml">
+							 <param name="tomcat.temp.home" value="${env.CATALINA_HOME}"/>
+							  <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+							  <param name="host.key.file" value="${host.cert.location}/host_${host.cn}_key.pem"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							 </antcall>
+	 	    	            
+	 	    	            
+	 	    	            
+							 <echo message="Logical Host=${logical.host}"/>
+							 <antcall target="configure_add_logical_host_entry_globus">
+							 <param name="globus.base.location" value="${env.CATALINA_HOME}/webapps/wsrf/WEB-INF"/>
+							 <param name="logical.host.name" value="${logical.host}"/>
+							 </antcall>
+							 
+							 <antcall target="patchGlobusOnTomcat">
+							 	  <param name="webinf.dir.param" value="${env.CATALINA_HOME}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core"/>
+							 </antcall>
+							 
+							  <antcall target="configure_web_dot_xml_for_globus">
+							  <param name="globus.web.inf.dir" value="${env.CATALINA_HOME}/webapps/wsrf/WEB-INF"/>
+							  <param name="http.scheme" value="https"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							  </antcall>
+							  
+							  <propertyfile file="${user.home}/.gridenv.properties">
+							  <entry key="env.CATALINA_HOME" value="${env.CATALINA_HOME}"/>
+							  <entry key="tomcat.exist" value="true"/>
+							  <entry key="globus.on.tomcat" value="true"/>
+							  <entry key="sec.globus.on.tomcat"  value="true"/>
+							  </propertyfile>
+	 	    	           
+	 	 	</target>
+	 	 	
+	 	 	 <!--
+	 				 ******************
+	 				 *** target_21   ****
+	 				 ******************
+	         	-->
+	 	 	
+	 	 	<target name="requires.exsiting.tomcat.secured.and.ca.absent" if="requires.exsiting.tomcat.secured.and.ca.absent">
+	 				   
+	 	    	   <antcall target="install_tomcat_on_globus_sec_if_does_not_exist" >
+	 	    	               <param name="tomcat.home.from.user" value="${env.CATALINA_HOME}"/>
+	 	    	             </antcall>
+	 	    	            
+	 	    	            <antcall target="install_non_sec_globus" >
+	 	    	               <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+	 	    	             </antcall>
+	 	    	            
+							<antcall target="createCAcertAndKey">
+						<param name="ca.cert.location" value="${root.cert.location}"/>
+						<param name="ca.key.location" value="${root.key.location}"/>
+					 </antcall>
+					 
+					 <mkdir dir="${user.home}/.globus/certificates"/>
+					 <copy file="${root.cert.location}/rootCA_cert.pem" overwrite="true" tofile="${user.home}/.globus/certificates/rootCA_cert.0" />
+					 
+					 <antcall target="createHostCertAndKey">
+					  <param name="ca.cert.file.param" value="${root.cert.location}/rootCA_cert.pem"/>
+					  <param name="ca.key.file.param" value="${root.key.location}/rootCA_key.pem"/>
+					 </antcall>
+	 	    	            
+	 	    	            
+	 	    	            <antcall target="configureServer.xml">
+							 <param name="tomcat.temp.home" value="${env.CATALINA_HOME}"/>
+							  <param name="host.cert.file" value="${host.cert.location}/host_${host.cn}_cert.pem"/>
+							  <param name="host.key.file" value="${host.cert.location}/host_${host.cn}_key.pem"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							 </antcall>
+	 	    	            
+	 	    	            
+	 	    	            
+							 <echo message="Logical Host=${logical.host}"/>
+							 <antcall target="configure_add_logical_host_entry_globus">
+							 <param name="globus.base.location" value="${env.CATALINA_HOME}/webapps/wsrf/WEB-INF"/>
+							 <param name="logical.host.name" value="${logical.host}"/>
+							 </antcall>
+							 
+							 <antcall target="patchGlobusOnTomcat">
+							  	  <param name="webinf.dir.param" value="${env.CATALINA_HOME}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core"/>
+							 </antcall>
+							 
+							  <antcall target="configure_web_dot_xml_for_globus">
+							  <param name="globus.web.inf.dir" value="${env.CATALINA_HOME}/webapps/wsrf/WEB-INF"/>
+							  <param name="http.scheme" value="https"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							  </antcall>
+							  
+							  <propertyfile file="${user.home}/.gridenv.properties">
+							  <entry key="env.CATALINA_HOME" value="${env.CATALINA_HOME}"/>
+							  <entry key="tomcat.exist" value="true"/>
+							  <entry key="globus.on.tomcat" value="true"/>
+							  <entry key="sec.globus.on.tomcat"  value="true"/>
+							  </propertyfile>
+
+	 	 	</target>
+	 	 	
+	 	 	<!--
+	 				 ******************
+	 				 *** target_21.1   ****
+	 				 ******************
+	         	-->
+	         	
+	 	 	<target name="requires.exsiting.tomcat.secured_but.no.security.config" if="requires.exsiting.tomcat.secured_but.no.security.config">
+	 	 	   <echo message="No configuration is required on this machine" />
+	 	 	   <antcall target="install_non_sec_globus" >
+	 	    	               <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+	 	    	             </antcall>
+	 	 	</target>
+	 	 	<!--
+	 		              ********************************************************************
+	 		              ***************** targets for Tomcat(Non Secured)****************
+	 		              ********************************************************************
+	 		        
+	 	        -->
+	 	        
+	 	         <!--
+	 				 ******************
+	 				 *** target_22   ****
+	 				 ******************
+	         	-->
+	 	 	
+	 		<target name="requires.nonsecure.tomcat.installation" if="requires.nonsecure.tomcat.installation">
+	 				   
+	 	    	            	    
+	 	    	         <antcall target="download_and_install_tomcat5028">
+	 	    	            <param name="install.dir" value="${tomcat.install.dir}"/>
+	 	    	            </antcall>
+	 	    	            
+	 	    	            <mkdir dir="${basedir}/globus_install_temp" />
+	 	    	            
+	 	    	           <antcall target="download_and_install_globus403">
+							  <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+							  </antcall>
+				     <antcall target="alterBuildStubXML">
+				     	<param name="globus.base.location" value="${globus.install.dir.with.tomcat}/ws-core-4.0.3"/>
+	 	    	      		</antcall>
+	 	    	            <antcall target="install_tomcat_on_globus_nosec">
+	 	    	            <param name="globus.temp.install.dir" value="${globus.install.dir.with.tomcat}"/>
+	 	    	            <param name="tomcat.temp.install.dir" value="${tomcat.install.dir}"/>
+	 	    	            </antcall>
+	 	    	            
+	 	    	            
+							 <echo message="Logical Host=${logical.host}"/>
+							 <antcall target="configure_add_logical_host_entry_globus">
+							 <param name="globus.base.location" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28/webapps/wsrf/WEB-INF"/>
+							 <param name="logical.host.name" value="${logical.host}"/>
+							 </antcall>
+							 
+							  <antcall target="configure_web_dot_xml_for_globus">
+							  <param name="globus.web.inf.dir" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28/webapps/wsrf/WEB-INF"/>
+							  <param name="http.scheme" value="http"/>
+							  <param name="host.port.param" value="${host.port}"/>
+							  </antcall>
+							  
+							  <propertyfile file="${user.home}/.gridenv.properties">
+							  <entry key="env.CATALINA_HOME" value="${tomcat.install.dir}/jakarta-tomcat-5.0.28"/>
+							  <entry key="tomcat.exist" value="true"/>
+							  <entry key="globus.on.tomcat" value="true"/>
+							  <entry key="sec.globus.on.tomcat"  value="false"/>
+							  <entry key="globus.exist" value="true"/>
+							  <entry key="env.GLOBUS_LOCATION" value="${globus.install.dir.with.tomcat}/ws-core-4.0.3"/>
+							  </propertyfile>
+	 		</target>
+	 		 	
+	 		 	
+	 		<!--
+	 				 ******************
+	 				 *** target_23   ****
+	 				 ******************
+	         	--> 	
+	 		 	
+	 		 	
+	 		<target name="requires.user.exisiting.nonsecure.tomcat.to.be.used" if="requires.user.exisiting.nonsecure.tomcat.to.be.used">
+	 					   
+	 	    	              <antcall target="install_tomcat_on_globus_nosec_if_does_not_exist">
+	 	    	              <param name="tomcat.home.from.user" value="${user.ext.tomcat.home}"/>
+	 	    	             </antcall>  
+	 	    	             <antcall target="install_non_sec_globus" >
+	 	    	               <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+	 	    	             </antcall>
+	 	    	           <propertyfile file="${user.home}/.gridenv.properties">
+							  <entry key="env.CATALINA_HOME" value="${user.ext.tomcat.home}"/>
+							  <entry key="tomcat.exist" value="true"/>
+							  <entry key="globus.on.tomcat" value="true"/>
+							  <entry key="sec.globus.on.tomcat"  value="false"/>
+							  </propertyfile>
+	 		</target>
+	 		
+	 		<!--
+	 				 ******************
+	 				 *** target_24   ****
+	 				 ******************
+	         	-->
+	 		
+	 		<target name="requires.exisiting.nonsecure.tomcat.to.be.used" if="requires.exisiting.nonsecure.tomcat.to.be.used">
+	 				    <antcall target="install_tomcat_on_globus_nosec_if_does_not_exist">
+	 	    	              <param name="tomcat.home.from.user" value="${env.CATALINA_HOME}"/>
+	 	    	             </antcall>  
+	 	    	             
+	 	    	             <antcall target="install_non_sec_globus" >
+	 	    	               <param name="install.dir" value="${globus.install.dir.with.tomcat}"/>
+	 	    	             </antcall>
+	 	    	           <propertyfile file="${user.home}/.gridenv.properties">
+							  <entry key="env.CATALINA_HOME" value="${env.CATALINA_HOME}"/>
+							  <entry key="tomcat.exist" value="true"/>
+							  <entry key="globus.on.tomcat" value="true"/>
+							  <entry key="sec.globus.on.tomcat"  value="false"/>
+							  </propertyfile>
+			</target>
+			
+			<target name="install.ant" if="ant.does.not.exist">
+				    <antcall target="download_and_install_Ant165">
+			      <param name="install.dir" value="${ant.install.dir}"/>
+			     </antcall>  
+			   <propertyfile file="${user.home}/.gridenv.properties">
+						  <entry key="ANT_HOME" value="${ant.install.dir}/apache-ant-1.6.5"/>
+						  <entry key="ant.exist" value="true"/>
+						  
+						  </propertyfile>
+			</target>
+ 	 
+ 	 
+ 	 
+ 	 <!--
+		 *************************************************************************************************
+		 ***************   End of  Define one target for every Condition out there        ****************
+		 *************************************************************************************************
+ 	 -->
+ 	
+ 	
+ 	
+ 	<!--
+			 *************************************************************************************************
+			 ***************   Main Tagerts                                                   ****************
+			 *************************************************************************************************
+ 	 -->
+ 	                 <target name="systemsetup" >
+ 	                 
+							 <echo message="is.secure:${is.secure}"  />
+	    	                <echo message="target.container:${system.target.container}"  />
+	    	                <echo message="Requires.config:${requires.config}"  />
+	    	                <echo message="Globus.Exist:${globus.exist}"  />
+	    	                <echo message="Tomcat.Exist:${tomcat.exist}"  />
+	    	                <echo message="User Tomcat.Exist:${user.tomcat.exist}"  />
+	    	                <echo message="System.certificate:${system.certificate.exist}" />
+	    	                <echo message="ca.exist:${ca.exist}" />
+	    	                
+				<antcall target="requires.secure.globus.installation.and.host.credential.exist"/>
+			  	<antcall target="requires.secure.globus.installation.and.ca.exist" />
+			  	<antcall target="requires.secure.globus.installation.and.ca.absent"/>
+			  	<antcall target="requires.user.exisiting.globus.secured.and.host.credential.exist"/>
+			  	<!-- Target 4.1 -->
+			  	<antcall target="requires.user.exisiting.globus.secured_but.requires.no.security.config" />
+			  	<antcall target="requires.user.exisiting.globus.secured.and.ca.exist" />
+			  	<antcall target="requires.user.exsiting.globus.secured.and.ca.absent" />
+			  	<antcall target="requires.exisiting.globus.secured.and.host.credential.exist"/>
+			 	<antcall target="requires.exisiting.globus.secured.and.ca.exist"/>
+			 	<antcall target="requires.exsiting.globus.secured.and.ca.absent"/>
+			 	<!-- Target 9.1 -->
+			 	<antcall target="requires.exsiting.globus.secured_but.no.security.config"/>
+			 	<antcall target="requires.nonsecure.globus.installation"/>
+			 	<antcall target="requires.user.exisiting.nonsecure.globus.to.be.used"/>
+			 	<antcall target="requires.exisiting.nonsecure.globus.to.be.used" />
+				<antcall target="requires.secure.tomcat.installation.and.host.credential.exist"/>
+				<antcall target="requires.secure.tomcat.installation.and.ca.exist"/>
+				<antcall target="requires.secure.tomcat.installation.and.ca.absent" />
+				<antcall target="requires.user.exisiting.tomcat.secured.and.host.credential.exist"/>
+				<antcall target="requires.user.exisiting.tomcat.secured.and.ca.exist" />
+				<antcall target="requires.user.exisiting.tomcat.secured.and.ca.absent"/>
+				<!-- Target 18.1 -->
+				<antcall target="requires.user.exisiting.tomcat.secured_but.no_security.config" />
+				<antcall target="requires.exisiting.tomcat.secured.and.host.credential.exist" />
+				<antcall target="requires.exisiting.tomcat.secured.and.ca.exist" />
+				<antcall target="requires.exsiting.tomcat.secured.and.ca.absent" />
+				<!-- Target 21.1-->
+				<antcall target="requires.exsiting.tomcat.secured_but.no.security.config"/>
+				<antcall target="requires.nonsecure.tomcat.installation" />
+				<antcall target="requires.user.exisiting.nonsecure.tomcat.to.be.used" />
+				<antcall target="requires.exisiting.nonsecure.tomcat.to.be.used" />
+	                        <antcall target="install.ant" />
+ 	               </target>
+ 	 
+ 	 <!--
+	 		 *************************************************************************************************
+	 		 ***************   End of Main Targets                                            ****************
+	 		 *************************************************************************************************
+ 	 -->
+ 	 
+ 	
+  	
+ 	
+ 	
+ 
+  	
+  	
+  
+  
+  
+  
+        
+  
+  
+  <target name="createCAcertAndKey">
+  	<java classname="gov.nih.nci.cagrid.installer.customtasks.CACertificateCreator" fork="yes">
+	    	       	 <arg value="${ca.o}" />
+	    		 <arg value="${ca.ou}" />
+	    		 <arg value="${ca.cn}"/> 
+	    		 <arg value="${ca.dv}" />
+	    		 <arg value="${ca.keypwd}"/>
+	    		 <arg value="${ca.cert.location}"/>
+	    		 <arg value="${ca.key.location}"/>
+	    		 <classpath refid="certificate.cp"/>
+    	</java>
+    	
+  </target>
+  
+  <target name="createHostCertAndKey">
+  	<echo message="passed ca cert:${ca.cert.file.param}"/>
+  	<echo message="passed ca key:${ca.key.file.param}"/>
+  	<echo message="passed ca keypwd:${ca.keypwd}"/>
+  	<echo message="passed host key location:${host.key.location}"/>
+  	<echo message="passed host cert location:${host.cert.location}"/>
+  	<java classname="gov.nih.nci.cagrid.installer.customtasks.HostCertificateCreator" fork="yes" failonerror="true">
+        	         <arg value="${ca.cert.file.param}" />
+        		 <arg value="${ca.key.file.param}" />
+        		 <arg value="${ca.keypwd}"/> 
+        		 <arg value="${host.cert.location}" />
+        		 <arg value="${host.dv}"/>
+        		 <arg value="${host.cn}"/>
+        		 <arg value="${host.key.location}"/>
+        		 <classpath refid="certificate.cp"/>
+        	
+      	</java>
+      	
+  </target>
+  
+  <target name="configureServer.xml">
+  	<xmltask source="${tomcat.temp.home}/conf/server.xml" dest="${tomcat.temp.home}/conf/server.xml">
+	          	<remove path="/Server/Service/Connector[@scheme='https']"/>
+	          	<remove path="/Server/Service[@name='Catalina']/Engine[@name='Catalina']/Valve[@className='org.globus.tomcat.coyote.valves.HTTPSValve']"/>
+	          	
+          </xmltask>
+          
+          
+          <xmltask source="${basedir}/resources/templates/tomcat/serverTemplate.xml" dest="${basedir}/resources/templates/tomcat/modifiedServerTemplate.xml">
+	          	<attr path="/Connector" attr="cert" value="${host.cert.file}"/>
+	          	<attr path="/Connector" attr="key" value="${host.key.file}"/>
+	          	<attr path="/Connector" attr="port" value="${host.port.param}"/>
+        </xmltask>
+        <xmltask source="${tomcat.temp.home}/conf/server.xml" dest="${tomcat.temp.home}/conf/server.xml">
+	      	<insert path="/Server/Service[@name='Catalina']" file="${basedir}/resources/templates/tomcat/modifiedServerTemplate.xml"/>
+	      	<insert path="/Server/Service[@name='Catalina']/Engine[@name='Catalina']" file="${basedir}/resources/templates/tomcat/valveTemplate.xml"/>
+      </xmltask>
+     
+  </target>
+  
+  
+  <target name="download_and_install_Ant165">
+    <mkdir dir="${basedir}/ant_temp"/>
+    <get src="http://www.apache.org/dist/ant/binaries/apache-ant-1.6.5-bin.zip" dest="${basedir}/ant_temp/apache-ant-1.6.5-bin.zip"/>
+    <unzip src="${basedir}/ant_temp/apache-ant-1.6.5-bin.zip" dest="${install.dir}"/>
+    <delete dir="${basedir}/ant_temp" />
+  </target>
+  
+  <target name="download_and_install_globus403">
+  <mkdir dir="${basedir}/globus_temp"/>
+  <get src="http://www-unix.globus.org/ftppub/gt4/4.0/4.0.3/ws-core/bin/ws-core-4.0.3-bin.zip" dest="${basedir}/globus_temp/ws-core-4.0.3-bin.zip"/>
+  <unzip src="${basedir}/globus_temp/ws-core-4.0.3-bin.zip" dest="${install.dir}"/>
+  <delete dir="${basedir}/globus_temp" />
+  </target>
+  
+  
+  <target name="configure_host_credential_globus">
+  <copy file="${basedir}/resources/templates/globus/global_security_descriptor.xml" overwrite="true" todir="${globus.base.location}/etc/globus_wsrf_core"/>
+  <replace file="${globus.base.location}//etc/globus_wsrf_core/global_security_descriptor.xml">
+    <replacefilter token="@CERT_FILE@" value="${host.cert.file}"/>
+    <replacefilter token="@KEY_FILE@" value="${host.key.file}"/>
+  </replace>
+ </target>
+ 
+ <target name="configure_add_logical_host_entry_globus">
+  <copy file="${basedir}/resources/templates/globus/server-config.wsdd" overwrite="true" todir="${globus.base.location}/etc/globus_wsrf_core"/>
+  <replace file="${globus.base.location}/etc/globus_wsrf_core/server-config.wsdd">
+    <replacefilter token="@LOGICAL_HOST@" value="${logical.host.name}"/>
+  </replace>
+ </target>
+ 
+ <target name="download_and_install_tomcat5028">
+  <mkdir dir="${basedir}/tomcat_temp"/>
+  <get src="http://www.apache.org/dist/tomcat/tomcat-5/v5.0.28/bin/jakarta-tomcat-5.0.28.zip" dest="${basedir}/tomcat_temp/jakarta-tomcat-5.0.28.zip"/>
+  <unzip src="${basedir}/tomcat_temp/jakarta-tomcat-5.0.28.zip" dest="${install.dir}"/>
+  <delete dir="${basedir}/tomcat_temp" />
+  </target>
+  
+  <target name="install_tomcat_on_globus_nosec">
+ <ant antfile="${globus.temp.install.dir}/ws-core-4.0.3/share/globus_wsrf_common\tomcat/tomcat.xml" target="deployTomcat" dir="${globus.temp.install.dir}/ws-core-4.0.3/share/globus_wsrf_common/tomcat">
+  <property name="tomcat.dir" value="${tomcat.temp.install.dir}/jakarta-tomcat-5.0.28"/>
+ </ant>
+ </target>
+ 
+ <target name="install_tomcat_on_globus_sec">
+ <ant antfile="${globus.temp.install.dir}/ws-core-4.0.3/share/globus_wsrf_common\tomcat/tomcat.xml" target="deploySecureTomcat" dir="${globus.temp.install.dir}/ws-core-4.0.3/share/globus_wsrf_common/tomcat">
+  <property name="tomcat.dir" value="${tomcat.temp.install.dir}/jakarta-tomcat-5.0.28"/>
+ </ant>
+ </target>
+ 
+ <target name="install_tomcat_on_globus_sec_if_does_not_exist" if="secure.globus.does.not.exist.on.tomcat">
+ <mkdir dir="${basedir}/globus_install_temp" />
+	 	    	            
+	 	    	            <antcall target="download_and_install_globus403">
+							  <param name="install.dir" value="${basedir}/globus_install_temp"/>
+							  </antcall>
+ <ant antfile="${basedir}/globus_install_temp/ws-core-4.0.3/share/globus_wsrf_common\tomcat/tomcat.xml" target="deploySecureTomcat" dir="${basedir}/globus_install_temp/ws-core-4.0.3/share/globus_wsrf_common/tomcat">
+  <property name="tomcat.dir" value="${tomcat.home.from.user}"/>
+ </ant>
+ </target>
+ 
+  <target name="install_tomcat_on_globus_nosec_if_does_not_exist" if="globus.does.not.exist.on.tomcat">
+ <mkdir dir="${basedir}/globus_install_temp" />
+	 	    	            
+	 	    	            <antcall target="download_and_install_globus403">
+							  <param name="install.dir" value="${basedir}/globus_install_temp"/>
+							  </antcall>
+ <ant antfile="${basedir}/globus_install_temp/ws-core-4.0.3/share/globus_wsrf_common\tomcat/tomcat.xml" target="deployTomcat" dir="${basedir}/globus_install_temp/ws-core-4.0.3/share/globus_wsrf_common/tomcat">
+  <property name="tomcat.dir" value="${tomcat.home.from.user}"/>
+ </ant>
+ </target>
+ 
+ <target name="configure_web_dot_xml_for_globus">
+ <copy file="${basedir}/resources/templates/globus/web.xml" overwrite="true" todir="${globus.web.inf.dir}"/>
+  <replace file="${globus.web.inf.dir}/web.xml">
+    <replacefilter token="@HTTP_SCHEME@" value="${http.scheme}"/>
+    <replacefilter token="@HTTP_PORT@" value="${host.port.param}"/>
+  </replace>
+ </target>
+  
+  <target name="install_non_sec_globus" if="globus_does_not_exist">
+   <mkdir dir="${basedir}/globus_temp"/>
+  <get src="http://www-unix.globus.org/ftppub/gt4/4.0/4.0.3/ws-core/bin/ws-core-4.0.3-bin.zip" dest="${basedir}/globus_temp/ws-core-4.0.3-bin.zip"/>
+  <unzip src="${basedir}/globus_temp/ws-core-4.0.3-bin.zip" dest="${install.dir}"/>
+  <delete dir="${basedir}/globus_temp" />
+  <antcall target="alterBuildStubXML">
+	<param name="globus.base.location" value="${install.dir}/ws-core-4.0.3"/>
+	</antcall>
+  <propertyfile file="${user.home}/.gridenv.properties">
+	 	    	      <entry key="env.GLOBUS_LOCATION" value="${install.dir}/ws-core-4.0.3"/>
+	 	    	      <entry key="globus.exist" value="true"/>
+	 	    	      </propertyfile>
+  </target>
+  
+  <target name="alterBuildStubXML">
+  <!--
+  <copy file="${basedir}/resources/templates/globus/build-stubs.xml" overwrite="true" todir="${globus.base.location}/share/globus_wsrf_tools"/>
+   -->
+   <echo message="   "/>
+  </target>
+  
+  <target name="patchGlobusOnTomcat">
+     <echo message="${webinf.dir.param}/server-config.wsdd"/>
+      <replace file="${webinf.dir.param}/server-config.wsdd"> 
+                      <replacetoken><![CDATA[<!-- @TOMCAT_SEC_HANDLER@ -->]]></replacetoken> 
+                      <replacevalue><![CDATA[<handler type="java:org.globus.wsrf.impl.security.authentication.transport.TomcatTransportSecurityHandler"/>]]></replacevalue> 
+              </replace> 
+   </target>
+   
+   <target name="pointToSecurityDesc">
+   
+         <xmltask source="${basedir}/resources/templates/globus/secDesc.xml" dest="${basedir}/resources/templates/globus/ModifiedsecDesc.xml">
+	        	          	<attr path="/parameter" attr="value" value="${dir.param}/global_security_descriptor.xml"/>
+	        	          	
+        </xmltask>
+        
+         <xmltask source="${dir.param}/server-config.wsdd" dest="${dir.param}/server-config.wsdd">
+                  <remove path="//*[local-name()='deployment']/*[local-name()='globalConfiguration']/parameter[@name='containerSecDesc']" />
+            
+            </xmltask>
+            <xmltask source="${dir.param}/server-config.wsdd" dest="${dir.param}/server-config.wsdd">
+   	       <insert path="//*[local-name()='deployment']/*[local-name()='globalConfiguration']"  file="${basedir}/resources/templates/globus/ModifiedsecDesc.xml"/>
+   	 
+         </xmltask>
+   </target>
+   
+  <target name="cleanuptarget"
+        description="clean up" >
+   
+    
+  </target>
+  <target name="finished"
+          description="clean up" >
+     
+      <echo message="System set up is complete "/>
+  </target>
+</project>

@@ -1,0 +1,425 @@
+<project name="certificate creation task test" default="installDorian" basedir=".">
+    <description>
+        certificate test
+    </description>
+    
+  <!--***************************************-->
+  <!-- set global properties for this build -->
+  <!--***************************************-->
+  
+  <property file="${user.home}/.gridenv.properties"/>
+  
+  
+  
+  <!--***************************************-->
+  <!--    For manipulating xml files         -->
+  <!--***************************************-->
+   
+   <path id="xmltaskdef.cp">
+       	<fileset dir="${basedir}/resources/lib">
+     	   <include name="xmltask-v1.14.jar"/>
+             </fileset> 
+   </path>
+   
+   <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltaskdef.cp"/>
+   
+   <!--***************************************-->
+   <!--          End of section               -->
+   <!--***************************************-->
+
+<!--################################################################################################################################-->   
+   
+   <!--***************************************-->
+   <!--    For Creation of certificates     -->
+   <!--***************************************-->
+   
+   <path id="certificate.cp">
+       	<fileset dir="${basedir}/resources/lib">
+     	   <include name="certificate_tasks.jar"/>
+             </fileset> 
+             <fileset dir="${basedir}/resources/lib/ext">
+     	   <include name="**/*.jar"/>
+             </fileset>
+      </path>
+
+  
+  <!--***************************************-->
+     <!--          End of section               -->
+   <!--***************************************-->
+   
+ <!--################################################################################################################################-->   
+
+ 
+   <!--***************************************-->
+    <!--    List All the scenarios here       -->
+  <!--***************************************-->
+  
+        <!--*******************************************
+              The first scenario represent the case 
+              when target container is tomcat but tomcat
+              does not exist 
+             *******************************************-->
+         
+  	<condition property="sc1">
+    	            <and>
+    	                <equals arg1="${tomcat.exist}" arg2="false" />
+    	                <equals arg1="${target.container}" arg2="tomcat" />
+    	            </and>
+ 	</condition>
+ 	<!--********************************************************
+	          The second scenario represent the case 
+	          when target container is globus and globus
+	          does not exist
+            *******************************************************-->
+ 	
+ 	<condition property="sc2">
+	    	            <and>
+	    	                <equals arg1="${globus.exist}" arg2="false" />
+	    	                <equals arg1="${target.container}" arg2="globus" />
+	    	            </and>
+ 	</condition>
+ 	
+ 	
+ 	<!--*******************************************************
+	          The third scenario represent the case when 
+	          a) target container is tomcat and it exists
+	          OR
+	          b) target container is globus and it exists
+            ********************************************************-->
+ 	
+ 	<condition property="sc3">
+ 	                 <OR>
+	    	            <and>
+	    	                <equals arg1="${tomcat.exist}" arg2="true" />
+	    	                <equals arg1="${target.container}" arg2="tomcat" />
+	    	                
+	    	            </and>
+	    	            <and>
+				<equals arg1="${globus.exist}" arg2="true" />
+				<equals arg1="${target.container}" arg2="globus" />
+			    	    	                
+	    	            </and>
+	    	          </OR>
+ 	</condition>
+ 	
+ 	                   <!--******************************************
+ 	                       ******************************************
+ 	                       ***   Certificate Conditions           ***
+ 	                       ******************************************
+ 	                       ****************************************** -->
+ 	
+				<condition property="cert_cond_1">
+					    <and>
+						
+						<equals arg1="${ca.exist}" arg2="false" />
+					    </and>
+				</condition>
+
+				<condition property="cert_cond_2">
+					    <and>
+						
+						<equals arg1="${ca.exist}" arg2="true" />
+					    </and>
+				</condition>
+
+				
+				
+				<!--***************************************
+				    ***************************************
+				    ********    End of section       ******
+   				    ***************************************
+   				    ***************************************-->
+ 	
+   <!--***************************************-->
+      <!--          End of section            -->
+   <!--***************************************-->
+   
+   <!--################################################################################################################################-->   
+
+   
+   
+   <!-- *****************************************************
+        *****************************************************
+        ***** Corresponding Targets for every scenario ******
+        *****************************************************
+        -->
+  	
+  	
+  <target name="Scn1"  description="Scenario 1" if="sc1">
+     
+     <echo message="Tomcat does not exist, Authentication Service can't be installed!" />
+     <fail message="Tomcat does not exist, Authentication Service  can't be installed!"/>
+  </target>
+  
+  <target name="Scn2"  description="Scenario 2" if="sc2">
+       <echo message="Globus does not exist, Authentication Service can't be installed!"/>
+       <fail message="Globus does not exist, Authentication Service  can't be installed!"/>
+  </target>
+  
+  <target name="Scn3"  description="Scenario 3" if="sc3">
+  
+       <!--*************************************************
+           **** First call certificates related targets ****
+           ************************************************* -->
+       		<antcall target="cert_cond_1"/>
+       		<antcall target="cert_cond_2"/>
+       		
+       		
+       <!--*************************************************
+           ****      Second call jass config task        ****
+           ************************************************* -->
+           
+           <antcall target="configureJAAS${credential.provider}"/>
+           
+       <!--*************************************************
+           ****     Third call serviceMetadata          ****
+           ************************************************* -->
+     
+       <antcall target="configureServiceMetadata">
+	 <param name="rc.display.name" value="${authservice.service.display.name}"/>
+         <param name="rc.short.name" value="${authservice.service.short.name}"/>
+         <param name="rc.country.name" value="${authservice.service.country}"/>
+         <param name="rc.postal.code" value="${authservice.service.postal.code}"/>
+         <param name="rc.province.name" value="${authservice.service.province}"/>
+         <param name="rc.street1.name" value="${authservice.service.street}"/>
+         <param name="rc.poc.affiliation.name" value="${authservice.service.rc.affiliation}"/>
+         <param name="rc.poc.email.id" value="${authservice.service.rc.poc.email}"/>
+         <param name="rc.poc.first.name" value="${authservice.service.rc.poc.first.name}"/>
+         <param name="rc.poc.last.name" value="${authservice.service.rc.poc.last.name}"/>
+         <param name="rc.poc.role.name" value="${authservice.service.rc.poc.role}"/>
+         
+         <param name="poc.affiliation.name" value="${authservice.service.poc.affiliation}"/>
+         <param name="poc.email.id" value="${authservice.service.poc.email}"/>
+         <param name="poc.first.name" value="${authservice.service.poc.first.name}"/>
+         <param name="poc.last.name" value="${authservice.service.poc.last.name}"/>
+         <param name="poc.role.name" value="${authservice.service.poc.role}"/>
+         
+         
+     </antcall>
+     
+    
+     
+      <!--*************************************************
+          ****     Final call to deploy                ****
+          ************************************************* -->
+     
+     <antcall target="deploy${target.container}"/>
+  </target>
+  
+  <target name="cert_cond_1"  description="Certificate Scenario 1" if="cert_cond_1">
+       
+       
+       
+       
+       <antcall target="createCAcertAndKey">
+       	<param name="ca.cert.location" value="${root.cert.location}"/>
+        	<param name="ca.key.location" value="${root.key.location}"/>
+       </antcall>
+       
+       
+       
+       
+       
+       <antcall target="configureAuthenticationConfigurationFile">
+       <param name="cert.file.param" value="${root.cert.location}/rootCA_cert.pem"/>
+       <param name="key.file.param" value="${root.cert.location}/rootCA_key.pem"/>
+       	 <param name="pwd.param" value="${ca.keypwd}"/>
+           <param name="app.context.param" value="grid${credential.provider}"/>
+       </antcall>
+       
+  </target>
+  
+  <target name="cert_cond_2"  description="Certificate Condition 2" if="cert_cond_2">
+         
+         
+       
+       <antcall target="configureAuthenticationConfigurationFile">
+       <param name="cert.file.param" value="${host.cert}"/>
+       <param name="key.file.param" value="${host.key}"/>
+       	 <param name="pwd.param" value="${ca.keypwd}"/>
+           <param name="app.context.param" value="grid${credential.provider}"/>
+       </antcall>
+  </target>
+  
+  
+  
+   <!--***************************************-->
+   <!--          End of section            -->
+   <!--***************************************-->
+   
+ <!--################################################################################################################################-->   
+
+   <!--*********************************************
+       ************* Main Targets ******************
+       *********************************************-->
+  
+   <target name="installAuthenticationService" description="Authentication Service Installation">
+       
+       <antcall target="Scn1"/>
+       <antcall target="Scn2"/>
+       <antcall target="Scn3"/>
+       
+       
+  </target>
+        
+  <target name="installsource" description="Source Code Installation">
+         
+         <mkdir dir="${grid.home}/authentication-service"/>
+         <copy todir="${grid.home}/authentication-service">
+	     <fileset dir="${basedir}/resources/release">
+	       <include name="**/*.*"/>
+	     </fileset>
+	   </copy>
+
+         
+         
+  </target>
+  
+  <!--***************************************-->
+     <!--          End of section            -->
+   <!--***************************************-->
+  
+ 
+<!--################################################################################################################################-->   
+
+  
+  <!-- ************************************************
+       ************************************************
+       *******         Reusable Targets        ********
+       ************************************************
+       ************************************************-->
+  
+  
+  
+  <target name="configureServiceMetadata">
+    <xmltask source="${basedir}/resources/release/etc/ServiceMetadata.xml" dest="${basedir}/resources/release/etc/ServiceMetadata.xml">
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']"  attr="displayName" value="${rc.display.name}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']"  attr="shortName" value="${rc.short.name}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='Address']"  attr="country" value="${rc.country.name}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='Address']"  attr="postalCode" value="${rc.postal.code}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='Address']"  attr="stateProvince" value="${rc.province.name}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='Address']"  attr="street1" value="${authservice.service.rc.street1.name}"/>
+       	          	
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="affiliation" value="${rc.poc.affiliation.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="email" value="${rc.poc.email.id}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="firstName" value="${rc.poc.first.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="lastName" value="${rc.poc.last.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="role" value="${rc.poc.role.name}"/>
+ 			
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="affiliation" value="${poc.affiliation.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="email" value="${poc.email.id}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="firstName" value="${poc.first.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="lastName" value="${poc.last.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="role" value="${poc.role.name}"/>
+ 			
+        
+        
+        </xmltask>
+  </target>
+ 
+  
+  
+  <target name="createCAcertAndKey">
+    	<java classname="gov.nih.nci.cagrid.installer.customtasks.CACertificateCreator" fork="yes">
+  	    	       	 <arg value="${ca.o}" />
+  	    		 <arg value="${ca.ou}" />
+  	    		 <arg value="${ca.cn}"/> 
+  	    		 <arg value="${ca.dv}" />
+  	    		 <arg value="${ca.keypwd}"/>
+  	    		 <arg value="${ca.cert.location}"/>
+  	    		 <arg value="${ca.key.location}"/>
+  	    		 <classpath refid="certificate.cp"/>
+      	</java>
+      	
+    </target>
+    
+    <target name="createHostCertAndKey">
+    	<echo message="passed ca cert:${ca.cert.file}"/>
+    	<echo message="passed ca key:${ca.key.file}"/>
+    	<echo message="passed ca keypwd:${ca.keypwd}"/>
+    	<echo message="passed host key location:${host.key.location}"/>
+    	<echo message="passed host cert location:${host.cert.location}"/>
+    	<java classname="gov.nih.nci.cagrid.installer.customtasks.HostCertificateCreator" fork="yes">
+          	         <arg value="${ca.cert.file}" />
+          		 <arg value="${ca.key.file}" />
+          		 <arg value="${ca.keypwd}"/> 
+          		 <arg value="${host.cert.location}" />
+          		 <arg value="${host.dv}"/>
+          		 <arg value="${host.cn}"/>
+          		 <arg value="${host.key.location}"/>
+          		 <classpath refid="certificate.cp"/>
+          	<redirector output="c:/temp/hostoutput.txt"/>
+        	</java>
+        	
+    </target>
+    
+    <target name="configureJAASrdbms">
+    	<replace file="${basedir}/resources/templates/.java.login.config" >
+    		<replacefilter token="@driver@" value="${credential.provider.rdbms.data.base.driver}"/>
+    		<replacefilter token="@url@" value="${credential.provider.rdbms.data.base.url}"/>
+    		<replacefilter token="@user@" value="${credential.provider.rdbms.user.id}"/>
+    		<replacefilter token="@password@" value="${credential.provider.rdbms.password}"/>
+    		<replacefilter token="@table_name@" value="${credential.provider.rdbms.data.base.table.name}"/>
+    		<replacefilter token="@user_login@" value="${credential.provider.rdbms.user.id.column.name}"/>
+    		<replacefilter token="@user_password@" value="${credential.provider.rdbms.password.column.name}"/>
+    		<replacefilter token="@user_first_name_rdbms@" value="${credential.provider.rdbms.user.first.name.column.name}"/>
+    		<replacefilter token="@user_last_name_rdbms@" value="${credential.provider.rdbms.last.name.column.name}"/>
+    		<replacefilter token="@email_rdbms@" value="${credential.provider.rdbms.email.id.column.name}"/>
+    		
+    	</replace>
+    	<!--copy the driver file to lib directory -->
+    	<copy file="${credential.provider.rdbms.data.base.driver.jar.or.zip.file}" todir="${basedir}/resources/release/lib"/>
+    	<copy file="${basedir}/resources/templates/.java.login.config" todir="${user.home}"/>
+    </target>
+    
+    <target name="configureJAASldap">
+        <replace file="${basedir}/resources/release/resources/.java.login.config">
+        	<replacefilter token="@ldap_host@" value="${credential.provider.ldap.host}"/>
+        	<replacefilter token="@ldap_base@" value="${credential.provider.ldap.search.base}"/>
+        	<replacefilter token="@user_id_label@" value="${credential.provider.ldap.user.id.label}"/>
+        	<replacefilter token="@admin_user_name@" value="${credential.provider.ldap.admin.name}"/>
+        	<replacefilter token="@admin_password@" value="${credential.provider.ldap.admin.password}"/>
+        	<replacefilter token="@user_first_name_ldap@" value="${credential.provider.ldap.user.first.name}"/>
+        	<replacefilter token="@user_last_name_ldap@" value="${credential.provider.ldap.user.last.name}"/>
+		<replacefilter token="@email_ldap@" value="${credential.provider.ldap.user.email.id}"/>  
+          
+        </replace>
+        <copy file="${basedir}/resources/templates/.java.login.config" todir="${user.home}"/>
+    </target>
+    
+    <target name="configureAuthenticationConfigurationFile">
+      	<replace file="${basedir}/resources/release/resources/authentication-config.xml">
+        	<replacefilter token="@CSM_APP_CONTEXT@" value="${app.context.param}"/>
+        	<replacefilter token="@SAML_PROVIDER_CRT@" value="${cert.file.param}"/>
+        	<replacefilter token="@SAML_PROVIDER_KEY@" value="${key.file.param}"/>
+        	<replacefilter token="@SAML_PROVIDER_PWD@" value="${pwd.param}"/>
+        	
+          
+        </replace>
+    </target>
+    
+  <target name="deploytomcat">
+    <ant  dir="${basedir}/resources/release" antfile="${basedir}/resources/release/build.xml" target="deployTomcat">
+    </ant>
+  </target>
+  <target name="deployglobus">
+      <ant  dir="${basedir}/resources/release" antfile="${basedir}/resources/release/build.xml" target="deployGlobus">
+      </ant>
+  </target>
+  <target name="cleanuptarget"
+        description="clean up" >
+   
+    
+  </target>
+  <target name="finished"
+          description="clean up" >
+     
+      <echo message="Installation completed !"/>
+  </target>
+  
+             <!--***************************************
+	     	 ******    End of section **************
+   	         ***************************************-->
+  <!--################################################################################################################################-->   
+
+</project>

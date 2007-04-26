@@ -1,0 +1,68 @@
+<project name="Ant Installer" default="makeInstaller" basedir=".">
+    <description>
+        caGrid Installer build file
+    </description>
+  <!-- set global properties for this build -->
+  
+  <property name="installerName" value="SyncGTSServiceInstaller"/>
+  <property name="project.property.file" value="../deploy.properties"/>
+  
+
+  <target name="init" depends="clean">
+    
+    <tstamp/>
+    
+    <mkdir dir="${basedir}/temp"/>
+  </target>
+  
+  <target name="makeInstaller" depends="copyRelease">
+  <ant  dir="${basedir}/temp" antfile="${basedir}/temp/build-installer.xml" target="selfextract">
+  	<property name="installerName" value="${installerName}"/>
+  </ant>
+  <copy todir="${basedir}">
+  	<fileset dir="${basedir}/temp">
+  		<include name="${installerName}.jar"/>
+  	</fileset>
+  </copy>
+  <delete dir="${basedir}/temp"/>
+  </target>
+  
+  
+  
+  <target name="copyAntFiles" depends="init">
+   <copy todir="${basedir}/temp">
+   	<fileset dir="${basedir}/antfiles"/>     
+   </copy>
+  </target>
+  
+  <target name="copyTemplate" depends="copyAntFiles">
+     <copy todir="${basedir}/temp">
+     	<fileset dir="${basedir}/template"/>     
+     </copy>
+  </target>
+  
+  <target name="copyRelease" depends="copyTemplate">
+       <mkdir dir="${basedir}/temp/installclasspath/resources/release"/>
+       <copy file="${project.property.file}" todir="${basedir}/temp/installclasspath/resources"/>
+     
+       <copy todir="${basedir}/temp/installclasspath/resources/release">
+       	<fileset dir="${basedir}/..">
+    	     <exclude name="installer/**"/>
+    	     <exclude name="CVS"/>
+    	     <exclude name=".classpath"/>
+    	     <exclude name=".cvsignore"/>
+    	     <exclude name=".project"/>
+    	 </fileset>
+       </copy>
+  </target>
+  
+  
+  <target name="clean"  description="clean up" >
+     <delete dir="${basedir}/temp"/>
+  </target>	
+  <target name="cleanuptarget"
+        description="clean up" >
+   
+    
+  </target>
+</project>

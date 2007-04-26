@@ -1,0 +1,220 @@
+<project name="certificate creation task test" default="installDorian" basedir=".">
+    <description>
+        certificate test
+    </description>
+  <!-- set global properties for this build -->
+  
+
+  
+  <property file="${user.home}/.gridenv.properties"/>
+  
+  
+  
+   
+   <path id="xmltaskdef.cp">
+       	<fileset dir="${basedir}/resources/lib">
+     	   <include name="xmltask-v1.14.jar"/>
+             </fileset> 
+   </path>
+   
+   <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltaskdef.cp"/>
+  
+  
+        <!---
+          The first scenario represent the case when target container is tomcat but
+          tomcat does not exist
+        -->
+  	<condition property="sc1">
+    	            <and>
+    	                <equals arg1="${tomcat.exist}" arg2="false" />
+    	                <equals arg1="${target.container}" arg2="tomcat" />
+    	            </and>
+ 	</condition>
+ 	<!---
+	          The second scenario represent the case when target 
+	          container is globus and globus does not exist
+        -->
+ 	
+ 	<condition property="sc2">
+	    	            <and>
+	    	                <equals arg1="${globus.exist}" arg2="false" />
+	    	                <equals arg1="${target.container}" arg2="globus" />
+	    	            </and>
+ 	</condition>
+ 	<!---
+	          The third scenario represent the case when 
+	          a) target container is tomcat and it exists
+	          OR
+	          b) target container is globus and it exists
+        -->
+ 	
+ 	<condition property="sc3">
+ 	                 <OR>
+	    	            <and>
+	    	                <equals arg1="${tomcat.exist}" arg2="true" />
+	    	                <equals arg1="${target.container}" arg2="tomcat" />
+	    	                
+	    	            </and>
+	    	            <and>
+				<equals arg1="${globus.exist}" arg2="true" />
+				<equals arg1="${target.container}" arg2="globus" />
+			    	    	                
+	    	            </and>
+	    	          </OR>
+ 	</condition>
+ 	
+ 
+  	
+  	
+  <target name="Scn1"  description="Scenario 1" if="sc1">
+     
+     <echo message="Tomcat does not exist, EVS can't be installed!" />
+     
+  </target>
+  
+  <target name="Scn2"  description="Scenario 2" if="sc2">
+       <echo message="Globus does not exist, EVS can't be installed!"/>
+  </target>
+  
+  <target name="Scn3"  description="Scenario 3" if="sc3">
+       
+       <antcall target="configureDataBaseParams">
+                   	<param name="db.host" value="${gme.database.host}"/>
+                   	<param name="db.un" value="${gme.database.userid}"/>
+                   	<param name="db.pwd" value="${gme.database.password}"/>
+                   	<param name="db.port" value="${gme.database.port}"/>
+                   	
+            </antcall>
+
+      <!--
+       <antcall target="configureServiceMetadata">
+	 <param name="rc.display.name" value="${evs.service.display.name}"/>
+         <param name="rc.short.name" value="${evs.service.short.name}"/>
+         <param name="rc.country.name" value="${evs.service.country}"/>
+         <param name="rc.postal.code" value="${evs.service.postal.code}"/>
+         <param name="rc.province.name" value="${evs.service.province}"/>
+         <param name="rc.street1.name" value="${evs.service.street}"/>
+         <param name="rc.poc.affiliation.name" value="${evs.service.rc.affiliation}"/>
+         <param name="rc.poc.email.id" value="${evs.service.rc.poc.email}"/>
+         <param name="rc.poc.first.name" value="${evs.service.rc.poc.first.name}"/>
+         <param name="rc.poc.last.name" value="${evs.service.rc.poc.last.name}"/>
+         <param name="rc.poc.role.name" value="${evs.service.rc.poc.role}"/>
+         
+         <param name="poc.affiliation.name" value="${evs.service.poc.affiliation}"/>
+         <param name="poc.email.id" value="${evs.service.poc.email}"/>
+         <param name="poc.first.name" value="${evs.service.poc.first.name}"/>
+         <param name="poc.last.name" value="${evs.service.poc.last.name}"/>
+         <param name="poc.role.name" value="${evs.service.poc.role}"/>
+         
+         
+         
+         
+     </antcall>
+     
+     -->
+     <antcall target="configureRegistartionData">
+                 	<param name="index.service.uri" value="${index.service.epr}"/>
+                 	         	
+     </antcall>
+     <antcall target="deploy${target.container}"/>
+  </target>
+  
+  
+  
+  
+   <target name="installGME" description="GME Installation">
+       
+       <antcall target="Scn1"/>
+       <antcall target="Scn2"/>
+       <antcall target="Scn3"/>
+       
+       
+  </target>
+        
+  <target name="installsource" description="Source Code Installation">
+         
+         <mkdir dir="${grid.home}/gme"/>
+         <copy todir="${grid.home}/gme">
+	     <fileset dir="${basedir}/resources/release">
+	       <include name="**/*.*"/>
+	     </fileset>
+	   </copy>
+
+         
+         
+  </target>
+  
+ 
+  <target name="configureDataBaseParams">
+  
+  
+  <replace file="${basedir}/resources/templates/gme-globus-config.xml" >
+      		<replacefilter token="@HOST@" value="${db.host}"/>
+      		<replacefilter token="@PORT@" value="${db.port}"/>
+      		<replacefilter token="@USER@" value="${db.un}"/>
+      		<replacefilter token="@PASSWORD@" value="${db.pwd}"/>
+    	</replace>
+  <copy file="${basedir}/resources/templates/gme-globus-config.xml" overwrite="true" todir="${basedir}/resources/release/etc"/>
+  
+    </target>
+
+  
+  
+  
+  
+  
+  <target name="configureServiceMetadata">
+    <xmltask source="${basedir}/resources/release/etc/ServiceMetadata.xml" dest="${basedir}/resources/release/etc/ServiceMetadata.xml">
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']"  attr="displayName" value="${rc.display.name}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']"  attr="shortName" value="${rc.short.name}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='Address']"  attr="country" value="${rc.country.name}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='Address']"  attr="postalCode" value="${rc.postal.code}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='Address']"  attr="stateProvince" value="${rc.province.name}"/>
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='Address']"  attr="street1" value="${rc.street1.name}"/>
+       	          	
+       	          	<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="affiliation" value="${rc.poc.affiliation.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="email" value="${rc.poc.email.id}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="firstName" value="${rc.poc.first.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="lastName" value="${rc.poc.last.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='hostingResearchCenter']/*[local-name()='ResearchCenter']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="role" value="${rc.poc.role.name}"/>
+ 			
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="affiliation" value="${poc.affiliation.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="email" value="${poc.email.id}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="firstName" value="${poc.first.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="lastName" value="${poc.last.name}"/>
+ 			<attr path="//*[local-name()='ServiceMetadata']/*[local-name()='serviceDescription']/*[local-name()='Service']/*[local-name()='pointOfContactCollection']/*[local-name()='PointOfContact']"  attr="role" value="${poc.role.name}"/>
+ 			
+        
+        
+        </xmltask>
+  </target>
+  
+  <target name="configureRegistartionData">
+  	<xmltask source="${basedir}/resources/release/etc/registration.xml" dest="${basedir}/resources/release/etc/registration.xml">
+		<replace path="//*[local-name()='ServiceGroupRegistrationParameters']/*[local-name()='ServiceGroupEPR']/*[local-name()='Address']/text()" withText="${index.service.uri}"/>
+
+		
+        </xmltask>
+  </target>
+  
+  <target name="deploytomcat">
+    <ant  dir="${basedir}/resources/release" antfile="${basedir}/resources/release/build.xml" target="deployTomcat">
+    	<property name="service.deployment.host" value="${service.deployment.host}"/> 
+    </ant>
+  </target>
+  <target name="deployglobus">
+      <ant  dir="${basedir}/resources/release" antfile="${basedir}/resources/release/build.xml" target="deployGlobus">
+      	<property name="service.deployment.host" value="${service.deployment.host}"/> 
+      </ant>
+  </target>
+  <target name="cleanuptarget"
+        description="clean up" >
+   
+    
+  </target>
+  <target name="finished"
+          description="clean up" >
+     
+      <echo message="we are done!"/>
+  </target>
+</project>

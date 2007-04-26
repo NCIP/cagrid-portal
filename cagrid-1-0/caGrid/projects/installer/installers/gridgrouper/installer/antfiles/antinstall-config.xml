@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<!DOCTYPE installer PUBLIC "-//tp23 //DTD Ant Installer Config//EN" "http://antinstaller.sf.net/dtd/antinstall-config-0.7.dtd">
+
+
+
+
+<installer ui="swing,text" verbose="false" lookAndFeel="com.jgoodies.plaf.plastic.Plastic3DLookAndFeel" name="caGrid Installer" windowIcon="/resources/gkmain_inv.png" defaultImageResource="/resources/caGrid.jpg" minJavaVersion="1.4">
+<!--  each page element represents a page of the installer -->
+    <page type="input" name="P1" displayText="Welcome to Grid Grouper Installation and configuration" 
+        		imageResource="/resources/caGrid.jpg"
+        		>
+        		
+            <select
+			property="target.container"
+			defaultValue="tomcat"
+			displayText="Choose the target container">
+		<option text="Tomcat" value="tomcat"/>
+		<option text="Globus" value="globus"/>
+	    				
+		</select>
+            
+            
+    </page>
+    <page type="input" 
+                	  name="P1_1" 
+                	  displayText="Choose Grid Home" 	
+                	  imageResource="/resources/caGrid.jpg">
+                	<comment displayText="The source code will be placed in the following directory" bold="true" />
+                	<directory property="user.grid.home" defaultValue="${gridenv.user.local.home}/cagrid-1-0" defaultValueWin="${gridenv.user.local.home}/cagrid-1-0" displayText="Grid Home" />
+                	
+    </page>
+    <page type="input" name="P2" displayText="Checking Tomcat" 
+    		imageResource="/resources/caGrid.jpg"
+    		ifProperty="${target.container}.equalsIgnoreCase('tomcat')**${gridenv.tomcat.exist}.equalsIgnoreCase('false')">
+    		
+        <comment displayText="Tomcat is not found. Make sure Tomcat is installed and CATALINA_HOME is set" bold="true" />
+    </page>
+    
+    
+    <page  type="input" name="P3" displayText="Checking Globus" ifProperty="${target.container}.equalsIgnoreCase('globus')**${gridenv.globus.exist}.equalsIgnoreCase('false')">
+        
+        
+        <comment displayText="Globus is not found. Make sure Globus is installed and GLOBUS_LOCATION is set" bold="true" />
+
+    </page>
+    
+    <page  type="input" name="P4" displayText="Configuration Parameters" ifProperty="(${target.container}.equalsIgnoreCase('tomcat')**${gridenv.tomcat.exist}.equalsIgnoreCase('true'))||(${target.container}.equalsIgnoreCase('globus')**${gridenv.globus.exist}.equalsIgnoreCase('true'))">
+            <comment displayText="Provide data base parameters" bold="true" />
+            
+            <text property="db.url" displayText="Database URL" defaultValue="jdbc:mysql://localhost:3306/" explanatoryText="The target machine, where Mysql will be running. It may be an ip address or machine name."/>
+            <text property="db.name" displayText="Database Name" defaultValue="grouper" />
+            <text property="db.userid" displayText="User Name" defaultValue="root" />
+            <text property="db.password" displayText="Password" defaultValue="" />
+    </page>
+    
+    <page type="input" name="P4_1" displayText="Do you want to  administrator right now or later?" 
+                		imageResource="/resources/caGrid.jpg"
+                		ifProperty="(${target.container}.equalsIgnoreCase('tomcat')**${gridenv.tomcat.exist}.equalsIgnoreCase('true'))||(${target.container}.equalsIgnoreCase('globus')**${gridenv.globus.exist}.equalsIgnoreCase('true'))">
+                		
+                    <select
+        			property="add.admin.now"
+        			defaultValue="false"
+        			displayText="Choose one">
+        		<option text="Add now" value="true"/>
+        		<option text="Add later" value="false"/>
+        	    				
+        		</select>
+                    
+                    
+        </page>
+        
+        <page  type="input" name="P4_2" displayText="Make sure database is up and running !" ifProperty="((${target.container}.equalsIgnoreCase('tomcat'))**(${gridenv.tomcat.exist}.equalsIgnoreCase('true'))||(${target.container}.equalsIgnoreCase('globus'))**(${gridenv.globus.exist}.equalsIgnoreCase('true')))**(${add.admin.now}.equalsIgnoreCase('true'))">
+                    
+                    
+                    
+                    <text property="admin.id" displayText="Admin Grid ID" defaultValue="" />
+    
+    </page>
+    
+    <page  type="input" name="P5" displayText="Service Metadata configuration" ifProperty="(${target.container}.equalsIgnoreCase('tomcat')**${gridenv.tomcat.exist}.equalsIgnoreCase('true'))||(${target.container}.equalsIgnoreCase('globus')**${gridenv.globus.exist}.equalsIgnoreCase('true'))">
+                    <comment displayText="Provide Resreach Centre information" bold="true" />
+                    
+                    <text property="grouper.service.display.name" 
+                          displayText="Display Name" 
+                          defaultValue="National Cancer Institute Center for BioInformatics" 
+                          />
+                          
+                    <text property="grouper.service.short.name" 
+                          displayText="Short Name" 
+                          defaultValue="NCICB" 
+                          />
+                          
+                    <text property="grouper.service.country" 
+                          displayText="Country" 
+                          defaultValue="US" />
+                          
+                    <text property="grouper.service.postal.code" 
+                          displayText="Postal Code" 
+                          defaultValue="20852" 
+                          />
+                          
+                    <text property="grouper.service.province" 
+                          displayText="Province" 
+                          defaultValue="MD" 
+                         />
+                          
+                    <text property="grouper.service.street" 
+                          displayText="Street" 
+                          defaultValue="6116 Executive Blvd, Suite 403" 
+                          />
+                          
+                    <text property="grouper.service.rc.affiliation" 
+                          displayText="Affiliation" 
+                          defaultValue="NCICB Application Support" 
+                          />
+                          
+                    <text property="grouper.service.rc.poc.email" 
+                          displayText="Poc's Email" 
+                          defaultValue="ncicbmb@mail.nih.gov" 
+                          />
+                          
+                    <text property="grouper.service.rc.poc.first.name" 
+                          displayText="First Name" 
+                          defaultValue="Your first name"
+                          explanatoryText="The name of the service by which it will be displayed"/>
+                          
+                    <text property="grouper.service.rc.poc.last.name" 
+                          displayText="Last Name" 
+                          defaultValue="Your last name" 
+                          explanatoryText="The name of the service by which it will be displayed"/>
+                          
+                    <text property="grouper.service.rc.poc.role" 
+                          displayText="Role" 
+                          defaultValue="Maintainer" 
+                          explanatoryText="The name of the service by which it will be displayed"/>
+                          
+          </page>
+        <page  type="input" name="P6" displayText="Service Metadata configuration" ifProperty="(${target.container}.equalsIgnoreCase('tomcat')**${gridenv.tomcat.exist}.equalsIgnoreCase('true'))||(${target.container}.equalsIgnoreCase('globus')**${gridenv.globus.exist}.equalsIgnoreCase('true'))">
+                    <comment displayText="Provide Point of contact information" bold="true" />
+                    
+                <text property="grouper.service.poc.affiliation" 
+                      displayText="Affiliation" 
+                      defaultValue="NCICB Application Support" 
+                      />
+    	    <text property="grouper.service.poc.email" 
+    	          displayText="Poc's Email" 
+    	          defaultValue="ncicbmb@mail.nih.gov" 
+    	          />
+    	    <text property="grouper.service.poc.first.name" 
+    	          displayText="First Name" 
+    	          defaultValue="Your first name" 
+    	          />
+    	    <text property="grouper.service.poc.last.name" 
+    	          displayText="Last Name" 
+    	          defaultValue="Your last name" 
+    	          />
+    	    <text property="grouper.service.poc.role" 
+    	          displayText="Role" 
+    	          defaultValue="Maintainer" 
+    	          />
+    
+    
+                    
+    </page>    
+    <!-- 
+    <page  type="input" name="P7" displayText="Service Metadata configuration" ifProperty="(${target.container}.equalsIgnoreCase('tomcat')**${gridenv.tomcat.exist}.equalsIgnoreCase('true'))||(${target.container}.equalsIgnoreCase('globus')**${gridenv.globus.exist}.equalsIgnoreCase('true'))">
+                    <comment displayText="Provide registartion information" bold="true" />
+                    
+                <text property="index.service.epr" displayText="EPR" defaultValue="http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService" />
+    	    
+    
+    
+                    
+    </page>
+    -->
+    
+    
+    <page type="deployproperty" 
+          name="P_ABC" 
+          displayText="Deploy property page" 
+          imageResource="/resources/caGrid.jpg"
+          ifProperty="(${target.container}.equalsIgnoreCase('tomcat')**${gridenv.tomcat.exist}.equalsIgnoreCase('true'))||(${target.container}.equalsIgnoreCase('globus')**${gridenv.globus.exist}.equalsIgnoreCase('true'))">
+    </page>
+    
+    
+    
+    
+    <page type="input" name="selector" displayText="Components to install">
+        <comment displayText="The following components will be installed" bold="true" />
+        <target displayText="Grid Grouper Service" target="installGridGrouper" defaultValue="true" force="true" />
+        <target displayText="Source Code" target="installsource" defaultValue="false" force="false" />
+    </page>
+<!--  These are some other input types -->
+<!--  page type="progress" shows a progress page with the install button 
+                Its target is set to cleanuptarget since it is the last page this target will be run last-->
+    <page type="progress" name="progress" showTargets="true" displayText="Installation progress" target="finished">
+    </page>
+</installer>

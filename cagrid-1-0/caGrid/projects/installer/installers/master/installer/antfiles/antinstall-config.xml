@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE installer PUBLIC "-//tp23 //DTD Ant Installer Config//EN" "http://antinstaller.sf.net/dtd/antinstall-config-0.7.dtd">
+
+
+
+
+<installer ui="swing,text" verbose="false" lookAndFeel="com.jgoodies.plaf.plastic.Plastic3DLookAndFeel" name="caGrid Installer" windowIcon="/resources/gkmain_inv.png" defaultImageResource="/resources/caGrid.jpg" minJavaVersion="1.4">
+<!--  each page element represents a page of the installer -->
+   
+			
+    <page type="input" name="P1" displayText="caGrid 1.0 Infrastructure Installation" 
+        		imageResource="/resources/caGrid.jpg"
+        		>
+        		
+            <comment displayText="caGrid 1.0 Infrastructure will install and configure Ant 1.6.5, Tomcat 5.0.28 and Globus Toolkit 4.0.3" bold="true" />
+            <comment displayText="and will download the caGrid 1.0 Infrastructure. " bold="true" />
+            <comment displayText="" bold="true" />
+          
+            
+	    
+	    
+	    
+            
+            
+    </page>
+    
+    
+    <page type="input" 
+    	  name="P1_1" 
+    	  displayText="Choose Grid Home" 	
+    	  imageResource="/resources/caGrid.jpg">
+    	<comment displayText="The source code and other artifacts will be placed in the following directory" bold="true" />
+    	<directory property="user.grid.home" defaultValue="${gridenv.user.local.home}/cagrid-1-0" defaultValueWin="${gridenv.user.local.home}/cagrid-1-0" displayText="Grid Home" />
+    	
+    </page>
+    <!--
+    <page type="input" 
+    	  name="P2" 
+    	  displayText="Choose the Installation Type" 	
+    	  imageResource="/resources/caGrid.jpg">
+    	
+    	<select
+		property="installation.type"
+		defaultValue="cagrid"
+		displayText="">
+		<option text="System Components (Ant 1.6.2,Tomcat 5.0.28 and Globus Toolkit 4.0.3)" value="systemcheck"/>
+		<option text="caGrid 1.0 Infrastructure" value="cagrid"/>
+		
+		
+					
+	</select>
+    </page>
+    
+    -->
+    
+    
+    
+    
+    
+    <page type="input" name="selector" displayText="Components to Install">
+        <comment displayText="The following components will be installed." bold="true" />
+        <comment displayText="(System Components (Ant 1.6.5, Tomcat 5.0.28 and Globus Toolkit 4.0.3) and caGrid 1.0 Infrastructure)" bold="true" />
+        <comment displayText="" bold="true" />
+        <target displayText="System Components" target="systemcheck" defaultValue="true" force="false" />
+        <target displayText="caGrid 1.0 Infrastructure" target="cagrid" defaultValue="true" force="false" />
+
+    </page>
+<!--  These are some other input types -->
+<!--  page type="progress" shows a progress page with the install button 
+                Its target is set to cleanuptarget since it is the last page this target will be run last-->
+    <page type="progress" name="progress" showTargets="true" displayText="Installation progress" target="finished">
+    </page>
+</installer>
