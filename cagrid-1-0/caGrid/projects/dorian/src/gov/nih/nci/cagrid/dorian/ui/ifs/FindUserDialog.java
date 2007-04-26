@@ -17,6 +17,7 @@ import java.awt.event.FocusListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -25,7 +26,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
@@ -35,9 +35,9 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.9 2007-04-26 20:04:04 langella Exp $
+ * @version $Id: FindUserDialog.java,v 1.1 2007-04-26 20:04:04 langella Exp $
  */
-public class UserManagerWindow extends ApplicationComponent {
+public class FindUserDialog extends JDialog {
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -53,7 +53,7 @@ public class UserManagerWindow extends ApplicationComponent {
 
 	private JScrollPane jScrollPane = null;
 
-	private JButton manageUser = null;
+	private JButton select = null;
 
 	private SessionPanel session = null;
 
@@ -95,8 +95,6 @@ public class UserManagerWindow extends ApplicationComponent {
 
 	private JLabel statusLabel = null;
 
-	private JButton removeUser = null;
-
 	private JLabel jLabel = null;
 
 	private JLabel jLabel1 = null;
@@ -105,13 +103,15 @@ public class UserManagerWindow extends ApplicationComponent {
 
 	private JTextField lastName = null;
 
+	private String selectedUser = null;
+
+
 	/**
 	 * This is the default constructor
 	 */
-	public UserManagerWindow() {
+	public FindUserDialog() {
 		super();
 		initialize();
-		this.setFrameIcon(DorianLookAndFeel.getUsersIcon());
 	}
 
 	/**
@@ -119,8 +119,9 @@ public class UserManagerWindow extends ApplicationComponent {
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
-		this.setTitle("Account Management");
-		setSize(600, 400);
+		this.setTitle("Find Users");
+		this.setIconImage(DorianLookAndFeel.getQueryIcon().getImage());
+		setSize(700, 600);
 
 	}
 
@@ -226,8 +227,7 @@ public class UserManagerWindow extends ApplicationComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			buttonPanel.add(getManageUser(), null);
-			buttonPanel.add(getRemoveUser(), null);
+			buttonPanel.add(getSelect(), null);
 			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
@@ -241,7 +241,7 @@ public class UserManagerWindow extends ApplicationComponent {
 	private JButton getCancel() {
 		if (cancel == null) {
 			cancel = new JButton();
-			cancel.setText("Close");
+			cancel.setText("Cancel");
 			cancel.setIcon(LookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -278,24 +278,36 @@ public class UserManagerWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes manageUser
+	 * This method initializes select
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getManageUser() {
-		if (manageUser == null) {
-			manageUser = new JButton();
-			manageUser.setText("Manage User");
-			manageUser.setIcon(DorianLookAndFeel.getUserBrowse());
-			manageUser.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getSelect() {
+		if (select == null) {
+			select = new JButton();
+			select.setText("Select User");
+			select.setIcon(DorianLookAndFeel.getUserBrowse());
+			select.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					getUsersTable().doubleClick();
+					try {
+						selectedUser = getUsersTable().getSelectedUser()
+								.getGridId();
+						dispose();
+					} catch (Exception ex) {
+						ErrorDialog.showError(ex);
+					}
 				}
 
 			});
 		}
 
-		return manageUser;
+		return select;
+	}
+	
+	
+
+	public String getSelectedUser() {
+		return selectedUser;
 	}
 
 	/**
@@ -739,35 +751,6 @@ public class UserManagerWindow extends ApplicationComponent {
 			userId = new JTextField();
 		}
 		return userId;
-	}
-
-	/**
-	 * This method initializes removeUser
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getRemoveUser() {
-		if (removeUser == null) {
-			removeUser = new JButton();
-			removeUser.setText("Remove User");
-			removeUser.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Runner runner = new Runner() {
-						public void execute() {
-							removeUser();
-						}
-					};
-					try {
-						GridApplication.getContext()
-								.executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
-				}
-			});
-			removeUser.setIcon(DorianLookAndFeel.getRemoveUserIcon());
-		}
-		return removeUser;
 	}
 
 	private void removeUser() {

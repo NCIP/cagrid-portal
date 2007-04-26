@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.ui;
 
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
+import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 
 import java.awt.GridBagConstraints;
@@ -21,11 +22,11 @@ public class SessionPanel extends JPanel {
 
 	private JLabel jLabel = null;
 
-	private DorianServiceListComboBox serviceURI = null;
+	private DorianServiceListComboBox service = null;
 
 	private JLabel jLabel1 = null;
 
-	private ProxyComboBox credential = null;
+	private ProxyComboBox cred = null;
 
 	/**
 	 * This is the default constructor
@@ -76,41 +77,57 @@ public class SessionPanel extends JPanel {
 				TitledBorder.DEFAULT_POSITION, null, LookAndFeel
 						.getPanelLabelColor()));
 		this.add(jLabel, gridBagConstraints1);
-		this.add(getServiceURI(), gridBagConstraints);
+		this.add(getService(), gridBagConstraints);
 		this.add(jLabel1, gridBagConstraints2);
-		this.add(getCredential(), gridBagConstraints3);
+		this.add(getCred(), gridBagConstraints3);
 	}
 
 	/**
-	 * This method initializes serviceURI
+	 * This method initializes service
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private DorianServiceListComboBox getServiceURI() {
-		if (serviceURI == null) {
-			serviceURI = new DorianServiceListComboBox();
+	private DorianServiceListComboBox getService() {
+		if (service == null) {
+			service = new DorianServiceListComboBox();
 		}
-		return serviceURI;
+		return service;
 	}
 
 	/**
-	 * This method initializes credential
+	 * This method initializes cred
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private ProxyComboBox getCredential() {
-		if (credential == null) {
-			credential = new ProxyComboBox();
+	private ProxyComboBox getCred() {
+		if (cred == null) {
+			cred = new ProxyComboBox();
 		}
-		return credential;
+		return cred;
 	}
 
 	public IFSAdministrationClient getAdminClient() throws Exception {
-		String serviceUrl = getServiceURI().getSelectedService();
-		GlobusCredential proxyCred = getCredential().getSelectedProxy();
+		String serviceUrl = getService().getSelectedService();
+		GlobusCredential proxyCred = getCred().getSelectedProxy();
 		IFSAdministrationClient client = new IFSAdministrationClient(
 				serviceUrl, proxyCred);
 		return client;
+	}
+
+	public IdPAdministrationClient getLocalAdminClient() throws Exception {
+		String serviceUrl = getService().getSelectedService();
+		GlobusCredential proxyCred = getCred().getSelectedProxy();
+		IdPAdministrationClient client = new IdPAdministrationClient(
+				serviceUrl, proxyCred);
+		return client;
+	}
+
+	public String getServiceURI() {
+		return getService().getSelectedService();
+	}
+
+	public GlobusCredential getCredential() throws Exception {
+		return getCred().getSelectedProxy();
 	}
 
 }

@@ -5,23 +5,22 @@ import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
-import java.awt.Font;
-import java.awt.Color;
 
-public class AddAdminWindow extends ApplicationComponent {
+public class AddAdminWindow extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
@@ -71,10 +70,10 @@ public class AddAdminWindow extends ApplicationComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 200);
+		this.setSize(500, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Add Administrator");
-		this.setFrameIcon(DorianLookAndFeel.getAdminIcon());
+		this.setIconImage(DorianLookAndFeel.getAdminIcon().getImage());
 	}
 
 	/**
@@ -317,6 +316,16 @@ public class AddAdminWindow extends ApplicationComponent {
 			findUser = new JButton();
 			findUser.setText("Find...");
 			findUser.setIcon(DorianLookAndFeel.getQueryIcon());
+			findUser.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					FindUserDialog dialog = new FindUserDialog();
+					dialog.setModal(true);
+					dialog.setVisible(true);
+					if (dialog.getSelectedUser() != null) {
+						gridIdentity.setText(dialog.getSelectedUser());
+					}
+				}
+			});
 		}
 		return findUser;
 	}

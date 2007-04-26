@@ -4,38 +4,31 @@ import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
-import gov.nih.nci.cagrid.dorian.ui.DorianServiceListComboBox;
-import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
+import gov.nih.nci.cagrid.dorian.ui.SessionPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.globus.gsi.GlobusCredential;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: AdministratorsWindow.java,v 1.1 2007-04-26 18:43:49 langella Exp $
+ * @version $Id: AdministratorsWindow.java,v 1.1 2007/04/26 18:43:49 langella
+ *          Exp $
  */
 public class AdministratorsWindow extends ApplicationComponent {
 
@@ -53,25 +46,15 @@ public class AdministratorsWindow extends ApplicationComponent {
 
 	private JButton viewEditAdmin = null;
 
-	private JPanel jPanel = null;
-
-	private JPanel jPanel2 = null;
-
-	private JLabel jLabel14 = null;
+	private SessionPanel sessionPanel = null;
 
 	private JPanel queryPanel = null;
 
 	private JButton query = null;
 
-	private JComboBox service = null;
-
 	private boolean isQuerying = false;
 
 	private Object mutex = new Object();
-
-	private JLabel proxyLabel = null;
-
-	private JComboBox proxy = null;
 
 	private JPanel progressPanel = null;
 
@@ -80,6 +63,8 @@ public class AdministratorsWindow extends ApplicationComponent {
 	private JButton removeTrustedIdPButton = null;
 
 	private JButton addAdmin = null;
+
+	private boolean loaded = false;
 
 	/**
 	 * This is the default constructor
@@ -153,7 +138,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			mainPanel.add(getButtonPanel(), gridBagConstraints2);
 			mainPanel.add(getContentPanel(), gridBagConstraints1);
-			mainPanel.add(getJPanel(), gridBagConstraints35);
+			mainPanel.add(getSessionPanel(), gridBagConstraints35);
 			mainPanel.add(getQueryPanel(), gridBagConstraints33);
 			mainPanel.add(getProgressPanel(), gridBagConstraints32);
 		}
@@ -210,7 +195,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 	 */
 	private AdminsTable getAdminsTable() {
 		if (adminsTable == null) {
-			adminsTable = new AdminsTable();
+			adminsTable = new AdminsTable(this);
 		}
 		return adminsTable;
 	}
@@ -262,13 +247,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 
 	public void showAdmin() {
 		try {
-
-			String serviceUrl = ((DorianServiceListComboBox) getService())
-					.getSelectedService();
-			GlobusCredential proxyCred = ((ProxyComboBox) getProxy())
-					.getSelectedProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(
-					serviceUrl, proxyCred);
+			IFSAdministrationClient client = getSessionPanel().getAdminClient();
 			IFSUserFilter f = new IFSUserFilter();
 			f.setGridId(getAdminsTable().getSelectedAdmin());
 			IFSUser[] users = client.findUsers(f);
@@ -286,7 +265,8 @@ public class AdministratorsWindow extends ApplicationComponent {
 					}
 				}
 				GridApplication.getContext().addApplicationComponent(
-						new UserWindow(serviceUrl, proxyCred, user, tidp));
+						new UserWindow(getSessionPanel().getServiceURI(),
+								getSessionPanel().getCredential(), user, tidp));
 			}
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
@@ -295,85 +275,28 @@ public class AdministratorsWindow extends ApplicationComponent {
 
 	public void addAdmin() {
 		try {
-			String serviceUrl = ((DorianServiceListComboBox) getService())
-					.getSelectedService();
-			GlobusCredential proxyCred = ((ProxyComboBox) getProxy())
-					.getSelectedProxy();
-			GridApplication.getContext().addApplicationComponent(
-					new AddAdminWindow(serviceUrl, proxyCred), 500, 200);
-
+			AddAdminWindow window = new AddAdminWindow(getSessionPanel()
+					.getServiceURI(), getSessionPanel().getCredential());
+			window.setModal(true);
+			window.setVisible(true);
+			if (loaded) {
+				this.listAdmins();
+			}
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
 	}
 
 	/**
-	 * This method initializes jPanel
+	 * This method initializes sessionPanel
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanel() {
-		if (jPanel == null) {
-			GridBagConstraints gridBagConstraints34 = new GridBagConstraints();
-			gridBagConstraints34.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints34.gridy = 0;
-			gridBagConstraints34.weightx = 1.0D;
-			gridBagConstraints34.gridx = 0;
-			jPanel = new JPanel();
-			jPanel.setLayout(new GridBagLayout());
-			jPanel.add(getJPanel2(), gridBagConstraints34);
+	private SessionPanel getSessionPanel() {
+		if (sessionPanel == null) {
+			sessionPanel = new SessionPanel();
 		}
-		return jPanel;
-	}
-
-	/**
-	 * This method initializes jPanel2
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getJPanel2() {
-		if (jPanel2 == null) {
-			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
-			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints30.gridx = 1;
-			gridBagConstraints30.gridy = 1;
-			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints30.weightx = 1.0;
-			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
-			gridBagConstraints29.gridx = 0;
-			gridBagConstraints29.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints29.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints29.gridy = 1;
-			proxyLabel = new JLabel();
-			proxyLabel.setText("Proxy");
-			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
-			gridBagConstraints28.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints28.gridx = 1;
-			gridBagConstraints28.gridy = 0;
-			gridBagConstraints28.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints28.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints28.weightx = 1.0;
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.anchor = GridBagConstraints.WEST;
-			gridBagConstraints31.gridwidth = 1;
-			gridBagConstraints31.gridx = 0;
-			gridBagConstraints31.gridy = 0;
-			gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
-			jLabel14 = new JLabel();
-			jLabel14.setText("Service");
-			jPanel2 = new JPanel();
-			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
-					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-							.getPanelLabelColor()));
-			jPanel2.add(jLabel14, gridBagConstraints31);
-			jPanel2.add(getService(), gridBagConstraints28);
-			jPanel2.add(proxyLabel, gridBagConstraints29);
-			jPanel2.add(getProxy(), gridBagConstraints30);
-		}
-		return jPanel2;
+		return sessionPanel;
 	}
 
 	/**
@@ -436,12 +359,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 		this.updateProgress(true, "Finding Administrators...");
 
 		try {
-			GlobusCredential proxyCred = ((ProxyComboBox) getProxy())
-					.getSelectedProxy();
-			String serviceUrl = ((DorianServiceListComboBox) getService())
-					.getSelectedService();
-			IFSAdministrationClient client = new IFSAdministrationClient(
-					serviceUrl, proxyCred);
+			IFSAdministrationClient client = getSessionPanel().getAdminClient();
 			String[] admins = client.getAdmins();
 
 			int length = 0;
@@ -451,6 +369,8 @@ public class AdministratorsWindow extends ApplicationComponent {
 					this.getAdminsTable().addAdmin(admins[i]);
 				}
 			}
+
+			loaded = true;
 			this.updateProgress(false, "Completed [Found " + length
 					+ " Administrators]");
 
@@ -463,40 +383,6 @@ public class AdministratorsWindow extends ApplicationComponent {
 		}
 		isQuerying = false;
 
-	}
-
-	private IFSUserPolicy[] getUserPolicies() throws Exception {
-		GlobusCredential proxyCred = ((ProxyComboBox) getProxy())
-				.getSelectedProxy();
-		String serviceUrl = ((DorianServiceListComboBox) getService())
-				.getSelectedService();
-		IFSAdministrationClient client = new IFSAdministrationClient(
-				serviceUrl, proxyCred);
-		return client.getUserPolicies();
-	}
-
-	/**
-	 * This method initializes service
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getService() {
-		if (service == null) {
-			service = new DorianServiceListComboBox();
-		}
-		return service;
-	}
-
-	/**
-	 * This method initializes proxy
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getProxy() {
-		if (proxy == null) {
-			proxy = new ProxyComboBox();
-		}
-		return proxy;
 	}
 
 	/**
@@ -569,20 +455,14 @@ public class AdministratorsWindow extends ApplicationComponent {
 							}
 						}
 					});
-			removeTrustedIdPButton.setIcon(DorianLookAndFeel
-					.getRemoveIcon());
+			removeTrustedIdPButton.setIcon(DorianLookAndFeel.getRemoveIcon());
 		}
 		return removeTrustedIdPButton;
 	}
 
 	private void removeAdmin() {
 		try {
-			String serviceUrl = ((DorianServiceListComboBox) getService())
-					.getSelectedService();
-			GlobusCredential proxyCred = ((ProxyComboBox) getProxy())
-					.getSelectedProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(
-					serviceUrl, proxyCred);
+			IFSAdministrationClient client = getSessionPanel().getAdminClient();
 			client.removeAdmin(getAdminsTable().getSelectedAdmin());
 			getAdminsTable().removeSelectedAdmin();
 		} catch (Exception e) {

@@ -6,35 +6,27 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
-import gov.nih.nci.cagrid.dorian.ui.DorianServiceListComboBox;
-import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
+import gov.nih.nci.cagrid.dorian.ui.SessionPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.globus.gsi.GlobusCredential;
-
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.6 2007-04-05 16:08:05 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.7 2007-04-26 20:04:04 langella Exp $
  */
 public class TrustedIdPsWindow extends ApplicationComponent {
 
@@ -52,25 +44,15 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 	private JButton viewTrustedIdP = null;
 
-	private JPanel jPanel = null;
-
-	private JPanel jPanel2 = null;
-
-	private JLabel jLabel14 = null;
+	private SessionPanel session = null;
 
 	private JPanel queryPanel = null;
 
 	private JButton query = null;
 
-	private JComboBox service = null;
-
 	private boolean isQuerying = false;
 
 	private Object mutex = new Object();
-
-	private JLabel proxyLabel = null;
-
-	private JComboBox proxy = null;
 
 	private JPanel progressPanel = null;
 
@@ -79,7 +61,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	private JButton removeTrustedIdPButton = null;
 
 	private JButton addUser = null;
-
 
 	/**
 	 * This is the default constructor
@@ -90,7 +71,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		this.setFrameIcon(DorianLookAndFeel.getTrustedIdPIcon());
 	}
 
-
 	/**
 	 * This method initializes this
 	 */
@@ -99,7 +79,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		this.setTitle("Trusted Identity Provider Management");
 
 	}
-
 
 	/**
 	 * This method initializes jContentPane
@@ -114,7 +93,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -156,13 +134,12 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			mainPanel.add(getButtonPanel(), gridBagConstraints2);
 			mainPanel.add(getContentPanel(), gridBagConstraints1);
-			mainPanel.add(getJPanel(), gridBagConstraints35);
+			mainPanel.add(getSession(), gridBagConstraints35);
 			mainPanel.add(getQueryPanel(), gridBagConstraints33);
 			mainPanel.add(getProgressPanel(), gridBagConstraints32);
 		}
 		return mainPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -174,9 +151,14 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
-			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trusted IdPs",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
+			contentPanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Trusted IdPs",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, LookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.gridx = 0;
@@ -186,7 +168,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		}
 		return contentPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -203,7 +184,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		return buttonPanel;
 	}
 
-
 	/**
 	 * This method initializes jTable
 	 * 
@@ -216,11 +196,9 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		return trustedIdPTable;
 	}
 
-
 	public void addTrustedIdP(TrustedIdP idp) {
 		getTrustedIdPTable().addTrustedIdP(idp);
 	}
-
 
 	/**
 	 * This method initializes jScrollPane
@@ -235,7 +213,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		return jScrollPane;
 	}
 
-
 	/**
 	 * This method initializes manageUser
 	 * 
@@ -246,120 +223,63 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			viewTrustedIdP = new JButton();
 			viewTrustedIdP.setText("View/Edit Trusted IdP");
 			viewTrustedIdP.setIcon(DorianLookAndFeel.getTrustedIdPIcon());
-			viewTrustedIdP.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Runner runner = new Runner() {
-						public void execute() {
-							showTrustedIdP();
+			viewTrustedIdP
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							Runner runner = new Runner() {
+								public void execute() {
+									showTrustedIdP();
+								}
+							};
+							try {
+								GridApplication.getContext()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
 						}
-					};
-					try {
-						GridApplication.getContext().executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
-				}
 
-			});
+					});
 		}
 
 		return viewTrustedIdP;
 	}
 
-
 	public void showTrustedIdP() {
 		try {
-			String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			GridApplication.getContext().addApplicationComponent(
-				new TrustedIdPWindow(serviceUrl, proxyCred, getTrustedIdPTable().getSelectedTrustedIdP(),
-					getUserPolicies()));
+			GridApplication.getContext()
+					.addApplicationComponent(
+							new TrustedIdPWindow(getSession().getServiceURI(),
+									getSession().getCredential(),
+									getTrustedIdPTable()
+											.getSelectedTrustedIdP(),
+									getUserPolicies()));
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
 	}
-
 
 	public void addTrustedIdP() {
 		try {
-			String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			GridApplication.getContext().addApplicationComponent(new TrustedIdPWindow(this, serviceUrl, proxyCred, getUserPolicies()));
+			GridApplication.getContext().addApplicationComponent(
+					new TrustedIdPWindow(this, getSession().getServiceURI(),
+							getSession().getCredential(), getUserPolicies()));
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
 	}
 
-
 	/**
-	 * This method initializes jPanel
+	 * This method initializes session
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanel() {
-		if (jPanel == null) {
-			GridBagConstraints gridBagConstraints34 = new GridBagConstraints();
-			gridBagConstraints34.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints34.gridy = 0;
-			gridBagConstraints34.weightx = 1.0D;
-			gridBagConstraints34.gridx = 0;
-			jPanel = new JPanel();
-			jPanel.setLayout(new GridBagLayout());
-			jPanel.add(getJPanel2(), gridBagConstraints34);
+	private SessionPanel getSession() {
+		if (session == null) {
+			session = new SessionPanel();
 		}
-		return jPanel;
+		return session;
 	}
-
-
-	/**
-	 * This method initializes jPanel2
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getJPanel2() {
-		if (jPanel2 == null) {
-			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
-			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints30.gridx = 1;
-			gridBagConstraints30.gridy = 1;
-			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints30.weightx = 1.0;
-			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
-			gridBagConstraints29.gridx = 0;
-			gridBagConstraints29.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints29.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints29.gridy = 1;
-			proxyLabel = new JLabel();
-			proxyLabel.setText("Proxy");
-			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
-			gridBagConstraints28.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints28.gridx = 1;
-			gridBagConstraints28.gridy = 0;
-			gridBagConstraints28.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints28.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints28.weightx = 1.0;
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.anchor = GridBagConstraints.WEST;
-			gridBagConstraints31.gridwidth = 1;
-			gridBagConstraints31.gridx = 0;
-			gridBagConstraints31.gridy = 0;
-			gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
-			jLabel14 = new JLabel();
-			jLabel14.setText("Service");
-			jPanel2 = new JPanel();
-			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-					.getPanelLabelColor()));
-			jPanel2.add(jLabel14, gridBagConstraints31);
-			jPanel2.add(getService(), gridBagConstraints28);
-			jPanel2.add(proxyLabel, gridBagConstraints29);
-			jPanel2.add(getProxy(), gridBagConstraints30);
-		}
-		return jPanel2;
-	}
-
 
 	/**
 	 * This method initializes queryPanel
@@ -373,7 +293,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		}
 		return queryPanel;
 	}
-
 
 	/**
 	 * This method initializes query
@@ -393,7 +312,8 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 						}
 					};
 					try {
-						GridApplication.getContext().executeInBackground(runner);
+						GridApplication.getContext()
+								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -404,13 +324,13 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		return query;
 	}
 
-
 	private void findTrustedIdPs() {
 
 		synchronized (mutex) {
 			if (isQuerying) {
-				ErrorDialog.showError("Query Already in Progress",
-					"Please wait until the current query is finished before executing another.");
+				ErrorDialog
+						.showError("Query Already in Progress",
+								"Please wait until the current query is finished before executing another.");
 				return;
 			} else {
 				isQuerying = true;
@@ -421,9 +341,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		this.updateProgress(true, "Finding Trusted IdPs...");
 
 		try {
-			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
-			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, proxyCred);
+			IFSAdministrationClient client = getSession().getAdminClient();
 			TrustedIdP[] idps = client.getTrustedIdPs();
 
 			int length = 0;
@@ -446,40 +364,10 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 	}
 
-
 	private IFSUserPolicy[] getUserPolicies() throws Exception {
-		GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
-		String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
-		IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, proxyCred);
+		IFSAdministrationClient client = getSession().getAdminClient();
 		return client.getUserPolicies();
 	}
-
-
-	/**
-	 * This method initializes service
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getService() {
-		if (service == null) {
-			service = new DorianServiceListComboBox();
-		}
-		return service;
-	}
-
-
-	/**
-	 * This method initializes proxy
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getProxy() {
-		if (proxy == null) {
-			proxy = new ProxyComboBox();
-		}
-		return proxy;
-	}
-
 
 	/**
 	 * This method initializes progressPanel
@@ -501,7 +389,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		return progressPanel;
 	}
 
-
 	/**
 	 * This method initializes progress
 	 * 
@@ -517,7 +404,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		return progress;
 	}
 
-
 	public void updateProgress(final boolean working, final String s) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -528,7 +414,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 	}
 
-
 	/**
 	 * This method initializes removeUser
 	 * 
@@ -538,38 +423,38 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		if (removeTrustedIdPButton == null) {
 			removeTrustedIdPButton = new JButton();
 			removeTrustedIdPButton.setText("Remove TrustedIdP");
-			removeTrustedIdPButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Runner runner = new Runner() {
-						public void execute() {
-							removeTrustedIdP();
+			removeTrustedIdPButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							Runner runner = new Runner() {
+								public void execute() {
+									removeTrustedIdP();
+								}
+							};
+							try {
+								GridApplication.getContext()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
 						}
-					};
-					try {
-						GridApplication.getContext().executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
-				}
-			});
-			removeTrustedIdPButton.setIcon(DorianLookAndFeel.getRemoveTrustedIdPIcon());
+					});
+			removeTrustedIdPButton.setIcon(DorianLookAndFeel
+					.getRemoveTrustedIdPIcon());
 		}
 		return removeTrustedIdPButton;
 	}
 
-
 	private void removeTrustedIdP() {
 		try {
-			String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, proxyCred);
-			client.removeTrustedIdP(getTrustedIdPTable().getSelectedTrustedIdP());
+			IFSAdministrationClient client = getSession().getAdminClient();
+			client.removeTrustedIdP(getTrustedIdPTable()
+					.getSelectedTrustedIdP());
 			getTrustedIdPTable().removeSelectedTrustedIdP();
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
 	}
-
 
 	/**
 	 * This method initializes addUser
@@ -588,7 +473,8 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 						}
 					};
 					try {
-						GridApplication.getContext().executeInBackground(runner);
+						GridApplication.getContext()
+								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}

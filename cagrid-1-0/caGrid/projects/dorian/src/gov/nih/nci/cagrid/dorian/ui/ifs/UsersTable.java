@@ -1,20 +1,25 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
+import gov.nih.nci.cagrid.common.Runner;
+import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
+import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.ui.SessionPanel;
 
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.table.GrapeBaseTable;
-
+import org.cagrid.grape.utils.ErrorDialog;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.2 2007-03-21 19:36:06 langella Exp $
+ * @version $Id: UsersTable.java,v 1.3 2007-04-26 20:04:02 langella Exp $
  */
 public class UsersTable extends GrapeBaseTable {
 	public final static String USER = "user";
@@ -31,12 +36,11 @@ public class UsersTable extends GrapeBaseTable {
 
 	public final static String LAST_NAME = "Last Name";
 
-	UserManagerWindow window;
+	SessionPanel session;
 
-
-	public UsersTable(UserManagerWindow window) {
+	public UsersTable(SessionPanel session) {
 		super(createTableModel());
-		this.window = window;
+		this.session = session;
 		TableColumn c = this.getColumn(USER);
 		c.setMaxWidth(0);
 		c.setMinWidth(0);
@@ -56,7 +60,6 @@ public class UsersTable extends GrapeBaseTable {
 
 	}
 
-
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(USER);
@@ -70,7 +73,6 @@ public class UsersTable extends GrapeBaseTable {
 
 	}
 
-
 	public void addUser(final IFSUser u) {
 		Vector v = new Vector();
 		v.add(u);
@@ -83,7 +85,6 @@ public class UsersTable extends GrapeBaseTable {
 		addRow(v);
 	}
 
-
 	public synchronized IFSUser getSelectedUser() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
@@ -92,7 +93,6 @@ public class UsersTable extends GrapeBaseTable {
 			throw new Exception("Please select a user!!!");
 		}
 	}
-
 
 	public synchronized void removeSelectedUser() throws Exception {
 		int row = getSelectedRow();
@@ -103,17 +103,35 @@ public class UsersTable extends GrapeBaseTable {
 		}
 	}
 
-
-	public void doubleClick() throws Exception {
-		int row = getSelectedRow();
-		if ((row >= 0) && (row < getRowCount())) {
-			window.showUser();
-		} else {
-			throw new Exception("No user selected, please select a user!!!");
+	public void doubleClick() {
+		Runner runner = new Runner() {
+			public void execute() {
+				try {
+					IFSUser user = getSelectedUser();
+					IFSAdministrationClient client = session.getAdminClient();
+					TrustedIdP[] idps = client.getTrustedIdPs();
+					TrustedIdP tidp = null;
+					for (int i = 0; i < idps.length; i++) {
+						if (idps[i].getId() == user.getIdPId()) {
+							tidp = idps[i];
+							break;
+						}
+					}
+					GridApplication.getContext().addApplicationComponent(
+							new UserWindow(session.getServiceURI(), session
+									.getCredential(), user, tidp));
+				} catch (Exception e) {
+					ErrorDialog.showError(e);
+				}
+			}
+		};
+		try {
+			GridApplication.getContext().executeInBackground(runner);
+		} catch (Exception t) {
+			t.getMessage();
 		}
 
 	}
-
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub

@@ -7,23 +7,23 @@ import javax.swing.table.TableColumn;
 
 import org.cagrid.grape.table.GrapeBaseTable;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: AdminsTable.java,v 1.1 2007-04-26 18:43:49 langella Exp $
+ * @version $Id: AdminsTable.java,v 1.2 2007-04-26 20:04:04 langella Exp $
  */
 public class AdminsTable extends GrapeBaseTable {
 	public final static String GRID_IDENTITY = "Grid Identity";
 
+	private AdministratorsWindow window;
 
-	public AdminsTable() {
+	public AdminsTable(AdministratorsWindow window) {
 		super(createTableModel());
+		this.window = window;
 		TableColumn c = this.getColumn(GRID_IDENTITY);
 		this.clearTable();
 	}
-
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
@@ -32,13 +32,11 @@ public class AdminsTable extends GrapeBaseTable {
 
 	}
 
-
 	public void addAdmin(final String admin) {
 		Vector v = new Vector();
 		v.add(admin);
 		addRow(v);
 	}
-
 
 	public synchronized String getSelectedAdmin() throws Exception {
 		int row = getSelectedRow();
@@ -49,7 +47,6 @@ public class AdminsTable extends GrapeBaseTable {
 		}
 	}
 
-
 	public synchronized void removeSelectedAdmin() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
@@ -59,11 +56,9 @@ public class AdminsTable extends GrapeBaseTable {
 		}
 	}
 
-
 	public void doubleClick() throws Exception {
-		
+		window.showAdmin();
 	}
-
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub
