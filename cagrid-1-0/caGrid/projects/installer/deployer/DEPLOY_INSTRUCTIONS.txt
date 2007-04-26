@@ -2,8 +2,13 @@
 # Setup #
 #########
 
-Place tomcat and globus zip files in software subdirectory.
-Configure <target_env>.properties as required.
+1. Build caGrid
+2. Place tomcat and globus zip files in software subdirectory.
+    - The software sub directory should contain:
+      - jakarta-tomcat-5.0.28.zip
+      - ws-core-4.0.3-bin.zip
+3. Configure <target_env>.properties as required.
+    - Look at dev.properties for an example
 
 #############
 # Re-deploy #
