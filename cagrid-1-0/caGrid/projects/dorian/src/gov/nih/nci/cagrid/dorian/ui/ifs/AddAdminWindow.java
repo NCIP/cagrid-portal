@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.cagrid.grape.ApplicationContext;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
@@ -320,7 +321,7 @@ public class AddAdminWindow extends JDialog {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					FindUserDialog dialog = new FindUserDialog();
 					dialog.setModal(true);
-					dialog.setVisible(true);
+					GridApplication.getContext().showDialog(dialog);
 					if (dialog.getSelectedUser() != null) {
 						gridIdentity.setText(dialog.getSelectedUser());
 					}

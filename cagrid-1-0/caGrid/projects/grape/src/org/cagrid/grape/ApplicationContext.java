@@ -4,9 +4,11 @@ import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.RunnerGroup;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Window;
 
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.cagrid.grape.model.Component;
@@ -117,5 +119,25 @@ public class ApplicationContext {
 
 	public void showMessage(String title, String[] msg) {
 		JOptionPane.showMessageDialog(this.application, msg, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+
+
+	public void showDialog(JDialog dialog) {
+		centerDialog(dialog);
+		dialog.setVisible(true);
+	}
+
+
+	public void centerDialog(JDialog dialog) {
+		// Determine the new location of the window
+		Frame owner = this.application;
+		if (owner != null) {
+			int w = owner.getSize().width;
+			int h = owner.getSize().height;
+			int x = owner.getLocationOnScreen().x;
+			int y = owner.getLocationOnScreen().y;
+			Dimension dim = dialog.getSize();
+			dialog.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
+		}
 	}
 }
