@@ -278,7 +278,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 			AddAdminWindow window = new AddAdminWindow(getSessionPanel()
 					.getServiceURI(), getSessionPanel().getCredential());
 			window.setModal(true);
-			window.setVisible(true);
+			GridApplication.getContext().showDialog(window);
 			if (loaded) {
 				this.listAdmins();
 			}
