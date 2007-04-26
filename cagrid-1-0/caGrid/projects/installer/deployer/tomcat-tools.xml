@@ -186,14 +186,12 @@
 	</target>
 
 	<target name="shutdown-tomcats">
-		<input message="Username: " addproperty="host.username" />
-		<input message="Password: " addproperty="host.password" />
+		<input message="Username: " addproperty="username" />
+		<input message="Password: " addproperty="password" />
 		<for list="${nodes.list}" param="node" parallel="false">
 			<sequential>
 				<antcall target="shutdown-tomcat">
 					<param name="host" value="${@{node}.host}" />
-					<param name="username" value="${host.username}" />
-					<param name="password" value="${host.password}" />
 					<param name="catalina.home"
 						value="${host.catalina.home}" />
 				</antcall>
@@ -202,14 +200,12 @@
 	</target>
 
 	<target name="startup-tomcats">
-		<input message="Username: " addproperty="host.username" />
-		<input message="Password: " addproperty="host.password" />
+		<input message="Username: " addproperty="username" />
+		<input message="Password: " addproperty="password" />
 		<for list="${nodes.list}" param="node" parallel="false">
 			<sequential>
 				<antcall target="startup-tomcat">
 					<param name="host" value="${@{node}.host}" />
-					<param name="username" value="${host.username}" />
-					<param name="password" value="${host.password}" />
 					<param name="catalina.home"
 						value="${host.catalina.home}" />
 				</antcall>
@@ -239,14 +235,12 @@
 	</target>
 
 	<target name="deploy-tomcats">
-		<input message="Username: " addproperty="host.username" />
-		<input message="Password: " addproperty="host.password" />
+		<input message="Username: " addproperty="username" />
+		<input message="Password: " addproperty="password" />
 		<for list="${nodes.list}" param="node" parallel="false">
 			<sequential>
 				<antcall target="deploy-tomcat">
 					<param name="host" value="${@{node}.host}" />
-					<param name="username" value="${host.username}" />
-					<param name="password" value="${host.password}" />
 					<param name="catalina.home"
 						value="${host.catalina.home}" />
 					<param name="tomcat.deploy.zip"

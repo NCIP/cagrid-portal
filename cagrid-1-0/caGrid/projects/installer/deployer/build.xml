@@ -1,0 +1,183 @@
+<project name="deploy-cagrid" default="deploy-nodes">
+
+	<import file="certificate-tools.xml" />
+	<import file="common.xml" />
+	<import file="database-tools.xml" />
+	<import file="deploy-authn-service.xml" />
+	<import file="deploy-dorian.xml" />
+	<import file="deploy-gme.xml" />
+	<import file="deploy-gridgrouper.xml" />
+	<import file="deploy-gts.xml" />
+	<import file="deploy-index.xml" />
+	<import file="deploy-syncgts.xml" />
+	<import file="deploy-other-services.xml" />
+	<import file="tomcat-tools.xml" />
+
+	<target name="sync-system-clocks">
+		<input message="Username: " addproperty="username" />
+		<input message="Password: " addproperty="password" />
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<antcall target="set-system-clock">
+					<param name="host" value="${@{node}.host}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="set-system-clock">
+		<tstamp>
+			<format property="curr.time" pattern="MMddHHmmyyyy.ss" />
+		</tstamp>
+		<sshexec host="${host}" username="${username}"
+			password="${password}"
+			command="echo ${password} | sudo -S date ${curr.time}" />
+	</target>
+
+	<target name="deploy-node1">
+		<echo>Deploying services on host: ${host}</echo>
+		<antcall target="deploy-index-service" />
+	</target>
+
+	<target name="deploy-node2">
+		<echo>Deploying services on host: ${host}</echo>
+
+		<antcall target="deploy-cadsr-service" />
+		<antcall target="deploy-evs-service" />
+		<antcall target="deploy-gme-service" />
+	</target>
+
+	<target name="deploy-node3">
+		<echo>Deploying services on host: ${host}</echo>
+		<antcall target="deploy-dorian-service" />
+	</target>
+
+	<target name="deploy-node4">
+		<echo>Deploying services on host: ${host}</echo>
+		<antcall target="deploy-gts-service">
+			<param name="db.name" value="gts_master" />
+		</antcall>
+	</target>
+
+	<target name="deploy-node5">
+		<echo>Deploying services on host: ${host}</echo>
+		<antcall target="deploy-gts-service">
+			<param name="db.name" value="gts_slave" />
+		</antcall>
+	</target>
+
+	<target name="deploy-node6">
+		<echo>Deploying services on host: ${host}</echo>
+		<antcall target="deploy-fqp-service" />
+	</target>
+
+	<target name="deploy-node7">
+		<echo>Deploying services on host: ${host}</echo>
+		<antcall target="deploy-authn-service" />
+		<antcall target="deploy-gridgrouper-service" />
+	</target>
+
+	<target name="deploy-nodes">
+		<input message="Username: " addproperty="username" />
+		<input message="Password: " addproperty="password" />
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<antcall target="deploy-@{node}">
+					<param name="host" value="${@{node}.host}" />
+					<param name="temp.dir" value="${temp.dir}/@{node}" />
+					<param name="catalina.home"
+						value="${host.catalina.home}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="deploy-syncgts-services">
+		<input message="Username: " addproperty="username" />
+		<input message="Password: " addproperty="password" />
+		<for list="${nodes.list}" param="node" parallel="false">
+			<sequential>
+				<if>
+					<equals arg1="@{node}" arg2="node3" />
+					<then>
+						<antcall target="deploy-syncgts-service">
+							<param name="host" value="${@{node}.host}" />
+							<param name="temp.dir"
+								value="${temp.dir}/@{node}" />
+							<param name="catalina.home"
+								value="${host.catalina.home}" />
+							<param name="syncgts.isDorian" value="true" />
+						</antcall>
+					</then>
+					<elseif>
+						<equals arg1="@{node}" arg2="node4" />
+						<then>
+							<antcall target="deploy-syncgts-service">
+								<param name="host"
+									value="${@{node}.host}" />
+								<param name="temp.dir"
+									value="${temp.dir}/@{node}" />
+								<param name="catalina.home"
+									value="${host.catalina.home}" />
+								<param name="syncgts.isGTSMaster"
+									value="true" />
+							</antcall>
+						</then>
+					</elseif>
+					<elseif>
+						<equals arg1="@{node}" arg2="node5" />
+						<then>
+							<antcall target="deploy-syncgts-service">
+								<param name="host"
+									value="${@{node}.host}" />
+								<param name="temp.dir"
+									value="${temp.dir}/@{node}" />
+								<param name="catalina.home"
+									value="${host.catalina.home}" />
+								<param name="syncgts.isGTSSlave"
+									value="true" />
+							</antcall>
+						</then>
+					</elseif>
+					<else>
+						<antcall target="deploy-syncgts-service">
+							<param name="host" value="${@{node}.host}" />
+							<param name="temp.dir"
+								value="${temp.dir}/@{node}" />
+							<param name="catalina.home"
+								value="${host.catalina.home}" />
+						</antcall>
+
+					</else>
+				</if>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="initialize" depends="clean">
+		<input message="Username: " addproperty="username" />
+		<input message="Password: " addproperty="password" />
+
+		<antcall target="sync-system-clocks" />
+		<antcall target="shutdown-tomcats" />
+		<antcall target="generate-certs" />
+		<antcall target="drop-databases" />
+		<antcall target="create-databases" />
+		<antcall target="one-time-db-operations" />
+		<antcall target="package-tomcats" />
+		<antcall target="deploy-tomcats" />
+	</target>
+
+	<target name="redeploy">
+		<input message="Username: " addproperty="username" />
+		<input message="Password: " addproperty="password" />
+
+		<antcall target="shutdown-tomcats" />
+		<antcall target="deploy-nodes" />
+		<antcall target="deploy-syncgts-services" />
+		<antcall target="startup-tomcats" />
+
+	</target>
+
+
+</project>

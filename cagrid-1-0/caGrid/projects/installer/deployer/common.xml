@@ -1,8 +1,8 @@
 <project name="common">
 	<property environment="env" />
-	<property file="common.properties"/>
-	<property name="target.env" value="dev"/>
-	<property file="${target.env}.properties"/>
+	<property file="common.properties" />
+	<property name="target.env" value="dev" />
+	<property file="${target.env}.properties" />
 
 	<path id="xmltaskdef.cp">
 		<fileset dir="lib">
@@ -21,7 +21,41 @@
 			</fileset>
 		</classpath>
 	</taskdef>
-	
+
+	<target name="ssh">
+		<if>
+			<and>
+				<isset property="username" />
+				<isset property="password" />
+			</and>
+			<then>
+				<sshexec host="${host}" username="${username}"
+					password="${password}" command="${command}" />
+			</then>
+			<else>
+				<sshexec host="${host}"
+					keyfile="${user.home}/.ssh/id_dsa" command="${command}" />
+			</else>
+		</if>
+	</target>
+
+	<target name="scp">
+		<if>
+			<and>
+				<isset property="username" />
+				<isset property="password" />
+			</and>
+			<then>
+				<scp file="${file}"
+					remoteToFile="${username}:${password}@${host}:${remoteToFile}" />
+			</then>
+			<else>
+				<scp file="${file}"
+					remoteToDir="${host}:${remoteToFile}" />
+			</else>
+		</if>
+	</target>
+
 	<target name="deploy-service">
 		<property name="build.dir"
 			value="${basedir}/${temp.dir}/${deploy.service.name}-service" />
@@ -57,9 +91,10 @@
 			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.trust.cert.deploy.filename}" />
 		<scp file="${ca.dorian.cert.input}"
 			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.dorian.cert.deploy.filename}" />
-	</target>	
-	
+	</target>
+
 	<target name="clean">
 		<delete dir="${temp.dir}" />
-	</target>	
+		<delete dir="${certs.dir}" />
+	</target>
 </project>

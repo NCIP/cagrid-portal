@@ -100,7 +100,7 @@
 		<antcall target="generate-trust-ca-cert" />
 		<antcall target="generate-dorian-ca-cert" />
 		<antcall target="generate-host-certs" />
-		<antcall target="generate-authn-service-cert" />
+		<antcall target="generate-authn-ca-cert" />
 	</target>	
 
 </project>

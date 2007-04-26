@@ -1,6 +1,6 @@
 <project name="deploy-syncgts" default="deploy-syncgts-service">
 
-	<import file="common.xml"/>
+	<import file="common.xml" />
 
 	<target name="deploy-syncgts-service">
 
@@ -19,7 +19,10 @@
 		<property name="config.file"
 			value="${cagrid.home}/caGrid/projects/syncgts/etc/sync-description.xml" />
 		<if>
-			<equals arg1="${gts.isMaster}" arg2="true" />
+			<or>
+				<istrue value="${syncgts.isGTSMaster}" />
+				<istrue value="${syncgts.isGTSSlave}" />
+			</or>
 			<then>
 				<xmltask source="${config.file}"
 					dest="${config.file}">
@@ -31,20 +34,6 @@
 						withText="${gts.service.identity.prefix}${node4.host}" />
 				</xmltask>
 			</then>
-			<elseif>
-				<equals arg1="${gts.isSlave}" arg2="true" />
-				<then>
-					<xmltask source="${config.file}"
-						dest="${config.file}">
-						<replace
-							path="/*[local-name()='SyncDescription']/*[local-name()='SyncDescriptor']/*[local-name()='gtsServiceURI']/text()"
-							withText="https://${node4.host}:8443/wsrf/services/cagrid/GTS" />
-						<replace
-							path="/*[local-name()='SyncDescription']/*[local-name()='SyncDescriptor']/*[local-name()='GTSIdentity']/text()"
-							withText="${gts.service.identity.prefix}${node4.host}" />
-					</xmltask>
-				</then>
-			</elseif>
 			<else>
 				<xmltask source="${config.file}"
 					dest="${config.file}">
@@ -84,16 +73,45 @@
 		</xmltask>
 
 		<xmltask source="${config.file}" dest="${config.file}">
+			<remove
+				path="/*[local-name()='SyncDescription']/*[local-name()='ExcludedCAs']/*[local-name()='CASubject']" />
+			<insert
+				path="/*[local-name()='SyncDescription']/*[local-name()='ExcludedCAs']">
+				<![CDATA[
+					<ns1:CASubject xmlns:ns1="http://cagrid.nci.nih.gov/12/SyncGTS">${ca.trust.dn.input}</ns1:CASubject>
+				]]>
+			</insert>
+		</xmltask>
+		<if>
+			<or>
+				<istrue value="${syncgts.isGTSMaster}" />
+				<istrue value="${syncgts.isGTSSlave}" />
+				<istrue value="${syncgts.isDorian}" />
+			</or>
+			<then>
+				<xmltask source="${config.file}"
+					dest="${config.file}">
+					<insert
+						path="/*[local-name()='SyncDescription']/*[local-name()='ExcludedCAs']">
+						<![CDATA[
+							<ns1:CASubject xmlns:ns1="http://cagrid.nci.nih.gov/12/SyncGTS">${ca.dorian.dn.input}</ns1:CASubject>
+						]]>
+					</insert>
+				</xmltask>
+			</then>
+		</if>
+
+		<xmltask source="${config.file}" dest="${config.file}">
 			<replace
-				path="/*[local-name()='SyncDescription']/*[local-name()='ExcludedCAs']/*[local-name()='CASubject']/text()"
-				withText="${ca.trust.dn.input}" />
+				path="/*[local-name()='SyncDescription']/*[local-name()='NextSync']/text()"
+				withText="60" />
 		</xmltask>
 
 	</target>
 
 	<target name="configure-syncgts-service-properties">
 		<if>
-			<equals arg1="${gts.isMaster}" arg2="true" />
+			<istrue value="${syncgts.isGTSMaster}"/>
 			<then>
 				<propertyfile
 					file="${cagrid.home}/caGrid/projects/syncgts/service.properties">
