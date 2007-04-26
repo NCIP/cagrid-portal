@@ -70,5 +70,11 @@
       </complexContent>
     </complexType>
   </element>
+  <element name="AdminAlreadyExists" type="tns:AdminAlreadyExists" />
+  <complexType name="AdminAlreadyExists">
+    <complexContent>
+      <extension base="wsrbf:BaseFaultType" />
+    </complexContent>
+  </complexType>
 </schema>
 

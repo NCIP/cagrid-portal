@@ -12,7 +12,6 @@ import gov.nih.nci.cagrid.dorian.conf.Length;
 import gov.nih.nci.cagrid.dorian.conf.ProxyPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
@@ -76,7 +75,8 @@ public class TestUserManager extends TestCase {
 		}
 
 	}
-	
+
+
 	public void testMultipleUsersIdPNameBasedIdentitfiers() {
 		try {
 			checkMultipleUsers(getUserManagerNameBasedIdentities());
@@ -111,9 +111,7 @@ public class TestUserManager extends TestCase {
 			user = um.addUser(getIdp(user), user);
 			assertNotNull(user.getCertificate());
 			assertNotNull(user.getGridId());
-			assertNotNull(user.getUserRole());
 			assertNotNull(user.getUserStatus());
-			assertEquals(IFSUserRole.Non_Administrator, user.getUserRole());
 			assertEquals(IFSUserStatus.Pending, user.getUserStatus());
 			StringReader ureader = new StringReader(user.getCertificate().getCertificateAsString());
 			X509Certificate cert = CertUtil.loadCertificate(ureader);
@@ -169,16 +167,6 @@ public class TestUserManager extends TestCase {
 			assertEquals(1, l5.length);
 			assertEquals(user, l5[0]);
 
-			// Test querying by Role
-			IFSUserFilter f6 = new IFSUserFilter();
-			f6.setUserRole(IFSUserRole.Administrator);
-			IFSUser[] l6 = um.getUsers(f6);
-			assertEquals(INIT_USER, l6.length);
-			f6.setUserRole(IFSUserRole.Non_Administrator);
-			l6 = um.getUsers(f6);
-			assertEquals(1, l6.length);
-			assertEquals(user, l6[0]);
-
 			// Test querying by Status
 			IFSUserFilter f7 = new IFSUserFilter();
 			f7.setUserStatus(IFSUserStatus.Suspended);
@@ -217,7 +205,6 @@ public class TestUserManager extends TestCase {
 			all.setFirstName(user.getFirstName());
 			all.setLastName(user.getLastName());
 			all.setEmail(user.getEmail());
-			all.setUserRole(user.getUserRole());
 			all.setUserStatus(user.getUserStatus());
 			IFSUser[] allList = um.getUsers(all);
 			assertEquals(1, allList.length);
@@ -230,11 +217,6 @@ public class TestUserManager extends TestCase {
 			um.updateUser(u1);
 			assertEquals(u1, um.getUser(u1.getGridId()));
 
-			IFSUser u2 = um.getUser(user.getGridId());
-			u2.setUserRole(IFSUserRole.Administrator);
-			um.updateUser(u2);
-			assertEquals(u2, um.getUser(u2.getGridId()));
-
 			IFSUser u3 = um.getUser(user.getGridId());
 			u3.setUserStatus(IFSUserStatus.Active);
 			um.updateUser(u3);
@@ -244,7 +226,6 @@ public class TestUserManager extends TestCase {
 			assertFalse(um.getCRL().isRevoked(CertUtil.loadCertificate(user.getCertificate().getCertificateAsString())));
 
 			IFSUser u4 = um.getUser(user.getGridId());
-			u4.setUserRole(IFSUserRole.Non_Administrator);
 			u4.setUserStatus(IFSUserStatus.Suspended);
 			u4.setEmail("newemail2@example.com");
 			um.updateUser(u4);
@@ -269,6 +250,12 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		} finally {
+			try {
+				um.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -314,9 +301,7 @@ public class TestUserManager extends TestCase {
 				user = um.addUser(getIdp(user), user);
 				assertNotNull(user.getCertificate());
 				assertNotNull(user.getGridId());
-				assertNotNull(user.getUserRole());
 				assertNotNull(user.getUserStatus());
-				assertEquals(IFSUserRole.Non_Administrator, user.getUserRole());
 				assertEquals(IFSUserStatus.Pending, user.getUserStatus());
 				StringReader ureader = new StringReader(user.getCertificate().getCertificateAsString());
 				X509Certificate cert = CertUtil.loadCertificate(ureader);
@@ -382,15 +367,6 @@ public class TestUserManager extends TestCase {
 				assertEquals(1, l5.length);
 				assertEquals(user, l5[0]);
 
-				// Test querying by Role
-				IFSUserFilter f6 = new IFSUserFilter();
-				f6.setUserRole(IFSUserRole.Administrator);
-				IFSUser[] l6 = um.getUsers(f6);
-				assertEquals(INIT_USER, l6.length);
-				f6.setUserRole(IFSUserRole.Non_Administrator);
-				l6 = um.getUsers(f6);
-				assertEquals((i + 1), l6.length);
-
 				// Test querying by Status
 				IFSUserFilter f7 = new IFSUserFilter();
 				f7.setUserStatus(IFSUserStatus.Suspended);
@@ -435,7 +411,6 @@ public class TestUserManager extends TestCase {
 				all.setFirstName(user.getFirstName());
 				all.setLastName(user.getLastName());
 				all.setEmail(user.getEmail());
-				all.setUserRole(user.getUserRole());
 				all.setUserStatus(user.getUserStatus());
 				IFSUser[] lall = um.getUsers(all);
 				assertEquals(1, lall.length);
@@ -445,11 +420,6 @@ public class TestUserManager extends TestCase {
 				u1.setEmail("newemail@example.com");
 				um.updateUser(u1);
 				assertEquals(u1, um.getUser(u1.getGridId()));
-
-				IFSUser u2 = um.getUser(user.getGridId());
-				u2.setUserRole(IFSUserRole.Administrator);
-				um.updateUser(u2);
-				assertEquals(u2, um.getUser(u2.getGridId()));
 
 				IFSUser u3 = um.getUser(user.getGridId());
 				u3.setUserStatus(IFSUserStatus.Active);
@@ -468,7 +438,6 @@ public class TestUserManager extends TestCase {
 					CertUtil.loadCertificate(user.getCertificate().getCertificateAsString())));
 
 				IFSUser u4 = um.getUser(user.getGridId());
-				u4.setUserRole(IFSUserRole.Non_Administrator);
 				u4.setUserStatus(IFSUserStatus.Suspended);
 				u4.setEmail("newemail2@example.com");
 				um.updateUser(u4);
@@ -503,6 +472,12 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		} finally {
+			try {
+				um.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -585,7 +560,6 @@ public class TestUserManager extends TestCase {
 		usr.setLastName("Admin");
 		usr.setEmail("inital_admin@test.com");
 		usr.setUserStatus(IFSUserStatus.Active);
-		usr.setUserRole(IFSUserRole.Administrator);
 		return new IFSDefaults(idp, usr);
 	}
 

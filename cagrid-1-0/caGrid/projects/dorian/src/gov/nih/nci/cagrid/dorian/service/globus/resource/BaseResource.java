@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.dorian.service.globus.resource;
 
-import gov.nih.nci.cagrid.common.Utils;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -29,6 +27,8 @@ import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
 import org.globus.wsrf.utils.AddressingUtils;
 
 import commonj.timers.Timer;
+
+import gov.nih.nci.cagrid.common.Utils;
 
 public class BaseResource implements Resource, ResourceProperties {
 
@@ -163,8 +163,12 @@ public class BaseResource implements Resource, ResourceProperties {
 
 					ServiceGroupRegistrationParameters params = ServiceGroupRegistrationClient
 						.readParams(registrationFile.getAbsolutePath());
-					// set our service's EPR as the registrant
-					params.setRegistrantEPR(epr);
+					
+					// set our service's EPR as the registrant, or use the specified value
+					EndpointReferenceType registrantEpr = params.getRegistrantEPR();
+					if(registrantEpr == null){
+						params.setRegistrantEPR(epr);
+					}
 
 					ServiceGroupRegistrationClient client = new ServiceGroupRegistrationClient();
 					// apply the registration params to the client

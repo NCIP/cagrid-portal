@@ -32,12 +32,11 @@ import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.6 2007-04-05 16:08:05 langella Exp $
+ * @version $Id: UserWindow.java,v 1.7 2007-04-26 18:43:49 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 
@@ -97,11 +96,7 @@ public class UserWindow extends ApplicationComponent {
 
 	private JLabel statusLabel = null;
 
-	private JLabel roleStatus = null;
-
 	private JComboBox userStatus = null;
-
-	private JComboBox userRole = null;
 
 	private JPanel certificatePanel = null;
 
@@ -117,11 +112,11 @@ public class UserWindow extends ApplicationComponent {
 
 	private JTextField lastName = null;
 
-
 	/**
 	 * This is the default constructor
 	 */
-	public UserWindow(String serviceId, GlobusCredential proxy, IFSUser u, TrustedIdP idp) throws Exception {
+	public UserWindow(String serviceId, GlobusCredential proxy, IFSUser u,
+			TrustedIdP idp) throws Exception {
 		super();
 		this.serviceId = serviceId;
 		this.cred = proxy;
@@ -131,7 +126,6 @@ public class UserWindow extends ApplicationComponent {
 		this.setFrameIcon(DorianLookAndFeel.getUserBrowse());
 	}
 
-
 	/**
 	 * This method initializes this
 	 */
@@ -140,7 +134,6 @@ public class UserWindow extends ApplicationComponent {
 		this.setTitle("Manage User [" + user.getGridId() + "]");
 
 	}
-
 
 	/**
 	 * This method initializes jContentPane
@@ -155,7 +148,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -191,7 +183,6 @@ public class UserWindow extends ApplicationComponent {
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -206,7 +197,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes jButton1
@@ -227,7 +217,6 @@ public class UserWindow extends ApplicationComponent {
 		return cancel;
 	}
 
-
 	/**
 	 * This method initializes manageUser
 	 * 
@@ -245,7 +234,8 @@ public class UserWindow extends ApplicationComponent {
 						}
 					};
 					try {
-						GridApplication.getContext().executeInBackground(runner);
+						GridApplication.getContext()
+								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -257,19 +247,20 @@ public class UserWindow extends ApplicationComponent {
 		return updateUser;
 	}
 
-
 	private synchronized void updateUser() {
-
-		user.setUserRole(((UserRolesComboBox) this.getUserRole()).getSelectedUserRole());
-		user.setUserStatus(((UserStatusComboBox) this.getUserStatus()).getSelectedUserStatus());
+		user.setUserStatus(((UserStatusComboBox) this.getUserStatus())
+				.getSelectedUserStatus());
 
 		try {
 			String serviceUrl = getService().getText();
-			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
+			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem())
+					.getProxy();
+			IFSAdministrationClient client = new IFSAdministrationClient(
+					serviceUrl, c);
 			client.updateUser(user);
 
-			GridApplication.getContext().showMessage("User " + user.getGridId() + " update successfully.");
+			GridApplication.getContext().showMessage(
+					"User " + user.getGridId() + " update successfully.");
 
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
@@ -278,18 +269,21 @@ public class UserWindow extends ApplicationComponent {
 		}
 
 	}
-
 
 	private void renewCredentials() {
 		try {
 			String serviceUrl = getService().getText();
-			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
+			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem())
+					.getProxy();
+			IFSAdministrationClient client = new IFSAdministrationClient(
+					serviceUrl, c);
 			user = client.renewUserCredentials(user);
-			X509Certificate cert = CertUtil.loadCertificate(user.getCertificate().getCertificateAsString());
+			X509Certificate cert = CertUtil.loadCertificate(user
+					.getCertificate().getCertificateAsString());
 			this.getCredPanel().setCertificate(cert);
 			GridApplication.getContext().showMessage(
-				"Successfully renewed the credentials for the user " + user.getGridId() + ".");
+					"Successfully renewed the credentials for the user "
+							+ user.getGridId() + ".");
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
 		} catch (Exception e) {
@@ -297,7 +291,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 
 	}
-
 
 	/**
 	 * This method initializes jTabbedPane
@@ -307,15 +300,17 @@ public class UserWindow extends ApplicationComponent {
 	private JTabbedPane getJTabbedPane() {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
-			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Grid User",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-					.getPanelLabelColor()));
-			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel.getUserIcon(), getInfoPanel(), null);
-			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
+			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null,
+					"Grid User", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+							.getPanelLabelColor()));
+			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel.getUserIcon(),
+					getInfoPanel(), null);
+			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel
+					.getCertificateIcon(), getCertificatePanel(), null);
 		}
 		return jTabbedPane;
 	}
-
 
 	/**
 	 * This method initializes jPanel1
@@ -366,13 +361,6 @@ public class UserWindow extends ApplicationComponent {
 			gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints15.gridx = 1;
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.gridx = 0;
-			gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints14.gridy = 7;
-			roleStatus = new JLabel();
-			roleStatus.setText("User Role");
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.gridx = 0;
 			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
@@ -448,9 +436,7 @@ public class UserWindow extends ApplicationComponent {
 			jPanel1.add(emailLabel, gridBagConstraints11);
 			jPanel1.add(getEmail(), gridBagConstraints12);
 			jPanel1.add(statusLabel, gridBagConstraints13);
-			jPanel1.add(roleStatus, gridBagConstraints14);
 			jPanel1.add(getUserStatus(), gridBagConstraints15);
-			jPanel1.add(getUserRole(), gridBagConstraints16);
 			jPanel1.add(jLabel, gridBagConstraints18);
 			jPanel1.add(jLabel1, gridBagConstraints19);
 			jPanel1.add(getFirstName(), gridBagConstraints20);
@@ -458,7 +444,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return jPanel1;
 	}
-
 
 	/**
 	 * This method initializes jPanel2
@@ -499,9 +484,10 @@ public class UserWindow extends ApplicationComponent {
 			jLabel14.setText("Service");
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-					.getPanelLabelColor()));
+			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
+					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+							.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);
 			jPanel2.add(credentialLabel, gridBagConstraints);
@@ -509,7 +495,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return jPanel2;
 	}
-
 
 	/**
 	 * This method initializes service1
@@ -525,7 +510,6 @@ public class UserWindow extends ApplicationComponent {
 		return service;
 	}
 
-
 	/**
 	 * This method initializes infoPanel
 	 * 
@@ -540,7 +524,6 @@ public class UserWindow extends ApplicationComponent {
 		return infoPanel;
 	}
 
-
 	/**
 	 * This method initializes proxy1
 	 * 
@@ -552,7 +535,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return proxy;
 	}
-
 
 	/**
 	 * This method initializes gridIdentity
@@ -568,7 +550,6 @@ public class UserWindow extends ApplicationComponent {
 		return gridIdentity;
 	}
 
-
 	/**
 	 * This method initializes trustedIdP
 	 * 
@@ -582,7 +563,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return trustedIdP;
 	}
-
 
 	/**
 	 * This method initializes userId
@@ -598,7 +578,6 @@ public class UserWindow extends ApplicationComponent {
 		return userId;
 	}
 
-
 	/**
 	 * This method initializes email
 	 * 
@@ -613,7 +592,6 @@ public class UserWindow extends ApplicationComponent {
 		return email;
 	}
 
-
 	/**
 	 * This method initializes userStatus
 	 * 
@@ -626,21 +604,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return userStatus;
 	}
-
-
-	/**
-	 * This method initializes userRole
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getUserRole() {
-		if (userRole == null) {
-			userRole = new UserRolesComboBox();
-			userRole.setSelectedItem(user.getUserRole());
-		}
-		return userRole;
-	}
-
 
 	/**
 	 * This method initializes certificatePanel
@@ -663,7 +626,6 @@ public class UserWindow extends ApplicationComponent {
 		return certificatePanel;
 	}
 
-
 	/**
 	 * This method initializes renewCredentials
 	 * 
@@ -673,16 +635,17 @@ public class UserWindow extends ApplicationComponent {
 		if (renewCredentials == null) {
 			renewCredentials = new JButton();
 			renewCredentials.setText("Renew Credentials");
-			renewCredentials.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					renewCredentials();
-				}
-			});
-			renewCredentials.setIcon(DorianLookAndFeel.getCertificateActionIcon());
+			renewCredentials
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							renewCredentials();
+						}
+					});
+			renewCredentials.setIcon(DorianLookAndFeel
+					.getCertificateActionIcon());
 		}
 		return renewCredentials;
 	}
-
 
 	/**
 	 * This method initializes credPanel
@@ -692,8 +655,8 @@ public class UserWindow extends ApplicationComponent {
 	private CertificatePanel getCredPanel() {
 		if (credPanel == null) {
 			try {
-				credPanel = new CertificatePanel(CertUtil.loadCertificate(user.getCertificate()
-					.getCertificateAsString()));
+				credPanel = new CertificatePanel(CertUtil.loadCertificate(user
+						.getCertificate().getCertificateAsString()));
 				credPanel.setAllowImport(false);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -701,7 +664,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return credPanel;
 	}
-
 
 	/**
 	 * This method initializes firstName
@@ -716,7 +678,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return firstName;
 	}
-
 
 	/**
 	 * This method initializes lastName

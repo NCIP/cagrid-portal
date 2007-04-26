@@ -18,7 +18,6 @@ import java.rmi.RemoteException;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.globus.gsi.GlobusCredential;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -26,22 +25,21 @@ import org.globus.gsi.GlobusCredential;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IFSAdministrationClient{
+public class IFSAdministrationClient {
 	private DorianClient client;
 
-
-	public IFSAdministrationClient(String serviceURI) throws MalformedURIException, RemoteException {
+	public IFSAdministrationClient(String serviceURI)
+			throws MalformedURIException, RemoteException {
 		client = new DorianClient(serviceURI);
 	}
 
-
-	public IFSAdministrationClient(String serviceURI, GlobusCredential proxy) throws MalformedURIException, RemoteException {
+	public IFSAdministrationClient(String serviceURI, GlobusCredential proxy)
+			throws MalformedURIException, RemoteException {
 		client = new DorianClient(serviceURI, proxy);
 	}
 
-
-	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws DorianFault, PermissionDeniedFault, InvalidTrustedIdPFault,
-		DorianInternalFault {
+	public TrustedIdP addTrustedIdP(TrustedIdP idp) throws DorianFault,
+			PermissionDeniedFault, InvalidTrustedIdPFault, DorianInternalFault {
 		try {
 			return client.addTrustedIdP(idp);
 		} catch (DorianInternalFault gie) {
@@ -61,9 +59,8 @@ public class IFSAdministrationClient{
 		}
 	}
 
-
-	public void removeTrustedIdP(TrustedIdP idp) throws DorianFault, PermissionDeniedFault, InvalidTrustedIdPFault,
-		DorianInternalFault {
+	public void removeTrustedIdP(TrustedIdP idp) throws DorianFault,
+			PermissionDeniedFault, InvalidTrustedIdPFault, DorianInternalFault {
 		try {
 			client.removeTrustedIdP(idp);
 		} catch (DorianInternalFault gie) {
@@ -84,9 +81,8 @@ public class IFSAdministrationClient{
 
 	}
 
-
-	public void updateTrustedIdP(TrustedIdP idp) throws DorianFault, PermissionDeniedFault, InvalidTrustedIdPFault,
-		DorianInternalFault {
+	public void updateTrustedIdP(TrustedIdP idp) throws DorianFault,
+			PermissionDeniedFault, InvalidTrustedIdPFault, DorianInternalFault {
 		try {
 			client.updateTrustedIdP(idp);
 		} catch (DorianInternalFault gie) {
@@ -107,8 +103,8 @@ public class IFSAdministrationClient{
 
 	}
 
-
-	public IFSUserPolicy[] getUserPolicies() throws DorianFault, PermissionDeniedFault, DorianInternalFault {
+	public IFSUserPolicy[] getUserPolicies() throws DorianFault,
+			PermissionDeniedFault, DorianInternalFault {
 
 		try {
 			return client.getIFSUserPolicies();
@@ -127,9 +123,8 @@ public class IFSAdministrationClient{
 		}
 	}
 
-
-	public IFSUser renewUserCredentials(IFSUser usr) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
-		DorianInternalFault {
+	public IFSUser renewUserCredentials(IFSUser usr) throws DorianFault,
+			PermissionDeniedFault, InvalidUserFault, DorianInternalFault {
 
 		try {
 			return client.renewIFSUserCredentials(usr);
@@ -150,9 +145,8 @@ public class IFSAdministrationClient{
 		}
 	}
 
-
-	public TrustedIdP[] getTrustedIdPs() throws DorianFault, PermissionDeniedFault, InvalidUserFault,
-		DorianInternalFault {
+	public TrustedIdP[] getTrustedIdPs() throws DorianFault,
+			PermissionDeniedFault, InvalidUserFault, DorianInternalFault {
 
 		try {
 			return client.getTrustedIdPs();
@@ -173,8 +167,8 @@ public class IFSAdministrationClient{
 		}
 	}
 
-
-	public IFSUser[] findUsers(IFSUserFilter filter) throws DorianFault, PermissionDeniedFault, DorianInternalFault {
+	public IFSUser[] findUsers(IFSUserFilter filter) throws DorianFault,
+			PermissionDeniedFault, DorianInternalFault {
 
 		try {
 			return client.findIFSUsers(filter);
@@ -193,9 +187,8 @@ public class IFSAdministrationClient{
 		}
 	}
 
-
-	public void removeUser(IFSUser usr) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
-		DorianInternalFault {
+	public void removeUser(IFSUser usr) throws DorianFault,
+			PermissionDeniedFault, InvalidUserFault, DorianInternalFault {
 
 		try {
 			client.removeIFSUser(usr);
@@ -217,9 +210,8 @@ public class IFSAdministrationClient{
 
 	}
 
-
-	public void updateUser(IFSUser usr) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
-		DorianInternalFault {
+	public void updateUser(IFSUser usr) throws DorianFault,
+			PermissionDeniedFault, InvalidUserFault, DorianInternalFault {
 
 		try {
 			client.updateIFSUser(usr);
@@ -228,6 +220,69 @@ public class IFSAdministrationClient{
 		} catch (PermissionDeniedFault f) {
 			throw f;
 		} catch (InvalidUserFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			DorianFault fault = new DorianFault();
+			fault.setFaultString(Utils.getExceptionMessage(e));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianFault) helper.getFault();
+			throw fault;
+		}
+
+	}
+
+	public void addAdmin(java.lang.String gridIdentity) throws DorianFault,
+			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
+			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		try {
+			client.addAdmin(gridIdentity);
+		} catch (DorianInternalFault gie) {
+			throw gie;
+		} catch (PermissionDeniedFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			DorianFault fault = new DorianFault();
+			fault.setFaultString(Utils.getExceptionMessage(e));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianFault) helper.getFault();
+			throw fault;
+		}
+
+	}
+
+	public void removeAdmin(java.lang.String gridIdentity) throws DorianFault,
+			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
+			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		try {
+			client.removeAdmin(gridIdentity);
+		} catch (DorianInternalFault gie) {
+			throw gie;
+		} catch (PermissionDeniedFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			DorianFault fault = new DorianFault();
+			fault.setFaultString(Utils.getExceptionMessage(e));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianFault) helper.getFault();
+			throw fault;
+		}
+
+	}
+
+	public java.lang.String[] getAdmins() throws DorianFault,
+			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
+			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		try {
+			return client.getAdmins();
+		} catch (DorianInternalFault gie) {
+			throw gie;
+		} catch (PermissionDeniedFault f) {
 			throw f;
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

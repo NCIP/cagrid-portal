@@ -61,7 +61,7 @@
                     <description>Manage Grid User Accounts</description>
                     <classname>gov.nih.nci.cagrid.dorian.ui.ifs.UserManagerWindow</classname>
                     <icon>/system-users.png</icon>
-                    <showOnToolBar>true</showOnToolBar>
+                    <showOnToolBar>false</showOnToolBar>
                     <dimensions>
                         <width>700</width>
                         <height>550</height>
@@ -72,7 +72,14 @@
                     <description>Trusted Identity Provider(s)</description>
                     <classname>gov.nih.nci.cagrid.dorian.ui.ifs.TrustedIdPsWindow</classname>
                     <icon>/group_link.png</icon>
-                    <showOnToolBar>true</showOnToolBar>
+                    <showOnToolBar>false</showOnToolBar>
+                </component>
+                <component>
+                    <title>Administrators</title>
+                    <description>Administrators</description>
+                    <classname>gov.nih.nci.cagrid.dorian.ui.ifs.AdministratorsWindow</classname>
+                    <icon>/preferences-desktop-theme.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
                 </component>
             </components>
         </menu>

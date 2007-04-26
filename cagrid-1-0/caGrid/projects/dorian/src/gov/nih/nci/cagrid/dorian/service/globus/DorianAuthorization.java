@@ -114,6 +114,21 @@ public class DorianAuthorization{
 		
 		
 	}
+					
+	public static void authorizeAddAdmin() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeRemoveAdmin() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeGetAdmins() throws RemoteException {
+		
+		
+	}
 	
 	
 }

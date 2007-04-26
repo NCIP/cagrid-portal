@@ -43,7 +43,6 @@
 				<xsd:element name="lastName" type="xsd:string"/>
 				<xsd:element name="email" type="xsd:string"/>
 			    <xsd:element name="userStatus" type="ifs:IFSUserStatus"/>
-			    <xsd:element name="userRole" type="ifs:IFSUserRole"/>
 			    <xsd:element name="certificate" type="dorian:X509Certificate"/>	
 			</xsd:sequence>
 	    </xsd:complexType>
@@ -58,8 +57,7 @@
 				<xsd:element name="lastName" type="xsd:string"/>
 				<xsd:element name="email" type="xsd:string"/>
 			    <xsd:element name="userStatus" type="ifs:IFSUserStatus"/>
-			    <xsd:element name="userRole" type="ifs:IFSUserRole"/>
-			</xsd:sequence>
+			    			</xsd:sequence>
 	    </xsd:complexType>
 	    
 	     <xsd:element name="ProxyLifetime" type="ifs:ProxyLifetime"/>
@@ -77,13 +75,6 @@
 			    <xsd:element name="length" type="xsd:int"/>
 			</xsd:sequence>
 	    </xsd:complexType>
-	    
-	    <xsd:simpleType name="IFSUserRole">
-  			<xsd:restriction base="xsd:string">
-   				<xsd:enumeration value="Administrator"/>
-   				<xsd:enumeration value="Non_Administrator"/>
-  			</xsd:restriction>
- 		 </xsd:simpleType>
 	    
 	     <xsd:simpleType name="IFSUserStatus">
   			<xsd:restriction base="xsd:string">

@@ -138,4 +138,25 @@ public class DorianProviderImpl{
 		return boxedResult;
 	}
 
+	public gov.nih.nci.cagrid.dorian.stubs.AddAdminResponse addAdmin(gov.nih.nci.cagrid.dorian.stubs.AddAdminRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		DorianAuthorization.authorizeAddAdmin();
+		gov.nih.nci.cagrid.dorian.stubs.AddAdminResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.AddAdminResponse();
+		impl.addAdmin(params.getGridIdentity());
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.dorian.stubs.RemoveAdminResponse removeAdmin(gov.nih.nci.cagrid.dorian.stubs.RemoveAdminRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		DorianAuthorization.authorizeRemoveAdmin();
+		gov.nih.nci.cagrid.dorian.stubs.RemoveAdminResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.RemoveAdminResponse();
+		impl.removeAdmin(params.getGridIdentity());
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.dorian.stubs.GetAdminsResponse getAdmins(gov.nih.nci.cagrid.dorian.stubs.GetAdminsRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		DorianAuthorization.authorizeGetAdmins();
+		gov.nih.nci.cagrid.dorian.stubs.GetAdminsResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.GetAdminsResponse();
+		boxedResult.setResponse(impl.getAdmins());
+		return boxedResult;
+	}
+
 }

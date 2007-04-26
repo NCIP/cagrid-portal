@@ -14,7 +14,6 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
-import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
@@ -37,6 +36,7 @@ import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
+import java.rmi.RemoteException;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
@@ -113,7 +113,6 @@ public class Dorian {
 			usr.setLastName(idpUsr.getLastName());
 			usr.setEmail(idpUsr.getEmail());
 			usr.setUserStatus(IFSUserStatus.Active);
-			usr.setUserRole(IFSUserRole.Administrator);
 
 			ifsConfiguration = configuration.getIdentityFederationConfiguration();
 			IFSDefaults defaults = new IFSDefaults(idp, usr);
@@ -270,6 +269,24 @@ public class Dorian {
 	public IFSUser renewIFSUserCredentials(String callerGridIdentity, IFSUser usr) throws DorianInternalFault,
 		InvalidUserFault, PermissionDeniedFault {
 		return ifs.renewUserCredentials(callerGridIdentity, usr);
+	}
+
+
+	public void addAdmin(String callerGridIdentity, String gridIdentity) throws RemoteException, DorianInternalFault,
+		PermissionDeniedFault {
+		ifs.addAdmin(callerGridIdentity, gridIdentity);
+	}
+
+
+	public void removeAdmin(String callerGridIdentity, String gridIdentity) throws RemoteException,
+		DorianInternalFault, PermissionDeniedFault {
+		ifs.removeAdmin(callerGridIdentity, gridIdentity);
+	}
+
+
+	public String[] getAdmins(String callerGridIdentity) throws RemoteException, DorianInternalFault,
+		PermissionDeniedFault {
+		return ifs.getAdmins(callerGridIdentity);
 	}
 
 

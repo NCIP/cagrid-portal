@@ -13,7 +13,6 @@ import gov.nih.nci.cagrid.dorian.conf.Length;
 import gov.nih.nci.cagrid.dorian.conf.ProxyPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
@@ -166,8 +165,7 @@ public class TestIFS extends TestCase {
 				} catch (PermissionDeniedFault f) {
 
 				}
-				usr[0].setUserRole(IFSUserRole.Administrator);
-				ifs.updateUser(adminGridId, usr[0]);
+				ifs.addAdmin(adminGridId, usr[0].getGridId());
 				assertEquals(ucount, ifs.findUsers(usr[0].getGridId(), new IFSUserFilter()).length);
 			}
 
@@ -273,8 +271,9 @@ public class TestIFS extends TestCase {
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, ca, defaults);
-			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
-				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
+				conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(),
+				INITIAL_ADMIN));
 
 			// give a chance for others to run right before we enter timing
 			// sensitive code
@@ -321,8 +320,9 @@ public class TestIFS extends TestCase {
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, ca, defaults);
-			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
-				.getSubjectDN().getName(), idp.getIdp(), defaults.getDefaultUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
+				conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(),
+				defaults.getDefaultUser().getUID()));
 
 			try {
 				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
@@ -358,8 +358,9 @@ public class TestIFS extends TestCase {
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, ca, defaults);
-			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
-				.getSubjectDN().getName(), idp.getIdp(), defaults.getDefaultUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
+				conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(),
+				defaults.getDefaultUser().getUID()));
 
 			PublicKey publicKey2 = pair2.getPublic();
 			// give a chance for others to run right before we enter timing
@@ -407,8 +408,9 @@ public class TestIFS extends TestCase {
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, ca, defaults);
-			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
-				.getSubjectDN().getName(), idp.getIdp(), defaults.getDefaultUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
+				conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(),
+				defaults.getDefaultUser().getUID()));
 
 			try {
 				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
@@ -586,8 +588,9 @@ public class TestIFS extends TestCase {
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp0.getIdp());
 			ifs = new IFS(conf, db, ca, defaults);
-			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
-				.getSubjectDN().getName(), idp0.getIdp(), defaults.getDefaultUser().getUID()));
+			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
+				conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp0.getIdp(),
+				defaults.getDefaultUser().getUID()));
 			int times = 3;
 			String baseName = "Test IdP";
 			String baseUpdateName = "Updated IdP";
@@ -632,6 +635,137 @@ public class TestIFS extends TestCase {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+
+	public void testAdministrators() {
+		IFS ifs = null;
+		try {
+
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, ca, defaults);
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			PublicKey publicKey = pair.getPublic();
+			ProxyLifetime lifetime = getProxyLifetime();
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion("user", idp), publicKey, lifetime,
+				DELEGATION_LENGTH);
+
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
+			String userId = UserManager.subjectToIdentity(certs[1].getSubjectDN().toString());
+			// Check that the user cannot call any admin methods
+			validateAccessControl(ifs, userId);
+			ifs.addAdmin(defaults.getDefaultUser().getGridId(), userId);
+			assertEquals(2, ifs.findUsers(userId, null).length);
+			ifs.removeAdmin(userId, userId);
+			validateAccessControl(ifs, userId);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+
+	private void validateAccessControl(IFS ifs, String userId) throws Exception {
+		try {
+			ifs.addAdmin(userId, null);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
+		}
+
+		try {
+			ifs.addTrustedIdP(userId, null);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
+		}
+
+		try {
+			ifs.findUsers(userId, null);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
+		}
+
+		try {
+			ifs.getAdmins(userId);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
+		}
+
+		try {
+			ifs.getTrustedIdPs(userId);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
+		}
+
+		try {
+			ifs.getUser(userId, 0, null);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
+		}
+
+		try {
+			ifs.getUserPolicies(userId);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
+		}
+
+		try {
+			ifs.removeAdmin(userId, null);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
+		}
+
+		try {
+			ifs.removeTrustedIdP(userId, 0);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
+		}
+
+		try {
+			ifs.removeUser(userId, null);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
+		}
+
+		try {
+			ifs.renewUserCredentials(userId, null);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
+		}
+
+		try {
+			ifs.updateTrustedIdP(userId, null);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
+		}
+
+		try {
+			ifs.updateUser(userId, null);
+			fail("Should not have permission to execute the operation.");
+		} catch (PermissionDeniedFault f) {
+
 		}
 	}
 
@@ -704,7 +838,6 @@ public class TestIFS extends TestCase {
 		usr.setLastName("Admin");
 		usr.setEmail(INITIAL_ADMIN + "@test.com");
 		usr.setUserStatus(IFSUserStatus.Active);
-		usr.setUserRole(IFSUserRole.Administrator);
 		return new IFSDefaults(idp, usr);
 	}
 

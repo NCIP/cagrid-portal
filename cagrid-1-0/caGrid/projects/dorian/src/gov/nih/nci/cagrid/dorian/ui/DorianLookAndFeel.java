@@ -22,6 +22,10 @@ public class DorianLookAndFeel extends LookAndFeel {
 	public final static ImageIcon getIFSIcon() {
 		return IconUtils.loadIcon("/applications-internet.png");
 	}
+	
+	public final static ImageIcon getAdminIcon() {
+		return IconUtils.loadIcon("/preferences-desktop-theme.png");
+	}
 
 
 	public final static ImageIcon getTrustedIdPIcon() {

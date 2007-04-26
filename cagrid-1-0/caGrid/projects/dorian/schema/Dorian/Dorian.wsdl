@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/Dorian" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://cagrid.nci.nih.gov/AuthenticationService" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns7="http://cagrid.nci.nih.gov/Dorian/types" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-ifs" xmlns:ns2="http://cagrid.nci.nih.gov/1/authentication-service" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns3="http://cagrid.nci.nih.gov/1/dorian-common" xmlns:ns1="http://cagrid.nci.nih.gov/AuthenticationService/types" xmlns:ns4="http://cagrid.nci.nih.gov/1/dorian-idp" name="Dorian" targetNamespace="http://cagrid.nci.nih.gov/Dorian">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/Dorian" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://cagrid.nci.nih.gov/AuthenticationService" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns1="http://cagrid.nci.nih.gov/AuthenticationService/types" xmlns:ns4="http://cagrid.nci.nih.gov/1/dorian-idp" xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-ifs" xmlns:ns3="http://cagrid.nci.nih.gov/1/dorian-common" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns2="http://cagrid.nci.nih.gov/1/authentication-service" xmlns:ns7="http://cagrid.nci.nih.gov/Dorian/types" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" name="Dorian" targetNamespace="http://cagrid.nci.nih.gov/Dorian">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://cagrid.nci.nih.gov/AuthenticationService" location="././AuthenticationService.wsdl" />
@@ -12,14 +12,14 @@
   <types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/Dorian" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
-      <import namespace="http://cagrid.nci.nih.gov/Dorian/types" schemaLocation="./DorianTypes.xsd" />
-      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd" />
-      <import namespace="http://cagrid.nci.nih.gov/1/dorian-ifs" schemaLocation="./dorian-ifs.xsd" />
-      <import namespace="http://cagrid.nci.nih.gov/1/authentication-service" schemaLocation="./authentication-service.xsd" />
-      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
-      <import namespace="http://cagrid.nci.nih.gov/1/dorian-common" schemaLocation="./dorian-common.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/AuthenticationService/types" schemaLocation="./AuthenticationServiceTypes.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/1/dorian-idp" schemaLocation="./dorian-idp.xsd" />
+      <import namespace="http://cagrid.nci.nih.gov/1/dorian-ifs" schemaLocation="./dorian-ifs.xsd" />
+      <import namespace="http://cagrid.nci.nih.gov/1/dorian-common" schemaLocation="./dorian-common.xsd" />
+      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
+      <import namespace="http://cagrid.nci.nih.gov/1/authentication-service" schemaLocation="./authentication-service.xsd" />
+      <import namespace="http://cagrid.nci.nih.gov/Dorian/types" schemaLocation="./DorianTypes.xsd" />
+      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd" />
       <element name="RegisterWithIdPRequest">
         <complexType>
           <sequence>
@@ -319,6 +319,42 @@
           </sequence>
         </complexType>
       </element>
+      <element name="AddAdminRequest">
+        <complexType>
+          <sequence>
+            <element name="gridIdentity" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="AddAdminResponse">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
+      <element name="RemoveAdminRequest">
+        <complexType>
+          <sequence>
+            <element name="gridIdentity" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="RemoveAdminResponse">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
+      <element name="GetAdminsRequest">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
+      <element name="GetAdminsResponse">
+        <complexType>
+          <sequence>
+            <element name="response" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="DorianResourceProperties">
         <complexType>
           <sequence>
@@ -424,6 +460,24 @@
   </message>
   <message name="GetIFSUserPoliciesResponse">
     <part name="parameters" element="tns:GetIFSUserPoliciesResponse" />
+  </message>
+  <message name="AddAdminRequest">
+    <part name="parameters" element="tns:AddAdminRequest" />
+  </message>
+  <message name="AddAdminResponse">
+    <part name="parameters" element="tns:AddAdminResponse" />
+  </message>
+  <message name="RemoveAdminRequest">
+    <part name="parameters" element="tns:RemoveAdminRequest" />
+  </message>
+  <message name="RemoveAdminResponse">
+    <part name="parameters" element="tns:RemoveAdminResponse" />
+  </message>
+  <message name="GetAdminsRequest">
+    <part name="parameters" element="tns:GetAdminsRequest" />
+  </message>
+  <message name="GetAdminsResponse">
+    <part name="parameters" element="tns:GetAdminsResponse" />
   </message>
   <message name="DorianInternalFaultFaultMessage">
     <part name="fault" element="ns7:DorianInternalFault" />
@@ -560,6 +614,24 @@
     <operation name="getIFSUserPolicies">
       <input message="tns:GetIFSUserPoliciesRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetIFSUserPoliciesRequest" />
       <output message="tns:GetIFSUserPoliciesResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetIFSUserPoliciesResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="addAdmin">
+      <input message="tns:AddAdminRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/AddAdminRequest" />
+      <output message="tns:AddAdminResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/AddAdminResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="removeAdmin">
+      <input message="tns:RemoveAdminRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RemoveAdminRequest" />
+      <output message="tns:RemoveAdminResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RemoveAdminResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="getAdmins">
+      <input message="tns:GetAdminsRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetAdminsRequest" />
+      <output message="tns:GetAdminsResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetAdminsResponse" />
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
     </operation>

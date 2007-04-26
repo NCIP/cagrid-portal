@@ -14,7 +14,6 @@ import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.CredentialsFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidPasswordFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
@@ -251,8 +250,6 @@ public class UserManager extends LoggingObject {
 					user.setEmail(email);
 				}
 				user.setUserStatus(IFSUserStatus.fromValue(rs.getString("STATUS")));
-				String role = rs.getString("ROLE");
-				user.setUserRole(IFSUserRole.fromValue(role));
 				X509Certificate cert = credentialsManager.getCertificate(getCredentialsManagerUID(user.getIdPId(), user
 					.getUID()));
 				user
@@ -310,8 +307,6 @@ public class UserManager extends LoggingObject {
 					user.setEmail(email);
 				}
 				user.setUserStatus(IFSUserStatus.fromValue(rs.getString("STATUS")));
-				String role = rs.getString("ROLE");
-				user.setUserRole(IFSUserRole.fromValue(role));
 				X509Certificate cert = credentialsManager.getCertificate(getCredentialsManagerUID(user.getIdPId(), user
 					.getUID()));
 				user
@@ -353,7 +348,7 @@ public class UserManager extends LoggingObject {
 				s = c
 					.prepareStatement("select * from  "
 						+ USERS_TABLE
-						+ " WHERE IDP_ID>= ? AND IDP_ID<= ? AND UID LIKE ? AND GID LIKE ? AND STATUS LIKE ? AND ROLE LIKE ? AND FIRST_NAME LIKE ? AND LAST_NAME LIKE ? AND EMAIL LIKE ?");
+						+ " WHERE IDP_ID>= ? AND IDP_ID<= ? AND UID LIKE ? AND GID LIKE ? AND STATUS LIKE ? AND FIRST_NAME LIKE ? AND LAST_NAME LIKE ? AND EMAIL LIKE ?");
 
 				if (filter.getIdPId() > 0) {
 					s.setLong(1, filter.getIdPId());
@@ -381,28 +376,22 @@ public class UserManager extends LoggingObject {
 					s.setString(5, "%");
 				}
 
-				if (filter.getUserRole() != null) {
-					s.setString(6, filter.getUserRole().getValue());
+				if (filter.getFirstName() != null) {
+					s.setString(6, "%" + filter.getFirstName() + "%");
 				} else {
 					s.setString(6, "%");
 				}
 
-				if (filter.getFirstName() != null) {
-					s.setString(7, "%" + filter.getFirstName() + "%");
+				if (filter.getLastName() != null) {
+					s.setString(7, "%" + filter.getLastName() + "%");
 				} else {
 					s.setString(7, "%");
 				}
 
-				if (filter.getLastName() != null) {
-					s.setString(8, "%" + filter.getLastName() + "%");
+				if (filter.getEmail() != null) {
+					s.setString(8, "%" + filter.getEmail() + "%");
 				} else {
 					s.setString(8, "%");
-				}
-
-				if (filter.getEmail() != null) {
-					s.setString(9, "%" + filter.getEmail() + "%");
-				} else {
-					s.setString(9, "%");
 				}
 			} else {
 				s = c.prepareStatement("select * from  " + USERS_TABLE);
@@ -428,8 +417,6 @@ public class UserManager extends LoggingObject {
 					user.setEmail(email);
 				}
 				user.setUserStatus(IFSUserStatus.fromValue(rs.getString("STATUS")));
-				String role = rs.getString("ROLE");
-				user.setUserRole(IFSUserRole.fromValue(role));
 				X509Certificate cert = credentialsManager.getCertificate(getCredentialsManagerUID(user.getIdPId(), user
 					.getUID()));
 				user
@@ -471,7 +458,6 @@ public class UserManager extends LoggingObject {
 				user
 					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 				user.setGridId(subjectToIdentity(cert.getSubjectDN().toString()));
-				user.setUserRole(IFSUserRole.Non_Administrator);
 				user.setUserStatus(IFSUserStatus.Pending);
 				try {
 					AddressValidator.validateEmail(user.getEmail());
@@ -486,16 +472,14 @@ public class UserManager extends LoggingObject {
 				validateSpecifiedField("Last Name", user.getLastName());
 				c = db.getConnection();
 				PreparedStatement s = c.prepareStatement("INSERT INTO " + USERS_TABLE
-					+ " SET IDP_ID= ?,UID= ?,GID= ?, STATUS=?,ROLE= ? , FIRST_NAME=?, LAST_NAME= ?, EMAIL=?");
+					+ " SET IDP_ID= ?,UID= ?,GID= ?, STATUS=?, FIRST_NAME=?, LAST_NAME= ?, EMAIL=?");
 				s.setLong(1, user.getIdPId());
 				s.setString(2, user.getUID());
 				s.setString(3, user.getGridId());
-
 				s.setString(4, user.getUserStatus().toString());
-				s.setString(5, user.getUserRole().toString());
-				s.setString(6, user.getFirstName());
-				s.setString(7, user.getLastName());
-				s.setString(8, user.getEmail());
+				s.setString(5, user.getFirstName());
+				s.setString(6, user.getLastName());
+				s.setString(7, user.getEmail());
 				s.execute();
 				if (!user.getUserStatus().equals(IFSUserStatus.Active)) {
 					publishCRL();
@@ -592,20 +576,16 @@ public class UserManager extends LoggingObject {
 					curr.setUserStatus(u.getUserStatus());
 				}
 
-				if ((u.getUserRole() != null) && (!u.getUserRole().equals(curr.getUserRole()))) {
-					curr.setUserRole(u.getUserRole());
-				}
 				c = db.getConnection();
 				PreparedStatement s = c.prepareStatement("UPDATE " + USERS_TABLE
-					+ " SET GID= ?, STATUS=?,ROLE= ? , FIRST_NAME=?, LAST_NAME= ?, EMAIL=? where IDP_ID= ? AND UID= ?");
+					+ " SET GID= ?, STATUS=?, FIRST_NAME=?, LAST_NAME= ?, EMAIL=? where IDP_ID= ? AND UID= ?");
 				s.setString(1, curr.getGridId());
 				s.setString(2, curr.getUserStatus().getValue());
-				s.setString(3, curr.getUserRole().getValue());
-				s.setString(4, curr.getFirstName());
-				s.setString(5, curr.getLastName());
-				s.setString(6, curr.getEmail());
-				s.setLong(7, curr.getIdPId());
-				s.setString(8, curr.getUID());
+				s.setString(3, curr.getFirstName());
+				s.setString(4, curr.getLastName());
+				s.setString(5, curr.getEmail());
+				s.setLong(6, curr.getIdPId());
+				s.setString(7, curr.getUID());
 				s.execute();
 				if (publishCRL) {
 					publishCRL();
@@ -755,8 +735,7 @@ public class UserManager extends LoggingObject {
 				String users = "CREATE TABLE " + USERS_TABLE + " (" + "IDP_ID INT NOT NULL,"
 					+ "UID VARCHAR(255) NOT NULL," + "FIRST_NAME VARCHAR(255) NOT NULL,"
 					+ "LAST_NAME VARCHAR(255) NOT NULL," + "GID VARCHAR(255) NOT NULL,"
-					+ "STATUS VARCHAR(50) NOT NULL," + "ROLE VARCHAR(50) NOT NULL, " + "EMAIL VARCHAR(255) NOT NULL, "
-					+ "INDEX document_index (UID));";
+					+ "STATUS VARCHAR(50) NOT NULL," + "EMAIL VARCHAR(255) NOT NULL, " + "INDEX document_index (UID));";
 				db.update(users);
 
 				try {
@@ -767,7 +746,6 @@ public class UserManager extends LoggingObject {
 						usr.setIdPId(idp.getId());
 						if (usr != null) {
 							this.addUser(idp, usr);
-							usr.setUserRole(IFSUserRole.Administrator);
 							usr.setUserStatus(IFSUserStatus.Active);
 							this.updateUser(usr);
 						} else {

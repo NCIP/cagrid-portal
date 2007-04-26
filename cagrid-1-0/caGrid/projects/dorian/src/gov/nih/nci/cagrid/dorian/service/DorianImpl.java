@@ -302,4 +302,25 @@ public class DorianImpl {
 		}
 	}
 
+
+	public void addAdmin(java.lang.String gridIdentity) throws RemoteException,
+		gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
+		gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		dorian.addAdmin(getCallerIdentity(), gridIdentity);
+	}
+
+
+	public void removeAdmin(java.lang.String gridIdentity) throws RemoteException,
+		gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
+		gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		dorian.removeAdmin(getCallerIdentity(), gridIdentity);
+	}
+
+
+	public java.lang.String[] getAdmins() throws RemoteException,
+		gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
+		gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		return dorian.getAdmins(getCallerIdentity());
+	}
+
 }

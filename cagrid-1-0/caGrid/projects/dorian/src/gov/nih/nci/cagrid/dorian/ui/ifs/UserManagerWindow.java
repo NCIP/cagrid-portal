@@ -34,12 +34,11 @@ import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.7 2007-04-05 16:08:05 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.8 2007-04-26 18:43:49 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -99,8 +98,6 @@ public class UserManagerWindow extends ApplicationComponent {
 
 	private JComboBox userStatus = null;
 
-	private JComboBox userRole = null;
-
 	private String lastService = null;
 
 	private String lastGridIdentity = null;
@@ -110,8 +107,6 @@ public class UserManagerWindow extends ApplicationComponent {
 	private JTextField userId = null;
 
 	private JLabel statusLabel = null;
-
-	private JLabel roleLabel = null;
 
 	private JButton removeUser = null;
 
@@ -123,7 +118,6 @@ public class UserManagerWindow extends ApplicationComponent {
 
 	private JTextField lastName = null;
 
-
 	/**
 	 * This is the default constructor
 	 */
@@ -133,16 +127,15 @@ public class UserManagerWindow extends ApplicationComponent {
 		this.setFrameIcon(DorianLookAndFeel.getUsersIcon());
 	}
 
-
 	/**
 	 * This method initializes this
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Identity Federation User Management");
+		setSize(600, 400);
 
 	}
-
 
 	/**
 	 * This method initializes jContentPane
@@ -157,7 +150,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -213,7 +205,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -224,9 +215,14 @@ public class UserManagerWindow extends ApplicationComponent {
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
-			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Users",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
+			contentPanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Users",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, LookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.weighty = 1.0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
@@ -234,7 +230,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return contentPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -250,7 +245,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes jButton1
@@ -271,7 +265,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		return cancel;
 	}
 
-
 	/**
 	 * This method initializes jTable
 	 * 
@@ -283,7 +276,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return usersTable;
 	}
-
 
 	/**
 	 * This method initializes jScrollPane
@@ -297,7 +289,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return jScrollPane;
 	}
-
 
 	/**
 	 * This method initializes manageUser
@@ -320,16 +311,18 @@ public class UserManagerWindow extends ApplicationComponent {
 		return manageUser;
 	}
 
-
 	public void showUser() {
 
 		Runner runner = new Runner() {
 			public void execute() {
 				try {
 					IFSUser user = getUsersTable().getSelectedUser();
-					String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
-					GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
-					IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, proxyCred);
+					String serviceUrl = ((DorianServiceListComboBox) getService())
+							.getSelectedService();
+					GlobusCredential proxyCred = ((ProxyComboBox) getProxy())
+							.getSelectedProxy();
+					IFSAdministrationClient client = new IFSAdministrationClient(
+							serviceUrl, proxyCred);
 					TrustedIdP[] idps = client.getTrustedIdPs();
 					TrustedIdP tidp = null;
 					for (int i = 0; i < idps.length; i++) {
@@ -339,7 +332,7 @@ public class UserManagerWindow extends ApplicationComponent {
 						}
 					}
 					GridApplication.getContext().addApplicationComponent(
-						new UserWindow(serviceUrl, proxyCred, user, tidp));
+							new UserWindow(serviceUrl, proxyCred, user, tidp));
 				} catch (Exception e) {
 					ErrorDialog.showError(e);
 				}
@@ -351,7 +344,6 @@ public class UserManagerWindow extends ApplicationComponent {
 			t.getMessage();
 		}
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -371,7 +363,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return jPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel2
@@ -411,9 +402,10 @@ public class UserManagerWindow extends ApplicationComponent {
 			jLabel14.setText("Service");
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-					.getPanelLabelColor()));
+			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
+					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+							.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -421,7 +413,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return jPanel2;
 	}
-
 
 	/**
 	 * This method initializes queryPanel
@@ -435,7 +426,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return queryPanel;
 	}
-
 
 	/**
 	 * This method initializes query
@@ -455,7 +445,8 @@ public class UserManagerWindow extends ApplicationComponent {
 						}
 					};
 					try {
-						GridApplication.getContext().executeInBackground(runner);
+						GridApplication.getContext()
+								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -466,13 +457,13 @@ public class UserManagerWindow extends ApplicationComponent {
 		return query;
 	}
 
-
 	private void findUsers() {
 
 		synchronized (mutex) {
 			if (isQuerying) {
-				ErrorDialog.showError("Query Already in Progress",
-					"Please wait until the current query is finished before executing another.");
+				ErrorDialog
+						.showError("Query Already in Progress",
+								"Please wait until the current query is finished before executing another.");
 				return;
 			} else {
 				isQuerying = true;
@@ -483,12 +474,14 @@ public class UserManagerWindow extends ApplicationComponent {
 		this.updateProgress(true, "Querying...");
 
 		try {
-			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential proxyCred = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
 			IFSUserFilter f = new IFSUserFilter();
 
 			Object o = getIdp().getSelectedItem();
 			if (o instanceof TrustedIdPCaddy) {
-				TrustedIdPCaddy caddy = (TrustedIdPCaddy) getIdp().getSelectedItem();
+				TrustedIdPCaddy caddy = (TrustedIdPCaddy) getIdp()
+						.getSelectedItem();
 				f.setIdPId(caddy.getTrustedIdP().getId());
 			}
 			f.setUID(format(getUserId().getText()));
@@ -496,12 +489,13 @@ public class UserManagerWindow extends ApplicationComponent {
 			f.setFirstName(format(this.firstName.getText()));
 			f.setLastName(format(this.lastName.getText()));
 			f.setEmail(format(getEmail().getText()));
+			f.setUserStatus(((UserStatusComboBox) this.getUserStatus())
+					.getSelectedUserStatus());
 
-			f.setUserRole(((UserRolesComboBox) this.getUserRole()).getSelectedUserRole());
-			f.setUserStatus(((UserStatusComboBox) this.getUserStatus()).getSelectedUserStatus());
-
-			String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
-			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, proxyCred);
+			String serviceUrl = ((DorianServiceListComboBox) getService())
+					.getSelectedService();
+			IFSAdministrationClient client = new IFSAdministrationClient(
+					serviceUrl, proxyCred);
 			IFSUser[] users = client.findUsers(f);
 			if (users != null) {
 				for (int i = 0; i < users.length; i++) {
@@ -513,7 +507,8 @@ public class UserManagerWindow extends ApplicationComponent {
 			if (users != null) {
 				length = users.length;
 			}
-			this.updateProgress(false, "Querying Completed [" + length + " users found]");
+			this.updateProgress(false, "Querying Completed [" + length
+					+ " users found]");
 
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
@@ -526,7 +521,6 @@ public class UserManagerWindow extends ApplicationComponent {
 
 	}
 
-
 	private String format(String s) {
 		if ((s == null) || (s.trim().length() == 0)) {
 			return null;
@@ -534,7 +528,6 @@ public class UserManagerWindow extends ApplicationComponent {
 			return s;
 		}
 	}
-
 
 	/**
 	 * This method initializes service
@@ -548,7 +541,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		return service;
 	}
 
-
 	/**
 	 * This method initializes proxy
 	 * 
@@ -560,7 +552,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return proxy;
 	}
-
 
 	/**
 	 * This method initializes progressPanel
@@ -582,7 +573,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		return progressPanel;
 	}
 
-
 	/**
 	 * This method initializes progress
 	 * 
@@ -598,7 +588,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		return progress;
 	}
 
-
 	public void updateProgress(final boolean working, final String s) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -608,7 +597,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		});
 
 	}
-
 
 	/**
 	 * This method initializes filterPanel
@@ -646,13 +634,6 @@ public class UserManagerWindow extends ApplicationComponent {
 			gridBagConstraints16.gridy = 3;
 			jLabel = new JLabel();
 			jLabel.setText("First Name");
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints13.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints13.gridy = 7;
-			roleLabel = new JLabel();
-			roleLabel.setText("User Role");
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.gridx = 0;
 			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
@@ -732,10 +713,10 @@ public class UserManagerWindow extends ApplicationComponent {
 			idpLabel.setText("Identity Provider");
 			filterPanel = new JPanel();
 			filterPanel.setLayout(new GridBagLayout());
-			filterPanel.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-					.getPanelLabelColor()));
-			filterPanel.add(getUserRole(), gridBagConstraints11);
+			filterPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Search Criteria", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+							.getPanelLabelColor()));
 			filterPanel.add(idpLabel, gridBagConstraints3);
 			filterPanel.add(getIdp(), gridBagConstraints5);
 			filterPanel.add(gidLabel, gridBagConstraints6);
@@ -746,7 +727,6 @@ public class UserManagerWindow extends ApplicationComponent {
 			filterPanel.add(getUserId(), gridBagConstraints15);
 			filterPanel.add(getUserStatus(), gridBagConstraints10);
 			filterPanel.add(statusLabel, gridBagConstraints12);
-			filterPanel.add(roleLabel, gridBagConstraints13);
 			filterPanel.add(jLabel, gridBagConstraints16);
 			filterPanel.add(jLabel1, gridBagConstraints17);
 			filterPanel.add(getFirstName(), gridBagConstraints18);
@@ -754,7 +734,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return filterPanel;
 	}
-
 
 	/**
 	 * This method initializes idp
@@ -769,7 +748,6 @@ public class UserManagerWindow extends ApplicationComponent {
 					checkUpdateIdPs();
 				}
 
-
 				public void focusLost(FocusEvent ev) {
 					// TODO Auto-generated method stub
 
@@ -780,12 +758,12 @@ public class UserManagerWindow extends ApplicationComponent {
 		return idp;
 	}
 
-
 	private void updateIdPs(String serviceUrl, GlobusCredential cred) {
 		try {
 			this.updateProgress(true, "Seaching for Trusted IdPs");
 			this.getIdp().removeAllItems();
-			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, cred);
+			IFSAdministrationClient client = new IFSAdministrationClient(
+					serviceUrl, cred);
 			TrustedIdP[] idps = client.getTrustedIdPs();
 			this.getIdp().removeAllItems();
 			for (int i = 0; i < idps.length; i++) {
@@ -799,12 +777,14 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 	}
 
-
 	private void checkUpdateIdPs() {
 		getIdp().hidePopup();
-		final String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
-		final ProxyCaddy caddy = ((ProxyComboBox) getProxy()).getSelectedProxyCaddy();
-		if ((serviceUrl.equals(this.lastService)) && (caddy.getIdentity().equals(this.lastGridIdentity))) {
+		final String serviceUrl = ((DorianServiceListComboBox) getService())
+				.getSelectedService();
+		final ProxyCaddy caddy = ((ProxyComboBox) getProxy())
+				.getSelectedProxyCaddy();
+		if ((serviceUrl.equals(this.lastService))
+				&& (caddy.getIdentity().equals(this.lastGridIdentity))) {
 			getIdp().showPopup();
 			return;
 		} else {
@@ -825,7 +805,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 	}
 
-
 	/**
 	 * This method initializes gridIdentity
 	 * 
@@ -837,7 +816,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return gridIdentity;
 	}
-
 
 	/**
 	 * This method initializes email
@@ -851,7 +829,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		return email;
 	}
 
-
 	/**
 	 * This method initializes userStatus
 	 * 
@@ -864,40 +841,23 @@ public class UserManagerWindow extends ApplicationComponent {
 		return userStatus;
 	}
 
-
-	/**
-	 * This method initializes userRole
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getUserRole() {
-		if (userRole == null) {
-			userRole = new UserRolesComboBox(true);
-		}
-		return userRole;
-	}
-
-
 	public class TrustedIdPCaddy {
 		private TrustedIdP trustedIdp;
-
 
 		public TrustedIdPCaddy(TrustedIdP idp) {
 			this.trustedIdp = idp;
 		}
 
-
 		public TrustedIdP getTrustedIdP() {
 			return trustedIdp;
 		}
 
-
 		public String toString() {
-			return "[IdP Id: " + trustedIdp.getId() + "] " + trustedIdp.getName();
+			return "[IdP Id: " + trustedIdp.getId() + "] "
+					+ trustedIdp.getName();
 		}
 
 	}
-
 
 	/**
 	 * This method initializes userId
@@ -910,7 +870,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return userId;
 	}
-
 
 	/**
 	 * This method initializes removeUser
@@ -929,7 +888,8 @@ public class UserManagerWindow extends ApplicationComponent {
 						}
 					};
 					try {
-						GridApplication.getContext().executeInBackground(runner);
+						GridApplication.getContext()
+								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -940,12 +900,14 @@ public class UserManagerWindow extends ApplicationComponent {
 		return removeUser;
 	}
 
-
 	private void removeUser() {
-		String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
+		String serviceUrl = ((DorianServiceListComboBox) getService())
+				.getSelectedService();
 		try {
-			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, proxyCred);
+			GlobusCredential proxyCred = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
+			IFSAdministrationClient client = new IFSAdministrationClient(
+					serviceUrl, proxyCred);
 			IFSUser usr = this.getUsersTable().getSelectedUser();
 			client.removeUser(usr);
 			this.getUsersTable().removeSelectedUser();
@@ -954,7 +916,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 
 	}
-
 
 	/**
 	 * This method initializes firstName
@@ -967,7 +928,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 		return firstName;
 	}
-
 
 	/**
 	 * This method initializes lastName

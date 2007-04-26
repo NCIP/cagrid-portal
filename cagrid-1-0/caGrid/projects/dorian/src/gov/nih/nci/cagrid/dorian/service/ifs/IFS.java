@@ -12,7 +12,6 @@ import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
-import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
@@ -30,6 +29,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 
+import java.rmi.RemoteException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
@@ -37,6 +37,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -56,6 +57,10 @@ public class IFS extends LoggingObject {
 
 	private CertificateAuthority ca;
 
+	public static final String ADMINISTRATORS = "administrators";
+	private Group administrators;
+	private GroupManager groupManager;
+
 
 	public IFS(IdentityFederationConfiguration conf, Database db, CertificateAuthority ca, IFSDefaults defaults)
 		throws DorianInternalFault {
@@ -64,6 +69,14 @@ public class IFS extends LoggingObject {
 		tm = new TrustedIdPManager(conf, db);
 		um = new UserManager(db, conf, ca, tm, defaults);
 		um.buildDatabase();
+		this.groupManager = new GroupManager(db);
+		if (!this.groupManager.groupExists(ADMINISTRATORS)) {
+			this.groupManager.addGroup(ADMINISTRATORS);
+			this.administrators = this.groupManager.getGroup(ADMINISTRATORS);
+			this.administrators.addMember(defaults.getDefaultUser().getGridId());
+		} else {
+			this.administrators = this.groupManager.getGroup(ADMINISTRATORS);
+		}
 		um.publishCRL();
 	}
 
@@ -92,6 +105,7 @@ public class IFS extends LoggingObject {
 		}
 		return usr.getUID();
 	}
+
 
 
 	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
@@ -218,6 +232,42 @@ public class IFS extends LoggingObject {
 	}
 
 
+	public void addAdmin(String callerGridIdentity, String gridIdentity) throws RemoteException, DorianInternalFault,
+		PermissionDeniedFault {
+		IFSUser caller = getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		if (!this.administrators.isMember(gridIdentity)) {
+			IFSUser admin = getUser(gridIdentity);
+			verifyActiveUser(admin);
+			this.administrators.addMember(gridIdentity);
+		}
+	}
+
+
+	public void removeAdmin(String callerGridIdentity, String gridIdentity) throws RemoteException,
+		DorianInternalFault, PermissionDeniedFault {
+		IFSUser caller = getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		this.administrators.removeMember(gridIdentity);
+	}
+
+
+	public String[] getAdmins(String callerGridIdentity) throws RemoteException, DorianInternalFault,
+		PermissionDeniedFault {
+		IFSUser caller = getUser(callerGridIdentity);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		List members = this.administrators.getMembers();
+		String[] admins = new String[members.size()];
+		for (int i = 0; i < members.size(); i++) {
+			admins[i] = (String) members.get(i);
+		}
+		return admins;
+	}
+
+
 	public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime,
 		int delegationPathLength) throws DorianInternalFault, InvalidAssertionFault, InvalidProxyFault,
 		UserPolicyFault, PermissionDeniedFault {
@@ -277,7 +327,6 @@ public class IFS extends LoggingObject {
 				usr.setFirstName(firstName);
 				usr.setLastName(lastName);
 				usr.setEmail(email);
-				usr.setUserRole(IFSUserRole.Non_Administrator);
 				usr.setUserStatus(IFSUserStatus.Pending);
 				usr = um.addUser(idp, usr);
 			} catch (Exception e) {
@@ -426,7 +475,7 @@ public class IFS extends LoggingObject {
 
 
 	private void verifyAdminUser(IFSUser usr) throws DorianInternalFault, PermissionDeniedFault {
-		if (usr.getUserRole().equals(IFSUserRole.Administrator)) {
+		if (administrators.isMember(usr.getGridId())) {
 			return;
 		} else {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
@@ -540,6 +589,7 @@ public class IFS extends LoggingObject {
 	public void clearDatabase() throws DorianInternalFault {
 		this.um.clearDatabase();
 		this.tm.clearDatabase();
+		this.groupManager.clearDatabase();
 		if (ca instanceof DorianCertificateAuthority) {
 			try {
 				((DorianCertificateAuthority) ca).clearDatabase();
