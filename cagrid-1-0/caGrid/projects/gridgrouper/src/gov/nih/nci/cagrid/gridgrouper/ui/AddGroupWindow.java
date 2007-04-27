@@ -18,6 +18,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 
 
@@ -77,7 +78,6 @@ public class AddGroupWindow extends ApplicationComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(500, 225);
@@ -171,8 +171,8 @@ public class AddGroupWindow extends ApplicationComponent {
 			addStemPanel = new JPanel();
 			addStemPanel.setLayout(new GridBagLayout());
 			addStemPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Group",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 			addStemPanel.add(jLabel10, gridBagConstraints35);
 			addStemPanel.add(getChildName(), gridBagConstraints36);
 			addStemPanel.add(jLabel11, gridBagConstraints37);
@@ -223,7 +223,7 @@ public class AddGroupWindow extends ApplicationComponent {
 	private JButton getAddChildGroup() {
 		if (addChildGroup == null) {
 			addChildGroup = new JButton();
-			addChildGroup.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addChildGroup.setIcon(LookAndFeel.getAddIcon());
 			addChildGroup.setText("Add Group");
 			addChildGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -249,9 +249,9 @@ public class AddGroupWindow extends ApplicationComponent {
 								node.refresh();
 								node.getBrowser().getProgress().stopEvent(eid, "Successfully added a child group!!!");
 								dispose();
-							} catch (Exception e) {
+							} catch (Exception ex) {
 								node.getBrowser().getProgress().stopEvent(eid, "Error adding a child group!!!");
-								ErrorDialog.showError(e);
+								ErrorDialog.showError(ex);
 							}
 						}
 					};
@@ -298,7 +298,7 @@ public class AddGroupWindow extends ApplicationComponent {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
 			cancelButton.setText("Cancel");
-			cancelButton.setIcon(GridGrouperLookAndFeel.getCloseIcon());
+			cancelButton.setIcon(LookAndFeel.getCloseIcon());
 			cancelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();

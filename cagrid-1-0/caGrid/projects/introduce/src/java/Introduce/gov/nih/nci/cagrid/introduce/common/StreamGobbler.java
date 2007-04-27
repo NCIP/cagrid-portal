@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.introduce.common;
 
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

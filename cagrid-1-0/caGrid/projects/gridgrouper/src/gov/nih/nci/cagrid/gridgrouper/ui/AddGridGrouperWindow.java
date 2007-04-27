@@ -65,7 +65,6 @@ public class AddGridGrouperWindow extends ApplicationComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(400, 150);

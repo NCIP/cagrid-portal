@@ -25,6 +25,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 
 
@@ -123,7 +124,6 @@ public class AddMemberWindow extends ApplicationComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(500, 300);
@@ -374,7 +374,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		if (addMember == null) {
 			addMember = new JButton();
 			addMember.setText("Add Member");
-			addMember.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addMember.setIcon(LookAndFeel.getAddIcon());
 			addMember.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -420,7 +420,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		} else if (type.equals(GROUP)) {
 			GroupNodeCaddy caddy = (GroupNodeCaddy) getGroupToAdd().getSelectedItem();
 			try {
-				node.getGroup().addMember(caddy.getNode().getGroup().toSubject());
+				node.getGroup().addMember(caddy.getGroupNode().getGroup().toSubject());
 				if (browser.getHasListedMembers()) {
 					browser.listMembers();
 				}
@@ -436,7 +436,7 @@ public class AddMemberWindow extends ApplicationComponent {
 			GroupNodeCaddy left = (GroupNodeCaddy) getLeftGroup().getSelectedItem();
 			GroupNodeCaddy right = (GroupNodeCaddy) getRightGroup().getSelectedItem();
 			try {
-				node.getGroup().addCompositeMember(ct, left.getNode().getGroup(), right.getNode().getGroup());
+				node.getGroup().addCompositeMember(ct, left.getGroupNode().getGroup(), right.getGroupNode().getGroup());
 				this.node.refresh();
 				this.browser.setGroup();
 				if (browser.getHasListedMembers()) {
@@ -463,7 +463,7 @@ public class AddMemberWindow extends ApplicationComponent {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Cancel");
-			cancel.setIcon(GridGrouperLookAndFeel.getCloseIcon());
+			cancel.setIcon(LookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -577,21 +577,21 @@ public class AddMemberWindow extends ApplicationComponent {
 
 
 	private class GroupNodeCaddy {
-		private GroupTreeNode node;
+		private GroupTreeNode groupNode;
 
 
 		public GroupNodeCaddy(GroupTreeNode node) {
-			this.node = node;
+			this.groupNode = node;
 		}
 
 
-		public GroupTreeNode getNode() {
-			return node;
+		public GroupTreeNode getGroupNode() {
+			return groupNode;
 		}
 
 
 		public String toString() {
-			return node.getGroup().getDisplayName();
+			return groupNode.getGroup().getDisplayName();
 		}
 	}
 

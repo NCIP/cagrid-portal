@@ -18,6 +18,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 
 
@@ -77,7 +78,6 @@ public class AddStemWindow extends ApplicationComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(500, 225);
@@ -171,8 +171,8 @@ public class AddStemWindow extends ApplicationComponent {
 			addStemPanel = new JPanel();
 			addStemPanel.setLayout(new GridBagLayout());
 			addStemPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Stem",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 			addStemPanel.add(jLabel10, gridBagConstraints35);
 			addStemPanel.add(getChildName(), gridBagConstraints36);
 			addStemPanel.add(jLabel11, gridBagConstraints37);
@@ -223,7 +223,7 @@ public class AddStemWindow extends ApplicationComponent {
 	private JButton getAddChildStem() {
 		if (addChildStem == null) {
 			addChildStem = new JButton();
-			addChildStem.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addChildStem.setIcon(LookAndFeel.getAddIcon());
 			addChildStem.setText("Add Stem");
 			addChildStem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -249,9 +249,9 @@ public class AddStemWindow extends ApplicationComponent {
 								node.refresh();
 								node.getBrowser().getProgress().stopEvent(eid, "Successfully added a child stem!!!");
 								dispose();
-							} catch (Exception e) {
+							} catch (Exception ex) {
 								node.getBrowser().getProgress().stopEvent(eid, "Error adding a child stem!!!");
-								ErrorDialog.showError(e);
+								ErrorDialog.showError(ex);
 							}
 						}
 					};
@@ -298,7 +298,7 @@ public class AddStemWindow extends ApplicationComponent {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
 			cancelButton.setText("Cancel");
-			cancelButton.setIcon(GridGrouperLookAndFeel.getCloseIcon());
+			cancelButton.setIcon(LookAndFeel.getCloseIcon());
 			cancelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();

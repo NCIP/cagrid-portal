@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 
+import org.cagrid.grape.LookAndFeel;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -26,7 +28,7 @@ public class GridGrouperProgressBar extends JProgressBar {
 	public GridGrouperProgressBar() {
 		this.events = new HashMap();
 		this.id = 0;
-		setForeground(GridGrouperLookAndFeel.getPanelLabelColor());
+		setForeground(LookAndFeel.getPanelLabelColor());
 		setString("");
 		setStringPainted(true);
 	}
@@ -43,8 +45,8 @@ public class GridGrouperProgressBar extends JProgressBar {
 	}
 
 
-	public synchronized void stopEvent(int id, String message) {
-		Integer bid = new Integer(id);
+	public synchronized void stopEvent(int eventId, String message) {
+		Integer bid = new Integer(eventId);
 		events.remove(bid);
 		if (events.size() == 0) {
 			updateProgress(false, message);
