@@ -9,9 +9,11 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
@@ -31,25 +33,25 @@ public class ProxyManagerComponent extends ApplicationComponent {
 
 	private JPanel buttonPanel = null;
 
-	private JButton jButton = null;
+	private JButton closeButton = null;
 
 	private JPanel proxyPanel = null;
 
-	private JComboBox proxy = null;
+	private JComboBox proxyComboBox = null;
 
-	private JButton viewCertificate = null;
+	private JButton viewCertificateButton = null;
 
-	private JButton saveProxy = null;
+	private JButton saveProxyButton = null;
 
-	private JButton setDefaultProxy = null;
+	private JButton setDefaultProxyButton = null;
 
 	private static final String DEFAULT_PROXY = "Globus Default Proxy";
 
-	private JButton deleteProxy = null;
+	private JButton deleteProxyButton = null;
 
 	private ProxyCaddy defaultProxy;
 
-	private ProxyPanel proxyInformation = null;
+	private ProxyPanel proxyInfoPanel = null;
 
 
 	/**
@@ -60,23 +62,22 @@ public class ProxyManagerComponent extends ApplicationComponent {
 		initialize();
 		List creds = ProxyManager.getInstance().getProxies();
 		defaultProxy = new ProxyCaddy(DEFAULT_PROXY, null);
-		getProxy().addItem(defaultProxy);
+		getProxyComboBox().addItem(defaultProxy);
 		for (int i = 0; i < creds.size(); i++) {
-			getProxy().addItem(new ProxyCaddy((GlobusCredential) creds.get(i)));
+			getProxyComboBox().addItem(new ProxyCaddy((GlobusCredential) creds.get(i)));
 		}
 	}
 
 
 	public ProxyManagerComponent(GlobusCredential cred) {
 		this();
-		getProxy().setSelectedItem(new ProxyCaddy(cred));
+		getProxyComboBox().setSelectedItem(new ProxyCaddy(cred));
 	}
 
 
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -129,7 +130,7 @@ public class ProxyManagerComponent extends ApplicationComponent {
 			gridBagConstraints4.insets = new java.awt.Insets(5, 5, 5, 5);
 			mainPanel.add(getButtonPanel(), gridBagConstraints4);
 			mainPanel.add(getProxyPanel(), gridBagConstraints14);
-			mainPanel.add(getProxyInformation(), gridBagConstraints);
+			mainPanel.add(getProxyInfoPanel(), gridBagConstraints);
 		}
 		return mainPanel;
 	}
@@ -149,11 +150,11 @@ public class ProxyManagerComponent extends ApplicationComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			buttonPanel.add(getViewCertificate(), null);
-			buttonPanel.add(getSaveProxy(), null);
-			buttonPanel.add(getDeleteProxy(), null);
-			buttonPanel.add(getSetDefaultProxy(), null);
-			buttonPanel.add(getJButton(), null);
+			buttonPanel.add(getViewCertificateButton(), null);
+			buttonPanel.add(getSaveProxyButton(), null);
+			buttonPanel.add(getDeleteProxyButton(), null);
+			buttonPanel.add(getSetDefaultProxyButton(), null);
+			buttonPanel.add(getCloseButton(), null);
 		}
 		return buttonPanel;
 	}
@@ -164,18 +165,18 @@ public class ProxyManagerComponent extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getJButton() {
-		if (jButton == null) {
-			jButton = new JButton();
-			jButton.setText("Close");
-			jButton.setIcon(GridCALookAndFeel.getCloseIcon());
-			jButton.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getCloseButton() {
+		if (closeButton == null) {
+			closeButton = new JButton();
+			closeButton.setText("Close");
+			closeButton.setIcon(LookAndFeel.getCloseIcon());
+			closeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
 				}
 			});
 		}
-		return jButton;
+		return closeButton;
 	}
 
 
@@ -195,9 +196,9 @@ public class ProxyManagerComponent extends ApplicationComponent {
 			proxyPanel = new JPanel();
 			proxyPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Proxy",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			proxyPanel.setLayout(new GridBagLayout());
-			proxyPanel.add(getProxy(), gridBagConstraints15);
+			proxyPanel.add(getProxyComboBox(), gridBagConstraints15);
 		}
 		return proxyPanel;
 	}
@@ -208,31 +209,31 @@ public class ProxyManagerComponent extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getProxy() {
-		if (proxy == null) {
-			proxy = new JComboBox();
+	private JComboBox getProxyComboBox() {
+		if (proxyComboBox == null) {
+			proxyComboBox = new JComboBox();
 			/*
 			 * proxy.addItemListener(new java.awt.event.ItemListener() { public
 			 * void itemStateChanged(java.awt.event.ItemEvent e) { } });
 			 */
-			proxy.addActionListener(new java.awt.event.ActionListener() {
+			proxyComboBox.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					ProxyCaddy caddy = (ProxyCaddy) getProxy().getSelectedItem();
+					ProxyCaddy caddy = (ProxyCaddy) getProxyComboBox().getSelectedItem();
 					if (caddy != null) {
 						if (caddy.getIdentity() == DEFAULT_PROXY) {
 							try {
-								proxyInformation.clearProxy();
+								proxyInfoPanel.clearProxy();
 								caddy.setProxy(ProxyUtil.getDefaultProxy());
 							} catch (Exception ex) {
 								return;
 							}
 						}
-						proxyInformation.showProxy(caddy.getProxy());
+						proxyInfoPanel.showProxy(caddy.getProxy());
 					}
 				}
 			});
 		}
-		return proxy;
+		return proxyComboBox;
 	}
 
 
@@ -241,23 +242,23 @@ public class ProxyManagerComponent extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getViewCertificate() {
-		if (viewCertificate == null) {
-			viewCertificate = new JButton();
-			viewCertificate.setText("View Certificate");
-			viewCertificate.setIcon(GridCALookAndFeel.getCertificateIcon());
-			viewCertificate.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getViewCertificateButton() {
+		if (viewCertificateButton == null) {
+			viewCertificateButton = new JButton();
+			viewCertificateButton.setText("View Certificate");
+			viewCertificateButton.setIcon(GridCALookAndFeel.getCertificateIcon());
+			viewCertificateButton.addActionListener(new java.awt.event.ActionListener() {
 
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						proxyInformation.getCertificates().doubleClick();
+						proxyInfoPanel.getCertificates().doubleClick();
 					} catch (Exception ex) {
 						ErrorDialog.showError("An unexpected error in loading the requested certificate.", ex);
 					}
 				}
 			});
 		}
-		return viewCertificate;
+		return viewCertificateButton;
 	}
 
 
@@ -266,19 +267,19 @@ public class ProxyManagerComponent extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getSaveProxy() {
-		if (saveProxy == null) {
-			saveProxy = new JButton();
-			saveProxy.setText("Save Proxy");
-			saveProxy.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getSaveProxyButton() {
+		if (saveProxyButton == null) {
+			saveProxyButton = new JButton();
+			saveProxyButton.setText("Save Proxy");
+			saveProxyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					saveProxyNow();
 
 				}
 			});
-			saveProxy.setIcon(GridCALookAndFeel.getSaveIcon());
+			saveProxyButton.setIcon(LookAndFeel.getSaveIcon());
 		}
-		return saveProxy;
+		return saveProxyButton;
 	}
 
 
@@ -288,7 +289,7 @@ public class ProxyManagerComponent extends ApplicationComponent {
 			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			int returnVal = fc.showSaveDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				ProxyCaddy caddy = (ProxyCaddy) getProxy().getSelectedItem();
+				ProxyCaddy caddy = (ProxyCaddy) getProxyComboBox().getSelectedItem();
 				ProxyUtil.saveProxy(caddy.getProxy(), fc.getSelectedFile().getAbsolutePath());
 			}
 		} catch (Exception e) {
@@ -302,24 +303,26 @@ public class ProxyManagerComponent extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getSetDefaultProxy() {
-		if (setDefaultProxy == null) {
-			setDefaultProxy = new JButton();
-			setDefaultProxy.setText("Set Default");
-			setDefaultProxy.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getSetDefaultProxyButton() {
+		if (setDefaultProxyButton == null) {
+			setDefaultProxyButton = new JButton();
+			setDefaultProxyButton.setText("Set Default");
+			setDefaultProxyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						ProxyCaddy caddy = (ProxyCaddy) getProxy().getSelectedItem();
+						ProxyCaddy caddy = (ProxyCaddy) getProxyComboBox().getSelectedItem();
 						ProxyUtil.saveProxyAsDefault(caddy.getProxy());
+                        JOptionPane.showMessageDialog(ProxyManagerComponent.this, 
+                            "Selected proxy saved as the default");
 					} catch (Exception ex) {
 						ErrorDialog.showError("An unexpected error occurred in saving the currently selected proxy!!!",
 							ex);
 					}
 				}
 			});
-			setDefaultProxy.setIcon(GridCALookAndFeel.getDefaultIcon());
+			setDefaultProxyButton.setIcon(GridCALookAndFeel.getDefaultIcon());
 		}
-		return setDefaultProxy;
+		return setDefaultProxyButton;
 	}
 
 
@@ -328,16 +331,16 @@ public class ProxyManagerComponent extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getDeleteProxy() {
-		if (deleteProxy == null) {
-			deleteProxy = new JButton();
-			deleteProxy.setText("Delete Proxy");
-			deleteProxy.setIcon(GridCALookAndFeel.getRemoveIcon());
-			deleteProxy.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getDeleteProxyButton() {
+		if (deleteProxyButton == null) {
+			deleteProxyButton = new JButton();
+			deleteProxyButton.setText("Delete Proxy");
+			deleteProxyButton.setIcon(LookAndFeel.getRemoveIcon());
+			deleteProxyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					ProxyCaddy caddy = (ProxyCaddy) getProxy().getSelectedItem();
-					proxyInformation.clearProxy();
-					getProxy().removeItemAt(getProxy().getSelectedIndex());
+					ProxyCaddy caddy = (ProxyCaddy) getProxyComboBox().getSelectedItem();
+					proxyInfoPanel.clearProxy();
+					getProxyComboBox().removeItemAt(getProxyComboBox().getSelectedIndex());
 					if (caddy.getIdentity() == DEFAULT_PROXY) {
 						ProxyUtil.destroyDefaultProxy();
 					} else {
@@ -347,7 +350,7 @@ public class ProxyManagerComponent extends ApplicationComponent {
 				}
 			});
 		}
-		return deleteProxy;
+		return deleteProxyButton;
 	}
 
 
@@ -356,10 +359,10 @@ public class ProxyManagerComponent extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private ProxyPanel getProxyInformation() {
-		if (proxyInformation == null) {
-			proxyInformation = new ProxyPanel();
+	private ProxyPanel getProxyInfoPanel() {
+		if (proxyInfoPanel == null) {
+			proxyInfoPanel = new ProxyPanel();
 		}
-		return proxyInformation;
+		return proxyInfoPanel;
 	}
 }
