@@ -419,7 +419,7 @@
 
 	<target name="upgrade" description="Upgrades old versions of the Dorian database to the latest version." depends="checkGlobus">
 		<java classname="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true">
-			<jvmarg value="-Dlog4j.configuration=file:/${basedir}/upgrader-log4j.properties" />
+			<jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
 			<arg value="-conf" />
 			<arg value="etc/dorian-conf.xml" />
 			<classpath refid="service.run.classpath" />
@@ -428,7 +428,7 @@
 
 	<target name="testUpgrade" description="Tests upgrading old versions of the Dorian database to the latest version." depends="checkGlobus">
 		<java classname="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true">
-			<jvmarg value="-Dlog4j.configuration=file:/${basedir}/upgrader-log4j.properties" />
+			<jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
 			<arg value="-conf" />
 			<arg value="etc/dorian-conf.xml" />
 			<arg value="-trial" />
