@@ -21,6 +21,7 @@ import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
+import java.awt.Insets;
 
 
 /**
@@ -98,7 +99,7 @@ public class ApplicationWindow extends ApplicationComponent {
 
 	private JTextField email = null;
 
-	private JButton apply = null;
+	private JButton applyButton = null;
 
 	private JButton cancel = null;
 
@@ -274,6 +275,7 @@ public class ApplicationWindow extends ApplicationComponent {
 			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints32.gridy = 8;
 			gridBagConstraints32.weightx = 1.0;
+			gridBagConstraints32.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints32.gridx = 1;
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 			gridBagConstraints31.gridx = 0;
@@ -286,6 +288,7 @@ public class ApplicationWindow extends ApplicationComponent {
 			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints30.gridy = 10;
 			gridBagConstraints30.weightx = 1.0;
+			gridBagConstraints30.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints30.gridx = 1;
 			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
 			gridBagConstraints29.anchor = java.awt.GridBagConstraints.WEST;
@@ -461,7 +464,7 @@ public class ApplicationWindow extends ApplicationComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			buttonPanel.add(getApply(), null);
+			buttonPanel.add(getApplyButton(), null);
 			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
@@ -655,19 +658,19 @@ public class ApplicationWindow extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getApply() {
-		if (apply == null) {
-			apply = new JButton();
-			apply.setText("Apply");
-			apply.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getApplyButton() {
+		if (applyButton == null) {
+			applyButton = new JButton();
+			applyButton.setText("Apply");
+			applyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					apply();
 
 				}
 			});
-			apply.setIcon(LookAndFeel.getSelectIcon());
+			applyButton.setIcon(LookAndFeel.getSelectIcon());
 		}
-		return apply;
+		return applyButton;
 	}
 
 
@@ -708,10 +711,11 @@ public class ApplicationWindow extends ApplicationComponent {
 		if (!applied) {
 			applied = true;
 			String pass = new String(this.getPassword().getPassword());
-			String vpass = new String(this.getPassword().getPassword());
+			String vpass = new String(this.getVerify().getPassword());
 			if (!pass.equals(vpass)) {
 				ErrorDialog.showError("Registration Error", "Password don't match!!!");
 				applied = false;
+                return;
 			}
 
 			final Application a = new Application();
@@ -741,7 +745,6 @@ public class ApplicationWindow extends ApplicationComponent {
 						ErrorDialog.showError("Registration Error", e);
 						applied = false;
 					}
-
 				}
 			};
 			try {
