@@ -1,9 +1,12 @@
 package gov.nih.nci.cagrid.dorian.ca;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
+import gov.nih.nci.cagrid.dorian.service.Database;
+import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityFault;
+import gov.nih.nci.cagrid.dorian.service.ca.DorianCertificateAuthority;
+import gov.nih.nci.cagrid.dorian.service.ca.NoCACredentialsFault;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;

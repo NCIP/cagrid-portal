@@ -401,23 +401,39 @@
 			</target>
 	
 	<target name="importCA" description="Imports an external CA, for Dorian to use as its CA." depends="checkGlobus">
-			<input message="Please enter the location to the CA's certificate (PEM Format):"
-			               addproperty="cacert.input"/>
-			<input message="Please enter the location to the CA's private key (PEM Format):"
-				               addproperty="cakey.input"/>
-			<input message="Please enter the password to the CA's private key (Enter if None):"
-					               addproperty="password.input"/>
-			<java classname="gov.nih.nci.cagrid.dorian.ca.tools.ImportCA" fork="yes" newenvironment="true">
-				<arg value="-conf" />
-				<arg value="etc/dorian-conf.xml" />
-				<arg value="-cert" />
-				<arg value="${cacert.input}"/>
-				<arg value="-key" />
-				<arg value="${cakey.input}"/>
-				<arg value="-password" />
-				<arg value="${password.input}"/>
-				<classpath refid="service.run.classpath"/>
-			</java>
-		</target>
+		<input message="Please enter the location to the CA's certificate (PEM Format):" addproperty="cacert.input" />
+		<input message="Please enter the location to the CA's private key (PEM Format):" addproperty="cakey.input" />
+		<input message="Please enter the password to the CA's private key (Enter if None):" addproperty="password.input" />
+		<java classname="gov.nih.nci.cagrid.dorian.service.ca.tools.ImportCA" fork="yes" newenvironment="true">
+			<arg value="-conf" />
+			<arg value="etc/dorian-conf.xml" />
+			<arg value="-cert" />
+			<arg value="${cacert.input}" />
+			<arg value="-key" />
+			<arg value="${cakey.input}" />
+			<arg value="-password" />
+			<arg value="${password.input}" />
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
+
+	<target name="upgrade" description="Upgrades old versions of the Dorian database to the latest version." depends="checkGlobus">
+		<java classname="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true">
+			<jvmarg value="-Dlog4j.configuration=file:/${basedir}/upgrader-log4j.properties" />
+			<arg value="-conf" />
+			<arg value="etc/dorian-conf.xml" />
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
+
+	<target name="testUpgrade" description="Tests upgrading old versions of the Dorian database to the latest version." depends="checkGlobus">
+		<java classname="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true">
+			<jvmarg value="-Dlog4j.configuration=file:/${basedir}/upgrader-log4j.properties" />
+			<arg value="-conf" />
+			<arg value="etc/dorian-conf.xml" />
+			<arg value="-trial" />
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
 
 </project>

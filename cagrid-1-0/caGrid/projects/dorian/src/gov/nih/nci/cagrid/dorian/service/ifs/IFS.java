@@ -2,11 +2,7 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.dorian.ca.CertificateAuthorityFault;
-import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
-import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
@@ -16,6 +12,11 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
+import gov.nih.nci.cagrid.dorian.service.Database;
+import gov.nih.nci.cagrid.dorian.service.PropertyManager;
+import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityFault;
+import gov.nih.nci.cagrid.dorian.service.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault;
@@ -62,12 +63,12 @@ public class IFS extends LoggingObject {
 	private GroupManager groupManager;
 
 
-	public IFS(IdentityFederationConfiguration conf, Database db, CertificateAuthority ca, IFSDefaults defaults)
+	public IFS(IdentityFederationConfiguration conf, Database db, PropertyManager properties, CertificateAuthority ca, IFSDefaults defaults)
 		throws DorianInternalFault {
 		this.conf = conf;
 		this.ca = ca;
 		tm = new TrustedIdPManager(conf, db);
-		um = new UserManager(db, conf, ca, tm, defaults);
+		um = new UserManager(db, conf, properties, ca, tm, defaults);
 		um.buildDatabase();
 		this.groupManager = new GroupManager(db);
 		if (!this.groupManager.groupExists(ADMINISTRATORS)) {

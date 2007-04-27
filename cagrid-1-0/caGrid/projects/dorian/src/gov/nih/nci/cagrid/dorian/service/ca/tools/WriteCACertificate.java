@@ -1,9 +1,9 @@
-package gov.nih.nci.cagrid.dorian.ca.tools;
+package gov.nih.nci.cagrid.dorian.service.ca.tools;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
-import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
+import gov.nih.nci.cagrid.dorian.service.Database;
+import gov.nih.nci.cagrid.dorian.service.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 

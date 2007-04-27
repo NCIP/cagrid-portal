@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
@@ -13,6 +11,8 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
+import gov.nih.nci.cagrid.dorian.service.Database;
+import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.test.Constants;

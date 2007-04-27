@@ -1,7 +1,8 @@
-package gov.nih.nci.cagrid.dorian.common;
+package gov.nih.nci.cagrid.dorian.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.bean.Metadata;
+import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 
 import java.sql.Connection;

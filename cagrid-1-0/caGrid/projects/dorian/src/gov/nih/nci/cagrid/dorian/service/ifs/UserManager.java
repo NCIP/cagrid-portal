@@ -4,9 +4,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.ThreadManager;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
-import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
@@ -17,6 +15,9 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidPasswordFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.service.Database;
+import gov.nih.nci.cagrid.dorian.service.PropertyManager;
+import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault;
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;
@@ -53,7 +54,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  */
 public class UserManager extends LoggingObject {
 
-	private static final String USERS_TABLE = "ifs_users";
+	public static final String USERS_TABLE = "ifs_users";
 
 	private Database db;
 
@@ -73,15 +74,18 @@ public class UserManager extends LoggingObject {
 
 	private IFSDefaults defaults;
 
+	private PropertyManager properties;
 
-	public UserManager(Database db, IdentityFederationConfiguration conf, CertificateAuthority ca,
-		TrustedIdPManager tm, IFSDefaults defaults) {
+
+	public UserManager(Database db, IdentityFederationConfiguration conf, PropertyManager properties,
+		CertificateAuthority ca, TrustedIdPManager tm, IFSDefaults defaults) {
 		this.db = db;
 		this.tm = tm;
 		this.defaults = defaults;
 		this.credentialsManager = new CredentialsManager(db);
 		this.conf = conf;
 		this.ca = ca;
+		this.properties = properties;
 		poolManager = new ThreadManager();
 	}
 
@@ -737,7 +741,7 @@ public class UserManager extends LoggingObject {
 					+ "LAST_NAME VARCHAR(255) NOT NULL," + "GID VARCHAR(255) NOT NULL,"
 					+ "STATUS VARCHAR(50) NOT NULL," + "EMAIL VARCHAR(255) NOT NULL, " + "INDEX document_index (UID));";
 				db.update(users);
-
+				properties.setCurrentVersion();
 				try {
 
 					if (defaults.getDefaultIdP() != null) {

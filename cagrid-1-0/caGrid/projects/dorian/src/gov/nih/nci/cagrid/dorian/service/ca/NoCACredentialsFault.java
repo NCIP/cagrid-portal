@@ -1,6 +1,6 @@
 
 
-package gov.nih.nci.cagrid.dorian.ca;
+package gov.nih.nci.cagrid.dorian.service.ca;
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>

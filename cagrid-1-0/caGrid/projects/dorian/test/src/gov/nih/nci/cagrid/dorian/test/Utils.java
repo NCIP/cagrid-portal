@@ -1,14 +1,14 @@
 package gov.nih.nci.cagrid.dorian.test;
 
-import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
-import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.conf.AccountPolicies;
 import gov.nih.nci.cagrid.dorian.conf.AccountPolicy;
 import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
 import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
+import gov.nih.nci.cagrid.dorian.service.Database;
+import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.service.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalPolicy;
 import gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalAutoRenewalPolicy;

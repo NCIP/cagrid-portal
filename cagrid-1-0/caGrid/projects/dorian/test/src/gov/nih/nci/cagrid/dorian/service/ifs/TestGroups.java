@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 

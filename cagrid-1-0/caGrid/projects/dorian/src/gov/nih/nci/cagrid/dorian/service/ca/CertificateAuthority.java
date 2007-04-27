@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.dorian.ca;
+package gov.nih.nci.cagrid.dorian.service.ca;
 
 
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;

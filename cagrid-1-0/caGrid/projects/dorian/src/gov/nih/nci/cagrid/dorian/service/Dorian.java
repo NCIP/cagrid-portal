@@ -1,9 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
-import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
@@ -20,6 +17,8 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
+import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.service.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.idp.IdentityProvider;
 import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.dorian.service.ifs.IFS;
@@ -66,6 +65,8 @@ public class Dorian {
 
 	private DorianConfiguration configuration;
 
+	private PropertyManager properties;
+
 
 	public Dorian(DorianConfiguration conf, String serviceId) throws DorianInternalFault {
 		try {
@@ -75,6 +76,8 @@ public class Dorian {
 			IdentityProvider.ADMIN_PASSWORD = IDP_ADMIN_PASSWORD;
 			this.db = new Database(conf.getDatabase(), getConfiguration().getDorianInternalId());
 			this.db.createDatabaseIfNeeded();
+			this.properties = new PropertyManager(this.db);
+		
 			this.ca = new DorianCertificateAuthority(db, configuration.getDorianCAConfiguration());
 			this.identityProvider = new IdentityProvider(configuration.getIdentityProviderConfiguration(), db, ca);
 
@@ -116,7 +119,14 @@ public class Dorian {
 
 			ifsConfiguration = configuration.getIdentityFederationConfiguration();
 			IFSDefaults defaults = new IFSDefaults(idp, usr);
-			this.ifs = new IFS(ifsConfiguration, db, ca, defaults);
+			this.ifs = new IFS(ifsConfiguration, db, properties, ca, defaults);
+			
+			if (this.properties.getVersion() != PropertyManager.CURRENT_VERSION) {
+				DorianInternalFault fault = new DorianInternalFault();
+				fault.setFaultString("Version conflict detected, your are running Dorian "
+					+ PropertyManager.CURRENT_VERSION + " against a Dorian " + properties.getVersion() + " database.");
+				throw fault;
+			}
 
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();

@@ -2,8 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.CredentialPolicy;
@@ -19,6 +17,9 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
+import gov.nih.nci.cagrid.dorian.service.Database;
+import gov.nih.nci.cagrid.dorian.service.PropertyManager;
+import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault;
@@ -78,6 +79,8 @@ public class TestIFS extends TestCase {
 
 	private CertificateAuthority ca;
 
+	private PropertyManager props;
+
 
 	public void testRenewUserCredentials() {
 		IFS ifs = null;
@@ -86,7 +89,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db, props,ca, defaults);
 			String uid = "user";
 			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
 				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
@@ -138,7 +141,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			String uidPrefix = "user";
 			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
 				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
@@ -205,7 +208,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db, props,ca, defaults);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
@@ -235,7 +238,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db,props, ca, defaults);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
@@ -270,7 +273,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db,props, ca, defaults);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
 				conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(),
 				INITIAL_ADMIN));
@@ -319,7 +322,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
 				conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(),
 				defaults.getDefaultUser().getUID()));
@@ -357,7 +360,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
 				conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(),
 				defaults.getDefaultUser().getUID()));
@@ -407,7 +410,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
 				conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(),
 				defaults.getDefaultUser().getUID()));
@@ -462,7 +465,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			Thread.sleep(500);
 			try {
 				ProxyLifetime valid = new ProxyLifetime();
@@ -496,7 +499,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
@@ -528,7 +531,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
@@ -558,7 +561,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
@@ -587,7 +590,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp0.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
 				conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp0.getIdp(),
 				defaults.getDefaultUser().getUID()));
@@ -647,7 +650,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
@@ -1020,6 +1023,7 @@ public class TestIFS extends TestCase {
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = Utils.getCA(db);
+			props = new PropertyManager(db);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());

@@ -1,6 +1,7 @@
-package gov.nih.nci.cagrid.dorian.common;
+package gov.nih.nci.cagrid.dorian.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 
 import java.sql.Connection;
@@ -17,7 +18,7 @@ import org.apache.commons.dbcp.BasicDataSource;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.27 2007-04-20 19:25:46 langella Exp $
+ * @version $Id: Database.java,v 1.6 2007-04-27 19:55:17 langella Exp $
  */
 public class Database extends LoggingObject {
 
@@ -44,7 +45,7 @@ public class Database extends LoggingObject {
 		root.setUrl(dbURL);
 		root.setValidationQuery("select 1");
 		root.setTestOnBorrow(true);
-		
+
 	}
 
 

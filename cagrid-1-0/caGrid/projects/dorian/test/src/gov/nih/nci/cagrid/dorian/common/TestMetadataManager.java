@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.dorian.common;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.bean.Metadata;
+import gov.nih.nci.cagrid.dorian.service.Database;
+import gov.nih.nci.cagrid.dorian.service.MetadataManager;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import junit.framework.TestCase;
 
