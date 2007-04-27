@@ -2,22 +2,30 @@ package gov.nih.nci.cagrid.introduce.extensions.metadata.editors.servicemetdata;
 
 import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import javax.swing.JList;
+import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 
 /**
  * @author oster
  * 
+ * TODO: add listeners to fields to update model (bean)
+ * 
  */
-public class PointsOfContactEditorPanel extends JPanel {
-	private PointOfContact[] pointsOfContact;
+public class PointsOfContactEditorPanel extends JPanel implements ListSelectionListener {
+	private List<PointOfContact> pointsOfContact;
 	private JPanel pocListPanel = null;
 	private JPanel detailPanel = null;
 	private JList pocList = null;
@@ -49,41 +57,55 @@ public class PointsOfContactEditorPanel extends JPanel {
 	 * 
 	 */
 	private void initialize() {
-        GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-        gridBagConstraints1.gridx = 0;
-        gridBagConstraints1.weightx = 1.0;
-        gridBagConstraints1.weighty = 1.0;
-        gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints1.gridy = 1;
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0,0,0,0);
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.gridx = 0;
-        this.setLayout(new GridBagLayout());
-        this.setSize(new java.awt.Dimension(597,305));
-        this.add(getPocListPanel(), gridBagConstraints);
-        this.add(getDetailPanel(), gridBagConstraints1);
-			
+		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.gridx = 0;
+		gridBagConstraints1.weightx = 1.0;
+		gridBagConstraints1.weighty = 1.0;
+		gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints1.gridy = 1;
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.weightx = 1.0;
+		gridBagConstraints.weighty = 1.0;
+		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints.gridx = 0;
+		this.setLayout(new GridBagLayout());
+		this.setSize(new java.awt.Dimension(597, 305));
+		this.add(getPocListPanel(), gridBagConstraints);
+		this.add(getDetailPanel(), gridBagConstraints1);
+
 	}
 
 
-	public PointOfContact[] getPointsOfContact() {
+	public List<PointOfContact> getPointsOfContact() {
 		return this.pointsOfContact;
 	}
 
 
-	public void setPointsOfContact(PointOfContact[] pointsOfContact) {
+	public void setPointsOfContact(List<PointOfContact> pointsOfContact) {
 		this.pointsOfContact = pointsOfContact;
+		updateView();
+	}
+
+
+	protected void updateView() {
+		DefaultListModel model = new DefaultListModel();
+
+		if (this.pointsOfContact != null) {
+			for (PointOfContact poc : this.pointsOfContact) {
+				model.addElement(new PointOfContactDisplay(poc));
+			}
+		}
+
+		getPocList().setModel(model);
 	}
 
 
 	/**
-	 * This method initializes pocListPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes pocListPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPocListPanel() {
 		if (pocListPanel == null) {
@@ -100,7 +122,9 @@ public class PointsOfContactEditorPanel extends JPanel {
 			gridBagConstraints2.weighty = 1.0D;
 			pocListPanel = new JPanel();
 			pocListPanel.setLayout(new GridBagLayout());
-			pocListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Current Points of Contact", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			pocListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Current Points of Contact",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 			pocListPanel.add(getPocList(), gridBagConstraints2);
 			pocListPanel.add(getControlPanel(), gridBagConstraints3);
 		}
@@ -109,9 +133,9 @@ public class PointsOfContactEditorPanel extends JPanel {
 
 
 	/**
-	 * This method initializes detailPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes detailPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getDetailPanel() {
 		if (detailPanel == null) {
@@ -119,13 +143,13 @@ public class PointsOfContactEditorPanel extends JPanel {
 			gridBagConstraints17.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints17.gridy = 2;
 			gridBagConstraints17.weightx = 1.0;
-			gridBagConstraints17.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints17.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints17.weighty = 0.0;
 			gridBagConstraints17.gridx = 3;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			gridBagConstraints16.gridx = 2;
 			gridBagConstraints16.anchor = java.awt.GridBagConstraints.EAST;
-			gridBagConstraints16.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints16.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints16.weighty = 0.0;
 			gridBagConstraints16.gridy = 2;
 			roleLabel = new JLabel();
@@ -134,7 +158,7 @@ public class PointsOfContactEditorPanel extends JPanel {
 			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints15.gridy = 2;
 			gridBagConstraints15.weightx = 1.0;
-			gridBagConstraints15.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints15.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints15.weighty = 0.0;
 			gridBagConstraints15.gridx = 1;
 			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
@@ -146,7 +170,7 @@ public class PointsOfContactEditorPanel extends JPanel {
 			affiliationLabel.setText("Affiliation");
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.gridx = 2;
-			gridBagConstraints13.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints13.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints13.anchor = java.awt.GridBagConstraints.EAST;
 			gridBagConstraints13.weighty = 0.0;
 			gridBagConstraints13.gridy = 1;
@@ -156,19 +180,19 @@ public class PointsOfContactEditorPanel extends JPanel {
 			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints12.gridy = 1;
 			gridBagConstraints12.weightx = 1.0;
-			gridBagConstraints12.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints12.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints12.weighty = 0.0;
 			gridBagConstraints12.gridx = 3;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints11.gridy = 1;
 			gridBagConstraints11.weightx = 1.0;
-			gridBagConstraints11.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints11.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints11.weighty = 0.0;
 			gridBagConstraints11.gridx = 1;
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.gridx = 0;
-			gridBagConstraints10.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints10.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.EAST;
 			gridBagConstraints10.weighty = 0.0;
 			gridBagConstraints10.gridy = 1;
@@ -178,7 +202,7 @@ public class PointsOfContactEditorPanel extends JPanel {
 			gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints9.gridy = 0;
 			gridBagConstraints9.weightx = 1.0;
-			gridBagConstraints9.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints9.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints9.weighty = 0.0;
 			gridBagConstraints9.gridx = 3;
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
@@ -192,12 +216,12 @@ public class PointsOfContactEditorPanel extends JPanel {
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints7.gridy = 0;
 			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints7.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints7.weighty = 0.0;
 			gridBagConstraints7.gridx = 1;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints6.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.EAST;
 			gridBagConstraints6.weighty = 0.0;
 			gridBagConstraints6.gridy = 0;
@@ -205,7 +229,9 @@ public class PointsOfContactEditorPanel extends JPanel {
 			fnameLabel.setText("First Name");
 			detailPanel = new JPanel();
 			detailPanel.setLayout(new GridBagLayout());
-			detailPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Selected Point of Contact Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			detailPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				"Selected Point of Contact Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 			detailPanel.add(fnameLabel, gridBagConstraints6);
 			detailPanel.add(getFnameTextField(), gridBagConstraints7);
 			detailPanel.add(lnameLabel, gridBagConstraints8);
@@ -224,14 +250,16 @@ public class PointsOfContactEditorPanel extends JPanel {
 
 
 	/**
-	 * This method initializes pocList	
-	 * 	
-	 * @return javax.swing.JList	
+	 * This method initializes pocList
+	 * 
+	 * @return javax.swing.JList
 	 */
 	private JList getPocList() {
 		if (pocList == null) {
-			pocList = new JList();
+			DefaultListModel model = new DefaultListModel();
+			pocList = new JList(model);
 			pocList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+			pocList.addListSelectionListener(this);
 			pocList.setVisibleRowCount(5);
 		}
 		return pocList;
@@ -239,19 +267,19 @@ public class PointsOfContactEditorPanel extends JPanel {
 
 
 	/**
-	 * This method initializes controlPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes controlPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getControlPanel() {
 		if (controlPanel == null) {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints5.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints5.gridy = 1;
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridx = 0;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.insets = new java.awt.Insets(5,5,5,5);
+			gridBagConstraints4.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints4.gridx = 0;
@@ -265,9 +293,9 @@ public class PointsOfContactEditorPanel extends JPanel {
 
 
 	/**
-	 * This method initializes addButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes addButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getAddButton() {
 		if (addButton == null) {
@@ -275,7 +303,7 @@ public class PointsOfContactEditorPanel extends JPanel {
 			addButton.setText("Add");
 			addButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					addPOC();
 				}
 			});
 		}
@@ -283,18 +311,31 @@ public class PointsOfContactEditorPanel extends JPanel {
 	}
 
 
+	protected void addPOC() {
+		PointOfContact poc = new PointOfContact();
+		if (this.pointsOfContact == null) {
+			this.pointsOfContact = new ArrayList<PointOfContact>();
+		}
+
+		this.pointsOfContact.add(poc);
+
+		updateView();
+	}
+
+
 	/**
-	 * This method initializes removeButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes removeButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
 			removeButton = new JButton();
 			removeButton.setText("Remove");
+			removeButton.setEnabled(false);
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					removeSelectedPOC();
 				}
 			});
 		}
@@ -302,10 +343,19 @@ public class PointsOfContactEditorPanel extends JPanel {
 	}
 
 
+	protected void removeSelectedPOC() {
+		int selectedIndex = getPocList().getSelectedIndex();
+		if (selectedIndex != -1) {
+			this.pointsOfContact.remove(selectedIndex);
+		}
+		updateView();
+	}
+
+
 	/**
-	 * This method initializes fnameTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes fnameTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getFnameTextField() {
 		if (fnameTextField == null) {
@@ -317,9 +367,9 @@ public class PointsOfContactEditorPanel extends JPanel {
 
 
 	/**
-	 * This method initializes lnameTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes lnameTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getLnameTextField() {
 		if (lnameTextField == null) {
@@ -331,9 +381,9 @@ public class PointsOfContactEditorPanel extends JPanel {
 
 
 	/**
-	 * This method initializes phoneTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes phoneTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getPhoneTextField() {
 		if (phoneTextField == null) {
@@ -345,9 +395,9 @@ public class PointsOfContactEditorPanel extends JPanel {
 
 
 	/**
-	 * This method initializes emailTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes emailTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getEmailTextField() {
 		if (emailTextField == null) {
@@ -359,9 +409,9 @@ public class PointsOfContactEditorPanel extends JPanel {
 
 
 	/**
-	 * This method initializes affiliationTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes affiliationTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getAffiliationTextField() {
 		if (affiliationTextField == null) {
@@ -373,16 +423,87 @@ public class PointsOfContactEditorPanel extends JPanel {
 
 
 	/**
-	 * This method initializes roleComboBox	
-	 * 	
-	 * @return javax.swing.JComboBox	
+	 * This method initializes roleComboBox
+	 * 
+	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getRoleComboBox() {
 		if (roleComboBox == null) {
 			roleComboBox = new JComboBox();
+			roleComboBox.addItem("Developer");
+			roleComboBox.addItem("Maintainer");
 			roleComboBox.setEditable(true);
 		}
 		return roleComboBox;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+
+	protected class PointOfContactDisplay {
+		PointOfContact poc;
+
+
+		public PointOfContactDisplay(PointOfContact poc) {
+			this.poc = poc;
+		}
+
+
+		public String toString() {
+			if (poc == null) {
+				return "";
+			}
+
+			return poc.getFirstName() + " " + poc.getLastName();
+		}
+
+
+		public PointOfContact getPoc() {
+			return this.poc;
+		}
+
+
+		public void setPoc(PointOfContact poc) {
+			this.poc = poc;
+		}
+	}
+
+
+	public void valueChanged(ListSelectionEvent e) {
+		if (e.getValueIsAdjusting() == false) {
+			updatePOCView();
+		}
+	}
+
+
+	private void updatePOCView() {
+		PointOfContactDisplay pocD = (PointOfContactDisplay) getPocList().getSelectedValue();
+		PointOfContact poc = null;
+		if (pocD != null) {
+			poc = pocD.getPoc();
+		}
+		String fname = null;
+		String lname = null;
+		String phone = null;
+		String email = null;
+		String affiliation = null;
+		String role = null;
+
+		if (poc == null) {
+			getRemoveButton().setEnabled(false);
+		} else {
+			getRemoveButton().setEnabled(true);
+			fname = poc.getFirstName();
+			lname = poc.getLastName();
+			phone = poc.getPhoneNumber();
+			email = poc.getEmail();
+			affiliation = poc.getAffiliation();
+			role = poc.getRole();
+		}
+
+		getFnameTextField().setText(fname);
+		getLnameTextField().setText(lname);
+		getPhoneTextField().setText(phone);
+		getEmailTextField().setText(email);
+		getAffiliationTextField().setText(affiliation);
+		getRoleComboBox().setSelectedItem(role);
+	}
+} // @jve:decl-index=0:visual-constraint="10,10"
