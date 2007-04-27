@@ -15,7 +15,7 @@ import javax.swing.JTextField;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CRLPanel.java,v 1.2 2007-03-21 20:11:32 langella Exp $
+ * @version $Id: CRLPanel.java,v 1.3 2007-04-27 16:27:37 dervin Exp $
  */
 public class CRLPanel extends JPanel {
 	private JPanel infoPanel = null;
@@ -43,7 +43,6 @@ public class CRLPanel extends JPanel {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();

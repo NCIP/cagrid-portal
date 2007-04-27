@@ -23,11 +23,11 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.3 2007-04-03 04:04:23 langella Exp $
+ * @version $Id: CertificatePanel.java,v 1.4 2007-04-27 16:27:37 dervin Exp $
  */
 public class CertificatePanel extends JPanel {
 
-	private JPanel jPanel = null;
+	private JPanel certInfoPanel = null;
 	private JLabel jLabel = null;
 	private JLabel jLabel1 = null;
 	private JLabel jLabel2 = null;
@@ -48,7 +48,7 @@ public class CertificatePanel extends JPanel {
 	private JButton loadButton = null;
 	private JButton saveButton = null;
 	private X509Certificate certificate;
-	private JPanel jPanel1 = null;
+	private JPanel certExtensionsPanel = null;
 	private JScrollPane jScrollPane = null;
 	private CertificateExtensionsTable certificateExtensionsTable = null;
 
@@ -114,7 +114,6 @@ public class CertificatePanel extends JPanel {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
@@ -137,9 +136,9 @@ public class CertificatePanel extends JPanel {
 		gridBagConstraints16.weighty = 1.0D;
 		gridBagConstraints16.gridy = 0;
 		this.setLayout(new GridBagLayout());
-		this.add(getJPanel(), gridBagConstraints16);
+		this.add(getCertInfoPanel(), gridBagConstraints16);
 		this.add(getButtonPanel(), gridBagConstraints17);
-		this.add(getJPanel1(), gridBagConstraints19);
+		this.add(getCertExtensionsPanel(), gridBagConstraints19);
 	}
 
 
@@ -148,8 +147,8 @@ public class CertificatePanel extends JPanel {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanel() {
-		if (jPanel == null) {
+	private JPanel getCertInfoPanel() {
+		if (certInfoPanel == null) {
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.anchor = GridBagConstraints.WEST;
 			gridBagConstraints15.insets = new Insets(2, 2, 2, 2);
@@ -269,29 +268,29 @@ public class CertificatePanel extends JPanel {
 			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 			jLabel = new JLabel();
 			jLabel.setText("Subject");
-			jPanel = new JPanel();
-			jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Certificate Information",
+			certInfoPanel = new JPanel();
+			certInfoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Certificate Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel.getPanelLabelColor()));
-			jPanel.setLayout(new GridBagLayout());
-			jPanel.add(jLabel, gridBagConstraints);
-			jPanel.add(jLabel1, gridBagConstraints1);
-			jPanel.add(jLabel2, gridBagConstraints2);
-			jPanel.add(jLabel3, gridBagConstraints3);
-			jPanel.add(jLabel4, gridBagConstraints4);
-			jPanel.add(jLabel5, gridBagConstraints5);
-			jPanel.add(versionLabel, gridBagConstraints6);
-			jPanel.add(jLabel7, gridBagConstraints7);
-			jPanel.add(getCertificateSignatureAlgorithm(), gridBagConstraints8);
-			jPanel.add(getCertificateType(), gridBagConstraints9);
-			jPanel.add(getCertificateVersion(), gridBagConstraints10);
-			jPanel.add(getCertificateSerialNumber(), gridBagConstraints11);
-			jPanel.add(getCertificateIssuer(), gridBagConstraints12);
-			jPanel.add(getCertificateExpires(), gridBagConstraints13);
-			jPanel.add(getCertificateCreated(), gridBagConstraints14);
-			jPanel.add(getCertificateSubject(), gridBagConstraints15);
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
+			certInfoPanel.setLayout(new GridBagLayout());
+			certInfoPanel.add(jLabel, gridBagConstraints);
+			certInfoPanel.add(jLabel1, gridBagConstraints1);
+			certInfoPanel.add(jLabel2, gridBagConstraints2);
+			certInfoPanel.add(jLabel3, gridBagConstraints3);
+			certInfoPanel.add(jLabel4, gridBagConstraints4);
+			certInfoPanel.add(jLabel5, gridBagConstraints5);
+			certInfoPanel.add(versionLabel, gridBagConstraints6);
+			certInfoPanel.add(jLabel7, gridBagConstraints7);
+			certInfoPanel.add(getCertificateSignatureAlgorithm(), gridBagConstraints8);
+			certInfoPanel.add(getCertificateType(), gridBagConstraints9);
+			certInfoPanel.add(getCertificateVersion(), gridBagConstraints10);
+			certInfoPanel.add(getCertificateSerialNumber(), gridBagConstraints11);
+			certInfoPanel.add(getCertificateIssuer(), gridBagConstraints12);
+			certInfoPanel.add(getCertificateExpires(), gridBagConstraints13);
+			certInfoPanel.add(getCertificateCreated(), gridBagConstraints14);
+			certInfoPanel.add(getCertificateSubject(), gridBagConstraints15);
 		}
-		return jPanel;
+		return certInfoPanel;
 	}
 
 
@@ -505,21 +504,21 @@ public class CertificatePanel extends JPanel {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanel1() {
-		if (jPanel1 == null) {
+	private JPanel getCertExtensionsPanel() {
+		if (certExtensionsPanel == null) {
 			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
 			gridBagConstraints18.fill = GridBagConstraints.BOTH;
 			gridBagConstraints18.weighty = 1.0;
 			gridBagConstraints18.weightx = 1.0;
-			jPanel1 = new JPanel();
+			certExtensionsPanel = new JPanel();
 
-			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Certificate Extensions",
+			certExtensionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Certificate Extensions",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel.getPanelLabelColor()));
-			jPanel1.setLayout(new GridBagLayout());
-			jPanel1.add(getJScrollPane(), gridBagConstraints18);
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
+			certExtensionsPanel.setLayout(new GridBagLayout());
+			certExtensionsPanel.add(getJScrollPane(), gridBagConstraints18);
 		}
-		return jPanel1;
+		return certExtensionsPanel;
 	}
 
 

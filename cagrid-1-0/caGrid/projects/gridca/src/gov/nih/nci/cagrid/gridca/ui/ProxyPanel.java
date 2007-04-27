@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;
 
 
@@ -82,7 +83,6 @@ public class ProxyPanel extends JPanel {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
@@ -186,8 +186,8 @@ public class ProxyPanel extends JPanel {
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
 			jPanel.setBorder(BorderFactory.createTitledBorder(null, "Proxy Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 			jPanel.add(jLabel, gridBagConstraints);
 			jPanel.add(jLabel1, gridBagConstraints1);
 			jPanel.add(jLabel2, gridBagConstraints2);
@@ -286,8 +286,8 @@ public class ProxyPanel extends JPanel {
 			gridBagConstraints10.weighty = 1.0;
 			certificateChain = new JPanel();
 			certificateChain.setBorder(BorderFactory.createTitledBorder(null, "Certificate Chain",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GridCALookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 			certificateChain.setLayout(new GridBagLayout());
 			certificateChain.add(getJScrollPane(), gridBagConstraints10);
 		}

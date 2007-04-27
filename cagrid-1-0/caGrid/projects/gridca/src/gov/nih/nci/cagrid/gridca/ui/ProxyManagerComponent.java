@@ -9,10 +9,10 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
@@ -312,7 +312,7 @@ public class ProxyManagerComponent extends ApplicationComponent {
 					try {
 						ProxyCaddy caddy = (ProxyCaddy) getProxyComboBox().getSelectedItem();
 						ProxyUtil.saveProxyAsDefault(caddy.getProxy());
-                        JOptionPane.showMessageDialog(ProxyManagerComponent.this, 
+                        GridApplication.getContext().showMessage(
                             "Selected proxy saved as the default");
 					} catch (Exception ex) {
 						ErrorDialog.showError("An unexpected error occurred in saving the currently selected proxy!!!",
