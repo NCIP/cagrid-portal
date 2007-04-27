@@ -227,7 +227,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 			idpPanel.setLayout(new GridBagLayout());
 			idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Proxy",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			idpPanel.add(getProgressPanel(), gridBagConstraints15);
 			idpPanel.add(idpLabel, gridBagConstraints1);
 			idpPanel.add(getIdentityProvider(), gridBagConstraints2);
@@ -292,7 +292,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 			cardPanel.setLayout(new CardLayout());
 			cardPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "IdP Authentication Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 		}
 		return cardPanel;
 	}
@@ -341,7 +341,6 @@ public class CreateProxyWindow extends ApplicationComponent {
 
 
 	private void authenticate() {
-
 		synchronized (mutex) {
 			if (isCreating) {
 				ErrorDialog.showError("Already trying to create a proxy, please wait!!!");
@@ -350,7 +349,9 @@ public class CreateProxyWindow extends ApplicationComponent {
 				isCreating = true;
 			}
 		}
-
+		// prevent clicking this button while working
+        getAuthenticateButton().setEnabled(false);
+        
 		String ifsService = ((DorianServiceListComboBox) this.getIfs()).getSelectedService();
 		String idpService = ((String) getIdentityProvider().getSelectedItem());
 
@@ -376,6 +377,10 @@ public class CreateProxyWindow extends ApplicationComponent {
 			this.updateProgress(false, "Proxy Created!!!");
 			ProxyManager.getInstance().addProxy(cred);
 			GridApplication.getContext().addApplicationComponent(new ProxyManagerComponent(cred), 700, 450);
+            
+            // enable the authenticate button
+            getAuthenticateButton().setEnabled(true);
+            
 			dispose();
 		} catch (Exception e) {
 			this.updateProgress(false, "Error");
@@ -390,7 +395,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(DorianLookAndFeel.getCloseIcon());
+			close.setIcon(LookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();

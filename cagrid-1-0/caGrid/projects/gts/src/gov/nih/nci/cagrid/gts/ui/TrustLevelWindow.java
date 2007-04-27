@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
@@ -141,7 +142,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(600, 400);
@@ -232,7 +232,8 @@ public class TrustLevelWindow extends ApplicationComponent {
 			topPanel = new JPanel();
 			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service/Login Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(jLabel, gridBagConstraints2);
 			topPanel.add(getGts(), gridBagConstraints3);
@@ -336,7 +337,7 @@ public class TrustLevelWindow extends ApplicationComponent {
 					dispose();
 				}
 			});
-			cancelButton.setIcon(GTSLookAndFeel.getCloseIcon());
+			cancelButton.setIcon(LookAndFeel.getCloseIcon());
 		}
 		return cancelButton;
 	}
@@ -345,12 +346,12 @@ public class TrustLevelWindow extends ApplicationComponent {
 	private void addUpdateTrustLevel() {
 		try {
 			getAddButton().setEnabled(false);
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			TrustLevel level = new TrustLevel();
 			level.setName(getTrustLevelName().getText().trim());
 			level.setDescription(getDescription().getText().trim());
-			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			GTSAdminClient client = new GTSAdminClient(service, selectedProxy);
 			if (state == UPDATE) {
 				client.updateTrustLevel(level);
 			} else if (state == ADD) {
@@ -469,7 +470,8 @@ public class TrustLevelWindow extends ApplicationComponent {
 			trustLevelPanel.setLayout(new GridBagLayout());
 			trustLevelPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trust Level",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 			trustLevelPanel.add(jLabel2, gridBagConstraints1);
 			trustLevelPanel.add(getTrustLevelName(), gridBagConstraints6);
 			trustLevelPanel.add(jLabel3, gridBagConstraints7);

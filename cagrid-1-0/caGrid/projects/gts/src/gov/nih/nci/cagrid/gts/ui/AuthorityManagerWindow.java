@@ -22,6 +22,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
@@ -97,7 +98,6 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(700, 500);
@@ -185,7 +185,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			contentPanel.setLayout(new GridBagLayout());
 			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Authority(s)",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.gridx = 0;
@@ -278,9 +278,9 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	public void addAuthority() {
 		try {
 
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			GridApplication.getContext().addApplicationComponent(new AuthorityWindow(service, proxy, this), 600, 400);
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GridApplication.getContext().addApplicationComponent(new AuthorityWindow(selectedService, selectedProxy, this), 600, 400);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
@@ -289,10 +289,10 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 
 	public void viewModifyAuthority() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			GridApplication.getContext().addApplicationComponent(
-				new AuthorityWindow(service, proxy, getAuthorityTable().getSelectedAuthority(), this), 600, 400);
+				new AuthorityWindow(selectedService, selectedProxy, getAuthorityTable().getSelectedAuthority(), this), 600, 400);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
@@ -358,8 +358,8 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "GTS/Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -392,7 +392,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Authorities");
-			query.setIcon(GTSLookAndFeel.getQueryIcon());
+			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					disableAllActions();
@@ -420,8 +420,8 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 		this.updateProgress(true, "Finding Authorities...");
 
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GTSPublicClient client = new GTSPublicClient(service);
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GTSPublicClient client = new GTSPublicClient(selectedService);
 			AuthorityGTS[] auth = client.getAuthorities();
 			int length = 0;
 			if (auth != null) {
@@ -498,7 +498,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setForeground(GTSLookAndFeel.getPanelLabelColor());
+			progress.setForeground(LookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -550,9 +550,9 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 
 	private void removeAuthority() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
 			AuthorityGTS gts = this.getAuthorityTable().getSelectedAuthority();
 			client.removeAuthority(gts.getServiceURI());
 			getAuthorities();
@@ -567,9 +567,9 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	private void updatePriorities() {
 		try {
 			disableAllActions();
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
 			client.updateAuthorityPriorities(getAuthorityTable().getPriorityUpdate());
 			GridApplication.getContext().showMessage("Successfully updated the authority priorities!!!");
 		} catch (Exception e) {

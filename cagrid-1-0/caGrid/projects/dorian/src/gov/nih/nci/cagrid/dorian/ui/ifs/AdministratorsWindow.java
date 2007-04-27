@@ -455,7 +455,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 							}
 						}
 					});
-			removeTrustedIdPButton.setIcon(DorianLookAndFeel.getRemoveIcon());
+			removeTrustedIdPButton.setIcon(LookAndFeel.getRemoveIcon());
 		}
 		return removeTrustedIdPButton;
 	}
@@ -495,7 +495,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 
 				}
 			});
-			addAdmin.setIcon(DorianLookAndFeel.getAddIcon());
+			addAdmin.setIcon(LookAndFeel.getAddIcon());
 		}
 		return addAdmin;
 	}

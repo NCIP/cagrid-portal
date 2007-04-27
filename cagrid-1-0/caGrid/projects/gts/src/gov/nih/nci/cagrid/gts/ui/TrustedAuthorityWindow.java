@@ -39,6 +39,7 @@ import javax.swing.JTextField;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
@@ -200,7 +201,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(600, 500);
@@ -226,10 +226,10 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		if (service != null) {
 			try {
 				GTSPublicClient client = new GTSPublicClient(service);
-				TrustLevel[] levels = client.getTrustLevels();
-				if (levels != null) {
-					for (int i = 0; i < levels.length; i++) {
-						this.addLevel(levels[i].getName());
+				TrustLevel[] newLevels = client.getTrustLevels();
+				if (newLevels != null) {
+					for (int i = 0; i < newLevels.length; i++) {
+						this.addLevel(newLevels[i].getName());
 					}
 
 				}
@@ -317,7 +317,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			topPanel = new JPanel();
 			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service/Login Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(jLabel, gridBagConstraints2);
 			topPanel.add(getGts(), gridBagConstraints3);
@@ -338,7 +338,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			taPanel = new JTabbedPane();
 			taPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trusted Authority",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			taPanel.addTab("Properties", GTSLookAndFeel.getTrustedAuthorityIcon(), getPropertiesNorthPanel(), null);
 			taPanel.addTab("Trust Levels", GTSLookAndFeel.getTrustLevelIcon(), getTrustLevels(), null);
 			taPanel.addTab("Certificate", GTSLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
@@ -627,7 +627,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 					dispose();
 				}
 			});
-			cancelButton.setIcon(GTSLookAndFeel.getCloseIcon());
+			cancelButton.setIcon(LookAndFeel.getCloseIcon());
 		}
 		return cancelButton;
 	}
@@ -770,9 +770,9 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			if (crlPanel.getCRL() != null) {
 				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil.writeCRL(crlPanel.getCRL())));
 			}
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
-			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			GTSAdminClient client = new GTSAdminClient(service, selectedProxy);
 			client.addTrustedAuthority(ta);
 			GridApplication.getContext().showMessage(
 				"The Trusted Authority, " + ta.getName() + " was succesfully added!!!");
@@ -796,9 +796,9 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			if (crlPanel.getCRL() != null) {
 				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil.writeCRL(crlPanel.getCRL())));
 			}
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
-			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			GTSAdminClient client = new GTSAdminClient(service, selectedProxy);
 			client.updateTrustedAuthority(ta);
 			GridApplication.getContext().showMessage(
 				"The Trusted Authority, " + ta.getName() + " was succesfully updated!!!");
@@ -922,7 +922,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			levels.setLayout(new GridBagLayout());
 			levels.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trust Levels",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 		}
 		return levels;
 	}
@@ -972,9 +972,9 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		for (int i = 0; i < list.size(); i++) {
 			tl[i] = (String) list.get(i);
 		}
-		TrustLevels levels = new TrustLevels();
-		levels.setTrustLevel(tl);
-		return levels;
+		TrustLevels selectedLevels = new TrustLevels();
+		selectedLevels.setTrustLevel(tl);
+		return selectedLevels;
 	}
 
 }

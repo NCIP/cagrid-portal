@@ -61,7 +61,6 @@ public class PermissionPanel extends JPanel {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();

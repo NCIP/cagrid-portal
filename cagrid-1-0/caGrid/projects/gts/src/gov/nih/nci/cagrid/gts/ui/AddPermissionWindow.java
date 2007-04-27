@@ -17,6 +17,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
@@ -69,7 +70,6 @@ public class AddPermissionWindow extends ApplicationComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(600, 400);
@@ -152,7 +152,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 			topPanel = new JPanel();
 			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service/Login Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(jLabel, gridBagConstraints2);
 			topPanel.add(getGts(), gridBagConstraints3);
@@ -264,7 +264,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 					dispose();
 				}
 			});
-			cancelButton.setIcon(GTSLookAndFeel.getCloseIcon());
+			cancelButton.setIcon(LookAndFeel.getCloseIcon());
 		}
 		return cancelButton;
 	}
@@ -273,9 +273,9 @@ public class AddPermissionWindow extends ApplicationComponent {
 	private void addPermission() {
 		try {
 			getAddButton().setEnabled(false);
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
-			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			GTSAdminClient client = new GTSAdminClient(service, selectedProxy);
 			client.addPermission(permissionPanel.getPermission());
 			refresher.refreshPermissions();
 			dispose();
@@ -297,8 +297,8 @@ public class AddPermissionWindow extends ApplicationComponent {
 		if (permissionPanel == null) {
 			permissionPanel = new PermissionPanel(false);
 			permissionPanel.setBorder(BorderFactory.createTitledBorder(null, "Permission",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 		}
 		return permissionPanel;
 	}

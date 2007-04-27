@@ -22,6 +22,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
@@ -92,7 +93,6 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(700, 500);
@@ -182,7 +182,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 			contentPanel.setLayout(new GridBagLayout());
 			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Permission(s)",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.gridx = 0;
@@ -271,10 +271,10 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 
 	public void addPermission() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			GridApplication.getContext().addApplicationComponent(new AddPermissionWindow(service, proxy, this), 600,
-				300);
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GridApplication.getContext().addApplicationComponent(
+                new AddPermissionWindow(selectedService, selectedProxy, this), 600, 300);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
@@ -340,8 +340,8 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "GTS/Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -374,7 +374,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Permissions");
-			query.setIcon(GTSLookAndFeel.getQueryIcon());
+			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -403,10 +403,10 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 		this.updateProgress(true, "Finding Permissions...");
 
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PermissionFilter f = filterPanel.getPermissionFilter();
-			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
 			Permission[] perms = client.findPermissions(f);
 			int length = 0;
 			if (perms != null) {
@@ -497,7 +497,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setForeground(GTSLookAndFeel.getPanelLabelColor());
+			progress.setForeground(LookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -549,9 +549,9 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 
 	private void removePermission() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
 			client.revokePermission(this.permissionsTable.getSelectedPermission());
 			this.refreshPermissions();
 
@@ -570,8 +570,8 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 		if (filterPanel == null) {
 			filterPanel = new PermissionPanel(true);
 			filterPanel.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 		}
 		return filterPanel;
 	}
@@ -579,12 +579,12 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 
 	private synchronized void syncServices() {
 		this.getPermissionsTable().clearTable();
-		String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-		if ((currentService == null) || (!currentService.equals(service))) {
+		String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+		if ((currentService == null) || (!currentService.equals(selectedService))) {
 			try {
-				currentService = service;
+				currentService = selectedService;
 				updateProgress(true, "Discovery Trusted Authorities...");
-				int length = filterPanel.syncWithService(service);
+				int length = filterPanel.syncWithService(selectedService);
 				this.updateProgress(false, "Completed [Found " + length + " Trusted Authority(s)]");
 			} catch (Exception e) {
 				ErrorDialog.showError(e);

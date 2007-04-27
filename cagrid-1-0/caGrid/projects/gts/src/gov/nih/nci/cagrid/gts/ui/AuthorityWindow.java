@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
@@ -151,7 +152,6 @@ public class AuthorityWindow extends ApplicationComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(600, 400);
@@ -239,7 +239,7 @@ public class AuthorityWindow extends ApplicationComponent {
 			topPanel = new JPanel();
 			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service/Login Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(jLabel, gridBagConstraints2);
 			topPanel.add(getGts(), gridBagConstraints3);
@@ -341,7 +341,7 @@ public class AuthorityWindow extends ApplicationComponent {
 					dispose();
 				}
 			});
-			cancelButton.setIcon(GTSLookAndFeel.getCloseIcon());
+			cancelButton.setIcon(LookAndFeel.getCloseIcon());
 		}
 		return cancelButton;
 	}
@@ -351,7 +351,7 @@ public class AuthorityWindow extends ApplicationComponent {
 
 		try {
 			getAddButton().setEnabled(false);
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			AuthorityGTS auth = new AuthorityGTS();
 			auth.setServiceURI(getGtsURI().getText().trim());
@@ -367,7 +367,7 @@ public class AuthorityWindow extends ApplicationComponent {
 			ttl.setSeconds(((Integer) getSeconds().getSelectedItem()).intValue());
 			auth.setTimeToLive(ttl);
 
-			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			GTSAdminClient client = new GTSAdminClient(service, selectedProxy);
 			if (update) {
 				client.updateAuthority(auth);
 			} else {
@@ -486,7 +486,7 @@ public class AuthorityWindow extends ApplicationComponent {
 			authorityPanel.setLayout(new GridBagLayout());
 			authorityPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Authority GTS",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			authorityPanel.add(jLabel2, gridBagConstraints1);
 			authorityPanel.add(getGtsURI(), gridBagConstraints6);
 			authorityPanel.add(Priority, gridBagConstraints7);

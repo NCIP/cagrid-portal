@@ -22,6 +22,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
@@ -89,7 +90,6 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(700, 500);
@@ -172,7 +172,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 			contentPanel.setLayout(new GridBagLayout());
 			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trust Level(s)",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.gridx = 0;
@@ -262,9 +262,9 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 
 	public void addTrustLevel() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			GridApplication.getContext().addApplicationComponent(new TrustLevelWindow(service, proxy, this), 500, 400);
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GridApplication.getContext().addApplicationComponent(new TrustLevelWindow(selectedService, selectedProxy, this), 500, 400);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
@@ -273,10 +273,10 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 
 	public void viewModifyLevel() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			GridApplication.getContext().addApplicationComponent(
-				new TrustLevelWindow(service, proxy, getTrustLevelTable().getSelectedTrustLevel(), this), 500, 400);
+				new TrustLevelWindow(selectedService, selectedProxy, getTrustLevelTable().getSelectedTrustLevel(), this), 500, 400);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
@@ -342,8 +342,8 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "GTS/Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -376,7 +376,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 		if (query == null) {
 			query = new JButton();
 			query.setText("List Trust Levels");
-			query.setIcon(GTSLookAndFeel.getQueryIcon());
+			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -404,8 +404,8 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 		this.updateProgress(true, "Finding Trust Levels...");
 
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GTSPublicClient client = new GTSPublicClient(service);
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GTSPublicClient client = new GTSPublicClient(selectedService);
 			TrustLevel[] levels = client.getTrustLevels();
 			int length = 0;
 			if (levels != null) {
@@ -479,7 +479,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setForeground(GTSLookAndFeel.getPanelLabelColor());
+			progress.setForeground(LookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -531,9 +531,9 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 
 	private void removeTrustLevel() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
 			TrustLevel level = getTrustLevelTable().getSelectedTrustLevel();
 			client.removeTrustLevel(level.getName());
 			getTrustLevelTable().removeSelectedTrustLevel();

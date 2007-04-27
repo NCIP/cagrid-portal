@@ -39,7 +39,6 @@ public class SessionPanel extends JPanel {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();

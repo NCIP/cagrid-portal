@@ -27,6 +27,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
@@ -126,7 +127,6 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(500, 500);
@@ -140,10 +140,10 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 	private void updateTrustLevels() {
 		trustLevel.removeAllItems();
 		trustLevel.addItem(ANY);
-		String service = Utils.clean((String) getService().getSelectedItem());
-		if (service != null) {
+		String selectedService = Utils.clean((String) getService().getSelectedItem());
+		if (selectedService != null) {
 			try {
-				GTSPublicClient client = new GTSPublicClient(service);
+				GTSPublicClient client = new GTSPublicClient(selectedService);
 				TrustLevel[] levels = client.getTrustLevels();
 				if (levels != null) {
 					for (int i = 0; i < levels.length; i++) {
@@ -154,7 +154,8 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				ErrorDialog.showError("Error obtaining the trust levels from " + service + ":\n" + e.getMessage());
+				ErrorDialog.showError("Error obtaining the trust levels from " 
+                    + selectedService + ":\n" + e.getMessage());
 			}
 		}
 	}
@@ -241,7 +242,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 			contentPanel.setLayout(new GridBagLayout());
 			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trusted Authority(s)",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.gridx = 0;
@@ -331,9 +332,9 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 
 	public void showTrustedAuthority() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			TrustedAuthorityWindow window = new TrustedAuthorityWindow(service, proxy, this.getTrustedAuthorityTable()
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			TrustedAuthorityWindow window = new TrustedAuthorityWindow(selectedService, selectedProxy, this.getTrustedAuthorityTable()
 				.getSelectedTrustedAuthority(), this);
 			GridApplication.getContext().addApplicationComponent(window);
 		} catch (Exception e) {
@@ -401,8 +402,8 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "GTS/Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -435,7 +436,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Trusted Authorities");
-			query.setIcon(GTSLookAndFeel.getQueryIcon());
+			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -464,7 +465,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 		this.updateProgress(true, "Finding Trusted Authorities...");
 
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
 
 			TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
 			filter.setName(Utils.clean(trustedAuthorityName.getText()));
@@ -481,7 +482,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 			filter.setIsAuthority(this.getIsAuthority().getIsAuthority());
 			filter.setAuthorityGTS(this.getAuthorityGTS().getSelectedService());
 			filter.setSourceGTS(this.getSourceGTS().getSelectedService());
-			GTSPublicClient client = new GTSPublicClient(service);
+			GTSPublicClient client = new GTSPublicClient(selectedService);
 			int length = 0;
 			TrustedAuthority[] tas = client.findTrustedAuthorities(filter);
 			if (tas != null) {
@@ -561,7 +562,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setForeground(GTSLookAndFeel.getPanelLabelColor());
+			progress.setForeground(LookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -613,9 +614,9 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 
 	private void removeTrustedAuthority() {
 		try {
-			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			GTSAdminClient client = new GTSAdminClient(service, proxy);
+			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
 			client.removeTrustedAuthority(this.getTrustedAuthorityTable().getSelectedTrustedAuthority().getName());
 			this.getTrustedAuthorityTable().removeSelectedTrustedAuthority();
 			refreshTrustedAuthorities();
@@ -732,8 +733,8 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 			filterPanel = new JPanel();
 			filterPanel.setLayout(new GridBagLayout());
 			filterPanel.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+                LookAndFeel.getPanelLabelColor()));
 			filterPanel.add(jLabel, gridBagConstraints10);
 			filterPanel.add(getTrustedAuthorityName(), gridBagConstraints3);
 			filterPanel.add(jLabel1, gridBagConstraints5);

@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.ui.ifs;
 
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -17,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
@@ -30,7 +30,7 @@ public class AddAdminWindow extends JDialog {
 
 	private JPanel buttonPanel = null;
 
-	private JButton addAdmin = null;
+	private JButton addAdminButton = null;
 
 	private JButton cancelButton = null;
 
@@ -52,7 +52,7 @@ public class AddAdminWindow extends JDialog {
 
 	private JTextField gridIdentity = null;
 
-	private JButton findUser = null;
+	private JButton findUserButton = null;
 
 	/**
 	 * This is the default constructor
@@ -67,7 +67,6 @@ public class AddAdminWindow extends JDialog {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(500, 200);
@@ -165,7 +164,7 @@ public class AddAdminWindow extends JDialog {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new FlowLayout());
-			buttonPanel.add(getAddAdmin(), null);
+			buttonPanel.add(getAddAdminButton(), null);
 			buttonPanel.add(getCancelButton(), null);
 		}
 		return buttonPanel;
@@ -176,12 +175,12 @@ public class AddAdminWindow extends JDialog {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getAddAdmin() {
-		if (addAdmin == null) {
-			addAdmin = new JButton();
-			addAdmin.setText("Add Admin");
-			addAdmin.setIcon(DorianLookAndFeel.getAddIcon());
-			addAdmin.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getAddAdminButton() {
+		if (addAdminButton == null) {
+			addAdminButton = new JButton();
+			addAdminButton.setText("Add Admin");
+			addAdminButton.setIcon(LookAndFeel.getAddIcon());
+			addAdminButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
 						public void execute() {
@@ -198,19 +197,19 @@ public class AddAdminWindow extends JDialog {
 				}
 			});
 		}
-		return addAdmin;
+		return addAdminButton;
 	}
 
 	private void addAdmin() {
 		try {
-			addAdmin.setEnabled(false);
+			addAdminButton.setEnabled(false);
 			IFSAdministrationClient client = new IFSAdministrationClient(uri,
 					cred);
 			client.addAdmin(getGridIdentity().getText());
 			dispose();
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
-			addAdmin.setEnabled(true);
+			addAdminButton.setEnabled(true);
 		}
 	}
 
@@ -223,7 +222,7 @@ public class AddAdminWindow extends JDialog {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
 			cancelButton.setText("Cancel");
-			cancelButton.setIcon(DorianLookAndFeel.getCloseIcon());
+			cancelButton.setIcon(LookAndFeel.getCloseIcon());
 			cancelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -283,13 +282,13 @@ public class AddAdminWindow extends JDialog {
 			gridBagConstraints6.gridy = 0;
 			jLabel2 = new JLabel();
 			jLabel2.setText("Grid Identity");
-			jLabel2.setForeground(DorianLookAndFeel.getPanelLabelColor());
+			jLabel2.setForeground(LookAndFeel.getPanelLabelColor());
 			jLabel2.setFont(new Font("Dialog", Font.BOLD, 14));
 			userPanel = new JPanel();
 			userPanel.setLayout(new GridBagLayout());
 			userPanel.add(jLabel2, gridBagConstraints6);
 			userPanel.add(getGridIdentity(), gridBagConstraints7);
-			userPanel.add(getFindUser(), gridBagConstraints8);
+			userPanel.add(getFindUserButton(), gridBagConstraints8);
 		}
 		return userPanel;
 	}
@@ -311,12 +310,12 @@ public class AddAdminWindow extends JDialog {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getFindUser() {
-		if (findUser == null) {
-			findUser = new JButton();
-			findUser.setText("Find...");
-			findUser.setIcon(DorianLookAndFeel.getQueryIcon());
-			findUser.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getFindUserButton() {
+		if (findUserButton == null) {
+			findUserButton = new JButton();
+			findUserButton.setText("Find...");
+			findUserButton.setIcon(LookAndFeel.getQueryIcon());
+			findUserButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					FindUserDialog dialog = new FindUserDialog();
 					dialog.setModal(true);
@@ -327,7 +326,7 @@ public class AddAdminWindow extends JDialog {
 				}
 			});
 		}
-		return findUser;
+		return findUserButton;
 	}
 
 }
