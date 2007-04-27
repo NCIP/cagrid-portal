@@ -33,6 +33,8 @@ Upgrade Cycle
 
 To Do:  
 
+add tests for returning client handle reference arrays....
+
 may need to have a model upgrader that runs before the upgrader that enables hte model to be moved forwared
 so that the beans will actually work....
 
