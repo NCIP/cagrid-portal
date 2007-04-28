@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +16,14 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 
 /**
  * @author oster
- * 
- * TODO: add listeners to fields to update model (bean)
  * 
  */
 public class PointsOfContactEditorPanel extends JPanel implements ListSelectionListener {
@@ -361,8 +363,38 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
 		if (fnameTextField == null) {
 			fnameTextField = new JTextField();
 			fnameTextField.setColumns(10);
+			fnameTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+
+
+				public void removeUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+
+
+				public void insertUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+			});
 		}
 		return fnameTextField;
+	}
+
+
+	protected void updatePOCModel() {
+		PointOfContactDisplay pocD = (PointOfContactDisplay) getPocList().getSelectedValue();
+		if (pocD == null) {
+			return;
+		}
+		PointOfContact poc = pocD.getPoc();
+		poc.setFirstName(getFnameTextField().getText());
+		poc.setLastName(getLnameTextField().getText());
+		poc.setAffiliation(getAffiliationTextField().getText());
+		poc.setEmail(getEmailTextField().getText());
+		poc.setPhoneNumber(getPhoneTextField().getText());
+		poc.setRole((String) getRoleComboBox().getSelectedItem());
 	}
 
 
@@ -375,6 +407,21 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
 		if (lnameTextField == null) {
 			lnameTextField = new JTextField();
 			lnameTextField.setColumns(10);
+			lnameTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+
+
+				public void removeUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+
+
+				public void insertUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+			});
 		}
 		return lnameTextField;
 	}
@@ -389,6 +436,21 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
 		if (phoneTextField == null) {
 			phoneTextField = new JTextField();
 			phoneTextField.setColumns(10);
+			phoneTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+
+
+				public void removeUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+
+
+				public void insertUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+			});
 		}
 		return phoneTextField;
 	}
@@ -403,6 +465,21 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
 		if (emailTextField == null) {
 			emailTextField = new JTextField();
 			emailTextField.setColumns(10);
+			emailTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+
+
+				public void removeUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+
+
+				public void insertUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+			});
 		}
 		return emailTextField;
 	}
@@ -417,6 +494,21 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
 		if (affiliationTextField == null) {
 			affiliationTextField = new JTextField();
 			affiliationTextField.setColumns(10);
+			affiliationTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+
+
+				public void removeUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+
+
+				public void insertUpdate(DocumentEvent e) {
+					updatePOCModel();
+				}
+			});
 		}
 		return affiliationTextField;
 	}
@@ -433,6 +525,11 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
 			roleComboBox.addItem("Developer");
 			roleComboBox.addItem("Maintainer");
 			roleComboBox.setEditable(true);
+			roleComboBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					updatePOCModel();
+				}
+			});
 		}
 		return roleComboBox;
 	}
@@ -449,10 +546,14 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
 
 		public String toString() {
 			if (poc == null) {
-				return "";
+				return "null";
 			}
 
-			return poc.getFirstName() + " " + poc.getLastName();
+			return (poc.getFirstName() == null || poc.getFirstName().trim().equals("") ? "<unspecified>" : poc
+				.getFirstName())
+				+ " "
+				+ (poc.getLastName() == null || poc.getLastName().trim().equals("") ? "<unspecified>" : poc
+					.getLastName());
 		}
 
 
