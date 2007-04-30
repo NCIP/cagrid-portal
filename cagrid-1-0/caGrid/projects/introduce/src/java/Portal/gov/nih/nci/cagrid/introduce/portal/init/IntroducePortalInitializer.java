@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal.init;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.help.IntroduceHelp;
@@ -34,7 +36,11 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 			+ "log4j.properties");
 
 		ExtensionsLoader.getInstance();
-
+		prepareMenus();
+		checkGlobusLocation();
+	}
+	
+	private void prepareMenus(){
 		IntroduceHelp help = new IntroduceHelp();
 		JMenu helpMenu = PortalResourceManager.getInstance().getGridPortal().getJMenuBar().getMenu(HELP_MENU);
 		JMenuItem helpMenuItem = new JMenuItem("Introduce Help", IntroduceLookAndFeel.getHelpIcon());
@@ -62,7 +68,30 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 			}
 		});
 		configMenu.insert(configMenuItem, 0);
-
 	}
+	
+
+    private void checkGlobusLocation() {
+        String currGlobusLocation = ResourceManager.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION);
+        if ((currGlobusLocation == null) || (currGlobusLocation.length() == 0)) {
+            try {
+                String globusLocation = System.getenv("GLOBUS_LOCATION");
+                ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, globusLocation);
+            } catch (Throwable ex) {
+                ex.printStackTrace();
+                String[] error = {"Error getting GLOBUS_LOCATION environment variable: ", ex.getMessage(),
+                        "Please set GLOBUS_LOCATION in preferences!"};
+                ErrorDialog.showErrorDialog("Error getting GLOBUS_LOCATION", error);
+                try {
+                    ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, "");
+                } catch (Exception configEx) {
+                    // now what?
+                    configEx.printStackTrace();
+                    ErrorDialog.showErrorDialog(configEx);
+                }
+            }
+        }
+    }
+
 
 }

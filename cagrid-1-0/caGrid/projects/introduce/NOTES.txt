@@ -14,6 +14,8 @@ new extensions architecture to support callbacks for different areas of editing.
 
 support registration on resources
 
+
+
 ==================================================================================================
 Upgrade Manager:
 
@@ -33,14 +35,7 @@ Upgrade Cycle
 
 To Do:  
 
-add tests for returning client handle reference arrays....
-
-may need to have a model upgrader that runs before the upgrader that enables hte model to be moved forwared
-so that the beans will actually work....
-
-look at new build files and make sure they are being called correctly......
-
-need to not build service after an upgrade and let the user know that the service build files may need to be altered.  
+sandboxing by using a startup conf file that can be prompted to user....
 
 when updating introduce software there will be a problem with the files in the users home space that will need to also be updated.
 
@@ -77,6 +72,14 @@ add tests to system tests for (coverage report shows no coverage):
 add a .cvsignore file to generated skeletons that includes the gar.  my right mouse button is slowly wearing out... and i am lazy...
 
 ============================ D O N E ================================================================
+need to not build service after an upgrade and let the user know that the service build files may need to be altered.  
+
+look at new build files and make sure they are being called correctly......
+
+add tests for returning client handle reference arrays....
+
+may need to have a model upgrader that runs before the upgrader that enables hte model to be moved forwared
+so that the beans will actually work....
 
 need to use a different dir besides ext/lib for jars that don't need deployed with service, such as the soapFix jar.
 

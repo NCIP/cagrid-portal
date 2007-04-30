@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -22,22 +22,14 @@ public final class Introduce {
     private static SplashScreen introduceSplash;
 
 
-    public static void main(String[] args) {
-        showIntroduceSplash();
-        if (args.length > 0) {
-            showGridPortal(args[0]);
-        } else {
-            showGridPortal(null);
-        }
-        EventQueue.invokeLater(new IntroduceSplashCloser());
-    }
-
-
     private static void showIntroduceSplash() {
         try {
             introduceSplash = new SplashScreen("/introduceSplash.png");
+            PortalUtils.centerWindow(introduceSplash);
+            introduceSplash.setVisible(true);
+            Thread.sleep(10000);
         } catch (Exception e) {
-
+        	e.printStackTrace();
         }
     }
 
@@ -49,14 +41,14 @@ public final class Introduce {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        checkGlobusLocation();
     }
 
 
     private static void showGridPortal(String confFile) {
         try {
             initialize();
-
+            showIntroduceSplash();
+            
             GridPortal portal = null;
             if (confFile == null) {
                 confFile = ResourceManager.getPortalConfigFileLocation();
@@ -79,29 +71,6 @@ public final class Introduce {
     }
 
 
-    private static void checkGlobusLocation() {
-        String currGlobusLocation = ResourceManager.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION);
-        if ((currGlobusLocation == null) || (currGlobusLocation.length() == 0)) {
-            try {
-                String globusLocation = System.getenv("GLOBUS_LOCATION");
-                ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, globusLocation);
-            } catch (Throwable ex) {
-                ex.printStackTrace();
-                String[] error = {"Error getting GLOBUS_LOCATION environment variable: ", ex.getMessage(),
-                        "Please set GLOBUS_LOCATION in preferences!"};
-                ErrorDialog.showErrorDialog("Error getting GLOBUS_LOCATION", error);
-                try {
-                    ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, "");
-                } catch (Exception configEx) {
-                    // now what?
-                    configEx.printStackTrace();
-                    ErrorDialog.showErrorDialog(configEx);
-                }
-            }
-        }
-    }
-
-
     private static final class IntroduceSplashCloser implements Runnable {
         public void run() {
             try {
@@ -111,4 +80,14 @@ public final class Introduce {
             }
         }
     }
+    
+    public static void main(String[] args) {
+        if (args.length > 0) {
+            showGridPortal(args[0]);
+        } else {
+            showGridPortal(null);
+        }
+        EventQueue.invokeLater(new IntroduceSplashCloser());
+    }
+
 }
