@@ -24,6 +24,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
+import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -56,6 +57,7 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 		installWsEnumExtension();
 		copySchemas();
 		addEnumerationQueryMethod();
+        setEnumIteratorImpl();
 		createDataSourceClient();
 	}
 
@@ -227,4 +229,11 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 			+ File.separator + "schema" + File.separator
 			+ getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 	}
+    
+    
+    private void setEnumIteratorImpl() {
+        CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
+            DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY,
+            IterImplType.CAGRID_CONCURRENT_COMPLETE.toString(), false);
+    }
 }

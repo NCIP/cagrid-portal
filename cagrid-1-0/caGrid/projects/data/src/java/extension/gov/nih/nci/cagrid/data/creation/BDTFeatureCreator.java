@@ -20,6 +20,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
+import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -39,7 +40,7 @@ import org.projectmobius.common.XMLUtilities;
  * @author David Ervin
  * 
  * @created Apr 4, 2007 9:56:09 AM
- * @version $Id: BDTFeatureCreator.java,v 1.8 2007-04-30 14:39:27 dervin Exp $ 
+ * @version $Id: BDTFeatureCreator.java,v 1.9 2007-04-30 20:46:18 dervin Exp $ 
  */
 public class BDTFeatureCreator extends FeatureCreator {
 
@@ -52,6 +53,7 @@ public class BDTFeatureCreator extends FeatureCreator {
         ensureBdtExtensionAdded();
         copySchemaAndWsdl();
         copyWsEnumerationLibs();
+        setEnumIteratorImpl();
         addBdtQueryMethod();
         modifyBdtMetadata();
     }
@@ -279,5 +281,12 @@ public class BDTFeatureCreator extends FeatureCreator {
                 break;
             }
         }
+    }
+    
+    
+    private void setEnumIteratorImpl() {
+        CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
+            DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY,
+            IterImplType.CAGRID_CONCURRENT_COMPLETE.toString(), false);
     }
 }
