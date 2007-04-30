@@ -20,6 +20,7 @@ import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.upgrade.common.ExtensionUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.one.one.ExtensionUpgraderBase;
+import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -64,6 +65,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		// move the configuration for the CQL query processor into
 		// the service properties and remove it from the extension data
 		reconfigureCqlQueryProcessor(extensionData);
+        // add selected enum iterator
+        setEnumIteratorSelection();
 		// update the data service libraries
 		updateLibraries();
 		// update schemas
@@ -365,6 +368,15 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), extendedKey, value, false);
 		}
 	}
+    
+    
+    private void setEnumIteratorSelection() throws UpgradeException {
+        if (serviceIsUsingEnumeration()) {
+            CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
+                DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY, 
+                IterImplType.CAGRID_CONCURRENT_COMPLETE.toString(), false);
+        }
+    }
 
 
 	private CQLQueryProcessor loadQueryProcessorInstance(String queryProcessorClassName) throws UpgradeException {
