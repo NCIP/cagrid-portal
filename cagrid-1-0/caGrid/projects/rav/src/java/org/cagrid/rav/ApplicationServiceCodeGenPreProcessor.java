@@ -4,6 +4,7 @@
 package org.cagrid.rav;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.xml.namespace.QName;
 
@@ -11,11 +12,11 @@ import org.apache.log4j.Logger;
 import org.ggf.schemas.jsdl._2005._11.jsdl.Application_Type;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
@@ -95,16 +96,42 @@ public class ApplicationServiceCodeGenPreProcessor implements
 			MethodTypeInputs inputs = new MethodTypeInputs();
 			inputs.setInput(newInputs);
 			method.setInputs(inputs);
+			MethodTypeExceptionsException[] exceptionsArray = new MethodTypeExceptionsException[1];
+	        MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
+	        exception.setName("java.io.IOException");
+	        exceptionsArray[0] = exception;
+	        MethodTypeExceptions exceptions = new MethodTypeExceptions();
+	        exceptions.setException(exceptionsArray);
+	        method.setExceptions(exceptions);
+
 			CommonTools.addMethod(info.getServices().getService()[0], method);
 			logger.info(appTypeData.getApplicationName()
 					+ appTypeData.getApplicationVersion());
+			editServiceImpl(info);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	private void editServiceImpl() {
+	private void editServiceImpl(ServiceInformation info) throws CodegenExtensionException {
+		//info.getServices().getService()[0].
+		String serviceName = info.getServices().getService()[0].getName();
+		String basePackage = info.getServices().getService()[0].getPackageName();
+		// full name of the service impl class
+		String fullClassName = basePackage + ".service." + serviceName + "Impl";
+		// file name of the service impl java source
+		String sourceFileName = info.getBaseDirectory().getAbsolutePath() + File.separator + "src" + File.separator 
+			+ fullClassName.replace('.', File.separatorChar) + ".java";
+		// read the source file in
+		StringBuffer source = null;
+		try {
+			source = Utils.fileToStringBuffer(new File(sourceFileName));
+			logger.info(sourceFileName);
+			logger.info(source.toString());
+		} catch (IOException ex) {
+			throw new CodegenExtensionException("Error reading service source file: " + ex.getMessage(), ex);
+		}
 		
 	}
 

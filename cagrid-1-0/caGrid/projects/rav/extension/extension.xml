@@ -3,7 +3,8 @@
     <ns1:ServiceExtensionDescription displayName="Remote Application Virtualization" name="rav">
     <ns1:CreationUIDialog>org.cagrid.rav.ApplicationServicePanel</ns1:CreationUIDialog>
     <ns1:CodegenPreProcessor>org.cagrid.rav.ApplicationServiceCodeGenPreProcessor</ns1:CodegenPreProcessor>
-	<!-- 	<ns1:CodegenPostProcessor>org.cagrid.rav.codegen.ApplicationServiceOperationProviderCodegenPostProcessor</ns1:CodegenPostProcessor>
+    <ns1:CodegenPostProcessor>org.cagrid.rav.ApplicationServiceCodegenPostProcessor</ns1:CodegenPostProcessor>
+        <!--
 		<ns1:CreationPostProcessor>org.cagrid.rav.ApplicationServiceCreationPostProcessor</ns1:CreationPostProcessor>
 	-->
 		<ns1:ServiceModificationUIPanel>org.cagrid.rav.ApplicationServiceModificationPanel</ns1:ServiceModificationUIPanel>
