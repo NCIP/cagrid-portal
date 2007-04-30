@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.creation;
 
+import gov.nih.nci.cagrid.bdt.service.BDTServiceConstants;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
@@ -12,6 +13,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -22,7 +24,13 @@ import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
+
+import org.jdom.Element;
+import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.XMLUtilities;
 
 /** 
  *  BDTFeatureCreator
@@ -31,7 +39,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Apr 4, 2007 9:56:09 AM
- * @version $Id: BDTFeatureCreator.java,v 1.7 2007-04-10 14:30:28 hastings Exp $ 
+ * @version $Id: BDTFeatureCreator.java,v 1.8 2007-04-30 14:39:27 dervin Exp $ 
  */
 public class BDTFeatureCreator extends FeatureCreator {
 
@@ -45,6 +53,7 @@ public class BDTFeatureCreator extends FeatureCreator {
         copySchemaAndWsdl();
         copyWsEnumerationLibs();
         addBdtQueryMethod();
+        modifyBdtMetadata();
     }
     
     
@@ -224,6 +233,51 @@ public class BDTFeatureCreator extends FeatureCreator {
             moreExtensions[0] = bdtExtension;
             System.arraycopy(usedExtensions, 0, moreExtensions, 1, usedExtensions.length);
             getServiceInformation().getExtensions().setExtension(moreExtensions);
+        }
+    }
+    
+    
+    private void modifyBdtMetadata() throws CreationExtensionException {
+        ResourcePropertyType[] resourceProperties = getMainService().getResourcePropertiesList().getResourceProperty();
+        for (ResourcePropertyType metadata : resourceProperties) {
+            if (metadata.getQName().equals(BDTServiceConstants.METADATA_QNAME)) {
+                // get the filename of the metadata document
+                File metadataFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
+                    + File.separator + "etc" + File.separator + metadata.getFileLocation());
+                Element metadataRoot = null;
+                try {
+                    metadataRoot = XMLUtilities.fileNameToDocument(
+                        metadataFile.getAbsolutePath()).getRootElement();
+                } catch (MobiusException ex) {
+                    throw new CreationExtensionException(
+                        "Error loading BDT metadata for editing: " + ex.getMessage(), ex);
+                }
+                // create the enabled operations element to describe the BDT query method
+                Element enabledOpsElement = new Element("EnabledOperations", metadataRoot.getNamespace());
+                Element enabledOpElement = new Element("EnabledOperation", metadataRoot.getNamespace());
+                enabledOpElement.setAttribute("name", DataServiceConstants.BDT_QUERY_METHOD_NAME);
+                enabledOpsElement.addContent(enabledOpElement);
+                // add the enabled operations element to the metadata
+                metadataRoot.addContent(enabledOpsElement);
+                // default metadata has an empty EnabledOperations element, which can be removed
+                Iterator enabledIter = metadataRoot.getChildren("EnabledOperations", metadataRoot.getNamespace()).iterator();
+                while (enabledIter.hasNext()) {
+                    Element enabledElement = (Element) enabledIter.next();
+                    List children = enabledElement.getChildren("EnabledOperation", enabledElement.getNamespace());
+                    if (children == null || children.size() == 0) {
+                        enabledIter.remove();
+                        break;
+                    }
+                }
+                // save the metadata back out
+                try {
+                    String metadataXml = XMLUtilities.formatXML(XMLUtilities.elementToString(metadataRoot));
+                    Utils.stringBufferToFile(new StringBuffer(metadataXml), metadataFile.getAbsolutePath());
+                } catch (Exception ex) {
+                    throw new CreationExtensionException("Error storing edited BDT metadata: " + ex.getMessage(), ex);
+                }
+                break;
+            }
         }
     }
 }
