@@ -27,7 +27,7 @@ import org.globus.ws.enumeration.IterationResult;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 10:42:15 AM
- * @version $Id: BaseSDKObjectIterator.java,v 1.1 2007-03-13 15:04:05 dervin Exp $ 
+ * @version $Id: BaseSDKObjectIterator.java,v 1.2 2007-04-30 17:52:41 dervin Exp $ 
  */
 public abstract class BaseSDKObjectIterator implements EnumIterator {
 	
@@ -124,7 +124,7 @@ public abstract class BaseSDKObjectIterator implements EnumIterator {
 	 * Releases the enumeration and cleans up resources.
 	 * Deletes the temporary persistance file
 	 */
-	public void release() {
+	public synchronized void release() {
 		try {
 			fileReader.close();
 		} catch (Exception ex) {
