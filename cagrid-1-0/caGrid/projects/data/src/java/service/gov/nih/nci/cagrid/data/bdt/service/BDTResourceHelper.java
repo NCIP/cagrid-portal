@@ -13,7 +13,8 @@ import gov.nih.nci.cagrid.data.mapping.ClassToQname;
 import gov.nih.nci.cagrid.data.mapping.Mappings;
 import gov.nih.nci.cagrid.data.service.BaseServiceImpl;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
-import gov.nih.nci.cagrid.wsenum.utils.PersistantSDKObjectIterator;
+import gov.nih.nci.cagrid.wsenum.utils.EnumIteratorFactory;
+import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -37,7 +38,7 @@ import org.w3c.dom.Document;
  * @author David Ervin
  * 
  * @created Mar 12, 2007 2:08:57 PM
- * @version $Id: BDTResourceHelper.java,v 1.1 2007-03-21 16:38:42 dervin Exp $ 
+ * @version $Id: BDTResourceHelper.java,v 1.2 2007-04-30 20:46:39 dervin Exp $ 
  */
 public class BDTResourceHelper extends BaseServiceImpl {
 	private CQLQuery query;
@@ -66,8 +67,11 @@ public class BDTResourceHelper extends BaseServiceImpl {
 				Iterator resultIter = processQueryAndIterate();
 				// get the qname of the object types
 				QName qName = getQueryTargetQName();
-				enumIter = PersistantSDKObjectIterator.createIterator(
-					resultIter, qName, getConsumableInputStream());
+                // determine the enumerator implementation type
+                String enumeratorTypeValue = getDataServiceConfig().getProperty(DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY);
+                IterImplType implType = IterImplType.valueOf(enumeratorTypeValue);
+                // get the enum iterator
+                enumIter = EnumIteratorFactory.createIterator(implType, resultIter, qName, getConsumableInputStream());
 			} catch (gov.nih.nci.cagrid.data.QueryProcessingException ex) {
 				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 			} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
@@ -123,8 +127,7 @@ public class BDTResourceHelper extends BaseServiceImpl {
 	public void cleanUp() {
 		if (enumIter != null) {
 			enumIter.release();
-		}
-		
+		}		
 	}
 	
 	

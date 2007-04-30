@@ -2,8 +2,12 @@ package gov.nih.nci.cagrid.data.enumeration.service;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
+import gov.nih.nci.cagrid.cqlresultset.CQLAttributeResult;
+import gov.nih.nci.cagrid.cqlresultset.CQLCountResult;
+import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
@@ -11,9 +15,10 @@ import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.data.service.BaseServiceImpl;
 import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
+import gov.nih.nci.cagrid.wsenum.utils.EnumIteratorFactory;
 import gov.nih.nci.cagrid.wsenum.utils.EnumerateResponseFactory;
 import gov.nih.nci.cagrid.wsenum.utils.EnumerationCreationException;
-import gov.nih.nci.cagrid.wsenum.utils.SimplePersistantSDKObjectIterator;
+import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -92,10 +97,15 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 			// create the EnumIterator from the objects
 			InputStream wsddStream = new FileInputStream(serverConfigLocation);
 			QName name = Utils.getRegisteredQName(resultList.get(0).getClass());
-			EnumIterator enumIter = SimplePersistantSDKObjectIterator.createIterator(resultList, name, wsddStream);
+            
+            // get the service property for the enum iterator type
+            String enumIterTypeValue = getDataServiceConfig().getProperty(DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY);
+            IterImplType implType = IterImplType.valueOf(enumIterTypeValue);
+            
+            EnumIterator enumIter = EnumIteratorFactory.createIterator(implType, resultList, name, wsddStream);
 			return enumIter;
 		} catch (Exception ex) {
-			throw new gov.nih.nci.cagrid.data.QueryProcessingException(ex);
+			throw new QueryProcessingException(ex);
 		}
 	}
 	
@@ -105,10 +115,31 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 		gov.nih.nci.cagrid.data.MalformedQueryException {
 		// perform the query
 		Iterator results = processor.processQueryLazy(query);
-		
-		// create an iterator
-		EnumIterator iterator = new LazyQueryResultEnumIterator(results);
-		return iterator;
+        
+        try {
+            // figure out the result type
+            QName name = null;
+            if (query.getQueryModifier() == null) {
+                name = CQLObjectResult.getTypeDesc().getXmlType();
+            } else if (query.getQueryModifier().isCountOnly()) {
+                name = CQLCountResult.getTypeDesc().getXmlType();
+            } else {
+                name = CQLAttributeResult.getTypeDesc().getXmlType();
+            }
+            
+            // get the service property for the enum iterator type
+            String enumIterTypeValue = getDataServiceConfig().getProperty(DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY);
+            IterImplType implType = IterImplType.valueOf(enumIterTypeValue);
+            String serverConfigLocation = ServiceConfigUtil.getConfigProperty(
+                DataServiceConstants.SERVER_CONFIG_LOCATION);
+            InputStream wsddStream = new FileInputStream(serverConfigLocation);
+
+            // create an iterator
+            EnumIterator iterator = EnumIteratorFactory.createIterator(implType, results, name, wsddStream);
+            return iterator;
+        } catch (Exception ex) {
+            throw new QueryProcessingException(ex);
+        }
 	}
 }
 
