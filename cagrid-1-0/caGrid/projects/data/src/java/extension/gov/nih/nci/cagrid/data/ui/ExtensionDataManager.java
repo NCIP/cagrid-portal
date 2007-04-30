@@ -20,7 +20,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 10:04:04 AM
- * @version $Id: ExtensionDataManager.java,v 1.2 2007-04-23 17:26:34 dervin Exp $ 
+ * @version $Id: ExtensionDataManager.java,v 1.3 2007-04-30 19:04:29 dervin Exp $ 
  */
 public class ExtensionDataManager {
     
@@ -383,6 +383,32 @@ public class ExtensionDataManager {
     public boolean isSuppliedDomainModel() throws Exception {
         CadsrInformation info = getCadsrInformation();
         return info.isUseSuppliedModel();
+    }
+    
+    
+    /**
+     * Gets the flag indicating the service is to use BDT
+     * 
+     * @return
+     *      The use BDT flag
+     * @throws Exception
+     */
+    public boolean isUseBdt() throws Exception {
+        Data data = getExtensionData();
+        return data.getServiceFeatures().isUseBdt();
+    }
+    
+    
+    /**
+     * Gets the flag indicating the service is to use WS-Enumeration
+     * 
+     * @return
+     *      The use WS-Enumeration flag
+     * @throws Exception
+     */
+    public boolean isUseWsEnumeration() throws Exception {
+        Data data = getExtensionData();
+        return data.getServiceFeatures().isUseWsEnumeration();
     }
     
     

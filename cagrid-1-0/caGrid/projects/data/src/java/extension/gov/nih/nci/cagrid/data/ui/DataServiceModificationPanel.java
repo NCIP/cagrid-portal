@@ -76,6 +76,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private JScrollPane qpParamsScrollPane = null;
     private JPanel processorConfigurationPanel = null;
     private JButton launchProcessorConfigButton = null;
+    private EnumIteratorSelectionPanel iterSelectionPanel = null;
 
 	private transient Map packageToClassMap = null;
     
@@ -384,8 +385,20 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private JTabbedPane getMainTabbedPane() {
 		if (mainTabbedPane == null) {
 			mainTabbedPane = new JTabbedPane();
-			mainTabbedPane.addTab("Domain Model", null, getDomainConfigPanel(), null);
-			mainTabbedPane.addTab("Query Processor", null, getProcessorConfigPanel(), null);
+			mainTabbedPane.addTab("Domain Model", null, getDomainConfigPanel(), 
+                "Selection of packages and classes in domain model");
+			mainTabbedPane.addTab("Query Processor", null, getProcessorConfigPanel(), 
+                "Selection and configuration of the CQL query processor");
+			try {
+			    if (dataManager.isUseBdt() || dataManager.isUseWsEnumeration()) {
+			        mainTabbedPane.addTab("Enumeration", null, getIterSelectionPanel(), 
+			        "Selection of WS-Enumeration implementation");
+			    }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                ErrorDialog.showErrorDialog(
+                    "Error getting enumeration use status", ex.getMessage(), ex);
+            }
 			mainTabbedPane.addTab("Details", null, getDetailConfigPanel(),
 				"Class to element mapping, serialization, validation");
 		}
@@ -531,6 +544,14 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
             });
         }
         return launchProcessorConfigButton;
+    }
+    
+    
+    private EnumIteratorSelectionPanel getIterSelectionPanel() {
+        if (iterSelectionPanel == null) {
+            iterSelectionPanel = new EnumIteratorSelectionPanel(getServiceInfo());
+        }
+        return iterSelectionPanel;
     }
     
     
