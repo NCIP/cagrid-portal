@@ -120,6 +120,8 @@ public class DataServiceConstants {
 	public static final String ENUMERATION_QUERY_METHOD_NAME = "enumerationQuery";
 	public static final String ENUMERATION_DATA_SERVICE_PACKAGE = DATA_SERVICE_PACKAGE + ".enumeration";
 	public static final String ENUMERATION_DATA_SERVICE_NAMESPACE = "http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService";
+    
+    public static final String ENUMERATION_ITERATOR_TYPE_PROPERTY = DATA_SERVICE_PARAMS_PREFIX + "_enumIteratorType";
 	
 	// bdt query method constants
 	public static final String BDT_QUERY_METHOD_NAME = "bdtQuery";
