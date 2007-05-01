@@ -26,7 +26,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 23, 2006 
- * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.2 2007-03-20 17:31:53 dervin Exp $ 
+ * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.3 2007-05-01 14:41:20 dervin Exp $ 
  */
 public class InvokeEnumerationDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
@@ -49,16 +49,15 @@ public class InvokeEnumerationDataServiceStep extends Step {
 		// create the generic enumeration client
 		EnumerationDataServiceClient client = new EnumerationDataServiceClient(serviceUrl);
 		
-		// run an enumeration query
-		EnumerateResponse response = queryForBooks(client);
+		// iterate over an enumeration response
+		iterateEnumeration(client);
 		
-		// iterate the response
-		iterateEnumeration(response, client);
-		
+        // make sure invalid classes still throw exceptions
 		queryForInvalidClass(client);
 		
+        // make sure malformed queries behave as expected
 		submitMalformedQuery(client);
-	}
+    }
 	
 	
 	private void queryForInvalidClass(EnumerationDataServiceClient client) throws Exception {
@@ -126,8 +125,9 @@ public class InvokeEnumerationDataServiceStep extends Step {
 	}
 	
 	
-	private void iterateEnumeration(EnumerateResponse response, EnumerationDataServiceClient dataSource) throws Exception {
-		
+	private void iterateEnumeration(EnumerationDataServiceClient dataSource) throws Exception {
+		EnumerateResponse response = queryForBooks(dataSource);
+        
 		/*
 		 * This is the preferred way to access an enumeration, but the client enum iterator hides
 		 * remote exceptions from the user and throws an empty NoSuchElement exception.
@@ -151,6 +151,15 @@ public class InvokeEnumerationDataServiceStep extends Step {
 			}
 		} finally {
 			iter.release();
+            try {
+                iter.next();
+                fail("Call to next() after release should have failed!");
+            } catch (NoSuchElementException ex) {
+                // expected
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                fail("Exception other than NoSuchElementException thrown: " + ex.getClass().getName());
+            }
 		}
 		assertTrue("No results were returned from the enumeration", resultCount != 0);
 		
