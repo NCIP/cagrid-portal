@@ -71,6 +71,9 @@ public class HostCertificateRequestUtility {
 				+ emailSubject
 				+ "\n\nIn the body of the email please include the following:\n\n"
 				+ "----------------START BODY----------------\n"
+				+ "Hostname: "
+				+ hostname
+				+ "\n"
 				+ "First Name: "
 				+ firstName
 				+ "\n"

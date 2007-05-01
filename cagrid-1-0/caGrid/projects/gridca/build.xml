@@ -246,7 +246,7 @@ GSBT - Globus Service Build Tools
 		<input message="Please enter the reason for you request:" addproperty="reason.input" />
 		<java classname="gov.nih.nci.cagrid.gridca.common.HostCertificateRequestUtility" fork="yes" newenvironment="true">
 			<arg value="langella@bmi.osu.edu" />
-			<arg value="caGrid 1.0 Development Host Certificate Request" />
+			<arg value="caGrid Development Host Certificate Request" />
 			<arg value="5" />
 			<arg value="${hostname.input}" />
 			<arg value="${first.name.input}" />
