@@ -27,7 +27,6 @@ public final class Introduce {
             introduceSplash = new SplashScreen("/introduceSplash.png");
             PortalUtils.centerWindow(introduceSplash);
             introduceSplash.setVisible(true);
-            Thread.sleep(10000);
         } catch (Exception e) {
         	e.printStackTrace();
         }
