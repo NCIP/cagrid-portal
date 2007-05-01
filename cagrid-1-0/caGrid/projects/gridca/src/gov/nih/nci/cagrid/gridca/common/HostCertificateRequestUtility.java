@@ -24,7 +24,12 @@ public class HostCertificateRequestUtility {
 			String emailSubject = args[1];
 			String days = args[2];
 			String hostname = args[3];
-			boolean manual = true;
+			String firstName = args[4];
+			String lastName = args[5];
+			String organization = args[6];
+			String project = args[7];
+			String phoneNumber = args[8];
+			String reason = args[9];
 
 			File dir = new File(Utils.getCaGridUserHome().getAbsolutePath() + File.separator + "gridca");
 			dir.mkdirs();
@@ -56,30 +61,50 @@ public class HostCertificateRequestUtility {
 			System.out.println();
 			System.out.println("*** Directions ***");
 			System.out.println();
-			if (manual) {
-				File f = new File(dir.getAbsolutePath() + File.separator + hostname + "-directions.txt");
-				f.delete();
-				String directions = "To request a host certificate, email your CA administrator at "
-					+ caAdminEmail
-					+ ".\n"
-					+ "Please set the subject of the email to: "
-					+ emailSubject
-					+ "\nand in the body of the email please specify you reason for needing a certificate.\n"
-					+ "It is also required that the public key you just generated is attached to the email.\n"
-					+ "The public key you need to attach to the email can be found at: \n\n	"
-					+ publicKey.getAbsolutePath()
-					+ "\n\nYou should receive an email response to your certificate request within\n"
-					+ days
-					+ " business day(s).  If your certificate request is approved, your certificate\n"
-					+ "will come attached in the email response.  Please save the attached certificate to:\n\n	"
-					+ cert.getAbsolutePath()
-					+ "\n\nTo use these credentials for your globus container, type the following command from your GLOBUS_LOCATION:\n\n bin/globus-start-container -containerDesc "
-					+ des.getAbsolutePath() + "\n\nThese directions have been written to the file:\n "
-					+ f.getAbsolutePath();
-				System.out.println(directions);
-				StringBuffer sb2 = new StringBuffer(directions);
-				Utils.stringBufferToFile(sb2, f.getAbsolutePath());
-			}
+
+			File f = new File(dir.getAbsolutePath() + File.separator + hostname + "-directions.txt");
+			f.delete();
+			String directions = "To request a host certificate, email your CA administrator at "
+				+ caAdminEmail
+				+ "."
+				+ "Please set the subject of the email to:\n\n"
+				+ emailSubject
+				+ "\n\nIn the body of the email please include the following:\n\n"
+				+ "----------------START BODY----------------\n"
+				+ "First Name: "
+				+ firstName
+				+ "\n"
+				+ "Last Name: "
+				+ lastName
+				+ "\n"
+				+ "Organization: "
+				+ organization
+				+ "\n"
+				+ "Project: "
+				+ project
+				+ "\n"
+				+ "Phone Number: "
+				+ phoneNumber
+				+ "\n"
+				+ "Reason: "
+				+ reason
+				+ "\n"
+				+ "----------------END BODY----------------\n"
+				+ "\n"
+				+ "It is also required that the public key you just generated is attached to the email.\n"
+				+ "The public key you need to attach to the email can be found at: \n\n	"
+				+ publicKey.getAbsolutePath()
+				+ "\n\nYou should receive an email response to your certificate request within\n"
+				+ days
+				+ " business day(s).  If your certificate request is approved, your certificate\n"
+				+ "will come attached in the email response.  Please save the attached certificate to:\n\n	"
+				+ cert.getAbsolutePath()
+				+ "\n\nTo use these credentials for your globus container, type the following command from your GLOBUS_LOCATION:\n\n bin/globus-start-container -containerDesc "
+				+ des.getAbsolutePath() + "\n\nThese directions have been written to the file:\n "
+				+ f.getAbsolutePath();
+			System.out.println(directions);
+			StringBuffer sb2 = new StringBuffer(directions);
+			Utils.stringBufferToFile(sb2, f.getAbsolutePath());
 
 		} catch (Exception e) {
 			e.printStackTrace();
