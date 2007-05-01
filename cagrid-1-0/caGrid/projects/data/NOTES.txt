@@ -47,7 +47,8 @@ TODO:
 	-- This actually used the ResourceManager from Introduce, which did the wrong thing.  So it's fixed in Introduce, and anyone using that call will get the fix too
 36[D]: Add unit tests for CQL Results validation
 37[D]: Make CQL Object Results iterator perform better by avoiding repeated object creation
-38[I]: Break appart DataServiceModificationPanel... it's 1700 lines long, and unweildy
+38[D]: Break appart DataServiceModificationPanel... it's 1700 lines long, and unweildy
+39[ ]: BDT Data Service's Grid FTP impl should give an option of a single large chunk or individual results per URL
 
 I = In Progress
 D = Done
