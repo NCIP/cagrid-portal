@@ -8,6 +8,7 @@
 	<property name="build.classes" location="${build}/classes" />
 	<property name="build.jars" location="${build}/jars" />
 	<property name="lib.dir" location="lib" />
+	<property name="ext.lib.dir" location="ext/lib" />
 	<property environment="env" />
 
 	<property file="${basedir}/ext/resources/cagrid.properties" />
@@ -15,6 +16,7 @@
 
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}" includes="**/*.jar" />
+		<fileset dir="${ext.lib.dir}" includes="**/*.jar" />
 	</path>
 
 	<target name="init" depends="clean">

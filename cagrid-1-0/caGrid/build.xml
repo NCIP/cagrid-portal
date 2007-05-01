@@ -58,6 +58,7 @@
             <artifact refid="mobius.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
+        	<artifact refid="wizard.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
     </target>
@@ -532,6 +533,7 @@
         <resolveDependencies extdir="${projects.dir}/installer/ext">
             <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
+        	<artifact refid="wizard.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
     </target>

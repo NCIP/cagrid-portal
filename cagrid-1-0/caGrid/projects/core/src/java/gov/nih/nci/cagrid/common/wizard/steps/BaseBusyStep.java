@@ -1,4 +1,4 @@
-package org.cagrid.installer.steps;
+package gov.nih.nci.cagrid.common.wizard.steps;
 
 import java.awt.Dimension;
 import java.awt.Font;
