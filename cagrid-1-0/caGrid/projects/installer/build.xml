@@ -74,56 +74,5 @@
 		</java>
 	</target>
 
-
-
-	<!--
-	
-	<target name="dist" depends="compile" description="generate the distribution">
-
-		<mkdir dir="${dist}/lib" />
-		<jar jarfile="${dist}/lib/${cagrid.master.jar.prefix}systemCheck.jar" basedir="${build}" />
-		<copy todir="${dist}/lib">
-			<fileset dir="${lib.dir}">
-				<include name="**/*.jar" />
-			</fileset>
-		</copy>
-	</target>
-	
-	<target name="jar-certificate-tasks" depends="compile">
-		<jar destfile="${dist}/${project.jar.prefix}certificate_tasks.jar" basedir="${build.classes}" includes="**/customtasks/*.class" />
-	</target>
-	
-	<target name="signjar" depends="generatekey" description="signs the jars">
-		<signjar jar="${dist}/lib/ant.jar" alias="installer" storepass="installerpassword" keystore="${dist}/lib/installerKeys" />
-		<signjar jar="${dist}/lib/${project.jar.prefix}systemCheck.jar" alias="installer" storepass="installerpassword" keystore="${dist}/lib/installerKeys" />
-	</target>
-
-	<target name="generatekey" depends="dist" description="generates keys">
-		<genkey alias="installer" storepass="installerpassword" keystore="${dist}/lib/installerKeys" dname="CN=Ant Group, OU=Jakarta Division, O=Apache.org, C=US" />
-	</target>
-
-	<target name="copy-common-installer-jars">
-		<copy todir="installers/common/installer/template/installclasspath/resources/lib/ext">
-			<fileset dir="ext/lib">
-				<include name="${cagrid.master.jar.prefix}core.jar" />
-			</fileset>
-			<fileset dir="${env.GLOBUS_LOCATION}/lib">
-				<include name="jce-jdk13-125.jar" />
-				<include name="cog-jglobus.jar" />
-			</fileset>
-		</copy>
-		<copy todir="installers/common/installer/template/installclasspath/resources/lib">
-			<fileset dir="deployer/lib">
-				<include name="xmltask-v1.14.jar" />
-			</fileset>
-			<fileset dir="${dist}">
-				<include name="certificate_tasks.jar" />
-			</fileset>
-		</copy>
-	</target>
-	-->
-
-
-
 </project>
 
