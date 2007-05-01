@@ -33,36 +33,36 @@ public class GridSourceAdapter extends BaseSourceAdapter {
 	}
 
 
-	public Subject getSubject(String id) throws SubjectNotFoundException {
-		return createSubject(id);
+	public Subject getSubject(String subjectId) throws SubjectNotFoundException {
+		return createSubject(subjectId);
 	}
 
 
-	public Subject getSubjectByIdentifier(String name) throws SubjectNotFoundException {
-		return createSubject(id);
+	public Subject getSubjectByIdentifier(String subjectName) throws SubjectNotFoundException {
+		return createSubject(subjectName);
 	}
 
 
-	private Subject createSubject(String id) throws SubjectNotFoundException {
-		if ((id == null) || (id.equals(AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID))) {
+	private Subject createSubject(String subjectId) throws SubjectNotFoundException {
+		if ((subjectId == null) || (subjectId.equals(AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID))) {
 			return new AnonymousGridUserSubject(this);
-		} else if (id.indexOf("CN=host/") != -1) {
-			validateGridId(id);
-			return new GridHostSubject(id, this);
+		} else if (subjectId.indexOf("CN=host/") != -1) {
+			validateGridId(subjectId);
+			return new GridHostSubject(subjectId, this);
 		} else {
-			validateGridId(id);
-			return new GridUserSubject(id, this);
+			validateGridId(subjectId);
+			return new GridUserSubject(subjectId, this);
 		}
 	}
 
 
-	private void validateGridId(String id) throws SubjectNotFoundException {
-		if (!id.startsWith("/")) {
-			throw new SubjectNotFoundException("The id " + id + " is not a valid grid identity.");
+	private void validateGridId(String gridId) throws SubjectNotFoundException {
+		if (!gridId.startsWith("/")) {
+			throw new SubjectNotFoundException("The id " + gridId + " is not a valid grid identity.");
 		}
 
-		if (id.indexOf("CN=") == -1) {
-			throw new SubjectNotFoundException("The id " + id + " is not a valid grid identity.");
+		if (gridId.indexOf("CN=") == -1) {
+			throw new SubjectNotFoundException("The id " + gridId + " is not a valid grid identity.");
 		}
 	}
 

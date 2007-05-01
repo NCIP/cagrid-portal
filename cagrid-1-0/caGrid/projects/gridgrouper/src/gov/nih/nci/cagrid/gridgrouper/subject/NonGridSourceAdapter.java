@@ -33,18 +33,18 @@ public class NonGridSourceAdapter extends BaseSourceAdapter {
 	}
 
 
-	public Subject getSubject(String id) throws SubjectNotFoundException {
-		return createSubject(id);
+	public Subject getSubject(String subjectId) throws SubjectNotFoundException {
+		return createSubject(subjectId);
 	}
 
 
-	public Subject getSubjectByIdentifier(String name) throws SubjectNotFoundException {
-		return createSubject(id);
+	public Subject getSubjectByIdentifier(String subjectName) throws SubjectNotFoundException {
+		return createSubject(subjectName);
 	}
 
 
-	private Subject createSubject(String id) throws SubjectNotFoundException {
-		return new NonGridSubject(id, this);
+	private Subject createSubject(String subjectId) throws SubjectNotFoundException {
+		return new NonGridSubject(subjectId, this);
 	}
 
 
