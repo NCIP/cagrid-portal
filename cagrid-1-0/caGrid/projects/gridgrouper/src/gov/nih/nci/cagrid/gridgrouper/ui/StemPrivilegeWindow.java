@@ -91,7 +91,6 @@ public class StemPrivilegeWindow extends ApplicationComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(500, 175);
@@ -340,22 +339,22 @@ public class StemPrivilegeWindow extends ApplicationComponent {
 
 
 	private String addUpdateCreate() throws Exception {
-		boolean isSelected = getCreate().isSelected();
+		boolean createSelected = getCreate().isSelected();
 		boolean wasSelected = false;
 		if (caddy != null) {
 			wasSelected = caddy.hasCreate();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected, NamingPrivilege.CREATE);
+		return addUpdatePrivilege(wasSelected, createSelected, NamingPrivilege.CREATE);
 	}
 
 
 	private String addUpdateStem() throws Exception {
-		boolean isSelected = getStem().isSelected();
+		boolean stemSelected = getStem().isSelected();
 		boolean wasSelected = false;
 		if (caddy != null) {
 			wasSelected = caddy.hasStem();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected, NamingPrivilege.STEM);
+		return addUpdatePrivilege(wasSelected, stemSelected, NamingPrivilege.STEM);
 	}
 
 

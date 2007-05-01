@@ -25,6 +25,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 
 
@@ -234,7 +235,6 @@ public class StemBrowser extends JPanel {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
@@ -317,7 +317,7 @@ public class StemBrowser extends JPanel {
 			stemProperties.add(getCredentials(), gridBagConstraints6);
 			stemProperties.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Grid Grouper Stem",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 		}
 		return stemProperties;
 	}
@@ -654,7 +654,7 @@ public class StemBrowser extends JPanel {
 			detailsPanel.add(getSystemExtension(), gridBagConstraints17);
 			detailsPanel.setBorder(BorderFactory.createTitledBorder(null, "Stem Details",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			detailsPanel.add(jLabel7, gridBagConstraints18);
 			detailsPanel.add(getJScrollPane(), gridBagConstraints19);
 			detailsPanel.add(getUpdateStem(), gridBagConstraints20);
@@ -864,7 +864,7 @@ public class StemBrowser extends JPanel {
 			privsList.setLayout(new GridBagLayout());
 			privsList.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Privileges",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			privsList.add(getJScrollPane1(), gridBagConstraints21);
 			privsList.add(getPrivButtons(), gridBagConstraints23);
 		}
@@ -925,7 +925,7 @@ public class StemBrowser extends JPanel {
 		if (getPrivileges == null) {
 			getPrivileges = new JButton();
 			getPrivileges.setText("Get Privileges");
-			getPrivileges.setIcon(GridGrouperLookAndFeel.getQueryIcon());
+			getPrivileges.setIcon(LookAndFeel.getQueryIcon());
 			getPrivileges.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					loadPrivileges();
@@ -1009,8 +1009,8 @@ public class StemBrowser extends JPanel {
 						public void execute() {
 							try {
 								getPrivs().doubleClick();
-							} catch (Exception e) {
-								ErrorDialog.showError(e);
+							} catch (Exception ex) {
+								ErrorDialog.showError(ex);
 							}
 						}
 					};
@@ -1056,7 +1056,7 @@ public class StemBrowser extends JPanel {
 			stemsPanel.setLayout(new GridBagLayout());
 			stemsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Child Stems",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			stemsPanel.add(getJScrollPane2(), gridBagConstraints33);
 			stemsPanel.add(getButtonPanel(), gridBagConstraints40);
 		}
@@ -1135,7 +1135,7 @@ public class StemBrowser extends JPanel {
 			addStemPanel.setLayout(new GridBagLayout());
 			addStemPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Stem",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			addStemPanel.add(jLabel10, gridBagConstraints35);
 			addStemPanel.add(getChildName(), gridBagConstraints36);
 			addStemPanel.add(jLabel11, gridBagConstraints37);
@@ -1181,7 +1181,7 @@ public class StemBrowser extends JPanel {
 		if (addChildStem == null) {
 			addChildStem = new JButton();
 			addChildStem.setText("Add Child Stem");
-			addChildStem.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addChildStem.setIcon(LookAndFeel.getAddIcon());
 			addChildStem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -1205,9 +1205,9 @@ public class StemBrowser extends JPanel {
 								node.refresh();
 								setStem();
 								node.getBrowser().getProgress().stopEvent(eid, "Successfully added a child stem!!!");
-							} catch (Exception e) {
+							} catch (Exception ex) {
 								node.getBrowser().getProgress().stopEvent(eid, "Error adding a child stem!!!");
-								ErrorDialog.showError(e);
+								ErrorDialog.showError(ex);
 							}
 						}
 					};
@@ -1257,7 +1257,7 @@ public class StemBrowser extends JPanel {
 		if (viewStem == null) {
 			viewStem = new JButton();
 			viewStem.setText("View Stem");
-			viewStem.setIcon(GridGrouperLookAndFeel.getQueryIcon());
+			viewStem.setIcon(LookAndFeel.getQueryIcon());
 			viewStem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -1281,7 +1281,7 @@ public class StemBrowser extends JPanel {
 		if (removeStem == null) {
 			removeStem = new JButton();
 			removeStem.setText("Remove Stem");
-			removeStem.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
+			removeStem.setIcon(LookAndFeel.getRemoveIcon());
 			removeStem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -1302,9 +1302,9 @@ public class StemBrowser extends JPanel {
 								setStem();
 								node.getBrowser().getProgress()
 									.stopEvent(eid, "Successfully removed the child stem!!!");
-							} catch (Exception e) {
+							} catch (Exception ex) {
 								node.getBrowser().getProgress().stopEvent(eid, "Error removing the child stem!!!");
-								ErrorDialog.showError(e);
+								ErrorDialog.showError(ex);
 							}
 						}
 					};
@@ -1343,7 +1343,7 @@ public class StemBrowser extends JPanel {
 			groupsPanel.setLayout(new GridBagLayout());
 			groupsPanel.setBorder(BorderFactory.createTitledBorder(null, "Child Group(s)",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			groupsPanel.add(getGroupsPane(), gridBagConstraints45);
 			groupsPanel.add(getGroupsButtonPanel(), gridBagConstraints46);
 		}
@@ -1393,7 +1393,7 @@ public class StemBrowser extends JPanel {
 			addGroupsPanel.setLayout(new GridBagLayout());
 			addGroupsPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Group",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			addGroupsPanel.add(jLabel13, gridBagConstraints52);
 			addGroupsPanel.add(jLabel12, gridBagConstraints49);
 			addGroupsPanel.add(getGroupExtension(), gridBagConstraints50);
@@ -1464,7 +1464,7 @@ public class StemBrowser extends JPanel {
 		if (viewGroup == null) {
 			viewGroup = new JButton();
 			viewGroup.setText("View Group");
-			viewGroup.setIcon(GridGrouperLookAndFeel.getQueryIcon());
+			viewGroup.setIcon(LookAndFeel.getQueryIcon());
 			viewGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -1488,7 +1488,7 @@ public class StemBrowser extends JPanel {
 		if (removeButton == null) {
 			removeButton = new JButton();
 			removeButton.setText("Remove Group");
-			removeButton.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
+			removeButton.setIcon(LookAndFeel.getRemoveIcon());
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -1509,9 +1509,9 @@ public class StemBrowser extends JPanel {
 								setStem();
 								node.getBrowser().getProgress().stopEvent(eid,
 									"Successfully removed the child group!!!");
-							} catch (Exception e) {
+							} catch (Exception ex) {
 								node.getBrowser().getProgress().stopEvent(eid, "Error removing the child group!!!");
-								ErrorDialog.showError(e);
+								ErrorDialog.showError(ex);
 							}
 						}
 					};
@@ -1563,7 +1563,7 @@ public class StemBrowser extends JPanel {
 		if (addGroup == null) {
 			addGroup = new JButton();
 			addGroup.setText("Add Group");
-			addGroup.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addGroup.setIcon(LookAndFeel.getAddIcon());
 			addGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -1587,9 +1587,9 @@ public class StemBrowser extends JPanel {
 								node.refresh();
 								setStem();
 								node.getBrowser().getProgress().stopEvent(eid, "Successfully added a child group!!!");
-							} catch (Exception e) {
+							} catch (Exception ex) {
 								node.getBrowser().getProgress().stopEvent(eid, "Error adding a child group!!!");
-								ErrorDialog.showError(e);
+								ErrorDialog.showError(ex);
 							}
 						}
 					};
@@ -1671,18 +1671,18 @@ public class StemBrowser extends JPanel {
 		if (addPrivileges == null) {
 			addPrivileges = new JButton();
 			addPrivileges.setText("Add Privilege(s)");
-			addPrivileges.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addPrivileges.setIcon(LookAndFeel.getAddIcon());
 			final StemBrowser sb = this;
 			addPrivileges.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
 						public void execute() {
 							try {
-								GridApplication.getContext().addApplicationComponent(new StemPrivilegeWindow(sb), 500,
-									200);
+								GridApplication.getContext().addApplicationComponent(
+                                    new StemPrivilegeWindow(sb), 500, 200);
 
-							} catch (Exception e) {
-								ErrorDialog.showError(e);
+							} catch (Exception ex) {
+								ErrorDialog.showError(ex);
 							}
 						}
 					};

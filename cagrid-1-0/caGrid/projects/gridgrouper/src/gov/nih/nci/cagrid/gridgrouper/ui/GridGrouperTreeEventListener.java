@@ -81,7 +81,7 @@ public class GridGrouperTreeEventListener extends MouseAdapter {
 	/**
 	 * Associate a GridServiceTreeNode type with a popup menu
 	 * 
-	 * @param serviceType
+	 * @param nodeType
 	 * @param popup
 	 */
 	public void associatePopup(Class nodeType, JPopupMenu popup) {

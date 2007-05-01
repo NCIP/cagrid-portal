@@ -85,13 +85,13 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		Set set = stem.getChildStems();
 		Iterator itr = set.iterator();
 		while (itr.hasNext()) {
-			StemI stem = (StemI) itr.next();
-			StemTreeNode node = new StemTreeNode(getBrowser(), ((Stem) stem), false);
+			StemI currentStem = (StemI) itr.next();
+			StemTreeNode node = new StemTreeNode(getBrowser(), ((Stem) currentStem), false);
 			synchronized (getTree()) {
 				this.add(node);
-				TreeNode parent = this.getParent();
-				if (parent != null) {
-					getTree().reload(parent);
+				TreeNode parentNode = this.getParent();
+				if (parentNode != null) {
+					getTree().reload(parentNode);
 				} else {
 					getTree().reload();
 				}
@@ -105,9 +105,9 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 			GroupTreeNode node = new GroupTreeNode(getBrowser(), (Group) group);
 			synchronized (getTree()) {
 				this.add(node);
-				TreeNode parent = this.getParent();
-				if (parent != null) {
-					getTree().reload(parent);
+				TreeNode parentNode = this.getParent();
+				if (parentNode != null) {
+					getTree().reload(parentNode);
 				} else {
 					getTree().reload();
 				}

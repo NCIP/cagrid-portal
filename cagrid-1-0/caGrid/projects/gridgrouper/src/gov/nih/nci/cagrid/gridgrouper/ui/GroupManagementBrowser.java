@@ -14,6 +14,7 @@ import javax.swing.JSplitPane;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 
 
@@ -47,7 +48,7 @@ public class GroupManagementBrowser extends ApplicationComponent {
 
 	private JButton removeGridGrouper = null;
 
-	private JButton view = null;
+	private JButton viewButton = null;
 
 	private JButton refresh = null;
 
@@ -68,7 +69,6 @@ public class GroupManagementBrowser extends ApplicationComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(800, 500);
@@ -182,7 +182,7 @@ public class GroupManagementBrowser extends ApplicationComponent {
 	public GridGrouperProgressBar getProgress() {
 		if (progress == null) {
 			progress = new GridGrouperProgressBar();
-			progress.setForeground(GridGrouperLookAndFeel.getPanelLabelColor());
+			progress.setForeground(LookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -225,7 +225,7 @@ public class GroupManagementBrowser extends ApplicationComponent {
 			buttonPanel.setLayout(new GridBagLayout());
 			buttonPanel.add(getAddGridGrouper(), gridBagConstraints2);
 			buttonPanel.add(getRemoveGridGrouper(), gridBagConstraints4);
-			buttonPanel.add(getView(), gridBagConstraints5);
+			buttonPanel.add(getViewButton(), gridBagConstraints5);
 			buttonPanel.add(getRefresh(), gridBagConstraints8);
 		}
 		return buttonPanel;
@@ -298,12 +298,12 @@ public class GroupManagementBrowser extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getView() {
-		if (view == null) {
-			view = new JButton();
-			view.setText("View");
-			view.setIcon(GridGrouperLookAndFeel.getQueryIcon());
-			view.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getViewButton() {
+		if (viewButton == null) {
+			viewButton = new JButton();
+			viewButton.setText("View");
+			viewButton.setIcon(LookAndFeel.getQueryIcon());
+			viewButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
 						public void execute() {
@@ -319,7 +319,7 @@ public class GroupManagementBrowser extends ApplicationComponent {
 				}
 			});
 		}
-		return view;
+		return viewButton;
 	}
 
 

@@ -107,7 +107,6 @@ public class GroupPrivilegeWindow extends ApplicationComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(500, 175);
@@ -425,62 +424,62 @@ public class GroupPrivilegeWindow extends ApplicationComponent {
 
 
 	private String addUpdateUpdate() throws Exception {
-		boolean isSelected = getUpdate().isSelected();
+		boolean updateSelected = getUpdate().isSelected();
 		boolean wasSelected = false;
 		if (caddy != null) {
 			wasSelected = caddy.hasUpdate();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected, AccessPrivilege.UPDATE);
+		return addUpdatePrivilege(wasSelected, updateSelected, AccessPrivilege.UPDATE);
 	}
 
 
 	private String addUpdateView() throws Exception {
-		boolean isSelected = getView().isSelected();
+		boolean viewSelected = getView().isSelected();
 		boolean wasSelected = false;
 		if (caddy != null) {
 			wasSelected = caddy.hasView();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected, AccessPrivilege.VIEW);
+		return addUpdatePrivilege(wasSelected, viewSelected, AccessPrivilege.VIEW);
 	}
 
 
 	private String addUpdateRead() throws Exception {
-		boolean isSelected = getRead().isSelected();
+		boolean readSelected = getRead().isSelected();
 		boolean wasSelected = false;
 		if (caddy != null) {
 			wasSelected = caddy.hasRead();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected, AccessPrivilege.READ);
+		return addUpdatePrivilege(wasSelected, readSelected, AccessPrivilege.READ);
 	}
 
 
 	private String addUpdateAdmin() throws Exception {
-		boolean isSelected = getAdmin().isSelected();
+		boolean adminSelected = getAdmin().isSelected();
 		boolean wasSelected = false;
 		if (caddy != null) {
 			wasSelected = caddy.hasAdmin();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected, AccessPrivilege.ADMIN);
+		return addUpdatePrivilege(wasSelected, adminSelected, AccessPrivilege.ADMIN);
 	}
 
 
 	private String addUpdateOptin() throws Exception {
-		boolean isSelected = getOptin().isSelected();
+		boolean optinSelected = getOptin().isSelected();
 		boolean wasSelected = false;
 		if (caddy != null) {
 			wasSelected = caddy.hasOptin();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected, AccessPrivilege.OPTIN);
+		return addUpdatePrivilege(wasSelected, optinSelected, AccessPrivilege.OPTIN);
 	}
 
 
 	private String addUpdateOptout() throws Exception {
-		boolean isSelected = getOptout().isSelected();
+		boolean optoutSelected = getOptout().isSelected();
 		boolean wasSelected = false;
 		if (caddy != null) {
 			wasSelected = caddy.hasOptout();
 		}
-		return addUpdatePrivilege(wasSelected, isSelected, AccessPrivilege.OPTOUT);
+		return addUpdatePrivilege(wasSelected, optoutSelected, AccessPrivilege.OPTOUT);
 	}
 
 

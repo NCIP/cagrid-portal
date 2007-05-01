@@ -6,6 +6,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 
 
 /**
@@ -58,7 +59,7 @@ public abstract class GridGrouperTreeNodeMenu extends JPopupMenu {
 		if (view == null) {
 			view = new JMenuItem();
 			view.setText("View");
-			view.setIcon(GridGrouperLookAndFeel.getQueryIcon());
+			view.setIcon(LookAndFeel.getQueryIcon());
 			view.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -133,7 +134,7 @@ public abstract class GridGrouperTreeNodeMenu extends JPopupMenu {
 		if (remove == null) {
 			remove = new JMenuItem();
 			remove.setText("Remove");
-			remove.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
+			remove.setIcon(LookAndFeel.getRemoveIcon());
 			remove.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {

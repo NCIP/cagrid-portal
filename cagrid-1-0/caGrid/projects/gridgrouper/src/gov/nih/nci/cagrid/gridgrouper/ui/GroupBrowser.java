@@ -27,6 +27,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 
 
@@ -216,7 +217,6 @@ public class GroupBrowser extends JPanel {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
@@ -299,7 +299,7 @@ public class GroupBrowser extends JPanel {
 			groupProperties.add(getCredentials(), gridBagConstraints6);
 			groupProperties.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Grid Grouper Group",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 		}
 		return groupProperties;
 	}
@@ -401,7 +401,7 @@ public class GroupBrowser extends JPanel {
 			privileges.setLayout(new GridBagLayout());
 			privileges.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Privileges",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			privileges.add(getJScrollPane2(), gridBagConstraints30);
 			privileges.add(getPrivilegesButtonPanel(), gridBagConstraints31);
 		}
@@ -436,7 +436,7 @@ public class GroupBrowser extends JPanel {
 			members.setLayout(new GridBagLayout());
 			members.setBorder(BorderFactory.createTitledBorder(null, "Group Members",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			members.add(getMemberSearchPanel(), gridBagConstraints21);
 			members.add(getJScrollPane1(), gridBagConstraints22);
 			members.add(getButtonPanel(), gridBagConstraints29);
@@ -640,7 +640,7 @@ public class GroupBrowser extends JPanel {
 			detailsPanel.add(getSystemExtension(), gridBagConstraints17);
 			detailsPanel.setBorder(BorderFactory.createTitledBorder(null, "Stem Details",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			detailsPanel.add(jLabel7, gridBagConstraints18);
 			detailsPanel.add(getJScrollPane(), gridBagConstraints19);
 			detailsPanel.add(getUpdateGroup(), gridBagConstraints20);
@@ -924,7 +924,7 @@ public class GroupBrowser extends JPanel {
 			memberSearchPanel.setLayout(new GridBagLayout());
 			memberSearchPanel.setBorder(BorderFactory.createTitledBorder(null, "Member Search",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GridGrouperLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			memberSearchPanel.add(getMemberFilter(), gridBagConstraints23);
 			memberSearchPanel.add(getListMembers(), gridBagConstraints24);
 		}
@@ -985,7 +985,7 @@ public class GroupBrowser extends JPanel {
 		if (listMembers == null) {
 			listMembers = new JButton();
 			listMembers.setText("List Members");
-			listMembers.setIcon(GridGrouperLookAndFeel.getQueryIcon());
+			listMembers.setIcon(LookAndFeel.getQueryIcon());
 			listMembers.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -1102,7 +1102,7 @@ public class GroupBrowser extends JPanel {
 		if (addMember == null) {
 			addMember = new JButton();
 			addMember.setText("Add Member");
-			addMember.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addMember.setIcon(LookAndFeel.getAddIcon());
 			final GroupBrowser gp = this;
 			addMember.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1137,7 +1137,7 @@ public class GroupBrowser extends JPanel {
 	private JButton getRemoveMemberButton() {
 		if (removeMemberButton == null) {
 			removeMemberButton = new JButton();
-			removeMemberButton.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
+			removeMemberButton.setIcon(LookAndFeel.getRemoveIcon());
 			removeMemberButton.setMnemonic(KeyEvent.VK_UNDEFINED);
 			removeMemberButton.setText("Remove Member");
 			removeMemberButton.addActionListener(new java.awt.event.ActionListener() {
@@ -1152,8 +1152,8 @@ public class GroupBrowser extends JPanel {
 									listMembers();
 								}
 
-							} catch (Exception e) {
-								ErrorDialog.showError(e);
+							} catch (Exception ex) {
+								ErrorDialog.showError(ex);
 							}
 
 						}
@@ -1179,7 +1179,7 @@ public class GroupBrowser extends JPanel {
 	private JButton getRemoveCompositeButton() {
 		if (removeCompositeButton == null) {
 			removeCompositeButton = new JButton();
-			removeCompositeButton.setIcon(GridGrouperLookAndFeel.getCloseIcon());
+			removeCompositeButton.setIcon(LookAndFeel.getCloseIcon());
 			removeCompositeButton.setText("Remove Composite Member");
 			removeCompositeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1193,8 +1193,8 @@ public class GroupBrowser extends JPanel {
 								if (getHasListedMembers()) {
 									listMembers();
 								}
-							} catch (Exception e) {
-								ErrorDialog.showError(e);
+							} catch (Exception ex) {
+								ErrorDialog.showError(ex);
 							}
 
 						}
@@ -1376,7 +1376,7 @@ public class GroupBrowser extends JPanel {
 		if (findPrivileges == null) {
 			findPrivileges = new JButton();
 			findPrivileges.setText("Get Privileges");
-			findPrivileges.setIcon(GridGrouperLookAndFeel.getQueryIcon());
+			findPrivileges.setIcon(LookAndFeel.getQueryIcon());
 			findPrivileges.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					loadPrivileges();
@@ -1396,17 +1396,17 @@ public class GroupBrowser extends JPanel {
 		if (addPrivilege == null) {
 			addPrivilege = new JButton();
 			addPrivilege.setText("Add Privilege");
-			addPrivilege.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addPrivilege.setIcon(LookAndFeel.getAddIcon());
 			final GroupBrowser gb = this;
 			addPrivilege.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
 						public void execute() {
 							try {
-								GridApplication.getContext().addApplicationComponent(new GroupPrivilegeWindow(gb), 500,
-									225);
-							} catch (Exception e) {
-								ErrorDialog.showError(e);
+								GridApplication.getContext().addApplicationComponent(
+                                    new GroupPrivilegeWindow(gb), 500, 225);
+							} catch (Exception ex) {
+								ErrorDialog.showError(ex);
 							}
 						}
 					};
@@ -1439,8 +1439,8 @@ public class GroupBrowser extends JPanel {
 						public void execute() {
 							try {
 								getPrivilegesTable().doubleClick();
-							} catch (Exception e) {
-								ErrorDialog.showError(e);
+							} catch (Exception ex) {
+								ErrorDialog.showError(ex);
 							}
 						}
 					};
