@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.cagrid.grape.utils.MultiEventProgressBar;
 import org.globus.gsi.GlobusCredential;
@@ -123,7 +124,6 @@ public class MyGroupsWindow extends ApplicationComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(300, 200);
@@ -337,7 +337,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 		if (view == null) {
 			view = new JButton();
 			view.setText("View");
-			view.setIcon(GridGrouperLookAndFeel.getQueryIcon());
+			view.setIcon(LookAndFeel.getQueryIcon());
 			view.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					getGroups().doubleClick();
@@ -386,7 +386,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Cancel");
-			close.setIcon(GridGrouperLookAndFeel.getCloseIcon());
+			close.setIcon(LookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();

@@ -70,9 +70,9 @@ public class QueryNode extends ExpressionBaseTreeNode {
 
 
 	public void refresh() {
-		TreeNode parent = this.getParent();
-		if (parent != null) {
-			getTree().reload(parent);
+		TreeNode parentNode = this.getParent();
+		if (parentNode != null) {
+			getTree().reload(parentNode);
 		} else {
 			getTree().reload();
 		}

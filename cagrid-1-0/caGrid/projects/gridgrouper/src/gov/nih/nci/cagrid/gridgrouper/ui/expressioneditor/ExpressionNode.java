@@ -83,9 +83,9 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 	}
 
 
-	public synchronized void resetExpression(MembershipExpression expression) {
+	public synchronized void resetExpression(MembershipExpression exp) {
 		super.removeAllChildren();
-		this.expression = expression;
+		this.expression = exp;
 		this.refresh();
 	}
 
@@ -98,9 +98,9 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 				ExpressionNode node = new ExpressionNode(getEditor(), exps[i], false);
 				synchronized (getTree()) {
 					this.add(node);
-					TreeNode parent = this.getParent();
-					if (parent != null) {
-						getTree().reload(parent);
+					TreeNode parentNode = this.getParent();
+					if (parentNode != null) {
+						getTree().reload(parentNode);
 					} else {
 						getTree().reload();
 					}
@@ -114,9 +114,9 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 				QueryNode node = new QueryNode(getEditor(), queries[i]);
 				synchronized (getTree()) {
 					this.add(node);
-					TreeNode parent = this.getParent();
-					if (parent != null) {
-						getTree().reload(parent);
+					TreeNode parentNode = this.getParent();
+					if (parentNode != null) {
+						getTree().reload(parentNode);
 					} else {
 						getTree().reload();
 					}
@@ -226,9 +226,9 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 
 	public void refresh() {
 		loadExpression();
-		TreeNode parent = this.getParent();
-		if (parent != null) {
-			getTree().reload(parent);
+		TreeNode parentNode = this.getParent();
+		if (parentNode != null) {
+			getTree().reload(parentNode);
 		} else {
 			getTree().reload();
 		}

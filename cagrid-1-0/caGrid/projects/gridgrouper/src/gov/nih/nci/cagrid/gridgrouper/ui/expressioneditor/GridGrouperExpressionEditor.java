@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor;
 
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.gridgrouper.bean.LogicalOperator;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
@@ -145,7 +146,6 @@ public class GridGrouperExpressionEditor extends JPanel {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
@@ -316,7 +316,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 	protected MultiEventProgressBar getProgress() {
 		if (progress == null) {
 			progress = new MultiEventProgressBar(false);
-			progress.setForeground(LookAndFeel.getPanelLabelColor());
+			progress.setForeground(PortalLookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -476,7 +476,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 					if (node instanceof ExpressionNode) {
 						ExpressionNode en = (ExpressionNode) node;
 						if (!en.getExpression().getLogicRelation().equals(
-							(LogicalOperator) getLogicalRelation().getSelectedItem())) {
+							getLogicalRelation().getSelectedItem())) {
 							en.getExpression().setLogicRelation(
 								(LogicalOperator) getLogicalRelation().getSelectedItem());
 							en.refresh();
@@ -517,7 +517,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (addExpression == null) {
 			addExpression = new JButton();
 			addExpression.setText("Add Expression");
-			addExpression.setIcon(LookAndFeel.getAddIcon());
+			addExpression.setIcon(PortalLookAndFeel.getAddIcon());
 			addExpression.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode currentNode = getExpressionTree().getCurrentNode();
@@ -544,7 +544,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (addGroup == null) {
 			addGroup = new JButton();
 			addGroup.setText("Add Group");
-			addGroup.setIcon(LookAndFeel.getAddIcon());
+			addGroup.setIcon(PortalLookAndFeel.getAddIcon());
 			addGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode currentNode = getGrouperTree().getCurrentNode();
@@ -570,7 +570,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (removeExpression == null) {
 			removeExpression = new JButton();
 			removeExpression.setText("Remove");
-			removeExpression.setIcon(LookAndFeel.getRemoveIcon());
+			removeExpression.setIcon(PortalLookAndFeel.getRemoveIcon());
 			removeExpression.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode currentNode = getExpressionTree().getCurrentNode();
@@ -681,7 +681,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (removeGroup == null) {
 			removeGroup = new JButton();
 			removeGroup.setText("Remove");
-			removeGroup.setIcon(LookAndFeel.getRemoveIcon());
+			removeGroup.setIcon(PortalLookAndFeel.getRemoveIcon());
 			removeGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode currentNode = getExpressionTree().getCurrentNode();
@@ -716,7 +716,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 					if (node instanceof QueryNode) {
 						QueryNode n = (QueryNode) node;
 						if (!n.getQuery().getMembershipStatus().equals(
-							(MembershipStatus) getMembership().getSelectedItem())) {
+							getMembership().getSelectedItem())) {
 							n.getQuery().setMembershipStatus((MembershipStatus) getMembership().getSelectedItem());
 							n.refresh();
 						}
