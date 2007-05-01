@@ -262,7 +262,11 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
         }
 
         // make context properties for RPs
-        editServiceContextProperties(service.getResourcePropertiesList().getResourceProperty(), serviceContext);
+        ResourcePropertyType[] resourceProperty = null;
+        if (service.getResourcePropertiesList() != null) {
+            resourceProperty = service.getResourcePropertiesList().getResourceProperty();
+        }
+        editServiceContextProperties(resourceProperty, serviceContext);
 
         // make operations
         editOperations(service.getMethods().getMethod(), serviceContext);
