@@ -122,7 +122,6 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getMainPanel());

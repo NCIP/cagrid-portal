@@ -54,7 +54,7 @@ public class MetadataUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 
     /**
      * @param extensionType
-     * @param serviceDescription
+     * @param serviceInfo
      * @param servicePath
      * @param fromVersion
      * @param toVersion

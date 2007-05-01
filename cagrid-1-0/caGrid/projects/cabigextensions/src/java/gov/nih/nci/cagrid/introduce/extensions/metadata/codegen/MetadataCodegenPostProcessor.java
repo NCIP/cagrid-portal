@@ -208,6 +208,7 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
     /**
      * @param info
      * @return
+     *      True if the service information is that of a Data Service, false otherwise
      */
     private boolean isDataService(ServiceInformation info) {
         ServicesType services = info.getServices();

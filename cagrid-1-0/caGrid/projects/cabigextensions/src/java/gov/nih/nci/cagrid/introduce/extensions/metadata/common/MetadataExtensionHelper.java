@@ -38,6 +38,7 @@ public class MetadataExtensionHelper {
 
     /**
      * @return
+     *      The filename of the metadata
      */
     public String getMetadataFilenameProperty() {
         ResourcePropertyType rp = getMetadataResourceProperty();
