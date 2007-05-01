@@ -533,7 +533,7 @@
             <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
         </resolveDependencies>
-        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="dist" />
+        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
 
