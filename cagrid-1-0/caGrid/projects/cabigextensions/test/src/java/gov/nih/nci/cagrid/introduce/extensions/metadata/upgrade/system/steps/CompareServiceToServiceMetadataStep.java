@@ -8,11 +8,6 @@ import gov.nih.nci.cagrid.metadata.service.Service;
 
 import java.io.File;
 import java.io.FileReader;
-import java.util.Iterator;
-
-import org.apache.commons.jxpath.JXPathContext;
-
-import com.atomicobject.haste.framework.Step;
 
 
 /**
@@ -26,24 +21,24 @@ import com.atomicobject.haste.framework.Step;
  *          dervin Exp $
  */
 public class CompareServiceToServiceMetadataStep extends XPathValidatingStep {
-    protected File introduceService;
+    protected File serviceDir;
     protected File serviceMetadata;
 
 
     public CompareServiceToServiceMetadataStep(File introduceServiceDir, File serviceMetadata) throws Exception {
-        this.introduceService = introduceServiceDir;
+        this.serviceDir = introduceServiceDir;
         this.serviceMetadata = serviceMetadata;
     }
 
 
     @Override
     public void runStep() throws Throwable {
-        assertTrue("Introduce service directory (" + this.introduceService + ") does not exist", this.introduceService
-            .exists());
+        assertTrue("Introduce service directory (" + this.serviceDir + ") does not exist", 
+            this.serviceDir.exists());
         assertTrue("Service Metadata file (" + this.serviceMetadata + ") does not exist", this.serviceMetadata.exists());
 
         ServiceMetadata metadata = MetadataUtils.deserializeServiceMetadata(new FileReader(this.serviceMetadata));
-        ServiceInformation introduceService = new ServiceInformation(this.introduceService);
+        ServiceInformation introduceService = new ServiceInformation(this.serviceDir);
 
         ServicesType duceServices = introduceService.getServiceDescriptor().getServices();
         Service metadataService = metadata.getServiceDescription().getService();
