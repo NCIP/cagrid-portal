@@ -28,7 +28,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:37:02 PM
- * @version $Id: InvokeBDTDataServiceStep.java,v 1.2 2007-04-05 15:28:54 dervin Exp $ 
+ * @version $Id: InvokeBDTDataServiceStep.java,v 1.3 2007-05-02 15:36:23 dervin Exp $ 
  */
 public class InvokeBDTDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
@@ -105,6 +105,15 @@ public class InvokeBDTDataServiceStep extends Step {
             }
         } finally {
             iter.release();
+            try {
+                iter.next();
+                fail("Call to next() after release should have failed!");
+            } catch (NoSuchElementException ex) {
+                // expected
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                fail("Exception other than NoSuchElementException thrown: " + ex.getClass().getName());
+            }
         }
         assertTrue("No results were returned from the enumeration", resultCount != 0);
     }
