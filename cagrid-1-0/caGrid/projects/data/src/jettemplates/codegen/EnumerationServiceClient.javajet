@@ -1,7 +1,7 @@
-<%@ jet package="gov.nih.nci.cagrid.data.creation.templates" class="EnumerationServiceClientTemplate" %>
+<%@ jet package="gov.nih.nci.cagrid.data.codegen.templates" class="EnumerationServiceClientTemplate" %>
 <% gov.nih.nci.cagrid.introduce.common.ServiceInformation serviceInfo = (gov.nih.nci.cagrid.introduce.common.ServiceInformation) argument;
-		String serviceName = serviceInfo.getServices().getService()[0].getName();
-		String basePackage = serviceInfo.getServices().getService()[0].getPackageName();
+		String serviceName = serviceInfo.getServices().getService()[0].getName() + "Enumeration";
+		String basePackage = serviceInfo.getServices().getService()[0].getPackageName() + ".enumeration";
 		String serviceClientName = basePackage + ".client." + serviceName + "Client";
 		// name the new client class
 		String dataSourceClassName = serviceName + "DataSourceClient";

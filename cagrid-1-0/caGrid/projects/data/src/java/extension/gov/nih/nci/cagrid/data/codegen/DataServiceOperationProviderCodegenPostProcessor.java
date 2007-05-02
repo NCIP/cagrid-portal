@@ -55,11 +55,17 @@ public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodege
 		}
 		
 		// handle service feature modifications
-		if (extensionData.getServiceFeatures() != null &&
-			extensionData.getServiceFeatures().isUseBdt()) {
-			BDTFeatureCodegen bdtCodegen = new BDTFeatureCodegen(
-				info, info.getServices().getService(0), info.getIntroduceServiceProperties());
-			bdtCodegen.codegenFeature();
+		if (extensionData.getServiceFeatures() != null) {
+		    if (extensionData.getServiceFeatures().isUseBdt()) {
+		        BDTFeatureCodegen bdtCodegen = new BDTFeatureCodegen(
+		            info, info.getServices().getService(0), info.getIntroduceServiceProperties());
+		        bdtCodegen.codegenFeature();
+            }
+            if (extensionData.getServiceFeatures().isUseWsEnumeration()) {
+                WsEnumerationFeatureCodegen wsEnumCodegen = new WsEnumerationFeatureCodegen(
+                    info, info.getServices().getService(0), info.getIntroduceServiceProperties());
+                wsEnumCodegen.codegenFeature();
+            }
 		}
 	}
 	

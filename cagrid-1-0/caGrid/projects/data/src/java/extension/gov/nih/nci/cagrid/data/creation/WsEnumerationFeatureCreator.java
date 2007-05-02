@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.data.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.data.creation.templates.EnumerationServiceClientTemplate;
 import gov.nih.nci.cagrid.data.enumeration.service.globus.EnumerationDataServiceProviderImpl;
 import gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationDataServicePortType;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -27,8 +26,6 @@ import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
 import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
@@ -58,7 +55,6 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 		copySchemas();
 		addEnumerationQueryMethod();
         setEnumIteratorImpl();
-		createDataSourceClient();
 	}
 
 
@@ -166,35 +162,6 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 			Utils.copyFile(addressingXsdFile, addressingXsdOutFile);
 		} catch (Exception ex) {
 			throw new CreationExtensionException("Error copying data service schemas: " + ex.getMessage(), ex);
-		}
-	}
-
-
-	private void createDataSourceClient() throws CreationExtensionException {
-		EnumerationServiceClientTemplate template = new EnumerationServiceClientTemplate();
-		String clientClassContents = template.generate(getServiceInformation());
-		// figgure out the class name
-		String classStart = "public class ";
-		int nameStart = clientClassContents.indexOf(classStart) + classStart.length();
-		int nameEnd = clientClassContents.indexOf(' ', nameStart);
-		String clientClassName = clientClassContents.substring(nameStart, nameEnd);
-		// and the package name
-		String pack = "package ";
-		int packNameStart = clientClassContents.indexOf(pack) + pack.length();
-		int packNameEnd = clientClassContents.indexOf(';', packNameStart);
-		String clientPackage = clientClassContents.substring(packNameStart, packNameEnd);
-		// write it out to disk
-		File clientClassFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
-			+ "src" + File.separator + clientPackage.replace('.', File.separatorChar) + File.separator
-			+ clientClassName + ".java");
-		try {
-			FileWriter classWriter = new FileWriter(clientClassFile);
-			classWriter.write(clientClassContents);
-			classWriter.flush();
-			classWriter.close();
-		} catch (IOException ex) {
-			throw new CreationExtensionException("Error creating Data Source enumeration client class: "
-				+ ex.getMessage(), ex);
 		}
 	}
 

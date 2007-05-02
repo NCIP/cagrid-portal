@@ -414,7 +414,7 @@
     <!-- =================================================================== -->
     <target name="generateJETClasses" depends="init">
         <jetc destdir="${extension.src.dir}" template="${src.dir}/jettemplates/codegen/CQLResultTypes.xsd.xmljet" />
-        <jetc destdir="${extension.src.dir}" template="${src.dir}/jettemplates/creation/EnumerationServiceClient.javajet" />
+        <jetc destdir="${extension.src.dir}" template="${src.dir}/jettemplates/codegen/EnumerationServiceClient.javajet" />
     </target>
 
 
