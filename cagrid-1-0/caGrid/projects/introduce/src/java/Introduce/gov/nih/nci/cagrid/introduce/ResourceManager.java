@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.ZipUtilities;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 
 import java.awt.Component;
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,17 +12,12 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
@@ -227,29 +222,6 @@ public class ResourceManager {
     }
 
 
-    private static synchronized void getDirectoryListing(List names, File dir, String parentPath) {
-        String[] children = dir.list();
-        if (children != null) {
-            for (int i = 0; i < children.length; i++) {
-                File child = new File(dir.getAbsolutePath() + File.separator + children[i]);
-                if (child.isDirectory()) {
-                    if (parentPath.equals("")) {
-                        getDirectoryListing(names, child, child.getName());
-                    } else {
-                        getDirectoryListing(names, child, parentPath + File.separator + child.getName());
-                    }
-                } else {
-                    if (parentPath.equals("")) {
-                        names.add(child.getName());
-                    } else {
-                        names.add(parentPath + File.separator + child.getName());
-                    }
-                }
-            }
-        }
-    }
-
-
     public static synchronized void purgeArchives(String serviceName) {
         String introduceCache = getResourcePath();
 
@@ -281,39 +253,12 @@ public class ResourceManager {
 
         String introduceCache = getResourcePath();
 
-        List filenames = new ArrayList();
-        getDirectoryListing(filenames, dir, "");
-
-        // Create a buffer for reading the files
-        byte[] buf = new byte[1024];
-
         // Create the ZIP file
         String outFilename = introduceCache + File.separator + serviceName + "_" + id + CACHE_POSTFIX;
         logger.debug("Creating service archive: " + outFilename);
-        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
-
-        // Compress the files
-        for (int i = 0; i < filenames.size(); i++) {
-            FileInputStream in = new FileInputStream(dir.getAbsolutePath() + File.separator + (String) filenames.get(i));
-
-            // Add ZIP entry to output stream.
-            out.putNextEntry(new ZipEntry((String) filenames.get(i)));
-
-            // Transfer bytes from the file to the ZIP file
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-
-            // Complete the entry
-            out.closeEntry();
-            in.close();
-        }
-
-        // Complete the ZIP file
-        out.flush();
-        out.close();
-
+        
+        ZipUtilities.zipDirectory(dir, new File(outFilename));
+        
         // cleanup if there are more that MAX_ARCHIVE files in the backup area
         cleanup(serviceName);
     }
@@ -346,46 +291,24 @@ public class ResourceManager {
     }
 
 
-    private static void unzip(String baseDir, ZipInputStream zin, String s) throws IOException {
-        File file = new File(new File(baseDir).getAbsolutePath() + File.separator + s);
-        file.getParentFile().mkdirs();
-        FileOutputStream out = new FileOutputStream(file);
-        byte[] b = new byte[512];
-        int len = 0;
-        while ((len = zin.read(b)) != -1) {
-            out.write(b, 0, len);
-        }
-        out.close();
-    }
-
-
     public static synchronized void restoreSpecific(String currentId, String serviceName, String baseDir)
         throws FileNotFoundException, IOException {
 
         // remove the directory first
         boolean deleted = Utils.deleteDir(new File(baseDir));
-        if (!deleted)
-            logger
-                .warn("Was not able to completely remove the service before restoring the new one.  May be unused new files leftover.");
+        if (!deleted) {
+            logger.warn("Was not able to completely remove the service before restoring the new one. " +
+                "May be unused new files leftover.");
+        }
 
         File introduceCache = new File(getResourcePath());
         introduceCache.mkdir();
-        File cachedFile = new File(introduceCache.getAbsolutePath() + File.separator + serviceName + "_" + currentId
-            + CACHE_POSTFIX);
+        File cachedFile = new File(introduceCache.getAbsolutePath() + File.separator 
+            + serviceName + "_" + currentId + CACHE_POSTFIX);
 
         logger.debug("Restoring service from archive:" + cachedFile.getAbsolutePath());
 
-        InputStream in = new BufferedInputStream(new FileInputStream(cachedFile));
-        ZipInputStream zin = new ZipInputStream(in);
-        ZipEntry e;
-        while ((e = zin.getNextEntry()) != null) {
-            if (e.isDirectory()) {
-                new File(new File(baseDir).getAbsolutePath() + File.separator + e.getName()).mkdirs();
-            } else {
-                unzip(baseDir, zin, e.getName());
-            }
-        }
-        zin.close();
+        ZipUtilities.unzip(cachedFile, new File(baseDir));
     }
 
 
@@ -394,9 +317,10 @@ public class ResourceManager {
 
         // remove the directory first
         boolean deleted = Utils.deleteDir(new File(baseDir));
-        if (!deleted)
-            logger
-                .warn("Was not able to completely remove the service before restoring the new one.  May be unused new files leftover.");
+        if (!deleted) {
+            logger.warn("Was not able to completely remove the service before restoring the new one.  " +
+                "May be unused new files leftover.");
+        }
 
         File introduceCache = new File(getResourcePath());
         final String finalServiceName = serviceName;
@@ -422,17 +346,7 @@ public class ResourceManager {
         File cachedFile = new File(introduceCache.getAbsolutePath() + File.separator + serviceName + "_"
             + String.valueOf(lastTime) + CACHE_POSTFIX);
 
-        InputStream in = new BufferedInputStream(new FileInputStream(cachedFile));
-        ZipInputStream zin = new ZipInputStream(in);
-        ZipEntry e;
-        while ((e = zin.getNextEntry()) != null) {
-            if (e.isDirectory()) {
-                new File(new File(baseDir).getAbsolutePath() + File.separator + e.getName()).mkdirs();
-            } else {
-                unzip(baseDir, zin, e.getName());
-            }
-        }
-        zin.close();
+        ZipUtilities.unzip(cachedFile, new File(baseDir));
     }
 
 
