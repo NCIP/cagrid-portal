@@ -78,6 +78,10 @@ public class PortalUtils {
     }
 
 
+    /**
+     * Centers the componenet withen the current application
+     * @param comp
+     */
     public final static void centerComponent(JComponent comp) {
         // Determine the new location of the window
         int w = PortalResourceManager.getInstance().getGridPortal().getSize().width;
@@ -89,6 +93,10 @@ public class PortalUtils {
     }
 
 
+    /**
+     * Centers the window on the users monitor
+     * @param comp
+     */
     public final static void centerWindowInScreen(Window comp) {
         // Determine the new location of the window
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -100,7 +108,10 @@ public class PortalUtils {
         comp.setLocation(x, y);
     }
 
-
+    /**
+     * Centers the window within the current application window
+     * @param comp
+     */
     public final static void centerWindow(Window comp) {
         // Determine the new location of the window
         int w = PortalResourceManager.getInstance().getGridPortal().getSize().width;
