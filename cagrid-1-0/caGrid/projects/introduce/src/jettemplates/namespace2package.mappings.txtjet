@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.* org.projectmobius.common.* java.io.* java.util.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.*"%>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates" class="NamespaceMappingsTemplate" imports="gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.* java.io.* java.util.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.*"%>
 <% gov.nih.nci.cagrid.introduce.common.ServiceInformation info = (gov.nih.nci.cagrid.introduce.common.ServiceInformation) argument;
    String serviceName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.service.name");
    if (info.getServices() != null && info.getServices().getService() != null) {
@@ -37,10 +37,10 @@
 				NamespaceInformation namespaceInformation=(NamespaceInformation)prefixmap.get(namespaceS);
 				try{ 
 					String newLine = "";
-					org.projectmobius.common.Namespace namespace = new org.projectmobius.common.Namespace(namespaceInformation.getNamespace().getNamespace());
-					writtenNamespaces.add(namespace.getRaw());
+					String currNS=namespaceInformation.getNamespace().getNamespace();
+					writtenNamespaces.add(currNS);
 					if (namespaceInformation.getNamespace().getPackageName() != null && !namespaceInformation.getNamespace().getPackageName().equals("")) {
-						newLine = namespace.getRaw() + "=" + namespaceInformation.getNamespace().getPackageName();
+						newLine = currNS + "=" + namespaceInformation.getNamespace().getPackageName();
 					}
 						
 					// turns http: into http\:
@@ -67,7 +67,7 @@
 			try {
 				String thisnamespace = (String)it.next();
 				if(!writtenNamespaces.contains(thisnamespace)){
-					String thispackageName = CommonTools.getPackageName(new Namespace(thisnamespace),info.getNamespaces());
+					String thispackageName = CommonTools.getPackageName(thisnamespace,info.getNamespaces());
 					newLine = thisnamespace + "=" + thispackageName;
 					// turns http: into http\:
 					newnewLine = newLine.replaceFirst(":", "\\\\:");

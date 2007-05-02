@@ -39,7 +39,6 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
 
 
@@ -335,13 +334,13 @@ public class CommonTools {
      *            The namespace to derive a package name for
      * @return The package name
      */
-    public static String getPackageName(Namespace namespace) {
+    public static String getPackageName(String fullNamespace) {
         try {
             // TODO: where should this mapperClassname preference be set
             String mapperClassname = "gov.nih.nci.cagrid.introduce.common.CaBIGNamespaceToPackageMapper";
             Class clazz = Class.forName(mapperClassname);
             NamespaceToPackageMapper mapper = (NamespaceToPackageMapper) clazz.newInstance();
-            return mapper.getPackageName(namespace.getRaw());
+            return mapper.getPackageName(fullNamespace);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -358,13 +357,13 @@ public class CommonTools {
      *            The namespace types of a service
      * @return The package name
      */
-    public static String getPackageName(Namespace namespace, NamespacesType namespaceTypes) {
+    public static String getPackageName(String fullNamespace, NamespacesType namespaceTypes) {
         // first check to see if this namespace is already in use....
-        NamespaceType nsType = CommonTools.getNamespaceType(namespaceTypes, namespace.getRaw());
+        NamespaceType nsType = CommonTools.getNamespaceType(namespaceTypes, fullNamespace);
         if (nsType != null) {
             return nsType.getPackageName();
         } else {
-            return getPackageName(namespace);
+            return getPackageName(fullNamespace);
         }
     }
 
@@ -426,11 +425,10 @@ public class CommonTools {
         Document schemaDoc = XMLUtilities.fileNameToDocument(xsdFilename);
 
         String rawNamespace = schemaDoc.getRootElement().getAttributeValue("targetNamespace");
-        Namespace namespace = new Namespace(rawNamespace);
-        String packageName = getPackageName(namespace);
+        String packageName = getPackageName(rawNamespace);
         namespaceType.setPackageName(packageName);
 
-        namespaceType.setNamespace(namespace.getRaw());
+        namespaceType.setNamespace(rawNamespace);
 
         List elementTypes = schemaDoc.getRootElement()
             .getChildren("element", schemaDoc.getRootElement().getNamespace());
