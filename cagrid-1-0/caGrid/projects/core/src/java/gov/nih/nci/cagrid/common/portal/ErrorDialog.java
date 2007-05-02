@@ -319,9 +319,10 @@ public class ErrorDialog extends JDialog {
 			clearButton.setToolTipText("Clears the dialog of any errors and closes it");
 			clearButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-                    getErrorsSplitPane().setDividerLocation(1.0D);
-					errors.clear();
+                    errors.clear();
                     getErrorTable().clearTable();
+                    getDetailTextArea().setText("");
+                    getErrorsSplitPane().setDividerLocation(1.0D);
 					dispose();
 				}
 			});
@@ -370,6 +371,7 @@ public class ErrorDialog extends JDialog {
 			hideDialogButton.setText("Hide");
 			hideDialogButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    getDetailTextArea().setText("");
                     getErrorsSplitPane().setDividerLocation(1.0D);
 					dispose();
 				}

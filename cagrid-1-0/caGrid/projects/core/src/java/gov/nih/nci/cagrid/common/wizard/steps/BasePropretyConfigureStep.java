@@ -133,15 +133,15 @@ public abstract class BasePropretyConfigureStep extends PanelWizardStep {
 		super.applyState();
 		for (int i = 0; i < myOptionsKeys.size(); i++) {
 			if (myOptionsTextFieldValues.get(i) instanceof JTextField) {
-				this.globalOptionContainer.put((String) myOptionsKeys.get(i),
+				this.globalOptionContainer.put(myOptionsKeys.get(i),
 						((JTextField) myOptionsTextFieldValues.get(i))
 								.getText());
 			} else if (myOptionsTextFieldValues.get(i) instanceof JCheckBox) {
-				this.globalOptionContainer.put((String) myOptionsKeys.get(i),
+				this.globalOptionContainer.put(myOptionsKeys.get(i),
 						String.valueOf(((JCheckBox) myOptionsTextFieldValues
 								.get(i)).isSelected()));
 			} else if (myOptionsTextFieldValues.get(i) instanceof JComboBox) {
-				this.globalOptionContainer.put((String) myOptionsKeys.get(i),
+				this.globalOptionContainer.put(myOptionsKeys.get(i),
 						String.valueOf(((JComboBox) myOptionsTextFieldValues
 								.get(i)).getSelectedItem()));
 			}
