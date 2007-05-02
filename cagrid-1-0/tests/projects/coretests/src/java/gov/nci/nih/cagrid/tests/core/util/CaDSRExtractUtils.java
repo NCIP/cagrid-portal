@@ -20,70 +20,65 @@ import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.xml.sax.InputSource;
 
-public class CaDSRExtractUtils
-{
-	public static void setAxisConfig(File clientConfigWsdd)
-	{
-		if (clientConfigWsdd == null) {
-			System.setProperty("axis.ClientConfigFile", null);
-		} else {
-			System.setProperty("axis.ClientConfigFile", clientConfigWsdd.toString());
-		}
-	}
-	
-	public static DomainModel findExtract(CaDSRServiceI cadsr, String projectName) 
-		throws Exception
-	{
-		Project[] projects = cadsr.findAllProjects();
-		Project project = null;
-		for (Project myProject : projects) {
-			if (myProject.shortName.equals(projectName)) {
-				project = myProject;
-				break;
-			}
-		}
-		if (project == null) {
-			throw new IllegalArgumentException("could not find project " + projectName);
-		}
-		
-		return cadsr.generateDomainModelForProject(project);
-	}
-	
-	public static DomainModel findExtract(String url, String projectName) 
-		throws Exception
-	{
-		CaDSRServiceI cadsr = new CaDSRServiceClient(url);
-		return findExtract(cadsr, projectName);
-	}
-	
-	public static void writeExtract(DomainModel extract, File file)
-		throws Exception
-	{
-		//BufferedWriter out = new BufferedWriter(new FileWriter(file));
-		//ObjectSerializer.serialize(out, extract, new QName("extract"));
-		//out.flush();
-		//out.close();
-		
-		Utils.serializeDocument(file.toString(), extract, new QName("extract"));
-		//gov.nih.nci.cagrid.encoding.SDKSerializerFactory.createFactory(null, null, null).
-	}
-	
-	public static DomainModel readExtract(File file)
-		throws IOException, DeserializationException
-	{
-		BufferedReader in = new BufferedReader(new FileReader(file));
-		DomainModel extract = (DomainModel) ObjectDeserializer.deserialize(new InputSource(in), DomainModel.class);
-		in.close();
-		
-		return extract;
-	}
-	
-	public static void main(String[] args) 
-		throws Exception
-	{
-		setAxisConfig(new File("etc" + File.separator + "cadsr" + File.separator + "client-config.wsdd"));
-		DomainModel model = findExtract(args[0], args[1]);
-		writeExtract(model, new File(args[2]));
-		readExtract(new File(args[2]));
-	}
+
+public class CaDSRExtractUtils {
+    public static void setAxisConfig(File clientConfigWsdd) {
+        if (clientConfigWsdd == null) {
+            System.setProperty("axis.ClientConfigFile", null);
+        } else {
+            System.setProperty("axis.ClientConfigFile", clientConfigWsdd.toString());
+        }
+    }
+
+
+    public static DomainModel findExtract(CaDSRServiceI cadsr, String projectName, String version) throws Exception {
+        Project[] projects = cadsr.findAllProjects();
+        Project project = null;
+        for (Project myProject : projects) {
+            if (myProject.shortName.equals(projectName) && myProject.version.equals(version)) {
+                project = myProject;
+                break;
+            }
+        }
+        if (project == null) {
+            throw new IllegalArgumentException("could not find project " + projectName);
+        }
+
+        return cadsr.generateDomainModelForProject(project);
+    }
+
+
+    public static DomainModel findExtract(String url, String projectName, String version) throws Exception {
+        CaDSRServiceI cadsr = new CaDSRServiceClient(url);
+        return findExtract(cadsr, projectName, version);
+    }
+
+
+    public static void writeExtract(DomainModel extract, File file) throws Exception {
+        // BufferedWriter out = new BufferedWriter(new FileWriter(file));
+        // ObjectSerializer.serialize(out, extract, new QName("extract"));
+        // out.flush();
+        // out.close();
+
+        Utils.serializeDocument(file.toString(), extract, new QName("extract"));
+        // gov.nih.nci.cagrid.encoding.SDKSerializerFactory.createFactory(null,
+        // null, null).
+    }
+
+
+    public static DomainModel readExtract(File file) throws IOException, DeserializationException {
+        BufferedReader in = new BufferedReader(new FileReader(file));
+        DomainModel extract = (DomainModel) ObjectDeserializer.deserialize(new InputSource(in), DomainModel.class);
+        in.close();
+
+        return extract;
+    }
+
+
+    public static void main(String[] args) throws Exception {
+        setAxisConfig(new File("etc" + File.separator + "cadsr" + File.separator + "client-config.wsdd"));
+        DomainModel model = findExtract(args[0], args[1], args[2]);
+        writeExtract(model, new File(args[2]));
+        readExtract(new File(args[2]));
+    }
 }

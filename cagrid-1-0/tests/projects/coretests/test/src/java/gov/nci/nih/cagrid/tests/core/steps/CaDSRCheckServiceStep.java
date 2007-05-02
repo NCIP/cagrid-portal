@@ -50,7 +50,7 @@ public class CaDSRCheckServiceStep extends Step {
 
         DomainModel extract = null;
         if (this.extractFile == null) {
-            extract = CaDSRExtractUtils.findExtract(cadsr, "Genomic Identifiers");
+            extract = CaDSRExtractUtils.findExtract(cadsr, "Genomic Identifiers", "1");
             // extract = CaDSRExtractUtils.findExtract(cadsr, "caTIES");
         } else {
             extract = CaDSRExtractUtils.readExtract(this.extractFile);
@@ -60,7 +60,8 @@ public class CaDSRCheckServiceStep extends Step {
         Project[] projects = cadsr.findAllProjects();
         Project project = null;
         for (Project myProject : projects) {
-            if (myProject.longName.equals(extract.getProjectLongName())) {
+            if (myProject.longName.equals(extract.getProjectLongName())
+                && myProject.getVersion().equals(extract.getProjectVersion())) {
                 project = myProject;
                 break;
             }
