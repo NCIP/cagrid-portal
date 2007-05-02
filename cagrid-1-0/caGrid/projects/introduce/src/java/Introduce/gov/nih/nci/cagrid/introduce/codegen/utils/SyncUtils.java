@@ -73,6 +73,8 @@ public class SyncUtils {
 			fromDocFile = gov.nih.nci.cagrid.introduce.ResourceManager
 				.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION)
 				+ File.separator
+                + "share"
+                + File.separator
 				+ "schema"
 				+ File.separator
 				+ "wsrf"
@@ -80,7 +82,7 @@ public class SyncUtils {
 				+ method.getImportInformation().getWsdlFile();
 		}
 		if (!(new File(fromDocFile).exists())) {
-			throw new Exception("Cannot locate WSDL file: " + method.getImportInformation().getWsdlFile()
+			throw new Exception("Cannot locate WSDL file: " + fromDocFile
 				+ " to import from for Method: " + method.getName());
 		}
 
