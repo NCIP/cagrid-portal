@@ -259,13 +259,12 @@
             <property name="wsdl.file" value="ClassToQname.wsdl" />
             <property name="target.stubs.dir" location="${stubs.src}" />
         </ant>
-        <!-- generate stubs for BTD handler reference classes 
-		<ant antfile="${ant.build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}/Data"/>
-			<property name="wsdl.file" value="BulkDataHandlerReference.wsdl"/>
-			<property name="target.stubs.dir" location="${stubs.src}"/>
-		</ant>
-		-->
+		<!-- generate stubs for Enumeration Response Container classes -->
+        <ant antfile="${ant.build.stubs}" target="generateStubs">
+            <property name="source.stubs.dir" location="${schema.dest}/Data" />
+            <property name="wsdl.file" value="EnumerationResponseContainer.wsdl" />
+            <property name="target.stubs.dir" location="${stubs.src}" />
+        </ant>
         <!-- generate stubs for Bookstore classes used in testing -->
         <ant antfile="${ant.build.stubs}" target="generateStubs">
             <property name="source.stubs.dir" location="${test.resources.dir}" />
