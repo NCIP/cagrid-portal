@@ -35,7 +35,7 @@ import org.cagrid.grape.utils.errors.ErrorDialogTableListener;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 2, 2006 
- * @version $Id: ErrorDialog.java,v 1.4 2007-04-13 18:11:01 dervin Exp $ 
+ * @version $Id: ErrorDialog.java,v 1.5 2007-05-02 14:39:14 dervin Exp $ 
  */
 public class ErrorDialog extends JDialog {
 	
@@ -345,8 +345,11 @@ public class ErrorDialog extends JDialog {
 			hideDialogButton.setText("Hide");
 			hideDialogButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    errors.clear();
+                    getErrorTable().clearTable();
+                    getDetailTextArea().setText("");
                     getErrorsSplitPane().setDividerLocation(1.0D);
-					dispose();
+                    dispose();
 				}
 			});
 		}
