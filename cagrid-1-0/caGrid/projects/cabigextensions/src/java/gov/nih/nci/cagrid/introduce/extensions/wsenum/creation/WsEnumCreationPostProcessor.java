@@ -48,7 +48,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
     public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation info)
         throws CreationExtensionException {
         // execute steps to add ws-enumeration to the grid service
-        createServiceContext(desc, info);
+        createServiceContext(info);
         copySchemasToService(desc, info);
         copyWsdlToService(desc, info);
         copyLibrariesToService(info);
@@ -57,7 +57,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
     }
 
 
-    private void createServiceContext(ServiceExtensionDescriptionType desc, ServiceInformation info) {
+    private void createServiceContext(ServiceInformation info) {
         ServiceType mainService = info.getServices().getService(0);
         ServiceType service = new ServiceType();
         service.setName(mainService.getName() + "Enumeration");
