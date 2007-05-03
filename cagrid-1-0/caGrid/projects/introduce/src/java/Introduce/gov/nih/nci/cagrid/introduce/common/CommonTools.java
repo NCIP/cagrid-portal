@@ -959,6 +959,7 @@ public class CommonTools {
                 if (allProperties[i].getKey().equals(key)) {
                     allProperties[i].setValue(value);
                     allProperties[i].setIsFromETC(new Boolean(isFromETC));
+                    allProperties[i].setDescription(description);
                     found = true;
                     break;
                 }
