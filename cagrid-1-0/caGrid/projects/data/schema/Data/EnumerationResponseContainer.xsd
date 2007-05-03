@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:erc="http://gov.nih.nci.cagrid.data.enumeration/EnumerationResponseContainer" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wse="http://schemas.xmlsoap.org/ws/2004/09/enumeration" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://gov.nih.nci.cagrid.data.enumeration/EnumerationResponseContainer" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xsd:import namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing" schemaLocation="addressing.xsd" />
+<xsd:schema xmlns:erc="http://gov.nih.nci.cagrid.data.enumeration/EnumerationResponseContainer" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wse="http://schemas.xmlsoap.org/ws/2004/09/enumeration" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://gov.nih.nci.cagrid.data.enumeration/EnumerationResponseContainer" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xsd:import namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" schemaLocation="enumeration.xsd"/>
 	
 	<xsd:element name="EnumerationResponseContainer">
