@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
+import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -17,7 +18,7 @@ import javax.swing.tree.DefaultTreeModel;
  * @created Nov 22, 2004
  * @version $Id$
  */
-public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
+public class ServicesTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
 
 	private ServicesPopUpMenu menu;
 	private ServicesType services;
@@ -104,7 +105,7 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
 	}
 
 
-	public ServicesPopUpMenu getPopUpMenu() {
+	public JPopupMenu getPopUpMenu() {
 		return this.menu;
 	}
 }

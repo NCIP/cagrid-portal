@@ -48,6 +48,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.PopupTreeNode;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
@@ -65,7 +66,7 @@ import javax.swing.tree.DefaultTreeModel;
  * @version $Id: MakoGridServiceTreeNode.java,v 1.21 2005/04/20 17:28:54 ervin
  *          Exp $
  */
-public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
+public class MethodsTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
 	private MethodsType methods;
 	// private ServicesJTree tree;
 	private MethodsPopUpMenu menu;
@@ -128,7 +129,7 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 		MethodType[] newMethods = new MethodType[getMethods().getMethod().length - 1];
 		int newMethodsCount = 0;
 		for (int i = 0; i < getMethods().getMethod().length; i++) {
-			MethodType potentialMethod = (MethodType)getMethods().getMethod(i);
+			MethodType potentialMethod = getMethods().getMethod(i);
 			if (!potentialMethod.equals(removedMethod)) {
 				newMethods[newMethodsCount++] = potentialMethod;
 			}

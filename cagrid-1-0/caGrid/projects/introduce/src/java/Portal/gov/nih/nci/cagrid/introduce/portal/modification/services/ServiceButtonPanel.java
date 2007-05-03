@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsPopUpMenu;
@@ -128,16 +129,26 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
 			modifyResourcesButton.setText("Modify Resources");
 			modifyResourcesButton.setIcon(IntroduceLookAndFeel.getResourcePropertiesIcon());
 			modifyResourcesButton.addActionListener(new ActionListener() {
-
 				public void actionPerformed(ActionEvent e) {
-					DefaultMutableTreeNode tnode = ServiceButtonPanel.this.getTree().getCurrentNode();
-					tnode = (DefaultMutableTreeNode)tnode.getChildAt(1);
-					if (tnode instanceof ResourcePropertiesTypeTreeNode) {
-						ResourcePropertiesPopUpMenu.modifyResourceProperties((ResourcePropertiesTypeTreeNode) tnode);
-					}
+                    // this first node will be the selected service context node
+					ServiceTypeTreeNode serviceNode = (ServiceTypeTreeNode) getTree().getCurrentNode();
+                    // locate or create a resource properties node
+                    ResourcePropertiesTypeTreeNode resourceNode = null;
+                    if (serviceNode.getChildCount() >= 2 
+                        && serviceNode.getChildAt(1) instanceof ResourcePropertiesTypeTreeNode) {
+                        resourceNode = (ResourcePropertiesTypeTreeNode) serviceNode.getChildAt(1);
+                    } else {
+                        ResourcePropertiesListType resourcePropsList = new ResourcePropertiesListType();
+                        serviceNode.getServiceType().setResourcePropertiesList(resourcePropsList);
+                        resourceNode = new ResourcePropertiesTypeTreeNode(
+                            serviceNode.getServiceType(), serviceNode.getServiceType().getResourcePropertiesList(),
+                            serviceNode.getModel(), serviceNode.getInfo());
+                        serviceNode.getModel().insertNodeInto(resourceNode, serviceNode, serviceNode.getChildCount());
+                    }
+                    ResourcePropertiesPopUpMenu.modifyResourceProperties(resourceNode);
 					
-					((DefaultTreeModel)getTree().getModel()).nodeStructureChanged(tnode);
-					((DefaultTreeModel)getTree().getModel()).nodeChanged(tnode);
+					((DefaultTreeModel)getTree().getModel()).nodeStructureChanged(resourceNode);
+					((DefaultTreeModel)getTree().getModel()).nodeChanged(resourceNode);
 				}
 
 			});

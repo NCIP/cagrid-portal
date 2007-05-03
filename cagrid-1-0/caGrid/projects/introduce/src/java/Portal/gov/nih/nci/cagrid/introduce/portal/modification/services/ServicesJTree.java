@@ -44,50 +44,34 @@ public class ServicesJTree extends JTree {
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
-				ServicesJTree.this.setSelectionRow(ServicesJTree.this.getRowForLocation(e.getX(), e.getY()));
-				List nodes = ServicesJTree.this.getSelectedNodes();
+				setSelectionRow(getRowForLocation(e.getX(), e.getY()));
+				List nodes = getSelectedNodes();
 				if (nodes.size() >= 1) {
 					currentNode = (DefaultMutableTreeNode) nodes.get(0);
 					if (SwingUtilities.isRightMouseButton(e)) {
-						if (nodes.get(0) instanceof MethodsTypeTreeNode) {
-							((MethodsTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(), e.getX(),
-								e.getY());
-						} else if (nodes.get(0) instanceof MethodTypeTreeNode) {
-							((MethodTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(), e.getX(),
-								e.getY());
-						} else if (nodes.get(0) instanceof ResourcePropertiesTypeTreeNode) {
-							((ResourcePropertiesTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(),
-								e.getX(), e.getY());
-						} else if (nodes.get(0) instanceof ServicesTypeTreeNode) {
-							((ServicesTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(), e.getX(),
-								e.getY());
-						} else if (nodes.get(0) instanceof ResourcePropertyTypeTreeNode) {
-							((ResourcePropertyTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(),
-								e.getX(), e.getY());
-						} else if (nodes.get(0) instanceof ServiceTypeTreeNode) {
-							((ServiceTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(), e.getX(),
-								e.getY());
-						}
+                        if (currentNode instanceof PopupTreeNode) {
+                            ((PopupTreeNode) currentNode).getPopUpMenu().show(
+                                e.getComponent(), e.getX(), e.getY());
+                        }
 					} else if (SwingUtilities.isLeftMouseButton(e)) {
-
-						if (nodes.get(0) instanceof MethodsTypeTreeNode) {
+						if (currentNode instanceof MethodsTypeTreeNode) {
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "methods");
-						} else if (nodes.get(0) instanceof MethodTypeTreeNode) {
+						} else if (currentNode instanceof MethodTypeTreeNode) {
 							((MethodButtonPanel) ServicesJTree.this.optionsPanel.getComponent(3)).setCanModify(true);
 							// show the correct card for editing a method
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "method");
-						} else if (nodes.get(0) instanceof ResourcePropertiesTypeTreeNode) {
+						} else if (currentNode instanceof ResourcePropertiesTypeTreeNode) {
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "resources");
-						} else if (nodes.get(0) instanceof ServicesTypeTreeNode) {
+						} else if (currentNode instanceof ServicesTypeTreeNode) {
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "services");
-						} else if (nodes.get(0) instanceof ResourcePropertyTypeTreeNode) {
+						} else if (currentNode instanceof ResourcePropertyTypeTreeNode) {
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "blank");
-						} else if (nodes.get(0) instanceof ServiceTypeTreeNode) {
+						} else if (currentNode instanceof ServiceTypeTreeNode) {
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "service");
 						}
@@ -95,7 +79,6 @@ public class ServicesJTree extends JTree {
 				}
 			}
 		});
-
 	}
 
 
@@ -143,10 +126,8 @@ public class ServicesJTree extends JTree {
 		if (currentSelection != null) {
 			for (int i = 0; i < currentSelection.length; i++) {
 				TreePath path = currentSelection[i];
-				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-				// if (currentNode != this.root) {
-				selected.add(currentNode);
-				// }
+				DefaultMutableTreeNode lastNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+				selected.add(lastNode);
 			}
 		}
 		return selected;
@@ -154,9 +135,7 @@ public class ServicesJTree extends JTree {
 
 
 	public void removeSelectedNode() {
-		DefaultMutableTreeNode currentNode = getCurrentNode();
-
-		// keep the services object in sync
+        // keep the services object in sync
 		if (currentNode instanceof ServiceTypeTreeNode) {
 			ServiceType[] namespaceTypes = services.getService();
 			if (namespaceTypes.length > 1) {
@@ -221,14 +200,4 @@ public class ServicesJTree extends JTree {
 			super.setExpandedState(path, state);
 		}
 	}
-
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

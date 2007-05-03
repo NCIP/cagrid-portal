@@ -47,6 +47,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.PopupTreeNode;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
@@ -63,7 +64,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @version $Id: MakoGridServiceTreeNode.java,v 1.21 2005/04/20 17:28:54 ervin
  *          Exp $
  */
-public class MethodTypeTreeNode extends DefaultMutableTreeNode {
+public class MethodTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
 	private MethodPopUpMenu popUpMenu;
 	private SpecificServiceInformation info;
 	MethodType method;

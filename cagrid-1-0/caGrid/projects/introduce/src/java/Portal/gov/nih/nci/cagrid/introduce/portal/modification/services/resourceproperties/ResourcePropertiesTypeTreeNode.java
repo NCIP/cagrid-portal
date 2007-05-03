@@ -48,6 +48,7 @@ import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.PopupTreeNode;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
@@ -65,7 +66,7 @@ import javax.swing.tree.DefaultTreeModel;
  * @version $Id: MakoGridServiceTreeNode.java,v 1.21 2005/04/20 17:28:54 ervin
  *          Exp $
  */
-public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode {
+public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
 	private ResourcePropertiesListType resourceProperties;
 	private DefaultTreeModel model;
 	private ResourcePropertiesPopUpMenu menu;
