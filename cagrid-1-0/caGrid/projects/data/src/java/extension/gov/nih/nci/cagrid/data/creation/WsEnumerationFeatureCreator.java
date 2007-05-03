@@ -17,6 +17,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -103,7 +104,8 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
         // output
 		MethodTypeOutput enumOutput = new MethodTypeOutput();
 		enumOutput.setIsArray(false);
-		enumOutput.setQName(new QName(WsEnumConstants.WS_ENUMERATION_URI, WsEnumConstants.ENUMERATE_RESPONSE_TYPE));
+		// enumOutput.setQName(new QName(WsEnumConstants.WS_ENUMERATION_URI, WsEnumConstants.ENUMERATE_RESPONSE_TYPE));
+        enumOutput.setQName(DataServiceConstants.ENUMERATION_QUERY_METHOD_OUTPUT_TYPE);
 		enumOutput.setDescription(DataServiceConstants.ENUMERATION_QUERY_METHOD_OUTPUT_DESCRIPTION);
 		enumerateMethod.setOutput(enumOutput);
 		// import info
@@ -145,6 +147,8 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 			+ WS_ENUM_EXTENSION_NAME + File.separator + "schema");
 		File wsdlFile = new File(dataExtensionSchemaDir.getAbsolutePath() + File.separator + "Data" + File.separator
 			+ "EnumerationDataService.wsdl");
+        File enumResponseContainerXsdFile = new File(dataExtensionSchemaDir.getAbsolutePath() + File.separator
+            + "Data" + File.separator + "EnumerationResponseContainer.xsd");
 		File enumWsdlFile = new File(wsEnumExtensionSchemaDir.getAbsolutePath() + File.separator
 			+ WsEnumConstants.ENUMERATION_WSDL_NAME);
 		File enumXsdFile = new File(wsEnumExtensionSchemaDir.getAbsolutePath() + File.separator
@@ -152,17 +156,26 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 		File addressingXsdFile = new File(wsEnumExtensionSchemaDir.getAbsolutePath() + File.separator
 			+ WsEnumConstants.ADDRESSING_XSD_NAME);
 		File wsdlOutFile = new File(schemaDir + File.separator + wsdlFile.getName());
+        File responseContainerOutFile = new File(schemaDir + File.separator + enumResponseContainerXsdFile.getName());
 		File enumWsdlOutFile = new File(schemaDir + File.separator + enumWsdlFile.getName());
 		File enumXsdOutFile = new File(schemaDir + File.separator + enumXsdFile.getName());
 		File addressingXsdOutFile = new File(schemaDir + File.separator + addressingXsdFile.getName());
 		try {
 			Utils.copyFile(wsdlFile, wsdlOutFile);
+            Utils.copyFile(enumResponseContainerXsdFile, responseContainerOutFile);
 			Utils.copyFile(enumWsdlFile, enumWsdlOutFile);
 			Utils.copyFile(enumXsdFile, enumXsdOutFile);
 			Utils.copyFile(addressingXsdFile, addressingXsdOutFile);
 		} catch (Exception ex) {
 			throw new CreationExtensionException("Error copying data service schemas: " + ex.getMessage(), ex);
 		}
+        // add the namespace for the enumeration container to the service description
+        try {
+            NamespaceType nsType = CommonTools.createNamespaceType(responseContainerOutFile.getAbsolutePath(), new File(schemaDir));
+            CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
+        } catch (Exception ex) {
+            throw new CreationExtensionException("Error creating response type namespace", ex);
+        }
 	}
 
 

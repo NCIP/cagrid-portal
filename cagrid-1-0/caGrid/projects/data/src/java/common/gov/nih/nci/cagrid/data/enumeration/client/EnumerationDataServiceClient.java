@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.enumeration.client;
 
 import gov.nih.nci.cagrid.data.enumeration.common.EnumerationDataServiceI;
 import gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationDataServicePortType;
+import gov.nih.nci.cagrid.data.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.data.enumeration.stubs.service.EnumerationDataServiceAddressingLocator;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
@@ -134,7 +135,7 @@ public class EnumerationDataServiceClient extends ServiceSecurityClient implemen
         portType.releaseOp(params);
       }
     }
-	public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse enumerationQuery(gov.nih.nci.cagrid.cqlquery.CQLQuery query) throws RemoteException, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
+	public EnumerationResponseContainer enumerationQuery(gov.nih.nci.cagrid.cqlquery.CQLQuery query) throws RemoteException, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"enumerationQuery");
         gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryRequest params = new gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryRequest();
@@ -142,7 +143,7 @@ public class EnumerationDataServiceClient extends ServiceSecurityClient implemen
         queryContainer.setCQLQuery(query);
         params.setCqlQuery(queryContainer);
         gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryResponse boxedResult = portType.enumerationQuery(params);
-        return boxedResult.getEnumerateResponse();
+        return boxedResult.getEnumerationResponseContainer();
       }
     }
 	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {

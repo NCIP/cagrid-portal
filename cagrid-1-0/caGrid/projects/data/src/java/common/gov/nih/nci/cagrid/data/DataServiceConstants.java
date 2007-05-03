@@ -115,11 +115,12 @@ public class DataServiceConstants {
 	public static final String CASTOR_MAPPING_WSDD_PARAMETER = "castorMapping";
 
 	// enumeration query method constants
-	public static final String ENUMERATION_QUERY_METHOD_OUTPUT_DESCRIPTION = "The enumerate response containing the EPR of the enumeration resource";
 	public static final String ENUMERATION_QUERY_METHOD_DESCRIPTION = "The standard caGrid Data Service query method which begins an Enumeration";
 	public static final String ENUMERATION_QUERY_METHOD_NAME = "enumerationQuery";
 	public static final String ENUMERATION_DATA_SERVICE_PACKAGE = DATA_SERVICE_PACKAGE + ".enumeration";
 	public static final String ENUMERATION_DATA_SERVICE_NAMESPACE = "http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService";
+    public static final String ENUMERATION_QUERY_METHOD_OUTPUT_DESCRIPTION = "The enumerate response containing the EPR of the enumeration resource";
+    public static final QName ENUMERATION_QUERY_METHOD_OUTPUT_TYPE = new QName("http://gov.nih.nci.cagrid.data.enumeration/EnumerationResponseContainer", "EnumerationResponseContainer");
     
     public static final String ENUMERATION_ITERATOR_TYPE_PROPERTY = DATA_SERVICE_PARAMS_PREFIX + "_enumIteratorType";
 	

@@ -73,16 +73,16 @@ public class EnumerationSystemTests extends BaseSystemTest {
 		// 3) Turn on query validation
 		steps.add(new EnableValidationStep(info.getDir()));
 		// 4) Rebuild the service to pick up the bookstore beans
-		steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
+		//steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
 		// 5) set up a clean, temporary Globus
-		steps.add(new CreateCleanGlobusStep(globusHelper));
+		//steps.add(new CreateCleanGlobusStep(globusHelper));
 		// 6) deploy data service
-		steps.add(new DeployDataServiceStep(globusHelper, info.getDir()));
+		//steps.add(new DeployDataServiceStep(globusHelper, info.getDir()));
 		// 7) start globus
-		steps.add(new StartGlobusStep(globusHelper));
+		//steps.add(new StartGlobusStep(globusHelper));
 		// 8) test data service
-		steps.add(new InvokeEnumerationDataServiceStep("localhost", IntroduceTestConstants.TEST_PORT + 2,
-			info.getName()));
+		//steps.add(new InvokeEnumerationDataServiceStep("localhost", IntroduceTestConstants.TEST_PORT + 2,
+		//	info.getName()));
 
 		return steps;
 	}

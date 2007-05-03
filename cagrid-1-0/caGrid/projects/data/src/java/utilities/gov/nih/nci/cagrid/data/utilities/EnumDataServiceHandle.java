@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.utilities;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.enumeration.common.EnumerationDataServiceI;
+import gov.nih.nci.cagrid.data.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
@@ -11,7 +12,6 @@ import java.util.Iterator;
 
 import org.globus.ws.enumeration.ClientEnumIterator;
 import org.globus.ws.enumeration.IterationConstraints;
-import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse;
 
 /** 
  *  EnumDataServiceHandle
@@ -20,7 +20,7 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: EnumDataServiceHandle.java,v 1.2 2006-12-18 14:48:47 dervin Exp $ 
+ * @version $Id: EnumDataServiceHandle.java,v 1.3 2007-05-03 18:17:39 dervin Exp $ 
  */
 public class EnumDataServiceHandle implements DataServiceIterator {
 
@@ -48,9 +48,10 @@ public class EnumDataServiceHandle implements DataServiceIterator {
 			helper.addFaultCause(ex);
 			throw (QueryProcessingExceptionType) helper.getFault();
 		}
-		EnumerateResponse response = queryService.enumerationQuery(query);
-		ClientEnumIterator iter = new ClientEnumIterator(
-			queryService, response.getEnumerationContext());
+		EnumerationResponseContainer container = queryService.enumerationQuery(query);
+        
+        ClientEnumIterator iter = new ClientEnumIterator(
+			queryService, container.getContext());
 		iter.setIterationConstraints(constraints);
 		iter.setItemType(targetClass);
 		return new IterationWraper(iter);

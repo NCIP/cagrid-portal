@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.data.enumeration.common;
 
+import gov.nih.nci.cagrid.data.enumeration.stubs.response.EnumerationResponseContainer;
+
 import java.rmi.RemoteException;
 
 import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
@@ -22,7 +24,7 @@ public interface EnumerationDataServiceI extends DataSource {
 
     public void releaseOp(org.xmlsoap.schemas.ws._2004._09.enumeration.Release params) throws RemoteException ;
 
-    public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse enumerationQuery(gov.nih.nci.cagrid.cqlquery.CQLQuery query) throws RemoteException, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
+    public EnumerationResponseContainer enumerationQuery(gov.nih.nci.cagrid.cqlquery.CQLQuery query) throws RemoteException, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
 
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 

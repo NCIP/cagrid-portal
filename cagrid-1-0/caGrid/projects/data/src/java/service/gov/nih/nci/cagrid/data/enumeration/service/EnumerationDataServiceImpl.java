@@ -10,14 +10,13 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
+import gov.nih.nci.cagrid.data.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.data.service.BaseServiceImpl;
 import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.wsenum.utils.EnumIteratorFactory;
-import gov.nih.nci.cagrid.wsenum.utils.EnumerateResponseFactory;
-import gov.nih.nci.cagrid.wsenum.utils.EnumerationCreationException;
 import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
 import java.io.FileInputStream;
@@ -31,7 +30,14 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.ws.enumeration.EnumIterator;
+import org.globus.ws.enumeration.EnumProvider;
+import org.globus.ws.enumeration.EnumResource;
+import org.globus.ws.enumeration.EnumResourceHome;
+import org.globus.wsrf.ResourceKey;
+import org.globus.wsrf.utils.AddressingUtils;
+import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerationContextType;
 
 /** 
  * TODO:I am the service side implementation class.  IMPLEMENT AND DOCUMENT ME
@@ -46,7 +52,7 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 		super();
 	}
 	
-	public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse enumerationQuery(gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws RemoteException, 
+	public EnumerationResponseContainer enumerationQuery(gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws RemoteException, 
 		gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType, 
 		gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
 		preProcess(cqlQuery);
@@ -70,8 +76,20 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 		}
 		
 		try {
-			return EnumerateResponseFactory.createCustomResponse(enumIter, false);
-		} catch (EnumerationCreationException ex) {
+            EnumResourceHome resourceHome = EnumResourceHome.getEnumResourceHome();
+            EnumResource resource = resourceHome.createEnumeration(enumIter, false);
+            ResourceKey key = resourceHome.getKey(resource);
+            
+            EnumerationContextType enumContext = 
+                EnumProvider.createEnumerationContextType(key);
+            
+            EndpointReferenceType epr = AddressingUtils.createEndpointReference(key);
+            
+            EnumerationResponseContainer container = new EnumerationResponseContainer();
+            container.setContext(enumContext);
+            container.setEPR(epr);
+            return container;
+		} catch (Exception ex) {
 			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		}
 	}	

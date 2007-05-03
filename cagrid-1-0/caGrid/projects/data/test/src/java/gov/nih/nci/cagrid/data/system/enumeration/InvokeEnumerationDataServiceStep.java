@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.cqlquery.Group;
 import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.data.enumeration.client.EnumerationDataServiceClient;
+import gov.nih.nci.cagrid.data.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
@@ -15,7 +16,6 @@ import javax.xml.soap.SOAPElement;
 
 import org.globus.ws.enumeration.ClientEnumIterator;
 import org.projectmobius.bookstore.Book;
-import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.Release;
 
 import com.atomicobject.haste.framework.Step;
@@ -26,7 +26,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 23, 2006 
- * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.3 2007-05-01 14:41:20 dervin Exp $ 
+ * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.4 2007-05-03 18:17:39 dervin Exp $ 
  */
 public class InvokeEnumerationDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
@@ -65,15 +65,15 @@ public class InvokeEnumerationDataServiceStep extends Step {
 		gov.nih.nci.cagrid.cqlquery.Object target = new gov.nih.nci.cagrid.cqlquery.Object();
 		target.setName("non.existant.class");
 		query.setTarget(target);
-		EnumerateResponse response = null;
+		EnumerationResponseContainer container = null;
 		try {
-			response = client.enumerationQuery(query);
+			container = client.enumerationQuery(query);
 		} catch (QueryProcessingExceptionType ex) {
 			assertTrue("Query Processing Exception Type thrown", true);
 		} finally {
-			if (response != null && response.getEnumerationContext() != null) {
+			if (container != null && container.getContext() != null) {
 				Release release = new Release();
-				release.setEnumerationContext(response.getEnumerationContext());
+				release.setEnumerationContext(container.getContext());
 				client.releaseOp(release);
 			}
 		}
@@ -94,45 +94,45 @@ public class InvokeEnumerationDataServiceStep extends Step {
 		});
 		target.setGroup(group);
 		query.setTarget(target);
-		EnumerateResponse response = null;
+		EnumerationResponseContainer container = null;
 		try {
-			response = client.enumerationQuery(query);
+			container = client.enumerationQuery(query);
 		} catch (MalformedQueryExceptionType ex) {
 			assertTrue("Malformed Query Exception Type thrown", true);
 		} finally {
-			if (response != null && response.getEnumerationContext() != null) {
+			if (container != null && container.getContext() != null) {
 				Release release = new Release();
-				release.setEnumerationContext(response.getEnumerationContext());
+				release.setEnumerationContext(container.getContext());
 				client.releaseOp(release);
 			}
 		}		
 	}
 	
 	
-	private EnumerateResponse queryForBooks(EnumerationDataServiceClient client) throws Exception {
+	private EnumerationResponseContainer queryForBooks(EnumerationDataServiceClient client) throws Exception {
 		CQLQuery query = new CQLQuery();
 		gov.nih.nci.cagrid.cqlquery.Object target = new gov.nih.nci.cagrid.cqlquery.Object();
 		target.setName(Book.class.getName());
 		query.setTarget(target);
-		EnumerateResponse response = null;
+		EnumerationResponseContainer container = null;
 		try {
-			response = client.enumerationQuery(query);
+			container = client.enumerationQuery(query);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw ex;
 		}
-		return response;
+		return container;
 	}
 	
 	
 	private void iterateEnumeration(EnumerationDataServiceClient dataSource) throws Exception {
-		EnumerateResponse response = queryForBooks(dataSource);
+		EnumerationResponseContainer container = queryForBooks(dataSource);
         
 		/*
 		 * This is the preferred way to access an enumeration, but the client enum iterator hides
 		 * remote exceptions from the user and throws an empty NoSuchElement exception.
 		 */
-		ClientEnumIterator iter = new ClientEnumIterator(dataSource, response.getEnumerationContext());
+		ClientEnumIterator iter = new ClientEnumIterator(dataSource, container.getContext());
 		int resultCount = 0;
 		try {
 			while (iter.hasNext()) {
