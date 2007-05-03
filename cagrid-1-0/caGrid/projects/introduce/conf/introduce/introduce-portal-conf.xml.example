@@ -15,7 +15,7 @@
       </application>
       <components>
         <component>
-          <title>Create Service</title>
+          <title></title>
           <description>Create Service Skeleton</description>
           <class>gov.nih.nci.cagrid.introduce.portal.creation.CreationViewer</class>
           <icon>/cog_add.png</icon>
@@ -24,18 +24,18 @@
             <height>450</height>
           </dimensions>
         </component>
-        <component>
-          <title>Create caBIG Service</title>
+         <component>
+          <title></title>
           <description>Create Service Skeleton</description>
           <class>gov.nih.nci.cagrid.introduce.portal.creation.CaBIGCreationViewer</class>
-          <icon>/cog_add.png</icon>
+          <icon>/caGrid_small.png</icon>
           <dimensions>
             <width>600</width>
             <height>450</height>
           </dimensions>
         </component>
         <component>
-          <title>Modify Service</title>
+          <title></title>
           <description>Modify Service Skeleton</description>
           <class>gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer</class>
           <icon>/cog_edit.png</icon>
@@ -45,7 +45,7 @@
           </dimensions>
         </component>
         <component>
-          <title>Deploy Service</title>
+          <title></title>
           <description>Deploy Grid Service</description>
           <class>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer</class>
           <icon>/cog_go.png</icon>
@@ -55,7 +55,7 @@
           </dimensions>
         </component>
         <component>
-          <title>Types Management Tools</title>
+          <title></title>
           <description>Types Management Tools</description>
           <class>gov.nih.nci.cagrid.introduce.portal.discoverytools.core.TypesToolsComponent</class>
           <icon>/system-search.png</icon>
