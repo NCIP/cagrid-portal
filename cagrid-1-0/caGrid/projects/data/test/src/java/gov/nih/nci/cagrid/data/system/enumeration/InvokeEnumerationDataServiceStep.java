@@ -10,13 +10,22 @@ import gov.nih.nci.cagrid.data.enumeration.stubs.response.EnumerationResponseCon
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
+import java.io.InputStream;
+import java.rmi.RemoteException;
 import java.util.NoSuchElementException;
 
 import javax.xml.soap.SOAPElement;
 
+import org.apache.axis.EngineConfiguration;
+import org.apache.axis.client.AxisClient;
+import org.apache.axis.configuration.FileProvider;
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.utils.ClassUtils;
 import org.globus.ws.enumeration.ClientEnumIterator;
 import org.projectmobius.bookstore.Book;
+import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.Release;
+import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAddressingLocator;
 
 import com.atomicobject.haste.framework.Step;
 
@@ -26,7 +35,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 23, 2006 
- * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.4 2007-05-03 18:17:39 dervin Exp $ 
+ * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.5 2007-05-04 19:07:58 dervin Exp $ 
  */
 public class InvokeEnumerationDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
@@ -41,6 +50,28 @@ public class InvokeEnumerationDataServiceStep extends Step {
 		this.serviceName = serviceName;
 	}
 	
+    private static DataSource createDataSource(EndpointReferenceType epr) throws RemoteException {
+
+        EnumerationServiceAddressingLocator locator = new EnumerationServiceAddressingLocator();
+        
+        // attempt to load our context sensitive wsdd file
+        InputStream resourceAsStream = ClassUtils.getResourceAsStream(Delme.class, "client-config.wsdd");
+        if (resourceAsStream != null) {
+            // we found it, so tell axis to configure an engine to use it
+            EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
+            // set the engine of the locator
+            locator.setEngine(new AxisClient(engineConfig));
+        }
+        DataSource port = null;
+        try {
+            port = locator.getDataSourcePort(epr);
+        } catch (Exception e) {
+            throw new RemoteException("Unable to locate portType:" + e.getMessage(), e);
+        }
+
+        return port;
+    }
+    
 
 	public void runStep() throws Throwable {
 		System.out.println("Running step " + getClass().getName());
@@ -74,7 +105,7 @@ public class InvokeEnumerationDataServiceStep extends Step {
 			if (container != null && container.getContext() != null) {
 				Release release = new Release();
 				release.setEnumerationContext(container.getContext());
-				client.releaseOp(release);
+                createDataSource(container.getEPR()).releaseOp(release);
 			}
 		}
 	}
@@ -103,7 +134,7 @@ public class InvokeEnumerationDataServiceStep extends Step {
 			if (container != null && container.getContext() != null) {
 				Release release = new Release();
 				release.setEnumerationContext(container.getContext());
-				client.releaseOp(release);
+				createDataSource(container.getEPR()).releaseOp(release);
 			}
 		}		
 	}
@@ -125,8 +156,10 @@ public class InvokeEnumerationDataServiceStep extends Step {
 	}
 	
 	
-	private void iterateEnumeration(EnumerationDataServiceClient dataSource) throws Exception {
-		EnumerationResponseContainer container = queryForBooks(dataSource);
+	private void iterateEnumeration(EnumerationDataServiceClient client) throws Exception {
+		EnumerationResponseContainer container = queryForBooks(client);
+        
+        DataSource dataSource = createDataSource(container.getEPR());
         
 		/*
 		 * This is the preferred way to access an enumeration, but the client enum iterator hides
