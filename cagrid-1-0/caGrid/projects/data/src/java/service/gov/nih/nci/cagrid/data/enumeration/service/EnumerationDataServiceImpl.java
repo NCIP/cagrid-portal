@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -35,7 +36,10 @@ import org.globus.ws.enumeration.EnumIterator;
 import org.globus.ws.enumeration.EnumProvider;
 import org.globus.ws.enumeration.EnumResource;
 import org.globus.ws.enumeration.EnumResourceHome;
+import org.globus.ws.enumeration.VisibilityProperties;
+import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceKey;
+import org.globus.wsrf.container.ServiceHost;
 import org.globus.wsrf.utils.AddressingUtils;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerationContextType;
 
@@ -76,14 +80,20 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 		}
 		
 		try {
-            EnumResourceHome resourceHome = EnumResourceHome.getEnumResourceHome();
-            EnumResource resource = resourceHome.createEnumeration(enumIter, false);
+		    EnumResourceHome resourceHome = EnumResourceHome.getEnumResourceHome();
+            VisibilityProperties visibility = new VisibilityProperties(
+                ResourceContext.getResourceContext().getService() + "Enumeration", null);
+            
+            EnumResource resource = resourceHome.createEnumeration(enumIter, visibility, false);
             ResourceKey key = resourceHome.getKey(resource);
             
             EnumerationContextType enumContext = 
                 EnumProvider.createEnumerationContextType(key);
             
-            EndpointReferenceType epr = AddressingUtils.createEndpointReference(key);
+            URL baseURL = ServiceHost.getBaseURL();
+            String serviceURI = baseURL.toString() + ResourceContext.getResourceContext().getService() + "Enumeration";
+
+            EndpointReferenceType epr = AddressingUtils.createEndpointReference(serviceURI, key);
             
             EnumerationResponseContainer container = new EnumerationResponseContainer();
             container.setContext(enumContext);
