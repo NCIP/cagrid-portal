@@ -35,7 +35,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 23, 2006 
- * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.5 2007-05-04 19:07:58 dervin Exp $ 
+ * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.6 2007-05-04 19:23:41 dervin Exp $ 
  */
 public class InvokeEnumerationDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
@@ -55,7 +55,8 @@ public class InvokeEnumerationDataServiceStep extends Step {
         EnumerationServiceAddressingLocator locator = new EnumerationServiceAddressingLocator();
         
         // attempt to load our context sensitive wsdd file
-        InputStream resourceAsStream = ClassUtils.getResourceAsStream(Delme.class, "client-config.wsdd");
+        InputStream resourceAsStream = ClassUtils.getResourceAsStream(
+            InvokeEnumerationDataServiceStep.class, "client-config.wsdd");
         if (resourceAsStream != null) {
             // we found it, so tell axis to configure an engine to use it
             EngineConfiguration engineConfig = new FileProvider(resourceAsStream);

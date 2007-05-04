@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.data.enumeration.common.EnumerationDataServiceI;
 import gov.nih.nci.cagrid.data.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
-import gov.nih.nci.cagrid.data.system.enumeration.Delme;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -29,7 +28,7 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAd
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: EnumDataServiceHandle.java,v 1.5 2007-05-04 19:17:34 dervin Exp $ 
+ * @version $Id: EnumDataServiceHandle.java,v 1.6 2007-05-04 19:23:41 dervin Exp $ 
  */
 public class EnumDataServiceHandle implements DataServiceIterator {
 
@@ -93,7 +92,7 @@ public class EnumDataServiceHandle implements DataServiceIterator {
         EnumerationServiceAddressingLocator locator = new EnumerationServiceAddressingLocator();
         
         // attempt to load our context sensitive wsdd file
-        InputStream resourceAsStream = ClassUtils.getResourceAsStream(Delme.class, "client-config.wsdd");
+        InputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
         if (resourceAsStream != null) {
             // we found it, so tell axis to configure an engine to use it
             EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
