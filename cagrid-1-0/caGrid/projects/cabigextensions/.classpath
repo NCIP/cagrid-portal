@@ -129,7 +129,7 @@
 	<classpathentry kind="lib" path="ext/test/lib/xstream-1.0.2.jar"/>
 	<classpathentry kind="lib" path="test/lib/commons-jxpath-1.2.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-portal.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-portal.jar" sourcepath="/caGrid-1.0-introduce"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-updater.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GlobalModelExchange-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-Introduce-1.1-core-tests.jar"/>
