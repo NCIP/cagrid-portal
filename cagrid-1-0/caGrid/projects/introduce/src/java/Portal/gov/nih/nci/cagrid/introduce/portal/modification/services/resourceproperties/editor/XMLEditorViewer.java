@@ -9,13 +9,10 @@ import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
 
 import javax.swing.JPanel;
 
-import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 
 
@@ -52,7 +49,6 @@ public class XMLEditorViewer extends ResourcePropertyEditorPanel {
     /**
      * This method initializes this
      * 
-     * @return void
      */
     private void initialize() {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -133,7 +129,7 @@ public class XMLEditorViewer extends ResourcePropertyEditorPanel {
 
 
     /**
-     * @see gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel#getResultRPInputStream()
+     * @see gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel#getResultRPString()
      */
     public String getResultRPString() {
         if (xml == null) {

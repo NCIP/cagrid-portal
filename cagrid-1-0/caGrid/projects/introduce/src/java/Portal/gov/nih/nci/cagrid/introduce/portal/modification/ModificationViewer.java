@@ -633,8 +633,7 @@ public class ModificationViewer extends GridPortalComponent {
      */
     private MethodsTable getMethodsTable() {
         if (methodsTable == null) {
-            methodsTable = new MethodsTable(info.getServices().getService(0), methodsDirectory, info
-                .getIntroduceServiceProperties());
+            methodsTable = new MethodsTable(info.getServices().getService(0));
             methodsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
                 public void valueChanged(ListSelectionEvent e) {

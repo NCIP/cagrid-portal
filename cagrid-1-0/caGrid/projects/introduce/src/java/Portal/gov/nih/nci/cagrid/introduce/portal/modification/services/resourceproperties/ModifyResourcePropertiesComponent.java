@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
@@ -21,7 +20,6 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 	private JPanel mainPanel = null;
 	private JPanel resourcesPanel = null;
 	private JPanel buttonPanel = null;
-	private ResourcePropertiesListType properties;
 	private NamespacesType namespaces;
 	private JButton doneButton = null;
 	private boolean showW3Cnamespaces;
@@ -39,7 +37,6 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 		this.service = service;
 		this.etcDir = etcDir;
 		this.schemaDir = schemaDir;
-		this.properties = service.getResourcePropertiesList();
 		this.namespaces = namespaces;
 		this.showW3Cnamespaces = showW3Cnamespaces;
 		initialize();

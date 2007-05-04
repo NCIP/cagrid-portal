@@ -8,10 +8,8 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Properties;
 import java.util.Vector;
 
 import javax.swing.event.TableModelEvent;
@@ -68,7 +66,7 @@ public class MethodsTable extends PortalBaseTable {
 	private ServiceType serviceType;
 
 
-	public MethodsTable(ServiceType service, File methodsDirectory, Properties serviceProperties) {
+	public MethodsTable(ServiceType service) {
 		super(createTableModel());
 		this.serviceType = service;
 		initialize();
@@ -240,17 +238,11 @@ public class MethodsTable extends PortalBaseTable {
 				return 1;
 			} else if (o2 == null) {
 				return -1;
-			} else if (o1 instanceof Comparable) {
+			} else {
 				if (ascending) {
 					return ((Comparable) o1).compareTo(o2);
 				} else {
 					return ((Comparable) o2).compareTo(o1);
-				}
-			} else {
-				if (ascending) {
-					return o1.toString().compareTo(o2.toString());
-				} else {
-					return o2.toString().compareTo(o1.toString());
 				}
 			}
 		}
