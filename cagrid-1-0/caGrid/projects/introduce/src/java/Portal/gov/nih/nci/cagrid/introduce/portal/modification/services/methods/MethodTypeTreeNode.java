@@ -47,7 +47,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.PopupTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.common.PopupTreeNode;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
