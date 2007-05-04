@@ -1564,11 +1564,6 @@ public class MethodViewer extends GridPortalBaseFrame {
     }
 
 
-    /**
-     * Yabba dabba do
-     * 
-     * @return
-     */
     private JPanel getImportInformationPanel() {
 
         if (importInformationPanel == null) {
