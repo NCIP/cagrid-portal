@@ -29,24 +29,43 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAd
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: EnumDataServiceHandle.java,v 1.4 2007-05-04 19:08:19 dervin Exp $ 
+ * @version $Id: EnumDataServiceHandle.java,v 1.5 2007-05-04 19:17:34 dervin Exp $ 
  */
 public class EnumDataServiceHandle implements DataServiceIterator {
 
 	private EnumerationDataServiceI queryService;
 	private IterationConstraints constraints;
 	
+    /**
+     * Creates a simplified enumeration data service handle using
+     * the default iteration constraints for WS-Enumeration
+     * 
+     * @param enumQueryService
+     */
 	public EnumDataServiceHandle(EnumerationDataServiceI enumQueryService) {
 		this(enumQueryService, new IterationConstraints());
 	}
 	
 	
+    /**
+     * Creates a simplified enumeration data service handle
+     * using the supplied iteration constraints for
+     * WS-Enumeration
+     * 
+     * @param enumQueryService
+     * @param iterationConstraints
+     */
 	public EnumDataServiceHandle(EnumerationDataServiceI enumQueryService, IterationConstraints iterationConstraints) {
 		this.queryService = enumQueryService;
 		this.constraints = iterationConstraints;
 	}
 	
 	
+    /**
+     * Performs a CQL query against the data source and returns an Iterator
+     * implementation, which hides the complexity of initializing a
+     * WS-Enumeration client session
+     */
 	public Iterator query(CQLQuery query) 
 		throws MalformedQueryExceptionType, QueryProcessingExceptionType, RemoteException {
 		Class targetClass = null;
