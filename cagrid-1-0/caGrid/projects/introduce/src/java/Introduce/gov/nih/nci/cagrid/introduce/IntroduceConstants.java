@@ -31,11 +31,11 @@ public class IntroduceConstants {
 
     public static final String INTRODUCE_ENGINE_PROPERTIES = "conf/introduce/introduce.engine.properties";
 
-    public static final String GLOBUS_LOCATION = "GLOBUS_LOCATION";
+    public static final String GLOBUS_LOCATION = "Globus Location";
 
     public static final String SERVICE_SECURITY_METADATA_METHOD = "getServiceSecurityMetadata";
 
-    public static final String NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY = "namespace.type.replacemenet.policy";
+    public static final String NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY = "Namespace Type Replacement Policy";
 
     // service skeleton properties
     public static final String INTRODUCE_PROPERTIES_FILE = "introduce.properties";

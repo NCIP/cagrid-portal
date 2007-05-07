@@ -13,6 +13,7 @@
 	
 	<target name="resyncService" depends="checkResyncInputProps, prepareResyncSkeleton" description="Uses the introduceMethods.xml to add and remove methods to this service skeleton">
 		<java classname="gov.nih.nci.cagrid.introduce.codegen.SyncTools" fork="yes" failonerror="true">
+			<sysproperty key="GLOBUS_LOCATION" value="${ext.globus.location}"/>
 			<arg value="-d" />
 			<arg value="${introduce.skeleton.destination.dir}" />
 			<!--

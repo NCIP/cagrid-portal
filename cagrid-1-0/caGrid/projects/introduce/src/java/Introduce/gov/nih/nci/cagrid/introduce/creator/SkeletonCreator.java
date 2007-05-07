@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -12,6 +13,7 @@ import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -27,134 +29,142 @@ import org.apache.tools.ant.Task;
  */
 public class SkeletonCreator extends Task {
 
-	public SkeletonCreator() {
-	    PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+    public SkeletonCreator() {
+        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
             + "log4j.properties");
-	}
+    }
 
 
-	public void execute() throws BuildException {
-		super.execute();
+    public void execute() throws BuildException {
+        super.execute();
 
-		Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
+        Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
 
-		Properties properties = new Properties();
-		properties.putAll(this.getProject().getProperties());
+        Properties properties = new Properties();
+        properties.putAll(this.getProject().getProperties());
 
-		File baseDirectory = new File(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+        // get and set the globus location property
+        String globusLocation = (String) properties.get("ext.globus.location");
+        try {
+            ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, globusLocation);
+        } catch (IOException e2) {
+            e2.printStackTrace();
+        }
 
-		ServiceDescription introService = null;
-		try {
-			introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
-				+ IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
-		} catch (Exception e1) {
-			BuildException be = new BuildException(e1.getMessage());
-			be.setStackTrace(e1.getStackTrace());
-			be.printStackTrace();
-			throw be;
-		}
+        File baseDirectory = new File(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 
-		// need to add the base service....
-		ServiceType serviceType = new ServiceType();
-		serviceType.setName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
-		serviceType.setNamespace(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
-		serviceType.setPackageName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE));
-		serviceType.setResourceFrameworkType(IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
+        ServiceDescription introService = null;
+        try {
+            introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
+                + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
+        } catch (Exception e1) {
+            BuildException be = new BuildException(e1.getMessage());
+            be.setStackTrace(e1.getStackTrace());
+            be.printStackTrace();
+            throw be;
+        }
 
-		// add new service to the services
-		// add new method to array in bean
-		// this seems to be a wierd way be adding things....
-		ServiceType[] newServices;
-		int newLength = 0;
-		if (introService.getServices() != null && introService.getServices().getService() != null) {
-			newLength = introService.getServices().getService().length + 1;
-			newServices = new ServiceType[newLength];
-			System.arraycopy(introService.getServices().getService(), 0, newServices, 0, introService.getServices()
-				.getService().length);
-		} else {
-			newLength = 1;
-			newServices = new ServiceType[newLength];
-		}
-		newServices[newLength - 1] = serviceType;
-		introService.getServices().setService(newServices);
+        // need to add the base service....
+        ServiceType serviceType = new ServiceType();
+        serviceType.setName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+        serviceType.setNamespace(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
+        serviceType.setPackageName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE));
+        serviceType.setResourceFrameworkType(IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
 
-		// write the modified document back out....
-		try {
-			Utils.serializeDocument(baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
-				introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
-		} catch (Exception e1) {
-			BuildException be = new BuildException(e1.getMessage());
-			be.setStackTrace(e1.getStackTrace());
-			be.printStackTrace();
-			throw be;
-		}
+        // add new service to the services
+        // add new method to array in bean
+        // this seems to be a wierd way be adding things....
+        ServiceType[] newServices;
+        int newLength = 0;
+        if (introService.getServices() != null && introService.getServices().getService() != null) {
+            newLength = introService.getServices().getService().length + 1;
+            newServices = new ServiceType[newLength];
+            System.arraycopy(introService.getServices().getService(), 0, newServices, 0, introService.getServices()
+                .getService().length);
+        } else {
+            newLength = 1;
+            newServices = new ServiceType[newLength];
+        }
+        newServices[newLength - 1] = serviceType;
+        introService.getServices().setService(newServices);
 
-		// for each extension in the properties make sure to add the xml to the
-		// introduce model for them to use.....
-		String extensionsList = properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS);
-		StringTokenizer strtok = new StringTokenizer(extensionsList, ",", false);
-		ExtensionType[] types = new ExtensionType[strtok.countTokens()];
-		int count = 0;
-		while (strtok.hasMoreTokens()) {
-			String token = strtok.nextToken();
-			ExtensionDescription desc = ExtensionsLoader.getInstance().getExtension(token);
-			ExtensionType type = new ExtensionType();
-			type.setName(token);
-			type.setVersion(desc.getVersion());
-			types[count++] = type;
-		}
-		ExtensionsType exts = new ExtensionsType();
-		exts.setExtension(types);
-		introService.setExtensions(exts);
+        // write the modified document back out....
+        try {
+            Utils.serializeDocument(baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
+                introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+        } catch (Exception e1) {
+            BuildException be = new BuildException(e1.getMessage());
+            be.setStackTrace(e1.getStackTrace());
+            be.printStackTrace();
+            throw be;
+        }
 
-		String service = properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-		if (!service.matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
-			System.err.println("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
-			return;
-		}
-		if (service.substring(0, 1).toLowerCase().equals(service.substring(0, 1))) {
-			System.err.println("Service Name cannnot start with lower case letters.");
-			return;
-		}
+        // for each extension in the properties make sure to add the xml to the
+        // introduce model for them to use.....
+        String extensionsList = properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS);
+        StringTokenizer strtok = new StringTokenizer(extensionsList, ",", false);
+        ExtensionType[] types = new ExtensionType[strtok.countTokens()];
+        int count = 0;
+        while (strtok.hasMoreTokens()) {
+            String token = strtok.nextToken();
+            ExtensionDescription desc = ExtensionsLoader.getInstance().getExtension(token);
+            ExtensionType type = new ExtensionType();
+            type.setName(token);
+            type.setVersion(desc.getVersion());
+            types[count++] = type;
+        }
+        ExtensionsType exts = new ExtensionsType();
+        exts.setExtension(types);
+        introService.setExtensions(exts);
 
-		// create the dirs to the basedir if needed
-		baseDirectory.mkdirs();
+        String service = properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+        if (!service.matches("[A-Z]++[A-Za-z0-9\\_\\$]*")) {
+            System.err.println("Service Name can only contain [A-Z]++[A-Za-z0-9\\_\\$]*");
+            return;
+        }
+        if (service.substring(0, 1).toLowerCase().equals(service.substring(0, 1))) {
+            System.err.println("Service Name cannnot start with lower case letters.");
+            return;
+        }
 
-		ServiceInformation info = new ServiceInformation(introService, properties, baseDirectory);
-		SkeletonBaseCreator sbc = new SkeletonBaseCreator();
-		SkeletonSourceCreator ssc = new SkeletonSourceCreator();
-		SkeletonSchemaCreator sscc = new SkeletonSchemaCreator();
-		SkeletonEtcCreator sec = new SkeletonEtcCreator();
-		SkeletonDocsCreator sdc = new SkeletonDocsCreator();
-		SkeletonSecurityOperationProviderCreator ssopc = new SkeletonSecurityOperationProviderCreator();
+        // create the dirs to the basedir if needed
+        baseDirectory.mkdirs();
 
-		// Generate the source
-		try {
-			if (info.getServices() != null && info.getServices().getService() != null) {
-				for (int i = 0; i < info.getServices().getService().length; i++) {
-					ssc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
-					sscc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
-					ssopc.createSkeleton(new SpecificServiceInformation(info, info.getServices().getService(i)));
-				}
-			}
-			sec.createSkeleton(info);
-			sdc.createSkeleton(info);
-			sbc.createSkeleton(info);
-		} catch (Exception e) {
-			BuildException be = new BuildException(e.getMessage());
-			be.setStackTrace(e.getStackTrace());
-			be.printStackTrace();
-			throw be;
-		}
+        ServiceInformation info = new ServiceInformation(introService, properties, baseDirectory);
+        SkeletonBaseCreator sbc = new SkeletonBaseCreator();
+        SkeletonSourceCreator ssc = new SkeletonSourceCreator();
+        SkeletonSchemaCreator sscc = new SkeletonSchemaCreator();
+        SkeletonEtcCreator sec = new SkeletonEtcCreator();
+        SkeletonDocsCreator sdc = new SkeletonDocsCreator();
+        SkeletonSecurityOperationProviderCreator ssopc = new SkeletonSecurityOperationProviderCreator();
 
-		try {
-			Utils.serializeDocument(baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
-				introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
-		} catch (Exception e) {
-			BuildException be = new BuildException(e.getMessage());
-			be.setStackTrace(e.getStackTrace());
-			be.printStackTrace();
-			throw be;
-		}
-	}
+        // Generate the source
+        try {
+            if (info.getServices() != null && info.getServices().getService() != null) {
+                for (int i = 0; i < info.getServices().getService().length; i++) {
+                    ssc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
+                    sscc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
+                    ssopc.createSkeleton(new SpecificServiceInformation(info, info.getServices().getService(i)));
+                }
+            }
+            sec.createSkeleton(info);
+            sdc.createSkeleton(info);
+            sbc.createSkeleton(info);
+        } catch (Exception e) {
+            BuildException be = new BuildException(e.getMessage());
+            be.setStackTrace(e.getStackTrace());
+            be.printStackTrace();
+            throw be;
+        }
+
+        try {
+            Utils.serializeDocument(baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
+                introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+        } catch (Exception e) {
+            BuildException be = new BuildException(e.getMessage());
+            be.setStackTrace(e.getStackTrace());
+            be.printStackTrace();
+            throw be;
+        }
+    }
 }

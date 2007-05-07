@@ -1283,24 +1283,23 @@ public class CommonTools {
     public static String upperCaseFirstCharacter(String variableName) {
         return variableName.substring(0, 1).toUpperCase() + variableName.substring(1);
     }
-    
+
+
     public static boolean checkGlobusLocation() {
         try {
-            String globusLocation = System.getenv("GLOBUS_LOCATION");
+            String globusLocation = System.getProperty("GLOBUS_LOCATION");
             ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, globusLocation);
             return true;
         } catch (Throwable ex) {
             ex.printStackTrace();
-            String[] error = {"Error getting GLOBUS_LOCATION environment variable: ", ex.getMessage(),
-                    "Please set GLOBUS_LOCATION in preferences!"};
-            logger.error(error);
             try {
                 ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, "");
-            } catch (Exception configEx) {
-                // now what?
-                configEx.printStackTrace();
-                logger.error(configEx);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            String[] error = {"Error getting GLOBUS_LOCATION system property: ", ex.getMessage(),
+                    "Please set your GLOBUS_LOCATION environment variable.!"};
+            logger.error(error);
         }
         return false;
     }
