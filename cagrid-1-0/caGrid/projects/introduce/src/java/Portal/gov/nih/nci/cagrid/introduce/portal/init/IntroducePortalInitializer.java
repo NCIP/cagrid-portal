@@ -1,9 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.init;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -61,7 +58,7 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
         helpMenu.insert(updateMenuItem, 1);
 
         JMenu configMenu = PortalResourceManager.getInstance().getGridPortal().getJMenuBar().getMenu(CONFIG_MENU);
-        JMenuItem configMenuItem = new JMenuItem("Preferences");
+        JMenuItem configMenuItem = new JMenuItem("Preferences",IntroduceLookAndFeel.getPreferencesIcon());
 
         configMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
