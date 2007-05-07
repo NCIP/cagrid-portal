@@ -20,7 +20,7 @@ import org.projectmobius.common.XMLUtilities;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 16, 2006
- * @version $Id: WsEnumCodegenPostProcessor.java,v 1.2 2007-05-07 19:41:50 dervin Exp $
+ * @version $Id: WsEnumCodegenPostProcessor.java,v 1.3 2007-05-07 19:52:28 dervin Exp $
  */
 public class WsEnumCodegenPostProcessor implements CodegenExtensionPostProcessor {
 
@@ -49,15 +49,11 @@ public class WsEnumCodegenPostProcessor implements CodegenExtensionPostProcessor
         Iterator serviceElementIter = jndiRoot.getChildren("service", jndiRoot.getNamespace()).iterator();
         String serviceName = "SERVICE-INSTANCE-PREFIX/" 
             + info.getServices().getService(0).getName() + "Enumeration";
-        System.out.println("JNDIEDIT: Looking for service named " + serviceName);
         while (serviceElementIter.hasNext()) {
             Element serviceElement = (Element) serviceElementIter.next();
-            System.out.println("JNDIEDIT: Service " + serviceElement.getAttributeValue("name"));
             if (serviceElement.getAttributeValue("name").equals(serviceName)) {
-                System.out.println("JNDIEDIT: Editing service's resource");
                 // see if the service already has the resource definition
                 if (serviceElement.getChild("resource", jndiRoot.getNamespace()) == null) {
-                    System.out.println("JNDIEDIT: No resource found, adding new");
                     // add the enumeration resource description
                     serviceElement.addContent(getEnumerationResourceDescription());
                     jndiEdited = true;
@@ -66,13 +62,10 @@ public class WsEnumCodegenPostProcessor implements CodegenExtensionPostProcessor
             }
         }
         if (jndiEdited) {
-            System.out.println("JNDIEDIT: jndi was edited");
             // write the JNDI with edits back out
             try {
                 FileWriter jndiWriter = new FileWriter(serviceJndiFile);
                 String xml = XMLUtilities.formatXML(XMLUtilities.elementToString(jndiRoot));
-                System.out.println("JNDIEDIT: WRITING EDITED JNDI");
-                System.out.println(xml);
                 jndiWriter.write(xml);
                 jndiWriter.flush();
                 jndiWriter.close();
@@ -88,7 +81,6 @@ public class WsEnumCodegenPostProcessor implements CodegenExtensionPostProcessor
         File coreJndiConfigFile = new File(new File(globusLocation).getAbsolutePath()
             + File.separator + "etc" + File.separator + "globus_wsrf_core" 
             + File.separator + "jndi-config.xml");
-        System.out.println("JNDIEDIT: core jndi file is " + coreJndiConfigFile.getAbsolutePath());
         Element coreJndiRoot = null;
         try {
             coreJndiRoot = XMLUtilities.fileNameToDocument(
@@ -101,14 +93,11 @@ public class WsEnumCodegenPostProcessor implements CodegenExtensionPostProcessor
         Iterator resourceElementIter = globalElement.getChildren("resource", coreJndiRoot.getNamespace()).iterator();
         while (resourceElementIter.hasNext()) {
             Element resourceElement = (Element) resourceElementIter.next();
-            System.out.println("JNDIEDIT: Looking at resource " + resourceElement.getAttributeValue("name"));
             if (resourceElement.getAttributeValue("name").equals("enumeration/EnumerationHome")) {
                 Element resourceDescription = (Element) resourceElement.clone();
-                System.out.println("JNDIEDIT: found resource");
                 return (Element) resourceDescription.detach();
             }
         }
-        System.out.println("JNDIEDIT: NEVER FOUND THE RESOURCE DESCRIPTION");
         return null;
     }
 }
