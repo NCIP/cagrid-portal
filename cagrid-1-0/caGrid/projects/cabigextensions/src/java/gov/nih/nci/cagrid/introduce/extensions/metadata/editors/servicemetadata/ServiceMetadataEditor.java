@@ -710,7 +710,7 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
 
     /**
      * @param serviceDescription
-     * @return
+     * 
      */
     private boolean saveService(Service serviceDescription) {
         // save pocs
