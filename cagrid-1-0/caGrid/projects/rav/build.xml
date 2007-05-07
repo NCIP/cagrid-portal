@@ -383,6 +383,6 @@
     <!-- ============================================================== -->
     <!-- Builds from scratch                                                -->
     <!-- ============================================================== -->
-    <target name="all" description="Builds the entire application" depends="jarStubs,jar,jarTests" />
+    <target name="all" description="Builds the entire application" depends="jarStubs,jar" />
 </project>
 
