@@ -260,7 +260,9 @@ public class ModificationViewer extends GridPortalComponent {
         extensionPanels = new ArrayList();
         this.methodsDirectory = methodsDirectory;
         try {
+
             initialize();
+
         } catch (Exception e) {
             // should never get here but in case.....
             e.printStackTrace();
@@ -283,7 +285,23 @@ public class ModificationViewer extends GridPortalComponent {
                 File file = new File(methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml");
                 if (file.exists() && file.canRead()) {
                     try {
-                        initialize();
+
+                        BusyDialogRunnable br = new BusyDialogRunnable(PortalResourceManager.getInstance()
+                            .getGridPortal(), "Initializing Modification Viewer") {
+                            public void process() {
+                                this.setProgressText("Initializing Modification Viewer");
+                                try {
+                                    initialize();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            };
+                        };
+
+                        Thread th = new Thread(br);
+                        th.start();
+                        th.join();
+
                         if (!beenDisposed) {
                             ModificationViewer.this.pack();
                             ModificationViewer.this.setMaximum(true);
@@ -367,7 +385,7 @@ public class ModificationViewer extends GridPortalComponent {
             if (upgrader.canIntroduceBeUpgraded() || upgrader.extensionsNeedUpgraded()) {
                 int answer = JOptionPane
                     .showConfirmDialog(
-                        this,
+                        ModificationViewer.this,
                         "This service is from an older of version of Introduce or uses an older version of an extension.\nWould you like to try to upgrade this service to work with the current version of Introduce and installed extensions?  Otherwise Introduce will attempt to work with this service.");
                 if (answer == JOptionPane.OK_OPTION) {
 
@@ -380,16 +398,17 @@ public class ModificationViewer extends GridPortalComponent {
                         } else if (answer == UpgradeStatusView.ROLL_BACK) {
                             upgrader.recover();
                             ModificationViewer.this.dispose();
-                            this.beenDisposed = true;
+
+                            beenDisposed = true;
                         } else if (answer == UpgradeStatusView.CANCEL) {
                             ModificationViewer.this.dispose();
-                            this.beenDisposed = true;
+                            beenDisposed = true;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                         answer = JOptionPane
                             .showConfirmDialog(
-                                this,
+                                ModificationViewer.this,
                                 "The service had the following fatal error during the upgrade process: \n"
                                     + e.getMessage()
                                     + "\n  This could be due to modifications you may have made to Introduce managed files such as the build files, source files or wsdl files.\nIf you select OK Introduce will roll your service back to its previous state before the upgrade attempt");
@@ -400,21 +419,30 @@ public class ModificationViewer extends GridPortalComponent {
                                 ErrorDialog.showErrorDialog(e);
                             }
                             ModificationViewer.this.dispose();
-                            this.beenDisposed = true;
+                            beenDisposed = true;
                         } else {
                             ModificationViewer.this.dispose();
-                            this.beenDisposed = true;
+                            beenDisposed = true;
                         }
                     }
                 }
             }
 
-            // reload the info incase it has changed during upgrading.....
-            info = new ServiceInformation(methodsDirectory);
+            // reload the info incase it has changed during
+            // upgrading.....
+            try {
+                info = new ServiceInformation(methodsDirectory);
+            } catch (Exception e) {
+                e.printStackTrace();
+                ErrorDialog.showErrorDialog(e);
+                ModificationViewer.this.dispose();
+                beenDisposed = true;
+            }
 
-            this.setContentPane(getMainPanel());
-            this.setTitle("Modify Service Interface");
-            this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
+            setContentPane(getMainPanel());
+            setTitle("Modify Service Interface");
+            setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
+
         }
     }
 
