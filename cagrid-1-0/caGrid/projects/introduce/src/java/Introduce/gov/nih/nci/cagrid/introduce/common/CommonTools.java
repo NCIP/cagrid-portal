@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
@@ -1280,5 +1282,26 @@ public class CommonTools {
      */
     public static String upperCaseFirstCharacter(String variableName) {
         return variableName.substring(0, 1).toUpperCase() + variableName.substring(1);
+    }
+    
+    public static boolean checkGlobusLocation() {
+        try {
+            String globusLocation = System.getenv("GLOBUS_LOCATION");
+            ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, globusLocation);
+            return true;
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+            String[] error = {"Error getting GLOBUS_LOCATION environment variable: ", ex.getMessage(),
+                    "Please set GLOBUS_LOCATION in preferences!"};
+            logger.error(error);
+            try {
+                ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, "");
+            } catch (Exception configEx) {
+                // now what?
+                configEx.printStackTrace();
+                logger.error(configEx);
+            }
+        }
+        return false;
     }
 }

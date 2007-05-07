@@ -103,6 +103,7 @@ public abstract class DynamicPreferencesConfigurationPanel extends BasePreferenc
 		JTextField text = new JTextField();
 		text.setText(value);
 		text.setEditable(enabled);
+		text.setEnabled(enabled);
 		component = text;
 		this.textFields.put(label, text);
 		this.labels.put(label, label1);

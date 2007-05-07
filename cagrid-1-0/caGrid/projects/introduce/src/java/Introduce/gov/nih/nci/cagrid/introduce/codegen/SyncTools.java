@@ -233,6 +233,11 @@ public class SyncTools {
 
 
     public void sync() throws Exception {
+        boolean globusSet = CommonTools.checkGlobusLocation();
+        if (!globusSet) {
+            throw new Exception("Failed to determine if GLOBUS_LOCATION is set.");
+        }
+
         // instatiate and load up service information
         ServiceInformation info = new ServiceInformation(this.baseDirectory);
 
