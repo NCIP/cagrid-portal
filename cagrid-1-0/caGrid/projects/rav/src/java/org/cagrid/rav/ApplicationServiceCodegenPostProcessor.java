@@ -91,10 +91,10 @@ public class ApplicationServiceCodegenPostProcessor implements CodegenExtensionP
             serviceMethod = serviceMethod.substring(0, serviceMethod.indexOf("}"));
             serviceMethod = serviceMethod + this.RUNTIME_EXEC_CODE + "\" " + methodName + "\");}";
             String temp = this.RUNTIME_EXEC_CODE + "\" " + methodName + "\"); " + "\n" + "return true; \n}";
-            source.replace(startOfMethod, endOfMethod, "");
+          //  source.replace(startOfMethod, endOfMethod, "");
             StringBuffer tempBuffer = new StringBuffer(); 
             tempBuffer.append(methodSignatureStart).append("{").append("\n").append(temp);
-            source.insert(source.lastIndexOf("}") -1, tempBuffer, 0 , tempBuffer.length());
+           // source.insert(source.lastIndexOf("}") -1, tempBuffer, 0 , tempBuffer.length());
             System.out.println(source.toString());
 		} catch (IOException ex) {
 			throw new CodegenExtensionException("Error reading service source file: " + ex.getMessage(), ex);

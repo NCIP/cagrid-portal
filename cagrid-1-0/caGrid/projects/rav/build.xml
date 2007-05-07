@@ -69,6 +69,17 @@
             </fileset>
         </copy>
         <available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
+
+        <path id="test.run.classpath">
+            <pathelement location="${test.build.dest}" />
+            <pathelement location="${test.dir}/resources" />
+            <path refid="test.build.classpath" />
+        </path>
+        <path id="run.classpath">
+            <pathelement location="${build.dest}" />
+            <path refid="service.build.classpath" />
+        </path>
+
     </target>
 
     <path id="base.classpath">
@@ -165,6 +176,47 @@
             </fileset>
             <pathelement location="${ext.globus.dir}" />
         </path>
+
+        <path id="base.classpath">
+            <fileset dir="${lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${ext.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${ext.globus.dir}/lib">
+                <include name="*.jar" />
+                <exclude name="${stubs.jar.name}" />
+                <exclude name="${common.jar.name}" />
+                <exclude name="${client.jar.name}" />
+                <exclude name="${service.jar.name}" />
+            </fileset>
+        </path>
+        <path id="service.build.classpath">
+            <pathelement location="${stubs.dest}" />
+            <path refid="base.classpath" />
+        </path>
+        <path id="service.run.classpath">
+            <pathelement location="${build.dest}" />
+            <path refid="service.build.classpath" />
+        </path>
+        <path id="test.build.classpath">
+            <fileset dir="${test.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <pathelement location="${build.dest}" />
+            <path refid="service.build.classpath" />
+        </path>
+        <path id="test.run.classpath">
+            <pathelement location="${test.build.dest}" />
+            <pathelement location="${test.dir}/resources" />
+            <path refid="test.build.classpath" />
+        </path>
+        <path id="run.classpath">
+            <pathelement location="${build.dest}" />
+            <path refid="service.build.classpath" />
+        </path>
+
     </target>
 
 
@@ -216,7 +268,7 @@
     <!-- =============================================================== -->
     <!-- Compiles the test source code                                        -->
     <!-- =============================================================== -->
-    <target name="compile-tests" depends="prepare" description="compiles.">
+    <target name="compileTests" depends="prepare" description="compiles.">
         <mkdir dir="${test.classes.dir}" />
         <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" source="1.3" target="1.1" debug="on" deprecation="off" optimize="off">
             <classpath refid="test.classpath" />
@@ -260,7 +312,7 @@
     <!-- ============================================================== -->
     <!-- Creates the jar files                                          -->
     <!-- ============================================================== -->
-    <target name="jar-tests" depends="compile-tests" description="Builds the Jar Files">
+    <target name="jarTests" depends="compileTests" description="Builds the Jar Files">
         <mkdir dir="${jar.dir}" />
         <jar jarfile="${test.project.jar}" basedir="${test.classes.dir}">
             <manifest>
@@ -331,6 +383,6 @@
     <!-- ============================================================== -->
     <!-- Builds from scratch                                                -->
     <!-- ============================================================== -->
-    <target name="all" description="Builds the entire application" depends="jarStubs,jar,jar-tests" />
+    <target name="all" description="Builds the entire application" depends="jarStubs,jar,jarTests" />
 </project>
 
