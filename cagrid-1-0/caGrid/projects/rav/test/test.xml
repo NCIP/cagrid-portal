@@ -64,6 +64,7 @@
 	</target>
 
 	<target name="test" depends="setGlobus, prepareClasspaths" description="Runs tests" >
+    <!-- 
 		<mkdir dir="${junit.results.dir}"/>
 		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
@@ -82,6 +83,7 @@
 		</junit>
 		<fail message="Tests failed! Check test reports." if="test.failed"/>
 		<property name="base.service.created" value="true"/>
+        -->
 	</target>
 
 
