@@ -26,7 +26,7 @@
         </component>
          <component>
           <title></title>
-          <description>Create Service Skeleton</description>
+          <description>Create caGrid Service Skeleton</description>
           <class>gov.nih.nci.cagrid.introduce.portal.creation.CaBIGCreationViewer</class>
           <icon>/caGrid_small.png</icon>
           <dimensions>
