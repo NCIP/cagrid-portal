@@ -1809,6 +1809,7 @@ public class MethodViewer extends GridPortalBaseFrame {
             outputTypeSplitPane.setOneTouchExpandable(true);
             outputTypeSplitPane.setLeftComponent(getOutputNamespacePanel());
             outputTypeSplitPane.setRightComponent(getOutputTypesTablePanel());
+            outputTypeSplitPane.setDividerLocation(.25);
             outputTypeSplitPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Output Type",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));

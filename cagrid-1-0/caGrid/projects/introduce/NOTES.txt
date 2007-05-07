@@ -35,8 +35,6 @@ Upgrade Cycle
 
 To Do:  
 
-sandboxing by using a startup conf file that can be prompted to user....
-
 when updating introduce software there will be a problem with the files in the users home space that will need to also be updated.
 
 need to clean up config params and deploy params to have "display" names
