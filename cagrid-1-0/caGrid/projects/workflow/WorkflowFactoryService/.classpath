@@ -90,5 +90,8 @@
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-grape.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-grape-resources.jar"/>
+	<classpathentry kind="lib" path="ext/lib/wizard-0.1.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
