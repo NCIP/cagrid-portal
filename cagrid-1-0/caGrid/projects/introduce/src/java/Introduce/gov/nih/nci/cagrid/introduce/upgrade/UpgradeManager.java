@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.introduce.upgrade;
 
 import java.io.File;
 
-import gov.nih.nci.cagrid.introduce.ResourceManager;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.UpgradeStatus;

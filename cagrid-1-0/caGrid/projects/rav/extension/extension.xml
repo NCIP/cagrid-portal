@@ -9,7 +9,6 @@
 	-->
 		<ns1:ServiceModificationUIPanel>org.cagrid.rav.ApplicationServiceModificationPanel</ns1:ServiceModificationUIPanel>
 		<ns1:Properties>
-			<ns1:Property makeGlobal="true" type="SERVICE_URL" key="GME_URL" value="http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"/>
 		</ns1:Properties>
 	</ns1:ServiceExtensionDescription>
 </ns1:ExtensionDescription>

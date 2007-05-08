@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce;
+package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.ZipUtilities;
@@ -58,7 +58,7 @@ public class ResourceManager {
     public static File getIntroduceUserHome() {
         String userHome = System.getProperty("user.home");
         File userHomeF = new File(userHome);
-        File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".introduce");
+        File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".introduce_" + CommonTools.getIntroduceVersion().replace(".", "_"));
         if (!caGridCache.exists()) {
             caGridCache.mkdirs();
         }

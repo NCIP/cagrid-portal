@@ -37,8 +37,6 @@ To Do:
 
 when updating introduce software there will be a problem with the files in the users home space that will need to also be updated.
 
-need to clean up config params and deploy params to have "display" names
-
 need to validate soapfix
 
 need to validate that namespace exist policy on the descovery tools is working. (Globus one does not do anything curently and not sure if scotts cadsr one has been moved forward)
@@ -70,6 +68,9 @@ add tests to system tests for (coverage report shows no coverage):
 add a .cvsignore file to generated skeletons that includes the gar.  my right mouse button is slowly wearing out... and i am lazy...
 
 ============================ D O N E ================================================================
+
+need to clean up config params and deploy params to have "display" names
+
 need to not build service after an upgrade and let the user know that the service build files may need to be altered.  
 
 look at new build files and make sure they are being called correctly......

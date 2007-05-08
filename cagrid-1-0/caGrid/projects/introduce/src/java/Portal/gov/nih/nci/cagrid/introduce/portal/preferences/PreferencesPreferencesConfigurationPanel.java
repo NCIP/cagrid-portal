@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.ResourceManager;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.util.Enumeration;
 

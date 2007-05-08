@@ -24,12 +24,12 @@ import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionListener;
 import gov.nih.nci.cagrid.data.ui.tree.uml.UMLClassTreeNode;
 import gov.nih.nci.cagrid.data.ui.tree.uml.UMLPackageTreeNode;
 import gov.nih.nci.cagrid.data.ui.tree.uml.UMLProjectTree;
-import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
@@ -64,7 +64,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.2 2007-04-23 17:26:43 dervin Exp $ 
+ * @version $Id: DomainModelConfigPanel.java,v 1.3 2007-05-08 19:56:10 hastings Exp $ 
  */
 public class DomainModelConfigPanel extends JPanel {
 

@@ -2,8 +2,8 @@ package gov.nih.nci.cagrid.introduce.portal.modification.discovery.globus;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

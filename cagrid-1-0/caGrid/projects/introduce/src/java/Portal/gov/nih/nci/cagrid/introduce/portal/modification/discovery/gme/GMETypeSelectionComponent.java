@@ -2,11 +2,11 @@ package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.gme.GMESchemaLocatorPanel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
@@ -40,7 +40,7 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
  *          Exp $
  */
 public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
-    public static String GME_URL = "GME_URL";
+    public static String GME_URL = "Global Model Exchange URL";
     public static String TYPE = "GME";
 
     private GMESchemaLocatorPanel gmePanel = null;

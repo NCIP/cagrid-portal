@@ -4,8 +4,8 @@
   <ns1:DiscoveryToolsPanelExtension>gov.nih.nci.cagrid.cadsr.portal.discovery.CaDSRTypeDiscoveryComponent</ns1:DiscoveryToolsPanelExtension>
   <ns1:DiscoveryPanelExtension>gov.nih.nci.cagrid.cadsr.portal.discovery.CaDSRTypeSelectionComponent</ns1:DiscoveryPanelExtension>
   <ns1:Properties>
-   <ns1:property makeGlobal="true" type="SERVICE_URL" key="GME_URL" value="http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"/>
-   <ns1:property makeGlobal="true" type="SERVICE_URL" key="CADSR_URL" value="http://cagrid05.bmi.ohio-state.edu:8080/wsrf/services/cagrid/CaDSRService"/> 
+   <ns1:property makeGlobal="true" type="SERVICE_URL" key="Global Model Exchange URL" value="http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"/>
+   <ns1:property makeGlobal="true" type="SERVICE_URL" key="Cancer Data Standards Repositoty (CADSR) URL" value="http://cagrid05.bmi.ohio-state.edu:8080/wsrf/services/cagrid/CaDSRService"/> 
   </ns1:Properties>
  </ns1:DiscoveryExtensionDescription>
 </ns1:ExtensionDescription>

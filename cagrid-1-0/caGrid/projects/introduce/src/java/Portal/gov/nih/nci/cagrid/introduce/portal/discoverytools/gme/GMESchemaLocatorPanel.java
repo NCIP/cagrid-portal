@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.introduce.ResourceManager;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -32,7 +32,7 @@ import org.projectmobius.protocol.gme.SchemaNode;
 
 public class GMESchemaLocatorPanel extends JPanel {
 
-	public static String GME_URL = "GME_URL";
+	public static String GME_URL = "Global Model Exchange URL";
 	public static String TYPE = "gme_discovery";
 
 	private JPanel mainPanel = null;
@@ -203,7 +203,7 @@ public class GMESchemaLocatorPanel extends JPanel {
                             try {
                                 XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
                                     .getGridService(
-                                        gov.nih.nci.cagrid.introduce.ResourceManager.getServiceURLProperty(GME_URL));
+                                        gov.nih.nci.cagrid.introduce.common.ResourceManager.getServiceURLProperty(GME_URL));
                                 if (schemaComboBox.getSelectedItem() != null) {
                                     Namespace namespace = ((SchemaWrapper) schemaComboBox.getSelectedItem()).getNamespace();
                                     currentNode = handle.getSchema(namespace, false);

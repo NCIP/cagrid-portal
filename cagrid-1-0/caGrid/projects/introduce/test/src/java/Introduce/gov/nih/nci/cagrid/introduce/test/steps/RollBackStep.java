@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.test.steps;
 
-import gov.nih.nci.cagrid.introduce.ResourceManager;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
 

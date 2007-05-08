@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal.creation;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extensions.metadata.constants.MetadataConstants;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
