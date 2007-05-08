@@ -702,6 +702,7 @@
             <artifact refid="mds.jars" />
             <artifact refid="common.metadata.jars" />
             <artifact refid="servicesecurity.jars" />
+            <artifact refid="grape.jars" />
         </resolveDependencies>
         <delete dir="${projects.dir}/workflow/WorkflowFactoryService/schema/WorkflowFactoryService/xsd" />
         <resolveDependencies extdir="${projects.dir}/workflow/WorkflowFactoryService/schema/WorkflowFactoryService">
