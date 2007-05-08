@@ -1,9 +1,7 @@
 package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
@@ -332,7 +330,7 @@ public class CommonTools {
      * Gets a package name for a namespace using a namespace to package mapper
      * utility
      * 
-     * @param namespace
+     * @param fullNamespace
      *            The namespace to derive a package name for
      * @return The package name
      */
@@ -353,7 +351,7 @@ public class CommonTools {
     /**
      * Gets a package name for a namespace
      * 
-     * @param namespace
+     * @param fullNamespace
      *            The namespace to get a package name for
      * @param namespaceTypes
      *            The namespace types of a service
@@ -862,7 +860,7 @@ public class CommonTools {
     /**
      * Adds aservice type to the services list
      * 
-     * @param servicesD
+     * @param servicesType
      *            The services descriptions
      * @param serviceType
      *            The service type to add
@@ -1288,7 +1286,7 @@ public class CommonTools {
     public static String getGlobusLocation() {
         try {
             String globusLocation = System.getenv("GLOBUS_LOCATION");
-            if(globusLocation!=null){
+            if (globusLocation != null) {
                 return globusLocation;
             }
         } catch (Throwable ex) {
@@ -1299,7 +1297,7 @@ public class CommonTools {
         }
         try {
             String globusLocation = System.getProperty("GLOBUS_LOCATION");
-            if(globusLocation!=null){
+            if (globusLocation != null) {
                 return globusLocation;
             }
         } catch (Throwable ex) {
