@@ -332,4 +332,10 @@
         </java>
     </target>
 
+    <target name="runGUI" depends="compile" description="Execute the GUI: runGUI">
+        <java classname="gov.nih.nci.cagrid.workflow.client.WorkflowSubmissionGUI" fork="yes">
+            <classpath refid="service.run.classpath" />
+        </java>
+    </target>
+
 </project>
