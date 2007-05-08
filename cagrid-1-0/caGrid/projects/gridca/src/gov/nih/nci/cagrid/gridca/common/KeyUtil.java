@@ -18,7 +18,6 @@ import org.bouncycastle.openssl.PEMReader;
 import org.globus.gsi.OpenSSLKey;
 import org.globus.gsi.bc.BouncyCastleOpenSSLKey;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -29,35 +28,54 @@ import org.globus.gsi.bc.BouncyCastleOpenSSLKey;
 public class KeyUtil {
 
 	public static KeyPair generateRSAKeyPair2048() throws Exception {
-		return generateRSAKeyPair(2048);
+		SecurityUtil.init();
+		return generateRSAKeyPair2048("BC");
 	}
 
+	public static KeyPair generateRSAKeyPair2048(String provider)
+			throws Exception {
+		return generateRSAKeyPair(provider, 2048);
+	}
 
 	public static KeyPair generateRSAKeyPair1024() throws Exception {
-		return generateRSAKeyPair(1024);
+		SecurityUtil.init();
+		return generateRSAKeyPair1024("BC");
 	}
 
+	public static KeyPair generateRSAKeyPair1024(String provider)
+			throws Exception {
+		return generateRSAKeyPair(provider, 1024);
+	}
 
 	public static KeyPair generateRSAKeyPair512() throws Exception {
-		return generateRSAKeyPair(512);
+		SecurityUtil.init();
+		return generateRSAKeyPair512("BC");
 	}
 
+	public static KeyPair generateRSAKeyPair512(String provider)
+			throws Exception {
+		return generateRSAKeyPair(provider, 512);
+	}
 
 	public static KeyPair generateRSAKeyPair(int size) throws Exception {
 		SecurityUtil.init();
-		KeyPairGenerator kpGen = KeyPairGenerator.getInstance("RSA", "BC");
+		return generateRSAKeyPair("BC", size);
+	}
+
+	public static KeyPair generateRSAKeyPair(String provider, int size)
+			throws Exception {
+		KeyPairGenerator kpGen = KeyPairGenerator.getInstance("RSA", provider);
 		kpGen.initialize(size, new SecureRandom());
 		return kpGen.generateKeyPair();
 	}
 
-
-	public static void writePrivateKey(PrivateKey key, File file) throws Exception {
+	public static void writePrivateKey(PrivateKey key, File file)
+			throws Exception {
 		writePrivateKey(key, file, null);
 	}
 
-
-	public static void writePrivateKey(PrivateKey key, File file, String password) throws Exception {
-		SecurityUtil.init();
+	public static void writePrivateKey(PrivateKey key, File file,
+			String password) throws Exception {
 		OpenSSLKey ssl = new BouncyCastleOpenSSLKey(key);
 		if (password != null) {
 			ssl.encrypt(password);
@@ -65,9 +83,8 @@ public class KeyUtil {
 		ssl.writeTo(file.getAbsolutePath());
 	}
 
-
-	public static String writePrivateKey(PrivateKey key, String password) throws Exception {
-		SecurityUtil.init();
+	public static String writePrivateKey(PrivateKey key, String password)
+			throws Exception {
 		OpenSSLKey ssl = new BouncyCastleOpenSSLKey(key);
 		if (password != null) {
 			ssl.encrypt(password);
@@ -79,18 +96,15 @@ public class KeyUtil {
 		return s;
 	}
 
-
-	public static void writePublicKey(PublicKey key, File path) throws IOException {
-		SecurityUtil.init();
+	public static void writePublicKey(PublicKey key, File path)
+			throws IOException {
 		PEMWriter pem = new PEMWriter(new FileWriter(path));
 		pem.writeObject(key);
 		pem.close();
 	}
 
-
-	public static PrivateKey loadPrivateKey(File location, String password) throws IOException,
-		GeneralSecurityException {
-		SecurityUtil.init();
+	public static PrivateKey loadPrivateKey(File location, String password)
+			throws IOException, GeneralSecurityException {
 		OpenSSLKey key = new BouncyCastleOpenSSLKey(location.getAbsolutePath());
 		if (key.isEncrypted()) {
 			key.decrypt(password);
@@ -98,10 +112,8 @@ public class KeyUtil {
 		return key.getPrivateKey();
 	}
 
-
-	public static PrivateKey loadPrivateKey(InputStream in, String password) throws IOException,
-		GeneralSecurityException {
-		SecurityUtil.init();
+	public static PrivateKey loadPrivateKey(InputStream in, String password)
+			throws IOException, GeneralSecurityException {
 		OpenSSLKey key = new BouncyCastleOpenSSLKey(in);
 		if (key.isEncrypted()) {
 			key.decrypt(password);
@@ -109,29 +121,37 @@ public class KeyUtil {
 		return key.getPrivateKey();
 	}
 
-
-	public static PublicKey loadPublicKey(String key) throws IOException, GeneralSecurityException {
+	public static PublicKey loadPublicKey(String key) throws IOException,
+			GeneralSecurityException {
 		SecurityUtil.init();
+		return loadPublicKey("BC", key);
+	}
+
+	public static PublicKey loadPublicKey(String provider, String key)
+			throws IOException, GeneralSecurityException {
 		StringReader in = new StringReader(key);
-		PEMReader reader = new PEMReader(in, null, "BC");
+		PEMReader reader = new PEMReader(in, null, provider);
 		PublicKey pk = (PublicKey) reader.readObject();
 		reader.close();
 		return pk;
 	}
 
-
-	public static PublicKey loadPublicKey(File location) throws IOException, GeneralSecurityException {
+	public static PublicKey loadPublicKey(File location) throws IOException,
+			GeneralSecurityException {
 		SecurityUtil.init();
+		return loadPublicKey("BC", location);
+	}
+
+	public static PublicKey loadPublicKey(String provider, File location)
+			throws IOException, GeneralSecurityException {
 		FileReader in = new FileReader(location);
-		PEMReader reader = new PEMReader(in, null, "BC");
+		PEMReader reader = new PEMReader(in, null, provider);
 		PublicKey pk = (PublicKey) reader.readObject();
 		reader.close();
 		return pk;
 	}
-
 
 	public static String writePublicKey(PublicKey key) throws IOException {
-		SecurityUtil.init();
 		StringWriter sw = new StringWriter();
 		PEMWriter pem = new PEMWriter(sw);
 		pem.writeObject(key);

@@ -1,9 +1,12 @@
-package gov.nih.nci.cagrid.gridca.common;
+package gov.nih.nci.cagrid.gridca.commandline;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.File;
 import java.security.KeyPair;
+import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,7 +14,6 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import org.bouncycastle.asn1.x509.X509Name;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -24,20 +26,22 @@ public class AntGenerateCA {
 
 	public static void main(String[] args) {
 		try {
-			SecurityUtil.init();
+			Security
+					.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 			String dn = args[0];
 			String daysValid = args[1];
 			String password = args[2];
 			String keyOut = args[3];
 			String caOut = args[4];
 
-			KeyPair root = KeyUtil.generateRSAKeyPair1024();
+			KeyPair root = KeyUtil.generateRSAKeyPair1024("BC");
 			int days = Integer.valueOf(daysValid).intValue();
 			while (days <= 0) {
 				System.err.println("Days Valid must be >0");
 				System.exit(1);
 			}
-			GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+			GregorianCalendar date = new GregorianCalendar(TimeZone
+					.getTimeZone("GMT"));
 
 			date.add(Calendar.MINUTE, -5);
 
@@ -45,10 +49,12 @@ public class AntGenerateCA {
 			date.add(Calendar.MINUTE, 5);
 			date.add(Calendar.DAY_OF_MONTH, days);
 			Date end = new Date(date.getTimeInMillis());
-			X509Certificate cert = CertUtil.generateCACertificate(new X509Name(dn), start, end, root);
+			X509Certificate cert = CertUtil.generateCACertificate("BC",
+					new X509Name(dn), start, end, root);
 
 			password = Utils.clean(password);
-			KeyUtil.writePrivateKey(root.getPrivate(), new File(keyOut), password);
+			KeyUtil.writePrivateKey(root.getPrivate(), new File(keyOut),
+					password);
 			CertUtil.writeCertificate(cert, new File(caOut));
 			System.out.println("Successfully create the CA certificate:");
 			System.out.println(dn);

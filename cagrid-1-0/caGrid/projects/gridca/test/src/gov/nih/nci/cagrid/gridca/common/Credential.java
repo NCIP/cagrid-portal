@@ -8,7 +8,7 @@ import java.security.cert.X509Certificate;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Credential.java,v 1.1 2006-05-22 15:38:40 langella Exp $
+ * @version $Id: Credential.java,v 1.2 2007-05-08 19:07:25 langella Exp $
  */
 
 public class Credential {
@@ -31,5 +31,12 @@ public class Credential {
 	public PrivateKey getPrivateKey() {
 		return privateKey;
 	}
+
+
+	public void setPrivateKey(PrivateKey privateKey) {
+		this.privateKey = privateKey;
+	}
+	
+	
 
 }

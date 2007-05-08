@@ -1,4 +1,7 @@
-package gov.nih.nci.cagrid.gridca.common;
+package gov.nih.nci.cagrid.gridca.commandline;
+
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.File;
 import java.security.GeneralSecurityException;
@@ -15,7 +18,6 @@ import java.util.TimeZone;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -27,7 +29,8 @@ public class CreateManyHostCertificates {
 
 	public static void main(String[] args) {
 		try {
-			Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+			Security
+					.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
 			String location = "C:\\certificates\\osu-cagrid-service-ca\\";
 			int days = 1820;
@@ -39,7 +42,8 @@ public class CreateManyHostCertificates {
 			PrivateKey cakey = KeyUtil.loadPrivateKey(new File(key), password);
 
 			String cert = location + "osu-cagrid-service-cacert.pem";
-			X509Certificate cacert = CertUtil.loadCertificate(new File(cert));
+			X509Certificate cacert = CertUtil.loadCertificate("BC", new File(
+					cert));
 
 			List hostList = new ArrayList();
 			// hostList.add("cagrid01.bmi.ohio-state.edu");
@@ -55,12 +59,14 @@ public class CreateManyHostCertificates {
 
 			for (int i = 0; i < hostList.size(); i++) {
 				String cn = (String) hostList.get(i);
-				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+				KeyPair pair = KeyUtil.generateRSAKeyPair1024("BC");
 				String rootSub = cacert.getSubjectDN().toString();
 				int index = rootSub.lastIndexOf(",");
 				String subject = rootSub.substring(0, index) + ",CN=host/" + cn;
-				PKCS10CertificationRequest request = CertUtil.generateCertficateRequest(subject, pair);
-				GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+				PKCS10CertificationRequest request = CertUtil
+						.generateCertficateRequest(subject, pair);
+				GregorianCalendar date = new GregorianCalendar(TimeZone
+						.getTimeZone("GMT"));
 				/* Allow for a five minute clock skew here. */
 				date.add(Calendar.MINUTE, -5);
 				Date start = new Date(date.getTimeInMillis());
@@ -74,11 +80,12 @@ public class CreateManyHostCertificates {
 					Date d = new Date(date.getTimeInMillis());
 					if (cacert.getNotAfter().before(d)) {
 						throw new GeneralSecurityException(
-							"Cannot create a certificate that expires after issuing certificate.");
+								"Cannot create a certificate that expires after issuing certificate.");
 					}
 					end = d;
 				}
-				X509Certificate userCert = CertUtil.signCertificateRequest(request, start, end, cacert, cakey);
+				X509Certificate userCert = CertUtil.signCertificateRequest(
+						"BC", request, start, end, cacert, cakey);
 
 				String keyOut = location + cn + keyEnd;
 				String caOut = location + cn + certEnd;

@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gridca.common;
 
+
 public class Constants {
 
 	public static final String BMI_CACERT = "/bmi-cacert.pem";
@@ -13,5 +14,4 @@ public class Constants {
 	public static final String SIMPLECA_CAKEY = "/simpleca-cakey.pem";
 
 	public static final String BAD_KEY = "/BADKEY";
-
 }

@@ -1,10 +1,13 @@
-package gov.nih.nci.cagrid.gridca.common;
+package gov.nih.nci.cagrid.gridca.commandline;
 
 import gov.nih.nci.cagrid.common.IOUtils;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.File;
 import java.security.KeyPair;
+import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,7 +15,6 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import org.bouncycastle.asn1.x509.X509Name;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -25,7 +27,8 @@ public class GenerateCA {
 
 	public static void main(String[] args) {
 		try {
-			SecurityUtil.init();
+			Security
+					.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 			StringBuffer sb = new StringBuffer();
 			String o = null;
 			while ((o == null) || (o.trim().length() == 0)) {
@@ -35,7 +38,8 @@ public class GenerateCA {
 			String ou = null;
 			int count = 1;
 			while (true) {
-				ou = IOUtils.readLine("Enter Organizational Unit (OU) " + count);
+				ou = IOUtils
+						.readLine("Enter Organizational Unit (OU) " + count);
 				count++;
 				if ((ou == null) || (ou.trim().length() == 0)) {
 					break;
@@ -50,12 +54,13 @@ public class GenerateCA {
 				cn = IOUtils.readLine("Enter Common Name (CN)");
 			}
 			sb.append(",CN=" + cn);
-			KeyPair root = KeyUtil.generateRSAKeyPair1024();
+			KeyPair root = KeyUtil.generateRSAKeyPair1024("BC");
 			int days = IOUtils.readInteger("Enter number of days valid");
 			while (days <= 0) {
 				days = IOUtils.readInteger("Enter days valid (>0)");
 			}
-			GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+			GregorianCalendar date = new GregorianCalendar(TimeZone
+					.getTimeZone("GMT"));
 
 			date.add(Calendar.MINUTE, -5);
 
@@ -63,12 +68,14 @@ public class GenerateCA {
 			date.add(Calendar.MINUTE, 5);
 			date.add(Calendar.DAY_OF_MONTH, days);
 			Date end = new Date(date.getTimeInMillis());
-			X509Certificate cert = CertUtil.generateCACertificate(new X509Name(sb.toString()), start, end, root);
+			X509Certificate cert = CertUtil.generateCACertificate("BC",
+					new X509Name(sb.toString()), start, end, root);
 			String password = IOUtils.readLine("Enter a key password");
 			password = Utils.clean(password);
 			String keyOut = IOUtils.readLine("Enter location to write CA key");
 			String caOut = IOUtils.readLine("Enter location to write CA cert");
-			KeyUtil.writePrivateKey(root.getPrivate(), new File(keyOut), password);
+			KeyUtil.writePrivateKey(root.getPrivate(), new File(keyOut),
+					password);
 			CertUtil.writeCertificate(cert, new File(caOut));
 			System.out.println("Successfully create the CA certificate:");
 			System.out.println(sb.toString());

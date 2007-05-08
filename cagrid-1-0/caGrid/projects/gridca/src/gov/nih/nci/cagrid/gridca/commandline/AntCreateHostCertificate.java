@@ -1,9 +1,12 @@
-package gov.nih.nci.cagrid.gridca.common;
+package gov.nih.nci.cagrid.gridca.commandline;
+
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.File;
 import java.security.GeneralSecurityException;
+import java.security.KeyPair;
 import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
@@ -11,7 +14,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import org.bouncycastle.asn1.x509.X509Name;
+import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 
 /**
@@ -21,31 +24,34 @@ import org.bouncycastle.asn1.x509.X509Name;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class AntSignHostCertificate {
+public class AntCreateHostCertificate {
 
 	public static void main(String[] args) {
 		try {
 			Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-
 			String key = args[0];
 			String password = args[1];
 			String cert = args[2];
-			String pubKey = args[3];
+			String cn = args[3];
 			String daysValid = args[4];
-			String caOut = args[5];
-			PrivateKey cakey = KeyUtil.loadPrivateKey(new File(key), password);
-
-			X509Certificate cacert = CertUtil.loadCertificate(new File(cert));
-
-			File keyFile = new File(pubKey);
-			PublicKey publicKey = KeyUtil.loadPublicKey(keyFile);
-			int indexP = keyFile.getName().lastIndexOf("-public-key.pem");
-			String hostname = keyFile.getName().substring(0, indexP);
-			String rootSub = cacert.getSubjectDN().toString();
-			int index = rootSub.lastIndexOf(",");
-			String subject = rootSub.substring(0, index) + ",CN=host/" + hostname;
+			String keyOut = args[5];
+			String certOut = args[6];
 
 			int days = Integer.valueOf(daysValid).intValue();
+			while (days <= 0) {
+				System.err.println("Days Valid must be >0");
+				System.exit(1);
+			}
+			PrivateKey cakey = KeyUtil.loadPrivateKey(new File(key), password);
+
+			X509Certificate cacert = CertUtil.loadCertificate("BC",new File(cert));
+
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024("BC");
+			String rootSub = cacert.getSubjectDN().toString();
+			int index = rootSub.lastIndexOf(",");
+			String subject = rootSub.substring(0, index) + ",CN=host/" + cn;
+			PKCS10CertificationRequest request = CertUtil.generateCertficateRequest(subject, pair);
+
 			GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 			/* Allow for a five minute clock skew here. */
 			date.add(Calendar.MINUTE, -5);
@@ -64,18 +70,20 @@ public class AntSignHostCertificate {
 				}
 				end = d;
 			}
+			X509Certificate userCert = CertUtil.signCertificateRequest("BC", request, start, end, cacert, cakey);
 
-			X509Certificate userCert = CertUtil.generateCertificate(new X509Name(subject), start, end, publicKey,
-				cacert, cakey);
-			CertUtil.writeCertificate(userCert, new File(caOut));
+			KeyUtil.writePrivateKey(pair.getPrivate(), new File(keyOut));
+			CertUtil.writeCertificate(userCert, new File(certOut));
 			System.out.println("Successfully create the user certificate:");
 			System.out.println(userCert.getSubjectDN().toString());
 			System.out.println("User certificate issued by:");
 			System.out.println(cacert.getSubjectDN().toString());
 			System.out.println("User Certificate Valid Till:");
 			System.out.println(userCert.getNotAfter());
+			System.out.println("User Private Key Written to:");
+			System.out.println(keyOut);
 			System.out.println("User Certificate Written to:");
-			System.out.println(caOut);
+			System.out.println(certOut);
 
 		} catch (Exception e) {
 			e.printStackTrace();

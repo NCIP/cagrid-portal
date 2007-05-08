@@ -1,11 +1,12 @@
-package gov.nih.nci.cagrid.gridca.common;
+package gov.nih.nci.cagrid.gridca.commandline;
 
-import gov.nih.nci.cagrid.common.IOUtils;
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.File;
 import java.security.GeneralSecurityException;
-import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
@@ -13,8 +14,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-
+import org.bouncycastle.asn1.x509.X509Name;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -23,44 +23,36 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class CreateUserCertificate {
+public class AntSignHostCertificate {
 
 	public static void main(String[] args) {
 		try {
-			Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+			Security
+					.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
-			PrivateKey cakey = null;
-			while (true) {
-				try {
-					String key = IOUtils.readLine("Enter CA key location", true);
-					String password = IOUtils.readLine("Enter CA key password.");
-					cakey = KeyUtil.loadPrivateKey(new File(key), password);
-					break;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+			String key = args[0];
+			String password = args[1];
+			String cert = args[2];
+			String pubKey = args[3];
+			String daysValid = args[4];
+			String caOut = args[5];
+			PrivateKey cakey = KeyUtil.loadPrivateKey(new File(key), password);
 
-			X509Certificate cacert = null;
+			X509Certificate cacert = CertUtil.loadCertificate("BC", new File(
+					cert));
 
-			while (true) {
-				try {
-					String cert = IOUtils.readLine("Enter CA certificate location", true);
-					cacert = CertUtil.loadCertificate(new File(cert));
-					break;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			String cn = IOUtils.readLine("Enter Common Name (CN)", true);
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			File keyFile = new File(pubKey);
+			PublicKey publicKey = KeyUtil.loadPublicKey("BC", keyFile);
+			int indexP = keyFile.getName().lastIndexOf("-public-key.pem");
+			String hostname = keyFile.getName().substring(0, indexP);
 			String rootSub = cacert.getSubjectDN().toString();
 			int index = rootSub.lastIndexOf(",");
-			String subject = rootSub.substring(0, index) + ",CN=" + cn;
-			PKCS10CertificationRequest request = CertUtil.generateCertficateRequest(subject, pair);
+			String subject = rootSub.substring(0, index) + ",CN=host/"
+					+ hostname;
 
-			int days = IOUtils.readInteger("Enter number of days valid");
-			GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+			int days = Integer.valueOf(daysValid).intValue();
+			GregorianCalendar date = new GregorianCalendar(TimeZone
+					.getTimeZone("GMT"));
 			/* Allow for a five minute clock skew here. */
 			date.add(Calendar.MINUTE, -5);
 			Date start = new Date(date.getTimeInMillis());
@@ -74,15 +66,14 @@ public class CreateUserCertificate {
 				Date d = new Date(date.getTimeInMillis());
 				if (cacert.getNotAfter().before(d)) {
 					throw new GeneralSecurityException(
-						"Cannot create a certificate that expires after issuing certificate.");
+							"Cannot create a certificate that expires after issuing certificate.");
 				}
 				end = d;
 			}
-			X509Certificate userCert = CertUtil.signCertificateRequest(request, start, end, cacert, cakey);
 
-			String keyOut = IOUtils.readLine("Enter location to write user key");
-			String caOut = IOUtils.readLine("Enter location to write user cert");
-			KeyUtil.writePrivateKey(pair.getPrivate(), new File(keyOut));
+			X509Certificate userCert = CertUtil
+					.generateCertificate("BC",new X509Name(subject), start, end,
+							publicKey, cacert, cakey);
 			CertUtil.writeCertificate(userCert, new File(caOut));
 			System.out.println("Successfully create the user certificate:");
 			System.out.println(userCert.getSubjectDN().toString());
@@ -90,8 +81,6 @@ public class CreateUserCertificate {
 			System.out.println(cacert.getSubjectDN().toString());
 			System.out.println("User Certificate Valid Till:");
 			System.out.println(userCert.getNotAfter());
-			System.out.println("User Private Key Written to:");
-			System.out.println(keyOut);
 			System.out.println("User Certificate Written to:");
 			System.out.println(caOut);
 
