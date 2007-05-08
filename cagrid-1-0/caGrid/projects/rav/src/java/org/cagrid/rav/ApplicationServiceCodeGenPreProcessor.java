@@ -53,7 +53,6 @@ public class ApplicationServiceCodeGenPreProcessor implements
 	 */
 	public void preCodegen(ServiceExtensionDescriptionType desc,
 			ServiceInformation info) throws CodegenExtensionException {
-		logger.info("in precodegen");
 		MethodsType methods = info.getServices().getService(0).getMethods();
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc,
 				info);
@@ -96,13 +95,13 @@ public class ApplicationServiceCodeGenPreProcessor implements
 			MethodTypeInputs inputs = new MethodTypeInputs();
 			inputs.setInput(newInputs);
 			method.setInputs(inputs);
-			MethodTypeExceptionsException[] exceptionsArray = new MethodTypeExceptionsException[1];
+			/*MethodTypeExceptionsException[] exceptionsArray = new MethodTypeExceptionsException[1];
 	        MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
 	        exception.setName("java.io.IOException");
 	        exceptionsArray[0] = exception;
 	        MethodTypeExceptions exceptions = new MethodTypeExceptions();
 	        exceptions.setException(exceptionsArray);
-	        method.setExceptions(exceptions);
+	        method.setExceptions(exceptions);*/
 
 			CommonTools.addMethod(info.getServices().getService()[0], method);
 			logger.info(appTypeData.getApplicationName()

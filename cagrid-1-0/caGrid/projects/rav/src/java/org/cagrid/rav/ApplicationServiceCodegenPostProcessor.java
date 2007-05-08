@@ -34,10 +34,12 @@ public class ApplicationServiceCodegenPostProcessor implements CodegenExtensionP
 	 * @see gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor#postCodegen(gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType, gov.nih.nci.cagrid.introduce.common.ServiceInformation)
 	 */
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
+		System.out.println("ain here");
 		editServiceImpl(desc, info);
 		
 	}
 	private void editServiceImpl(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
+		System.out.println("Iam here");
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc,
 				info);
 		Application_Type appTypeData = null;
@@ -91,10 +93,10 @@ public class ApplicationServiceCodegenPostProcessor implements CodegenExtensionP
             serviceMethod = serviceMethod.substring(0, serviceMethod.indexOf("}"));
             serviceMethod = serviceMethod + this.RUNTIME_EXEC_CODE + "\" " + methodName + "\");}";
             String temp = this.RUNTIME_EXEC_CODE + "\" " + methodName + "\"); " + "\n" + "return true; \n}";
-          //  source.replace(startOfMethod, endOfMethod, "");
+            source.replace(startOfMethod, endOfMethod, "");
             StringBuffer tempBuffer = new StringBuffer(); 
             tempBuffer.append(methodSignatureStart).append("{").append("\n").append(temp);
-           // source.insert(source.lastIndexOf("}") -1, tempBuffer, 0 , tempBuffer.length());
+            source.insert(source.lastIndexOf("}") -1, tempBuffer, 0 , tempBuffer.length());
             System.out.println(source.toString());
 		} catch (IOException ex) {
 			throw new CodegenExtensionException("Error reading service source file: " + ex.getMessage(), ex);
