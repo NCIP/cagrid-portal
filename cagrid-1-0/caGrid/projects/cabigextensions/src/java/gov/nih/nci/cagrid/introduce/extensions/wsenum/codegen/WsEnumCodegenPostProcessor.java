@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.extensions.wsenum.codegen;
 
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
@@ -20,7 +22,7 @@ import org.projectmobius.common.XMLUtilities;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 16, 2006
- * @version $Id: WsEnumCodegenPostProcessor.java,v 1.3 2007-05-07 19:52:28 dervin Exp $
+ * @version $Id: WsEnumCodegenPostProcessor.java,v 1.4 2007-05-08 16:24:34 dervin Exp $
  */
 public class WsEnumCodegenPostProcessor implements CodegenExtensionPostProcessor {
 
@@ -77,7 +79,7 @@ public class WsEnumCodegenPostProcessor implements CodegenExtensionPostProcessor
     
     
     private Element getEnumerationResourceDescription() throws CodegenExtensionException {
-        String globusLocation = System.getenv("GLOBUS_LOCATION");
+        String globusLocation = ResourceManager.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION);
         File coreJndiConfigFile = new File(new File(globusLocation).getAbsolutePath()
             + File.separator + "etc" + File.separator + "globus_wsrf_core" 
             + File.separator + "jndi-config.xml");
