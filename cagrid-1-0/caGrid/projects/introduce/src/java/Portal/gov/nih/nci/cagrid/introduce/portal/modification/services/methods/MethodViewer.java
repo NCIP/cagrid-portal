@@ -2043,8 +2043,7 @@ public class MethodViewer extends GridPortalBaseFrame {
         try {
             parser.parse(new File(baseSchemaDir.getAbsolutePath() + File.separator + namespace.getLocation()));
             try {
-                parser.parse(new File(gov.nih.nci.cagrid.introduce.ResourceManager
-                    .getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION)
+                parser.parse(new File(CommonTools.getGlobusLocation()
                     + File.separator
                     + "share"
                     + File.separator

@@ -93,11 +93,10 @@ public class GlobusConfigurationPanel extends JPanel {
 						String schemaNamespace = (String) namespaceComboBox.getSelectedItem();
 						currentNamespace = schemaNamespace;
 						try {
-							if (new File(ResourceManager.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION))
+							if (new File(CommonTools.getGlobusLocation())
 								.exists()) {
 
-								File schemasDir = new File(ResourceManager
-									.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION)
+								File schemasDir = new File(CommonTools.getGlobusLocation()
 									+ File.separator + "share" + File.separator + "schema");
 								try {
 									currentSchemaFile = CommonTools.findSchema(schemaNamespace, schemasDir);

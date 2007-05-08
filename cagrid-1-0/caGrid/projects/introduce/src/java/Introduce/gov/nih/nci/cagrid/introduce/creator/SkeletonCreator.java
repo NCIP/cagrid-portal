@@ -43,14 +43,6 @@ public class SkeletonCreator extends Task {
         Properties properties = new Properties();
         properties.putAll(this.getProject().getProperties());
 
-        // get and set the globus location property
-        String globusLocation = (String) properties.get("ext.globus.location");
-        try {
-            ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, globusLocation);
-        } catch (IOException e2) {
-            e2.printStackTrace();
-        }
-
         File baseDirectory = new File(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 
         ServiceDescription introService = null;

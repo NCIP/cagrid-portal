@@ -35,10 +35,6 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 
         ExtensionsLoader.getInstance();
         prepareMenus();
-        boolean globusSet = CommonTools.checkGlobusLocation();
-        if (!globusSet) {
-            throw new Exception("Cannot determine if GLOBUS_LOCATION is set.");
-        }
     }
 
 

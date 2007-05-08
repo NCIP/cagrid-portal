@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ImportInformation;
 import gov.nih.nci.cagrid.introduce.common.NamespaceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
@@ -70,8 +71,7 @@ public class SyncUtils {
 			+ method.getImportInformation().getWsdlFile();
 		if (!(new File(fromDocFile).exists())) {
 			// try From Globus Location
-			fromDocFile = gov.nih.nci.cagrid.introduce.ResourceManager
-				.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION)
+			fromDocFile = CommonTools.getGlobusLocation()
 				+ File.separator
                 + "share"
                 + File.separator

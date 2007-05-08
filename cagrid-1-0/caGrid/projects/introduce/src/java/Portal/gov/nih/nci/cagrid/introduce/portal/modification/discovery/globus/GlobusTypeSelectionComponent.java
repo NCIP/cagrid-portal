@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.GridBagConstraints;
@@ -83,9 +84,9 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 			if (currentSchemaFile != null) {
 
 				int index = currentSchemaFile.getAbsolutePath().indexOf(
-					ResourceManager.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION) + File.separator
+				    CommonTools.getGlobusLocation() + File.separator
 						+ "share" + File.separator + "schema" + File.separator)
-					+ new String(ResourceManager.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION) + "share"
+					+ new String(CommonTools.getGlobusLocation() + "share"
 						+ File.separator + "schema" + File.separator).length();
 				String location = ".."
 					+ File.separator

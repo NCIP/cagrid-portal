@@ -1285,22 +1285,29 @@ public class CommonTools {
     }
 
 
-    public static boolean checkGlobusLocation() {
+    public static String getGlobusLocation() {
         try {
-            String globusLocation = System.getProperty("GLOBUS_LOCATION");
-            ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, globusLocation);
-            return true;
+            String globusLocation = System.getenv("GLOBUS_LOCATION");
+            if(globusLocation!=null){
+                return globusLocation;
+            }
         } catch (Throwable ex) {
             ex.printStackTrace();
-            try {
-                ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, "");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String[] error = {"Error getting GLOBUS_LOCATION system property: ", ex.getMessage(),
-                    "Please set your GLOBUS_LOCATION environment variable.!"};
+            String[] error = {"Error getting GLOBUS_LOCATION environment variable: ", ex.getMessage(),
+                    "Will now try to get it from system properties"};
             logger.error(error);
         }
-        return false;
+        try {
+            String globusLocation = System.getProperty("GLOBUS_LOCATION");
+            if(globusLocation!=null){
+                return globusLocation;
+            }
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+            String[] error = {"Error getting GLOBUS_LOCATION system property: ", ex.getMessage(),
+                    "Please set your GLOBUS_LOCATION system property!"};
+            logger.error(error);
+        }
+        return null;
     }
 }
