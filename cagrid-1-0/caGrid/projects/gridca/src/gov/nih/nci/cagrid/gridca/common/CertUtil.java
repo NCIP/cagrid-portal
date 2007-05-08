@@ -225,7 +225,7 @@ public class CertUtil {
 			throws InvalidKeyException, NoSuchProviderException,
 			SignatureException, IOException {
 		SecurityUtil.init();
-		return generateCertificate(subject, start, expired, publicKey, cacert,
+		return generateCertificate("BC",subject, start, expired, publicKey, cacert,
 				signerKey);
 	}
 
