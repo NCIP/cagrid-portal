@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.enumeration.common;
 
-import gov.nih.nci.cagrid.data.enumeration.stubs.response.EnumerationResponseContainer;
+import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 
 import java.rmi.RemoteException;
 

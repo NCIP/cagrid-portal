@@ -17,6 +17,7 @@ import org.globus.ws.enumeration.ClientEnumIterator;
 import org.jdom.Element;
 import org.projectmobius.bookstore.Book;
 import org.projectmobius.common.XMLUtilities;
+import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse;
 
 import com.atomicobject.haste.framework.Step;
@@ -28,7 +29,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:37:02 PM
- * @version $Id: InvokeBDTDataServiceStep.java,v 1.3 2007-05-02 15:36:23 dervin Exp $ 
+ * @version $Id: InvokeBDTDataServiceStep.java,v 1.4 2007-05-08 20:52:43 dervin Exp $ 
  */
 public class InvokeBDTDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
@@ -82,11 +83,13 @@ public class InvokeBDTDataServiceStep extends Step {
     
     private void iterateEnumeration(BulkDataHandlerClient client) throws Exception {
         EnumerateResponse response = beginEnumeration(client);
+        
         /*
          * This is the preferred way to access an enumeration, but the client enum iterator hides
          * remote exceptions from the user and throws an empty NoSuchElement exception.
          */
-        ClientEnumIterator iter = new ClientEnumIterator(client, response.getEnumerationContext());
+        // TODO: fix this to use the enumerate response container
+        ClientEnumIterator iter = new ClientEnumIterator((DataSource) null, response.getEnumerationContext());
         int resultCount = 0;
         try {
             while (iter.hasNext()) {

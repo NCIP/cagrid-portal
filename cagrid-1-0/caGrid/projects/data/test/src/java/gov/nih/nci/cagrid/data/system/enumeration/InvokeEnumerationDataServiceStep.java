@@ -6,9 +6,9 @@ import gov.nih.nci.cagrid.cqlquery.Group;
 import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.data.enumeration.client.EnumerationDataServiceClient;
-import gov.nih.nci.cagrid.data.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
+import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -35,7 +35,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 23, 2006 
- * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.6 2007-05-04 19:23:41 dervin Exp $ 
+ * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.7 2007-05-08 20:52:43 dervin Exp $ 
  */
 public class InvokeEnumerationDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";

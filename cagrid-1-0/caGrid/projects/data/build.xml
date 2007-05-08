@@ -179,7 +179,7 @@
             </fileset>
         </copy>
         <copy todir="${schema.dest}/Data">
-            <fileset dir="ext">
+            <fileset dir="ext/">
                 <include name="xsd/**/*.xsd" />
                 <exclude name="xsd/**/enumeration.xsd" />
                 <exclude name="xsd/**/enumeration.wsdl" />
@@ -188,6 +188,7 @@
         </copy>
         <copy todir="${schema.dest}/Data">
             <fileset dir="${ext.schema.dir}">
+				<include name="EnumerationResponseContainer.xsd"/>
                 <include name="enumeration.xsd" />
                 <include name="enumeration.wsdl" />
                 <include name="addressing.xsd" />

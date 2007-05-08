@@ -3,9 +3,9 @@ package gov.nih.nci.cagrid.data.utilities;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.enumeration.common.EnumerationDataServiceI;
-import gov.nih.nci.cagrid.data.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
+import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -28,7 +28,7 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAd
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: EnumDataServiceHandle.java,v 1.6 2007-05-04 19:23:41 dervin Exp $ 
+ * @version $Id: EnumDataServiceHandle.java,v 1.7 2007-05-08 20:52:43 dervin Exp $ 
  */
 public class EnumDataServiceHandle implements DataServiceIterator {
 

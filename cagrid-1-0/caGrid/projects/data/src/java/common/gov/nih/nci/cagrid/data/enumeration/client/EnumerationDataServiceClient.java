@@ -2,8 +2,8 @@ package gov.nih.nci.cagrid.data.enumeration.client;
 
 import gov.nih.nci.cagrid.data.enumeration.common.EnumerationDataServiceI;
 import gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationDataServicePortType;
-import gov.nih.nci.cagrid.data.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.data.enumeration.stubs.service.EnumerationDataServiceAddressingLocator;
+import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
 import java.io.InputStream;
