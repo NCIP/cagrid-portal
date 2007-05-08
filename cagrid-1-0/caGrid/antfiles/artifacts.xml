@@ -442,6 +442,7 @@
                 <include name="enumeration.xsd" />
                 <include name="addressing.xsd" />
                 <include name="enumeration.wsdl" />
+            	<include name="EnumerationResponseContainer.xsd"/>
             </fileset>
         </artifact>
         <!--
