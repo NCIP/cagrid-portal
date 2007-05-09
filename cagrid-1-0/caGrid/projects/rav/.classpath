@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="test/src/java"/>
+	<classpathentry kind="src" path="build/stubs/src"/>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="build/jars/caGrid-1.0-rav-stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/saaj.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-core.jar" sourcepath="/caGrid-1.0-introduce"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-portal.jar"/>
 	<classpathentry kind="lib" path="/caGrid-1.0-bulkDataTransfer/test/lib/shaste-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
@@ -22,5 +18,10 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-portal.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-updater.jar"/>
+	<classpathentry kind="lib" path="build/jars/caGrid-1.1-rav-stubs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

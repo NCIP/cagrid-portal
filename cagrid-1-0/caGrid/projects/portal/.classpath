@@ -68,10 +68,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-data.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
 	<classpathentry kind="lib" path="test/lib/spring-mock.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/commons-codec.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/commons-el.jar"/>
@@ -85,10 +81,6 @@
 	<classpathentry kind="lib" path="lib/myfaces/tomahawk.jar"/>
 	<classpathentry kind="lib" path="lib/nocopy/servlet-api.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
@@ -97,18 +89,29 @@
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="lib/nocopy/jsp-api.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gts-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gts-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gts-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-syncgts-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-syncgts-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-syncgts-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cog-jglobus.jar"/>
 	<classpathentry kind="lib" path="lib/poi/poi-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="lib" path="lib/poi/poi-contrib-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="lib" path="lib/poi/poi-scratchpad-2.5.1-final-20040804.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-discovery.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-discovery.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridca.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gts-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gts-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gts-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-data.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-security.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadataUtils.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-syncgts-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-syncgts-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-syncgts-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
