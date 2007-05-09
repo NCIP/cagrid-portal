@@ -21,7 +21,7 @@ public class BulkDataHandlerProviderImpl{
 
 	public gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationResponse createEnumeration(gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationRequest params) throws RemoteException {
 		gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationResponse boxedResult = new gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationResponse();
-		boxedResult.setEnumerateResponse(impl.createEnumeration());
+		boxedResult.setEnumerationResponseContainer(impl.createEnumeration());
 		return boxedResult;
 	}
 

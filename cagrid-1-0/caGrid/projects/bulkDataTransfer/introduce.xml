@@ -66,7 +66,7 @@
   <ns2:Namespace location="./BulkDataHandlerReference.xsd" namespace="http://cagrid.nci.nih.gov/BulkDataHandlerReference" packageName="bulkdatahandlerreference" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="BulkDataHandlerReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace generateStubs="false" location="./xsd\security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace generateStubs="false" location="./xsd/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CommunicationMechanism" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
@@ -76,7 +76,7 @@
    <ns2:SchemaElement type="GSITransport" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="None" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location=".\enumeration.xsd" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" packageName="org.xmlsoap.schemas.ws._2004._09.enumeration" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./enumeration.xsd" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" packageName="org.xmlsoap.schemas.ws._2004._09.enumeration" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Enumerate" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SupportedDialect" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="EnumerateResponse" xsi:type="ns2:SchemaElementType"/>
@@ -89,6 +89,9 @@
    <ns2:SchemaElement type="Release" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="EnumerationEnd" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
+  <ns2:Namespace location="./EnumerationResponseContainer.xsd" namespace="http://gov.nih.nci.cagrid.enumeration/EnumerationResponseContainer" packageName="gov.nih.nci.cagrid.enumeration.stubs.response" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="EnumerationResponseContainer" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns3:Service name="BulkDataHandler" namespace="http://cagrid.nci.nih.gov/BulkDataHandler" packageName="gov.nih.nci.cagrid.bdt" resourceFrameworkType="main" xsi:type="ns3:ServiceType">
@@ -100,7 +103,7 @@
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="CreateEnumeration" xsi:type="ns4:MethodType">
      <ns4:Inputs/>
-     <ns4:Output qName="ns18:EnumerateResponse" isArray="false" xmlns:ns18="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:Output qName="ns18:EnumerationResponseContainer" isArray="false" xmlns:ns18="http://gov.nih.nci.cagrid.enumeration/EnumerationResponseContainer"/>
      <ns4:Exceptions/>
     </ns4:Method>
     <ns4:Method isImported="true" isProvided="false" name="Get" xsi:type="ns4:MethodType">

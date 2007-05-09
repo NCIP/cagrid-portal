@@ -2,22 +2,24 @@ package gov.nih.nci.cagrid.bdt.service;
 
 import gov.nih.nci.cagrid.bdt.service.globus.resource.BDTException;
 import gov.nih.nci.cagrid.bdt.service.globus.resource.BDTResourceI;
+import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 
+import java.net.URL;
 import java.rmi.RemoteException;
 
 import javax.naming.NamingException;
 
-import org.apache.axis.message.MessageElement;
+import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.ws.enumeration.EnumIterator;
 import org.globus.ws.enumeration.EnumProvider;
 import org.globus.ws.enumeration.EnumResource;
 import org.globus.ws.enumeration.EnumResourceHome;
+import org.globus.ws.enumeration.VisibilityProperties;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceKey;
-import org.globus.wsrf.encoding.SerializationException;
-import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse;
+import org.globus.wsrf.container.ServiceHost;
+import org.globus.wsrf.utils.AddressingUtils;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerationContextType;
-import org.xmlsoap.schemas.ws._2004._09.enumeration.ExpirationType;
 
 
 /**
@@ -32,7 +34,7 @@ public class BulkDataHandlerImpl extends BulkDataHandlerImplBase {
 	}
 
 
-	public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse createEnumeration() throws RemoteException {
+	public EnumerationResponseContainer createEnumeration() throws RemoteException {
 		try {
 			BDTResourceI bdtResource = (BDTResourceI) ResourceContext.getResourceContext().getResource();
 			EnumIterator iter = bdtResource.createEnumeration();
@@ -42,14 +44,29 @@ public class BulkDataHandlerImpl extends BulkDataHandlerImplBase {
 			} catch (NamingException ex) {
 			    throw new RemoteException(ex.getMessage(), ex);
 			}
-			EnumResource resource = resourceHome.createEnumeration(iter, false);
-			ResourceKey key = resourceHome.getKey(resource);
+            VisibilityProperties visibility = new VisibilityProperties(
+                ResourceContext.getResourceContext().getService() + "Enumeration", null);
+            
+            EnumResource resource = resourceHome.createEnumeration(iter, visibility, false);
+            ResourceKey key = resourceHome.getKey(resource);
+            
 			try {
-				EnumerationContextType enumContext = EnumProvider.createEnumerationContextType(key);
-				EnumerateResponse response = new EnumerateResponse(new MessageElement[]{}, enumContext,
-					new ExpirationType());
-				return response;
-			} catch (SerializationException e) {
+                
+                EnumerationContextType enumContext = 
+                    EnumProvider.createEnumerationContextType(key);
+                
+                // create the enumeration subservice URL
+                URL baseURL = ServiceHost.getBaseURL();
+                String serviceURI = baseURL.toString() 
+                    + ResourceContext.getResourceContext().getService() + "Enumeration";
+
+                EndpointReferenceType epr = AddressingUtils.createEndpointReference(serviceURI, key);
+                
+                EnumerationResponseContainer container = new EnumerationResponseContainer();
+                container.setContext(enumContext);
+                container.setEPR(epr);
+                return container;
+			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RemoteException(e.getMessage(), e);
 			}

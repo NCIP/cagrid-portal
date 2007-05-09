@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.bdt.common;
 
+import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
+
 import java.rmi.RemoteException;
 
 /** 
@@ -12,7 +14,7 @@ import java.rmi.RemoteException;
  */
 public interface BulkDataHandlerI {
 
-  public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse createEnumeration() throws RemoteException ;
+  public EnumerationResponseContainer createEnumeration() throws RemoteException ;
 
   public org.globus.transfer.AnyXmlType get(org.globus.transfer.EmptyType params) throws RemoteException ;
 

@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.bdt.client;
 import gov.nih.nci.cagrid.bdt.common.BulkDataHandlerI;
 import gov.nih.nci.cagrid.bdt.stubs.BulkDataHandlerPortType;
 import gov.nih.nci.cagrid.bdt.stubs.service.BulkDataHandlerServiceAddressingLocator;
+import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
 import java.io.InputStream;
@@ -119,12 +120,12 @@ public class BulkDataHandlerClient extends ServiceSecurityClient implements Bulk
 	}
 
 
-	public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse createEnumeration() throws RemoteException {
+	public EnumerationResponseContainer createEnumeration() throws RemoteException {
 		synchronized (portTypeMutex) {
 			configureStubSecurity((Stub) portType, "createEnumeration");
 			gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationRequest params = new gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationRequest();
 			gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationResponse boxedResult = portType.createEnumeration(params);
-			return boxedResult.getEnumerateResponse();
+			return boxedResult.getEnumerationResponseContainer();
 		}
 	}
 

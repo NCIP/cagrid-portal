@@ -3,14 +3,23 @@ package gov.nih.nci.cagrid.data.system.bdt;
 import gov.nih.nci.cagrid.bdt.client.BulkDataHandlerClient;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.bdt.client.BDTDataServiceClient;
+import gov.nih.nci.cagrid.data.system.enumeration.InvokeEnumerationDataServiceStep;
+import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 
+import java.io.InputStream;
+import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import javax.xml.soap.SOAPElement;
 
+import org.apache.axis.EngineConfiguration;
+import org.apache.axis.client.AxisClient;
+import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.MessageElement;
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.utils.ClassUtils;
 import org.globus.transfer.AnyXmlType;
 import org.globus.transfer.EmptyType;
 import org.globus.ws.enumeration.ClientEnumIterator;
@@ -18,7 +27,7 @@ import org.jdom.Element;
 import org.projectmobius.bookstore.Book;
 import org.projectmobius.common.XMLUtilities;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
-import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse;
+import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAddressingLocator;
 
 import com.atomicobject.haste.framework.Step;
 
@@ -29,7 +38,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:37:02 PM
- * @version $Id: InvokeBDTDataServiceStep.java,v 1.4 2007-05-08 20:52:43 dervin Exp $ 
+ * @version $Id: InvokeBDTDataServiceStep.java,v 1.5 2007-05-09 15:49:12 dervin Exp $ 
  */
 public class InvokeBDTDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
@@ -74,22 +83,49 @@ public class InvokeBDTDataServiceStep extends Step {
     }
     
     
-    private EnumerateResponse beginEnumeration(BulkDataHandlerClient client) throws Exception {
-        EnumerateResponse response = client.createEnumeration();
-        assertNotNull("Enumeration response does not contain an enumeration context", response.getEnumerationContext());
+    private EnumerationResponseContainer beginEnumeration(BulkDataHandlerClient client) throws Exception {
+        EnumerationResponseContainer response = client.createEnumeration();
+        assertNotNull("Enumeration response does not contain an enumeration context", response.getContext());
         return response;
     }
     
     
+    private static DataSource createDataSource(EndpointReferenceType epr) throws RemoteException {
+
+        EnumerationServiceAddressingLocator locator = new EnumerationServiceAddressingLocator();
+        
+        // attempt to load our context sensitive wsdd file
+        InputStream resourceAsStream = ClassUtils.getResourceAsStream(
+            InvokeEnumerationDataServiceStep.class, "client-config.wsdd");
+        if (resourceAsStream != null) {
+            // we found it, so tell axis to configure an engine to use it
+            EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
+            // set the engine of the locator
+            locator.setEngine(new AxisClient(engineConfig));
+        }
+        DataSource port = null;
+        try {
+            port = locator.getDataSourcePort(epr);
+        } catch (Exception e) {
+            throw new RemoteException("Unable to locate portType:" + e.getMessage(), e);
+        }
+
+        return port;
+    }
+
+    
+    
     private void iterateEnumeration(BulkDataHandlerClient client) throws Exception {
-        EnumerateResponse response = beginEnumeration(client);
+        EnumerationResponseContainer response = beginEnumeration(client);
         
         /*
          * This is the preferred way to access an enumeration, but the client enum iterator hides
          * remote exceptions from the user and throws an empty NoSuchElement exception.
          */
-        // TODO: fix this to use the enumerate response container
-        ClientEnumIterator iter = new ClientEnumIterator((DataSource) null, response.getEnumerationContext());
+        
+        DataSource dataSource = createDataSource(response.getEPR());
+        
+        ClientEnumIterator iter = new ClientEnumIterator(dataSource, response.getContext());
         int resultCount = 0;
         try {
             while (iter.hasNext()) {
