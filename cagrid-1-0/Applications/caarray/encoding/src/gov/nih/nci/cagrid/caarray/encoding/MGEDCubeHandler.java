@@ -24,15 +24,15 @@ public class MGEDCubeHandler implements FieldHandler {
 
 	public static final String VALUE_DELIMITER_PATTERN = "\\|";
 
-	private static final String LINE_DELIMITER_PROP = "gov.nih.nci.cagrid.caarray.encoding.lineDelimiter";
+	static final String LINE_DELIMITER_PROP = "gov.nih.nci.cagrid.caarray.encoding.lineDelimiter";
 
-	private static final String LINE_DELIMITER_PATTERN_PROP = "gov.nih.nci.cagrid.caarray.encoding.lineDelimiterPattern";
+	static final String LINE_DELIMITER_PATTERN_PROP = "gov.nih.nci.cagrid.caarray.encoding.lineDelimiterPattern";
 
-	private static final String VALUE_DELIMITER_PROP = "gov.nih.nci.cagrid.caarray.encoding.valueDelimiter";
+	static final String VALUE_DELIMITER_PROP = "gov.nih.nci.cagrid.caarray.encoding.valueDelimiter";
 
-	private static final String VALUE_DELIMITER_PATTERN_PROP = "gov.nih.nci.cagrid.caarray.encoding.valueDelimiterPattern";
+	static final String VALUE_DELIMITER_PATTERN_PROP = "gov.nih.nci.cagrid.caarray.encoding.valueDelimiterPattern";
 
-	private static final String NAN = "NaN";
+	static final String NAN = "NaN";
 
 	private String lineDelimiter;
 
@@ -244,31 +244,28 @@ public class MGEDCubeHandler implements FieldHandler {
 				// Assume tab is the delimiter.
 				String[] tmp = line.split(valueDelimPatt);
 				// System.out.println("Got " + tmp.length + " values.");
-				Double[] dtmp = new Double[tmp.length];
 
 				for (int k = 0; k < tmp.length; k++) {
 					if (tmp[k].trim().equalsIgnoreCase(NAN)) {
-						dtmp[k] = null;
-					} else {
-						dtmp[k] = new Double(tmp[k]);
+						tmp[k] = null;
 					}
 				}
 
 				// Check loaded dimension and trow exception if not the
 				// same as the input parameter.
-				if (dtmp.length == dim3) {
-					cube[i][j] = dtmp;
-				} else if (dtmp.length == dim2 * dim3) {
+				if (tmp.length == dim3) {
+					cube[i][j] = tmp;
+				} else if (tmp.length == dim2 * dim3) {
 					for (int k = 0; k < dim2; k++)
 						for (int l = 0; l < dim3; l++) {
-							cube[i][k][l] = dtmp[k * dim3 + l];
+							cube[i][k][l] = tmp[k * dim3 + l];
 						}
 
 					// force return of j-loop, both dim 2 and 3 was on the same
 					// line
 					j = dim2;
 				} else {
-					throw new ArrayIndexOutOfBoundsException(dtmp.length);
+					throw new ArrayIndexOutOfBoundsException(tmp.length);
 				}
 
 			}
