@@ -25,7 +25,9 @@ public class CA {
 	private PrivateKey key;
 	private X509CRL crl;
 	public static final Provider PROVIDER = new org.bouncycastle.jce.provider.BouncyCastleProvider();
+	public static final String SIGNATURE_ALGORITHM = "MD5WithRSAEncryption";
 	// public static final Provider PROVIDER = new ERACOMProvider();
+	// public static final String SIGNATURE_ALGORITHM = "MD5WithRSA";
 	public static final String PASSWORD = "caGrid@bmi";
 	public final static String DEFAULT_CA_DN = "O=Organization ABC,OU=Unit XYZ,CN=Certificate Authority";
 
@@ -44,7 +46,7 @@ public class CA {
 		KeyPair pair = KeyUtil.generateRSAKeyPair512(PROVIDER.getName());
 		this.key = pair.getPrivate();
 		cert = CertUtil.generateCACertificate(PROVIDER.getName(), new X509Name(
-				dn), now, expires, pair);
+				dn), now, expires, pair, SIGNATURE_ALGORITHM);
 
 		if (PROVIDER.getName().equals("ERACOM")) {
 			keyStore = KeyStore.getInstance("CRYPTOKI", PROVIDER.getName());
@@ -61,7 +63,7 @@ public class CA {
 		KeyPair pair = KeyUtil.generateRSAKeyPair512(PROVIDER.getName());
 		this.key = pair.getPrivate();
 		cert = CertUtil.generateCACertificate(PROVIDER.getName(), new X509Name(
-				dn), start, expires, pair);
+				dn), start, expires, pair, SIGNATURE_ALGORITHM);
 	}
 
 	public CA(X509Certificate cert, PrivateKey key, X509CRL crl) {
@@ -83,7 +85,8 @@ public class CA {
 		Date end = getCertificate().getNotAfter();
 		Credential cred = new Credential(CertUtil.generateCertificate(PROVIDER
 				.getName(), new X509Name(dn), now, end, pair.getPublic(),
-				getCertificate(), getPrivateKey()), pair.getPrivate());
+				getCertificate(), getPrivateKey(), SIGNATURE_ALGORITHM), pair
+				.getPrivate());
 
 		if (PROVIDER.getName().equals("ERACOM")) {
 			keyStore.deleteEntry(id);
@@ -106,13 +109,13 @@ public class CA {
 		CRLEntry[] entries = new CRLEntry[1];
 		entries[0] = entry;
 		crl = CertUtil.createCRL(PROVIDER.getName(), cert, key, entries, cert
-				.getNotAfter());
+				.getNotAfter(), SIGNATURE_ALGORITHM);
 		return crl;
 	}
 
 	public X509CRL updateCRL(CRLEntry[] entries) throws Exception {
 		crl = CertUtil.createCRL(PROVIDER.getName(), cert, key, entries, cert
-				.getNotAfter());
+				.getNotAfter(), SIGNATURE_ALGORITHM);
 		return crl;
 	}
 

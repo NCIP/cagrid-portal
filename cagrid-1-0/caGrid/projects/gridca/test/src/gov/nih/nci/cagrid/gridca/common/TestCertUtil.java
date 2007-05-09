@@ -85,9 +85,9 @@ public class TestCertUtil extends TestCase {
 			assertNotNull(rootPair);
 			String rootSub = "O=Ohio State University,OU=BMI,OU=MSCL,CN=Temp Certificate Authority";
 			X509Name rootSubject = new X509Name(rootSub);
-			X509Certificate root = CertUtil.generateCACertificate("BC",
-					rootSubject, new Date(System.currentTimeMillis()),
-					new Date(System.currentTimeMillis() + 500000000), rootPair);
+			X509Certificate root = CertUtil.generateCACertificate(rootSubject,
+					new Date(System.currentTimeMillis()), new Date(System
+							.currentTimeMillis() + 500000000), rootPair);
 			assertNotNull(root);
 			String certLocation = "temp-cacert.pem";
 			String keyLocation = "temp-cakey.pem";
@@ -122,9 +122,9 @@ public class TestCertUtil extends TestCase {
 			assertNotNull(rootPair);
 			String rootSub = "O=Ohio State University,OU=BMI,OU=MSCL,CN=Temp Certificate Authority";
 			X509Name rootSubject = new X509Name(rootSub);
-			X509Certificate root = CertUtil.generateCACertificate("BC",
-					rootSubject, new Date(System.currentTimeMillis()),
-					new Date(System.currentTimeMillis()), rootPair);
+			X509Certificate root = CertUtil.generateCACertificate(rootSubject,
+					new Date(System.currentTimeMillis()), new Date(System
+							.currentTimeMillis()), rootPair);
 			Thread.sleep(10);
 			assertNotNull(root);
 			String certLocation = "temp-cacert.pem";
@@ -160,9 +160,9 @@ public class TestCertUtil extends TestCase {
 			assertNotNull(rootPair);
 			String rootSub = "O=Ohio State University,OU=BMI,OU=MSCL,CN=Temp Certificate Authority";
 			X509Name rootSubject = new X509Name(rootSub);
-			X509Certificate root = CertUtil.generateCACertificate("BC",
-					rootSubject, new Date(System.currentTimeMillis() + 50000),
-					new Date(System.currentTimeMillis() + 500000), rootPair);
+			X509Certificate root = CertUtil.generateCACertificate(rootSubject,
+					new Date(System.currentTimeMillis() + 50000), new Date(
+							System.currentTimeMillis() + 500000), rootPair);
 			assertNotNull(root);
 			String certLocation = "temp-cacert.pem";
 			String keyLocation = "temp-cakey.pem";
@@ -248,8 +248,8 @@ public class TestCertUtil extends TestCase {
 			System.exit(1);
 		}
 
-		X509Certificate issuedCert = CertUtil.signCertificateRequest("BC",
-				request, new Date(System.currentTimeMillis()), new Date(System
+		X509Certificate issuedCert = CertUtil.signCertificateRequest(request,
+				new Date(System.currentTimeMillis()), new Date(System
 						.currentTimeMillis() + 500000000), rootCert, rootKey);
 		assertNotNull(issuedCert);
 
@@ -270,32 +270,32 @@ public class TestCertUtil extends TestCase {
 			Date now = c.getTime();
 			c.add(Calendar.YEAR, 1);
 			Date end = c.getTime();
-			X509Certificate cacert = CertUtil.generateCACertificate("BC",
+			X509Certificate cacert = CertUtil.generateCACertificate(
 					new X509Name(rootSub), now, end, rootKeys);
 			checkCert(cacert, rootSub, rootSub);
 			checkWriteReadCertificate(cacert);
 
 			KeyPair user1Keys = KeyUtil.generateRSAKeyPair512("BC");
 			assertNotNull(user1Keys);
-			X509Certificate user1 = CertUtil.generateCertificate("BC",
-					new X509Name(user1Sub), now, end, user1Keys.getPublic(),
-					cacert, rootKeys.getPrivate());
+			X509Certificate user1 = CertUtil.generateCertificate(new X509Name(
+					user1Sub), now, end, user1Keys.getPublic(), cacert,
+					rootKeys.getPrivate());
 			checkCert(user1, rootSub, user1Sub);
 			checkWriteReadCertificate(user1);
 
 			KeyPair user2Keys = KeyUtil.generateRSAKeyPair512("BC");
 			assertNotNull(user2Keys);
-			X509Certificate user2 = CertUtil.generateCertificate("BC",
-					new X509Name(user2Sub), now, end, user2Keys.getPublic(),
-					cacert, rootKeys.getPrivate());
+			X509Certificate user2 = CertUtil.generateCertificate(new X509Name(
+					user2Sub), now, end, user2Keys.getPublic(), cacert,
+					rootKeys.getPrivate());
 			checkCert(user2, rootSub, user2Sub);
 			checkWriteReadCertificate(user2);
 
 			KeyPair user3Keys = KeyUtil.generateRSAKeyPair512("BC");
 			assertNotNull(user3Keys);
-			X509Certificate user3 = CertUtil.generateCertificate("BC",
-					new X509Name(user3Sub), now, end, user3Keys.getPublic(),
-					cacert, rootKeys.getPrivate());
+			X509Certificate user3 = CertUtil.generateCertificate(new X509Name(
+					user3Sub), now, end, user3Keys.getPublic(), cacert,
+					rootKeys.getPrivate());
 			checkCert(user3, rootSub, user3Sub);
 			checkWriteReadCertificate(user3);
 
@@ -304,8 +304,8 @@ public class TestCertUtil extends TestCase {
 					CRLReason.PRIVILEGE_WITHDRAWN);
 			crls[1] = new CRLEntry(user3.getSerialNumber(),
 					CRLReason.PRIVILEGE_WITHDRAWN);
-			X509CRL crl = CertUtil.createCRL("BC", cacert, rootKeys
-					.getPrivate(), crls, cacert.getNotAfter());
+			X509CRL crl = CertUtil.createCRL(cacert, rootKeys.getPrivate(),
+					crls, cacert.getNotAfter());
 			assertNotNull(crl);
 
 			// Test validity of CRL

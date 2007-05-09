@@ -72,7 +72,7 @@ public class AntSignHostCertificate {
 			}
 
 			X509Certificate userCert = CertUtil
-					.generateCertificate("BC",new X509Name(subject), start, end,
+					.generateCertificate(new X509Name(subject), start, end,
 							publicKey, cacert, cakey);
 			CertUtil.writeCertificate(userCert, new File(caOut));
 			System.out.println("Successfully create the user certificate:");

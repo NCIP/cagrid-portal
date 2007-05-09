@@ -85,7 +85,7 @@ public class CreateManyHostCertificates {
 					end = d;
 				}
 				X509Certificate userCert = CertUtil.signCertificateRequest(
-						"BC", request, start, end, cacert, cakey);
+						request, start, end, cacert, cakey);
 
 				String keyOut = location + cn + keyEnd;
 				String caOut = location + cn + certEnd;

@@ -50,7 +50,7 @@ import org.bouncycastle.openssl.PEMReader;
  */
 public class CertUtil {
 
-	public static final String SIGNATURE_ALGORITHM = "MD5WithRSA";
+	public static final String SIGNATURE_ALGORITHM = "MD5WithRSAEncryption";
 
 	public static String getHashCode(X509Certificate cert) throws Exception {
 		X509Principal x509 = (X509Principal) cert.getSubjectDN();
@@ -85,15 +85,16 @@ public class CertUtil {
 	public static PKCS10CertificationRequest generateCertficateRequest(
 			String subject, KeyPair pair) throws Exception {
 		SecurityUtil.init();
-		return generateCertficateRequest("BC", subject, pair);
+		return generateCertficateRequest("BC", subject, pair,
+				SIGNATURE_ALGORITHM);
 
 	}
 
 	public static PKCS10CertificationRequest generateCertficateRequest(
-			String provider, String subject, KeyPair pair) throws Exception {
-		return new PKCS10CertificationRequest(SIGNATURE_ALGORITHM,
-				new X509Principal(subject), pair.getPublic(), null, pair
-						.getPrivate(), provider);
+			String provider, String subject, KeyPair pair, String algorithm)
+			throws Exception {
+		return new PKCS10CertificationRequest(algorithm, new X509Principal(
+				subject), pair.getPublic(), null, pair.getPrivate(), provider);
 	}
 
 	public static X509Certificate signCertificateRequest(
@@ -103,31 +104,35 @@ public class CertUtil {
 			SignatureException, NoSuchAlgorithmException, IOException {
 		SecurityUtil.init();
 		return signCertificateRequest("BC", request, start, expired, cacert,
-				signerKey);
+				signerKey, SIGNATURE_ALGORITHM);
 	}
 
 	public static X509Certificate signCertificateRequest(String provider,
 			PKCS10CertificationRequest request, Date start, Date expired,
-			X509Certificate cacert, PrivateKey signerKey)
-			throws InvalidKeyException, NoSuchProviderException,
-			SignatureException, NoSuchAlgorithmException, IOException {
+			X509Certificate cacert, PrivateKey signerKey,
+			String signatureAlgorithm) throws InvalidKeyException,
+			NoSuchProviderException, SignatureException,
+			NoSuchAlgorithmException, IOException {
 		return generateCertificate(provider, request
 				.getCertificationRequestInfo().getSubject(), start, expired,
-				request.getPublicKey(provider), cacert, signerKey);
+				request.getPublicKey(provider), cacert, signerKey,
+				signatureAlgorithm);
 	}
 
 	public static X509Certificate generateCACertificate(X509Name subject,
 			Date start, Date expired, KeyPair pair) throws InvalidKeyException,
 			NoSuchProviderException, SignatureException, IOException {
 		SecurityUtil.init();
-		return generateCACertificate("BC", subject, start, expired, pair, 1);
+		return generateCACertificate("BC", subject, start, expired, pair, 1,
+				SIGNATURE_ALGORITHM);
 	}
 
 	public static X509Certificate generateCACertificate(String provider,
-			X509Name subject, Date start, Date expired, KeyPair pair)
-			throws InvalidKeyException, NoSuchProviderException,
-			SignatureException, IOException {
-		return generateCACertificate(provider, subject, start, expired, pair, 1);
+			X509Name subject, Date start, Date expired, KeyPair pair,
+			String signatureAlgorithm) throws InvalidKeyException,
+			NoSuchProviderException, SignatureException, IOException {
+		return generateCACertificate(provider, subject, start, expired, pair,
+				1, signatureAlgorithm);
 	}
 
 	public static X509Certificate generateIntermediateCACertificate(
@@ -137,14 +142,14 @@ public class CertUtil {
 			SignatureException, IOException {
 		SecurityUtil.init();
 		return generateIntermediateCACertificate("BC", cacert, signerKey,
-				subject, start, expired, publicKey);
+				subject, start, expired, publicKey, SIGNATURE_ALGORITHM);
 	}
 
 	public static X509Certificate generateIntermediateCACertificate(
 			String provider, X509Certificate cacert, PrivateKey signerKey,
-			X509Name subject, Date start, Date expired, PublicKey publicKey)
-			throws InvalidKeyException, NoSuchProviderException,
-			SignatureException, IOException {
+			X509Name subject, Date start, Date expired, PublicKey publicKey,
+			String signatureAlgorithm) throws InvalidKeyException,
+			NoSuchProviderException, SignatureException, IOException {
 		int constraints = cacert.getBasicConstraints();
 		if (constraints <= 1) {
 			throw new SignatureException(
@@ -162,7 +167,7 @@ public class CertUtil {
 		certGen.setNotAfter(expired);
 		certGen.setSubjectDN(subject);
 		certGen.setPublicKey(publicKey);
-		certGen.setSignatureAlgorithm(SIGNATURE_ALGORITHM);
+		certGen.setSignatureAlgorithm(signatureAlgorithm);
 		certGen.addExtension(X509Extensions.BasicConstraints, true,
 				new BasicConstraints(constraints));
 		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(
@@ -189,13 +194,14 @@ public class CertUtil {
 			SignatureException, IOException {
 		SecurityUtil.init();
 		return generateCACertificate("BC", subject, start, expired, pair,
-				numberOfCAs);
+				numberOfCAs, SIGNATURE_ALGORITHM);
 	}
 
 	public static X509Certificate generateCACertificate(String provider,
 			X509Name subject, Date start, Date expired, KeyPair pair,
-			int numberOfCAs) throws InvalidKeyException,
-			NoSuchProviderException, SignatureException, IOException {
+			int numberOfCAs, String signartureAlgorthm)
+			throws InvalidKeyException, NoSuchProviderException,
+			SignatureException, IOException {
 		// generate the certificate
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
 
@@ -205,7 +211,7 @@ public class CertUtil {
 		certGen.setNotAfter(expired);
 		certGen.setSubjectDN(subject);
 		certGen.setPublicKey(pair.getPublic());
-		certGen.setSignatureAlgorithm(SIGNATURE_ALGORITHM);
+		certGen.setSignatureAlgorithm(signartureAlgorthm);
 		certGen.addExtension(X509Extensions.BasicConstraints, true,
 				new BasicConstraints(numberOfCAs));
 		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(
@@ -233,14 +239,14 @@ public class CertUtil {
 			SignatureException, IOException {
 		SecurityUtil.init();
 		return generateCertificate("BC", subject, start, expired, publicKey,
-				cacert, signerKey);
+				cacert, signerKey, SIGNATURE_ALGORITHM);
 	}
 
 	public static X509Certificate generateCertificate(String provider,
 			X509Name subject, Date start, Date expired, PublicKey publicKey,
-			X509Certificate cacert, PrivateKey signerKey)
-			throws InvalidKeyException, NoSuchProviderException,
-			SignatureException, IOException {
+			X509Certificate cacert, PrivateKey signerKey,
+			String signartureAlgorithm) throws InvalidKeyException,
+			NoSuchProviderException, SignatureException, IOException {
 		// create the certificate using the information in the request
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
 
@@ -250,7 +256,7 @@ public class CertUtil {
 		certGen.setNotAfter(expired);
 		certGen.setSubjectDN(subject);
 		certGen.setPublicKey(publicKey);
-		certGen.setSignatureAlgorithm(SIGNATURE_ALGORITHM);
+		certGen.setSignatureAlgorithm(signartureAlgorithm);
 		certGen.addExtension(X509Extensions.BasicConstraints, true,
 				new BasicConstraints(false));
 		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(
@@ -352,18 +358,19 @@ public class CertUtil {
 	public static X509CRL createCRL(X509Certificate caCert, PrivateKey caKey,
 			CRLEntry[] entries, Date expires) throws Exception {
 		SecurityUtil.init();
-		return createCRL("BC", caCert, caKey, entries, expires);
+		return createCRL("BC", caCert, caKey, entries, expires,
+				SIGNATURE_ALGORITHM);
 	}
 
 	public static X509CRL createCRL(String provider, X509Certificate caCert,
-			PrivateKey caKey, CRLEntry[] entries, Date expires)
-			throws Exception {
+			PrivateKey caKey, CRLEntry[] entries, Date expires,
+			String signatureAlgorithm) throws Exception {
 		X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
 		Date now = new Date();
 		crlGen.setIssuerDN(new X509Name(caCert.getSubjectDN().getName()));
 		crlGen.setThisUpdate(now);
 		crlGen.setNextUpdate(expires);
-		crlGen.setSignatureAlgorithm(SIGNATURE_ALGORITHM);
+		crlGen.setSignatureAlgorithm(signatureAlgorithm);
 		for (int i = 0; i < entries.length; i++) {
 			crlGen.addCRLEntry(entries[i].getCertificateSerialNumber(), now,
 					entries[i].getReason());

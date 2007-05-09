@@ -49,8 +49,8 @@ public class AntGenerateCA {
 			date.add(Calendar.MINUTE, 5);
 			date.add(Calendar.DAY_OF_MONTH, days);
 			Date end = new Date(date.getTimeInMillis());
-			X509Certificate cert = CertUtil.generateCACertificate("BC",
-					new X509Name(dn), start, end, root);
+			X509Certificate cert = CertUtil.generateCACertificate(new X509Name(
+					dn), start, end, root);
 
 			password = Utils.clean(password);
 			KeyUtil.writePrivateKey(root.getPrivate(), new File(keyOut),

@@ -68,8 +68,8 @@ public class GenerateCA {
 			date.add(Calendar.MINUTE, 5);
 			date.add(Calendar.DAY_OF_MONTH, days);
 			Date end = new Date(date.getTimeInMillis());
-			X509Certificate cert = CertUtil.generateCACertificate("BC",
-					new X509Name(sb.toString()), start, end, root);
+			X509Certificate cert = CertUtil.generateCACertificate(new X509Name(
+					sb.toString()), start, end, root);
 			String password = IOUtils.readLine("Enter a key password");
 			password = Utils.clean(password);
 			String keyOut = IOUtils.readLine("Enter location to write CA key");
