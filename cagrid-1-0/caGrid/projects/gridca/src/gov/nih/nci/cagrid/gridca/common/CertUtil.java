@@ -84,9 +84,16 @@ public class CertUtil {
 
 	public static PKCS10CertificationRequest generateCertficateRequest(
 			String subject, KeyPair pair) throws Exception {
+		SecurityUtil.init();
+		return generateCertficateRequest("BC", subject, pair);
+
+	}
+
+	public static PKCS10CertificationRequest generateCertficateRequest(
+			String provider, String subject, KeyPair pair) throws Exception {
 		return new PKCS10CertificationRequest(SIGNATURE_ALGORITHM,
 				new X509Principal(subject), pair.getPublic(), null, pair
-						.getPrivate());
+						.getPrivate(), provider);
 	}
 
 	public static X509Certificate signCertificateRequest(
@@ -225,8 +232,8 @@ public class CertUtil {
 			throws InvalidKeyException, NoSuchProviderException,
 			SignatureException, IOException {
 		SecurityUtil.init();
-		return generateCertificate("BC",subject, start, expired, publicKey, cacert,
-				signerKey);
+		return generateCertificate("BC", subject, start, expired, publicKey,
+				cacert, signerKey);
 	}
 
 	public static X509Certificate generateCertificate(String provider,
