@@ -53,17 +53,17 @@
     
     <!-- Jars from other caGrid projects -->
     <patternset id="cagrid.jars">
-        <include name="caGrid-1.0-core.jar"/>
-        <include name="caGrid-1.0-gridca.jar"/>
-        <include name="caGrid-1.0-gridgrouper-client.jar"/>
-        <include name="caGrid-1.0-gridgrouper-common.jar"/>
-        <include name="caGrid-1.0-gridgrouper-stubs.jar"/>
-        <include name="caGrid-1.0-metadata-common.jar"/>
-        <include name="caGrid-1.0-metadata-security.jar"/>
-        <include name="caGrid-1.0-ServiceSecurityProvider-client.jar"/>
-        <include name="caGrid-1.0-ServiceSecurityProvider-common.jar"/>
-        <include name="caGrid-1.0-ServiceSecurityProvider-service.jar"/>
-        <include name="caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
+        <include name="caGrid-*-core.jar"/>
+        <include name="caGrid-*-gridca.jar"/>
+        <include name="caGrid-*-gridgrouper-client.jar"/>
+        <include name="caGrid-*-gridgrouper-common.jar"/>
+        <include name="caGrid-*-gridgrouper-stubs.jar"/>
+        <include name="caGrid-*-metadata-common.jar"/>
+        <include name="caGrid-*-metadata-security.jar"/>
+        <include name="caGrid-*-ServiceSecurityProvider-client.jar"/>
+        <include name="caGrid-*-ServiceSecurityProvider-common.jar"/>
+        <include name="caGrid-*-ServiceSecurityProvider-service.jar"/>
+        <include name="caGrid-*-ServiceSecurityProvider-stubs.jar"/>
         <include name="cglib-nodep-2.1_3.jar"/>
         <include name="grouper.jar"/>
     	<include name="hibernate3.jar" />
