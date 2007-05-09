@@ -117,7 +117,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		FileFilter dataLibFilter = new FileFilter() {
 			public boolean accept(File name) {
 				String filename = name.getName();
-				return filename.startsWith("caGrid-1.0-data-") && filename.endsWith(".jar");
+				return filename.startsWith("caGrid-1.1-data-") && filename.endsWith(".jar");
 			}
 		};
 		// locate the old data service libs in the service
@@ -154,7 +154,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		FileFilter enumLibFilter = new FileFilter() {
 			public boolean accept(File name) {
 				String filename = name.getName();
-				return filename.equals("caGrid-1.0-wsEnum.jar");
+				return filename.equals("caGrid-1.1-wsEnum.jar");
 			}
 		};
 		// locate old enumeration libraries in the service
@@ -190,8 +190,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		FileFilter sdkLibFilter = new FileFilter() {
 			public boolean accept(File name) {
 				String filename = name.getName();
-				return (filename.startsWith("caGrid-1.0-sdkQuery") 
-					|| filename.startsWith("caGrid-1.0-sdkQuery32"))
+				return (filename.startsWith("caGrid-1.1-sdkQuery") 
+					|| filename.startsWith("caGrid-1.1-sdkQuery32"))
 					&& filename.endsWith(".jar");
 			}
 		};
@@ -202,10 +202,10 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		File[] oldLibs = serviceLibDir.listFiles(sdkLibFilter);
 		// first must see which version of SDK we're using
 		for (int i = 0; i < oldLibs.length; i++) {
-			if (oldLibs[i].getName().indexOf("caGrid-1.0-sdkQuery32") != -1) {
+			if (oldLibs[i].getName().indexOf("caGrid-1.1-sdkQuery32") != -1) {
 				isSdk32 = true;
 			} else {
-				if (oldLibs[i].getName().indexOf("caGrid-1.0-sdkQuery") != -1) {
+				if (oldLibs[i].getName().indexOf("caGrid-1.1-sdkQuery") != -1) {
 					isSdk31 = true;
 				}
 			}

@@ -36,7 +36,7 @@ import org.projectmobius.tools.common.viewer.XSDFileFilter;
  */
 public class ServiceMetadataCreationPostProcessor implements CreationExtensionPostProcessor {
 
-	private static final String METADATA_JAR_PREFIX = "caGrid-1.0-metadata";
+	private static final String METADATA_JAR_PREFIX = "caGrid-1.1-metadata";
 
 
 	public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation info)

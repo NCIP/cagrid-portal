@@ -114,9 +114,9 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
         // need to add the soapFix.jar to the tools lib directory
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "tools" + File.separator + "lib"
-            + File.separator + "caGrid-1.0-Introduce-1.1-soapBindingFix.jar"), new File(getServicePath()
+            + File.separator + "caGrid-1.1-Introduce-1.1-soapBindingFix.jar"), new File(getServicePath()
             + File.separator + "tools" + File.separator + "lib" + File.separator
-            + "caGrid-1.0-Introduce-1.1-soapBindingFix.jar"));
+            + "caGrid-1.1-Introduce-1.1-soapBindingFix.jar"));
         getStatus().addDescriptionLine("added soapFix jar to enable patching the soap bindings that get generated for custom beans");
         
         // need to move the ant-contrib.jar to the tools lib directory
@@ -147,9 +147,9 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
         FileFilter skeletonLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
-                boolean core = filename.startsWith("caGrid-1.0-core") && filename.endsWith(".jar");
-                boolean security = (filename.startsWith("caGrid-1.0-ServiceSecurityProvider") || filename
-                    .startsWith("caGrid-1.0-metadata-security"))
+                boolean core = filename.startsWith("caGrid-1.1-core") && filename.endsWith(".jar");
+                boolean security = (filename.startsWith("caGrid-1.1-ServiceSecurityProvider") || filename
+                    .startsWith("caGrid-1.1-metadata-security"))
                     && filename.endsWith(".jar");
                 boolean wsrf = (filename.startsWith("globus_wsrf_mds") || filename
                     .startsWith("globus_wsrf_servicegroup"))

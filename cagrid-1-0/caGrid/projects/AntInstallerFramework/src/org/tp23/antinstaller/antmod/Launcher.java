@@ -42,7 +42,7 @@ import org.tp23.antinstaller.InstallerContext;
  * as the one delivered with Ant 1.6
  *
  * @since Ant 1.6
- * @version $Id: Launcher.java,v 1.3 2007-04-25 13:50:34 joshua Exp $
+ * @version $Id: Launcher.java,v 1.4 2007-05-09 19:24:24 hastings Exp $
  */
 public class Launcher {
 	/** The Ant Home property */
@@ -234,8 +234,8 @@ public class Launcher {
 				File lib = new File(resources,"lib");
 				File cert_task_jar = new File(lib,"certificate_tasks.jar");
 				File ext = new File(lib,"ext");
-				File core_jar = new File(ext,"caGrid-1.0-core.jar");
-				File grid_ca_jar = new File(ext,"caGrid-1.0-gridca-1.0.jar");
+				File core_jar = new File(ext,"caGrid-1.1-core.jar");
+				File grid_ca_jar = new File(ext,"caGrid-1.1-gridca-1.0.jar");
 				File jglobus_jar = new File(ext,"cog-jglobus.jar");
 				File jce_jar = new File(ext,"jce-jdk13-125.jar");
 				ClassPathModifier.addFile(tools_jar);

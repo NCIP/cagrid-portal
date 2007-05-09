@@ -65,8 +65,8 @@ public class CaExistPageRenderer  extends SwingPageRenderer{
 		File lib = new File(resources,"lib");
 		File cert_task_jar = new File(lib,"certificate_tasks.jar");
 		File ext = new File(lib,"ext");
-		File core_jar = new File(ext,"caGrid-1.0-core.jar");
-		File grid_ca_jar = new File(ext,"caGrid-1.0-gridca-1.0.jar");
+		File core_jar = new File(ext,"caGrid-1.1-core.jar");
+		File grid_ca_jar = new File(ext,"caGrid-1.1-gridca-1.0.jar");
 		File jglobus_jar = new File(ext,"cog-jglobus.jar");
 		File jce_jar = new File(ext,"jce-jdk13-125.jar");
 		

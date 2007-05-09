@@ -50,12 +50,12 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 
 	// constants for the 3.1 version of the SDK Query Processor
 	public static final String SDK_31_QUERY_LIB = ".." + File.separator + "sdkQuery" + File.separator + "build"
-		+ File.separator + "lib" + File.separator + "caGrid-1.0-sdkQuery.jar";
+		+ File.separator + "lib" + File.separator + "caGrid-1.1-sdkQuery.jar";
 	public static final String SDK_31_QUERY_PROCESSOR = "gov.nih.nci.cagrid.data.cql.cacore.HQLCoreQueryProcessor";
 
 	// constants for the 3.2 version of the SDK Query Processor
 	public static final String SDK_32_QUERY_LIB = ".." + File.separator + "sdkQuery32" + File.separator + "build"
-		+ File.separator + "lib" + File.separator + "caGrid-1.0-sdkQuery32.jar";
+		+ File.separator + "lib" + File.separator + "caGrid-1.1-sdkQuery32.jar";
 	public static final String SDK_32_QUERY_PROCESSOR = "gov.nih.nci.cagrid.data.sdk32query.HQLCoreQueryProcessor";
 
 	/**
