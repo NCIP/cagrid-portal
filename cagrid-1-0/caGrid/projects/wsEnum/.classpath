@@ -55,10 +55,10 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/wsrf_core_stubs_enum.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/client.jar"/>
 	<classpathentry kind="src" path="test/resources"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

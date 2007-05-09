@@ -53,27 +53,6 @@
 	<classpathentry kind="lib" path="ext/lib/asm.jar"/>
 	<classpathentry kind="lib" path="ext/lib/c3p0-0.8.5.2.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cacore32-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authz-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-cql.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-extension.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-tests.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-tools.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-utils.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-validation.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cglib-2.1.3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/clm.jar"/>
@@ -99,8 +78,30 @@
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="lib" path="ext/lib/spring-richclient-full-0.1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/subject-0.2.1.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-authz-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-cql.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-extension.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-tests.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-tools.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-upgrades.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-utils.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-validation.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridca.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-security.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
