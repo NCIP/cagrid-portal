@@ -19,7 +19,6 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.utils.ClassUtils;
 import org.globus.gsi.GlobusCredential;
 import org.oasis.wsrf.properties.GetResourcePropertyResponse;
-import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
 
 
 /**
@@ -31,7 +30,7 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
  * 
  * @created by Introduce Toolkit version 1.1
  */
-public class BulkDataHandlerClient extends ServiceSecurityClient implements BulkDataHandlerI, DataSource {
+public class BulkDataHandlerClient extends ServiceSecurityClient implements BulkDataHandlerI {
 	protected BulkDataHandlerPortType portType;
 	private Object portTypeMutex;
 
@@ -116,41 +115,6 @@ public class BulkDataHandlerClient extends ServiceSecurityClient implements Bulk
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
-		}
-	}
-
-
-	public org.xmlsoap.schemas.ws._2004._09.enumeration.PullResponse pullOp(
-		org.xmlsoap.schemas.ws._2004._09.enumeration.Pull params) throws RemoteException {
-		synchronized (portTypeMutex) {
-			configureStubSecurity((Stub) portType, "pullOp");
-			return portType.pullOp(params);
-		}
-	}
-
-
-	public org.xmlsoap.schemas.ws._2004._09.enumeration.RenewResponse renewOp(
-		org.xmlsoap.schemas.ws._2004._09.enumeration.Renew params) throws RemoteException {
-		synchronized (portTypeMutex) {
-			configureStubSecurity((Stub) portType, "renewOp");
-			return portType.renewOp(params);
-		}
-	}
-
-
-	public org.xmlsoap.schemas.ws._2004._09.enumeration.GetStatusResponse getStatusOp(
-		org.xmlsoap.schemas.ws._2004._09.enumeration.GetStatus params) throws RemoteException {
-		synchronized (portTypeMutex) {
-			configureStubSecurity((Stub) portType, "getStatusOp");
-			return portType.getStatusOp(params);
-		}
-	}
-
-
-	public void releaseOp(org.xmlsoap.schemas.ws._2004._09.enumeration.Release params) throws RemoteException {
-		synchronized (portTypeMutex) {
-			configureStubSecurity((Stub) portType, "releaseOp");
-			portType.releaseOp(params);
 		}
 	}
 

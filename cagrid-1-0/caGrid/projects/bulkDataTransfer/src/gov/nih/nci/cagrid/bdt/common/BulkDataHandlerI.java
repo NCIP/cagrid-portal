@@ -12,14 +12,6 @@ import java.rmi.RemoteException;
  */
 public interface BulkDataHandlerI {
 
-  public org.xmlsoap.schemas.ws._2004._09.enumeration.PullResponse pullOp(org.xmlsoap.schemas.ws._2004._09.enumeration.Pull params) throws RemoteException ;
-
-  public org.xmlsoap.schemas.ws._2004._09.enumeration.RenewResponse renewOp(org.xmlsoap.schemas.ws._2004._09.enumeration.Renew params) throws RemoteException ;
-
-  public org.xmlsoap.schemas.ws._2004._09.enumeration.GetStatusResponse getStatusOp(org.xmlsoap.schemas.ws._2004._09.enumeration.GetStatus params) throws RemoteException ;
-
-  public void releaseOp(org.xmlsoap.schemas.ws._2004._09.enumeration.Release params) throws RemoteException ;
-
   public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse createEnumeration() throws RemoteException ;
 
   public org.globus.transfer.AnyXmlType get(org.globus.transfer.EmptyType params) throws RemoteException ;

@@ -10,4 +10,5 @@ public interface BDTServiceConstants {
 	public static final String ENUMERATION_SCHEMA = "enumeration.xsd";
 	public static final String ADDRESSING_SCHEMA = "addressing.xsd";
 	public static final String TRANSFER_SCHEMA = "transfer.xsd";
+    public static final String ENUMERATION_RESPONSE_CONTAINER_SCHEMA = "EnumerationResponseContainer.xsd";
 }

@@ -131,12 +131,18 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			+ BDTServiceConstants.ADDRESSING_SCHEMA, schemaDirFile);
 		addressingNamespace.setGenerateStubs(new Boolean(false));
 		addressingNamespace.setPackageName("org.globus.addressing");
-
+        // enumeration response container
+        NamespaceType responseContainerNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
+            + BDTServiceConstants.ENUMERATION_RESPONSE_CONTAINER_SCHEMA, schemaDirFile);
+        // responseContainerNamespace.setGenerateStubs(new Boolean(true));
+        responseContainerNamespace.setPackageName("gov.nih.nci.cagrid.enumeration.stubs.response");
+        
 		bdtNamespaces.add(metadataNamespace);
 		bdtNamespaces.add(refNamespace);
 		bdtNamespaces.add(transferNamespace);
 		bdtNamespaces.add(enumerationNamespace);
 		bdtNamespaces.add(addressingNamespace);
+        bdtNamespaces.add(responseContainerNamespace);
 
 		NamespaceType[] nsArray = new NamespaceType[bdtNamespaces.size()];
 		bdtNamespaces.toArray(nsArray);

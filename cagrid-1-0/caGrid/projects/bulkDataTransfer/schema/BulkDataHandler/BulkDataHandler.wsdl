@@ -16,8 +16,9 @@
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
       <import namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing" schemaLocation="./addressing.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/BulkDataHandlerReference" schemaLocation="./BulkDataHandlerReference.xsd" />
-      <import namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" schemaLocation=".\enumeration.xsd" />
-      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd\security.xsd" />
+      <import namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" schemaLocation="./enumeration.xsd" />
+      <import namespace="http://gov.nih.nci.cagrid.enumeration/EnumerationResponseContainer" schemaLocation="./EnumerationResponseContainer.xsd"/>
+      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/security.xsd" />
       <import namespace="http://www.globus.org/transfer" schemaLocation="./transfer.xsd" />
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" schemaLocation="./WS-ResourceLifetime.xsd" />
       <element name="CreateEnumerationRequest">

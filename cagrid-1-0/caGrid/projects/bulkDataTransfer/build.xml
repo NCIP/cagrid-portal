@@ -24,6 +24,7 @@
     <property name="ext.lib.dir" value="ext/lib" />
     <property name="etc.dir" value="etc" />
     <property name="schema.dir" value="schema" />
+	<property name="ext.schema.dir" value="ext/xsd"/>
     <property name="metadata.dir" value="metadata" />
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
     <property name="common.jar.name" value="${project.jar.prefix}common.jar" />
@@ -45,6 +46,7 @@
 
     <!-- Basic Build directories -->
     <property name="extension.description.file" value="${basedir}/extension/extension.xml" />
+	<property name="introduce.extensions.dir" location="../introduce/extensions"/>
 
     <!-- Auxiliary directory where all the intermediate files will be placed -->
     <property name="build.dir" location="build" />
@@ -124,6 +126,11 @@
             <fileset dir="${schema.dir}" casesensitive="yes">
                 <include name="**" />
             </fileset>
+		</copy>
+		<copy toDir="${schema.dest}/${introduce.skeleton.service.name}">
+			<fileset dir="${ext.schema.dir}">
+            	<include name="EnumerationResponseContainer.xsd"/>
+			</fileset>
         </copy>
 
         <!-- Creates etc.dir in case it doesn't exist. Has no effect if dir already exists -->
@@ -351,13 +358,21 @@
                 <include name="**/*.jar" />
             </fileset>
         </copy>
-        <!-- data service schemas -->
+    	
+        <!-- bdt specific schemas and wsdl -->
         <copy todir="${introduce.extensions.dir}/bdt/schema">
             <fileset dir="${basedir}/schema/BulkDataHandler/">
                 <include name="**/*.xsd" />
                 <include name="**/*.wsdl" />
             </fileset>
         </copy>
+	
+		<!-- enumeration response container -->
+		<copy todir="${introduce.extensions.dir}/bdt/schema">
+			<fileset dir="${ext.schema.dir}">
+				<include name="EnumerationResponseContainer.xsd"/>
+			</fileset>
+		</copy>
 
         <!-- etc/metadata file -->
         <copy todir="${introduce.extensions.dir}/bdt/etc">
