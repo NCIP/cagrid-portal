@@ -20,6 +20,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 
@@ -36,6 +37,7 @@ import javax.xml.namespace.QName;
 
 
 public class BDTCreationExtensionPostProcessor implements CreationExtensionPostProcessor {
+    public static final String WS_ENUM_EXTENSION_NAME = "cagrid_wsEnum";
 
 	private ServiceInformation info;
 	private Properties serviceProperties;
@@ -60,6 +62,8 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			throw new CreationExtensionException(
 				"Error adding BDT service components to template! " + ex.getMessage(), ex);
 		}
+        // add the ws-enumeration
+        installWsEnumExtension();        
 		// add the proper deployment metadata
 		try {
 			System.out.println("Modifying metadata");
@@ -317,6 +321,46 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		}
 		modifyClasspathFile(copiedLibs, props);
 	}
+    
+    
+    private void installWsEnumExtension() throws CreationExtensionException {
+        // verify the ws-enum extension is installed
+        if (!wsEnumExtensionInstalled()) {
+            throw new CreationExtensionException("The required extension " + WS_ENUM_EXTENSION_NAME
+                + " was not found to be installed.  Please install it and try creating your service again");
+        }
+
+        if (!wsEnumExtensionUsed()) {
+            System.out.println("Adding the WS-Enumeration extension to the service");
+            // add the ws Enumeration extension
+            ExtensionTools.addExtensionToService(info, WS_ENUM_EXTENSION_NAME);
+        }
+    }
+    
+    
+    private boolean wsEnumExtensionInstalled() {
+        List extensionDescriptors = ExtensionsLoader.getInstance().getServiceExtensions();
+        for (int i = 0; i < extensionDescriptors.size(); i++) {
+            ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) extensionDescriptors.get(i);
+            if (ex.getName().equals(WS_ENUM_EXTENSION_NAME)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private boolean wsEnumExtensionUsed() {
+        ServiceDescription desc = info.getServiceDescriptor();
+        if ((desc.getExtensions() != null) && (desc.getExtensions().getExtension() != null)) {
+            for (int i = 0; i < desc.getExtensions().getExtension().length; i++) {
+                if (desc.getExtensions().getExtension(i).getName().equals(WS_ENUM_EXTENSION_NAME)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 
 	private void modifyClasspathFile(File[] libs, Properties props) throws Exception {
