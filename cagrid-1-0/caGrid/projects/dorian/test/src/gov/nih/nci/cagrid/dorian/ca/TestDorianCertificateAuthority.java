@@ -150,7 +150,6 @@ public class TestDorianCertificateAuthority extends TestCase {
 			X509Certificate cert = ca.getCACertificate();
 			assertTrue(ca.hasCredentials(CertificateAuthority.CA_ALIAS));
 			assertEquals(conf.getAutoCreate().getCASubject(), cert.getSubjectDN().getName());
-			assertEquals(ca.getSignatureAlgorithm(), cert.getSigAlgName());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -344,7 +343,6 @@ public class TestDorianCertificateAuthority extends TestCase {
 		assertNotNull(root);
 		ca.setCACredentials(root, rootPair.getPrivate());
 		X509Certificate r = ca.getCACertificate();
-		assertEquals(ca.getSignatureAlgorithm(), r.getSigAlgName());
 		assertNotNull(r);
 		assertEquals(r, root);
 	}
@@ -363,7 +361,6 @@ public class TestDorianCertificateAuthority extends TestCase {
 		assertNotNull(root);
 		ca.setCACredentials(root, rootPair.getPrivate());
 		X509Certificate r = ca.getCACertificate();
-		assertEquals(ca.getSignatureAlgorithm(), r.getSigAlgName());
 		assertNotNull(r);
 		assertEquals(r, root);
 		return r;
@@ -383,7 +380,6 @@ public class TestDorianCertificateAuthority extends TestCase {
 		X509Certificate cert = ca.getCertificate(cn);
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
-		assertEquals(ca.getSignatureAlgorithm(), cert.getSigAlgName());
 	}
 
 
