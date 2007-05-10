@@ -55,7 +55,8 @@ public class Utils {
 		}
 		return db;
 	}
-	
+
+
 	public static AccountPolicies getAccountPolicies() {
 		AccountPolicies ap = new AccountPolicies();
 		AccountPolicy[] policies = new AccountPolicy[4];
@@ -74,17 +75,19 @@ public class Utils {
 		ap.setAccountPolicy(policies);
 		return ap;
 	}
-	
-	
-	
-	public static String getDorianIdPUserId(IdentityAssignmentPolicy policy, String idpName, String caSubject, String uid) throws Exception {
+
+
+	public static String getDorianIdPUserId(IdentityAssignmentPolicy policy, String idpName, String caSubject,
+		String uid) throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setId(1);
 		idp.setName(idpName);
 		return UserManager.getUserSubject(policy, caSubject, idp, uid);
 	}
-	
-	public static String getDorianIdPUserId(IdentityAssignmentPolicy policy, String caSubject, String uid) throws Exception {
+
+
+	public static String getDorianIdPUserId(IdentityAssignmentPolicy policy, String caSubject, String uid)
+		throws Exception {
 		return getDorianIdPUserId(policy, "Dorian IdP", caSubject, uid);
 	}
 
@@ -113,7 +116,7 @@ public class Utils {
 		DorianCAConfiguration conf = new DorianCAConfiguration();
 		conf.setCertificateAuthorityPassword("password");
 		DorianCertificateAuthority ca = new DorianCertificateAuthority(cadb, conf);
-		ca.clearDatabase();
+		ca.clearCertificateAuthority();
 		KeyPair rootPair = KeyUtil.generateRSAKeyPair1024();
 
 		String rootSub = getCASubject();

@@ -241,18 +241,18 @@ public class IdentityProvider extends LoggingObject {
 	public void clearDatabase() throws DorianInternalFault {
 		assertionManager.clearDatabase();
 		userManager.clearDatabase();
-		if (ca instanceof DorianCertificateAuthority) {
-			try {
-				((DorianCertificateAuthority) ca).clearDatabase();
-			} catch (CertificateAuthorityFault e) {
-				DorianInternalFault fault = new DorianInternalFault();
-				fault.setFaultString(e.getFaultString());
-				FaultHelper helper = new FaultHelper(fault);
-				helper.addFaultCause(e);
-				fault = (DorianInternalFault) helper.getFault();
-				throw fault;
-			}
+
+		try {
+			((DorianCertificateAuthority) ca).clearCertificateAuthority();
+		} catch (CertificateAuthorityFault e) {
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString(e.getFaultString());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
 		}
+
 	}
 
 }

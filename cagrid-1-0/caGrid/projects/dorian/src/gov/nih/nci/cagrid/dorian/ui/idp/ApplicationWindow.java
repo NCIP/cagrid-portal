@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.dorian.ui.DorianServiceListComboBox;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -21,7 +22,6 @@ import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import java.awt.Insets;
 
 
 /**

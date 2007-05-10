@@ -2,10 +2,16 @@ package gov.nih.nci.cagrid.dorian.service.ca;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
-import gov.nih.nci.cagrid.dorian.service.Database;
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
+import java.security.KeyStore;
 import java.security.PrivateKey;
+import java.security.Provider;
+import java.security.Security;
 import java.security.cert.X509Certificate;
+import java.util.Enumeration;
+
+import au.com.eracom.crypto.provider.ERACOMProvider;
 
 
 /**
@@ -15,43 +21,43 @@ import java.security.cert.X509Certificate;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class DorianCertificateAuthority extends CertificateAuthority {
+public class EracomCertificateAuthority extends CertificateAuthority {
 
-	public static final String SIGNATURE_ALGORITHM = "MD5WithRSAEncryption";
+	public static final String SIGNATURE_ALGORITHM = "MD5WithRSA";
+	private Provider provider;
+	private KeyStore keyStore;
 
-	private CredentialsManager manager;
 
-
-	public DorianCertificateAuthority(Database db, DorianCAConfiguration conf) {
+	public EracomCertificateAuthority(DorianCAConfiguration conf) throws CertificateAuthorityFault {
 		super(conf);
-		this.manager = new CredentialsManager(db);
-	}
+		try {
 
+			provider = new ERACOMProvider();
+			Security.addProvider(provider);
+			keyStore = KeyStore.getInstance("CRYPTOKI", provider.getName());
+			// TODO: Determine which password this is.
+			keyStore.load(null, conf.getCertificateAuthorityPassword().toCharArray());
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault.setFaultString("Error initializing the Dorian Certificate Authority.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CertificateAuthorityFault) helper.getFault();
+			throw fault;
+		}
 
-	public String getProvider() {
-		return "BC";
-	}
-
-
-	public String getSignatureAlgorithm() {
-		return SIGNATURE_ALGORITHM;
 	}
 
 
 	protected void addCredentials(String alias, String password, X509Certificate cert, PrivateKey key)
 		throws CertificateAuthorityFault {
 		try {
-
-			if (manager.hasCredentials(alias)) {
-				CertificateAuthorityFault fault = new CertificateAuthorityFault();
-				fault.setFaultString("Credentials already exist for " + alias);
-				throw fault;
-			}
-			manager.addCredentials(alias, password, cert, key);
+			keyStore.setKeyEntry(alias, key, null, new X509Certificate[]{cert});
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("An unexpected error occurred, could not add credentials.");
+			fault.setFaultString("Unexpected Error, could not add credentials.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();
@@ -63,11 +69,11 @@ public class DorianCertificateAuthority extends CertificateAuthority {
 
 	protected void deleteCredentials(String alias) throws CertificateAuthorityFault {
 		try {
-			manager.deleteCredentials(alias);
+			keyStore.deleteEntry(alias);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("An unexpected error occurred, could not delete credentials.");
+			fault.setFaultString("Unexpected Error, could not add credentials.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();
@@ -77,9 +83,27 @@ public class DorianCertificateAuthority extends CertificateAuthority {
 	}
 
 
+	protected void clear() throws CertificateAuthorityFault {
+		try {
+			Enumeration<String> e = keyStore.aliases();
+			while (e.hasMoreElements()) {
+				keyStore.deleteEntry(e.nextElement());
+			}
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault.setFaultString("Unexpected Error, could not destroy Dorian Certificate Authority.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CertificateAuthorityFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+
 	public boolean hasCredentials(String alias) throws CertificateAuthorityFault {
 		try {
-			return manager.hasCredentials(alias);
+			return keyStore.containsAlias(alias);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
@@ -92,6 +116,16 @@ public class DorianCertificateAuthority extends CertificateAuthority {
 	}
 
 
+	public String getProvider() {
+		return provider.getName();
+	}
+
+
+	public String getSignatureAlgorithm() {
+		return SIGNATURE_ALGORITHM;
+	}
+
+
 	public PrivateKey getPrivateKey(String alias, String password) throws CertificateAuthorityFault {
 
 		try {
@@ -100,7 +134,7 @@ public class DorianCertificateAuthority extends CertificateAuthority {
 				fault.setFaultString("The requested private key does not exist.");
 				throw fault;
 			} else {
-				return manager.getPrivateKey(alias, password);
+				return (PrivateKey) keyStore.getKey(alias, null);
 			}
 		} catch (CertificateAuthorityFault f) {
 			throw f;
@@ -115,7 +149,8 @@ public class DorianCertificateAuthority extends CertificateAuthority {
 		}
 
 	}
-	
+
+
 	public X509Certificate getCertificate(String alias) throws CertificateAuthorityFault {
 		try {
 			if (!hasCredentials(alias)) {
@@ -123,7 +158,7 @@ public class DorianCertificateAuthority extends CertificateAuthority {
 				fault.setFaultString("The requested certificate does not exist.");
 				throw fault;
 			} else {
-				return manager.getCertificate(alias);
+				return convert((X509Certificate) keyStore.getCertificate(alias));
 			}
 		} catch (CertificateAuthorityFault f) {
 			throw f;
@@ -140,21 +175,9 @@ public class DorianCertificateAuthority extends CertificateAuthority {
 	}
 
 
-	// ////////////////////////////////////////////////////////////////////////////////////////////
-
-	public void clear() throws CertificateAuthorityFault {
-		try {
-			manager.clearDatabase();
-		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("Unexpected Error, could not destroy Dorian Certificate Authority.");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (CertificateAuthorityFault) helper.getFault();
-			throw fault;
-		}
+	private X509Certificate convert(X509Certificate cert) throws Exception {
+		String str = CertUtil.writeCertificate(cert);
+		return CertUtil.loadCertificate(str);
 	}
-
 
 }

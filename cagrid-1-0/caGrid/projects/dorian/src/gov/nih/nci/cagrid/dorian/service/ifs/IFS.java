@@ -16,7 +16,6 @@ import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.PropertyManager;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityFault;
-import gov.nih.nci.cagrid.dorian.service.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault;
@@ -63,8 +62,8 @@ public class IFS extends LoggingObject {
 	private GroupManager groupManager;
 
 
-	public IFS(IdentityFederationConfiguration conf, Database db, PropertyManager properties, CertificateAuthority ca, IFSDefaults defaults)
-		throws DorianInternalFault {
+	public IFS(IdentityFederationConfiguration conf, Database db, PropertyManager properties, CertificateAuthority ca,
+		IFSDefaults defaults) throws DorianInternalFault {
 		this.conf = conf;
 		this.ca = ca;
 		tm = new TrustedIdPManager(conf, db);
@@ -106,7 +105,6 @@ public class IFS extends LoggingObject {
 		}
 		return usr.getUID();
 	}
-
 
 
 	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
@@ -591,17 +589,16 @@ public class IFS extends LoggingObject {
 		this.um.clearDatabase();
 		this.tm.clearDatabase();
 		this.groupManager.clearDatabase();
-		if (ca instanceof DorianCertificateAuthority) {
-			try {
-				((DorianCertificateAuthority) ca).clearDatabase();
-			} catch (CertificateAuthorityFault e) {
-				DorianInternalFault fault = new DorianInternalFault();
-				fault.setFaultString(e.getFaultString());
-				FaultHelper helper = new FaultHelper(fault);
-				helper.addFaultCause(e);
-				fault = (DorianInternalFault) helper.getFault();
-				throw fault;
-			}
+		try {
+			ca.clearCertificateAuthority();
+		} catch (CertificateAuthorityFault e) {
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString(e.getFaultString());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
 		}
+
 	}
 }
