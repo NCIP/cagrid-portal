@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.extension;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
@@ -12,12 +14,31 @@ import java.util.List;
 
 import org.apache.axis.message.MessageElement;
 
-
+/**
+  *  ExtensionTools
+  *  Tools to handle extension management
+  * 
+  * @author David Ervin
+  * 
+  * @created May 10, 2007 10:10:00 AM
+  * @version $Id$
+ */
 public class ExtensionTools {
 
+    /**
+     * Gets a named creation post processor
+     * 
+     * @param extensionName
+     *      The name of the extension
+     *      
+     * @return
+     *      The CreationExtensionPostProcessor of the named extension, 
+     *      or <code>null</code> if none is present
+     * @throws Exception
+     */
 	public static CreationExtensionPostProcessor getCreationPostProcessor(String extensionName) throws Exception {
-		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getServiceExtension(
-			extensionName);
+		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance()
+            .getServiceExtension(extensionName);
 		if (extensionDesc != null && extensionDesc.getCreationPostProcessor() != null
 			&& !extensionDesc.getCreationPostProcessor().equals("")) {
 			Class c = Class.forName(extensionDesc.getCreationPostProcessor());
@@ -28,9 +49,18 @@ public class ExtensionTools {
 	}
 
 
+    /**
+     * Gets a named codegen post processor
+     * 
+     * @param extensionName
+     *      The name of the extension
+     * @return
+     *      The CodegenExtensionPostProcessor or <code>null</code> if none is present
+     * @throws Exception
+     */
 	public static CodegenExtensionPostProcessor getCodegenPostProcessor(String extensionName) throws Exception {
-		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getServiceExtension(
-			extensionName);
+		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance()
+            .getServiceExtension(extensionName);
 		if (extensionDesc != null && extensionDesc.getCodegenPostProcessor() != null
 			&& !extensionDesc.getCodegenPostProcessor().equals("")) {
 			Class c = Class.forName(extensionDesc.getCodegenPostProcessor());
@@ -41,9 +71,19 @@ public class ExtensionTools {
 	}
 
 
+    /**
+     * Gets a named codegen extension pre processor
+     * 
+     * @param extensionName
+     *      The name of the extension
+     * @return
+     *      The CodegenExtensionPreProcessor for the named extension,
+     *      or <code>null</code> if none is found
+     * @throws Exception
+     */
 	public static CodegenExtensionPreProcessor getCodegenPreProcessor(String extensionName) throws Exception {
-		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getServiceExtension(
-			extensionName);
+		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance()
+            .getServiceExtension(extensionName);
 		if (extensionDesc != null && extensionDesc.getCodegenPreProcessor() != null
 			&& !extensionDesc.getCodegenPreProcessor().equals("")) {
 			Class c = Class.forName(extensionDesc.getCodegenPreProcessor());
@@ -54,6 +94,16 @@ public class ExtensionTools {
 	}
 
 
+    /**
+     * Extracts a property value from an Introduce Properties bean
+     * 
+     * @param properties
+     *      The properties
+     * @param key
+     *      The key name
+     * @return
+     *      The value associated with the key, or <code>null</code>
+     */
 	public static String getProperty(Properties properties, String key) {
 		String value = null;
 		if (properties != null && properties.getProperty() != null) {
@@ -63,11 +113,20 @@ public class ExtensionTools {
 				}
 			}
 		}
-
 		return value;
 	}
 
 
+    /**
+     * Extracts a property object from an Introduce Properties bean
+     *
+     * @param properties
+     *      The properties
+     * @param key
+     *      The key name
+     * @return
+     *      The property object associated with the key
+     */
 	public static PropertiesProperty getPropertyObject(Properties properties, String key) {
 		if (properties != null && properties.getProperty() != null) {
 			for (int i = 0; i < properties.getProperty().length; i++) {
@@ -81,6 +140,16 @@ public class ExtensionTools {
 	}
 
 
+    /**
+     * Gets the extension type extension data for a service extension in a service model
+     * 
+     * @param desc
+     *      The service extension description
+     * @param info
+     *      The service model
+     * @return
+     *      The extension data, or <code>null</code> if no extension is found
+     */
 	public static ExtensionTypeExtensionData getExtensionData(ServiceExtensionDescriptionType desc,
 		ServiceInformation info) {
 		String extensionName = desc.getName();
@@ -97,6 +166,16 @@ public class ExtensionTools {
 	}
 
 
+    /**
+     * Gets an extension data element with a given local name
+     * 
+     * @param extensionData
+     *      The extension data
+     * @param dataElement
+     *      The name of the data element to extract
+     * @return
+     *      The data element
+     */
 	public static MessageElement getExtensionDataElement(ExtensionTypeExtensionData extensionData, String dataElement) {
 		MessageElement[] dataEntries = extensionData.get_any();
 		for (int i = 0; dataEntries != null && i < dataEntries.length; i++) {
@@ -108,6 +187,14 @@ public class ExtensionTools {
 	}
 
 
+    /**
+     * Updates an extension data element
+     * 
+     * @param data
+     *      The extension data
+     * @param element
+     *      The updated element
+     */
 	public static void updateExtensionDataElement(ExtensionTypeExtensionData data, MessageElement element) {
 		MessageElement[] anys = data.get_any();
 		if (anys == null) {
@@ -133,6 +220,14 @@ public class ExtensionTools {
 	}
 
 
+    /**
+     * Removes an extension data element
+     * 
+     * @param data
+     *      The extension data
+     * @param dataElementName
+     *      The name of the data element to be removed
+     */
 	public static void removeExtensionDataElement(ExtensionTypeExtensionData data, String dataElementName) {
 		MessageElement[] dataEntries = data.get_any();
 		if (dataEntries != null) {
@@ -147,4 +242,46 @@ public class ExtensionTools {
 			data.set_any(dataEntries);
 		}
 	}
+    
+    
+    /**
+     * Adds an extension's functionality to an <b><i>existing</i></b> service.
+     * The extension will be added to the extensions list, and its creation
+     * processes invoked against the service.
+     * 
+     * @param service
+     *      The service to extend
+     * @param extensionName
+     *      The name of the service extension
+     */
+    public static void addExtensionToService(ServiceInformation service, String extensionName) 
+        throws CreationExtensionException {
+        // locate the extension
+        ExtensionDescription extensionDescription = 
+            ExtensionsLoader.getInstance().getExtension(extensionName);
+        ServiceExtensionDescriptionType serviceExtensionDescription = 
+            ExtensionsLoader.getInstance().getServiceExtension(extensionName);
+        if (extensionDescription == null || serviceExtensionDescription == null) {
+            throw new CreationExtensionException(
+                "No service extension named " + extensionName + " was able to be loaded");
+        }
+        // add the extension to the service information
+        ExtensionType[] serviceExtensions = service.getExtensions().getExtension();
+        ExtensionType addedExtension = new ExtensionType();
+        addedExtension.setName(extensionName);
+        addedExtension.setVersion(extensionDescription.getVersion());
+        addedExtension.setExtensionType(extensionDescription.getExtensionType());
+        serviceExtensions = (ExtensionType[]) Utils.appendToArray(serviceExtensions, addedExtension);
+        // invoke the creation post processor
+        CreationExtensionPostProcessor creationPostProcessor = null;
+        try {
+            creationPostProcessor = getCreationPostProcessor(extensionName);
+        } catch (Exception ex) {
+            throw new CreationExtensionException(
+                "Error loading post processor for extension: " + ex.getMessage(), ex);
+        }
+        if (creationPostProcessor != null) {
+            creationPostProcessor.postCreate(serviceExtensionDescription, service);
+        }
+    }
 }
