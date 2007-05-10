@@ -35,7 +35,7 @@ import org.bouncycastle.asn1.x509.X509Name;
 public class TestDorianCertificateAuthority extends TestCase {
 	private static final String TABLE = "test_dorian_ca";
 
-	private static final String SUBJECT_PREFIX = "O=Ohio State University,OU=BMI,OU=MSCL,CN=";
+	private static final String SUBJECT_PREFIX = "O=Testing Organization,OU=ABC,OU=XYZ,CN=";
 
 	private Database db;
 
