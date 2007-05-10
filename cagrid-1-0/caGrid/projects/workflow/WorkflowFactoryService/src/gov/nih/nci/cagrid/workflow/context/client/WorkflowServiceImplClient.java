@@ -16,7 +16,6 @@ import org.globus.gsi.GlobusCredential;
 import gov.nih.nci.cagrid.workflow.context.stubs.WorkflowServiceImplPortType;
 import gov.nih.nci.cagrid.workflow.context.stubs.service.WorkflowServiceImplServiceAddressingLocator;
 import gov.nih.nci.cagrid.workflow.context.common.WorkflowServiceImplI;
-import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
 /**

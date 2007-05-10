@@ -1,10 +1,6 @@
 package gov.nih.nci.cagrid.workflow.context.service;
 
 import gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowResource;
-import gov.nih.nci.cagrid.workflow.context.stubs.types.StartCalledOnStartedWorkflowFaultType;
-import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType;
-import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
-
 import java.rmi.RemoteException;
 
 import org.globus.wsrf.ResourceContext;
