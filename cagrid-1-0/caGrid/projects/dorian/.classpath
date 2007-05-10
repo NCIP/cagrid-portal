@@ -83,7 +83,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridca.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridca.jar" sourcepath="/caGrid-1.0-gridca"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gts-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gts-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gts-stubs.jar"/>

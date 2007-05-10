@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.dorian.service.ca;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
 import gov.nih.nci.cagrid.dorian.service.Database;
+import gov.nih.nci.cagrid.gridca.common.SecurityUtil;
 
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
@@ -24,6 +25,7 @@ public class DorianCertificateAuthority extends CertificateAuthority {
 
 	public DorianCertificateAuthority(Database db, DorianCAConfiguration conf) {
 		super(conf);
+		SecurityUtil.init();
 		this.manager = new CredentialsManager(db);
 	}
 

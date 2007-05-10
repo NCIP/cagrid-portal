@@ -245,7 +245,7 @@ public class CertUtil {
 	public static X509Certificate generateCertificate(String provider,
 			X509Name subject, Date start, Date expired, PublicKey publicKey,
 			X509Certificate cacert, PrivateKey signerKey,
-			String signartureAlgorithm) throws InvalidKeyException,
+			String signatureAlgorithm) throws InvalidKeyException,
 			NoSuchProviderException, SignatureException, IOException {
 		// create the certificate using the information in the request
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
@@ -256,7 +256,7 @@ public class CertUtil {
 		certGen.setNotAfter(expired);
 		certGen.setSubjectDN(subject);
 		certGen.setPublicKey(publicKey);
-		certGen.setSignatureAlgorithm(signartureAlgorithm);
+		certGen.setSignatureAlgorithm(signatureAlgorithm);
 		certGen.addExtension(X509Extensions.BasicConstraints, true,
 				new BasicConstraints(false));
 		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(
