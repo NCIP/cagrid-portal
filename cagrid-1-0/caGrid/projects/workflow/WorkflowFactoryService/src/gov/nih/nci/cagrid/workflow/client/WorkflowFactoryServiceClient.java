@@ -98,18 +98,22 @@ public class WorkflowFactoryServiceClient extends ServiceSecurityClient implemen
 		System.out.println(WorkflowFactoryServiceClient.class.getName() + " -url <service url>");
 	}
 	
-	public static WMSInputType createInput(String bpelFile) throws Exception {
+	public static WMSInputType createInput(String bpelFile, String name, 
+			WSDLReferences[] wsdlRefArray) throws Exception {
 		WMSInputType input = new WMSInputType();
 		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
 		input.setBpelDoc(bpelProcess);
-		input.setWorkflowName("Simple");
-		WSDLReferences[] wsdlRefArray = new WSDLReferences[1];
-		wsdlRefArray[0] = new WSDLReferences();
-		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
-		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
-		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
-		input.setWsdlReferences(wsdlRefArray);
-		return input;
+        input.setWorkflowName(name);
+        if (wsdlRefArray == null) {
+        	wsdlRefArray = new WSDLReferences[1];
+        	wsdlRefArray[0] = new WSDLReferences();
+        	wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/WorkflowTestService1"));
+        	wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/WorkflowTestService1/WorkflowTestService1.wsdl");
+        	wsdlRefArray[0].setWsdlNamespace(new URI("http://sample1.tests.workflow.cagrid.nci.nih.gov/WorkflowTestService1"));
+        } 
+        input.setWsdlReferences(wsdlRefArray);
+        return input;
+
 	}
 	public static void main(String [] args){
 	    System.out.println("Running the Grid Service Client");
@@ -135,7 +139,7 @@ public class WorkflowFactoryServiceClient extends ServiceSecurityClient implemen
 					}
 				}
 		    WorkflowFactoryServiceClient client = new WorkflowFactoryServiceClient(url);
-		    WMSInputType input = createInput(fileName);
+		    WMSInputType input = createInput(fileName, "Test1", null);
 		    WMSOutputType output = client.createWorkflow(input);
 		    EndpointReferenceType epr = output.getWorkflowEPR();
 		    writer = new FileWriter("workflow_" + input.getWorkflowName() + "_epr");

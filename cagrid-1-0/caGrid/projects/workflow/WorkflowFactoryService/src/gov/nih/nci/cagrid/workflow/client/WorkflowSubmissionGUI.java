@@ -3,6 +3,13 @@
  */
 package gov.nih.nci.cagrid.workflow.client;
 
+import gov.nih.nci.cagrid.workflow.context.client.WorkflowServiceImplClient;
+import gov.nih.nci.cagrid.workflow.stubs.types.StartInputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowInputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
+
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,6 +20,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.apache.axis.message.MessageElement;
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.grape.ApplicationComponent;
 
 import javax.swing.JTextField;
@@ -23,19 +33,30 @@ import javax.swing.JTextArea;
 import java.awt.Insets;
 import java.awt.Color;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.StringReader;
+import java.rmi.RemoteException;
 
 import javax.swing.SwingConstants;
+import javax.xml.namespace.QName;
+
 import org.cagrid.grape.utils.ErrorDialog;
+import org.globus.wsrf.encoding.ObjectSerializer;
+import org.globus.wsrf.utils.AnyHelper;
+import org.globus.wsrf.utils.XmlUtils;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
 /**
  * @author madduri
- *
+ * 
  */
 public class WorkflowSubmissionGUI extends ApplicationComponent {
 
 	private static final long serialVersionUID = 1L;
 
-	private JPanel jContentPane = null;  //  @jve:decl-index=0:visual-constraint="10,10"
+	private JPanel jContentPane = null; // @jve:decl-index=0:visual-constraint="10,10"
 
 	private JLabel jLabel = null;
 
@@ -52,12 +73,32 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 	private JButton submitButton = null;
 
 	private JLabel jLabel3 = null;
-	
+
 	private File bpelFile = null;
 
 	private JButton startButton = null;
-	
+
 	private WorkflowFactoryServiceClient factoryClient = null;
+
+	private JButton getStatusButton = null;
+
+	private String workflowFactoryURL = "http://localhost:8080/wsrf/services/cagrid/WorkflowFactoryService";
+
+	private WorkflowServiceImplClient wclient = null;
+
+	private EndpointReferenceType epr = null;
+
+	private JLabel jLabel4 = null;
+
+	private JTextField nameTextField = null;
+
+	private JButton partnerLinkButton = null;
+
+	private JTextArea jTextArea = null;
+
+	private JLabel jLabel5 = null;
+	
+	private String status = "Pending";
 
 	/**
 	 * This is the default constructor
@@ -67,18 +108,16 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 		initialize();
 	}
 
-
 	/**
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setSize(470, 362);
+		this.setSize(629, 700);
 		this.setTitle("WorkflowSubmissionGUI");
 		this.setContentPane(getJContentPane());
 		this.setEnabled(true);
 		this.setVisible(true);
 	}
-
 
 	/**
 	 * This method initializes jContentPane
@@ -87,6 +126,35 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
+			gridBagConstraints61.gridy = 2;
+			gridBagConstraints61.gridx = 0;
+			jLabel5 = new JLabel();
+			jLabel5.setText("Output  :");
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.fill = GridBagConstraints.BOTH;
+			gridBagConstraints5.weighty = 1.0;
+			gridBagConstraints5.gridx = 1;
+			gridBagConstraints5.weightx = 1.0;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 2;
+			gridBagConstraints4.gridy = 1;
+			gridBagConstraints4.anchor = GridBagConstraints.NORTH;
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints3.gridx = 1;
+			gridBagConstraints3.gridy = 1;
+			gridBagConstraints3.anchor = GridBagConstraints.NORTH;
+			gridBagConstraints3.weightx = 1.0;
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.gridy = 1;
+			gridBagConstraints2.anchor = GridBagConstraints.NORTH;
+			gridBagConstraints2.gridx = 0;
+			jLabel4 = new JLabel();
+			jLabel4.setText("Workflow Name:");
+			jLabel4.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridx = 2;
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.gridx = 2;
 			gridBagConstraints13.gridy = 2;
@@ -98,7 +166,7 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 			gridBagConstraints.ipady = 1;
 			gridBagConstraints.weightx = 0.0D;
 			gridBagConstraints.weighty = 0.0D;
-			gridBagConstraints.gridy = 2;
+			gridBagConstraints.gridy = 3;
 			jLabel3 = new JLabel();
 			jLabel3.setText("Pending");
 			jLabel3.setFont(new Font("Dialog", Font.BOLD, 14));
@@ -108,7 +176,7 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 			gridBagConstraints12.gridx = 2;
 			gridBagConstraints12.gridy = 1;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.gridy = 2;
+			gridBagConstraints11.gridy = 3;
 			gridBagConstraints11.anchor = GridBagConstraints.WEST;
 			gridBagConstraints11.gridx = 0;
 			jLabel2 = new JLabel();
@@ -157,30 +225,35 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 			jContentPane.add(jLabel2, gridBagConstraints11);
 			jContentPane.add(jLabel3, gridBagConstraints);
 			jContentPane.add(getStartButton(), gridBagConstraints13);
+			jContentPane.add(getGetStatusButton(), gridBagConstraints1);
+			jContentPane.add(jLabel4, gridBagConstraints2);
+			jContentPane.add(getNameTextField(), gridBagConstraints3);
+			jContentPane.add(getPartnerLinkButton(), gridBagConstraints4);
+			jContentPane.add(getJTextArea(), gridBagConstraints5);
+			jContentPane.add(jLabel5, gridBagConstraints61);
 		}
 		return jContentPane;
 	}
 
-
 	/**
-	 * This method initializes bpelTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes bpelTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getBpelTextField() {
 		if (bpelTextField == null) {
 			bpelTextField = new JTextField();
-			bpelTextField.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+			bpelTextField
+					.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			bpelTextField.setPreferredSize(new Dimension(200, 20));
 		}
 		return bpelTextField;
 	}
 
-
 	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton() {
 		if (jButton == null) {
@@ -189,26 +262,36 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 			jButton.setText("Browse");
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
-					JFrame tempFrame = new JFrame(); // temp frame to open file
+					System.out.println("actionPerformed()"); // TODO
+																// Auto-generated
+																// Event stub
+																// actionPerformed()
+					JFrame tempFrame = new JFrame(); // temp frame to open
+														// file
 					// chooser from
-					JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
+					JFileChooser chooser = new JFileChooser(System
+							.getProperty("user.dir"));
 					chooser.setDialogTitle("Select a BPEL file");
 					chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 					chooser.setMultiSelectionEnabled(false);
 					// TODO: FIX THIS
-					//chooser.setFileFilter(new XMLFileFilter());
+					// chooser.setFileFilter(new XMLFileFilter());
 					int choice = chooser.showOpenDialog(tempFrame);
 					if (choice == JFileChooser.APPROVE_OPTION) {
 						try {
-							bpelFile = new File(chooser.getSelectedFile().getAbsolutePath());
+							bpelFile = new File(chooser.getSelectedFile()
+									.getAbsolutePath());
+							getBpelTextField().setText(
+									bpelFile.getAbsolutePath());
 						} catch (Exception ex) {
-							JOptionPane.showMessageDialog(null, ex.getMessage(), "Error loading file",
-								JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null,
+									ex.getMessage(), "Error loading file",
+									JOptionPane.ERROR_MESSAGE);
 						}
 					} else {
-						System.err.println("No configuration file passed in or selected... exiting.");
+						System.err
+								.println("No configuration file passed in or selected... exiting.");
 						System.exit(1);
 					}
 					// destroy the temp frame
@@ -219,26 +302,27 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 		return jButton;
 	}
 
-
 	/**
-	 * This method initializes inputTextArea	
-	 * 	
-	 * @return javax.swing.JTextArea	
+	 * This method initializes inputTextArea
+	 * 
+	 * @return javax.swing.JTextArea
 	 */
 	private JTextArea getInputTextArea() {
 		if (inputTextArea == null) {
 			inputTextArea = new JTextArea();
 			inputTextArea.setPreferredSize(new Dimension(200, 200));
-			inputTextArea.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+			inputTextArea.setLineWrap(true);
+			inputTextArea.setWrapStyleWord(true);
+			inputTextArea
+					.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		}
 		return inputTextArea;
 	}
 
-
 	/**
-	 * This method initializes submitButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes submitButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getSubmitButton() {
 		if (submitButton == null) {
@@ -250,18 +334,34 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 					if (getBpelTextField().getText().trim().equals("")) {
 						ErrorDialog.showError("BPEL File cannot be empty");
 					}
-					 
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					try {
+						factoryClient = new WorkflowFactoryServiceClient(
+								workflowFactoryURL);
+						WMSInputType input = factoryClient.createInput(bpelFile
+								.getAbsolutePath(), nameTextField.getText(), null);
+						WMSOutputType output = factoryClient
+								.createWorkflow(input);
+						epr = output.getWorkflowEPR();
+						FileWriter writer = new FileWriter("workflow_"
+								+ input.getWorkflowName() + "_epr");
+						writer.write(ObjectSerializer.toString(epr, new QName(
+								"", "WMS_EPR")));
+						jLabel3.setText("Submitted");
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					System.out.println("actionPerformed()"); 
 				}
 			});
 		}
 		return submitButton;
 	}
-	
+
 	/**
-	 * This method initializes startButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes startButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getStartButton() {
 		if (startButton == null) {
@@ -270,13 +370,115 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 			startButton.setText("Start");
 			startButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					try {
+						wclient = new WorkflowServiceImplClient(epr);
+						StartInputType startInput = new StartInputType();
+						WorkflowInputType inputArgs = new WorkflowInputType();
+						String inputDoc = inputTextArea.getText();
+						if (inputDoc.trim().equals("")) {
+							JOptionPane.showMessageDialog(null,
+									"Input cannot be empty", "Input cannot be empty",
+									JOptionPane.ERROR_MESSAGE);
+						} else {
+							System.out.println("Input:" + inputDoc);
+							StringReader reader = new StringReader(inputDoc);
+							Element e2 = XmlUtils.newDocument(new InputSource(reader))
+							.getDocumentElement();
+							
+							MessageElement anyContent = AnyHelper
+							.toAny(new MessageElement(e2));
+							inputArgs.set_any(new MessageElement[] { anyContent });
+							startInput.setInputArgs(inputArgs);
+							wclient.start(startInput);
+							jLabel3.setText("Active");
+							System.out.println("actionPerformed()");
+						}
+						// TODO Auto-generated Event stub actionPerformed()
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						jLabel3.setText("Failed");
+					}
 				}
 			});
 		}
 		return startButton;
 	}
 
+	/**
+	 * This method initializes getStatusButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getGetStatusButton() {
+		if (getStatusButton == null) {
+			getStatusButton = new JButton();
+			getStatusButton.setPreferredSize(new Dimension(100, 20));
+			getStatusButton.setText("Get Status");
+			getStatusButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							try {
+								status = wclient.getStatus().getValue();
+								if (!status.equals("Pending")) {
+									jLabel3.setText(status);
+								}
+								if (status.equalsIgnoreCase("Done")) {
+									jLabel3.setText("Done");
+									WorkflowOutputType output = wclient.getWorkflowOutput();
+									jTextArea.setText(
+											AnyHelper.toSingleString(output.get_any()));
+								}
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
+							System.out.println("actionPerformed()"); 
+						}
+					});
+		}
+		return getStatusButton;
+	}
+
+	/**
+	 * This method initializes nameTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getNameTextField() {
+		if (nameTextField == null) {
+			nameTextField = new JTextField();
+		}
+		return nameTextField;
+	}
+
+	/**
+	 * This method initializes partnerLinkButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getPartnerLinkButton() {
+		if (partnerLinkButton == null) {
+			partnerLinkButton = new JButton();
+			partnerLinkButton.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+			partnerLinkButton.setText("Add Partners..");
+			partnerLinkButton.setPreferredSize(new Dimension(100, 20));
+		}
+		return partnerLinkButton;
+	}
+
+	/**
+	 * This method initializes jTextArea	
+	 * 	
+	 * @return javax.swing.JTextArea	
+	 */
+	private JTextArea getJTextArea() {
+		if (jTextArea == null) {
+			jTextArea = new JTextArea();
+			jTextArea.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+			jTextArea.setLineWrap(true);
+			jTextArea.setPreferredSize(new Dimension(200, 200));
+		}
+		return jTextArea;
+	}
 
 	public static void main(String args[]) {
 		WorkflowSubmissionGUI gui = new WorkflowSubmissionGUI();
@@ -284,4 +486,4 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 		gui.setVisible(true);
 		gui.show();
 	}
-}  //  @jve:decl-index=0:visual-constraint="181,6"
+} // @jve:decl-index=0:visual-constraint="181,6"
