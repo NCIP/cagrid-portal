@@ -9,12 +9,10 @@ import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityFault;
 import gov.nih.nci.cagrid.dorian.service.ca.CredentialsManager;
 import gov.nih.nci.cagrid.dorian.service.ca.DorianCertificateAuthority;
-import gov.nih.nci.cagrid.dorian.service.ca.EracomCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.NoCACredentialsFault;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
-import gov.nih.nci.cagrid.gridca.common.SecurityUtil;
 
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
@@ -25,7 +23,6 @@ import java.util.GregorianCalendar;
 import junit.framework.TestCase;
 
 import org.bouncycastle.asn1.x509.X509Name;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 
 /**

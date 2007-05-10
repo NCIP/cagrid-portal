@@ -28,7 +28,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  */
 public abstract class CertificateAuthority extends LoggingObject {
 
-	private static final String CA_ALIAS = "dorianca";
+	public static final String CA_ALIAS = "dorianca";
 
 	private boolean initialized = false;
 
