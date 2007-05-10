@@ -144,12 +144,12 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
     private void upgradeJars() throws Exception {
 
-        FileFilter skeletonLibFilter = new FileFilter() {
+        FileFilter oldDkeletonLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
-                boolean core = filename.startsWith("caGrid-1.1-core") && filename.endsWith(".jar");
-                boolean security = (filename.startsWith("caGrid-1.1-ServiceSecurityProvider") || filename
-                    .startsWith("caGrid-1.1-metadata-security"))
+                boolean core = filename.startsWith("caGrid-1.0-core") && filename.endsWith(".jar");
+                boolean security = (filename.startsWith("caGrid-1.0-ServiceSecurityProvider") || filename
+                    .startsWith("caGrid-1.0-metadata-security"))
                     && filename.endsWith(".jar");
                 boolean wsrf = (filename.startsWith("globus_wsrf_mds") || filename
                     .startsWith("globus_wsrf_servicegroup"))
@@ -161,7 +161,7 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
         // locate the old libs in the service
         File serviceLibDir = new File(getServicePath() + File.separator + "lib");
-        File[] serviceLibs = serviceLibDir.listFiles(skeletonLibFilter);
+        File[] serviceLibs = serviceLibDir.listFiles(oldDkeletonLibFilter);
         // delete the old libraries
         for (int i = 0; i < serviceLibs.length; i++) {
             serviceLibs[i].delete();
