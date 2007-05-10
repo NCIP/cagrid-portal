@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.ca;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.conf.AutoCreate;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
 import gov.nih.nci.cagrid.dorian.service.Database;
@@ -130,6 +131,29 @@ public class TestDorianCertificateAuthority extends TestCase {
 			ca.clearCertificateAuthority();
 			// ca.destroyTable();
 			createAndStoreCA(ca);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				ca.clearCertificateAuthority();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void testAutoCreateCA() {
+		DorianCAConfiguration conf = this.getDorianCAConfAutoCreateAutoRenewalLong();
+		CertificateAuthority ca = null;
+		try {
+			ca = getCertificateAuthority(conf);
+			ca.clearCertificateAuthority();
+			assertFalse(ca.hasCredentials(CertificateAuthority.CA_ALIAS));
+			X509Certificate cert = ca.getCACertificate();
+			assertTrue(ca.hasCredentials(CertificateAuthority.CA_ALIAS));
+			assertEquals(conf.getAutoCreate().getCASubject(), cert.getSubjectDN().getName());
+			assertEquals(ca.getSignatureAlgorithm(), cert.getSigAlgName());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -286,6 +310,21 @@ public class TestDorianCertificateAuthority extends TestCase {
 		conf.setAutoRenewal(lifetime);
 		return conf;
 	}
+	
+	private DorianCAConfiguration getDorianCAConfAutoCreateAutoRenewalLong() {
+		DorianCAConfiguration conf = new DorianCAConfiguration();
+		conf.setCertificateAuthorityPassword("password");
+		CredentialLifetime lifetime = new CredentialLifetime();
+		lifetime.setYears(5);
+		lifetime.setMonths(0);
+		lifetime.setDays(0);
+		conf.setAutoRenewal(lifetime);
+		AutoCreate auto = new AutoCreate();
+		auto.setLifetime(lifetime);
+		auto.setCASubject(SUBJECT_PREFIX + "Temp Certificate Authority");
+		conf.setAutoCreate(auto);
+		return conf;
+	}
 
 
 	private DorianCAConfiguration getDorianCAConfNoAutoRenewalLong() {
@@ -308,6 +347,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 		assertNotNull(root);
 		ca.setCACredentials(root, rootPair.getPrivate());
 		X509Certificate r = ca.getCACertificate();
+		assertEquals(ca.getSignatureAlgorithm(), r.getSigAlgName());
 		assertNotNull(r);
 		assertEquals(r, root);
 	}
@@ -326,6 +366,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 		assertNotNull(root);
 		ca.setCACredentials(root, rootPair.getPrivate());
 		X509Certificate r = ca.getCACertificate();
+		assertEquals(ca.getSignatureAlgorithm(), r.getSigAlgName());
 		assertNotNull(r);
 		assertEquals(r, root);
 		return r;
@@ -345,6 +386,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 		X509Certificate cert = ca.getCertificate(cn);
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
+		assertEquals(ca.getSignatureAlgorithm(), cert.getSigAlgName());
 	}
 
 
