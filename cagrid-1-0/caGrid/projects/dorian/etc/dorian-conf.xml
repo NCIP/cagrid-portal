@@ -53,6 +53,7 @@
         -->
     </IdentityFederationConfiguration>
     <DorianCAConfiguration>
+    	<CertificateAuthorityType>dbca</CertificateAuthorityType>
         <CertificateAuthorityPassword>admin</CertificateAuthorityPassword>
         <AutoCreate>
             <CASubject>C=US,O=abc,OU=xyz,OU=caGrid,OU=Users,CN=caGrid Dorian CA</CASubject>

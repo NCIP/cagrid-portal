@@ -11,6 +11,8 @@ public class Constants {
 	public static final String DORIAN_KEY = "/ca-test/dorian-key.pem";
 
 	public static final String DB_CONFIG = "/general-test/db-config.xml";
+	
+	public static final String CA_CONFIG = "/general-test/ca-config.xml";
 
 	public static final String DORIAN_CONF = "/general-test/dorian-conf.xml";
 	

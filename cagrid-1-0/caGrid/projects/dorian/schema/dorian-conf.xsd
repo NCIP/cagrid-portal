@@ -94,6 +94,7 @@
     
     <xs:complexType name="DorianCAConfiguration">
         <xs:sequence>
+            <xs:element name="CertificateAuthorityType" type="dorian:CertificateAuthorityType" minOccurs="1" maxOccurs="1"/>
             <xs:element name="CertificateAuthorityPassword" type="xs:string" minOccurs="1" maxOccurs="1"/>
             <xs:element name="AutoCreate" type="dorian:AutoCreate" minOccurs="0" maxOccurs="1"/>
             <xs:element name="AutoRenewal" type="dorian:CredentialLifetime" minOccurs="0" maxOccurs="1"/>
@@ -110,6 +111,12 @@
    			<xs:restriction base="xs:string">
    				<xs:enumeration value="id"/>
    				<xs:enumeration value="name"/>
+  			</xs:restriction>
+    </xs:simpleType>
+     <xs:simpleType name="CertificateAuthorityType">
+   			<xs:restriction base="xs:string">
+   				<xs:enumeration value="dbca"/>
+   				<xs:enumeration value="eracom"/>
   			</xs:restriction>
     </xs:simpleType>
 </xs:schema>

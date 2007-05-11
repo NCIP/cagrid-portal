@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.IOUtils;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
 import gov.nih.nci.cagrid.dorian.service.Database;
-import gov.nih.nci.cagrid.dorian.service.ca.DorianCertificateAuthority;
+import gov.nih.nci.cagrid.dorian.service.ca.DBCertificateAuthority;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
@@ -98,7 +98,7 @@ public class CreateCACertificate {
 				Database db = new Database(c.getDatabase(), c
 						.getDorianInternalId());
 				db.createDatabaseIfNeeded();
-				DorianCertificateAuthority ca = new DorianCertificateAuthority(db, c.getDorianCAConfiguration());
+				DBCertificateAuthority ca = new DBCertificateAuthority(db, c.getDorianCAConfiguration());
 				boolean interactive = false;
 				if (line.hasOption(INTERACTIVE_MODE_OPT)) {
 					interactive = true;

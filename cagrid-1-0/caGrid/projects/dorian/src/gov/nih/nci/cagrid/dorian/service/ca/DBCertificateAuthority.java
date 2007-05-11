@@ -16,14 +16,14 @@ import java.security.cert.X509Certificate;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class DorianCertificateAuthority extends CertificateAuthority {
+public class DBCertificateAuthority extends CertificateAuthority {
 
 	public static final String SIGNATURE_ALGORITHM = "MD5WithRSAEncryption";
 
 	private CredentialsManager manager;
 
 
-	public DorianCertificateAuthority(Database db, DorianCAConfiguration conf) {
+	public DBCertificateAuthority(Database db, DorianCAConfiguration conf) {
 		super(conf);
 		SecurityUtil.init();
 		this.manager = new CredentialsManager(db);
