@@ -34,4 +34,11 @@ public class WsEnumConstants {
 	
 	// QName for enumerate response message
 	public static final QName ENUMERATE_RESPONSE_MESSAGE_QNAME = new QName(WS_ENUMERATION_URI, "EnumerateResponseMessage");
+    
+    // caGrid enumeration service context
+    public static final String CAGRID_ENUMERATION_SERVICE_NAME = "CaGridEnumeration";
+    public static final String CAGRID_ENUMERATION_SERVICE_PACKAGE = "gov.nih.nci.cagrid.enumeration";
+    public static final String CAGRID_ENUMERATION_SERVICE_NAMESPACE = 
+        "http://" + CAGRID_ENUMERATION_SERVICE_PACKAGE + 
+        "/" + CAGRID_ENUMERATION_SERVICE_NAME;
 }
