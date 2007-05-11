@@ -22,7 +22,7 @@ import java.io.File;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 30, 2006 
- * @version $Id: CreateEnumerationDataServiceStep.java,v 1.3 2007-03-22 14:21:25 dervin Exp $ 
+ * @version $Id: CreateEnumerationDataServiceStep.java,v 1.4 2007-05-11 16:35:58 dervin Exp $ 
  */
 public class CreateEnumerationDataServiceStep extends CreationStep {
 	
@@ -44,6 +44,7 @@ public class CreateEnumerationDataServiceStep extends CreationStep {
             serviceModelFile.getAbsolutePath(), ServiceDescription.class);      
         
         // add the ws Enumeration extension
+        /*
         System.out.println("Locating the ws-enumeration extension");
         ExtensionDescription ext = ExtensionsLoader.getInstance()
             .getExtension(WsEnumerationFeatureCreator.WS_ENUM_EXTENSION_NAME);
@@ -58,7 +59,7 @@ public class CreateEnumerationDataServiceStep extends CreationStep {
         System.arraycopy(serviceExtensions, 0, allExtensions, 0, serviceExtensions.length);
         allExtensions[allExtensions.length - 1] = extType;
         serviceDesc.getExtensions().setExtension(allExtensions);
-        
+        */
         // verify the data extension is in there
         assertTrue("Service description has no extensions", 
             serviceDesc.getExtensions() != null 

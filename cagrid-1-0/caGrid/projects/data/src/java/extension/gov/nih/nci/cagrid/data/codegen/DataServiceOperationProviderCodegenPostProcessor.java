@@ -62,9 +62,11 @@ public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodege
 		        bdtCodegen.codegenFeature();
             }
             if (extensionData.getServiceFeatures().isUseWsEnumeration()) {
+                /*
                 WsEnumerationFeatureCodegen wsEnumCodegen = new WsEnumerationFeatureCodegen(
                     info, info.getServices().getService(0), info.getIntroduceServiceProperties());
                 wsEnumCodegen.codegenFeature();
+                */
             }
 		}
 	}

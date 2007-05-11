@@ -302,6 +302,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 
 
 	private void setFeatureStatus() {
+        /*
 		if (getWsEnumCheckBox().isSelected()) {
 			if (!wsEnumExtensionUsed()) {
 				// add the ws-enum extension
@@ -316,6 +317,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 						getServiceInfo().getExtensions().getExtension(), extension));
 			}
 		}
+        */
 
 		if (getBdtCheckBox().isSelected()) {
 			if (!bdtExtensionUsed()) {
