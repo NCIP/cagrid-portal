@@ -421,6 +421,12 @@
                 <include name="*.jar" />
             </fileset>
         </artifact>
+        <artifact track="main" type="jars" id="sdk.32.query.jars">
+            <generatingantcall target="build-sdkQuery32" />
+            <fileset dir="${projects.dir}/sdkQuery32/build/lib">
+                <include name="*.jar" />
+            </fileset>
+        </artifact>
         <artifact track="main" type="jars" id="fqp.jars">
             <generatingantcall target="build-fqp" />
             <fileset dir="${projects.dir}/fqp/build/lib">

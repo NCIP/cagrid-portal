@@ -183,8 +183,7 @@ public class QueryProcessorParametersTable extends JTable {
 
 
 	private String[] getJarFilenames() throws Exception {
-		String libDir = serviceInfo.getIntroduceServiceProperties().getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+		String libDir = serviceInfo.getBaseDirectory()
 			+ File.separator + "lib";
 		AdditionalLibraries additionalLibs = ExtensionDataUtils.getExtensionData(extData).getAdditionalLibraries();
 		List namesList = new ArrayList();

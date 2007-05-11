@@ -31,6 +31,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.axis.message.MessageElement;
@@ -60,6 +61,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         validateUpgrade();
         // get the extension data in raw form
         Element extensionData = getExtensionDataElement();
+        // update the data service libraries
+        updateLibraries();
         // fix the cadsr information block
         setCadsrInformation(extensionData);
         // move the configuration for the CQL query processor into
@@ -67,8 +70,6 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         reconfigureCqlQueryProcessor(extensionData);
         // add selected enum iterator
         setEnumIteratorSelection();
-        // update the data service libraries
-        updateLibraries();
         // update schemas
         updateDataSchemas();
         // change the version number
@@ -111,19 +112,23 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             updateSdkQueryLibraries();
         }
     }
-
+    
 
     private void updateDataLibraries() throws UpgradeException {
         FileFilter dataLibFilter = new FileFilter() {
-            public boolean accept(File name) {
-                String filename = name.getName();
-                return filename.startsWith("caGrid-1.0-data-") && filename.endsWith(".jar");
+            public boolean accept(File pathname) {
+                String name = pathname.getName();
+                return (name.endsWith(".jar") && (name.startsWith("caGrid-1.0-data")
+                    || name.startsWith("caGrid-1.0-core") || name.startsWith("caGrid-1.0-caDSR")
+                    || name.startsWith("caGrid-1.0-metadata")));
             }
         };
-        FileFilter newDataLibFilter = new FileFilter() {
-            public boolean accept(File name) {
-                String filename = name.getName();
-                return filename.startsWith("caGrid-1.1-data-") && filename.endsWith(".jar");
+        FileFilter newDataLibFilter =new FileFilter() {
+            public boolean accept(File pathname) {
+                String name = pathname.getName();
+                return (name.endsWith(".jar") && (name.startsWith("caGrid-1.1-data")
+                    || name.startsWith("caGrid-1.1-core") || name.startsWith("caGrid-1.1-caDSR")
+                    || name.startsWith("caGrid-1.1-metadata")));
             }
         };
         // locate the old data service libs in the service
@@ -134,8 +139,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             serviceDataLibs[i].delete();
         }
         // copy new libraries in
-        File buildLibDir = new File(".." + File.separator + "data" + File.separator + "build" + File.separator + "lib");
-        File[] dataLibs = buildLibDir.listFiles(newDataLibFilter);
+        File extLibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "lib");
+        File[] dataLibs = extLibDir.listFiles(newDataLibFilter);
         File[] outLibs = new File[dataLibs.length];
         for (int i = 0; i < dataLibs.length; i++) {
             File out = new File(serviceLibDir.getAbsolutePath() + File.separator + dataLibs[i].getName());
@@ -176,9 +181,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             oldEnumLibs[i].delete();
         }
         // copy in new libraries
-        File enumBuildLibDir = new File(".." + File.separator + "wsEnum" + File.separator + "build" + File.separator
-            + "lib");
-        File[] newEnumLibs = enumBuildLibDir.listFiles(newEnumLibFilter);
+        File extLibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "lib");
+        File[] newEnumLibs = extLibDir.listFiles(newEnumLibFilter);
         File[] outLibs = new File[newEnumLibs.length];
         for (int i = 0; i < newEnumLibs.length; i++) {
             File outFile = new File(serviceLibDir.getAbsolutePath() + File.separator + newEnumLibs[i].getName());
@@ -239,12 +243,10 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         // locate new libraries
         File[] newLibs = null;
         if (isSdk31) {
-            File sdk31LibDir = new File(".." + File.separator + "sdkQuery" + File.separator + "build" + File.separator
-                + "lib");
+            File sdk31LibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"  + File.separator + "sdk31" + File.separator + "lib");
             newLibs = sdk31LibDir.listFiles(newSdkLibFilter);
         } else if (isSdk32) {
-            File sdk32LibDir = new File(".." + File.separator + "sdkQuery32" + File.separator + "build"
-                + File.separator + "lib");
+            File sdk32LibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator + "sdk32" + File.separator + "lib");
             newLibs = sdk32LibDir.listFiles(newSdkLibFilter);
         }
         // copy the libraries in
@@ -265,6 +267,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         } catch (Exception ex) {
             throw new UpgradeException("Error updating Eclipse .classpath file: " + ex.getMessage(), ex);
         }
+        
     }
 
 
@@ -349,6 +352,19 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 
 
     private void reconfigureCqlQueryProcessor(Element extensionData) throws UpgradeException {
+        // make sure to replace the processor jar with the new one in the libs listing
+        Element additionalLibraries = extensionData.getChild("AdditionalLibraries",extensionData.getNamespace());
+        List libsEls = additionalLibraries.getChildren();
+        Iterator libsElsIt = libsEls.iterator();
+        while(libsElsIt.hasNext()){
+            Element nextLib = (Element)libsElsIt.next();
+            String jarName = nextLib.getText();
+            if(jarName.equals("caGrid-1.0-sdkQuery.jar")){
+                nextLib.setText("caGrid-1.1-sdkQuery-core.jar");
+            } else if(jarName.equals("caGrid-1.0-sdkQuery32.jar")){
+                nextLib.setText("caGrid-1.1-sdkQuery32-core.jar");
+            }
+        }
         // service properties now contain CQL Query Processor configuration
         // get the current config properties out of the data element
         Element procConfig = extensionData.getChild("CQLProcessorConfig", extensionData.getNamespace());

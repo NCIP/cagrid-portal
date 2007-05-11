@@ -444,8 +444,7 @@ public class ClassBrowserPanel extends JPanel {
 
 
 	private void populateClassDropdown() {
-		String libDir = serviceInfo.getIntroduceServiceProperties().getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
+		String libDir = serviceInfo.getBaseDirectory() + File.separator + "lib";
 		SortedSet classNames = new TreeSet();
 		String[] jars = getAdditionalJars();
 		try {
