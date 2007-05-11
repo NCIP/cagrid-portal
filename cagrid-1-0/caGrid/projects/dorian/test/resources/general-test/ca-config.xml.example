@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DorianCAConfiguration>
+<DorianCAConfiguration xmlns="http://cagrid.nci.nih.gov/dorian/conf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dorian="http://cagrid.nci.nih.gov/dorian/conf">
         <CertificateAuthorityType>dbca</CertificateAuthorityType>
         <CertificateAuthorityPassword>password</CertificateAuthorityPassword>
         <AutoCreate>
