@@ -38,9 +38,23 @@ public class DorianCertificateAuthority extends CertificateAuthority {
 	public String getSignatureAlgorithm() {
 		return SIGNATURE_ALGORITHM;
 	}
+	
+	public long getCertificateSerialNumber(String alias) throws CertificateAuthorityFault{
+		try {
+			return manager.getCertificateSerialNumber(alias);
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault.setFaultString("An unexpected error occurred, could not the serial number of the requested certificate.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CertificateAuthorityFault) helper.getFault();
+			throw fault;
+		}
+	}
 
 
-	protected void addCredentials(String alias, String password, X509Certificate cert, PrivateKey key)
+	public void addCredentials(String alias, String password, X509Certificate cert, PrivateKey key)
 		throws CertificateAuthorityFault {
 		try {
 
@@ -63,7 +77,7 @@ public class DorianCertificateAuthority extends CertificateAuthority {
 	}
 
 
-	protected void deleteCredentials(String alias) throws CertificateAuthorityFault {
+	public void deleteCredentials(String alias) throws CertificateAuthorityFault {
 		try {
 			manager.deleteCredentials(alias);
 		} catch (Exception e) {

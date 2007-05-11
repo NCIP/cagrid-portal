@@ -32,10 +32,12 @@ import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.NoSuchUserFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.test.CA;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
+import gov.nih.nci.cagrid.gridca.common.Credential;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
@@ -63,7 +65,6 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.globus.gsi.GlobusCredential;
 
 
@@ -88,6 +89,8 @@ public class TestDorian extends TestCase {
 	private static final int SHORT_PROXY_VALID = 2;
 
 	private static final int SHORT_CREDENTIALS_VALID = 10;
+	
+	private CA memoryCA;
 
 	private InputStream resource = TestCase.class.getResourceAsStream(Constants.DORIAN_CONF);
 
@@ -848,20 +851,13 @@ public class TestDorian extends TestCase {
 		methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
 		idp.setAuthenticationMethod(methods);
 
-		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 		String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
-		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
-		assertNotNull(req);
-		GregorianCalendar cal = new GregorianCalendar();
-		Date start = cal.getTime();
-		cal.add(Calendar.MONTH, 10);
-		Date end = cal.getTime();
-		X509Certificate cert = ca.requestCertificate(req, start, end);
+		Credential cred = memoryCA.createIdentityCertificate(name);
+		X509Certificate cert = cred.getCertificate();
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
 		idp.setIdPCertificate(CertUtil.writeCertificate(cert));
-
-		return new IdPContainer(idp, cert, pair.getPrivate());
+		return new IdPContainer(idp, cert, cred.getPrivateKey());
 	}
 
 
@@ -902,6 +898,7 @@ public class TestDorian extends TestCase {
 		try {
 			count = 0;
 			ca = Utils.getCA();
+			memoryCA = new CA(Utils.getCASubject());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

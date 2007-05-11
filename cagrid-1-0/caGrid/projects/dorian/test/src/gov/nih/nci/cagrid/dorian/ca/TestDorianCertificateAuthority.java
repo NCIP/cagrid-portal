@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.conf.AutoCreate;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
+import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityFault;
@@ -12,9 +13,11 @@ import gov.nih.nci.cagrid.dorian.service.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.NoCACredentialsFault;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.security.KeyPair;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,6 +26,7 @@ import java.util.GregorianCalendar;
 import junit.framework.TestCase;
 
 import org.bouncycastle.asn1.x509.X509Name;
+import org.globus.gsi.GlobusCredential;
 
 
 /**
@@ -40,10 +44,113 @@ public class TestDorianCertificateAuthority extends TestCase {
 	private Database db;
 
 
-	private CertificateAuthority getCertificateAuthority(DorianCAConfiguration conf) throws Exception{
+	private CertificateAuthority getCertificateAuthority(DorianCAConfiguration conf) throws Exception {
 		return new DorianCertificateAuthority(db, conf);
-		//conf.setCertificateAuthorityPassword("password");
-		//return new EracomCertificateAuthority(conf);
+		// conf.setCertificateAuthorityPassword("password");
+		// return new EracomCertificateAuthority(conf);
+	}
+
+
+	private String identityToSubject(String identity) {
+		String s = identity.substring(1);
+		return s.replace('/', ',');
+	}
+
+
+	public void testCreateProxy() {
+		checkCreateProxy(Integer.MAX_VALUE);
+	}
+
+
+	public void testDelegationProxyLength0() {
+		checkCreateProxy(0);
+	}
+
+
+	public void testDelegationProxyLength5() {
+		checkCreateProxy(5);
+	}
+
+
+	public void checkCreateProxy(int delegationLength) {
+		DorianCAConfiguration conf = this.getDorianCAConfAutoCreateAutoRenewalLong();
+		CertificateAuthority ca = null;
+		try {
+			String user = SUBJECT_PREFIX + "User";
+			ca = getCertificateAuthority(conf);
+			ca.clearCertificateAuthority();
+			Calendar c = new GregorianCalendar();
+			Date start = c.getTime();
+			c.add(Calendar.YEAR, 1);
+			Date expiration = c.getTime();
+
+			ca.createCredentials(user, user, null, start, expiration);
+
+			ProxyLifetime lifetime = new ProxyLifetime();
+			lifetime.setHours(2);
+			lifetime.setMinutes(0);
+			lifetime.setSeconds(0);
+
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			assertNotNull(pair);
+			PublicKey proxyPublicKey = pair.getPublic();
+			assertNotNull(proxyPublicKey);
+
+			X509Certificate[] certs = ca.createImpersonationProxyCertificate(user, null, proxyPublicKey, lifetime,
+				delegationLength);
+			assertNotNull(certs);
+			assertEquals(2, certs.length);
+			GlobusCredential cred = new GlobusCredential(pair.getPrivate(), certs);
+			assertNotNull(cred);
+			long timeLeft = cred.getTimeLeft();
+			assertEquals(ca.getCertificate(user).getSubjectDN().getName(), identityToSubject(cred.getIdentity()));
+			assertEquals(cred.getIssuer(), identityToSubject(cred.getIdentity()));
+			assertEquals(delegationLength, CertificateExtensionsUtil.getDelegationPathLength(certs[0]));
+
+			long okMax = lifetime.getHours() * 60 * 60;
+			// Allow some Buffer
+			long okMin = okMax - 3;
+
+			if ((okMin > timeLeft) || (timeLeft > okMax)) {
+				assertTrue(false);
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+	}
+
+
+	public void testInvalidProxyTimeToGreat() {
+		DorianCAConfiguration conf = this.getDorianCAConfAutoCreateAutoRenewalLong();
+		CertificateAuthority ca = null;
+		try {
+			String user = SUBJECT_PREFIX + "User";
+			ca = getCertificateAuthority(conf);
+			ca.clearCertificateAuthority();
+			Calendar c = new GregorianCalendar();
+			Date start = c.getTime();
+			c.add(Calendar.YEAR, 1);
+			Date expiration = c.getTime();
+			ca.createCredentials(user, user, null, start, expiration);
+			ProxyLifetime lifetime = new ProxyLifetime();
+			lifetime.setHours(50000);
+			lifetime.setMinutes(0);
+			lifetime.setSeconds(0);
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			assertNotNull(pair);
+			PublicKey proxyPublicKey = pair.getPublic();
+			assertNotNull(proxyPublicKey);
+			try {
+				ca.createImpersonationProxyCertificate(user, null, proxyPublicKey, lifetime, 1);
+				assertTrue(false);
+			} catch (CertificateAuthorityFault f) {
+				
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
 	}
 
 
@@ -139,7 +246,8 @@ public class TestDorianCertificateAuthority extends TestCase {
 			}
 		}
 	}
-	
+
+
 	public void testAutoCreateCA() {
 		DorianCAConfiguration conf = this.getDorianCAConfAutoCreateAutoRenewalLong();
 		CertificateAuthority ca = null;
@@ -219,8 +327,6 @@ public class TestDorianCertificateAuthority extends TestCase {
 			}
 		}
 	}
-
-
 
 
 	public void testExpiredCACredentialsWithRenewal() {
@@ -306,7 +412,8 @@ public class TestDorianCertificateAuthority extends TestCase {
 		conf.setAutoRenewal(lifetime);
 		return conf;
 	}
-	
+
+
 	private DorianCAConfiguration getDorianCAConfAutoCreateAutoRenewalLong() {
 		DorianCAConfiguration conf = new DorianCAConfiguration();
 		conf.setCertificateAuthorityPassword("password");
@@ -339,7 +446,8 @@ public class TestDorianCertificateAuthority extends TestCase {
 		Date start = cal.getTime();
 		cal.add(Calendar.YEAR, 1);
 		Date end = cal.getTime();
-		X509Certificate root = CertUtil.generateCACertificate(ca.getProvider(),rootSubject, start, end, rootPair,ca.getSignatureAlgorithm());
+		X509Certificate root = CertUtil.generateCACertificate(ca.getProvider(), rootSubject, start, end, rootPair, ca
+			.getSignatureAlgorithm());
 		assertNotNull(root);
 		ca.setCACredentials(root, rootPair.getPrivate());
 		X509Certificate r = ca.getCACertificate();
@@ -357,7 +465,8 @@ public class TestDorianCertificateAuthority extends TestCase {
 		Date start = cal.getTime();
 		cal.add(Calendar.SECOND, 5);
 		Date end = cal.getTime();
-		X509Certificate root = CertUtil.generateCACertificate(ca.getProvider(),rootSubject, start, end, rootPair,ca.getSignatureAlgorithm());
+		X509Certificate root = CertUtil.generateCACertificate(ca.getProvider(), rootSubject, start, end, rootPair, ca
+			.getSignatureAlgorithm());
 		assertNotNull(root);
 		ca.setCACredentials(root, rootPair.getPrivate());
 		X509Certificate r = ca.getCACertificate();
@@ -371,12 +480,14 @@ public class TestDorianCertificateAuthority extends TestCase {
 		throws Exception {
 		String cn = "User";
 		String subject = prefix + cn;
-		
-		//PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(ca.getProvider(),subject, KeyUtil.generateRSAKeyPair1024(ca.getProvider()),ca.getSignatureAlgorithm());
-		//assertNotNull(req);
-		//X509Certificate cert = ca.requestCertificate(req, start, end);
-		//assertEquals(0, db.getUsedConnectionCount());
-		ca.createCredentials(cn, cn, null, start, end);
+
+		// PKCS10CertificationRequest req =
+		// CertUtil.generateCertficateRequest(ca.getProvider(),subject,
+		// KeyUtil.generateRSAKeyPair1024(ca.getProvider()),ca.getSignatureAlgorithm());
+		// assertNotNull(req);
+		// X509Certificate cert = ca.requestCertificate(req, start, end);
+		// assertEquals(0, db.getUsedConnectionCount());
+		ca.createCredentials(cn, subject, null, start, end);
 		X509Certificate cert = ca.getCertificate(cn);
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);

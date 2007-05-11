@@ -55,8 +55,8 @@ public class Upgrader {
 
 	private void buildUpgraders() {
 		upgradeSet = new HashMap<Float, Upgrade>();
-		Upgrade u = new Upgrade1_0To1_1();
-		upgradeSet.put(u.getStartingVersion(), u);
+		// Upgrade u = new Upgrade1_0To1_1();
+		//upgradeSet.put(u.getStartingVersion(), u);
 	}
 
 

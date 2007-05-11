@@ -24,9 +24,11 @@ import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.test.CA;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
+import gov.nih.nci.cagrid.gridca.common.Credential;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
@@ -50,7 +52,6 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.globus.gsi.GlobusCredential;
 
 
@@ -79,6 +80,8 @@ public class TestIFS extends TestCase {
 
 	private CertificateAuthority ca;
 
+	private CA memoryCA;
+
 	private PropertyManager props;
 
 
@@ -89,7 +92,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, props,ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			String uid = "user";
 			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
 				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
@@ -208,7 +211,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db, props,ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
@@ -238,7 +241,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db,props, ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
@@ -273,7 +276,7 @@ public class TestIFS extends TestCase {
 			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
-			ifs = new IFS(conf, db,props, ca, defaults);
+			ifs = new IFS(conf, db, props, ca, defaults);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
 				conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(),
 				INITIAL_ADMIN));
@@ -1001,19 +1004,13 @@ public class TestIFS extends TestCase {
 		methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
 		idp.setAuthenticationMethod(methods);
 
-		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 		String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
-		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
-		assertNotNull(req);
-		GregorianCalendar cal = new GregorianCalendar();
-		Date start = cal.getTime();
-		cal.add(Calendar.MONTH, 10);
-		Date end = cal.getTime();
-		X509Certificate cert = ca.requestCertificate(req, start, end);
+		Credential cred = memoryCA.createIdentityCertificate(name);
+		X509Certificate cert = cred.getCertificate();
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
 		idp.setIdPCertificate(CertUtil.writeCertificate(cert));
-		return new IdPContainer(idp, cert, pair.getPrivate());
+		return new IdPContainer(idp, cert, cred.getPrivateKey());
 	}
 
 
@@ -1023,6 +1020,7 @@ public class TestIFS extends TestCase {
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = Utils.getCA(db);
+			memoryCA = new CA(Utils.getCASubject());
 			props = new PropertyManager(db);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

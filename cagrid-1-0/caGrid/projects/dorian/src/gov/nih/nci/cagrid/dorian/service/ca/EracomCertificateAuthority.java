@@ -50,7 +50,24 @@ public class EracomCertificateAuthority extends CertificateAuthority {
 	}
 
 
-	protected void addCredentials(String alias, String password, X509Certificate cert, PrivateKey key)
+	public long getCertificateSerialNumber(String alias) throws CertificateAuthorityFault {
+		try {
+			X509Certificate cert = getCertificate(alias);
+			return cert.getSerialNumber().longValue();
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault
+				.setFaultString("An unexpected error occurred, could not the serial number of the requested certificate.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CertificateAuthorityFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+
+	public void addCredentials(String alias, String password, X509Certificate cert, PrivateKey key)
 		throws CertificateAuthorityFault {
 		try {
 			keyStore.setKeyEntry(alias, key, null, new X509Certificate[]{cert});
@@ -67,7 +84,7 @@ public class EracomCertificateAuthority extends CertificateAuthority {
 	}
 
 
-	protected void deleteCredentials(String alias) throws CertificateAuthorityFault {
+	public void deleteCredentials(String alias) throws CertificateAuthorityFault {
 		try {
 			keyStore.deleteEntry(alias);
 		} catch (Exception e) {

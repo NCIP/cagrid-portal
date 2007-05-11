@@ -9,12 +9,12 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.dorian.service.Database;
-import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault;
+import gov.nih.nci.cagrid.dorian.test.CA;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
+import gov.nih.nci.cagrid.gridca.common.Credential;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLNameIdentifier;
@@ -22,7 +22,6 @@ import gov.nih.nci.cagrid.opensaml.SAMLSubject;
 
 import java.io.StringReader;
 import java.lang.reflect.Field;
-import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,7 +32,6 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 
 /**
@@ -55,7 +53,7 @@ public class TestTrustedIdPManager extends TestCase {
 
 	private SAMLAuthenticationMethod[] methods;
 
-	private CertificateAuthority ca;
+	private CA ca;
 
 
 	public void testUniqueCertificates() {
@@ -548,28 +546,24 @@ public class TestTrustedIdPManager extends TestCase {
 		email.setNamespaceURI(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE);
 		email.setName(SAMLConstants.EMAIL_ATTRIBUTE);
 		idp.setEmailAttributeDescriptor(email);
-
-		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+		String id = null;
 		String subject = null;
 		if (nonStandartCert) {
-			subject = Utils.CA_SUBJECT_PREFIX + ",CN=Non Standard" + name;
+			id="Non Standard" + name;
 		} else {
-			subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
+			id =  name;
 		}
-		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
-		assertNotNull(req);
-		GregorianCalendar cal = new GregorianCalendar();
-		Date start = cal.getTime();
-		cal.add(Calendar.MONTH, 10);
-		Date end = cal.getTime();
-		X509Certificate cert = ca.requestCertificate(req, start, end);
+		
+		subject = Utils.CA_SUBJECT_PREFIX + ",CN="+id;
+		Credential cred = ca.createIdentityCertificate(id);
+		X509Certificate cert = cred.getCertificate();
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
 		idp.setIdPCertificate(CertUtil.writeCertificate(cert));
 
 		GregorianCalendar cal2 = new GregorianCalendar();
 		Date start2 = cal2.getTime();
-		cal.add(Calendar.MINUTE, 2);
+		cal2.add(Calendar.MINUTE, 2);
 		Date end2 = cal2.getTime();
 		String issuer = cert.getSubjectDN().toString();
 		String federation = cert.getSubjectDN().toString();
@@ -586,8 +580,7 @@ public class TestTrustedIdPManager extends TestCase {
 		SAMLAssertion saml = new SAMLAssertion(issuer, start2, end2, null, null, l);
 		List a = new ArrayList();
 		a.add(cert);
-		saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, pair.getPrivate(), a);
-
+		saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, cred.getPrivateKey(), a);
 		return new IdPContainer(idp, cert, saml);
 	}
 
@@ -605,7 +598,7 @@ public class TestTrustedIdPManager extends TestCase {
 			len.setMax(MAX_NAME_LENGTH);
 			conf.setIdentityProviderNameLength(len);
 			conf.setAccountPolicies(Utils.getAccountPolicies());
-			ca = Utils.getCA(db);
+			ca = new CA(Utils.getCASubject());
 			tm = new TrustedIdPManager(conf, db);
 			tm.clearDatabase();
 		} catch (Exception e) {

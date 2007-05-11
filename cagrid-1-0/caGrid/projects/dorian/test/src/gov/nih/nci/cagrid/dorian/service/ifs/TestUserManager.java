@@ -18,21 +18,16 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.PropertyManager;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.test.CA;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
+import gov.nih.nci.cagrid.gridca.common.Credential;
 
 import java.io.StringReader;
-import java.security.KeyPair;
 import java.security.cert.X509Certificate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import junit.framework.TestCase;
-
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 
 /**
@@ -54,6 +49,7 @@ public class TestUserManager extends TestCase {
 	private Database db;
 
 	private CertificateAuthority ca;
+	private CA memoryCA;
 
 	private PropertyManager props;
 
@@ -544,15 +540,9 @@ public class TestUserManager extends TestCase {
 		idp.setAuthenticationMethod(methods);
 		idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
 
-		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 		String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + idp.getName();
-		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
-		assertNotNull(req);
-		GregorianCalendar cal = new GregorianCalendar();
-		Date start = cal.getTime();
-		cal.add(Calendar.MONTH, 10);
-		Date end = cal.getTime();
-		X509Certificate cert = ca.requestCertificate(req, start, end);
+		Credential cred = memoryCA.createIdentityCertificate(idp.getName());
+		X509Certificate cert = cred.getCertificate();
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
 		idp.setIdPCertificate(CertUtil.writeCertificate(cert));
@@ -573,6 +563,7 @@ public class TestUserManager extends TestCase {
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = Utils.getCA(db);
+			memoryCA = new CA(Utils.getCASubject());
 			props = new PropertyManager(db);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

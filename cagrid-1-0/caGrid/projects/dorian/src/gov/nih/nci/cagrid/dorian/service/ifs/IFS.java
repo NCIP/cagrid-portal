@@ -30,7 +30,6 @@ import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 
 import java.rmi.RemoteException;
-import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
@@ -446,9 +445,8 @@ public class IFS extends LoggingObject {
 		// create the proxy
 
 		try {
-			PrivateKey key = um.getUsersPrivateKey(usr);
-			X509Certificate[] certs = IFSProxyCreator.createImpersonationProxyCertificate(new X509Certificate[]{cert},
-				key, publicKey, lifetime, delegationPathLength);
+			X509Certificate[] certs = ca.createImpersonationProxyCertificate(um.getCredentialsManagerUID(
+				usr.getIdPId(), usr.getUID()), null, publicKey, lifetime, delegationPathLength);
 			return certs;
 		} catch (Exception e) {
 			InvalidProxyFault fault = new InvalidProxyFault();

@@ -13,21 +13,19 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.CredentialsFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
-import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidPasswordFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.PropertyManager;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault;
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
@@ -42,7 +40,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.bouncycastle.asn1.x509.CRLReason;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 
 /**
@@ -59,8 +56,6 @@ public class UserManager extends LoggingObject {
 	private Database db;
 
 	private boolean dbBuilt = false;
-
-	private CredentialsManager credentialsManager;
 
 	private IdentityFederationConfiguration conf;
 
@@ -82,7 +77,6 @@ public class UserManager extends LoggingObject {
 		this.db = db;
 		this.tm = tm;
 		this.defaults = defaults;
-		this.credentialsManager = new CredentialsManager(db);
 		this.conf = conf;
 		this.ca = ca;
 		this.properties = properties;
@@ -124,16 +118,15 @@ public class UserManager extends LoggingObject {
 	}
 
 
-	private String getCredentialsManagerUID(long idpId, String uid) {
-		return "[IdPId=" + idpId + ", UID=" + uid + "]";
+	public String getCredentialsManagerUID(long idpId, String uid) {
+		return "IdPId=" + idpId + ":UID=" + uid;
 	}
 
 
 	public PrivateKey getUsersPrivateKey(IFSUser user) throws DorianInternalFault {
 		try {
-			return this.credentialsManager
-				.getPrivateKey(getCredentialsManagerUID(user.getIdPId(), user.getUID()), null);
-		} catch (InvalidPasswordFault e) {
+			return ca.getPrivateKey(getCredentialsManagerUID(user.getIdPId(), user.getUID()), null);
+		} catch (CertificateAuthorityFault e) {
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error loading the user " + user.getGridId() + "'s private key.");
 			FaultHelper helper = new FaultHelper(fault);
@@ -155,23 +148,34 @@ public class UserManager extends LoggingObject {
 				publishCRL();
 			}
 		} catch (InvalidUserFault iuf) {
-			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
+			try {
+				ca.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
+			} catch (Exception ex) {
+				log.error(ex);
+			}
 			throw iuf;
 		} catch (DorianInternalFault gif) {
-			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
+			try {
+				ca.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
+			} catch (Exception ex) {
+				log.error(ex);
+			}
 			throw gif;
 		}
 		try {
 			user.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 		} catch (IOException ioe) {
-			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
+			try {
+				ca.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
+			} catch (Exception ex) {
+				log.error(ex);
+			}
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error renewing credentials.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(ioe);
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
-
 		}
 		return user;
 	}
@@ -195,7 +199,6 @@ public class UserManager extends LoggingObject {
 
 	private synchronized X509Certificate createUserCredentials(TrustedIdP idp, String uid) throws DorianInternalFault {
 		try {
-
 			String caSubject = ca.getCACertificate().getSubjectDN().getName();
 			String sub = getUserSubject(caSubject, idp, uid);
 			Calendar c = new GregorianCalendar();
@@ -205,15 +208,10 @@ public class UserManager extends LoggingObject {
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
 			}
-
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-
-			PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(sub, pair);
-			X509Certificate cert = ca.requestCertificate(req, start, end);
-			this.credentialsManager.deleteCredentials(getCredentialsManagerUID(idp.getId(), uid));
-			this.credentialsManager.addCredentials(getCredentialsManagerUID(idp.getId(), uid), null, cert, pair
-				.getPrivate());
-			return cert;
+			String alias = getCredentialsManagerUID(idp.getId(), uid);
+			ca.deleteCredentials(alias);
+			ca.createCredentials(alias, sub, null, start, end);
+			return ca.getCertificate(alias);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
@@ -254,8 +252,7 @@ public class UserManager extends LoggingObject {
 					user.setEmail(email);
 				}
 				user.setUserStatus(IFSUserStatus.fromValue(rs.getString("STATUS")));
-				X509Certificate cert = credentialsManager.getCertificate(getCredentialsManagerUID(user.getIdPId(), user
-					.getUID()));
+				X509Certificate cert = ca.getCertificate(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
 				user
 					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 			} else {
@@ -311,8 +308,7 @@ public class UserManager extends LoggingObject {
 					user.setEmail(email);
 				}
 				user.setUserStatus(IFSUserStatus.fromValue(rs.getString("STATUS")));
-				X509Certificate cert = credentialsManager.getCertificate(getCredentialsManagerUID(user.getIdPId(), user
-					.getUID()));
+				X509Certificate cert = ca.getCertificate(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
 				user
 					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 			} else {
@@ -421,8 +417,7 @@ public class UserManager extends LoggingObject {
 					user.setEmail(email);
 				}
 				user.setUserStatus(IFSUserStatus.fromValue(rs.getString("STATUS")));
-				X509Certificate cert = credentialsManager.getCertificate(getCredentialsManagerUID(user.getIdPId(), user
-					.getUID()));
+				X509Certificate cert = ca.getCertificate(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
 				user
 					.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 				users.add(user);
@@ -498,7 +493,7 @@ public class UserManager extends LoggingObject {
 				}
 
 				try {
-					this.credentialsManager.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
+					this.ca.deleteCredentials(getCredentialsManagerUID(user.getIdPId(), user.getUID()));
 				} catch (Exception ex) {
 
 				}
@@ -688,7 +683,7 @@ public class UserManager extends LoggingObject {
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
 				String id = getCredentialsManagerUID(rs.getLong("IDP_ID"), rs.getString("UID"));
-				sn.add(new Long(credentialsManager.getCertificateSerialNumber(id)));
+				sn.add(new Long(ca.getCertificateSerialNumber(id)));
 			}
 			rs.close();
 			s.close();
@@ -703,7 +698,7 @@ public class UserManager extends LoggingObject {
 					ResultSet result = stmt.executeQuery(sb.toString());
 					while (result.next()) {
 						String id = getCredentialsManagerUID(result.getLong("IDP_ID"), result.getString("UID"));
-						sn.add(new Long(credentialsManager.getCertificateSerialNumber(id)));
+						sn.add(new Long(ca.getCertificateSerialNumber(id)));
 					}
 					stmt.close();
 					result.close();
@@ -726,9 +721,17 @@ public class UserManager extends LoggingObject {
 
 
 	public void clearDatabase() throws DorianInternalFault {
+
+		try {
+			IFSUser[] users = getUsers(null);
+			for (int i = 0; i < users.length; i++) {
+				ca.deleteCredentials(getCredentialsManagerUID(users[i].getIdPId(), users[i].getUID()));
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
 		db.update("DROP TABLE IF EXISTS " + USERS_TABLE);
 		this.tm.clearDatabase();
-		this.credentialsManager.clearDatabase();
 		this.dbBuilt = false;
 	}
 

@@ -5,18 +5,20 @@ import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.Utils;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
+import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
+import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
 import org.bouncycastle.asn1.x509.X509Name;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 
 /**
@@ -46,11 +48,11 @@ public abstract class CertificateAuthority extends LoggingObject {
 	public abstract String getSignatureAlgorithm();
 
 
-	protected abstract void addCredentials(String alias, String password, X509Certificate cert, PrivateKey key)
+	public abstract void addCredentials(String alias, String password, X509Certificate cert, PrivateKey key)
 		throws CertificateAuthorityFault;
 
 
-	protected abstract void deleteCredentials(String alias) throws CertificateAuthorityFault;
+	public abstract void deleteCredentials(String alias) throws CertificateAuthorityFault;
 
 
 	public abstract boolean hasCredentials(String alias) throws CertificateAuthorityFault;
@@ -60,6 +62,9 @@ public abstract class CertificateAuthority extends LoggingObject {
 
 
 	public abstract X509Certificate getCertificate(String alias) throws CertificateAuthorityFault;
+
+
+	public abstract long getCertificateSerialNumber(String alias) throws CertificateAuthorityFault;
 
 
 	protected abstract void clear() throws CertificateAuthorityFault;
@@ -218,7 +223,7 @@ public abstract class CertificateAuthority extends LoggingObject {
 	}
 
 
-	public void createCredentials(String alias, String cn, String password, Date start, Date expiration)
+	public void createCredentials(String alias, String subject, String password, Date start, Date expiration)
 		throws CertificateAuthorityFault, NoCACredentialsFault {
 		init();
 		X509Certificate cacert = getCACertificate();
@@ -243,11 +248,16 @@ public abstract class CertificateAuthority extends LoggingObject {
 				throw fault;
 			}
 
+			// VALIDATE DN
 			String caSubject = cacert.getSubjectDN().getName();
 			int caindex = caSubject.lastIndexOf(",");
 			String caPreSub = caSubject.substring(0, caindex);
 
-			String subject = caPreSub + ",CN=" + cn;
+			if (!subject.startsWith(caPreSub)) {
+				CertificateAuthorityFault fault = new CertificateAuthorityFault();
+				fault.setFaultString("Invalid certificate subject, the subject must start with, " + caPreSub);
+				throw fault;
+			}
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024(getProvider());
 			X509Certificate cert = CertUtil.generateCertificate(getProvider(), new X509Name(subject), start,
 				expiration, pair.getPublic(), cacert, getCAPrivateKey(), getSignatureAlgorithm());
@@ -287,51 +297,6 @@ public abstract class CertificateAuthority extends LoggingObject {
 	}
 
 
-	public X509Certificate requestCertificate(PKCS10CertificationRequest request, Date startDate, Date expirationDate)
-		throws CertificateAuthorityFault, NoCACredentialsFault {
-		init();
-		PrivateKey cakey = getCAPrivateKey();
-		X509Certificate cacert = getCACertificate();
-
-		Date caDate = cacert.getNotAfter();
-		if (startDate.after(caDate)) {
-			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("Certificate start date is after the CA certificates expiration date.");
-			throw fault;
-		}
-		if (expirationDate.after(caDate)) {
-			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("Certificate expiration date is after the CA certificates expiration date.");
-			throw fault;
-		}
-
-		// VALIDATE DN
-		String caSubject = cacert.getSubjectDN().getName();
-		int caindex = caSubject.lastIndexOf(",");
-		String caPreSub = caSubject.substring(0, caindex);
-
-		String userSubject = request.getCertificationRequestInfo().getSubject().toString();
-
-		if (!userSubject.startsWith(caPreSub)) {
-			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("Invalid certificate subject, the subject must start with, " + caPreSub);
-			throw fault;
-		}
-		try {
-			return CertUtil.signCertificateRequest(getProvider(), request, startDate, expirationDate, cacert, cakey,
-				getSignatureAlgorithm());
-		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("Unexpected Error, could not sign certifcate request.");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (CertificateAuthorityFault) helper.getFault();
-			throw fault;
-		}
-	}
-
-
 	public X509CRL getCRL(CRLEntry[] entries) throws CertificateAuthorityFault, NoCACredentialsFault {
 		try {
 			init();
@@ -341,6 +306,25 @@ public abstract class CertificateAuthority extends LoggingObject {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
 			fault.setFaultString("Unexpected Error, could not create the CRL.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CertificateAuthorityFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+
+	public X509Certificate[] createImpersonationProxyCertificate(String alias, String password,
+		PublicKey proxyPublicKey, ProxyLifetime lifetime, int delegationPathLength) throws CertificateAuthorityFault {
+		try {
+			X509Certificate[] certs = new X509Certificate[]{getCertificate(alias)};
+			PrivateKey key = getPrivateKey(alias, password);
+			return ProxyCreator.createImpersonationProxyCertificate(getProvider(), certs, key, proxyPublicKey, lifetime
+				.getHours(), lifetime.getMinutes(), lifetime.getSeconds(), delegationPathLength,
+				getSignatureAlgorithm());
+		} catch (Exception e) {
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault.setFaultString("Unexpected Error, could not create proxy, " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();

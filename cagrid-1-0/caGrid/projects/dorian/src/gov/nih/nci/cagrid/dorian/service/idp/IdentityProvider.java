@@ -15,8 +15,6 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityFault;
-import gov.nih.nci.cagrid.dorian.service.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.NoSuchUserFault;
@@ -44,8 +42,6 @@ public class IdentityProvider extends LoggingObject {
 
 	private AssertionCredentialsManager assertionManager;
 
-	private CertificateAuthority ca;
-
 	private IdPRegistrationPolicy registrationPolicy;
 
 
@@ -53,7 +49,6 @@ public class IdentityProvider extends LoggingObject {
 		throws DorianInternalFault {
 		try {
 			this.registrationPolicy = (IdPRegistrationPolicy) Class.forName(conf.getRegistrationPolicy()).newInstance();
-			this.ca = ca;
 			this.userManager = new UserManager(db, conf);
 			this.assertionManager = new AssertionCredentialsManager(conf, ca, db);
 
@@ -241,18 +236,6 @@ public class IdentityProvider extends LoggingObject {
 	public void clearDatabase() throws DorianInternalFault {
 		assertionManager.clearDatabase();
 		userManager.clearDatabase();
-
-		try {
-			((DorianCertificateAuthority) ca).clearCertificateAuthority();
-		} catch (CertificateAuthorityFault e) {
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString(e.getFaultString());
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
-		}
-
 	}
 
 }
