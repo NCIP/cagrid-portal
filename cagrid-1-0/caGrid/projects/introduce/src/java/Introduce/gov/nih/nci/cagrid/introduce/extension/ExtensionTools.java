@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
 import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -262,25 +263,38 @@ public class ExtensionTools {
         ServiceExtensionDescriptionType serviceExtensionDescription = 
             ExtensionsLoader.getInstance().getServiceExtension(extensionName);
         if (extensionDescription == null || serviceExtensionDescription == null) {
+            System.out.println("Extension description NOT FOUND for " + extensionName);
             throw new CreationExtensionException(
                 "No service extension named " + extensionName + " was able to be loaded");
         }
         // add the extension to the service information
-        ExtensionType[] serviceExtensions = service.getExtensions().getExtension();
+        System.out.println("Creating new extension type");
         ExtensionType addedExtension = new ExtensionType();
         addedExtension.setName(extensionName);
         addedExtension.setVersion(extensionDescription.getVersion());
         addedExtension.setExtensionType(extensionDescription.getExtensionType());
-        serviceExtensions = (ExtensionType[]) Utils.appendToArray(serviceExtensions, addedExtension);
+        System.out.println("Appending extension to extensions list");
+        if (service.getExtensions() == null) {
+            service.setExtensions(new ExtensionsType());
+        }
+        ExtensionType[] serviceExtensions = service.getExtensions().getExtension();
+        if (serviceExtensions == null) {
+            serviceExtensions = new ExtensionType[] {addedExtension};
+        } else {
+            serviceExtensions = (ExtensionType[]) Utils.appendToArray(serviceExtensions, addedExtension);
+        }
+        service.getExtensions().setExtension(serviceExtensions);
         // invoke the creation post processor
         CreationExtensionPostProcessor creationPostProcessor = null;
         try {
             creationPostProcessor = getCreationPostProcessor(extensionName);
         } catch (Exception ex) {
+            System.out.println("ERROR LOADING EXTENSION POST PROCESSOR");
             throw new CreationExtensionException(
                 "Error loading post processor for extension: " + ex.getMessage(), ex);
         }
         if (creationPostProcessor != null) {
+            System.out.println("Invoking extension creation post processor");
             creationPostProcessor.postCreate(serviceExtensionDescription, service);
         }
     }
