@@ -37,263 +37,267 @@ import javax.swing.JPanel;
  */
 
 public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
-	implements
-		PackageSelectedListener,
-		ProjectSelectedListener {
-	private CaDSRBrowserPanel caDSRPanel = null;
-	private JPanel graphPanel = null;
-	private UMLDiagram umlDiagram;
-	private JPanel refreshPanel = null;
-	private JButton refreshButton = null;
+    implements
+        PackageSelectedListener,
+        ProjectSelectedListener {
+    private CaDSRBrowserPanel caDSRPanel = null;
+    private JPanel graphPanel = null;
+    private UMLDiagram umlDiagram;
+    private JPanel refreshPanel = null;
+    private JButton refreshButton = null;
 
 
-	/**
-	 * @param desc
-	 */
-	public CaDSRTypeDiscoveryComponent(DiscoveryExtensionDescriptionType desc) {
-		super(desc);
-		initialize();
-		this.getCaDSRPanel().setDefaultCaDSRURL(getCaDSRURL());
-		this.getCaDSRPanel().discoverFromCaDSR();
-	}
+    /**
+     * @param desc
+     */
+    public CaDSRTypeDiscoveryComponent(DiscoveryExtensionDescriptionType desc) {
+        super(desc);
+        initialize();
+        this.getCaDSRPanel().setDefaultCaDSRURL(getCaDSRURL());
+        this.getCaDSRPanel().discoverFromCaDSR();
+    }
 
 
-	private String getCaDSRURL() {
-		return ResourceManager.getServiceURLProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY);
-	}
+    private String getCaDSRURL() {
+        return ResourceManager.getServiceURLProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY);
+    }
 
 
-	private void initialize() {
-		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-		gridBagConstraints11.gridy = 1;
-		gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints11.gridx = 0;
-		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-		gridBagConstraints1.gridx = 0;
-		gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints1.weightx = 1.0D;
-		gridBagConstraints1.weighty = 1.0D;
-		gridBagConstraints1.gridy = 2;
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints.gridy = 0;
-		gridBagConstraints.weightx = 0.0D;
-		gridBagConstraints.weighty = 0.0D;
-		this.setLayout(new GridBagLayout());
-		this.add(getCaDSRPanel(), gridBagConstraints);
-		this.add(getRefreshPanel(), gridBagConstraints11);
-		this.add(getGraphPanel(), gridBagConstraints1);
-	}
+    private void initialize() {
+        GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+        gridBagConstraints11.gridy = 1;
+        gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints11.gridx = 0;
+        GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+        gridBagConstraints1.gridx = 0;
+        gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints1.weightx = 1.0D;
+        gridBagConstraints1.weighty = 1.0D;
+        gridBagConstraints1.gridy = 2;
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 0.0D;
+        gridBagConstraints.weighty = 0.0D;
+        this.setLayout(new GridBagLayout());
+        this.add(getCaDSRPanel(), gridBagConstraints);
+        this.add(getRefreshPanel(), gridBagConstraints11);
+        this.add(getGraphPanel(), gridBagConstraints1);
+    }
 
 
-	/**
-	 * This method initializes cadsrPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private CaDSRBrowserPanel getCaDSRPanel() {
-		if (caDSRPanel == null) {
-			caDSRPanel = new CaDSRBrowserPanel(false, false);
-			caDSRPanel.addPackageSelectionListener(this);
-			caDSRPanel.addProjectSelectionListener(this);
-		}
-		return caDSRPanel;
-	}
+    /**
+     * This method initializes cadsrPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private CaDSRBrowserPanel getCaDSRPanel() {
+        if (this.caDSRPanel == null) {
+            this.caDSRPanel = new CaDSRBrowserPanel(false, false);
+            this.caDSRPanel.addPackageSelectionListener(this);
+            this.caDSRPanel.addProjectSelectionListener(this);
+        }
+        return this.caDSRPanel;
+    }
 
 
-	public void handleProjectSelection(Project project) {
-		this.getCaDSRPanel().getCadsr().setText(getCaDSRURL());
-	}
+    public void handleProjectSelection(Project project) {
+        this.getCaDSRPanel().getCadsr().setText(getCaDSRURL());
+    }
 
 
-	public void handlePackageSelection(final UMLPackageMetadata pkg) {
-		this.getCaDSRPanel().getCadsr().setText(getCaDSRURL());
-		// update the graph for the given package
-		Thread t = new Thread() {
-			public void run() {
-				try {
-					final int progressEventID = getCaDSRPanel().getMultiEventProgressBar().startEvent(
-						"Processing Package " + pkg.getName());
-					CaDSRServiceI cadsrService = new CaDSRServiceClient(getCaDSRPanel().getCadsr().getText());
+    public void handlePackageSelection(final UMLPackageMetadata pkg) {
+        this.getCaDSRPanel().getCadsr().setText(getCaDSRURL());
+        // update the graph for the given package
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    getRefreshButton().setEnabled(false);
+                    final int progressEventID = getCaDSRPanel().getMultiEventProgressBar().startEvent(
+                        "Processing Package " + pkg.getName());
+                    CaDSRServiceI cadsrService = new CaDSRServiceClient(getCaDSRPanel().getCadsr().getText());
 
-					getUMLDiagram().clear();
-					UMLClassMetadata[] classes = cadsrService.findClassesInPackage(
-						getCaDSRPanel().getSelectedProject(), pkg.getName());
+                    getUMLDiagram().clear();
+                    UMLClassMetadata[] classes = cadsrService.findClassesInPackage(
+                        getCaDSRPanel().getSelectedProject(), pkg.getName());
 
-					Map classMap = new HashMap();
+                    Map classMap = new HashMap();
 
-					if (classes != null) {
-						for (int i = 0; i < classes.length; i++) {
-							UMLClassMetadata clazz = classes[i];
-							UMLClass c = new UMLClass(clazz.getName());
-							getCaDSRPanel().getMultiEventProgressBar().updateProgress(
-								"Processing Class " + clazz.getName() + " ( " + i + " of " + classes.length + ")", 0,
-								classes.length, i);
+                    if (classes != null) {
+                        for (int i = 0; i < classes.length; i++) {
+                            UMLClassMetadata clazz = classes[i];
+                            UMLClass c = new UMLClass(clazz.getName());
+                            getCaDSRPanel().getMultiEventProgressBar().updateProgress(
+                                "Processing Class " + clazz.getName() + " ( " + i + " of " + classes.length + ")", 0,
+                                classes.length, i);
 
-							UMLAttributeMetadata[] atts = cadsrService.findAttributesInClass(getCaDSRPanel()
-								.getSelectedProject(), clazz);
-							if (atts != null) {
-								for (int j = 0; j < atts.length; j++) {
-									UMLAttributeMetadata att = atts[j];
-									ValueDomain domain = cadsrService.findValueDomainForAttribute(getCaDSRPanel()
-										.getSelectedProject(), att);
-									c.addAttribute(domain.getDatatypeName(), att.getName());
+                            UMLAttributeMetadata[] atts = cadsrService.findAttributesInClass(getCaDSRPanel()
+                                .getSelectedProject(), clazz);
+                            if (atts != null) {
+                                for (UMLAttributeMetadata att : atts) {
+                                    ValueDomain domain = cadsrService.findValueDomainForAttribute(getCaDSRPanel()
+                                        .getSelectedProject(), att);
+                                    c.addAttribute(domain.getDatatypeName(), att.getName());
 
-								}
-							}
-							classMap.put(clazz.getId(), c);
-							getUMLDiagram().addClass(c);
-						}
-					}
+                                }
+                            }
+                            classMap.put(clazz.getId(), c);
+                            getUMLDiagram().addClass(c);
+                        }
+                    }
 
-					final int assocProgressEventID = getCaDSRPanel().getMultiEventProgressBar().startEvent(
-						"Processing Associations...");
-					UMLAssociation[] assocs = cadsrService.findAssociationsInPackage(getCaDSRPanel()
-						.getSelectedProject(), pkg.getName());
-					if (assocs != null) {
-						for (int i = 0; i < assocs.length; i++) {
-							UMLAssociation assoc = assocs[i];
-							getCaDSRPanel().getMultiEventProgressBar().updateProgress(
-								"Processing Association " + " ( " + i + " of " + assocs.length + ")", 0, assocs.length,
-								i);
-							UMLClassMetadata source = assoc.getSourceUMLClassMetadata().getUMLClassMetadata();
-							UMLClassMetadata target = assoc.getTargetUMLClassMetadata().getUMLClassMetadata();
+                    final int assocProgressEventID = getCaDSRPanel().getMultiEventProgressBar().startEvent(
+                        "Processing Associations...");
+                    UMLAssociation[] assocs = cadsrService.findAssociationsInPackage(getCaDSRPanel()
+                        .getSelectedProject(), pkg.getName());
+                    if (assocs != null) {
+                        for (int i = 0; i < assocs.length; i++) {
+                            UMLAssociation assoc = assocs[i];
+                            getCaDSRPanel().getMultiEventProgressBar().updateProgress(
+                                "Processing Association " + " ( " + i + " of " + assocs.length + ")", 0, assocs.length,
+                                i);
+                            UMLClassMetadata source = assoc.getSourceUMLClassMetadata().getUMLClassMetadata();
+                            UMLClassMetadata target = assoc.getTargetUMLClassMetadata().getUMLClassMetadata();
 
-							UMLClass sourceGraph = (UMLClass) classMap.get(source.getId());
-							UMLClass targetGraph = (UMLClass) classMap.get(target.getId());
+                            UMLClass sourceGraph = (UMLClass) classMap.get(source.getId());
+                            UMLClass targetGraph = (UMLClass) classMap.get(target.getId());
 
-							if (sourceGraph == null || targetGraph == null) {
-								System.out
-									.println("Skipping association, as both source and target are not in this package.");
-								System.out.println("Source:" + source.getFullyQualifiedName());
-								System.out.println("Target:" + target.getFullyQualifiedName());
-							} else {
-								getUMLDiagram().addAssociation(
-									sourceGraph,
-									targetGraph,
-									assoc.getSourceRoleName(),
-									assoc.getSourceMinCardinality()
-										+ ".."
-										+ (assoc.getSourceMaxCardinality() == -1 ? "*" : String.valueOf(assoc
-											.getSourceMaxCardinality())),
-									assoc.getTargetRoleName(),
-									assoc.getTargetMinCardinality()
-										+ ".."
-										+ (assoc.getTargetMaxCardinality() == -1 ? "*" : String.valueOf(assoc
-											.getTargetMaxCardinality())));
-							}
-						}
-					}
+                            if (sourceGraph == null || targetGraph == null) {
+                                System.out
+                                    .println("Skipping association, as both source and target are not in this package.");
+                                System.out.println("Source:" + source.getFullyQualifiedName());
+                                System.out.println("Target:" + target.getFullyQualifiedName());
+                            } else {
+                                getUMLDiagram().addAssociation(
+                                    sourceGraph,
+                                    targetGraph,
+                                    assoc.getSourceRoleName(),
+                                    assoc.getSourceMinCardinality()
+                                        + ".."
+                                        + (assoc.getSourceMaxCardinality() == -1 ? "*" : String.valueOf(assoc
+                                            .getSourceMaxCardinality())),
+                                    assoc.getTargetRoleName(),
+                                    assoc.getTargetMinCardinality()
+                                        + ".."
+                                        + (assoc.getTargetMaxCardinality() == -1 ? "*" : String.valueOf(assoc
+                                            .getTargetMaxCardinality())));
+                            }
+                        }
+                    }
 
-					getCaDSRPanel().getMultiEventProgressBar().stopEvent(assocProgressEventID,
-						"Done with Associations.");
+                    getCaDSRPanel().getMultiEventProgressBar().stopEvent(assocProgressEventID,
+                        "Done with Associations.");
 
-					final int renderProgressEventID = getCaDSRPanel().getMultiEventProgressBar().startEvent(
-						"Rendering...");
-					getUMLDiagram().refresh();
-					getCaDSRPanel().getMultiEventProgressBar().stopEvent(renderProgressEventID, "Done with Rendering.");
-					getCaDSRPanel().getMultiEventProgressBar().stopEvent(progressEventID, "Done with Package.");
+                    final int renderProgressEventID = getCaDSRPanel().getMultiEventProgressBar().startEvent(
+                        "Rendering...");
+                    getUMLDiagram().refresh();
+                    getCaDSRPanel().getMultiEventProgressBar().stopEvent(renderProgressEventID, "Done with Rendering.");
+                    getCaDSRPanel().getMultiEventProgressBar().stopEvent(progressEventID, "Done with Package.");
 
-				} catch (RemoteException e) {
-					e.printStackTrace();
-					ErrorDialog.showErrorDialog("Error communicating with caDSR; please check the caDSR URL!", e);
-					getCaDSRPanel().getMultiEventProgressBar().stopAll(
-						"Error communicating with caDSR; please check the caDSR URL!");
-					getUMLDiagram().clear();
-				} catch (Exception e) {
-					e.printStackTrace();
-					ErrorDialog.showErrorDialog("Error processing model!", e);
-					getCaDSRPanel().getMultiEventProgressBar().stopAll("Error processing model!");
-					getUMLDiagram().clear();
-				}
-			}
-		};
-		t.start();
-	}
-
-
-	/**
-	 * This method initializes graphPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getGraphPanel() {
-		if (graphPanel == null) {
-			graphPanel = new JPanel();
-			graphPanel.setLayout(new GridBagLayout());
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.weightx = 1.0D;
-			gridBagConstraints1.weighty = 1.0D;
-			gridBagConstraints1.gridy = 1;
-			graphPanel.add(getUMLDiagram(), gridBagConstraints1);
-
-		}
-		return graphPanel;
-	}
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    ErrorDialog.showErrorDialog("Error communicating with caDSR; please check the caDSR URL!", e);
+                    getCaDSRPanel().getMultiEventProgressBar().stopAll(
+                        "Error communicating with caDSR; please check the caDSR URL!");
+                    getUMLDiagram().clear();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ErrorDialog.showErrorDialog("Error processing model!", e);
+                    getCaDSRPanel().getMultiEventProgressBar().stopAll("Error processing model!");
+                    getUMLDiagram().clear();
+                } finally {
+                    getRefreshButton().setEnabled(true);
+                }
+            }
+        };
+        t.start();
+    }
 
 
-	private UMLDiagram getUMLDiagram() {
-		if (umlDiagram == null) {
-			umlDiagram = new UMLDiagram();
+    /**
+     * This method initializes graphPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getGraphPanel() {
+        if (this.graphPanel == null) {
+            this.graphPanel = new JPanel();
+            this.graphPanel.setLayout(new GridBagLayout());
+            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+            gridBagConstraints1.gridx = 0;
+            gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints1.weightx = 1.0D;
+            gridBagConstraints1.weighty = 1.0D;
+            gridBagConstraints1.gridy = 1;
+            this.graphPanel.add(getUMLDiagram(), gridBagConstraints1);
 
-		}
-		return umlDiagram;
-	}
-
-
-	/**
-	 * This method initializes refreshPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getRefreshPanel() {
-		if (refreshPanel == null) {
-			refreshPanel = new JPanel();
-			refreshPanel.add(getRefreshButton(), null);
-		}
-		return refreshPanel;
-	}
-
-
-	/**
-	 * This method initializes refreshButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getRefreshButton() {
-		if (refreshButton == null) {
-			refreshButton = new JButton();
-			refreshButton.setText("Refresh");
-			refreshButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					getCaDSRPanel().getCadsr().setText(getCaDSRURL());
-					getCaDSRPanel().discoverFromCaDSR();
-				}
-			});
-		}
-		return refreshButton;
-	}
+        }
+        return this.graphPanel;
+    }
 
 
-	public static void main(String[] args) {
-		try {
-			JFrame frame = new JFrame();
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    private UMLDiagram getUMLDiagram() {
+        if (this.umlDiagram == null) {
+            this.umlDiagram = new UMLDiagram();
 
-			ExtensionDescription ext = (ExtensionDescription) Utils.deserializeDocument("extension.xml",
-				ExtensionDescription.class);
-			final CaDSRTypeDiscoveryComponent panel = new CaDSRTypeDiscoveryComponent(ext
-				.getDiscoveryExtensionDescription());
-			frame.getContentPane().setLayout(new BorderLayout());
-			frame.getContentPane().add(panel, BorderLayout.CENTER);
+        }
+        return this.umlDiagram;
+    }
 
-			frame.pack();
-			frame.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+
+    /**
+     * This method initializes refreshPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getRefreshPanel() {
+        if (this.refreshPanel == null) {
+            this.refreshPanel = new JPanel();
+            this.refreshPanel.add(getRefreshButton(), null);
+        }
+        return this.refreshPanel;
+    }
+
+
+    /**
+     * This method initializes refreshButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getRefreshButton() {
+        if (this.refreshButton == null) {
+            this.refreshButton = new JButton();
+            this.refreshButton.setText("Refresh");
+            this.refreshButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    getUMLDiagram().clear();
+                    getCaDSRPanel().getCadsr().setText(getCaDSRURL());
+                    getCaDSRPanel().discoverFromCaDSR();
+                }
+            });
+        }
+        return this.refreshButton;
+    }
+
+
+    public static void main(String[] args) {
+        try {
+            JFrame frame = new JFrame();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+            ExtensionDescription ext = (ExtensionDescription) Utils.deserializeDocument("../cadsr/extension.xml",
+                ExtensionDescription.class);
+            final CaDSRTypeDiscoveryComponent panel = new CaDSRTypeDiscoveryComponent(ext
+                .getDiscoveryExtensionDescription());
+            frame.getContentPane().setLayout(new BorderLayout());
+            frame.getContentPane().add(panel, BorderLayout.CENTER);
+
+            frame.pack();
+            frame.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
