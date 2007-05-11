@@ -6,8 +6,6 @@ import gov.nih.nci.cagrid.data.enumeration.service.globus.EnumerationDataService
 import gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationDataServicePortType;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
@@ -71,21 +69,6 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 			System.out.println("Adding the WS-Enumeration extension to the service");
 			// add the ws Enumeration extension
             ExtensionTools.addExtensionToService(getServiceInformation(), WS_ENUM_EXTENSION_NAME);
-            /*
-			ExtensionDescription ext = ExtensionsLoader.getInstance().getExtension(
-				WsEnumerationFeatureCreator.WS_ENUM_EXTENSION_NAME);
-			ExtensionType extType = new ExtensionType();
-			extType.setName(ext.getServiceExtensionDescription().getName());
-			extType.setExtensionType(ext.getExtensionType());
-			ExtensionType[] serviceExtensions = getServiceInformation()
-				.getServiceDescriptor().getExtensions().getExtension();
-			ExtensionType[] allExtensions = new ExtensionType[serviceExtensions.length + 1];
-			System.arraycopy(serviceExtensions, 0, allExtensions, 0, serviceExtensions.length);
-			allExtensions[allExtensions.length - 1] = extType;
-			getServiceInformation().getServiceDescriptor().getExtensions().setExtension(allExtensions);
-			// wsEnum extension copies libraries into the service on its own
-             * 
-			 */
 		}
 	}
 
