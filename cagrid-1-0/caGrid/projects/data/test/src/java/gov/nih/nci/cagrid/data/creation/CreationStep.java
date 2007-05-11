@@ -34,30 +34,35 @@ public class CreationStep extends Step {
 
 		String cmd = CommonTools.getAntSkeletonCreationCommand(introduceDir, serviceInfo.getName(), 
 			serviceInfo.getDir(), serviceInfo.getPackage(), serviceInfo.getNamespace(), serviceInfo.getExtensions());
-		Process p = CommonTools.createAndOutputProcess(cmd);
-		p.waitFor();
-		assertTrue("Creating new data service failed", p.exitValue() == 0);
+        System.out.println("EXECUTING COMMAND: " + cmd);
+		Process createSkeletonProcess = CommonTools.createAndOutputProcess(cmd);
+        new StreamDumpster(createSkeletonProcess.getInputStream(), System.out).start();
+        new StreamDumpster(createSkeletonProcess.getErrorStream(), System.err).start();
+        createSkeletonProcess.waitFor();
+		assertTrue("Creating new data service failed", createSkeletonProcess.exitValue() == 0);
         
         postSkeletonCreation();
 		
 		System.out.println("Invoking post creation processes...");
 		cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, serviceInfo.getName(),
 			serviceInfo.getDir(), serviceInfo.getPackage(), serviceInfo.getNamespace(), serviceInfo.getExtensions());
-		p = CommonTools.createAndOutputProcess(cmd);
-        new StreamDumpster(p.getInputStream(), System.out).start();
-        new StreamDumpster(p.getErrorStream(), System.err).start();
-		p.waitFor();
-		assertTrue("Service post creation process failed", p.exitValue() == 0);
+        System.out.println("EXECUTING COMMAND: " + cmd);
+		Process postCreateProcess = CommonTools.createAndOutputProcess(cmd);
+        new StreamDumpster(postCreateProcess.getInputStream(), System.out).start();
+        new StreamDumpster(postCreateProcess.getErrorStream(), System.err).start();
+        postCreateProcess.waitFor();
+		assertTrue("Service post creation process failed", postCreateProcess.exitValue() == 0);
         
         postSkeletonPostCreation();
 
 		System.out.println("Building created service...");
 		cmd = CommonTools.getAntAllCommand(serviceInfo.getDir());
-		p = CommonTools.createAndOutputProcess(cmd);
-        new StreamDumpster(p.getInputStream(), System.out).start();
-        new StreamDumpster(p.getErrorStream(), System.err).start();
-		p.waitFor();
-		assertTrue("Build process failed", p.exitValue() == 0);
+        System.out.println("EXECUTING COMMAND: " + cmd);
+		Process antAllProcess = CommonTools.createAndOutputProcess(cmd);
+        new StreamDumpster(antAllProcess.getInputStream(), System.out).start();
+        new StreamDumpster(antAllProcess.getErrorStream(), System.err).start();
+        antAllProcess.waitFor();
+		assertTrue("Build process failed", antAllProcess.exitValue() == 0);
 	}
     
     

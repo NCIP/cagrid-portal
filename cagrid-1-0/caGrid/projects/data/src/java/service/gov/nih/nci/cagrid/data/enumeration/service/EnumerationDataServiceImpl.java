@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.data.service.BaseServiceImpl;
 import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
+import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
 import gov.nih.nci.cagrid.wsenum.utils.EnumIteratorFactory;
 import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
@@ -37,7 +38,6 @@ import org.globus.ws.enumeration.EnumProvider;
 import org.globus.ws.enumeration.EnumResource;
 import org.globus.ws.enumeration.EnumResourceHome;
 import org.globus.ws.enumeration.VisibilityProperties;
-import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceKey;
 import org.globus.wsrf.container.ServiceHost;
 import org.globus.wsrf.utils.AddressingUtils;
@@ -55,6 +55,7 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 	public EnumerationDataServiceImpl() throws RemoteException {
 		super();
 	}
+    
 	
 	public EnumerationResponseContainer enumerationQuery(gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws RemoteException, 
 		gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType, 
@@ -82,7 +83,7 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 		try {
 		    EnumResourceHome resourceHome = EnumResourceHome.getEnumResourceHome();
             VisibilityProperties visibility = new VisibilityProperties(
-                ResourceContext.getResourceContext().getService() + "Enumeration", null);
+                "cagrid/" + WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME, null);
             
             EnumResource resource = resourceHome.createEnumeration(enumIter, visibility, false);
             ResourceKey key = resourceHome.getKey(resource);
@@ -91,7 +92,7 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
                 EnumProvider.createEnumerationContextType(key);
             
             URL baseURL = ServiceHost.getBaseURL();
-            String serviceURI = baseURL.toString() + ResourceContext.getResourceContext().getService() + "Enumeration";
+            String serviceURI = baseURL.toString() + "cagrid/" + WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME;
 
             EndpointReferenceType epr = AddressingUtils.createEndpointReference(serviceURI, key);
             

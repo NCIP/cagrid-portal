@@ -11,6 +11,9 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.xml.namespace.QName;
 
@@ -22,7 +25,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * 
  * @created Aug 22, 2006
- * @version $Id: CreationStep.java,v 1.4 2007-04-02 19:35:31 hastings Exp $
+ * @version $Id: CreationStep.java,v 1.5 2007-05-11 16:32:26 dervin Exp $
  */
 public class CreationStep extends Step {
     private String introduceDir;
@@ -36,10 +39,11 @@ public class CreationStep extends Step {
 
     public void runStep() throws Throwable {
         System.out.println("Creating service...");
-
         String cmd = CommonTools.getAntSkeletonCreationCommand(introduceDir, CreationTest.SERVICE_NAME,
             CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, "bdt");
         Process p = CommonTools.createAndOutputProcess(cmd);
+        new StreamDumpster(p.getInputStream(), System.out).start();
+        new StreamDumpster(p.getErrorStream(), System.err).start();
         p.waitFor();
         assertTrue("Creating new bdt service failed", p.exitValue() == 0);
         
@@ -49,12 +53,16 @@ public class CreationStep extends Step {
         cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, CreationTest.SERVICE_NAME,
             CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, "bdt");
         p = CommonTools.createAndOutputProcess(cmd);
+        new StreamDumpster(p.getInputStream(), System.out).start();
+        new StreamDumpster(p.getErrorStream(), System.err).start();
         p.waitFor();
         assertTrue("Service post creation process failed", p.exitValue() == 0);
 
         System.out.println("Building created service...");
         cmd = CommonTools.getAntAllCommand(CreationTest.SERVICE_DIR);
         p = CommonTools.createAndOutputProcess(cmd);
+        new StreamDumpster(p.getInputStream(), System.out).start();
+        new StreamDumpster(p.getErrorStream(), System.err).start();
         p.waitFor();
         assertTrue("Build process failed", p.exitValue() == 0);
     }
@@ -106,12 +114,35 @@ public class CreationStep extends Step {
         bdtQueryMethod.setOutput(bdtHandleOutput);
         
         // add the method to the service
-        mainService.getMethods().setMethod(
-            (MethodType[]) Utils.appendToArray(
-                mainService.getMethods().getMethod(), bdtQueryMethod));
+        CommonTools.addMethod(mainService, bdtQueryMethod);
         
         // save the model back to disk for the post creation process
         Utils.serializeDocument(serviceModelFile.getAbsolutePath(), serviceDesc,
             IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+    }
+    
+    
+    private static class StreamDumpster extends Thread {
+        private InputStream in;
+        private OutputStream out;
+        
+        public StreamDumpster(InputStream in, OutputStream out) {
+            this.in = in;
+            this.out = out;
+        }
+        
+        
+        public void run() {
+            byte[] buff = new byte[1024];
+            int len = -1;
+            try {
+                while ((len = in.read(buff)) != -1) {
+                    out.write(buff, 0, len);
+                    out.flush();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }
