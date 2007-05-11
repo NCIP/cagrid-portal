@@ -47,24 +47,47 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 
     public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation info)
         throws CreationExtensionException {
-        // execute steps to add ws-enumeration to the grid service
-        createServiceContext(info);
-        copySchemasToService(desc, info);
-        copyWsdlToService(desc, info);
-        copyLibrariesToService(info);
-        addEnumerationNamespaces(info);
-        addEnumerationMethods(info);
+        try {
+            if (!enumerationServiceContextExists(info)) {
+                // execute steps to add ws-enumeration to the grid service
+                createServiceContext(info);
+                copySchemasToService(desc, info);
+                copyWsdlToService(desc, info);
+                copyLibrariesToService(info);
+                addEnumerationNamespaces(info);
+                addEnumerationMethods(info);
+            }
+        } catch (CreationExtensionException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            // ex.printStackTrace(System.out);
+            // System.out.flush();
+            throw new CreationExtensionException(ex);
+        }
+    }
+    
+    
+    private boolean enumerationServiceContextExists(ServiceInformation info) {
+        if (info.getServices() != null && info.getServices().getService() != null) {
+            for (ServiceType service : info.getServices().getService()) {
+                if (WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME.equals(service.getName())
+                    && WsEnumConstants.CAGRID_ENUMERATION_SERVICE_PACKAGE.equals(service.getPackageName())
+                    && WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAMESPACE.equals(service.getNamespace())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
     private void createServiceContext(ServiceInformation info) {
-        ServiceType mainService = info.getServices().getService(0);
-        ServiceType service = new ServiceType();
-        service.setName(mainService.getName() + "Enumeration");
-        service.setPackageName(mainService.getPackageName() + ".enumeration");
-        service.setNamespace(mainService.getNamespace() + "/Enumeration");
-        service.setResourceFrameworkType(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE);
-        CommonTools.addService(info.getServices(), service);
+        ServiceType enumServiceContext = new ServiceType();
+        enumServiceContext.setName(WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME);
+        enumServiceContext.setPackageName(WsEnumConstants.CAGRID_ENUMERATION_SERVICE_PACKAGE);
+        enumServiceContext.setNamespace(WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAMESPACE);
+        enumServiceContext.setResourceFrameworkType(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE);
+        CommonTools.addService(info.getServices(), enumServiceContext);
     }
 
 
@@ -79,8 +102,8 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
             try {
                 Utils.copyFile(sourceSchemas[i], outFile);
             } catch (IOException ex) {
-                throw new CreationExtensionException("Error copying schema file " + sourceSchemas[i].getAbsolutePath(),
-                    ex);
+                throw new CreationExtensionException("Error copying schema file " 
+                    + sourceSchemas[i].getAbsolutePath(), ex);
             }
         }
     }
@@ -158,9 +181,8 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 
     private void addEnumerationMethods(ServiceInformation info) {
         // get the main service
-        String serviceName = info.getIntroduceServiceProperties().getProperty(
-            IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-        ServiceType service = CommonTools.getService(info.getServices(), serviceName + "Enumeration");
+        ServiceType service = CommonTools.getService(
+            info.getServices(), WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME);
 
         // Pull method
         MethodType pullMethod = new MethodType();
