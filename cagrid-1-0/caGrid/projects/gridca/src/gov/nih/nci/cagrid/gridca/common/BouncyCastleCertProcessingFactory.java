@@ -1,12 +1,11 @@
 /*
- * Portions of this file Copyright 1999-2005 University of Chicago
- * Portions of this file Copyright 1999-2005 The University of Southern California.
- *
- * This file or a portion of this file is licensed under the
- * terms of the Globus Toolkit Public License, found at
- * http://www.globus.org/toolkit/download/license.html.
- * If you redistribute this file, with or without
- * modifications, you must include this notice in the file.
+ * Portions of this file Copyright 1999-2005 University of Chicago Portions of
+ * this file Copyright 1999-2005 The University of Southern California. This
+ * file or a portion of this file is licensed under the terms of the Globus
+ * Toolkit Public License, found at
+ * http://www.globus.org/toolkit/download/license.html. If you redistribute this
+ * file, with or without modifications, you must include this notice in the
+ * file.
  */
 package gov.nih.nci.cagrid.gridca.common;
 
@@ -50,6 +49,7 @@ import org.globus.gsi.proxy.ext.ProxyCertInfo;
 import org.globus.gsi.proxy.ext.ProxyCertInfoExtension;
 import org.globus.gsi.proxy.ext.ProxyPolicy;
 
+
 /**
  * Provides certificate processing API such as creating new certificates,
  * certificate requests, etc.
@@ -58,8 +58,10 @@ public class BouncyCastleCertProcessingFactory {
 
 	private static BouncyCastleCertProcessingFactory factory;
 
+
 	protected BouncyCastleCertProcessingFactory() {
 	}
+
 
 	/**
 	 * Returns an instance of this class..
@@ -73,20 +75,6 @@ public class BouncyCastleCertProcessingFactory {
 		return factory;
 	}
 
-	/**
-	 * Creates a proxy certificate from the certificate request.
-	 * 
-	 * @see #createCertificate(InputStream, X509Certificate, PrivateKey, int,
-	 *      int, X509ExtensionSet, String) createCertificate
-	 */
-	public X509Certificate createCertificate(String provider,
-			InputStream certRequestInputStream, X509Certificate cert,
-			PrivateKey privateKey, int lifetime, int delegationMode)
-			throws IOException, GeneralSecurityException {
-		return createCertificate(provider, certRequestInputStream, cert,
-				privateKey, lifetime, delegationMode, (X509ExtensionSet) null,
-				null);
-	}
 
 	/**
 	 * Creates a proxy certificate from the certificate request.
@@ -94,14 +82,27 @@ public class BouncyCastleCertProcessingFactory {
 	 * @see #createCertificate(InputStream, X509Certificate, PrivateKey, int,
 	 *      int, X509ExtensionSet, String) createCertificate
 	 */
-	public X509Certificate createCertificate(String provider,
-			InputStream certRequestInputStream, X509Certificate cert,
-			PrivateKey privateKey, int lifetime, int delegationMode,
-			X509ExtensionSet extSet) throws IOException,
-			GeneralSecurityException {
-		return createCertificate(provider, certRequestInputStream, cert,
-				privateKey, lifetime, delegationMode, extSet, null);
+	public X509Certificate createCertificate(String provider, InputStream certRequestInputStream, X509Certificate cert,
+		PrivateKey privateKey, int lifetime, int delegationMode, String signatureAlgorithm) throws IOException,
+		GeneralSecurityException {
+		return createCertificate(provider, certRequestInputStream, cert, privateKey, lifetime, delegationMode,
+			(X509ExtensionSet) null, null, signatureAlgorithm);
 	}
+
+
+	/**
+	 * Creates a proxy certificate from the certificate request.
+	 * 
+	 * @see #createCertificate(InputStream, X509Certificate, PrivateKey, int,
+	 *      int, X509ExtensionSet, String) createCertificate
+	 */
+	public X509Certificate createCertificate(String provider, InputStream certRequestInputStream, X509Certificate cert,
+		PrivateKey privateKey, int lifetime, int delegationMode, X509ExtensionSet extSet, String signatureAlgorithm)
+		throws IOException, GeneralSecurityException {
+		return createCertificate(provider, certRequestInputStream, cert, privateKey, lifetime, delegationMode, extSet,
+			null, signatureAlgorithm);
+	}
+
 
 	/**
 	 * Creates a proxy certificate from the certificate request. (Signs a
@@ -138,27 +139,24 @@ public class BouncyCastleCertProcessingFactory {
 	 * @exception GeneralSecurityException
 	 *                if a security error occurs.
 	 */
-	public X509Certificate createCertificate(String provider,
-			InputStream certRequestInputStream, X509Certificate cert,
-			PrivateKey privateKey, int lifetime, int delegationMode,
-			X509ExtensionSet extSet, String cnValue) throws IOException,
-			GeneralSecurityException {
+	public X509Certificate createCertificate(String provider, InputStream certRequestInputStream, X509Certificate cert,
+		PrivateKey privateKey, int lifetime, int delegationMode, X509ExtensionSet extSet, String cnValue,
+		String signatureAlgorithm) throws IOException, GeneralSecurityException {
 
 		DERInputStream derin = new DERInputStream(certRequestInputStream);
 		DERObject reqInfo = derin.readObject();
-		PKCS10CertificationRequest certReq = new PKCS10CertificationRequest(
-				(ASN1Sequence) reqInfo);
+		PKCS10CertificationRequest certReq = new PKCS10CertificationRequest((ASN1Sequence) reqInfo);
 
 		boolean rs = certReq.verify();
 
 		if (!rs) {
-			throw new GeneralSecurityException(
-					"Certificate request verification failed!");
+			throw new GeneralSecurityException("Certificate request verification failed!");
 		}
 
-		return createProxyCertificate(provider, cert, privateKey, certReq
-				.getPublicKey(), lifetime, delegationMode, extSet, cnValue);
+		return createProxyCertificate(provider, cert, privateKey, certReq.getPublicKey(), lifetime, delegationMode,
+			extSet, cnValue, signatureAlgorithm);
 	}
+
 
 	/**
 	 * Loads a X509 certificate from the specified input stream. Input stream
@@ -170,27 +168,13 @@ public class BouncyCastleCertProcessingFactory {
 	 * @exception GeneralSecurityException
 	 *                if certificate failed to load.
 	 */
-	public X509Certificate loadCertificate(InputStream in) throws IOException,
-			GeneralSecurityException {
+	public X509Certificate loadCertificate(InputStream in) throws IOException, GeneralSecurityException {
 		DERInputStream derin = new DERInputStream(in);
 		DERObject certInfo = derin.readObject();
 		ASN1Sequence seq = ASN1Sequence.getInstance(certInfo);
 		return new X509CertificateObject(new X509CertificateStructure(seq));
 	}
 
-	/**
-	 * Creates a new proxy credential from the specified certificate chain and a
-	 * private key.
-	 * 
-	 * @see #createCredential(X509Certificate[], PrivateKey, int, int, int,
-	 *      X509ExtensionSet, String) createCredential
-	 */
-	public GlobusCredential createCredential(String provider,
-			X509Certificate[] certs, PrivateKey privateKey, int bits,
-			int lifetime, int delegationMode) throws GeneralSecurityException {
-		return createCredential(provider, certs, privateKey, bits, lifetime,
-				delegationMode, (X509ExtensionSet) null, null);
-	}
 
 	/**
 	 * Creates a new proxy credential from the specified certificate chain and a
@@ -199,13 +183,27 @@ public class BouncyCastleCertProcessingFactory {
 	 * @see #createCredential(X509Certificate[], PrivateKey, int, int, int,
 	 *      X509ExtensionSet, String) createCredential
 	 */
-	public GlobusCredential createCredential(String provider,
-			X509Certificate[] certs, PrivateKey privateKey, int bits,
-			int lifetime, int delegationMode, X509ExtensionSet extSet)
-			throws GeneralSecurityException {
-		return createCredential(provider, certs, privateKey, bits, lifetime,
-				delegationMode, extSet, null);
+	public GlobusCredential createCredential(String provider, X509Certificate[] certs, PrivateKey privateKey, int bits,
+		int lifetime, int delegationMode, String signatureAlgorithm) throws GeneralSecurityException {
+		return createCredential(provider, certs, privateKey, bits, lifetime, delegationMode, (X509ExtensionSet) null,
+			null, signatureAlgorithm);
 	}
+
+
+	/**
+	 * Creates a new proxy credential from the specified certificate chain and a
+	 * private key.
+	 * 
+	 * @see #createCredential(X509Certificate[], PrivateKey, int, int, int,
+	 *      X509ExtensionSet, String) createCredential
+	 */
+	public GlobusCredential createCredential(String provider, X509Certificate[] certs, PrivateKey privateKey, int bits,
+		int lifetime, int delegationMode, X509ExtensionSet extSet, String signatureAlgorithm)
+		throws GeneralSecurityException {
+		return createCredential(provider, certs, privateKey, bits, lifetime, delegationMode, extSet, null,
+			signatureAlgorithm);
+	}
+
 
 	/**
 	 * Creates a new proxy credential from the specified certificate chain and a
@@ -245,19 +243,17 @@ public class BouncyCastleCertProcessingFactory {
 	 * @exception GeneralSecurityException
 	 *                if a security error occurs.
 	 */
-	public GlobusCredential createCredential(String provider,
-			X509Certificate[] certs, PrivateKey privateKey, int bits,
-			int lifetime, int delegationMode, X509ExtensionSet extSet,
-			String cnValue) throws GeneralSecurityException {
+	public GlobusCredential createCredential(String provider, X509Certificate[] certs, PrivateKey privateKey, int bits,
+		int lifetime, int delegationMode, X509ExtensionSet extSet, String cnValue, String signatureAlgorithm)
+		throws GeneralSecurityException {
 
 		KeyPairGenerator keyGen = null;
 		keyGen = KeyPairGenerator.getInstance("RSA", "BC");
 		keyGen.initialize(bits);
 		KeyPair keyPair = keyGen.genKeyPair();
 
-		X509Certificate newCert = createProxyCertificate(provider, certs[0],
-				privateKey, keyPair.getPublic(), lifetime, delegationMode,
-				extSet, cnValue);
+		X509Certificate newCert = createProxyCertificate(provider, certs[0], privateKey, keyPair.getPublic(), lifetime,
+			delegationMode, extSet, cnValue, signatureAlgorithm);
 
 		X509Certificate[] newCerts = new X509Certificate[certs.length + 1];
 		newCerts[0] = newCert;
@@ -265,6 +261,7 @@ public class BouncyCastleCertProcessingFactory {
 
 		return new GlobusCredential(keyPair.getPrivate(), newCerts);
 	}
+
 
 	/**
 	 * Creates a certificate request from the specified subject DN and a key
@@ -279,11 +276,11 @@ public class BouncyCastleCertProcessingFactory {
 	 * @exception GeneralSecurityException
 	 *                if security error occurs.
 	 */
-	public byte[] createCertificateRequest(String subject, KeyPair keyPair)
-			throws GeneralSecurityException {
+	public byte[] createCertificateRequest(String subject, KeyPair keyPair) throws GeneralSecurityException {
 		X509Name name = new X509Name(subject);
 		return createCertificateRequest(name, "MD5WithRSA", keyPair);
 	}
+
 
 	/**
 	 * Creates a certificate request from the specified certificate and a key
@@ -300,13 +297,13 @@ public class BouncyCastleCertProcessingFactory {
 	 * @exception GeneralSecurityException
 	 *                if security error occurs.
 	 */
-	public byte[] createCertificateRequest(X509Certificate cert, KeyPair keyPair)
-			throws GeneralSecurityException {
+	public byte[] createCertificateRequest(X509Certificate cert, KeyPair keyPair) throws GeneralSecurityException {
 		String issuer = cert.getSubjectDN().getName();
 		X509Name subjectDN = new X509Name(issuer + ",CN=proxy");
 		String sigAlgName = cert.getSigAlgName();
 		return createCertificateRequest(subjectDN, sigAlgName, keyPair);
 	}
+
 
 	/**
 	 * Creates a certificate request from the specified subject name, signing
@@ -322,15 +319,16 @@ public class BouncyCastleCertProcessingFactory {
 	 * @exception GeneralSecurityException
 	 *                if security error occurs.
 	 */
-	public byte[] createCertificateRequest(X509Name subjectDN,
-			String sigAlgName, KeyPair keyPair) throws GeneralSecurityException {
+	public byte[] createCertificateRequest(X509Name subjectDN, String sigAlgName, KeyPair keyPair)
+		throws GeneralSecurityException {
 		DERConstructedSet attrs = null;
 		PKCS10CertificationRequest certReq = null;
-		certReq = new PKCS10CertificationRequest(sigAlgName, subjectDN, keyPair
-				.getPublic(), attrs, keyPair.getPrivate());
+		certReq = new PKCS10CertificationRequest(sigAlgName, subjectDN, keyPair.getPublic(), attrs, keyPair
+			.getPrivate());
 
 		return certReq.getEncoded();
 	}
+
 
 	/**
 	 * Creates a proxy certificate. A set of X.509 extensions can be optionally
@@ -397,11 +395,9 @@ public class BouncyCastleCertProcessingFactory {
 	 * @exception GeneralSecurityException
 	 *                if a security error occurs.
 	 */
-	public X509Certificate createProxyCertificate(String provider,
-			X509Certificate issuerCert, PrivateKey issuerKey,
-			PublicKey publicKey, int lifetime, int proxyType,
-			X509ExtensionSet extSet, String cnValue)
-			throws GeneralSecurityException {
+	public X509Certificate createProxyCertificate(String provider, X509Certificate issuerCert, PrivateKey issuerKey,
+		PublicKey publicKey, int lifetime, int proxyType, X509ExtensionSet extSet, String cnValue,
+		String signatureAlgorithm) throws GeneralSecurityException {
 
 		if (proxyType == GSIConstants.DELEGATION_LIMITED) {
 			int type = BouncyCastleUtil.getCertificateType(issuerCert);
@@ -413,8 +409,9 @@ public class BouncyCastleCertProcessingFactory {
 				proxyType = GSIConstants.GSI_2_LIMITED_PROXY;
 			} else {
 				// default to Globus OID
-				proxyType = (CertUtil.isGsi3Enabled()) ? GSIConstants.GSI_3_LIMITED_PROXY
-						: GSIConstants.GSI_2_LIMITED_PROXY;
+				proxyType = (CertUtil.isGsi3Enabled())
+					? GSIConstants.GSI_3_LIMITED_PROXY
+					: GSIConstants.GSI_2_LIMITED_PROXY;
 			}
 		} else if (proxyType == GSIConstants.DELEGATION_FULL) {
 			int type = BouncyCastleUtil.getCertificateType(issuerCert);
@@ -426,8 +423,9 @@ public class BouncyCastleCertProcessingFactory {
 				proxyType = GSIConstants.GSI_2_PROXY;
 			} else {
 				// Default to Globus OID
-				proxyType = (CertUtil.isGsi3Enabled()) ? GSIConstants.GSI_3_IMPERSONATION_PROXY
-						: GSIConstants.GSI_2_PROXY;
+				proxyType = (CertUtil.isGsi3Enabled())
+					? GSIConstants.GSI_3_IMPERSONATION_PROXY
+					: GSIConstants.GSI_2_PROXY;
 			}
 		}
 
@@ -460,9 +458,8 @@ public class BouncyCastleCertProcessingFactory {
 					// since limited has already been checked, this should work.
 					policy = new ProxyPolicy(ProxyPolicy.IMPERSONATION);
 				} else if ((proxyType == GSIConstants.GSI_3_RESTRICTED_PROXY)
-						|| (proxyType == GSIConstants.GSI_4_RESTRICTED_PROXY)) {
-					throw new IllegalArgumentException(
-							"Restricted proxy requires ProxyCertInfo extension");
+					|| (proxyType == GSIConstants.GSI_4_RESTRICTED_PROXY)) {
+					throw new IllegalArgumentException("Restricted proxy requires ProxyCertInfo extension");
 				} else {
 					throw new IllegalArgumentException("Invalid proxyType");
 				}
@@ -480,12 +477,10 @@ public class BouncyCastleCertProcessingFactory {
 
 			try {
 				// add ProxyCertInfo extension to the new cert
-				certGen.addExtension(x509Ext.getOid(), x509Ext.isCritical(),
-						x509Ext.getValue());
+				certGen.addExtension(x509Ext.getOid(), x509Ext.isCritical(), x509Ext.getValue());
 
 				// handle KeyUsage in issuer cert
-				TBSCertificateStructure crt = BouncyCastleUtil
-						.getTBSCertificateStructure(issuerCert);
+				TBSCertificateStructure crt = BouncyCastleUtil.getTBSCertificateStructure(issuerCert);
 
 				X509Extensions extensions = crt.getExtensions();
 				if (extensions != null) {
@@ -496,15 +491,12 @@ public class BouncyCastleCertProcessingFactory {
 					if (ext != null) {
 
 						// TBD: handle this better
-						if (extSet != null
-								&& (extSet.get(X509Extensions.KeyUsage.getId()) != null)) {
-							throw new GeneralSecurityException(
-									"KeyUsage extension present in X509ExtensionSet "
-											+ "and in issuer certificate.");
+						if (extSet != null && (extSet.get(X509Extensions.KeyUsage.getId()) != null)) {
+							throw new GeneralSecurityException("KeyUsage extension present in X509ExtensionSet "
+								+ "and in issuer certificate.");
 						}
 
-						DERBitString bits = (DERBitString) BouncyCastleUtil
-								.getExtensionObject(ext);
+						DERBitString bits = (DERBitString) BouncyCastleUtil.getExtensionObject(ext);
 
 						byte[] bytes = bits.getBytes();
 
@@ -519,8 +511,7 @@ public class BouncyCastleCertProcessingFactory {
 
 						bits = new DERBitString(bytes, bits.getPadBits());
 
-						certGen.addExtension(X509Extensions.KeyUsage, ext
-								.isCritical(), bits);
+						certGen.addExtension(X509Extensions.KeyUsage, ext.isCritical(), bits);
 					}
 				}
 
@@ -536,8 +527,7 @@ public class BouncyCastleCertProcessingFactory {
 			delegDN = "proxy";
 			serialNum = issuerCert.getSerialNumber();
 		} else {
-			throw new IllegalArgumentException("Unsupported proxyType : "
-					+ proxyType);
+			throw new IllegalArgumentException("Unsupported proxyType : " + proxyType);
 		}
 
 		// add specified extensions
@@ -546,13 +536,11 @@ public class BouncyCastleCertProcessingFactory {
 			while (iter.hasNext()) {
 				String oid = (String) iter.next();
 				// skip ProxyCertInfo extension
-				if (oid.equals(ProxyCertInfo.OID.getId())
-						|| oid.equals(ProxyCertInfo.OLD_OID.getId())) {
+				if (oid.equals(ProxyCertInfo.OID.getId()) || oid.equals(ProxyCertInfo.OLD_OID.getId())) {
 					continue;
 				}
 				x509Ext = (org.globus.gsi.X509Extension) extSet.get(oid);
-				certGen.addExtension(x509Ext.getOid(), x509Ext.isCritical(),
-						x509Ext.getValue());
+				certGen.addExtension(x509Ext.getOid(), x509Ext.isCritical(), x509Ext.getValue());
 			}
 		}
 
@@ -568,10 +556,9 @@ public class BouncyCastleCertProcessingFactory {
 
 		certGen.setSerialNumber(serialNum);
 		certGen.setPublicKey(publicKey);
-		certGen.setSignatureAlgorithm("md5WithRSA");
+		certGen.setSignatureAlgorithm(signatureAlgorithm);
 
-		GregorianCalendar date = new GregorianCalendar(TimeZone
-				.getTimeZone("GMT"));
+		GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 		/* Allow for a five minute clock skew here. */
 		date.add(Calendar.MINUTE, -5);
 		certGen.setNotBefore(date.getTime());
@@ -593,6 +580,7 @@ public class BouncyCastleCertProcessingFactory {
 		return certGen.generateX509Certificate(issuerKey, provider);
 	}
 
+
 	// ----------------- OLDER API ------------------------------
 
 	private X509ExtensionSet createExtensionSet(ProxyCertInfo proxyCertInfo) {
@@ -604,6 +592,7 @@ public class BouncyCastleCertProcessingFactory {
 		return set;
 	}
 
+
 	/**
 	 * @deprecated Please use
 	 *             {@link #createProxyCertificate(X509Certificate, PrivateKey, PublicKey,
@@ -613,15 +602,13 @@ public class BouncyCastleCertProcessingFactory {
 	 *             {@link org.globus.gsi.proxy.ext.ProxyCertInfoExtension 
 	 *             ProxyCertInfoExtension} class.
 	 */
-	public X509Certificate createProxyCertificate(String provider,
-			X509Certificate issuerCert, PrivateKey issuerKey,
-			PublicKey publicKey, int lifetime, int proxyType,
-			ProxyCertInfo proxyCertInfo, String cnValue)
-			throws GeneralSecurityException {
-		return createProxyCertificate(provider, issuerCert, issuerKey,
-				publicKey, lifetime, proxyType,
-				createExtensionSet(proxyCertInfo), cnValue);
+	public X509Certificate createProxyCertificate(String provider, X509Certificate issuerCert, PrivateKey issuerKey,
+		PublicKey publicKey, int lifetime, int proxyType, ProxyCertInfo proxyCertInfo, String cnValue,
+		String signatureAlgorithm) throws GeneralSecurityException {
+		return createProxyCertificate(provider, issuerCert, issuerKey, publicKey, lifetime, proxyType,
+			createExtensionSet(proxyCertInfo), cnValue, signatureAlgorithm);
 	}
+
 
 	/**
 	 * @deprecated Please use
@@ -632,27 +619,24 @@ public class BouncyCastleCertProcessingFactory {
 	 *             {@link org.globus.gsi.proxy.ext.ProxyCertInfoExtension 
 	 *             ProxyCertInfoExtension} class.
 	 */
-	public GlobusCredential createCredential(String provider,
-			X509Certificate[] certs, PrivateKey privateKey, int bits,
-			int lifetime, int delegationMode, ProxyCertInfo proxyCertInfoExt,
-			String cnValue) throws GeneralSecurityException {
-		return createCredential(provider, certs, privateKey, bits, lifetime,
-				delegationMode, createExtensionSet(proxyCertInfoExt), cnValue);
+	public GlobusCredential createCredential(String provider, X509Certificate[] certs, PrivateKey privateKey, int bits,
+		int lifetime, int delegationMode, ProxyCertInfo proxyCertInfoExt, String cnValue)
+		throws GeneralSecurityException {
+		return createCredential(provider, certs, privateKey, bits, lifetime, delegationMode,
+			createExtensionSet(proxyCertInfoExt), cnValue);
 	}
+
 
 	/**
 	 * @deprecated
-	 * 
 	 * @see #createCredential(X509Certificate[], PrivateKey, int, int, int,
 	 *      ProxyCertInfo, String) createCredential
 	 */
-	public GlobusCredential createCredential(String provider,
-			X509Certificate[] certs, PrivateKey privateKey, int bits,
-			int lifetime, int delegationMode, ProxyCertInfo proxyCertInfoExt)
-			throws GeneralSecurityException {
-		return createCredential(provider, certs, privateKey, bits, lifetime,
-				delegationMode, proxyCertInfoExt, null);
+	public GlobusCredential createCredential(String provider, X509Certificate[] certs, PrivateKey privateKey, int bits,
+		int lifetime, int delegationMode, ProxyCertInfo proxyCertInfoExt) throws GeneralSecurityException {
+		return createCredential(provider, certs, privateKey, bits, lifetime, delegationMode, proxyCertInfoExt, null);
 	}
+
 
 	/**
 	 * @deprecated Please use
@@ -663,29 +647,24 @@ public class BouncyCastleCertProcessingFactory {
 	 *             {@link org.globus.gsi.proxy.ext.ProxyCertInfoExtension 
 	 *             ProxyCertInfoExtension} class.
 	 */
-	public X509Certificate createCertificate(String provider,
-			InputStream certRequestInputStream, X509Certificate cert,
-			PrivateKey privateKey, int lifetime, int delegationMode,
-			ProxyCertInfo proxyCertInfoExt, String cnValue) throws IOException,
-			GeneralSecurityException {
-		return createCertificate(provider, certRequestInputStream, cert,
-				privateKey, lifetime, delegationMode,
-				createExtensionSet(proxyCertInfoExt), cnValue);
+	public X509Certificate createCertificate(String provider, InputStream certRequestInputStream, X509Certificate cert,
+		PrivateKey privateKey, int lifetime, int delegationMode, ProxyCertInfo proxyCertInfoExt, String cnValue)
+		throws IOException, GeneralSecurityException {
+		return createCertificate(provider, certRequestInputStream, cert, privateKey, lifetime, delegationMode,
+			createExtensionSet(proxyCertInfoExt), cnValue);
 	}
+
 
 	/**
 	 * @deprecated
-	 * 
 	 * @see #createCertificate(InputStream, X509Certificate, PrivateKey, int,
 	 *      int, ProxyCertInfo, String) createCertificate
 	 */
-	public X509Certificate createCertificate(String provider,
-			InputStream certRequestInputStream, X509Certificate cert,
-			PrivateKey privateKey, int lifetime, int delegationMode,
-			ProxyCertInfo proxyCertInfoExt) throws IOException,
-			GeneralSecurityException {
-		return createCertificate(provider, certRequestInputStream, cert,
-				privateKey, lifetime, delegationMode, proxyCertInfoExt, null);
+	public X509Certificate createCertificate(String provider, InputStream certRequestInputStream, X509Certificate cert,
+		PrivateKey privateKey, int lifetime, int delegationMode, ProxyCertInfo proxyCertInfoExt) throws IOException,
+		GeneralSecurityException {
+		return createCertificate(provider, certRequestInputStream, cert, privateKey, lifetime, delegationMode,
+			proxyCertInfoExt, null);
 	}
 
 }

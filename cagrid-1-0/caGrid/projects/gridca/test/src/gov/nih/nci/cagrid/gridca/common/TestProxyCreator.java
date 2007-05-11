@@ -13,6 +13,7 @@ import junit.framework.TestCase;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.globus.gsi.GlobusCredential;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -27,17 +28,21 @@ public class TestProxyCreator extends TestCase {
 		return s.replace('/', ',');
 	}
 
+
 	public void testCreateProxy() {
 		checkCreateProxy(Integer.MAX_VALUE);
 	}
+
 
 	public void testDelegationProxyLength0() {
 		checkCreateProxy(0);
 	}
 
+
 	public void testDelegationProxyLength5() {
 		checkCreateProxy(5);
 	}
+
 
 	public void checkCreateProxy(int length) {
 		try {
@@ -54,22 +59,16 @@ public class TestProxyCreator extends TestCase {
 			assertNotNull(proxyPublicKey);
 			X509Certificate cert = gridCred.getCertificate();
 			assertNotNull(cert);
-			X509Certificate[] certs = ProxyCreator
-					.createImpersonationProxyCertificate(CA.PROVIDER.getName(),
-							cert, key, proxyPublicKey, hours, minutes, seconds,
-							length);
+			X509Certificate[] certs = ProxyCreator.createImpersonationProxyCertificate(CA.PROVIDER.getName(), cert,
+				key, proxyPublicKey, hours, minutes, seconds, length, CA.SIGNATURE_ALGORITHM);
 			assertNotNull(certs);
 			assertEquals(2, certs.length);
-			GlobusCredential cred = new GlobusCredential(pair.getPrivate(),
-					certs);
+			GlobusCredential cred = new GlobusCredential(pair.getPrivate(), certs);
 			assertNotNull(cred);
 			long timeLeft = cred.getTimeLeft();
-			assertEquals(cert.getSubjectDN().toString(), identityToSubject(cred
-					.getIdentity()));
-			assertEquals(cred.getIssuer(),
-					identityToSubject(cred.getIdentity()));
-			assertEquals(length, CertificateExtensionsUtil
-					.getDelegationPathLength(certs[0]));
+			assertEquals(cert.getSubjectDN().toString(), identityToSubject(cred.getIdentity()));
+			assertEquals(cred.getIssuer(), identityToSubject(cred.getIdentity()));
+			assertEquals(length, CertificateExtensionsUtil.getDelegationPathLength(certs[0]));
 
 			long okMax = hours * 60 * 60;
 			// Allow some Buffer
@@ -84,6 +83,7 @@ public class TestProxyCreator extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	public void testInvalidProxyTimeToGreat() {
 		try {
@@ -100,16 +100,14 @@ public class TestProxyCreator extends TestCase {
 			assertNotNull(proxyPublicKey);
 			X509Certificate cert = gridCred.getCertificate();
 			assertNotNull(cert);
-			ProxyCreator.createImpersonationProxyCertificate(CA.PROVIDER
-					.getName(), cert, key, proxyPublicKey, hours, minutes,
-					seconds);
+			ProxyCreator.createImpersonationProxyCertificate(CA.PROVIDER.getName(), cert, key, proxyPublicKey, hours,
+				minutes, seconds, CA.SIGNATURE_ALGORITHM);
 			assertTrue(false);
 		} catch (Exception e) {
-			assertEquals(
-					"Cannot create a proxy that expires after issuing certificate.",
-					e.getMessage());
+			assertEquals("Cannot create a proxy that expires after issuing certificate.", e.getMessage());
 		}
 	}
+
 
 	protected void setUp() throws Exception {
 		super.setUp();
