@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.ui.creation;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
@@ -302,26 +301,11 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 
 
 	private void setFeatureStatus() {
-        /*
-		if (getWsEnumCheckBox().isSelected()) {
-			if (!wsEnumExtensionUsed()) {
-				// add the ws-enum extension
-				ExtensionDescription desc = ExtensionsLoader.getInstance()
-					.getExtension(WS_ENUM_EXTENSION_NAME);
-				ExtensionType extension = new ExtensionType();
-				extension.setName(desc.getServiceExtensionDescription().getName());
-				extension.setExtensionType(desc.getExtensionType());
-				extension.setVersion(desc.getVersion());
-				getServiceInfo().getExtensions().setExtension(
-					(ExtensionType[]) Utils.appendToArray(
-						getServiceInfo().getExtensions().getExtension(), extension));
-			}
-		}
-        */
-
 		if (getBdtCheckBox().isSelected()) {
 			if (!bdtExtensionUsed()) {
 				// add the BDT extension
+                // TODO: get rid of this and use the extension tools to add
+                // the BDT extension in the data extension's feature creator
 				ExtensionDescription desc = ExtensionsLoader.getInstance()
 					.getExtension(BDT_EXTENSIONS_NAME);
 				ExtensionType bdtExtension = new ExtensionType();
@@ -367,19 +351,6 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 					(ServiceExtensionDescriptionType) extensionDescriptors.get(i);
 			if (ex.getName().equals(WS_ENUM_EXTENSION_NAME)) {
 				return true;
-			}
-		}
-		return false;
-	}
-
-
-	private boolean wsEnumExtensionUsed() {
-		ServiceInformation info = getServiceInfo();
-		if (info.getExtensions() != null && info.getExtensions().getExtension() != null) {
-			for (int i = 0; i < info.getExtensions().getExtension().length; i++) {
-				if (info.getExtensions().getExtension(i).getName().equals(WS_ENUM_EXTENSION_NAME)) {
-					return true;
-				}
 			}
 		}
 		return false;
