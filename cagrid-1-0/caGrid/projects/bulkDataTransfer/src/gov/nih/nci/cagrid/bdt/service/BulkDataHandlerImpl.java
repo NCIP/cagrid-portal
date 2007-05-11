@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.bdt.service;
 import gov.nih.nci.cagrid.bdt.service.globus.resource.BDTException;
 import gov.nih.nci.cagrid.bdt.service.globus.resource.BDTResourceI;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
+import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
 
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -44,22 +45,21 @@ public class BulkDataHandlerImpl extends BulkDataHandlerImplBase {
 			} catch (NamingException ex) {
 			    throw new RemoteException(ex.getMessage(), ex);
 			}
+            
             VisibilityProperties visibility = new VisibilityProperties(
-                ResourceContext.getResourceContext().getService() + "Enumeration", null);
+                "cagrid/" + WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME, null);
             
             EnumResource resource = resourceHome.createEnumeration(iter, visibility, false);
             ResourceKey key = resourceHome.getKey(resource);
             
 			try {
-                
                 EnumerationContextType enumContext = 
                     EnumProvider.createEnumerationContextType(key);
                 
-                // create the enumeration subservice URL
                 URL baseURL = ServiceHost.getBaseURL();
-                String serviceURI = baseURL.toString() 
-                    + ResourceContext.getResourceContext().getService() + "Enumeration";
+                String serviceURI = baseURL.toString() + "cagrid/" + WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME;
 
+                
                 EndpointReferenceType epr = AddressingUtils.createEndpointReference(serviceURI, key);
                 
                 EnumerationResponseContainer container = new EnumerationResponseContainer();
