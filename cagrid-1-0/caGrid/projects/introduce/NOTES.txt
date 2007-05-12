@@ -35,6 +35,10 @@ Upgrade Cycle
 
 To Do:  
 
+make gui work one service at a time
+
+make deployer deploy remotely
+
 when updating introduce software there will be a problem with the files in the users home space that will need to also be updated.
 
 need to validate soapfix
