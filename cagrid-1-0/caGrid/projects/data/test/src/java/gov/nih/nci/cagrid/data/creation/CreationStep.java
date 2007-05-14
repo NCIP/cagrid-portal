@@ -48,7 +48,7 @@ public class CreationStep extends Step {
 		
 		System.out.println("Invoking post creation processes...");
 		cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, serviceInfo.getName(),
-			serviceInfo.getDir(), serviceInfo.getPackage(), serviceInfo.getNamespace(), getServiceExtensions(), true);
+			serviceInfo.getDir(), serviceInfo.getPackage(), serviceInfo.getNamespace(), getServiceExtensions());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process postCreateProcess = CommonTools.createAndOutputProcess(cmd);
         new StreamPrinter(postCreateProcess.getInputStream(), System.out).start();
