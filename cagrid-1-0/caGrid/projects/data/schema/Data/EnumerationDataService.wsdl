@@ -96,22 +96,6 @@
       <input message="wns0:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest" />
       <output message="wns0:GetServiceSecurityMetadataResponse" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataResponse" />
     </operation>
-    <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="PullOp">
-      <wsdl:input xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns1:PullMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/enumeration/Pull" />
-      <wsdl:output xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns1:PullResponseMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/enumeration/PullResponse" />
-    </wsdl:operation>
-    <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="RenewOp">
-      <wsdl:input xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns1:RenewMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/enumeration/Renew" />
-      <wsdl:output xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns1:RenewResponseMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/enumeration/RenewResponse" />
-    </wsdl:operation>
-    <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="GetStatusOp">
-      <wsdl:input xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns1:GetStatusMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/enumeration/GetStatus" />
-      <wsdl:output xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns1:GetStatusResponseMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/enumeration/GetStatusResponse" />
-    </wsdl:operation>
-    <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="ReleaseOp">
-      <wsdl:input xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns1:ReleaseMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/enumeration/Release" />
-      <wsdl:output xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns1:ReleaseResponseMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/enumeration/ReleaseResponse" />
-    </wsdl:operation>
   </portType>
 </definitions>
 
