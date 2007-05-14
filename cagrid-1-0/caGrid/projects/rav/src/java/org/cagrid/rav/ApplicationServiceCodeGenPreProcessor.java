@@ -27,6 +27,8 @@ import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPreProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 
+import org.apache.axis.message.MessageElement;
+
 /**
  * @author madduri
  * 
@@ -59,7 +61,10 @@ public class ApplicationServiceCodeGenPreProcessor implements
 
 		try {
 			this.appTypeData = ExtensionDataUtils.getExtensionData(data);
-			this.methodName = this.appTypeData.getApplicationName();
+			// should get method name differently
+			//this.methodName = this.appTypeData.getApplicationName();
+			this.methodName = ExtensionDataUtils.getMethodName(this.appTypeData.getApplicationName());
+			
 			this.appDescritption = this.appTypeData.getDescription();
 			this.appVersion = this.appTypeData.getApplicationVersion();
 			for (int i = 0; i < methods.getMethod().length; i++) {
@@ -81,17 +86,22 @@ public class ApplicationServiceCodeGenPreProcessor implements
 			MethodTypeInputsInput input1 = new MethodTypeInputsInput();
 			input1.setQName(new QName("http://www.w3.org/2001/XMLSchema",
 					"string"));
+			input1.setName("arguments");
+			input1.setIsArray(true);
+			/*MethodTypeInputsInput input1 = new MethodTypeInputsInput();
+			input1.setQName(new QName("http://www.w3.org/2001/XMLSchema",
+					"string"));
 			input1.setName("foo");
-			input1.setIsArray(false);
+			input1.setIsArray(false);*/
 			// create a new input param
-			MethodTypeInputsInput input2 = new MethodTypeInputsInput();
+			/*MethodTypeInputsInput input2 = new MethodTypeInputsInput();
 			input2.setQName(new QName("http://www.w3.org/2001/XMLSchema",
 					"integer"));
 			input2.setName("bar");
-			input2.setIsArray(false);
-			MethodTypeInputsInput[] newInputs = new MethodTypeInputsInput[2];
+			input2.setIsArray(false);*/
+			MethodTypeInputsInput[] newInputs = new MethodTypeInputsInput[1];
 			newInputs[0] = input1;
-			newInputs[1] = input2;
+			//newInputs[1] = input2;
 			MethodTypeInputs inputs = new MethodTypeInputs();
 			inputs.setInput(newInputs);
 			method.setInputs(inputs);

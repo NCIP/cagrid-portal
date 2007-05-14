@@ -26,6 +26,7 @@
     <property name="lib.dir" value="${basedir}/lib" />
     <property name="ext.lib.dir" value="${basedir}/ext/lib" />
     <property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
+    <property name="introduce.extensions.dir" location="../introduce/extensions" />
 
     <!-- testing stuff -->
     <property name="test.dir" location="${basedir}/test" />

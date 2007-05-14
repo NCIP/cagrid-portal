@@ -6,9 +6,11 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.CreationExtensionUIDialog;
-
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
+import javax.swing.JDialog;
 
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
@@ -17,8 +19,10 @@ import java.awt.Insets;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import java.awt.ComponentOrientation;
@@ -28,13 +32,17 @@ import java.awt.event.ActionListener;
 import org.apache.axis.message.MessageElement;
 import org.ggf.schemas.jsdl._2005._11.jsdl.Application_Type;
 import java.io.File;
+import java.awt.Dimension;
+import javax.swing.JCheckBox;
+import javax.swing.JTable;
 
-public class ApplicationServicePanel extends CreationExtensionUIDialog {
+public class ApplicationServicePanel extends CreationExtensionUIDialog  {
+//public class ApplicationServicePanel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	public static final String RAV_EXTENSION = "rav";  //  @jve:decl-index=0:
 	private JPanel browserPanel = null;
-	private JPanel argsPanel = null;
+	
 	private JLabel jLabel = null;
 	private JTextField jTextField = null;
 	private JButton jButton = null;
@@ -52,13 +60,30 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 	private JFileChooser fileChooser = null;
 	
 	private Application_Type appType = null;  //  @jve:decl-index=0:
+	private JCheckBox jCheckBox = null;
+	private JLabel jLabel4 = null;
 	
+	
+	// Args Panel
+	private JPanel argsPanel = null;
+    private JPanel commandArgsTableContainerPanel = null;
+    private JScrollPane commandArgsTableScrollPane = null;
+    private CommandArgsTable commandArgsTable = null;
+    private JButton addCommandArgsButton = null;
+    private JButton removeCommandArgsButton = null;
+    private JTextField commandArgsKeyTextField = null;
+    private JTextField commandArgsValueTextField = null;
+    private JLabel commandArgsKeyLabel = null;
+    private JLabel commandArgsValueLabel = null;
+    private JPanel commandArgsButtonPanel = null;
+    private JPanel commandArgsControlPanel = null;
 	/**
 	 * This is the default constructor
 	 */
 	public ApplicationServicePanel(Frame f, 
 			ServiceExtensionDescriptionType desc, ServiceInformation info) {
-		super(f, desc, info);
+		
+		super(f, desc, info);//super(f, true);
 		initialize();
 	}
 
@@ -81,22 +106,50 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.gridy = 0;
-		this.setSize(536, 191);
+		this.setSize(536, 245);
 		this.setLayout(new GridBagLayout());
 		this.setName("ApplicationServicePanel");
-		this.add(getBrowserPanel(), gridBagConstraints);
-		this.add(getArgsPanel(), gridBagConstraints1);
+		
+		JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("Application Information", null,
+        				  getBrowserPanel(),
+                          "desc"); //tooltip text
+        tabbedPane.addTab("Arguments", null,
+        				  getArgsPanel(),
+                          "test"); //tooltip text
+
+		
+		//this.add(getBrowserPanel(), gridBagConstraints);
+		//this.add(getArgsPanel(), gridBagConstraints1);
 		this.setTitle("Remote Application Virtualization Environment");
 		appType = new Application_Type();
+		this.setContentPane(tabbedPane);
 	}
 
+	
+	
 	/**
 	 * This method initializes browserPanel	
+	 * BrowserPanel is the first tab
 	 * 	
 	 * @return javax.swing.JPanel	
+	 * 
 	 */
 	private JPanel getBrowserPanel() {
 		if (browserPanel == null) {
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.gridx = 1;
+			gridBagConstraints14.gridy = 5;
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.anchor = GridBagConstraints.WEST;
+			gridBagConstraints13.gridy = 4;
+			jLabel4 = new JLabel();
+			jLabel4.setText("Deploy as GRAM Job");
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 1;
+			gridBagConstraints12.anchor = GridBagConstraints.WEST;
+			gridBagConstraints12.gridy = 4;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.gridx = 2;
 			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
@@ -190,6 +243,9 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 			browserPanel.add(getJTextField3(), gridBagConstraints11);
 			
 			browserPanel.add(getJButton(), gridBagConstraints4);
+			browserPanel.add(getJCheckBox(), gridBagConstraints12);
+			browserPanel.add(jLabel4, gridBagConstraints13);
+			browserPanel.add(getJButton1(), gridBagConstraints14);
 		}
 		return browserPanel;
 	}
@@ -201,20 +257,238 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 	 */
 	private JPanel getArgsPanel() {
 		if (argsPanel == null) {
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.anchor = GridBagConstraints.SOUTHWEST;
-			gridBagConstraints6.gridx = 3;
-			gridBagConstraints6.gridheight = 4;
-			gridBagConstraints6.gridwidth = 41;
-			gridBagConstraints6.gridy = 6;
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.fill = GridBagConstraints.BOTH;
+			gridBagConstraints15.gridy = 0;
+			gridBagConstraints15.weightx = 1.0;
+			gridBagConstraints15.weighty = 1.0;
+			gridBagConstraints15.gridx = 0;
+			
+
+            GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+            gridBagConstraints16.gridx = 0;
+            gridBagConstraints16.fill = GridBagConstraints.BOTH;
+            gridBagConstraints16.gridy = 1;
+            
+            
 			argsPanel = new JPanel();
 			argsPanel.setLayout(new GridBagLayout());
 			argsPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-			argsPanel.add(getJButton1(), gridBagConstraints6);
+			argsPanel.add(getCommandArgsTableContainerPanel(), gridBagConstraints15);
+			argsPanel.add(getCommandArgsControlPanel(), gridBagConstraints16);
+			
+			
 		}
 		return argsPanel;
 	}
 
+
+
+    /**
+     * This method initializes servicePropertiesTableContainerPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getCommandArgsTableContainerPanel() {
+        if (commandArgsTableContainerPanel == null) {
+            GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
+            gridBagConstraints28.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints28.gridx = 0;
+            gridBagConstraints28.gridy = 0;
+            gridBagConstraints28.weightx = 1.0;
+            gridBagConstraints28.weighty = 1.0;
+            gridBagConstraints28.insets = new java.awt.Insets(5, 5, 5, 5);
+            commandArgsTableContainerPanel = new JPanel();
+            commandArgsTableContainerPanel.setLayout(new GridBagLayout());
+            commandArgsTableContainerPanel.add(getCommandArgsTableScrollPane(), gridBagConstraints28);
+        }
+        return commandArgsTableContainerPanel;
+    }
+
+
+    /**
+     * This method initializes servicePropertiesTableScrollPane
+     * 
+     * @return javax.swing.JScrollPane
+     */
+    private JScrollPane getCommandArgsTableScrollPane() {
+        if (commandArgsTableScrollPane == null) {
+        	commandArgsTableScrollPane = new JScrollPane();
+        	commandArgsTableScrollPane.setViewportView(getCommandArgsTable());
+        }
+        return commandArgsTableScrollPane;
+    }
+
+
+    /**
+     * This method initializes servicePropertiesTable
+     * 
+     * @return javax.swing.JTable
+     */
+    private CommandArgsTable getCommandArgsTable() {
+        if (commandArgsTable == null) {
+        	commandArgsTable = new CommandArgsTable(/*info*/);
+        }
+        return commandArgsTable;
+    }
+
+    
+    
+    private JPanel getCommandArgsControlPanel() {
+        if (commandArgsControlPanel == null) {
+
+             GridBagConstraints gridBagConstraints42 = new GridBagConstraints();
+             gridBagConstraints42.gridx = 1;
+             gridBagConstraints42.fill = java.awt.GridBagConstraints.BOTH;
+             gridBagConstraints42.gridwidth = 1;
+             gridBagConstraints42.gridheight = 4;
+             gridBagConstraints42.gridy = 0;
+             GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
+             gridBagConstraints41.gridx = 0;
+             gridBagConstraints41.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+             gridBagConstraints41.insets = new java.awt.Insets(2, 2, 2, 2);
+             gridBagConstraints41.gridy = 2;
+            
+             GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
+             gridBagConstraints40.gridx = 0;
+             gridBagConstraints40.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+             gridBagConstraints40.insets = new java.awt.Insets(2, 2, 2, 2);
+             gridBagConstraints40.gridy = 0;
+             
+             GridBagConstraints gridBagConstraints39 = new GridBagConstraints();
+             gridBagConstraints39.fill = java.awt.GridBagConstraints.HORIZONTAL;
+             gridBagConstraints39.gridy = 3;
+             gridBagConstraints39.weightx = 1.0;
+             gridBagConstraints39.insets = new java.awt.Insets(2, 2, 10, 10);
+             gridBagConstraints39.gridx = 0;
+             GridBagConstraints gridBagConstraints38 = new GridBagConstraints();
+             gridBagConstraints38.fill = java.awt.GridBagConstraints.HORIZONTAL;
+             gridBagConstraints38.gridy = 1;
+             gridBagConstraints38.weightx = 1.0;
+             gridBagConstraints38.insets = new java.awt.Insets(2, 2, 10, 10);
+             gridBagConstraints38.gridx = 0;
+             
+             commandArgsValueLabel = new JLabel();
+             commandArgsValueLabel.setText("Value:");
+             commandArgsKeyLabel = new JLabel();
+             commandArgsKeyLabel.setText("Key:");
+             
+             commandArgsControlPanel = new JPanel();
+             commandArgsControlPanel.setLayout(new GridBagLayout());
+             commandArgsControlPanel.add(getCommandArgsKeyTextField(), gridBagConstraints38);
+             commandArgsControlPanel.add(getCommandArgsValueTextField(), gridBagConstraints39);
+             commandArgsControlPanel.add(commandArgsKeyLabel, gridBagConstraints40);
+             commandArgsControlPanel.add(commandArgsValueLabel, gridBagConstraints41);
+             commandArgsControlPanel.add(getCommandArgsButtonPanel(), gridBagConstraints42);
+             
+        }
+        return commandArgsControlPanel;
+    }
+	
+    /**
+     * This method initializes servicePropertiesButtonPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getCommandArgsButtonPanel() {
+        if (commandArgsButtonPanel == null) {
+            GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
+            gridBagConstraints37.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints37.gridy = 0;
+            gridBagConstraints37.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints37.gridx = 0;
+            GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
+            gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints32.gridy = 1;
+            gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints32.gridx = 0;
+            commandArgsButtonPanel = new JPanel();
+            commandArgsButtonPanel.setLayout(new GridBagLayout());
+            commandArgsButtonPanel.add(getRemoveCommandArgsButton(), gridBagConstraints32);
+            commandArgsButtonPanel.add(getAddCommandArgsButton(), gridBagConstraints37);
+        }
+        return commandArgsButtonPanel;
+    }
+    
+    /**
+     * This method initializes addServiceProperyButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getAddCommandArgsButton() {
+        if (addCommandArgsButton == null) {
+        	addCommandArgsButton = new JButton();
+        	addCommandArgsButton.setText("Add");
+        	addCommandArgsButton.setIcon(PortalLookAndFeel.getAddIcon());
+        	addCommandArgsButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    // TODO - might want to do some extra checks here 
+                	if ((getCommandArgsKeyTextField().getText().length() != 0) && CommonTools.isValidJavaField(getCommandArgsKeyTextField().getText())) {
+                        String key = getCommandArgsKeyTextField().getText();
+                        String value = getCommandArgsValueTextField().getText();
+                       
+                        getCommandArgsTable().addRow(key, value);
+                    } else {
+                    	System.out.println("ERROR specifying command args - key null");
+                        //JOptionPane
+                        //    .showMessageDialog(ModificationViewer.this,
+                        //        "Service Property key must be a valid java identifier, beginning with a lowercase character.");
+                    }
+                }
+            });
+        }
+        return addCommandArgsButton;
+    }
+
+
+    /**
+     * This method initializes removeServicePropertyButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getRemoveCommandArgsButton() {
+        if (removeCommandArgsButton == null) {
+        	removeCommandArgsButton = new JButton();
+        	removeCommandArgsButton.setText("Remove");
+        	removeCommandArgsButton.setIcon(PortalLookAndFeel.getRemoveIcon());
+        	removeCommandArgsButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        getCommandArgsTable().removeSelectedRow();
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                        //ErrorDialog.showErrorDialog(e1);
+                    }
+                }
+            });
+        }
+        return removeCommandArgsButton;
+    }
+	
+    /**
+     * This method initializes servicePropertyKeyTextField
+     * 
+     * @return javax.swing.JTextField
+     */
+    private JTextField getCommandArgsKeyTextField() {
+        if (commandArgsKeyTextField == null) {
+        	commandArgsKeyTextField = new JTextField();
+        }
+        return commandArgsKeyTextField;
+    }
+    
+    /**
+     * This method initializes servicePropertyKeyTextField
+     * 
+     * @return javax.swing.JTextField
+     */
+    private JTextField getCommandArgsValueTextField() {
+        if (commandArgsValueTextField == null) {
+        	commandArgsValueTextField = new JTextField();
+        }
+        return commandArgsValueTextField;
+    }
+    
 	/**
 	 * This method initializes jTextField	
 	 * 	
@@ -277,8 +551,8 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 					if(!(getJTextField().getText().trim()).equals("")) {
 					
 						appType.setApplicationName(getJTextField().getText().trim());
-						appType.setApplicationVersion(getJTextField1().getText().trim());
-						appType.setDescription(getJTextField2().getText().trim());
+						appType.setApplicationVersion(getJTextField2().getText().trim());
+						appType.setDescription(getJTextField1().getText().trim());
 						//TODO: Handle the extension elements to JSDL Application_Type properly
 						MessageElement[] any_element = new MessageElement[1];
 						any_element[0] = new MessageElement(getJTextField3().getText().trim(), "foo");
@@ -347,6 +621,20 @@ public class ApplicationServicePanel extends CreationExtensionUIDialog {
 		MessageElement element = new MessageElement(Application_Type.getTypeDesc().getXmlType(), appType1);
 		ExtensionTools.updateExtensionDataElement(data, element);
 	}
+
+	/**
+	 * This method initializes jCheckBox	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getJCheckBox() {
+		if (jCheckBox == null) {
+			jCheckBox = new JCheckBox();
+		}
+		return jCheckBox;
+	}
+
+
 	
 
-}  //  @jve:decl-index=0:visual-constraint="8,8"
+}  //  @jve:decl-index=0:visual-constraint="27,29"

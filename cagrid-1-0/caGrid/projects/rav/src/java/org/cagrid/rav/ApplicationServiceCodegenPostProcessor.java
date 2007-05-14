@@ -20,6 +20,8 @@ import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 
+import org.apache.axis.message.MessageElement;
+
 /**
  * @author madduri
  *
@@ -28,7 +30,7 @@ public class ApplicationServiceCodegenPostProcessor implements CodegenExtensionP
 
 	private static final Logger logger = Logger.getLogger(ApplicationServiceCodegenPostProcessor.class);
 	
-	private static final String RUNTIME_EXEC_CODE = "Runtime.getRuntime().exec(";
+	private static final String RUNTIME_EXEC_CODE = "Runtime.getRuntime().exec";
 	
 	/* (non-Javadoc)
 	 * @see gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor#postCodegen(gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType, gov.nih.nci.cagrid.introduce.common.ServiceInformation)
@@ -49,9 +51,23 @@ public class ApplicationServiceCodegenPostProcessor implements CodegenExtensionP
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("************HH**********************************");
+		System.out.println("APP:" + appTypeData.getApplicationName() + " VER:" + appTypeData.getApplicationVersion() +	" DESC:" + appTypeData.getDescription() );
+		MessageElement [] elements = (MessageElement [])appTypeData.get_any();
+		System.out.println("NAME:" + elements[0].getName() + ", "  + elements[0].getValue());
+		
+		
 		MethodsType methods = info.getServices().getService(0).getMethods();
 		String methodSignatureStart = null;
-		String methodName = appTypeData.getApplicationName();
+		
+		//TODO METHODNAME
+		//String applicationName = appTypeData.getApplicationName();
+		String applicationName = ExtensionDataUtils.delimitSlashes(appTypeData.getApplicationName());
+		//System.out.println("SLASHES DELIM");
+		//System.out.println(applicationName);
+		//String methodName = appTypeData.getDescription();
+		String methodName = ExtensionDataUtils.getMethodName(appTypeData.getApplicationName());
+		
 		int i = 0;
 		for (i = 0; i < methods.getMethod().length; i++) {
 			if (methods.getMethod()[i].getName().equals(methodName)) {
@@ -90,9 +106,55 @@ public class ApplicationServiceCodegenPostProcessor implements CodegenExtensionP
             }
             String serviceMethod = source.substring(startOfMethod, endOfMethod);
             System.out.println("serviceMethod: " + serviceMethod + " " + startOfMethod + " " + endOfMethod + " " + source.length());
-            serviceMethod = serviceMethod.substring(0, serviceMethod.indexOf("}"));
-            serviceMethod = serviceMethod + this.RUNTIME_EXEC_CODE + "\" " + methodName + "\");}";
-            String temp = this.RUNTIME_EXEC_CODE + "\" " + methodName + "\"); " + "\n" + "return true; \n}";
+            // where is this string used??
+            //serviceMethod = serviceMethod.substring(0, serviceMethod.indexOf("}"));
+            // TODO - cant add .exe like this
+            //serviceMethod = serviceMethod + this.RUNTIME_EXEC_CODE + "\" " + methodName + ".exe\");}";
+           
+            /*
+             Generates code like
+            
+			* System.out.println("Attempting to execute ");
+			* try{
+			*	
+			*	String execString = "C:\\ANL\\Solitaire.exe";
+			*	for (int i = 0; i < arguments.length; i++){
+			*		if (arguments [i] != null){
+			*			execString += " " + arguments[i];
+			*		}
+			*	}
+			*	//Runtime.getRuntime().exec(execString);
+			*	System.out.println(execString);
+			* }catch(Exception e){
+			*	System.out.println("ERR " + e + " returning fail");
+			*	return false;
+			* 	//Should do something here
+			* }
+			* System.out.println("EXECUTED");
+			* return true;
+            */
+            
+            //TODO: Probably should find the parameter name rather than hardcoding aguments in here
+            String temp = "" +
+            	"System.out.println(\"Attempting to execute.... \");\n" +
+            	"try{" + "\n" + 
+            	"	String execString = \"" + applicationName + "\";" + "\n" + 
+            	"	for (int i = 0; i < arguments.length; i++){" + "\n" + 
+            	"		if (arguments [i] != null){" + "\n" + 
+            	"			execString += \" \" + arguments[i];" + "\n" + 
+            	"		}"+ "\n" + 
+            	"	}"+ "\n" + 
+            	"	System.out.println(\"Command:\" + execString);" + "\n" +
+            		this.RUNTIME_EXEC_CODE + "(execString); " + "\n" + 
+            	"}catch(Exception e){" + "\n" + 
+            	"	System.out.println(\"ERR \" + e + \" returning fail\");\n" +
+            	"	return false;" + "\n" +
+            	"	//Should do something here" + "\n" +
+            	"}" + "\n" +
+            	"System.out.println(\"EXECUTED\");" + "\n" +
+            	"return true;" + "\n" +
+            	"}";
+            
             source.replace(startOfMethod, endOfMethod, "");
             StringBuffer tempBuffer = new StringBuffer(); 
             tempBuffer.append(methodSignatureStart).append("{").append("\n").append(temp);
