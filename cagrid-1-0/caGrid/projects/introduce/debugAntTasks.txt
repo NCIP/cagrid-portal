@@ -1,0 +1,17 @@
+Debugging Custom Ant Tasks in Eclipse 
+To achieve this: 
+Set a breakpoint in your custom Ant task code. 
+Open the launch configuration dialog on the Ant config for this build 
+Go to the JRE tab 
+In the VM arguments specify for the VM to launch to enable remote debug: 
+-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 
+The Ant build will launch and wait for a remote debug attach 
+Top level Run menu>Debug.. 
+Create a new Remote Java Application launch configuration 
+Set the source lookup path as required for your code 
+Debug 
+ 
+You should hit your breakpoint and be able to step through the code to  
+determine what is the root problem. 
+ 
+Launch the Ant build in run mode 
