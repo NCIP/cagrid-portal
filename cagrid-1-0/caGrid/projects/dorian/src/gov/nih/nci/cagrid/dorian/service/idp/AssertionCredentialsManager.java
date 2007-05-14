@@ -32,7 +32,6 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.xml.security.signature.XMLSignature;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 
 
 /**
@@ -109,7 +108,6 @@ public class AssertionCredentialsManager extends LoggingObject {
 
 		String subject = caPreSub + ",CN=" + CERT_DN;
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-		PKCS10CertificationRequest req = CertUtil.generateCertficateRequest(subject, pair);
 		GregorianCalendar cal = new GregorianCalendar();
 		Date start = cal.getTime();
 		ca.deleteCredentials(CERT_DN);

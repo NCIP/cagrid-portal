@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.InvalidCryptoException;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
@@ -18,6 +19,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 
 import java.io.InputStream;
+import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
@@ -147,13 +149,17 @@ public class TestAssertionCredentialsManager extends TestCase {
 			assertNotNull(cm.getIdPKey());
 			String expectedSub = Utils.CA_SUBJECT_PREFIX + ",CN=" + AssertionCredentialsManager.CERT_DN;
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
+
+			String subject = cert.getSubjectDN().toString();
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			GregorianCalendar cal = new GregorianCalendar();
 			Date start = cal.getTime();
 			cal.add(Calendar.SECOND, 6);
 			Date end = cal.getTime();
-            ca.deleteCredentials(AssertionCredentialsManager.CERT_DN);
-            ca.createCredentials(AssertionCredentialsManager.CERT_DN, cert.getSubjectDN().getName(), conf.getAssertingCredentials().getKeyPassword(), start, end);
-			X509Certificate shortCert = ca.getCertificate(AssertionCredentialsManager.CERT_DN);
+			ca.deleteCredentials(AssertionCredentialsManager.CERT_DN);
+			X509Certificate shortCert = ca.signCertificate(AssertionCredentialsManager.CERT_DN, subject, pair
+				.getPublic(), start, end);
+			cm.storeCredentials(shortCert, pair.getPrivate(), conf.getAssertingCredentials().getKeyPassword());
 			X509Certificate idpShortCert = cm.getIdPCertificate();
 			assertEquals(shortCert, idpShortCert);
 			if (cert.equals(idpShortCert)) {
@@ -169,6 +175,14 @@ public class TestAssertionCredentialsManager extends TestCase {
 			assertNotNull(renewedKey);
 
 			assertTrue(!CertUtil.isExpired(renewedCert));
+
+			if (renewedCert.equals(idpShortCert)) {
+				assertTrue(false);
+			}
+
+			if (renewedKey.equals(pair.getPrivate())) {
+				assertTrue(false);
+			}
 
 			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID, TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL);
 			verifySAMLAssertion(saml, cm);
@@ -200,15 +214,16 @@ public class TestAssertionCredentialsManager extends TestCase {
 			String expectedSub = Utils.CA_SUBJECT_PREFIX + ",CN=" + AssertionCredentialsManager.CERT_DN;
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
 
-
+			String subject = cert.getSubjectDN().toString();
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			GregorianCalendar cal = new GregorianCalendar();
 			Date start = cal.getTime();
 			cal.add(Calendar.SECOND, 2);
 			Date end = cal.getTime();
-
 			ca.deleteCredentials(AssertionCredentialsManager.CERT_DN);
-            ca.createCredentials(AssertionCredentialsManager.CERT_DN, cert.getSubjectDN().getName(), conf.getAssertingCredentials().getKeyPassword(), start, end);
-			X509Certificate shortCert = ca.getCertificate(AssertionCredentialsManager.CERT_DN);
+			X509Certificate shortCert = ca.signCertificate(AssertionCredentialsManager.CERT_DN, subject, pair
+				.getPublic(), start, end);
+			cm.storeCredentials(shortCert, pair.getPrivate(), conf.getAssertingCredentials().getKeyPassword());
 			if (cert.equals(shortCert)) {
 				assertTrue(false);
 			}
