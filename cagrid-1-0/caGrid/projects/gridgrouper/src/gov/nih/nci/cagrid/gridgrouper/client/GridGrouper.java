@@ -224,6 +224,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 	 * @param groupName
 	 *            The name of the group.
 	 * @return
+     *      True if member
 	 * @throws GroupNotFoundException
 	 *             Thrown if the request group could not be found.
 	 */

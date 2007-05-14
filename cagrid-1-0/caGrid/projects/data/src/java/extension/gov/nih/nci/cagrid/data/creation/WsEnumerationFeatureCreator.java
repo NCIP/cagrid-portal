@@ -51,10 +51,12 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 
 
 	public void addFeature() throws CreationExtensionException {
-		installWsEnumExtension();
-		copySchemas();
-		addEnumerationQueryMethod();
-        setEnumIteratorImpl();
+	    if (!featureAlreadyCreated()) {
+	        installWsEnumExtension();
+	        copySchemas();
+	        addEnumerationQueryMethod();
+	        setEnumIteratorImpl();
+        }
 	}
 
 
@@ -203,5 +205,17 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
         CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
             DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY,
             IterImplType.CAGRID_CONCURRENT_COMPLETE.toString(), false);
+    }
+    
+    
+    private boolean featureAlreadyCreated() {
+        // does the service context exist?
+        ServiceType service = CommonTools.getService(
+            getServiceInformation().getServices(), WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME);
+        if (service != null) {
+            return WsEnumConstants.CAGRID_ENUMERATION_SERVICE_PACKAGE.equals(service.getPackageName())
+                && WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAMESPACE.equals(service.getNamespace());
+        }
+        return false;
     }
 }
