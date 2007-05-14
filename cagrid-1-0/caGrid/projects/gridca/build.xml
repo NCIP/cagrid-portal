@@ -242,7 +242,7 @@ GSBT - Globus Service Build Tools
 		<input message="Please enter your last name:" addproperty="last.name.input" />
 		<input message="Please enter the organization you are affiliated with:" addproperty="organization.input" />
 		<input message="Please enter the project you are working on:" addproperty="project.input" />
-	    <input message="Please enter a phone number where you can be reached:" addproperty="phone.input" />
+		<input message="Please enter a phone number where you can be reached:" addproperty="phone.input" />
 		<input message="Please enter the reason for you request:" addproperty="reason.input" />
 		<java classname="gov.nih.nci.cagrid.gridca.commandline.HostCertificateRequestUtility" fork="yes" newenvironment="true">
 			<arg value="langella@bmi.osu.edu" />
@@ -253,7 +253,7 @@ GSBT - Globus Service Build Tools
 			<arg value="${last.name.input}" />
 			<arg value="${organization.input}" />
 			<arg value="${project.input}" />
-	        <arg value="${phone.input}" />
+			<arg value="${phone.input}" />
 			<arg value="${reason.input}" />
 			<classpath>
 				<fileset dir="${build.lib.dir}">
