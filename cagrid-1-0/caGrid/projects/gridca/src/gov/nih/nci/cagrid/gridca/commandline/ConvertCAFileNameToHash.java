@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridca.commandline;
 
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.SecurityUtil;
 
 import java.io.File;
 import java.security.cert.X509Certificate;
@@ -24,6 +25,7 @@ public class ConvertCAFileNameToHash {
 	public static final String HELP_OPT_FULL = "help";
 
 	public static void main(String[] args) {
+		SecurityUtil.init();
 		Options options = new Options();
 		Option help = new Option(HELP_OPT, HELP_OPT_FULL, false,
 				"Prints this message.");
