@@ -24,8 +24,9 @@ public abstract class ExtensionUpgraderBase implements ExtensionUpgraderI {
 	    String fromVersion;
 	    String toVersion;
 	    String servicePath;
+	    ExtensionUpgradeStatus status;
 
-	public ExtensionUpgraderBase(ExtensionType extensionType,
+	public ExtensionUpgraderBase(String upgraderName, ExtensionType extensionType,
 			ServiceInformation serviceInformation, String servicePath,
 			String fromVersion, String toVersion) {
 	    this.serviceInformation = serviceInformation;
@@ -33,15 +34,19 @@ public abstract class ExtensionUpgraderBase implements ExtensionUpgraderI {
         this.toVersion = toVersion;
         this.servicePath = servicePath;
 		this.extensionType = extensionType;
+		this.status = new ExtensionUpgradeStatus(upgraderName,this.extensionType.getName(),this.fromVersion,this.toVersion);
 	}
 
-	public ExtensionUpgradeStatus execute() throws Exception {
+	public void execute() throws Exception {
 		System.out.println("Upgrading services " + extensionType.getName()
 				+ " extension  from Version " + this.getFromVersion()
 				+ " to Version " + this.getToVersion());
-		ExtensionUpgradeStatus status = upgrade();
+		upgrade();
 		extensionType.setVersion(getToVersion());
-		return status;
+	}
+	
+	public ExtensionUpgradeStatus getStatus(){
+	    return this.status;
 	}
 
 	public ExtensionType getExtensionType() {
@@ -68,7 +73,7 @@ public abstract class ExtensionUpgraderBase implements ExtensionUpgraderI {
 	        this.toVersion = toVersion;
 	    }
 
-	    protected abstract ExtensionUpgradeStatus upgrade() throws Exception;
+	    protected abstract void upgrade() throws Exception;
 
 	    public ServiceInformation getServiceInformation() {
 	        return serviceInformation;

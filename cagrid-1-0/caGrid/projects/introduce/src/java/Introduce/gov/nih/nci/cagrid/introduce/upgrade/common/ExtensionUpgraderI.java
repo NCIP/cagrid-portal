@@ -2,5 +2,6 @@ package gov.nih.nci.cagrid.introduce.upgrade.common;
 
 
 public interface ExtensionUpgraderI {
-	ExtensionUpgradeStatus execute() throws Exception;
+	void execute() throws Exception;
+	ExtensionUpgradeStatus getStatus();
 }

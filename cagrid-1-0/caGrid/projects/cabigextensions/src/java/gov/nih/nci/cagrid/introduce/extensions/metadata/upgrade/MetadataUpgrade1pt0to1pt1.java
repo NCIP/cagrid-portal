@@ -61,18 +61,16 @@ public class MetadataUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
      */
     public MetadataUpgrade1pt0to1pt1(ExtensionType extensionType, ServiceInformation serviceInfo, String servicePath,
         String fromVersion, String toVersion) {
-        super(extensionType, serviceInfo, servicePath, fromVersion, toVersion);
+        super("MetadataUpgrade1pt0to1pt1",extensionType, serviceInfo, servicePath, fromVersion, toVersion);
         this.helper = new MetadataExtensionHelper(serviceInfo);
     }
 
-    protected ExtensionUpgradeStatus upgrade() throws Exception {
-        ExtensionUpgradeStatus status  = new ExtensionUpgradeStatus();
+    protected void upgrade() throws Exception {
         if (this.helper.getExistingServiceMetdata() == null) {
             LOG.info("Unable to locate service metdata; no metadata upgrade will be performed.");
             // return false
-            status.addDescriptionLine("Unable to locate service metdata; no metadata upgrade will be performed.");
-            status.setStatus(StatusBase.UPGRADE_OK);
-            return status ;
+            getStatus().addDescriptionLine("Unable to locate service metdata; no metadata upgrade will be performed.");
+            getStatus().setStatus(StatusBase.UPGRADE_OK);
         }
         // make a copy of the metadata backup
         writeBackupServiceMetadata();
@@ -80,8 +78,7 @@ public class MetadataUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         processService(this.helper.getExistingServiceMetdata().getServiceDescription().getService(),
             getServiceInformation().getServiceDescriptor());
        
-        status.setStatus(StatusBase.UPGRADE_OK);
-        return status ;
+        getStatus().setStatus(StatusBase.UPGRADE_OK);
     }
 
 

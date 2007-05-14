@@ -121,7 +121,8 @@ public class ExtensionsUpgradeManager {
 							.newInstance(new Object[] { extension, serviceInformation,
 									pathToService, upgrade.getFromVersion(),
 									upgrade.getToVersion() });
-					status.addExtensionUpgradeStatus(upgrader.execute());
+					upgrader.execute();
+					status.addExtensionUpgradeStatus(upgrader.getStatus());
 				}
 
 			}

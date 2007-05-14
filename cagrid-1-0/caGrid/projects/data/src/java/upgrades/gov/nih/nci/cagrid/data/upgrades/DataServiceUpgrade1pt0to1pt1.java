@@ -51,12 +51,11 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 
     public DataServiceUpgrade1pt0to1pt1(ExtensionType extensionType, ServiceInformation serviceInformation,
         String servicePath, String fromVersion, String toVersion) {
-        super(extensionType, serviceInformation, servicePath, fromVersion, toVersion);
+        super("DataServiceUpgrade1pt0to1pt1",extensionType, serviceInformation, servicePath, fromVersion, toVersion);
     }
 
 
-    protected ExtensionUpgradeStatus upgrade() throws Exception {
-        ExtensionUpgradeStatus status = new ExtensionUpgradeStatus();
+    protected void upgrade() throws Exception {
         // ensure we're upgrading appropriatly
         validateUpgrade();
         // get the extension data in raw form
@@ -83,7 +82,6 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         // store the modified extension data back into the service model
         setExtensionDataElement(extensionData);
 
-        return status;
     }
 
 
