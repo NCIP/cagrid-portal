@@ -26,11 +26,13 @@
     <import file="dev-build.xml" />
 
     <!-- Jars -->
-    <property name="common.jar.name" value="${service.name}-common.jar" />
-    <property name="client.jar.name" value="${service.name}-client.jar" />
-    <property name="service.jar.name" value="${service.name}-service.jar" />
-    <property name="stubs.jar.name" value="${service.name}-stubs.jar" />
-    <property name="test.jar.name" value="${service.name}-tests.jar" />
+    <!-- Jars -->
+	<property name="jar.prefix" value="${service.name}" />
+    <property name="common.jar.name" value="${jar.prefix}-common.jar" />
+    <property name="client.jar.name" value="${jar.prefix}-client.jar" />
+    <property name="service.jar.name" value="${jar.prefix}-service.jar" />
+    <property name="stubs.jar.name" value="${jar.prefix}-stubs.jar" />
+    <property name="test.jar.name" value="${jar.prefix}-tests.jar" />
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="test" />
@@ -150,34 +152,35 @@
                 <exclude name="${client.jar.name}" />
                 <exclude name="${service.jar.name}" />
             </fileset>
+        	<path refid="base.extended.classpath" />
         </path>
         <path id="service.build.classpath">
             <pathelement location="${stubs.dest}" />
+        	<path refid="service.build.extended.classpath" />
             <path refid="base.classpath" />
-            <path refid="base.extended.classpath" />
         </path>
         <path id="service.run.classpath">
             <pathelement location="${build.dest}" />
+        	<path refid="service.run.extended.classpath" />
             <path refid="service.build.classpath" />
-            <path refid="service.build.extended.classpath" />
         </path>
         <path id="test.build.classpath">
             <fileset dir="${test.lib.dir}">
                 <include name="*.jar" />
             </fileset>
             <pathelement location="${build.dest}" />
+        	<path refid="test.build.extended.classpath" />
             <path refid="service.build.classpath" />
-            <path refid="test.build.extended.classpath" />
         </path>
         <path id="test.run.classpath">
             <pathelement location="${test.build.dest}" />
+        	<path refid="test.run.extended.classpath" />
             <path refid="test.build.classpath" />
-            <path refid="test.run.extended.classpath" />
         </path>
         <path id="run.classpath">
             <pathelement location="${build.dest}" />
+        	<path refid="run.extended.classpath" />
             <path refid="service.build.classpath" />
-            <path refid="run.extended.classpath" />
         </path>
         <path id="processor.run.classpath">
             <fileset dir="${tools.lib.dir}">

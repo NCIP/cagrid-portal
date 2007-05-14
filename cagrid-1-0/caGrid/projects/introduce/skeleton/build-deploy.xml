@@ -124,7 +124,7 @@
 			<fileset dir="lib">
 				<include name="*" />
 			</fileset>
-			<fileset dir="build/lib">
+			<fileset dir="${build.lib.dir}">
 				<include name="*" />
 			</fileset>
 		</copy>
@@ -140,19 +140,18 @@
 	<!-- make deployment configured gar -->
 	<target name="createDeploymentGar" depends="all, addFilters">
 		
+		<!-- prepare the server-config file -->
+		<mkdir dir="tmp" />
+		
 		<echo message="Creating a gar for service ${gar.name}" />
 		
+		<runtarget target="preDeployGlobus"/>
 		
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		
-		<!-- prepare the server-config file -->
-		<mkdir dir="tmp" />
-		
-		<runtarget target="preDeployGlobus"/>
 				
 		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
 		<!-- replace the config paths in the server deploy file -->
