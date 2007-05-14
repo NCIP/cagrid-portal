@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -30,9 +31,11 @@ public class CredentialsManager extends LoggingObject {
 
 	private boolean dbBuilt = false;
 
+
 	public CredentialsManager(Database db) {
 		this.db = db;
 	}
+
 
 	public boolean hasCredentials(String alias) throws DorianInternalFault {
 		this.buildDatabase();
@@ -40,8 +43,7 @@ public class CredentialsManager extends LoggingObject {
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select count(*) from "
-					+ CREDENTIALS_TABLE + " where ALIAS= ?");
+			PreparedStatement s = c.prepareStatement("select count(*) from " + CREDENTIALS_TABLE + " where ALIAS= ?");
 			s.setString(1, alias);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -55,9 +57,8 @@ public class CredentialsManager extends LoggingObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Unexpected Database Error, Error determining if the user "
-							+ alias + " has credentials.");
+			fault.setFaultString("Unexpected Database Error, Error determining if the user " + alias
+				+ " has credentials.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -68,22 +69,21 @@ public class CredentialsManager extends LoggingObject {
 		return exists;
 	}
 
+
 	public void deleteCredentials(String alias) throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("delete from "
-					+ CREDENTIALS_TABLE + " where ALIAS= ? ");
+			PreparedStatement s = c.prepareStatement("delete from " + CREDENTIALS_TABLE + " where ALIAS= ? ");
 			s.setString(1, alias);
 			s.execute();
 			s.close();
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Unexpected Database Error, Error removing the credentials for the user "
-							+ alias + "!!!");
+			fault.setFaultString("Unexpected Database Error, Error removing the credentials for the user " + alias
+				+ "!!!");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -93,8 +93,9 @@ public class CredentialsManager extends LoggingObject {
 		}
 	}
 
-	public void addCredentials(String alias, String password,
-			X509Certificate cert, PrivateKey key) throws DorianInternalFault {
+
+	public void addCredentials(String alias, String password, X509Certificate cert, PrivateKey key)
+		throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		try {
@@ -103,10 +104,8 @@ public class CredentialsManager extends LoggingObject {
 				long serial = cert.getSerialNumber().longValue();
 				String keyStr = KeyUtil.writePrivateKey(key, password);
 				String certStr = CertUtil.writeCertificate(cert);
-				PreparedStatement s = c
-						.prepareStatement("INSERT INTO "
-								+ CREDENTIALS_TABLE
-								+ " SET ALIAS= ?, SERIAL_NUMBER= ?, CERTIFICATE= ?, PRIVATE_KEY= ?");
+				PreparedStatement s = c.prepareStatement("INSERT INTO " + CREDENTIALS_TABLE
+					+ " SET ALIAS= ?, SERIAL_NUMBER= ?, CERTIFICATE= ?, PRIVATE_KEY= ?");
 				s.setString(1, alias);
 				s.setLong(2, serial);
 				s.setString(3, certStr);
@@ -117,8 +116,7 @@ public class CredentialsManager extends LoggingObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Unexpected Error, could not add credentials to the credentials database.");
+			fault.setFaultString("Unexpected Error, could not add credentials to the credentials database.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -128,16 +126,48 @@ public class CredentialsManager extends LoggingObject {
 		}
 	}
 
-	public PrivateKey getPrivateKey(String alias, String password)
-			throws DorianInternalFault, InvalidPasswordFault {
+
+	public void addCertificate(String alias, X509Certificate cert) throws DorianInternalFault {
+		this.buildDatabase();
+		Connection c = null;
+		try {
+			if (!hasCredentials(alias)) {
+				c = db.getConnection();
+				long serial = cert.getSerialNumber().longValue();
+				String keyStr = "";
+				String certStr = CertUtil.writeCertificate(cert);
+				PreparedStatement s = c.prepareStatement("INSERT INTO " + CREDENTIALS_TABLE
+					+ " SET ALIAS= ?, SERIAL_NUMBER= ?, CERTIFICATE= ?, PRIVATE_KEY= ?");
+				s.setString(1, alias);
+				s.setLong(2, serial);
+				s.setString(3, certStr);
+				s.setString(4, keyStr);
+				s.execute();
+				s.close();
+			}
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("Unexpected Error, could not add certificate to the credentials database.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+	}
+
+
+	public PrivateKey getPrivateKey(String alias, String password) throws DorianInternalFault, InvalidPasswordFault {
 		this.buildDatabase();
 		Connection c = null;
 		PrivateKey key = null;
 		String keyStr = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select PRIVATE_KEY from "
-					+ CREDENTIALS_TABLE + " where ALIAS= ?");
+			PreparedStatement s = c
+				.prepareStatement("select PRIVATE_KEY from " + CREDENTIALS_TABLE + " where ALIAS= ?");
 			s.setString(1, alias);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -148,9 +178,8 @@ public class CredentialsManager extends LoggingObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Unexpected Database Error, Error obtaining the private key for the user "
-							+ alias + ".");
+			fault.setFaultString("Unexpected Database Error, Error obtaining the private key for the user " + alias
+				+ ".");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -160,13 +189,11 @@ public class CredentialsManager extends LoggingObject {
 		}
 		if (keyStr == null || keyStr.trim().equals("")) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("No PrivateKey exists for the user "
-					+ alias + ".");
+			fault.setFaultString("No PrivateKey exists for the user " + alias + ".");
 			throw fault;
 		}
 		try {
-			key = KeyUtil.loadPrivateKey(new ByteArrayInputStream(keyStr
-					.getBytes()), password);
+			key = KeyUtil.loadPrivateKey(new ByteArrayInputStream(keyStr.getBytes()), password);
 		} catch (Exception e) {
 			InvalidPasswordFault fault = new InvalidPasswordFault();
 			fault.setFaultString("Invalid Password Specified.");
@@ -175,15 +202,15 @@ public class CredentialsManager extends LoggingObject {
 		return key;
 	}
 
-	public X509Certificate getCertificate(String alias)
-			throws DorianInternalFault {
+
+	public X509Certificate getCertificate(String alias) throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		X509Certificate cert = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select CERTIFICATE from "
-					+ CREDENTIALS_TABLE + " where ALIAS= ?");
+			PreparedStatement s = c
+				.prepareStatement("select CERTIFICATE from " + CREDENTIALS_TABLE + " where ALIAS= ?");
 			s.setString(1, alias);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -195,9 +222,8 @@ public class CredentialsManager extends LoggingObject {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("Unexpected Database Error, Error obtaining the certificate for the user "
-							+ alias + ".");
+			fault.setFaultString("Unexpected Database Error, Error obtaining the certificate for the user " + alias
+				+ ".");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -207,22 +233,21 @@ public class CredentialsManager extends LoggingObject {
 		}
 		if (cert == null) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("No Certificate exists for the user "
-					+ alias + ".");
+			fault.setFaultString("No Certificate exists for the user " + alias + ".");
 			throw fault;
 		}
 		return cert;
 	}
 
-	public long getCertificateSerialNumber(String alias)
-			throws DorianInternalFault {
+
+	public long getCertificateSerialNumber(String alias) throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		long sn = -1;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select SERIAL_NUMBER from "
-					+ CREDENTIALS_TABLE + " where ALIAS= ?");
+			PreparedStatement s = c.prepareStatement("select SERIAL_NUMBER from " + CREDENTIALS_TABLE
+				+ " where ALIAS= ?");
 			s.setString(1, alias);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -234,8 +259,8 @@ public class CredentialsManager extends LoggingObject {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
 			fault
-					.setFaultString("Unexpected Database Error, Error obtaining the certificate serial number for the user "
-							+ alias + ".");
+				.setFaultString("Unexpected Database Error, Error obtaining the certificate serial number for the user "
+					+ alias + ".");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -245,27 +270,25 @@ public class CredentialsManager extends LoggingObject {
 		}
 		if (sn == -1) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("No Certificate exists for the user "
-					+ alias + ".");
+			fault.setFaultString("No Certificate exists for the user " + alias + ".");
 			throw fault;
 		}
 		return sn;
 	}
 
+
 	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(CREDENTIALS_TABLE)) {
-				String users = "CREATE TABLE " + CREDENTIALS_TABLE + " ("
-						+ "ALIAS VARCHAR(255) NOT NULL PRIMARY KEY,"
-						+ " SERIAL_NUMBER BIGINT NOT NULL,"
-						+ "CERTIFICATE TEXT NOT NULL,"
-						+ "PRIVATE_KEY TEXT NOT NULL,"
-						+ "INDEX document_index (ALIAS));";
+				String users = "CREATE TABLE " + CREDENTIALS_TABLE + " (" + "ALIAS VARCHAR(255) NOT NULL PRIMARY KEY,"
+					+ " SERIAL_NUMBER BIGINT NOT NULL," + "CERTIFICATE TEXT NOT NULL," + "PRIVATE_KEY TEXT NOT NULL,"
+					+ "INDEX document_index (ALIAS));";
 				db.update(users);
 			}
 			this.dbBuilt = true;
 		}
 	}
+
 
 	public void clearDatabase() throws DorianInternalFault {
 		buildDatabase();

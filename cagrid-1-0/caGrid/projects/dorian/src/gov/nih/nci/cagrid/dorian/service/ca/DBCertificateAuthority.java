@@ -38,14 +38,16 @@ public class DBCertificateAuthority extends CertificateAuthority {
 	public String getSignatureAlgorithm() {
 		return SIGNATURE_ALGORITHM;
 	}
-	
-	public long getCertificateSerialNumber(String alias) throws CertificateAuthorityFault{
+
+
+	public long getCertificateSerialNumber(String alias) throws CertificateAuthorityFault {
 		try {
 			return manager.getCertificateSerialNumber(alias);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("An unexpected error occurred, could not the serial number of the requested certificate.");
+			fault
+				.setFaultString("An unexpected error occurred, could not the serial number of the requested certificate.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();
@@ -68,6 +70,27 @@ public class DBCertificateAuthority extends CertificateAuthority {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
 			fault.setFaultString("An unexpected error occurred, could not add credentials.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CertificateAuthorityFault) helper.getFault();
+			throw fault;
+		}
+
+	}
+
+	public void addCertificate(String alias, X509Certificate cert) throws CertificateAuthorityFault {
+		try {
+
+			if (manager.hasCredentials(alias)) {
+				CertificateAuthorityFault fault = new CertificateAuthorityFault();
+				fault.setFaultString("Credentials already exist for " + alias);
+				throw fault;
+			}
+			manager.addCertificate(alias, cert);
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault.setFaultString("An unexpected error occurred, could not add certificate.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();
@@ -131,7 +154,8 @@ public class DBCertificateAuthority extends CertificateAuthority {
 		}
 
 	}
-	
+
+
 	public X509Certificate getCertificate(String alias) throws CertificateAuthorityFault {
 		try {
 			if (!hasCredentials(alias)) {
@@ -171,6 +195,5 @@ public class DBCertificateAuthority extends CertificateAuthority {
 			throw fault;
 		}
 	}
-
 
 }

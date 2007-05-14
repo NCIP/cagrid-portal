@@ -55,6 +55,9 @@ public abstract class CertificateAuthority extends LoggingObject {
 	public abstract void deleteCredentials(String alias) throws CertificateAuthorityFault;
 
 
+	public abstract void addCertificate(String alias, X509Certificate cert) throws CertificateAuthorityFault;
+
+
 	public abstract boolean hasCredentials(String alias) throws CertificateAuthorityFault;
 
 
@@ -266,6 +269,57 @@ public abstract class CertificateAuthority extends LoggingObject {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
 			fault.setFaultString("Unexpected Error, could not create credentials.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CertificateAuthorityFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+
+	public X509Certificate signCertificate(String alias, String subject, PublicKey publicKey, Date start,
+		Date expiration) throws CertificateAuthorityFault, NoCACredentialsFault {
+		init();
+		X509Certificate cacert = getCACertificate();
+
+		Date caDate = cacert.getNotAfter();
+		if (start.after(caDate)) {
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault.setFaultString("Certificate start date is after the CA certificates expiration date.");
+			throw fault;
+		}
+		if (expiration.after(caDate)) {
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault.setFaultString("Certificate expiration date is after the CA certificates expiration date.");
+			throw fault;
+		}
+
+		try {
+
+			if (hasCredentials(alias)) {
+				CertificateAuthorityFault fault = new CertificateAuthorityFault();
+				fault.setFaultString("Credentials already exist for " + alias);
+				throw fault;
+			}
+
+			// VALIDATE DN
+			String caSubject = cacert.getSubjectDN().getName();
+			int caindex = caSubject.lastIndexOf(",");
+			String caPreSub = caSubject.substring(0, caindex);
+
+			if (!subject.startsWith(caPreSub)) {
+				CertificateAuthorityFault fault = new CertificateAuthorityFault();
+				fault.setFaultString("Invalid certificate subject, the subject must start with, " + caPreSub);
+				throw fault;
+			}
+			X509Certificate cert = CertUtil.generateCertificate(getProvider(), new X509Name(subject), start,
+				expiration, publicKey, cacert, getCAPrivateKey(), getSignatureAlgorithm());
+			addCertificate(alias, cert);
+			return cert;
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault.setFaultString("Unexpected Error, could not sign certificate.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();

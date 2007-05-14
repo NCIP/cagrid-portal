@@ -84,6 +84,23 @@ public class EracomCertificateAuthority extends CertificateAuthority {
 	}
 
 
+	public void addCertificate(String alias, X509Certificate cert) throws CertificateAuthorityFault {
+		try {
+
+			keyStore.setCertificateEntry(alias, cert);
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault.setFaultString("An unexpected error occurred, could not add certificate.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CertificateAuthorityFault) helper.getFault();
+			throw fault;
+		}
+
+	}
+
+
 	public void deleteCredentials(String alias) throws CertificateAuthorityFault {
 		try {
 			keyStore.deleteEntry(alias);
