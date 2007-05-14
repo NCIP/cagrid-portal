@@ -596,10 +596,13 @@
 	<target name="build-wsEnum" depends="prepare" description="Builds caGrid WS-Enumeration components">
 		<resolveDependencies extdir="${projects.dir}/wsEnum/ext">
 			<artifact refid="cagrid.properties" />
+			<artifact refid="introduce.jars" />
 			<artifact refid="core.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="security.metadata.schemas" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/wsEnum/ext/test">
 			<artifact refid="caCORE.jars" />
