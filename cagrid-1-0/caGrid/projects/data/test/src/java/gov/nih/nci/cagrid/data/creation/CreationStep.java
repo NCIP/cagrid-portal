@@ -1,11 +1,14 @@
 package gov.nih.nci.cagrid.data.creation;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.StreamPrinter;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+
+import java.io.File;
 
 import com.atomicobject.haste.framework.Step;
 
@@ -36,8 +39,8 @@ public class CreationStep extends Step {
 			serviceInfo.getDir(), serviceInfo.getPackage(), serviceInfo.getNamespace(), serviceInfo.getExtensions());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process createSkeletonProcess = CommonTools.createAndOutputProcess(cmd);
-        new StreamDumpster(createSkeletonProcess.getInputStream(), System.out).start();
-        new StreamDumpster(createSkeletonProcess.getErrorStream(), System.err).start();
+        new StreamPrinter(createSkeletonProcess.getInputStream(), System.out).start();
+        new StreamPrinter(createSkeletonProcess.getErrorStream(), System.err).start();
         createSkeletonProcess.waitFor();
 		assertTrue("Creating new data service failed", createSkeletonProcess.exitValue() == 0);
         
@@ -45,11 +48,11 @@ public class CreationStep extends Step {
 		
 		System.out.println("Invoking post creation processes...");
 		cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, serviceInfo.getName(),
-			serviceInfo.getDir(), serviceInfo.getPackage(), serviceInfo.getNamespace(), serviceInfo.getExtensions());
+			serviceInfo.getDir(), serviceInfo.getPackage(), serviceInfo.getNamespace(), getServiceExtensions(), true);
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process postCreateProcess = CommonTools.createAndOutputProcess(cmd);
-        new StreamDumpster(postCreateProcess.getInputStream(), System.out).start();
-        new StreamDumpster(postCreateProcess.getErrorStream(), System.err).start();
+        new StreamPrinter(postCreateProcess.getInputStream(), System.out).start();
+        new StreamPrinter(postCreateProcess.getErrorStream(), System.err).start();
         postCreateProcess.waitFor();
 		assertTrue("Service post creation process failed", postCreateProcess.exitValue() == 0);
         
@@ -59,8 +62,8 @@ public class CreationStep extends Step {
 		cmd = CommonTools.getAntAllCommand(serviceInfo.getDir());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process antAllProcess = CommonTools.createAndOutputProcess(cmd);
-        new StreamDumpster(antAllProcess.getInputStream(), System.out).start();
-        new StreamDumpster(antAllProcess.getErrorStream(), System.err).start();
+        new StreamPrinter(antAllProcess.getInputStream(), System.out).start();
+        new StreamPrinter(antAllProcess.getErrorStream(), System.err).start();
         antAllProcess.waitFor();
 		assertTrue("Build process failed", antAllProcess.exitValue() == 0);
 	}
@@ -76,27 +79,21 @@ public class CreationStep extends Step {
     }
     
     
-    private static class StreamDumpster extends Thread {
-        private InputStream in;
-        private OutputStream out;
-        
-        public StreamDumpster(InputStream in, OutputStream out) {
-            this.in = in;
-            this.out = out;
-        }
-        
-        
-        public void run() {
-            byte[] buff = new byte[1024];
-            int len = -1;
-            try {
-                while ((len = in.read(buff)) != -1) {
-                    out.write(buff, 0, len);
-                    out.flush();
+    private String getServiceExtensions() throws Exception {
+        ServiceDescription description = (ServiceDescription) Utils.deserializeDocument(
+            serviceInfo.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
+            ServiceDescription.class);
+        String ext = "";
+        if (description.getExtensions() != null 
+            && description.getExtensions().getExtension() != null) {
+            ExtensionType[] extensions = description.getExtensions().getExtension();
+            for (int i = 0; i < extensions.length; i++) {
+                ext += extensions[i].getName();
+                if (i + 1 < extensions.length) {
+                    ext += ",";
                 }
-            } catch (IOException ex) {
-                ex.printStackTrace();
             }
         }
+        return ext;
     }
 }

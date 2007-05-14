@@ -1,11 +1,14 @@
 package gov.nih.nci.cagrid.data.system;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.StreamPrinter;
 import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.File;
 
 import com.atomicobject.haste.framework.Step;
 
@@ -16,7 +19,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: RebuildServiceStep.java,v 1.5 2007-04-12 14:24:55 dervin Exp $ 
+ * @version $Id: RebuildServiceStep.java,v 1.6 2007-05-14 16:03:12 dervin Exp $ 
  */
 public class RebuildServiceStep extends Step {
 	
@@ -36,43 +39,42 @@ public class RebuildServiceStep extends Step {
 		System.out.println("Invoking post creation processes...");
 		String cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, 
             serviceInfo.getName(), serviceInfo.getDir(), serviceInfo.getPackage(), 
-            serviceInfo.getNamespace(), serviceInfo.getExtensions());
+            serviceInfo.getNamespace(), getServiceExtensions());
+        System.out.println("Invoking ant:");
+        System.out.println(cmd);
 		Process p = CommonTools.createAndOutputProcess(cmd);
-        new StreamDumpster(p.getInputStream(), System.out).start();
-        new StreamDumpster(p.getErrorStream(), System.err).start();
+        new StreamPrinter(p.getInputStream(), System.out).start();
+        new StreamPrinter(p.getErrorStream(), System.err).start();
 		p.waitFor();
-        
 		assertTrue("Service post creation process failed", p.exitValue() == 0);
 
 		System.out.println("Building created service...");
 		cmd = CommonTools.getAntAllCommand(serviceInfo.getDir());
+        System.out.println("Invoking ant:");
+        System.out.println(cmd);
 		p = CommonTools.createAndOutputProcess(cmd);
-		p.waitFor();
+        new StreamPrinter(p.getInputStream(), System.out).start();
+        new StreamPrinter(p.getErrorStream(), System.err).start();
+        p.waitFor();
 		assertTrue("Build process failed", p.exitValue() == 0);
 	}
     
     
-    private static class StreamDumpster extends Thread {
-        private InputStream in;
-        private OutputStream out;
-        
-        public StreamDumpster(InputStream in, OutputStream out) {
-            this.in = in;
-            this.out = out;
-        }
-        
-        
-        public void run() {
-            byte[] buff = new byte[1024];
-            int len = -1;
-            try {
-                while ((len = in.read(buff)) != -1) {
-                    out.write(buff, 0, len);
-                    out.flush();
+    private String getServiceExtensions() throws Exception {
+        ServiceDescription description = (ServiceDescription) Utils.deserializeDocument(
+            serviceInfo.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
+            ServiceDescription.class);
+        String ext = "";
+        if (description.getExtensions() != null 
+            && description.getExtensions().getExtension() != null) {
+            ExtensionType[] extensions = description.getExtensions().getExtension();
+            for (int i = 0; i < extensions.length; i++) {
+                ext += extensions[i].getName();
+                if (i + 1 < extensions.length) {
+                    ext += ",";
                 }
-            } catch (IOException ex) {
-                ex.printStackTrace();
             }
         }
+        return ext;
     }
 }

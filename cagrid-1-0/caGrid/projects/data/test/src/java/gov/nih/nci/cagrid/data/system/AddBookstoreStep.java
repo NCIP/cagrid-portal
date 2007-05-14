@@ -17,7 +17,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: AddBookstoreStep.java,v 1.5 2007-03-22 14:21:25 dervin Exp $
+ * @version $Id: AddBookstoreStep.java,v 1.6 2007-05-14 16:03:12 dervin Exp $
  */
 public class AddBookstoreStep extends Step {
 
@@ -41,7 +41,7 @@ public class AddBookstoreStep extends Step {
 			fail("Error loading service description: " + ex.getMessage());
 		}
 		// create a namespace type for the bookstore
-		String bookstoreFilename = "test" + File.separator + "resources" + File.separator + "bookstore.xsd";
+		String bookstoreFilename = ".." + File.separator + "data" + File.separator + "test" + File.separator + "resources" + File.separator + "bookstore.xsd";
 
 		// copy the schema to the service's lib directory
 		String schemaDir = serviceInfo.getDir() + File.separator + "schema" 

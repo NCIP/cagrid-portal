@@ -4,15 +4,12 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.creation.CreationStep;
 import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
-import gov.nih.nci.cagrid.data.creation.WsEnumerationFeatureCreator;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ServiceFeatures;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
 import java.io.File;
 
@@ -22,7 +19,7 @@ import java.io.File;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 30, 2006 
- * @version $Id: CreateEnumerationDataServiceStep.java,v 1.4 2007-05-11 16:35:58 dervin Exp $ 
+ * @version $Id: CreateEnumerationDataServiceStep.java,v 1.5 2007-05-14 16:03:12 dervin Exp $ 
  */
 public class CreateEnumerationDataServiceStep extends CreationStep {
 	
@@ -43,23 +40,6 @@ public class CreateEnumerationDataServiceStep extends CreationStep {
         ServiceDescription serviceDesc = (ServiceDescription) Utils.deserializeDocument(
             serviceModelFile.getAbsolutePath(), ServiceDescription.class);      
         
-        // add the ws Enumeration extension
-        /*
-        System.out.println("Locating the ws-enumeration extension");
-        ExtensionDescription ext = ExtensionsLoader.getInstance()
-            .getExtension(WsEnumerationFeatureCreator.WS_ENUM_EXTENSION_NAME);
-        assertNotNull("Ws enumeration extension is not available", ext);
-        ExtensionType extType = new ExtensionType();
-        extType.setName(ext.getServiceExtensionDescription().getName());
-        extType.setExtensionType(ext.getExtensionType());
-        
-        System.out.println("Adding the ws-enumeration extension to the service description");
-        ExtensionType[] serviceExtensions = serviceDesc.getExtensions().getExtension();
-        ExtensionType[] allExtensions = new ExtensionType[serviceExtensions.length + 1];
-        System.arraycopy(serviceExtensions, 0, allExtensions, 0, serviceExtensions.length);
-        allExtensions[allExtensions.length - 1] = extType;
-        serviceDesc.getExtensions().setExtension(allExtensions);
-        */
         // verify the data extension is in there
         assertTrue("Service description has no extensions", 
             serviceDesc.getExtensions() != null 
@@ -77,7 +57,6 @@ public class CreateEnumerationDataServiceStep extends CreationStep {
         ExtensionTypeExtensionData extData = new ExtensionTypeExtensionData();
         dataExtension.setExtensionData(extData);
         
-        // edit the service description here
         // enable the ws-enumeration support feature
         System.out.println("Setting ws-enumeration feature enabled");
         Data data = ExtensionDataUtils.getExtensionData(extData);

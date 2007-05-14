@@ -66,22 +66,24 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 
 	public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo)
 		throws CreationExtensionException {
-		ServiceType mainService = serviceInfo.getServices().getService(0);
-		Properties serviceProperties = serviceInfo.getIntroduceServiceProperties();
+	    if (!queryOperationCreated(serviceInfo)) {
+	        ServiceType mainService = serviceInfo.getServices().getService(0);
+	        Properties serviceProperties = serviceInfo.getIntroduceServiceProperties();
 
-		copyDataServiceSchemas(serviceProperties);
-		copyDataServiceLibraries(serviceProperties);
-		ResultTypeGeneratorInformation typeInfo = new ResultTypeGeneratorInformation();
-		typeInfo.setServiceInfo(serviceInfo);
-		try {
-			CQLResultTypesGenerator.generateCQLResultTypesXSD(typeInfo);
-		} catch (CodegenExtensionException e) {
-			throw new CreationExtensionException("Problen creating initial permissible result type XSD.", e);
-		}
-		addDataServiceNamespaces(serviceInfo.getServiceDescriptor(), serviceProperties);
-		modifyServiceProperties(serviceInfo.getServiceDescriptor());
-		addQueryMethod(serviceInfo.getServiceDescriptor(), mainService);
-		processFeatures(serviceInfo, mainService, serviceProperties);
+	        copyDataServiceSchemas(serviceProperties);
+	        copyDataServiceLibraries(serviceProperties);
+	        ResultTypeGeneratorInformation typeInfo = new ResultTypeGeneratorInformation();
+	        typeInfo.setServiceInfo(serviceInfo);
+	        try {
+	            CQLResultTypesGenerator.generateCQLResultTypesXSD(typeInfo);
+	        } catch (CodegenExtensionException e) {
+	            throw new CreationExtensionException("Problen creating initial permissible result type XSD.", e);
+	        }
+	        addDataServiceNamespaces(serviceInfo.getServiceDescriptor(), serviceProperties);
+	        modifyServiceProperties(serviceInfo.getServiceDescriptor());
+	        addQueryMethod(serviceInfo.getServiceDescriptor(), mainService);
+	        processFeatures(serviceInfo, mainService, serviceProperties);
+        }
 	}
 
 
@@ -192,65 +194,9 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 
 
 	private void addQueryMethod(ServiceDescription description, ServiceType service) throws CreationExtensionException {
-		MethodType queryMethod = new MethodType();
-		queryMethod.setName(DataServiceConstants.QUERY_METHOD_NAME);
-		queryMethod.setDescription(DataServiceConstants.QUERY_METHOD_DESCRIPTION);
-		// get namespaces needed out of the service description
-		NamespaceType queryNamespace = getNamespaceType(description, DataServiceConstants.CQL_QUERY_URI);
-		// method input parameters
-		MethodTypeInputs inputs = new MethodTypeInputs();
-		MethodTypeInputsInput queryInput = new MethodTypeInputsInput();
-		queryInput.setName(DataServiceConstants.QUERY_METHOD_PARAMETER_NAME);
-		queryInput.setIsArray(false);
-		QName queryQname = new QName(queryNamespace.getNamespace(), queryNamespace.getSchemaElement(0).getType());
-		queryInput.setQName(queryQname);
-		queryInput.setDescription(DataServiceConstants.QUERY_METHOD_PARAMETER_DESCRIPTION);
-		inputs.setInput(new MethodTypeInputsInput[]{queryInput});
-		queryMethod.setInputs(inputs);
-		// method output
-		MethodTypeOutput output = new MethodTypeOutput();
-		output.setIsArray(false);
-		output.setQName(DataServiceConstants.CQL_RESULT_COLLECTION_QNAME);
-		output.setDescription(DataServiceConstants.QUERY_METHOD_OUTPUT_DESCRIPTION);
-		queryMethod.setOutput(output);
-		// exceptions on query method
-		MethodTypeExceptions queryExceptions = new MethodTypeExceptions();
-		MethodTypeExceptionsException qpException = new MethodTypeExceptionsException(
-			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_DESCRIPTION,
-			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_NAME, 
-			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_QNAME);
-		MethodTypeExceptionsException mqException = new MethodTypeExceptionsException(
-			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_DESCRIPTION,
-			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_NAME, 
-			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME);
-		queryExceptions.setException(new MethodTypeExceptionsException[]{qpException, mqException});
-		queryMethod.setExceptions(queryExceptions);
-		// query method is imported
-		MethodTypeImportInformation importInfo = new MethodTypeImportInformation();
-		importInfo.setNamespace(DataServiceConstants.DATA_SERVICE_NAMESPACE);
-		importInfo.setPackageName(DataServiceConstants.DATA_SERVICE_PACKAGE);
-		importInfo.setPortTypeName(DataServiceConstants.DATA_SERVICE_PORT_TYPE_NAME);
-		importInfo.setWsdlFile("DataService.wsdl");
-		importInfo.setInputMessage(new QName(DataServiceConstants.DATA_SERVICE_NAMESPACE, "QueryRequest"));
-		importInfo.setOutputMessage(new QName(DataServiceConstants.DATA_SERVICE_NAMESPACE, "QueryResponse"));
-		queryMethod.setIsImported(true);
-		queryMethod.setImportInformation(importInfo);
-		// query method is provided
-		MethodTypeProviderInformation providerInfo = new MethodTypeProviderInformation();
-		providerInfo.setProviderClass(DataServiceProviderImpl.class.getName());
-		queryMethod.setProviderInformation(providerInfo);
-		queryMethod.setIsProvided(true);
+		MethodType queryMethod = createQueryMethodType(description);
 		// add the query method to the service
-		MethodType[] methods = service.getMethods().getMethod();
-		if (methods != null) {
-			MethodType[] tmpMethods = new MethodType[methods.length + 1];
-			System.arraycopy(methods, 0, tmpMethods, 0, methods.length);
-			tmpMethods[tmpMethods.length - 1] = queryMethod;
-			methods = tmpMethods;
-		} else {
-			methods = new MethodType[]{queryMethod};
-		}
-		service.getMethods().setMethod(methods);
+        CommonTools.addMethod(service, queryMethod);
 	}
 
 
@@ -343,18 +289,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		CommonTools.setServiceProperty(desc, DataServiceConstants.CLASS_MAPPINGS_FILENAME,
 			DataServiceConstants.CLASS_TO_QNAME_XML, true, "The name of the file containing the class name to QName mapping");
 	}
-
-
-	private NamespaceType getNamespaceType(ServiceDescription description, String nsUri) {
-		NamespaceType[] namespaces = description.getNamespaces().getNamespace();
-		for (int i = 0; i < namespaces.length; i++) {
-			if (namespaces[i].getNamespace().equals(nsUri)) {
-				return namespaces[i];
-			}
-		}
-		return null;
-	}
-
+    
 
 	private void processFeatures(ServiceInformation info, ServiceType service, Properties serviceProps)
 		throws CreationExtensionException {
@@ -394,4 +329,69 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		}
 		return null;
 	}
+    
+    
+    private MethodType createQueryMethodType(ServiceDescription description) {
+        MethodType queryMethod = new MethodType();
+        queryMethod.setName(DataServiceConstants.QUERY_METHOD_NAME);
+        queryMethod.setDescription(DataServiceConstants.QUERY_METHOD_DESCRIPTION);
+        // get namespaces needed out of the service description
+        NamespaceType queryNamespace = CommonTools.getNamespaceType(
+            description.getNamespaces(), DataServiceConstants.CQL_QUERY_URI);
+        // method input parameters
+        MethodTypeInputs inputs = new MethodTypeInputs();
+        MethodTypeInputsInput queryInput = new MethodTypeInputsInput();
+        queryInput.setName(DataServiceConstants.QUERY_METHOD_PARAMETER_NAME);
+        queryInput.setIsArray(false);
+        QName queryQname = new QName(queryNamespace.getNamespace(), queryNamespace.getSchemaElement(0).getType());
+        queryInput.setQName(queryQname);
+        queryInput.setDescription(DataServiceConstants.QUERY_METHOD_PARAMETER_DESCRIPTION);
+        inputs.setInput(new MethodTypeInputsInput[]{queryInput});
+        queryMethod.setInputs(inputs);
+        // method output
+        MethodTypeOutput output = new MethodTypeOutput();
+        output.setIsArray(false);
+        output.setQName(DataServiceConstants.CQL_RESULT_COLLECTION_QNAME);
+        output.setDescription(DataServiceConstants.QUERY_METHOD_OUTPUT_DESCRIPTION);
+        queryMethod.setOutput(output);
+        // exceptions on query method
+        MethodTypeExceptions queryExceptions = new MethodTypeExceptions();
+        MethodTypeExceptionsException qpException = new MethodTypeExceptionsException(
+            DataServiceConstants.QUERY_PROCESSING_EXCEPTION_DESCRIPTION,
+            DataServiceConstants.QUERY_PROCESSING_EXCEPTION_NAME, 
+            DataServiceConstants.QUERY_PROCESSING_EXCEPTION_QNAME);
+        MethodTypeExceptionsException mqException = new MethodTypeExceptionsException(
+            DataServiceConstants.MALFORMED_QUERY_EXCEPTION_DESCRIPTION,
+            DataServiceConstants.MALFORMED_QUERY_EXCEPTION_NAME, 
+            DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME);
+        queryExceptions.setException(new MethodTypeExceptionsException[]{qpException, mqException});
+        queryMethod.setExceptions(queryExceptions);
+        // query method is imported
+        MethodTypeImportInformation importInfo = new MethodTypeImportInformation();
+        importInfo.setNamespace(DataServiceConstants.DATA_SERVICE_NAMESPACE);
+        importInfo.setPackageName(DataServiceConstants.DATA_SERVICE_PACKAGE);
+        importInfo.setPortTypeName(DataServiceConstants.DATA_SERVICE_PORT_TYPE_NAME);
+        importInfo.setWsdlFile("DataService.wsdl");
+        importInfo.setInputMessage(new QName(DataServiceConstants.DATA_SERVICE_NAMESPACE, "QueryRequest"));
+        importInfo.setOutputMessage(new QName(DataServiceConstants.DATA_SERVICE_NAMESPACE, "QueryResponse"));
+        queryMethod.setIsImported(true);
+        queryMethod.setImportInformation(importInfo);
+        // query method is provided
+        MethodTypeProviderInformation providerInfo = new MethodTypeProviderInformation();
+        providerInfo.setProviderClass(DataServiceProviderImpl.class.getName());
+        queryMethod.setProviderInformation(providerInfo);
+        queryMethod.setIsProvided(true);
+        return queryMethod;
+    }
+    
+    
+    private boolean queryOperationCreated(ServiceInformation info) {
+        ServiceType mainService = info.getServices().getService(0);
+        MethodType queryMethod = CommonTools.getMethod(
+            mainService.getMethods(), DataServiceConstants.QUERY_METHOD_NAME);
+        if (queryMethod != null) {
+            return createQueryMethodType(info.getServiceDescriptor()).equals(queryMethod);
+        }
+        return false;
+    }
 }

@@ -96,8 +96,8 @@ public class SetQueryProcessorStep extends Step {
         CommonTools.setServiceProperty(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY,
             TestingCQLQueryProcessor.class.getName(), false);
         // copy the testing jar file to the service
-        File buildLibDir = new File("build" + File.separator + "lib");
-        File[] testJars = buildLibDir.listFiles(new FileFilter() {
+        File dataBuildLibDir = new File(".." + File.separator + "data" + File.separator + "build" + File.separator + "lib");
+        File[] testJars = dataBuildLibDir.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
                 return (pathname.getName().endsWith("tests.jar"));
             }
