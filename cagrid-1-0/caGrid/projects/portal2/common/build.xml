@@ -1,0 +1,126 @@
+<project name="portal2" default="compile">
+
+	<property file="build.properties" />
+	<property name="hibernate.properties"
+		value="db/${db}.hibernate.properties" />
+	<property file="${hibernate.properties}" />
+
+	<path id="cp">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+			<exclude name="**/ant*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="test.cp">
+		<path refid="cp" />
+		<fileset dir="${test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<pathelement location="${classes.dir}" />
+		<pathelement location="${test.classes.dir}" />
+	</path>
+
+	<path id="hibernatetoolslib">
+		<fileset dir="tools/hibernatetools/lib">
+			<include name="*.jar" />
+		</fileset>
+		<path refid="cp" />
+	</path>
+
+	<taskdef name="hibernatetool"
+		classname="org.hibernate.tool.ant.HibernateToolTask"
+		classpathref="hibernatetoolslib" />
+
+	<target name="configure-hibernate-tools">
+		<copy file="tools/hibernatetools/template.hibernate.cfg.xml"
+			tofile="tools/hibernatetools/hibernate.cfg.xml" overwrite="true">
+			<filterset>
+				<filter token="DB_DRIVER"
+					value="${hibernate.connection.driver_class}" />
+				<filter token="DB_URL"
+					value="${hibernate.connection.url}" />
+				<filter token="DB_USERNAME"
+					value="${hibernate.connection.username}" />
+				<filter token="DB_PASSWORD"
+					value="${hibernate.connection.password}" />
+				<filter token="DB_DIALECT" value="${hibernate.dialect}" />
+			</filterset>
+		</copy>
+	</target>
+
+	<target name="gen-ddl" depends="configure-hibernate-tools,compile">
+		<mkdir dir="gen" />
+		<hibernatetool destdir="gen">
+			<classpath>
+				<pathelement location="${classes.dir}" />
+			</classpath>
+			<annotationconfiguration
+				configurationfile="tools/hibernatetools/hibernate.cfg.xml" />
+			<hbm2ddl export="false" drop="true"
+				outputfilename="portal.ddl" />
+		</hibernatetool>
+
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}"
+			debug="true">
+			<classpath refid="cp" />
+		</javac>
+		<copy todir="${classes.dir}" overwrite="true">
+			<fileset dir="${src.dir}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+		<copy file="${hibernate.properties}"
+			tofile="${classes.dir}/hibernate.properties" overwrite="true" />
+	</target>
+
+	<target name="compile-test" depends="compile">
+		<mkdir dir="${test.classes.dir}" />
+		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}"
+			debug="true">
+			<classpath refid="test.cp" />
+		</javac>
+		<copy todir="${test.classes.dir}" overwrite="true">
+			<fileset dir="${test.src.dir}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="test" depends="compile-test">
+		<mkdir dir="test/reports" />
+		<junit printsummary="yes" showoutput="true" fork="true">
+			<classpath refid="test.cp" />
+			<formatter type="plain" />
+			<batchtest todir="test/reports">
+				<fileset dir="${test.src.dir}">
+					<include name="**/*Test*.java" />
+					<exclude name="**/Abstract*.java" />
+				</fileset>
+			</batchtest>
+
+		</junit>
+	</target>
+	
+	<target name="jar" depends="compile">
+		<jar destfile="${build.dir}/${common.jar.name}">
+			<fileset dir="${classes.dir}"/>
+			<fileset dir="${src.dir}">
+				<include name="**/*.xml"/>
+				<include name="**/*.properties"/>
+			</fileset>
+		</jar>
+	</target>
+
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+</project>

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+
+		<!-- Database connection settings -->
+		<property name="connection.driver_class">
+			com.mysql.jdbc.Driver
+		</property>
+		<property name="connection.url">
+			jdbc:mysql://localhost:3306/portal2
+		</property>
+		<property name="connection.username">portal2</property>
+		<property name="connection.password">portal2</property>
+		<property name="dialect">
+			org.hibernate.dialect.MySQLDialect
+		</property>
+
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.Address" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.Person" />
+
+	</session-factory>
+
+</hibernate-configuration>

@@ -1,0 +1,11 @@
+<project name="common">
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<fileset dir="${cagrid.home}/caGrid/share/lib">
+				<include name="ant-contrib*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+
+</project>

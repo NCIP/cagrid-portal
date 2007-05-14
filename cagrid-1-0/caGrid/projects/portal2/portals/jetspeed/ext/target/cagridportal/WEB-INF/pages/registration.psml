@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page id="default-page" xmlns="http://portals.apache.org/jetspeed"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://portals.apache.org/jetspeed http://portals.apache.org/jetspeed-2/2.1/schemas/psml.xsd">
+
+	<fragment id="jsreg-1" type="layout"
+		name="jetspeed-layouts::VelocityOneColumn">
+		<fragment id="jsreg-2" type="portlet"
+			name="j2-admin::UserRegistrationPortlet" />
+	</fragment>
+
+	<security-constraints>
+		<security-constraints-ref>guest-only</security-constraints-ref>
+	</security-constraints>
+
+</page>

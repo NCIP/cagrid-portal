@@ -1,0 +1,21 @@
+<project name="portlets-common">
+
+	<target name="compile">
+		<mkdir dir="${portlet.build.classes.dir}"/>
+		<javac srcdir="${portlet.src.java.dir}" destdir="${portlet.build.classes.dir}" classpathref="portlet.compile.cp"/> 
+	</target>	
+	
+	<target name="war" depends="compile">
+		<war destfile="${portlet.build.dir}/${portlet.portlet.name}.war"
+			webxml="${portlet.src.war.dir}/WEB-INF/web.xml">
+			<fileset dir="${portlet.src.war.dir}"/>
+			<classes dir="${portlet.build.classes.dir}"/>
+			<lib dir="${portlet.build.war.dir}/WEB-INF/lib"/>
+		</war>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${portlet.build.dir}"/>
+	</target>
+	
+</project>
