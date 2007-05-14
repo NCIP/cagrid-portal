@@ -90,7 +90,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-data.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-security.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-opensaml-1.1.jar" sourcepath="/caGrid-1.0-opensaml"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-opensaml-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-service.jar"/>
