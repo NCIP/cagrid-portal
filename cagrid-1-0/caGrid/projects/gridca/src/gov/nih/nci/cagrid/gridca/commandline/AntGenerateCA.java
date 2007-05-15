@@ -34,7 +34,7 @@ public class AntGenerateCA {
 			String keyOut = args[3];
 			String caOut = args[4];
 
-			KeyPair root = KeyUtil.generateRSAKeyPair1024("BC");
+			KeyPair root = KeyUtil.generateRSAKeyPair2048("BC");
 			int days = Integer.valueOf(daysValid).intValue();
 			while (days <= 0) {
 				System.err.println("Days Valid must be >0");

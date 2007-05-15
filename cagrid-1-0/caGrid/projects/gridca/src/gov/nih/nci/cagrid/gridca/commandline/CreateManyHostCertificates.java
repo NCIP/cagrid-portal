@@ -32,30 +32,25 @@ public class CreateManyHostCertificates {
 			Security
 					.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
-			String location = "C:\\certificates\\osu-cagrid-service-ca\\";
+			String location = "C:\\Users\\langella\\certificates\\osu-trust-ca\\";
 			int days = 1820;
 			String keyEnd = "-key.pem";
 			String certEnd = "-cert.pem";
 
-			String key = location + "osu-cagrid-service-cakey.pem";
-			String password = "gomets123";
+			String key = location + "ca-key.pem";
+			String password = "password";
 			PrivateKey cakey = KeyUtil.loadPrivateKey(new File(key), password);
 
-			String cert = location + "osu-cagrid-service-cacert.pem";
+			String cert = location + "ca-cert.pem";
 			X509Certificate cacert = CertUtil.loadCertificate("BC", new File(
 					cert));
 
 			List hostList = new ArrayList();
-			// hostList.add("cagrid01.bmi.ohio-state.edu");
-			// hostList.add("cagrid02.bmi.ohio-state.edu");
-			// hostList.add("cagrid03.bmi.ohio-state.edu");
-			// hostList.add("cagrid04.bmi.ohio-state.edu");
-			// hostList.add("cagrid05.bmi.ohio-state.edu");
-			hostList.add("ccis2005.duhs.duke.edu");
-			hostList.add("cagrid1.duhs.duke.edu");
-			hostList.add("cagrid2.duhs.duke.edu");
-			hostList.add("catrip1.duhs.duke.edu");
-			hostList.add("mendel.duhs.duke.edu");
+			hostList.add("cagrid01.bmi.ohio-state.edu");
+		    hostList.add("cagrid02.bmi.ohio-state.edu");
+			hostList.add("cagrid03.bmi.ohio-state.edu");
+			hostList.add("cagrid04.bmi.ohio-state.edu");
+			hostList.add("cagrid05.bmi.ohio-state.edu");
 
 			for (int i = 0; i < hostList.size(); i++) {
 				String cn = (String) hostList.get(i);
