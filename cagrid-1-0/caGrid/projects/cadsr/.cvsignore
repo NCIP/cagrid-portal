@@ -8,3 +8,4 @@ bin
 *.bat
 *omainModel.xml
 deploy.properties
+extension.xml

@@ -194,7 +194,11 @@
     </target>
     
     <target name="configure" description="Configures the project based on settings.">		
-        <copy filtering="true" file="deploy.properties.template" tofile="deploy.properties" overwrite="true">
+        <copy todir="${basedir}" overwrite="true">
+            <fileset dir="${basedir}">
+                <include name="*.template" />
+            </fileset>
+            <mapper type="glob" from="*.template" to="*" />
             <filterset filtersfile="${basedir}/ext/resources/service_urls.properties"/>
         </copy>
     </target>

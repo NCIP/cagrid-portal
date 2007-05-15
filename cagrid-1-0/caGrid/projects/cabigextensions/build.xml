@@ -149,9 +149,15 @@
     <!-- =============================================================== -->
     <!-- Prepares the build directory                                    -->
     <!-- =============================================================== -->
-    <target name="prepare" depends="checkGlobus">
+    <target name="prepare" depends="checkGlobus, configure">
         <tstamp />
         <mkdir dir="${build.dir}" />
+    </target>
+    
+    <target name="configure" description="Configures the project based on settings.">		
+        <copy filtering="true" file="${extensions.dir}/cagrid_metadata/extension.xml.template" tofile="${extensions.dir}/cagrid_metadata/extension.xml" overwrite="true">
+            <filterset filtersfile="${basedir}/ext/resources/service_urls.properties"/>
+        </copy>
     </target>
 
 
