@@ -568,7 +568,13 @@
     <!-- =============================================================== -->
     <!-- CAGRID GME:                                                     -->
     <!-- =============================================================== -->
-    <target name="build-gme" depends="prepare" description="Builds caGrid GME">
+    <target name="configure-gme" depends="prepare" description="Configures the gme project">
+        <resolveDependencies extdir="${projects.dir}/gme/ext">
+            <artifact refid="service_urls.properties" />
+        </resolveDependencies>
+        <!--<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="configure" />-->
+    </target>
+    <target name="build-gme" depends="configure-gme" description="Builds caGrid GME">
         <resolveDependencies extdir="${projects.dir}/gme/ext">
             <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
