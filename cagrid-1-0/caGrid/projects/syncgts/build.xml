@@ -102,7 +102,7 @@
 
 
 	<!-- Sets up the build directory structure -->
-	<target name="init" depends="checkGlobus, defineClasspaths">
+	<target name="init" depends="checkGlobus, defineClasspaths, configure">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
 		<mkdir dir="${test.build.dest}" />
@@ -169,6 +169,11 @@
 		</path>
 	</target>
 
+    <target name="configure" description="Configures the project based on settings.">		
+        <copy filtering="true" file="deploy.properties.template" tofile="deploy.properties" overwrite="true">
+            <filterset filtersfile="${basedir}/ext/resources/service_urls.properties"/>
+        </copy>
+    </target>
 
 
 	<!-- Generate bindings for our WSDL file -->

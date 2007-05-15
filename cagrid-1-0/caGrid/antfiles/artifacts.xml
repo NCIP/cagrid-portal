@@ -634,5 +634,15 @@
                 <include name="*.jar" />
             </fileset>
         </artifact>
+        
+        
+        <!-- artificats which depend on the target grid -->
+        <artifact track="main" type="resources" id="service_urls.properties">
+            <fileset dir="${target.grids.dir}/${target.grid}">
+                <include name="service_urls.properties" />
+            </fileset>
+        </artifact>
+        
+        
     </target>
 </project>

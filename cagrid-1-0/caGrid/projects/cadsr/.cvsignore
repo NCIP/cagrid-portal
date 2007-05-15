@@ -7,3 +7,4 @@ bin
 *.sh
 *.bat
 *omainModel.xml
+deploy.properties

@@ -1,5 +1,5 @@
 service.deployment.prefix=cagrid
-index.service.url=http://cbiovdev5012.nci.nih.gov:80/wsrf/services/DefaultIndexService
+index.service.url=@cagrid.master.index.service.url@
 csm.app.context=SDK
 saml.provider.crt=/Users/auth_svc/certs/auth_svc_crt.pem
 saml.provider.key=/Users/auth_svc/certs/auth_svc_key.pem
