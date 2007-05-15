@@ -14,7 +14,6 @@ import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extensions.metadata.common.MetadataExtensionHelper;
-import gov.nih.nci.cagrid.introduce.upgrade.common.ExtensionUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
 import gov.nih.nci.cagrid.introduce.upgrade.one.one.ExtensionUpgraderBase;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
