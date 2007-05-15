@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.CertificateAuthorityType;
 import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
@@ -48,7 +49,7 @@ import java.security.cert.X509Certificate;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class Dorian {
+public class Dorian extends LoggingObject{
 
 	private Database db;
 
@@ -67,6 +68,8 @@ public class Dorian {
 	private DorianConfiguration configuration;
 
 	private PropertyManager properties;
+	
+	
 
 	public Dorian(DorianConfiguration conf, String serviceId)
 			throws DorianInternalFault {
@@ -152,6 +155,7 @@ public class Dorian {
 			}
 
 		} catch (Exception e) {
+			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
 			fault
 					.setFaultString("An unexpected error occurred in configuring the service.");
