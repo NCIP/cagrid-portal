@@ -35,6 +35,10 @@ Upgrade Cycle
 
 To Do:  
 
+Fix the caDSR var name in the extensions, i have a typo
+
+in the types file importer check the support for includes, and imports and check on whether it works when importing and including from ../
+
 when using CMS and not setting the context then it throws up error dialogs at random times as well as it lets you close the method mod viewer
 even though it is wrong ang then pops up an error dialog.  It should be validating on the close or done buttons.
 
