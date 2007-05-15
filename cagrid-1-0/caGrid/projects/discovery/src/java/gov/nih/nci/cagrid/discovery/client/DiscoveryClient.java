@@ -12,8 +12,11 @@ import gov.nih.nci.cagrid.metadata.exceptions.QueryInvalidException;
 import gov.nih.nci.cagrid.metadata.exceptions.RemoteResourcePropertyRetrievalException;
 import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.Address;
@@ -37,8 +40,16 @@ import org.globus.wsrf.encoding.ObjectDeserializer;
  * @author oster
  */
 public class DiscoveryClient {
+    /**
+     * Comment for <code>DEFAULT_INDEX_SERVICE_URL_PROP</code>
+     */
+    private static final String DEFAULT_INDEX_SERVICE_URL_PROP = "default.index.service.url";
 
-    protected static final String DEFAULT_INDEX_SERVICE_URL = "http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService";
+    /**
+     * Comment for <code>DISCOVERY_PROPERTIES</code>
+     */
+    private static final String DISCOVERY_PROPERTIES = "discovery.properties";
+
     protected EndpointReferenceType indexEPR = null;
 
     // Define the prefixes
@@ -80,7 +91,34 @@ public class DiscoveryClient {
      *             if the Default Index Service is invalid
      */
     public DiscoveryClient() throws MalformedURIException {
-        this(DEFAULT_INDEX_SERVICE_URL);
+        this(getDefaultIndexServiceURL());
+    }
+
+
+    /**
+     * @return
+     */
+    protected static String getDefaultIndexServiceURL() throws MalformedURIException {
+        InputStream propStream = DiscoveryClient.class.getResourceAsStream(DISCOVERY_PROPERTIES);
+        if (propStream == null) {
+            throw new MalformedURIException(
+                "Problem determining default Index Service URL; unable to load properties file ["
+                    + DISCOVERY_PROPERTIES + "]");
+        }
+        Properties props = new Properties();
+        try {
+            props.load(propStream);
+        } catch (IOException e) {
+            throw new MalformedURIException(
+                "Problem determining default Index Service URL; unable to load properties file : " + e.getMessage());
+        }
+        String defaultURL = props.getProperty(DEFAULT_INDEX_SERVICE_URL_PROP);
+        if (defaultURL == null) {
+            throw new MalformedURIException("Problem determining default Index Service URL; unable to load property ["
+                + DEFAULT_INDEX_SERVICE_URL_PROP + "] from properties file.");
+        }
+
+        return defaultURL;
     }
 
 
@@ -721,8 +759,7 @@ public class DiscoveryClient {
         }
 
         if (allServices != null) {
-            for (int i = 0; i < allServices.length; i++) {
-                EndpointReferenceType service = allServices[i];
+            for (EndpointReferenceType service : allServices) {
                 System.out.println("\n\n" + service.getAddress());
                 try {
                     ServiceMetadata commonMetadata = MetadataUtils.getServiceMetadata(service);
