@@ -35,6 +35,9 @@ Upgrade Cycle
 
 To Do:  
 
+when using CMS and not setting the context then it throws up error dialogs at random times as well as it lets you close the method mod viewer
+even though it is wrong ang then pops up an error dialog.  It should be validating on the close or done buttons.
+
 make gui work one service at a time
 
 make deployer deploy remotely
