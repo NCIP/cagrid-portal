@@ -265,6 +265,8 @@ public abstract class CertificateAuthority extends LoggingObject {
 			X509Certificate cert = CertUtil.generateCertificate(getProvider(), new X509Name(subject), start,
 				expiration, pair.getPublic(), cacert, getCAPrivateKey(), getSignatureAlgorithm());
 			addCredentials(alias, password, cert, pair.getPrivate());
+		} catch (CertificateAuthorityFault f) {
+			throw f;
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();

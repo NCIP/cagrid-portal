@@ -164,6 +164,43 @@ public class TestGroups extends TestCase {
 			}
 		}
 	}
+	
+	public void testRemoveAllMembersFromGroup() {
+		GroupManager gm = new GroupManager(db);
+		String member = "MemberX";
+		String memberToBeRemoved = "MemberY";
+		try {
+			String grpPrefix="mygroup";
+			for(int i=0; i<3; i++){
+				String grpName = grpPrefix+i;
+				gm.addGroup(grpName);
+				Group grp = gm.getGroup(grpName);
+				grp.addMember(member);
+				grp.addMember(memberToBeRemoved);
+				assertEquals(true, grp.isMember(member));
+				assertEquals(true, grp.isMember(memberToBeRemoved));
+				assertEquals(2, grp.getMembers().size());
+			}
+			gm.removeUserFromAllGroups(memberToBeRemoved);
+			for(int i=0; i<3; i++){
+				String grpName = grpPrefix+i;
+				Group grp = gm.getGroup(grpName);
+				assertEquals(true, grp.isMember(member));
+				assertEquals(false, grp.isMember(memberToBeRemoved));
+				assertEquals(1, grp.getMembers().size());
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				gm.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 
 
 	protected void setUp() throws Exception {

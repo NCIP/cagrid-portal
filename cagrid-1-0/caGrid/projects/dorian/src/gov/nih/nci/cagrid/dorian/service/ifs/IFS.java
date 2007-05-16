@@ -144,6 +144,7 @@ public class IFS extends LoggingObject {
 		for (int i = 0; i < users.length; i++) {
 			try {
 				um.removeUser(users[i]);
+				this.groupManager.removeUserFromAllGroups(users[i].getGridId());
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
 			}
@@ -193,6 +194,7 @@ public class IFS extends LoggingObject {
 			TrustedIdP idp = tm.getTrustedIdPByDN(idpCert.getSubjectDN().getName());
 			IFSUser usr = um.getUser(idp.getId(), localId);
 			um.removeUser(usr);
+			this.groupManager.removeUserFromAllGroups(usr.getGridId());
 		} catch (InvalidUserFault e) {
 
 		} catch (InvalidTrustedIdPFault f) {
@@ -211,6 +213,7 @@ public class IFS extends LoggingObject {
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		um.removeUser(usr);
+		this.groupManager.removeUserFromAllGroups(usr.getGridId());
 	}
 
 

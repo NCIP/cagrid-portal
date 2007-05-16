@@ -7,9 +7,12 @@ import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -54,7 +57,8 @@ public class GroupManager {
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("INSERT INTO " + GROUPS_TABLE + " SET "+GROUP_NAME_FIELD+"= ?");
+			PreparedStatement s = c
+				.prepareStatement("INSERT INTO " + GROUPS_TABLE + " SET " + GROUP_NAME_FIELD + "= ?");
 			s.setString(1, name);
 			s.execute();
 			s.close();
@@ -77,6 +81,47 @@ public class GroupManager {
 	public Group getGroup(long groupId) throws DorianInternalFault {
 		buildDatabase();
 		return new Group(db, groupId);
+	}
+
+
+	public void removeUserFromAllGroups(String member) throws DorianInternalFault {
+		List<Group> groups = getGroups();
+		for (int i = 0; i < groups.size(); i++) {
+			Group g = groups.get(i);
+			g.removeMember(member);
+		}
+
+	}
+
+
+	public List<Group> getGroups() throws DorianInternalFault {
+		buildDatabase();
+		List<Group> groups = new ArrayList<Group>();
+		Connection c = null;
+		try {
+			c = db.getConnection();
+			PreparedStatement s = c.prepareStatement("select " + GROUP_ID_FIELD + "," + GROUP_NAME_FIELD + " from "
+				+ GROUPS_TABLE);
+			ResultSet rs = s.executeQuery();
+			while (rs.next()) {
+				Group grp = new Group(db, rs.getLong(GROUP_ID_FIELD));
+				grp.setName(rs.getString(GROUP_NAME_FIELD));
+				groups.add(grp);
+			}
+			rs.close();
+			s.close();
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("Unexpected Database Error");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+		return groups;
 	}
 
 
