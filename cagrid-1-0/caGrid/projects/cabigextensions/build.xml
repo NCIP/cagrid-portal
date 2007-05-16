@@ -59,6 +59,8 @@
     <fileset dir="${ext.schema.dir}" id="cagrid_wsEnum.schema.fileset">
         <include name="*.xsd" />
         <include name="*.wsdl" />
+    	<include name="CaGridEnumeration/**/*.xsd"/>
+		<include name="CaGridEnumeration/**/*.wsdl"/>
     </fileset>
 
     <taskdef resource="net/sf/antcontrib/antlib.xml">
@@ -153,13 +155,12 @@
         <tstamp />
         <mkdir dir="${build.dir}" />
     </target>
-    
+
     <target name="configure" description="Configures the project based on settings.">		
         <copy filtering="true" file="${extensions.dir}/cagrid_metadata/extension.xml.template" tofile="${extensions.dir}/cagrid_metadata/extension.xml" overwrite="true">
             <filterset filtersfile="${basedir}/ext/resources/service_urls.properties"/>
         </copy>
     </target>
-
 
     <target name="merge" depends="prepare">
         <!-- Merge our namespace mappings file with the GT4 mappins file -->

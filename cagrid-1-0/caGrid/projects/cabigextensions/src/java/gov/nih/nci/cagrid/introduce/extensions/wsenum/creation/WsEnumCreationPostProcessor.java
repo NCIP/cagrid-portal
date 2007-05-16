@@ -58,10 +58,12 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
                 addEnumerationMethods(info);
             }
         } catch (CreationExtensionException ex) {
+            ex.printStackTrace(System.out);
+            System.out.flush();
             throw ex;
         } catch (Exception ex) {
-            // ex.printStackTrace(System.out);
-            // System.out.flush();
+            ex.printStackTrace(System.out);
+            System.out.flush();
             throw new CreationExtensionException(ex);
         }
     }
@@ -94,16 +96,19 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
     private void copySchemasToService(ServiceExtensionDescriptionType desc, ServiceInformation info)
         throws CreationExtensionException {
         File extensionSchemaDir = getExtensionSchemaDir(desc);
-        File[] sourceSchemas = extensionSchemaDir.listFiles(new FileFilters.XSDFileFilter());
         File serviceSchemasDir = new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema"
-            + File.separator + info.getServices().getService()[0].getName());
-        for (int i = 0; i < sourceSchemas.length; i++) {
-            File outFile = new File(serviceSchemasDir.getAbsolutePath() + File.separator + sourceSchemas[i].getName());
-            try {
-                Utils.copyFile(sourceSchemas[i], outFile);
-            } catch (IOException ex) {
-                throw new CreationExtensionException("Error copying schema file " 
-                    + sourceSchemas[i].getAbsolutePath(), ex);
+            + File.separator + info.getServices().getService(0).getName());
+        File[] sourceSchemas = extensionSchemaDir.listFiles(new FileFilters.XSDFileFilter());
+        for (File source : sourceSchemas) {
+            if (source.isFile()) {
+                File outFile = new File(serviceSchemasDir.getAbsolutePath() 
+                    + File.separator + source.getName());
+                try {
+                    Utils.copyFile(source, outFile);
+                } catch (IOException ex) {
+                    throw new CreationExtensionException("Error copying schema file " 
+                        + source.getAbsolutePath(), ex);
+                }
             }
         }
     }
@@ -173,6 +178,12 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
             addyNsType.setGenerateStubs(Boolean.FALSE);
             addyNsType.setPackageName(WsEnumConstants.ADDRESSING_PACKAGE_NAME);
             CommonTools.addNamespace(info.getServiceDescriptor(), addyNsType);
+            // enumeration response container
+            NamespaceType ercNsType = CommonTools.createNamespaceType(serviceSchemasDir.getAbsolutePath()
+                + File.separator + WsEnumConstants.ENUMERATION_RESPONSE_XSD, serviceSchemasDir);
+            ercNsType.setGenerateStubs(Boolean.FALSE);
+            ercNsType.setPackageName(WsEnumConstants.ENUMERATION_RESPONSE_PACKAGE);
+            CommonTools.addNamespace(info.getServiceDescriptor(), ercNsType);
         } catch (MobiusException ex) {
             throw new CreationExtensionException("Error creating namespace types", ex);
         }
