@@ -139,81 +139,57 @@
         <available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
     </target>
 	
-	
-	<!-- Generate the stub source files -->
-	    <!-- This is done with a GT4 tool -->
-	<!--
-	    <target name="stubs" depends="init">
-	        <for list="${introduce.skeleton.services.list}" parallel="false" param="service.name" trim="true">
-	            <sequential>
-	                <echo message="Generating stubs for @{service.name}." />
-	                <antcall target="serviceStubs" inheritall="false">
-	                    <param name="interface.name" value="@{service.name}" />
-	                </antcall>
-	            </sequential>
-	        </for>
-	        <antcall target="stubGenerationPostProcessor" />
-	        <runtarget target="postStubs" />
-	    </target>
-
-	    <target name="stubGenerationPostProcessor">
-	        <java classname="gov.nih.nci.cagrid.introduce.axis.FixSoapBindingStub" classpathref="processor.run.classpath" fork="no">
-	            <arg value="${basedir}" />
-	        </java>
-	    </target>
-	-->
-	
 	 <target name="merge" depends="init">
-	        <!-- Merge our namespace mappings file with the GT4 mappins file -->
-	        <ant antfile="${build.stubs}" target="mergePackageMapping" inheritall="false">
-	            <property name="mapping.src" location="${mapping.src}" />
-	            <property name="mapping.dst" location="${build.dir}/namespace2package.mappings" />
-	        </ant>
-	    </target>
+		<!-- Merge our namespace mappings file with the GT4 mappins file -->
+	    <ant antfile="${build.stubs}" target="mergePackageMapping" inheritall="false">
+	    	<property name="mapping.src" location="${mapping.src}" />
+	        <property name="mapping.dst" location="${build.dir}/namespace2package.mappings" />
+			</ant>
+	</target>
 	
 	
 	<!-- Generate bindings for our WSDL file -->
-	    <!-- This is done with a GT4 tool -->
-	    <target name="serviceGenerateBindings" depends="setGlobus,init">
-	        <ant antfile="${build.stubs}" target="generateBinding" inheritall="false">
-	            <property name="source.binding.dir" value="${schema.dest}/CaGridEnumeration" />
-	            <property name="target.binding.dir" value="${schema.dest}/CaGridEnumeration" />
-	            <property name="porttype.wsdl" value="CaGridEnumeration.wsdl" />
-	            <property name="binding.root" value="CaGridEnumeration" />
-	        </ant>
-	    </target>
+	<!-- This is done with a GT4 tool -->
+	<target name="serviceGenerateBindings" depends="setGlobus,init">
+		<ant antfile="${build.stubs}" target="generateBinding" inheritall="false">
+	    	<property name="source.binding.dir" value="${schema.dest}/CaGridEnumeration" />
+	        <property name="target.binding.dir" value="${schema.dest}/CaGridEnumeration" />
+	        <property name="porttype.wsdl" value="CaGridEnumeration.wsdl" />
+	        <property name="binding.root" value="CaGridEnumeration" />
+		</ant>
+	</target>
 	
 	<!-- Generate the stub source files -->
-	    <!-- This is done with a GT4 tool -->
-	    <target name="serviceStubs" depends="setGlobus,serviceGenerateBindings, merge">
-	        <!-- Invoke the stub generator -->
-	        <ant antfile="${build.stubs}" target="generateStubs" inheritall="false">
-	            <property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
-	            <property name="source.stubs.dir" location="${schema.dest}/CaGridEnumeration" />
-	            <property name="target.stubs.dir" location="${stubs.src}" />
-	            <property name="wsdl.file" value="CaGridEnumeration_service.wsdl" />
-	            <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
-	        </ant>
-	    </target>
+	<!-- This is done with a GT4 tool -->
+	<target name="serviceStubs" depends="setGlobus,serviceGenerateBindings, merge">
+		<!-- Invoke the stub generator -->
+	    <ant antfile="${build.stubs}" target="generateStubs" inheritall="false">
+	    	<property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
+	        <property name="source.stubs.dir" location="${schema.dest}/CaGridEnumeration" />
+	        <property name="target.stubs.dir" location="${stubs.src}" />
+	        <property name="wsdl.file" value="CaGridEnumeration_service.wsdl" />
+	        <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
+	    </ant>
+	</target>
 
 
-	    <!-- Compile the stubs generated in the previous step -->
-	    <target name="compileStubs" depends="serviceStubs">
-	        <javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
-				<classpath>
-	                <fileset dir="${lib.dir}">
-	                    <include name="*.jar" />
-	                </fileset>
-	                <fileset dir="${ext.lib.dir}">
-	                    <include name="*.jar" />
-	                </fileset>
-	                <fileset dir="${globus.dir}/lib">
-	                    <include name="*.jar" />
-	                </fileset>
-	            </classpath>
-	            <include name="**/*.java" />
-	        </javac>
-	    </target>
+	<!-- Compile the stubs generated in the previous step -->
+	<target name="compileStubs" depends="serviceStubs">
+		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
+			<classpath>
+				<fileset dir="${lib.dir}">
+	            	<include name="*.jar" />
+				</fileset>
+	            <fileset dir="${ext.lib.dir}">
+	            	<include name="*.jar" />
+				</fileset>
+	            <fileset dir="${globus.dir}/lib">
+	            	<include name="*.jar" />
+				</fileset>
+			</classpath>
+	        <include name="**/*.java" />
+		</javac>
+	</target>
 
 
     <!-- compiles the common classes for data services -->
