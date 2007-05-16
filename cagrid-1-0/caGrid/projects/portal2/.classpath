@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="common/src/java"/>
+	<classpathentry kind="src" path="common/test/src/java"/>
+	<classpathentry kind="src" path="webapps/cagridportlets/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/hibernate/annotations/hibernate-commons-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate/annotations/hibernate-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate/annotations/ejb3-persistence.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate/core/hibernate3.jar"/>
+	<classpathentry kind="lib" path="lib/portlet/portlet.jar"/>
+	<classpathentry kind="lib" path="lib/j2ee/jstl.jar"/>
+	<classpathentry kind="lib" path="lib/servlet/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-commons/commons-logging.jar"/>
+	<classpathentry kind="lib" path="lib/spring/spring.jar"/>
+	<classpathentry kind="lib" path="lib/spring-portlet/spring-portlet.jar"/>
+	<classpathentry kind="lib" path="common/test/lib/dbunit-2.2.jar"/>
+	<classpathentry kind="lib" path="common/test/lib/spring/junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
