@@ -44,7 +44,7 @@
     <!-- schemas and namespace mappings -->
     <property name="schema.src" location="${globus.dir}/share/schema" />
     <property name="schema.dest" location="${build.dir}/schema" />
-    <property name="mapping.src" value="${basedir}/NStoPkg.properties" />
+    <property name="mapping.src" value="${basedir}/NStoPKG.properties" />
 
     <!-- source directories -->
     <property name="src.dir" location="${basedir}/src/java" />
