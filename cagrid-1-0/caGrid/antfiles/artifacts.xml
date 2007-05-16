@@ -445,10 +445,14 @@
         </artifact>
         <artifact track="main" type="schemas" id="ws.enum.schemas">
             <fileset dir="${projects.dir}/wsEnum/schema">
+            	<include name="**/*.xsd"/>
+            	<include name="**/*.wsdl"/>
+            	<!--
                 <include name="enumeration.xsd" />
                 <include name="addressing.xsd" />
                 <include name="enumeration.wsdl" />
             	<include name="EnumerationResponseContainer.xsd"/>
+            	-->
             </fileset>
         </artifact>
         <!--
