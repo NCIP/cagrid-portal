@@ -337,8 +337,8 @@ public class TestIdentityProvider extends TestCase {
 
 	private BasicAuthCredential getAdminCreds() {
 		BasicAuthCredential cred = new BasicAuthCredential();
-		cred.setUserId(IdentityProvider.ADMIN_USER_ID);
-		cred.setPassword(IdentityProvider.ADMIN_PASSWORD);
+		cred.setUserId(UserManager.ADMIN_USER_ID);
+		cred.setPassword(UserManager.ADMIN_PASSWORD);
 		return cred;
 	}
 

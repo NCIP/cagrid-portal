@@ -32,6 +32,10 @@ import java.util.List;
  */
 public class UserManager extends LoggingObject {
 
+	public static String ADMIN_USER_ID = "dorian";
+
+	public static String ADMIN_PASSWORD = "password";
+
 	private static final String IDP_USERS_TABLE = "idp_users";
 
 	private Database db;
@@ -393,6 +397,33 @@ public class UserManager extends LoggingObject {
 					+ "PHONE_NUMBER VARCHAR(20) NOT NULL," + "STATUS VARCHAR(20) NOT NULL,"
 					+ "ROLE VARCHAR(20) NOT NULL," + "INDEX document_index (EMAIL));";
 				db.update(applications);
+				try {
+					IdPUser u = new IdPUser();
+					u.setUserId(ADMIN_USER_ID);
+					u.setPassword(ADMIN_PASSWORD);
+					u.setEmail("dorian@dorian.org");
+					u.setFirstName("Mr.");
+					u.setLastName("Administrator");
+					u.setOrganization("caBIG");
+					u.setAddress("3184 Graves Hall");
+					u.setAddress2("333 W. Tenth Avenue");
+					u.setCity("Columbus");
+					u.setState(StateCode.OH);
+					u.setZipcode("43210");
+					u.setCountry(CountryCode.US);
+					u.setPhoneNumber("555-555-5555");
+					u.setStatus(IdPUserStatus.Active);
+					u.setRole(IdPUserRole.Administrator);
+					this.addUser(u);
+				} catch (Exception e) {
+					logError(e.getMessage(), e);
+					DorianInternalFault fault = new DorianInternalFault();
+					fault.setFaultString("Unexpected Error, Could not add initial IdP user!!!");
+					FaultHelper helper = new FaultHelper(fault);
+					helper.addFaultCause(e);
+					fault = (DorianInternalFault) helper.getFault();
+					throw fault;
+				}
 			}
 			this.dbBuilt = true;
 		}
@@ -589,7 +620,7 @@ public class UserManager extends LoggingObject {
 
 	public void clearDatabase() throws DorianInternalFault {
 		this.buildDatabase();
-		db.update("delete FROM " + IDP_USERS_TABLE);
+		db.update("drop TABLE " + IDP_USERS_TABLE);
 	}
 
 }

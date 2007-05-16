@@ -72,7 +72,11 @@ public class IFS extends LoggingObject {
 		if (!this.groupManager.groupExists(ADMINISTRATORS)) {
 			this.groupManager.addGroup(ADMINISTRATORS);
 			this.administrators = this.groupManager.getGroup(ADMINISTRATORS);
-			this.administrators.addMember(defaults.getDefaultUser().getGridId());
+			if (defaults.getDefaultUser() != null) {
+				this.administrators.addMember(defaults.getDefaultUser().getGridId());
+			} else {
+				logWarning("COULD NOT ADD DEFAULT USER TO ADMINISTRATORS GROUP, NO DEFAULT USER WAS FOUND!!!");
+			}
 		} else {
 			this.administrators = this.groupManager.getGroup(ADMINISTRATORS);
 		}

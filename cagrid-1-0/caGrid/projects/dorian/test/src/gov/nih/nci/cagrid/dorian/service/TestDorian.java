@@ -344,6 +344,179 @@ public class TestDorian extends TestCase {
 	}
 
 
+	public void testRemoveDorianIdPDefaultAdmin() {
+		try {
+			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
+				new InputStreamReader(resource), DorianConfiguration.class);
+			dorian = new Dorian(conf, "localhost");
+			assertNotNull(dorian.getConfiguration());
+			assertNotNull(dorian.getDatabase());
+			String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
+			String gridId = UserManager.subjectToIdentity(gridSubject);
+
+			IFSUserFilter uf = new IFSUserFilter();
+			uf.setGridId(gridId);
+			assertEquals(1, dorian.findIFSUsers(gridId, uf).length);
+
+			Application app = createApplication();
+			dorian.registerWithIdP(app);
+
+			IdPUserFilter f = new IdPUserFilter();
+			f.setUserId(app.getUserId());
+			IdPUser[] list = dorian.findIdPUsers(gridId, f);
+			assertEquals(1, list.length);
+			assertEquals(app.getUserId(), list[0].getUserId());
+			list[0].setStatus(IdPUserStatus.Active);
+			list[0].setRole(IdPUserRole.Administrator);
+			dorian.updateIdPUser(gridId, list[0]);
+			String username = list[0].getUserId();
+			BasicAuthCredential cred = new BasicAuthCredential();
+			cred.setUserId(username);
+			cred.setPassword(app.getPassword());
+			SAMLAssertion saml = dorian.authenticate(cred);
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			ProxyLifetime lifetime = getProxyLifetimeShort();
+			X509Certificate[] certs = dorian.createProxy(saml, pair.getPublic(), lifetime, DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
+			IFSUserFilter filter = new IFSUserFilter();
+			filter.setUID(username);
+			filter.setIdPId(1);
+			IFSUser[] ifsUser = dorian.findIFSUsers(gridId, filter);
+			assertEquals(1, ifsUser.length);
+			String userGridId = ifsUser[0].getGridId();
+			dorian.addAdmin(gridId, userGridId);
+
+			assertEquals(2, dorian.findIFSUsers(gridId, null).length);
+			String[] users = dorian.getAdmins(gridId);
+			boolean found1 = false;
+			boolean found2 = false;
+			for (int i = 0; i < users.length; i++) {
+				if (users[i].equals(userGridId)) {
+					found1 = true;
+				} else if (users[i].equals(gridId)) {
+					found2 = true;
+				}
+			}
+			assertTrue(found1);
+			assertTrue(found2);
+			dorian.removeIdPUser(userGridId, Dorian.IDP_ADMIN_USER_ID);
+
+			Dorian dorian2 = new Dorian(conf, "localhost");
+
+			assertEquals(1, dorian2.findIFSUsers(userGridId, null).length);
+			assertEquals(0, dorian2.findIFSUsers(userGridId, uf).length);
+			users = dorian2.getAdmins(userGridId);
+			found1 = false;
+			found2 = false;
+			for (int i = 0; i < users.length; i++) {
+				if (users[i].equals(userGridId)) {
+					found1 = true;
+				} else if (users[i].equals(gridId)) {
+					found2 = true;
+				}
+			}
+			assertTrue(found1);
+			assertFalse(found2);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				assertEquals(0, dorian.getDatabase().getUsedConnectionCount());
+				dorian.clearDatabase();
+				dorian = null;
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
+		}
+	}
+	
+	
+	public void testSuspendDorianIdPDefaultAdmin() {
+		try {
+			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
+				new InputStreamReader(resource), DorianConfiguration.class);
+			dorian = new Dorian(conf, "localhost");
+			assertNotNull(dorian.getConfiguration());
+			assertNotNull(dorian.getDatabase());
+			String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
+			String gridId = UserManager.subjectToIdentity(gridSubject);
+
+			IFSUserFilter uf = new IFSUserFilter();
+			uf.setGridId(gridId);
+			assertEquals(1, dorian.findIFSUsers(gridId, uf).length);
+			Application app = createApplication();
+			dorian.registerWithIdP(app);
+			IdPUserFilter f = new IdPUserFilter();
+			f.setUserId(app.getUserId());
+			IdPUser[] list = dorian.findIdPUsers(gridId, f);
+			assertEquals(1, list.length);
+			assertEquals(app.getUserId(), list[0].getUserId());
+			list[0].setStatus(IdPUserStatus.Active);
+			list[0].setRole(IdPUserRole.Administrator);
+			dorian.updateIdPUser(gridId, list[0]);
+			String username = list[0].getUserId();
+			BasicAuthCredential cred = new BasicAuthCredential();
+			cred.setUserId(username);
+			cred.setPassword(app.getPassword());
+			SAMLAssertion saml = dorian.authenticate(cred);
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			ProxyLifetime lifetime = getProxyLifetimeShort();
+			X509Certificate[] certs = dorian.createProxy(saml, pair.getPublic(), lifetime, DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
+			IFSUserFilter filter = new IFSUserFilter();
+			filter.setUID(username);
+			filter.setIdPId(1);
+			IFSUser[] ifsUser = dorian.findIFSUsers(gridId, filter);
+			assertEquals(1, ifsUser.length);
+			String userGridId = ifsUser[0].getGridId();
+			dorian.addAdmin(gridId, userGridId);
+			assertEquals(2, dorian.findIFSUsers(gridId, null).length);
+			
+			
+			IdPUserFilter f2 = new IdPUserFilter();
+			f2.setUserId(Dorian.IDP_ADMIN_USER_ID);
+			IdPUser[] list2 = dorian.findIdPUsers(gridId, f2);
+			assertEquals(1, list2.length);
+			assertEquals(Dorian.IDP_ADMIN_USER_ID, list2[0].getUserId());
+			list2[0].setStatus(IdPUserStatus.Suspended);
+			dorian.updateIdPUser(userGridId, list2[0]);
+			
+			Dorian dorian2 = new Dorian(conf, "localhost");
+			
+			try{
+				dorian2.findIdPUsers(gridId, null);
+				fail("Should not have permission to execute.");
+			}catch(PermissionDeniedFault pdf){
+				
+			}
+			IdPUserFilter idpf = new IdPUserFilter();
+			idpf.setUserId(Dorian.IDP_ADMIN_USER_ID);
+			idpf.setStatus(IdPUserStatus.Suspended);
+			assertEquals(1, dorian2.findIdPUsers(userGridId, idpf).length);
+			idpf.setStatus(IdPUserStatus.Active);
+			assertEquals(0, dorian2.findIdPUsers(userGridId, idpf).length);
+			
+			assertEquals(2, dorian2.findIFSUsers(userGridId, null).length);
+			assertEquals(1, dorian2.findIFSUsers(userGridId, uf).length);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				assertEquals(0, dorian.getDatabase().getUsedConnectionCount());
+				dorian.clearDatabase();
+				dorian = null;
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				assertTrue(false);
+			}
+		}
+	}
+
+
 	public void testMembershipRemovalOnIdPUserRemoval() {
 		try {
 			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
@@ -355,7 +528,7 @@ public class TestDorian extends TestCase {
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			Application app = createApplication();
 			dorian.registerWithIdP(app);
-			
+
 			IdPUserFilter f = new IdPUserFilter();
 			f.setUserId(app.getUserId());
 			IdPUser[] list = dorian.findIdPUsers(gridId, f);
@@ -370,8 +543,7 @@ public class TestDorian extends TestCase {
 			SAMLAssertion saml = dorian.authenticate(cred);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			X509Certificate[] certs = dorian.createProxy(saml, pair.getPublic(), lifetime,
-				DELEGATION_LENGTH);
+			X509Certificate[] certs = dorian.createProxy(saml, pair.getPublic(), lifetime, DELEGATION_LENGTH);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
 			IFSUserFilter filter = new IFSUserFilter();
 			filter.setUID(username);

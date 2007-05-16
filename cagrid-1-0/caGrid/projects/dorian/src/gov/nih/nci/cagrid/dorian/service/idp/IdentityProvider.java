@@ -7,12 +7,10 @@ import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.ApplicationReview;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
-import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
@@ -36,10 +34,6 @@ public class IdentityProvider extends LoggingObject {
 
 	private UserManager userManager;
 
-	public static String ADMIN_USER_ID = "dorian";
-
-	public static String ADMIN_PASSWORD = "password";
-
 	private AssertionCredentialsManager assertionManager;
 
 	private IdPRegistrationPolicy registrationPolicy;
@@ -51,27 +45,6 @@ public class IdentityProvider extends LoggingObject {
 			this.registrationPolicy = (IdPRegistrationPolicy) Class.forName(conf.getRegistrationPolicy()).newInstance();
 			this.userManager = new UserManager(db, conf);
 			this.assertionManager = new AssertionCredentialsManager(conf, ca, db);
-
-			if (!this.userManager.userExists(ADMIN_USER_ID)) {
-				IdPUser u = new IdPUser();
-				u.setUserId(ADMIN_USER_ID);
-				u.setPassword(ADMIN_PASSWORD);
-				u.setEmail("dorian@dorian.org");
-				u.setFirstName("Mr.");
-				u.setLastName("Administrator");
-				u.setOrganization("caBIG");
-				u.setAddress("3184 Graves Hall");
-				u.setAddress2("333 W. Tenth Avenue");
-				u.setCity("Columbus");
-				u.setState(StateCode.OH);
-				u.setZipcode("43210");
-				u.setCountry(CountryCode.US);
-				u.setPhoneNumber("555-555-5555");
-				u.setStatus(IdPUserStatus.Active);
-				u.setRole(IdPUserRole.Administrator);
-				this.userManager.addUser(u);
-			}
-
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();

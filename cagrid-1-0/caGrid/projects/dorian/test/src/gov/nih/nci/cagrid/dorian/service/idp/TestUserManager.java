@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 
 import junit.framework.TestCase;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -34,6 +35,7 @@ public class TestUserManager extends TestCase {
 
 	private IdentityProviderConfiguration conf;
 
+
 	public void testMultipleUsers() {
 		int userCount = 20;
 		int activeNA = 0;
@@ -41,7 +43,7 @@ public class TestUserManager extends TestCase {
 		int rejectedNA = 0;
 		int suspendedNA = 0;
 
-		int activeA = 0;
+		int activeA = 1;
 		int pendingA = 0;
 		int rejectedA = 0;
 		int suspendedA = 0;
@@ -54,36 +56,28 @@ public class TestUserManager extends TestCase {
 
 			for (int i = 0; i < users.length; i++) {
 				if ((i % 8) == 0) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator,
-							IdPUserStatus.Active);
+					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Active);
 					activeNA = activeNA + 1;
 				} else if ((i % 8) == 1) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator,
-							IdPUserStatus.Pending);
+					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Pending);
 					pendingNA = pendingNA + 1;
 				} else if ((i % 8) == 2) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator,
-							IdPUserStatus.Rejected);
+					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Rejected);
 					rejectedNA = rejectedNA + 1;
 				} else if ((i % 8) == 3) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator,
-							IdPUserStatus.Suspended);
+					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Suspended);
 					suspendedNA = suspendedNA + 1;
 				} else if ((i % 8) == 4) {
-					users[i] = makeUser(IdPUserRole.Administrator,
-							IdPUserStatus.Active);
+					users[i] = makeUser(IdPUserRole.Administrator, IdPUserStatus.Active);
 					activeA = activeA + 1;
 				} else if ((i % 8) == 5) {
-					users[i] = makeUser(IdPUserRole.Administrator,
-							IdPUserStatus.Pending);
+					users[i] = makeUser(IdPUserRole.Administrator, IdPUserStatus.Pending);
 					pendingA = pendingA + 1;
 				} else if ((i % 8) == 6) {
-					users[i] = makeUser(IdPUserRole.Administrator,
-							IdPUserStatus.Rejected);
+					users[i] = makeUser(IdPUserRole.Administrator, IdPUserStatus.Rejected);
 					rejectedA = rejectedA + 1;
 				} else if ((i % 8) == 7) {
-					users[i] = makeUser(IdPUserRole.Administrator,
-							IdPUserStatus.Suspended);
+					users[i] = makeUser(IdPUserRole.Administrator, IdPUserStatus.Suspended);
 					suspendedA = suspendedA + 1;
 				}
 
@@ -94,7 +88,7 @@ public class TestUserManager extends TestCase {
 				assertEquals(users[i], u);
 
 				IdPUser[] list = um.getUsers(null);
-				assertEquals(i + 1, list.length);
+				assertEquals(i + 2, list.length);
 				IdPUserFilter f = new IdPUserFilter();
 				f.setStatus(IdPUserStatus.Active);
 				f.setRole(IdPUserRole.Non_Administrator);
@@ -124,47 +118,37 @@ public class TestUserManager extends TestCase {
 
 			}
 
-			int numberOfUsers = users.length;
+			int numberOfUsers = users.length + 1;
 
 			for (int i = 0; i < users.length; i++) {
 				um.removeUser(users[i].getUserId());
 				numberOfUsers = numberOfUsers - 1;
 				if ((users[i].getStatus().equals(IdPUserStatus.Active))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Non_Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Non_Administrator))) {
 					activeNA = activeNA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Pending))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Non_Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Non_Administrator))) {
 					pendingNA = pendingNA - 1;
 				}
 				if ((users[i].getStatus().equals(IdPUserStatus.Rejected))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Non_Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Non_Administrator))) {
 					rejectedNA = rejectedNA - 1;
 				}
 				if ((users[i].getStatus().equals(IdPUserStatus.Suspended))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Non_Administrator))) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator,
-							IdPUserStatus.Suspended);
+					&& (users[i].getRole().equals(IdPUserRole.Non_Administrator))) {
+					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Suspended);
 					suspendedNA = suspendedNA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Active))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Administrator))) {
 					activeA = activeA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Pending))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Administrator))) {
 					pendingA = pendingA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Rejected))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Administrator))) {
+					&& (users[i].getRole().equals(IdPUserRole.Administrator))) {
 					rejectedA = rejectedA - 1;
-				} else if ((users[i].getStatus()
-						.equals(IdPUserStatus.Suspended))
-						&& (users[i].getRole()
-								.equals(IdPUserRole.Administrator))) {
+				} else if ((users[i].getStatus().equals(IdPUserStatus.Suspended))
+					&& (users[i].getRole().equals(IdPUserRole.Administrator))) {
 					suspendedA = suspendedA - 1;
 				}
 				assertFalse(um.userExists(users[i].getEmail()));
@@ -203,7 +187,7 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				um.clearDatabase();
 			} catch (Exception e) {
@@ -211,6 +195,7 @@ public class TestUserManager extends TestCase {
 			}
 		}
 	}
+
 
 	public void testChangeStatus() {
 		UserManager um = null;
@@ -229,7 +214,7 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				um.clearDatabase();
 			} catch (Exception e) {
@@ -238,6 +223,7 @@ public class TestUserManager extends TestCase {
 		}
 
 	}
+
 
 	public void testChangeRole() {
 		UserManager um = null;
@@ -255,7 +241,7 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				um.clearDatabase();
 			} catch (Exception e) {
@@ -263,6 +249,7 @@ public class TestUserManager extends TestCase {
 			}
 		}
 	}
+
 
 	public void testChangePassword() {
 		UserManager um = null;
@@ -281,7 +268,7 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				um.clearDatabase();
 			} catch (Exception e) {
@@ -290,6 +277,7 @@ public class TestUserManager extends TestCase {
 		}
 
 	}
+
 
 	public void testUpdateUser() {
 		UserManager um = null;
@@ -320,7 +308,7 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				um.clearDatabase();
 			} catch (Exception e) {
@@ -329,6 +317,7 @@ public class TestUserManager extends TestCase {
 		}
 
 	}
+
 
 	public void testSingleUser() {
 		UserManager um = null;
@@ -343,7 +332,7 @@ public class TestUserManager extends TestCase {
 			assertEquals(u1, u2);
 
 			IdPUser[] list = um.getUsers(null);
-			assertEquals(1, list.length);
+			assertEquals(2, list.length);
 			assertEquals(u1, list[0]);
 			IdPUserFilter f = new IdPUserFilter();
 			f.setStatus(IdPUserStatus.Active);
@@ -357,7 +346,7 @@ public class TestUserManager extends TestCase {
 			assertEquals(0, um.getUsers(f).length);
 			f.setStatus(IdPUserStatus.Active);
 			f.setRole(IdPUserRole.Administrator);
-			assertEquals(0, um.getUsers(f).length);
+			assertEquals(1, um.getUsers(f).length);
 			f.setStatus(IdPUserStatus.Pending);
 			assertEquals(0, um.getUsers(f).length);
 			f.setStatus(IdPUserStatus.Rejected);
@@ -374,12 +363,12 @@ public class TestUserManager extends TestCase {
 
 			}
 
-			assertEquals(0, um.getUsers(null).length);
+			assertEquals(1, um.getUsers(null).length);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				um.clearDatabase();
 			} catch (Exception e) {
@@ -388,16 +377,16 @@ public class TestUserManager extends TestCase {
 		}
 	}
 
+
 	public void testFindUsers() {
 		UserManager um = null;
 		try {
 
 			um = new UserManager(db, conf);
 			int size = 10;
-			
+
 			for (int i = 0; i < size; i++) {
-				um.addUser(makeUser(IdPUserRole.Non_Administrator,
-						IdPUserStatus.Active));
+				um.addUser(makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Active));
 			}
 			assertEquals(size, um.getUsers(getActiveUserFilter()).length);
 
@@ -544,7 +533,7 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				um.clearDatabase();
 			} catch (Exception e) {
@@ -552,6 +541,7 @@ public class TestUserManager extends TestCase {
 			}
 		}
 	}
+
 
 	public void testForeignUser() {
 		UserManager um = null;
@@ -585,7 +575,7 @@ public class TestUserManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		}finally {
+		} finally {
 			try {
 				um.clearDatabase();
 			} catch (Exception e) {
@@ -595,6 +585,7 @@ public class TestUserManager extends TestCase {
 
 	}
 
+
 	private IdPUserFilter getActiveUserFilter() {
 		IdPUserFilter filter = new IdPUserFilter();
 		filter.setStatus(IdPUserStatus.Active);
@@ -602,9 +593,11 @@ public class TestUserManager extends TestCase {
 		return filter;
 	}
 
+
 	private IdPUser makeActiveUser() {
 		return makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Active);
 	}
+
 
 	private IdPUser makeUser(IdPUserRole role, IdPUserStatus status) {
 		IdPUser u = new IdPUser();
@@ -627,6 +620,7 @@ public class TestUserManager extends TestCase {
 		return u;
 	}
 
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
@@ -641,6 +635,7 @@ public class TestUserManager extends TestCase {
 			assertTrue(false);
 		}
 	}
+
 
 	protected void tearDown() throws Exception {
 		super.setUp();

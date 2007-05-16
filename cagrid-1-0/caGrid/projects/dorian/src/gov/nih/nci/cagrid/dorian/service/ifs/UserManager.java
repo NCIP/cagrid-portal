@@ -750,8 +750,8 @@ public class UserManager extends LoggingObject {
 					if (defaults.getDefaultIdP() != null) {
 						TrustedIdP idp = tm.addTrustedIdP(defaults.getDefaultIdP());
 						IFSUser usr = defaults.getDefaultUser();
-						usr.setIdPId(idp.getId());
 						if (usr != null) {
+							usr.setIdPId(idp.getId());
 							this.addUser(idp, usr);
 							usr.setUserStatus(IFSUserStatus.Active);
 							this.updateUser(usr);
