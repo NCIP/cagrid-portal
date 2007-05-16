@@ -1,3 +1,6 @@
+lib/aspectj/*.jar
+ - From Spring 2.0.5 release
+
 lib/hibernate/annotations/*.jar
  - From Hibernate Annotations 3.3.0 GA.
  
@@ -7,11 +10,17 @@ lib/hibernate/core/*.jar
 lib/hsqldb/*.jar
  - From HSQLDB 1.8.0.7 release
  
+lib/j2ee/jstl.jar
+ - From Spring 2.0.5 
+
 lib/jakarta-commons/*.jar
- - From Spring 2.0.3 release
+ - From Spring 2.0.5 release
+ 
+lib/jakarta-taglib/standard.jar
+ - From Spring 2.0.5
  
 lib/log4j/log4j-1.2.14.jar
- - From Spring 2.0.3 release
+ - From Spring 2.0.5 release
  
 lib/mysql/mysql-connector-java-3.1.11.jar
 
@@ -21,15 +30,15 @@ lib/portlet/portlet.jar
  - This should not be included in any portlet war since the portal container will 
    provide it.
 
-lib/servlet/serverl-api.jar
+lib/servlet/servlet-api.jar
  - From Tomcat 5.5.17 release
    
 lib/spring/*.jar
- - From Spring 2.0.3 release
+ - From Spring 2.0.5 release
  - Downloaded from http://www.springframework.org/download
  
 lib/spring-portlet/*.jar
- - From the petportal sample that comes with the Spring 2.0.3 release.
+ - From the petportal sample that comes with the Spring 2.0.5 release.
  
 
  

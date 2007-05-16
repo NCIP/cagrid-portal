@@ -2,15 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="common/src/java"/>
 	<classpathentry kind="src" path="common/test/src/java"/>
-	<classpathentry kind="src" path="portlets/cabigparticipants/src/java"/>
+	<classpathentry kind="src" path="webapps/cagridportlets/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/portlet/portlet.jar"/>
-	<classpathentry kind="lib" path="lib/spring-portlet/standard.jar"/>
 	<classpathentry kind="lib" path="lib/spring-portlet/spring-portlet.jar"/>
-	<classpathentry kind="lib" path="lib/spring-portlet/jstl.jar"/>
-	<classpathentry kind="lib" path="lib/spring-portlet/commons-logging.jar"/>
-	<classpathentry kind="lib" path="lib/spring-portlet/commons-io.jar"/>
-	<classpathentry kind="lib" path="lib/spring-portlet/commons-fileupload.jar"/>
 	<classpathentry kind="lib" path="lib/spring/spring.jar"/>
 	<classpathentry kind="lib" path="lib/servlet/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-logging.jar"/>

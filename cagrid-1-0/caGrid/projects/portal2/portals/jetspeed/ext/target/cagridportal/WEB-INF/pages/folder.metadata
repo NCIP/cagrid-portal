@@ -32,7 +32,7 @@ limitations under the License.
   <document-order>cagridwiki.link</document-order>
 
   <menu name="page-navigations">
-    <options>/Administrative/portal-admin,/Administrative/security</options>
+    <options>/Administrative/cagridportaladmin,/Administrative/portal-admin,/Administrative/security</options>
   </menu>
 
   <!-- temporary menu definitions for jscookmenu layout decorator; will be standard -->

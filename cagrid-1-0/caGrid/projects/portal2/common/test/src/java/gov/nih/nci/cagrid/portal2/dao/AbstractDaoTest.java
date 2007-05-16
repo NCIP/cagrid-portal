@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.portal2.dao;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -228,6 +229,31 @@ public abstract class AbstractDaoTest extends DBTestCase {
 
 		public Map getParameterMap() {
 			return null;
+		}
+
+		public String getContextPath() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public String getRemoteUser() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Principal getUserPrincipal() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public boolean isSecure() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public boolean isUserInRole(String arg0) {
+			// TODO Auto-generated method stub
+			return false;
 		}
     }
 	

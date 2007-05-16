@@ -1,0 +1,59 @@
+<project name="participants" default="all">
+
+	<property file="build.properties" />
+
+	<import file="../../ant-files/common.xml" />
+
+	<path id="run.cp">
+		<fileset dir="../../lib">
+			<include name="spring/*.jar" />
+			<include name="spring-portlet/*.jar" />
+			<include name="log4j/*.jar" />
+			<include name="j2ee/jstl.jar"/>
+			<include name="jakarta-commons/*.jar" />
+			<include name="jakarta-taglib/standard.jar"/>
+			<include name="hibernate/**/*.jar" />
+			<include name="aspectj/*.jar"/>
+		</fileset>
+		<fileset dir="../../common/build">
+			<include name="cagrid-portal2-common.jar" />
+		</fileset>
+	</path>
+	<path id="compile.cp">
+		<path refid="run.cp"/>
+		<pathelement location="../../lib/portlet/portlet.jar" />
+	</path>
+
+	<target name="build-war">
+		<mkdir dir="${build.war.dir}/WEB-INF/lib" />
+		<copy todir="${build.war.dir}/WEB-INF/lib"
+			flatten="true" overwrite="true">
+			<path refid="run.cp"/>
+		</copy>
+	</target>
+	
+	<target name="compile">
+		<mkdir dir="${build.classes.dir}"/>
+		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" classpathref="compile.cp"/> 
+	</target>	
+	
+	<target name="war" depends="compile">
+		<war destfile="${build.dir}/${webapp.name}.war"
+			webxml="${src.war.dir}/WEB-INF/web.xml">
+			<fileset dir="${src.war.dir}"/>
+			<classes dir="${build.classes.dir}"/>
+			<lib dir="${build.war.dir}/WEB-INF/lib"/>
+		</war>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+	</target>	
+
+	<target name="all">
+		<antcall target="clean" />
+		<antcall target="build-war" />
+		<antcall target="war" />
+	</target>
+
+</project>

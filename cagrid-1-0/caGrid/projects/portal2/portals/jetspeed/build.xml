@@ -6,28 +6,32 @@
 	<import file="../../ant-files/common.xml" />
 
 
-	<target name="copy-custom-portal-conf">
+	<target name="copy-conf">
 		<copy todir="${jetspeed.ext.dir}" overwrite="true">
 			<fileset dir="ext">
-				<include name="**/*"/>
+				<include name="**/*" />
 			</fileset>
 		</copy>
 	</target>
 
-	<target name="copy-pages-to-tomcat">
-		<copy
-			todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/WEB-INF/pages"
-			overwrite="true">
-			<fileset
-				dir="ext/target/${jetspeed.custom.portal.name}/WEB-INF/pages">
+	<target name="copy-pages">
+		<copy todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/WEB-INF/pages" overwrite="true">
+			<fileset dir="ext/target/${jetspeed.custom.portal.name}/WEB-INF/pages">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-decoration">
+		<copy todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/decorations" overwrite="true">
+			<fileset dir="ext/target/${jetspeed.custom.portal.name}/decorations">
 				<include name="**/*" />
 			</fileset>
 		</copy>
 	</target>
 
 	<target name="deploy-portlets">
-		<for list="${portlets.list}" param="portletName"
-			parallel="false">
+		<for list="${portlets.list}" param="portletName" parallel="false">
 			<sequential>
 				<antcall target="deploy-portlet">
 					<param name="portletName" value="@{portletName}" />
@@ -36,10 +40,8 @@
 		</for>
 	</target>
 
-	<target name="deploy-portlet">
-		<copy
-			file="../../portlets/${portletName}/${portlet.build.dir}/${portletName}.war"
-			todir="${jetspeed.autodeploy.dir}" />
+	<target name="deploy-portlet-apps">
+		<copy file="../../webapps/${portletName}/build/${portletName}.war" todir="${jetspeed.autodeploy.dir}" />
 	</target>
 
 

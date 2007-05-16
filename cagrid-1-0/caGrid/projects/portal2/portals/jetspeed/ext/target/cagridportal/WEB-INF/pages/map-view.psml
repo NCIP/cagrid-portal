@@ -5,11 +5,11 @@
 	</security-constraints>
 	<title>Map View</title>
 	<short-title>Map View</short-title>
-	<defaults layout-decorator="tigris" />
+	<defaults layout-decorator="cagridportal1" />
 
-	<fragment id="frag-1" type="layout"
+	<fragment id="map-view-1" type="layout"
 		name="jetspeed-layouts::VelocityOneColumn">
-		<fragment id="frag-2" type="portlet"
-			name="j2-admin::WelcomeToJetspeed" />
+		<fragment id="map-view-1-1" type="portlet"
+			name="cagridportlets::CaGridParticipantsMapView" />
 	</fragment>
 </page>
