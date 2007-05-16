@@ -49,6 +49,8 @@ import org.projectmobius.common.XMLUtilities;
  */
 public class CommonTools {
     private static final Logger logger = Logger.getLogger(CommonTools.class);
+    
+    public static final String DEBUG_ANT_CALL_JAVA_OPTS = "-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000";
 
     public static final String ALLOWED_JAVA_CLASS_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
 
@@ -251,10 +253,16 @@ public class CommonTools {
         cmd = getAntCommand(deployTarget, buildFileDir) + " " + cmd;
         return cmd;
     }
+    
+    
+    public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
+        String packagename, String namespacedomain, String extensions) throws Exception {
+        return getAntSkeletonCreationCommand(buildFileDir, name, dir, packagename, namespacedomain, extensions, false);
+    }
 
 
     public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
-        String packagename, String namespacedomain, String extensions) throws Exception {
+        String packagename, String namespacedomain, String extensions, boolean debug) throws Exception {
         // fix dir path if it relative......
         logger.debug("CREATION: builddir: " + buildFileDir);
         logger.debug("CREATION: destdir: " + dir);
@@ -267,14 +275,21 @@ public class CommonTools {
             + " -Dintroduce.skeleton.package=" + packagename + " -Dintroduce.skeleton.package.dir="
             + packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
             + namespacedomain + " -Dintroduce.skeleton.extensions=" + extensions + " createService";
-        cmd = getAntCommandCall(buildFileDir) + cmd;
+        cmd = getAntCommandCall(buildFileDir, debug) + cmd;
         logger.debug("CREATION: cmd: " + cmd);
         return cmd;
+    }
+    
+    
+    public static String getAntSkeletonPostCreationCommand(String buildFileDir, String name, String dir,
+        String packagename, String namespacedomain, String extensions) throws Exception {
+        return getAntSkeletonPostCreationCommand(
+            buildFileDir, name, dir, packagename, namespacedomain, extensions, false);
     }
 
 
     public static String getAntSkeletonPostCreationCommand(String buildFileDir, String name, String dir,
-        String packagename, String namespacedomain, String extensions) throws Exception {
+        String packagename, String namespacedomain, String extensions, boolean debug) throws Exception {
         // fix dir path if it relative......
         logger.debug("CREATION: builddir: " + buildFileDir);
         logger.debug("CREATION: destdir: " + dir);
@@ -287,27 +302,40 @@ public class CommonTools {
             + " -Dintroduce.skeleton.package=" + packagename + " -Dintroduce.skeleton.package.dir="
             + packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
             + namespacedomain + " -Dintroduce.skeleton.extensions=" + extensions + " postCreateService";
-        cmd = getAntCommandCall(buildFileDir) + cmd;
+        cmd = getAntCommandCall(buildFileDir, debug) + cmd;
         logger.debug("CREATION: cmd: " + cmd);
         return cmd;
     }
-
-
+    
+    
     static String getAntCommandCall(String buildFileDir) throws Exception {
+        return getAntCommandCall(buildFileDir, false);
+    }
+
+
+    static String getAntCommandCall(String buildFileDir, boolean debug) throws Exception {
         String os = System.getProperty("os.name");
         String cmd = "";
         if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
             cmd = "-classpath \"" + CommonTools.getAntLauncherJarLocation(System.getProperty("java.class.path"), true)
                 + "\" org.apache.tools.ant.launch.Launcher -buildfile " + "\"" + buildFileDir + File.separator
                 + "build.xml\"" + cmd;
-            cmd = "java.exe " + cmd;
+            if (debug) {
+                cmd = "java.exe " + DEBUG_ANT_CALL_JAVA_OPTS + " " + cmd;
+            } else {
+                cmd = "java.exe " + cmd;
+            }
         } else {
             // escape out the spaces.....
             buildFileDir = buildFileDir.replaceAll("\\s", "\\ ");
             cmd = "-classpath " + CommonTools.getAntLauncherJarLocation(System.getProperty("java.class.path"), false)
                 + " org.apache.tools.ant.launch.Launcher -buildfile " + buildFileDir + File.separator + "build.xml"
                 + cmd;
-            cmd = "java " + cmd;
+            if (debug) {
+                cmd = "java " + DEBUG_ANT_CALL_JAVA_OPTS + " " + cmd;
+            } else {
+                cmd = "java " + cmd;
+            }
         }
         return cmd;
     }
