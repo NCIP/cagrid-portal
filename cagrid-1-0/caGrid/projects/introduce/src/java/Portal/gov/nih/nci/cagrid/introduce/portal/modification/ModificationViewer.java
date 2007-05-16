@@ -30,7 +30,6 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
-import gov.nih.nci.cagrid.introduce.portal.Introduce;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
@@ -65,8 +64,6 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -84,7 +81,6 @@ import java.util.Set;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -95,7 +91,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -286,8 +281,9 @@ public class ModificationViewer extends GridPortalComponent {
                 if (file.exists() && file.canRead()) {
                     try {
 
-                        BusyDialogRunnable br = new BusyDialogRunnable(PortalResourceManager.getInstance()
-                            .getGridPortal(), "Initializing Modification Viewer") {
+                        BusyDialogRunnable br = new BusyDialogRunnable(
+                            PortalResourceManager.getInstance().getGridPortal(), 
+                            "Initializing Modification Viewer") {
                             public void process() {
                                 this.setProgressText("Initializing Modification Viewer");
                                 try {
@@ -298,9 +294,9 @@ public class ModificationViewer extends GridPortalComponent {
                             };
                         };
 
-                        Thread th = new Thread(br);
-                        th.start();
-                        th.join();
+                        Thread dialogThread = new Thread(br);
+                        dialogThread.start();
+                        dialogThread.join();
 
                         if (!beenDisposed) {
                             ModificationViewer.this.pack();
@@ -375,7 +371,6 @@ public class ModificationViewer extends GridPortalComponent {
     /**
      * This method initializes this viewer componenet
      * 
-     * @return void
      */
     private void initialize() throws Exception {
         if (methodsDirectory != null) {
@@ -383,12 +378,16 @@ public class ModificationViewer extends GridPortalComponent {
             UpgradeManager upgrader = new UpgradeManager(methodsDirectory.getAbsolutePath());
 
             if (upgrader.canIntroduceBeUpgraded() || upgrader.extensionsNeedUpgraded()) {
-                int answer = JOptionPane
-                    .showConfirmDialog(
-                        ModificationViewer.this,
-                        "This service is from an older of version of Introduce or uses an older version of an extension.\nWould you like to try to upgrade this service to work with the current version of Introduce and installed extensions?  Otherwise Introduce will attempt to work with this service.");
+                String message =
+                    "This service is from an older of version of\n" +
+                    "Introduce or uses an older version of an extension.\n" +
+                    "Would you like to try to upgrade this service to work\n" + 
+                    "with the current version of Introduce and installed extensions?\n" +
+                    "Otherwise Introduce will attempt to work with this service.";
+                int answer = JOptionPane.showConfirmDialog(
+                    PortalResourceManager.getInstance().getGridPortal(),
+                    "Service requires upgrade", message, JOptionPane.OK_CANCEL_OPTION);
                 if (answer == JOptionPane.OK_OPTION) {
-
                     try {
                         UpgradeStatus status = upgrader.upgrade();
                         logger.info("SERVICE UPGRADE STATUS:\n" + status);
@@ -406,12 +405,15 @@ public class ModificationViewer extends GridPortalComponent {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        answer = JOptionPane
-                            .showConfirmDialog(
-                                ModificationViewer.this,
-                                "The service had the following fatal error during the upgrade process: \n"
-                                    + e.getMessage()
-                                    + "\n  This could be due to modifications you may have made to Introduce managed files such as the build files, source files or wsdl files.\nIf you select OK Introduce will roll your service back to its previous state before the upgrade attempt");
+                        answer = JOptionPane .showConfirmDialog(
+                            PortalResourceManager.getInstance().getGridPortal(),
+                            "Error upgrading service",
+                            "The service had the following fatal error during the upgrade process:\n" + 
+                            e.getMessage() + "\n" +
+                            "This could be due to modifications you may have made to Introduce\n" +
+                            "managed files such as the build files, source files or wsdl files.\n" +
+                            "If you select OK, Introduce will roll your service back to its previous\n" +
+                            "state before the upgrade attempt", JOptionPane.OK_CANCEL_OPTION);
                         if (answer == JOptionPane.OK_OPTION) {
                             try {
                                 upgrader.recover();
@@ -668,7 +670,6 @@ public class ModificationViewer extends GridPortalComponent {
 
                     int row = getMethodsTable().getSelectedRow();
                     if ((row >= 0) && (row < getMethodsTable().getRowCount())) {
-                        MethodType type = getMethodsTable().getMethodType(getMethodsTable().getSelectedRow());
                         getModifyButton().setEnabled(true);
                     } else {
                         getModifyButton().setEnabled(false);
@@ -683,7 +684,6 @@ public class ModificationViewer extends GridPortalComponent {
                         dirty = true;
                         int row = getMethodsTable().getSelectedRow();
                         if ((row >= 0) && (row < getMethodsTable().getRowCount())) {
-                            MethodType type = getMethodsTable().getMethodType(getMethodsTable().getSelectedRow());
                             performMethodModify();
                         }
                     }
@@ -2054,7 +2054,7 @@ public class ModificationViewer extends GridPortalComponent {
             additionalNamespaces.add(additional[i].getNamespace());
         }
         List merged = new ArrayList();
-        Collections.addAll(merged, additional);
+        Collections.addAll(merged, (Object[]) additional);
         if (current.length != 0) {
             for (int i = 0; i < current.length; i++) {
                 String currentNamespace = current[i].getNamespace();
