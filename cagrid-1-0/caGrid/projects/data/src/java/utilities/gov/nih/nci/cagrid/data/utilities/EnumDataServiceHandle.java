@@ -6,20 +6,15 @@ import gov.nih.nci.cagrid.data.enumeration.common.EnumerationDataServiceI;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
+import gov.nih.nci.cagrid.wsenum.utils.EnumerationResponseHelper;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 
-import org.apache.axis.EngineConfiguration;
-import org.apache.axis.client.AxisClient;
-import org.apache.axis.configuration.FileProvider;
-import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.utils.ClassUtils;
 import org.globus.ws.enumeration.ClientEnumIterator;
 import org.globus.ws.enumeration.IterationConstraints;
-import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
-import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAddressingLocator;
 
 /** 
  *  EnumDataServiceHandle
@@ -28,7 +23,7 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAd
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: EnumDataServiceHandle.java,v 1.7 2007-05-08 20:52:43 dervin Exp $ 
+ * @version $Id: EnumDataServiceHandle.java,v 1.8 2007-05-16 18:47:12 dervin Exp $ 
  */
 public class EnumDataServiceHandle implements DataServiceIterator {
 
@@ -75,61 +70,20 @@ public class EnumDataServiceHandle implements DataServiceIterator {
 			helper.addFaultCause(ex);
 			throw (QueryProcessingExceptionType) helper.getFault();
 		}
-		EnumerationResponseContainer container = queryService.enumerationQuery(query);
+		EnumerationResponseContainer responseContainer = queryService.enumerationQuery(query);
         
-        DataSource dataSource = createDataSource(container.getEPR());
-        
-        ClientEnumIterator iter = new ClientEnumIterator(
-			dataSource, container.getContext());
-		iter.setIterationConstraints(constraints);
-		iter.setItemType(targetClass);
-		return new IterationWraper(iter);
-	}
-	
-    
-    private DataSource createDataSource(EndpointReferenceType epr) throws RemoteException {
-
-        EnumerationServiceAddressingLocator locator = new EnumerationServiceAddressingLocator();
-        
-        // attempt to load our context sensitive wsdd file
-        InputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
-        if (resourceAsStream != null) {
-            // we found it, so tell axis to configure an engine to use it
-            EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
-            // set the engine of the locator
-            locator.setEngine(new AxisClient(engineConfig));
+        ClientEnumIterator iterator = null;
+        // see if there's a wsdd-config to be had
+        InputStream wsddStream = 
+            ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
+        if (wsddStream != null) {
+            iterator = EnumerationResponseHelper.createClientIterator(responseContainer, wsddStream);
+        } else {
+            iterator = EnumerationResponseHelper.createClientIterator(responseContainer);
         }
-        DataSource port = null;
-        try {
-            port = locator.getDataSourcePort(epr);
-        } catch (Exception e) {
-            throw new RemoteException("Unable to locate portType:" + e.getMessage(), e);
-        }
-
-        return port;
-    }
-    
-	
-	private static class IterationWraper implements Iterator {
-		private ClientEnumIterator clientIter;
-		
-		public IterationWraper(ClientEnumIterator clientIter) {
-			this.clientIter = clientIter;
-		}
-		
-		
-		public boolean hasNext() {
-			return clientIter.hasNext();
-		}
-		
-		
-		public Object next() {
-			return clientIter.next();
-		}
-		
-		
-		public void remove() {
-			throw new UnsupportedOperationException("remove() is not implemented");
-		}
+        
+		iterator.setIterationConstraints(constraints);
+        iterator.setItemType(targetClass);
+		return iterator;
 	}
 }
