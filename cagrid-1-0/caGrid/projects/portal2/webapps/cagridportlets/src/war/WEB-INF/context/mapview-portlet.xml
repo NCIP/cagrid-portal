@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+
+	<bean id="mapViewHelpController"
+		class="org.springframework.web.portlet.mvc.ParameterizableViewController">
+		<property name="viewName" value="WEB-INF/jsp/help.jsp" />
+	</bean>
+
+	<bean id="mapViewEditController"
+		class="gov.nih.nci.cagrid.portal2.portlet.map.MapViewEditController" />
+
+	<bean id="mapViewViewController"
+		class="gov.nih.nci.cagrid.portal2.portlet.map.MapViewViewController" />
+
+	<bean id="mapViewAddUrlController"
+		class="gov.nih.nci.cagrid.portal2.portlet.map.MapViewAddUrlController" />
+		
+	<bean id="mapViewDeleteUrlController"
+		class="gov.nih.nci.cagrid.portal2.portlet.map.MapViewDeleteUrlController" />
+
+	<bean id="portletModeParameterHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+		<property name="order" value="1" />
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="edit">
+					<map>
+						<entry key="addUrl"
+							value-ref="mapViewAddUrlController" />
+						<entry key="deleteUrl"
+							value-ref="mapViewDeleteUrlController" />
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		<property name="order" value="2" />
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="mapViewViewController" />
+				</entry>
+				<entry key="edit">
+					<ref bean="mapViewEditController" />
+				</entry>
+				<entry key="help">
+					<ref bean="mapViewHelpController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/mapview/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>		
+
+	<!-- Exception Handler -->
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate" />
+
+</beans>
