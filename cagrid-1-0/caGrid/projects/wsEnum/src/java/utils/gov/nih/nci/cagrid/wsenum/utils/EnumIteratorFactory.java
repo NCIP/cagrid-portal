@@ -21,7 +21,7 @@ import org.globus.wsrf.utils.io.IndexedObjectFileUtils;
  * @author David Ervin
  * 
  * @created Apr 30, 2007 12:18:15 PM
- * @version $Id: EnumIteratorFactory.java,v 1.2 2007-04-30 19:00:56 dervin Exp $ 
+ * @version $Id: EnumIteratorFactory.java,v 1.1 2007-05-16 15:00:57 dervin Exp $ 
  */
 public class EnumIteratorFactory {
 

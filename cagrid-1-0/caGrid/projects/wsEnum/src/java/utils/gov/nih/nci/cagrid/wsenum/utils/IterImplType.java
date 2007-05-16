@@ -8,7 +8,7 @@ package gov.nih.nci.cagrid.wsenum.utils;
   * @author David Ervin
   * 
   * @created Apr 30, 2007 3:00:10 PM
-  * @version $Id: IterImplType.java,v 1.1 2007-04-30 19:00:56 dervin Exp $
+  * @version $Id: IterImplType.java,v 1.1 2007-05-16 15:00:57 dervin Exp $
  */
 public enum IterImplType {
     GLOBUS_SIMPLE, GLOBUS_INDEXED_FILE, 

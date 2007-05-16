@@ -1,19 +1,27 @@
 package gov.nih.nci.cagrid.wsenum.utils;
 
+import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
+import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import javax.xml.namespace.QName;
 
 import org.apache.axis.message.MessageElement;
+import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.ws.enumeration.EnumIterator;
 import org.globus.ws.enumeration.EnumProvider;
 import org.globus.ws.enumeration.EnumResource;
 import org.globus.ws.enumeration.EnumResourceHome;
 import org.globus.ws.enumeration.IndexedObjectFileEnumIterator;
 import org.globus.ws.enumeration.SimpleEnumIterator;
+import org.globus.ws.enumeration.VisibilityProperties;
 import org.globus.wsrf.ResourceKey;
+import org.globus.wsrf.container.ServiceHost;
+import org.globus.wsrf.utils.AddressingUtils;
 import org.globus.wsrf.utils.io.IndexedObjectFileUtils;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerationContextType;
@@ -27,9 +35,40 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.ExpirationType;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 17, 2006 
- * @version $Id$ 
+ * @version $Id: EnumerateResponseFactory.java,v 1.1 2007-05-16 15:00:57 dervin Exp $ 
  */
 public class EnumerateResponseFactory {
+    
+    public static EnumerationResponseContainer createEnumerationResponse(EnumIterator enumIter)
+        throws EnumerationCreationException {
+        try {
+            EnumResourceHome resourceHome = EnumResourceHome.getEnumResourceHome();
+            VisibilityProperties visibility = new VisibilityProperties(
+                "cagrid/" + WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME, null);
+
+            EnumResource resource = resourceHome.createEnumeration(
+                enumIter, visibility, false);
+            ResourceKey key = resourceHome.getKey(resource);
+
+            EnumerationContextType enumContext = 
+                EnumProvider.createEnumerationContextType(key);
+
+            URL baseURL = ServiceHost.getBaseURL();
+            String serviceURI = baseURL.toString() 
+                + "cagrid/" + WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME;
+
+            EndpointReferenceType epr = 
+                AddressingUtils.createEndpointReference(serviceURI, key);
+
+            EnumerationResponseContainer container = new EnumerationResponseContainer();
+            container.setContext(enumContext);
+            container.setEPR(epr);
+            return container;
+        } catch (Exception ex) {
+            throw new EnumerationCreationException(ex.getMessage(), ex);
+        }
+    }
+    
 
 	/**
 	 * Creates an enumerate response using an in-memory SimpleEnumIterator,

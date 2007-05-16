@@ -7,7 +7,7 @@ package gov.nih.nci.cagrid.wsenum.utils;
  * @author David Ervin
  * 
  * @created Apr 30, 2007 12:31:12 PM
- * @version $Id: EnumIteratorInitializationException.java,v 1.1 2007-04-30 17:53:01 dervin Exp $ 
+ * @version $Id: EnumIteratorInitializationException.java,v 1.1 2007-05-16 15:00:57 dervin Exp $ 
  */
 public class EnumIteratorInitializationException extends Exception {
 

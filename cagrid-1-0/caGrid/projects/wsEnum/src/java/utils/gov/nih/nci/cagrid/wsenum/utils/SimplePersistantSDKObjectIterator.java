@@ -34,7 +34,7 @@ import org.globus.wsrf.encoding.SerializationException;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 17, 2006 
- * @version $Id$ 
+ * @version $Id: SimplePersistantSDKObjectIterator.java,v 1.1 2007-05-16 15:00:57 dervin Exp $ 
  */
 public class SimplePersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	
