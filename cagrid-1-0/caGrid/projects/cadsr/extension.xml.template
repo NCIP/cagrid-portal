@@ -5,7 +5,7 @@
   <ns1:DiscoveryPanelExtension>gov.nih.nci.cagrid.cadsr.portal.discovery.CaDSRTypeSelectionComponent</ns1:DiscoveryPanelExtension>
   <ns1:Properties>
    <ns1:Property makeGlobal="true" type="SERVICE_URL" key="Global Model Exchange URL" value="@cagrid.master.gme.service.url@"/>
-   <ns1:Property makeGlobal="true" type="SERVICE_URL" key="Cancer Data Standards Repositoty (CADSR) URL" value="@cagrid.master.cadsr.service.url@"/> 
+   <ns1:Property makeGlobal="true" type="SERVICE_URL" key="Cancer Data Standards Repositoty (caDSR) URL" value="@cagrid.master.cadsr.service.url@"/> 
   </ns1:Properties>
  </ns1:DiscoveryExtensionDescription>
 </ns1:ExtensionDescription>
