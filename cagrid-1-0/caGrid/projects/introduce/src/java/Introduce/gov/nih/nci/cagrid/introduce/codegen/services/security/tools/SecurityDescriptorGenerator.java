@@ -122,6 +122,8 @@ public class SecurityDescriptorGenerator {
 					xml.append("<authz value=\"gridmap\"/>");
 					xml.append("<gridmap value=\"" + auth.getGridMapAuthorization().getGridMapFileLocation() + "\"/>");
 					usedServiceAuth = true;
+				} else if (auth.getCustomPDPChainAuthorization() !=null) {
+				    xml.append("<authz value=\"" + auth.getCustomPDPChainAuthorization().getPDPChain() + "\" />");
 				} else {
 					xml.append("<authz value=\"" + service.getName().toLowerCase() + ":" + service.getPackageName()
 						+ ".service.globus." + service.getName() + "Authorization" + "\" />");

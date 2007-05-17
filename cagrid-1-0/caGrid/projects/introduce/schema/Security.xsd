@@ -32,6 +32,7 @@
 			<xs:element name="GridMapAuthorization" minOccurs="1" maxOccurs="1" type="GridMapAuthorization"/>
 			<xs:element name="GridGrouperAuthorization" minOccurs="1" maxOccurs="1" type="grouper:MembershipExpression"/>
 			<xs:element name="CSMAuthorization" minOccurs="1" maxOccurs="1" type="CSMAuthorization"/>
+			<xs:element name="CustomPDPChainAuthorization" minOccurs="1" maxOccurs="1" type="CustomPDPChainAuthorization"/>
 		</xs:choice>
 	</xs:complexType>
 	
@@ -54,6 +55,11 @@
 			<xs:element name="ProtectionMethod" minOccurs="1" maxOccurs="1" type="ProtectionMethod"/>
 			<xs:element name="CustomProtectionMethod" minOccurs="0" maxOccurs="1" type="xs:string"/>
 			<xs:element name="Privilege" minOccurs="1" maxOccurs="1" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+		<xs:complexType name="CustomPDPChainAuthorization">
+		<xs:sequence>
+		    <xs:element name="PDPChain" minOccurs="1" maxOccurs="1" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
 	

@@ -401,7 +401,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	private void syncAuthorization() {
-		if (isSecure()) {
+		if (isSecure() && this.serviceSecurity.getServiceAuthorization().getCustomPDPChainAuthorization() == null) {
 			authorizationMechanism.setEnabled(true);
 			String mech = (String) authorizationMechanism.getSelectedItem();
 			authLayout.show(authPanel, mech);
