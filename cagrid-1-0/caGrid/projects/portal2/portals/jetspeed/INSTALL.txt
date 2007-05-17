@@ -1,0 +1,85 @@
+This will get simpler in the future. For now, there are lots of 
+manual steps.
+
+Install MySQL
+In portal2/common, run: ant gen-ddl
+Create portal2 database (this holds cagrid portal data)
+
+     create database portal2;
+     grant all privileges on portal2.* to 'portal2'@'%' identified by 'portal2';
+
+Import portal2 schema:
+
+	mysql -u root -p portal2 < portal2/common/gen/portal.ddl
+	
+Create cagridportal database (this holds jetspeed-specific data)
+
+	 create database cagridportal;
+     grant all privileges on cagridportal.* to 'cagridportal'@'%' identified by 'cagridportal';
+     
+Download and install Tomcat 5.5.23
+Copy lib/mysql/mysql*.jar to CATALINA_HOME/common/lib directory.
+Modify CATALINA_HOME/conf/tomcat-users.xml. It should loolk like this:
+
+	<?xml version='1.0' encoding='utf-8'?>
+	<tomcat-users>
+	  <role rolename="tomcat"/>
+	  <user username="tomcat" password="tomcat" roles="tomcat"/>
+	  <user username="j2deployer" password="j2deployer" roles="manager"/>
+	</tomcat-users>
+
+If you are using Windows, modify CATALINA_HOME/conf/context.xml to look like this:
+
+	<Context antiJARLocking="true">
+    ...
+    </Context>
+
+Install Maven 1.0.2.
+ - We use the Jetspeed custom Maven plugin to create the custom portal skeleton. So, we need
+   to first install Maven. Instructions are here:
+    - http://maven.apache.org/maven-1.x/start/download.html
+    - http://maven.apache.org/maven-1.x/start/install.html
+
+Install Jetspeed 2.1
+ - Copy portal2/portals/maven.build.properties to HOME/build.properties
+ - Modify the following properties to suit your environment:
+
+     org.apache.jetspeed.portal.home: where the custom portal skeleton will be installed
+     org.apache.jetspeed.server.home: where you installed Tomcat, i.e. CATALINA_HOME
+     org.apache.jetspeed.production.jdbc.drivers.path: location of the MySQL driver jar
+     
+ - From anywhere, run:
+ 
+ 	maven -DartifactId=maven-jetspeed2-plugin -DgroupId=org.apache.portals.jetspeed-2 -Dversion=2.1 plugin:download
+ 	maven j2:portal.genapp
+ 	
+ - From ${org.apache.jetspeed.portal.home}, run:
+ 
+ 	maven war:install
+ 	mkdir logs
+ 	touch logs/apacheds.xml
+ 	maven j2:quickStart
+ 	
+Install caGrid customizations
+ - From portal2/portals/jetspeed
+   - Modify build.properties. Set the jetspeed.tomcat.dir appropriately for
+     your environment.
+   - Run:
+   
+   		ant copy-pages
+   		ant copy-decoration
+   		
+Start up Tomcat
+
+Install porlets
+ - From portal2/common, run: 
+ 
+ 		ant jar
+ 		
+ - From portal2/portlets/cagridportlets, run:
+ 
+ 		ant
+ 		cp build/cagridportlets.war CATALINA_HOME/webapps/cagridportal/WEB-INF/deploy/
+ 		
+Go to: http://localhost:8080/cagridportal
+You can sign in as admin/admin

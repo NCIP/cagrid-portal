@@ -57,7 +57,7 @@
 			</classpath>
 			<annotationconfiguration
 				configurationfile="tools/hibernatetools/hibernate.cfg.xml" />
-			<hbm2ddl export="false" drop="true"
+			<hbm2ddl export="false" drop="false"
 				outputfilename="portal.ddl" />
 		</hibernatetool>
 
