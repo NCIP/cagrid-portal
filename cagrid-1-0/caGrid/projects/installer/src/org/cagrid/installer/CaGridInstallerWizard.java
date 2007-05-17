@@ -2,13 +2,14 @@ package org.cagrid.installer;
 
 import gov.nih.nci.cagrid.common.wizard.CaGridWizardModel;
 
+import org.cagrid.installer.path.MasterInstallerPath;
 import org.pietschy.wizard.Wizard;
 
 
 public class CaGridInstallerWizard {
 
     public static void main(String[] args) {
-        CaGridInstallPath paths = new CaGridInstallPath();
+        MasterInstallerPath paths = new MasterInstallerPath();
         CaGridWizardModel model = new CaGridWizardModel(paths, new CaGridOverviewPanel());
         Wizard wizard = new Wizard(model);
         wizard.setOverviewVisible(true);

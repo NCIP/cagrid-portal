@@ -1,0 +1,30 @@
+The first step of the installer should present a list of checkbox controls.
+Each control represents a path to execute.
+The list of paths can be configured by Spring.
+
+# System Check Installer #
+Installs
+ - Ant, Globus, Tomcat, and may be mysql
+Steps
+ - Check if HOME/.cagridenv.properties exists
+    - if so, then the installer has been run, so load the properties
+      - ant.home
+      - globus.home
+      - tomcat.home
+    - if not, then try to pull these values from system properties
+      - ant.home = ANT_HOME
+      - globus.home = GLOBUS_HOME
+      - tomcat.home = CATALINA_HOME
+ - If any component is already installed
+   - need to check if it is the appropriate version
+     - if it is not the appropriate version it will need to be reinstalled
+       - ask the user if the existing installation should be replaced or if it
+         should be installed to a new directory
+   - even if it is the right version
+     - give user the option to use the existing install or install to new location
+     
+# Dorian Installer #
+Download dorian distribution 
+Configure dorian-conf
+Configure service-metadata
+Deploy service

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+	<bean id="wizard" class="org.cagrid.installer.CaGridWizard">
+
+		<constructor-arg ref="masterModel" />
+
+		<property name="frameTitle" value="caGrid 1.1 Installer" />
+	</bean>
+
+	<bean id="masterModel"
+		class="org.cagrid.installer.model.OverviewModel">
+
+		<constructor-arg ref="masterPath" />
+
+		<property name="overviewComponent">
+			<bean
+				class="org.cagrid.installer.panel.ImageOverviewPanel">
+				<property name="imageResource"
+					value="/images/AuthenticationServiceInstaller.gif" />
+			</bean>
+		</property>
+
+	</bean>
+
+	<bean id="masterPath"
+		class="org.cagrid.installer.path.MasterInstallerPath">
+
+		<property name="paths" ref="masterInstallerPaths" />
+
+		<property name="pathSelectorStep">
+			<bean class="org.cagrid.installer.steps.PathSelectorStep">
+				<constructor-arg>
+					<list>
+						<value>Dorian</value>
+						<value>Dorian2</value>
+					</list>
+				</constructor-arg>
+			</bean>
+		</property>
+
+		<property name="beginStep">
+			<bean class="org.cagrid.installer.steps.IntroductionStep" />
+		</property>
+
+		<property name="endStep">
+			<bean class="org.cagrid.installer.steps.FinishedStep" />
+		</property>
+
+	</bean>
+
+	<util:list id="masterInstallerPaths">
+		<ref bean="namedDorianInstallPath" />
+		<ref bean="namedDorianInstallPath2" />
+	</util:list>
+
+	<bean id="namedDorianInstallPath"
+		class="org.cagrid.installer.path.DelegatingPath">
+		<property name="name" value="Dorian" />
+		<property name="description" value="Install the Dorian service" />
+		<property name="path" ref="dorianInstallPath" />
+	</bean>
+	
+	<bean id="namedDorianInstallPath2"
+		class="org.cagrid.installer.path.DelegatingPath">
+		<property name="name" value="Dorian" />
+		<property name="description" value="Install the Dorian service 2" />
+		<property name="path" ref="dorianInstallPath2" />
+	</bean>
+	
+
+	<bean id="dorianInstallPath"
+		class="org.cagrid.installer.path.ConfigurableMultiStepPath">
+
+		<property name="globalProperties" ref="dorianGlobalProperties" />
+
+		<property name="wizardSteps">
+			<list>
+				<bean
+					class="org.cagrid.installer.steps.SimplePropertyConfigurationStep">
+					<constructor-arg ref="dorianGlobalProperties" />
+					<constructor-arg>
+						<util:map>
+							<entry key="prop.one" value="Property One" />
+							<entry key="prop.two" value="Property Two" />
+						</util:map>
+					</constructor-arg>
+				</bean>
+				<bean class="org.cagrid.installer.steps.RunAntStep">
+					<constructor-arg ref="dorianGlobalProperties" />
+					<constructor-arg>
+						<value>Installing Dorian</value>
+					</constructor-arg>
+					
+					<property name="defaultBuildFileName" value="/Users/joshua/dev/svn/caaers_maven/trunk/projects/core/tools/tomcat/harden-tomcat.xml"/>
+					<property name="defaultTargetName" value="harden"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="dorianInstallPath2"
+		class="org.cagrid.installer.path.ConfigurableMultiStepPath">
+
+		<property name="globalProperties" ref="dorianGlobalProperties" />
+
+		<property name="wizardSteps">
+			<list>
+				<bean
+					class="org.cagrid.installer.steps.SimplePropertyConfigurationStep">
+					<constructor-arg ref="dorianGlobalProperties" />
+					<constructor-arg>
+						<util:map>
+							<entry key="prop.one" value="Property One" />
+							<entry key="prop.two" value="Property Two" />
+						</util:map>
+					</constructor-arg>
+				</bean>
+				<bean class="org.cagrid.installer.steps.RunAntStep">
+					<constructor-arg ref="dorianGlobalProperties" />
+					<constructor-arg>
+						<value>Installing Dorian 2</value>
+					</constructor-arg>
+					
+					<property name="defaultBuildFileName" value="/Users/joshua/dev/svn/caaers_maven/trunk/projects/core/tools/tomcat/harden-tomcat.xml"/>
+					<property name="defaultTargetName" value="harden"/>
+				</bean>
+			</list>
+		</property>
+	</bean>	
+
+	<util:map id="dorianGlobalProperties">
+		<entry key="prop.one" value="prop.one.value" />
+		<entry key="prop.two" value="prop.two.value" />
+		<entry key="prop.three" value="prop.three.value" />
+	</util:map>
+
+</beans>
