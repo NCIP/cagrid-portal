@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="DataServiceAuditorConfiguration" xmlns="http://schemas.xmlsoap.org/wsdl/" >
+	<import location="DataServiceAuditorConfiguration.xsd"/>
+</definitions>
+
