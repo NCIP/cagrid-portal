@@ -27,11 +27,6 @@
                 <include name="*.jar" />
             </fileset>
         </artifact>
-        <artifact track="main" type="jars" id="wizard.jars">
-            <fileset dir="${share.dir}/lib">
-                <include name="wizard-0.1.12.jar" />
-            </fileset>
-        </artifact>
         <artifact track="main" type="jars" id="caCORE.3.2.jars">
             <fileset dir="${share.dir}/lib/caCORE32">
                 <include name="*.jar" />
@@ -646,6 +641,13 @@
                 <include name="service_urls.properties" />
             </fileset>
         </artifact>
+    	
+    	<artifact track="main" type="jars" id="wizard.jars">
+    		<generatingantcall target="build-wizard"/>
+    		<fileset dir="${projects.dir}/wizard/build/jars">
+    			<include name="*.jar"/>
+    		</fileset>
+    	</artifact>
         
         
     </target>

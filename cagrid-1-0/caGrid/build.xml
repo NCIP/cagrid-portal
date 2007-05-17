@@ -63,7 +63,6 @@
             <artifact refid="mobius.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
-            <artifact refid="wizard.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
     </target>
@@ -600,7 +599,9 @@
             <artifact refid="core.jars" />
             <artifact refid="wizard.jars" />
         </resolveDependencies>
-        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
+    	<!--
+    	        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
+    	        -->
     </target>
 
 
@@ -832,7 +833,16 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/gridftpauthz" inheritAll="false" antfile="build.xml" target="all" />
     </target>
-
+	
+	<!-- =============================================================== -->
+	<!-- WIZARD:                                                         -->
+	<!-- =============================================================== -->
+	<target name="build-wizard" depends="prepare" description="Builds Wizard API">
+		<resolveDependencies extdir="${projects.dir}/wizard/ext">
+	        <artifact refid="cagrid.properties" />
+	    </resolveDependencies>
+	    <ant dir="${projects.dir}/wizard" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
     <!-- ============================================================== -->
     <!-- Installs the Introduce Extensions                              -->
