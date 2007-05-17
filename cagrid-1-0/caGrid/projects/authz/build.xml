@@ -1,4 +1,4 @@
-<project name="authz" default="all">
+<project name="authz" default="all" basedir=".">
     
     <property file="build.properties"/>
     <property file="${basedir}/ext/resources/cagrid.properties" />
@@ -6,10 +6,16 @@
     <property name="globus.location" value="${env.GLOBUS_LOCATION}"/>
     <property name="build.dir" value="build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
-    <property name="lib.dir" value="lib"/>
-    <property name="ext.lib.dir" value="ext/lib"/>
+    <property name="lib.dir" value="${basedir}/lib"/>
+    <property name="ext.lib.dir" value="${basedir}/ext/lib" />
+    <property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />	
     <property name="src.java.dir" value="src/java"/>
-    <property name="test.src.java.dir" value="test/src/java"/>
+
+    <property name="test.dir" location="${basedir}/test" />
+    <property name="test.src.dir" location="${test.dir}/src/java" />
+    <property name="test.classes.dir" location="${build.dir}/test_classes" />
+    <!-- property name="test.lib.dir" location="${test.dir}/lib" / -->
+    <property name="test.logs.dir" location="${test.dir}/logs" />
     
 	<property name="project.version" value="${cagrid.master.project.version}" />
 	<property name="project.name" value="${cagrid.master.project.name}-${project.version}-${ant.project.name}" />
@@ -93,7 +99,7 @@
         <include name="mysql-connector-java-3.1.11-bin.jar"/>
     </patternset>
     
-    <path id="compile.cp">
+    <path id="compile.classpath">
         <fileset dir="${lib.dir}">
             <patternset refid="csm.jars"/>
         </fileset>
@@ -105,12 +111,20 @@
         </fileset>
     </path>
     
-    <path id="run.cp">
-        <path refid="compile.cp"/>
+    <path id="test.classpath">
+        <path refid="compile.classpath"/>
         <pathelement location="${build.dir}/${jar.name}.jar"/>
         <pathelement location="${build.classes.dir}"/>
+	<!--   <fileset dir="${test.lib.dir}">
+        <include name="**/*.jar" />
+    </fileset>
+    -->
+    <fileset dir="${ext.test.lib.dir}">
+        <include name="**/*.jar" />
+    </fileset>	
     </path>
     
+	<import file="test/test.xml"/>
     
     <target name="init">
         <mkdir dir="${build.classes.dir}"/>
@@ -118,13 +132,14 @@
     
     <target name="compile" depends="init">
         <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" debug="true">
-            <classpath refid="compile.cp"/>
+            <classpath refid="compile.classpath"/>
         </javac>
     </target>
     
-    <target name="compile-test" depends="compile">
-        <javac srcdir="${test.src.java.dir}" destdir="${build.classes.dir}" debug="true">
-            <classpath refid="compile.cp"/>
+    <target name="compile-tests" description="compiles tests">
+        <mkdir dir="${test.classes.dir}" />
+        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="on" deprecation="off" optimize="off">
+            <classpath refid="test.classpath" />
         </javac>
     </target>
     
@@ -134,7 +149,7 @@
         </jar>
     </target>
 
-    
+<!--    
     <target name="test" depends="compile-test">
         
         <junit printsummary="yes" showoutput="true" fork="true">
@@ -151,6 +166,7 @@
 
         </junit>
     </target>
+    -->
     
     <target name="clean">
         <delete dir="build"/>
