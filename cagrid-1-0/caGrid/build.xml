@@ -176,6 +176,29 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
     </target>
+	
+	<!-- =============================================================== -->
+    <!-- PORTAL 2:                                                    	 -->
+    <!-- =============================================================== -->
+    <target name="build-portal2" depends="prepare" description="Builds the portal2 project">
+        <resolveDependencies extdir="${projects.dir}/portal2/ext">
+	        <artifact refid="authentication.service.client.jars" />
+            <artifact refid="cagrid.properties" />
+            <artifact refid="core.jars" />
+            <artifact refid="common.test.jars" />
+            <artifact refid="core.test.jars" />
+            <artifact refid="test.coverage.jars" />
+            <artifact refid="common.metadata.jars" />
+            <artifact refid="data.metadata.jars" />
+	        <artifact refid="dorian.client.jars" />
+	        <artifact refid="discovery.jars" />
+            <artifact refid="metadatautils.jars" />
+            <artifact refid="syncgts.client.jars" />
+            <artifact refid="syncgts.config.docs" />
+            <artifact refid="security.metadata.jars" />
+        </resolveDependencies>
+        <ant dir="${projects.dir}/portal2" inheritAll="false" antfile="build.xml" target="all" />
+    </target>
 
 
     <!-- =============================================================== -->
@@ -599,9 +622,7 @@
             <artifact refid="core.jars" />
             <artifact refid="wizard.jars" />
         </resolveDependencies>
-    	<!--
-    	        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
-    	        -->
+        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
 
@@ -845,6 +866,8 @@
 	    </resolveDependencies>
 	    <ant dir="${projects.dir}/wizard" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
+	
+	
 
     <!-- ============================================================== -->
     <!-- Installs the Introduce Extensions                              -->
