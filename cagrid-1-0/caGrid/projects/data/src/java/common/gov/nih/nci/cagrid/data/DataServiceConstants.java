@@ -134,7 +134,13 @@ public class DataServiceConstants {
     public static final QName BDT_HANDLER_REFERENCE_QNAME = new QName("http://cagrid.nci.nih.gov/BulkDataHandlerReference", "BulkDataHandlerReference");
     public static final QName BDT_QUERY_METHOD_INPUT_MESSAGE = new QName(BDT_DATA_SERVICE_NAMESPACE, "BdtQueryRequest");
     public static final QName BDT_QUERY_METHOD_OUTPUT_MESSAGE = new QName(BDT_DATA_SERVICE_NAMESPACE, "BdtQueryResponse");
-	
+    
+    // auditor related constants
+    public static final String DATA_SERVICE_AUDITING_NAMESPACE = "http://gov.nih.nci.cagrid.data/Auditing";
+	public static final String DATA_SERVICE_AUDITORS_NAME = "DataServiceAuditors";
+    public static final QName DATA_SERVICE_AUDITORS_QNAME = new QName(DATA_SERVICE_AUDITING_NAMESPACE, DATA_SERVICE_AUDITORS_NAME);
+    public static final String DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY = DATA_SERVICE_PARAMS_PREFIX + "_auditorsConfigFile";
+        
 	private DataServiceConstants() {
 		
 	}
