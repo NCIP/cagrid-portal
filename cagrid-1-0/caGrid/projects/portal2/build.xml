@@ -1,11 +1,9 @@
 <project name="portal2" default="all">
 
 	<target name="all">
-	
-		<ant dir="common" target="jar"/>
+		<ant dir="common" target="all"/>
 		<ant dir="webapps/cagridportlets" target="all"/>
 		<ant dir="portals/jetspeed" target="all"/>
-		
 	</target>
 	
 	<target name="test">
@@ -13,6 +11,12 @@
 			<property name="db" value="test"/>
 			<property name="data.file.prefix" value="common/"/>
 		</ant>
+	</target>
+	
+	<target name="clean">
+		<ant dir="common" target="clean"/>
+		<ant dir="webapps/cagridportlets" target="clean"/>
+		<ant dir="portals/jetspeed" target="clean"/>	
 	</target>
 	
 </project>
