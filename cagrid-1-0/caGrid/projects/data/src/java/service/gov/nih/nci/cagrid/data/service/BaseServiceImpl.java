@@ -165,7 +165,7 @@ public abstract class BaseServiceImpl {
             String value = cqlQueryProcessorConfig.getProperty(key);
             clone.setProperty(key, value);
         }
-		return cqlQueryProcessorConfig;
+		return clone;
 	}
 	
 	
