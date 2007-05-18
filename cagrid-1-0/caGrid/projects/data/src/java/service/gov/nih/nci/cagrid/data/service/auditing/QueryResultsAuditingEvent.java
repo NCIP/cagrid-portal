@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.data.service.auditing;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 
-import java.util.Date;
-
 /** 
  *  QueryResultsAuditingEvent
  *  Auditing event fired when query results are produced
@@ -12,14 +10,14 @@ import java.util.Date;
  * @author David Ervin
  * 
  * @created May 17, 2007 3:41:22 PM
- * @version $Id: QueryResultsAuditingEvent.java,v 1.1 2007-05-17 19:42:29 dervin Exp $ 
+ * @version $Id: QueryResultsAuditingEvent.java,v 1.2 2007-05-18 16:04:01 dervin Exp $ 
  */
-public abstract class QueryResultsAuditingEvent extends BaseAuditingEvent {
+public class QueryResultsAuditingEvent extends BaseAuditingEvent {
 
     private CQLQueryResults results;
     
-    public QueryResultsAuditingEvent(CQLQuery query, String callerId, Date queryStartDate, CQLQueryResults results) {
-        super(query, callerId, queryStartDate);
+    public QueryResultsAuditingEvent(CQLQuery query, String callerId, CQLQueryResults results) {
+        super(query, callerId);
         this.results = results;
     }
 

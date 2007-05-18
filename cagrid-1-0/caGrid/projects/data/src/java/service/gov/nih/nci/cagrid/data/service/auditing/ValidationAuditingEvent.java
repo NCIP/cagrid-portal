@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.data.service.auditing;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 
-import java.util.Date;
-
 /** 
  *  ValidationAuditingEvent
  *  Auditing event fired when validation is performed on a CQL query
@@ -12,16 +10,16 @@ import java.util.Date;
  * @author David Ervin
  * 
  * @created May 17, 2007 11:22:35 AM
- * @version $Id: ValidationAuditingEvent.java,v 1.1 2007-05-17 18:39:15 dervin Exp $ 
+ * @version $Id: ValidationAuditingEvent.java,v 1.2 2007-05-18 16:04:01 dervin Exp $ 
  */
 public class ValidationAuditingEvent extends BaseAuditingEvent {
 
     private MalformedQueryException cqlStructureException;
     private MalformedQueryException domainValidityException;
     
-    public ValidationAuditingEvent(CQLQuery query, String callerId, Date queryStartDate,
+    public ValidationAuditingEvent(CQLQuery query, String callerId,
             MalformedQueryException cqlStructureException, MalformedQueryException domainValidityException) {
-        super(query, callerId, queryStartDate);
+        super(query, callerId);
         this.cqlStructureException = cqlStructureException;
         this.domainValidityException = domainValidityException;
     }
