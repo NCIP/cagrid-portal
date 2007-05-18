@@ -17,7 +17,7 @@ public class AddressDaoTest extends AbstractDaoTest {
 	
 	
     protected String getDataSetFileName(){
-    	return "test/data/AddressDaoTest.xml";
+    	return getDataSetFileName("test/data/AddressDaoTest.xml");
     }
     
     public void testFind(){

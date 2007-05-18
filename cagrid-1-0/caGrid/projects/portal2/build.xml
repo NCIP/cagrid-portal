@@ -3,7 +3,16 @@
 	<target name="all">
 	
 		<ant dir="common" target="jar"/>
+		<ant dir="webapps/cagridportlets" target="all"/>
+		<ant dir="portals/jetspeed" target="all"/>
 		
+	</target>
+	
+	<target name="test">
+		<ant dir="common" target="test" inheritAll="false" inheritRefs="false">
+			<property name="db" value="test"/>
+			<property name="data.file.prefix" value="common/"/>
+		</ant>
 	</target>
 	
 </project>

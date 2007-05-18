@@ -4,6 +4,8 @@
 	<property file="build.properties" />
 
 	<import file="../../ant-files/common.xml" />
+	
+	<property environment="env"/>
 
 
 	<target name="copy-conf">
@@ -15,23 +17,57 @@
 	</target>
 
 	<target name="copy-pages">
-		<copy todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/WEB-INF/pages" overwrite="true">
-			<fileset dir="ext/target/${jetspeed.custom.portal.name}/WEB-INF/pages">
+		<copy
+			todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/WEB-INF/pages"
+			overwrite="true">
+			<fileset
+				dir="ext/target/${jetspeed.custom.portal.name}/WEB-INF/pages">
 				<include name="**/*" />
 			</fileset>
 		</copy>
 	</target>
 
 	<target name="copy-decoration">
-		<copy todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/decorations" overwrite="true">
-			<fileset dir="ext/target/${jetspeed.custom.portal.name}/decorations">
+		<copy
+			todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/decorations"
+			overwrite="true">
+			<fileset
+				dir="ext/target/${jetspeed.custom.portal.name}/decorations">
 				<include name="**/*" />
 			</fileset>
 		</copy>
 	</target>
+	
+	<target name="deploy-assembly" depends="jar">
+		<copy
+			todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/WEB-INF/assembly"
+			overwrite="true">
+			<fileset
+				dir="ext/target/${jetspeed.custom.portal.name}/WEB-INF/assembly">
+				<include name="**/*" />
+			</fileset>
+		</copy>	
+		<copy
+			todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/WEB-INF/conf"
+			overwrite="true">
+			<fileset
+				dir="ext/target/${jetspeed.custom.portal.name}/WEB-INF/conf">
+				<include name="**/*" />
+			</fileset>
+		</copy>	
+		<copy
+			todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/WEB-INF/lib"
+			overwrite="true">
+			<fileset
+				dir="build">
+				<include name="cagrid-portal2-jetspeed.jar" />
+			</fileset>
+		</copy>		
+	</target>
 
 	<target name="deploy-portlets">
-		<for list="${portlets.list}" param="portletName" parallel="false">
+		<for list="${portlets.list}" param="portletName"
+			parallel="false">
 			<sequential>
 				<antcall target="deploy-portlet">
 					<param name="portletName" value="@{portletName}" />
@@ -41,9 +77,37 @@
 	</target>
 
 	<target name="deploy-portlet-apps">
-		<copy file="../../webapps/${portletName}/build/${portletName}.war" todir="${jetspeed.autodeploy.dir}" />
+		<copy
+			file="../../webapps/${portletName}/build/${portletName}.war"
+			todir="${jetspeed.autodeploy.dir}" />
 	</target>
 
+	<target name="compile">
+		<mkdir dir="build/classes" />
+		<javac srcdir="src/java" destdir="build/classes">
+			<classpath>
+				<fileset dir="../../lib">
+					<include name="jakarta-commons/*.jar" />
+					<include name="jetspeed/*.jar" />
+					<include name="log4j/*.jar" />
+					<include name="servlet/*.jar" />
+				</fileset>
+				<fileset dir="${env.GLOBUS_LOCATION}/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
 
+	<target name="jar" depends="compile">
+		<jar destfile="build/cagrid-portal2-jetspeed.jar">
+			<fileset dir="build/classes" />
+		</jar>
+	</target>
 
+	<target name="clean">
+		<delete dir="build" />
+	</target>
+	
+	<target name="all" depends="clean,jar"/>
 </project>

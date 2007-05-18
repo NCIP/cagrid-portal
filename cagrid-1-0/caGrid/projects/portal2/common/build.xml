@@ -4,6 +4,7 @@
 	<property name="hibernate.properties"
 		value="db/${db}.hibernate.properties" />
 	<property file="${hibernate.properties}" />
+	<property name="data.file.prefix" value=""/>
 
 	<path id="cp">
 		<fileset dir="${lib.dir}">
@@ -30,7 +31,7 @@
 
 	<taskdef name="hibernatetool"
 		classname="org.hibernate.tool.ant.HibernateToolTask"
-		classpathref="hibernatetoolslib" />
+		classpathref="hibernatetoolslib" />	
 
 	<target name="configure-hibernate-tools">
 		<copy file="tools/hibernatetools/template.hibernate.cfg.xml"
@@ -96,6 +97,9 @@
 	<target name="test" depends="compile-test">
 		<mkdir dir="test/reports" />
 		<junit printsummary="yes" showoutput="true" fork="true">
+			
+			<jvmarg value="-Ddata.file.prefix=${data.file.prefix}"/>
+			
 			<classpath refid="test.cp" />
 			<formatter type="plain" />
 			<batchtest todir="test/reports">
@@ -122,5 +126,7 @@
 	<target name="clean">
 		<delete dir="${build.dir}" />
 	</target>
+	
+	<target name="all" depends="clean,jar"/>
 
 </project>

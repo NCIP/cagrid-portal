@@ -22,7 +22,7 @@ public class PersonDaoTest extends AbstractDaoTest {
 	 */
 	@Override
 	protected String getDataSetFileName() {
-		return "test/data/PersonDaoTest.xml";
+		return getDataSetFileName("test/data/PersonDaoTest.xml");
 	}
 	
 	public void testGetAll(){

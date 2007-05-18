@@ -3,6 +3,8 @@
 	<classpathentry kind="src" path="common/src/java"/>
 	<classpathentry kind="src" path="common/test/src/java"/>
 	<classpathentry kind="src" path="webapps/cagridportlets/src/java"/>
+	<classpathentry kind="src" path="portals/jetspeed/src/java"/>
+	<classpathentry kind="src" path="webapps/authn/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/hibernate/annotations/hibernate-commons-annotations.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate/annotations/hibernate-annotations.jar"/>
@@ -16,5 +18,36 @@
 	<classpathentry kind="lib" path="lib/spring-portlet/spring-portlet.jar"/>
 	<classpathentry kind="lib" path="common/test/lib/dbunit-2.2.jar"/>
 	<classpathentry kind="lib" path="common/test/lib/spring/junit.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-portal-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-components-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-webapp-logging-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-statistics-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-sso-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-serializer-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-security-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-search-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-registry-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-rdbms-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-profiler-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-prefs-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-portlet-factory-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-portal-site-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-page-manager-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-locator-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-id-generator-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-header-resource-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-file-cache-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-deploy-tools-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-cm-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-capability-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetspeed/jetspeed-api-2.1.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/puretls.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/jgss.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/jce-jdk13-125.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/cryptix-asn1.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/cryptix32.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/cryptix.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" sourcepath="/GT4_LOCATION/cog-1.2-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

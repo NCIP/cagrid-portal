@@ -60,6 +60,9 @@ Install Jetspeed 2.1
  	touch logs/apacheds.xml
  	maven j2:quickStart
  	
+Download Apache Ant 1.7.0
+ 	- http://apache.mirrors.redwire.net/ant/binaries/apache-ant-1.7.0-bin.zip 	
+ 	
 Install caGrid customizations
  - From portal2/portals/jetspeed
    - Modify build.properties. Set the jetspeed.tomcat.dir appropriately for
@@ -76,7 +79,7 @@ Install porlets
  
  		ant jar
  		
- - From portal2/portlets/cagridportlets, run:
+ - From portal2/webapps/cagridportlets, run:
  
  		ant
  		cp build/cagridportlets.war CATALINA_HOME/webapps/cagridportal/WEB-INF/deploy/

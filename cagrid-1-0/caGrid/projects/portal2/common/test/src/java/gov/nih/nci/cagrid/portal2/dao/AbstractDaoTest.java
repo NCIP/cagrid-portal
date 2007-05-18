@@ -39,6 +39,7 @@ public abstract class AbstractDaoTest extends DBTestCase {
     protected WebRequest webRequest = new StubWebRequest();
     private boolean shouldFlush = true;
 	private ApplicationContext ctx;
+	private String dataFilePrefix;
 
 	/**
 	 * 
@@ -86,6 +87,8 @@ public abstract class AbstractDaoTest extends DBTestCase {
 
 	private void init() {
 
+		this.dataFilePrefix = System.getProperty("data.file.prefix", "");
+		
 		Properties props = new Properties();
 		try {
 			props.load(Thread.currentThread().getContextClassLoader()
@@ -114,6 +117,10 @@ public abstract class AbstractDaoTest extends DBTestCase {
 				pwd);
 
 		this.ctx = new ClassPathXmlApplicationContext(getConfigLocations());
+	}
+	
+	protected String getDataSetFileName(String path){
+		return this.dataFilePrefix + path;
 	}
 	
 	public void setUp() throws Exception{
@@ -158,14 +165,12 @@ public abstract class AbstractDaoTest extends DBTestCase {
 	
 
     private void beginSession() {
-        logger.info("-- beginning CaaersDbTestCase interceptor session --");
         for (OpenSessionInViewInterceptor interceptor : interceptors()) {
             interceptor.preHandle(webRequest);
         }
     }
 
     private void endSession() {
-        logger.info("--    ending CaaersDbTestCase interceptor session --");
         for (OpenSessionInViewInterceptor interceptor : reverseInterceptors()) {
             if (shouldFlush) {
                 interceptor.postHandle(webRequest, null);
@@ -176,7 +181,6 @@ public abstract class AbstractDaoTest extends DBTestCase {
 
     protected void interruptSession() {
         endSession();
-        logger.info("-- interrupted CaaersDbTestCase session --");
         beginSession();
     }
 
