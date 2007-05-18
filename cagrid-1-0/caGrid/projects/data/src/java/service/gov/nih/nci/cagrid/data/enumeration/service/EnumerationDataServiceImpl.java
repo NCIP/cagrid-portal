@@ -60,6 +60,8 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 	public EnumerationResponseContainer enumerationQuery(gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws RemoteException, 
 		gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType, 
 		gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
+        fireAuditQueryBegins(cqlQuery);
+        
 		preProcess(cqlQuery);
 		
 		CQLQueryProcessor processor = getCqlQueryProcessorInstance();
@@ -71,6 +73,7 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 				enumIter = processQuery(processor, cqlQuery);
 			}
 		} catch (gov.nih.nci.cagrid.data.QueryProcessingException ex) {
+            fireAuditQueryProcessingFailure(cqlQuery, ex);
 			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
 			throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
@@ -112,6 +115,8 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 		FileNotFoundException, IOException {
 		// perform the query
 		CQLQueryResults results = processor.processQuery(query);
+        // fire off the results auditing
+        fireAuditQueryResults(query, results);
 		// pump the results into a list
 		List<Object> resultList = new LinkedList<Object>();
 		
@@ -144,6 +149,7 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 		gov.nih.nci.cagrid.data.MalformedQueryException {
 		// perform the query
 		Iterator results = processor.processQueryLazy(query);
+        // TODO: fire results auditing, but HOW?
         
         try {
             // figure out the result type

@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.rmi.RemoteException;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -38,7 +39,7 @@ import org.w3c.dom.Document;
  * @author David Ervin
  * 
  * @created Mar 12, 2007 2:08:57 PM
- * @version $Id: BDTResourceHelper.java,v 1.2 2007-04-30 20:46:39 dervin Exp $ 
+ * @version $Id: BDTResourceHelper.java,v 1.3 2007-05-18 19:05:05 dervin Exp $ 
  */
 public class BDTResourceHelper extends BaseServiceImpl {
 	private CQLQuery query;
@@ -50,7 +51,9 @@ public class BDTResourceHelper extends BaseServiceImpl {
 	private CQLQueryResults queryResults;
 	private byte[] wsddBytes;
 	
-	public BDTResourceHelper(CQLQuery query, String classToQNameMapfile, InputStream wsddInput) {
+	public BDTResourceHelper(CQLQuery query, String classToQNameMapfile, InputStream wsddInput) throws RemoteException {
+        super();
+        fireAuditQueryBegins(query);
 		this.query = query;
 		this.classToQNameMapfile = classToQNameMapfile;
 		this.wsddInput = wsddInput;
@@ -73,6 +76,7 @@ public class BDTResourceHelper extends BaseServiceImpl {
                 // get the enum iterator
                 enumIter = EnumIteratorFactory.createIterator(implType, resultIter, qName, getConsumableInputStream());
 			} catch (gov.nih.nci.cagrid.data.QueryProcessingException ex) {
+                fireAuditQueryProcessingFailure(query, ex);
 				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 			} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
 				throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
@@ -95,8 +99,17 @@ public class BDTResourceHelper extends BaseServiceImpl {
 	 * 		The query result
 	 */
 	public AnyXmlType resultsAsAnyType() throws QueryProcessingException, MalformedQueryException {
+        // create the new any type
 		AnyXmlType any = new AnyXmlType();
-		CQLQueryResults results = processQuery();
+        // process the query
+        CQLQueryResults results = null;
+        try {
+            results = processQuery();
+            fireAuditQueryResults(query, results);
+        } catch (QueryProcessingException ex) {
+            fireAuditQueryProcessingFailure(query, ex);
+            throw ex;
+        }
 		// serialize the results
 		StringWriter writer = new StringWriter();
 		try {
@@ -169,6 +182,7 @@ public class BDTResourceHelper extends BaseServiceImpl {
 	private Iterator processQueryAndIterate() throws QueryProcessingException, 
 		MalformedQueryException, IOException {
 		CQLQueryResults results = processQuery();
+        fireAuditQueryResults(query, results);
 		Iterator iterator = new CQLQueryResultsIterator(results, getConsumableInputStream());
 		return iterator;
 	}

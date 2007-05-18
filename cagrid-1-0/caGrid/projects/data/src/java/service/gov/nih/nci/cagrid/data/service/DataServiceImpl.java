@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.service;
 
+import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
@@ -11,12 +12,14 @@ import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
 import org.globus.wsrf.ResourceHome;
 
-/** 
- *  gov.nih.nci.cagrid.dataI
- *  TODO:DOCUMENT ME
- * 
- * @created by Introduce Toolkit version 1.0
- * 
+/**
+  *  DataServiceImpl
+  *  Implementation of the caGrid data service
+  * 
+  * @author David Ervin
+  * 
+  * @created May 17, 2007 2:20:26 PM
+  * @version $Id$
  */
 public class DataServiceImpl extends BaseServiceImpl {
 	
@@ -27,6 +30,8 @@ public class DataServiceImpl extends BaseServiceImpl {
 	
 	public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults query(gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) 
 		throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
+        fireAuditQueryBegins(cqlQuery);
+        
 		preProcess(cqlQuery);
 		
 		// process the query
@@ -37,8 +42,11 @@ public class DataServiceImpl extends BaseServiceImpl {
 			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		}
 		try {
-			return processor.processQuery(cqlQuery);
+            CQLQueryResults results = processor.processQuery(cqlQuery);
+            fireAuditQueryResults(cqlQuery, results);
+            return results;
 		} catch (gov.nih.nci.cagrid.data.QueryProcessingException ex) {
+            fireAuditQueryProcessingFailure(cqlQuery, ex);
 			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
 			throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());

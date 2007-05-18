@@ -29,7 +29,7 @@ public class ServiceConfigUtil {
 			+ Character.toUpperCase(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.charAt(0)) 
 			+ DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.substring(1);
 		
-		Properties configParams = new Properties();		
+		Properties configParams = new Properties();
 		try {
 			Object serviceConfig = getServiceConfigObject();
 			Class configClass = serviceConfig.getClass();
