@@ -1,7 +1,6 @@
 package org.cagrid.installer;
 
-import gov.nih.nci.cagrid.common.wizard.CaGridWizardModel;
-
+import org.cagrid.common.wizard.CaGridWizardModel;
 import org.cagrid.installer.path.MasterInstallerPath;
 import org.pietschy.wizard.Wizard;
 

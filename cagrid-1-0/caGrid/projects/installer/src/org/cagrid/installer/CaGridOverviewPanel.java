@@ -4,8 +4,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import sun.net.www.protocol.systemresource.SystemResourceURLConnection;
-
 public class CaGridOverviewPanel extends JPanel {
 
 	private JLabel jLabel = null;

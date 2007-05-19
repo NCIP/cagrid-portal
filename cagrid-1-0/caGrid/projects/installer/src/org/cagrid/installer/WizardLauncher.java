@@ -3,7 +3,6 @@
  */
 package org.cagrid.installer;
 
-import org.pietschy.wizard.Wizard;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
