@@ -76,6 +76,10 @@
             <filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
             <filterset filtersfile="${basedir}/ext/resources/introduce.properties" />
         </copy>
+
+        <!-- TODO: check that we actually created the critical files we need at runtime-->
+        <available file="${conf.dir}/introduce/introduce.engine.properties" property="introduce.engine.properties.available" />
+        <fail message="Critical configuration file [${conf.dir}/introduce/introduce.engine.properties] not found!" unless="introduce.engine.properties.available" />
     </target>
 
 

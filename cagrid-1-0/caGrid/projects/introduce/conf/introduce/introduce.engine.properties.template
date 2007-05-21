@@ -1,6 +1,15 @@
+#General Introduce Properties
 introduce.version=1.1
 introduce.update.site=@introduce.update.site@
+
+#Statistics Related
 introduce.statistics.site=@introduce.statistics.site@
 introduce.statistics.port=@introduce.statistics.port@
 introduce.statistics.collect=@introduce.statistics.collect@
+
+# Information on Dependent Services
+#Index Service
 introduce.default.index.service=@cagrid.master.index.service.url@
+#Grid Grouper
+introduce.gridgrouper.load.on.startup=false
+introduce.gridgrouper.urls=@cagrid.master.gridgrouper.service.url@

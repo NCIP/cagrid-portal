@@ -1261,7 +1261,7 @@ public class CommonTools {
 
 
     public static boolean getCollectStats() {
-        return Boolean.valueOf(getIntroducePropertyValue(IntroduceConstants.INTRODUCE_STATS_COLLECT)).booleanValue();
+        return Boolean.parseBoolean(getIntroducePropertyValue(IntroduceConstants.INTRODUCE_STATS_COLLECT));
     }
 
 
