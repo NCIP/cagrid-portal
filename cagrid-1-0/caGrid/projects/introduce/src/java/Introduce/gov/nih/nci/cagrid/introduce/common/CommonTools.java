@@ -642,7 +642,7 @@ public class CommonTools {
         newNamespaces.setNamespace(newNamespacesArr);
         introService.setNamespaces(newNamespaces);
 
-        // find the method and add it methods....
+        // find the method and add it to service's methods....
         MethodsType fromMethods = CommonTools.getService(fromintroService.getServices(), fromService).getMethods();
         MethodType foundMethod = null;
         if ((fromMethods != null) && (fromMethods.getMethod() != null)) {
@@ -668,7 +668,7 @@ public class CommonTools {
         foundMethod.setImportInformation(importInformation);
 
         // add new method to array in bean
-        // this seems to be a weird way be adding things....
+        // this seems to be a weird way to be adding things....
         MethodType[] newMethods;
         int newLength = 0;
         if ((methodsType != null) && (methodsType.getMethod() != null)) {
