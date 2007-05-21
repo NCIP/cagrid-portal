@@ -1,0 +1,6 @@
+introduce.version=1.1
+introduce.update.site=@introduce.update.site@
+introduce.statistics.site=@introduce.statistics.site@
+introduce.statistics.port=@introduce.statistics.port@
+introduce.statistics.collect=@introduce.statistics.collect@
+introduce.default.index.service=@cagrid.master.index.service.url@
