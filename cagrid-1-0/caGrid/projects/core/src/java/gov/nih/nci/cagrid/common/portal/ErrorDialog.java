@@ -227,6 +227,7 @@ public class ErrorDialog extends JDialog {
                         showingErrorException = false;
                         getErrorsSplitPane().setDividerLocation(0.5D);
                         getDetailTextArea().setText(container.getDetail());
+                        getDetailTextArea().setCaretPosition(0);
                     }
                 }
                 
@@ -246,6 +247,7 @@ public class ErrorDialog extends JDialog {
                         container.getError().printStackTrace(printWriter);
                         getErrorsSplitPane().setDividerLocation(0.5D);
                         getDetailTextArea().setText(writer.getBuffer().toString());
+                        getDetailTextArea().setCaretPosition(0);
                     }
                 }
             });
@@ -511,14 +513,18 @@ public class ErrorDialog extends JDialog {
 		frame.setSize(new Dimension(400,400));
 		frame.setVisible(true);
 		ErrorDialog.setOwnerFrame(frame);
+        String message = "";
+        for (int i = 0; i < 30; i++) {
+            message += "This is line " + i + "\n";
+        }
 		for (int i = 0; i < 10; i++) {
 			try {
 				Thread.sleep(5000);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			ErrorDialog.showErrorDialog("Test error", "Test detail",
-                new Exception("Oh Noes!"));		
+			ErrorDialog.showErrorDialog("Test error", message,
+                new Exception(message));		
 		}
 	}
 }
