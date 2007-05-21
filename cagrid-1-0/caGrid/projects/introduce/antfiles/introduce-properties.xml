@@ -61,6 +61,7 @@
 	<property name="test.log.dir" location="${test.dir}/logs" />
 	
 	<!-- extensions stuff -->
-	<property name="extensions.lib.dir" location="${basedir}/extensions/lib" />
+    <property name="extensions.dir" location="${basedir}/extensions" />
+	<property name="extensions.lib.dir" location="${extensions.dir}/lib" />
 	
 </project>

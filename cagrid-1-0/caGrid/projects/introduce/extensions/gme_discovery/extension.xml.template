@@ -9,8 +9,7 @@
   <ns1:DiscoveryPanelExtension xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
    >gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme.GMETypeSelectionComponent</ns1:DiscoveryPanelExtension>
   <ns1:Properties>
-   <ns1:Property makeGlobal="true" type="SERVICE_URL" key="Global Model Exchange URL"
-    value="http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"/>
+   <ns1:Property makeGlobal="true" type="SERVICE_URL" key="Global Model Exchange URL" value="@cagrid.master.gme.service.url@"/>
   </ns1:Properties>
  </ns1:DiscoveryExtensionDescription>
 </ns1:ExtensionDescription>
