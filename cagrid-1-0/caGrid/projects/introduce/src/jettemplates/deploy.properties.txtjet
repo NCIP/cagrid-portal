@@ -9,6 +9,6 @@
 %>
 service.deployment.prefix=cagrid
 perform.index.service.registration=true
-index.service.url=http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService
+index.service.url=<%=gov.nih.nci.cagrid.introduce.common.CommonTools.getIntroduceDefaultIndexService()%>
 index.service.registration.refresh_seconds=600
 index.service.index.refresh_milliseconds=30000

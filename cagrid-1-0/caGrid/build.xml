@@ -176,7 +176,7 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
     </target>
-	
+
 	<!-- =============================================================== -->
     <!-- PORTAL 2:                                                    	 -->
     <!-- =============================================================== -->
@@ -199,7 +199,6 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/portal2" inheritAll="false" antfile="build.xml" target="all" />
     </target>
-
 
     <!-- =============================================================== -->
     <!-- caBIG Introduce Extensions:                                     -->
@@ -504,7 +503,14 @@
     <!-- =============================================================== -->
     <!-- INTRODUCE:                                                      -->
     <!-- =============================================================== -->
-    <target name="build-introduce" depends="prepare" description="Builds Introduce">
+    <target name="configure-introduce" depends="prepare" description="Configures the introduce project">
+        <resolveDependencies extdir="${projects.dir}/introduce/ext">
+            <artifact refid="service_urls.properties" />
+            <artifact refid="introduce.properties" />
+        </resolveDependencies>
+        <ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="configure" />
+    </target>
+    <target name="build-introduce" depends="configure-introduce" description="Builds Introduce">
         <resolveDependencies extdir="${projects.dir}/introduce/ext">
             <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
@@ -622,7 +628,9 @@
             <artifact refid="core.jars" />
             <artifact refid="wizard.jars" />
         </resolveDependencies>
-        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
+    	<!--
+    	        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
+    	        -->
     </target>
 
 
@@ -866,8 +874,6 @@
 	    </resolveDependencies>
 	    <ant dir="${projects.dir}/wizard" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	
-	
 
     <!-- ============================================================== -->
     <!-- Installs the Introduce Extensions                              -->

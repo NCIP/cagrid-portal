@@ -49,7 +49,7 @@ import org.projectmobius.common.XMLUtilities;
  */
 public class CommonTools {
     private static final Logger logger = Logger.getLogger(CommonTools.class);
-    
+
     public static final String DEBUG_ANT_CALL_JAVA_OPTS = "-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000";
 
     public static final String ALLOWED_JAVA_CLASS_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
@@ -253,8 +253,8 @@ public class CommonTools {
         cmd = getAntCommand(deployTarget, buildFileDir) + " " + cmd;
         return cmd;
     }
-    
-    
+
+
     public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
         String packagename, String namespacedomain, String extensions) throws Exception {
         return getAntSkeletonCreationCommand(buildFileDir, name, dir, packagename, namespacedomain, extensions, false);
@@ -279,12 +279,12 @@ public class CommonTools {
         logger.debug("CREATION: cmd: " + cmd);
         return cmd;
     }
-    
-    
+
+
     public static String getAntSkeletonPostCreationCommand(String buildFileDir, String name, String dir,
         String packagename, String namespacedomain, String extensions) throws Exception {
-        return getAntSkeletonPostCreationCommand(
-            buildFileDir, name, dir, packagename, namespacedomain, extensions, false);
+        return getAntSkeletonPostCreationCommand(buildFileDir, name, dir, packagename, namespacedomain, extensions,
+            false);
     }
 
 
@@ -306,8 +306,8 @@ public class CommonTools {
         logger.debug("CREATION: cmd: " + cmd);
         return cmd;
     }
-    
-    
+
+
     static String getAntCommandCall(String buildFileDir) throws Exception {
         return getAntCommandCall(buildFileDir, false);
     }
@@ -607,7 +607,7 @@ public class CommonTools {
         }
 
         // copy over the namespaces from the imported service
-        // make sure to warn on duplicates and remome them
+        // make sure to warn on duplicates and remove them
         NamespacesType fromNamespaces = fromintroService.getNamespaces();
         int fromNamespacesLength = 0;
         if ((fromNamespaces != null) && (fromNamespaces.getNamespace() != null)) {
@@ -668,7 +668,7 @@ public class CommonTools {
         foundMethod.setImportInformation(importInformation);
 
         // add new method to array in bean
-        // this seems to be a wierd way be adding things....
+        // this seems to be a weird way be adding things....
         MethodType[] newMethods;
         int newLength = 0;
         if ((methodsType != null) && (methodsType.getMethod() != null)) {
@@ -1078,11 +1078,11 @@ public class CommonTools {
 
     /**
      * Determines if schema element types from a namespace type are referenced
-     * in other parts of the service (ie Methods, Exceptions)
+     * in other parts of the service (e.g. Methods, Exceptions)
      * 
      * @param nsType
      * @param desc
-     * @return True if the namespace typs is in use in the service, false
+     * @return True if the namespace type is in use in the service, false
      *         otherwise
      */
     public static boolean isNamespaceTypeInUse(NamespaceType nsType, ServiceDescription desc) {
@@ -1200,7 +1200,7 @@ public class CommonTools {
                             if (exception.getQname() != null) {
                                 usedTypes.add(exception.getQname());
                             } else {
-                                // this is just added int he gui and not in the
+                                // this is just added in the gui and not in the
                                 // actual types list yet
                                 // it will be after the save
                             }
@@ -1228,67 +1228,57 @@ public class CommonTools {
 
 
     public static String getIntroduceVersion() {
-        Properties engineProps = new Properties();
-        try {
-            engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
-            return (String) engineProps.get(IntroduceConstants.INTRODUCE_VERSION_PROPERTY);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_VERSION_PROPERTY);
     }
 
 
     public static String getIntroduceUpdateSite() {
-        Properties engineProps = new Properties();
-        try {
-            engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
-            return (String) engineProps.get(IntroduceConstants.INTRODUCE_UPDATE_SITE_PROPERTY);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_UPDATE_SITE_PROPERTY);
+    }
+
+
+    public static String getIntroduceDefaultIndexService() {
+        return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_DEFAULT_INDEX_SERVICE_PROPERTY);
     }
 
 
     public static String getStatisticSite() {
-        Properties engineProps = new Properties();
-        try {
-            engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
-            return (String) engineProps.get(IntroduceConstants.INTRODUCE_STATS_SITE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_STATS_SITE);
     }
 
 
     public static int getStatisticPort() {
-        Properties engineProps = new Properties();
+        int port = -1;
+        String prop = getIntroducePropertyValue(IntroduceConstants.INTRODUCE_STATS_PORT);
         try {
-            engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
-            return Integer.parseInt((String) engineProps.get(IntroduceConstants.INTRODUCE_STATS_PORT));
-        } catch (IOException e) {
+            port = Integer.parseInt(prop);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return -1;
+
+        return port;
     }
 
 
     public static boolean getCollectStats() {
+        return Boolean.valueOf(getIntroducePropertyValue(IntroduceConstants.INTRODUCE_STATS_COLLECT)).booleanValue();
+    }
+
+
+    public static String getIntroducePropertyValue(String propertyKey) {
         Properties engineProps = new Properties();
         try {
             engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
-            return new Boolean((String) engineProps.get(IntroduceConstants.INTRODUCE_STATS_COLLECT)).booleanValue();
+            return engineProps.getProperty(propertyKey);
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return false;
     }
 
 
     /**
-     * Returns the input string with the first character converted to lowercase
+     * Returns the input string with the first character converted to lower case
      * 
      * @param variableName
      *            string to fix
