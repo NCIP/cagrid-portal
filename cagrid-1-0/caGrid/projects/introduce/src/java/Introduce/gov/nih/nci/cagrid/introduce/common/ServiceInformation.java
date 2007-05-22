@@ -26,6 +26,8 @@ public class ServiceInformation {
     private ServiceDescription introService;
 
     private Properties introduceServiceProperties;
+    
+    private Properties deploymentProperties;
 
     private File baseDirectory;
 
@@ -52,6 +54,11 @@ public class ServiceInformation {
             + IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
         introduceServiceProperties = new Properties();
         introduceServiceProperties.load(new FileInputStream(servicePropertiesFile));
+        File deployPropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator
+                + IntroduceConstants.DEPLOY_PROPERTIES_FILE);
+        deploymentProperties = new Properties();
+        deploymentProperties.load(new FileInputStream(deployPropertiesFile));
+    
     }
 
 
@@ -69,6 +76,15 @@ public class ServiceInformation {
 
     public void setIntroduceServiceProperties(Properties serviceProperties) {
         this.introduceServiceProperties = serviceProperties;
+    }
+    
+    public Properties getDeploymentProperties() {
+        return deploymentProperties;
+    }
+
+
+    public void setDeplymentProperties(Properties deploymentProperties) {
+        this.deploymentProperties = deploymentProperties;
     }
 
 
@@ -128,6 +144,9 @@ public class ServiceInformation {
         File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator
             + IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
         introduceServiceProperties.store(new FileOutputStream(servicePropertiesFile), "Introduce Properties");
+        File deploymentPropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator
+                + IntroduceConstants.DEPLOY_PROPERTIES_FILE);
+            introduceServiceProperties.store(new FileOutputStream(deploymentPropertiesFile), "Service Deployment Properties");
     }
 
 
