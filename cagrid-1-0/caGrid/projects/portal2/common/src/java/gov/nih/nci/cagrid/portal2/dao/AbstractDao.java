@@ -3,12 +3,11 @@
  */
 package gov.nih.nci.cagrid.portal2.dao;
 
+import gov.nih.nci.cagrid.portal2.dao.exception.NonUniqueResultException;
 import gov.nih.nci.cagrid.portal2.domain.DomainObject;
 
 import java.sql.SQLException;
 import java.util.List;
-
-import javax.persistence.Table;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -23,7 +22,18 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  */
 public abstract class AbstractDao<T extends DomainObject> extends HibernateDaoSupport {
 	
-	public abstract Class<T> domainClass();
+	public abstract Class domainClass();
+	
+	public T getByExample(final T sample){
+		T result = null;
+		List<T> results = searchByExample(sample, false);
+		if(results.size() > 1){
+			throw new NonUniqueResultException("Found " + sample.getClass().getName() + " objects.");
+		}else if(results.size() == 1){
+			result = results.get(0);
+		}
+		return result;
+	}
 
     @SuppressWarnings("unchecked")
     public T getById(int id) {

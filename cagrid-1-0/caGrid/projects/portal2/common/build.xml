@@ -5,11 +5,18 @@
 		value="db/${db}.hibernate.properties" />
 	<property file="${hibernate.properties}" />
 	<property name="data.file.prefix" value=""/>
+	<property environment="env"/>
 
 	<path id="cp">
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 			<exclude name="**/ant*.jar"/>
+		</fileset>
+		<fileset dir="${ext.lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${env.GLOBUS_LOCATION}/lib">
+			<include name="*.jar"/>
 		</fileset>
 	</path>
 
@@ -26,7 +33,9 @@
 		<fileset dir="tools/hibernatetools/lib">
 			<include name="*.jar" />
 		</fileset>
+		<!--
 		<path refid="cp" />
+		-->
 	</path>
 
 	<taskdef name="hibernatetool"
@@ -54,11 +63,12 @@
 		<mkdir dir="gen" />
 		<hibernatetool destdir="gen">
 			<classpath>
+				<path refid="cp"/>
 				<pathelement location="${classes.dir}" />
 			</classpath>
 			<annotationconfiguration
 				configurationfile="tools/hibernatetools/hibernate.cfg.xml" />
-			<hbm2ddl export="false" drop="false"
+			<hbm2ddl export="false" drop="true"
 				outputfilename="portal.ddl" />
 		</hibernatetool>
 

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<project name="developers-build-deploy file" basedir=".">
+
+	<import file="common-build.xml" />
+
+
+	<!-- ============================================================== -->
+	<!-- Pre Deploy Tomcat                                              -->
+	<!-- ============================================================== -->
+	<target name="preDeployTomcat">
+		<copy todir="${tomcat.deploy.lib.dir}" overwrite="true" flatten="true">
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="../../lib">
+				<patternset refid="portal2.dependencies" />
+			</fileset>
+			<fileset dir="../../common/build/">
+				<include name="cagrid-portal2-common.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+
+	<!-- ============================================================== -->
+	<!-- Pre Deploy Globus                                              -->
+	<!-- ============================================================== -->
+	<target name="preDeployGlobus">
+
+	</target>
+
+</project>

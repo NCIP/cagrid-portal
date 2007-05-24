@@ -16,7 +16,7 @@
 	
 	<bean id="contentControllerTemplate" abstract="true">
 		<property name="viewNameParam" ref="viewNameParam"/>
-		<property name="viewNameDefault" value="viewNameDefault"/>
+		<property name="viewNameDefault" ref="viewNameDefault"/>
 	</bean>
 
 	<bean id="contentEditController" parent="contentControllerTemplate"

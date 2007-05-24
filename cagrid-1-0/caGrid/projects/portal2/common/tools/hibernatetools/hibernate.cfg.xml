@@ -22,6 +22,10 @@
 
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.Address" />
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.Person" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.CaGridParticipant" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.PortalUser" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.GridPortalUser" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.Role" />
 
 	</session-factory>
 

@@ -40,6 +40,10 @@
 			<list>
 				<value>gov.nih.nci.cagrid.portal2.domain.Address</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.Person</value>
+				<value>gov.nih.nci.cagrid.portal2.domain.CaGridParticipant</value>
+				<value>gov.nih.nci.cagrid.portal2.domain.PortalUser</value>
+				<value>gov.nih.nci.cagrid.portal2.domain.GridPortalUser</value>
+				<value>gov.nih.nci.cagrid.portal2.domain.Role</value>
 			</list>
 		</property>
 	</bean>
@@ -48,6 +52,8 @@
 		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
 
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
@@ -83,10 +89,21 @@
 		
 	<bean id="personDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.PersonDao" />		
-
+	<bean id="portalUserDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal2.dao.PortalUserDao" />
+	<bean id="gridPortalUserDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal2.dao.GridPortalUserDao" />
+	<bean id="caGridParticipantDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal2.dao.CaGridParticipantDao" />
+	<bean id="roleDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal2.dao.RoleDao" />
+		
     <bean id="openSessionInViewInterceptor" class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor" autowire="byName">
         <property name="singleSession"><value>true</value></property>
         <property name="flushModeName"><value>FLUSH_AUTO</value></property>
     </bean>
+    
+
+	
 
 </beans>

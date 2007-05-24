@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+	<bean id="webAuthnSvc" class="gov.nih.nci.cagrid.portal2.webauthn.common.WebAuthnSvc">
+		<property name="portalUserDao" ref="portalUserDao"/>
+		<property name="roleDao" ref="roleDao"/>
+		<property name="defaultRoles" ref="defaultRoles"/>
+	</bean>
+
+	<bean id="adminRole" class="gov.nih.nci.cagrid.portal2.domain.Role">
+		<property name="name" value="admin"/>
+	</bean>
+	<bean id="userRole" class="gov.nih.nci.cagrid.portal2.domain.Role">
+		<property name="name" value="user"/>
+	</bean>
+	
+	<util:list id="defaultRoles">
+		<ref bean="userRole"/>
+    </util:list>
+    
+    <bean id="adminUser" class="gov.nih.nci.cagrid.portal2.domain.GridPortalUser">
+    	<property name="username" value="manager@manager.com"/>
+    	<property name="password" value="manager"/>
+    	<property name="roles">
+    		<util:list>
+				<ref bean="adminRole"/>
+				<ref bean="userRole"/>
+    		</util:list>
+    	</property>
+    </bean>
+    
+    <bean id="appInit" class="gov.nih.nci.cagrid.portal2.webauthn.common.AppInit">
+    	<property name="defaultRoles" ref="defaultRoles"/>
+    	<property name="adminUser" ref="adminUser"/>
+    	<property name="roleDao" ref="roleDao"/>
+    	<property name="portalUserDao" ref="portalUserDao"/>
+    </bean>
+
+</beans>

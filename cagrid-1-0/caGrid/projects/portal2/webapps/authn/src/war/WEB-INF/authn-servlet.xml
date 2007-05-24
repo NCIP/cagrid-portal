@@ -1,20 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-<!--
-  - Application context definition for "springapp" DispatcherServlet.
-  -->
+	<bean id="userSessionKey" class="java.lang.String">
+		<constructor-arg value="cagrid_authn_user" />
+	</bean>
+	<bean id="targetUrlKey" class="java.lang.String">
+		<constructor-arg value="cagrid_authn_targetUrl" />
+	</bean>
 
-<beans>
-    <bean id="loginController" class="gov.nih.nci.cagrid.portal2.servlet.authn.LoginController">
-    	<property name="" value=""/>
-    </bean>
+	<util:map id="idpUrls">
+		<entry key="NCICB DEV Dorian IdP" value="https://cbiovdev5034.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
+	</util:map>
+	
 
-    <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-        <property name="mappings">
-            <props>
-                <prop key="/authn/login">loginController</prop>
-            </props>
-        </property>
-    </bean>
+	<bean id="webAuthnSvcClient" class="gov.nih.nci.cagrid.portal2.webauthn.client.WebAuthnSvcClient">
+		<constructor-arg value="http://localhost:8081/wsrf/services/cagrid/WebAuthnSvc"/>
+	</bean>
+
+
+	<bean id="loginController"
+		class="gov.nih.nci.cagrid.portal2.servlet.authn.LoginController">
+
+		<property name="redirectView" value="redirectToTarget" />
+
+		<property name="loginSuccessView" value="loginSuccess" />
+		<property name="selectActionView"
+			value="redirect:/authn/selectAction" />
+
+		<property name="userSessionKey" ref="userSessionKey" />
+		<property name="targetUrlKey" ref="targetUrlKey" />
+		<property name="webAuthnSvcClient" ref="webAuthnSvcClient"/>
+	</bean>
+
+	<bean id="selectActionController"
+		class="gov.nih.nci.cagrid.portal2.servlet.authn.SelectActionController">
+
+		<property name="formView" value="selectAction" />
+		<property name="gridLoginView"
+			value="redirect:/authn/gridLogin" />
+		<property name="localLoginView"
+			value="redirect:/authn/localLogin" />
+		<property name="registerView" value="redirect:/authn/register" />
+
+		<property name="commandClass"
+			value="gov.nih.nci.cagrid.portal2.servlet.authn.SelectActionCommand" />
+
+	</bean>
+
+	<bean id="localLoginController"
+		class="gov.nih.nci.cagrid.portal2.servlet.authn.LocalLoginController">
+
+		<property name="formView" value="localLogin" />
+		<property name="successView" value="redirect:/authn/login" />
+
+		<property name="commandClass"
+			value="gov.nih.nci.cagrid.portal2.servlet.authn.LoginCommand" />
+		<property name="userSessionKey" ref="userSessionKey" />
+		<property name="targetUrlKey" ref="targetUrlKey" />
+	</bean>
+
+	<bean id="gridLoginController"
+		class="gov.nih.nci.cagrid.portal2.servlet.authn.GridLoginController">
+
+		<property name="formView" value="gridLogin" />
+		<property name="successView" value="redirect:/authn/login" />
+
+		<property name="commandClass"
+			value="gov.nih.nci.cagrid.portal2.servlet.authn.LoginCommand" />
+		<property name="userSessionKey" ref="userSessionKey" />
+		<property name="targetUrlKey" ref="targetUrlKey" />
+
+		<property name="idpUrls" ref="idpUrls" />
+		<property name="webAuthnSvcClient" ref="webAuthnSvcClient"/>
+	</bean>
+
+	<bean id="urlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/login">loginController</prop>
+				<prop key="/selectAction">selectActionController</prop>
+
+				<prop key="/gridLogin">gridLoginController</prop>
+				<prop key="/localLogin">localLoginController</prop>
+				<!--                 
+					<prop key="/register">registerController</prop>
+				-->
+			</props>
+		</property>
+	</bean>
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />	
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!-- 
+		<bean id="exceptionHandlerTemplate" class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver" abstract="true">
+		<property name="defaultErrorView" value="error"/>
+		<property name="exceptionMappings">
+		<props>
+		<prop key="gov.nih.nci.cagrid.portal2.servlet.authn.LocalLoginException">localLogin</prop>
+		<prop key="gov.nih.nci.cagrid.portal2.servlet.authn.GridLoginException">gridLogin</prop>
+		</props>
+		</property>  
+		</bean>	
+	-->
+	
+
+	
 </beans>

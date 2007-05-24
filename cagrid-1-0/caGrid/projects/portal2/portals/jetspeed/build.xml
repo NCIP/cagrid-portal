@@ -4,8 +4,11 @@
 	<property file="build.properties" />
 
 	<import file="../../ant-files/common.xml" />
-	
-	<property environment="env"/>
+
+	<property environment="env" />
+
+
+
 
 
 	<target name="copy-conf">
@@ -37,7 +40,7 @@
 			</fileset>
 		</copy>
 	</target>
-	
+
 	<target name="deploy-assembly" depends="jar">
 		<copy
 			todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/WEB-INF/assembly"
@@ -46,7 +49,7 @@
 				dir="ext/target/${jetspeed.custom.portal.name}/WEB-INF/assembly">
 				<include name="**/*" />
 			</fileset>
-		</copy>	
+		</copy>
 		<copy
 			todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/WEB-INF/conf"
 			overwrite="true">
@@ -54,15 +57,35 @@
 				dir="ext/target/${jetspeed.custom.portal.name}/WEB-INF/conf">
 				<include name="**/*" />
 			</fileset>
-		</copy>	
+		</copy>
 		<copy
 			todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/WEB-INF/lib"
 			overwrite="true">
-			<fileset
-				dir="build">
+			<fileset dir="build">
 				<include name="cagrid-portal2-jetspeed.jar" />
 			</fileset>
-		</copy>		
+			<fileset dir="../../ext/lib/">
+				<patternset refid="ext.jars" />
+			</fileset>
+			<fileset dir="${env.GLOBUS_LOCATION}/lib">
+				<patternset refid="globus.jars" />
+			</fileset>
+			<fileset dir="../../services/webauthn/build/lib">
+				<include name="WebAuthnSvc-client.jar" />
+				<include name="WebAuthnSvc-common.jar" />
+				<include name="WebAuthnSvc-stubs.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${jetspeed.tomcat.dir}/common/lib"
+			overwrite="true">
+			<fileset dir="${env.GLOBUS_LOCATION}/lib">
+				<patternset refid="crypto.jars" />
+			</fileset>
+			<fileset dir="../../ext/lib">
+				<patternset refid="crypto.jars" />
+			</fileset>
+		</copy>
+
 	</target>
 
 	<target name="deploy-portlets">
@@ -92,8 +115,18 @@
 					<include name="log4j/*.jar" />
 					<include name="servlet/*.jar" />
 				</fileset>
+				<fileset dir="../../ext/lib/">
+					<patternset refid="ext.jars" />
+					<patternset refid="crypto.jars" />
+				</fileset>
 				<fileset dir="${env.GLOBUS_LOCATION}/lib">
-					<include name="*.jar"/>
+					<patternset refid="globus.jars" />
+					<patternset refid="crypto.jars" />
+				</fileset>
+				<fileset dir="../../services/webauthn/build/lib">
+					<include name="WebAuthnSvc-client.jar" />
+					<include name="WebAuthnSvc-common.jar" />
+					<include name="WebAuthnSvc-stubs.jar" />
 				</fileset>
 			</classpath>
 		</javac>
@@ -108,6 +141,6 @@
 	<target name="clean">
 		<delete dir="build" />
 	</target>
-	
-	<target name="all" depends="clean,jar"/>
+
+	<target name="all" depends="clean,jar" />
 </project>

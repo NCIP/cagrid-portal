@@ -6,7 +6,12 @@ package gov.nih.nci.cagrid.portal2.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
@@ -17,56 +22,64 @@ import org.hibernate.annotations.Parameter;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
+ * 
  */
 @Entity
 @Table(name = "persons")
-@GenericGenerator(name="id-generator", strategy = "native",
-    parameters = {
-        @Parameter(name="sequence", value="seq_persons")
-    }
-)
+@GenericGenerator(name = "id-generator", strategy = "native", parameters = { @Parameter(name = "sequence", value = "seq_persons") })
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "person_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("Person")
 public class Person extends AbstractDomainObject {
-	
+
 	private String firstName;
+
 	private String lastName;
+
 	private String emailAddress;
+
 	private String phoneNumber;
+
 	private List<Address> addresses = new ArrayList<Address>();
-	
+
 	@OneToMany
-	@JoinTable(
-			name="person_addresses", 
-			joinColumns=@JoinColumn(name="person_id"),
-			inverseJoinColumns=@JoinColumn(name="address_id")
-			)
+	@JoinTable(name = "person_addresses", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "address_id"))
 	public List<Address> getAddresses() {
 		return addresses;
 	}
+
 	public void setAddresses(List<Address> addresses) {
 		this.addresses = addresses;
 	}
+
 	public String getEmailAddress() {
 		return emailAddress;
 	}
+
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
+
 	public String getFirstName() {
 		return firstName;
 	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
 	public String getLastName() {
 		return lastName;
 	}
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
+
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
