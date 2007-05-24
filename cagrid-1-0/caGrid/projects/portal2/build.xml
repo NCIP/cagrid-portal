@@ -3,6 +3,7 @@
 	<target name="all">
 		<ant dir="common" target="all"/>
 		<ant dir="webapps/cagridportlets" target="all"/>
+		<ant dir="services/webauthn" target="jars"/>
 		<ant dir="portals/jetspeed" target="all"/>
 	</target>
 	
