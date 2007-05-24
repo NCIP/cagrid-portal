@@ -1,8 +1,13 @@
 package gov.nih.nci.cagrid.data.ui.auditors;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /** 
@@ -12,15 +17,42 @@ import javax.swing.table.DefaultTableModel;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:41:23 AM
- * @version $Id: AuditorsTable.java,v 1.1 2007-05-21 19:07:57 dervin Exp $ 
+ * @version $Id: AuditorsTable.java,v 1.2 2007-05-24 16:11:22 dervin Exp $ 
  */
 public class AuditorsTable extends JTable {
     
     private DefaultTableModel model = null;
+    private List<AuditorChangeListener> auditorChangeListeners = null;
 
     public AuditorsTable() {
         super();
+        auditorChangeListeners = new LinkedList();
         setModel(getAuditorsTableModel());
+        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                if (e.getFirstIndex() != -1) {
+                    fireAuditorSelectionChanged();
+                }
+            }
+        });
+    }
+    
+    
+    public void addAuditorChangeListener(AuditorChangeListener listener) {
+        auditorChangeListeners.add(listener);
+    }
+    
+    
+    public boolean removeAuditorChangeListener(AuditorChangeListener listener) {
+        return auditorChangeListeners.remove(listener);
+    }
+    
+    
+    public AuditorChangeListener[] getAuditorChangeListeners() {
+        AuditorChangeListener[] listeners = new AuditorChangeListener[auditorChangeListeners.size()];
+        auditorChangeListeners.toArray(listeners);
+        return listeners;
     }
     
     
@@ -34,11 +66,11 @@ public class AuditorsTable extends JTable {
     
     public void removeAuditor(String className, String instanceName) {
         for (int i = 0; i < getRowCount(); i++) {
-            if (getValueAt(i, 0).equals(className)) {
-                if (getValueAt(i, 1).equals(instanceName)) {
-                    getAuditorsTableModel().removeRow(i);
-                    return;
-                }
+            if (getValueAt(i, 0).equals(className) 
+                && getValueAt(i, 1).equals(instanceName)) {
+                System.out.println("Removing auditor at row " + i);
+                getAuditorsTableModel().removeRow(i);
+                return;
             }
         }
     }
@@ -59,7 +91,17 @@ public class AuditorsTable extends JTable {
             model = new DefaultTableModel();
             model.addColumn("Auditor Class");
             model.addColumn("Instance Name");
+            
         }
         return model;
+    }
+    
+    
+    protected void fireAuditorSelectionChanged() {
+        String className = getSelectedClassName();
+        String instanceName = getSelectedInstanceName();
+        for (AuditorChangeListener listener : auditorChangeListeners) {
+            listener.auditorSelectionChanged(className, instanceName);
+        }
     }
 }

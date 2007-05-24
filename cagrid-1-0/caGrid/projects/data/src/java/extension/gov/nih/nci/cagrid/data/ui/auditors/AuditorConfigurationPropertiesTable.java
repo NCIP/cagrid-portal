@@ -3,12 +3,15 @@ package gov.nih.nci.cagrid.data.ui.auditors;
 import gov.nih.nci.cagrid.data.auditing.AuditorConfigurationConfigurationProperties;
 import gov.nih.nci.cagrid.data.auditing.ConfigurationProperty;
 
-import java.awt.Dimension;
 import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 /** 
@@ -18,22 +21,36 @@ import javax.swing.table.DefaultTableModel;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:58:45 AM
- * @version $Id: AuditorConfigurationPropertiesTable.java,v 1.1 2007-05-21 19:07:57 dervin Exp $ 
+ * @version $Id: AuditorConfigurationPropertiesTable.java,v 1.2 2007-05-24 16:11:22 dervin Exp $ 
  */
 public class AuditorConfigurationPropertiesTable extends JTable {
 
     private DefaultTableModel model;
     
+    private List<AuditorPropertyChangeListener> propertyChangeListeners = null;
+    
     public AuditorConfigurationPropertiesTable() {
         super();
         setModel(getConfigurationPropertiesModel());
-        initialize();
+        propertyChangeListeners = new LinkedList();
     }
     
     
-    private void initialize() {
-        this.setSize(new Dimension(348, 61));
-        
+    public void addAuditorPropertyListener(AuditorPropertyChangeListener listener) {
+        propertyChangeListeners.add(listener);
+    }
+    
+    
+    public boolean removeAuditorPropertyChangeListener(AuditorPropertyChangeListener listener) {
+        return propertyChangeListeners.remove(listener);
+    }
+    
+    
+    public AuditorPropertyChangeListener[] getAuditorPropertyChangeListeners() {
+        AuditorPropertyChangeListener[] listeners = 
+            new AuditorPropertyChangeListener[propertyChangeListeners.size()];
+        propertyChangeListeners.toArray(listeners);
+        return listeners;
     }
     
     
@@ -75,6 +92,13 @@ public class AuditorConfigurationPropertiesTable extends JTable {
     }
     
     
+    public void clearTable() {
+        while (getRowCount() != 0) {
+            getConfigurationPropertiesModel().removeRow(0);
+        }
+    }
+    
+    
     private DefaultTableModel getConfigurationPropertiesModel() {
         if (model == null) {
             model = new DefaultTableModel() {
@@ -85,7 +109,28 @@ public class AuditorConfigurationPropertiesTable extends JTable {
             model.addColumn("Key");
             model.addColumn("Default");
             model.addColumn("Value");
+            
+            model.addTableModelListener(new TableModelListener() {
+                public void tableChanged(TableModelEvent e) {
+                    if (e.getType() == TableModelEvent.UPDATE) {
+                        int row = e.getFirstRow();
+                        int col = e.getColumn();
+                        if (col == 2) {
+                            fireConfigurationPropertyChanged(row);
+                        }
+                    }
+                }
+            });
         }
         return model;
+    }
+    
+    
+    protected void fireConfigurationPropertyChanged(int row) {
+        String key = getValueAt(row, 0).toString();
+        String value = getValueAt(row, 2).toString();
+        for (AuditorPropertyChangeListener listener : propertyChangeListeners) {
+            listener.propertyValueEdited(key, value);
+        }
     }
 }

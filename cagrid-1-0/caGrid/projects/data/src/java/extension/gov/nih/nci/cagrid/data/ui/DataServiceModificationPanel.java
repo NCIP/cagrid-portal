@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.data.cql.ui.CQLQueryProcessorConfigUI;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.ui.auditors.AuditorsConfigurationPanel;
 import gov.nih.nci.cagrid.data.ui.browser.AdditionalJarsChangeListener;
 import gov.nih.nci.cagrid.data.ui.browser.AdditionalJarsChangedEvent;
 import gov.nih.nci.cagrid.data.ui.browser.ClassBrowserPanel;
@@ -77,6 +78,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
     private JPanel processorConfigurationPanel = null;
     private JButton launchProcessorConfigButton = null;
     private EnumIteratorSelectionPanel iterSelectionPanel = null;
+    private AuditorsConfigurationPanel auditorConfigPanel = null;
 
 	private transient Map packageToClassMap = null;
     
@@ -401,6 +403,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
             }
 			mainTabbedPane.addTab("Details", null, getDetailConfigPanel(),
 				"Class to element mapping, serialization, validation");
+            mainTabbedPane.addTab("Auditing", null, getAuditorConfigPanel(),
+                "Optional selection and configuration of auditors");
 		}
 		return mainTabbedPane;
 	}
@@ -552,6 +556,14 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
             iterSelectionPanel = new EnumIteratorSelectionPanel(getServiceInfo());
         }
         return iterSelectionPanel;
+    }
+    
+    
+    private AuditorsConfigurationPanel getAuditorConfigPanel() {
+        if (auditorConfigPanel == null) {
+            auditorConfigPanel = new AuditorsConfigurationPanel(getServiceInfo());
+        }
+        return auditorConfigPanel;
     }
     
     

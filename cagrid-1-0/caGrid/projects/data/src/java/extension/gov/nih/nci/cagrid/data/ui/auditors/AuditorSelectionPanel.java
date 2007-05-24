@@ -1,9 +1,7 @@
 package gov.nih.nci.cagrid.data.ui.auditors;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.service.auditing.DataServiceAuditor;
-import gov.nih.nci.cagrid.introduce.common.FileFilters;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -14,13 +12,8 @@ import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
@@ -37,7 +30,7 @@ import javax.swing.JTextField;
  * @author David Ervin
  * 
  * @created May 21, 2007 11:38:54 AM
- * @version $Id: AuditorSelectionPanel.java,v 1.1 2007-05-21 19:07:57 dervin Exp $ 
+ * @version $Id: AuditorSelectionPanel.java,v 1.2 2007-05-24 16:11:22 dervin Exp $ 
  */
 public class AuditorSelectionPanel extends JPanel {
 
@@ -50,31 +43,31 @@ public class AuditorSelectionPanel extends JPanel {
     private JButton removeButton = null;
     
     private File serviceBaseDir = null;
-    private List<AuditorChangeListener> auditorChangeListeners = null;    
+    private List<AuditorAdditionListener> auditorAdditionListeners = null;    
 
 
     public AuditorSelectionPanel(File serviceBaseDir) {
         super();
         this.serviceBaseDir = serviceBaseDir;
-        auditorChangeListeners = new LinkedList();
+        auditorAdditionListeners = new LinkedList();
         initialize();
     }
     
     
-    public void addAuditorChangeLisener(AuditorChangeListener listener) {
-        auditorChangeListeners.add(listener);
+    public void addAuditorAdditionListener(AuditorAdditionListener listener) {
+        auditorAdditionListeners.add(listener);
     }
     
     
-    public boolean removeAuditorChangeListener(AuditorChangeListener listener) {
-        return auditorChangeListeners.remove(listener);
+    public boolean removeAuditorAdditionListener(AuditorAdditionListener listener) {
+        return auditorAdditionListeners.remove(listener);
     }
     
     
-    public AuditorChangeListener[] getAuditorChangeListeners() {
-        AuditorChangeListener[] listeners = 
-            new AuditorChangeListener[auditorChangeListeners.size()];
-        auditorChangeListeners.toArray(listeners);
+    public AuditorAdditionListener[] getAuditorAdditionListeners() {
+        AuditorAdditionListener[] listeners = 
+            new AuditorAdditionListener[auditorAdditionListeners.size()];
+        auditorAdditionListeners.toArray(listeners);
         return listeners;
     }
     
@@ -260,56 +253,18 @@ public class AuditorSelectionPanel extends JPanel {
     
     
     private void populateClassDropdown() throws MalformedURLException, IOException {
-        // list jars from the service lib dir as URLs
         File libDir = new File(serviceBaseDir.getAbsolutePath() + File.separator + "lib");
-        List jarFiles = Utils.recursiveListFiles(libDir, new FileFilters.JarFileFilter());
-        List<URL> jarUrls = new LinkedList();
-        for (int i = 0; i < jarFiles.size(); i++) {
-            File jarFile = (File) jarFiles.get(i);
-            if (jarFile.isFile()) {
-                jarUrls.add(jarFile.toURL());
-            }
-        }
-        URL[] urlArray = new URL[jarUrls.size()];
-        jarUrls.toArray(urlArray);
-        
-        // load all subclasses of DataServiceAuditor
-        List<Class> subclasses = new LinkedList();
-        ClassLoader loader = new URLClassLoader(urlArray, getClass().getClassLoader());
-        Class baseClass = DataServiceAuditor.class;
-        for (int i = 0; i < jarFiles.size(); i++) {
-            JarFile jar = new JarFile((File) jarFiles.get(i));
-            Enumeration jarEntries = jar.entries();
-            while (jarEntries.hasMoreElements()) {
-                JarEntry entry = (JarEntry) jarEntries.nextElement();
-                String name = entry.getName();
-                if (name.endsWith(".class")) {
-                    name = name.replace('/', '.');
-                    name = name.substring(0, name.length() - 6);
-                    Class loadedClass = null;
-                    try {
-                        loadedClass = loader.loadClass(name);
-                    } catch (Throwable e) {
-                        // theres a lot of these...
-                        // System.err.println("Error loading class (" + name
-                        // + "):" + e.getMessage());
-                    }
-                    if (loadedClass != null && baseClass.isAssignableFrom(loadedClass)) {
-                        subclasses.add(loadedClass);
-                    }
-                }
-            }
-        }
+        List<Class> auditorClassses = AuditorsLoader.getAvailableAuditorClasses(libDir);
         
         // add the classes to the drop-down
-        for (Class c : subclasses) {
+        for (Class c : auditorClassses) {
             getAuditorClassComboBox().addItem(c);
         }
     }
     
     
     protected void fireAuditorAdded() {
-        if (auditorChangeListeners.size() != 0) {
+        if (auditorAdditionListeners.size() != 0) {
             Class auditorClass = (Class) getAuditorClassComboBox().getSelectedItem();
             DataServiceAuditor auditor = null;
             try {
@@ -324,7 +279,7 @@ public class AuditorSelectionPanel extends JPanel {
                 return;
             }
             
-            for (AuditorChangeListener listener : auditorChangeListeners) {
+            for (AuditorAdditionListener listener : auditorAdditionListeners) {
                 listener.auditorAdded(auditor, auditorClass.getName(), getInstanceNameTextField().getText());
             }
         }
@@ -332,9 +287,9 @@ public class AuditorSelectionPanel extends JPanel {
     
     
     protected void fireAuditorRemoved() {
-        for (AuditorChangeListener listener : auditorChangeListeners) {
+        for (AuditorAdditionListener listener : auditorAdditionListeners) {
             listener.auditorRemoved(
-                getAuditorClassComboBox().getSelectedItem().toString(), 
+                ((Class) getAuditorClassComboBox().getSelectedItem()).getName(),
                 getInstanceNameTextField().getText());
         }
     }

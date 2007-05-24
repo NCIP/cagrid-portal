@@ -2,10 +2,15 @@ package gov.nih.nci.cagrid.data.ui.auditors;
 
 import gov.nih.nci.cagrid.data.auditing.MonitoredEvents;
 
-import javax.swing.JPanel;
-import javax.swing.JCheckBox;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 
 /** 
  *  MonitoredEventsPanel
@@ -14,7 +19,7 @@ import java.awt.GridLayout;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:50:26 AM
- * @version $Id: MonitoredEventsPanel.java,v 1.1 2007-05-21 19:07:56 dervin Exp $ 
+ * @version $Id: MonitoredEventsPanel.java,v 1.2 2007-05-24 16:11:22 dervin Exp $ 
  */
 public class MonitoredEventsPanel extends JPanel {
 
@@ -23,9 +28,33 @@ public class MonitoredEventsPanel extends JPanel {
     private JCheckBox queryProcessingFailureCheckBox = null;
     private JCheckBox queryResultsCheckBox = null;
 
+    private List<MonitoredEventsChangeListener> changeListeners = null;
+    private boolean changeNotificationEnabled = true;
+    
+    private ItemListener eventSelectionListener = null;
 
     public MonitoredEventsPanel() {
+        changeListeners = new LinkedList();
+        changeNotificationEnabled = true;
         initialize();
+    }
+    
+    
+    public void addMonitoredEventsChangeListener(MonitoredEventsChangeListener listener) {
+        changeListeners.add(listener);
+    }
+    
+    
+    public boolean removeMonitoredEventsChangeListener(MonitoredEventsChangeListener listener) {
+        return changeListeners.remove(listener);
+    }
+    
+    
+    public MonitoredEventsChangeListener[] getMonitoredEventsChangeListeners() {
+        MonitoredEventsChangeListener[] listeners = 
+            new MonitoredEventsChangeListener[changeListeners.size()];
+        changeListeners.toArray(listeners);
+        return listeners;
     }
     
     
@@ -41,15 +70,16 @@ public class MonitoredEventsPanel extends JPanel {
         this.add(getValidationFailureCheckBox(), null);
         this.add(getQueryProcessingFailureCheckBox(), null);
         this.add(getQueryResultsCheckBox(), null);
-        
     }
     
     
-    public void setMonitoredEvents(MonitoredEvents events) {
+    public synchronized void setMonitoredEvents(MonitoredEvents events) {
+        changeNotificationEnabled = false;
         getQueryBeginsCheckBox().setSelected(events.isQueryBegin());
         getValidationFailureCheckBox().setSelected(events.isValidationFailure());
         getQueryProcessingFailureCheckBox().setSelected(events.isQueryProcessingFailure());
         getQueryResultsCheckBox().setSelected(events.isQueryResults());
+        changeNotificationEnabled = true;
     }
     
     
@@ -72,6 +102,7 @@ public class MonitoredEventsPanel extends JPanel {
         if (queryBeginsCheckBox == null) {
             queryBeginsCheckBox = new JCheckBox();
             queryBeginsCheckBox.setText("Query Begins");
+            queryBeginsCheckBox.addItemListener(getEventSelectionListener());
         }
         return queryBeginsCheckBox;
     }
@@ -86,6 +117,7 @@ public class MonitoredEventsPanel extends JPanel {
         if (validationFailureCheckBox == null) {
             validationFailureCheckBox = new JCheckBox();
             validationFailureCheckBox.setText("Validation Failure");
+            validationFailureCheckBox.addItemListener(getEventSelectionListener());
         }
         return validationFailureCheckBox;
     }
@@ -100,6 +132,7 @@ public class MonitoredEventsPanel extends JPanel {
         if (queryProcessingFailureCheckBox == null) {
             queryProcessingFailureCheckBox = new JCheckBox();
             queryProcessingFailureCheckBox.setText("Query Processing Failure");
+            queryProcessingFailureCheckBox.addItemListener(getEventSelectionListener());
         }
         return queryProcessingFailureCheckBox;
     }
@@ -114,7 +147,29 @@ public class MonitoredEventsPanel extends JPanel {
         if (queryResultsCheckBox == null) {
             queryResultsCheckBox = new JCheckBox();
             queryResultsCheckBox.setText("Query Results");
+            queryResultsCheckBox.addItemListener(getEventSelectionListener());
         }
         return queryResultsCheckBox;
+    }
+    
+    
+    private ItemListener getEventSelectionListener() {
+        if (eventSelectionListener == null) {
+            eventSelectionListener = new ItemListener() {
+                public void itemStateChanged(ItemEvent e) {
+                    fireMonitoredEventsChanged();
+                }
+            };
+        }
+        return eventSelectionListener;
+    }
+    
+    
+    protected void fireMonitoredEventsChanged() {
+        if (changeNotificationEnabled) {
+            for (MonitoredEventsChangeListener listener : changeListeners) {
+                listener.monitoredEventsChanged();
+            }
+        }
     }
 }

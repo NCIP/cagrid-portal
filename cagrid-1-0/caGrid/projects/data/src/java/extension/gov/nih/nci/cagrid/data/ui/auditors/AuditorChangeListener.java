@@ -1,22 +1,17 @@
 package gov.nih.nci.cagrid.data.ui.auditors;
 
-import gov.nih.nci.cagrid.data.service.auditing.DataServiceAuditor;
-
 import java.util.EventListener;
 
 /** 
  *  AuditorChangeListener
- *  Listens for changes to the auditor selection on a data service
+ *  Listens for changes to the data service auditor selection
  * 
  * @author David Ervin
  * 
- * @created May 21, 2007 11:57:48 AM
- * @version $Id: AuditorChangeListener.java,v 1.1 2007-05-21 19:07:57 dervin Exp $ 
+ * @created May 22, 2007 11:13:11 AM
+ * @version $Id: AuditorChangeListener.java,v 1.2 2007-05-24 16:11:22 dervin Exp $ 
  */
 public interface AuditorChangeListener extends EventListener {
 
-    public void auditorAdded(DataServiceAuditor auditor, String auditorClass, String instanceName);
-    
-    
-    public void auditorRemoved(String auditorClass, String instanceName);
+    public void auditorSelectionChanged(String className, String instanceName);
 }
