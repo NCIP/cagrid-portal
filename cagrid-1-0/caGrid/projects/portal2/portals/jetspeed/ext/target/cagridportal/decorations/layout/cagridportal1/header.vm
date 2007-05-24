@@ -26,6 +26,8 @@ This original design comes from Open Web Design.
 #* Loads our custom macros *#
 #parse($layoutDecoration.getResource("decorator-macros.vm"))
 
+#defineCaGridPortalObjects()
+
 #* Add all template constants to the current context *#
 #defineNavigationConstants()
 
@@ -82,9 +84,17 @@ This original design comes from Open Web Design.
             <div id="corecenter">
 
      <!-- Page Action Bar -->
+
 ##   <span style="position:absolute;right:5em">$jetspeed.renderPortletEntity("theClock", "j2-admin::DateTimePortlet")</span>     
+#*
 #if ($request.getUserPrincipal())
 <span style="position:absolute;right:15em"><a href="#BaseHref()login/logout">Logout</a></span>   
 #end 
+*#
+#if ($caGridPortal_userLoggedIn == "true")
+<span style="position:absolute;right:15em"><a href="$caGridPortal_logoutUrl">Logout</a></span>   
+#else
+<span style="position:absolute;right:15em"><a href="$caGridPortal_loginUrl">Login</a></span>   
+#end
      #PageActionBar()
 <!--  END: layout/html/cagridportal1/decorator.vm -->

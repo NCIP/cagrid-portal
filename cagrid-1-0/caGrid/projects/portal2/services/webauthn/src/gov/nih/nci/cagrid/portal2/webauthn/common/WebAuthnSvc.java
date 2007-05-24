@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.portal2.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal2.dao.RoleDao;
 import gov.nih.nci.cagrid.portal2.domain.GridPortalUser;
+import gov.nih.nci.cagrid.portal2.domain.PortalUser;
 import gov.nih.nci.cagrid.portal2.domain.Role;
 import gov.nih.nci.cagrid.portal2.webauthn.types.UserInfoType;
 import gov.nih.nci.cagrid.portal2.webauthn.types.UserInfoTypeRoles;
@@ -35,6 +36,7 @@ import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.oasis.wsrf.faults.BaseFaultType;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -49,10 +51,13 @@ public class WebAuthnSvc implements WebAuthnSvcI {
 	private static final Log logger = LogFactory.getLog(WebAuthnSvc.class);
 
 	// TODO: persist this to database
+	//Also need clean up thread
 	private Map<String, UserInfoType> userInfo = new Hashtable<String, UserInfoType>();
 
 	private PortalUserDao portalUserDao;
+
 	private RoleDao roleDao;
+
 	private List<Role> defaultRoles;
 
 	public WebAuthnSvc() {
@@ -62,8 +67,48 @@ public class WebAuthnSvc implements WebAuthnSvcI {
 			throws RemoteException, InvalidCredentialFault,
 			InsufficientAttributeFault, AuthenticationProviderFault,
 			WebAuthnSvcFault {
-		throw new UnsupportedOperationException(
-				"This operation has not been implemented");
+
+		assertBasicAuthn(credential);
+
+		// TODO: replace this with some pluggable authenticator
+		PortalUser user = null;
+		try {
+			PortalUser userEg = new PortalUser();
+			userEg.setUsername(credential.getBasicAuthenticationCredential()
+					.getUserId());
+			user = getPortalUserDao().getByExample(userEg);
+		} catch (Exception ex) {
+			FaultHelper helper = new FaultHelper(new WebAuthnSvcFault());
+			helper.setDescription("Error retrieving user data: "
+					+ ex.getMessage());
+			helper.addFaultCause(ex);
+			throw (WebAuthnSvcFault) helper.getFault();
+		}
+
+		if (user == null) {
+			logger.info("User "
+					+ credential.getBasicAuthenticationCredential().getUserId()
+					+ " not found. Throwing InvalidCredentialFault.");
+			throw new InvalidCredentialFault();
+		}
+
+		// TODO: do some encryption/decryption
+		if (!user.getPassword().equals(
+				credential.getBasicAuthenticationCredential().getPassword())) {
+			logger.info("Invalid password for user '"
+					+ credential.getBasicAuthenticationCredential().getUserId()
+					+ "'.");
+			throw new InvalidCredentialFault();
+		}
+		String loginKey = generateLoginKey(user.getUsername());
+		
+		UserInfoType userInfoObj = new UserInfoType();
+		userInfoObj.setUsername(user.getUsername());
+		populateRoles(userInfoObj);
+		this.userInfo.put(loginKey, userInfoObj);
+		
+		return loginKey;
+
 	}
 
 	/*
@@ -75,6 +120,8 @@ public class WebAuthnSvc implements WebAuthnSvcI {
 			throws RemoteException, InvalidCredentialFault,
 			InsufficientAttributeFault, AuthenticationProviderFault,
 			WebAuthnSvcFault {
+
+		assertBasicAuthn(credential);
 
 		AuthenticationServiceClient client = null;
 		try {
@@ -123,21 +170,43 @@ public class WebAuthnSvc implements WebAuthnSvcI {
 			throw helper.getFault();
 		}
 
-		String loginKey = generateLoginKey(xml);
+		String loginKey = generateLoginKey(bac.getUserId());
 
-		// TODO: get real user info
-		UserInfoType userInfo = new UserInfoType();
+		UserInfoType userInfoObj = new UserInfoType();
 
 		// Can't use username, since it isn't unique. Have to use email address.
 		String email = getEmailAddress(xml);
-		userInfo.setUsername(email);
+		userInfoObj.setUsername(email);
 
+		populateRoles(userInfoObj);
+
+		SAMLAssertion newSAML = new SAMLAssertion();
+		newSAML.setXml(xml);
+		userInfoObj.setSaml(newSAML);
+		this.userInfo.put(loginKey, userInfoObj);
+
+		return loginKey;
+	}
+
+	private void assertBasicAuthn(Credential credential) throws RemoteException {
+		gov.nih.nci.cagrid.portal2.webauthn.types.authenticationservice.BasicAuthenticationCredential givenBac = credential
+				.getBasicAuthenticationCredential();
+		if (givenBac == null) {
+			FaultHelper helper = new FaultHelper(new InvalidCredentialFault());
+			helper
+					.addDescription("Credentials of type BasicAuthenticationCredential are required");
+			throw helper.getFault();
+		}
+	}
+
+	private void populateRoles(UserInfoType userInfoObj) {
 		UserInfoTypeRoles roles = new UserInfoTypeRoles();
 
-		GridPortalUser userEg = new GridPortalUser();
-		userEg.setUsername(userInfo.getUsername());
-		GridPortalUser user = (GridPortalUser) getPortalUserDao().getByExample(userEg);
-		
+		PortalUser userEg = new PortalUser();
+		userEg.setUsername(userInfoObj.getUsername());
+		PortalUser user = getPortalUserDao().getByExample(
+				userEg);
+
 		String[] roleNames = null;
 		if (user == null) {
 			// Create a new user
@@ -147,17 +216,17 @@ public class WebAuthnSvc implements WebAuthnSvcI {
 			for (int i = 0; i < roleNames.length; i++) {
 				Role role = dRoles.get(i);
 				Role r = getRoleDao().getByExample(role);
-				if(r == null){
+				if (r == null) {
 					getRoleDao().save(role);
-					userRoles.add(role);	
-				}else{
+					userRoles.add(role);
+				} else {
 					userRoles.add(r);
 				}
 				roleNames[i] = role.getName();
 			}
 			userEg.setRoles(userRoles);
 			getPortalUserDao().save(userEg);
-			
+
 		} else {
 			List<Role> uRoles = user.getRoles();
 			roleNames = new String[uRoles.size()];
@@ -167,13 +236,7 @@ public class WebAuthnSvc implements WebAuthnSvcI {
 			}
 		}
 		roles.setRole(roleNames);
-		userInfo.setRoles(roles);
-		SAMLAssertion newSAML = new SAMLAssertion();
-		newSAML.setXml(xml);
-		userInfo.setSaml(newSAML);
-		this.userInfo.put(loginKey, userInfo);
-
-		return loginKey;
+		userInfoObj.setRoles(roles);
 	}
 
 	private String getEmailAddress(String xml) {
@@ -194,9 +257,9 @@ public class WebAuthnSvc implements WebAuthnSvcI {
 		return email;
 	}
 
-	private String generateLoginKey(String xml) {
+	private String generateLoginKey(String base) {
 		// TODO: come up with better algorithm
-		return xml.hashCode() + "-" + System.currentTimeMillis();
+		return base.hashCode() + "-" + System.currentTimeMillis();
 	}
 
 	/*

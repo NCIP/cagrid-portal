@@ -38,6 +38,15 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 		<property name="targetUrlKey" ref="targetUrlKey" />
 		<property name="webAuthnSvcClient" ref="webAuthnSvcClient"/>
 	</bean>
+	
+	<bean id="logoutController"
+		class="gov.nih.nci.cagrid.portal2.servlet.authn.LogoutController">
+
+		<property name="redirectView" value="redirectToTarget" />
+		<property name="loginSuccessView" value="loginSuccess" />
+		<property name="targetUrlKey" ref="targetUrlKey" />
+
+	</bean>	
 
 	<bean id="selectActionController"
 		class="gov.nih.nci.cagrid.portal2.servlet.authn.SelectActionController">
@@ -54,31 +63,28 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 
 	</bean>
 
-	<bean id="localLoginController"
+	<bean id="loginControllerTemplate" abstract="true">
+		<property name="successView" value="redirect:/authn/login" />
+		<property name="commandClass"
+			value="gov.nih.nci.cagrid.portal2.servlet.authn.LoginCommand" />
+		<property name="userSessionKey" ref="userSessionKey" />
+		<property name="targetUrlKey" ref="targetUrlKey" />
+		<property name="webAuthnSvcClient" ref="webAuthnSvcClient"/>	
+	</bean>
+
+	<bean id="localLoginController" parent="loginControllerTemplate"
 		class="gov.nih.nci.cagrid.portal2.servlet.authn.LocalLoginController">
 
 		<property name="formView" value="localLogin" />
-		<property name="successView" value="redirect:/authn/login" />
 
-		<property name="commandClass"
-			value="gov.nih.nci.cagrid.portal2.servlet.authn.LoginCommand" />
-		<property name="userSessionKey" ref="userSessionKey" />
-		<property name="targetUrlKey" ref="targetUrlKey" />
 	</bean>
 
-	<bean id="gridLoginController"
+	<bean id="gridLoginController" parent="loginControllerTemplate"
 		class="gov.nih.nci.cagrid.portal2.servlet.authn.GridLoginController">
 
 		<property name="formView" value="gridLogin" />
-		<property name="successView" value="redirect:/authn/login" />
-
-		<property name="commandClass"
-			value="gov.nih.nci.cagrid.portal2.servlet.authn.LoginCommand" />
-		<property name="userSessionKey" ref="userSessionKey" />
-		<property name="targetUrlKey" ref="targetUrlKey" />
-
 		<property name="idpUrls" ref="idpUrls" />
-		<property name="webAuthnSvcClient" ref="webAuthnSvcClient"/>
+
 	</bean>
 
 	<bean id="urlMapping"
@@ -86,8 +92,8 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 		<property name="mappings">
 			<props>
 				<prop key="/login">loginController</prop>
+				<prop key="/logout">logoutController</prop>
 				<prop key="/selectAction">selectActionController</prop>
-
 				<prop key="/gridLogin">gridLoginController</prop>
 				<prop key="/localLogin">localLoginController</prop>
 				<!--                 

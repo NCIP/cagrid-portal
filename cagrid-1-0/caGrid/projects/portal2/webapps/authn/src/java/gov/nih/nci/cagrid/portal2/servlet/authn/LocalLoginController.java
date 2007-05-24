@@ -3,6 +3,9 @@
  */
 package gov.nih.nci.cagrid.portal2.servlet.authn;
 
+import gov.nih.nci.cagrid.portal2.domain.PortalUser;
+import gov.nih.nci.cagrid.portal2.webauthn.client.WebAuthnSvcClient;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,11 +19,14 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
  */
+//TODO: refactor similarities with GridLoginController
 public class LocalLoginController extends SimpleFormController {
 
 	private static final Log logger = LogFactory
 			.getLog(LocalLoginController.class);
 
+	
+	private WebAuthnSvcClient webAuthnSvcClient;
 	private String userSessionKey;
 
 	private String targetUrlKey;
@@ -47,17 +53,23 @@ public class LocalLoginController extends SimpleFormController {
 		logger.info("Handling login submit");
 		ModelAndView mav = new ModelAndView(getSuccessView());
 		LoginCommand command = (LoginCommand) commandObj;
-		doLogin(request, response, command);
+		
+		PortalUser user = new PortalUser();
+		user.setUsername(command.getUsername());
+		user.setPassword(command.getPassword());
+		String loginKey = AuthnUtils.generateLoginKey(getWebAuthnSvcClient(), user);
+		mav.addObject("loginKey", loginKey);
 		mav.addObject(getTargetUrlKey(), command.getTargetUrl());
+		request.getSession().setAttribute(getUserSessionKey(), user);
 		return mav;
 	}
 
-	private String doLogin(HttpServletRequest request,
-			HttpServletResponse response, LoginCommand command) {
-		// TODO: interact with local credential store
-		request.getSession().setAttribute(getUserSessionKey(),
-				command.getUsername());
-		return command.getUsername();
+	public WebAuthnSvcClient getWebAuthnSvcClient() {
+		return webAuthnSvcClient;
+	}
+
+	public void setWebAuthnSvcClient(WebAuthnSvcClient webAuthnSvcClient) {
+		this.webAuthnSvcClient = webAuthnSvcClient;
 	}
 
 }

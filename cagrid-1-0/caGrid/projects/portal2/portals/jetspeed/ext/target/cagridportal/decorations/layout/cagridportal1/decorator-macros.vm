@@ -241,3 +241,16 @@
 *#
   #end
 #end
+
+#* get the logout URL *#
+#macro (defineCaGridPortalObjects)
+  #set($caGridPortal_loginUrl = $request.getAttribute("cagrid.portal.loginUrl"))
+  #set($caGridPortal_logoutUrl = $request.getAttribute("cagrid.portal.logoutUrl"))
+  #set($caGridPortal_guestUser = $request.getAttribute("cagrid.portal.guestUser"))
+  #set($caGridPortal_userPrincipal = $JS2RequestContext.userPrincipal)
+  #if($caGridPortal_userPrincipal && $caGridPortal_userPrincipal.name != $caGridPortal_guestUser)
+	#set($caGridPortal_userLoggedIn = "true")
+  #else
+  	#set($caGridPortal_userLoggedIn = "false")
+  #end
+#end

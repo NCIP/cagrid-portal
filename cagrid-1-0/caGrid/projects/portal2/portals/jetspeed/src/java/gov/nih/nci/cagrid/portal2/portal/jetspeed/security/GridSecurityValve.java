@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.portal2.webauthn.client.WebAuthnSvcClient;
 import gov.nih.nci.cagrid.portal2.webauthn.types.UserInfoType;
+import gov.nih.nci.cagrid.portal2.webauthn.types.UserInfoTypeRoles;
 import gov.nih.nci.cagrid.portal2.webauthn.types.authenticationservice.SAMLAssertion;
 import gov.nih.nci.cagrid.portal2.webauthn.types.faults.InvalidKeyFault;
 
@@ -34,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.jetspeed.PortalReservedParameters;
 import org.apache.jetspeed.pipeline.PipelineException;
 import org.apache.jetspeed.pipeline.valve.ValveContext;
 import org.apache.jetspeed.request.RequestContext;
@@ -53,7 +55,19 @@ public class GridSecurityValve extends AbstractSecurityValve {
 	private static final Log logger = LogFactory
 			.getLog(GridSecurityValve.class);
 
+	private static final String CAGRID_PORTAL_LOGIN_URL = "cagrid.portal.loginUrl";
+
+	private static final String CAGRID_PORTAL_LOGOUT_URL = "cagrid.portal.logoutUrl";
+
+	private static final String CAGRID_AUTHN_TARGET_URL = "cagrid_authn_targetUrl";
+
+	private static final String CAGRID_GUEST_USER = "cagrid.portal.guestUser";
+
+	private boolean forceLogin;
+
 	private String loginApplicationUrl;
+
+	private String logoutApplicationUrl;
 
 	private String webAuthnSvcUrl;
 
@@ -69,6 +83,16 @@ public class GridSecurityValve extends AbstractSecurityValve {
 
 	private int delegationPathLength = 0;
 
+	private String anonymousUser = "guest";
+
+	public String getAnonymousUser() {
+		return anonymousUser;
+	}
+
+	public void setAnonymousUser(String anonymousUser) {
+		this.anonymousUser = anonymousUser;
+	}
+
 	public GridSecurityValve() {
 	}
 
@@ -80,6 +104,24 @@ public class GridSecurityValve extends AbstractSecurityValve {
 		try {
 			HttpServletRequest request = requestCtx.getRequest();
 			HttpServletResponse response = requestCtx.getResponse();
+
+			if (isForceLogin(request)) {
+				logger.info("forcing login");
+				doLogin(request, response);
+				return;
+			}
+			if (isForceLogout(request)) {
+				logger.info("forcing logout");
+				doLogout(requestCtx);
+				return;
+			}
+
+			// Set up request attributes
+			request.setAttribute(CAGRID_PORTAL_LOGIN_URL,
+					buildLoginUrl(request));
+			request.setAttribute(CAGRID_PORTAL_LOGOUT_URL,
+					buildLogoutUrl(request));
+			request.setAttribute(CAGRID_GUEST_USER, getAnonymousUser());
 
 			Subject subject = getSubjectFromSession(requestCtx);
 			if (subject != null) {
@@ -117,8 +159,16 @@ public class GridSecurityValve extends AbstractSecurityValve {
 
 				} else {
 					// This means the user has yet provided credentials to
-					// the login application. So, we need to redirect.
-					doLogin(requestCtx.getRequest(), requestCtx.getResponse());
+					// the login application.
+
+					if (isForceLogin(request)) {
+						// So, we need to redirect.
+						doLogin(requestCtx.getRequest(), requestCtx
+								.getResponse());
+					} else {
+						super.invoke(requestCtx, valveCtx);
+					}
+
 				}
 
 			}
@@ -131,8 +181,48 @@ public class GridSecurityValve extends AbstractSecurityValve {
 
 	}
 
+	private void doLogout(RequestContext requestCtx) throws PipelineException {
+
+		Subject anon = buildAnonymousSubject();
+		requestCtx.setSubject(anon);
+		HttpServletRequest request = requestCtx.getRequest();
+		HttpServletResponse response = requestCtx.getResponse();
+		request.getSession(true).invalidate();
+		try {
+			String logoutAppUrl = getLogoutApplicationUrl();
+			logger.info("Redirecting client at " + request.getRemoteAddr()
+					+ " to login application: " + logoutAppUrl);
+			response.sendRedirect(logoutAppUrl + "?" + CAGRID_AUTHN_TARGET_URL
+					+ "=" + request.getRequestURL());
+		} catch (IOException e) {
+
+			try {
+				response
+						.sendError(500,
+								"Unable to redirect to logout server:  "
+										+ e.toString());
+			} catch (IOException e1) {
+				throw new PipelineException(
+						"Unable to send logout error to the client: "
+								+ e1.toString());
+			}
+		}
+	}
+
+	private String buildLoginUrl(HttpServletRequest request) {
+		return request.getScheme() + "://" + request.getServerName() + ":"
+				+ request.getServerPort() + request.getContextPath()
+				+ "?forceLogin=true";
+	}
+
+	private String buildLogoutUrl(HttpServletRequest request) {
+		return request.getScheme() + "://" + request.getServerName() + ":"
+				+ request.getServerPort() + request.getContextPath()
+				+ "?forceLogout=true";
+	}
+
 	private Subject buildSubjectFromLoginKey(String loginKey,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws PipelineException {
 		logger.info("Building new subject from login key: " + loginKey);
 
 		// Get userInfo object from WebAuthnSvc.
@@ -159,6 +249,13 @@ public class GridSecurityValve extends AbstractSecurityValve {
 
 		Set<Principal> principals = new HashSet<Principal>();
 		principals.add(new UserPrincipalImpl(username));
+
+		UserInfoTypeRoles r = userInfo.getRoles();
+		if (r == null) {
+			throw new PipelineException("No roles for user '"
+					+ userInfo.getUsername() + "'.");
+		}
+
 		String[] roles = userInfo.getRoles().getRole();
 		for (int i = 0; i < roles.length; i++) {
 			logger.info("Adding role: " + roles[i]);
@@ -289,8 +386,8 @@ public class GridSecurityValve extends AbstractSecurityValve {
 			String loginAppUrl = getLoginApplicationUrl();
 			logger.info("Redirecting client at " + request.getRemoteAddr()
 					+ " to login application: " + loginAppUrl);
-			response.sendRedirect(loginAppUrl + "?cagrid_authn_targetUrl="
-					+ request.getRequestURL());
+			response.sendRedirect(loginAppUrl + "?" + CAGRID_AUTHN_TARGET_URL
+					+ "=" + request.getRequestURL());
 		} catch (IOException e) {
 
 			try {
@@ -311,20 +408,39 @@ public class GridSecurityValve extends AbstractSecurityValve {
 
 	protected Subject getSubject(RequestContext requestCtx) throws Exception {
 
-		Subject subject = getSubjectFromSession(requestCtx);
-		if (subject == null) {
-
-			String loginKey = getLoginKey(requestCtx.getRequest());
-			if (loginKey == null) {
-				// This shouldn't happen
-				throw new IllegalStateException(
-						"Subject is null and there is no login key");
-			}
+		Subject subject = null;
+		String loginKey = getLoginKey(requestCtx.getRequest());
+		if (loginKey == null && isForceLogin(requestCtx.getRequest())) {
+			// This shouldn't happen
+			throw new IllegalStateException(
+					"Subject is null and there is no login key");
+		} else if (loginKey != null) {
 			subject = buildSubjectFromLoginKey(loginKey, requestCtx
 					.getRequest());
-
+		}
+		if (subject == null) {
+			subject = getSubjectFromSession(requestCtx);
+			if (subject == null) {
+				subject = buildAnonymousSubject();
+			}
 		}
 		return subject;
+	}
+
+	private boolean isForceLogin(HttpServletRequest request) {
+		String forceLogin = request.getParameter("forceLogin");
+		return "true".equals(forceLogin) || isForceLogin();
+	}
+
+	private boolean isForceLogout(HttpServletRequest request) {
+		String forceLogin = request.getParameter("forceLogout");
+		return "true".equals(forceLogin);
+	}
+
+	private Subject buildAnonymousSubject() {
+		Set principals = new HashSet();
+		principals.add(new UserPrincipalImpl(getAnonymousUser()));
+		return new Subject(true, principals, new HashSet(), new HashSet());
 	}
 
 	@Override
@@ -396,5 +512,21 @@ public class GridSecurityValve extends AbstractSecurityValve {
 
 	public void setWebAuthnSvcUrl(String webAuthnSvcUrl) {
 		this.webAuthnSvcUrl = webAuthnSvcUrl;
+	}
+
+	public boolean isForceLogin() {
+		return forceLogin;
+	}
+
+	public void setForceLogin(boolean forceLogin) {
+		this.forceLogin = forceLogin;
+	}
+
+	public String getLogoutApplicationUrl() {
+		return logoutApplicationUrl;
+	}
+
+	public void setLogoutApplicationUrl(String logoutApplicationUrl) {
+		this.logoutApplicationUrl = logoutApplicationUrl;
 	}
 }
