@@ -34,7 +34,7 @@
                 xsldir="/usr/local/bin/cruisecontrol/reporting/jsp/webcontent/xsl" logdir="logs/caGrid-1.0-continuous">
                 <failure address="developers" reportWhenFixed="true"/>
                 <map alias="developers"
-                    address="oster@bmi.osu.edu, hastings@bmi.osu.edu, langella@bmi.osu.edu, ervin@bmi.osu.edu, christman@bmi.osu.edu, patrick.mcconnell@Duke.edu, madduri@mcs.anl.gov, ram.chilukuri@semanticbits.com, joshua.phillips@semanticbits.com, kherm@MAIL.NIH.GOV, kumarvi@mail.nih.gov"
+                    address="oster@bmi.osu.edu, hastings@bmi.osu.edu, langella@bmi.osu.edu, ervin@bmi.osu.edu, patrick.mcconnell@Duke.edu, madduri@mcs.anl.gov, joshua.phillips@semanticbits.com, parmarv@mail.nih.gov"
                 />
             </htmlemail>
             <!--<artifactspublisher dir="checkout/caGrid-1.0-continuous/build/jars" dest="artifacts/caGrid-1.0-continuous"/>-->
@@ -79,7 +79,7 @@
                 xsldir="/usr/local/bin/cruisecontrol/reporting/jsp/webcontent/xsl" logdir="logs/caGrid-1.0-nightly">
                 <failure address="developers" reportWhenFixed="true"/>
                 <map alias="developers"
-                    address="oster@bmi.osu.edu, hastings@bmi.osu.edu, langella@bmi.osu.edu, ervin@bmi.osu.edu, christman@bmi.osu.edu, patrick.mcconnell@Duke.edu, madduri@mcs.anl.gov, ram.chilukuri@semanticbits.com, joshua.phillips@semanticbits.com, kherm@MAIL.NIH.GOV, kumarvi@mail.nih.gov"
+                    address="oster@bmi.osu.edu, hastings@bmi.osu.edu, langella@bmi.osu.edu, ervin@bmi.osu.edu, patrick.mcconnell@Duke.edu, madduri@mcs.anl.gov, joshua.phillips@semanticbits.com, parmarv@mail.nih.gov"
                 />
             </htmlemail>
             <!--<artifactspublisher dir="checkout/caGrid-1.0-nightly/build/jars" dest="artifacts/caGrid-1.0-nightly"/>-->
@@ -140,7 +140,7 @@
                 xsldir="/usr/local/home/oster/bin/cruisecontrol/reporting/jsp/webcontent/xsl" logdir="logs/caGrid-1.0-system">
                 <failure address="developers" reportWhenFixed="true"/>
                 <map alias="developers"
-                    address="oster@bmi.osu.edu, hastings@bmi.osu.edu, langella@bmi.osu.edu, ervin@bmi.osu.edu, patrick.mcconnell@Duke.edu, madduri@mcs.anl.gov, joshua.phillips@semanticbits.com"
+                    address="oster@bmi.osu.edu, hastings@bmi.osu.edu, langella@bmi.osu.edu, ervin@bmi.osu.edu, patrick.mcconnell@Duke.edu, madduri@mcs.anl.gov, joshua.phillips@semanticbits.com, parmarv@mail.nih.gov"
                 />
             </htmlemail>
         <antpublisher buildfile="checkout/caGrid-1.0-system/cagrid-1-0/tests/build.xml" target="ccpublish"/>
