@@ -12,19 +12,22 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created May 17, 2007 10:50:11 AM
- * @version $Id: DataServiceAuditor.java,v 1.2 2007-05-18 16:04:01 dervin Exp $ 
+ * @version $Id: DataServiceAuditor.java,v 1.3 2007-05-24 16:11:00 dervin Exp $ 
  */
 public abstract class DataServiceAuditor {
 
     private AuditorConfiguration configuration;
     
-    public DataServiceAuditor(AuditorConfiguration configuration) {
-        this.configuration = configuration;
+    public DataServiceAuditor() {
+        
     }
     
     
     /**
-     * Returns the instance name of this auditor
+     * Returns the configured instance name of this auditor.
+     * If the configuration is null, a NullPointerException will
+     * probably be thrown here
+     * 
      * @return
      *      The name of this auditor instance
      */
@@ -35,6 +38,11 @@ public abstract class DataServiceAuditor {
     
     public AuditorConfiguration getAuditorConfiguration() {
         return configuration;
+    }
+    
+    
+    public void setAuditorConfiguration(AuditorConfiguration config) {
+        this.configuration = config;
     }
     
     
