@@ -42,7 +42,7 @@ limitations under the License.
        <ref bean="NavigationalStateComponent" />
    </constructor-arg>            
   </bean>
-  <!-- 
+
   <bean id="securityValve"
         class="org.apache.jetspeed.security.impl.SecurityValveImpl"
         init-method="initialize"
@@ -57,8 +57,8 @@ limitations under the License.
        <ref bean="PortalStatistics" />
    </constructor-arg>   
   </bean> 
-   -->
-   
+
+<!--   
   <bean id="securityValve"
         class="gov.nih.nci.cagrid.portal2.portal.jetspeed.security.GridSecurityValve"
   >
@@ -71,7 +71,7 @@ limitations under the License.
   	<property name="proxyLifetimeSeconds" value="0"/>
   	<property name="delegationPathLength" value="0"/>
   </bean>
-
+-->
    
   <bean id="passwordCredentialValve"
         class="org.apache.jetspeed.security.impl.PasswordCredentialValveImpl"
