@@ -22,6 +22,7 @@ import gov.nih.nci.cagrid.portal2.webauthn.types.faults.WebAuthnSvcFault;
 
 import java.io.ByteArrayInputStream;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,6 @@ public class WebAuthnSvc implements WebAuthnSvcI {
 					.setFaultDetailString("Error instantiating AuthenticationServiceClient: "
 							+ ex.getMessage());
 		}
-
 		BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
 		bac
 				.setUserId(credential.getBasicAuthenticationCredential()
@@ -143,17 +143,21 @@ public class WebAuthnSvc implements WebAuthnSvcI {
 			// Create a new user
 			List<Role> dRoles = getDefaultRoles();
 			roleNames = new String[dRoles.size()];
+			List<Role> userRoles = new ArrayList<Role>();
 			for (int i = 0; i < roleNames.length; i++) {
 				Role role = dRoles.get(i);
 				Role r = getRoleDao().getByExample(role);
 				if(r == null){
 					getRoleDao().save(role);
+					userRoles.add(role);	
+				}else{
+					userRoles.add(r);
 				}
 				roleNames[i] = role.getName();
-				userEg.getRoles().add(role);
 			}
+			userEg.setRoles(userRoles);
 			getPortalUserDao().save(userEg);
-
+			
 		} else {
 			List<Role> uRoles = user.getRoles();
 			roleNames = new String[uRoles.size()];

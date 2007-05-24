@@ -8,9 +8,11 @@ import gov.nih.nci.cagrid.portal2.dao.RoleDao;
 import gov.nih.nci.cagrid.portal2.domain.PortalUser;
 import gov.nih.nci.cagrid.portal2.domain.Role;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /**
@@ -32,6 +34,7 @@ public class AppInit implements InitializingBean {
 	 * 
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
+	@Transactional
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(this.defaultRoles,
 				"The defaultRoles property is required.");
@@ -51,13 +54,19 @@ public class AppInit implements InitializingBean {
 		PortalUser admin = getPortalUserDao().getByExample(adminEg);
 		if (admin == null) {
 			for (Role role : adminEg.getRoles()) {
+				List<Role> roles = new ArrayList<Role>();
 				Role r = getRoleDao().getByExample(role);
 				if (r == null) {
 					getRoleDao().save(role);
+					roles.add(role);
+				}else{
+					roles.add(r);
 				}
+				adminEg.setRoles(roles);
 			}
 			getPortalUserDao().save(adminEg);
 		}
+
 
 	}
 

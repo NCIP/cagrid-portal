@@ -33,9 +33,10 @@
 		<fileset dir="tools/hibernatetools/lib">
 			<include name="*.jar" />
 		</fileset>
-		<!--
-		<path refid="cp" />
-		-->
+		<fileset dir="../lib/hibernate">
+			<include name="**/*.jar"/>
+		</fileset>
+
 	</path>
 
 	<taskdef name="hibernatetool"
