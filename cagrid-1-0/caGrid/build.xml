@@ -182,6 +182,7 @@
     <!-- =============================================================== -->
     <target name="build-portal2" depends="prepare" description="Builds the portal2 project">
         <resolveDependencies extdir="${projects.dir}/portal2/ext">
+        	<artifact refid="advertisement.jars" />
 	        <artifact refid="authentication.service.client.jars" />
             <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
