@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.extension;
 
 import java.io.File;
-import java.io.InputStream;
 
 import javax.swing.JPanel;
 

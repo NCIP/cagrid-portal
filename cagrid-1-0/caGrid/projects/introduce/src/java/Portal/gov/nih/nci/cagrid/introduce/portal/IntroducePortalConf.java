@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.swing.ToolTipManager;
 
 import org.jdom.Element;

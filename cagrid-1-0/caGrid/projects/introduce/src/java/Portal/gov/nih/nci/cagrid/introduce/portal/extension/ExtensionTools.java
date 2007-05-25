@@ -22,7 +22,6 @@ import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeD
 
 import java.awt.Frame;
 import java.io.File;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
