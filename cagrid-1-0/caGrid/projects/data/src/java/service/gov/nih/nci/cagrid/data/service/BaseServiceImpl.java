@@ -23,7 +23,6 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.util.Enumeration;
@@ -265,9 +264,9 @@ public abstract class BaseServiceImpl {
     private DataServiceAuditor createAuditor(AuditorConfiguration config) throws Exception {
         String auditorClassName = config.getClassName();
         Class auditorClass = Class.forName(auditorClassName);
-        Constructor auditorConstructor = auditorClass.getConstructor(
-            new Class[] {AuditorConfiguration.class});
-        return (DataServiceAuditor) auditorConstructor.newInstance(new Object[] {config});
+        DataServiceAuditor auditor = (DataServiceAuditor) auditorClass.newInstance();
+        auditor.setAuditorConfiguration(config);
+        return auditor;
     }
     
     
