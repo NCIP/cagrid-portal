@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:41:23 AM
- * @version $Id: AuditorsTable.java,v 1.2 2007-05-24 16:11:22 dervin Exp $ 
+ * @version $Id: AuditorsTable.java,v 1.3 2007-05-25 14:34:47 dervin Exp $ 
  */
 public class AuditorsTable extends JTable {
     
@@ -77,11 +77,17 @@ public class AuditorsTable extends JTable {
     
     
     public String getSelectedClassName() {
+        if (getSelectedRow() == -1) {
+            return null;
+        }
         return getValueAt(getSelectedRow(), 0).toString();
     }
     
     
     public String getSelectedInstanceName() {
+        if (getSelectedRow() == -1) {
+            return null;
+        }
         return getValueAt(getSelectedRow(), 1).toString();
     }
     

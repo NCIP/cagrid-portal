@@ -33,7 +33,7 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:40:27 AM
- * @version $Id: AuditorsConfigurationPanel.java,v 1.2 2007-05-24 16:11:22 dervin Exp $ 
+ * @version $Id: AuditorsConfigurationPanel.java,v 1.3 2007-05-25 14:34:47 dervin Exp $ 
  */
 public class AuditorsConfigurationPanel extends JPanel {
 
@@ -50,6 +50,11 @@ public class AuditorsConfigurationPanel extends JPanel {
         super();
         this.serviceInfo = serviceInfo;
         initialize();
+    }
+    
+    
+    public void forceReload() {
+        // TODO: reload everything from the configuration file
     }
     
     
@@ -81,7 +86,7 @@ public class AuditorsConfigurationPanel extends JPanel {
         this.add(getAuditorsTableScrollPane(), gridBagConstraints1);
         this.add(getPropertiesTableScrollPane(), gridBagConstraints2);
         this.add(getMonitoredEventsPanel(), gridBagConstraints3);
-        
+        PortalUtils.setContainerEnabled(getMonitoredEventsPanel(), false);
     }
     
     
@@ -90,37 +95,42 @@ public class AuditorsConfigurationPanel extends JPanel {
             auditorsTable = new AuditorsTable();
             auditorsTable.addAuditorChangeListener(new AuditorChangeListener() {
                 public void auditorSelectionChanged(String className, String instanceName) {
-                    File libDir = new File(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "lib");
-                    try {
-                        DataServiceAuditor auditor = AuditorsLoader.loadAuditor(libDir, className);
-                        
-                        // dig up the properties for this auditor and put them in
-                        // the auditor configuration table
-                        Properties auditorDefaultProps = auditor.getDefaultConfigurationProperties();
-                        DataServiceAuditors auditors = getAuditorsDescription();
-                        AuditorConfigurationConfigurationProperties configProps = null;
-                        MonitoredEvents monitoredEvents = null;
-                        for (AuditorConfiguration config : auditors.getAuditorConfiguration()) {
-                            if (config.getClassName().equals(className)
-                                && config.getInstanceName().equals(instanceName)) {
-                                configProps = config.getConfigurationProperties();
-                                monitoredEvents = config.getMonitoredEvents();
-                                if (monitoredEvents == null) {
-                                    monitoredEvents = new MonitoredEvents();
-                                    config.setMonitoredEvents(monitoredEvents);
+                    boolean validSelection = (className != null) && (instanceName != null);
+                    PortalUtils.setContainerEnabled(getMonitoredEventsPanel(), validSelection);
+                    
+                    if (validSelection) {
+                        File libDir = new File(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "lib");
+                        try {
+                            DataServiceAuditor auditor = AuditorsLoader.loadAuditor(libDir, className);
+
+                            // dig up the properties for this auditor and put them in
+                            // the auditor configuration table
+                            Properties auditorDefaultProps = auditor.getDefaultConfigurationProperties();
+                            DataServiceAuditors auditors = getAuditorsDescription();
+                            AuditorConfigurationConfigurationProperties configProps = null;
+                            MonitoredEvents monitoredEvents = null;
+                            for (AuditorConfiguration config : auditors.getAuditorConfiguration()) {
+                                if (config.getClassName().equals(className)
+                                    && config.getInstanceName().equals(instanceName)) {
+                                    configProps = config.getConfigurationProperties();
+                                    monitoredEvents = config.getMonitoredEvents();
+                                    if (monitoredEvents == null) {
+                                        monitoredEvents = new MonitoredEvents();
+                                        config.setMonitoredEvents(monitoredEvents);
+                                    }
+                                    break;
                                 }
-                                break;
                             }
+                            getPropertiesTable().setConfigurationProperties(configProps, auditorDefaultProps);
+
+                            // set the monitored events
+                            getMonitoredEventsPanel().setMonitoredEvents(monitoredEvents);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            ErrorDialog.showErrorDialog(
+                                "Error loading properties for auditor " + className + " : " + instanceName, 
+                                ex.getMessage(), ex);
                         }
-                        getPropertiesTable().setConfigurationProperties(configProps, auditorDefaultProps);
-                        
-                        // set the monitored events
-                        getMonitoredEventsPanel().setMonitoredEvents(monitoredEvents);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        ErrorDialog.showErrorDialog(
-                            "Error loading properties for auditor " + className + " : " + instanceName, 
-                            ex.getMessage(), ex);
                     }
                 }
             });
