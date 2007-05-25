@@ -19,7 +19,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created May 21, 2007 9:53:51 AM
- * @version $Id: FileDataServiceAuditor.java,v 1.1 2007-05-24 16:11:00 dervin Exp $ 
+ * @version $Id: FileDataServiceAuditor.java,v 1.2 2007-05-25 19:39:00 dervin Exp $ 
  */
 public class FileDataServiceAuditor extends DataServiceAuditor {
     
@@ -44,8 +44,8 @@ public class FileDataServiceAuditor extends DataServiceAuditor {
 
     public void auditQueryBegin(QueryBeginAuditingEvent event) {
         try {
-            getWriter().write("Query Begins at " + getCurrentTime() + "\n");
-            getWriter().write(getBaseEventInformation(event));
+            writeToLog("Query Begins at " + getCurrentTime() + "\n");
+            writeToLog(getBaseEventInformation(event));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -54,13 +54,13 @@ public class FileDataServiceAuditor extends DataServiceAuditor {
 
     public void auditQueryProcessingFailed(QueryProcessingFailedAuditingEvent event) {
         try {
-            getWriter().write("Query Processing Failed at " + getCurrentTime() + "\n");
-            getWriter().write(getBaseEventInformation(event));
+            writeToLog("Query Processing Failed at " + getCurrentTime() + "\n");
+            writeToLog(getBaseEventInformation(event));
             StringWriter exceptionStringWriter = new StringWriter();
             PrintWriter exceptionPrintWriter = new PrintWriter(exceptionStringWriter);
             event.getQueryProcessingException().printStackTrace(exceptionPrintWriter);
-            getWriter().write("\tException follows:\n");
-            getWriter().write(exceptionStringWriter.getBuffer().toString());
+            writeToLog("\tException follows:\n");
+            writeToLog(exceptionStringWriter.getBuffer().toString());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -72,10 +72,10 @@ public class FileDataServiceAuditor extends DataServiceAuditor {
             boolean fullResults = Boolean.valueOf(
                 getConfiguredProperties().getProperty(PRINT_FULL_RESULTS)).booleanValue();
             
-            getWriter().write("Query Results at " + getCurrentTime() + "\n");
-            getWriter().write(getBaseEventInformation(event));
+            writeToLog("Query Results at " + getCurrentTime() + "\n");
+            writeToLog(getBaseEventInformation(event));
             if (fullResults) {
-                getWriter().write("Query Results follow:\n");
+                writeToLog("Query Results follow:\n");
                 StringWriter resultsWriter = new StringWriter();
                 try {
                     Utils.serializeObject(event.getResults(), 
@@ -84,7 +84,7 @@ public class FileDataServiceAuditor extends DataServiceAuditor {
                     resultsWriter.append("ERROR SERIALIZING CQL RESULTS: " + ex.getMessage());
                     ex.printStackTrace();
                 }
-                getWriter().write(resultsWriter.getBuffer().toString());
+                writeToLog(resultsWriter.getBuffer().toString());
             } else {
                 String resultType = null;
                 if (event.getResults().getAttributeResult() != null) {
@@ -94,7 +94,7 @@ public class FileDataServiceAuditor extends DataServiceAuditor {
                 } else {
                     resultType = "Object"; 
                 }
-                getWriter().write("Query Returned " + resultType + " results");
+                writeToLog("Query Returned " + resultType + " results");
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -104,15 +104,15 @@ public class FileDataServiceAuditor extends DataServiceAuditor {
 
     public void auditValidation(ValidationAuditingEvent event) {
         try {
-            getWriter().write("Validation Failed at " + getCurrentTime() + "\n");
-            getWriter().write(getBaseEventInformation(event));
+            writeToLog("Validation Failed at " + getCurrentTime() + "\n");
+            writeToLog(getBaseEventInformation(event));
             StringWriter exceptionStringWriter = new StringWriter();
             PrintWriter exceptionPrintWriter = new PrintWriter(exceptionStringWriter);
             if (event.getCqlStructureException() != null) {
-                getWriter().write("\tCQL Structure Validation failed:\n");
+                writeToLog("\tCQL Structure Validation failed:\n");
                 event.getCqlStructureException().printStackTrace(exceptionPrintWriter);
             } else {
-                getWriter().write("\tDomain Validation failed:\n");
+                writeToLog("\tDomain Validation failed:\n");
                 event.getDomainValidityException().printStackTrace(exceptionPrintWriter);
             }
         } catch (IOException ex) {
@@ -139,21 +139,23 @@ public class FileDataServiceAuditor extends DataServiceAuditor {
         buff.append("\t").append(cqlWriter.getBuffer().toString()).append("\n");
         return buff.toString();
     }
-
     
-    private BufferedWriter getWriter() throws IOException {
+    
+    private void writeToLog(String message) throws IOException {
         if (writer == null) {
             String outputFilename = getConfiguredProperties().getProperty(AUDIT_FILE);
             writer = new BufferedWriter(new FileWriter(outputFilename));
         }
-        return writer;
+        writer.write(message);
+        writer.flush();
     }
     
     
     public void finalize() {
         try {
-            getWriter().flush();
-            getWriter().close();
+            if (writer != null) {
+                writer.close();
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
