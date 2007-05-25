@@ -47,7 +47,7 @@
 	<property name="service.tools.jar" value="${basedir}/skeleton/lib/${jars.prefixname}serviceTools.jar"/>
 	
 	
-	<property name="java.source" value="1.4" />
+	<property name="java.source" value="1.5" />
 	
 	<!-- testing stuff -->
 	<property name="test.dir" location="${basedir}/test" />
