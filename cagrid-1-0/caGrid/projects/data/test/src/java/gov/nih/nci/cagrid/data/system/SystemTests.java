@@ -21,11 +21,13 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.14 2007-04-05 16:57:58 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.15 2007-05-25 20:03:40 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     private static GlobusHelper globusHelper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
         IntroduceTestConstants.TEST_PORT + 1);
+    
+    private static File auditorLogFile = new File("./dataServiceAuditing.log").getAbsoluteFile();
 
 
     public SystemTests() {
@@ -60,36 +62,43 @@ public class SystemTests extends BaseSystemTest {
         steps.add(new SetQueryProcessorStep(info.getDir()));
         // 3) Turn on query validation
         steps.add(new EnableValidationStep(info.getDir()));
-        // 4) Rebuild the service to pick up the bookstore beans
+        // 4) Turn on and configure auditing
+        steps.add(new AddFileSystemAuditorStep(info.getDir(), auditorLogFile.getAbsolutePath()));
+        // 5) Rebuild the service to pick up the bookstore beans
         steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
-        // 5) set up a clean, temporary Globus
+        // 6) set up a clean, temporary Globus
         steps.add(new CreateCleanGlobusStep(globusHelper));
-        // 6) deploy data service
+        // 7) deploy data service
         steps.add(new DeployDataServiceStep(globusHelper, info.getDir()));
-        // 7) start globus
+        // 8) start globus
         steps.add(new StartGlobusStep(globusHelper));
-        // 8) test data service
+        // 9) test data service
         steps.add(new InvokeDataServiceStep("localhost", IntroduceTestConstants.TEST_PORT + 1, info.getName()));
-
+        // 10) verify the audit log
+        steps.add(new VerifyAuditLogStep(auditorLogFile.getAbsolutePath()));
         return steps;
     }
 
 
     protected void storyTearDown() throws Throwable {
         super.storyTearDown();
-        // 9) stop globus
+        // 11) stop globus
         Step stopStep = new StopGlobusStep(globusHelper);
         try {
             stopStep.runStep();
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
-        // 10) throw away globus
+        // 12) throw away globus
         Step destroyStep = new DestroyTempGlobusStep(globusHelper);
         try {
             destroyStep.runStep();
         } catch (Throwable ex) {
             ex.printStackTrace();
+        }
+        // 13) throw away auditor log
+        if (auditorLogFile.exists()) {
+            auditorLogFile.delete();
         }
     }
 
