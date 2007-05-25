@@ -33,7 +33,7 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:40:27 AM
- * @version $Id: AuditorsConfigurationPanel.java,v 1.3 2007-05-25 14:34:47 dervin Exp $ 
+ * @version $Id: AuditorsConfigurationPanel.java,v 1.4 2007-05-25 17:32:12 dervin Exp $ 
  */
 public class AuditorsConfigurationPanel extends JPanel {
 
@@ -125,6 +125,9 @@ public class AuditorsConfigurationPanel extends JPanel {
 
                             // set the monitored events
                             getMonitoredEventsPanel().setMonitoredEvents(monitoredEvents);
+                            
+                            // set the selected auditor
+                            getAuditorSelectionPanel().setSelectedAuditor(className, instanceName);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                             ErrorDialog.showErrorDialog(
