@@ -177,13 +177,13 @@
         <ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
-	<!-- =============================================================== -->
+    <!-- =============================================================== -->
     <!-- PORTAL 2:                                                    	 -->
     <!-- =============================================================== -->
     <target name="build-portal2" depends="prepare" description="Builds the portal2 project">
         <resolveDependencies extdir="${projects.dir}/portal2/ext">
-        	<artifact refid="advertisement.jars" />
-	        <artifact refid="authentication.service.client.jars" />
+            <artifact refid="advertisement.jars" />
+            <artifact refid="authentication.service.client.jars" />
             <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="common.test.jars" />
@@ -191,8 +191,8 @@
             <artifact refid="test.coverage.jars" />
             <artifact refid="common.metadata.jars" />
             <artifact refid="data.metadata.jars" />
-	        <artifact refid="dorian.client.jars" />
-	        <artifact refid="discovery.jars" />
+            <artifact refid="dorian.client.jars" />
+            <artifact refid="discovery.jars" />
             <artifact refid="metadatautils.jars" />
             <artifact refid="syncgts.client.jars" />
             <artifact refid="syncgts.config.docs" />
@@ -477,6 +477,8 @@
     <target name="configure-syncgts" depends="prepare" description="Configures the syncgts project">
         <resolveDependencies extdir="${projects.dir}/syncgts/ext">
             <artifact refid="service_urls.properties" />
+            <artifact refid="gts.sync.description" />
+            <artifact refid="gts.ca.files" />
         </resolveDependencies>
         <ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="configure" />
     </target>
@@ -629,7 +631,7 @@
             <artifact refid="core.jars" />
             <artifact refid="wizard.jars" />
         </resolveDependencies>
-    	<!--
+        <!--
     	        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
     	        -->
     </target>
@@ -842,7 +844,7 @@
             <artifact refid="servicesecurity.jars" />
             <artifact refid="gridgrouper.client.jars" />
             <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />        	
+            <artifact refid="test.coverage.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/authz" inheritAll="false" antfile="build.xml" target="all" />
     </target>
@@ -865,16 +867,16 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/gridftpauthz" inheritAll="false" antfile="build.xml" target="all" />
     </target>
-	
-	<!-- =============================================================== -->
-	<!-- WIZARD:                                                         -->
-	<!-- =============================================================== -->
-	<target name="build-wizard" depends="prepare" description="Builds Wizard API">
-		<resolveDependencies extdir="${projects.dir}/wizard/ext">
-	        <artifact refid="cagrid.properties" />
-	    </resolveDependencies>
-	    <ant dir="${projects.dir}/wizard" inheritAll="false" antfile="build.xml" target="all" />
-	</target>
+
+    <!-- =============================================================== -->
+    <!-- WIZARD:                                                         -->
+    <!-- =============================================================== -->
+    <target name="build-wizard" depends="prepare" description="Builds Wizard API">
+        <resolveDependencies extdir="${projects.dir}/wizard/ext">
+            <artifact refid="cagrid.properties" />
+        </resolveDependencies>
+        <ant dir="${projects.dir}/wizard" inheritAll="false" antfile="build.xml" target="all" />
+    </target>
 
     <!-- ============================================================== -->
     <!-- Installs the Introduce Extensions                              -->
@@ -950,7 +952,38 @@
                 <include name="service_urls.properties" />
             </fileset>
         </delete>
+
+        <!-- TODO: what needs to be cleaned out in grape configs? -->
+
+        <!-- Get up to date with the trust fabric this grid uses -->
+        <runtarget target="syncWithTrustFabric" />
+
+        <runtarget target="configureHelp" />
     </target>
+    <target name="configureHelp" depends="prepare" description="Displays help information on configuring the environment to target a specific grid.">
+        <echo message="=====================================================================================" />
+        <echo message="|    CONFIGURED TO USE GRID: ${target.grid}" />
+        <echo message="|" />
+        <echo message="|    THE VALID TARGET GRIDS ARE:" />
+        <for param="dir">
+            <path>
+                <dirset dir="${target.grids.dir}" includes="*" />
+            </path>
+            <sequential>
+                <basename file="@{dir}" property="@{dir}.grid.name" />
+                <echo message="|      - ${@{dir}.grid.name}" />
+            </sequential>
+        </for>
+        <echo message="|" />
+        <echo message="-------------------------------------------------------------------------------------" />
+        <echo message="|    NOTE: To use a different target grid, set property 'target.grid'" />
+        <echo message="|    to the grid's name, and run the 'configure' target." />
+        <echo message="|" />
+        <echo message="|    For example, type:"/>
+        <echo message="|        ant -Dtarget.grid=${target.grid} configure" />
+        <echo message="=====================================================================================" />
+    </target>
+
 
     <!-- ============================================================== -->
     <!-- Builds from scratch                                            -->

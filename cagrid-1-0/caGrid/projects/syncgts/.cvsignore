@@ -1,5 +1,5 @@
 build
 ext
 bin
-SyncGTS.gar
+*.gar
 deploy.properties

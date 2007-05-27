@@ -652,5 +652,15 @@
                 <include name="introduce.properties" />
             </fileset>
         </artifact>
+        <artifact track="main" type="resources" id="gts.ca.files">
+            <fileset dir="${target.grids.dir}/${target.grid}">
+                <include name="certificates/*" />
+            </fileset>
+        </artifact>
+        <artifact track="main" type="resources" id="gts.sync.description">
+            <fileset dir="${target.grids.dir}/${target.grid}">
+                <include name="sync-description.xml" />
+            </fileset>
+        </artifact>
     </target>
 </project>

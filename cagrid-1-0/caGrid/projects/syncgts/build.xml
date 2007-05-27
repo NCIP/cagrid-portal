@@ -13,7 +13,11 @@
 	<property name="service.name" value="${introduce.skeleton.service.name}" />
 	<property name="schema.path" value="${introduce.skeleton.service.name}" />
     
-    <property file="${basedir}/ext/resources/cagrid.properties" />
+    <property name="ext.resources.dir" location="${basedir}/ext/resources" />
+    <property name="sync.description.file" value="${ext.resources.dir}/sync-description.xml" />
+     
+    
+    <property file="${ext.resources.dir}/cagrid.properties" />
     <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}syncgts-" />
 
 	<!-- Important directories and files -->
@@ -171,7 +175,7 @@
 
     <target name="configure" description="Configures the project based on settings.">		
         <copy filtering="true" file="deploy.properties.template" tofile="deploy.properties" overwrite="true">
-            <filterset filtersfile="${basedir}/ext/resources/service_urls.properties"/>
+            <filterset filtersfile="${ext.resources.dir}/service_urls.properties"/>
         </copy>
     </target>
 
@@ -310,31 +314,10 @@
 	<target name="all" depends="jars" />
 
 
-	<!-- call the test target for each project and aggregates the log resutls  -->
-	<!--
-	<target name="test" depends="checkGlobus">
-		<echo message="Test results dir: ${junit.results.dir}" />
-		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" forkmode="once">
-			<sysproperty key="basedir" value="${basedir}" />
-			<jvmarg value="-Dbuild.dir=${build.dir}" />
-			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
-			<classpath refid="test.run.classpath" />
-			<formatter type="xml" />
-			<batchtest fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/Test*.java" />
-					<include name="**/*TestCase.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />   
-	</target>
--->
 	<target name="deployTrustedCerts" depends="">
 		<mkdir dir="${globus.trusted.ca.dir}" />
 		<copy toDir="${globus.trusted.ca.dir}">
-			<fileset dir="resources/certificates/" casesensitive="yes">
+			<fileset dir="${ext.resources.dir}/certificates/" casesensitive="yes">
 				<include name="**" />
 			</fileset>
 		</copy>
@@ -345,7 +328,7 @@
 			<jvmarg value="-Dlog4j.configuration=sync-gts-log4j.properties" />
 			<jvmarg value="-Dlog4j.debug" />
 			<arg value="-d" />
-			<arg value="etc/sync-description.xml" />
+			<arg value="${sync.description.file}" />
 			<arg value="-o" />
 		</java>
 	</target>
@@ -355,7 +338,7 @@
 			<jvmarg value="-Dlog4j.configuration=sync-gts-log4j.properties" />
 			<jvmarg value="-Dlog4j.debug" />
 			<arg value="-d" />
-			<arg value="etc/sync-description.xml" />
+			<arg value="${sync.description.file}" />
 		</java>
 	</target>
 
