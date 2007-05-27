@@ -361,12 +361,6 @@
                 <exclude name="*test*.jar" />
             </fileset>
         </artifact>
-        <!-- syncGts description and configuration files -->
-        <artifact track="main" type="resources" id="syncgts.config.docs">
-            <fileset dir="${projects.dir}/syncgts/etc">
-                <include name="sync-description.xml" />
-            </fileset>
-        </artifact>
         <artifact track="main" type="jars" id="cadsr.jars">
             <generatingantcall target="build-cadsr" />
             <fileset dir="${projects.dir}/cadsr/build/lib">

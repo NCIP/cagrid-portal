@@ -171,7 +171,7 @@
             <artifact refid="discovery.jars" />
             <artifact refid="metadatautils.jars" />
             <artifact refid="syncgts.client.jars" />
-            <artifact refid="syncgts.config.docs" />
+            <artifact refid="gts.sync.description" />
             <artifact refid="security.metadata.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
@@ -195,7 +195,7 @@
             <artifact refid="discovery.jars" />
             <artifact refid="metadatautils.jars" />
             <artifact refid="syncgts.client.jars" />
-            <artifact refid="syncgts.config.docs" />
+            <artifact refid="gts.sync.description" />
             <artifact refid="security.metadata.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/portal2" inheritAll="false" antfile="build.xml" target="all" />
