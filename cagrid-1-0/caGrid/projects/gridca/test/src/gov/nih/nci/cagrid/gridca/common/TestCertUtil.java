@@ -250,7 +250,7 @@ public class TestCertUtil extends TestCase {
 
 		X509Certificate issuedCert = CertUtil.signCertificateRequest(request,
 				new Date(System.currentTimeMillis()), new Date(System
-						.currentTimeMillis() + 500000000), rootCert, rootKey);
+						.currentTimeMillis() + 500000000), rootCert, rootKey,null);
 		assertNotNull(issuedCert);
 
 		return new X509Certificate[] { issuedCert, rootCert };
@@ -279,7 +279,7 @@ public class TestCertUtil extends TestCase {
 			assertNotNull(user1Keys);
 			X509Certificate user1 = CertUtil.generateCertificate(new X509Name(
 					user1Sub), now, end, user1Keys.getPublic(), cacert,
-					rootKeys.getPrivate());
+					rootKeys.getPrivate(),null);
 			checkCert(user1, rootSub, user1Sub);
 			checkWriteReadCertificate(user1);
 
@@ -287,7 +287,7 @@ public class TestCertUtil extends TestCase {
 			assertNotNull(user2Keys);
 			X509Certificate user2 = CertUtil.generateCertificate(new X509Name(
 					user2Sub), now, end, user2Keys.getPublic(), cacert,
-					rootKeys.getPrivate());
+					rootKeys.getPrivate(),null);
 			checkCert(user2, rootSub, user2Sub);
 			checkWriteReadCertificate(user2);
 
@@ -295,7 +295,7 @@ public class TestCertUtil extends TestCase {
 			assertNotNull(user3Keys);
 			X509Certificate user3 = CertUtil.generateCertificate(new X509Name(
 					user3Sub), now, end, user3Keys.getPublic(), cacert,
-					rootKeys.getPrivate());
+					rootKeys.getPrivate(),null);
 			checkCert(user3, rootSub, user3Sub);
 			checkWriteReadCertificate(user3);
 

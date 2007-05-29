@@ -73,7 +73,7 @@ public class CA {
 		Date now = new Date();
 		Date end = getCertificate().getNotAfter();
 		return new Credential(CertUtil.generateCertificate(new X509Name(dn), now, end, pair.getPublic(),
-			getCertificate(), getPrivateKey()), pair.getPrivate());
+			getCertificate(), getPrivateKey(),null), pair.getPrivate());
 
 	}
 

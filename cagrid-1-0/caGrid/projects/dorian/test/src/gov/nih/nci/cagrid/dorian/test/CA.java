@@ -95,7 +95,7 @@ public class CA {
 		Date now = new Date();
 		Date end = getCertificate().getNotAfter();
 		Credential cred = new Credential(CertUtil.generateCertificate(PROVIDER.getName(), new X509Name(dn), now, end,
-			pair.getPublic(), getCertificate(), getPrivateKey(), SIGNATURE_ALGORITHM), pair.getPrivate());
+			pair.getPublic(), getCertificate(), getPrivateKey(), SIGNATURE_ALGORITHM,null), pair.getPrivate());
 
 		if (PROVIDER.getName().equals("ERACOM")) {
 			keyStore.deleteEntry(id);

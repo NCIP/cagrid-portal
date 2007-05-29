@@ -71,7 +71,7 @@ public class SignHostCertificate {
 
 			X509Certificate userCert = CertUtil
 					.generateCertificate(new X509Name(subject), start, end,
-							publicKey, cacert, cakey);
+							publicKey, cacert, cakey,null);
 
 			String caOut = IOUtils
 					.readLine("Enter location to write user cert");

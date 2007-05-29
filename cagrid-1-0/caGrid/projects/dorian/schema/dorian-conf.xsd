@@ -96,6 +96,8 @@
         <xs:sequence>
             <xs:element name="CertificateAuthorityType" type="dorian:CertificateAuthorityType" minOccurs="1" maxOccurs="1"/>
             <xs:element name="CertificateAuthorityPassword" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="CertificatePolicyOID" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="UserKeySize" type="dorian:KeySize" minOccurs="1" maxOccurs="1"/>
             <xs:element name="AutoCreate" type="dorian:AutoCreate" minOccurs="0" maxOccurs="1"/>
             <xs:element name="AutoRenewal" type="dorian:CredentialLifetime" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
@@ -104,6 +106,7 @@
     <xs:complexType name="AutoCreate">
         <xs:sequence>
             <xs:element name="CASubject" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="CAKeySize" type="dorian:KeySize" minOccurs="1" maxOccurs="1"/>
             <xs:element name="lifetime" type="dorian:CredentialLifetime" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType> 
@@ -111,6 +114,13 @@
    			<xs:restriction base="xs:string">
    				<xs:enumeration value="id"/>
    				<xs:enumeration value="name"/>
+  			</xs:restriction>
+    </xs:simpleType>
+     <xs:simpleType name="KeySize">
+   			<xs:restriction base="xs:int">
+   				<xs:enumeration value="512"/>
+   				<xs:enumeration value="1024"/>
+   				<xs:enumeration value="2048"/>
   			</xs:restriction>
     </xs:simpleType>
      <xs:simpleType name="CertificateAuthorityType">

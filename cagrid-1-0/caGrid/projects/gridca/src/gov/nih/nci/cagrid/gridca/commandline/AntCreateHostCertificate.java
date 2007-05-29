@@ -70,7 +70,7 @@ public class AntCreateHostCertificate {
 				}
 				end = d;
 			}
-			X509Certificate userCert = CertUtil.signCertificateRequest(request, start, end, cacert, cakey);
+			X509Certificate userCert = CertUtil.signCertificateRequest(request, start, end, cacert, cakey,null);
 
 			KeyUtil.writePrivateKey(pair.getPrivate(), new File(keyOut));
 			CertUtil.writeCertificate(userCert, new File(certOut));

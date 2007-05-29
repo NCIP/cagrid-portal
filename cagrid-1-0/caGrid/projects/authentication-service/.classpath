@@ -64,7 +64,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commonj.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-tomcat.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" sourcepath="/GT4_LOCATION/cog-1.2-src.zip"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" sourcepath="/JGLOBUS_SOURCE"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>

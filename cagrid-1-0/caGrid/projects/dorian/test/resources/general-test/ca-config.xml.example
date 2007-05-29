@@ -4,8 +4,11 @@
     xmlns:dorian="http://cagrid.nci.nih.gov/dorian/conf">
         <CertificateAuthorityType>dbca</CertificateAuthorityType>
         <CertificateAuthorityPassword>password</CertificateAuthorityPassword>
+        <CertificatePolicyOID>5.5.5.5.5.5.5555.555.5.5</CertificatePolicyOID>
+        <UserKeySize>1024</UserKeySize>
         <AutoCreate>
             <CASubject>C=US,O=abc,OU=xyz,OU=caGrid,OU=Users,CN=caGrid Dorian CA</CASubject>
+            <CAKeySize>2048</CAKeySize>
             <lifetime years="10" months="0" days="0" hours="0" minutes="0" seconds="0"/>
         </AutoCreate>
         <AutoRenewal years="10" months="0" days="0" hours="0" minutes="0" seconds="0"/>

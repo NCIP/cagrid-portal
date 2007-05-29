@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.dorian.conf.AutoCreate;
 import gov.nih.nci.cagrid.dorian.conf.CertificateAuthorityType;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
+import gov.nih.nci.cagrid.dorian.conf.KeySize;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
@@ -446,6 +447,7 @@ public class TestCertificateAuthority extends TestCase {
 	private DorianCAConfiguration getDorianCAConfAutoRenewalLong() {
 		DorianCAConfiguration conf = new DorianCAConfiguration();
 		conf.setCertificateAuthorityPassword("password");
+		conf.setUserKeySize(KeySize.fromValue(1024));
 		CredentialLifetime lifetime = new CredentialLifetime();
 		lifetime.setYears(5);
 		lifetime.setMonths(0);
@@ -458,12 +460,14 @@ public class TestCertificateAuthority extends TestCase {
 	private DorianCAConfiguration getDorianCAConfAutoCreateAutoRenewalLong() {
 		DorianCAConfiguration conf = new DorianCAConfiguration();
 		conf.setCertificateAuthorityPassword("password");
+		conf.setUserKeySize(KeySize.fromValue(1024));
 		CredentialLifetime lifetime = new CredentialLifetime();
 		lifetime.setYears(5);
 		lifetime.setMonths(0);
 		lifetime.setDays(0);
 		conf.setAutoRenewal(lifetime);
 		AutoCreate auto = new AutoCreate();
+		auto.setCAKeySize(KeySize.fromValue(2048));
 		auto.setLifetime(lifetime);
 		auto.setCASubject(SUBJECT_PREFIX + "Temp Certificate Authority");
 		conf.setAutoCreate(auto);
@@ -474,6 +478,7 @@ public class TestCertificateAuthority extends TestCase {
 	private DorianCAConfiguration getDorianCAConfNoAutoRenewalLong() {
 		DorianCAConfiguration conf = new DorianCAConfiguration();
 		conf.setCertificateAuthorityPassword("password");
+		conf.setUserKeySize(KeySize.fromValue(1024));
 		return conf;
 	}
 
@@ -498,7 +503,7 @@ public class TestCertificateAuthority extends TestCase {
 
 
 	private X509Certificate createAndStoreCAShort(CertificateAuthority ca) throws Exception {
-		KeyPair rootPair = KeyUtil.generateRSAKeyPair1024(ca.getProvider());
+		KeyPair rootPair = KeyUtil.generateRSAKeyPair2048(ca.getProvider());
 		assertNotNull(rootPair);
 		String rootSub = SUBJECT_PREFIX + "Temp Certificate Authority";
 		X509Name rootSubject = new X509Name(rootSub);

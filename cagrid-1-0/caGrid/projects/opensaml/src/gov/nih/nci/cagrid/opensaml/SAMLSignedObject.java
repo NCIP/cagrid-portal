@@ -177,7 +177,6 @@ public abstract class SAMLSignedObject extends SAMLObject implements Cloneable
         {
             // Build the empty signature.
             sig=new XMLSignature(root.getOwnerDocument(),"",sigalg,Canonicalizer.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
-            
             // Have the object place it in the proper place.
             insertSignature();
             

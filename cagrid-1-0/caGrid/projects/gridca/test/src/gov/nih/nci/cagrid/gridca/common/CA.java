@@ -13,6 +13,7 @@ import java.util.GregorianCalendar;
 
 import org.bouncycastle.asn1.x509.X509Name;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -33,9 +34,11 @@ public class CA {
 
 	private KeyStore keyStore;
 
+
 	public CA() throws Exception {
 		this(DEFAULT_CA_DN);
 	}
+
 
 	public CA(String dn) throws Exception {
 		Security.addProvider(PROVIDER);
@@ -45,26 +48,27 @@ public class CA {
 		Date expires = c.getTime();
 		KeyPair pair = KeyUtil.generateRSAKeyPair512(PROVIDER.getName());
 		this.key = pair.getPrivate();
-		cert = CertUtil.generateCACertificate(PROVIDER.getName(), new X509Name(
-				dn), now, expires, pair, SIGNATURE_ALGORITHM);
+		cert = CertUtil.generateCACertificate(PROVIDER.getName(), new X509Name(dn), now, expires, pair,
+			SIGNATURE_ALGORITHM);
 
 		if (PROVIDER.getName().equals("ERACOM")) {
 			keyStore = KeyStore.getInstance("CRYPTOKI", PROVIDER.getName());
 			keyStore.load(null, PASSWORD.toCharArray());
 			keyStore.deleteEntry("CA");
-			keyStore.setKeyEntry("CA", this.key, null,
-					new X509Certificate[] { cert });
+			keyStore.setKeyEntry("CA", this.key, null, new X509Certificate[]{cert});
 			key = (PrivateKey) keyStore.getKey("CA", null);
 		}
 
 	}
 
+
 	public CA(String dn, Date start, Date expires) throws Exception {
 		KeyPair pair = KeyUtil.generateRSAKeyPair512(PROVIDER.getName());
 		this.key = pair.getPrivate();
-		cert = CertUtil.generateCACertificate(PROVIDER.getName(), new X509Name(
-				dn), start, expires, pair, SIGNATURE_ALGORITHM);
+		cert = CertUtil.generateCACertificate(PROVIDER.getName(), new X509Name(dn), start, expires, pair,
+			SIGNATURE_ALGORITHM);
 	}
+
 
 	public CA(X509Certificate cert, PrivateKey key, X509CRL crl) {
 		this.cert = cert;
@@ -72,9 +76,11 @@ public class CA {
 		this.crl = crl;
 	}
 
+
 	public X509Certificate getCertificate() {
 		return cert;
 	}
+
 
 	public Credential createIdentityCertificate(String id) throws Exception {
 		String dn = getCertificate().getSubjectDN().getName();
@@ -83,39 +89,38 @@ public class CA {
 		KeyPair pair = KeyUtil.generateRSAKeyPair512(PROVIDER.getName());
 		Date now = new Date();
 		Date end = getCertificate().getNotAfter();
-		Credential cred = new Credential(CertUtil.generateCertificate(PROVIDER
-				.getName(), new X509Name(dn), now, end, pair.getPublic(),
-				getCertificate(), getPrivateKey(), SIGNATURE_ALGORITHM), pair
-				.getPrivate());
+		Credential cred = new Credential(CertUtil.generateCertificate(PROVIDER.getName(), new X509Name(dn), now, end,
+			pair.getPublic(), getCertificate(), getPrivateKey(), SIGNATURE_ALGORITHM, null), pair.getPrivate());
 
 		if (PROVIDER.getName().equals("ERACOM")) {
 			keyStore.deleteEntry(id);
-			keyStore.setKeyEntry(id, cred.getPrivateKey(), null,
-					new X509Certificate[] { cred.getCertificate() });
+			keyStore.setKeyEntry(id, cred.getPrivateKey(), null, new X509Certificate[]{cred.getCertificate()});
 			cred.setPrivateKey((PrivateKey) keyStore.getKey(id, null));
 		}
 		return cred;
 	}
 
+
 	public X509CRL getCRL() {
 		return crl;
 	}
+
 
 	public PrivateKey getPrivateKey() {
 		return key;
 	}
 
+
 	public X509CRL updateCRL(CRLEntry entry) throws Exception {
 		CRLEntry[] entries = new CRLEntry[1];
 		entries[0] = entry;
-		crl = CertUtil.createCRL(PROVIDER.getName(), cert, key, entries, cert
-				.getNotAfter(), SIGNATURE_ALGORITHM);
+		crl = CertUtil.createCRL(PROVIDER.getName(), cert, key, entries, cert.getNotAfter(), SIGNATURE_ALGORITHM);
 		return crl;
 	}
 
+
 	public X509CRL updateCRL(CRLEntry[] entries) throws Exception {
-		crl = CertUtil.createCRL(PROVIDER.getName(), cert, key, entries, cert
-				.getNotAfter(), SIGNATURE_ALGORITHM);
+		crl = CertUtil.createCRL(PROVIDER.getName(), cert, key, entries, cert.getNotAfter(), SIGNATURE_ALGORITHM);
 		return crl;
 	}
 
