@@ -384,7 +384,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 			dispose();
 		} catch (Exception e) {
 			this.updateProgress(false, "Error");
-			ErrorDialog.showError("Error Creating Proxy", e);
+			ErrorDialog.showError(e);
 			getAuthenticateButton().setEnabled(true);
 		}
 

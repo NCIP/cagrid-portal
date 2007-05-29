@@ -54,7 +54,7 @@ public class Utils {
 	}
 
 
-	public static String getExceptionMessage(Exception e) {
+	public static String getExceptionMessage(Throwable e) {
 		String mess = e.getMessage();
 		if (e instanceof AxisFault) {
 			AxisFault af = (AxisFault) e;

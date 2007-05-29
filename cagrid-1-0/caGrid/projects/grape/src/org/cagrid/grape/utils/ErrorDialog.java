@@ -1,502 +1,366 @@
 package org.cagrid.grape.utils;
 
-import java.awt.Dimension;
+import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.common.Utils;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.text.DateFormat;
-import java.util.Vector;
+import java.awt.Insets;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.border.TitledBorder;
 
-import org.cagrid.grape.LookAndFeel;
-import org.cagrid.grape.utils.errors.ErrorContainer;
-import org.cagrid.grape.utils.errors.ErrorDialogTable;
-import org.cagrid.grape.utils.errors.ErrorDialogTableListener;
 
-/** 
- *  ErrorDialog
- *  Dialog for displaying / queueing up errors and detail messages
- * 
- * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
- * @created Oct 2, 2006 
- * @version $Id: ErrorDialog.java,v 1.6 2007-05-21 13:45:50 dervin Exp $ 
- */
 public class ErrorDialog extends JDialog {
-	
+
+	private final static int WIDTH_NO_DETAILS = 400;
+	private final static int HEIGHT_NO_DETAILS = 150;
+	private final static int WIDTH_DETAILS = 400;
+	private final static int HEIGHT_DETAILS = 400;
+
+	private static final long serialVersionUID = 1L;
+
 	private static Frame ownerFrame = null;
-	private static Vector<ErrorContainer> errors = null;
-	private static ErrorDialog dialog = null;
-	private static String lastFileLocation = null;
-	
-    private ErrorDialogTable errorTable = null;
-	private JScrollPane errorScrollPane = null;
-	private JTextArea detailTextArea = null;
-	private JScrollPane detailScrollPane = null;
-	private JButton clearButton = null;
+
+	private JPanel jContentPane = null;
+
 	private JPanel mainPanel = null;
-	private JButton hideDialogButton = null;
-	private JButton logErrorsButton = null;
-	private JPanel buttonPanel = null;
-    private JSplitPane errorsSplitPane = null;
 
-	private ErrorDialog(Frame parentFrame) {
-		super(parentFrame);
-		initialize();
-	}
-		
+	private JPanel messagePanel = null;
 
-	private void initialize() {
-		setTitle("Errors");
-		this.setContentPane(getMainPanel());
-		pack();
+	private JScrollPane jScrollPane = null;
+
+	private JTextArea error = null;
+
+	private String message;
+
+	private JPanel detailsPanel = null;
+
+	private JScrollPane jScrollPane1 = null;
+
+	private JTextArea details = null;
+
+	private JButton detailsButton = null;
+
+	private boolean detailsShown = false;
+
+	private Throwable exception;
+
+	private String strDetails;
+
+
+	public static void showError(String message, Throwable ex) {
+		ErrorDialog window = new ErrorDialog(getOwnerFrame(), message, ex);
+		window.setVisible(true);
 	}
-	
-	
-	public static void setOwnerFrame(Frame frame) {
-		ownerFrame = frame;
+
+
+	public static void showError(String message, String details) {
+		ErrorDialog window = new ErrorDialog(getOwnerFrame(), message, details);
+		window.setVisible(true);
 	}
-	
-	
-	private static Frame getOwnerFrame() {
-		return ownerFrame;
-	}
-	
-	
-    /**
-     * Only message is required.  Detail will be shown when asked for, exception shown
-     * when asked for, each only if != null
-     * 
-     * @param message
-     * @param detail
-     * @param error
-     */
-	private static void addError(final String message, 
-        final String detail, final Throwable error) {
-		if (dialog == null) {
-			dialog = new ErrorDialog(getOwnerFrame());	
-		}
-		Runnable r = new Runnable() {
-			public void run() {
-				dialog.setAlwaysOnTop(true);
-				ErrorContainer container = new ErrorContainer(message, detail, error);
-				if (errors == null) {
-					errors = new Vector<ErrorContainer>();
-				}
-				errors.add(container);
-				dialog.getErrorTable().addError(container);
-				if (!dialog.isVisible()) {
-					dialog.setModal(true);
-					// dialog.pack();
-					dialog.setSize(500, 450);
-					// attempt to center the dialog
-					centerDialog();
-					dialog.setVisible(true);
-				}
-			}
-		};
-		SwingUtilities.invokeLater(r);
-	}
-	
-	
-    /**
-     * Shows an error message from an exception.  The message presented will
-     * be the exception's message, or the exception's class name
-     * if no message is present
-     * 
-     * @param ex
-     */
+
+
 	public static void showError(Throwable ex) {
-		String message = ex.getMessage();
+		String message = Utils.getExceptionMessage(ex);
 		if (message == null) {
-			message = ex.getClass().getName();
+			message = "Unkown Error";
 		}
-		addError(message, null, ex);
+		showError(message, ex);
 	}
-	
-	
-    /**
-     * Shows an error message with no detail or exception
-     * 
-     * @param error
-     */
+
+
 	public static void showError(String error) {
-		addError(error, null, null);
+		showError(error, (String) null);
 	}
-	
-	
-    /**
-     * Shows an error message with details
-     * @param error
-     * @param detail
-     */
-	public static void showError(String error, String detail) {
-		addError(error, detail, null);
-	}
-	
-	
-    /**
-     * Shows an error message with multi-line details
-     * 
-     * @param error
-     * @param detail
-     */
+
+
 	public static void showError(String error, String[] detail) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < detail.length; i++) {
 			builder.append(detail[i]).append("\n");
 		}
-		addError(error, builder.toString(), null);
+		showError(error, builder.toString());
 	}
-	
-	
-    /**
-     * Shows an error message with an exception
-     * 
-     * @param message
-     * @param ex
-     */
-	public static void showError(String message, Throwable ex) {
-		addError(message, null, ex);
+
+
+	public static void setOwnerFrame(Frame frame) {
+		ownerFrame = frame;
 	}
-    
-    
-    /**
-     * Shows an error message with a multi-line detail message and exception
-     * 
-     * @param message
-     * @param details
-     * @param ex
-     */
-	public static void showError(String message, String[] details, Throwable ex) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < details.length; i++) {
-            builder.append(details[i]).append("\n");
-        }
-        addError(message, builder.toString(), ex);
-    }
 
-    
-    /**
-     * Shows an error message with a detail message and exception
-     * 
-     * @param message
-     * @param details
-     * @param ex
-     */
-    public static void showError(String message, String details, Throwable ex) {
-        addError(message, details, ex);
-    }
 
-	
-	private ErrorDialogTable getErrorTable() {
-	    if (errorTable == null) {
-	        errorTable = new ErrorDialogTable();
-            errorTable.addErrorTableListener(new ErrorDialogTableListener() {
-                public void showDetailsClicked(ErrorContainer container) {
-                    getErrorsSplitPane().setDividerLocation(0.5D);
-                    getDetailTextArea().setText(container.getDetail());
-                    getDetailTextArea().setCaretPosition(0);
-                }
-                
-                
-                public void showErrorClicked(ErrorContainer container) {
-                    StringWriter writer = new StringWriter();
-                    PrintWriter printWriter = new PrintWriter(writer);
-                    container.getError().printStackTrace(printWriter);
-                    getErrorsSplitPane().setDividerLocation(0.5D);
-                    getDetailTextArea().setText(writer.getBuffer().toString());
-                    getDetailTextArea().setCaretPosition(0);
-                }
-            });
-        }
-        return errorTable;
-    }
+	private static Frame getOwnerFrame() {
+		return ownerFrame;
+	}
 
-	
+
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * @param owner
 	 */
-	private JScrollPane getErrorScrollPane() {
-		if (errorScrollPane == null) {
-			errorScrollPane = new JScrollPane();
-			errorScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				null, "Errors", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, 
-                null, LookAndFeel.getPanelLabelColor()));
-			errorScrollPane.setViewportView(getErrorTable());
-			errorScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		}
-		return errorScrollPane;
+	public ErrorDialog(Frame owner, String message, Throwable exception) {
+		super(owner);
+		this.message = message;
+		this.exception = exception;
+		initialize();
 	}
-	
+
+
+	public ErrorDialog(Frame owner, String message, String strDetails) {
+		super(owner);
+		this.message = message;
+		this.strDetails = strDetails;
+		initialize();
+	}
+
 
 	/**
-	 * This method initializes jTextArea   
-	 * 	
-	 * @return javax.swing.JTextArea	
-	 */
-	private JTextArea getDetailTextArea() {
-		if (detailTextArea == null) {
-			detailTextArea = new JTextArea();
-			detailTextArea.setEditable(false);
-			detailTextArea.setWrapStyleWord(true);
-			detailTextArea.setLineWrap(true);
-		}
-		return detailTextArea;
-	}
-	
-
-	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */
-	private JScrollPane getDetailScrollPane() {
-		if (detailScrollPane == null) {
-			detailScrollPane = new JScrollPane();
-			detailScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			detailScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-			detailScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				null, "Detail", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, 
-                null, LookAndFeel.getPanelLabelColor()));
-			detailScrollPane.setViewportView(getDetailTextArea());			
-		}
-		return detailScrollPane;
-	}
-	
-
-	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */
-	private JButton getClearButton() {
-		if (clearButton == null) {
-			clearButton = new JButton();
-			clearButton.setText("Clear");
-			clearButton.setToolTipText("Clears the dialog of any errors and closes it");
-			clearButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-                    getErrorsSplitPane().setDividerLocation(1.0D);
-					errors.clear();
-                    getErrorTable().clearTable();
-					dispose();
-				}
-			});
-		}
-		return clearButton;
-	}
-	
-	
-	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes mainPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints1.gridy = 1;
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.anchor = GridBagConstraints.EAST;
+			gridBagConstraints12.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints12.gridy = 1;
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.fill = GridBagConstraints.BOTH;
+			gridBagConstraints11.weightx = 1.0D;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.gridy = 2;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints.gridy = 0;
-			gridBagConstraints.weightx = 1.0;
-			gridBagConstraints.weighty = 1.0D;
-			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints.gridx = 0;
+			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints.fill = GridBagConstraints.BOTH;
+			gridBagConstraints.weightx = 1.0D;
+			gridBagConstraints.weighty = 1.0D;
+			gridBagConstraints.gridy = 0;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-			mainPanel.add(getErrorsSplitPane(), gridBagConstraints);
-			mainPanel.add(getButtonPanel(), gridBagConstraints1);
+			mainPanel.add(getMessagePanel(), gridBagConstraints);
+			mainPanel.add(getDetailsPanel(), gridBagConstraints11);
+			mainPanel.add(getDetailsButton(), gridBagConstraints12);
 		}
 		return mainPanel;
 	}
 
 
 	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes messagePanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
-	private JButton getHideDialogButton() {
-		if (hideDialogButton == null) {
-			hideDialogButton = new JButton();
-			hideDialogButton.setToolTipText(
-                "Simply hides the dialog, preserving all displayed errors");
-			hideDialogButton.setText("Hide");
-			hideDialogButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-                    errors.clear();
-                    getErrorTable().clearTable();
-                    getDetailTextArea().setText("");
-                    getErrorsSplitPane().setDividerLocation(1.0D);
-                    dispose();
-				}
-			});
-		}
-		return hideDialogButton;
-	}
-	
-	
-	private JButton getLogErrorsButton() {
-		if (logErrorsButton == null) {
-			logErrorsButton = new JButton();
-			logErrorsButton.setText("Log Errors");
-			logErrorsButton.setToolTipText("Allows saving the error dialog's contents to disk");
-			logErrorsButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					saveLogFile();
-				}
-			});
-		}
-		return logErrorsButton;
-	}
-
-
-	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getButtonPanel() {
-		if (buttonPanel == null) {
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 2;
-			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints3.gridy = 0;
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.gridx = 1;
-			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints2.gridy = 0;
+	private JPanel getMessagePanel() {
+		if (messagePanel == null) {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints1.anchor = GridBagConstraints.WEST;
-			gridBagConstraints1.weightx = 1.0D;
+			gridBagConstraints1.fill = GridBagConstraints.BOTH;
+			gridBagConstraints1.weighty = 1.0;
 			gridBagConstraints1.gridy = 0;
-			buttonPanel = new JPanel();
-			buttonPanel.setLayout(new GridBagLayout());
-			buttonPanel.add(getLogErrorsButton(), gridBagConstraints1);
-			buttonPanel.add(getHideDialogButton(), gridBagConstraints2);
-			buttonPanel.add(getClearButton(), gridBagConstraints3);
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints1.weightx = 1.0;
+			messagePanel = new JPanel();
+			messagePanel.setLayout(new GridBagLayout());
+			messagePanel.add(getJScrollPane(), gridBagConstraints1);
+			messagePanel.setBorder(BorderFactory.createTitledBorder(null, "Error Message",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+				new Color(62, 109, 181)));
 		}
-		return buttonPanel;
+		return messagePanel;
 	}
-	
-	
+
+
 	/**
-	 * This method initializes jSplitPane	
-	 * 	
-	 * @return javax.swing.JSplitPane	
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
-	private JSplitPane getErrorsSplitPane() {
-		if (errorsSplitPane == null) {
-			errorsSplitPane = new JSplitPane();
-			errorsSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-			errorsSplitPane.setResizeWeight(1.0D);
-			errorsSplitPane.setTopComponent(getErrorScrollPane());
-			errorsSplitPane.setBottomComponent(getDetailScrollPane());
-			errorsSplitPane.setOneTouchExpandable(true);
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getError());
 		}
-		return errorsSplitPane;
+		return jScrollPane;
 	}
-	
-	
-	private static void centerDialog() {
-		// Determine the new location of the window
-		Frame owner = getOwnerFrame();
-		if (owner != null) {
-			int w = owner.getSize().width;
-			int h = owner.getSize().height;
-			int x = owner.getLocationOnScreen().x;
-			int y = owner.getLocationOnScreen().y;
-			Dimension dim = dialog.getSize();
-			dialog.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);			
+
+
+	/**
+	 * This method initializes error
+	 * 
+	 * @return javax.swing.JTextArea
+	 */
+	private JTextArea getError() {
+		if (error == null) {
+			error = new JTextArea();
+			error.setLineWrap(true);
+			error.setEditable(false);
+			error.setWrapStyleWord(true);
+			error.setText(message);
 		}
+		return error;
 	}
-	
-	
-	private void saveLogFile() {
-		String nl = System.getProperty("line.separator");
-		JFileChooser chooser = new JFileChooser(lastFileLocation);
-		int choice = chooser.showSaveDialog(dialog);
-		if (choice == JFileChooser.APPROVE_OPTION) {
-			File file = chooser.getSelectedFile();
-			lastFileLocation = file.getAbsolutePath();
-			StringBuilder text = new StringBuilder();
-			synchronized (errors) {
-                for (ErrorContainer container : errors) {
-                    text.append(container.getMessage()).append(" -- ")
-                        .append(DateFormat.getDateTimeInstance().format(
-                            container.getErrorDate())).append(nl);
-                    if (container.getDetail() != null) {
-                        text.append("DETAILS:").append(nl);
-                        String[] details = container.getDetail().split("\n");
-                        for (String detail : details) {
-                            text.append(detail).append(nl);
-                        }
-                    }
-                    if (container.getError() != null) {
-                        text.append("EXCEPTION:").append(nl);
-                        StringWriter writer = new StringWriter();
-                        PrintWriter printWriter = new PrintWriter(writer);
-                        container.getError().printStackTrace(printWriter);
-                        String[] lines = writer.getBuffer().toString().split("\n");
-                        for (String line : lines) {
-                            text.append(line).append(nl);
-                        }
-                    }
-                    text.append("---- ---- ---- ----").append(nl);
-                }
+
+
+	/**
+	 * This method initializes detailsPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getDetailsPanel() {
+		if (detailsPanel == null) {
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.fill = GridBagConstraints.BOTH;
+			gridBagConstraints2.weighty = 1.0;
+			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.gridy = 0;
+			gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints2.weightx = 1.0;
+			detailsPanel = new JPanel();
+			detailsPanel.setLayout(new GridBagLayout());
+			detailsPanel.add(getJScrollPane1(), gridBagConstraints2);
+			detailsPanel.setBorder(BorderFactory.createTitledBorder(null, "Error Details",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+				new Color(62, 109, 181)));
+		}
+		return detailsPanel;
+	}
+
+
+	/**
+	 * This method initializes jScrollPane1
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getJScrollPane1() {
+		if (jScrollPane1 == null) {
+			jScrollPane1 = new JScrollPane();
+			jScrollPane1.setViewportView(getDetails());
+		}
+		return jScrollPane1;
+	}
+
+
+	/**
+	 * This method initializes details
+	 * 
+	 * @return javax.swing.JTextArea
+	 */
+	private JTextArea getDetails() {
+		if (details == null) {
+			details = new JTextArea();
+			if (strDetails != null) {
+				details.setText(this.strDetails);
+			} else if (exception != null) {
+				details.setText(FaultUtil.printFaultToString(exception));
 			}
-			try {
-				FileWriter writer = new FileWriter(file);
-				writer.write(text.toString());
-				writer.flush();
-				writer.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-				showError(ex);
-			}
+		}
+		return details;
+	}
+
+
+	private synchronized void hideDetails() {
+		if (strDetails != null || exception != null) {
+			detailsPanel.setVisible(false);
+			this.setSize(WIDTH_NO_DETAILS, HEIGHT_NO_DETAILS);
+			detailsButton.setText("Show Details");
+			detailsShown = false;
+		} else {
+			disableDetails();
 		}
 	}
 
 
+	private void disableDetails() {
+		detailsPanel.setVisible(false);
+		this.detailsButton.setVisible(false);
+		this.setSize(WIDTH_NO_DETAILS, HEIGHT_NO_DETAILS);
+	}
+
+
+	private synchronized void showDetails() {
+		if (strDetails != null || exception != null) {
+			detailsPanel.setVisible(true);
+			this.setSize(WIDTH_DETAILS, HEIGHT_DETAILS);
+			detailsButton.setText("Hide Details");
+			detailsShown = true;
+		} else {
+			disableDetails();
+		}
+	}
+
+
+	/**
+	 * This method initializes detailsButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getDetailsButton() {
+		if (detailsButton == null) {
+			detailsButton = new JButton();
+			detailsButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (detailsShown) {
+						hideDetails();
+					} else {
+						showDetails();
+					}
+				}
+			});
+		}
+		return detailsButton;
+	}
+
+
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setTitle("HELLO THERE");
-		frame.setSize(new Dimension(400,400));
-		frame.setVisible(true);
-		ErrorDialog.setOwnerFrame(frame);
-		for (int i = 0; i < 10; i++) {
-			try {
-				Thread.sleep(5000);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			ErrorDialog.showError("Test error", "Test detail",
-                new Exception("Oh Noes!"));		
-		}
+		ErrorDialog window = new ErrorDialog(
+			null,
+			"When the moon hits your eyes like a big pizza pie thats amore.   When the world seem to shine like you had too much whine, that amore.",
+			(String) null);
+		window.setVisible(true);
+
 	}
+
+
+	/**
+	 * This method initializes this
+	 * 
+	 * @return void
+	 */
+	private void initialize() {
+
+		this.setContentPane(getJContentPane());
+		this.setTitle("Error");
+		hideDetails();
+	}
+
+
+	/**
+	 * This method initializes jContentPane
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJContentPane() {
+		if (jContentPane == null) {
+			jContentPane = new JPanel();
+			jContentPane.setLayout(new BorderLayout());
+			jContentPane.add(getMainPanel(), BorderLayout.CENTER);
+		}
+		return jContentPane;
+	}
+
 }

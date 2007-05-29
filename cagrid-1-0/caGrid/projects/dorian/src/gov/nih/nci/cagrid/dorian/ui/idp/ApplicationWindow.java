@@ -742,7 +742,7 @@ public class ApplicationWindow extends ApplicationComponent {
 						dispose();
 					} catch (Exception e) {
 						e.printStackTrace();
-						ErrorDialog.showError("Registration Error", e);
+						ErrorDialog.showError(e);
 						applied = false;
 					}
 				}
