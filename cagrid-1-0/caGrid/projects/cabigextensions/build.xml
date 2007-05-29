@@ -306,6 +306,7 @@
             </fileset>
             <fileset dir="${ext.lib.dir}">
                 <include name="*.jar" />
+            	<exclude name="${cagrid.master.jar.prefix}*Introduce*.jar"/>
             </fileset>
             <fileset dir="${jar.dir}">
                 <include name="**/*.jar" />
