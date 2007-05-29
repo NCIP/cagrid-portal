@@ -55,7 +55,7 @@ public abstract class BaseServiceImpl {
 	private DomainModel domainModel = null;
 	private boolean domainModelSearchedFor;
 	
-	private Class cqlQueryProcessorClass = null;
+	private CQLQueryProcessor queryProcessorInstance = null;
     
     private List<DataServiceAuditor> auditors = null;
 
@@ -180,31 +180,25 @@ public abstract class BaseServiceImpl {
 	}
 	
 	
-	private Class getCqlQueryProcessorClass() throws QueryProcessingExceptionType {
-		if (cqlQueryProcessorClass == null) {
-			try {
-				String qpClassName = ServiceConfigUtil.getCqlQueryProcessorClassName();
-				cqlQueryProcessorClass = Class.forName(qpClassName);
-			} catch (Exception ex) {
-				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
-			}
-		}
-		return cqlQueryProcessorClass;
-	}
-	
-	
 	protected CQLQueryProcessor getCqlQueryProcessorInstance() throws QueryProcessingExceptionType {
-		try {
-			CQLQueryProcessor processor = (gov.nih.nci.cagrid.data.cql.CQLQueryProcessor) 
-				getCqlQueryProcessorClass().newInstance();
-			String serverConfigLocation = ServiceConfigUtil.getConfigProperty(
-				DataServiceConstants.SERVER_CONFIG_LOCATION);
-			InputStream configStream = new FileInputStream(serverConfigLocation);
-			processor.initialize(getCqlQueryProcessorConfig(), configStream);
-			return processor;
-		} catch (Exception ex) {
-			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
-		}
+	    if (queryProcessorInstance == null) {
+	        try {
+                // get the query processor's class
+                String qpClassName = ServiceConfigUtil.getCqlQueryProcessorClassName();
+                Class cqlQueryProcessorClass = Class.forName(qpClassName);
+                // create a new instance of the query processor
+	            queryProcessorInstance = (gov.nih.nci.cagrid.data.cql.CQLQueryProcessor) 
+	                cqlQueryProcessorClass.newInstance();
+                // configure the instance
+	            String serverConfigLocation = ServiceConfigUtil.getConfigProperty(
+	                DataServiceConstants.SERVER_CONFIG_LOCATION);
+	            InputStream configStream = new FileInputStream(serverConfigLocation);
+	            queryProcessorInstance.initialize(getCqlQueryProcessorConfig(), configStream);
+	        } catch (Exception ex) {
+	            throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
+	        }
+        }
+        return queryProcessorInstance;
 	}
 	
 	
