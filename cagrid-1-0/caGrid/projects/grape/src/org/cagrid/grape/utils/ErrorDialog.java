@@ -22,9 +22,9 @@ import javax.swing.border.TitledBorder;
 
 public class ErrorDialog extends JDialog {
 
-	private final static int WIDTH_NO_DETAILS = 400;
-	private final static int HEIGHT_NO_DETAILS = 150;
-	private final static int WIDTH_DETAILS = 400;
+	private final static int WIDTH_NO_DETAILS = 500;
+	private final static int HEIGHT_NO_DETAILS = 200;
+	private final static int WIDTH_DETAILS = 500;
 	private final static int HEIGHT_DETAILS = 400;
 
 	private static final long serialVersionUID = 1L;
