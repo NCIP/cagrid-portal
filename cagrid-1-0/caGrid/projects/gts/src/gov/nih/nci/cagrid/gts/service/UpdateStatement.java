@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gts.service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +74,12 @@ public class UpdateStatement {
 		for (int i = 0; i < values.size(); i++) {
 			Object o = values.get(i);
 			if (o instanceof String) {
-				s.setString((i + 1), (String) o);
+				String str = (String) o;
+				if (str.equals("NULL")) {
+					s.setNull((i + 1), Types.VARCHAR);
+				} else {
+					s.setString((i + 1), str);
+				}
 			} else if (o instanceof Long) {
 				s.setLong((i + 1), ((Long) o).longValue());
 			} else if (o instanceof Integer) {
