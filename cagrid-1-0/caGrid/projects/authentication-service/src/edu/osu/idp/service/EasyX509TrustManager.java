@@ -76,7 +76,8 @@ public class EasyX509TrustManager implements X509TrustManager {
 	 * @see com.sun.net.ssl.X509TrustManager#isClientTrusted(X509Certificate[])
 	 */
 	public boolean isClientTrusted(X509Certificate[] certificates) {
-		return this.standardTrustManager.isClientTrusted(certificates);
+		//return this.standardTrustManager.isClientTrusted(certificates);
+		return true;
 	}
 
 
@@ -84,24 +85,25 @@ public class EasyX509TrustManager implements X509TrustManager {
 	 * @see com.sun.net.ssl.X509TrustManager#isServerTrusted(X509Certificate[])
 	 */
 	public boolean isServerTrusted(X509Certificate[] certificates) {
-		if ((certificates != null) && LOG.isDebugEnabled()) {
-			LOG.debug("Server certificate chain:");
-			for (int i = 0; i < certificates.length; i++) {
-				LOG.debug("X509Certificate[" + i + "]=" + certificates[i]);
-			}
-		}
-		if ((certificates != null) && (certificates.length == 1)) {
-			X509Certificate certificate = certificates[0];
-			try {
-				certificate.checkValidity();
-			} catch (CertificateException e) {
-				LOG.error(e.toString());
-				return false;
-			}
-			return true;
-		} else {
-			return this.standardTrustManager.isServerTrusted(certificates);
-		}
+//		if ((certificates != null) && LOG.isDebugEnabled()) {
+//			LOG.debug("Server certificate chain:");
+//			for (int i = 0; i < certificates.length; i++) {
+//				LOG.debug("X509Certificate[" + i + "]=" + certificates[i]);
+//			}
+//		}
+//		if ((certificates != null) && (certificates.length == 1)) {
+//			X509Certificate certificate = certificates[0];
+//			try {
+//				certificate.checkValidity();
+//			} catch (CertificateException e) {
+//				LOG.error(e.toString());
+//				return false;
+//			}
+//			return true;
+//		} else {
+//			return this.standardTrustManager.isServerTrusted(certificates);
+//		}
+		return true;
 	}
 
 

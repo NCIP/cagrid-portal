@@ -44,6 +44,9 @@ public class OSUAuthenticationProvider implements AuthenticationProvider {
 	}
 
 
+
+
+
 	public SAMLAssertion authenticate(Credential credential) throws RemoteException, InvalidCredentialException,
 		InsufficientAttributeException, AuthenticationProviderException {
 		if (credential.getBasicAuthenticationCredential() == null) {
