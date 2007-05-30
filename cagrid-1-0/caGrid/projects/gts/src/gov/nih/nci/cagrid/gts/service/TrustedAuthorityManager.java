@@ -263,6 +263,8 @@ public class TrustedAuthorityManager {
 			fault.setFaultString("The authority trust service for a Trusted Authority cannot be changed");
 			throw fault;
 		}
+		
+		
 
 		if (ta.getCRL() != null) {
 			if ((clean(ta.getCRL().getCrlEncodedString()) != null) && (!ta.getCRL().equals(curr.getCRL()))) {
@@ -270,6 +272,13 @@ public class TrustedAuthorityManager {
 				checkAndExtractCRL(ta, cert);
 				update.addField(TrustedAuthorityTable.CRL, ta.getCRL().getCrlEncodedString());
 				needsUpdate = true;
+			}
+		}else{
+			if(!internal){
+				if(curr.getCRL()!=null){
+					update.addField(TrustedAuthorityTable.CRL, "NULL");
+					needsUpdate = true;
+				}
 			}
 		}
 
