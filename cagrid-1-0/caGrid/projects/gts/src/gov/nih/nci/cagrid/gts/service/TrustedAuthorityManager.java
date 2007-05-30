@@ -276,7 +276,7 @@ public class TrustedAuthorityManager {
 		}else{
 			if(!internal){
 				if(curr.getCRL()!=null){
-					update.addField(TrustedAuthorityTable.CRL, "NULL");
+					update.addField(TrustedAuthorityTable.CRL, "");
 					needsUpdate = true;
 				}
 			}

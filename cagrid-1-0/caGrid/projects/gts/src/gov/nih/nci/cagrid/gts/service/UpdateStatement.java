@@ -75,11 +75,7 @@ public class UpdateStatement {
 			Object o = values.get(i);
 			if (o instanceof String) {
 				String str = (String) o;
-				if (str.equals("NULL")) {
-					s.setNull((i + 1), Types.VARCHAR);
-				} else {
-					s.setString((i + 1), str);
-				}
+				s.setString((i + 1), str);
 			} else if (o instanceof Long) {
 				s.setLong((i + 1), ((Long) o).longValue());
 			} else if (o instanceof Integer) {
