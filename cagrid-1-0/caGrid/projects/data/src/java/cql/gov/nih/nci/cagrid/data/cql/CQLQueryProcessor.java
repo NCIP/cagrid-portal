@@ -15,7 +15,12 @@ import java.util.Set;
 /** 
  *  CQLQueryProcessor
  *  Abstract class the service providers must extend to process 
- *  CQL Queries to a caGrid data service 
+ *  CQL Queries to a caGrid data service.
+ *  A DataService instance will have only one instance of the query
+ *  processor, created on the first call to the query method.  At creation
+ *  time, the processor will be configured via the initialize method.
+ *  All subsequent calls to the query method will simply invoke the 
+ *  <code>processQuery</code> method.
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
@@ -73,11 +78,11 @@ public abstract class CQLQueryProcessor {
 	
 	/**
 	 * @return
-	 * 		The parameters as configured by the user.  The set of keys must contain all
-	 * 		of the keys contained in the Properties object returned 
-	 * 		by <code>getRequiredParamters()</code>.  The values in the parameters will
-	 *		be either the user defined value or the default value from 
-	 *		<code>getRequiredParameters()</code>.
+	 * 		The parameters as configured by the user at runtime.
+     *      The set of keys must contain all of the keys contained in 
+     *      the Properties object returned by <code>getRequiredParamters()</code>.  
+     *      The values in the parameters will be either the user defined 
+     *      value or the default value from <code>getRequiredParameters()</code>.
 	 */
 	protected Properties getConfiguredParameters() {
 		return this.params;
@@ -97,6 +102,7 @@ public abstract class CQLQueryProcessor {
 	
 	/**
 	 * Processes the CQL Query
+     * 
 	 * @param cqlQuery
 	 * @return The results of processing a CQL query
 	 * @throws MalformedQueryException
