@@ -107,8 +107,6 @@ public class ApplicationWindow extends ApplicationComponent {
 
 	private JComboBox country = null;
 
-	private boolean applied = false;
-
 
 	/**
 	 * This is the default constructor
@@ -708,52 +706,48 @@ public class ApplicationWindow extends ApplicationComponent {
 
 
 	public synchronized void apply() {
-		if (!applied) {
-			applied = true;
-			String pass = new String(this.getPassword().getPassword());
-			String vpass = new String(this.getVerify().getPassword());
-			if (!pass.equals(vpass)) {
-				ErrorDialog.showError("Registration Error", "Password don't match!!!");
-				applied = false;
-                return;
-			}
+		getApplyButton().setEnabled(false);
+		String pass = new String(this.getPassword().getPassword());
+		String vpass = new String(this.getVerify().getPassword());
+		if (!pass.equals(vpass)) {
+			ErrorDialog.showError("Registration Error", "Password don't match!!!");
+			getApplyButton().setEnabled(true);
+			return;
+		}
 
-			final Application a = new Application();
-			a.setUserId(this.getUsername().getText());
-			a.setPassword(pass);
-			a.setFirstName(this.getFirstName().getText());
-			a.setLastName(this.getLastName().getText());
-			a.setOrganization(this.getOrganization().getText());
-			a.setAddress(this.getAddress().getText());
-			a.setAddress2(this.getAddress2().getText());
-			a.setCity(this.getCity().getText());
-			a.setState(((StateListComboBox) this.getState()).getSelectedState());
-			a.setZipcode(this.getZipcode().getText());
-			a.setCountry(((CountryListComboBox) this.getCountry()).getSelectedCountry());
-			a.setPhoneNumber(this.getPhoneNumber().getText());
-			a.setEmail(this.getEmail().getText());
-			final String serviceUrl = ((DorianServiceListComboBox) this.getService()).getSelectedService();
+		final Application a = new Application();
+		a.setUserId(this.getUsername().getText());
+		a.setPassword(pass);
+		a.setFirstName(this.getFirstName().getText());
+		a.setLastName(this.getLastName().getText());
+		a.setOrganization(this.getOrganization().getText());
+		a.setAddress(this.getAddress().getText());
+		a.setAddress2(this.getAddress2().getText());
+		a.setCity(this.getCity().getText());
+		a.setState(((StateListComboBox) this.getState()).getSelectedState());
+		a.setZipcode(this.getZipcode().getText());
+		a.setCountry(((CountryListComboBox) this.getCountry()).getSelectedCountry());
+		a.setPhoneNumber(this.getPhoneNumber().getText());
+		a.setEmail(this.getEmail().getText());
+		final String serviceUrl = ((DorianServiceListComboBox) this.getService()).getSelectedService();
 
-			Runner runner = new Runner() {
-				public void execute() {
-					try {
-						IdPRegistrationClient client = new IdPRegistrationClient(serviceUrl);
-						GridApplication.getContext().showMessage(client.register(a));
-						dispose();
-					} catch (Exception e) {
-						e.printStackTrace();
-						ErrorDialog.showError(e);
-						applied = false;
-					}
+		Runner runner = new Runner() {
+			public void execute() {
+				try {
+					IdPRegistrationClient client = new IdPRegistrationClient(serviceUrl);
+					GridApplication.getContext().showMessage(client.register(a));
+					dispose();
+				} catch (Exception e) {
+					e.printStackTrace();
+					ErrorDialog.showError(e);
+					getApplyButton().setEnabled(true);
 				}
-			};
-			try {
-				GridApplication.getContext().executeInBackground(runner);
-			} catch (Exception t) {
-				t.getMessage();
 			}
-		} else {
-			ErrorDialog.showError("Application already sent, currently awaiting response.");
+		};
+		try {
+			GridApplication.getContext().executeInBackground(runner);
+		} catch (Exception t) {
+			t.getMessage();
 		}
 	}
 }
