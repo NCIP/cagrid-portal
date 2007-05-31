@@ -15,6 +15,7 @@ import org.globus.wsrf.impl.ResourceHomeImpl;
 import org.globus.wsrf.impl.SimpleResourceKey;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.MessageContext;
+import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.utils.AddressingUtils;
 
 /**
@@ -29,11 +30,15 @@ public class BaseResourceHome extends ResourceHomeImpl {
  	*/
 	public ResourceKey createResource() throws Exception {
 		// Create a resource and initialize it
-		BaseResource resource = (BaseResource) createNewInstance();
+		<%=info.getService().getName()%>Resource resource = (<%=info.getService().getName()%>Resource) createNewInstance();
 		resource.initialize();
 
 		// Get key
 		ResourceKey key = new SimpleResourceKey(getKeyTypeName(), resource.getID());
+		resource.setResourceKey(key);
+		
+		// register the service to the index sevice
+		resource.refreshRegistration(true);
 		
 		// Add the resource to the list of resources in this home
 		add(key, resource);
@@ -57,10 +62,21 @@ public class BaseResourceHome extends ResourceHomeImpl {
 	/**
  	* Given the key of a resource managed by this resource home, a type resource will be returned.
  	*/	
-	public BaseResource getResource(ResourceKey key) throws ResourceException {
-		BaseResource thisResource = (BaseResource)find(key);
+	public <%=info.getService().getName()%>Resource getResource(ResourceKey key) throws ResourceException {
+		<%=info.getService().getName()%>Resource thisResource = (<%=info.getService().getName()%>Resource)find(key);
 		return thisResource;
 	}
+	
+
+    /**
+     * Get the resouce that is being addressed in this current context
+     */
+    public <%=info.getService().getName()%>Resource getAddressedResource() throws Exception {
+        <%=info.getService().getName()%>Resource thisResource;
+        thisResource = (<%=info.getService().getName()%>Resource) ResourceContext.getResourceContext().getResource();
+        return thisResource;
+    }
+	
 	
 	
 	

@@ -135,9 +135,10 @@ public class SkeletonCreator extends Task {
                     ssc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
                     sscc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
                     ssopc.createSkeleton(new SpecificServiceInformation(info, info.getServices().getService(i)));
+                    sec.createSkeleton(info,info.getServices().getService(i));
                 }
             }
-            sec.createSkeleton(info);
+           
             sdc.createSkeleton(info);
             sbc.createSkeleton(info);
         } catch (Exception e) {

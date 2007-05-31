@@ -1,10 +1,8 @@
 <%@ jet package="gov.nih.nci.cagrid.introduce.templates.etc" class="RegistrationTemplate"
 imports="gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*" %>
-<% gov.nih.nci.cagrid.introduce.common.ServiceInformation info = (gov.nih.nci.cagrid.introduce.common.ServiceInformation) argument; 
+<% gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation) argument; 
 	ResourcePropertiesListType metadataList = null;	
-	if(info.getServices() != null && info.getServices().getService() !=null){
-		metadataList = info.getServices().getService(0).getResourcePropertiesList();
-	}	
+		metadataList = info.getService().getResourcePropertiesList();	
 	String serviceName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.service.name");
 	String namespaceDomain = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.namespace.domain");
 	String modifiedServiceName = serviceName;

@@ -419,9 +419,9 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		if (mainSplitPane == null) {
 			mainSplitPane = new JSplitPane();
 			mainSplitPane.setOneTouchExpandable(true);
-			mainSplitPane.setDividerLocation(.5);
 			mainSplitPane.setLeftComponent(getNamespacesScrollPane());
 			mainSplitPane.setRightComponent(getResourcePropertiesPanel());
+			mainSplitPane.setDividerLocation(.5);
 		}
 		return mainSplitPane;
 	}

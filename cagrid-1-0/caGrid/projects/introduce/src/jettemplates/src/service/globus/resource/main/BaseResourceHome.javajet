@@ -32,7 +32,7 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 	public Resource findSingleton() {
 		logger.info("Creating a single resource.");
 		try {
-			BaseResource resource = new BaseResource();
+			<%=info.getService().getName()%>Resource resource = new <%=info.getService().getName()%>Resource();
 			resource.initialize();
 			return resource;
 		} catch (Exception e) {
@@ -41,10 +41,10 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 		}
 	}
 	
-	public BaseResource getResource(){
-		BaseResource serviceBaseResource;
+	public <%=info.getService().getName()%>Resource getResource(){
+		<%=info.getService().getName()%>Resource serviceBaseResource;
 		try {
-			serviceBaseResource = (BaseResource)ResourceContext.getResourceContext().getResource();
+			serviceBaseResource = (<%=info.getService().getName()%>Resource)ResourceContext.getResourceContext().getResource();
 		} catch (ResourceContextException e) {
 			return null;
 		} catch (ResourceException e) {
@@ -55,7 +55,7 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 
 
 	public Resource find(ResourceKey key) throws ResourceException {
-		BaseResource resource = (BaseResource) super.find(key);
+		<%=info.getService().getName()%>Resource resource = (<%=info.getService().getName()%>Resource) super.find(key);
 		// each time the resource is looked up, do a lazy refreash of
 		// registration.
 		resource.refreshRegistration(false);
@@ -75,4 +75,13 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 			logger.info("Successfully initialized resource.");
 		}
 	}
+	
+    /**
+     * Get the resouce that is being addressed in this current context
+     */
+    public <%=info.getService().getName()%>Resource getAddressedResource() throws Exception {
+        <%=info.getService().getName()%>Resource thisResource;
+        thisResource = (<%=info.getService().getName()%>Resource) ResourceContext.getResourceContext().getResource();
+        return thisResource;
+    }
 }

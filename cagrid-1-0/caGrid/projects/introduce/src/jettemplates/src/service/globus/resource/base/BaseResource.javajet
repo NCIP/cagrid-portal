@@ -14,7 +14,7 @@ import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.jndi.Initializable;
 
-public class BaseResource extends BaseResourceBase {
+public class <%=arguments.getService().getName()%>Resource extends BaseResourceBase {
 
 	
    	/**

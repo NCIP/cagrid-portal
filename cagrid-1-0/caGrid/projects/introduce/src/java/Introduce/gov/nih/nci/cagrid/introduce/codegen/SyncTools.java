@@ -26,6 +26,7 @@ import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.creator.SkeletonEtcCreator;
 import gov.nih.nci.cagrid.introduce.creator.SkeletonSchemaCreator;
 import gov.nih.nci.cagrid.introduce.creator.SkeletonSecurityOperationProviderCreator;
 import gov.nih.nci.cagrid.introduce.creator.SkeletonSourceCreator;
@@ -640,13 +641,15 @@ public class SyncTools {
             ServiceType newService = (ServiceType) newServices.get(i);
             SkeletonSourceCreator ssc = new SkeletonSourceCreator();
             SkeletonSchemaCreator sschc = new SkeletonSchemaCreator();
+            SkeletonEtcCreator sec = new SkeletonEtcCreator();
             SkeletonSecurityOperationProviderCreator ssopc = new SkeletonSecurityOperationProviderCreator();
             try {
                 logger.debug("Adding Service for: " + newService.getName());
                 ssc.createSkeleton(info.getBaseDirectory(), info, newService);
                 sschc.createSkeleton(info.getBaseDirectory(), info, newService);
                 ssopc.createSkeleton(new SpecificServiceInformation(info, newService));
-
+                sec.createSkeleton(info, newService);
+                
                 // if this is a new service we need to add it's new "service"
                 // element to the WSDD
                 NewServerConfigTemplate newServerConfigT = new NewServerConfigTemplate();

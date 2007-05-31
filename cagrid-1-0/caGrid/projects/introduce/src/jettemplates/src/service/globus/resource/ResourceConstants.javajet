@@ -28,7 +28,7 @@ public interface ResourceConstants {
 			
 			stringBuffer.append("\tpublic static final QName ");
 			stringBuffer.append(CommonTools.getResourcePropertyVariableName(metadataList, i).toUpperCase());
-			stringBuffer.append("_MD_RP = new QName(\"");
+			stringBuffer.append("_Value_RP = new QName(\"");
 			stringBuffer.append(metadata.getQName().getNamespaceURI()+"\", \""+metadata.getQName().getLocalPart()+"\");\n");
 		}
 	}

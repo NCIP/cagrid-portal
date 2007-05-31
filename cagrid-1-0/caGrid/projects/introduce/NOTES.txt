@@ -35,11 +35,13 @@ Upgrade Cycle
 
 To Do:  
 
-Fix the caDSR var name in the extensions, i have a typo
+resource refactoring needs to be done completely
+
+when adding a service context, if there is an error the screen is already gone and not fixable before the service is added and than not modifyable
 
 in the types file importer check the support for includes, and imports and check on whether it works when importing and including from ../
 
-when using CMS and not setting the context then it throws up error dialogs at random times as well as it lets you close the method mod viewer
+when using CSM and not setting the context then it throws up error dialogs at random times as well as it lets you close the method mod viewer
 even though it is wrong ang then pops up an error dialog.  It should be validating on the close or done buttons.
 
 make gui work one service at a time
@@ -79,6 +81,8 @@ add tests to system tests for (coverage report shows no coverage):
 add a .cvsignore file to generated skeletons that includes the gar.  my right mouse button is slowly wearing out... and i am lazy...
 
 ============================ D O N E ================================================================
+
+Fix the caDSR var name in the extensions, i have a typo
 
 need to clean up config params and deploy params to have "display" names
 

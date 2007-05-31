@@ -109,9 +109,20 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		<replace file="tmp/etc/registration.xml" value="${index.service.url}" token="INDEX_SERVICE_URL" />
-		<replace file="tmp/etc/registration.xml" value="${index.service.registration.refresh_seconds}" token="REGISTRATION_REFRESH" />
-		<replace file="tmp/etc/registration.xml" value="${index.service.index.refresh_milliseconds}" token="INDEX_REFRESH" />
+		<replace 
+		    dir="tmp/etc/"
+		    value="defaultvalue">
+			<include name="*_registration.xml"/>
+		  <replacefilter 
+		    token="INDEX_SERVICE_URL"
+		    value="${index.service.url}"/>
+		  <replacefilter 
+		    token="REGISTRATION_REFRESH" 
+		    value="${index.service.registration.refresh_seconds}"/>
+		  <replacefilter 
+		    token="INDEX_REFRESH" 
+		    value="${index.service.index.refresh_milliseconds}"/>
+		</replace>
 		<!-- Copy skeleton files to Tomcat and rename -->
 		<copy overwrite="true" toDir="${service.deployment.dir}">
 			<fileset dir="tmp/etc">
@@ -171,9 +182,20 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		<replace file="tmp/etc/registration.xml" value="${index.service.url}" token="INDEX_SERVICE_URL" />
-		<replace file="tmp/etc/registration.xml" value="${index.service.registration.refresh_seconds}" token="REGISTRATION_REFRESH" />
-		<replace file="tmp/etc/registration.xml" value="${index.service.index.refresh_milliseconds}" token="INDEX_REFRESH" />
+		<replace 
+		    dir="tmp/etc/"
+		    value="defaultvalue">
+			<include name="*_registration.xml"/>
+		  <replacefilter 
+		    token="INDEX_SERVICE_URL"
+		    value="${index.service.url}"/>
+		  <replacefilter 
+		    token="REGISTRATION_REFRESH" 
+		    value="${index.service.registration.refresh_seconds}"/>
+		  <replacefilter 
+		    token="INDEX_REFRESH" 
+		    value="${index.service.index.refresh_milliseconds}"/>
+		</replace>
 		<!-- make the gar file -->
 		<ant antfile="${build.packages}" target="makeGar">
 			<property name="garserverdeployment.file" value="${basedir}/tmp/server-config.wsdd" />

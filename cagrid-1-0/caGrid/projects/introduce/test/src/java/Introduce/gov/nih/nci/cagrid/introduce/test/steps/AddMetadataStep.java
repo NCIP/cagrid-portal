@@ -98,7 +98,7 @@ public class AddMetadataStep extends BaseStep {
 		// exists.......
 		String serviceInterface = getBaseDir() + File.separator + tci.getDir() + File.separator + "src" + File.separator
 			+ tci.getPackageDir() + File.separator  + "service" + File.separator + "globus" + File.separator + "resource"
-			+ File.separator + "BaseResource.java";
+			+ File.separator + "BaseResourceBase.java";
 		assertFalse("Checking that BaseResource contains the load method", StepTools.methodExists(serviceInterface,
 			"loadAnalyticalServiceMetadataFromFile"));
 

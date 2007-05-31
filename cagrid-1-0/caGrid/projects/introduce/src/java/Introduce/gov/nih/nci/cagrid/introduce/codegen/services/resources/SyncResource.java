@@ -9,14 +9,15 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base.BaseResourceBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main.MainConfigurationTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main.MainResourceTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.singleton.SingletonConfigurationTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.singleton.SingletonResourceTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main.MainResourceBaseTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.singleton.SingletonResourceBaseTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
 
 /**
  * SyncMethodsOnDeployment
@@ -30,153 +31,119 @@ import java.io.IOException;
  */
 public class SyncResource extends SyncTool {
 
-	private File srcDir;
+    private File srcDir;
 
-	private ServiceType service;
+    private ServiceType service;
 
-	public SyncResource(File baseDirectory, ServiceInformation info,
-			ServiceType service) {
-		super(baseDirectory, info);
-		srcDir = new File(baseDirectory.getAbsolutePath() + File.separator
-				+ "src");
-		this.service = service;
-	}
 
-	public void sync() throws SynchronizationException {
-		try {
+    public SyncResource(File baseDirectory, ServiceInformation info, ServiceType service) {
+        super(baseDirectory, info);
+        srcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "src");
+        this.service = service;
+    }
 
-			if (service.getResourceFrameworkType().equals(
-					IntroduceConstants.INTRODUCE_BASE_RESOURCE)
-					|| service.getResourceFrameworkType().equals(
-							IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
-				// not the base service do nothing....
-				ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
-				String resourceContanstsS = resourceContanstsT
-						.generate(new SpecificServiceInformation(
-								getServiceInformation(), service));
-				File resourceContanstsF = new File(srcDir.getAbsolutePath()
-						+ File.separator + CommonTools.getPackageDir(service)
-						+ File.separator + "service" + File.separator
-						+ "globus" + File.separator + "resource"
-						+ File.separator + "ResourceConstants.java");
 
-				FileWriter resourceContanstsFW = new FileWriter(
-						resourceContanstsF);
-				resourceContanstsFW.write(resourceContanstsS);
-				resourceContanstsFW.close();
+    public void sync() throws SynchronizationException {
+        try {
+            
+            MainConfigurationTemplate metadataConfigurationT = new MainConfigurationTemplate();
+            String metadataConfigurationS = metadataConfigurationT.generate(new SpecificServiceInformation(
+                getServiceInformation(), service));
+            File metadataConfigurationF = new File(srcDir.getAbsolutePath() + File.separator
+                + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                + File.separator + "resource" + File.separator + "ResourceConfiguration.java");
 
-			} else if (service.getResourceFrameworkType().equals(
-					IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
-				SingletonResourceTemplate baseResourceT = new SingletonResourceTemplate();
-				String baseResourceS = baseResourceT
-						.generate(new SpecificServiceInformation(
-								getServiceInformation(), service));
-				File baseResourceF = new File(srcDir.getAbsolutePath()
-						+ File.separator + CommonTools.getPackageDir(service)
-						+ File.separator + "service" + File.separator
-						+ "globus" + File.separator + "resource"
-						+ File.separator + "BaseResource.java");
+            FileWriter metadataConfigurationFW = new FileWriter(metadataConfigurationF);
+            metadataConfigurationFW.write(metadataConfigurationS);
+            metadataConfigurationFW.close();
 
-				FileWriter baseResourceFW = new FileWriter(baseResourceF);
-				baseResourceFW.write(baseResourceS);
-				baseResourceFW.close();
+            if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)
+                || service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
+                // not the base service do nothing....
+                ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+                String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
+                    getServiceInformation(), service));
+                File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + "ResourceConstants.java");
 
-				SingletonConfigurationTemplate metadataConfigurationT = new SingletonConfigurationTemplate();
-				String metadataConfigurationS = metadataConfigurationT
-						.generate(new SpecificServiceInformation(
-								getServiceInformation(), service));
-				File metadataConfigurationF = new File(srcDir.getAbsolutePath()
-						+ File.separator + CommonTools.getPackageDir(service)
-						+ File.separator + "service" + File.separator
-						+ "globus" + File.separator + "resource"
-						+ File.separator + "ResourceConfiguration.java");
+                FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+                resourceContanstsFW.write(resourceContanstsS);
+                resourceContanstsFW.close();
 
-				FileWriter metadataConfigurationFW = new FileWriter(
-						metadataConfigurationF);
-				metadataConfigurationFW.write(metadataConfigurationS);
-				metadataConfigurationFW.close();
+                BaseResourceBaseTemplate baseResourceBaseT = new BaseResourceBaseTemplate();
+                String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(
+                    getServiceInformation(), service));
+                File baseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + "BaseResourceBase.java");
 
-				ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
-				String resourceContanstsS = resourceContanstsT
-						.generate(new SpecificServiceInformation(
-								getServiceInformation(), service));
-				File resourceContanstsF = new File(srcDir.getAbsolutePath()
-						+ File.separator + CommonTools.getPackageDir(service)
-						+ File.separator + "service" + File.separator
-						+ "globus" + File.separator + "resource"
-						+ File.separator + "ResourceConstants.java");
+                FileWriter baseResourceBaseFW = new FileWriter(baseResourceBaseF);
+                baseResourceBaseFW.write(baseResourceBaseS);
+                baseResourceBaseFW.close();
 
-				FileWriter resourceContanstsFW = new FileWriter(
-						resourceContanstsF);
-				resourceContanstsFW.write(resourceContanstsS);
-				resourceContanstsFW.close();
+            } else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
+                SingletonResourceBaseTemplate baseResourceBaseT = new SingletonResourceBaseTemplate();
+                String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(
+                    getServiceInformation(), service));
+                File baseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + "BaseResourceBase.java");
 
-			} else if (service.getResourceFrameworkType().equals(
-					IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
+                FileWriter baseResourceBaseFW = new FileWriter(baseResourceBaseF);
+                baseResourceBaseFW.write(baseResourceBaseS);
+                baseResourceBaseFW.close();
 
-				ServiceConfigurationTemplate serviceConfT = new ServiceConfigurationTemplate();
-				String serviceConfS = serviceConfT
-						.generate(new SpecificServiceInformation(
-								getServiceInformation(), service));
-				File serviceConfF = new File(srcDir.getAbsolutePath()
-						+ File.separator + CommonTools.getPackageDir(service)
-						+ File.separator + "service" + File.separator
-						+ "ServiceConfiguration.java");
-				FileWriter serviceConfFW = new FileWriter(serviceConfF);
-				serviceConfFW.write(serviceConfS);
-				serviceConfFW.close();
+                ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+                String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
+                    getServiceInformation(), service));
+                File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + "ResourceConstants.java");
 
-				MainResourceTemplate baseResourceT = new MainResourceTemplate();
-				String baseResourceS = baseResourceT
-						.generate(new SpecificServiceInformation(
-								getServiceInformation(), service));
-				File baseResourceF = new File(srcDir.getAbsolutePath()
-						+ File.separator + CommonTools.getPackageDir(service)
-						+ File.separator + "service" + File.separator
-						+ "globus" + File.separator + "resource"
-						+ File.separator + "BaseResource.java");
+                FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+                resourceContanstsFW.write(resourceContanstsS);
+                resourceContanstsFW.close();
 
-				FileWriter baseResourceFW = new FileWriter(baseResourceF);
-				baseResourceFW.write(baseResourceS);
-				baseResourceFW.close();
+            } else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
 
-				MainConfigurationTemplate metadataConfigurationT = new MainConfigurationTemplate();
-				String metadataConfigurationS = metadataConfigurationT
-						.generate(new SpecificServiceInformation(
-								getServiceInformation(), service));
-				File metadataConfigurationF = new File(srcDir.getAbsolutePath()
-						+ File.separator + CommonTools.getPackageDir(service)
-						+ File.separator + "service" + File.separator
-						+ "globus" + File.separator + "resource"
-						+ File.separator + "ResourceConfiguration.java");
+                ServiceConfigurationTemplate serviceConfT = new ServiceConfigurationTemplate();
+                String serviceConfS = serviceConfT.generate(new SpecificServiceInformation(getServiceInformation(),
+                    service));
+                File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator
+                    + "ServiceConfiguration.java");
+                FileWriter serviceConfFW = new FileWriter(serviceConfF);
+                serviceConfFW.write(serviceConfS);
+                serviceConfFW.close();
 
-				FileWriter metadataConfigurationFW = new FileWriter(
-						metadataConfigurationF);
-				metadataConfigurationFW.write(metadataConfigurationS);
-				metadataConfigurationFW.close();
+                MainResourceBaseTemplate baseResourceBaseT = new MainResourceBaseTemplate();
+                String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(
+                    getServiceInformation(), service));
+                File baseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + "BaseResourceBase.java");
 
-				ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
-				String resourceContanstsS = resourceContanstsT
-						.generate(new SpecificServiceInformation(
-								getServiceInformation(), service));
-				File resourceContanstsF = new File(srcDir.getAbsolutePath()
-						+ File.separator + CommonTools.getPackageDir(service)
-						+ File.separator + "service" + File.separator
-						+ "globus" + File.separator + "resource"
-						+ File.separator + "ResourceConstants.java");
+                FileWriter baseResourceBaseFW = new FileWriter(baseResourceBaseF);
+                baseResourceBaseFW.write(baseResourceBaseS);
+                baseResourceBaseFW.close();
 
-				FileWriter resourceContanstsFW = new FileWriter(
-						resourceContanstsF);
-				resourceContanstsFW.write(resourceContanstsS);
-				resourceContanstsFW.close();
-			} else if (service.getResourceFrameworkType().equals(
-					IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)) {
+                ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+                String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
+                    getServiceInformation(), service));
+                File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + "ResourceConstants.java");
 
-			}
-		} catch (IOException e) {
-			throw new SynchronizationException("Error writing file:"
-					+ e.getMessage(), e);
-		}
-	}
+                FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+                resourceContanstsFW.write(resourceContanstsS);
+                resourceContanstsFW.close();
+            } else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)) {
+
+            }
+        } catch (IOException e) {
+            throw new SynchronizationException("Error writing file:" + e.getMessage(), e);
+        }
+    }
 
 }

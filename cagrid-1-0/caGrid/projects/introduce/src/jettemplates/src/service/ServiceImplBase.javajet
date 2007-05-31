@@ -13,7 +13,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 package <%=info.getService().getPackageName()%>.service;
 
 <%if(!info.getService().getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)){%>
-import <%=info.getService().getPackageName()%>.service.globus.resource.BaseResource;
+import <%=info.getService().getPackageName()%>.service.globus.resource.<%=info.getService().getName()%>Resource;
 <%}%>
 import <%=baseService.getPackageName()%>.service.ServiceConfiguration;
 
@@ -108,16 +108,16 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 	%>
 	
 	
-	protected <%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=CommonTools.upperCaseFirstCharacter(name)%>MD(){
-		BaseResource serviceBaseResource;
+	protected <%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=CommonTools.upperCaseFirstCharacter(name)%>Value(){
+		<%=serviceName%>Resource serviceBaseResource;
 		try {
-			serviceBaseResource = (BaseResource)ResourceContext.getResourceContext().getResource();
+			serviceBaseResource = (<%=serviceName%>Resource)ResourceContext.getResourceContext().getResource();
 		} catch (ResourceContextException e) {
 			return null;
 		} catch (ResourceException e) {
 			return null;
 		}
-		return serviceBaseResource.get<%=CommonTools.upperCaseFirstCharacter(name)%>MD();
+		return serviceBaseResource.get<%=CommonTools.upperCaseFirstCharacter(name)%>Value();
 	}
 
 	<%	}
@@ -125,9 +125,9 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 	
 	<%if(info.getService().getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)){%>
 	protected Object getMetadata(QName metadataQName) {
-		BaseResource serviceBaseResource = null;
+		<%=serviceName%>Resource serviceBaseResource = null;
 		try {
-			serviceBaseResource = (BaseResource) ResourceContext.getResourceContext().getResource();
+			serviceBaseResource = (<%=serviceName%>Resource) ResourceContext.getResourceContext().getResource();
 		} catch (ResourceContextException e) {
 			return null;
 		} catch (ResourceException e) {

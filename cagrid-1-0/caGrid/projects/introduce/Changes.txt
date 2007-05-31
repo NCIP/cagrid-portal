@@ -10,9 +10,16 @@
 -- Moved to PDP based authorization
 	--made the authorization file a PDP
 	--configured the service security descriptor to use the PDP
--- Added support for resourcec creation code to automatically be generated nad placed into any method
+-- Added support for resource factory/creation code to automatically be generated and placed into any method
    which is creating and returning a client handle.
 -- Added upgrader framework to enable migration of services from 1.0 - 1.1
+-- Refactored service resource framework in order to enable registration of resource
+   properties as well as enable the resource class itself to be user modified and 
+   extended to there liking.  In doing this the BaseResource class was also renamed to
+   <serviceName>Resource to make more sence to the developer.
+   This also caused the renaming of the etc/registration.xml to etc/<serviceName>_registration.xml
+   in order to support registration for the all the resource framework types.
+
 	
 
 1.0B --.9999 mainstream
