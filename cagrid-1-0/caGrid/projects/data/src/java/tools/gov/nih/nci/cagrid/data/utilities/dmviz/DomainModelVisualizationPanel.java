@@ -36,7 +36,7 @@ import org.tigris.gef.event.GraphSelectionListener;
  * @author David Ervin
  * 
  * @created Mar 30, 2007 10:23:05 AM
- * @version $Id: DomainModelVisualizationPanel.java,v 1.1 2007-03-30 20:40:42 dervin Exp $ 
+ * @version $Id: DomainModelVisualizationPanel.java,v 1.2 2007-05-31 17:36:13 dervin Exp $ 
  */
 public class DomainModelVisualizationPanel extends JPanel {
 
@@ -91,9 +91,11 @@ public class DomainModelVisualizationPanel extends JPanel {
         graphClassToUML.clear();
         getUmlDiagram().clear();
         
+        // verify the model contains classes
         DomainModelExposedUMLClassCollection exposedClassCollection = 
             model.getExposedUMLClassCollection();
         if (exposedClassCollection == null || exposedClassCollection.getUMLClass() == null) {
+            // no classes == nothing to do!
             return;
         }
         
@@ -107,9 +109,13 @@ public class DomainModelVisualizationPanel extends JPanel {
             
             // add attributes to the graph class
             UMLAttribute[] attribs = currentModelClass.getUmlAttributeCollection().getUMLAttribute();
-            for (UMLAttribute currentAttrib : attribs) {
-                graphClass.addAttribute(currentAttrib.getDataTypeName(), currentAttrib.getName());
+            if (attribs != null) {
+                for (UMLAttribute currentAttrib : attribs) {
+                    graphClass.addAttribute(currentAttrib.getDataTypeName(), currentAttrib.getName());
+                }
             }
+            
+            // add the class to the model
             getUmlDiagram().addClass(graphClass);
             
             idsToGraphClasses.put(currentModelClass.getId(), graphClass);

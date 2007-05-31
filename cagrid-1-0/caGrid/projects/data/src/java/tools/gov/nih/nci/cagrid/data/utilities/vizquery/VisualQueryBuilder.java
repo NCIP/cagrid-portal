@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.data.utilities.vizquery;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -32,6 +31,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
@@ -42,6 +43,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.UIManager;
@@ -60,9 +62,11 @@ import org.apache.axis.message.addressing.EndpointReference;
  * @author David Ervin
  * 
  * @created Mar 30, 2007 3:46:34 PM
- * @version $Id: VisualQueryBuilder.java,v 1.2 2007-04-06 14:50:14 dervin Exp $ 
+ * @version $Id: VisualQueryBuilder.java,v 1.3 2007-05-31 17:35:49 dervin Exp $ 
  */
 public class VisualQueryBuilder extends JFrame {
+    
+    private static String lastSelectedModelFilename = null;
     
     private DomainModelVisualizationPanel domainModelPanel = null;
     private QueryTree cqlQueryTree = null;
@@ -112,9 +116,9 @@ public class VisualQueryBuilder extends JFrame {
     
     
     private void setCurrentModel(DomainModel model) {
-        // TODO: clear query tree, validation, etc. BEFORE setting the model
-        getDomainModelPanel().setDomainModel(currentModel);
+        getCqlQueryTree().setQuery(new CQLQuery());
         currentModel = model;
+        getDomainModelPanel().setDomainModel(currentModel);
     }
     
     
@@ -127,11 +131,15 @@ public class VisualQueryBuilder extends JFrame {
             domainModelPanel.addModelSelectionListener(new ModelSelectionListener() {
                 public void classSelected(UMLClass selection) {
                     UMLAttribute[] attribs = selection.getUmlAttributeCollection().getUMLAttribute();
-                    String[] values = new String[attribs.length];
-                    for (int i = 0; i < attribs.length; i++) {
-                        values[i] = attribs[i].getName() + " : " + attribs[i].getDataTypeName();
+                    if (attribs != null) {
+                        String[] values = new String[attribs.length];
+                        for (int i = 0; i < attribs.length; i++) {
+                            values[i] = attribs[i].getName() + " : " + attribs[i].getDataTypeName();
+                        }
+                        getAttributesList().setListData(values);
+                    } else {
+                        getAttributesList().setListData(new String[0]);
                     }
-                    getAttributesList().setListData(values);
                 }
                 
                 
@@ -158,65 +166,60 @@ public class VisualQueryBuilder extends JFrame {
                             IconTreeNode node = (IconTreeNode) selectionPath.getLastPathComponent();
                             if (node instanceof QueryTreeNode) {
                                 // root of the query
-                                PortalUtils.setContainerEnabled(getQueryBuildingMenuBar(), false);
+                                disableQueryMenuItems();
                                 if (((QueryTreeNode) node).getQuery().getTarget() == null) {
-                                    getQuerySetMenu().setEnabled(true);
-                                    getSetTargetMenuItem().setEnabled(true);   
+                                    setMenuItemEnabled(getSetTargetMenuItem(), true);
                                 }
                             } else if (node instanceof TargetTreeNode) {
                                 // query target selected
                                 // disable most of the query building toolbar
-                                PortalUtils.setContainerEnabled(getQueryBuildingMenuBar(), false);
+                                disableQueryMenuItems();
                                 // can always remove stuff
-                                PortalUtils.setContainerEnabled(getQueryRemoveMenu(), true);
+                                setMenuItemEnabled(getQueryRemoveMenu(), true);
                                 // if target has no children, it can be added to
                                 Object target = ((TargetTreeNode) node).getTarget();
                                 if (target.getAssociation() == null
                                     && target.getGroup() == null
                                     && target.getAttribute() == null) {
-                                    PortalUtils.setContainerEnabled(getQueryAddMenu(), true);
+                                    setMenuItemEnabled(getQueryAddMenu(), true);
                                 }
                             } else if (node instanceof GroupTreeNode) {
                                 // group selected
                                 // disable most of the query building toolbar
-                                PortalUtils.setContainerEnabled(getQueryBuildingMenuBar(), false);
+                                disableQueryMenuItems();
                                 // can always remove stuff
-                                PortalUtils.setContainerEnabled(getQueryRemoveMenu(), true);
+                                setMenuItemEnabled(getQueryRemoveMenu(), true);
                                 // groups can always be added to
-                                PortalUtils.setContainerEnabled(getQueryAddMenu(), true);
+                                setMenuItemEnabled(getQueryAddMenu(), true);
                                 // enable choice items
-                                getQuerySetMenu().setEnabled(true);
-                                getSetGroupLogicMenuItem().setEnabled(true);
+                                setMenuItemEnabled(getSetGroupLogicMenuItem(), true);
                             } else if (node instanceof AssociationTreeNode) {
                                 // association selected
                                 // disable most of the query building toolbar
-                                PortalUtils.setContainerEnabled(getQueryBuildingMenuBar(), false);
+                                disableQueryMenuItems();
                                 // can always remove stuff
-                                PortalUtils.setContainerEnabled(getQueryRemoveMenu(), true);
+                                setMenuItemEnabled(getQueryRemoveMenu(), true);
                                 // see what (if any) further restrictions exist on the association
                                 Association association = ((AssociationTreeNode) node).getAssociation();
                                 if (association.getAssociation() == null 
                                     && association.getGroup() == null
                                     && association.getAttribute() == null) {
                                     // can add to the association
-                                    PortalUtils.setContainerEnabled(getQueryAddMenu(), true);
+                                    setMenuItemEnabled(getQueryAddMenu(), true);
                                 }
                             } else if (node instanceof AttributeTreeNode) {
                                 // attribute selected
                                 // disable everything in the query builing toolbar
-                                PortalUtils.setContainerEnabled(getQueryBuildingMenuBar(), false);
+                                disableQueryMenuItems();
                                 // can always remove stuff
-                                PortalUtils.setContainerEnabled(getQueryRemoveMenu(), true);
+                                setMenuItemEnabled(getQueryRemoveMenu(), true);
                                 // enable a few choice items
-                                getQuerySetMenu().setEnabled(true);
-                                getSetAttributeValueMenuItem().setEnabled(true);
-                                getSetAttributeValueMenuItem().setEnabled(true);
+                                setMenuItemEnabled(getSetAttributeValueMenuItem(), true);
                             }
                         }
                     }
                 }
             });
-
         }
         return cqlQueryTree;
     }
@@ -291,11 +294,12 @@ public class VisualQueryBuilder extends JFrame {
             loadModelFromFileMenuItem.setText("Load From File");
             loadModelFromFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    JFileChooser chooser = new JFileChooser();
+                    JFileChooser chooser = new JFileChooser(lastSelectedModelFilename);
                     chooser.setFileFilter(FileFilters.XML_FILTER);
                     int choice = chooser.showOpenDialog(VisualQueryBuilder.this);
                     if (choice == JFileChooser.APPROVE_OPTION) {
                         File dmFile = chooser.getSelectedFile();
+                        lastSelectedModelFilename = dmFile.getAbsolutePath();
                         try {
                             DomainModel model = MetadataUtils.deserializeDomainModel(
                                 new FileReader(dmFile));
@@ -791,6 +795,46 @@ public class VisualQueryBuilder extends JFrame {
             });
         }
         return clearQueryMenuItem;
+    }
+    
+    
+    /**
+     * Sets a menu item's enabled state while preserving the enabled
+     * state of its sibling items
+     * 
+     * @param item
+     * @param enable
+     */
+    private void setMenuItemEnabled(JMenuItem item, boolean enable) {
+        if (item.getParent() instanceof JPopupMenu) {
+            Map<JMenuItem, Boolean> currentItemStates = new HashMap();
+            JPopupMenu parentMenu = (JPopupMenu) item.getParent();
+            for (int i = 0; i < parentMenu.getComponentCount(); i++) {
+                if (parentMenu.getComponent(i) instanceof JMenuItem) {
+                    JMenuItem child = (JMenuItem) parentMenu.getComponent(i);
+                    if (child != item) {
+                        currentItemStates.put(child, Boolean.valueOf(child.isEnabled()));
+                    }
+                }
+            }
+            JMenu menu = (JMenu) item.getAccessibleContext().getAccessibleParent();
+            menu.setEnabled(enable);
+            for (JMenuItem child : currentItemStates.keySet()) {
+                child.setEnabled(currentItemStates.get(child).booleanValue());
+            }
+        }
+        item.setEnabled(enable);
+    }
+    
+    
+    private void disableQueryMenuItems() {
+        for (int menuIndex = 0; menuIndex < getQueryBuildingMenuBar().getMenuCount(); menuIndex++) {
+            JMenu menu = getQueryBuildingMenuBar().getMenu(menuIndex);
+            for (int itemIndex = 0; itemIndex < menu.getItemCount(); itemIndex++) {
+                menu.getItem(itemIndex).setEnabled(false);
+            }
+            menu.setEnabled(false);
+        }
     }
 
 
