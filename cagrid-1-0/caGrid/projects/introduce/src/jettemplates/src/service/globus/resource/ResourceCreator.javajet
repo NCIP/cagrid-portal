@@ -22,7 +22,7 @@
 			resourceKey = home.createResource();
 			
 			//  Grab the newly created resource
-			<%=resourceService.getPackageName()%>.service.globus.resource.<%=serviceName%>Resource thisResource = (<%=resourceService.getPackageName()%>.service.globus.resource.<%=serviceName%>Resource)home.find(resourceKey);
+			<%=resourceService.getPackageName()%>.service.globus.resource.<%=resourceService.getName()%>Resource thisResource = (<%=resourceService.getPackageName()%>.service.globus.resource.<%=resourceService.getName()%>Resource)home.find(resourceKey);
 			
 			//  This is where the creator of this resource type can set whatever needs
 			//  to be set on the resource so that it can function appropriatly  for instance
