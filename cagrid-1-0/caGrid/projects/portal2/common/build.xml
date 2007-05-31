@@ -7,6 +7,7 @@
 	<property name="data.file.prefix" value="" />
 	<property environment="env" />
 
+	<!-- 
 	<path id="hyperjaxb2.runtime.path">
 		<fileset dir="${lib.dir}">
 			<include name="hibernate/core/antlr-*.jar"/>
@@ -36,7 +37,7 @@
 			<include name="log4j/log4j-*.jar"/>
 		</fileset>
 	</path>
-
+	-->
 	<path id="cp">
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
@@ -48,8 +49,8 @@
 		<fileset dir="${env.GLOBUS_LOCATION}/lib">
 			<include name="*.jar" />
 		</fileset>
-		<pathelement location="tools/hyperjaxb2/target/cagrid-portal2-metadata.jar"/>
-		<path refid="hyperjaxb2.runtime.path"/>		
+		<!-- pathelement location="tools/hyperjaxb2/target/cagrid-portal2-metadata.jar"/ -->
+		<!-- path refid="hyperjaxb2.runtime.path"/ -->		
 	</path>
 
 	<path id="test.cp">
@@ -167,11 +168,11 @@
 			<formatter type="plain" />
 			<batchtest todir="test/reports">
 				<fileset dir="${test.src.dir}">
-
-					<include name="**/ServiceMetadataAggregatorTest.java" />
 					<!-- 
-					<include name="**/ServiceMetadataDaoTest.java" />
+					<include name="**/ServiceMetadataAggregatorTest.java" />
 					 -->
+					<include name="**/ServiceMetadataDaoTest.java" />
+
 
 					<exclude name="**/Abstract*.java" />
 				</fileset>
