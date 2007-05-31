@@ -5,9 +5,8 @@ in the doc directory. For more information,
 visit our website: http://cagrid.org
 
 -------------------------------------------
-R U N N I N G
+S Y S T E M  R E Q U I R E M E N T S
 -------------------------------------------
-System Requirements:
 Java version 1.5 or newer.
 Apache Ant 1.6.5
 Globus Toolkit Core 1.4.3
@@ -20,7 +19,7 @@ ANT_HOME         "path to the ant installation"
 GLOBUS_LOCATION  "path to the globus installation"
 
 -------------------------------------------
-B U I L D I N G
+E X E C U T I N G
 -------------------------------------------
 To launch Introduce: ant introduce
 

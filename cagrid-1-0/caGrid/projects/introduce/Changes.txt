@@ -22,7 +22,7 @@
 
 	
 
-1.0B --.9999 mainstream
+1.0B --1.0
 A new field to the ResourcePropertiesType was added called fileLocation.  This field
 is used to tell introduce what file to use for reading in a populateFromFile resource
 property.  If you do not metadata files aleady filed out then you should not see a problem.

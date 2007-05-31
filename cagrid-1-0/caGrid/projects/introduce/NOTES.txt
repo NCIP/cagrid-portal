@@ -35,7 +35,10 @@ Upgrade Cycle
 
 To Do:  
 
-resource refactoring needs to be done completely
+upgrading is not really dont until sync is ran, so in modification gui make sure the user
+is notified that it is not complete until they hit save.
+
+resource refactoring needs to be done completely (first pass done)
 
 when adding a service context, if there is an error the screen is already gone and not fixable before the service is added and than not modifyable
 
