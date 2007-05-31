@@ -21,7 +21,7 @@ import javax.swing.JTextField;
  * @author David Ervin
  * 
  * @created Apr 6, 2007 10:32:03 AM
- * @version $Id: SetAttributePredicateDialog.java,v 1.1 2007-04-06 14:50:14 dervin Exp $ 
+ * @version $Id: SetAttributePredicateDialog.java,v 1.2 2007-05-31 19:34:59 dervin Exp $ 
  */
 public class SetAttributePredicateDialog extends JDialog {
 
@@ -60,7 +60,8 @@ public class SetAttributePredicateDialog extends JDialog {
                public void attributePredicateChanged(Predicate newValue) {
                    if (newValue.equals(Predicate.IS_NOT_NULL) 
                        || newValue.equals(Predicate.IS_NULL)) {
-                       // TODO: remove attribute's query value                       
+                       // remove attribute's query value
+                       attribute.setValue("");
                    }
                    attribute.setPredicate(newValue);
                }
