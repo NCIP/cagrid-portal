@@ -95,7 +95,7 @@ public class IndexServiceTest extends AbstractServiceTest {
 
         // stand up the service
         steps.add(getCreateServiceStep());
-        steps.add(new ServiceAdvertiseConfigStep(indexEPR, getServiceDir()));
+        steps.add(new ServiceAdvertiseConfigStep(indexEPR, getServiceDir(), getServiceName()));
         steps.add(new GlobusCreateStep(getGlobus()));
         steps.add(new GlobusDeployServiceStep(getGlobus(), getCreateServiceStep().getServiceDir()));
         steps.add(new GlobusStartStep(getGlobus()));

@@ -27,13 +27,15 @@ import com.atomicobject.haste.framework.Step;
 public class ServiceAdvertiseConfigStep extends Step {
     private File serviceDir;
     private EndpointReferenceType indexServiceEPR;
+    private String serviceName;
 
 
-    public ServiceAdvertiseConfigStep(EndpointReferenceType indexServiceEPR, File serviceDir) {
+    public ServiceAdvertiseConfigStep(EndpointReferenceType indexServiceEPR, File serviceDir, String serviceName) {
         super();
 
         this.serviceDir = serviceDir;
         this.indexServiceEPR = indexServiceEPR;
+        this.serviceName = serviceName;
     }
 
 
@@ -41,7 +43,7 @@ public class ServiceAdvertiseConfigStep extends Step {
     public void runStep() throws Throwable {
         File tmpFile = File.createTempFile("AdvertiseServiceStep", ".xml");
         tmpFile.deleteOnExit();
-        File registrationFile = new File(this.serviceDir, "etc" + File.separator + "registration.xml");
+        File registrationFile = new File(this.serviceDir, "etc" + File.separator + serviceName + "_registration.xml");
 
         // TODO: clean this up
         PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(tmpFile)));
