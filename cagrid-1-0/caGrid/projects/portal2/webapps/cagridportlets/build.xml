@@ -13,6 +13,7 @@
 		<include name="jakarta-taglib/standard.jar" />
 		<include name="hibernate/**/*.jar" />
 		<include name="aspectj/*.jar" />
+		<include name="portlet/portlet-messaging*.jar"/>
 	</patternset>
 
 	<path id="run.cp">

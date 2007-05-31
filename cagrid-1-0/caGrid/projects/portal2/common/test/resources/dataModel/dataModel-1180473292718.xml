@@ -1,0 +1,80 @@
+<ns1:DomainModel projectDescription="Imaging" projectLongName="Imaging" projectShortName="Imaging" projectVersion="1" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice">
+ <ns1:exposedUMLAssociationCollection>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="metadataCollection">
+     <ns1:UMLClassReference refid="EAID_F9E92A86_C03A_4f24_9359_AF74E9B82B8E"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="cadOrder">
+     <ns1:UMLClassReference refid="EAID_80589F3E_4176_4d17_A5B9_D42E80D5C13F"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+ </ns1:exposedUMLAssociationCollection>
+ <ns1:exposedUMLClassCollection>
+  <ns1:UMLClass allowableAsTarget="false" className="CADOrder" id="EAID_80589F3E_4176_4d17_A5B9_D42E80D5C13F" packageName="edu.osu.bmi.cabig.order" projectName="Imaging" projectVersion="1">
+   <ns2:umlAttributeCollection xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns2:UMLAttribute dataTypeName="java.lang.String" name="algorithm" publicID="2105016589" version="1.0">
+     <ns2:SemanticMetadata conceptCode="C16275" conceptDefinition="A defined procedure for solving a problem.  Applied to a problem-solving procedure implemented in software to be executed by a computer." conceptName="Algorithm" order="0"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute dataTypeName="boolean" name="completionFlag" publicID="2105016590" version="1.0">
+     <ns2:SemanticMetadata conceptCode="C43578" conceptDefinition="An indicator that can be set or unset in order to signal whether a particular condition is true." conceptName="Flag" order="0"/>
+     <ns2:SemanticMetadata conceptCode="C25250" conceptDefinition="To possess every necessary or normal part or component or step; having come or been brought to a conclusion." conceptName="Complete" order="1"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute dataTypeName="java.util.Date" name="completionTimestamp" publicID="2105016591" version="1.0">
+     <ns2:SemanticMetadata conceptCode="C54086" conceptDefinition="A variation of the Date datatype that's useful for storing very precise datetime values, down to small fractions of seconds. The Timestamp datatype stores all the information that the Date datatype stores, but also includes fractional seconds." conceptName="Timestamp" order="0"/>
+     <ns2:SemanticMetadata conceptCode="C25250" conceptDefinition="To possess every necessary or normal part or component or step; having come or been brought to a conclusion." conceptName="Complete" order="1"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute dataTypeName="java.lang.String" name="dataSourceURL" publicID="2105016592" version="1.0">
+     <ns2:SemanticMetadata conceptCode="C42743" conceptDefinition="An Internet address which tells a browser where to find an Internet resource." conceptName="Uniform Resource Locator" order="0"/>
+     <ns2:SemanticMetadata conceptCode="C25683" conceptDefinition="Where something is available or from where it originates." conceptName="Source" order="1"/>
+     <ns2:SemanticMetadata conceptCode="C25474" conceptDefinition="A collection or single item of factual information, derived from measurement or research, from which conclusions may be drawn." conceptName="Data" order="2"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute dataTypeName="java.lang.String" name="jobName" publicID="2105016593" version="1.0">
+     <ns2:SemanticMetadata conceptCode="C42614" conceptDefinition="The words or language units by which a thing is known." conceptName="Name" order="0"/>
+     <ns2:SemanticMetadata conceptCode="C48906" conceptDefinition="The act of requesting that person, business, or organization supply something in return for payment." conceptName="Order" order="1"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute dataTypeName="java.lang.String" name="jobUID" publicID="2105016594" version="1.0">
+     <ns2:SemanticMetadata conceptCode="C25364" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." conceptName="Identifier" order="0"/>
+     <ns2:SemanticMetadata conceptCode="C45282" conceptDefinition="The single one of its kind." conceptName="Unique" order="1"/>
+     <ns2:SemanticMetadata conceptCode="C48906" conceptDefinition="The act of requesting that person, business, or organization supply something in return for payment." conceptName="Order" order="2"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute dataTypeName="java.lang.String" name="originator" publicID="2105016595" version="1.0">
+     <ns2:SemanticMetadata conceptCode="C42703" conceptDefinition="The place where something begins or comes from in either the sense of a physical location or a metaphysical source." conceptName="Origin" order="0"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute dataTypeName="java.util.Date" name="requestTimestamp" publicID="2105016596" version="1.0">
+     <ns2:SemanticMetadata conceptCode="C54086" conceptDefinition="A variation of the Date datatype that's useful for storing very precise datetime values, down to small fractions of seconds. The Timestamp datatype stores all the information that the Date datatype stores, but also includes fractional seconds." conceptName="Timestamp" order="0"/>
+     <ns2:SemanticMetadata conceptCode="C48312" conceptDefinition="Express the need or desire for; ask for." conceptName="Request" order="1"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute dataTypeName="java.lang.String" name="seriesInstanceUID" publicID="2105016597" version="1.0">
+     <ns2:SemanticMetadata conceptCode="C25364" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." conceptName="Identifier" order="0"/>
+     <ns2:SemanticMetadata conceptCode="C45282" conceptDefinition="The single one of its kind." conceptName="Unique" order="1"/>
+     <ns2:SemanticMetadata conceptCode="C48364" conceptDefinition="An occurrence of something." conceptName="Instance" order="2"/>
+     <ns2:SemanticMetadata conceptCode="C25674" conceptDefinition="A group or succession of objects, substances, or events arranged in regular order in space or time, connected by a like relation, or forming a kind of chain." conceptName="Series" order="3"/>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute dataTypeName="java.lang.String" name="studyInstanceUID" publicID="2105016598" version="1.0">
+     <ns2:SemanticMetadata conceptCode="C25364" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." conceptName="Identifier" order="0"/>
+     <ns2:SemanticMetadata conceptCode="C45282" conceptDefinition="The single one of its kind." conceptName="Unique" order="1"/>
+     <ns2:SemanticMetadata conceptCode="C48364" conceptDefinition="An occurrence of something." conceptName="Instance" order="2"/>
+     <ns2:SemanticMetadata conceptCode="C63536" conceptDefinition="A detailed critical inspection; a research project." conceptName="Study" order="3"/>
+    </ns2:UMLAttribute>
+   </ns2:umlAttributeCollection>
+   <ns3:SemanticMetadata conceptCode="C48906" conceptDefinition="The act of requesting that person, business, or organization supply something in return for payment." conceptName="Order" order="0" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns4:SemanticMetadata conceptCode="C48222" conceptDefinition="The act of interpreting something that is written or printed." conceptName="Read" order="1" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="false" className="Metadata" id="EAID_F9E92A86_C03A_4f24_9359_AF74E9B82B8E" packageName="edu.osu.bmi.cabig.order" projectName="Imaging" projectVersion="1">
+   <ns5:umlAttributeCollection xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns5:UMLAttribute dataTypeName="java.lang.String" name="name" publicID="1161129967" version="1.0">
+     <ns5:SemanticMetadata conceptCode="C42614" conceptDefinition="The words or language units by which a thing is known." conceptName="Name" order="0"/>
+    </ns5:UMLAttribute>
+    <ns5:UMLAttribute dataTypeName="java.lang.String" name="value" publicID="1161129968" version="1.0">
+     <ns5:SemanticMetadata conceptCode="C49100" conceptDefinition="The information contained in a data field; may represent a numeric quantity, a textual characterization, a date or time measurement, or some other state depending on the nature of the attribute." conceptName="Value" order="0"/>
+    </ns5:UMLAttribute>
+   </ns5:umlAttributeCollection>
+   <ns6:SemanticMetadata conceptCode="C52095" conceptDefinition="Data about data; information that describes another set of data." conceptName="Metadata" order="0" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+  </ns1:UMLClass>
+ </ns1:exposedUMLClassCollection>
+ <ns1:umlGeneralizationCollection/>
+</ns1:DomainModel>

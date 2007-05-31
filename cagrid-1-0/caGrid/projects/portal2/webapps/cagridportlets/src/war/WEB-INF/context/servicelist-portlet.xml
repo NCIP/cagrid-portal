@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+
+	<bean id="scrollController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.servicelist.ScrollController"/>
+	<bean id="viewDetailsController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.servicelist.ViewDetailsController"/>
+	<bean id="listServicesController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.servicelist.ListServicesController">
+		<property name="showAllIfNoneProvided" value="true"/>
+		<property name="serviceMetdataDao" ref="serviceMetadataDao"/>
+		<property name="defaultRange" value="10"/>
+		<property name="listView" value="serviceList"/>
+	</bean>
+
+	<bean id="portletModeParameterHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+		<property name="order" value="1" />
+		<property name="interceptors">
+			<list>
+				<ref bean="parameterMappingInterceptor" />
+				<ref bean="openSessionInViewInterceptor" />
+			</list>
+		</property>
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="view">
+					<map>
+						<entry key="scroll"
+							value-ref="scrollController" />
+						<entry key="viewDetails"
+							value-ref="viewDetailsController" />
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		<property name="order" value="2" />
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="listServicesController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/discovery/servicelist/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>	
+
+	<!-- Exception Handler -->
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate" />
+
+</beans>

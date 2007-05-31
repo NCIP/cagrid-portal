@@ -1,0 +1,5 @@
+<ns1:DomainModel xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice">
+ <ns1:exposedUMLAssociationCollection xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns1:exposedUMLClassCollection xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns1:umlGeneralizationCollection xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+</ns1:DomainModel>

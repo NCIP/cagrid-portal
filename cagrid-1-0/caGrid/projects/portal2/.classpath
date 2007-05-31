@@ -60,6 +60,9 @@
 	<classpathentry kind="lib" path="services/webauthn/build/lib/WebAuthnSvc-stubs.jar"/>
 	<classpathentry kind="lib" path="services/webauthn/build/lib/WebAuthnSvc-common.jar"/>
 	<classpathentry kind="lib" path="services/webauthn/build/lib/WebAuthnSvc-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-discovery.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-service.jar"/>
+	<classpathentry kind="lib" path="lib/portlet/portlet-messaging-2.4.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/puretls.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jgss.jar"/>

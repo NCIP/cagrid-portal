@@ -4,29 +4,63 @@
 	<property name="hibernate.properties"
 		value="db/${db}.hibernate.properties" />
 	<property file="${hibernate.properties}" />
-	<property name="data.file.prefix" value=""/>
-	<property environment="env"/>
+	<property name="data.file.prefix" value="" />
+	<property environment="env" />
+
+	<path id="hyperjaxb2.runtime.path">
+		<fileset dir="${lib.dir}">
+			<include name="hibernate/core/antlr-*.jar"/>
+			<include name="hibernate/core/asm*.jar"/>
+			<include name="hibernate/core/asm-attrs*.jar"/>
+			<include name="hibernate/core/cglib-*.jar"/>
+			<include name="hibernate/core/ehcache-*.jar"/>
+			<include name="hibernate/core/jta.jar"/>
+			<include name="hibernate/core/hibernate*.jar"/>
+			<include name="hibernate/core/dom4j-*.jar"/>
+			<include name="hibernate/core/commons-collections-*.jar"/>
+			<include name="jakarta-commons/commons-io.jar"/>
+			<include name="hyperjaxb2/commons-lang-*.jar"/>
+			<include name="hyperjaxb2/jaxb-api-*.jar"/>
+			<include name="hyperjaxb2/jaxb-impl-*.jar"/>
+			<include name="hyperjaxb2/jaxp-api-*.jar"/>
+			<include name="hyperjaxb2/jaxp-ri-*.jar"/>
+			<include name="hyperjaxb2/isorelax-*.jar"/>
+			<include name="hyperjaxb2/jaxb-libs-*.jar"/>
+			<include name="hyperjaxb2/relaxngDatatype-*.jar"/>
+			<include name="hyperjaxb2/xsdlib-*.jar"/>
+			<include name="hyperjaxb2/jaxbcommons-shared-*.jar"/>
+			<include name="hyperjaxb2/jaxbcommons-testing-*.jar"/>
+			<include name="hyperjaxb2/hyperjaxb2-shared-*.jar"/>
+			<include name="hyperjaxb2/hyperjaxb2-testing-*.jar"/>
+			<include name="jakarta-commons/commons-logging.jar"/>
+			<include name="log4j/log4j-*.jar"/>
+		</fileset>
+	</path>
 
 	<path id="cp">
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
-			<exclude name="**/ant*.jar"/>
+			<exclude name="**/ant*.jar" />
 		</fileset>
 		<fileset dir="${ext.lib.dir}">
-			<include name="*.jar"/>
+			<include name="*.jar" />
 		</fileset>
 		<fileset dir="${env.GLOBUS_LOCATION}/lib">
-			<include name="*.jar"/>
+			<include name="*.jar" />
 		</fileset>
+		<pathelement location="tools/hyperjaxb2/target/cagrid-portal2-metadata.jar"/>
+		<path refid="hyperjaxb2.runtime.path"/>		
 	</path>
 
 	<path id="test.cp">
+		<pathelement location="${classes.dir}" />
 		<path refid="cp" />
 		<fileset dir="${test.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<pathelement location="${classes.dir}" />
+		
 		<pathelement location="${test.classes.dir}" />
+
 	</path>
 
 	<path id="hibernatetoolslib">
@@ -34,14 +68,14 @@
 			<include name="*.jar" />
 		</fileset>
 		<fileset dir="../lib/hibernate">
-			<include name="**/*.jar"/>
+			<include name="**/*.jar" />
 		</fileset>
 
 	</path>
 
 	<taskdef name="hibernatetool"
 		classname="org.hibernate.tool.ant.HibernateToolTask"
-		classpathref="hibernatetoolslib" />	
+		classpathref="hibernatetoolslib" />
 
 	<target name="configure-hibernate-tools">
 		<copy file="tools/hibernatetools/template.hibernate.cfg.xml"
@@ -60,19 +94,36 @@
 		</copy>
 	</target>
 
-	<target name="gen-ddl" depends="configure-hibernate-tools,compile">
+	<target name="gen-ddl"
+		depends="configure-hibernate-tools,compile">
+		<property name="drop.tables" value="true"/>
 		<mkdir dir="gen" />
 		<hibernatetool destdir="gen">
 			<classpath>
-				<path refid="cp"/>
+				<path refid="cp" />
 				<pathelement location="${classes.dir}" />
 			</classpath>
 			<annotationconfiguration
 				configurationfile="tools/hibernatetools/hibernate.cfg.xml" />
-			<hbm2ddl export="false" drop="true"
+			<hbm2ddl export="false" drop="${drop.tables}"
 				outputfilename="portal.ddl" />
 		</hibernatetool>
-
+		<!-- 
+		<hibernatetool destdir="gen">
+			<classpath>
+				<path refid="cp" />
+				<pathelement location="${classes.dir}" />
+			</classpath>
+			<configuration
+				propertyfile="db/${db}.hibernate.properties">
+				<fileset dir="tools/hyperjaxb2/target/generated-sources/xjc">
+					<include name="**/*.hbm.xml" />
+				</fileset>
+			</configuration>
+			<hbm2ddl export="false" drop="${drop.tables}"
+				outputfilename="servicemetadata.ddl" />
+		</hibernatetool>
+ -->
 	</target>
 
 	<target name="compile">
@@ -85,6 +136,7 @@
 			<fileset dir="${src.dir}">
 				<include name="**/*.properties" />
 				<include name="**/*.xml" />
+				<include name="**/*.wsdd" />
 			</fileset>
 		</copy>
 		<copy file="${hibernate.properties}"
@@ -108,27 +160,32 @@
 	<target name="test" depends="compile-test">
 		<mkdir dir="test/reports" />
 		<junit printsummary="yes" showoutput="true" fork="true">
-			
-			<jvmarg value="-Ddata.file.prefix=${data.file.prefix}"/>
-			
+
+			<jvmarg value="-Ddata.file.prefix=${data.file.prefix}" />
+
 			<classpath refid="test.cp" />
 			<formatter type="plain" />
 			<batchtest todir="test/reports">
 				<fileset dir="${test.src.dir}">
-					<include name="**/*Test*.java" />
+
+					<include name="**/ServiceMetadataAggregatorTest.java" />
+					<!-- 
+					<include name="**/ServiceMetadataDaoTest.java" />
+					 -->
+
 					<exclude name="**/Abstract*.java" />
 				</fileset>
 			</batchtest>
 
 		</junit>
 	</target>
-	
+
 	<target name="jar" depends="compile">
 		<jar destfile="${build.dir}/${common.jar.name}">
-			<fileset dir="${classes.dir}"/>
+			<fileset dir="${classes.dir}" />
 			<fileset dir="${src.dir}">
-				<include name="**/*.xml"/>
-				<include name="**/*.properties"/>
+				<include name="**/*.xml" />
+				<include name="**/*.properties" />
 			</fileset>
 		</jar>
 	</target>
@@ -137,7 +194,7 @@
 	<target name="clean">
 		<delete dir="${build.dir}" />
 	</target>
-	
-	<target name="all" depends="clean,jar"/>
+
+	<target name="all" depends="clean,jar" />
 
 </project>

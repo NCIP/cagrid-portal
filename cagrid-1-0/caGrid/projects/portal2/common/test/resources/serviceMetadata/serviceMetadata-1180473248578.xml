@@ -1,0 +1,128 @@
+<ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
+ <ns1:serviceDescription>
+  <ns2:Service description="The CaNanoLabSvc grid service, created with caGrid Introduce, version:1.0." name="CaNanoLabSvc" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+   <ns2:pointOfContactCollection/>
+   <ns2:serviceContextCollection>
+    <ns2:ServiceContext description="" name="CaNanoLabSvc">
+     <ns2:operationCollection>
+      <ns2:Operation description="" name="getServiceSecurityMetadata">
+       <ns2:inputParameterCollection/>
+       <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="query">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns4:CQLQuery" dimensionality="1" index="0" isArray="false" isRequired="false" name="cqlQuery" xmlns:ns4="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns5:CQLQueryResultCollection" dimensionality="1" isArray="false" xmlns:ns5="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="QueryProcessingException"/>
+        <ns2:Fault description="" name="MalformedQueryException"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getCharacterizationsByParticleName">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="string" dimensionality="1" index="0" isArray="false" isRequired="false" name="particleName"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns6:Characterization" dimensionality="1" isArray="true" xmlns:ns6="gme://caCORE.cabig/3.0/gov.nih.nci.calab.domain.nano.characterization"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getFunctionsByParticleName">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="string" dimensionality="1" index="0" isArray="false" isRequired="false" name="particleName"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns7:Function" dimensionality="1" isArray="true" xmlns:ns7="gme://caCORE.cabig/3.0/gov.nih.nci.calab.domain.nano.function"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getNanoparticles">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="string" dimensionality="1" index="0" isArray="false" isRequired="false" name="particleType"/>
+        <ns2:InputParameter qName="string" dimensionality="1" index="1" isArray="true" isRequired="false" name="characterizationTypes"/>
+        <ns2:InputParameter qName="string" dimensionality="1" index="2" isArray="true" isRequired="false" name="functionTypes"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns8:Nanoparticle" dimensionality="1" isArray="true" xmlns:ns8="gme://caCORE.cabig/3.0/gov.nih.nci.calab.domain.nano.particle"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getOtherAssociatedFiles">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="string" dimensionality="1" index="0" isArray="false" isRequired="false" name="title"/>
+        <ns2:InputParameter qName="string" dimensionality="1" index="1" isArray="false" isRequired="false" name="particleType"/>
+        <ns2:InputParameter qName="string" dimensionality="1" index="2" isArray="true" isRequired="false" name="functionTypes"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns9:AssociatedFile" dimensionality="1" isArray="true" xmlns:ns9="gme://caCORE.cabig/3.0/gov.nih.nci.calab.domain"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getReports">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="string" dimensionality="1" index="0" isArray="false" isRequired="false" name="reportTitle"/>
+        <ns2:InputParameter qName="string" dimensionality="1" index="1" isArray="false" isRequired="false" name="particleType"/>
+        <ns2:InputParameter qName="string" dimensionality="1" index="2" isArray="true" isRequired="false" name="functionTypes"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns10:Report" dimensionality="1" isArray="true" xmlns:ns10="gme://caCORE.cabig/3.0/gov.nih.nci.calab.domain"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getSourceByParticleName">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="string" dimensionality="1" index="0" isArray="false" isRequired="false" name="particleName"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns11:Source" dimensionality="1" isArray="false" xmlns:ns11="gme://caCORE.cabig/3.0/gov.nih.nci.calab.domain"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getReportsByParticleName">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="string" dimensionality="1" index="0" isArray="false" isRequired="false" name="particleName"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns12:Report" dimensionality="1" isArray="true" xmlns:ns12="gme://caCORE.cabig/3.0/gov.nih.nci.calab.domain"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getOtherAssociatedFilesByParticleName">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="string" dimensionality="1" index="0" isArray="false" isRequired="false" name="particleName"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns13:AssociatedFile" dimensionality="1" isArray="true" xmlns:ns13="gme://caCORE.cabig/3.0/gov.nih.nci.calab.domain"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getComposingElements">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="long" dimensionality="1" index="0" isArray="false" isRequired="false" name="compositionId"/>
+        <ns2:InputParameter qName="string" dimensionality="1" index="1" isArray="false" isRequired="false" name="particleName"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns14:ComposingElement" dimensionality="1" isArray="true" xmlns:ns14="gme://caCORE.cabig/3.0/gov.nih.nci.calab.domain.nano.characterization.physical.composition"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getSurfaceGroups">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="long" dimensionality="1" index="0" isArray="false" isRequired="false" name="compositionId"/>
+        <ns2:InputParameter qName="string" dimensionality="1" index="1" isArray="false" isRequired="false" name="particleName"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns15:SurfaceGroup" dimensionality="1" isArray="true" xmlns:ns15="gme://caCORE.cabig/3.0/gov.nih.nci.calab.domain.nano.characterization.physical.composition"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getCharacterization">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="long" dimensionality="1" index="0" isArray="false" isRequired="false" name="characterizationId"/>
+        <ns2:InputParameter qName="string" dimensionality="1" index="1" isArray="false" isRequired="false" name="particleName"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns16:Characterization" dimensionality="1" isArray="false" xmlns:ns16="gme://caCORE.cabig/3.0/gov.nih.nci.calab.domain.nano.characterization"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+     </ns2:operationCollection>
+     <ns2:contextPropertyCollection>
+      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
+      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice}DomainModel"/>
+     </ns2:contextPropertyCollection>
+    </ns2:ServiceContext>
+   </ns2:serviceContextCollection>
+   <ns17:SemanticMetadata conceptCode="C63541" conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services." conceptName="Grid Service" order="0" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns18:SemanticMetadata conceptCode="C63544" conceptDefinition="A web service which accepts as input a query targeted at a data resource addressable by the system and returns information to the client in the form of one or more data objects." conceptName="Data Grid Service" order="1" xmlns:ns18="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+  </ns2:Service>
+ </ns1:serviceDescription>
+ <ns1:hostingResearchCenter>
+  <ns19:ResearchCenter displayName="caNanoLab-NCL_PROD" shortName="caNanoLab-NCL_PROD" xmlns:ns19="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns19:Address country="US" locality="ABCC/NCI-Frederick" postalCode="21702-1201" stateProvince="MD" street1=""/>
+   <ns19:pointOfContactCollection>
+    <ns19:PointOfContact affiliation="YOUR_AFFILIATION" email="YOUR_EMAIL" firstName="YOUR_FIRST_NAME" lastName="YOUR_LAST_NAME" role="participant"/>
+   </ns19:pointOfContactCollection>
+  </ns19:ResearchCenter>
+ </ns1:hostingResearchCenter>
+</ns1:ServiceMetadata>

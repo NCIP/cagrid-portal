@@ -23,21 +23,15 @@ import org.hibernate.annotations.Parameter;
 public class Address extends AbstractDomainObject {
 	
 	
-	private String street;
+	private String street1;
+	private String street2;
 	private String postalCode;
-	private String city;
-	private String state;
+	private String locality;
+	private String stateProvince;
 	private String country;
 	private Float latitude;
 	private Float longitude;
-	private AddressType type = AddressType.HOME;
 	
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
 	public String getCountry() {
 		return country;
 	}
@@ -49,6 +43,12 @@ public class Address extends AbstractDomainObject {
 	}
 	public void setLatitude(Float latitude) {
 		this.latitude = latitude;
+	}
+	public String getLocality() {
+		return locality;
+	}
+	public void setLocality(String locality) {
+		this.locality = locality;
 	}
 	public Float getLongitude() {
 		return longitude;
@@ -62,23 +62,25 @@ public class Address extends AbstractDomainObject {
 	public void setPostalCode(String postalCode) {
 		this.postalCode = postalCode;
 	}
-	public String getState() {
-		return state;
+	public String getStateProvince() {
+		return stateProvince;
 	}
-	public void setState(String state) {
-		this.state = state;
+	public void setStateProvince(String stateProvince) {
+		this.stateProvince = stateProvince;
 	}
-	public String getStreet() {
-		return street;
+	public String getStreet1() {
+		return street1;
 	}
-	public void setStreet(String street) {
-		this.street = street;
+	public void setStreet1(String street1) {
+		this.street1 = street1;
 	}
-	public AddressType getType() {
-		return type;
+	public String getStreet2() {
+		return street2;
 	}
-	public void setType(AddressType type) {
-		this.type = type;
+	public void setStreet2(String street2) {
+		this.street2 = street2;
 	}
+	
+	
 
 }

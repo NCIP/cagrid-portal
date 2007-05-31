@@ -30,6 +30,11 @@ lib/portlet/portlet.jar
  - This should not be included in any portlet war since the portal container will 
    provide it.
 
+lib/portlet/portlet-messaging-2.4.jar
+ - A JSR 168 compliant implementation of IPC.
+ - Downloaded from http://www.doc.ic.ac.uk/~mo197/portlets/portlet_messaging/download.php
+
+
 lib/servlet/servlet-api.jar
  - From Tomcat 5.5.17 release
    

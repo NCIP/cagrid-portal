@@ -1,0 +1,100 @@
+/**
+ * 
+ */
+package gov.nih.nci.cagrid.portal2.domain.metadata.common;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
+import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
+
+/**
+ * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
+ *
+ */
+@Entity
+@Table(name = "uml_class")
+@GenericGenerator(name = "id-generator", strategy = "native", parameters = { @Parameter(name = "sequence", value = "seq_uml_class") })
+public class UMLClass extends AbstractDomainObject {
+	
+	private String className;
+	private String description;
+	private String packageName;
+	private String projectName;
+	private String projectVersion;
+	private List<SemanticMetadata> semanticMetadata = new ArrayList<SemanticMetadata>();
+	
+	private List<UMLAttribute> umlAttributeCollection = new ArrayList<UMLAttribute>();
+	
+	public String getClassName() {
+		return className;
+	}
+	public void setClassName(String className) {
+		this.className = className;
+	}
+	
+	@Column(length = 4000)
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getPackageName() {
+		return packageName;
+	}
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	public String getProjectVersion() {
+		return projectVersion;
+	}
+	public void setProjectVersion(String projectVersion) {
+		this.projectVersion = projectVersion;
+	}
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "uml_class_sem_meta", 
+			joinColumns = @JoinColumn(name = "uml_class_id"), 
+			inverseJoinColumns = @JoinColumn(name = "sem_meta_id"), 
+			uniqueConstraints =	@UniqueConstraint(columnNames = 
+				{"uml_class_id", "sem_meta_id" })
+	)
+	public List<SemanticMetadata> getSemanticMetadata() {
+		return semanticMetadata;
+	}
+	public void setSemanticMetadata(List<SemanticMetadata> semanticMetadata) {
+		this.semanticMetadata = semanticMetadata;
+	}
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "umlClass")
+	public List<UMLAttribute> getUmlAttributeCollection() {
+		return umlAttributeCollection;
+	}
+	public void setUmlAttributeCollection(List<UMLAttribute> umlAttributeCollection) {
+		this.umlAttributeCollection = umlAttributeCollection;
+	}
+}

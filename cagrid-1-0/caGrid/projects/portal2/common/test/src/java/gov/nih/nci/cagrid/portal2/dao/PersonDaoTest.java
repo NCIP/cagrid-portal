@@ -4,7 +4,6 @@
 package gov.nih.nci.cagrid.portal2.dao;
 
 import gov.nih.nci.cagrid.portal2.domain.Address;
-import gov.nih.nci.cagrid.portal2.domain.AddressType;
 import gov.nih.nci.cagrid.portal2.domain.Person;
 
 import java.util.List;
@@ -42,7 +41,7 @@ public class PersonDaoTest extends AbstractDaoTest {
 	public void testFindPersonByAddresses(){
 		Person personProt = new Person();
 		Address addressProt = new Address();
-		addressProt.setType(AddressType.HOME);
+//		addressProt.setType(AddressType.HOME);
 		personProt.getAddresses().add(addressProt);
 		PersonDao dao = (PersonDao)getApplicationContext().getBean("personDao");
 		List<Person> persons = dao.searchByExample(personProt);
@@ -55,7 +54,7 @@ public class PersonDaoTest extends AbstractDaoTest {
 		Person p = personDao.getById(-1);
 		assertNotNull(p);
 		Address newAddress = new Address();
-		newAddress.setCity("Baltimore");
+//		newAddress.setCity("Baltimore");
 		addressDao.save(newAddress);
 		p.getAddresses().add(newAddress);
 		personDao.save(p);
