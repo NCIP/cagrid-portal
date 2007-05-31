@@ -12,6 +12,12 @@ package <%=arguments.getService().getPackageName()%>.service.globus.resource;
 
 import org.globus.wsrf.ResourceException;
 
+/** 
+ * The implementation of this <%=arguments.getService().getName()%>Resource type.
+ * 
+ * @created by Introduce Toolkit version <%=CommonTools.getIntroduceVersion()%>
+ * 
+ */
 public class <%=arguments.getService().getName()%>Resource extends BaseResourceBase {
 
 

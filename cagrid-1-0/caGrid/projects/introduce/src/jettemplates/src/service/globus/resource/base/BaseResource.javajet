@@ -14,6 +14,13 @@ import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.jndi.Initializable;
 
+
+/** 
+ * The implementation of this <%=arguments.getService().getName()%>Resource type.
+ * 
+ * @created by Introduce Toolkit version <%=CommonTools.getIntroduceVersion()%>
+ * 
+ */
 public class <%=arguments.getService().getName()%>Resource extends BaseResourceBase {
 
 	

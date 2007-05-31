@@ -13,7 +13,12 @@ package <%=arguments.getService().getPackageName()%>.service.globus.resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
+/** 
+ * The implementation of this <%=arguments.getService().getName()%>Resource type.
+ * 
+ * @created by Introduce Toolkit version <%=CommonTools.getIntroduceVersion()%>
+ * 
+ */
 public class <%=arguments.getService().getName()%>Resource extends BaseResourceBase {
 
 
