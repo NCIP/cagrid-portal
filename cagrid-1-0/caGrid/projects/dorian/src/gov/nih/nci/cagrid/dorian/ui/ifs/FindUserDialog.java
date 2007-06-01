@@ -31,11 +31,12 @@ import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: FindUserDialog.java,v 1.3 2007-04-26 20:33:53 langella Exp $
+ * @version $Id: FindUserDialog.java,v 1.4 2007-06-01 15:42:43 langella Exp $
  */
 public class FindUserDialog extends JDialog {
 
@@ -110,9 +111,10 @@ public class FindUserDialog extends JDialog {
 	 * This is the default constructor
 	 */
 	public FindUserDialog() {
-		super();
+		super(GridApplication.getContext().getApplication());
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -120,10 +122,10 @@ public class FindUserDialog extends JDialog {
 	private void initialize() {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Find Users");
-		//this.setIconImage(DorianLookAndFeel.getQueryIcon().getImage());
 		setSize(700, 600);
 
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -138,6 +140,7 @@ public class FindUserDialog extends JDialog {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -193,6 +196,7 @@ public class FindUserDialog extends JDialog {
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -203,14 +207,9 @@ public class FindUserDialog extends JDialog {
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
-			contentPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Users",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, LookAndFeel.getPanelLabelColor()));
+			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Users",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.weighty = 1.0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
@@ -218,6 +217,7 @@ public class FindUserDialog extends JDialog {
 		}
 		return contentPanel;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -232,6 +232,7 @@ public class FindUserDialog extends JDialog {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes jButton1
@@ -252,6 +253,7 @@ public class FindUserDialog extends JDialog {
 		return cancel;
 	}
 
+
 	/**
 	 * This method initializes jTable
 	 * 
@@ -263,6 +265,7 @@ public class FindUserDialog extends JDialog {
 		}
 		return usersTable;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane
@@ -277,6 +280,7 @@ public class FindUserDialog extends JDialog {
 		return jScrollPane;
 	}
 
+
 	/**
 	 * This method initializes select
 	 * 
@@ -290,8 +294,7 @@ public class FindUserDialog extends JDialog {
 			select.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						selectedUser = getUsersTable().getSelectedUser()
-								.getGridId();
+						selectedUser = getUsersTable().getSelectedUser().getGridId();
 						dispose();
 					} catch (Exception ex) {
 						ErrorDialog.showError(ex);
@@ -303,12 +306,12 @@ public class FindUserDialog extends JDialog {
 
 		return select;
 	}
-	
-	
+
 
 	public String getSelectedUser() {
 		return selectedUser;
 	}
+
 
 	/**
 	 * This method initializes session
@@ -322,6 +325,7 @@ public class FindUserDialog extends JDialog {
 		return session;
 	}
 
+
 	/**
 	 * This method initializes queryPanel
 	 * 
@@ -334,6 +338,7 @@ public class FindUserDialog extends JDialog {
 		}
 		return queryPanel;
 	}
+
 
 	/**
 	 * This method initializes query
@@ -353,8 +358,7 @@ public class FindUserDialog extends JDialog {
 						}
 					};
 					try {
-						GridApplication.getContext()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -365,13 +369,13 @@ public class FindUserDialog extends JDialog {
 		return query;
 	}
 
+
 	private void findUsers() {
 
 		synchronized (mutex) {
 			if (isQuerying) {
-				ErrorDialog
-						.showError("Query Already in Progress",
-								"Please wait until the current query is finished before executing another.");
+				ErrorDialog.showError("Query Already in Progress",
+					"Please wait until the current query is finished before executing another.");
 				return;
 			} else {
 				isQuerying = true;
@@ -386,8 +390,7 @@ public class FindUserDialog extends JDialog {
 
 			Object o = getIdp().getSelectedItem();
 			if (o instanceof TrustedIdPCaddy) {
-				TrustedIdPCaddy caddy = (TrustedIdPCaddy) getIdp()
-						.getSelectedItem();
+				TrustedIdPCaddy caddy = (TrustedIdPCaddy) getIdp().getSelectedItem();
 				f.setIdPId(caddy.getTrustedIdP().getId());
 			}
 			f.setUID(format(getUserId().getText()));
@@ -395,8 +398,7 @@ public class FindUserDialog extends JDialog {
 			f.setFirstName(format(this.firstName.getText()));
 			f.setLastName(format(this.lastName.getText()));
 			f.setEmail(format(getEmail().getText()));
-			f.setUserStatus(((UserStatusComboBox) this.getUserStatus())
-					.getSelectedUserStatus());
+			f.setUserStatus(((UserStatusComboBox) this.getUserStatus()).getSelectedUserStatus());
 
 			IFSAdministrationClient client = getSession().getAdminClient();
 			IFSUser[] users = client.findUsers(f);
@@ -410,8 +412,7 @@ public class FindUserDialog extends JDialog {
 			if (users != null) {
 				length = users.length;
 			}
-			this.updateProgress(false, "Querying Completed [" + length
-					+ " users found]");
+			this.updateProgress(false, "Querying Completed [" + length + " users found]");
 
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
@@ -424,6 +425,7 @@ public class FindUserDialog extends JDialog {
 
 	}
 
+
 	private String format(String s) {
 		if ((s == null) || (s.trim().length() == 0)) {
 			return null;
@@ -431,6 +433,7 @@ public class FindUserDialog extends JDialog {
 			return s;
 		}
 	}
+
 
 	/**
 	 * This method initializes progressPanel
@@ -452,6 +455,7 @@ public class FindUserDialog extends JDialog {
 		return progressPanel;
 	}
 
+
 	/**
 	 * This method initializes progress
 	 * 
@@ -467,6 +471,7 @@ public class FindUserDialog extends JDialog {
 		return progress;
 	}
 
+
 	public void updateProgress(final boolean working, final String s) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -476,6 +481,7 @@ public class FindUserDialog extends JDialog {
 		});
 
 	}
+
 
 	/**
 	 * This method initializes filterPanel
@@ -592,10 +598,9 @@ public class FindUserDialog extends JDialog {
 			idpLabel.setText("Identity Provider");
 			filterPanel = new JPanel();
 			filterPanel.setLayout(new GridBagLayout());
-			filterPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Search Criteria", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-							.getPanelLabelColor()));
+			filterPanel.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+					.getPanelLabelColor()));
 			filterPanel.add(idpLabel, gridBagConstraints3);
 			filterPanel.add(getIdp(), gridBagConstraints5);
 			filterPanel.add(gidLabel, gridBagConstraints6);
@@ -614,6 +619,7 @@ public class FindUserDialog extends JDialog {
 		return filterPanel;
 	}
 
+
 	/**
 	 * This method initializes idp
 	 * 
@@ -627,6 +633,7 @@ public class FindUserDialog extends JDialog {
 					checkUpdateIdPs();
 				}
 
+
 				public void focusLost(FocusEvent ev) {
 					// TODO Auto-generated method stub
 
@@ -637,12 +644,12 @@ public class FindUserDialog extends JDialog {
 		return idp;
 	}
 
+
 	private void updateIdPs(String serviceUrl, GlobusCredential cred) {
 		try {
 			this.updateProgress(true, "Seaching for Trusted IdPs");
 			this.getIdp().removeAllItems();
-			IFSAdministrationClient client = new IFSAdministrationClient(
-					serviceUrl, cred);
+			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, cred);
 			TrustedIdP[] idps = client.getTrustedIdPs();
 			this.getIdp().removeAllItems();
 			this.getIdp().addItem("");
@@ -657,13 +664,13 @@ public class FindUserDialog extends JDialog {
 		}
 	}
 
+
 	private void checkUpdateIdPs() {
 		try {
 			getIdp().hidePopup();
 			final String serviceUrl = getSession().getServiceURI();
 			final GlobusCredential cred = getSession().getCredential();
-			if ((serviceUrl.equals(this.lastService))
-					&& (cred.getIdentity().equals(this.lastGridIdentity))) {
+			if ((serviceUrl.equals(this.lastService)) && (cred.getIdentity().equals(this.lastGridIdentity))) {
 				getIdp().showPopup();
 				return;
 			} else {
@@ -687,6 +694,7 @@ public class FindUserDialog extends JDialog {
 		}
 	}
 
+
 	/**
 	 * This method initializes gridIdentity
 	 * 
@@ -698,6 +706,7 @@ public class FindUserDialog extends JDialog {
 		}
 		return gridIdentity;
 	}
+
 
 	/**
 	 * This method initializes email
@@ -711,6 +720,7 @@ public class FindUserDialog extends JDialog {
 		return email;
 	}
 
+
 	/**
 	 * This method initializes userStatus
 	 * 
@@ -723,23 +733,27 @@ public class FindUserDialog extends JDialog {
 		return userStatus;
 	}
 
+
 	public class TrustedIdPCaddy {
 		private TrustedIdP trustedIdp;
+
 
 		public TrustedIdPCaddy(TrustedIdP idp) {
 			this.trustedIdp = idp;
 		}
 
+
 		public TrustedIdP getTrustedIdP() {
 			return trustedIdp;
 		}
 
+
 		public String toString() {
-			return "[IdP Id: " + trustedIdp.getId() + "] "
-					+ trustedIdp.getName();
+			return "[IdP Id: " + trustedIdp.getId() + "] " + trustedIdp.getName();
 		}
 
 	}
+
 
 	/**
 	 * This method initializes userId
@@ -754,7 +768,6 @@ public class FindUserDialog extends JDialog {
 	}
 
 
-
 	/**
 	 * This method initializes firstName
 	 * 
@@ -766,6 +779,7 @@ public class FindUserDialog extends JDialog {
 		}
 		return firstName;
 	}
+
 
 	/**
 	 * This method initializes lastName

@@ -45,6 +45,11 @@ public class ApplicationContext {
 	}
 
 
+	public GridApplication getApplication() {
+		return this.application;
+	}
+
+
 	public void addApplicationComponent(ApplicationComponent comp) {
 		this.application.addApplicationComponent(comp);
 	}

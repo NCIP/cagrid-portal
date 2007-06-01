@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.ui.ifs;
 
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -16,11 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
+
 
 public class AddAdminWindow extends JDialog {
 
@@ -56,25 +55,28 @@ public class AddAdminWindow extends JDialog {
 
 	private JButton findUserButton = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
 	public AddAdminWindow(String uri, GlobusCredential cred) {
+		super(GridApplication.getContext().getApplication());
 		this.uri = uri;
 		this.cred = cred;
 		initialize();
 	}
 
+
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setSize(500, 200);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Add Administrator");
-		//this.setIconImage(DorianLookAndFeel.getAdminIcon().getImage());
+		// this.setIconImage(DorianLookAndFeel.getAdminIcon().getImage());
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -111,6 +113,7 @@ public class AddAdminWindow extends JDialog {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes servicePanel
@@ -156,6 +159,7 @@ public class AddAdminWindow extends JDialog {
 		return servicePanel;
 	}
 
+
 	/**
 	 * This method initializes buttonPanel
 	 * 
@@ -170,6 +174,7 @@ public class AddAdminWindow extends JDialog {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes addAdmin
@@ -189,8 +194,7 @@ public class AddAdminWindow extends JDialog {
 						}
 					};
 					try {
-						GridApplication.getContext()
-								.executeInBackground(runner);
+						GridApplication.getContext().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -201,11 +205,11 @@ public class AddAdminWindow extends JDialog {
 		return addAdminButton;
 	}
 
+
 	private void addAdmin() {
 		try {
 			addAdminButton.setEnabled(false);
-			IFSAdministrationClient client = new IFSAdministrationClient(uri,
-					cred);
+			IFSAdministrationClient client = new IFSAdministrationClient(uri, cred);
 			client.addAdmin(getGridIdentity().getText());
 			dispose();
 		} catch (Exception e) {
@@ -213,6 +217,7 @@ public class AddAdminWindow extends JDialog {
 			addAdminButton.setEnabled(true);
 		}
 	}
+
 
 	/**
 	 * This method initializes cancelButton
@@ -233,6 +238,7 @@ public class AddAdminWindow extends JDialog {
 		return cancelButton;
 	}
 
+
 	/**
 	 * This method initializes serviceURI
 	 * 
@@ -247,6 +253,7 @@ public class AddAdminWindow extends JDialog {
 		return serviceURI;
 	}
 
+
 	/**
 	 * This method initializes credential
 	 * 
@@ -260,6 +267,7 @@ public class AddAdminWindow extends JDialog {
 		}
 		return credential;
 	}
+
 
 	/**
 	 * This method initializes userPanel
@@ -294,6 +302,7 @@ public class AddAdminWindow extends JDialog {
 		return userPanel;
 	}
 
+
 	/**
 	 * This method initializes gridIdentity
 	 * 
@@ -305,6 +314,7 @@ public class AddAdminWindow extends JDialog {
 		}
 		return gridIdentity;
 	}
+
 
 	/**
 	 * This method initializes findUser
