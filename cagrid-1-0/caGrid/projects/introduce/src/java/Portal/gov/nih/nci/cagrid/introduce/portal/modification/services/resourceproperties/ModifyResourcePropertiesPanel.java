@@ -41,7 +41,6 @@ import javax.xml.namespace.QName;
 
 import org.projectmobius.common.XMLUtilities;
 
-
 public class ModifyResourcePropertiesPanel extends JPanel {
 
 	private ResourcePropertiesListType properties;
@@ -76,18 +75,20 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 
 	private ServiceType service;
 
+	private boolean isMainMetadataPanel = true;
 
-	public ModifyResourcePropertiesPanel(ServiceType service, NamespacesType namespaces, File etcDir, File schemaDir,
-		boolean showW3Cnamespaces) {
+	public ModifyResourcePropertiesPanel(ServiceType service,
+			NamespacesType namespaces, File etcDir, File schemaDir,
+			boolean showW3Cnamespaces, boolean isMainMetadataPanel) {
 		this.service = service;
 		this.etcDir = etcDir;
 		this.schemaDir = schemaDir;
 		this.properties = service.getResourcePropertiesList();
 		this.namespaces = namespaces;
 		this.showW3Cnamespaces = showW3Cnamespaces;
+		this.isMainMetadataPanel = isMainMetadataPanel;
 		initialize();
 	}
-
 
 	private void initialize() {
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
@@ -106,7 +107,6 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		this.add(getButtonsPanel(), gridBagConstraints2);
 	}
 
-
 	public void reInitialize(ResourcePropertiesListType props, NamespacesType ns) {
 		this.properties = props;
 		this.namespaces = ns;
@@ -114,16 +114,16 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		this.resourcePropertiesTable.setResourceProperties(props);
 	}
 
-
-	public ResourcePropertyType[] getConfiguredResourceProperties() throws Exception {
+	public ResourcePropertyType[] getConfiguredResourceProperties()
+			throws Exception {
 		int propertyCount = getResourcePropertiesTable().getRowCount();
 		ResourcePropertyType[] configuredProperties = new ResourcePropertyType[propertyCount];
 		for (int i = 0; i < propertyCount; i++) {
-			configuredProperties[i] = getResourcePropertiesTable().getRowData(i);
+			configuredProperties[i] = getResourcePropertiesTable()
+					.getRowData(i);
 		}
 		return configuredProperties;
 	}
-
 
 	/**
 	 * This method initializes resourcePropertiesPanel
@@ -141,11 +141,11 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
 			resourcePropertiesPanel = new JPanel();
 			resourcePropertiesPanel.setLayout(new GridBagLayout());
-			resourcePropertiesPanel.add(getResourcePropertiesScrollPane(), gridBagConstraints4);
+			resourcePropertiesPanel.add(getResourcePropertiesScrollPane(),
+					gridBagConstraints4);
 		}
 		return resourcePropertiesPanel;
 	}
-
 
 	/**
 	 * This method initializes namespacesScrollPane
@@ -155,12 +155,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	private JScrollPane getNamespacesScrollPane() {
 		if (namespacesScrollPane == null) {
 			namespacesScrollPane = new JScrollPane();
-			namespacesScrollPane.setPreferredSize(new java.awt.Dimension(240, 240));
+			namespacesScrollPane.setPreferredSize(new java.awt.Dimension(240,
+					240));
 			namespacesScrollPane.setViewportView(getNamespacesJTree());
 		}
 		return namespacesScrollPane;
 	}
-
 
 	/**
 	 * This method initializes resourcePropertiesScrollPane
@@ -170,11 +170,11 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	private JScrollPane getResourcePropertiesScrollPane() {
 		if (resourcePropertiesScrollPane == null) {
 			resourcePropertiesScrollPane = new JScrollPane();
-			resourcePropertiesScrollPane.setViewportView(getResourcePropertiesTable());
+			resourcePropertiesScrollPane
+					.setViewportView(getResourcePropertiesTable());
 		}
 		return resourcePropertiesScrollPane;
 	}
-
 
 	/**
 	 * This method initializes namespacesJTree
@@ -183,7 +183,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	 */
 	private NamespacesJTree getNamespacesJTree() {
 		if (namespacesJTree == null) {
-			namespacesJTree = new NamespacesJTree(this.namespaces, showW3Cnamespaces);
+			namespacesJTree = new NamespacesJTree(this.namespaces,
+					showW3Cnamespaces);
 			namespacesJTree.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
@@ -196,7 +197,6 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		return namespacesJTree;
 	}
 
-
 	/**
 	 * This method initializes resourcePropertiesTable
 	 * 
@@ -204,49 +204,62 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	 */
 	private ResourcePropertyTable getResourcePropertiesTable() {
 		if (resourcePropertiesTable == null) {
-			resourcePropertiesTable = new ResourcePropertyTable(this.properties);
+			if (isMainMetadataPanel) {
+				resourcePropertiesTable = new ResourcePropertyTable(
+						this.properties, true);
+			} else {
+				resourcePropertiesTable = new ResourcePropertyTable(
+						this.properties, false);
+			}
+			SelectionListener listener = new SelectionListener(
+					resourcePropertiesTable);
+			resourcePropertiesTable.getSelectionModel()
+					.addListSelectionListener(listener);
+			resourcePropertiesTable.getColumnModel().getSelectionModel()
+					.addListSelectionListener(listener);
+			resourcePropertiesTable.getModel().addTableModelListener(
+					new TableModelListener() {
 
-			SelectionListener listener = new SelectionListener(resourcePropertiesTable);
-			resourcePropertiesTable.getSelectionModel().addListSelectionListener(listener);
-			resourcePropertiesTable.getColumnModel().getSelectionModel().addListSelectionListener(listener);
-			resourcePropertiesTable.getModel().addTableModelListener(new TableModelListener() {
+						public void tableChanged(TableModelEvent e) {
 
-				public void tableChanged(TableModelEvent e) {
+							try {
 
-					try {
-
-						if (e.getType() != TableModelEvent.DELETE && resourcePropertiesTable.getSelectedRow() >= 0) {
-							if (resourcePropertiesTable.getRowData(resourcePropertiesTable.getSelectedRow())
-								.isPopulateFromFile()) {
-								getEditInstanceButton().setEnabled(true);
-							} else {
-								getEditInstanceButton().setEnabled(false);
+								if (e.getType() != TableModelEvent.DELETE
+										&& resourcePropertiesTable
+												.getSelectedRow() >= 0) {
+									if (resourcePropertiesTable.getRowData(
+											resourcePropertiesTable
+													.getSelectedRow())
+											.isPopulateFromFile()) {
+										getEditInstanceButton()
+												.setEnabled(true);
+									} else {
+										getEditInstanceButton().setEnabled(
+												false);
+									}
+								}
+							} catch (Exception e1) {
+								e1.printStackTrace();
 							}
 						}
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-				}
 
-			});
+					});
 		}
 		return resourcePropertiesTable;
 	}
 
-
 	public class SelectionListener implements ListSelectionListener {
 		ResourcePropertyTable table;
-
 
 		SelectionListener(ResourcePropertyTable table) {
 			this.table = table;
 		}
 
-
 		public void valueChanged(ListSelectionEvent e) {
 			try {
 				if (table.getSelectedRow() >= 0) {
-					if (table.getRowData(table.getSelectedRow()).isPopulateFromFile()) {
+					if (table.getRowData(table.getSelectedRow())
+							.isPopulateFromFile()) {
 						getEditInstanceButton().setEnabled(true);
 					} else {
 						getEditInstanceButton().setEnabled(false);
@@ -257,7 +270,6 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			}
 		}
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -285,11 +297,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			buttonsPanel.setLayout(new GridBagLayout());
 			buttonsPanel.add(getAddButton(), gridBagConstraints);
 			buttonsPanel.add(getRemoveButton(), gridBagConstraints8);
-			buttonsPanel.add(getEditInstanceButton(), gridBagConstraints11);
+			if (isMainMetadataPanel) {
+				buttonsPanel.add(getEditInstanceButton(), gridBagConstraints11);
+			}
 		}
 		return buttonsPanel;
 	}
-
 
 	/**
 	 * This method initializes jButton
@@ -302,22 +315,22 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			addResourcePropertyButton.setToolTipText("add new operation");
 			addResourcePropertyButton.setText("Add");
 			addResourcePropertyButton.setIcon(PortalLookAndFeel.getAddIcon());
-			addResourcePropertyButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					addResourceProperty();
-				}
-			});
+			addResourcePropertyButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							addResourceProperty();
+						}
+					});
 		}
 		return addResourcePropertyButton;
 	}
 
-
 	private void addResourceProperty() {
 		if (getNamespacesJTree().getCurrentNode() instanceof SchemaElementTypeTreeNode) {
-			NamespaceType nt = ((NamespaceType) ((NamespaceTypeTreeNode) getNamespacesJTree().getCurrentNode()
-				.getParent()).getUserObject());
+			NamespaceType nt = ((NamespaceType) ((NamespaceTypeTreeNode) getNamespacesJTree()
+					.getCurrentNode().getParent()).getUserObject());
 			SchemaElementType st = ((SchemaElementType) ((SchemaElementTypeTreeNode) getNamespacesJTree()
-				.getCurrentNode()).getUserObject());
+					.getCurrentNode()).getUserObject());
 			ResourcePropertyType metadata = new ResourcePropertyType();
 			metadata.setQName(new QName(nt.getNamespace(), st.getType()));
 			metadata.setPopulateFromFile(false);
@@ -341,8 +354,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			if (properties != null && properties.getResourceProperty() != null) {
 				newLength = properties.getResourceProperty().length + 1;
 				metadatas = new ResourcePropertyType[newLength];
-				System.arraycopy(properties.getResourceProperty(), 0, metadatas, 0,
-					properties.getResourceProperty().length);
+				System.arraycopy(properties.getResourceProperty(), 0,
+						metadatas, 0, properties.getResourceProperty().length);
 			} else {
 				newLength = 1;
 				metadatas = new ResourcePropertyType[newLength];
@@ -357,11 +370,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 					break;
 				}
 			}
-			metadata.setFileLocation(service.getName() + "_"
-				+ CommonTools.getResourcePropertyVariableName(service.getResourcePropertiesList(), i) + ".xml");
+			metadata.setFileLocation(service.getName()
+					+ "_"
+					+ CommonTools.getResourcePropertyVariableName(service
+							.getResourcePropertiesList(), i) + ".xml");
 		}
 	}
-
 
 	/**
 	 * This method initializes jButton2
@@ -371,44 +385,53 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	private JButton getRemoveButton() {
 		if (removeResourcePropertyButton == null) {
 			removeResourcePropertyButton = new JButton();
-			removeResourcePropertyButton.setToolTipText("remove selected operation");
+			removeResourcePropertyButton
+					.setToolTipText("remove selected operation");
 			removeResourcePropertyButton.setText("Remove");
-			removeResourcePropertyButton.setIcon(PortalLookAndFeel.getRemoveIcon());
-			removeResourcePropertyButton.addActionListener(new java.awt.event.ActionListener() {
-				// remove from table
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					ResourcePropertyType resource = null;
-					try {
-						resource = getResourcePropertiesTable().getRowData(
-							getResourcePropertiesTable().getSelectedRow());
-					} catch (Exception e1) {
-						PortalUtils.showErrorMessage("Please select a metdata type to remove.");
-						return;
-					}
-					try {
-						getResourcePropertiesTable().removeSelectedRow();
-					} catch (Exception e1) {
-						PortalUtils.showErrorMessage("Please select a metdata type to remove.");
-						return;
-					}
-					// remove from resource properties list
-					ResourcePropertyType[] metadatas;
-					int newLength = properties.getResourceProperty().length - 1;
-					metadatas = new ResourcePropertyType[newLength];
-					int resourcesCount = 0;
-					for (int i = 0; i < properties.getResourceProperty().length; i++) {
-						ResourcePropertyType oldResource = properties.getResourceProperty(i);
-						if (!resource.equals(oldResource)) {
-							metadatas[resourcesCount++] = oldResource;
+			removeResourcePropertyButton.setIcon(PortalLookAndFeel
+					.getRemoveIcon());
+			removeResourcePropertyButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						// remove from table
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							ResourcePropertyType resource = null;
+							try {
+								resource = getResourcePropertiesTable()
+										.getRowData(
+												getResourcePropertiesTable()
+														.getSelectedRow());
+							} catch (Exception e1) {
+								PortalUtils
+										.showErrorMessage("Please select a metdata type to remove.");
+								return;
+							}
+							try {
+								getResourcePropertiesTable()
+										.removeSelectedRow();
+							} catch (Exception e1) {
+								PortalUtils
+										.showErrorMessage("Please select a metdata type to remove.");
+								return;
+							}
+							// remove from resource properties list
+							ResourcePropertyType[] metadatas;
+							int newLength = properties.getResourceProperty().length - 1;
+							metadatas = new ResourcePropertyType[newLength];
+							int resourcesCount = 0;
+							for (int i = 0; i < properties
+									.getResourceProperty().length; i++) {
+								ResourcePropertyType oldResource = properties
+										.getResourceProperty(i);
+								if (!resource.equals(oldResource)) {
+									metadatas[resourcesCount++] = oldResource;
+								}
+							}
+							properties.setResourceProperty(metadatas);
 						}
-					}
-					properties.setResourceProperty(metadatas);
-				}
-			});
+					});
 		}
 		return removeResourcePropertyButton;
 	}
-
 
 	/**
 	 * This method initializes jSplitPane
@@ -426,7 +449,6 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		return mainSplitPane;
 	}
 
-
 	/**
 	 * This method initializes editInstanceButton
 	 * 
@@ -442,58 +464,90 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					if (getResourcePropertiesTable().getSelectedRow() >= 0) {
 						try {
-							ResourcePropertyType type = getResourcePropertiesTable().getRowData(
-								getResourcePropertiesTable().getSelectedRow());
+							ResourcePropertyType type = getResourcePropertiesTable()
+									.getRowData(
+											getResourcePropertiesTable()
+													.getSelectedRow());
 							if (type.isPopulateFromFile()) {
 								String rpData = null;
 								File resourcePropertyFile = null;
-								
-								if(type.getFileLocation() !=null){
-								    resourcePropertyFile = new File(etcDir.getAbsolutePath() + File.separator
-                                        + type.getFileLocation());
+
+								if (type.getFileLocation() != null) {
+									resourcePropertyFile = new File(etcDir
+											.getAbsolutePath()
+											+ File.separator
+											+ type.getFileLocation());
 								}
-								if (resourcePropertyFile!=null && resourcePropertyFile.exists()) {
+								if (resourcePropertyFile != null
+										&& resourcePropertyFile.exists()) {
 									// file has already been created
-									System.out.println("Loading resource properties file : " + resourcePropertyFile);
-									rpData = XMLUtilities.fileNameToString(resourcePropertyFile.getAbsolutePath());
+									System.out
+											.println("Loading resource properties file : "
+													+ resourcePropertyFile);
+									rpData = XMLUtilities
+											.fileNameToString(resourcePropertyFile
+													.getAbsolutePath());
 								} else {
 									// file has not been created yet, we will
 									// create it, set the path to file, and then
 									// call the editor
 									int i = 0;
-									for (i = 0; i < properties.getResourceProperty().length; i++) {
-										if (type.equals(properties.getResourceProperty(i))) {
+									for (i = 0; i < properties
+											.getResourceProperty().length; i++) {
+										if (type.equals(properties
+												.getResourceProperty(i))) {
 											break;
 										}
 									}
-									System.out.println("Creating a new resource properties file");
-									boolean created = resourcePropertyFile.createNewFile();
-									if(!created){
-									    throw new Exception("Could not create file" +  resourcePropertyFile.getAbsolutePath());
+									System.out
+											.println("Creating a new resource properties file");
+									boolean created = resourcePropertyFile
+											.createNewFile();
+									if (!created) {
+										throw new Exception(
+												"Could not create file"
+														+ resourcePropertyFile
+																.getAbsolutePath());
 									}
-									rpData = XMLUtilities.fileNameToString(resourcePropertyFile.getAbsolutePath());
+									rpData = XMLUtilities
+											.fileNameToString(resourcePropertyFile
+													.getAbsolutePath());
 								}
 
 								QName qname = type.getQName();
 								NamespaceType nsType = CommonTools
-									.getNamespaceType(namespaces, qname.getNamespaceURI());
+										.getNamespaceType(namespaces, qname
+												.getNamespaceURI());
 
 								ResourcePropertyEditorExtensionDescriptionType mde = ExtensionTools
-									.getResourcePropertyEditorExtensionDescriptor(qname);
+										.getResourcePropertyEditorExtensionDescriptor(qname);
 								ResourcePropertyEditorPanel mdec = null;
 
 								if (mde != null) {
-									mdec = ExtensionTools.getMetadataEditorComponent(mde.getName(), rpData,
-										new File(schemaDir.getAbsolutePath() + File.separator + nsType.getLocation()),
-										schemaDir);
+									mdec = ExtensionTools
+											.getMetadataEditorComponent(
+													mde.getName(),
+													rpData,
+													new File(
+															schemaDir
+																	.getAbsolutePath()
+																	+ File.separator
+																	+ nsType
+																			.getLocation()),
+													schemaDir);
 								} else {
 									// use the default editor....
-									mdec = new XMLEditorViewer(rpData, new File(schemaDir.getAbsolutePath()
-										+ File.separator + nsType.getLocation()), schemaDir);
+									mdec = new XMLEditorViewer(rpData,
+											new File(schemaDir
+													.getAbsolutePath()
+													+ File.separator
+													+ nsType.getLocation()),
+											schemaDir);
 								}
 								ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(
-									(Frame) SwingUtilities.getRoot(ModifyResourcePropertiesPanel.this), mdec,
-									resourcePropertyFile);
+										(Frame) SwingUtilities
+												.getRoot(ModifyResourcePropertiesPanel.this),
+										mdec, resourcePropertyFile);
 								diag.pack();
 								PortalUtils.centerWindow(diag);
 								diag.setVisible(true);

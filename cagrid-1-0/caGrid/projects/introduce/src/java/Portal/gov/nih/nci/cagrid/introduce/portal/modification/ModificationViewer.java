@@ -2005,7 +2005,7 @@ public class ModificationViewer extends GridPortalComponent {
             rpHolderPanel = new ModifyResourcePropertiesPanel(info.getServices().getService(0), info.getNamespaces(),
                 new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "etc"), new File(info
                     .getBaseDirectory().getAbsolutePath()
-                    + File.separator + "schema" + File.separator + info.getServices().getService(0).getName()), false);
+                    + File.separator + "schema" + File.separator + info.getServices().getService(0).getName()), false, true);
         }
         return rpHolderPanel;
     }

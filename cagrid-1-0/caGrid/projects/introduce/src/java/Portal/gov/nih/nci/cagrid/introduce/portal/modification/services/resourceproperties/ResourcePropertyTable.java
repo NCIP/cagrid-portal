@@ -28,10 +28,13 @@ public class ResourcePropertyTable extends PortalBaseTable {
 	public static String DATA = "Data";
 
 	private ResourcePropertiesListType metadatas;
+	
+	private boolean allowPopulateFromFile;
 
 
-	public ResourcePropertyTable(ResourcePropertiesListType metadatas) {
+	public ResourcePropertyTable(ResourcePropertiesListType metadatas, boolean allowPopulateFromFile) {
 		super(createTableModel());
+		this.allowPopulateFromFile = allowPopulateFromFile;
 		this.metadatas = metadatas;
 		getModel().addTableModelListener(new TableModelListener() {
 			public void tableChanged(TableModelEvent e) {
@@ -142,6 +145,11 @@ public class ResourcePropertyTable extends PortalBaseTable {
 		this.getColumn(DATA).setMaxWidth(0);
 		this.getColumn(DATA).setMinWidth(0);
 		this.getColumn(DATA).setPreferredWidth(0);
+		if(!this.allowPopulateFromFile){
+			this.getColumn(POPULATE_FROM_FILE).setMaxWidth(0);
+			this.getColumn(POPULATE_FROM_FILE).setMinWidth(0);
+			this.getColumn(POPULATE_FROM_FILE).setPreferredWidth(0);
+		}
 		while (getRowCount() != 0) {
 			removeRow(0);
 		}

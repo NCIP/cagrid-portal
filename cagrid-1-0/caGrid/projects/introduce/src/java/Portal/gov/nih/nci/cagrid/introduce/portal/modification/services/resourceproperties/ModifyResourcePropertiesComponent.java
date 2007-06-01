@@ -89,7 +89,7 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 	private JPanel getResourcesPanel() {
 		if (resourcesPanel == null) {
 			resourcesPanel = new ModifyResourcePropertiesPanel(service, namespaces, etcDir, schemaDir,
-				showW3Cnamespaces);
+				showW3Cnamespaces,false);
 		}
 		return resourcesPanel;
 	}
@@ -125,7 +125,6 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 			doneButton.setIcon(IntroduceLookAndFeel.getDoneIcon());
 			doneButton.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
-					super.mouseClicked(e);
 					dispose();
 				}
 			});
