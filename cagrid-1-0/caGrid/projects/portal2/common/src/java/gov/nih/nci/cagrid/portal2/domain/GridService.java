@@ -39,7 +39,7 @@ public class GridService extends AbstractDomainObject {
 	
 	private ServiceStatusType status = ServiceStatusType.UNKNOWN;
 	
-	@OneToMany(mappedBy="service")
+	@OneToMany(mappedBy="service", cascade = CascadeType.ALL)
 	public List<ServiceAnnotation> getAnnotations() {
 		return annotations;
 	}

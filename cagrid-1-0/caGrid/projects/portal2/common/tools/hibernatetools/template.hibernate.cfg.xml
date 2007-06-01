@@ -49,6 +49,8 @@
 		<mapping
 			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.ValueDomain" />
 		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.CaDSRRegistration" />
+		<mapping
 			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.ContextProperty" />
 		<mapping
 			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.Fault" />

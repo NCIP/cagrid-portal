@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <portlet-app version="1.0"
-             xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
-	         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	         xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd
+	xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd
 	                             http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
 
 
-   <portlet>
-      <portlet-name>participantsadmin</portlet-name>
-      <display-name>caGrid Participants</display-name>
-      <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
-      <init-param>
-         <name>contextConfigLocation</name>
-         <value>/WEB-INF/context/participantsadmin-portlet.xml</value>
-      </init-param>
-      <supports>
-         <mime-type>text/html</mime-type>
-         <portlet-mode>view</portlet-mode>
-         <portlet-mode>help</portlet-mode>
-      </supports>
-      <portlet-info>
-         <title>caGrid Participants</title>
-         <short-title>caGrid Participants</short-title>
-         <keywords>participants</keywords>
-      </portlet-info>
-   </portlet>
+	<portlet>
+		<portlet-name>participantsadmin</portlet-name>
+		<display-name>caGrid Participants</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>
+				/WEB-INF/context/participantsadmin-portlet.xml
+			</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Participants</title>
+			<short-title>caGrid Participants</short-title>
+			<keywords>participants</keywords>
+		</portlet-info>
+	</portlet>
 
 	<portlet>
 		<description>Content introducing the caGrid Portal</description>
@@ -36,9 +40,7 @@
 		</portlet-class>
 		<init-param>
 			<name>contextConfigLocation</name>
-			<value>
-				/WEB-INF/context/content-portlet.xml
-			</value>
+			<value>/WEB-INF/context/content-portlet.xml</value>
 		</init-param>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -58,9 +60,11 @@
 			</preference>
 		</portlet-preferences>
 	</portlet>
-	
+
 	<portlet>
-		<description>Content describing what is new in caGrid Portal</description>
+		<description>
+			Content describing what is new in caGrid Portal
+		</description>
 		<portlet-name>WhatsNew</portlet-name>
 		<display-name>What's New</display-name>
 		<portlet-class>
@@ -68,9 +72,7 @@
 		</portlet-class>
 		<init-param>
 			<name>contextConfigLocation</name>
-			<value>
-				/WEB-INF/context/content-portlet.xml
-			</value>
+			<value>/WEB-INF/context/content-portlet.xml</value>
 		</init-param>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -90,7 +92,7 @@
 			</preference>
 		</portlet-preferences>
 	</portlet>
-	
+
 	<portlet>
 		<description>Did You Know</description>
 		<portlet-name>DidYouKnow</portlet-name>
@@ -100,9 +102,7 @@
 		</portlet-class>
 		<init-param>
 			<name>contextConfigLocation</name>
-			<value>
-				/WEB-INF/context/content-portlet.xml
-			</value>
+			<value>/WEB-INF/context/content-portlet.xml</value>
 		</init-param>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -121,8 +121,8 @@
 				<value>didYouKnow</value>
 			</preference>
 		</portlet-preferences>
-	</portlet>	
-	
+	</portlet>
+
 	<portlet>
 		<description>caGrid Participants Map View</description>
 		<portlet-name>caGridParticipantsMapView</portlet-name>
@@ -132,9 +132,7 @@
 		</portlet-class>
 		<init-param>
 			<name>contextConfigLocation</name>
-			<value>
-				/WEB-INF/context/mapview-portlet.xml
-			</value>
+			<value>/WEB-INF/context/mapview-portlet.xml</value>
 		</init-param>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -150,13 +148,113 @@
 		<portlet-preferences>
 			<preference>
 				<name>appid</name>
-				<value>l8L56e7V34Hm5.fFeDc3TfIcdbhlI0R2g1MtlIqsrr7JD.yy37YdwK2Bs68Z9jWILQ--</value>
+				<value>
+					l8L56e7V34Hm5.fFeDc3TfIcdbhlI0R2g1MtlIqsrr7JD.yy37YdwK2Bs68Z9jWILQ--
+				</value>
 			</preference>
 			<preference>
 				<name>geoRSSUrls</name>
-				<value>http://developer.yahoo.com/maps/sample.xml</value>
+				<value>
+					http://developer.yahoo.com/maps/sample.xml
+				</value>
 			</preference>
 		</portlet-preferences>
-	</portlet>	
+	</portlet>
 
+	<portlet>
+		<portlet-name>servicelist</portlet-name>
+		<display-name>caGrid Service List</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/servicelist-portlet.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Service List</title>
+			<short-title>Service List</short-title>
+			<keywords>cagrid,discovery,service,list</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>MsgInput1Name</name>
+				<value>gridServices</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceName</name>
+				<value>global_gridServices</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceNamespace</name>
+				<value></value>
+			</preference>
+			<preference>
+				<name>MsgOutput1Name</name>
+				<value>gridServices</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishName1</name>
+				<value>global_gridServices</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishNamespace1</name>
+				<value></value>
+			</preference>
+			<preference>
+				<name>MsgOutput2Name</name>
+				<value>selectedGridService</value>
+			</preference>
+			<preference>
+				<name>MsgOutput2PublishName1</name>
+				<value>global_selectedGridService</value>
+			</preference>
+			<preference>
+				<name>MsgOutput2PublishNamespace1</name>
+				<value></value>
+			</preference>
+		</portlet-preferences>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>servicedetails</portlet-name>
+		<display-name>caGrid Service Details</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/servicedetails-portlet.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Service Details</title>
+			<short-title>Service Details</short-title>
+			<keywords>cagrid,discovery,service,details</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>MsgInput1Name</name>
+				<value>selectedGridService</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceName</name>
+				<value>global_selectedGridService</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceNamespace</name>
+				<value></value>
+			</preference>
+		</portlet-preferences>
+	</portlet>
+	
 </portlet-app>

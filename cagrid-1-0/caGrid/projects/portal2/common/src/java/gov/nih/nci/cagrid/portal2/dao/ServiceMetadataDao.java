@@ -13,7 +13,7 @@ import gov.nih.nci.cagrid.portal2.domain.metadata.ServiceMetadata;
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
-public class ServiceMetadataDao extends AbstractDao {
+public class ServiceMetadataDao extends AbstractDao<ServiceMetadata> {
 
 	/* (non-Javadoc)
 	 * @see gov.nih.nci.cagrid.portal2.dao.AbstractDao#domainClass()

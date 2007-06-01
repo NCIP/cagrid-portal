@@ -9,7 +9,7 @@ import gov.nih.nci.cagrid.portal2.domain.GridService;
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
-public class GridServiceDao extends AbstractDao {
+public class GridServiceDao extends AbstractDao<GridService> {
 
 	/* (non-Javadoc)
 	 * @see gov.nih.nci.cagrid.portal2.dao.AbstractDao#domainClass()

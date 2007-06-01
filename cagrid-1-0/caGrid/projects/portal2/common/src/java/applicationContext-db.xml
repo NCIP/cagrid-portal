@@ -61,6 +61,7 @@
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLAttribute</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLClass</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.ValueDomain</value>
+				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.CaDSRRegistration</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.ContextProperty</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.Fault</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.InputParameter</value>
@@ -372,7 +373,9 @@
 		class="gov.nih.nci.cagrid.portal2.dao.CaGridParticipantDao" />
 	<bean id="roleDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.RoleDao" />
-		
+	
+	<bean id="gridServiceDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal2.dao.GridServiceDao" />
 
 	<bean id="serviceMetadataDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.ServiceMetadataDao" />

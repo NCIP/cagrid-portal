@@ -124,6 +124,8 @@ public class ServiceMetadataAggregator {
 			}
 
 			ServiceMetadata serviceMetadata = constructServiceMetadata(sMeta);
+			serviceMetadata.setService(service);
+//			dao.save(serviceMetadata);
 			service.setServiceMetadata(serviceMetadata);
 			service.setUrl(url);
 			service.setFirstSeen(new Date());

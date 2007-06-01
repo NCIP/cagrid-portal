@@ -168,11 +168,11 @@
 			<formatter type="plain" />
 			<batchtest todir="test/reports">
 				<fileset dir="${test.src.dir}">
-					<!-- 
-					<include name="**/ServiceMetadataAggregatorTest.java" />
-					 -->
-					<include name="**/ServiceMetadataDaoTest.java" />
 
+					<include name="**/ServiceMetadataAggregatorTest.java" />
+					<!-- 
+					<include name="**/ServiceMetadataDaoTest.java" />
+					 -->
 
 					<exclude name="**/Abstract*.java" />
 				</fileset>

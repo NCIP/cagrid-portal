@@ -3,32 +3,38 @@
 
 <beans>
 
-	<bean id="scrollController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.servicelist.ScrollController"/>
-	<bean id="viewDetailsController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.servicelist.ViewDetailsController"/>
-	<bean id="listServicesController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.servicelist.ListServicesController">
+	<bean id="selectServiceController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.SelectGridServiceController">
+		<property name="successAction" value="listServices"/>
+	</bean>
+
+	<bean id="listServicesController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.ListServicesController">
 		<property name="showAllIfNoneProvided" value="true"/>
-		<property name="serviceMetdataDao" ref="serviceMetadataDao"/>
+		<property name="gridServiceDao" ref="gridServiceDao"/>
 		<property name="defaultRange" value="10"/>
 		<property name="listView" value="serviceList"/>
 	</bean>
 
+
 	<bean id="portletModeParameterHandlerMapping"
 		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+		
 		<property name="order" value="1" />
+		
 		<property name="interceptors">
 			<list>
 				<ref bean="parameterMappingInterceptor" />
 				<ref bean="openSessionInViewInterceptor" />
 			</list>
 		</property>
+		
 		<property name="portletModeParameterMap">
 			<map>
 				<entry key="view">
 					<map>
-						<entry key="scroll"
-							value-ref="scrollController" />
-						<entry key="viewDetails"
-							value-ref="viewDetailsController" />
+						<entry key="selectService"
+							value-ref="selectServiceController" />
+						<entry key="listServices"
+							value-ref="listServicesController" />
 					</map>
 				</entry>
 			</map>
@@ -37,7 +43,16 @@
 
 	<bean id="portletModeHandlerMapping"
 		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+
 		<property name="order" value="2" />
+		
+		<property name="interceptors">
+			<list>
+				<ref bean="parameterMappingInterceptor" />
+				<ref bean="openSessionInViewInterceptor" />
+			</list>
+		</property>
+
 		<property name="portletModeMap">
 			<map>
 				<entry key="view">
@@ -49,7 +64,7 @@
 	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-		<property name="prefix" value="/WEB-INF/jsp/discovery/servicelist/"/>
+		<property name="prefix" value="/WEB-INF/jsp/discovery/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>	
 

@@ -28,7 +28,7 @@ public abstract class AbstractDao<T extends DomainObject> extends HibernateDaoSu
 		T result = null;
 		List<T> results = searchByExample(sample, false);
 		if(results.size() > 1){
-			throw new NonUniqueResultException("Found " + sample.getClass().getName() + " objects.");
+			throw new NonUniqueResultException("Found " + results.size() + " "+ sample.getClass().getName() + " objects.");
 		}else if(results.size() == 1){
 			result = results.get(0);
 		}
