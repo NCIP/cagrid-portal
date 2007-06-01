@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
@@ -59,10 +60,8 @@ public class AddAdminWindow extends JDialog {
 	 * This is the default constructor
 	 */
 	public AddAdminWindow(String uri, GlobusCredential cred) {
-		super();
 		this.uri = uri;
 		this.cred = cred;
-		this.setIconImage(DorianLookAndFeel.getAdminIcon().getImage());
 		initialize();
 	}
 
