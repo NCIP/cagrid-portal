@@ -2,7 +2,9 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.Introduce;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsPopUpMenu;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
@@ -17,6 +19,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+
+import org.projectmobius.portal.GridPortal;
+import org.projectmobius.portal.PortalResourceManager;
 
 
 public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
@@ -79,6 +84,7 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
 							node.getServiceType()), false);
 						comp.pack();
 						PortalUtils.centerWindow(comp);
+						PortalResourceManager.getInstance().getGridPortal().add(comp);
 						comp.setVisible(true);
 					}
 				}

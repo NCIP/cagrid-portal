@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -18,8 +17,11 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import org.projectmobius.portal.GridPortalComponent;
 
 
 public class ModifyService extends JDialog {
@@ -182,8 +184,7 @@ public class ModifyService extends JDialog {
 					super.mouseClicked(e);
 					// make sure that service has a valid name
 					if (!CommonTools.isValidServiceName(serviceNameTextField.getText())) {
-						ErrorDialog.showErrorDialog("Service Name is not valid",
-							"Service name must be a java compatible class name. ("
+						JOptionPane.showMessageDialog(ModifyService.this,"Service Name is not valid, Service name must be a java compatible class name. ("
 								+ CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")");
 						return;
 					}
@@ -193,8 +194,7 @@ public class ModifyService extends JDialog {
 						NamespaceType nsType = service.getNamespaces().getNamespace(i);
 						if (nsType.getNamespace().equals(namespaceTextField.getText())
 							&& !nsType.getPackageName().equals(servicePackageNameTextField.getText())) {
-							ErrorDialog.showErrorDialog("Namespace Collision",
-								"Service Namespace is already being used " + "and Package Name does not match : "
+							JOptionPane.showMessageDialog(ModifyService.this,"Namespace Collision, Service Namespace is already being used " + "and Package Name does not match : "
 									+ servicePackageNameTextField.getText() + " != " + nsType.getPackageName());
 							return;
 						}
@@ -203,18 +203,15 @@ public class ModifyService extends JDialog {
 						ServiceType testService = service.getServiceDescriptor().getServices().getService(i);
 						if (!testService.equals(service.getService())) {
 							if (namespaceTextField.getText().equals(testService.getNamespace())) {
-								ErrorDialog.showErrorDialog("Service Namespace is not valid",
-									"Service namespace must be unique for this service context.");
+								JOptionPane.showMessageDialog(ModifyService.this,"Service Namespace is not valid, Service namespace must be unique for this service context.");
 								return;
 							}
 							if (servicePackageNameTextField.getText().equals(testService.getPackageName())) {
-								ErrorDialog.showErrorDialog("Service Package Name is not valid",
-									"Service Package Name must be unique for this service context.");
+								JOptionPane.showMessageDialog(ModifyService.this,"Service Package Name is not valid, Service Package Name must be unique for this service context.");
 								return;
 							}
 							if (serviceNameTextField.getText().equals(testService.getName())) {
-								ErrorDialog.showErrorDialog("Service Name is not valid",
-									"Service Name must be unique for this service context.");
+								JOptionPane.showMessageDialog(ModifyService.this,"Service Name is not valid, Service Name must be unique for this service context.");
 								return;
 							}
 						}
@@ -227,7 +224,7 @@ public class ModifyService extends JDialog {
 					try {
 						service.getService().setServiceSecurity(getSecurityPanel().getServiceSecurity(true));
 					} catch (Exception e1) {
-						ErrorDialog.showErrorDialog(e1);
+						JOptionPane.showMessageDialog(ModifyService.this,e1.getMessage());
 						return;
 					}
 					node.getModel().nodeStructureChanged(node);

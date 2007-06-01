@@ -338,7 +338,7 @@ public class MethodViewer extends GridPortalBaseFrame {
     private void initialize() {
         this.setContentPane(getMainPanel());
         this.setTitle("Build/Modify Operation");
-        this.setSize(new java.awt.Dimension(683, 469));
+        this.setSize(new Dimension(683, 539));
         this.setContentPane(getMainPanel());
         this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
     }
@@ -1268,9 +1268,8 @@ public class MethodViewer extends GridPortalBaseFrame {
     private JScrollPane getInputNamespaceScrollPane() {
         if (inputNamespaceScrollPane == null) {
             inputNamespaceScrollPane = new JScrollPane();
-            inputNamespaceScrollPane.setPreferredSize(new Dimension(200, 400));
-            inputNamespaceScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
             inputNamespaceScrollPane.setViewportView(getInputNamespaceTypesJTree());
+            inputNamespaceScrollPane.setPreferredSize(new Dimension(200,200));
             inputNamespaceScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Types",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
@@ -1373,6 +1372,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             outputNamespacesTypeScrollPane.setViewportView(getOutputNamespacesJTree());
+            outputNamespacesTypeScrollPane.setPreferredSize(new Dimension(200,200));
         }
         return outputNamespacesTypeScrollPane;
     }
@@ -1788,7 +1788,6 @@ public class MethodViewer extends GridPortalBaseFrame {
             inputParamsSplitPane.setOneTouchExpandable(true);
             inputParamsSplitPane.setLeftComponent(getInputNamespacesPanel());
             inputParamsSplitPane.setRightComponent(getInputTypesTablePanel());
-            inputParamsSplitPane.setDividerLocation(.25);
             inputParamsSplitPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input Parameters",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
@@ -1805,11 +1804,9 @@ public class MethodViewer extends GridPortalBaseFrame {
     private JSplitPane getOutputTypeSplitPane() {
         if (outputTypeSplitPane == null) {
             outputTypeSplitPane = new JSplitPane();
-            outputTypeSplitPane.setSize(new java.awt.Dimension(192, 90));
             outputTypeSplitPane.setOneTouchExpandable(true);
             outputTypeSplitPane.setLeftComponent(getOutputNamespacePanel());
             outputTypeSplitPane.setRightComponent(getOutputTypesTablePanel());
-            outputTypeSplitPane.setDividerLocation(.25);
             outputTypeSplitPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Output Type",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
@@ -1909,7 +1906,6 @@ public class MethodViewer extends GridPortalBaseFrame {
             exceptionsPanelSplitPane = new JSplitPane();
             exceptionsPanelSplitPane.setRightComponent(getExceptionScrollPane());
             exceptionsPanelSplitPane.setLeftComponent(getExceptionNamespacesScrollPane());
-            exceptionsPanelSplitPane.setDividerLocation(0.40);
         }
         return exceptionsPanelSplitPane;
     }
@@ -1924,6 +1920,7 @@ public class MethodViewer extends GridPortalBaseFrame {
         if (exceptionNamespacesScrollPane == null) {
             exceptionNamespacesScrollPane = new JScrollPane();
             exceptionNamespacesScrollPane.setViewportView(getNamespacesJTree());
+            exceptionNamespacesScrollPane.setPreferredSize(new Dimension(200,200));
         }
         return exceptionNamespacesScrollPane;
     }
@@ -2577,4 +2574,4 @@ public class MethodViewer extends GridPortalBaseFrame {
         }
         return descriptionTextField;
     }
-}
+}  //  @jve:decl-index=0:visual-constraint="10,10"

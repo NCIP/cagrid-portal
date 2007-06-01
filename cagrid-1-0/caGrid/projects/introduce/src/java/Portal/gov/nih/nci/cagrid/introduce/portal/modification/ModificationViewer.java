@@ -55,6 +55,7 @@ import gov.nih.nci.cagrid.introduce.upgrade.UpgradeManager;
 import gov.nih.nci.cagrid.introduce.upgrade.common.UpgradeStatus;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -1157,7 +1158,7 @@ public class ModificationViewer extends GridPortalComponent {
             gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
             discoveryPanel = new JPanel();
             discoveryPanel.setLayout(new GridBagLayout());
-            discoveryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Type",
+            discoveryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Import Data Types",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
                 PortalLookAndFeel.getPanelLabelColor()));
@@ -1307,6 +1308,7 @@ public class ModificationViewer extends GridPortalComponent {
     private JScrollPane getNamespaceTableScrollPane() {
         if (namespaceTableScrollPane == null) {
             namespaceTableScrollPane = new JScrollPane();
+            namespaceTableScrollPane.setPreferredSize(new Dimension(300,400));
             namespaceTableScrollPane.setViewportView(getNamespaceJTree());
         }
         return namespaceTableScrollPane;
@@ -1504,7 +1506,11 @@ public class ModificationViewer extends GridPortalComponent {
                                         for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
                                             MethodType method = service.getMethods().getMethod(methodI);
                                             copyRequiredJars(method.getMethodSecurity());
-                                            if (!(methodNames.contains(method.getName()))) {
+                                            if(method.getName().length()==0){
+                                            	setErrorMessage("The service " + service.getName()
+                                                        + " has a method with no name");
+                                                    return;
+                                            } else if (!(methodNames.contains(method.getName()))) {
                                                 methodNames.add(method.getName());
                                             } else {
                                                 setErrorMessage("The service " + service.getName()
@@ -2022,8 +2028,6 @@ public class ModificationViewer extends GridPortalComponent {
             typesSplitPane.setOneTouchExpandable(true);
             typesSplitPane.setLeftComponent(getNamespaceTableScrollPane());
             typesSplitPane.setRightComponent(getNamespaceConfPanel());
-            typesSplitPane.setDividerLocation(0.4);
-            typesSplitPane.setResizeWeight(0.4);
         }
         return typesSplitPane;
     }
