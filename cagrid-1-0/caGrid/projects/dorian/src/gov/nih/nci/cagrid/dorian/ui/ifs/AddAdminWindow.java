@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.dorian.ui.ifs;
 
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
+import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -61,6 +62,7 @@ public class AddAdminWindow extends JDialog {
 		super();
 		this.uri = uri;
 		this.cred = cred;
+		this.setIconImage(DorianLookAndFeel.getAdminIcon().getImage());
 		initialize();
 	}
 
