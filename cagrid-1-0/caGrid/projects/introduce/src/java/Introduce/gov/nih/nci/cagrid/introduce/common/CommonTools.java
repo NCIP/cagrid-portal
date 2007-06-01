@@ -589,10 +589,10 @@ public class CommonTools {
     public static void importMethod(MethodTypeImportInformation importInformation, File fromDir, File toDir,
         String fromService, String toService, String methodName, boolean copyFiles) throws Exception {
         ServiceDescription fromintroService = (ServiceDescription) Utils.deserializeDocument(fromDir.getAbsolutePath()
-            + File.separator + "introduce.xml", ServiceDescription.class);
+            + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
 
         ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(toDir.getAbsolutePath()
-            + File.separator + "introduce.xml", ServiceDescription.class);
+            + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
 
         if (copyFiles) {
             File fromwsdl = new File(fromDir.getAbsolutePath() + File.separator + "schema" + File.separator

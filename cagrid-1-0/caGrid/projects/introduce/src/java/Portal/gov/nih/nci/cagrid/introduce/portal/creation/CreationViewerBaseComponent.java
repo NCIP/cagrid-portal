@@ -60,7 +60,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 		final File dirFile = new File(dir);
 		if (dirFile.exists() && dirFile.list().length != 0) {
 			doIdeleteResult = JOptionPane.NO_OPTION;
-			File duceXML = new File(dirFile.getAbsolutePath() + File.separator + "introduce.xml");
+			File duceXML = new File(dirFile.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE);
 			if (duceXML.exists()) {
 				doIdeleteResult = JOptionPane.showConfirmDialog(this, "The creation directory ("
 					+ dirFile.getAbsolutePath() + ") is not empty.  All information in the directory will be lost.",

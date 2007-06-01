@@ -70,8 +70,8 @@ public class StatusBase {
         return description;
     }
     
-    public void addDescriptionLine(String description) {
-        this.description += description + "\n";
+    public void addDescriptionLine(String line) {
+        this.description += line + "\n";
     }
     
     public void addIssue(String issue, String resolution){

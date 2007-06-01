@@ -2311,7 +2311,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                     if (chooser.getSelectedFile().isDirectory()) {
                         File[] files = chooser.getSelectedFile().listFiles();
                         for (int i = 0; i < files.length; i++) {
-                            if (files[i].getName().equals("introduce.xml")) {
+                            if (files[i].getName().equals(IntroduceConstants.INTRODUCE_XML_FILE)) {
                                 ok = true;
                                 break;
                             }
@@ -2328,7 +2328,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                     // introduce.xml
                     // document.
                     File introduceFile = new File(chooser.getSelectedFile().getAbsolutePath() + File.separator
-                        + "introduce.xml");
+                        + IntroduceConstants.INTRODUCE_XML_FILE);
                     ServiceDescription desc = null;
                     try {
                         desc = (ServiceDescription) Utils.deserializeDocument(introduceFile.getAbsolutePath(),

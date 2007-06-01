@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.codegen.services;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncMethods;
@@ -16,8 +17,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.StringReader;
 
-import org.apache.log4j.Logger;
-
 
 /**
  * SyncMethodsOnDeployment
@@ -30,8 +29,6 @@ import org.apache.log4j.Logger;
  *          Exp $
  */
 public class SyncServices extends SyncTool {
-    private static final Logger logger = Logger.getLogger(SyncServices.class);
-
 
     public SyncServices(File baseDirectory, ServiceInformation info) {
         super(baseDirectory, info);
@@ -39,18 +36,14 @@ public class SyncServices extends SyncTool {
 
 
     public void sync() throws SynchronizationException {
-
         // sync each sub service
         if ((getServiceInformation().getServices() != null)
             && (getServiceInformation().getServices().getService() != null)) {
-            for (int serviceI = 0; serviceI < getServiceInformation().getServices().getService().length; serviceI++) {
-
-                int serviceIndex = serviceI;
+            for (ServiceType service : getServiceInformation().getServices().getService()) {
 
                 try {
-
-                    SpecificServiceInformation ssi = new SpecificServiceInformation(getServiceInformation(),
-                        getServiceInformation().getServices().getService(serviceIndex));
+                    SpecificServiceInformation ssi = new SpecificServiceInformation(
+                        getServiceInformation(), service);
 
                     // regenerate the services globus layer "ImplBase"
                     ServiceImplBaseTemplate implBaseT = new ServiceImplBaseTemplate();
@@ -66,17 +59,17 @@ public class SyncServices extends SyncTool {
                     // execute the source synchronization to make any necessary
                     // changes to source
                     // code for new/modified/removed methods
-                    SyncMethods methodSync = new SyncMethods(getBaseDirectory(), getServiceInformation(),
-                        getServiceInformation().getServices().getService(serviceIndex));
+                    SyncMethods methodSync = new SyncMethods(
+                        getBaseDirectory(), getServiceInformation(), service);
                     methodSync.sync();
-                    SyncResource resourceSync = new SyncResource(getBaseDirectory(), getServiceInformation(),
-                        getServiceInformation().getServices().getService(serviceIndex));
+                    SyncResource resourceSync = new SyncResource(
+                        getBaseDirectory(), getServiceInformation(), service);
                     resourceSync.sync();
 
                     // resync the security configuration files and authorization
                     // callbacks
-                    SyncSecurity securitySync = new SyncSecurity(getBaseDirectory(), getServiceInformation(),
-                        getServiceInformation().getServices().getService(serviceIndex));
+                    SyncSecurity securitySync = new SyncSecurity(
+                        getBaseDirectory(), getServiceInformation(), service);
                     securitySync.sync();
 
                     // if there is a description on the service then add it to
@@ -104,13 +97,10 @@ public class SyncServices extends SyncTool {
                         FileWriter fw = new FileWriter(new File(serviceInf));
                         fw.write(fileContentString);
                         fw.close();
-
                     }
-
                 } catch (Exception e) {
                     throw new SynchronizationException(e.getMessage(), e);
                 }
-
             }
         }
     }

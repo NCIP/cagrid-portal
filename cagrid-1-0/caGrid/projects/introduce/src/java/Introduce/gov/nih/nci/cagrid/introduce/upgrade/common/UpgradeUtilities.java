@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.introduce.upgrade.common;
 
-import java.io.File;
-
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.xpath.XPath;

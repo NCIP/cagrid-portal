@@ -277,7 +277,7 @@ public class ModificationViewer extends GridPortalComponent {
                     ModificationViewer.this.dispose();
                     return;
                 }
-                File file = new File(methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml");
+                File file = new File(methodsDirectory.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE);
                 if (file.exists() && file.canRead()) {
                     try {
 
@@ -1520,7 +1520,7 @@ public class ModificationViewer extends GridPortalComponent {
                         // save the metadata and methods and then call the
                         // resync and build
                         setProgressText("writting service document");
-                        Utils.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml",
+                        Utils.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
                             info.getServiceDescriptor(), IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
                         // call the sync tools

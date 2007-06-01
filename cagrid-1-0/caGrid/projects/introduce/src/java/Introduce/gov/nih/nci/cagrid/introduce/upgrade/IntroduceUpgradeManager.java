@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.upgrade;
 
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
@@ -48,7 +49,8 @@ public class IntroduceUpgradeManager {
 
     protected boolean needsUpgrading() {
         try {
-            String serviceVersion = UpgradeUtilities.getCurrentServiceVersion(pathToService + File.separator + "introduce.xml");
+            String serviceVersion = UpgradeUtilities.getCurrentServiceVersion(
+                pathToService + File.separator + IntroduceConstants.INTRODUCE_XML_FILE);
             if ((serviceVersion == null) || !serviceVersion.equals(CommonTools.getIntroduceVersion())) {
                 return true;
             }
@@ -72,7 +74,7 @@ public class IntroduceUpgradeManager {
     protected void upgrade(UpgradeStatus status) throws Exception {
         System.out.println("Trying to upgrade the service");
 
-        String serviceVersion = UpgradeUtilities.getCurrentServiceVersion(pathToService + File.separator + "introduce.xml");
+        String serviceVersion = UpgradeUtilities.getCurrentServiceVersion(pathToService + File.separator + IntroduceConstants.INTRODUCE_XML_FILE);
 
         if (canBeUpgraded(serviceVersion)) {
 
@@ -80,7 +82,7 @@ public class IntroduceUpgradeManager {
             String version = CommonTools.getIntroduceVersion();
             if (version != null) {
 
-                String vers = UpgradeUtilities.getCurrentServiceVersion(pathToService + File.separator + "introduce.xml");
+                String vers = UpgradeUtilities.getCurrentServiceVersion(pathToService + File.separator + IntroduceConstants.INTRODUCE_XML_FILE);
 
                 while (canBeUpgraded(vers)) {
                     String newVersion = getUpgradeVersion(vers);
