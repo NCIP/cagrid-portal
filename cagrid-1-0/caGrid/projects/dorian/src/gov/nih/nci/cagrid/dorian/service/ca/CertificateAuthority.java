@@ -227,7 +227,7 @@ public abstract class CertificateAuthority extends LoggingObject {
 	}
 
 
-	public void createCredentials(String alias, String subject, String password, Date start, Date expiration)
+	public synchronized void createCredentials(String alias, String subject, String password, Date start, Date expiration)
 		throws CertificateAuthorityFault, NoCACredentialsFault {
 		init();
 		X509Certificate cacert = getCACertificate();
@@ -281,7 +281,7 @@ public abstract class CertificateAuthority extends LoggingObject {
 	}
 
 
-	public X509Certificate signCertificate(String alias, String subject, PublicKey publicKey, Date start,
+	public synchronized X509Certificate signCertificate(String alias, String subject, PublicKey publicKey, Date start,
 		Date expiration) throws CertificateAuthorityFault, NoCACredentialsFault {
 		init();
 		X509Certificate cacert = getCACertificate();
@@ -333,7 +333,30 @@ public abstract class CertificateAuthority extends LoggingObject {
 	}
 
 
-	public X509Certificate renewCertifcateAuthorityCredentials(Date expirationDate) throws CertificateAuthorityFault,
+	public synchronized X509Certificate signHostCertificate(String alias, String host, PublicKey publicKey, Date start,
+		Date expiration) throws CertificateAuthorityFault, NoCACredentialsFault {
+		init();
+		X509Certificate cacert = getCACertificate();
+		try {
+			// VALIDATE DN
+			String caSubject = cacert.getSubjectDN().getName();
+			int caindex = caSubject.lastIndexOf(",");
+			String caPreSub = caSubject.substring(0, caindex);
+			String subject = caPreSub + ",CN=host/" + host;
+			return signCertificate(alias, subject, publicKey, start, expiration);
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault.setFaultString("Unexpected Error, could not sign host certificate.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CertificateAuthorityFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+
+	public synchronized X509Certificate renewCertifcateAuthorityCredentials(Date expirationDate) throws CertificateAuthorityFault,
 		NoCACredentialsFault {
 		init();
 		try {
@@ -390,5 +413,10 @@ public abstract class CertificateAuthority extends LoggingObject {
 			fault = (CertificateAuthorityFault) helper.getFault();
 			throw fault;
 		}
+	}
+
+
+	public DorianCAConfiguration getConfiguration() {
+		return conf;
 	}
 }

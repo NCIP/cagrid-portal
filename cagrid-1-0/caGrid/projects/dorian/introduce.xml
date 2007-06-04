@@ -10,6 +10,12 @@
    <ns2:SchemaElement type="IFSUserPolicy" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="InvalidPasswordFault" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CredentialsFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="HostCertificateRequest" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="HostCertificateRecord" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="HostCertificateFilter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="HostCertificateUpdate" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="InvalidHostCertificateRequestFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="InvalidHostCertificateFault" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./AuthenticationServiceTypes.xsd" namespace="http://cagrid.nci.nih.gov/AuthenticationService/types" packageName="gov.nih.nci.cagrid.authentication.stubs.types" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="AuthenticationServiceReference" xsi:type="ns2:SchemaElementType"/>
