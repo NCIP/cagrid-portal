@@ -26,27 +26,6 @@
 		</cobertura-instrument>
 	</target>
 	
-	<target name="testCycles" depends="checkGlobus, instrument">
-		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
-			<sysproperty key="basedir" value="${basedir}" />
-			<sysproperty key="build.dir" value="${classes.dir}" />
-			<jvmarg value="-Dbuild.dir=${classes.dir}" />
-			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
-			<classpath location="${instrumented.classes.dir}" />
-			<classpath refid="Introduce.test.classpath" />
-			<classpath refid="UpdateManager.test.classpath" />
-			<formatter type="xml" />
-			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
-			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}/Introduce">
-					<include name="**/test/unit/**/IntroduceCycleTestCase.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed" />
-	</target>
 
 	<!-- call the test target for each project and aggregates the log resutls  -->
 	<target name="test" depends="checkGlobus, instrument">
