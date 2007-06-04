@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.common.Runner;
+import gov.nih.nci.cagrid.common.ThreadManager;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
@@ -32,6 +34,7 @@ import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
@@ -70,16 +73,20 @@ public class IFS extends LoggingObject {
 
 	private CertificateAuthority ca;
 
+	private Object mutex = new Object();
+
 	public static final String ADMINISTRATORS = "administrators";
 	private Group administrators;
 	private GroupManager groupManager;
 	private HostCertificateManager hostManager;
+	private ThreadManager threadManager;
 
 
 	public IFS(IdentityFederationConfiguration conf, Database db, PropertyManager properties, CertificateAuthority ca,
 		IFSDefaults defaults) throws DorianInternalFault {
 		this.conf = conf;
 		this.ca = ca;
+		threadManager = new ThreadManager();
 		tm = new TrustedIdPManager(conf, db);
 		um = new UserManager(db, conf, properties, ca, tm, defaults);
 		um.buildDatabase();
@@ -96,6 +103,7 @@ public class IFS extends LoggingObject {
 			this.administrators = this.groupManager.getGroup(ADMINISTRATORS);
 		}
 		this.hostManager = new HostCertificateManager(db, this.conf, ca);
+
 		um.publishCRL();
 	}
 
@@ -557,7 +565,50 @@ public class IFS extends LoggingObject {
 	}
 
 
-	public synchronized X509CRL getCRL() throws DorianInternalFault {
+	public void publishCRL() {
+		if (conf.getCRLPublish() != null) {
+			if ((conf.getCRLPublish().getGts() != null) && (conf.getCRLPublish().getGts().length > 0)) {
+				Runner runner = new Runner() {
+					public void execute() {
+						synchronized (mutex) {
+							String[] services = conf.getCRLPublish().getGts();
+							if ((services != null) && (services.length > 0)) {
+								try {
+									X509CRL crl = getCRL();
+									gov.nih.nci.cagrid.gts.bean.X509CRL x509 = new gov.nih.nci.cagrid.gts.bean.X509CRL();
+									x509.setCrlEncodedString(CertUtil.writeCRL(crl));
+									String authName = ca.getCACertificate().getSubjectDN().getName();
+									for (int i = 0; i < services.length; i++) {
+										String uri = services[i];
+										try {
+											debug("Publishing CRL to the GTS " + uri);
+											GTSAdminClient client = new GTSAdminClient(uri, null);
+											client.updateCRL(authName, x509);
+											debug("Published CRL to the GTS " + uri);
+										} catch (Exception ex) {
+											getLog().error("Error publishing the CRL to the GTS " + uri + "!!!", ex);
+										}
+
+									}
+
+								} catch (Exception e) {
+									getLog().error("Unexpected Error publishing the CRL!!!", e);
+								}
+							}
+						}
+					}
+				};
+				try {
+					threadManager.executeInBackground(runner);
+				} catch (Exception t) {
+					t.getMessage();
+				}
+			}
+		}
+	}
+
+
+	private X509CRL getCRL() throws DorianInternalFault {
 
 		Map<String, DisabledUser> users = this.um.getDisabledUsers();
 		Map<Long, CRLEntry> list = new HashMap<Long, CRLEntry>();
