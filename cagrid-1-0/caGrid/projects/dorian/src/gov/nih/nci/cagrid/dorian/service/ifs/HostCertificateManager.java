@@ -54,6 +54,57 @@ public class HostCertificateManager extends LoggingObject {
 	}
 
 
+	public synchronized HostCertificateRecord renewHostCertificate(long id) throws DorianInternalFault,
+		InvalidHostCertificateFault {
+		HostCertificateRecord record = this.getHostCertificateRecord(id);
+		if (!record.getStatus().equals(HostCertificateStatus.Active)) {
+			InvalidHostCertificateFault fault = new InvalidHostCertificateFault();
+			fault.setFaultString("Only active host certificates may be renewed.");
+			throw fault;
+		}
+
+		Connection c = null;
+
+		try {
+			ca.deleteCredentials(record.getHost());
+			java.security.PublicKey key = KeyUtil.loadPublicKey(record.getPublicKey().getKeyAsString());
+			Date start = new Date();
+			CredentialLifetime lifetime = this.conf.getCredentialPolicy().getCredentialLifetime();
+			Date end = gov.nih.nci.cagrid.dorian.common.Utils.getExpiredDate(lifetime);
+			if (end.after(ca.getCACertificate().getNotAfter())) {
+				end = ca.getCACertificate().getNotAfter();
+			}
+			java.security.cert.X509Certificate cert = ca.signHostCertificate(record.getHost(), record.getHost(), key,
+				start, end);
+			record.setSerialNumber(cert.getSerialNumber().longValue());
+			record.setSubject(cert.getSubjectDN().getName());
+			X509Certificate x509 = new X509Certificate();
+			x509.setCertificateAsString(CertUtil.writeCertificate(cert));
+			record.setCertificate(x509);
+			c = db.getConnection();
+			PreparedStatement s = c.prepareStatement("update " + TABLE + " SET " + SERIAL + " = ? , " + SUBJECT
+				+ " = ? , " + CERTIFICATE + " = ? WHERE " + ID + "= ?");
+			s.setLong(1, record.getSerialNumber());
+			s.setString(2, record.getSubject());
+			s.setString(3, record.getCertificate().getCertificateAsString());
+			s.setLong(4, record.getId());
+			s.execute();
+			return record;
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+
+		} finally {
+			db.releaseConnection(c);
+		}
+	}
+
+
 	public synchronized HostCertificateRecord approveHostCertifcate(long id) throws DorianInternalFault,
 		InvalidHostCertificateFault {
 		Connection c = null;
