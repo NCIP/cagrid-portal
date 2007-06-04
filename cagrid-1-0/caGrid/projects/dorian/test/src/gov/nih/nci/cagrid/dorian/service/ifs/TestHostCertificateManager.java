@@ -54,12 +54,13 @@ public class TestHostCertificateManager extends TestCase {
 	public void testCreateAndApproveManyHostCertificate() {
 		try {
 			int total = 5;
+			String hostPrefix = "localhost";
 			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca);
 			hcm.clearDatabase();
 			List<HostCertificateRequest> requests = new ArrayList<HostCertificateRequest>();
 			List<Long> ids = new ArrayList<Long>();
 			for (int i = 0; i < total; i++) {
-				String host = "localhost" + i;
+				String host = hostPrefix + i;
 				HostCertificateRequest req = getHostCertificateRequest(host);
 				String owner = OWNER + i;
 				long id = hcm.requestHostCertifcate(owner, req);
@@ -73,12 +74,84 @@ public class TestHostCertificateManager extends TestCase {
 				HostCertificateRequest req = requests.get(i);
 				String owner = OWNER + i;
 				HostCertificateRecord record = hcm.approveHostCertifcate(id);
-				System.err.println((i + 1));
 				validateAfterCertificateApproval(total, (i + 1), hcm, id, owner, req, record);
 				HostCertificateFilter f = new HostCertificateFilter();
 				f.setStatus(HostCertificateStatus.Pending);
 				assertEquals(total - (i + 1), hcm.findHostCertificates(f).size());
 			}
+
+			// Test find by host
+			try {
+				HostCertificateFilter f = new HostCertificateFilter();
+				f.setHost("foobar");
+				assertEquals(0, hcm.findHostCertificates(f).size());
+				f.setHost("localhost");
+				assertEquals(5, hcm.findHostCertificates(f).size());
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				fail(e.getMessage());
+			}
+
+			// Test find by owner
+			try {
+				HostCertificateFilter f = new HostCertificateFilter();
+				f.setOwner("foobar");
+				assertEquals(0, hcm.findHostCertificates(f).size());
+				f.setOwner(OWNER);
+				assertEquals(5, hcm.findHostCertificates(f).size());
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				fail(e.getMessage());
+			}
+
+			// Test find by subject
+			try {
+				HostCertificateFilter f = new HostCertificateFilter();
+				f.setSubject("foobar");
+				assertEquals(0, hcm.findHostCertificates(f).size());
+				String caSubject = ca.getCACertificate().getSubjectDN().getName();
+				int caindex = caSubject.lastIndexOf(",");
+				String caPreSub = caSubject.substring(0, caindex);
+				f.setSubject(caPreSub);
+				assertEquals(5, hcm.findHostCertificates(f).size());
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				fail(e.getMessage());
+			}
+
+			// Test Find by Multiple
+			try {
+				HostCertificateFilter f = new HostCertificateFilter();
+				String caSubject = ca.getCACertificate().getSubjectDN().getName();
+				int caindex = caSubject.lastIndexOf(",");
+				String caPreSub = caSubject.substring(0, caindex);
+				f.setStatus(HostCertificateStatus.Active);
+				f.setHost(hostPrefix);
+				f.setOwner(OWNER);
+				f.setSubject(caPreSub);
+				assertEquals(5, hcm.findHostCertificates(f).size());
+			} catch (Exception e) {
+				FaultUtil.printFault(e);
+				fail(e.getMessage());
+			}
+
+			// Update the owner and status
+
+			for (int i = 0; i < total; i++) {
+				long id = ids.get(i).longValue();
+				String newOwnerPrefix= "new";
+				String newOwner = newOwnerPrefix + i;
+				HostCertificateUpdate update = new HostCertificateUpdate();
+				update.setId(id);
+				update.setOwner(newOwner);
+				update.setStatus(HostCertificateStatus.Suspended);
+				hcm.updateHostCertificateRecord(update);
+				HostCertificateFilter f = new HostCertificateFilter();
+				f.setStatus(HostCertificateStatus.Suspended);
+				f.setOwner(newOwnerPrefix);
+				assertEquals((i + 1), hcm.findHostCertificates(f).size());
+			}
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
