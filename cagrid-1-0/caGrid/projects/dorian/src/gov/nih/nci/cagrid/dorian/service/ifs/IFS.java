@@ -640,11 +640,12 @@ public class IFS extends LoggingObject {
 		}
 
 		CRLEntry[] entries = new CRLEntry[list.size()];
-		for (int i = 0; i < list.size(); i++) {
-			entries[i] = list.get(i);
-
+		Iterator<CRLEntry> itr2 = list.values().iterator();
+		int count = 0;
+		while (itr2.hasNext()) {
+			entries[count] = itr2.next();
+			count++;
 		}
-
 		try {
 			X509CRL crl = ca.getCRL(entries);
 			return crl;
