@@ -890,7 +890,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
             jLabel6 = new JLabel();
             jLabel6.setText("Import Credentials");
             jLabel6.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
-            jLabel6.setForeground(PortalLookAndFeel.getPanelLabelColor());
             selectPanel = new JPanel();
 
             selectPanel.setLayout(new GridBagLayout());
@@ -1191,11 +1190,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
         if (jPanel1 == null) {
             credentialsRequired = new JLabel();
             credentialsRequired.setText("Anonymous Clients");
-            credentialsRequired.setForeground(PortalLookAndFeel.getPanelLabelColor());
             credentialsRequired.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
             authLabel = new JLabel();
             authLabel.setText("Authorization Mechanism");
-            authLabel.setForeground(PortalLookAndFeel.getPanelLabelColor());
             authLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
 
             GridBagConstraints gridBagConstraints5 = new GridBagConstraints();

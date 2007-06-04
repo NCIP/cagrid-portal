@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
 import gov.nih.nci.cagrid.introduce.beans.security.CustomPDPChainAuthorization;
+import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -58,7 +59,7 @@ public class CustomPDPPanel extends JPanel {
 		gridBagConstraints.gridx = 1;
 		this.setLayout(new GridBagLayout());
 
-		this.setBorder(BorderFactory.createTitledBorder(null, "Custom PDP Authorization Chain", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+		this.setBorder(BorderFactory.createTitledBorder(null, "Custom PDP Authorization Chain", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
 
 		this.setSize(new Dimension(473, 214));
 		this.add(getPdpAuthField(), gridBagConstraints);
