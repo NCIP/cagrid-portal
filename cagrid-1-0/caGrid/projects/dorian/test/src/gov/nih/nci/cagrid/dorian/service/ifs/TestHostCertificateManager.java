@@ -20,6 +20,7 @@ import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.math.BigInteger;
 import java.security.KeyPair;
+import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -47,6 +48,41 @@ public class TestHostCertificateManager extends TestCase {
 			fail(e.getMessage());
 		}
 
+	}
+
+
+	public void testCreateAndApproveManyHostCertificate() {
+		try {
+			int total = 5;
+			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca);
+			hcm.clearDatabase();
+			List<HostCertificateRequest> requests = new ArrayList<HostCertificateRequest>();
+			List<Long> ids = new ArrayList<Long>();
+			for (int i = 0; i < total; i++) {
+				String host = "localhost" + i;
+				HostCertificateRequest req = getHostCertificateRequest(host);
+				String owner = OWNER + i;
+				long id = hcm.requestHostCertifcate(owner, req);
+				validateAfterCertificateRequest((i + 1), (i + 1), hcm, owner, req, id);
+				requests.add(req);
+				ids.add(Long.valueOf(id));
+			}
+
+			for (int i = 0; i < total; i++) {
+				long id = ids.get(i).longValue();
+				HostCertificateRequest req = requests.get(i);
+				String owner = OWNER + i;
+				HostCertificateRecord record = hcm.approveHostCertifcate(id);
+				System.err.println((i + 1));
+				validateAfterCertificateApproval(total, (i + 1), hcm, id, owner, req, record);
+				HostCertificateFilter f = new HostCertificateFilter();
+				f.setStatus(HostCertificateStatus.Pending);
+				assertEquals(total - (i + 1), hcm.findHostCertificates(f).size());
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
 	}
 
 
@@ -440,13 +476,25 @@ public class TestHostCertificateManager extends TestCase {
 
 	private void validateAfterCertificateRequest(HostCertificateManager hcm, HostCertificateRequest req, long id)
 		throws Exception {
-		validateFindHostCertificates(hcm, id, -1, null, req.getHostname(), OWNER, req.getPublicKey(),
-			HostCertificateStatus.Pending, "");
+		validateAfterCertificateRequest(1, 1, hcm, OWNER, req, id);
+	}
+
+
+	private void validateAfterCertificateRequest(int count, int statusCount, HostCertificateManager hcm, String owner,
+		HostCertificateRequest req, long id) throws Exception {
+		validateFindHostCertificates(count, statusCount, hcm, id, -1, null, req.getHostname(), owner, req
+			.getPublicKey(), HostCertificateStatus.Pending, "");
 	}
 
 
 	private void validateAfterCertificateApproval(HostCertificateManager hcm, long id, String owner,
 		HostCertificateRequest req, HostCertificateRecord record) throws Exception {
+		validateAfterCertificateApproval(1, 1, hcm, id, owner, req, record);
+	}
+
+
+	private void validateAfterCertificateApproval(int count, int statusCount, HostCertificateManager hcm, long id,
+		String owner, HostCertificateRequest req, HostCertificateRecord record) throws Exception {
 		assertEquals(req.getHostname(), record.getHost());
 		assertEquals(req.getPublicKey(), record.getPublicKey());
 		assertEquals(owner, record.getOwner());
@@ -466,22 +514,26 @@ public class TestHostCertificateManager extends TestCase {
 		assertEquals(record.getStatus(), r.getStatus());
 		assertEquals(record.getSubject(), r.getSubject());
 		assertEquals(record, r);
-		validateFindHostCertificates(hcm, id, record.getSerialNumber(), record.getCertificate(), req.getHostname(),
-			owner, req.getPublicKey(), HostCertificateStatus.Active, subject);
+		validateFindHostCertificates(count, statusCount, hcm, id, record.getSerialNumber(), record.getCertificate(),
+			req.getHostname(), owner, req.getPublicKey(), HostCertificateStatus.Active, subject);
 	}
 
 
-	private void validateFindHostCertificates(HostCertificateManager hcm, long id, long sn, X509Certificate cert,
-		String host, String owner, PublicKey key, HostCertificateStatus status, String subject) throws Exception {
+	private void validateFindHostCertificates(int count, int statusCount, HostCertificateManager hcm, long id, long sn,
+		X509Certificate cert, String host, String owner, PublicKey key, HostCertificateStatus status, String subject)
+		throws Exception {
 
 		List<HostCertificateRecord> l1 = hcm.findHostCertificates(null);
-		assertEquals(1, l1.size());
-		validateHostCertificateRecord(l1.get(0), id, sn, cert, host, owner, key, status, subject);
+		assertEquals(count, l1.size());
+		if (count == 1) {
+			validateHostCertificateRecord(l1.get(count - 1), id, sn, cert, host, owner, key, status, subject);
+		}
 
-		List<HostCertificateRecord> l2 = hcm.findHostCertificates(new HostCertificateFilter());
-		assertEquals(1, l2.size());
-		validateHostCertificateRecord(l2.get(0), id, sn, cert, host, owner, key, status, subject);
-
+		if (count == 1) {
+			List<HostCertificateRecord> l2 = hcm.findHostCertificates(new HostCertificateFilter());
+			assertEquals(count, l2.size());
+			validateHostCertificateRecord(l2.get(count - 1), id, sn, cert, host, owner, key, status, subject);
+		}
 		HostCertificateFilter f3 = new HostCertificateFilter();
 		f3.setHost(host);
 		List<HostCertificateRecord> l3 = hcm.findHostCertificates(f3);
@@ -511,8 +563,15 @@ public class TestHostCertificateManager extends TestCase {
 		HostCertificateFilter f7 = new HostCertificateFilter();
 		f7.setStatus(status);
 		List<HostCertificateRecord> l7 = hcm.findHostCertificates(f7);
-		assertEquals(1, l7.size());
-		validateHostCertificateRecord(l7.get(0), id, sn, cert, host, owner, key, status, subject);
+		assertEquals(statusCount, l7.size());
+		if (statusCount == 1) {
+			validateHostCertificateRecord(l7.get(0), id, sn, cert, host, owner, key, status, subject);
+		} else if (statusCount > 1) {
+			f7.setId(new BigInteger(String.valueOf(id)));
+			l7 = hcm.findHostCertificates(f7);
+			assertEquals(1, l7.size());
+			validateHostCertificateRecord(l7.get(0), id, sn, cert, host, owner, key, status, subject);
+		}
 
 		if (gov.nih.nci.cagrid.common.Utils.clean(subject) != null) {
 			HostCertificateFilter f8 = new HostCertificateFilter();
