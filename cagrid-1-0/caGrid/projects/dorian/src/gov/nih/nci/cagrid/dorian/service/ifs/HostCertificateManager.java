@@ -314,6 +314,34 @@ public class HostCertificateManager extends LoggingObject {
 	}
 
 
+	public List<HostCertificateRecord> getHostCertificateRecords(String owner) throws DorianInternalFault {
+		List<HostCertificateRecord> records = new ArrayList<HostCertificateRecord>();
+		Connection c = null;
+		try {
+			c = db.getConnection();
+			PreparedStatement s = c.prepareStatement("select " + ID + " from  " + TABLE + " WHERE OWNER = ?");
+			s.setString(1, owner);
+			ResultSet rs = s.executeQuery();
+			while (rs.next()) {
+				records.add(getHostCertificateRecord(rs.getInt(ID)));
+			}
+			rs.close();
+			s.close();
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+		return records;
+	}
+
+
 	public HostCertificateRecord getHostCertificateRecord(long id) throws DorianInternalFault,
 		InvalidHostCertificateFault {
 		buildDatabase();
@@ -371,7 +399,7 @@ public class HostCertificateManager extends LoggingObject {
 	}
 
 
-	public void updateHostCertificateRecord(HostCertificateUpdate update) throws DorianInternalFault,
+	public synchronized void updateHostCertificateRecord(HostCertificateUpdate update) throws DorianInternalFault,
 		InvalidHostCertificateFault {
 
 		if (!determineIfRecordExistById(update.getId())) {

@@ -67,6 +67,12 @@ public class TestHostCertificateManager extends TestCase {
 				validateAfterCertificateRequest((i + 1), (i + 1), hcm, owner, req, id);
 				requests.add(req);
 				ids.add(Long.valueOf(id));
+
+				assertEquals(0, hcm.getHostCertificateRecords(OWNER).size());
+				List<HostCertificateRecord> records = hcm.getHostCertificateRecords(owner);
+				assertEquals(1, records.size());
+				assertEquals(host, records.get(0).getHost());
+				assertEquals(owner, records.get(0).getOwner());
 			}
 
 			for (int i = 0; i < total; i++) {
@@ -78,6 +84,10 @@ public class TestHostCertificateManager extends TestCase {
 				HostCertificateFilter f = new HostCertificateFilter();
 				f.setStatus(HostCertificateStatus.Pending);
 				assertEquals(total - (i + 1), hcm.findHostCertificates(f).size());
+
+				List<HostCertificateRecord> records = hcm.getHostCertificateRecords(owner);
+				assertEquals(1, records.size());
+				assertEquals(record, records.get(0));
 			}
 
 			// Test find by host
@@ -139,8 +149,7 @@ public class TestHostCertificateManager extends TestCase {
 
 			for (int i = 0; i < total; i++) {
 				long id = ids.get(i).longValue();
-				String newOwnerPrefix= "new";
-				String newOwner = newOwnerPrefix + i;
+				String newOwner = "new";
 				HostCertificateUpdate update = new HostCertificateUpdate();
 				update.setId(id);
 				update.setOwner(newOwner);
@@ -148,8 +157,10 @@ public class TestHostCertificateManager extends TestCase {
 				hcm.updateHostCertificateRecord(update);
 				HostCertificateFilter f = new HostCertificateFilter();
 				f.setStatus(HostCertificateStatus.Suspended);
-				f.setOwner(newOwnerPrefix);
+				f.setOwner(newOwner);
 				assertEquals((i + 1), hcm.findHostCertificates(f).size());
+				List<HostCertificateRecord> records = hcm.getHostCertificateRecords(newOwner);
+				assertEquals((i + 1), records.size());
 			}
 
 		} catch (Exception e) {
