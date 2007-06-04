@@ -608,7 +608,7 @@ public class IFS extends LoggingObject {
 	}
 
 
-	private X509CRL getCRL() throws DorianInternalFault {
+	public X509CRL getCRL() throws DorianInternalFault {
 
 		Map<String, DisabledUser> users = this.um.getDisabledUsers();
 		Map<Long, CRLEntry> list = new HashMap<Long, CRLEntry>();
