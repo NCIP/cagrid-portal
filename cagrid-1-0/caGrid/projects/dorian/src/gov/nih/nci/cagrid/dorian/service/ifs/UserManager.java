@@ -37,7 +37,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bouncycastle.asn1.x509.CRLReason;
 
@@ -666,8 +668,66 @@ public class UserManager extends LoggingObject {
 	}
 
 
-	public List getDisabledUsersSerialIds() throws DorianInternalFault {
+	public Map<String, DisabledUser> getDisabledUsers() throws DorianInternalFault {
+		Map<String, DisabledUser> users = new HashMap<String, DisabledUser>();
+		this.buildDatabase();
+		Connection c = null;
+		try {
+			// First get all the users who's accounts are disabled.
+			c = db.getConnection();
+			Statement s = c.createStatement();
 
+			StringBuffer sql = new StringBuffer();
+			sql.append("select IDP_ID,UID, GID from " + USERS_TABLE + " WHERE STATUS='" + IFSUserStatus.Suspended
+				+ "' OR STATUS='" + IFSUserStatus.Pending + "' OR STATUS='" + IFSUserStatus.Rejected + "' OR STATUS='"
+				+ IFSUserStatus.Expired + "'");
+			ResultSet rs = s.executeQuery(sql.toString());
+			while (rs.next()) {
+				String id = getCredentialsManagerUID(rs.getLong("IDP_ID"), rs.getString("UID"));
+				DisabledUser usr = new DisabledUser(rs.getString("GID"), ca.getCertificateSerialNumber(id), CRLReason.PRIVILEGE_WITHDRAWN);
+				if (!users.containsKey(usr.getGridIdentity())) {
+					users.put(usr.getGridIdentity(), usr);
+				}
+			}
+			rs.close();
+			s.close();
+
+			// Now get all the IdPs who are suspended.
+			TrustedIdP[] idp = this.tm.getSuspendedTrustedIdPs();
+			if (idp != null) {
+				for (int i = 0; i < idp.length; i++) {
+					Statement stmt = c.createStatement();
+					StringBuffer sb = new StringBuffer();
+					sb.append("select IDP_ID,UID,GID from " + USERS_TABLE + " WHERE IDP_ID=" + idp[i].getId());
+					ResultSet result = stmt.executeQuery(sb.toString());
+					while (result.next()) {
+						String id = getCredentialsManagerUID(result.getLong("IDP_ID"), result.getString("UID"));
+						DisabledUser usr = new DisabledUser(rs.getString("GID"), ca.getCertificateSerialNumber(id), CRLReason.PRIVILEGE_WITHDRAWN);
+						if (!users.containsKey(usr.getGridIdentity())) {
+							users.put(usr.getGridIdentity(), usr);
+						}
+					}
+					stmt.close();
+					result.close();
+				}
+			}
+			return users;
+
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("Unexpected Error, could not obtain a list of users");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+	}
+
+
+	public List getDisabledUsersSerialIds() throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		List sn = new ArrayList();

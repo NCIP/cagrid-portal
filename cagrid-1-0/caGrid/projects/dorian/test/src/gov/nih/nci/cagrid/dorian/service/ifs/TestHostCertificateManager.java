@@ -131,6 +131,126 @@ public class TestHostCertificateManager extends TestCase {
 	}
 
 
+	public void testGetHostCertificateSerialNumbers() {
+		try {
+			int total = 5;
+			String hostPrefix = "localhost";
+			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca);
+			hcm.clearDatabase();
+			List<Long> ids = new ArrayList<Long>();
+			String owner = OWNER;
+			for (int i = 0; i < total; i++) {
+				String host = hostPrefix + i;
+				HostCertificateRequest req = getHostCertificateRequest(host);
+				long id = hcm.requestHostCertifcate(owner, req);
+				assertEquals(0,  hcm.getHostCertificateRecordsSerialNumbers(owner).size());
+				ids.add(Long.valueOf(id));
+			}
+
+			for (int i = 0; i < total; i++) {
+				long id = ids.get(i).longValue();
+				hcm.approveHostCertifcate(id);
+				List<Long> sn = hcm.getHostCertificateRecordsSerialNumbers(owner);
+				assertEquals((i + 1), sn.size());
+				for (int j = 0; j < (i + 1); j++) {
+					HostCertificateRecord r = hcm.getHostCertificateRecord(ids.get(j));
+					boolean found = false;
+					for (int x = 0; x < sn.size(); x++) {
+						if (r.getSerialNumber() == sn.get(x).longValue()) {
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						fail("Serial Number not returned.");
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
+	
+	public void testGetDisabledHostCertificates() {
+		try {
+			int total = 5;
+			String hostPrefix = "localhost";
+			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca);
+			hcm.clearDatabase();
+			List<Long> ids = new ArrayList<Long>();
+			String owner = OWNER;
+			for (int i = 0; i < total; i++) {
+				String host = hostPrefix + i;
+				HostCertificateRequest req = getHostCertificateRequest(host);
+				long id = hcm.requestHostCertifcate(owner, req);
+				assertEquals(0,  hcm.getDisabledHostCertificatesSerialNumbers().size());
+				ids.add(Long.valueOf(id));
+			}
+
+			for (int i = 0; i < total; i++) {
+				long id = ids.get(i).longValue();
+				hcm.approveHostCertifcate(id);
+				assertEquals(0,  hcm.getDisabledHostCertificatesSerialNumbers().size());
+				List<Long> sn = hcm.getHostCertificateRecordsSerialNumbers(owner);
+				assertEquals((i + 1), sn.size());
+			}
+			
+			for (int i = 0; i < 3; i++) {
+				long id = ids.get(i).longValue();
+				HostCertificateUpdate update = new HostCertificateUpdate();
+				update.setId(id);
+				update.setStatus(HostCertificateStatus.Suspended);
+				hcm.updateHostCertificateRecord(update);
+				List<Long> sn = hcm.getDisabledHostCertificatesSerialNumbers();
+				assertEquals((i+1),  sn.size());
+				for (int j = 0; j < (i + 1); j++) {
+					HostCertificateRecord r = hcm.getHostCertificateRecord(ids.get(j));
+					boolean found = false;
+					for (int x = 0; x < sn.size(); x++) {
+						if (r.getSerialNumber() == sn.get(x).longValue()) {
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						fail("Serial Number not returned.");
+					}
+				}
+			}
+			
+			for (int i = 3; i < 5; i++) {
+				long id = ids.get(i).longValue();
+				HostCertificateUpdate update = new HostCertificateUpdate();
+				update.setId(id);
+				update.setStatus(HostCertificateStatus.Compromised);
+				hcm.updateHostCertificateRecord(update);
+				List<Long> sn = hcm.getDisabledHostCertificatesSerialNumbers();
+				assertEquals((i+1),  sn.size());
+				for (int j = 0; j < (i + 1); j++) {
+					HostCertificateRecord r = hcm.getHostCertificateRecord(ids.get(j));
+					boolean found = false;
+					for (int x = 0; x < sn.size(); x++) {
+						if (r.getSerialNumber() == sn.get(x).longValue()) {
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						fail("Serial Number not returned.");
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
+
+
+
 	public void testCreateAndApproveManyHostCertificate() {
 		try {
 			int total = 5;

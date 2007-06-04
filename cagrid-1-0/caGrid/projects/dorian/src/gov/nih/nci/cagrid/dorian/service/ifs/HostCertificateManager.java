@@ -370,7 +370,7 @@ public class HostCertificateManager extends LoggingObject {
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select " + ID + " from  " + TABLE + " WHERE OWNER = ?");
+			PreparedStatement s = c.prepareStatement("select " + ID + " from  " + TABLE + " WHERE " + OWNER + " = ?");
 			s.setString(1, owner);
 			ResultSet rs = s.executeQuery();
 			while (rs.next()) {
@@ -390,6 +390,68 @@ public class HostCertificateManager extends LoggingObject {
 			db.releaseConnection(c);
 		}
 		return records;
+	}
+
+
+	public List<Long> getHostCertificateRecordsSerialNumbers(String owner) throws DorianInternalFault {
+		List<Long> sn = new ArrayList<Long>();
+		Connection c = null;
+		try {
+			c = db.getConnection();
+			PreparedStatement s = c.prepareStatement("select " + SERIAL + " from  " + TABLE + " WHERE " + OWNER
+				+ " = ? AND " + STATUS + " <> ? AND " + STATUS + " <> ? ");
+			s.setString(1, owner);
+			s.setString(2, HostCertificateStatus.Pending.getValue());
+			s.setString(3, HostCertificateStatus.Rejected.getValue());
+			ResultSet rs = s.executeQuery();
+			while (rs.next()) {
+				sn.add(new Long(rs.getLong(SERIAL)));
+			}
+			rs.close();
+			s.close();
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+		return sn;
+	}
+
+
+	public List<Long> getDisabledHostCertificatesSerialNumbers() throws DorianInternalFault {
+		List<Long> entries = new ArrayList<Long>();
+		Connection c = null;
+		try {
+			c = db.getConnection();
+			PreparedStatement s = c.prepareStatement("select " + SERIAL + " from  " + TABLE + " WHERE " + STATUS
+				+ " = ? OR " + STATUS + " = ? ");
+			s.setString(1, HostCertificateStatus.Suspended.getValue());
+			s.setString(2, HostCertificateStatus.Compromised.getValue());
+			ResultSet rs = s.executeQuery();
+			while (rs.next()) {
+				long sn = rs.getLong(SERIAL);
+				entries.add(new Long(sn));
+			}
+			rs.close();
+			s.close();
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+		return entries;
 	}
 
 

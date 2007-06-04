@@ -5,10 +5,17 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidHostCertificateFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidHostCertificateRequestFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
@@ -23,20 +30,27 @@ import gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
+import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 
+import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.security.PublicKey;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import org.bouncycastle.asn1.x509.CRLReason;
 
 
 /**
@@ -59,6 +73,7 @@ public class IFS extends LoggingObject {
 	public static final String ADMINISTRATORS = "administrators";
 	private Group administrators;
 	private GroupManager groupManager;
+	private HostCertificateManager hostManager;
 
 
 	public IFS(IdentityFederationConfiguration conf, Database db, PropertyManager properties, CertificateAuthority ca,
@@ -80,6 +95,7 @@ public class IFS extends LoggingObject {
 		} else {
 			this.administrators = this.groupManager.getGroup(ADMINISTRATORS);
 		}
+		this.hostManager = new HostCertificateManager(db, this.conf, ca);
 		um.publishCRL();
 	}
 
@@ -461,6 +477,134 @@ public class IFS extends LoggingObject {
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (InvalidProxyFault) helper.getFault();
+			throw fault;
+		}
+
+	}
+
+
+	// ///////////////////////////////
+	/* HOST CERTIFICATE OPERATIONS */
+	// ///////////////////////////////
+	public HostCertificateStatus requestHostCertificate(String callerGridId, HostCertificateRequest req)
+		throws DorianInternalFault, InvalidHostCertificateRequestFault, InvalidHostCertificateFault,
+		PermissionDeniedFault {
+		IFSUser caller = getUser(callerGridId);
+		verifyActiveUser(caller);
+		long id = hostManager.requestHostCertifcate(callerGridId, req);
+		HostCertificateRecord record = null;
+		if (this.conf.getCredentialPolicy().isHostCertificateAutoApproval()) {
+			record = hostManager.approveHostCertifcate(id);
+		} else {
+			record = hostManager.getHostCertificateRecord(id);
+		}
+		return record.getStatus();
+	}
+
+
+	public HostCertificateRecord[] getHostCertificatesForCaller(String callerGridId) throws DorianInternalFault,
+		PermissionDeniedFault {
+		IFSUser caller = getUser(callerGridId);
+		verifyActiveUser(caller);
+		List<HostCertificateRecord> list = hostManager.getHostCertificateRecords(callerGridId);
+		HostCertificateRecord[] records = new HostCertificateRecord[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			records[i] = list.get(i);
+		}
+
+		return records;
+	}
+
+
+	public HostCertificateRecord approveHostCertificate(String callerGridId, long recordId) throws DorianInternalFault,
+		InvalidHostCertificateFault, PermissionDeniedFault {
+		IFSUser caller = getUser(callerGridId);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		return hostManager.approveHostCertifcate(recordId);
+	}
+
+
+	public HostCertificateRecord[] findHostCertificates(String callerGridId, HostCertificateFilter f)
+		throws DorianInternalFault, PermissionDeniedFault {
+		IFSUser caller = getUser(callerGridId);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		List<HostCertificateRecord> list = hostManager.findHostCertificates(f);
+		HostCertificateRecord[] records = new HostCertificateRecord[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			records[i] = list.get(i);
+		}
+		return records;
+	}
+
+
+	public void updateHostCertificateRecord(String callerGridId, HostCertificateUpdate update)
+		throws DorianInternalFault, InvalidHostCertificateFault, PermissionDeniedFault {
+		IFSUser caller = getUser(callerGridId);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		hostManager.updateHostCertificateRecord(update);
+	}
+
+
+	public void renewHostCertificate(String callerGridId, long recordId) throws DorianInternalFault,
+		InvalidHostCertificateFault, PermissionDeniedFault {
+		IFSUser caller = getUser(callerGridId);
+		verifyActiveUser(caller);
+		verifyAdminUser(caller);
+		hostManager.renewHostCertificate(recordId);
+	}
+
+
+	public synchronized X509CRL getCRL() throws DorianInternalFault {
+
+		Map<String, DisabledUser> users = this.um.getDisabledUsers();
+		Map<Long, CRLEntry> list = new HashMap<Long, CRLEntry>();
+
+		Iterator<DisabledUser> itr = users.values().iterator();
+		while (itr.hasNext()) {
+			DisabledUser usr = itr.next();
+			Long sn = new Long(usr.getSerialNumber());
+			if (!list.containsKey(sn)) {
+				CRLEntry entry = new CRLEntry(BigInteger.valueOf(sn.longValue()), usr.getCRLReason());
+				list.put(sn, entry);
+			}
+			List<Long> hostCerts = this.hostManager.getHostCertificateRecordsSerialNumbers(usr.getGridIdentity());
+			for (int i = 0; i < hostCerts.size(); i++) {
+				if (!list.containsKey(hostCerts.get(i))) {
+					CRLEntry entry = new CRLEntry(BigInteger.valueOf(hostCerts.get(i).longValue()), usr.getCRLReason());
+					list.put(hostCerts.get(i), entry);
+				}
+			}
+		}
+
+		List<Long> hosts = this.hostManager.getDisabledHostCertificatesSerialNumbers();
+		for (int i = 0; i < hosts.size(); i++) {
+			if (!list.containsKey(hosts.get(i))) {
+				CRLEntry entry = new CRLEntry(BigInteger.valueOf(hosts.get(i).longValue()),
+					CRLReason.PRIVILEGE_WITHDRAWN);
+				list.put(hosts.get(i), entry);
+			}
+		}
+
+		CRLEntry[] entries = new CRLEntry[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			entries[i] = list.get(i);
+
+		}
+
+		try {
+			X509CRL crl = ca.getCRL(entries);
+			return crl;
+
+		} catch (Exception e) {
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("Unexpected error obtaining the CRL.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addDescription(Utils.getExceptionMessage(e));
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 
