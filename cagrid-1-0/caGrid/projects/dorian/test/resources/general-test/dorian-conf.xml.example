@@ -24,6 +24,7 @@
         <IdentityAssignmentPolicy>name</IdentityAssignmentPolicy>
         <CredentialPolicy>
             <CredentialLifetime years="1" months="0" days="0" hours="0" minutes="0" seconds="0"/>
+            <HostCertificateAutoApproval>false</HostCertificateAutoApproval>
         </CredentialPolicy>
         <ProxyPolicy>
             <ProxyLifetime hours="12" minutes="0" seconds="0"/>

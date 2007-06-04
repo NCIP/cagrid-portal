@@ -5,6 +5,7 @@
         <IdentityAssignmentPolicy>id</IdentityAssignmentPolicy>
         <CredentialPolicy>
             <CredentialLifetime years="3" months="4" days="5" hours="6" minutes="7" seconds="8"/>
+            <HostCertificateAutoApproval>false</HostCertificateAutoApproval>
         </CredentialPolicy>
         <ProxyPolicy>
             <ProxyLifetime hours="9" minutes="10" seconds="11"/>

@@ -50,6 +50,7 @@
     <xs:complexType name="CredentialPolicy">
         <xs:sequence>
             <xs:element name="CredentialLifetime" type="dorian:CredentialLifetime" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="HostCertificateAutoApproval" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType> 
     <xs:complexType name="ProxyPolicy">
