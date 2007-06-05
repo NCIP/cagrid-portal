@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "../dtd/spring-beans.dtd">
+
+<beans>
+    	
+	<!-- Property Configurer  -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>WEB-INF/dataservice.properties</value>
+			</list>
+		</property>
+	</bean>
+
+   	<bean id="urlQueryObject" class="gov.nih.nci.cagrid.portal2.portlet.dataservice.URLQueryObject">
+		<property name="url" value="${dataservice.url}"/>
+		<property name="cqlQuery" value="${dataservice.cqlquery}"/>
+		<property name="results" value="${dataservice.results}"/>
+	</bean>
+    
+	<bean id="dataServiceManager" class="gov.nih.nci.cagrid.portal2.portlet.dataservice.DataServiceManager">
+		<property name="urlQueryObject">
+			<ref bean="urlQueryObject"/>
+		</property>
+		
+	</bean>
+	
+    <bean id="homeController" class="gov.nih.nci.cagrid.portal2.portlet.dataservice.DataServiceHomeController">
+        <property name="dataServiceManager" ref="dataServiceManager" />
+    </bean>
+    
+    <bean id="urlQueryObjectValidator" class="gov.nih.nci.cagrid.portal2.portlet.dataservice.URLQueryObjectValidator">
+    </bean>
+    
+    <bean id="queryController" class="gov.nih.nci.cagrid.portal2.portlet.dataservice.QueryController">
+        <property name="dataServiceManager" ref="dataServiceManager" />
+        <property name="sessionForm" value="false"/>
+        <property name="commandName" value="urlqueryobject" />
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.dataservice.URLQueryObject" />
+        <property name="formView" value="dataservicehome" />
+        <property name="successView" value="dataservicehome" />
+        <property name="validator" ref="urlQueryObjectValidator" />
+    </bean>
+        
+    <bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>    
+    <bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+        <property name="order" value="10" />
+        <property name="interceptors">
+            <list><ref bean="parameterMappingInterceptor"/></list>
+        </property>
+        <property name="portletModeParameterMap">
+            <map>
+                <entry key="view">
+                    <map>
+                        <entry key="dataservicehome" value-ref="homeController" />
+						<entry key="performQuery" value-ref="queryController" />
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+    
+    <bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+        <property name="order" value="20" />
+        <property name="portletModeMap">
+            <map>
+                <entry key="view" value-ref="homeController" />
+            </map>
+        </property>
+    </bean>
+    <!-- View Resolver -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/dataservice/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>		
+
+	<!-- Exception Handler -->
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate" />
+    
+</beans>
