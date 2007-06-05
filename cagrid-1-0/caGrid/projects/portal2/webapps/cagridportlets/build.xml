@@ -1,5 +1,7 @@
 <project name="participants" default="all">
 
+	<property environment="env"/>
+	
 	<property file="build.properties" />
 
 	<import file="../../ant-files/common.xml" />
@@ -23,6 +25,12 @@
 		<fileset dir="../../common/build">
 			<include name="cagrid-portal2-common.jar" />
 		</fileset>
+		<fileset dir="../../ext/lib">
+				<patternset refid="ext.jars" />
+		</fileset>
+		<fileset dir="${env.GLOBUS_LOCATION}/lib">
+					<patternset refid="globus.jars" />
+		</fileset>
 	</path>
 	<path id="compile.cp">
 		<path refid="run.cp" />
@@ -35,6 +43,12 @@
 			overwrite="true">
 			<fileset dir="../../lib">
 				<patternset refid="compile.jars" />
+			</fileset>	
+			<fileset dir="../../ext/lib">
+				<patternset refid="ext.jars" />
+			</fileset>
+			<fileset dir="${env.GLOBUS_LOCATION}/lib">
+				<patternset refid="globus.jars" />
 			</fileset>
 			<fileset dir="../../common/build">
 				<include name="cagrid-portal2-common.jar" />
