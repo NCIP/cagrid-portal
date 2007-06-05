@@ -139,6 +139,22 @@ public abstract class CQLQueryProcessor {
     
     
     /**
+     * Get a set of property names whose values should be file names
+     * prepended with the location of the service's etc directory.
+     * Potential uses include locating config files, storing logs, etc.
+     * 
+     * Subclasses can override this method to return a Set of Strings which
+     * are the names of property keys from the getRequiredParameters() method.
+     * 
+     * @return
+     *      The set of property names
+     */
+    public Set<String> getPropertiesFromEtc() {
+        return new HashSet();
+    }
+    
+    
+    /**
      * Get the classname of the configuration user interface for 
      * this CQL Query Processor.  This class should exist in the same 
      * JAR as the query processor, as well as any (non-java / caGrid)
