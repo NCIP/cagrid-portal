@@ -11,7 +11,7 @@
 
     <target name="build" depends="update">
         <!-- Call the target that does everything -->
-        <ant dir="caGrid" antfile="build.xml" target="all" inheritAll="false" inheritRefs="true"/>
+        <ant dir="caGrid" antfile="build.xml" target="configure-clean, all" inheritAll="false" inheritRefs="true"/>
     </target>
 
     <target name="test" depends="build">

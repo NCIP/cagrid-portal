@@ -30,14 +30,14 @@
         </propertyfile>
     </target>
     
-    <target name="clear-target-grid" >
+    <target name="configure-clean" >
         <delete dir="${current.grid.dir}"/>
     </target>
 
     <!-- ====================================================================== -->
     <!-- Configure each configurable project (only needed to target a new grid) -->
     <!-- ====================================================================== -->
-    <target name="configure" depends="clear-target-grid, noDeps, prepare " description="(Re-)Configures the projects to target a different grid.">
+    <target name="configure" depends="configure-clean, noDeps, prepare " description="(Re-)Configures the projects to target a different grid.">
         <!-- Give each configurable project the new configuration information, and tell them to configure -->
         <for list="${configurable.projects.list}" parallel="true" param="project.name" trim="true">
             <sequential>
