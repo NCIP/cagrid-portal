@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.common.ThreadManager;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
@@ -20,14 +18,10 @@ import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault;
-import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.PrivateKey;
-import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -65,24 +59,22 @@ public class UserManager extends LoggingObject {
 
 	private TrustedIdPManager tm;
 
-	private ThreadManager poolManager;
-
-	private Object mutex = new Object();
-
 	private IFSDefaults defaults;
 
 	private PropertyManager properties;
 
+	private Publisher publisher;
+
 
 	public UserManager(Database db, IdentityFederationConfiguration conf, PropertyManager properties,
-		CertificateAuthority ca, TrustedIdPManager tm, IFSDefaults defaults) {
+		CertificateAuthority ca, TrustedIdPManager tm, Publisher publisher, IFSDefaults defaults) {
 		this.db = db;
 		this.tm = tm;
 		this.defaults = defaults;
 		this.conf = conf;
 		this.ca = ca;
 		this.properties = properties;
-		poolManager = new ThreadManager();
+		this.publisher = publisher;
 	}
 
 
@@ -147,7 +139,7 @@ public class UserManager extends LoggingObject {
 			this.updateUser(user);
 
 			if (!user.getUserStatus().equals(IFSUserStatus.Active)) {
-				publishCRL();
+				publisher.publishCRL();
 			}
 		} catch (InvalidUserFault iuf) {
 			try {
@@ -483,7 +475,7 @@ public class UserManager extends LoggingObject {
 				s.setString(7, user.getEmail());
 				s.execute();
 				if (!user.getUserStatus().equals(IFSUserStatus.Active)) {
-					publishCRL();
+					publisher.publishCRL();
 				}
 			} catch (InvalidUserFault iuf) {
 				throw iuf;
@@ -589,7 +581,7 @@ public class UserManager extends LoggingObject {
 				s.setString(7, curr.getUID());
 				s.execute();
 				if (publishCRL) {
-					publishCRL();
+					publisher.publishCRL();
 				}
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
@@ -684,7 +676,8 @@ public class UserManager extends LoggingObject {
 			ResultSet rs = s.executeQuery(sql.toString());
 			while (rs.next()) {
 				String id = getCredentialsManagerUID(rs.getLong("IDP_ID"), rs.getString("UID"));
-				DisabledUser usr = new DisabledUser(rs.getString("GID"), ca.getCertificateSerialNumber(id), CRLReason.PRIVILEGE_WITHDRAWN);
+				DisabledUser usr = new DisabledUser(rs.getString("GID"), ca.getCertificateSerialNumber(id),
+					CRLReason.PRIVILEGE_WITHDRAWN);
 				if (!users.containsKey(usr.getGridIdentity())) {
 					users.put(usr.getGridIdentity(), usr);
 				}
@@ -702,7 +695,8 @@ public class UserManager extends LoggingObject {
 					ResultSet result = stmt.executeQuery(sb.toString());
 					while (result.next()) {
 						String id = getCredentialsManagerUID(result.getLong("IDP_ID"), result.getString("UID"));
-						DisabledUser usr = new DisabledUser(rs.getString("GID"), ca.getCertificateSerialNumber(id), CRLReason.PRIVILEGE_WITHDRAWN);
+						DisabledUser usr = new DisabledUser(result.getString("GID"), ca.getCertificateSerialNumber(id),
+							CRLReason.PRIVILEGE_WITHDRAWN);
 						if (!users.containsKey(usr.getGridIdentity())) {
 							users.put(usr.getGridIdentity(), usr);
 						}
@@ -712,59 +706,6 @@ public class UserManager extends LoggingObject {
 				}
 			}
 			return users;
-
-		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Unexpected Error, could not obtain a list of users");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
-		} finally {
-			db.releaseConnection(c);
-		}
-	}
-
-
-	public List getDisabledUsersSerialIds() throws DorianInternalFault {
-		this.buildDatabase();
-		Connection c = null;
-		List sn = new ArrayList();
-		try {
-			// First get all the users who's accounts are disabled.
-			c = db.getConnection();
-			Statement s = c.createStatement();
-
-			StringBuffer sql = new StringBuffer();
-			sql.append("select IDP_ID,UID from " + USERS_TABLE + " WHERE STATUS='" + IFSUserStatus.Suspended
-				+ "' OR STATUS='" + IFSUserStatus.Pending + "' OR STATUS='" + IFSUserStatus.Rejected + "' OR STATUS='"
-				+ IFSUserStatus.Expired + "'");
-			ResultSet rs = s.executeQuery(sql.toString());
-			while (rs.next()) {
-				String id = getCredentialsManagerUID(rs.getLong("IDP_ID"), rs.getString("UID"));
-				sn.add(new Long(ca.getCertificateSerialNumber(id)));
-			}
-			rs.close();
-			s.close();
-
-			// Now get all the IdPs who are suspended.
-			TrustedIdP[] idp = this.tm.getSuspendedTrustedIdPs();
-			if (idp != null) {
-				for (int i = 0; i < idp.length; i++) {
-					Statement stmt = c.createStatement();
-					StringBuffer sb = new StringBuffer();
-					sb.append("select IDP_ID,UID from " + USERS_TABLE + " WHERE IDP_ID=" + idp[i].getId());
-					ResultSet result = stmt.executeQuery(sb.toString());
-					while (result.next()) {
-						String id = getCredentialsManagerUID(result.getLong("IDP_ID"), result.getString("UID"));
-						sn.add(new Long(ca.getCertificateSerialNumber(id)));
-					}
-					stmt.close();
-					result.close();
-				}
-			}
-			return sn;
 
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
@@ -844,72 +785,6 @@ public class UserManager extends LoggingObject {
 
 			}
 			this.dbBuilt = true;
-		}
-	}
-
-
-	public X509CRL getCRL() throws DorianInternalFault {
-		List sn = this.getDisabledUsersSerialIds();
-		CRLEntry[] entries = new CRLEntry[sn.size()];
-		for (int i = 0; i < sn.size(); i++) {
-			Long l = (Long) sn.get(i);
-			entries[i] = new CRLEntry(BigInteger.valueOf(l.longValue()), CRLReason.PRIVILEGE_WITHDRAWN);
-		}
-		try {
-			X509CRL crl = ca.getCRL(entries);
-			return crl;
-		} catch (Exception e) {
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Unexpected error obtaining the CRL.");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addDescription(Utils.getExceptionMessage(e));
-			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
-
-		}
-	}
-
-
-	protected void publishCRL() {
-		if (conf.getCRLPublish() != null) {
-			if ((conf.getCRLPublish().getGts() != null) && (conf.getCRLPublish().getGts().length > 0)) {
-				Runner runner = new Runner() {
-					public void execute() {
-						synchronized (mutex) {
-							String[] services = conf.getCRLPublish().getGts();
-							if ((services != null) && (services.length > 0)) {
-								try {
-									X509CRL crl = getCRL();
-									gov.nih.nci.cagrid.gts.bean.X509CRL x509 = new gov.nih.nci.cagrid.gts.bean.X509CRL();
-									x509.setCrlEncodedString(CertUtil.writeCRL(crl));
-									String authName = ca.getCACertificate().getSubjectDN().getName();
-									for (int i = 0; i < services.length; i++) {
-										String uri = services[i];
-										try {
-											debug("Publishing CRL to the GTS " + uri);
-											GTSAdminClient client = new GTSAdminClient(uri, null);
-											client.updateCRL(authName, x509);
-											debug("Published CRL to the GTS " + uri);
-										} catch (Exception ex) {
-											getLog().error("Error publishing the CRL to the GTS " + uri + "!!!", ex);
-										}
-
-									}
-
-								} catch (Exception e) {
-									getLog().error("Unexpected Error publishing the CRL!!!", e);
-								}
-							}
-						}
-					}
-				};
-				try {
-					poolManager.executeInBackground(runner);
-				} catch (Exception t) {
-					t.getMessage();
-				}
-			}
 		}
 	}
 

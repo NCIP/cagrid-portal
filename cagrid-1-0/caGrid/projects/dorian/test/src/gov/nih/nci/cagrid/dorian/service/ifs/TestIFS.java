@@ -40,6 +40,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLSubject;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -122,6 +123,143 @@ public class TestIFS extends TestCase {
 			X509Certificate cert2 = CertUtil.loadCertificate(usr2.getCertificate().getCertificateAsString());
 
 			assertTrue(cert2.getNotBefore().after(cert1.getNotBefore()));
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testGetCRL() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf();
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+
+			IdPContainer idp2 = this.getTrustedIdpAutoApproveAutoRenew("My IdP2");
+			ifs.addTrustedIdP(adminGridId, idp2.getIdp());
+			int total = 3;
+			List<IFSUser> list = new ArrayList();
+			for (int i = 0; i < total; i++) {
+				String uid = "user" + i;
+				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+				PublicKey publicKey = pair.getPublic();
+				ProxyLifetime lifetime = getProxyLifetime();
+				X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(uid, idp2), publicKey, lifetime,
+					DELEGATION_LENGTH);
+				createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
+				IFSUserFilter f1 = new IFSUserFilter();
+				f1.setIdPId(idp2.getIdp().getId());
+				f1.setUID(uid);
+				IFSUser[] users = ifs.findUsers(adminGridId, f1);
+				assertEquals(1, users.length);
+				list.add(users[0]);
+			}
+
+			idp2.getIdp().setStatus(TrustedIdPStatus.Suspended);
+			ifs.updateTrustedIdP(adminGridId, idp2.getIdp());
+			X509CRL crl = ifs.getCRL();
+			assertEquals(total, crl.getRevokedCertificates().size());
+			for (int i = 0; i < list.size(); i++) {
+				X509Certificate cert = CertUtil.loadCertificate(list.get(i).getCertificate().getCertificateAsString());
+				assertNotNull(crl.getRevokedCertificate(cert));
+			}
+
+			idp2.getIdp().setStatus(TrustedIdPStatus.Active);
+			ifs.updateTrustedIdP(adminGridId, idp2.getIdp());
+
+			crl = ifs.getCRL();
+			assertEquals(null, crl.getRevokedCertificates());
+			for (int i = 0; i < list.size(); i++) {
+				X509Certificate cert = CertUtil.loadCertificate(list.get(i).getCertificate().getCertificateAsString());
+				assertNull(crl.getRevokedCertificate(cert));
+			}
+
+			for (int i = 0; i < list.size(); i++) {
+				crl = null;
+				IFSUser usr = list.get(i);
+				usr.setUserStatus(IFSUserStatus.Suspended);
+				ifs.updateUser(adminGridId, usr);
+				crl = ifs.getCRL();
+				assertEquals((i + 1), crl.getRevokedCertificates().size());
+				for (int j = 0; j < list.size(); j++) {
+					if (j <= i) {
+						assertNotNull(crl.getRevokedCertificate(CertUtil.loadCertificate(list.get(j).getCertificate()
+							.getCertificateAsString())));
+					} else {
+						assertNull(crl.getRevokedCertificate(CertUtil.loadCertificate(list.get(j).getCertificate()
+							.getCertificateAsString())));
+					}
+				}
+			}
+
+			for (int i = 0; i < list.size(); i++) {
+				IFSUser usr = list.get(i);
+				usr.setUserStatus(IFSUserStatus.Active);
+				ifs.updateUser(adminGridId, usr);
+			}
+
+			crl = ifs.getCRL();
+			assertEquals(null, crl.getRevokedCertificates());
+
+			for (int i = 0; i < list.size(); i++) {
+				crl = null;
+				IFSUser usr = list.get(i);
+				usr.setUserStatus(IFSUserStatus.Expired);
+				ifs.updateUser(adminGridId, usr);
+				crl = ifs.getCRL();
+				assertEquals((i + 1), crl.getRevokedCertificates().size());
+				for (int j = 0; j < list.size(); j++) {
+					if (j <= i) {
+						assertNotNull(crl.getRevokedCertificate(CertUtil.loadCertificate(list.get(j).getCertificate()
+							.getCertificateAsString())));
+					} else {
+						assertNull(crl.getRevokedCertificate(CertUtil.loadCertificate(list.get(j).getCertificate()
+							.getCertificateAsString())));
+					}
+				}
+			}
+
+			for (int i = 0; i < list.size(); i++) {
+				IFSUser usr = list.get(i);
+				usr.setUserStatus(IFSUserStatus.Active);
+				ifs.updateUser(adminGridId, usr);
+			}
+
+			crl = ifs.getCRL();
+			assertEquals(null, crl.getRevokedCertificates());
+
+			for (int i = 0; i < list.size(); i++) {
+				crl = null;
+				IFSUser usr = list.get(i);
+				usr.setUserStatus(IFSUserStatus.Rejected);
+				ifs.updateUser(adminGridId, usr);
+				crl = ifs.getCRL();
+				assertEquals((i + 1), crl.getRevokedCertificates().size());
+				for (int j = 0; j < list.size(); j++) {
+					if (j <= i) {
+						assertNotNull(crl.getRevokedCertificate(CertUtil.loadCertificate(list.get(j).getCertificate()
+							.getCertificateAsString())));
+					} else {
+						assertNull(crl.getRevokedCertificate(CertUtil.loadCertificate(list.get(j).getCertificate()
+							.getCertificateAsString())));
+					}
+				}
+			}
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

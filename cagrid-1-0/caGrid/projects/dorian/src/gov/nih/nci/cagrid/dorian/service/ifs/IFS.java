@@ -63,7 +63,7 @@ import org.bouncycastle.asn1.x509.CRLReason;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IFS extends LoggingObject {
+public class IFS extends LoggingObject implements Publisher {
 
 	private UserManager um;
 
@@ -88,7 +88,7 @@ public class IFS extends LoggingObject {
 		this.ca = ca;
 		threadManager = new ThreadManager();
 		tm = new TrustedIdPManager(conf, db);
-		um = new UserManager(db, conf, properties, ca, tm, defaults);
+		um = new UserManager(db, conf, properties, ca, tm, this, defaults);
 		um.buildDatabase();
 		this.groupManager = new GroupManager(db);
 		if (!this.groupManager.groupExists(ADMINISTRATORS)) {
@@ -104,7 +104,7 @@ public class IFS extends LoggingObject {
 		}
 		this.hostManager = new HostCertificateManager(db, this.conf, ca);
 
-		um.publishCRL();
+		publishCRL();
 	}
 
 
@@ -155,7 +155,7 @@ public class IFS extends LoggingObject {
 		}
 		tm.updateIdP(idp);
 		if (statusChanged) {
-			um.publishCRL();
+			publishCRL();
 		}
 	}
 

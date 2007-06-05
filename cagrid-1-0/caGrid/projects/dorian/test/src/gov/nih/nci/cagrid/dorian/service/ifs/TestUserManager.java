@@ -25,7 +25,7 @@ import gov.nih.nci.cagrid.gridca.common.Credential;
 
 import java.io.StringReader;
 import java.security.cert.X509Certificate;
-import java.util.List;
+import java.util.Map;
 
 import junit.framework.TestCase;
 
@@ -37,7 +37,7 @@ import junit.framework.TestCase;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TestUserManager extends TestCase {
+public class TestUserManager extends TestCase implements Publisher {
 
 	private static final int MIN_NAME_LENGTH = 4;
 
@@ -117,9 +117,8 @@ public class TestUserManager extends TestCase {
 			assertEquals(user.getGridId(), UserManager.subjectToIdentity(cert.getSubjectDN().getName()));
 			assertEquals(user, um.getUser(user.getIdPId(), user.getUID()));
 			assertEquals(user, um.getUser(user.getGridId()));
-			assertEquals(1, um.getDisabledUsersSerialIds().size());
-			assertTrue(isUserSerialIdInList(user, um.getDisabledUsersSerialIds()));
-			assertTrue(um.getCRL().isRevoked(CertUtil.loadCertificate(user.getCertificate().getCertificateAsString())));
+			assertEquals(1, um.getDisabledUsers().size());
+			assertTrue(isUserSerialIdInList(user, um.getDisabledUsers()));
 
 			// Test Querying for users
 			IFSUserFilter f1 = new IFSUserFilter();
@@ -220,9 +219,8 @@ public class TestUserManager extends TestCase {
 			u3.setUserStatus(IFSUserStatus.Active);
 			um.updateUser(u3);
 			assertEquals(u3, um.getUser(u3.getGridId()));
-			assertEquals(0, um.getDisabledUsersSerialIds().size());
-			assertFalse(isUserSerialIdInList(user, um.getDisabledUsersSerialIds()));
-			assertFalse(um.getCRL().isRevoked(CertUtil.loadCertificate(user.getCertificate().getCertificateAsString())));
+			assertEquals(0, um.getDisabledUsers().size());
+			assertFalse(isUserSerialIdInList(user, um.getDisabledUsers()));
 
 			IFSUser u4 = um.getUser(user.getGridId());
 			u4.setUserStatus(IFSUserStatus.Suspended);
@@ -259,9 +257,9 @@ public class TestUserManager extends TestCase {
 	}
 
 
-	private boolean isUserSerialIdInList(IFSUser usr, List list) throws Exception {
-		for (int i = 0; i < list.size(); i++) {
-			long sn = ((Long) list.get(i)).longValue();
+	private boolean isUserSerialIdInList(IFSUser usr, Map<String, DisabledUser> list) throws Exception {
+		if (list.containsKey(usr.getGridId())) {
+			long sn = list.get(usr.getGridId()).getSerialNumber();
 			X509Certificate cert = CertUtil.loadCertificate(usr.getCertificate().getCertificateAsString());
 			long certsn = cert.getSerialNumber().longValue();
 			if (sn == certsn) {
@@ -307,10 +305,8 @@ public class TestUserManager extends TestCase {
 				assertEquals(user.getGridId(), UserManager.subjectToIdentity(cert.getSubjectDN().getName()));
 				assertEquals(user, um.getUser(user.getIdPId(), user.getUID()));
 				assertEquals(user, um.getUser(user.getGridId()));
-				assertEquals((i + 1), um.getDisabledUsersSerialIds().size());
-				assertTrue(isUserSerialIdInList(user, um.getDisabledUsersSerialIds()));
-				assertTrue(um.getCRL().isRevoked(
-					CertUtil.loadCertificate(user.getCertificate().getCertificateAsString())));
+				assertEquals((i + 1), um.getDisabledUsers().size());
+				assertTrue(isUserSerialIdInList(user, um.getDisabledUsers()));
 
 				// Test Querying for users
 				IFSUserFilter f1 = new IFSUserFilter();
@@ -424,17 +420,13 @@ public class TestUserManager extends TestCase {
 				u3.setUserStatus(IFSUserStatus.Active);
 				um.updateUser(u3);
 				assertEquals(u3, um.getUser(u3.getGridId()));
-				assertEquals(i, um.getDisabledUsersSerialIds().size());
-				assertFalse(isUserSerialIdInList(user, um.getDisabledUsersSerialIds()));
-				assertFalse(um.getCRL().isRevoked(
-					CertUtil.loadCertificate(user.getCertificate().getCertificateAsString())));
+				assertEquals(i, um.getDisabledUsers().size());
+				assertFalse(isUserSerialIdInList(user, um.getDisabledUsers()));
 				u3.setUserStatus(IFSUserStatus.Suspended);
 				um.updateUser(u3);
 				assertEquals(u3, um.getUser(u3.getGridId()));
-				assertEquals((i + 1), um.getDisabledUsersSerialIds().size());
-				assertTrue(isUserSerialIdInList(user, um.getDisabledUsersSerialIds()));
-				assertTrue(um.getCRL().isRevoked(
-					CertUtil.loadCertificate(user.getCertificate().getCertificateAsString())));
+				assertEquals((i + 1), um.getDisabledUsers().size());
+				assertTrue(isUserSerialIdInList(user, um.getDisabledUsers()));
 
 				IFSUser u4 = um.getUser(user.getGridId());
 				u4.setUserStatus(IFSUserStatus.Suspended);
@@ -575,7 +567,7 @@ public class TestUserManager extends TestCase {
 	public UserManager getUserManagerNameBasedIdentities() throws Exception {
 		IdentityFederationConfiguration conf = getConf(IdentityAssignmentPolicy.name);
 		TrustedIdPManager tm = new TrustedIdPManager(conf, db);
-		UserManager um = new UserManager(db, conf, props, ca, tm, getDefaults());
+		UserManager um = new UserManager(db, conf, props, ca, tm, this, getDefaults());
 		um.clearDatabase();
 		return um;
 	}
@@ -584,7 +576,7 @@ public class TestUserManager extends TestCase {
 	public UserManager getUserManagerIdBasedIdentities() throws Exception {
 		IdentityFederationConfiguration conf = getConf(IdentityAssignmentPolicy.id);
 		TrustedIdPManager tm = new TrustedIdPManager(conf, db);
-		UserManager um = new UserManager(db, conf, props, ca, tm, getDefaults());
+		UserManager um = new UserManager(db, conf, props, ca, tm, this, getDefaults());
 		um.clearDatabase();
 		return um;
 	}
@@ -598,6 +590,11 @@ public class TestUserManager extends TestCase {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
+	}
+
+
+	public void publishCRL() {
+
 	}
 
 
