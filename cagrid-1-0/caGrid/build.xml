@@ -201,12 +201,14 @@
             <artifact refid="core.test.jars" />
             <artifact refid="test.coverage.jars" />
             <artifact refid="common.metadata.jars" />
+			<artifact refid="data.jars" />
             <artifact refid="data.metadata.jars" />
             <artifact refid="dorian.client.jars" />
             <artifact refid="discovery.jars" />
             <artifact refid="metadatautils.jars" />
             <artifact refid="syncgts.client.jars" />
             <artifact refid="security.metadata.jars" />
+			<artifact refid="ws.enum.jars"/>
         </resolveDependencies>
         <ant dir="${projects.dir}/portal2" inheritAll="false" antfile="build.xml" target="all" />
     </target>
