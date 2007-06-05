@@ -49,7 +49,7 @@
         </AccountPolicies>
         <!--
         <CRLPublish>
-            <gts>https://cagrid01.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GTS</gts>
+            <gts>https://localhost:8443/wsrf/services/cagrid/GTS</gts>
         </CRLPublish>
         -->
     </IdentityFederationConfiguration>
