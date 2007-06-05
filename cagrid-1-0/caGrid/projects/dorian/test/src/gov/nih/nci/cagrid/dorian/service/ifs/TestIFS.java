@@ -9,6 +9,9 @@ import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.conf.Length;
 import gov.nih.nci.cagrid.dorian.conf.ProxyPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
@@ -137,6 +140,7 @@ public class TestIFS extends TestCase {
 	}
 
 
+
 	public void testGetCRL() {
 		IFS ifs = null;
 		try {
@@ -152,9 +156,15 @@ public class TestIFS extends TestCase {
 
 			IdPContainer idp2 = this.getTrustedIdpAutoApproveAutoRenew("My IdP2");
 			ifs.addTrustedIdP(adminGridId, idp2.getIdp());
-			int total = 3;
-			List<IFSUser> list = new ArrayList();
-			for (int i = 0; i < total; i++) {
+			String hostPrefix = "myhost";
+			int hostCount = 1;
+			int totalUsers = 3;
+			int userHostCerts = 2;
+			int total = totalUsers + (totalUsers * userHostCerts);
+
+			// Create users and host certificates
+			List<UserContainer> list = new ArrayList();
+			for (int i = 0; i < totalUsers; i++) {
 				String uid = "user" + i;
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
@@ -167,16 +177,29 @@ public class TestIFS extends TestCase {
 				f1.setUID(uid);
 				IFSUser[] users = ifs.findUsers(adminGridId, f1);
 				assertEquals(1, users.length);
-				list.add(users[0]);
+				UserContainer usr = new UserContainer(users[0]);
+				list.add(usr);
+				for (int j = 0; j < userHostCerts; j++) {
+					usr.addHostCertificate(createAndSubmitHostCert(ifs, conf, adminGridId, usr.getUser().getGridId(),
+						hostPrefix + hostCount));
+					hostCount++;
+				}
 			}
 
+			// Suspend IDP
 			idp2.getIdp().setStatus(TrustedIdPStatus.Suspended);
 			ifs.updateTrustedIdP(adminGridId, idp2.getIdp());
 			X509CRL crl = ifs.getCRL();
 			assertEquals(total, crl.getRevokedCertificates().size());
 			for (int i = 0; i < list.size(); i++) {
-				X509Certificate cert = CertUtil.loadCertificate(list.get(i).getCertificate().getCertificateAsString());
+				X509Certificate cert = CertUtil.loadCertificate(list.get(i).getUser().getCertificate()
+					.getCertificateAsString());
 				assertNotNull(crl.getRevokedCertificate(cert));
+				List<HostCertificateRecord> hosts = list.get(i).getHostCertificates();
+				for (int j = 0; j < hosts.size(); j++) {
+					assertNotNull(crl.getRevokedCertificate(CertUtil.loadCertificate(hosts.get(j).getCertificate()
+						.getCertificateAsString())));
+				}
 			}
 
 			idp2.getIdp().setStatus(TrustedIdPStatus.Active);
@@ -185,81 +208,19 @@ public class TestIFS extends TestCase {
 			crl = ifs.getCRL();
 			assertEquals(null, crl.getRevokedCertificates());
 			for (int i = 0; i < list.size(); i++) {
-				X509Certificate cert = CertUtil.loadCertificate(list.get(i).getCertificate().getCertificateAsString());
+				X509Certificate cert = CertUtil.loadCertificate(list.get(i).getUser().getCertificate()
+					.getCertificateAsString());
 				assertNull(crl.getRevokedCertificate(cert));
-			}
-
-			for (int i = 0; i < list.size(); i++) {
-				crl = null;
-				IFSUser usr = list.get(i);
-				usr.setUserStatus(IFSUserStatus.Suspended);
-				ifs.updateUser(adminGridId, usr);
-				crl = ifs.getCRL();
-				assertEquals((i + 1), crl.getRevokedCertificates().size());
-				for (int j = 0; j < list.size(); j++) {
-					if (j <= i) {
-						assertNotNull(crl.getRevokedCertificate(CertUtil.loadCertificate(list.get(j).getCertificate()
-							.getCertificateAsString())));
-					} else {
-						assertNull(crl.getRevokedCertificate(CertUtil.loadCertificate(list.get(j).getCertificate()
-							.getCertificateAsString())));
-					}
+				List<HostCertificateRecord> hosts = list.get(i).getHostCertificates();
+				for (int j = 0; j < hosts.size(); j++) {
+					assertNull(crl.getRevokedCertificate(CertUtil.loadCertificate(hosts.get(j).getCertificate()
+						.getCertificateAsString())));
 				}
 			}
 
-			for (int i = 0; i < list.size(); i++) {
-				IFSUser usr = list.get(i);
-				usr.setUserStatus(IFSUserStatus.Active);
-				ifs.updateUser(adminGridId, usr);
-			}
-
-			crl = ifs.getCRL();
-			assertEquals(null, crl.getRevokedCertificates());
-
-			for (int i = 0; i < list.size(); i++) {
-				crl = null;
-				IFSUser usr = list.get(i);
-				usr.setUserStatus(IFSUserStatus.Expired);
-				ifs.updateUser(adminGridId, usr);
-				crl = ifs.getCRL();
-				assertEquals((i + 1), crl.getRevokedCertificates().size());
-				for (int j = 0; j < list.size(); j++) {
-					if (j <= i) {
-						assertNotNull(crl.getRevokedCertificate(CertUtil.loadCertificate(list.get(j).getCertificate()
-							.getCertificateAsString())));
-					} else {
-						assertNull(crl.getRevokedCertificate(CertUtil.loadCertificate(list.get(j).getCertificate()
-							.getCertificateAsString())));
-					}
-				}
-			}
-
-			for (int i = 0; i < list.size(); i++) {
-				IFSUser usr = list.get(i);
-				usr.setUserStatus(IFSUserStatus.Active);
-				ifs.updateUser(adminGridId, usr);
-			}
-
-			crl = ifs.getCRL();
-			assertEquals(null, crl.getRevokedCertificates());
-
-			for (int i = 0; i < list.size(); i++) {
-				crl = null;
-				IFSUser usr = list.get(i);
-				usr.setUserStatus(IFSUserStatus.Rejected);
-				ifs.updateUser(adminGridId, usr);
-				crl = ifs.getCRL();
-				assertEquals((i + 1), crl.getRevokedCertificates().size());
-				for (int j = 0; j < list.size(); j++) {
-					if (j <= i) {
-						assertNotNull(crl.getRevokedCertificate(CertUtil.loadCertificate(list.get(j).getCertificate()
-							.getCertificateAsString())));
-					} else {
-						assertNull(crl.getRevokedCertificate(CertUtil.loadCertificate(list.get(j).getCertificate()
-							.getCertificateAsString())));
-					}
-				}
-			}
+			this.validateCRLOnDisabledStatus(ifs, list, IFSUserStatus.Suspended, adminGridId, userHostCerts);
+			this.validateCRLOnDisabledStatus(ifs, list, IFSUserStatus.Rejected, adminGridId, userHostCerts);
+			this.validateCRLOnDisabledStatus(ifs, list, IFSUserStatus.Expired, adminGridId, userHostCerts);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -926,6 +887,7 @@ public class TestIFS extends TestCase {
 		l.setMinutes(0);
 		l.setSeconds(0);
 		cp.setCredentialLifetime(l);
+		cp.setHostCertificateAutoApproval(true);
 		conf.setCredentialPolicy(cp);
 		Length len = new Length();
 		len.setMin(MIN_NAME_LENGTH);
@@ -1111,6 +1073,44 @@ public class TestIFS extends TestCase {
 	private IdPContainer getTrustedIdpManualApproveAutoRenew(String name) throws Exception {
 		return this.getTrustedIdp(name, ManualApprovalAutoRenewalPolicy.class.getName());
 	}
+	
+	private void validateCRLOnDisabledStatus(IFS ifs, List<UserContainer> list, IFSUserStatus status,
+		String adminGridId, int userHostCerts) throws Exception {
+		for (int i = 0; i < list.size(); i++) {
+			IFSUser usr = list.get(i).getUser();
+			usr.setUserStatus(status);
+			ifs.updateUser(adminGridId, usr);
+			X509CRL crl = ifs.getCRL();
+			int sum = (i + 1) + ((i + 1) * userHostCerts);
+			assertEquals(sum, crl.getRevokedCertificates().size());
+			for (int j = 0; j < list.size(); j++) {
+				UserContainer curr = list.get(j);
+				if (j <= i) {
+					assertNotNull(crl.getRevokedCertificate(CertUtil.loadCertificate(curr.getUser().getCertificate()
+						.getCertificateAsString())));
+					for (int x = 0; x < curr.getHostCertificates().size(); x++) {
+						assertNotNull(crl.getRevokedCertificate(CertUtil.loadCertificate(curr.getHostCertificates()
+							.get(x).getCertificate().getCertificateAsString())));
+					}
+				} else {
+					assertNull(crl.getRevokedCertificate(CertUtil.loadCertificate(curr.getUser().getCertificate()
+						.getCertificateAsString())));
+					for (int x = 0; x < curr.getHostCertificates().size(); x++) {
+						assertNull(crl.getRevokedCertificate(CertUtil.loadCertificate(curr.getHostCertificates().get(x)
+							.getCertificate().getCertificateAsString())));
+					}
+				}
+
+			}
+		}
+
+		for (int i = 0; i < list.size(); i++) {
+			IFSUser usr = list.get(i).getUser();
+			usr.setUserStatus(IFSUserStatus.Active);
+			ifs.updateUser(adminGridId, usr);
+		}
+		assertEquals(null, ifs.getCRL().getRevokedCertificates());
+	}
 
 
 	private IdPContainer getTrustedIdp(String name, String policyClass) throws Exception {
@@ -1200,6 +1200,25 @@ public class TestIFS extends TestCase {
 	}
 
 
+	private HostCertificateRecord createAndSubmitHostCert(IFS ifs, IdentityFederationConfiguration conf, String admin,
+		String owner, String host) throws Exception {
+		KeyPair pair = KeyUtil.generateRSAKeyPair(ca.getConfiguration().getUserKeySize().getValue());
+		HostCertificateRequest req = new HostCertificateRequest();
+		req.setHostname(host);
+		gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey key = new gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey();
+		key.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
+		req.setPublicKey(key);
+		HostCertificateRecord record = ifs.requestHostCertificate(owner, req);
+		if (!conf.getCredentialPolicy().isHostCertificateAutoApproval()) {
+			assertEquals(HostCertificateStatus.Pending, record.getStatus());
+			record = ifs.approveHostCertificate(admin, record.getId());
+		}
+		assertEquals(HostCertificateStatus.Active, record.getStatus());
+		assertEquals(host, record.getHost());
+		return record;
+	}
+
+
 	private void createAndCheckProxyLifetime(ProxyLifetime lifetime, PrivateKey key, X509Certificate[] certs,
 		int delegationLength) throws Exception {
 		assertNotNull(certs);
@@ -1248,6 +1267,34 @@ public class TestIFS extends TestCase {
 		public PrivateKey getKey() {
 			return key;
 		}
+	}
+
+
+	public class UserContainer {
+		private IFSUser usr;
+		private List<HostCertificateRecord> hostCertificates;
+
+
+		public UserContainer(IFSUser usr) {
+			this.usr = usr;
+			this.hostCertificates = new ArrayList<HostCertificateRecord>();
+		}
+
+
+		public IFSUser getUser() {
+			return usr;
+		}
+
+
+		public List<HostCertificateRecord> getHostCertificates() {
+			return hostCertificates;
+		}
+
+
+		public void addHostCertificate(HostCertificateRecord record) {
+			hostCertificates.add(record);
+		}
+
 	}
 
 }

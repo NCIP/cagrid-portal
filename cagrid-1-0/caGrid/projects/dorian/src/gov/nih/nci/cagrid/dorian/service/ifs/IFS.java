@@ -10,7 +10,6 @@ import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
-import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
@@ -493,7 +492,7 @@ public class IFS extends LoggingObject implements Publisher {
 	// ///////////////////////////////
 	/* HOST CERTIFICATE OPERATIONS */
 	// ///////////////////////////////
-	public HostCertificateStatus requestHostCertificate(String callerGridId, HostCertificateRequest req)
+	public HostCertificateRecord requestHostCertificate(String callerGridId, HostCertificateRequest req)
 		throws DorianInternalFault, InvalidHostCertificateRequestFault, InvalidHostCertificateFault,
 		PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridId);
@@ -505,7 +504,7 @@ public class IFS extends LoggingObject implements Publisher {
 		} else {
 			record = hostManager.getHostCertificateRecord(id);
 		}
-		return record.getStatus();
+		return record;
 	}
 
 
@@ -789,6 +788,7 @@ public class IFS extends LoggingObject implements Publisher {
 		this.um.clearDatabase();
 		this.tm.clearDatabase();
 		this.groupManager.clearDatabase();
+		this.hostManager.clearDatabase();
 		try {
 			ca.clearCertificateAuthority();
 		} catch (CertificateAuthorityFault e) {
