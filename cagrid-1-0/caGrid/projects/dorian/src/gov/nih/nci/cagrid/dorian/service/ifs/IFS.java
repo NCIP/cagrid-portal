@@ -170,6 +170,7 @@ public class IFS extends LoggingObject implements Publisher {
 		for (int i = 0; i < users.length; i++) {
 			try {
 				um.removeUser(users[i]);
+				this.hostManager.ownerRemovedUpdateHostCertificates(users[i].getGridId());
 				this.groupManager.removeUserFromAllGroups(users[i].getGridId());
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
@@ -220,6 +221,7 @@ public class IFS extends LoggingObject implements Publisher {
 			TrustedIdP idp = tm.getTrustedIdPByDN(idpCert.getSubjectDN().getName());
 			IFSUser usr = um.getUser(idp.getId(), localId);
 			um.removeUser(usr);
+			this.hostManager.ownerRemovedUpdateHostCertificates(usr.getGridId());
 			this.groupManager.removeUserFromAllGroups(usr.getGridId());
 		} catch (InvalidUserFault e) {
 
@@ -239,6 +241,7 @@ public class IFS extends LoggingObject implements Publisher {
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		um.removeUser(usr);
+		this.hostManager.ownerRemovedUpdateHostCertificates(usr.getGridId());
 		this.groupManager.removeUserFromAllGroups(usr.getGridId());
 	}
 

@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.conf.Length;
 import gov.nih.nci.cagrid.dorian.conf.ProxyPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateStatus;
@@ -41,6 +42,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLNameIdentifier;
 import gov.nih.nci.cagrid.opensaml.SAMLSubject;
 
+import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -88,6 +90,472 @@ public class TestIFS extends TestCase {
 	private CA memoryCA;
 
 	private PropertyManager props;
+
+
+	public void testRequestHostCertificateManualApproval() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf(false);
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			String host = "localhost";
+			HostCertificateRequest req = getHostCertificateRequest(host);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			assertEquals(HostCertificateStatus.Pending, record.getStatus());
+			assertEquals(null, record.getCertificate());
+
+			String caSubject = ca.getCACertificate().getSubjectDN().getName();
+			int index = caSubject.lastIndexOf(",");
+			String subject = caSubject.substring(0, index) + ",CN=host/" + host;
+			record = ifs.approveHostCertificate(adminGridId, record.getId());
+			assertEquals(HostCertificateStatus.Active, record.getStatus());;
+			assertEquals(subject, record.getSubject());
+			assertEquals(subject, CertUtil.loadCertificate(record.getCertificate().getCertificateAsString())
+				.getSubjectDN().getName());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testRequestHostCertificateAutoApproval() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf(true);
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			String host = "localhost";
+			HostCertificateRequest req = getHostCertificateRequest(host);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			String caSubject = ca.getCACertificate().getSubjectDN().getName();
+			int index = caSubject.lastIndexOf(",");
+			String subject = caSubject.substring(0, index) + ",CN=host/" + host;
+			assertEquals(HostCertificateStatus.Active, record.getStatus());;
+			assertEquals(subject, record.getSubject());
+			assertEquals(subject, CertUtil.loadCertificate(record.getCertificate().getCertificateAsString())
+				.getSubjectDN().getName());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testRequestHostCertificateInvalidUser() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf(false);
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			createUser(ifs, adminGridId, idp, "user");
+			String host = "localhost";
+			HostCertificateRequest req = getHostCertificateRequest(host);
+			try {
+				ifs.requestHostCertificate("bad user", req);
+				fail("Should have failed.");
+			} catch (PermissionDeniedFault f) {
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+
+	public void testApproveHostCertificateInvalidUser() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf(false);
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			String host = "localhost";
+			HostCertificateRequest req = getHostCertificateRequest(host);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			assertEquals(HostCertificateStatus.Pending, record.getStatus());
+			assertEquals(null, record.getCertificate());
+
+			try {
+				ifs.approveHostCertificate("bad subject", record.getId());
+			} catch (PermissionDeniedFault f) {
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testFindHostCertificates() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf(true);
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			String caSubject = ca.getCACertificate().getSubjectDN().getName();
+			int index = caSubject.lastIndexOf(",");
+			String subjectPrefix = caSubject.substring(0, index) + ",CN=host/";
+			String hostPrefix = "localhost";
+			int total = 3;
+
+			for (int i = 0; i < total; i++) {
+				HostCertificateRequest req = getHostCertificateRequest(hostPrefix + i);
+				ifs.requestHostCertificate(usr.getGridId(), req);
+			}
+
+			// Find by Subject;
+			HostCertificateFilter f1 = new HostCertificateFilter();
+			f1.setSubject(subjectPrefix);
+			assertEquals(total, ifs.findHostCertificates(adminGridId, f1).length);
+			for (int i = 0; i < total; i++) {
+				String subject = subjectPrefix + hostPrefix + i;
+				f1.setSubject(subject);
+				HostCertificateRecord[] r = ifs.findHostCertificates(adminGridId, f1);
+				assertEquals(1, r.length);
+				assertEquals(subject, r[0].getSubject());
+			}
+
+			// Find by host;
+			HostCertificateFilter f2 = new HostCertificateFilter();
+			f2.setHost(hostPrefix);
+			assertEquals(total, ifs.findHostCertificates(adminGridId, f2).length);
+			for (int i = 0; i < total; i++) {
+				String host = hostPrefix + i;
+				f2.setHost(host);
+				HostCertificateRecord[] r = ifs.findHostCertificates(adminGridId, f2);
+				assertEquals(1, r.length);
+				assertEquals(host, r[0].getHost());
+			}
+
+			// Find by Owner;
+			HostCertificateFilter f3 = new HostCertificateFilter();
+			f3.setOwner(usr.getGridId());
+			assertEquals(total, ifs.findHostCertificates(adminGridId, f3).length);
+
+			// Find by host;
+			HostCertificateFilter f4 = new HostCertificateFilter();
+			f4.setStatus(HostCertificateStatus.Active);
+			assertEquals(total, ifs.findHostCertificates(adminGridId, f4).length);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testFindHostCertificatesInvalidUser() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf(false);
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			createUser(ifs, adminGridId, idp, "user");
+			try {
+				ifs.findHostCertificates("bad user", new HostCertificateFilter());
+				fail("Should have failed.");
+			} catch (PermissionDeniedFault f) {
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testUpdateHostCertificate() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf(true);
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			String host = "localhost";
+			HostCertificateRequest req = getHostCertificateRequest(host);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			String caSubject = ca.getCACertificate().getSubjectDN().getName();
+			int index = caSubject.lastIndexOf(",");
+			String subject = caSubject.substring(0, index) + ",CN=host/" + host;
+			assertEquals(HostCertificateStatus.Active, record.getStatus());;
+			assertEquals(subject, record.getSubject());
+			assertEquals(subject, CertUtil.loadCertificate(record.getCertificate().getCertificateAsString())
+				.getSubjectDN().getName());
+			HostCertificateUpdate update = new HostCertificateUpdate();
+			update.setId(record.getId());
+			update.setStatus(HostCertificateStatus.Suspended);
+			ifs.updateHostCertificateRecord(adminGridId, update);
+			HostCertificateFilter f = new HostCertificateFilter();
+			f.setId(BigInteger.valueOf(record.getId()));
+			HostCertificateRecord[] r = ifs.findHostCertificates(adminGridId, f);
+			assertEquals(1, r.length);
+			assertEquals(HostCertificateStatus.Suspended, r[0].getStatus());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testUpdateHostCertificatesInvalidUser() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf(false);
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			createUser(ifs, adminGridId, idp, "user");
+			try {
+				ifs.updateHostCertificateRecord("bad user", new HostCertificateUpdate());
+				fail("Should have failed.");
+			} catch (PermissionDeniedFault f) {
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testGetHostCertificatesForCaller() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf(true);
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			String hostPrefix = "localhost";
+			int total = 3;
+
+			for (int i = 0; i < total; i++) {
+				HostCertificateRequest req = getHostCertificateRequest(hostPrefix + i);
+				ifs.requestHostCertificate(usr.getGridId(), req);
+			}
+
+			HostCertificateRecord[] r = ifs.getHostCertificatesForCaller(usr.getGridId());
+			assertEquals(total, r.length);
+			for (int i = 0; i < total; i++) {
+				String host = hostPrefix + i;
+				boolean found = false;
+				for (int j = 0; j < r.length; j++) {
+					if (host.equals(r[j].getHost())) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					fail("A host certificate that was expected was not found.");
+				}
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+
+	public void testGetHostCertificatesForCallerInvalidUser() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf(false);
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			createUser(ifs, adminGridId, idp, "user");
+			try {
+				ifs.getHostCertificatesForCaller("bad user");
+				fail("Should have failed.");
+			} catch (PermissionDeniedFault f) {
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testHostCeritifcateStatusAfterUserRemoval() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf(false);
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			String host = "localhost1";
+			HostCertificateRequest req = getHostCertificateRequest(host);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			assertEquals(HostCertificateStatus.Pending, record.getStatus());
+			assertEquals(null, record.getCertificate());
+			String caSubject = ca.getCACertificate().getSubjectDN().getName();
+			int index = caSubject.lastIndexOf(",");
+			String subject = caSubject.substring(0, index) + ",CN=host/" + host;
+			record = ifs.approveHostCertificate(adminGridId, record.getId());
+			assertEquals(HostCertificateStatus.Active, record.getStatus());;
+			assertEquals(subject, record.getSubject());
+			assertEquals(subject, CertUtil.loadCertificate(record.getCertificate().getCertificateAsString())
+				.getSubjectDN().getName());
+
+			String host2 = "localhost2";
+			HostCertificateRequest req2 = getHostCertificateRequest(host2);
+			HostCertificateRecord record2 = ifs.requestHostCertificate(usr.getGridId(), req2);
+			assertEquals(HostCertificateStatus.Pending, record2.getStatus());
+			assertEquals(null, record2.getCertificate());
+
+			ifs.removeUser(adminGridId, usr);
+
+			HostCertificateFilter f = new HostCertificateFilter();
+			f.setId(BigInteger.valueOf(record.getId()));
+
+			HostCertificateRecord[] r = ifs.findHostCertificates(adminGridId, f);
+			assertEquals(1, r.length);
+			assertEquals(HostCertificateStatus.Compromised, r[0].getStatus());
+
+			f.setId(BigInteger.valueOf(record2.getId()));
+			HostCertificateRecord[] r2 = ifs.findHostCertificates(adminGridId, f);
+			assertEquals(1, r2.length);
+			assertEquals(HostCertificateStatus.Rejected, r2[0].getStatus());
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
 
 
 	public void testRenewUserCredentials() {
@@ -221,8 +689,10 @@ public class TestIFS extends TestCase {
 			this.validateCRLOnDisabledUserStatus(ifs, list, IFSUserStatus.Suspended, adminGridId, userHostCerts);
 			this.validateCRLOnDisabledUserStatus(ifs, list, IFSUserStatus.Rejected, adminGridId, userHostCerts);
 			this.validateCRLOnDisabledUserStatus(ifs, list, IFSUserStatus.Expired, adminGridId, userHostCerts);
-			this.validateCRLOnDisabledHostStatus(ifs, list, HostCertificateStatus.Suspended, adminGridId, userHostCerts);
-			this.validateCRLOnDisabledHostStatus(ifs, list, HostCertificateStatus.Compromised, adminGridId, userHostCerts);
+			this
+				.validateCRLOnDisabledHostStatus(ifs, list, HostCertificateStatus.Suspended, adminGridId, userHostCerts);
+			this.validateCRLOnDisabledHostStatus(ifs, list, HostCertificateStatus.Compromised, adminGridId,
+				userHostCerts);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -877,6 +1347,11 @@ public class TestIFS extends TestCase {
 
 
 	private IdentityFederationConfiguration getConf() throws Exception {
+		return getConf(true);
+	}
+
+
+	private IdentityFederationConfiguration getConf(boolean autoHostCertificateApproval) throws Exception {
 		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
 		conf.setIdentityAssignmentPolicy(IdentityAssignmentPolicy.name);
 		CredentialPolicy cp = new CredentialPolicy();
@@ -888,7 +1363,7 @@ public class TestIFS extends TestCase {
 		l.setMinutes(0);
 		l.setSeconds(0);
 		cp.setCredentialLifetime(l);
-		cp.setHostCertificateAutoApproval(true);
+		cp.setHostCertificateAutoApproval(autoHostCertificateApproval);
 		conf.setCredentialPolicy(cp);
 		Length len = new Length();
 		len.setMin(MIN_NAME_LENGTH);
@@ -1197,6 +1672,21 @@ public class TestIFS extends TestCase {
 	}
 
 
+	private IFSUser createUser(IFS ifs, String adminGridId, IdPContainer idp, String uid) throws Exception {
+		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+		PublicKey publicKey = pair.getPublic();
+		ProxyLifetime lifetime = getProxyLifetime();
+		X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(uid, idp), publicKey, lifetime, DELEGATION_LENGTH);
+		createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
+		IFSUserFilter f1 = new IFSUserFilter();
+		f1.setIdPId(idp.getIdp().getId());
+		f1.setUID(uid);
+		IFSUser[] users = ifs.findUsers(adminGridId, f1);
+		assertEquals(1, users.length);
+		return users[0];
+	}
+
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
@@ -1247,12 +1737,7 @@ public class TestIFS extends TestCase {
 
 	private HostCertificateRecord createAndSubmitHostCert(IFS ifs, IdentityFederationConfiguration conf, String admin,
 		String owner, String host) throws Exception {
-		KeyPair pair = KeyUtil.generateRSAKeyPair(ca.getConfiguration().getUserKeySize().getValue());
-		HostCertificateRequest req = new HostCertificateRequest();
-		req.setHostname(host);
-		gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey key = new gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey();
-		key.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
-		req.setPublicKey(key);
+		HostCertificateRequest req = getHostCertificateRequest(host);
 		HostCertificateRecord record = ifs.requestHostCertificate(owner, req);
 		if (!conf.getCredentialPolicy().isHostCertificateAutoApproval()) {
 			assertEquals(HostCertificateStatus.Pending, record.getStatus());
@@ -1261,6 +1746,17 @@ public class TestIFS extends TestCase {
 		assertEquals(HostCertificateStatus.Active, record.getStatus());
 		assertEquals(host, record.getHost());
 		return record;
+	}
+
+
+	private HostCertificateRequest getHostCertificateRequest(String host) throws Exception {
+		KeyPair pair = KeyUtil.generateRSAKeyPair(ca.getConfiguration().getUserKeySize().getValue());
+		HostCertificateRequest req = new HostCertificateRequest();
+		req.setHostname(host);
+		gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey key = new gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey();
+		key.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
+		req.setPublicKey(key);
+		return req;
 	}
 
 

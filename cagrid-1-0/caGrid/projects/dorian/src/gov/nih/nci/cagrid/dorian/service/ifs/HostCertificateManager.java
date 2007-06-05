@@ -69,6 +69,41 @@ public class HostCertificateManager extends LoggingObject {
 	}
 
 
+	public void ownerRemovedUpdateHostCertificates(String owner) throws DorianInternalFault {
+		try {
+			List<HostCertificateRecord> records = this.getHostCertificateRecords(owner);
+			boolean updateCRL = false;
+			for (int i = 0; i < records.size(); i++) {
+				HostCertificateRecord r = records.get(i);
+				if ((r.getStatus().equals(HostCertificateStatus.Active))
+					|| (r.getStatus().equals(HostCertificateStatus.Suspended))) {
+					HostCertificateUpdate update = new HostCertificateUpdate();
+					update.setId(r.getId());
+					update.setStatus(HostCertificateStatus.Compromised);
+					updateHostCertificateRecord(update);
+					updateCRL = true;
+				} else if (r.getStatus().equals(HostCertificateStatus.Pending)) {
+					HostCertificateUpdate update = new HostCertificateUpdate();
+					update.setId(r.getId());
+					update.setStatus(HostCertificateStatus.Rejected);
+					updateHostCertificateRecord(update);
+				}
+			}
+			if (updateCRL) {
+				publisher.publishCRL();
+			}
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+
 	public synchronized HostCertificateRecord renewHostCertificate(long id) throws DorianInternalFault,
 		InvalidHostCertificateFault {
 		HostCertificateRecord record = this.getHostCertificateRecord(id);
@@ -124,13 +159,14 @@ public class HostCertificateManager extends LoggingObject {
 		InvalidHostCertificateFault {
 		Connection c = null;
 		HostCertificateRecord record = this.getHostCertificateRecord(id);
+
+		// Check to see if the status is pending.
+		if (!record.getStatus().equals(HostCertificateStatus.Pending)) {
+			InvalidHostCertificateFault fault = new InvalidHostCertificateFault();
+			fault.setFaultString("Only pending host certificates may be approved.");
+			throw fault;
+		}
 		try {
-			// Check to see if the status is pending.
-			if (!record.getStatus().equals(HostCertificateStatus.Pending)) {
-				InvalidHostCertificateRequestFault fault = new InvalidHostCertificateRequestFault();
-				fault.setFaultString("Only pending host certificates may be approved.");
-				throw fault;
-			}
 			java.security.PublicKey key = KeyUtil.loadPublicKey(record.getPublicKey().getKeyAsString());
 			String host = record.getHost();
 			if (ca.hasCredentials(host)) {

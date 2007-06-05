@@ -392,6 +392,134 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 	}
 
 
+	public void testOwnerRemovedUpdateHostCertificates() {
+		try {
+			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			hcm.clearDatabase();
+			long id1 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost1"));
+			hcm.approveHostCertifcate(id1);
+			HostCertificateUpdate update1 = new HostCertificateUpdate();
+			update1.setId(id1);
+			update1.setStatus(HostCertificateStatus.Suspended);
+			hcm.updateHostCertificateRecord(update1);
+
+			long id2 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost2"));
+			hcm.approveHostCertifcate(id2);
+
+			long id3 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost3"));
+
+			hcm.ownerRemovedUpdateHostCertificates(OWNER);
+			assertEquals(HostCertificateStatus.Compromised, hcm.getHostCertificateRecord(id1).getStatus());
+			assertEquals(HostCertificateStatus.Compromised, hcm.getHostCertificateRecord(id2).getStatus());
+			assertEquals(HostCertificateStatus.Rejected, hcm.getHostCertificateRecord(id3).getStatus());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
+
+
+	public void testApproveActiveHostCertificate() {
+		try {
+			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			hcm.clearDatabase();
+			HostCertificateRequest req = getHostCertificateRequest("localhost");
+			long id = hcm.requestHostCertifcate(OWNER, req);
+			validateAfterCertificateRequest(hcm, req, id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
+			try {
+				hcm.approveHostCertifcate(id);
+				fail("Should have failed.");
+			} catch (InvalidHostCertificateFault f) {
+
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
+
+
+	public void testApproveRejectedHostCertificate() {
+		try {
+			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			hcm.clearDatabase();
+			HostCertificateRequest req = getHostCertificateRequest("localhost");
+			long id = hcm.requestHostCertifcate(OWNER, req);
+			validateAfterCertificateRequest(hcm, req, id);
+
+			HostCertificateUpdate update = new HostCertificateUpdate();
+			update.setId(id);
+			update.setStatus(HostCertificateStatus.Rejected);
+			hcm.updateHostCertificateRecord(update);
+			try {
+				hcm.approveHostCertifcate(id);
+				fail("Should have failed.");
+			} catch (InvalidHostCertificateFault f) {
+
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
+
+
+	public void testApproveSuspendedHostCertificate() {
+		try {
+			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			hcm.clearDatabase();
+			HostCertificateRequest req = getHostCertificateRequest("localhost");
+			long id = hcm.requestHostCertifcate(OWNER, req);
+			validateAfterCertificateRequest(hcm, req, id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
+
+			HostCertificateUpdate update = new HostCertificateUpdate();
+			update.setId(id);
+			update.setStatus(HostCertificateStatus.Suspended);
+			hcm.updateHostCertificateRecord(update);
+			try {
+				hcm.approveHostCertifcate(id);
+				fail("Should have failed.");
+			} catch (InvalidHostCertificateFault f) {
+
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
+
+
+	public void testApproveCompromisedHostCertificate() {
+		try {
+			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			hcm.clearDatabase();
+			HostCertificateRequest req = getHostCertificateRequest("localhost");
+			long id = hcm.requestHostCertifcate(OWNER, req);
+			validateAfterCertificateRequest(hcm, req, id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
+
+			HostCertificateUpdate update = new HostCertificateUpdate();
+			update.setId(id);
+			update.setStatus(HostCertificateStatus.Compromised);
+			hcm.updateHostCertificateRecord(update);
+			try {
+				hcm.approveHostCertifcate(id);
+				fail("Should have failed.");
+			} catch (InvalidHostCertificateFault f) {
+
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
+
+
 	public void testCreateDuplicateHostCertificate() {
 		try {
 			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
@@ -521,8 +649,8 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			fail(e.getMessage());
 		}
 	}
-	
-	
+
+
 	public void testCreateHostCertificateInvalidPublicKeySize() {
 		try {
 			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
@@ -772,8 +900,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 
 
 	private HostCertificateRequest getHostCertificateRequest(String host) throws Exception {
-		return getHostCertificateRequest(host,ca.getConfiguration().getUserKeySize().getValue());
+		return getHostCertificateRequest(host, ca.getConfiguration().getUserKeySize().getValue());
 	}
+
+
 	private HostCertificateRequest getHostCertificateRequest(String host, int keySize) throws Exception {
 		KeyPair pair = KeyUtil.generateRSAKeyPair(keySize);
 		HostCertificateRequest req = new HostCertificateRequest();
