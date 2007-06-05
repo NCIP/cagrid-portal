@@ -1,0 +1,99 @@
+<!-- ======================================================================= -->
+<!-- caGrid Target Grids build file                                          -->
+<!-- ======================================================================= -->
+<project name="caGrid_target_grid" basedir="." default="">
+
+    <!-- The default target grid -->
+    <property name="target.grid" value="osu_dev" />
+
+    <!-- The target grid which clients should communicate with -->
+    <property name="target.grids.dir" location="${share.dir}/resources/target_grids" />
+
+    <!-- The directory where the current grid resources are -->
+    <property name="current.grid.dir" value="${build.dir}/currentgrid" />
+    <property name="current.grid.property.file" value="${current.grid.dir}/currentgrid.properties" />
+    
+
+    <target name="check-target-grid-configured">
+        <condition property="target.grid.configured">
+            <available file="${current.grid.dir}" type="dir" />
+        </condition>
+    </target>
+
+    <target name="prepare-target-grid" depends="check-target-grid-configured" unless="target.grid.configured">
+        <copy todir="${current.grid.dir}">
+            <fileset dir="${target.grids.dir}/${target.grid}" />
+        </copy>
+        <propertyfile file="${current.grid.property.file}">
+            <entry key="current.grid.name" value="${target.grid}" />
+            <entry key="current.grid.configure.time" type="date" value="now" />
+        </propertyfile>
+    </target>
+    
+    <target name="clear-target-grid" >
+        <delete dir="${current.grid.dir}"/>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Configure each configurable project (only needed to target a new grid) -->
+    <!-- ====================================================================== -->
+    <target name="configure" depends="clear-target-grid, noDeps, prepare " description="(Re-)Configures the projects to target a different grid.">
+        <!-- Give each configurable project the new configuration information, and tell them to configure -->
+        <for list="${configurable.projects.list}" parallel="true" param="project.name" trim="true">
+            <sequential>
+                <echo message="Configuring project @{project.name}." />
+                <runtarget target="configure-@{project.name}" />
+            </sequential>
+        </for>
+
+        <!-- reinstall the intronduce extensions -->
+        <runtarget target="installIntroduceExtensions" />
+
+        <!-- delete the user's Introduce service preferences -->
+        <delete failonerror="false">
+            <fileset dir="${user.home}/.introduce_1_1/">
+                <include name="service_urls.properties" />
+            </fileset>
+        </delete>
+
+        <!-- delete the user's Grape preferences -->
+        <delete failonerror="false">
+            <fileset dir="${user.home}/.cagrid/grape">
+                <include name="*-conf.xml" />
+            </fileset>
+        </delete>
+
+        <!-- Get up to date with the trust fabric this grid uses -->
+        <runtarget target="syncWithTrustFabric" />
+
+        <runtarget target="configureHelp" />
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Prints details and instructions on using the configure target          -->
+    <!-- ====================================================================== -->
+    <target name="configureHelp" depends="prepare" description="Displays help information on configuring the environment to target a specific grid.">
+        <property file="${current.grid.property.file}" />
+        <echo message="=====================================================================================" />
+        <echo message="|    CONFIGURED TO USE GRID: ${current.grid.name} AT: ${current.grid.configure.time}"/>
+        <echo message="|" />
+        <echo message="|    THE VALID TARGET GRIDS ARE:" />
+        <for param="dir">
+            <path>
+                <dirset dir="${target.grids.dir}" includes="*" />
+            </path>
+            <sequential>
+                <basename file="@{dir}" property="@{dir}.grid.name" />
+                <echo message="|      - ${@{dir}.grid.name}" />
+            </sequential>
+        </for>
+        <echo message="|" />
+        <echo message="-------------------------------------------------------------------------------------" />
+        <echo message="|    NOTE: To use a different target grid, set property 'target.grid'" />
+        <echo message="|    to the grid's name, and run the 'configure' target." />
+        <echo message="|" />
+        <echo message="|    For example, type:" />
+        <echo message="|        ant -Dtarget.grid=${target.grid} configure" />
+        <echo message="=====================================================================================" />
+    </target>
+</project>

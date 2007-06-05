@@ -17,14 +17,11 @@
     <property name="share.dir" location="${caGrid-Master.basedir}/share" />
     <property name="share.lib.dir" location="${share.dir}/lib" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
+    <property name="build.dir" location="${caGrid-Master.basedir}/build" />
     <property name="antfiles.dir" location="${caGrid-Master.basedir}/antfiles" />
+    <property name="anttask.classes.dir" location="${build.dir}/anttasks/classes" />
 
     <property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
-
-    <!-- The target grid which clients should communicate with -->
-    <property name="target.grids.dir" location="${share.dir}/resources/target_grids" />
-    <property name="target.grid" value="osu_dev" />
-
 
     <condition property="isJDK1.5" value="true">
         <or>
@@ -37,6 +34,7 @@
 
     <!-- IMPORT THE UTILITIES TARGETS -->
     <import file="${antfiles.dir}/ant-tasks.xml" />
+    <import file="${antfiles.dir}/target-grid.xml" />
     <import file="${antfiles.dir}/artifacts.xml" />
     <import file="${antfiles.dir}/run-utilities.xml" />
 
@@ -44,13 +42,13 @@
     <import file="${test.dir}/test.xml" />
 
     <!-- At parse time we clean out the custom ant task build, to be sure it gets built at parse time -->
-    <delete failonerror="false" dir="${antfiles.dir}/build" />
+    <delete failonerror="false" dir="${anttask.classes.dir}" />
 
     <!-- =============================================================== -->
     <!-- Bootstrap the build by setting up the structure and building    -->
     <!-- our custom ant tasks.                                           -->
     <!-- =============================================================== -->
-    <target name="prepare" depends="check-anttask-rebuild-needed, build-ant-tasks, define-ant-tasks">
+    <target name="prepare" depends="define-ant-tasks, prepare-target-grid">
         <tstamp />
     </target>
 
@@ -941,59 +939,6 @@
     <target name="noDeps">
         <echo message="Disabling calling of generatingantcalls." />
         <property name="skip.artifact.antcalls" value="true" />
-    </target>
-
-    <!-- ====================================================================== -->
-    <!-- Configure each configurable project (only needed to target a new grid) -->
-    <!-- ====================================================================== -->
-    <target name="configure" depends="prepare, noDeps" description="(Re-)Configures the projects to target a different grid.">
-        <!-- Give each configurable project the new configuration information, and tell them to configure -->
-        <for list="${configurable.projects.list}" parallel="true" param="project.name" trim="true">
-            <sequential>
-                <echo message="Configuring project @{project.name}." />
-                <runtarget target="configure-@{project.name}" />
-            </sequential>
-        </for>
-
-        <!-- reinstall the intronduce extensions -->
-        <runtarget target="installIntroduceExtensions" />
-
-        <!-- delete the user's service preferences -->
-        <delete failonerror="false">
-            <fileset dir="${user.home}/.introduce_1_1/">
-                <include name="service_urls.properties" />
-            </fileset>
-        </delete>
-
-        <!-- TODO: what needs to be cleaned out in grape configs? -->
-
-        <!-- Get up to date with the trust fabric this grid uses -->
-        <runtarget target="syncWithTrustFabric" />
-
-        <runtarget target="configureHelp" />
-    </target>
-    <target name="configureHelp" depends="prepare" description="Displays help information on configuring the environment to target a specific grid.">
-        <echo message="=====================================================================================" />
-        <echo message="|    CONFIGURED TO USE GRID: ${target.grid}" />
-        <echo message="|" />
-        <echo message="|    THE VALID TARGET GRIDS ARE:" />
-        <for param="dir">
-            <path>
-                <dirset dir="${target.grids.dir}" includes="*" />
-            </path>
-            <sequential>
-                <basename file="@{dir}" property="@{dir}.grid.name" />
-                <echo message="|      - ${@{dir}.grid.name}" />
-            </sequential>
-        </for>
-        <echo message="|" />
-        <echo message="-------------------------------------------------------------------------------------" />
-        <echo message="|    NOTE: To use a different target grid, set property 'target.grid'" />
-        <echo message="|    to the grid's name, and run the 'configure' target." />
-        <echo message="|" />
-        <echo message="|    For example, type:"/>
-        <echo message="|        ant -Dtarget.grid=${target.grid} configure" />
-        <echo message="=====================================================================================" />
     </target>
 
 

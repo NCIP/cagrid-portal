@@ -1,13 +1,10 @@
 <!-- ======================================================================= -->
-<!-- caGrid Reporting Utilities build file                                   -->
+<!-- caGrid Custom Ant Tasks build file                                      -->
 <!-- ======================================================================= -->
 <project name="caGrid_ant_tasks" basedir="." default="">
-    <target name="usage">
-        <echo message="Not to be called directly.  This file contains utilities to be used in other build files." />
-    </target>
 
     <path id="ant.tasks.classpath">
-        <pathelement location="${antfiles.dir}/build" />
+        <pathelement location="${anttask.classes.dir}" />
         <fileset dir="${ant.library.dir}">
             <include name="ant.jar" />
         </fileset>
@@ -29,15 +26,15 @@
         </condition>
     </target>
 
-    <target name="build-ant-tasks" unless="have.anttasks">
-        <delete dir="${antfiles.dir}/build" />
-        <mkdir dir="${antfiles.dir}/build" />
-        <javac srcdir="${antfiles.dir}/src" destdir="${antfiles.dir}/build" debug="on" deprecation="off" optimize="off">
+    <target name="build-ant-tasks" unless="have.anttasks" depends="check-anttask-rebuild-needed">
+        <delete dir="${anttask.classes.dir}" />
+        <mkdir dir="${anttask.classes.dir}" />
+        <javac srcdir="${antfiles.dir}/src" destdir="${anttask.classes.dir}" debug="on" deprecation="off" optimize="off">
             <classpath refid="ant.tasks.classpath" />
         </javac>
     </target>
 
-    <target name="define-ant-tasks" unless="defined.anttasks">
+    <target name="define-ant-tasks" unless="defined.anttasks" depends="build-ant-tasks">
         <taskdef resource="net/sf/antcontrib/antlib.xml" loaderref="artifact">
             <classpath refid="ant.tasks.classpath" />
         </taskdef>
