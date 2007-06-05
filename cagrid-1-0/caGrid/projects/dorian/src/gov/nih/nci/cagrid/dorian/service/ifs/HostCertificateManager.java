@@ -45,12 +45,27 @@ public class HostCertificateManager extends LoggingObject {
 	private Database db;
 	private CertificateAuthority ca;
 	private IdentityFederationConfiguration conf;
+	private Publisher publisher;
 
 
-	public HostCertificateManager(Database db, IdentityFederationConfiguration conf, CertificateAuthority ca) {
+	public HostCertificateManager(Database db, IdentityFederationConfiguration conf, CertificateAuthority ca,
+		Publisher publisher) {
 		this.db = db;
 		this.ca = ca;
 		this.conf = conf;
+		this.publisher = publisher;
+	}
+
+
+	private void publishCRLIfNeeded(HostCertificateStatus s1, HostCertificateStatus s2) {
+		if ((s1.equals(HostCertificateStatus.Active)) && (s2.equals(HostCertificateStatus.Suspended))) {
+			publisher.publishCRL();
+		} else if ((s1.equals(HostCertificateStatus.Active)) && (s2.equals(HostCertificateStatus.Compromised))) {
+			publisher.publishCRL();
+		} else if ((s1.equals(HostCertificateStatus.Suspended)) && (s2.equals(HostCertificateStatus.Active))) {
+			publisher.publishCRL();
+		}
+
 	}
 
 
@@ -589,6 +604,9 @@ public class HostCertificateManager extends LoggingObject {
 				}
 				s.setLong(count, update.getId());
 				s.execute();
+				if (updateStatus) {
+					publishCRLIfNeeded(record.getStatus(), update.getStatus());
+				}
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
 				DorianInternalFault fault = new DorianInternalFault();

@@ -102,8 +102,7 @@ public class IFS extends LoggingObject implements Publisher {
 		} else {
 			this.administrators = this.groupManager.getGroup(ADMINISTRATORS);
 		}
-		this.hostManager = new HostCertificateManager(db, this.conf, ca);
-
+		this.hostManager = new HostCertificateManager(db, this.conf, ca, this);
 		publishCRL();
 	}
 
