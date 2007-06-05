@@ -35,12 +35,12 @@ Upgrade Cycle
 
 To Do:  
 
+Add notification support to any resource
+
 upgrading is not really dont until sync is ran, so in modification gui make sure the user
 is notified that it is not complete until they hit save.
 
 resource refactoring needs to be done completely (first pass done)
-
-when adding a service context, if there is an error the screen is already gone and not fixable before the service is added and than not modifyable
 
 in the types file importer check the support for includes, and imports and check on whether it works when importing and including from ../
 
@@ -84,6 +84,8 @@ add tests to system tests for (coverage report shows no coverage):
 add a .cvsignore file to generated skeletons that includes the gar.  my right mouse button is slowly wearing out... and i am lazy...
 
 ============================ D O N E ================================================================
+
+when adding a service context, if there is an error the screen is already gone and not fixable before the service is added and than not modifyable
 
 Fix the caDSR var name in the extensions, i have a typo
 
