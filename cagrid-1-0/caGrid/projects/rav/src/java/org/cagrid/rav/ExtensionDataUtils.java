@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.cagrid.rav;
 
 import gov.nih.nci.cagrid.common.Utils;

@@ -16,10 +16,29 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-portal.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-updater.jar"/>
-	<classpathentry kind="lib" path="build/jars/caGrid-1.1-rav-stubs.jar"/>
+	<classpathentry kind="lib" path="build/jars/caGrid-1.0-rav-core.jar"/>
+	<classpathentry kind="lib" path="build/lib/caGrid-1.0-rav-stubs.jar"/>
+	<classpathentry kind="lib" path="build/jars/caGrid-1.0-rav-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-portal.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-1.1-updater.jar"/>
+	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/lib/wizard-0.1.12.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/ant-contrib.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/caGrid-1.0-core.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/caGrid-1.0-Introduce-1.1-core.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/caGrid-1.0-Introduce-1.1-portal.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/caGrid-1.0-Introduce-1.1-updater.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/caGrid-1.0-rav-core.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/caGrid-1.0-rav-stubs.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/jaxmejs.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/mobius_common_client-1.1.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/mobius_factories-1.1.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/mobius_gme_client-1.1.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/mobius_mako_client-1.1.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="${introduce.extensions.dir}/lib/wizard-0.1.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
