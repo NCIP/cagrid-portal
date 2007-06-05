@@ -10,6 +10,8 @@ import java.rmi.RemoteException;
  */
 public interface DorianI {
 
+    public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord[] getOwnedHostCertificates() throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault ;
+
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
     public java.lang.String registerWithIdP(gov.nih.nci.cagrid.dorian.idp.bean.Application application) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault ;
@@ -51,6 +53,8 @@ public interface DorianI {
     public void removeAdmin(java.lang.String gridIdentity) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault ;
 
     public java.lang.String[] getAdmins() throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault ;
+
+    public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord requestHostCertificate(gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest req) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateRequestFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault ;
 
 }
 

@@ -8,14 +8,10 @@
    <ns2:SchemaElement type="DelegationPathLength" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="PublicKey" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="IFSUserPolicy" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="InvalidPasswordFault" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CredentialsFault" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="HostCertificateRequest" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="HostCertificateRecord" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="HostCertificateFilter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="HostCertificateUpdate" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="InvalidHostCertificateRequestFault" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="InvalidHostCertificateFault" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./AuthenticationServiceTypes.xsd" namespace="http://cagrid.nci.nih.gov/AuthenticationService/types" packageName="gov.nih.nci.cagrid.authentication.stubs.types" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="AuthenticationServiceReference" xsi:type="ns2:SchemaElementType"/>
@@ -65,6 +61,8 @@
    <ns2:SchemaElement type="InvalidTrustedIdPFault" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="InvalidUserFault" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="AdminAlreadyExists" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="InvalidHostCertificateRequestFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="InvalidHostCertificateFault" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -324,25 +322,45 @@
       <ns4:Exception name="PermissionDeniedFault" qname="ns86:PermissionDeniedFault" xmlns:ns86="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="requestHostCertificate" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns87:HostCertificateRequest" isArray="false" name="req" xmlns:ns87="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns88:HostCertificateRecord" isArray="false" xmlns:ns88="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="DorianInternalFault" qname="ns89:DorianInternalFault" xmlns:ns89="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception name="InvalidHostCertificateRequestFault" qname="ns90:InvalidHostCertificateRequestFault" xmlns:ns90="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception name="InvalidHostCertificateFault" qname="ns91:InvalidHostCertificateFault" xmlns:ns91="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception name="PermissionDeniedFault" qname="ns92:PermissionDeniedFault" xmlns:ns92="http://cagrid.nci.nih.gov/Dorian/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="getOwnedHostCertificates" xsi:type="ns4:MethodType">
+     <ns4:Inputs/>
+     <ns4:Output qName="ns93:HostCertificateRecord" isArray="true" xmlns:ns93="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="DorianInternalFault" qname="ns94:DorianInternalFault" xmlns:ns94="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception name="PermissionDeniedFault" qname="ns95:PermissionDeniedFault" xmlns:ns95="http://cagrid.nci.nih.gov/Dorian/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
    </ns4:Methods>
-   <ns87:ResourcePropertiesList xsi:type="ns87:ResourcePropertiesListType" xmlns:ns87="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns87:ResourceProperty qName="ns88:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns87:ResourcePropertyType" xmlns:ns88="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns87:ResourcePropertiesList>
-   <ns89:ServiceSecurity xsi:type="ns89:ServiceSecurity" xmlns:ns89="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns89:SecuritySetting xsi:type="ns89:SecuritySetting">Custom</ns89:SecuritySetting>
-    <ns89:TransportLevelSecurity xsi:type="ns89:TransportLevelSecurity">
-     <ns89:CommunicationMethod xsi:type="ns89:CommunicationMethod">Privacy</ns89:CommunicationMethod>
-    </ns89:TransportLevelSecurity>
-    <ns89:RunAsMode xsi:type="ns89:RunAsMode">System</ns89:RunAsMode>
-    <ns89:AnonymousClients xsi:type="ns89:AnonymousCommunication">No</ns89:AnonymousClients>
-    <ns89:ServiceAuthorization xsi:type="ns89:ServiceAuthorization">
-     <ns89:NoAuthorization xsi:type="ns89:NoAuthorization"/>
-    </ns89:ServiceAuthorization>
-   </ns89:ServiceSecurity>
+   <ns96:ResourcePropertiesList xsi:type="ns96:ResourcePropertiesListType" xmlns:ns96="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns96:ResourceProperty qName="ns97:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns96:ResourcePropertyType" xmlns:ns97="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns96:ResourcePropertiesList>
+   <ns98:ServiceSecurity xsi:type="ns98:ServiceSecurity" xmlns:ns98="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns98:SecuritySetting xsi:type="ns98:SecuritySetting">Custom</ns98:SecuritySetting>
+    <ns98:TransportLevelSecurity xsi:type="ns98:TransportLevelSecurity">
+     <ns98:CommunicationMethod xsi:type="ns98:CommunicationMethod">Privacy</ns98:CommunicationMethod>
+    </ns98:TransportLevelSecurity>
+    <ns98:RunAsMode xsi:type="ns98:RunAsMode">System</ns98:RunAsMode>
+    <ns98:AnonymousClients xsi:type="ns98:AnonymousCommunication">No</ns98:AnonymousClients>
+    <ns98:ServiceAuthorization xsi:type="ns98:ServiceAuthorization">
+     <ns98:NoAuthorization xsi:type="ns98:NoAuthorization"/>
+    </ns98:ServiceAuthorization>
+   </ns98:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns90:Extensions xsi:type="ns90:ExtensionsType" xmlns:ns90="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns90:Extension name="cagrid_metadata" xsi:type="ns90:ExtensionType"/>
- </ns90:Extensions>
- <ns91:ServiceProperties xmlns:ns91="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
+ <ns99:Extensions xsi:type="ns99:ExtensionsType" xmlns:ns99="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns99:Extension name="cagrid_metadata" xsi:type="ns99:ExtensionType"/>
+ </ns99:Extensions>
+ <ns100:ServiceProperties xmlns:ns100="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
 </ns1:ServiceDescription>

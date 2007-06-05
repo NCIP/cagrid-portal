@@ -355,6 +355,38 @@
           </sequence>
         </complexType>
       </element>
+      <element name="RequestHostCertificateRequest">
+        <complexType>
+          <sequence>
+            <element name="req">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:HostCertificateRequest" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="RequestHostCertificateResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:HostCertificateRecord" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetOwnedHostCertificatesRequest">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
+      <element name="GetOwnedHostCertificatesResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:HostCertificateRecord" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="DorianResourceProperties">
         <complexType>
           <sequence>
@@ -479,6 +511,18 @@
   <message name="GetAdminsResponse">
     <part name="parameters" element="tns:GetAdminsResponse" />
   </message>
+  <message name="RequestHostCertificateRequest">
+    <part name="parameters" element="tns:RequestHostCertificateRequest" />
+  </message>
+  <message name="RequestHostCertificateResponse">
+    <part name="parameters" element="tns:RequestHostCertificateResponse" />
+  </message>
+  <message name="GetOwnedHostCertificatesRequest">
+    <part name="parameters" element="tns:GetOwnedHostCertificatesRequest" />
+  </message>
+  <message name="GetOwnedHostCertificatesResponse">
+    <part name="parameters" element="tns:GetOwnedHostCertificatesResponse" />
+  </message>
   <message name="DorianInternalFaultFaultMessage">
     <part name="fault" element="ns7:DorianInternalFault" />
   </message>
@@ -505,6 +549,12 @@
   </message>
   <message name="InvalidUserFaultFaultMessage">
     <part name="fault" element="ns7:InvalidUserFault" />
+  </message>
+  <message name="InvalidHostCertificateRequestFaultFaultMessage">
+    <part name="fault" element="ns7:InvalidHostCertificateRequestFault" />
+  </message>
+  <message name="InvalidHostCertificateFaultFaultMessage">
+    <part name="fault" element="ns7:InvalidHostCertificateFault" />
   </message>
   <!--============================================================
 
@@ -632,6 +682,20 @@
     <operation name="getAdmins">
       <input message="tns:GetAdminsRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetAdminsRequest" />
       <output message="tns:GetAdminsResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetAdminsResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="requestHostCertificate">
+      <input message="tns:RequestHostCertificateRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RequestHostCertificateRequest" />
+      <output message="tns:RequestHostCertificateResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RequestHostCertificateResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="InvalidHostCertificateRequestFault" message="tns:InvalidHostCertificateRequestFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidHostCertificateRequestFaultFaultMessage" />
+      <fault name="InvalidHostCertificateFault" message="tns:InvalidHostCertificateFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidHostCertificateFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="getOwnedHostCertificates">
+      <input message="tns:GetOwnedHostCertificatesRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetOwnedHostCertificatesRequest" />
+      <output message="tns:GetOwnedHostCertificatesResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetOwnedHostCertificatesResponse" />
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
     </operation>

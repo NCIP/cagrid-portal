@@ -1,13 +1,13 @@
 package gov.nih.nci.cagrid.dorian.test;
 
+import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 
 
 public class CABlaster {

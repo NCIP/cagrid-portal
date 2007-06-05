@@ -10,11 +10,11 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate;
-import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidHostCertificateFault;
-import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidHostCertificateRequestFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey;
 import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
+import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateRequestFault;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 

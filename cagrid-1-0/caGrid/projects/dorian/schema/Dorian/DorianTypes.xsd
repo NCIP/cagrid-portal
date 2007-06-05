@@ -76,5 +76,17 @@
       <extension base="wsrbf:BaseFaultType" />
     </complexContent>
   </complexType>
+  <element name="InvalidHostCertificateRequestFault" type="tns:InvalidHostCertificateRequestFault" />
+  <complexType name="InvalidHostCertificateRequestFault">
+    <complexContent>
+      <extension base="wsrbf:BaseFaultType" />
+    </complexContent>
+  </complexType>
+  <element name="InvalidHostCertificateFault" type="tns:InvalidHostCertificateFault" />
+  <complexType name="InvalidHostCertificateFault">
+    <complexContent>
+      <extension base="wsrbf:BaseFaultType" />
+    </complexContent>
+  </complexType>
 </schema>
 

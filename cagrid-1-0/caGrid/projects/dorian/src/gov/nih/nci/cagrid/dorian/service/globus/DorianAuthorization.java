@@ -129,6 +129,16 @@ public class DorianAuthorization{
 		
 		
 	}
+					
+	public static void authorizeRequestHostCertificate() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeGetOwnedHostCertificates() throws RemoteException {
+		
+		
+	}
 	
 	
 }

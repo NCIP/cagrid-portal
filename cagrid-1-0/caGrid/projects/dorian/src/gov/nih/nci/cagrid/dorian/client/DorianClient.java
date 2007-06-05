@@ -96,6 +96,14 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
 		}
 	}
 
+	public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord[] getOwnedHostCertificates() throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"getOwnedHostCertificates");
+        gov.nih.nci.cagrid.dorian.stubs.GetOwnedHostCertificatesRequest params = new gov.nih.nci.cagrid.dorian.stubs.GetOwnedHostCertificatesRequest();
+        gov.nih.nci.cagrid.dorian.stubs.GetOwnedHostCertificatesResponse boxedResult = portType.getOwnedHostCertificates(params);
+        return boxedResult.getHostCertificateRecord();
+      }
+    }
 	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
@@ -305,6 +313,17 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
         gov.nih.nci.cagrid.dorian.stubs.GetAdminsRequest params = new gov.nih.nci.cagrid.dorian.stubs.GetAdminsRequest();
         gov.nih.nci.cagrid.dorian.stubs.GetAdminsResponse boxedResult = portType.getAdmins(params);
         return boxedResult.getResponse();
+      }
+    }
+	public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord requestHostCertificate(gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest req) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateRequestFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"requestHostCertificate");
+        gov.nih.nci.cagrid.dorian.stubs.RequestHostCertificateRequest params = new gov.nih.nci.cagrid.dorian.stubs.RequestHostCertificateRequest();
+        gov.nih.nci.cagrid.dorian.stubs.RequestHostCertificateRequestReq reqContainer = new gov.nih.nci.cagrid.dorian.stubs.RequestHostCertificateRequestReq();
+        reqContainer.setHostCertificateRequest(req);
+        params.setReq(reqContainer);
+        gov.nih.nci.cagrid.dorian.stubs.RequestHostCertificateResponse boxedResult = portType.requestHostCertificate(params);
+        return boxedResult.getHostCertificateRecord();
       }
     }
 

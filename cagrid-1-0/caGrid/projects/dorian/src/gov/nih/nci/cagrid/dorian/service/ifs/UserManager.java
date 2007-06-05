@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
-import gov.nih.nci.cagrid.dorian.ifs.bean.CredentialsFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
@@ -439,7 +438,7 @@ public class UserManager extends LoggingObject {
 	}
 
 
-	public synchronized IFSUser addUser(TrustedIdP idp, IFSUser user) throws DorianInternalFault, CredentialsFault,
+	public synchronized IFSUser addUser(TrustedIdP idp, IFSUser user) throws DorianInternalFault,
 		InvalidUserFault {
 		this.buildDatabase();
 		if (!determineIfUserExists(user.getIdPId(), user.getUID())) {

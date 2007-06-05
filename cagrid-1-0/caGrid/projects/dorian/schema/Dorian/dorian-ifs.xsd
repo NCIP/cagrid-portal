@@ -128,22 +128,6 @@
 				<xsd:element name="className" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
 	</xsd:complexType>
-	
-	<xsd:element name="InvalidPasswordFault" type="ifs:InvalidPasswordFault"/>
-	
-	 <xsd:complexType name="InvalidPasswordFault">
-				<xsd:complexContent>
-					<xsd:extension base="wsbf:BaseFaultType" />
-				</xsd:complexContent>
-	 </xsd:complexType>
-	 
-	 <xsd:element name="CredentialsFault" type="ifs:CredentialsFault"/>
-	 <xsd:complexType name="CredentialsFault">
-				<xsd:complexContent>
-					<xsd:extension base="wsbf:BaseFaultType" />
-				</xsd:complexContent>
-	 </xsd:complexType>
-	 
 	 
 	 <xsd:element name="HostCertificateRequest" type="ifs:HostCertificateRequest"/>
 	    <xsd:complexType name="HostCertificateRequest">
@@ -197,20 +181,5 @@
    				<xsd:enumeration value="Compromised"/>
   			</xsd:restriction>
  	  </xsd:simpleType>
- 	  
- 	 <xsd:element name="InvalidHostCertificateRequestFault" type="ifs:InvalidHostCertificateRequestFault"/>
-	 <xsd:complexType name="InvalidHostCertificateRequestFault">
-				<xsd:complexContent>
-					<xsd:extension base="wsbf:BaseFaultType" />
-				</xsd:complexContent>
-	 </xsd:complexType>
-	 
-	  <xsd:element name="InvalidHostCertificateFault" type="ifs:InvalidHostCertificateFault"/>
-	 <xsd:complexType name="InvalidHostCertificateFault">
-				<xsd:complexContent>
-					<xsd:extension base="wsbf:BaseFaultType" />
-				</xsd:complexContent>
-	 </xsd:complexType>
-
-		
+ 	 	
 </xsd:schema>
