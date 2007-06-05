@@ -32,6 +32,26 @@
 	</portlet>
 
 	<portlet>
+      <portlet-name>dataservice</portlet-name>
+      <display-name>caGrid Data Service</display-name>
+      <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+      <init-param>
+         <name>contextConfigLocation</name>
+         <value>/WEB-INF/context/dataservice-portlet.xml</value>
+      </init-param>
+      <supports>
+         <mime-type>text/html</mime-type>
+         <portlet-mode>view</portlet-mode>
+      </supports>
+      <portlet-info>
+         <title>caGrid Data Service</title>
+         <short-title>caGrid Data Service</short-title>
+         <keywords>data service</keywords>
+      </portlet-info>
+   </portlet>
+
+
+	<portlet>
 		<description>Content introducing the caGrid Portal</description>
 		<portlet-name>WelcomeToCaGridPortal</portlet-name>
 		<display-name>Welcome to caGrid Portal</display-name>
