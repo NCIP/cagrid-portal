@@ -51,12 +51,12 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 
     // constants for the 3.1 version of the SDK Query Processor
     public static final String SDK_31_QUERY_LIB = ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
-        + File.separator + "skd31" + File.separator + "lib" + File.separator + "caGrid-1.1-sdkQuery.jar";
+        + File.separator + "sdk31" + File.separator + "lib" + File.separator + "caGrid-1.1-sdkQuery-core.jar";
     public static final String SDK_31_QUERY_PROCESSOR = "gov.nih.nci.cagrid.data.cql.cacore.HQLCoreQueryProcessor";
 
     // constants for the 3.2 version of the SDK Query Processor
     public static final String SDK_32_QUERY_LIB = ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
-        + File.separator + "sdk32" + File.separator + "lib" + File.separator + "caGrid-1.1-sdkQuery32.jar";
+        + File.separator + "sdk32" + File.separator + "lib" + File.separator + "caGrid-1.1-sdkQuery32-core.jar";
     public static final String SDK_32_QUERY_PROCESSOR = "gov.nih.nci.cagrid.data.sdk32query.HQLCoreQueryProcessor";
 
     /**
@@ -78,7 +78,6 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
     private JPanel versionSelectionPanel = null;
     private JRadioButton sdk31RadioButton = null;
     private JRadioButton sdk32RadioButton = null;
-
 
     public CoreDsIntroPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
@@ -313,7 +312,7 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
     private JRadioButton getSdk32RadioButton() {
         if (sdk32RadioButton == null) {
             sdk32RadioButton = new JRadioButton();
-            sdk32RadioButton.setText("SDK Version 3.2");
+            sdk32RadioButton.setText("SDK Version 3.2 / 3.2.1");
         }
         return sdk32RadioButton;
     }
