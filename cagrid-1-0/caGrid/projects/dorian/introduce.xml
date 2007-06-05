@@ -342,25 +342,68 @@
       <ns4:Exception name="PermissionDeniedFault" qname="ns95:PermissionDeniedFault" xmlns:ns95="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="approveHostCertificate" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="xsd:integer" isArray="false" name="recordId" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns96:HostCertificateRecord" isArray="false" xmlns:ns96="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="DorianInternalFault" qname="ns97:DorianInternalFault" xmlns:ns97="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception name="InvalidHostCertificateFault" qname="ns98:InvalidHostCertificateFault" xmlns:ns98="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception name="PermissionDeniedFault" qname="ns99:PermissionDeniedFault" xmlns:ns99="http://cagrid.nci.nih.gov/Dorian/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="findHostCertificates" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns100:HostCertificateFilter" isArray="false" name="hostCertificateFilter" xmlns:ns100="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns101:HostCertificateRecord" isArray="true" xmlns:ns101="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="DorianInternalFault" qname="ns102:DorianInternalFault" xmlns:ns102="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception name="PermissionDeniedFault" qname="ns103:PermissionDeniedFault" xmlns:ns103="http://cagrid.nci.nih.gov/Dorian/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="updateHostCertificateRecord" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns104:HostCertificateUpdate" isArray="false" name="hostCertificateUpdate" xmlns:ns104="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     </ns4:Inputs>
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="DorianInternalFault" qname="ns105:DorianInternalFault" xmlns:ns105="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception name="InvalidHostCertificateFault" qname="ns106:InvalidHostCertificateFault" xmlns:ns106="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception name="PermissionDeniedFault" qname="ns107:PermissionDeniedFault" xmlns:ns107="http://cagrid.nci.nih.gov/Dorian/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="renewHostCertificate" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="xsd:integer" isArray="false" name="recordId" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     </ns4:Inputs>
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="DorianInternalFault" qname="ns108:DorianInternalFault" xmlns:ns108="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception name="InvalidHostCertificateFault" qname="ns109:InvalidHostCertificateFault" xmlns:ns109="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception name="PermissionDeniedFault" qname="ns110:PermissionDeniedFault" xmlns:ns110="http://cagrid.nci.nih.gov/Dorian/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
    </ns4:Methods>
-   <ns96:ResourcePropertiesList xsi:type="ns96:ResourcePropertiesListType" xmlns:ns96="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns96:ResourceProperty qName="ns97:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns96:ResourcePropertyType" xmlns:ns97="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns96:ResourcePropertiesList>
-   <ns98:ServiceSecurity xsi:type="ns98:ServiceSecurity" xmlns:ns98="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns98:SecuritySetting xsi:type="ns98:SecuritySetting">Custom</ns98:SecuritySetting>
-    <ns98:TransportLevelSecurity xsi:type="ns98:TransportLevelSecurity">
-     <ns98:CommunicationMethod xsi:type="ns98:CommunicationMethod">Privacy</ns98:CommunicationMethod>
-    </ns98:TransportLevelSecurity>
-    <ns98:RunAsMode xsi:type="ns98:RunAsMode">System</ns98:RunAsMode>
-    <ns98:AnonymousClients xsi:type="ns98:AnonymousCommunication">No</ns98:AnonymousClients>
-    <ns98:ServiceAuthorization xsi:type="ns98:ServiceAuthorization">
-     <ns98:NoAuthorization xsi:type="ns98:NoAuthorization"/>
-    </ns98:ServiceAuthorization>
-   </ns98:ServiceSecurity>
+   <ns111:ResourcePropertiesList xsi:type="ns111:ResourcePropertiesListType" xmlns:ns111="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns111:ResourceProperty qName="ns112:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns111:ResourcePropertyType" xmlns:ns112="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns111:ResourcePropertiesList>
+   <ns113:ServiceSecurity xsi:type="ns113:ServiceSecurity" xmlns:ns113="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns113:SecuritySetting xsi:type="ns113:SecuritySetting">Custom</ns113:SecuritySetting>
+    <ns113:TransportLevelSecurity xsi:type="ns113:TransportLevelSecurity">
+     <ns113:CommunicationMethod xsi:type="ns113:CommunicationMethod">Privacy</ns113:CommunicationMethod>
+    </ns113:TransportLevelSecurity>
+    <ns113:RunAsMode xsi:type="ns113:RunAsMode">System</ns113:RunAsMode>
+    <ns113:AnonymousClients xsi:type="ns113:AnonymousCommunication">No</ns113:AnonymousClients>
+    <ns113:ServiceAuthorization xsi:type="ns113:ServiceAuthorization">
+     <ns113:NoAuthorization xsi:type="ns113:NoAuthorization"/>
+    </ns113:ServiceAuthorization>
+   </ns113:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns99:Extensions xsi:type="ns99:ExtensionsType" xmlns:ns99="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns99:Extension name="cagrid_metadata" xsi:type="ns99:ExtensionType"/>
- </ns99:Extensions>
- <ns100:ServiceProperties xmlns:ns100="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
+ <ns114:Extensions xsi:type="ns114:ExtensionsType" xmlns:ns114="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns114:Extension name="cagrid_metadata" xsi:type="ns114:ExtensionType"/>
+ </ns114:Extensions>
+ <ns115:ServiceProperties xmlns:ns115="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
 </ns1:ServiceDescription>

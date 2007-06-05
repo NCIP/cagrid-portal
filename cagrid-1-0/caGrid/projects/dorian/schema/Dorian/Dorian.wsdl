@@ -387,6 +387,70 @@
           </sequence>
         </complexType>
       </element>
+      <element name="ApproveHostCertificateRequest">
+        <complexType>
+          <sequence>
+            <element name="recordId" type="xs:integer" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="ApproveHostCertificateResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:HostCertificateRecord" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindHostCertificatesRequest">
+        <complexType>
+          <sequence>
+            <element name="hostCertificateFilter">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:HostCertificateFilter" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindHostCertificatesResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:HostCertificateRecord" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="UpdateHostCertificateRecordRequest">
+        <complexType>
+          <sequence>
+            <element name="hostCertificateUpdate">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:HostCertificateUpdate" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="UpdateHostCertificateRecordResponse">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
+      <element name="RenewHostCertificateRequest">
+        <complexType>
+          <sequence>
+            <element name="recordId" type="xs:integer" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="RenewHostCertificateResponse">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
       <element name="DorianResourceProperties">
         <complexType>
           <sequence>
@@ -522,6 +586,30 @@
   </message>
   <message name="GetOwnedHostCertificatesResponse">
     <part name="parameters" element="tns:GetOwnedHostCertificatesResponse" />
+  </message>
+  <message name="ApproveHostCertificateRequest">
+    <part name="parameters" element="tns:ApproveHostCertificateRequest" />
+  </message>
+  <message name="ApproveHostCertificateResponse">
+    <part name="parameters" element="tns:ApproveHostCertificateResponse" />
+  </message>
+  <message name="FindHostCertificatesRequest">
+    <part name="parameters" element="tns:FindHostCertificatesRequest" />
+  </message>
+  <message name="FindHostCertificatesResponse">
+    <part name="parameters" element="tns:FindHostCertificatesResponse" />
+  </message>
+  <message name="UpdateHostCertificateRecordRequest">
+    <part name="parameters" element="tns:UpdateHostCertificateRecordRequest" />
+  </message>
+  <message name="UpdateHostCertificateRecordResponse">
+    <part name="parameters" element="tns:UpdateHostCertificateRecordResponse" />
+  </message>
+  <message name="RenewHostCertificateRequest">
+    <part name="parameters" element="tns:RenewHostCertificateRequest" />
+  </message>
+  <message name="RenewHostCertificateResponse">
+    <part name="parameters" element="tns:RenewHostCertificateResponse" />
   </message>
   <message name="DorianInternalFaultFaultMessage">
     <part name="fault" element="ns7:DorianInternalFault" />
@@ -697,6 +785,33 @@
       <input message="tns:GetOwnedHostCertificatesRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetOwnedHostCertificatesRequest" />
       <output message="tns:GetOwnedHostCertificatesResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetOwnedHostCertificatesResponse" />
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="approveHostCertificate">
+      <input message="tns:ApproveHostCertificateRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/ApproveHostCertificateRequest" />
+      <output message="tns:ApproveHostCertificateResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/ApproveHostCertificateResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="InvalidHostCertificateFault" message="tns:InvalidHostCertificateFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidHostCertificateFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="findHostCertificates">
+      <input message="tns:FindHostCertificatesRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/FindHostCertificatesRequest" />
+      <output message="tns:FindHostCertificatesResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/FindHostCertificatesResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="updateHostCertificateRecord">
+      <input message="tns:UpdateHostCertificateRecordRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/UpdateHostCertificateRecordRequest" />
+      <output message="tns:UpdateHostCertificateRecordResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/UpdateHostCertificateRecordResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="InvalidHostCertificateFault" message="tns:InvalidHostCertificateFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidHostCertificateFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="renewHostCertificate">
+      <input message="tns:RenewHostCertificateRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RenewHostCertificateRequest" />
+      <output message="tns:RenewHostCertificateResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RenewHostCertificateResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="InvalidHostCertificateFault" message="tns:InvalidHostCertificateFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidHostCertificateFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">

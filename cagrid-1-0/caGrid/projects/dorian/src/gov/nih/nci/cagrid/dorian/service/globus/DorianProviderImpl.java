@@ -19,10 +19,24 @@ public class DorianProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.dorian.stubs.GetOwnedHostCertificatesResponse getOwnedHostCertificates(gov.nih.nci.cagrid.dorian.stubs.GetOwnedHostCertificatesRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
-		DorianAuthorization.authorizeGetOwnedHostCertificates();
-		gov.nih.nci.cagrid.dorian.stubs.GetOwnedHostCertificatesResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.GetOwnedHostCertificatesResponse();
-		boxedResult.setHostCertificateRecord(impl.getOwnedHostCertificates());
+	public gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesResponse findHostCertificates(gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		DorianAuthorization.authorizeFindHostCertificates();
+		gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesResponse();
+		boxedResult.setHostCertificateRecord(impl.findHostCertificates(params.getHostCertificateFilter().getHostCertificateFilter()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordResponse updateHostCertificateRecord(gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		DorianAuthorization.authorizeUpdateHostCertificateRecord();
+		gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordResponse();
+		impl.updateHostCertificateRecord(params.getHostCertificateUpdate().getHostCertificateUpdate());
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateResponse renewHostCertificate(gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		DorianAuthorization.authorizeRenewHostCertificate();
+		gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateResponse();
+		impl.renewHostCertificate(params.getRecordId());
 		return boxedResult;
 	}
 
@@ -170,6 +184,20 @@ public class DorianProviderImpl{
 		DorianAuthorization.authorizeRequestHostCertificate();
 		gov.nih.nci.cagrid.dorian.stubs.RequestHostCertificateResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.RequestHostCertificateResponse();
 		boxedResult.setHostCertificateRecord(impl.requestHostCertificate(params.getReq().getHostCertificateRequest()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.dorian.stubs.GetOwnedHostCertificatesResponse getOwnedHostCertificates(gov.nih.nci.cagrid.dorian.stubs.GetOwnedHostCertificatesRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		DorianAuthorization.authorizeGetOwnedHostCertificates();
+		gov.nih.nci.cagrid.dorian.stubs.GetOwnedHostCertificatesResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.GetOwnedHostCertificatesResponse();
+		boxedResult.setHostCertificateRecord(impl.getOwnedHostCertificates());
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.dorian.stubs.ApproveHostCertificateResponse approveHostCertificate(gov.nih.nci.cagrid.dorian.stubs.ApproveHostCertificateRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+		DorianAuthorization.authorizeApproveHostCertificate();
+		gov.nih.nci.cagrid.dorian.stubs.ApproveHostCertificateResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.ApproveHostCertificateResponse();
+		boxedResult.setHostCertificateRecord(impl.approveHostCertificate(params.getRecordId()));
 		return boxedResult;
 	}
 
