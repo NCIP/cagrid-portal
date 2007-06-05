@@ -70,7 +70,7 @@ public class Operation extends AbstractDomainObject {
 		this.faultCollection = faultCollection;
 	}
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "operation")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "operation", targetEntity = InputParameter.class)
 	public List<InputParameter> getInputParameterCollection() {
 		return inputParameterCollection;
 	}

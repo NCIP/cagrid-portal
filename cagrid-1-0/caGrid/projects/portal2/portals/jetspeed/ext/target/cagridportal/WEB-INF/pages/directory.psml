@@ -3,13 +3,15 @@
 	<security-constraints>
 		<security-constraints-ref>public-view</security-constraints-ref>
 	</security-constraints>
+	
 	<title>Directory</title>
 	<short-title>Directory</short-title>
 	<defaults layout-decorator="cagridportal1" />
 
-	<fragment id="directory-1" type="layout"
+	<fragment id="cp-dir-1" type="layout"
 		name="jetspeed-layouts::VelocityOneColumn">
-		<fragment id="directory-1-1" type="portlet"
-			name="j2-admin::WelcomeToJetspeed" />
+		<fragment id="cp-dir-1-1" type="portlet"
+			name="cagridportlets::WelcomeToCaGridPortal" />
 	</fragment>
+
 </page>

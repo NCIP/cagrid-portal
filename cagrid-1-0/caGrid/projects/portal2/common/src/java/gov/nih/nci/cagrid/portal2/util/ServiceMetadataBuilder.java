@@ -67,13 +67,13 @@ public class ServiceMetadataBuilder {
 		return sMetaOut;
 	}
 
-	private void handlePersist(Object obj) {
+	protected void handlePersist(Object obj) {
 		if (isPersist()) {
 			getHibernateTemplate().saveOrUpdate(obj);
 		}
 	}
 
-	private Service buildService(
+	protected Service buildService(
 			gov.nih.nci.cagrid.metadata.service.Service svcIn) {
 		Service svcOut = new Service();
 		svcOut.setName(svcIn.getName());
@@ -104,8 +104,9 @@ public class ServiceMetadataBuilder {
 				svcOut.getServiceContextCollection().add(svcCtxOut);
 			}
 		}
-		if(svcIn.getCaDSRRegistration() != null){
-			CaDSRRegistration regOut = buildCaDSRRegistration(svcIn.getCaDSRRegistration());
+		if (svcIn.getCaDSRRegistration() != null) {
+			CaDSRRegistration regOut = buildCaDSRRegistration(svcIn
+					.getCaDSRRegistration());
 			regOut.setService(svcOut);
 			svcOut.setCaDSRRegistration(regOut);
 		}
@@ -113,7 +114,8 @@ public class ServiceMetadataBuilder {
 		return svcOut;
 	}
 
-	private CaDSRRegistration buildCaDSRRegistration(gov.nih.nci.cagrid.metadata.service.CaDSRRegistration regIn) {
+	protected CaDSRRegistration buildCaDSRRegistration(
+			gov.nih.nci.cagrid.metadata.service.CaDSRRegistration regIn) {
 		CaDSRRegistration regOut = new CaDSRRegistration();
 		regOut.setRegistrationStatus(regIn.getRegistrationStatus());
 		regOut.setWorkflowStatus(regIn.getWorkflowStatus());
@@ -121,7 +123,7 @@ public class ServiceMetadataBuilder {
 		return regOut;
 	}
 
-	private ServiceContext buildServiceContext(
+	protected ServiceContext buildServiceContext(
 			gov.nih.nci.cagrid.metadata.service.ServiceContext svcCtxIn) {
 
 		ServiceContext svcCtxOut = new ServiceContext();
@@ -153,7 +155,7 @@ public class ServiceMetadataBuilder {
 		return svcCtxOut;
 	}
 
-	private Operation buildOperation(
+	protected Operation buildOperation(
 			gov.nih.nci.cagrid.metadata.service.Operation operIn) {
 		Operation operOut = new Operation();
 		operOut.setDescription(operIn.getDescription());
@@ -201,7 +203,7 @@ public class ServiceMetadataBuilder {
 		return operOut;
 	}
 
-	private Output buildOutput(
+	protected Output buildOutput(
 			gov.nih.nci.cagrid.metadata.service.Output outputIn) {
 		Output outputOut = new Output();
 		outputOut.setArray(outputIn.isIsArray());
@@ -216,7 +218,7 @@ public class ServiceMetadataBuilder {
 		return outputOut;
 	}
 
-	private InputParameter buildInputParameter(
+	protected InputParameter buildInputParameter(
 			gov.nih.nci.cagrid.metadata.service.InputParameter paramIn) {
 		InputParameter paramOut = new InputParameter();
 		paramOut.setArray(paramIn.isIsArray());
@@ -235,7 +237,7 @@ public class ServiceMetadataBuilder {
 
 	}
 
-	private UMLClass buildUMLClass(
+	protected UMLClass buildUMLClass(
 			gov.nih.nci.cagrid.metadata.common.UMLClass umlClassIn) {
 		UMLClass umlClassOut = new UMLClass();
 		if (umlClassIn.getSemanticMetadata() != null) {
@@ -253,6 +255,7 @@ public class ServiceMetadataBuilder {
 				umlClassOut.getUmlAttributeCollection().add(umlAttrOut);
 			}
 		}
+		umlClassOut.setCadsrId(umlClassIn.getId());
 		umlClassOut.setClassName(umlClassIn.getClassName());
 		umlClassOut.setDescription(umlClassIn.getDescription());
 		umlClassOut.setPackageName(umlClassIn.getPackageName());
@@ -263,7 +266,7 @@ public class ServiceMetadataBuilder {
 		return umlClassOut;
 	}
 
-	private UMLAttribute buildUMLAttribute(
+	protected UMLAttribute buildUMLAttribute(
 			gov.nih.nci.cagrid.metadata.common.UMLAttribute umlAttrIn) {
 		UMLAttribute umlAttrOut = new UMLAttribute();
 		if (umlAttrIn.getSemanticMetadata() != null) {
@@ -285,7 +288,7 @@ public class ServiceMetadataBuilder {
 		return umlAttrOut;
 	}
 
-	private ValueDomain buildValueDomain(
+	protected ValueDomain buildValueDomain(
 			gov.nih.nci.cagrid.metadata.common.ValueDomain valDomIn) {
 		ValueDomain valDomOut = new ValueDomain();
 		if (valDomIn.getEnumerationCollection() != null) {
@@ -316,23 +319,26 @@ public class ServiceMetadataBuilder {
 		return valDomOut;
 	}
 
-	private Enumeration buildEnumeration(
+	protected Enumeration buildEnumeration(
 			gov.nih.nci.cagrid.metadata.common.Enumeration enumIn) {
 		Enumeration enumOut = new Enumeration();
 		enumOut.setPermissibleValue(enumIn.getPermissibleValue());
 		enumOut.setValueMeaning(enumIn.getValueMeaning());
 		if (enumOut.getSemanticMetadata() != null) {
-			for (gov.nih.nci.cagrid.metadata.common.SemanticMetadata sMetaIn : enumIn
-					.getSemanticMetadata()) {
-				enumOut.getSemanticMetadata().add(
-						buildSemanticMetadata(sMetaIn));
+			gov.nih.nci.cagrid.metadata.common.SemanticMetadata[] sMetaIns = enumIn
+					.getSemanticMetadata();
+			if (sMetaIns != null) {
+				for (gov.nih.nci.cagrid.metadata.common.SemanticMetadata sMetaIn : sMetaIns) {
+					enumOut.getSemanticMetadata().add(
+							buildSemanticMetadata(sMetaIn));
+				}
 			}
 		}
 		handlePersist(enumOut);
 		return enumOut;
 	}
 
-	private Fault buildFault(gov.nih.nci.cagrid.metadata.service.Fault faultIn) {
+	protected Fault buildFault(gov.nih.nci.cagrid.metadata.service.Fault faultIn) {
 		Fault faultOut = new Fault();
 		faultOut.setDescription(faultIn.getDescription());
 		faultOut.setName(faultIn.getName());
@@ -340,7 +346,7 @@ public class ServiceMetadataBuilder {
 		return faultOut;
 	}
 
-	private ContextProperty buildContextProperty(
+	protected ContextProperty buildContextProperty(
 			gov.nih.nci.cagrid.metadata.service.ContextProperty ctxPropIn) {
 
 		ContextProperty ctxPropOut = new ContextProperty();
@@ -350,7 +356,7 @@ public class ServiceMetadataBuilder {
 		return ctxPropOut;
 	}
 
-	private SemanticMetadata buildSemanticMetadata(
+	protected SemanticMetadata buildSemanticMetadata(
 			gov.nih.nci.cagrid.metadata.common.SemanticMetadata semMetaIn) {
 		SemanticMetadata semMetaOut = new SemanticMetadata();
 
@@ -364,7 +370,7 @@ public class ServiceMetadataBuilder {
 		return semMetaOut;
 	}
 
-	private PointOfContact buildPointOfContact(
+	protected PointOfContact buildPointOfContact(
 			gov.nih.nci.cagrid.metadata.common.PointOfContact pocIn) {
 		PointOfContact pocOut = new PointOfContact();
 		pocOut.setFirstName(pocIn.getFirstName());
@@ -378,7 +384,7 @@ public class ServiceMetadataBuilder {
 		return pocOut;
 	}
 
-	private ResearchCenter buildResearchCenter(
+	protected ResearchCenter buildResearchCenter(
 			gov.nih.nci.cagrid.metadata.common.ResearchCenter rCtrIn) {
 		ResearchCenter rCtrOut = new ResearchCenter();
 
@@ -407,7 +413,7 @@ public class ServiceMetadataBuilder {
 		return rCtrOut;
 	}
 
-	private Address buildAddress(
+	protected Address buildAddress(
 			gov.nih.nci.cagrid.metadata.common.Address addrIn) {
 		Address addrOut = new Address();
 		addrOut.setCountry(addrIn.getCountry());

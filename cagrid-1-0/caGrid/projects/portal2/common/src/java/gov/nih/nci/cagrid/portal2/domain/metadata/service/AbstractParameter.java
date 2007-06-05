@@ -16,6 +16,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ForceDiscriminator;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -31,6 +32,7 @@ import gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLClass;
 @GenericGenerator(name = "id-generator", strategy = "native", parameters = { @Parameter(name = "sequence", value = "seq_params") })
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "param_type", discriminatorType = DiscriminatorType.STRING)
+@ForceDiscriminator
 public abstract class AbstractParameter extends AbstractDomainObject {
 
 	private String qName;

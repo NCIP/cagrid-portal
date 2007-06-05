@@ -1,7 +1,13 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 
 <h1>Services</h1>
-
+<br/>
+<p>
+<c:choose>
+	<c:when test="${empty gridServicesInRange}">
+No grid services to display.
+	</c:when>
+	<c:otherwise>
 <div class="scrollControls">
 	<c:choose>
 		<c:when test="${!empty first}">
@@ -85,8 +91,10 @@
    <tr>
       <th>Name</th>
       <th>Status</th>
+      <%--
       <th>First Seen</th>
       <th>Last Seen</th>
+      --%>
 
    </tr>
    <c:forEach items="${gridServicesInRange}" var="gridService">
@@ -109,6 +117,7 @@
    		<td>
    			<c:out value="${gridService.status}"/>
    		</td>
+   		<%--
    		<td>
    			<fmt:formatDate value="${gridService.firstSeen}" 
    				type="both" dateStyle="full" timeStyle="medium"/>
@@ -117,8 +126,12 @@
    			<fmt:formatDate value="${gridService.lastSeen}" 
    				type="both" dateStyle="full" timeStyle="medium"/>
    		</td>
+   		--%>
    	</tr>
    
    </c:forEach>
    
 </table>
+	</c:otherwise>
+</c:choose>
+</p>

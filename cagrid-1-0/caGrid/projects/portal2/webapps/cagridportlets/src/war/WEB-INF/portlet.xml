@@ -182,6 +182,42 @@
 	</portlet>
 
 	<portlet>
+		<portlet-name>servicediscovery</portlet-name>
+		<display-name>caGrid Service Discovery</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/servicediscovery-portlet.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Service Discovery</title>
+			<short-title>Service Discovery</short-title>
+			<keywords>cagrid,discovery,service,discovery</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>MsgOutput1Name</name>
+				<value>gridServiceIds</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishName1</name>
+				<value>publishedGridServiceIds</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishNamespace1</name>
+				<value></value>
+			</preference>
+		</portlet-preferences>
+	</portlet>
+
+	<portlet>
 		<portlet-name>servicelist</portlet-name>
 		<display-name>caGrid Service List</display-name>
 		<portlet-class>
@@ -202,42 +238,33 @@
 			<keywords>cagrid,discovery,service,list</keywords>
 		</portlet-info>
 		<portlet-preferences>
-			<preference>
-				<name>MsgInput1Name</name>
-				<value>gridServices</value>
-			</preference>
-			<preference>
-				<name>MsgInput1SourceName</name>
-				<value>global_gridServices</value>
-			</preference>
-			<preference>
-				<name>MsgInput1SourceNamespace</name>
-				<value></value>
-			</preference>
+
 			<preference>
 				<name>MsgOutput1Name</name>
-				<value>gridServices</value>
+				<value>selectedGridServiceId</value>
 			</preference>
 			<preference>
 				<name>MsgOutput1PublishName1</name>
-				<value>global_gridServices</value>
+				<value>publishedSelectedGridServiceId</value>
 			</preference>
 			<preference>
 				<name>MsgOutput1PublishNamespace1</name>
 				<value></value>
 			</preference>
+			
 			<preference>
-				<name>MsgOutput2Name</name>
-				<value>selectedGridService</value>
+				<name>MsgInput2Name</name>
+				<value>gridServiceIds</value>
 			</preference>
 			<preference>
-				<name>MsgOutput2PublishName1</name>
-				<value>global_selectedGridService</value>
+				<name>MsgInput2SourceName</name>
+				<value>publishedGridServiceIds</value>
 			</preference>
 			<preference>
-				<name>MsgOutput2PublishNamespace1</name>
+				<name>MsgInput2SourceNamespace</name>
 				<value></value>
-			</preference>
+			</preference>			
+			
 		</portlet-preferences>
 	</portlet>
 	
@@ -264,11 +291,11 @@
 		<portlet-preferences>
 			<preference>
 				<name>MsgInput1Name</name>
-				<value>selectedGridService</value>
+				<value>selectedGridServiceId</value>
 			</preference>
 			<preference>
 				<name>MsgInput1SourceName</name>
-				<value>global_selectedGridService</value>
+				<value>publishedSelectedGridServiceId</value>
 			</preference>
 			<preference>
 				<name>MsgInput1SourceNamespace</name>

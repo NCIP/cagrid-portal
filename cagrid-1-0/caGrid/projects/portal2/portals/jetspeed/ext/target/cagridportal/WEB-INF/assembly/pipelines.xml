@@ -62,10 +62,10 @@ limitations under the License.
   <bean id="securityValve"
         class="gov.nih.nci.cagrid.portal2.portal.jetspeed.security.GridSecurityValve"
   >
-  	<property name="loginApplicationUrl" value="http://localhost:8081/authn/authn/login"/>
-  	<property name="logoutApplicationUrl" value="http://localhost:8081/authn/authn/logout"/>
+  	<property name="loginApplicationUrl" value="http://localhost:8080/authn/authn/login"/>
+  	<property name="logoutApplicationUrl" value="http://localhost:8080/authn/authn/logout"/>
   	<property name="ifsUrl" value="https://cbiovdev5034.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
-  	<property name="webAuthnSvcUrl" value="http://localhost:8080/wsrf/services/cagrid/WebAuthnSvc"/>
+  	<property name="webAuthnSvcUrl" value="http://localhost:8081/wsrf/services/cagrid/WebAuthnSvc"/>
   	<property name="gridCredentialsSessionKey" value="cagrid_authn_gridCredentials"/>
   	<property name="proxyLifetimeHours" value="12"/>
   	<property name="proxyLifetimeMinutes" value="0"/>

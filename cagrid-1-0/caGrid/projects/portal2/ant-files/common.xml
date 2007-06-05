@@ -16,7 +16,7 @@
 		<include name="jce-jdk13-125.jar" />
 		<include name="jgss.jar" />				
 		<include name="puretls.jar" />		
-		<include name="xmlsec.jar" />		
+		<include name="xmlsec.jar" />
 	</patternset>
 	
 	<patternset id="globus.jars">
@@ -24,7 +24,6 @@
 		<include name="axis.jar" />
 		<include name="bootstrap.jar" />
 		<include name="cog-axis.jar" />
-		<include name="cog-jglobus.jar" />		
 		<include name="commonj.jar" />
 		<include name="commons-discovery.jar" />
 		<include name="concurrent.jar" />

@@ -28,8 +28,12 @@
 	<!-- This interceptor forwards the mapping request parameter from an ActionRequest to be used as a render parameter. -->
 	<bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
 	
-	<bean id="openSessionInViewInterceptor" class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor">
+	<bean id="openSessionInViewInterceptor" class="gov.nih.nci.cagrid.portal2.portlet.util.OpenSessionInViewInterceptor">
 		<property name="sessionFactory" ref="sessionFactory"/>
+		<property name="singleSession" value="true"/>
+		<property name="flushModeName">
+			<value>FLUSH_AUTO</value>
+		</property>
 	</bean>
 
 	<!-- Abstract Default ExceptionHandler -->

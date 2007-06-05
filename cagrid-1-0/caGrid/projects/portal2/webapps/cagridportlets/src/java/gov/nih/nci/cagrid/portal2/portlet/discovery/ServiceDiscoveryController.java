@@ -3,6 +3,12 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.discovery;
 
+import gov.nih.nci.cagrid.portal2.dao.GridServiceDao;
+import gov.nih.nci.cagrid.portal2.domain.GridService;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
@@ -16,12 +22,13 @@ import org.springframework.web.portlet.mvc.AbstractController;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
+ *
  */
-public class SelectGridServiceController extends AbstractController{
+public class ServiceDiscoveryController extends AbstractController {
+
+	private static final Log logger = LogFactory.getLog(ServiceDiscoveryController.class);
 	
-	private static final Log logger = LogFactory.getLog(SelectGridServiceController.class);
-	
+	private GridServiceDao gridServiceDao;
 	private String successAction;
 	
 	public String getSuccessAction() {
@@ -35,17 +42,14 @@ public class SelectGridServiceController extends AbstractController{
 	public void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
 
-		String sgsIdStr = request.getParameter("sgs_id");
-		logger.debug("sgsIdStr = " + sgsIdStr);
-		Integer sgsId = null;
-		try {
-			sgsId = Integer.parseInt(sgsIdStr);
-		} catch (Exception ex) {
-			// This should never happen.
-			String msg = "Error parsing selected gridService ID = " + sgsIdStr
-					+ ": " + ex.getMessage();
-			logger.error(msg, ex);
-			throw new RuntimeException(msg, ex);
+		String keyword = request.getParameter("keyword");
+		logger.debug("keyword = " + keyword);
+		
+		//Just get them all
+		List<GridService> gridServices = getGridServiceDao().getAll();
+		List<Integer> gridServiceIds = new ArrayList<Integer>();
+		for(GridService svc : gridServices){
+			gridServiceIds.add(svc.getId());
 		}
 		
 		PortletSession portletSession = request.getPortletSession(true);
@@ -54,17 +58,23 @@ public class SelectGridServiceController extends AbstractController{
 		MessageHelper.loadPrefs(request, id, msgSessionId);
 		MessageHelper helper = new MessageHelper(portletSession, id,
 				msgSessionId);
+		logger.debug("############## Sending list of " + gridServiceIds.size() + " gridServiceIds. #############");
+		helper.send("gridServiceIds", gridServiceIds);
 		
-		logger.debug("########## publishing selectedGridServiceId = " + sgsId + " #########");
-		
-		helper.send("selectedGridServiceId", sgsId);
-
 		logger.debug("setting action to " + getSuccessAction());
 		response.setRenderParameter("action", getSuccessAction());
 	}
 
 	public String getInstanceID(PortletRequest request) {
-		return "SelectGridService" + MessageHelper.getPortletID(request);
+		return "DiscoverGridServices" + MessageHelper.getPortletID(request);
 	}
 
+	public GridServiceDao getGridServiceDao() {
+		return gridServiceDao;
+	}
+
+	public void setGridServiceDao(GridServiceDao gridServiceDao) {
+		this.gridServiceDao = gridServiceDao;
+	}
+	
 }

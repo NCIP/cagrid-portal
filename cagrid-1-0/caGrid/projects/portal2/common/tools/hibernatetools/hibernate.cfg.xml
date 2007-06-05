@@ -64,7 +64,11 @@
 			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.Service" />
 		<mapping
 			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.ServiceContext" />
-
+			
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.DomainModel" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLAssociation" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLAssociationEdge" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass" />
 
 	</session-factory>
 

@@ -8,9 +8,14 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -31,8 +36,12 @@ import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
 @Entity
 @Table(name = "uml_class")
 @GenericGenerator(name = "id-generator", strategy = "native", parameters = { @Parameter(name = "sequence", value = "seq_uml_class") })
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "uml_class_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("UMLClass")
 public class UMLClass extends AbstractDomainObject {
 	
+	private String cadsrId;
 	private String className;
 	private String description;
 	private String packageName;
@@ -96,5 +105,11 @@ public class UMLClass extends AbstractDomainObject {
 	}
 	public void setUmlAttributeCollection(List<UMLAttribute> umlAttributeCollection) {
 		this.umlAttributeCollection = umlAttributeCollection;
+	}
+	public String getCadsrId() {
+		return cadsrId;
+	}
+	public void setCadsrId(String cadsrId) {
+		this.cadsrId = cadsrId;
 	}
 }

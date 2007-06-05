@@ -3,25 +3,29 @@
  */
 package gov.nih.nci.cagrid.portal2.domain;
 
+import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.DomainModel;
+
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
 @Entity
-@DiscriminatorValue("GridDataService")
+@DiscriminatorValue("GridService")
 public class GridDataService extends GridService {
 
-	private Long dataModelId;
-
-	public Long getDataModelId() {
-		return dataModelId;
+	private DomainModel domainModel;
+	
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "service")
+	public DomainModel getDomainModel() {
+		return domainModel;
 	}
-
-	public void setDataModelId(Long dataModelId) {
-		this.dataModelId = dataModelId;
+	public void setDomainModel(DomainModel domainModel) {
+		this.domainModel = domainModel;
 	}
 	
 }

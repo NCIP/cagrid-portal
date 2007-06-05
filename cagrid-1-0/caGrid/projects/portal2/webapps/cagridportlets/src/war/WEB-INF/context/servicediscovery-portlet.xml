@@ -3,17 +3,16 @@
 
 <beans>
 
-	<bean id="selectServiceController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.SelectGridServiceController">
-		<property name="successAction" value="listServices"/>
-	</bean>
-
-	<bean id="listServicesController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.ListServicesController">
+	<bean id="searchController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.ServiceDiscoveryController">
+		<property name="successAction" value="view"/>
 		<property name="gridServiceDao" ref="gridServiceDao"/>
-		<property name="defaultRange" value="10"/>
-		<property name="listView" value="serviceList"/>
 	</bean>
-
-
+	
+	<bean id="viewController"
+		class="org.springframework.web.portlet.mvc.ParameterizableViewController">
+		<property name="viewName" value="search" />
+	</bean>
+	
 	<bean id="portletModeParameterHandlerMapping"
 		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
 		
@@ -30,21 +29,21 @@
 			<map>
 				<entry key="view">
 					<map>
-						<entry key="selectService"
-							value-ref="selectServiceController" />
-						<entry key="listServices"
-							value-ref="listServicesController" />
+						<entry key="search"
+							value-ref="searchController" />
+						<entry key="view"
+							value-ref="viewController" />
 					</map>
 				</entry>
 			</map>
 		</property>
-	</bean>
+	</bean>	
 
 	<bean id="portletModeHandlerMapping"
 		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
 
 		<property name="order" value="2" />
-		
+
 		<property name="interceptors">
 			<list>
 				<ref bean="parameterMappingInterceptor" />
@@ -55,7 +54,7 @@
 		<property name="portletModeMap">
 			<map>
 				<entry key="view">
-					<ref bean="listServicesController" />
+					<ref bean="viewController" />
 				</entry>
 			</map>
 		</property>

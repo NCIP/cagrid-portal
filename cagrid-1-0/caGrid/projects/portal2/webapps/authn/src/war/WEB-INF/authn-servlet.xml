@@ -21,7 +21,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 	
 
 	<bean id="webAuthnSvcClient" class="gov.nih.nci.cagrid.portal2.webauthn.client.WebAuthnSvcClient">
-		<constructor-arg value="http://localhost:8080/wsrf/services/cagrid/WebAuthnSvc"/>
+		<constructor-arg value="http://localhost:8081/wsrf/services/cagrid/WebAuthnSvc"/>
 	</bean>
 
 

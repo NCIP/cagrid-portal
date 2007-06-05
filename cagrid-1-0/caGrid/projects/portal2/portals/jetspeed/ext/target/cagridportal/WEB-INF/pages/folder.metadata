@@ -23,8 +23,8 @@ limitations under the License.
   />
 
   <document-order>default-page.psml</document-order>
-  <document-order>registration.psml</document-order>
   <document-order>directory.psml</document-order>  
+  <document-order>search.psml</document-order>  
   <document-order>tools.psml</document-order>  
   <document-order>map-view.psml</document-order>  
 

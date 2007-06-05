@@ -4,6 +4,7 @@
 package gov.nih.nci.cagrid.portal2.discovery;
 
 import gov.nih.nci.cagrid.portal2.dao.ServiceMetadataDao;
+import gov.nih.nci.cagrid.portal2.util.DomainModelBuilder;
 import gov.nih.nci.cagrid.portal2.util.ServiceMetadataBuilder;
 
 import java.util.Iterator;
@@ -47,6 +48,7 @@ public class ServiceMetadataAggregatorTest extends TestCase {
 	public void testAggregateMetadata() {
 		ServiceMetadataDao dao = (ServiceMetadataDao) this.ctx
 				.getBean("serviceMetadataDao");
+		DomainModelBuilder dBuilder = new DomainModelBuilder();
 		ServiceMetadataBuilder builder = new ServiceMetadataBuilder();
 		builder.setHibernateTemplate((HibernateTemplate)this.ctx.getBean("hibernateTemplate"));
 		builder.setPersist(true);
@@ -54,6 +56,7 @@ public class ServiceMetadataAggregatorTest extends TestCase {
 		agg.setServiceMetadataDao(dao);
 		agg.setMetadataCompliance(true);
 		agg.setServiceMetadataBuilder(builder);
+		agg.setDomainModelBuilder(dBuilder);
 		List urls = (List) this.ctx.getBean("defaultIndexServiceUrls");
 		System.out.println("Got " + urls.size() + " urls.");
 		for (Iterator i = urls.iterator(); i.hasNext();) {

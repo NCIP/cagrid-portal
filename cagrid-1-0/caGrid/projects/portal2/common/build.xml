@@ -7,37 +7,6 @@
 	<property name="data.file.prefix" value="" />
 	<property environment="env" />
 
-	<!-- 
-	<path id="hyperjaxb2.runtime.path">
-		<fileset dir="${lib.dir}">
-			<include name="hibernate/core/antlr-*.jar"/>
-			<include name="hibernate/core/asm*.jar"/>
-			<include name="hibernate/core/asm-attrs*.jar"/>
-			<include name="hibernate/core/cglib-*.jar"/>
-			<include name="hibernate/core/ehcache-*.jar"/>
-			<include name="hibernate/core/jta.jar"/>
-			<include name="hibernate/core/hibernate*.jar"/>
-			<include name="hibernate/core/dom4j-*.jar"/>
-			<include name="hibernate/core/commons-collections-*.jar"/>
-			<include name="jakarta-commons/commons-io.jar"/>
-			<include name="hyperjaxb2/commons-lang-*.jar"/>
-			<include name="hyperjaxb2/jaxb-api-*.jar"/>
-			<include name="hyperjaxb2/jaxb-impl-*.jar"/>
-			<include name="hyperjaxb2/jaxp-api-*.jar"/>
-			<include name="hyperjaxb2/jaxp-ri-*.jar"/>
-			<include name="hyperjaxb2/isorelax-*.jar"/>
-			<include name="hyperjaxb2/jaxb-libs-*.jar"/>
-			<include name="hyperjaxb2/relaxngDatatype-*.jar"/>
-			<include name="hyperjaxb2/xsdlib-*.jar"/>
-			<include name="hyperjaxb2/jaxbcommons-shared-*.jar"/>
-			<include name="hyperjaxb2/jaxbcommons-testing-*.jar"/>
-			<include name="hyperjaxb2/hyperjaxb2-shared-*.jar"/>
-			<include name="hyperjaxb2/hyperjaxb2-testing-*.jar"/>
-			<include name="jakarta-commons/commons-logging.jar"/>
-			<include name="log4j/log4j-*.jar"/>
-		</fileset>
-	</path>
-	-->
 	<path id="cp">
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
@@ -49,8 +18,6 @@
 		<fileset dir="${env.GLOBUS_LOCATION}/lib">
 			<include name="*.jar" />
 		</fileset>
-		<!-- pathelement location="tools/hyperjaxb2/target/cagrid-portal2-metadata.jar"/ -->
-		<!-- path refid="hyperjaxb2.runtime.path"/ -->		
 	</path>
 
 	<path id="test.cp">
@@ -109,22 +76,6 @@
 			<hbm2ddl export="false" drop="${drop.tables}"
 				outputfilename="portal.ddl" />
 		</hibernatetool>
-		<!-- 
-		<hibernatetool destdir="gen">
-			<classpath>
-				<path refid="cp" />
-				<pathelement location="${classes.dir}" />
-			</classpath>
-			<configuration
-				propertyfile="db/${db}.hibernate.properties">
-				<fileset dir="tools/hyperjaxb2/target/generated-sources/xjc">
-					<include name="**/*.hbm.xml" />
-				</fileset>
-			</configuration>
-			<hbm2ddl export="false" drop="${drop.tables}"
-				outputfilename="servicemetadata.ddl" />
-		</hibernatetool>
- -->
 	</target>
 
 	<target name="compile">
@@ -168,17 +119,22 @@
 			<formatter type="plain" />
 			<batchtest todir="test/reports">
 				<fileset dir="${test.src.dir}">
-
-					<include name="**/ServiceMetadataAggregatorTest.java" />
 					<!-- 
-					<include name="**/ServiceMetadataDaoTest.java" />
+					<include name="**/*Test.java"/>
 					 -->
+					<include name="**/ServiceMetadataAggregatorTest.java" />
+					<exclude name="**/ServiceMetadataDaoTest.java" />
+
 
 					<exclude name="**/Abstract*.java" />
 				</fileset>
 			</batchtest>
 
 		</junit>
+	</target>
+	
+	<target name="run" depends="compile-test">
+		<java classname="test.CheckInheritence" classpathref="test.cp"/>
 	</target>
 
 	<target name="jar" depends="compile">
