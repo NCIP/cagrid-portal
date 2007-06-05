@@ -10,6 +10,10 @@ import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
@@ -29,6 +33,8 @@ import gov.nih.nci.cagrid.dorian.service.ifs.IFS;
 import gov.nih.nci.cagrid.dorian.service.ifs.IFSDefaults;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateRequestFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault;
@@ -310,6 +316,44 @@ public class Dorian extends LoggingObject {
 	public String[] getAdmins(String callerGridIdentity) throws RemoteException, DorianInternalFault,
 		PermissionDeniedFault {
 		return ifs.getAdmins(callerGridIdentity);
+	}
+
+
+	public HostCertificateRecord requestHostCertificate(String callerGridId, HostCertificateRequest req)
+		throws DorianInternalFault, InvalidHostCertificateRequestFault, InvalidHostCertificateFault,
+		PermissionDeniedFault {
+		return ifs.requestHostCertificate(callerGridId, req);
+	}
+
+
+	public HostCertificateRecord[] getOwnedHostCertificates(String callerGridId) throws DorianInternalFault,
+		PermissionDeniedFault {
+		return ifs.getHostCertificatesForCaller(callerGridId);
+
+	}
+
+
+	public HostCertificateRecord approveHostCertificate(String callerGridId, long recordId) throws DorianInternalFault,
+		InvalidHostCertificateFault, PermissionDeniedFault {
+		return ifs.approveHostCertificate(callerGridId, recordId);
+	}
+
+
+	public HostCertificateRecord[] findHostCertificates(String callerGridId, HostCertificateFilter hostCertificateFilter)
+		throws DorianInternalFault, PermissionDeniedFault {
+		return findHostCertificates(callerGridId, hostCertificateFilter);
+	}
+
+
+	public void updateHostCertificateRecord(String callerGridId, HostCertificateUpdate update)
+		throws DorianInternalFault, InvalidHostCertificateFault, PermissionDeniedFault {
+		ifs.updateHostCertificateRecord(callerGridId, update);
+	}
+
+
+	public void renewHostCertificate(String callerGridId, long recordId) throws DorianInternalFault,
+		InvalidHostCertificateFault, PermissionDeniedFault {
+		ifs.renewHostCertificate(callerGridId, recordId);
 	}
 
 
