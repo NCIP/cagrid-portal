@@ -37,6 +37,16 @@
                 <include name="*.xsd" />
             </fileset>
         </artifact>
+    	<artifact track="main" type="jars" id="caCORE.3.2.1.jars">
+    		<fileset dir="${share.dir}/lib/caCORE321/client">
+    			<include name="*.jar"/>
+    		</fileset>
+    	</artifact>
+    	<artifact track="main" type="jars" id="caCORE.3.2.1.thickclient.jars">
+    	    <fileset dir="${share.dir}/lib/caCORE321/thick-client">
+    	    	<include name="*.jar"/>
+    	    </fileset>
+    	</artifact>
         <artifact track="main" type="jars" id="jet.jars">
             <fileset dir="${share.dir}/lib/jet">
                 <include name="*.jar" />
