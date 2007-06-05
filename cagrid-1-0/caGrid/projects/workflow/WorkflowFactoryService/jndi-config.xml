@@ -34,7 +34,7 @@
         <parameter>
           <name>performRegistration</name>
           <!-- Set this to false to skip ServiceGroup registration -->
-          <value>true</value>
+          <value>PERFORM_REGISTRATION</value>
         </parameter>
         <parameter>
           <name>registrationTemplateFile</name>

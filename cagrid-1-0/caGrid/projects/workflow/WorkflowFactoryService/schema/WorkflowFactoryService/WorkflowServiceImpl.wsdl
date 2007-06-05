@@ -16,7 +16,7 @@
       <import namespace="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService" schemaLocation="./WorkflowManagementFactoryService.xsd" />
       <import namespace="http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl/types" schemaLocation="./WorkflowServiceImplTypes.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
-      <import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" schemaLocation="ws_2004_03_addressing.xsd" />
+      <import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" schemaLocation="./ws_2004_03_addressing.xsd" />
       <element name="StartRequest">
         <complexType>
           <sequence>
@@ -95,6 +95,18 @@
           </sequence>
         </complexType>
       </element>
+      <element name="GetDetailedStatusRequest">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
+      <element name="GetDetailedStatusResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:DetailedStatusOutputElement" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="WorkflowServiceImplResourceProperties">
         <complexType>
           <sequence>
@@ -140,6 +152,12 @@
   </message>
   <message name="GetWorkflowOutputResponse">
     <part name="parameters" element="tns:GetWorkflowOutputResponse" />
+  </message>
+  <message name="GetDetailedStatusRequest">
+    <part name="parameters" element="tns:GetDetailedStatusRequest" />
+  </message>
+  <message name="GetDetailedStatusResponse">
+    <part name="parameters" element="tns:GetDetailedStatusResponse" />
   </message>
   <message name="WorkflowExceptionFaultMessage">
     <part name="fault" element="ns2:WorkflowException" />
@@ -194,6 +212,11 @@
     <operation name="getWorkflowOutput">
       <input message="tns:GetWorkflowOutputRequest" wsa:Action="http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl/GetWorkflowOutputRequest" />
       <output message="tns:GetWorkflowOutputResponse" wsa:Action="http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl/GetWorkflowOutputResponse" />
+      <fault name="WorkflowException" message="tns:WorkflowExceptionFaultMessage" wsa:Action="http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl/WorkflowExceptionFaultMessage" />
+    </operation>
+    <operation name="getDetailedStatus">
+      <input message="tns:GetDetailedStatusRequest" wsa:Action="http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl/GetDetailedStatusRequest" />
+      <output message="tns:GetDetailedStatusResponse" wsa:Action="http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl/GetDetailedStatusResponse" />
       <fault name="WorkflowException" message="tns:WorkflowExceptionFaultMessage" wsa:Action="http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl/WorkflowExceptionFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">

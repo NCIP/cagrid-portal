@@ -171,24 +171,25 @@ public class WorkflowFactoryServiceClient extends ServiceSecurityClient implemen
 		}
 	}
 
-	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
-        gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
-        gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
-        return boxedResult.getServiceSecurityMetadata();
-      }
+  public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
+    return boxedResult.getServiceSecurityMetadata();
     }
-	public gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType createWorkflow(gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType wMSInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"createWorkflow");
-        gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowRequest params = new gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowRequest();
-        gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowRequestWMSInputElement wMSInputElementContainer = new gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowRequestWMSInputElement();
-        wMSInputElementContainer.setWMSInputElement(wMSInputElement);
-        params.setWMSInputElement(wMSInputElementContainer);
-        gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowResponse boxedResult = portType.createWorkflow(params);
-        return boxedResult.getWMSOutputElement();
-      }
+  }
+
+  public gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType createWorkflow(gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType wMSInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"createWorkflow");
+    gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowRequest params = new gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowRequest();
+    gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowRequestWMSInputElement wMSInputElementContainer = new gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowRequestWMSInputElement();
+    wMSInputElementContainer.setWMSInputElement(wMSInputElement);
+    params.setWMSInputElement(wMSInputElementContainer);
+    gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowResponse boxedResult = portType.createWorkflow(params);
+    return boxedResult.getWMSOutputElement();
     }
+  }
 
 }

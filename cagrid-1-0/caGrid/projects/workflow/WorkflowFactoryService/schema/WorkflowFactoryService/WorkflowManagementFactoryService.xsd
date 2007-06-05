@@ -7,23 +7,27 @@
   <xsd:element name="StartInputElement" type="tns:StartInputType" />
   <xsd:element name="WorkflowOutputElement" type="tns:WorkflowOutputType" />
   <xsd:element name="StatusOutputElement" type="tns:WorkflowStatusType" />
+  <xsd:element name="DetailedStatusOutputElement" type="tns:WorkflowStatusEventType"/>
+
   <xsd:complexType name="WMSInputType">
     <xsd:annotation>
       <xsd:documentation>This type represents the input type for a BPEL workflow</xsd:documentation>
     </xsd:annotation>
-    <xsd:sequence>
+    <xsd:sequence>  
       <xsd:element name="workflowName" type="xsd:string" minOccurs="1" maxOccurs="1" />
       <xsd:element name="bpelDoc" type="xsd:string" maxOccurs="1" />
       <xsd:element name="delegationEPR" type="wsa:EndpointReferenceType" minOccurs="0" maxOccurs="1"/> 
       <xsd:element name="wsdlReferences" type="tns:WSDLReferences" maxOccurs="unbounded" />
-    <xsd:element name="terminationTime" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>    
+      <xsd:element name="terminationTime" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>    
     </xsd:sequence>
   </xsd:complexType>
+  
   <xsd:complexType name="StartInputType">
     <xsd:sequence>
       <xsd:element name="inputArgs" type="tns:WorkflowInputType" maxOccurs="1" />
     </xsd:sequence>
   </xsd:complexType>
+  
   <xsd:simpleType name="WorkflowStatusType">
     <xsd:restriction base="xsd:string">
       <xsd:enumeration value="Pending" />
@@ -34,6 +38,16 @@
       <xsd:enumeration value="Cancelled" />
     </xsd:restriction>
   </xsd:simpleType>
+
+  <xsd:simpleType name="WorkflowStateType">
+    <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="Executing"/>
+        <xsd:enumeration value="Completed"/>
+        <xsd:enumeration value="Failed"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+
   <xsd:complexType name="WMSOutputType">
     <xsd:annotation>
       <xsd:documentation>This type represents the output from a workflow</xsd:documentation>
@@ -42,16 +56,19 @@
       <xsd:element name="WorkflowEPR" type="wsa:EndpointReferenceType" />
     </xsd:sequence>
   </xsd:complexType>
+  
   <xsd:complexType name="WorkflowInputType">
     <xsd:sequence>
       <xsd:any maxOccurs="1" />
     </xsd:sequence>
   </xsd:complexType>
+  
   <xsd:complexType name="WorkflowOutputType">
     <xsd:sequence>
       <xsd:any maxOccurs="1" />
     </xsd:sequence>
   </xsd:complexType>
+  
   <xsd:complexType name="WSDLReferences">
     <xsd:sequence>
       <xsd:element name="partnerLinkType" type="xsd:string"/>
@@ -60,5 +77,14 @@
       <xsd:element name="serviceUrl" type="xsd:anyURI" />
     </xsd:sequence>
   </xsd:complexType>
+
+  <xsd:complexType name="WorkflowStatusEventType">
+    <xsd:sequence>
+        <xsd:element name="timestamp" type="xsd:dateTime"/>
+        <xsd:element name="state" type="tns:WorkflowStateType"/>
+        <xsd:element name="currentOperation" type="xsd:string"/>
+    </xsd:sequence>
+ </xsd:complexType>
+
 </xsd:schema>
 

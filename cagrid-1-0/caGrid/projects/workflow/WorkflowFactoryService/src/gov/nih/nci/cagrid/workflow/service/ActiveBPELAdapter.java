@@ -4,10 +4,22 @@ import gov.nih.nci.cagrid.workflow.stubs.types.StartInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStateType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusEventType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
@@ -49,6 +61,10 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	private String workflowName = null;
 	
 	private String bprFileName = null;
+	
+	private String processLogFileLocation = null;
+	
+	private HashMap processStates = new HashMap();
 	
 	public ActiveBPELAdapter(String abAdminUrl)  {
 		if (abAdminUrl != null) {
@@ -107,9 +123,13 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		SOAPEnvelope res = call.invoke(env);
 		System.out.println("Result " + res.getAsString());
 	    this.workflowStatus = WorkflowStatusType.Active;
-		this.workflowOutput.set_any(new MessageElement[]{new MessageElement(res.getAsDOM())});
+		this.workflowOutput.set_any(new MessageElement[]{
+				new MessageElement(res.getAsDOM())});
 		//output.setOutputType(outputType);
 		this.processId = getProcessId();
+		this.processLogFileLocation = System.getProperty("user.home") + File.separator 
+			+ "AeBPELEngine" + File.separator + "process-logs" 
+			+ File.separator + this.processId + ".log";
 		return this.workflowStatus;
 	}
 	
@@ -117,7 +137,8 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		return Base64.encodeFromFile(pathToBpr);
 	}
 	
-	public String deployWorkflow(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws WorkflowExceptionType {
+	public String deployWorkflow(String bpelFileName, String workflowName, 
+			WSDLReferences[] wsdlRefArray) throws WorkflowExceptionType {
 		try {
 			return deployBpr(bpelFileName, workflowName, wsdlRefArray);
 		} catch (Exception e) {
@@ -126,7 +147,8 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	}
 
 
-	public WorkflowStatusType startWorkflow(StartInputType startInput) throws WorkflowExceptionType {
+	public WorkflowStatusType startWorkflow(
+			StartInputType startInput) throws WorkflowExceptionType {
 		WorkflowStatusType status = WorkflowStatusType.Pending;
 		System.out.println("Starting workflow : " + this.workflowName);
 		try {
@@ -188,6 +210,19 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		}		
 	}
 	
+	/*public String getProcessLog() throws WorkflowExceptionType {
+		try {
+			return this.mRemote.getProcessLog(this.processId);
+		} catch (Exception e) {
+			throw new WorkflowExceptionType();
+		}
+	}*/
+	
+	public WorkflowStatusEventType[] 
+	    getWorkflowStatusEventsArray() throws WorkflowExceptionType {
+		
+		return readFromFile(this.processLogFileLocation);
+	}
 	
 	private int displayProcessList(QName workflowName) throws Exception {
 	      AeProcessFilter filter = new AeProcessFilter();
@@ -254,5 +289,80 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	public void remove() throws  RemoteException {
 		this.mRemote.terminateProcess(this.processId);
 		// If activebpel exposes remote interface to remove bpr files
+	}
+
+	public WorkflowStatusEventType[] readFromFile(String fileName) throws WorkflowExceptionType {
+		String timeStamp = "";
+		String DataLine = null;
+		String state = null;
+		try {
+			File inFile = new File(fileName);
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					new FileInputStream(inFile)));
+
+			while ((DataLine = br.readLine()) != null) {
+				System.out.println(DataLine);
+				WorkflowStatusEventType statusEvent = new WorkflowStatusEventType();
+				int index = DataLine.indexOf("Executing");
+				int index2 = DataLine.indexOf("Completed");
+				if (index != -1) {
+					timeStamp = DataLine.substring(3, index);
+					state = DataLine.substring(index, DataLine.length());
+					// DateFormat.getDateTimeInstance().parse(timeStamp.substring(timeStamp.indexOf('[')+1
+					// , timeStamp.indexOf(']')));
+					// statusEvent.setTimestamp(DateFormat.getDateTimeInstance().parse(timeStamp));
+
+				} else if (index2 != -1) {
+					timeStamp = DataLine.substring(3, index2);
+					state = DataLine.substring(index2, DataLine.length());
+					// statusEvent.setTimestamp(timeStamp);
+				}
+				// System.out.println("TimeStamp: " +
+				// timeStamp.substring(timeStamp.indexOf('[') + 1 ,
+				// timeStamp.indexOf(']')));
+				String temp = state.substring(0, state.indexOf('['));
+				// System.out.println("Status: " + temp);
+				statusEvent.setCurrentOperation(state.substring(state
+						.indexOf('[') + 1, state.indexOf(']')));
+				if (temp.trim().equals("Executing")) {
+					statusEvent.setState(WorkflowStateType.Executing);
+				} else if (temp.trim().indexOf("Completed") != -1) {
+					statusEvent.setState(WorkflowStateType.Completed);
+
+				} else if (temp.trim().indexOf("Faulted") != -1) {
+					statusEvent.setState(WorkflowStateType.Failed);
+				}
+				if (processStates
+						.containsKey(statusEvent.getCurrentOperation())) {
+					processStates.remove(statusEvent.getCurrentOperation());
+					processStates.put(statusEvent.getCurrentOperation(),
+							statusEvent);
+					System.out.println("adding1"
+							+ statusEvent.getCurrentOperation());
+				} else {
+					System.out.println("adding:"
+							+ statusEvent.getCurrentOperation());
+					processStates.put(statusEvent.getCurrentOperation(),
+							statusEvent);
+				}
+
+			}
+			br.close();
+			System.out.println(processStates.size());
+			toString(processStates);
+		} catch (FileNotFoundException ex) {
+			throw new WorkflowExceptionType();
+		} catch (IOException ex) {
+			throw  new WorkflowExceptionType();
+		}
+		return (WorkflowStatusEventType[]) processStates.values().toArray();
+
+	}
+	
+	public static void toString(HashMap map) {
+		Iterator i = map.keySet().iterator();
+		while(i.hasNext()) {
+			System.out.println("here: " +  ((WorkflowStatusEventType)map.get(i.next())).getState().getValue());
+		}
 	}
 }

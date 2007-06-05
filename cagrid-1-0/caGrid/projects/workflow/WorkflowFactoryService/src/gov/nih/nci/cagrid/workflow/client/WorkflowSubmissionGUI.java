@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.grape.ApplicationComponent;
 
 import javax.swing.JTextField;
@@ -33,10 +32,8 @@ import javax.swing.JTextArea;
 import java.awt.Insets;
 import java.awt.Color;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.StringReader;
-import java.rmi.RemoteException;
 
 import javax.swing.SwingConstants;
 import javax.xml.namespace.QName;

@@ -9,11 +9,18 @@ import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusEventType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.util.Calendar;
+import java.util.Vector;
 
 import javax.naming.InitialContext;
 import javax.xml.namespace.QName;
@@ -81,6 +88,8 @@ public class WorkflowResource implements Resource,
 		new QName("http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl", "Status");
 	
 	private TopicList topicList = null;
+	
+	private String logFileLocation = null;
 	
 	protected void initialize(Object key) {
 		this.key = key;
@@ -193,6 +202,12 @@ public class WorkflowResource implements Resource,
 	public WorkflowStatusType getStatusRP() {
 		return (WorkflowStatusType) this.statusRP.get(0);
 	}
+	
+	public WorkflowStatusEventType[] getDetailedStatus() throws WorkflowExceptionType {
+		
+		return this.abAdapter.getWorkflowStatusEventsArray();
+	}
+	
 	public ServiceConfiguration getConfiguration() throws Exception {
 		if (this.configuration != null) {
 			return this.configuration;
@@ -241,4 +256,6 @@ public class WorkflowResource implements Resource,
 		}
 		
 	}
+	
+	
 }

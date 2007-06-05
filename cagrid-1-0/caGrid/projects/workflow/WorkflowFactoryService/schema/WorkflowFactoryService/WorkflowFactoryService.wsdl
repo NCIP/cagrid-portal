@@ -16,7 +16,7 @@
       <import namespace="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService" schemaLocation="./WorkflowManagementFactoryService.xsd" />
       <import namespace="http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl/types" schemaLocation="./WorkflowServiceImplTypes.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
-      <import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" schemaLocation="ws_2004_03_addressing.xsd" />
+      <import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" schemaLocation="./ws_2004_03_addressing.xsd" />
       <element name="CreateWorkflowRequest">
         <complexType>
           <sequence>

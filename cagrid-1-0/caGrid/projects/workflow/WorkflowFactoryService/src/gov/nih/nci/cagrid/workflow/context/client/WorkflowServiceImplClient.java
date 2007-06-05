@@ -109,63 +109,78 @@ public class WorkflowServiceImplClient extends ServiceSecurityClient implements 
 		}
 	}
 
-	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
-        gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
-        gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
-        return boxedResult.getServiceSecurityMetadata();
-      }
+  public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
+    return boxedResult.getServiceSecurityMetadata();
     }
-	public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType start(gov.nih.nci.cagrid.workflow.stubs.types.StartInputType startInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.StartCalledOnStartedWorkflowFaultType {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"start");
-        gov.nih.nci.cagrid.workflow.context.stubs.StartRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.StartRequest();
-        gov.nih.nci.cagrid.workflow.context.stubs.StartRequestStartInputElement startInputElementContainer = new gov.nih.nci.cagrid.workflow.context.stubs.StartRequestStartInputElement();
-        startInputElementContainer.setStartInputElement(startInputElement);
-        params.setStartInputElement(startInputElementContainer);
-        gov.nih.nci.cagrid.workflow.context.stubs.StartResponse boxedResult = portType.start(params);
-        return boxedResult.getWorkflowStatusElement();
-      }
+  }
+
+  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType start(gov.nih.nci.cagrid.workflow.stubs.types.StartInputType startInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.StartCalledOnStartedWorkflowFaultType {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"start");
+    gov.nih.nci.cagrid.workflow.context.stubs.StartRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.StartRequest();
+    gov.nih.nci.cagrid.workflow.context.stubs.StartRequestStartInputElement startInputElementContainer = new gov.nih.nci.cagrid.workflow.context.stubs.StartRequestStartInputElement();
+    startInputElementContainer.setStartInputElement(startInputElement);
+    params.setStartInputElement(startInputElementContainer);
+    gov.nih.nci.cagrid.workflow.context.stubs.StartResponse boxedResult = portType.start(params);
+    return boxedResult.getWorkflowStatusElement();
     }
-	public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType getStatus() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getStatus");
-        gov.nih.nci.cagrid.workflow.context.stubs.GetStatusRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.GetStatusRequest();
-        gov.nih.nci.cagrid.workflow.context.stubs.GetStatusResponse boxedResult = portType.getStatus(params);
-        return boxedResult.getWorkflowStatusElement();
-      }
+  }
+
+  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType getStatus() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getStatus");
+    gov.nih.nci.cagrid.workflow.context.stubs.GetStatusRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.GetStatusRequest();
+    gov.nih.nci.cagrid.workflow.context.stubs.GetStatusResponse boxedResult = portType.getStatus(params);
+    return boxedResult.getWorkflowStatusElement();
     }
-	public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType pause() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotPauseWorkflowFaultType {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"pause");
-        gov.nih.nci.cagrid.workflow.context.stubs.PauseRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.PauseRequest();
-        gov.nih.nci.cagrid.workflow.context.stubs.PauseResponse boxedResult = portType.pause(params);
-        return boxedResult.getWorkflowStatusElement();
-      }
+  }
+
+  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType pause() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotPauseWorkflowFaultType {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"pause");
+    gov.nih.nci.cagrid.workflow.context.stubs.PauseRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.PauseRequest();
+    gov.nih.nci.cagrid.workflow.context.stubs.PauseResponse boxedResult = portType.pause(params);
+    return boxedResult.getWorkflowStatusElement();
     }
-	public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType resume() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotResumeWorkflowFaultType {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"resume");
-        gov.nih.nci.cagrid.workflow.context.stubs.ResumeRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.ResumeRequest();
-        gov.nih.nci.cagrid.workflow.context.stubs.ResumeResponse boxedResult = portType.resume(params);
-        return boxedResult.getWorkflowStatusElement();
-      }
+  }
+
+  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType resume() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotResumeWorkflowFaultType {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"resume");
+    gov.nih.nci.cagrid.workflow.context.stubs.ResumeRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.ResumeRequest();
+    gov.nih.nci.cagrid.workflow.context.stubs.ResumeResponse boxedResult = portType.resume(params);
+    return boxedResult.getWorkflowStatusElement();
     }
-	public void cancel() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotCancelWorkflowFaultType {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"cancel");
-        gov.nih.nci.cagrid.workflow.context.stubs.CancelRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.CancelRequest();
-        gov.nih.nci.cagrid.workflow.context.stubs.CancelResponse boxedResult = portType.cancel(params);
-      }
+  }
+
+  public void cancel() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotCancelWorkflowFaultType {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"cancel");
+    gov.nih.nci.cagrid.workflow.context.stubs.CancelRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.CancelRequest();
+    gov.nih.nci.cagrid.workflow.context.stubs.CancelResponse boxedResult = portType.cancel(params);
     }
-	public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType getWorkflowOutput() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getWorkflowOutput");
-        gov.nih.nci.cagrid.workflow.context.stubs.GetWorkflowOutputRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.GetWorkflowOutputRequest();
-        gov.nih.nci.cagrid.workflow.context.stubs.GetWorkflowOutputResponse boxedResult = portType.getWorkflowOutput(params);
-        return boxedResult.getWorkflowOutputElement();
-      }
+  }
+
+  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType getWorkflowOutput() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getWorkflowOutput");
+    gov.nih.nci.cagrid.workflow.context.stubs.GetWorkflowOutputRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.GetWorkflowOutputRequest();
+    gov.nih.nci.cagrid.workflow.context.stubs.GetWorkflowOutputResponse boxedResult = portType.getWorkflowOutput(params);
+    return boxedResult.getWorkflowOutputElement();
     }
+  }
+
+  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusEventType[] getDetailedStatus() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getDetailedStatus");
+    gov.nih.nci.cagrid.workflow.context.stubs.GetDetailedStatusRequest params = new gov.nih.nci.cagrid.workflow.context.stubs.GetDetailedStatusRequest();
+    gov.nih.nci.cagrid.workflow.context.stubs.GetDetailedStatusResponse boxedResult = portType.getDetailedStatus(params);
+    return boxedResult.getDetailedStatusOutputElement();
+    }
+  }
 
 }

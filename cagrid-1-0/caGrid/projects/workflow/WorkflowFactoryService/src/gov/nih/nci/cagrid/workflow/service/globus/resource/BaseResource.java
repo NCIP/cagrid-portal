@@ -1,5 +1,9 @@
 package gov.nih.nci.cagrid.workflow.service.globus.resource;
 
+import gov.nih.nci.cagrid.advertisement.AdvertisementClient;
+import gov.nih.nci.cagrid.advertisement.exceptions.UnregistrationException;
+import gov.nih.nci.cagrid.common.Utils;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -26,9 +30,6 @@ import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
 import org.globus.wsrf.utils.AddressingUtils;
 
-import commonj.timers.Timer;
-
-import gov.nih.nci.cagrid.common.Utils;
 
 public class BaseResource implements Resource, ResourceProperties {
 
@@ -37,8 +38,8 @@ public class BaseResource implements Resource, ResourceProperties {
 	/** Stores the ResourceProperties of this service */
 	private ResourcePropertySet propSet;
 	
-	//this can be used to cancel the registration renewal
-	private Timer registrationTimer;
+	// this can be used to cancel the registration renewal
+    private AdvertisementClient registrationClient;
 
 	private ResourceConfiguration configuration;
 	
@@ -82,7 +83,7 @@ public class BaseResource implements Resource, ResourceProperties {
 	 * This exists to handle fixing the registration URL which may be incorrect
 	 * during initialization, then later corrected during invocation. The
 	 * existence of baseURL does not imply successful registration (a non-null
-	 * registrationTimer does). We will only attempt to reregister when the URL
+	 * registrationClient does). We will only attempt to reregister when the URL
 	 * changes (to prevent attempting registration with each invocation if there
 	 * is a configuration problem).
 	 */
@@ -106,8 +107,12 @@ public class BaseResource implements Resource, ResourceProperties {
 					// we've tried to register before, and we have a different
 					// URL now.. so cancel the old registration (if it exists),
 					// and try to redo it.
-					if (registrationTimer != null) {
-						registrationTimer.cancel();
+					if (registrationClient != null) {
+						try {
+                            this.registrationClient.unregister();
+                        } catch (UnregistrationException e) {
+                            logger.error("Problem unregistering existing registration:" + e.getMessage(), e);
+                        }
 					}
 
 					// save the new value
@@ -170,9 +175,8 @@ public class BaseResource implements Resource, ResourceProperties {
 						params.setRegistrantEPR(epr);
 					}
 
-					ServiceGroupRegistrationClient client = new ServiceGroupRegistrationClient();
-					// apply the registration params to the client
-					registrationTimer = client.register(params);
+					this.registrationClient = new AdvertisementClient(params);
+                    this.registrationClient.register();
 				} else {
 					logger.error("Unable to read registration file:" + registrationFile);
 				}

@@ -23,7 +23,7 @@
   <auth-method>
     <none />
   </auth-method>
-  <authz value="none" />
+  <authz value="" />
 </securityConfig>
 
 

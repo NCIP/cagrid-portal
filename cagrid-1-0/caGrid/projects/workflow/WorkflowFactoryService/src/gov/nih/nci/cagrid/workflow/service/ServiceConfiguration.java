@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.workflow.service;
 
+import org.globus.wsrf.config.ContainerConfig;
+import java.io.File;
 import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;
@@ -12,7 +14,7 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version 1.0
+ * @created by Introduce Toolkit version 1.1
  * 
  */
 public class ServiceConfiguration {
