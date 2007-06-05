@@ -12,6 +12,7 @@ import gov.nih.nci.cagrid.dorian.conf.ProxyPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
@@ -140,7 +141,6 @@ public class TestIFS extends TestCase {
 	}
 
 
-
 	public void testGetCRL() {
 		IFS ifs = null;
 		try {
@@ -218,10 +218,11 @@ public class TestIFS extends TestCase {
 				}
 			}
 
-			this.validateCRLOnDisabledStatus(ifs, list, IFSUserStatus.Suspended, adminGridId, userHostCerts);
-			this.validateCRLOnDisabledStatus(ifs, list, IFSUserStatus.Rejected, adminGridId, userHostCerts);
-			this.validateCRLOnDisabledStatus(ifs, list, IFSUserStatus.Expired, adminGridId, userHostCerts);
-
+			this.validateCRLOnDisabledUserStatus(ifs, list, IFSUserStatus.Suspended, adminGridId, userHostCerts);
+			this.validateCRLOnDisabledUserStatus(ifs, list, IFSUserStatus.Rejected, adminGridId, userHostCerts);
+			this.validateCRLOnDisabledUserStatus(ifs, list, IFSUserStatus.Expired, adminGridId, userHostCerts);
+			this.validateCRLOnDisabledHostStatus(ifs, list, HostCertificateStatus.Suspended, adminGridId, userHostCerts);
+			this.validateCRLOnDisabledHostStatus(ifs, list, HostCertificateStatus.Compromised, adminGridId, userHostCerts);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -1073,8 +1074,9 @@ public class TestIFS extends TestCase {
 	private IdPContainer getTrustedIdpManualApproveAutoRenew(String name) throws Exception {
 		return this.getTrustedIdp(name, ManualApprovalAutoRenewalPolicy.class.getName());
 	}
-	
-	private void validateCRLOnDisabledStatus(IFS ifs, List<UserContainer> list, IFSUserStatus status,
+
+
+	private void validateCRLOnDisabledUserStatus(IFS ifs, List<UserContainer> list, IFSUserStatus status,
 		String adminGridId, int userHostCerts) throws Exception {
 		for (int i = 0; i < list.size(); i++) {
 			IFSUser usr = list.get(i).getUser();
@@ -1110,6 +1112,49 @@ public class TestIFS extends TestCase {
 			ifs.updateUser(adminGridId, usr);
 		}
 		assertEquals(null, ifs.getCRL().getRevokedCertificates());
+	}
+
+
+	private void validateCRLOnDisabledHostStatus(IFS ifs, List<UserContainer> list, HostCertificateStatus status,
+		String adminGridId, int userHostCerts) throws Exception {
+		for (int i = 0; i < list.size(); i++) {
+			UserContainer usr = list.get(i);
+			for (int j = 0; j < usr.getHostCertificates().size(); j++) {
+				HostCertificateUpdate update = new HostCertificateUpdate();
+				update.setId(usr.getHostCertificates().get(j).getId());
+				update.setStatus(status);
+				ifs.updateHostCertificateRecord(adminGridId, update);
+			}
+			X509CRL crl = ifs.getCRL();
+			int sum = ((i + 1) * userHostCerts);
+			assertEquals(sum, crl.getRevokedCertificates().size());
+			for (int j = 0; j < list.size(); j++) {
+				UserContainer curr = list.get(j);
+				assertNull(crl.getRevokedCertificate(CertUtil.loadCertificate(curr.getUser().getCertificate()
+					.getCertificateAsString())));
+				for (int x = 0; x < curr.getHostCertificates().size(); x++) {
+					if (j <= i) {
+						assertNotNull(crl.getRevokedCertificate(CertUtil.loadCertificate(curr.getHostCertificates()
+							.get(x).getCertificate().getCertificateAsString())));
+					} else {
+						assertNull(crl.getRevokedCertificate(CertUtil.loadCertificate(curr.getHostCertificates().get(x)
+							.getCertificate().getCertificateAsString())));
+					}
+				}
+			}
+		}
+		if (!status.equals(HostCertificateStatus.Compromised)) {
+			for (int i = 0; i < list.size(); i++) {
+				UserContainer usr = list.get(i);
+				for (int j = 0; j < usr.getHostCertificates().size(); j++) {
+					HostCertificateUpdate update = new HostCertificateUpdate();
+					update.setId(usr.getHostCertificates().get(j).getId());
+					update.setStatus(HostCertificateStatus.Active);
+					ifs.updateHostCertificateRecord(adminGridId, update);
+				}
+			}
+			assertEquals(null, ifs.getCRL().getRevokedCertificates());
+		}
 	}
 
 
