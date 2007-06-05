@@ -12,6 +12,9 @@
 	<fragment id="tools-1" type="layout"
 		name="jetspeed-layouts::VelocityOneColumn">
 		<fragment id="tools-1-1" type="portlet"
+			name="cagridportlets::dataservice" />
+		<fragment id="tools-1-2" type="portlet"
 			name="j2-admin::WelcomeToJetspeed" />
 	</fragment>
+	
 </page>
