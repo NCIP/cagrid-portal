@@ -521,6 +521,25 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			fail(e.getMessage());
 		}
 	}
+	
+	
+	public void testCreateHostCertificateInvalidPublicKeySize() {
+		try {
+			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			hcm.clearDatabase();
+			try {
+				HostCertificateRequest req = getHostCertificateRequest("localhost", 512);
+				hcm.requestHostCertifcate(OWNER, req);
+				fail("Should have Failed!!");
+			} catch (InvalidHostCertificateRequestFault f) {
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
 
 
 	public void testUpdateHostCertificateStatusBeforeApproval() {
@@ -753,7 +772,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 
 
 	private HostCertificateRequest getHostCertificateRequest(String host) throws Exception {
-		KeyPair pair = KeyUtil.generateRSAKeyPair(ca.getConfiguration().getUserKeySize().getValue());
+		return getHostCertificateRequest(host,ca.getConfiguration().getUserKeySize().getValue());
+	}
+	private HostCertificateRequest getHostCertificateRequest(String host, int keySize) throws Exception {
+		KeyPair pair = KeyUtil.generateRSAKeyPair(keySize);
 		HostCertificateRequest req = new HostCertificateRequest();
 		req.setHostname(host);
 		String keyStr = KeyUtil.writePublicKey(pair.getPublic());
