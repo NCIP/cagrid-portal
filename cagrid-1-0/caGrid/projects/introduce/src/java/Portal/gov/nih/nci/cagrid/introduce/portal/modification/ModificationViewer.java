@@ -384,11 +384,12 @@ public class ModificationViewer extends GridPortalComponent {
                     "Introduce or uses an older version of an extension.\n" +
                     "Would you like to try to upgrade this service to work\n" + 
                     "with the current version of Introduce and installed extensions?\n" +
-                    "Otherwise Introduce will attempt to work with this service.";
+                    "Yes will upgrade the service, No will close the modification viewer,\n" +
+                    "Otherwise cancel will have Introduce attempt to work with this service.";
                 int answer = JOptionPane.showConfirmDialog(
-                    PortalResourceManager.getInstance().getGridPortal(),
-                    "Service requires upgrade", message, JOptionPane.OK_CANCEL_OPTION);
-                if (answer == JOptionPane.OK_OPTION) {
+                    PortalResourceManager.getInstance().getGridPortal()
+                    , message, "Service requires an upgrade", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (answer == JOptionPane.YES_OPTION) {
                     try {
                         UpgradeStatus status = upgrader.upgrade();
                         logger.info("SERVICE UPGRADE STATUS:\n" + status);
@@ -428,6 +429,9 @@ public class ModificationViewer extends GridPortalComponent {
                             beenDisposed = true;
                         }
                     }
+                } else if(answer==JOptionPane.NO_OPTION){
+                    ModificationViewer.this.dispose();
+                    beenDisposed = true;
                 }
             }
 
