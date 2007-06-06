@@ -13,6 +13,12 @@
 		<mkdir dir="${instrumented.classes.dir}"/>
 		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
 			<fileset dir="${build.classes.dir}">
+			    <include name="**/*.class"/>	
+			</fileset>
+			<fileset dir="${test.stubs.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${stubs.dest}">
 				<include name="**/*.class"/>
 			</fileset>
 		</cobertura-instrument>
@@ -44,11 +50,16 @@
 	</target>
 	
 	
-	<target name="coverageReport" depends="test" description="Runs the tests and generates a test
-		coverage report.">
-		<cobertura-report format="html" datafile="${cobertura.data.file}"
-			destdir="${cobertura.report.dir}">
-			<fileset dir="${src.dir}">
+	<target name="coverageReport" depends="test" 
+		description="Runs the tests and generates a test coverage report.">
+		<cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
+			<fileset dir="${src.dir}/client">
+				<include name="**/*.java"/>
+			</fileset>
+			<fileset dir="${src.dir}/common">
+				<include name="**/*.java"/>
+			</fileset>
+			<fileset dir="${src.dir}/utils">
 				<include name="**/*.java"/>
 			</fileset>
 			<fileset dir="${test.src.dir}">
