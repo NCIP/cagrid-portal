@@ -18,6 +18,7 @@ import gov.nih.nci.cagrid.data.utilities.query.cqltree.QueryTreeNode;
 import gov.nih.nci.cagrid.data.utilities.query.cqltree.RebuildableTreeNode;
 import gov.nih.nci.cagrid.data.utilities.query.cqltree.TargetTreeNode;
 import gov.nih.nci.cagrid.data.utilities.vizquery.attributes.SetAttributePredicateDialog;
+import gov.nih.nci.cagrid.data.utilities.vizquery.attributes.SetAttributeValueDialog;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
@@ -62,7 +63,7 @@ import org.apache.axis.message.addressing.EndpointReference;
  * @author David Ervin
  * 
  * @created Mar 30, 2007 3:46:34 PM
- * @version $Id: VisualQueryBuilder.java,v 1.3 2007-05-31 17:35:49 dervin Exp $ 
+ * @version $Id: VisualQueryBuilder.java,v 1.4 2007-06-06 17:53:28 dervin Exp $ 
  */
 public class VisualQueryBuilder extends JFrame {
     
@@ -99,6 +100,8 @@ public class VisualQueryBuilder extends JFrame {
     private JMenuItem clearQueryMenuItem = null;
     
     private DomainModel currentModel = null;
+    private UMLClass selectedUmlClass = null;
+    private UMLAssociation selectedUmlAssociation = null;
     
     public VisualQueryBuilder() {
         super("Visual CQL Query Builder");
@@ -130,6 +133,7 @@ public class VisualQueryBuilder extends JFrame {
                 TitledBorder.DEFAULT_POSITION, null, null));
             domainModelPanel.addModelSelectionListener(new ModelSelectionListener() {
                 public void classSelected(UMLClass selection) {
+                    selectedUmlClass = selection;
                     UMLAttribute[] attribs = selection.getUmlAttributeCollection().getUMLAttribute();
                     if (attribs != null) {
                         String[] values = new String[attribs.length];
@@ -144,6 +148,7 @@ public class VisualQueryBuilder extends JFrame {
                 
                 
                 public void associationSelected(UMLAssociation selection) {
+                    selectedUmlAssociation = selection;
                     getAssociationInfoPanel().setAssociation(selection, currentModel);
                 }
             });
@@ -677,7 +682,22 @@ public class VisualQueryBuilder extends JFrame {
             setTargetMenuItem.setText("Target");
             setTargetMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    if (selectedUmlClass != null) {
+                        Object target = new Object();
+                        String className = null;
+                        if (selectedUmlClass.getPackageName() == null) {
+                            className = selectedUmlClass.getPackageName() 
+                                + "." + selectedUmlClass.getClassName();
+                        } else {
+                            className = selectedUmlClass.getClassName();
+                        }
+                        target.setName(className);
+                        getCqlQueryTree().getQueryTreeNode().getQuery().setTarget(target);
+                        getCqlQueryTree().getQueryTreeNode().rebuild();
+                    } else {
+                        JOptionPane.showMessageDialog(VisualQueryBuilder.this,
+                            "Please select a UML class to target first!");
+                    }
                 }
             });
         }
@@ -721,7 +741,11 @@ public class VisualQueryBuilder extends JFrame {
             setAttributeValueMenuItem.setText("Attribute Value");
             setAttributeValueMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    AttributeTreeNode attributeTreeNode = (AttributeTreeNode) 
+                        getCqlQueryTree().getSelectionPath().getLastPathComponent();
+                    Attribute attrib = attributeTreeNode.getAttribute();
+                    SetAttributeValueDialog.setAttributeValue(VisualQueryBuilder.this, attrib);
+                    attributeTreeNode.rebuild();
                 }
             });
         }
@@ -757,7 +781,7 @@ public class VisualQueryBuilder extends JFrame {
 
 
     /**
-     * This method initializes removeCurrentItemMenuItem	
+     * This method initializes removeCurrentItemMenuItem
      * 	
      * @return javax.swing.JMenuItem	
      */
