@@ -1,7 +1,7 @@
 <!-- ======================================================================= -->
-<!-- caGrid Utilities build file                                             -->
+<!-- caGrid SDK Query 32 test file                                           -->
 <!-- ======================================================================= -->
-<project name="caGrid-core_tests_harness" basedir=".">
+<project name="caGrid-sdkQuery32_tests_harness" basedir=".">
 	<property name="junit.results.dir" value="${test.logs.dir}/junit"/>
 	<property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes"/>
 	<property name="cobertura.report.dir" value="${build.dir}/coverage"/>
