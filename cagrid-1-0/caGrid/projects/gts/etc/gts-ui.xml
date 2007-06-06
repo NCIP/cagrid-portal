@@ -59,7 +59,7 @@
                     <name>GeneralConfiguration</name>
                 </qname>
                 <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-                <DefaultFile>etc/gts-ui-configuration.xml</DefaultFile>
+                <DefaultFile>ext/resources/gts-ui-configuration.xml</DefaultFile>
             </ConfigurationDescriptor>
         </ConfigurationDescriptors>
     </configuration>

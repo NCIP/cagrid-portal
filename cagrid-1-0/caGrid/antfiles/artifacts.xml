@@ -666,5 +666,20 @@
                 <include name="sync-description.xml" />
             </fileset>
         </artifact>
+        <artifact track="main" type="resources" id="gts.ui.conf">
+            <fileset dir="${current.grid.dir}">
+                <include name="gts-ui-configuration.xml" />
+            </fileset>
+        </artifact>
+        <artifact track="main" type="resources" id="dorian.ui.conf">
+            <fileset dir="${current.grid.dir}">
+                <include name="dorian-ui-configuration.xml" />
+            </fileset>
+        </artifact>
+        <artifact track="main" type="resources" id="gridgrouper.ui.conf">
+            <fileset dir="${current.grid.dir}">
+                <include name="gridgrouper-ui-configuration.xml" />
+            </fileset>
+        </artifact>
     </target>
 </project>

@@ -4,20 +4,23 @@
         default="test"
         basedir="checkout/caGrid-1.0-nightly">
 
-    <target name="update" depends="">
+    <target name="delete">
+        <!-- start fresh on the code each night-->
+        <delete dir="caGrid"/>
+    </target>
+    
+    <target name="update" depends="delete">
         <!-- Get the latest from CVS -->
         <cvs quiet="true" command="up -d -P"/>
     </target>
 
     <target name="build" depends="update">
         <!-- Call the target that does everything -->
-        <ant dir="caGrid" antfile="build.xml" target="configure-clean, all" inheritAll="false" inheritRefs="true"/>
+        <ant dir="caGrid" antfile="build.xml" target="all" inheritAll="false" inheritRefs="true"/>
     </target>
 
     <target name="test" depends="build">
         <!-- Call the target that tests  -->
         <ant dir="caGrid" antfile="build.xml" target="test" inheritAll="false" inheritRefs="true"/>
     </target>
-
-
 </project>

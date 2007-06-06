@@ -15,10 +15,11 @@
     <property name="projects.dir" location="${caGrid-Master.basedir}/projects" />
     <property name="test.dir" location="${caGrid-Master.basedir}/test" />
     <property name="share.dir" location="${caGrid-Master.basedir}/share" />
-    <property name="share.lib.dir" location="${share.dir}/lib" />
-    <property name="test.lib.dir" location="${test.dir}/lib" />
     <property name="build.dir" location="${caGrid-Master.basedir}/build" />
     <property name="antfiles.dir" location="${caGrid-Master.basedir}/antfiles" />
+    
+    <property name="share.lib.dir" location="${share.dir}/lib" />
+    <property name="test.lib.dir" location="${test.dir}/lib" />
     <property name="anttask.classes.dir" location="${build.dir}/anttasks/classes" />
 
     <property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
@@ -199,14 +200,14 @@
             <artifact refid="core.test.jars" />
             <artifact refid="test.coverage.jars" />
             <artifact refid="common.metadata.jars" />
-			<artifact refid="data.jars" />
+            <artifact refid="data.jars" />
             <artifact refid="data.metadata.jars" />
             <artifact refid="dorian.client.jars" />
             <artifact refid="discovery.jars" />
             <artifact refid="metadatautils.jars" />
             <artifact refid="syncgts.client.jars" />
             <artifact refid="security.metadata.jars" />
-			<artifact refid="ws.enum.jars"/>
+            <artifact refid="ws.enum.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/portal2" inheritAll="false" antfile="build.xml" target="all" />
     </target>
@@ -379,6 +380,7 @@
     <target name="configure-dorian" depends="prepare">
         <resolveDependencies extdir="${projects.dir}/dorian/ext">
             <artifact refid="service_urls.properties" />
+            <artifact refid="dorian.ui.conf" />
         </resolveDependencies>
         <ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="configure" />
     </target>
@@ -407,7 +409,14 @@
         <ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
-    <target name="build-security-ui" depends="prepare" description="Builds the Security UI project">
+    <target name="configure-security-ui" depends="prepare">
+        <resolveDependencies extdir="${projects.dir}/security-ui/ext">
+            <artifact refid="dorian.ui.conf" />
+            <artifact refid="gts.ui.conf" />
+            <artifact refid="gridgrouper.ui.conf" />
+        </resolveDependencies>
+    </target>
+    <target name="build-security-ui" depends="configure-security-ui" description="Builds the Security UI project">
         <resolveDependencies extdir="${projects.dir}/security-ui/ext">
             <artifact refid="dorian.ui.jars" />
             <artifact refid="grape.jars" />
@@ -424,6 +433,7 @@
     <target name="configure-gridgrouper" depends="prepare">
         <resolveDependencies extdir="${projects.dir}/gridgrouper/ext">
             <artifact refid="service_urls.properties" />
+            <artifact refid="gridgrouper.ui.conf" />
         </resolveDependencies>
         <ant dir="${projects.dir}/gridgrouper" inheritAll="false" antfile="build.xml" target="configure" />
     </target>
@@ -455,6 +465,7 @@
     <target name="configure-gts" depends="prepare">
         <resolveDependencies extdir="${projects.dir}/gts/ext">
             <artifact refid="service_urls.properties" />
+            <artifact refid="gts.ui.conf" />
         </resolveDependencies>
         <ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="configure" />
     </target>

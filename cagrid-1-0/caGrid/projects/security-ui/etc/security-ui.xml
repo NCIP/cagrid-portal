@@ -201,7 +201,7 @@
                     <name>GeneralConfiguration</name>
                 </qname>
                 <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-                <DefaultFile>etc/dorian-ui-configuration.xml</DefaultFile>
+                <DefaultFile>ext/resources/dorian-ui-configuration.xml</DefaultFile>
             </ConfigurationDescriptor>
             <ConfigurationDescriptor>
                 <DisplayName>Grid Trust Fabric</DisplayName>
@@ -212,7 +212,7 @@
                     <name>GeneralConfiguration</name>
                 </qname>
                 <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-                <DefaultFile>etc/gts-ui-configuration.xml</DefaultFile>
+                <DefaultFile>ext/resources/gts-ui-configuration.xml</DefaultFile>
             </ConfigurationDescriptor>
             <ConfigurationDescriptor>
                 <DisplayName>Group Management</DisplayName>
@@ -223,7 +223,7 @@
                     <name>GeneralConfiguration</name>
                 </qname>
                 <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-                <DefaultFile>etc/gridgrouper-ui-configuration.xml</DefaultFile>
+                <DefaultFile>ext/resources/gridgrouper-ui-configuration.xml</DefaultFile>
             </ConfigurationDescriptor>
         </ConfigurationDescriptors>
     </configuration>

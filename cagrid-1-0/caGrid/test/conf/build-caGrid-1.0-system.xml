@@ -13,7 +13,8 @@
 
 
     <target name="build" depends="update">
-        <ant antfile="build.xml" dir="cagrid-1-0/tests" target="configure-clean, all" />
+        <ant antfile="build.xml" dir="cagrid-1-0/tests" target="configure-clean" />
+        <ant antfile="build.xml" dir="cagrid-1-0/tests" target="all" />
     </target>
 
   

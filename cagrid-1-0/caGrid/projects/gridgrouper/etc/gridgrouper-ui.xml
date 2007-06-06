@@ -42,7 +42,7 @@
                     <name>GeneralConfiguration</name>
                 </qname>
                 <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-                <DefaultFile>etc/gridgrouper-ui-configuration.xml</DefaultFile>
+                <DefaultFile>ext/resources/gridgrouper-ui-configuration.xml</DefaultFile>
             </ConfigurationDescriptor>
         </ConfigurationDescriptors>
     </configuration>
