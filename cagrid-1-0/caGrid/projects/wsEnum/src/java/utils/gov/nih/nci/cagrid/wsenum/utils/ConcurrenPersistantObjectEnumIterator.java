@@ -35,7 +35,7 @@ import org.globus.wsrf.encoding.SerializationException;
  * @author David Ervin
  * 
  * @created Apr 10, 2007 10:02:57 AM
- * @version $Id: ConcurrenPersistantObjectEnumIterator.java,v 1.1 2007-05-16 15:00:57 dervin Exp $ 
+ * @version $Id: ConcurrenPersistantObjectEnumIterator.java,v 1.2 2007-06-06 16:59:27 dervin Exp $ 
  */
 public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator {
     
@@ -45,6 +45,11 @@ public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator
         throws FileNotFoundException {
         super(file, objectQName);
         overflowElements = new LinkedList<SOAPElement>();
+    }
+    
+    
+    public static EnumIterator createIterator(List objects, QName objectQName) throws Exception {
+        return createIterator(objects.iterator(), objectQName, null);
     }
     
     
@@ -148,7 +153,7 @@ public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator
      * @throws Exception
      */
     public static EnumIterator createIterator(Iterator objectIter, QName objectQName, InputStream wsddInput, String tempFilename) throws Exception {
-        StringBuffer wsddContents = Utils.inputStreamToStringBuffer(wsddInput);
+        StringBuffer wsddContents = wsddInput != null ? Utils.inputStreamToStringBuffer(wsddInput) : null;
         writeSdkObjects(objectIter, objectQName, tempFilename, wsddContents);
         return new ConcurrenPersistantObjectEnumIterator(
             new File(tempFilename), objectQName);

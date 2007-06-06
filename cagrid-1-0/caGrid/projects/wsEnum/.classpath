@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="test/src/java"/>
+	<classpathentry kind="src" path="build/stubs/test/src"/>
 	<classpathentry kind="src" path="build/stubs/src"/>
 	<classpathentry kind="src" path="src/java/client"/>
 	<classpathentry kind="src" path="src/java/common"/>
@@ -59,7 +60,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/wsrf_core_stubs_enum.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/client.jar"/>
 	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>

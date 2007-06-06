@@ -58,6 +58,8 @@
     <!-- testing stuff -->
     <property name="test.dir" location="${basedir}/test" />
     <property name="test.src.dir" location="${test.dir}/src/java" />
+	<property name="test.stubs.src" location="${stubs.dir}/test/src"/>
+	<property name="test.stubs.dir" location="${stubs.dir}/test/classes"/>
     <property name="test.classes.dir" location="${build.dir}/test/classes" />
 	<property name="test.resources.dir" location="${basedir}/test/resources" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
@@ -112,6 +114,8 @@
         <mkdir dir="${stubs.dir}" />
         <mkdir dir="${stubs.src}" />
         <mkdir dir="${stubs.dest}" />
+		<mkdir dir="${test.stubs.src}"/>
+		<mkdir dir="${test.stubs.dir}"/>
         <mkdir dir="${schema.dest}" />
 		<mkdir dir="${schema.dest}/CaGridEnumeration"/>
         <!-- copy schemas to the output directory -->
@@ -144,7 +148,7 @@
 	    <ant antfile="${build.stubs}" target="mergePackageMapping" inheritall="false">
 	    	<property name="mapping.src" location="${mapping.src}" />
 	        <property name="mapping.dst" location="${build.dir}/namespace2package.mappings" />
-			</ant>
+		</ant>
 	</target>
 	
 	
@@ -171,11 +175,22 @@
 	        <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
 	    </ant>
 	</target>
+	
+	
+	<!-- generate stubs for Bookstore classes used in testing -->
+	<target name="createBookstoreBeans" depends="setGlobus, merge">
+		<ant antfile="${ant.build.stubs}" target="generateStubs">
+			<property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
+			<property name="source.stubs.dir" location="${test.resources.dir}" />
+			<property name="wsdl.file" value="bookstore.wsdl" />
+			<property name="target.stubs.dir" location="${test.stubs.src}" />
+		</ant>
+	</target>
 
 
 	<!-- Compile the stubs generated in the previous step -->
-	<target name="compileStubs" depends="serviceStubs">
-		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
+	<target name="compileStubs" depends="serviceStubs, createBookstoreBeans">
+		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}" source="${java.source}">
 			<classpath>
 				<fileset dir="${lib.dir}">
 	            	<include name="*.jar" />
@@ -189,8 +204,20 @@
 			</classpath>
 	        <include name="**/*.java" />
 		</javac>
+		<javac srcdir="${test.stubs.src}" destdir="${test.stubs.dir}" debug="${java.debug}" source="${java.source}">
+			<classpath>
+				<fileset dir="${lib.dir}">
+		           	<include name="*.jar" />
+				</fileset>
+		        <fileset dir="${ext.lib.dir}">
+		           	<include name="*.jar" />
+				</fileset>
+		        <fileset dir="${globus.dir}/lib">
+		    	  	<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
 	</target>
-
 
     <!-- compiles the common classes for data services -->
     <target name="compile" depends="init, compileStubs">
@@ -215,6 +242,9 @@
     <target name="compileTests" depends="init, compile">
         <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="${java.debug}" source="${java.source}">
             <classpath refid="test.classpath" />
+			<classpath>
+				<pathelement location="${test.stubs.dir}"/>
+			</classpath>
         </javac>
     </target>
 

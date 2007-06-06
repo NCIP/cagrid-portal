@@ -1,13 +1,8 @@
 package gov.nih.nci.cagrid.wsenum;
 
-import gov.nih.nci.cabio.domain.Gene;
-import gov.nih.nci.cagrid.common.ConfigurableObjectDeserializationContext;
 import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -36,7 +31,7 @@ import org.globus.ws.enumeration.EnumIterator;
 import org.globus.ws.enumeration.IterationConstraints;
 import org.globus.ws.enumeration.IterationResult;
 import org.globus.ws.enumeration.TimeoutException;
-import org.xml.sax.InputSource;
+import org.projectmobius.bookstore.Book;
 
 /** 
  *  CompleteEnumIteratorBaseTest
@@ -45,13 +40,10 @@ import org.xml.sax.InputSource;
  * @author David Ervin
  * 
  * @created Apr 10, 2007 12:16:58 PM
- * @version $Id: CompleteEnumIteratorBaseTest.java,v 1.1 2007-04-10 16:34:51 dervin Exp $ 
+ * @version $Id: CompleteEnumIteratorBaseTest.java,v 1.2 2007-06-06 16:59:27 dervin Exp $ 
  */
 public abstract class CompleteEnumIteratorBaseTest extends TestCase {
     
-    private String wsddFilename;
-    private QName geneQname;
-    private MessageContext messageContext;
     private List<Object> objectList;
     private EnumIterator enumIterator;
     private String iteratorClassName;
@@ -59,21 +51,6 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
     public CompleteEnumIteratorBaseTest(String iteratorClassName) {
         super("EnumIter testing for " + iteratorClassName);
         this.iteratorClassName = iteratorClassName;
-    }
-    
-    
-    protected String getWsddFilename() {
-        return wsddFilename;
-    }
-    
-    
-    protected QName getGeneQname() {
-        return geneQname;
-    }
-
-    
-    protected MessageContext getMessageContext() {
-        return messageContext;
     }
     
     
@@ -88,30 +65,20 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
     
 
     public void setUp() {
-        wsddFilename = "test" + File.separator + "resources" 
-            + File.separator + "cabio-client-config.wsdd";
-        // set up the message context
-        try {
-            messageContext = createMessageContext(new FileInputStream(wsddFilename));
-        } catch (FileNotFoundException ex) {
-            fail("Wsdd file not found: " + ex.getMessage());
-        }
-        // QName for the data type
-        geneQname = new QName("gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain", "Gene");
         // need a list of SDK objects
         objectList = new ArrayList<Object>();
         for (int i = 0; i < 10; i++) {
-            Gene g = new Gene();
-            g.setSymbol("Symbol" + i);
-            g.setFullName("Fake Gene Number " + i);
-            objectList.add(g);
+            Book b = new Book();
+            b.setAuthor("caGrid Testing Book " + i);
+            b.setISBN(String.valueOf(i));
+            objectList.add(b);
         }
         // set up the enum iterator
         try {
             Class iterClass = Class.forName(iteratorClassName);
             Method createIteratorMethod = iterClass.getDeclaredMethod(
-                "createIterator", new Class[] {List.class, QName.class, InputStream.class});
-            Object[] args = {objectList, geneQname, new FileInputStream(wsddFilename)};
+                "createIterator", new Class[] {List.class, QName.class});
+            Object[] args = {objectList, TestingConstants.BOOK_QNAME};
             enumIterator = (EnumIterator) createIteratorMethod.invoke(null, args);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -141,10 +108,10 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
         assertEquals("Unexpected number of results returned", 1, rawElements.length);
         // deserialize the result
         try {
-            Gene g = (Gene) deserializeDocumentString(
-                rawElements[0].getValue(), Gene.class);
-            boolean found = geneInOriginalList(g);
-            assertTrue("Returned gene was not found in original object list", found);
+            Book b = (Book) deserializeDocumentString(
+                rawElements[0].getValue(), Book.class);
+            boolean found = bookInOriginalList(b);
+            assertTrue("Returned book was not found in original object list", found);
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Error deserializing result: " + ex.getMessage());
@@ -161,10 +128,10 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
         for (int i = 0; i < rawElements.length; i++) {
             // deserialize the result
             try {
-                Gene g = (Gene) deserializeDocumentString(
-                    rawElements[i].getValue(), Gene.class);
-                boolean found = geneInOriginalList(g);
-                assertTrue("Returned gene not found in original object list", found);
+                Book b = (Book) deserializeDocumentString(
+                    rawElements[i].getValue(), Book.class);
+                boolean found = bookInOriginalList(b);
+                assertTrue("Returned book not found in original object list", found);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 fail("Error deserializing result: " + ex.getMessage());
@@ -185,10 +152,10 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
         for (int i = 0; i < rawElements.length; i++) {
             // deserialize the result
             try {
-                Gene g = (Gene) deserializeDocumentString(
-                    rawElements[i].getValue(), Gene.class);
-                boolean found = geneInOriginalList(g);
-                assertTrue("Returned gene not found in original object list", found);
+                Book b = (Book) deserializeDocumentString(
+                    rawElements[i].getValue(), Book.class);
+                boolean found = bookInOriginalList(b);
+                assertTrue("Returned book not found in original object list", found);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 fail("Error deserializing result: " + ex.getMessage());
@@ -224,7 +191,7 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
         StringWriter writer = new StringWriter();
         try {
             Utils.serializeObject(objectList.get(0), 
-                geneQname, writer, new FileInputStream(wsddFilename));
+                TestingConstants.BOOK_QNAME, writer);
             charCount = writer.getBuffer().length();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -239,28 +206,28 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
             rawResults.length == objectList.size());
         assertEquals("Unexpected number of results returned", 1, rawResults.length);
         // verify content
-        Gene original = null;
-        Gene returned = null;
+        Book original = null;
+        Book returned = null;
         try {
-            original = (Gene) deserializeDocumentString(
-                writer.getBuffer().toString(), Gene.class);
-            returned = (Gene) deserializeDocumentString(
-                rawResults[0].getValue().toString(), Gene.class);
+            original = (Book) deserializeDocumentString(
+                writer.getBuffer().toString(), Book.class);
+            returned = (Book) deserializeDocumentString(
+                rawResults[0].getValue().toString(), Book.class);
         } catch (Exception ex) {
             fail("Error deserializing objects: " + ex.getMessage());
         }
-        boolean equal = original.getSymbol().equals(returned.getSymbol()) 
-            && original.getFullName().equals(returned.getFullName());
-        assertTrue("Expected gene and returned gene do not match", equal);
+        boolean equal = original.getAuthor().equals(returned.getAuthor()) 
+            && original.getISBN().equals(returned.getISBN());
+        assertTrue("Expected book and returned book do not match", equal);
     }
     
     
-    protected boolean geneInOriginalList(Gene g) {
-        // verify the gene is part of the original object list
+    protected boolean bookInOriginalList(Book g) {
+        // verify the book is part of the original object list
         for (int i = 0; i < objectList.size(); i++) {
-            Gene current = (Gene) objectList.get(i);
-            if (current.getSymbol().equals(g.getSymbol()) 
-                && current.getFullName().equals(g.getFullName())) {
+            Book current = (Book) objectList.get(i);
+            if (current.getAuthor().equals(g.getAuthor()) 
+                && current.getISBN().equals(g.getISBN())) {
                 return true;
             }
         }
@@ -269,11 +236,7 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
     
     
     protected Object deserializeDocumentString(String xmlDocument, Class objectClass) throws Exception {
-        InputSource objectSource = new InputSource(new StringReader(xmlDocument));
-        ConfigurableObjectDeserializationContext desContext = 
-            new ConfigurableObjectDeserializationContext(
-                messageContext, objectSource, objectClass);
-        return desContext.getValue();
+        return Utils.deserializeObject(new StringReader(xmlDocument), objectClass);
     }
     
     

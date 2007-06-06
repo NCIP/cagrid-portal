@@ -1,19 +1,13 @@
 package gov.nih.nci.cagrid.wsenum;
 
-import gov.nih.nci.cabio.domain.Gene;
-import gov.nih.nci.cagrid.common.ConfigurableObjectDeserializationContext;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.wsenum.utils.SimplePersistantSDKObjectIterator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
 
 import junit.framework.TestCase;
@@ -21,16 +15,11 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.apache.axis.AxisEngine;
-import org.apache.axis.EngineConfiguration;
-import org.apache.axis.MessageContext;
-import org.apache.axis.configuration.FileProvider;
-import org.apache.axis.server.AxisServer;
 import org.apache.axis.types.Duration;
 import org.globus.ws.enumeration.EnumIterator;
 import org.globus.ws.enumeration.IterationConstraints;
 import org.globus.ws.enumeration.IterationResult;
-import org.xml.sax.InputSource;
+import org.projectmobius.bookstore.Book;
 
 /** 
  *  SimpleEnumIterTestCase
@@ -43,8 +32,6 @@ import org.xml.sax.InputSource;
  */
 public class SimpleEnumIterTestCase extends TestCase {
 	
-	private QName geneQname;
-	private MessageContext messageContext;
 	private List<Object> objectList;
 	private EnumIterator enumIterator;
 	
@@ -54,26 +41,18 @@ public class SimpleEnumIterTestCase extends TestCase {
 	
 	
 	public void setUp() {
-		String wsddFilename = "test" + File.separator + "resources" + File.separator + "cabio-client-config.wsdd";
-		// set up the message context
-		try {
-			messageContext = createMessageContext(new FileInputStream(wsddFilename));
-		} catch (FileNotFoundException ex) {
-			fail("Wsdd file not found: " + ex.getMessage());
-		}
-		// QName for the data type
-		geneQname = new QName("gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain", "Gene");
 		// need a list of SDK objects
 		objectList = new ArrayList<Object>();
 		for (int i = 0; i < 10; i++) {
-			Gene g = new Gene();
-			g.setSymbol("Symbol" + i);
-			g.setFullName("Fake Gene Number " + i);
-			objectList.add(g);
+			Book b = new Book();
+			b.setAuthor("caGrid Book Author " + i);
+			b.setISBN("Fake book Number " + i);
+			objectList.add(b);
 		}
 		// set up the enum iterator
 		try {
-			enumIterator = SimplePersistantSDKObjectIterator.createIterator(objectList, geneQname, new FileInputStream(wsddFilename));
+			enumIterator = SimplePersistantSDKObjectIterator.createIterator(
+                objectList, TestingConstants.BOOK_QNAME, null);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Error initializing the Simple SDK Iterator: " + ex.getMessage());
@@ -104,10 +83,10 @@ public class SimpleEnumIterTestCase extends TestCase {
 		assertTrue("Only one result was returned", rawElements.length == 1);
 		// deserialize the result
 		try {
-			Gene g = (Gene) deserializeDocumentString(
-				rawElements[0].getValue(), Gene.class);
-			boolean found = geneInOriginalList(g);
-			assertTrue("Returned gene found in original object list", found);
+            Book b = (Book) deserializeDocumentString(
+				rawElements[0].getValue(), Book.class);
+			boolean found = bookInOriginalList(b);
+			assertTrue("Returned book found in original object list", found);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Error deserializing result: " + ex.getMessage());
@@ -127,10 +106,10 @@ public class SimpleEnumIterTestCase extends TestCase {
 		for (int i = 0; i < rawElements.length; i++) {
 			// deserialize the result
 			try {
-				Gene g = (Gene) deserializeDocumentString(
-					rawElements[i].getValue(), Gene.class);
-				boolean found = geneInOriginalList(g);
-				assertTrue("Returned gene found in original object list", found);
+                Book b = (Book) deserializeDocumentString(
+					rawElements[i].getValue(), Book.class);
+				boolean found = bookInOriginalList(b);
+				assertTrue("Returned book found in original object list", found);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				fail("Error deserializing result: " + ex.getMessage());
@@ -154,10 +133,10 @@ public class SimpleEnumIterTestCase extends TestCase {
 		for (int i = 0; i < rawElements.length; i++) {
 			// deserialize the result
 			try {
-				Gene g = (Gene) deserializeDocumentString(
-					rawElements[i].getValue(), Gene.class);
-				boolean found = geneInOriginalList(g);
-				assertTrue("Returned gene found in original object list", found);
+                Book b = (Book) deserializeDocumentString(
+					rawElements[i].getValue(), Book.class);
+				boolean found = bookInOriginalList(b);
+				assertTrue("Returned book found in original object list", found);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				fail("Error deserializing result: " + ex.getMessage());
@@ -166,12 +145,12 @@ public class SimpleEnumIterTestCase extends TestCase {
 	}
 	
 	
-	private boolean geneInOriginalList(Gene g) {
-		// verify the gene is part of the original object list
+	private boolean bookInOriginalList(Book b) {
+		// verify the book is part of the original object list
 		for (int i = 0; i < objectList.size(); i++) {
-			Gene current = (Gene) objectList.get(i);
-			if (current.getSymbol().equals(g.getSymbol()) 
-				&& current.getFullName().equals(g.getFullName())) {
+            Book current = (Book) objectList.get(i);
+			if (current.getAuthor().equals(b.getAuthor()) 
+				&& current.getISBN().equals(b.getISBN())) {
 				return true;
 			}
 		}
@@ -180,25 +159,7 @@ public class SimpleEnumIterTestCase extends TestCase {
 	
 	
 	private Object deserializeDocumentString(String xmlDocument, Class objectClass) throws Exception {
-		InputSource objectSource = new InputSource(new StringReader(xmlDocument));
-		ConfigurableObjectDeserializationContext desContext	= 
-			new ConfigurableObjectDeserializationContext(messageContext, objectSource, objectClass);
-		return desContext.getValue();
-	}
-	
-	
-	private MessageContext createMessageContext(InputStream configStream) {
-		EngineConfiguration engineConfig = new FileProvider(configStream);
-		AxisEngine engine = new AxisServer(engineConfig);
-		
-		MessageContext context = new MessageContext(engine);
-		context.setEncodingStyle("");
-		context.setProperty(AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
-		// the following two properties prevent xsd types from appearing in
-		// every single element in the serialized XML
-		context.setProperty(AxisEngine.PROP_EMIT_ALL_TYPES, Boolean.FALSE);
-		context.setProperty(AxisEngine.PROP_SEND_XSI, Boolean.FALSE);
-		return context;
+		return Utils.deserializeObject(new StringReader(xmlDocument), objectClass);
 	}
 	
 

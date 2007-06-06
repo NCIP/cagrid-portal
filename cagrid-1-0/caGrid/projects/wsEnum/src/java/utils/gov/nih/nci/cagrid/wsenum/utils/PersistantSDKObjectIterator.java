@@ -30,7 +30,7 @@ import org.globus.wsrf.encoding.SerializationException;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 17, 2006 
- * @version $Id: PersistantSDKObjectIterator.java,v 1.1 2007-05-16 15:00:57 dervin Exp $ 
+ * @version $Id: PersistantSDKObjectIterator.java,v 1.2 2007-06-06 16:59:27 dervin Exp $ 
  */
 public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	private static final String THREAD_EXCEPTION = "ThreadException";
@@ -42,6 +42,11 @@ public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 		super(file, objectQName);
 	}
 	
+    
+    public static EnumIterator createIterator(List objects, QName objectQName) throws Exception {
+        return createIterator(objects.iterator(), objectQName, null);
+    }
+    
 	
 	/**
 	 * Serializes a List of caCORE SDK generated objects to a temp file on
@@ -143,7 +148,7 @@ public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	 * @throws Exception
 	 */
 	public static EnumIterator createIterator(Iterator objectIter, QName objectQName, InputStream wsddInput, String tempFilename) throws Exception {
-		StringBuffer wsddContents = Utils.inputStreamToStringBuffer(wsddInput);
+		StringBuffer wsddContents = wsddInput != null ? Utils.inputStreamToStringBuffer(wsddInput) : null;
 		writeSdkObjects(objectIter, objectQName, tempFilename, wsddContents);
 		return new PersistantSDKObjectIterator(new File(tempFilename), objectQName);
 	}

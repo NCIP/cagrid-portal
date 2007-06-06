@@ -1,16 +1,15 @@
 package gov.nih.nci.cagrid.wsenum;
 
-import gov.nih.nci.cabio.domain.Gene;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.wsenum.utils.ConcurrenPersistantObjectEnumIterator;
 
-import java.io.FileInputStream;
 import java.io.StringWriter;
 
 import javax.xml.soap.SOAPElement;
 
 import org.globus.ws.enumeration.IterationConstraints;
 import org.globus.ws.enumeration.IterationResult;
+import org.projectmobius.bookstore.Book;
 
 /** 
  *  ConcurrentEnumIterTestCase
@@ -20,7 +19,7 @@ import org.globus.ws.enumeration.IterationResult;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Nov 3, 2006 
- * @version $Id: ConcurrentEnumIterTestCase.java,v 1.4 2007-04-10 16:34:51 dervin Exp $ 
+ * @version $Id: ConcurrentEnumIterTestCase.java,v 1.5 2007-06-06 16:59:27 dervin Exp $ 
  */
 public class ConcurrentEnumIterTestCase extends CompleteEnumIteratorBaseTest {
 	
@@ -35,7 +34,7 @@ public class ConcurrentEnumIterTestCase extends CompleteEnumIteratorBaseTest {
         StringWriter writer = new StringWriter();
         try {
             Utils.serializeObject(getObjectList().get(0), 
-                getGeneQname(), writer, new FileInputStream(getWsddFilename()));
+                TestingConstants.BOOK_QNAME, writer);
             charCount = writer.getBuffer().length();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -50,25 +49,25 @@ public class ConcurrentEnumIterTestCase extends CompleteEnumIteratorBaseTest {
             rawResults.length == getObjectList().size());
         assertEquals("Unexpected number of results returned", 1, rawResults.length);
         // verify content
-        Gene original = null;
-        Gene returned = null;
+        Book original = null;
+        Book returned = null;
         try {
-            original = (Gene) deserializeDocumentString(
-                writer.getBuffer().toString(), Gene.class);
-            returned = (Gene) deserializeDocumentString(
-                rawResults[0].getValue().toString(), Gene.class);
+            original = (Book) deserializeDocumentString(
+                writer.getBuffer().toString(), Book.class);
+            returned = (Book) deserializeDocumentString(
+                rawResults[0].getValue().toString(), Book.class);
         } catch (Exception ex) {
             fail("Error deserializing objects: " + ex.getMessage());
         }
-        boolean equal = original.getSymbol().equals(returned.getSymbol()) 
-            && original.getFullName().equals(returned.getFullName());
-        assertTrue("Expected gene and returned gene do not match", equal);
+        boolean equal = original.getAuthor().equals(returned.getAuthor()) 
+            && original.getISBN().equals(returned.getISBN());
+        assertTrue("Expected book and returned book do not match", equal);
         
         // ask for results again, should get the next object
         writer = new StringWriter();
         try {
             Utils.serializeObject(getObjectList().get(1), 
-                getGeneQname(), writer, new FileInputStream(getWsddFilename()));
+                TestingConstants.BOOK_QNAME, writer);
             charCount = writer.getBuffer().length();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -83,15 +82,15 @@ public class ConcurrentEnumIterTestCase extends CompleteEnumIteratorBaseTest {
         assertEquals("Unexpected number of results returned", 1, rawResults.length);
         // verify content
         try {
-            original = (Gene) deserializeDocumentString(
-                writer.getBuffer().toString(), Gene.class);
-            returned = (Gene) deserializeDocumentString(
-                rawResults[0].getValue().toString(), Gene.class);
+            original = (Book) deserializeDocumentString(
+                writer.getBuffer().toString(), Book.class);
+            returned = (Book) deserializeDocumentString(
+                rawResults[0].getValue().toString(), Book.class);
         } catch (Exception ex) {
             fail("Error deserializing objects: " + ex.getMessage());
         }
-        equal = original.getSymbol().equals(returned.getSymbol()) 
-            && original.getFullName().equals(returned.getFullName());
-        assertTrue("Expected gene and returned gene do not match", equal);
+        equal = original.getAuthor().equals(returned.getAuthor()) 
+            && original.getISBN().equals(returned.getISBN());
+        assertTrue("Expected book and returned book do not match", equal);
     }
 }
