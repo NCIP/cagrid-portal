@@ -9,3 +9,4 @@ cacert.pem
 temp-cakey.pem
 junit*.properties
 deploy.properties
+.settings
