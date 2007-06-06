@@ -51,13 +51,9 @@ public class ServiceDiscoveryController extends AbstractController {
 		for(GridService svc : gridServices){
 			gridServiceIds.add(svc.getId());
 		}
-		
-		PortletSession portletSession = request.getPortletSession(true);
-		String id = getInstanceID(request);
-		String msgSessionId = MessageHelper.getSessionID(request);
-		MessageHelper.loadPrefs(request, id, msgSessionId);
-		MessageHelper helper = new MessageHelper(portletSession, id,
-				msgSessionId);
+
+		MessageHelper.loadPrefs(request);
+		MessageHelper helper = new MessageHelper(request);
 		logger.debug("############## Sending list of " + gridServiceIds.size() + " gridServiceIds. #############");
 		helper.send("gridServiceIds", gridServiceIds);
 		
@@ -65,9 +61,6 @@ public class ServiceDiscoveryController extends AbstractController {
 		response.setRenderParameter("action", getSuccessAction());
 	}
 
-	public String getInstanceID(PortletRequest request) {
-		return "DiscoverGridServices" + MessageHelper.getPortletID(request);
-	}
 
 	public GridServiceDao getGridServiceDao() {
 		return gridServiceDao;

@@ -27,6 +27,7 @@ limitations under the License.
   <document-order>search.psml</document-order>  
   <document-order>tools.psml</document-order>  
   <document-order>map-view.psml</document-order>  
+  <document-order>ipc.psml</document-order>  
 
   <document-order>cabig.link</document-order>
   <document-order>cagridwiki.link</document-order>

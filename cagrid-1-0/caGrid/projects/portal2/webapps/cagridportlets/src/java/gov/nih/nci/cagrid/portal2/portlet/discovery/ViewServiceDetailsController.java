@@ -32,6 +32,7 @@ public class ViewServiceDetailsController extends AbstractController {
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 
+		
 		ModelAndView mav = new ModelAndView(getSuccessView());
 		PortletSession portletSession = request.getPortletSession(true);
 		String id = getInstanceID(request);

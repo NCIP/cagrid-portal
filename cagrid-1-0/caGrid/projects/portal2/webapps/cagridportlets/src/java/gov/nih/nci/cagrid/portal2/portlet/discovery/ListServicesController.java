@@ -37,27 +37,22 @@ public class ListServicesController extends AbstractController {
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request, RenderResponse response) throws Exception {
 		
 		ModelAndView mav = new ModelAndView(getListView());
-		PortletSession portletSession = request.getPortletSession(true);
-        String id = getInstanceID(request);
-        String msgSessionId = MessageHelper.getSessionID(request);
+        MessageHelper.loadPrefs(request);
+        MessageHelper helper = new MessageHelper(request);
         
-        // load this portlet's inputs and outputs from preferences
-        MessageHelper.loadPrefs(request, id, msgSessionId);
-
-        MessageHelper helper = new MessageHelper(portletSession, id, msgSessionId);
+        List gridServiceIds = (List)helper.get("gridServiceIds");
         
-//        List gridServiceIds = (List)helper.get("gridServiceIds");
+//        List<GridService> sl = getGridServiceDao().getAll();
+//        List gridServiceIds = new ArrayList();
+//        for(GridService s : sl){
+//        	gridServiceIds.add(s.getId());
+//        }
         
-        List<GridService> sl = getGridServiceDao().getAll();
-        List gridServiceIds = new ArrayList();
-        for(GridService s : sl){
-        	gridServiceIds.add(s.getId());
-        }
-        
-        //TODO: this is a hack
         if(gridServiceIds == null){
         	logger.debug("################### gridServiceIds is null #################");
         
+        }else if(gridServiceIds.size() == 0){
+        	logger.debug("################### gridServiceIds.size() = " + gridServiceIds.size() + " #################");
         }
         
         if(gridServiceIds != null && gridServiceIds.size() > 0){

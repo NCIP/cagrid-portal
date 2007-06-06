@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+
+	<bean id="viewController" class="gov.nih.nci.cagrid.portal2.portlet.ipc.IPCTestController">
+		<property name="viewName" value="view"/>
+		<property name="inputName" value="ipc_input"/>
+		<property name="outputName" value="ipc_output"/>
+	</bean>
+
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="viewController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/ipc/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>	
+
+	<!-- Exception Handler -->
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate" />
+
+</beans>

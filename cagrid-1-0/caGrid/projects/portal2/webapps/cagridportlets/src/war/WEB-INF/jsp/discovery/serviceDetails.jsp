@@ -167,7 +167,7 @@
 																				<li>Index:&nbsp; <c:out value="${inputParam.index}" /></li>
 																				<li>Is Array?:&nbsp; <c:out value="${inputParam.array}" /></li>
 																				<c:if test="${inputParam.array}">
-																					<li>Dimentionality:&nbsp; <c:out value="${inputParam.dimentionality}" /></li>
+																					<li>Dimensionality:&nbsp; <c:out value="${inputParam.dimensionality}" /></li>
 																				</c:if>
 																				<li>QName:&nbsp; <c:out value="${inputParam.QName}" /></li>
 																			</ul>

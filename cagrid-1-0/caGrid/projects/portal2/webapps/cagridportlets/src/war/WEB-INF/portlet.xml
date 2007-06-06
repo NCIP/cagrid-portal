@@ -253,15 +253,15 @@
 			</preference>
 			
 			<preference>
-				<name>MsgInput2Name</name>
+				<name>MsgInput1Name</name>
 				<value>gridServiceIds</value>
 			</preference>
 			<preference>
-				<name>MsgInput2SourceName</name>
+				<name>MsgInput1SourceName</name>
 				<value>publishedGridServiceIds</value>
 			</preference>
 			<preference>
-				<name>MsgInput2SourceNamespace</name>
+				<name>MsgInput1SourceNamespace</name>
 				<value></value>
 			</preference>			
 			
@@ -303,5 +303,241 @@
 			</preference>
 		</portlet-preferences>
 	</portlet>
+	
+	<portlet>
+		<portlet-name>ipctest1</portlet-name>
+		<display-name>IPC Test 1</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/ipctest-portlet.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>IPC Test 1</title>
+			<short-title>IPC Test 1</short-title>
+			<keywords>ipc</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>MsgInput1Name</name>
+				<value>ipc_input</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceName</name>
+				<value>global_ipc2_output</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceNamespace</name>
+				<value></value>
+			</preference>
+			<preference>
+				<name>MsgOutput1Name</name>
+				<value>ipc_output</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishName1</name>
+				<value>global_ipc1_output</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishNamespace1</name>
+				<value></value>
+			</preference>
+		</portlet-preferences>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>ipctest2</portlet-name>
+		<display-name>IPC Test 2</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/ipctest-portlet.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>IPC Test 2</title>
+			<short-title>IPC Test 2</short-title>
+			<keywords>ipc</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>MsgInput1Name</name>
+				<value>ipc_input</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceName</name>
+				<value>global_ipc1_output</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceNamespace</name>
+				<value></value>
+			</preference>
+			<preference>
+				<name>MsgOutput1Name</name>
+				<value>ipc_output</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishName1</name>
+				<value>global_ipc2_output</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishNamespace1</name>
+				<value></value>
+			</preference>
+		</portlet-preferences>
+	</portlet>	
+	
+	<portlet>
+		<portlet-name>ipctest3</portlet-name>
+		<display-name>IPC Test 3</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/ipctest-portlet.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>IPC Test 3</title>
+			<short-title>IPC Test 3</short-title>
+			<keywords>ipc</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>MsgInput1Name</name>
+				<value>ipc_input</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceName</name>
+				<value>global_ipc1_output</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceNamespace</name>
+				<value></value>
+			</preference>
+			<preference>
+				<name>MsgOutput1Name</name>
+				<value>ipc_output</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishName1</name>
+				<value>global_ipc2_output</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishNamespace1</name>
+				<value></value>
+			</preference>
+		</portlet-preferences>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>ipctestoutonly</portlet-name>
+		<display-name>IPC Test Out Only</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/ipctestoutonly-portlet.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>IPC Test Out Only</title>
+			<short-title>IPC Out Only</short-title>
+			<keywords>ipc</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>MsgOutput1Name</name>
+				<value>ipc_output</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishName1</name>
+				<value>global_ipc_outonly</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishNamespace1</name>
+				<value></value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishName2</name>
+				<value>global_ipc2_output</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishNamespace2</name>
+				<value></value>
+			</preference>
+		</portlet-preferences>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>ipctestinonly</portlet-name>
+		<display-name>IPC Test In Only</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/ipctestinonly-portlet.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>IPC Test In Only</title>
+			<short-title>IPC In Only</short-title>
+			<keywords>ipc</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>MsgInput1Name</name>
+				<value>ipc_input1</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceName</name>
+				<value>global_ipc_outonly</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceNamespace</name>
+				<value></value>
+			</preference>
+			<preference>
+				<name>MsgInput2Name</name>
+				<value>ipc_input2</value>
+			</preference>
+			<preference>
+				<name>MsgInput2SourceName</name>
+				<value>global_ipc1_output</value>
+			</preference>
+			<preference>
+				<name>MsgInput2SourceNamespace</name>
+				<value></value>
+			</preference>
+		</portlet-preferences>
+	</portlet>	
 	
 </portlet-app>

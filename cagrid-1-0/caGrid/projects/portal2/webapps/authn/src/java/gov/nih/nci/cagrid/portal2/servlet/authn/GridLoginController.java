@@ -59,6 +59,9 @@ public class GridLoginController extends SimpleFormController {
 		user.setPassword(command.getPassword());
 		user.setIdpUrl(command.getIdpUrl());
 		String loginKey = AuthnUtils.generateLoginKey(getWebAuthnSvcClient(), user);
+		
+		//TODO: if user is not successfully authenticated, do some error
+		//handling here.
 
 		mav.addObject("loginKey", loginKey);
 		mav.addObject(getTargetUrlKey(), command.getTargetUrl());
