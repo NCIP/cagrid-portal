@@ -76,8 +76,10 @@ public class DomainModelBuilder {
 	/**
 	 * Gets a DomainModel that represents the entire project
 	 * 
-	 * @param proj
+	 * @param project
+     *      The project for which a domain model will be created
 	 * @return
+     *      The domain model
 	 */
 	public DomainModel createDomainModel(Project project) throws DomainModelGenerationException {
 		Project proj;
@@ -116,12 +118,12 @@ public class DomainModelBuilder {
 	/**
 	 * Gets a DomainModel that represents the project and packages
 	 * 
-	 * @param proj
+	 * @param project
 	 *            The project to build a domain model for
 	 * @param packageNames
 	 *            The names of packages to include in the domain model
 	 * @return
-	 * @throws RemoteException
+     *      The domain model
 	 */
 	public DomainModel createDomainModelForPackages(Project project, String[] packageNames)
 		throws DomainModelGenerationException {
@@ -177,6 +179,7 @@ public class DomainModelBuilder {
 	 * @param exposedClasses
 	 *            fully qualified name of classes to include
 	 * @return
+     *      The domain model
 	 * @throws DomainModelGenerationException
 	 */
 	public DomainModel createDomainModelForClasses(Project project, String[] exposedClasses)
@@ -192,11 +195,12 @@ public class DomainModelBuilder {
 	 * 
 	 * @param project
 	 *            The project to build a domain model for
-	 * @param exposedClasses
+	 * @param fullClassNames
 	 *            fully qualified name of classes to include
 	 * @param excludedAssociations
 	 *            associations to not include
 	 * @return
+     *      The domain model
 	 * @throws DomainModelGenerationException
 	 */
 	public DomainModel createDomainModelForClassesWithExcludes(Project project, String[] fullClassNames,
@@ -282,6 +286,7 @@ public class DomainModelBuilder {
 	 * @param classArr
 	 * @param excludedAssociations
 	 * @return
+     *      The UML Association metadata array
 	 * @throws ApplicationException
 	 */
 	private UMLAssociationMetadata[] getProjectAssociationClosure(Project proj, UMLClassMetadata[] classArr,
@@ -350,6 +355,7 @@ public class DomainModelBuilder {
 	/**
 	 * @param excludedAssociations
 	 * @return
+     *      An HQL fragment to exclude the specified associations
 	 */
 	private String createAssociationExcludeFilter(UMLAssociationExclude[] excludedAssociations, String alias) {
 		if (excludedAssociations == null || excludedAssociations.length == 0) {
@@ -408,6 +414,7 @@ public class DomainModelBuilder {
 
 	/**
 	 * @return
+     *      Classes in a project
 	 * @throws ApplicationException
 	 */
 	private UMLClassMetadata[] getProjectClasses(Project proj, DetachedCriteria classCriteria)
@@ -439,6 +446,7 @@ public class DomainModelBuilder {
 	 * @param associations
 	 *            The asociations to include in the domain model
 	 * @return
+     *      The domain model
 	 * @throws DomainModelGenerationException
 	 * @throws RemoteException
 	 */
@@ -677,30 +685,6 @@ public class DomainModelBuilder {
 			+ ((assoc.getIsBidirectional() != null && assoc.getIsBidirectional().booleanValue()) ? "<" : "") + " -->"
 			+ assoc.getTargetRoleName() + "(" + assoc.getTargetLowCardinality() + "..."
 			+ assoc.getTargetHighCardinality() + ")";
-
-	}
-
-
-	private static String associationToString(UMLAssociation assoc) {
-		UMLAssociationEdge source = null;
-		if (assoc.getSourceUMLAssociationEdge() == null
-			|| assoc.getSourceUMLAssociationEdge().getUMLAssociationEdge() == null) {
-			source = new UMLAssociationEdge();
-		} else {
-			source = assoc.getSourceUMLAssociationEdge().getUMLAssociationEdge();
-		}
-
-		UMLAssociationEdge target = null;
-		if (assoc.getTargetUMLAssociationEdge() == null
-			|| assoc.getTargetUMLAssociationEdge().getUMLAssociationEdge() == null) {
-			target = new UMLAssociationEdge();
-		} else {
-			target = assoc.getTargetUMLAssociationEdge().getUMLAssociationEdge();
-		}
-
-		return source.getRoleName() + "(" + source.getMinCardinality() + "..." + source.getMaxCardinality() + ")"
-			+ ((assoc.isBidirectional()) ? "<" : "") + " -->" + target.getRoleName() + "(" + target.getMinCardinality()
-			+ "..." + target.getMaxCardinality() + ")";
 
 	}
 
