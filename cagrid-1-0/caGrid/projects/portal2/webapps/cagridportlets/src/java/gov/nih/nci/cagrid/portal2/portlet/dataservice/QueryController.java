@@ -62,13 +62,10 @@ public class QueryController extends SimpleFormController implements Initializin
 	
     protected Object formBackingObject(PortletRequest request)
     		throws Exception {
-    	//If 
+    	
     	String tempurl = (String) request.getPortletSession().getAttribute("gridserviceurl");
     	String tempcqlquery = (String) request.getPortletSession().getAttribute("gridservicecqlquery");
-    	if(null!=tempurl && tempurl.length()>0){
-    		//url is available.
-    	}
-    	
+    	    	
     	return this.dataServiceManager.getUrlQueryObject();
 	}
     

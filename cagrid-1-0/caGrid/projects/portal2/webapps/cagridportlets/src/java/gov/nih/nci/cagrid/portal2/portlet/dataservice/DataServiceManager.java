@@ -51,10 +51,6 @@ public class DataServiceManager {
 		CQLQueryResults result = null;
 		result = client.query(query);
 
-		
-		/*XMLOutputter opf = new XMLOutputter();
-		opf.output((List) result.getTypeDesc(), null);*/
-		
 		//Convert Result to String
 		StringWriter writer = new StringWriter();
 		try{
