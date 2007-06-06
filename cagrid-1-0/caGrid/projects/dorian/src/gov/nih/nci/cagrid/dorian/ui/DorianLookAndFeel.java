@@ -95,5 +95,9 @@ public class DorianLookAndFeel extends LookAndFeel {
 	public final static ImageIcon getAttributesIcon() {
 		return IconUtils.loadIcon("/edit-paste.png");
 	}
+	
+	public final static ImageIcon getHostsIcon() {
+		return IconUtils.loadIcon("/network-idle.png");
+	}
 
 }

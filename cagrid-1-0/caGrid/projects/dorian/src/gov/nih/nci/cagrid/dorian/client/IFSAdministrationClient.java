@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
@@ -280,6 +282,26 @@ public class IFSAdministrationClient {
 			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		try {
 			return client.getAdmins();
+		} catch (DorianInternalFault gie) {
+			throw gie;
+		} catch (PermissionDeniedFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			DorianFault fault = new DorianFault();
+			fault.setFaultString(Utils.getExceptionMessage(e));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+	public HostCertificateRecord[] findHostCertificates(
+			HostCertificateFilter filter) throws DorianFault,
+			DorianInternalFault, PermissionDeniedFault {
+		try {
+			return client.findHostCertificates(filter);
 		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {

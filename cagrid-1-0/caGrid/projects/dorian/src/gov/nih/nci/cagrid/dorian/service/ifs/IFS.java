@@ -669,7 +669,7 @@ public class IFS extends LoggingObject implements Publisher {
 			return um.getUser(gridId);
 		} catch (InvalidUserFault f) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault.setFaultString("You are NOT an Administrator!!!");
+			fault.setFaultString("You are not a valid user!!!");
 			throw fault;
 		}
 	}

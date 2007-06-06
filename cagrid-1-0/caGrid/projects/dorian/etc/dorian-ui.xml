@@ -79,6 +79,17 @@
                     </dimensions>
                 </component>
                 <component>
+                    <title>Host Certificate Management</title>
+                    <description>Manage Host Certificates</description>
+                    <classname>gov.nih.nci.cagrid.dorian.ui.ifs.HostCertificatesWindow</classname>
+                    <icon>/network-idle.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                        <width>700</width>
+                        <height>550</height>
+                    </dimensions>
+                </component>
+                <component>
                     <title>Trusted Identity Provider(s)</title>
                     <description>Trusted Identity Provider(s)</description>
                     <classname>gov.nih.nci.cagrid.dorian.ui.ifs.TrustedIdPsWindow</classname>
