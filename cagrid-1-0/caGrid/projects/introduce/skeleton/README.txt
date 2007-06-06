@@ -10,7 +10,7 @@ Prerequisits:
 Java 1.5 and JAVA_HOME env defined
 Ant 1.6.5 and ANT_HOME env defined
 Globus 4.0.3 installed and GLOBUS_LOCATION env defined
-(optional)Tomcat 4.0.28 installed and "CATALINA_HOME" env defined
+(optional)Tomcat 5.0.28 installed and "CATALINA_HOME" env defined with globus deployed to it
 
 To Build:
 =======================================

@@ -85,6 +85,8 @@ add a .cvsignore file to generated skeletons that includes the gar.  my right mo
 
 ============================ D O N E ================================================================
 
+on some smaller resolution screen when the "do you want to upgrade" pop up comes up, you can not see some of the buttons.....
+
 when adding a service context, if there is an error the screen is already gone and not fixable before the service is added and than not modifyable
 
 Fix the caDSR var name in the extensions, i have a typo
