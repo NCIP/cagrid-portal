@@ -5,8 +5,10 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateStatus;
 import javax.swing.JComboBox;
 
 public class HostCertificateStatusComboBox extends JComboBox {
-	public HostCertificateStatusComboBox() {
-		this.addItem("");
+	public HostCertificateStatusComboBox(boolean includeBlank) {
+		if (includeBlank) {
+			this.addItem("");
+		}
 		this.addItem(HostCertificateStatus.Active);
 		this.addItem(HostCertificateStatus.Pending);
 		this.addItem(HostCertificateStatus.Rejected);

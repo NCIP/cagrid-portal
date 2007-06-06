@@ -30,9 +30,11 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: HostCertificatesWindow.java,v 1.1 2007-06-06 19:27:54 langella Exp $
+ * @version $Id: HostCertificatesWindow.java,v 1.1 2007/06/06 19:27:54 langella
+ *          Exp $
  */
-public class HostCertificatesWindow extends ApplicationComponent {
+public class HostCertificatesWindow extends ApplicationComponent implements
+		HostCertificateLauncher {
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -109,6 +111,20 @@ public class HostCertificatesWindow extends ApplicationComponent {
 		this.setTitle("Host Certificate Management");
 		this.setFrameIcon(DorianLookAndFeel.getHostsIcon());
 		this.setSize(500, 500);
+
+	}
+
+	public void viewHostCertificate(HostCertificateRecord record) {
+		try {
+			HostCertificateWindow window = new HostCertificateWindow(
+					getSession().getServiceURI(), getSession().getCredential(),
+					getHostCertificatesTable().getSelectedHostCertificate(),
+					true);
+			GridApplication.getContext().addApplicationComponent(window, 600,
+					575);
+		} catch (Exception e) {
+			ErrorDialog.showError(e);
+		}
 
 	}
 
@@ -228,7 +244,7 @@ public class HostCertificatesWindow extends ApplicationComponent {
 	 */
 	private HostCertificatesTable getHostCertificatesTable() {
 		if (hostCertificatesTable == null) {
-			hostCertificatesTable = new HostCertificatesTable();
+			hostCertificatesTable = new HostCertificatesTable(this);
 		}
 		return hostCertificatesTable;
 	}
@@ -262,8 +278,8 @@ public class HostCertificatesWindow extends ApplicationComponent {
 							Runner runner = new Runner() {
 								public void execute() {
 									try {
-										getHostCertificatesTable()
-												.doubleClick();
+										viewHostCertificate(getHostCertificatesTable()
+												.getSelectedHostCertificate());
 									} catch (Exception e) {
 										ErrorDialog.showError(e);
 									}
@@ -617,7 +633,7 @@ public class HostCertificatesWindow extends ApplicationComponent {
 	 */
 	private HostCertificateStatusComboBox getStatus() {
 		if (status == null) {
-			status = new HostCertificateStatusComboBox();
+			status = new HostCertificateStatusComboBox(true);
 		}
 		return status;
 	}
@@ -641,6 +657,10 @@ public class HostCertificatesWindow extends ApplicationComponent {
 	 */
 	private JPanel getOwnerPanel() {
 		if (ownerPanel == null) {
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.gridx = 1;
+			gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints17.gridy = 0;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			gridBagConstraints16.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints16.gridx = 0;
@@ -650,7 +670,7 @@ public class HostCertificatesWindow extends ApplicationComponent {
 			ownerPanel = new JPanel();
 			ownerPanel.setLayout(new GridBagLayout());
 			ownerPanel.add(getOwner(), gridBagConstraints16);
-			ownerPanel.add(getFindUser(), new GridBagConstraints());
+			ownerPanel.add(getFindUser(), gridBagConstraints17);
 		}
 		return ownerPanel;
 	}

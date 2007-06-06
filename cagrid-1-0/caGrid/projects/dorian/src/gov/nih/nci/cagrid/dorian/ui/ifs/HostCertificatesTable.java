@@ -13,7 +13,7 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: HostCertificatesTable.java,v 1.1 2007-06-06 19:27:54 langella Exp $
+ * @version $Id: HostCertificatesTable.java,v 1.2 2007-06-06 20:55:45 langella Exp $
  */
 public class HostCertificatesTable extends GrapeBaseTable {
 	public final static String HOST_CERTIFICATE_RECORD = "record";
@@ -23,9 +23,12 @@ public class HostCertificatesTable extends GrapeBaseTable {
 	public final static String HOST = "Host";
 
 	public final static String STATUS = "Status";
+	
+	private HostCertificateLauncher launcher;
 
-	public HostCertificatesTable() {
+	public HostCertificatesTable(HostCertificateLauncher launcher) {
 		super(createTableModel());
+		this.launcher = launcher;
 		TableColumn c = this.getColumn(HOST_CERTIFICATE_RECORD);
 		c.setMaxWidth(0);
 		c.setMinWidth(0);
@@ -83,7 +86,7 @@ public class HostCertificatesTable extends GrapeBaseTable {
 	}
 
 	public void doubleClick() throws Exception {
-
+		launcher.viewHostCertificate(getSelectedHostCertificate());
 	}
 
 	public void singleClick() throws Exception {
