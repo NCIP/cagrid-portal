@@ -141,7 +141,10 @@ public class DataServiceConstants {
     public static final QName DATA_SERVICE_AUDITORS_QNAME = new QName(DATA_SERVICE_AUDITING_NAMESPACE, DATA_SERVICE_AUDITORS_NAME);
     public static final String DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY = DATA_SERVICE_PARAMS_PREFIX + "_auditorsConfigFile";
     public static final String DATA_SERVICE_AUDITORS_CONFIG_FILE_NAME = "dataServiceAuditorsConfiguration.xml";
-        
+    
+    // Local SDK api related
+    public static final String LOCAL_SDK_CONF_JAR_POSTFIX = "_LocalSdkConfiguration";
+    
 	private DataServiceConstants() {
 		
 	}

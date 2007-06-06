@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created May 2, 2006 
- * @version $Id: HQLCoreQueryProcessor.java,v 1.7 2007-06-05 17:04:08 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessor.java,v 1.8 2007-06-06 19:44:50 dervin Exp $ 
  */
 public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
     // parameter which determines the remote appservice URL
@@ -60,10 +60,6 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
     public static final String USE_LOCAL_APPSERVICE = "useLocalAppservice";
     public static final String USE_LOCAL_APPSERVICE_DEFAULT = String.valueOf(false);
     
-    // location of the local API configuration directory
-    public static final String LOCAL_APPSERVICE_CONF_DIR = "localAppserviceConfigDir";
-    public static final String LOCAL_APPSERVICE_CONF_DIR_DEFAULT = "";
-	
 	private static Logger LOG = Logger.getLogger(HQLCoreQueryProcessor.class);
 	
 	private ApplicationService coreService;
@@ -262,6 +258,7 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
             boolean useLocal = Boolean.valueOf(
                 getConfiguredParameters().getProperty(USE_LOCAL_APPSERVICE)).booleanValue();
             if (useLocal) {
+                // TODO: call my specialized loader
                 coreService = ApplicationServiceProvider.getLocalInstance();
             } else {
                 // remote, http-tunnled API
@@ -330,7 +327,6 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 		params.setProperty(CSM_CONTEXT_NAME, "");
 		params.setProperty(CASE_INSENSITIVE_QUERYING, USE_CASE_INSENSITIVE_DEFAULT);
         params.setProperty(USE_LOCAL_APPSERVICE, USE_LOCAL_APPSERVICE_DEFAULT);
-        params.setProperty(LOCAL_APPSERVICE_CONF_DIR, LOCAL_APPSERVICE_CONF_DIR_DEFAULT);
 		return params;
 	}
     
@@ -340,7 +336,6 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
         // specified relative to the service's etc directory
         HashSet<String> fromEtc = new HashSet();
         fromEtc.add(CSM_CONFIGURATION_FILENAME);
-        fromEtc.add(LOCAL_APPSERVICE_CONF_DIR);
         return fromEtc;
     }
 }

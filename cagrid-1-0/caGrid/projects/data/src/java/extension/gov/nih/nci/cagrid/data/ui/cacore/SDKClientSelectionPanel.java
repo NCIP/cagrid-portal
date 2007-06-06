@@ -49,7 +49,7 @@ import javax.swing.ScrollPaneConstants;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.1 2007-06-06 17:54:37 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.2 2007-06-06 19:44:22 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String[] LOCAL_CLIENT_REQUIRED_FILES = new String[] {
@@ -64,7 +64,6 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String LOCAL_CONFIG_COPIED_DIR = "localSdkConfig";
     
     // from HQLCoreQueryProcessor...
-    public static final String LOCAL_APPSERVICE_CONF_DIR = "localAppserviceConfigDir";
     public static final String USE_LOCAL_APPSERVICE = "useLocalAppservice";
 
     private JLabel qpJarLabel = null;
@@ -232,19 +231,6 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                     getLocalRadioButton().setSelected(true);
                 } else {
                     getRemoteApiRadioButton().setSelected(true);
-                }
-            }
-            // local API config dir
-            getLocalConfDirTextField().setText("");
-            if (localApi) {
-                if (CommonTools.servicePropertyExists(getServiceInformation().getServiceDescriptor(), 
-                    DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + LOCAL_APPSERVICE_CONF_DIR)) {
-                    String configDir = CommonTools.getServicePropertyValue(
-                        getServiceInformation().getServiceDescriptor(), 
-                        DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + LOCAL_APPSERVICE_CONF_DIR);
-                    configDir = getServiceInformation().getBaseDirectory().getAbsolutePath() 
-                        + File.separator + "etc" + File.separator + configDir;
-                    getLocalConfDirTextField().setText(configDir);
                 }
             }
             
@@ -501,20 +487,19 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                         String dir = ResourceManager.promptDir(null);
                         if (dir != null) {
                             if (isValidConfDir(dir)) {
-                                // copy the directory into the service
-                                File confOutDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-                                    + File.separator + "etc" + File.separator + LOCAL_CONFIG_COPIED_DIR);
-                                if (confOutDir.exists()) {
-                                    // delete the old directory
-                                    Utils.deleteDir(confOutDir);
+                                // create the name of the configuration jar
+                                File configJarFile = new File(
+                                    getServiceInformation().getBaseDirectory().getAbsolutePath() 
+                                    + File.separator + "lib" + File.separator 
+                                    + getServiceInformation().getServices().getService(0).getName() 
+                                    + DataServiceConstants.LOCAL_SDK_CONF_JAR_POSTFIX + ".jar");
+                                // remove it if it exists
+                                if (configJarFile.exists()) {
+                                    configJarFile.delete();
                                 }
-                                confOutDir.mkdirs();
-                                Utils.copyDirectory(new File(dir), confOutDir);
-                                // set the appropriate service property
-                                CommonTools.setServiceProperty(
-                                    getServiceInformation().getServiceDescriptor(), 
-                                    DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + LOCAL_APPSERVICE_CONF_DIR,
-                                    confOutDir.getName(), true);
+                                // jar up the conf dir
+                                File confDir = new File(dir);
+                                JarUtilities.jarDirectory(confDir, configJarFile);
                                 // set the GUI's text field
                                 getLocalConfDirTextField().setText(dir);
                             } else {
@@ -584,9 +569,11 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     
     private void updateNextEnabledState() {
         setNextEnabled(false);
-        String clientJar = getClientJarTextField().getText();
+        File clientJarFile = new File(
+            getServiceInformation().getBaseDirectory().getAbsolutePath() 
+            + File.separator + "lib" + getClientJarTextField().getText());
         try {
-            if (clientJar.length() != 0 || isValidClientJar(clientJar)) {
+            if (clientJarFile.exists() || isValidClientJar(clientJarFile.getAbsolutePath())) {
                 setNextEnabled(true);
                 if (getLocalRadioButton().isSelected()) {
                     String confDir = getLocalConfDirTextField().getText();
