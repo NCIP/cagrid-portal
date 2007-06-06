@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="Introduce Developer Modified Build File" basedir=".">
+<project name="Developer Modified Build File" basedir=".">
 	<!-- ============================================================== -->
 	<!-- This file is designed to allow the developer to extend the     -->
 	<!-- build process without having to edit the master build.xml      -->
