@@ -49,38 +49,18 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="lib" path="ext/lib/antlr-2.7.6rc1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/asm.jar"/>
-	<classpathentry kind="lib" path="ext/lib/c3p0-0.8.5.2.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cacore32-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cglib-2.1.3.jar"/>
-	<classpathentry kind="lib" path="ext/lib/clm.jar"/>
-	<classpathentry kind="lib" path="ext/lib/commons-dbcp-1.2.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/commons-lang-1.0.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/csmapi.jar"/>
-	<classpathentry kind="lib" path="ext/lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ehcache-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="ext/lib/grouper.jar"/>
-	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
-	<classpathentry kind="lib" path="ext/lib/jta.jar"/>
-	<classpathentry kind="lib" path="ext/lib/jtds-1.2.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.1.11-bin.jar"/>
-	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
-	<classpathentry kind="lib" path="ext/lib/spring-richclient-full-0.1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/subject-0.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-authz-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-cql.jar"/>
@@ -92,16 +72,14 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-upgrades.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-utils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-validation.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridca.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-security.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
+	<classpathentry kind="lib" path="ext/lib/sdkClient/asm.jar"/>
+	<classpathentry kind="lib" path="ext/lib/sdkClient/cacore32-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/sdkClient/cglib-2.1.3.jar"/>
+	<classpathentry kind="lib" path="ext/lib/sdkClient/hibernate3.jar"/>
+	<classpathentry kind="lib" path="ext/lib/sdkClient/spring.jar"/>
+	<classpathentry kind="lib" path="ext/lib/sdkClient/spring-richclient-full-0.1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/authz/caGrid-1.1-authz-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/authz/csmapi.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
