@@ -15,3 +15,5 @@ III.	CQL
 	B.	Potential to reuse HQL translation process
 	C.	Predicate value types
 	
+	
+To use the "local" SDK API, the conf directory from an application's thick-client output directory must be turned into a JAR file and placed on the service's classpath at runtime.
