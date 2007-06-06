@@ -2,10 +2,17 @@ package gov.nih.nci.cagrid.common;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -58,6 +65,31 @@ public class JarUtilities {
 		jarOut.close();
 		return bytes.toByteArray();
 	}
+    
+    
+    public static void jarDirectory(File dir, File jarFile) throws IOException {
+        JarOutputStream jarOut = new JarOutputStream(new FileOutputStream(jarFile));
+        List files = Utils.recursiveListFiles(dir, new FileFilter() {
+            public boolean accept(File name) {
+                return true;
+            }
+        });
+        int baseDirNameLength = dir.getAbsolutePath().length();
+        Iterator fileIter = files.iterator();
+        while (fileIter.hasNext()) {
+            File fileToAdd = (File) fileIter.next();
+            String relativeFileName = fileToAdd.getAbsolutePath().substring(baseDirNameLength + 1);
+            JarEntry entry = new JarEntry(relativeFileName);
+            jarOut.putNextEntry(entry);
+            if (!fileToAdd.isDirectory()) {
+                BufferedInputStream fileInput = new BufferedInputStream(new FileInputStream(fileToAdd));
+                copyStreams(fileInput, jarOut);
+                fileInput.close();
+            }
+        }
+        jarOut.flush();
+        jarOut.close();
+    }
 	
 	
 	private static byte[] streamToBytes(InputStream stream) throws IOException {
@@ -72,4 +104,20 @@ public class JarUtilities {
 		}
 		return bytes;
 	}
+    
+    
+    /**
+     * Copies the contents of an input stream into an output stream
+     * 
+     * @param input
+     * @param output
+     * @throws IOException
+     */
+    private static void copyStreams(InputStream input, OutputStream output) throws IOException {
+        byte[] temp = new byte[8192];
+        int read = -1;
+        while ((read = input.read(temp)) != -1) {
+            output.write(temp, 0, read);
+        }
+    }
 }
