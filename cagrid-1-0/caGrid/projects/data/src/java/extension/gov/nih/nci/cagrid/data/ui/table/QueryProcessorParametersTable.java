@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
@@ -39,7 +40,7 @@ public class QueryProcessorParametersTable extends JTable {
 	private ExtensionTypeExtensionData extData;
 	private ServiceInformation serviceInfo;
 	private JTextField editorTextField = null;
-
+    private Set<String> propertiesFromEtc = null;
 
 	public QueryProcessorParametersTable(ExtensionTypeExtensionData extensionData, ServiceInformation serviceInfo) {
 		super(createModel());
@@ -97,14 +98,15 @@ public class QueryProcessorParametersTable extends JTable {
 				CQLQueryProcessor proc = (CQLQueryProcessor) selected.newInstance();
 				// get the default parameters
 				Properties defaultProps = proc.getRequiredParameters();
+                // get the parameters required to be from etc
+                this.propertiesFromEtc = proc.getPropertiesFromEtc();
 				// get any configured parameters
 				Properties configuredProps = new Properties();
 				ServiceProperties serviceProps = serviceInfo.getServiceProperties();
-				if (serviceProps != null) {
-					for (int i = 0; (serviceProps.getProperty() != null) && (i < serviceProps.getProperty().length); i++) {
-						ServicePropertiesProperty property = serviceProps.getProperty(i);
-						String rawKey = property.getKey();
-						if (rawKey.startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
+				if (serviceProps != null && serviceProps.getProperty() != null) {
+                    for (ServicePropertiesProperty property : serviceProps.getProperty()) {
+                        String rawKey = property.getKey();
+                        if (rawKey.startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
 							String key = rawKey.substring(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.length());
 							configuredProps.setProperty(key, property.getValue());
 						}
@@ -204,7 +206,9 @@ public class QueryProcessorParametersTable extends JTable {
 			String key = (String) getValueAt(i, 0);
 			String userVal = (String) getValueAt(i, 2);
 			String prefixedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + key;
-			CommonTools.setServiceProperty(serviceInfo.getServiceDescriptor(), prefixedKey, userVal, false);
+            boolean isFromEtc = propertiesFromEtc != null && propertiesFromEtc.contains(key);
+			CommonTools.setServiceProperty(
+                serviceInfo.getServiceDescriptor(), prefixedKey, userVal, isFromEtc);
 		}
 	}
 
