@@ -42,11 +42,11 @@
                     <title>Request Host Certificate</title>
                     <description>Allows a user to request a host ceritficate from Dorian.</description>
                     <classname>gov.nih.nci.cagrid.dorian.ui.ifs.RequestHostCertificateWindow</classname>
-                    <icon>/contact-new.png</icon>
+                    <icon>/computer.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
                         <width>500</width>
-                        <height>300</height>
+                        <height>325</height>
                     </dimensions>
                 </component>
                 <component>

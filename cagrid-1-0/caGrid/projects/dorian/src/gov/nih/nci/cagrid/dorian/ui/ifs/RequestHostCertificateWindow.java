@@ -2,6 +2,9 @@ package gov.nih.nci.cagrid.dorian.ui.ifs;
 
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
+import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.ui.SessionPanel;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
@@ -10,11 +13,14 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.File;
+import java.net.InetAddress;
 import java.security.KeyPair;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -54,6 +60,14 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
 
 	private JButton request = null;
 
+	private JPanel locationPanel = null;
+
+	private JLabel jLabel2 = null;
+
+	private JTextField directory = null;
+
+	private JButton browse = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -68,9 +82,10 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(400, 300);
+		this.setSize(400, 325);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Request Host Certificate");
+		this.setFrameIcon(DorianLookAndFeel.getHostIcon());
 	}
 
 	/**
@@ -147,6 +162,14 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
 	 */
 	private JPanel getRequestPanel() {
 		if (requestPanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.gridx = 0;
+			gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints7.gridwidth = 2;
+			gridBagConstraints7.weightx = 1.0D;
+			gridBagConstraints7.fill = GridBagConstraints.BOTH;
+			gridBagConstraints7.weighty = 1.0D;
+			gridBagConstraints7.gridy = 2;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridy = 1;
@@ -184,6 +207,7 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
 			requestPanel.add(getHost(), gridBagConstraints2);
 			requestPanel.add(jLabel1, gridBagConstraints4);
 			requestPanel.add(getStrength(), gridBagConstraints5);
+			requestPanel.add(getLocationPanel(), gridBagConstraints7);
 		}
 		return requestPanel;
 	}
@@ -196,6 +220,11 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
 	private JTextField getHost() {
 		if (host == null) {
 			host = new JTextField();
+			try {
+				host.setText(InetAddress.getLocalHost().getHostName());
+			} catch (Exception e) {
+
+			}
 		}
 		return host;
 	}
@@ -296,7 +325,7 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
 	private void requestHostCertificate() {
 		this.getRequest().setEnabled(false);
 		try {
-			if(Utils.clean(getHost().getText())==null){
+			if (Utils.clean(getHost().getText()) == null) {
 				throw new Exception("You must specify a host.");
 			}
 			int stren = Integer.valueOf((String) getStrength()
@@ -304,8 +333,20 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
 			int event = getProgress().startEvent("Generating key pair.....");
 			KeyPair pair = KeyUtil.generateRSAKeyPair(stren);
 			getProgress().stopEvent(event, "Successfully generated key pair.");
-			
-		
+			event = getProgress().startEvent(
+					"Submitting certificate request to Dorian....");
+			IFSUserClient client = getSessionPanel()
+					.getUserClientWithCredentials();
+			HostCertificateRecord record = client.requestHostCertificate(
+					getHost().getText(), pair.getPublic());
+			getProgress().stopEvent(event,
+					"Successfully sent certificate request to Dorian.");
+			GridApplication.getContext().addApplicationComponent(
+					new RequestHostCertificateResponseWindow(record, pair
+							.getPrivate(), new File(directory.getText())), 500,
+					300);
+			dispose();
+
 		} catch (Exception e) {
 			getProgress().stopAll("Error");
 			ErrorDialog.showError(e);
@@ -314,4 +355,82 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
 
 	}
 
+	/**
+	 * This method initializes locationPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getLocationPanel() {
+		if (locationPanel == null) {
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.gridx = 1;
+			gridBagConstraints10.anchor = GridBagConstraints.WEST;
+			gridBagConstraints10.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridy = 1;
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints9.gridx = 0;
+			gridBagConstraints9.gridy = 1;
+			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints9.anchor = GridBagConstraints.WEST;
+			gridBagConstraints9.weightx = 1.0;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints8.gridwidth = 2;
+			gridBagConstraints8.gridy = 0;
+			jLabel2 = new JLabel();
+			jLabel2.setText("Specify Directory to Write Credentials");
+			locationPanel = new JPanel();
+			locationPanel.setLayout(new GridBagLayout());
+			locationPanel.add(jLabel2, gridBagConstraints8);
+			locationPanel.add(getDirectory(), gridBagConstraints9);
+			locationPanel.add(getBrowse(), gridBagConstraints10);
+		}
+		return locationPanel;
+	}
+
+	/**
+	 * This method initializes directory
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getDirectory() {
+		if (directory == null) {
+			directory = new JTextField();
+			directory.setEditable(false);
+			directory.setText(Utils.getCaGridUserHome().getAbsolutePath()
+					+ File.separator + "certificates");
+		}
+		return directory;
+	}
+
+	/**
+	 * This method initializes browse
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getBrowse() {
+		if (browse == null) {
+			browse = new JButton();
+			browse.setText("Browse");
+			final RequestHostCertificateWindow window = this;
+			browse.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					JFileChooser fc = new JFileChooser();
+					fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					int returnVal = fc.showSaveDialog(window);
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
+						try {
+							directory.setText(fc.getSelectedFile()
+									.getAbsolutePath());
+						} catch (Exception ex) {
+							ErrorDialog.showError(ex);
+						}
+					}
+				}
+			});
+		}
+		return browse;
+	}
 }

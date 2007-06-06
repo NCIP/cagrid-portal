@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.ui;
 
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
+import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 
@@ -110,6 +111,13 @@ public class SessionPanel extends JPanel {
 		GlobusCredential proxyCred = getCred().getSelectedProxy();
 		IFSAdministrationClient client = new IFSAdministrationClient(
 				serviceUrl, proxyCred);
+		return client;
+	}
+
+	public IFSUserClient getUserClientWithCredentials() throws Exception {
+		String serviceUrl = getService().getSelectedService();
+		GlobusCredential proxyCred = getCred().getSelectedProxy();
+		IFSUserClient client = new IFSUserClient(serviceUrl, proxyCred);
 		return client;
 	}
 
