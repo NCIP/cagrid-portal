@@ -729,9 +729,6 @@
             <artifact refid="servicesecurity.jars" />
             <artifact refid="security.metadata.schemas" />
         </resolveDependencies>
-        <resolveDependencies extdir="${projects.dir}/wsEnum/ext/test">
-            <artifact refid="caCORE.jars" />
-        </resolveDependencies>
         <ant dir="${projects.dir}/wsEnum" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
