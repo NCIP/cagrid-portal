@@ -36,6 +36,9 @@
 	<!-- libraries -->
 	<property name="lib.dir" location="${basedir}/lib"/>
 	<property name="ext.lib.dir" location="${basedir}/ext/lib"/>
+	<property name="ext.client.lib.dir" location="${basedir}/ext/lib/sdkClient"/>
+	<property name="ext.thickclient.lib.dir" location="${basedir}/ext/lib/sdkThickClient"/>
+	<property name="ext.authz.lib.dir" location="${basedir}/ext/lib/authz"/>
 	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib"/>
 	
 	<!-- testing stuff -->
@@ -46,44 +49,7 @@
 	<property name="test.logs.dir" location="${test.dir}/logs" />
 	<property name="test.project.jar" location="${build.jars.dir}/${project.jar.prefix}tests.jar" />
 	<import file="test\test.xml" />
-	
-	<!-- =============================================================== -->
-	<!-- The Test Classpath                                              -->
-	<!-- =============================================================== -->
-	<path id="test.classpath">
-		<!-- 
-		<pathelement path="${basedir}/ext/resources"/>
-		-->
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${ext.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${test.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${ext.test.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${globus.dir}/lib">
-			<include name="**/*.jar" />
-		</fileset>
-		<pathelement location="${build.dest}"/>
-	</path>
-	
-	<!-- check for java 1.5 -->
-	<condition property="isJDK1.5">
-		<and>
-			<equals arg1="${ant.java.version}" arg2="1.5" />
-		</and>
-	</condition>
-	
-	<!-- fail the build gracefully if JDK < 1.5 is used -->
-	<target name="checkJDK" unless="isJDK1.5">
-		<fail message="JDK with version &lt; 1.5 is required to build this project!" />
-	</target>
-	
+
 	<!-- creates output directories -->
     <target name="init">
         <mkdir dir="${build.dir}" />
@@ -93,7 +59,7 @@
     </target>
 
 	<!-- compiles the query processor source code -->
-	<target name="compile" depends="init, checkJDK">
+	<target name="compile" depends="init">
 		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}" source="${java.source}">
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -101,6 +67,12 @@
 				</fileset>
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${ext.client.lib.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${ext.authz.lib.dir}">
+					<include name="**/*.jar"/>
 				</fileset>
 				<fileset dir="${globus.dir}/lib">
                     <include name="*.jar" />
@@ -120,6 +92,9 @@
 				</fileset>
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${ext.client.lib.dir}">
+					<include name="**/*.jar"/>
 				</fileset>
 				<fileset dir="${ext.test.lib.dir}">
 					<include name="*.jar"/>
