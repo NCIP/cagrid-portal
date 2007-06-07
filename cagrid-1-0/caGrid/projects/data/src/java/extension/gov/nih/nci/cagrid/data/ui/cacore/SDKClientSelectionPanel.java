@@ -49,7 +49,7 @@ import javax.swing.ScrollPaneConstants;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.2 2007-06-06 19:44:22 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.3 2007-06-07 14:37:56 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String[] LOCAL_CLIENT_REQUIRED_FILES = new String[] {
@@ -560,6 +560,8 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                     CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
                         DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_LOCAL_APPSERVICE, 
                         String.valueOf(enable), false);
+                    // decide if the next button should be enabled
+                    updateNextEnabledState();
                 }
             });
         }
@@ -571,7 +573,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         setNextEnabled(false);
         File clientJarFile = new File(
             getServiceInformation().getBaseDirectory().getAbsolutePath() 
-            + File.separator + "lib" + getClientJarTextField().getText());
+            + File.separator + "lib" + File.separator + getClientJarTextField().getText());
         try {
             if (clientJarFile.exists() || isValidClientJar(clientJarFile.getAbsolutePath())) {
                 setNextEnabled(true);

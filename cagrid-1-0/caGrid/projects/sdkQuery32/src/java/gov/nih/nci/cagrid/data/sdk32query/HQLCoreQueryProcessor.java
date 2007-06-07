@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created May 2, 2006 
- * @version $Id: HQLCoreQueryProcessor.java,v 1.8 2007-06-06 19:44:50 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessor.java,v 1.9 2007-06-07 14:36:18 dervin Exp $ 
  */
 public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
     // parameter which determines the remote appservice URL
@@ -258,7 +258,6 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
             boolean useLocal = Boolean.valueOf(
                 getConfiguredParameters().getProperty(USE_LOCAL_APPSERVICE)).booleanValue();
             if (useLocal) {
-                // TODO: call my specialized loader
                 coreService = ApplicationServiceProvider.getLocalInstance();
             } else {
                 // remote, http-tunnled API
