@@ -35,12 +35,14 @@ Upgrade Cycle
 
 To Do:  
 
+need to make namespace exist policy a dropdown in the config so user knows what the options are
+
 Add notification support to any resource
 
 upgrading is not really dont until sync is ran, so in modification gui make sure the user
 is notified that it is not complete until they hit save.
 
-resource refactoring needs to be done completely (first pass done)
+resource refactoring needs to be done completely (first pass done still need to combine into one)
 
 in the types file importer check the support for includes, and imports and check on whether it works when importing and including from ../
 
@@ -50,8 +52,6 @@ even though it is wrong ang then pops up an error dialog.  It should be validati
 make gui work one service at a time
 
 make deployer deploy remotely
-
-when updating introduce software there will be a problem with the files in the users home space that will need to also be updated.
 
 need to validate soapfix
 
