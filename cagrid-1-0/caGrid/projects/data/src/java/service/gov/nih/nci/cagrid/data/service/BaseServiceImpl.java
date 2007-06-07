@@ -62,6 +62,8 @@ public abstract class BaseServiceImpl {
 	public BaseServiceImpl() throws RemoteException {
 		domainModelSearchedFor = false;
         initializeAuditors();
+        // force initialization of the query processor at creation
+        getCqlQueryProcessorInstance();
 	}
     
 	
