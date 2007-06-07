@@ -33,7 +33,7 @@ public interface WizardPane {
      * Called to initialize the step. This method will be called when the wizard
      * is first initialising. You should get a reference to the
      * {@link org.pietschy.wizard.WizardStep} in order to call
-     * {@link org.pietschy.wizard.Wizar?dStep#setComplete(boolean) when the step is filled with enough information,
+     * {@link org.pietschy.wizard.WizardStep}#setComplete(boolean) when the step is filled with enough information,
      * and a reference to the model in order to update it on {òlink
      * #applyState}.
      * 
