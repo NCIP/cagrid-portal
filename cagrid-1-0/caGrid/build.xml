@@ -839,6 +839,7 @@
     </target>
     <target name="build-workflow/WorkflowFactoryService" depends="configure-workflow/WorkflowFactoryService" description="Builds caGrid workflow">
         <resolveDependencies extdir="${projects.dir}/workflow/WorkflowFactoryService/ext">
+            <artifact refid="jdom.jars" />
             <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="core.test.jars" />
