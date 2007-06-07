@@ -49,6 +49,9 @@ TODO:
 37[D]: Make CQL Object Results iterator perform better by avoiding repeated object creation
 38[D]: Break appart DataServiceModificationPanel... it's 1700 lines long, and unweildy
 39[ ]: BDT Data Service's Grid FTP impl should give an option of a single large chunk or individual results per URL
+	-- Dependent on having 'a way' to create Grid FTP urls / resources
+40[ ]: Upgrade tests for an SDK-backed data service
+41[ ]: Upgrade tests for an Enumeration data service
 
 I = In Progress
 D = Done
