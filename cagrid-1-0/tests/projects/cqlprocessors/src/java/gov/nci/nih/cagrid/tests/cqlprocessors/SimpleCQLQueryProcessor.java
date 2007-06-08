@@ -9,9 +9,13 @@ import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
+import gov.nih.nci.cagrid.data.mapping.ClassToQname;
+import gov.nih.nci.cagrid.data.mapping.Mappings;
 import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
 
 import java.util.ArrayList;
+
+import javax.xml.namespace.QName;
 
 
 public class SimpleCQLQueryProcessor extends CQLQueryProcessor {
@@ -31,7 +35,14 @@ public class SimpleCQLQueryProcessor extends CQLQueryProcessor {
 				resultList.add(obj);
 			}
 			
-			return CQLResultsCreationUtil.createObjectResults(resultList, cqlQuery.getTarget().getName(),  null);
+            // the results creation util needs a class to QName mapping
+            Mappings mapping = new Mappings();
+            ClassToQname stringMap = new ClassToQname();
+            stringMap.setClassName(String.class.getName());
+            stringMap.setQname(new QName("http://www.w3.org/2001/XMLSchema", "string").toString());
+            mapping.setMapping(new ClassToQname[] {stringMap});
+            
+			return CQLResultsCreationUtil.createObjectResults(resultList, cqlQuery.getTarget().getName(),  mapping);
 		} catch (Exception t) {
 			System.out.println(t.getMessage());
 			t.printStackTrace();
