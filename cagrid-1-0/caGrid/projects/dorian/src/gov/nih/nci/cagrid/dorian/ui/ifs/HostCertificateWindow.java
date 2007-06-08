@@ -120,6 +120,10 @@ public class HostCertificateWindow extends ApplicationComponent {
 
 	private JButton update = null;
 
+	private JLabel jLabel4 = null;
+
+	private JTextField hostGridIdentity = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -162,6 +166,8 @@ public class HostCertificateWindow extends ApplicationComponent {
 				X509Certificate cert = CertUtil.loadCertificate(record
 						.getCertificate().getCertificateAsString());
 				getCredPanel().setCertificate(cert);
+				hostGridIdentity.setText(CertUtil.subjectToIdentity(cert
+						.getSubjectDN().getName()));
 				getSave().setEnabled(true);
 				getSave().setVisible(true);
 			} else {
@@ -407,6 +413,20 @@ public class HostCertificateWindow extends ApplicationComponent {
 	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints18.gridy = 5;
+			gridBagConstraints18.weightx = 1.0;
+			gridBagConstraints18.anchor = GridBagConstraints.WEST;
+			gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints18.gridx = 1;
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.gridx = 0;
+			gridBagConstraints15.anchor = GridBagConstraints.WEST;
+			gridBagConstraints15.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints15.gridy = 5;
+			jLabel4 = new JLabel();
+			jLabel4.setText("Host Grid Identity");
 			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
 			gridBagConstraints22.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints22.gridy = 4;
@@ -494,6 +514,8 @@ public class HostCertificateWindow extends ApplicationComponent {
 			jPanel1.add(getStatus(), gridBagConstraints14);
 			jPanel1.add(jLabel6, gridBagConstraints21);
 			jPanel1.add(getStrength(), gridBagConstraints22);
+			jPanel1.add(jLabel4, gridBagConstraints15);
+			jPanel1.add(getHostGridIdentity(), gridBagConstraints18);
 		}
 		return jPanel1;
 	}
@@ -900,6 +922,20 @@ public class HostCertificateWindow extends ApplicationComponent {
 			}
 		}
 		return update;
+	}
+
+	/**
+	 * This method initializes hostGridIdentity
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getHostGridIdentity() {
+		if (hostGridIdentity == null) {
+			hostGridIdentity = new JTextField();
+			hostGridIdentity.setEnabled(true);
+			hostGridIdentity.setEditable(false);
+		}
+		return hostGridIdentity;
 	}
 
 }

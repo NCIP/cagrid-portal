@@ -27,6 +27,7 @@ import gov.nih.nci.cagrid.dorian.service.PropertyManager;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.test.CA;
@@ -402,6 +403,69 @@ public class TestIFS extends TestCase {
 			} catch (PermissionDeniedFault f) {
 
 			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Exception occured:" + e.getMessage());
+		} finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testUpdateInvalidOwner() {
+		IFS ifs = null;
+		try {
+			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
+			IdentityFederationConfiguration conf = getConf(false);
+			IFSDefaults defaults = getDefaults();
+			defaults.setDefaultIdP(idp.getIdp());
+			ifs = new IFS(conf, db, props, ca, defaults);
+			String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
+				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
+			String adminGridId = UserManager.subjectToIdentity(adminSubject);
+			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			String host = "localhost";
+			HostCertificateRequest req = getHostCertificateRequest(host);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			try {
+				HostCertificateUpdate update = new HostCertificateUpdate();
+				update.setId(record.getId());
+				update.setOwner("invalid user");
+				ifs.updateHostCertificateRecord(adminGridId, update);
+				fail("Should have failed.");
+			} catch (InvalidHostCertificateFault f) {
+
+			}
+
+			IFSUser usr2 = createUser(ifs, adminGridId, idp, "user2");
+			usr2.setUserStatus(IFSUserStatus.Suspended);
+			ifs.updateUser(adminGridId, usr2);
+
+			try {
+				HostCertificateUpdate update = new HostCertificateUpdate();
+				update.setId(record.getId());
+				update.setOwner(usr2.getGridId());
+				ifs.updateHostCertificateRecord(adminGridId, update);
+				fail("Should have failed.");
+			} catch (InvalidHostCertificateFault f) {
+
+			}
+
+			usr2.setUserStatus(IFSUserStatus.Active);
+			ifs.updateUser(adminGridId, usr2);
+
+			HostCertificateUpdate update = new HostCertificateUpdate();
+			update.setId(record.getId());
+			update.setOwner(usr2.getGridId());
+			ifs.updateHostCertificateRecord(adminGridId, update);
+			HostCertificateFilter f = new HostCertificateFilter();
+			f.setId(BigInteger.valueOf(record.getId()));
+			assertEquals(usr2.getGridId(), ifs.findHostCertificates(adminGridId, f)[0].getOwner());
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

@@ -54,6 +54,7 @@ import java.util.Map;
 
 import org.bouncycastle.asn1.x509.CRLReason;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -83,9 +84,9 @@ public class IFS extends LoggingObject implements Publisher {
 
 	private ThreadManager threadManager;
 
-	public IFS(IdentityFederationConfiguration conf, Database db,
-			PropertyManager properties, CertificateAuthority ca,
-			IFSDefaults defaults) throws DorianInternalFault {
+
+	public IFS(IdentityFederationConfiguration conf, Database db, PropertyManager properties, CertificateAuthority ca,
+		IFSDefaults defaults) throws DorianInternalFault {
 		this.conf = conf;
 		this.ca = ca;
 		threadManager = new ThreadManager();
@@ -97,8 +98,7 @@ public class IFS extends LoggingObject implements Publisher {
 			this.groupManager.addGroup(ADMINISTRATORS);
 			this.administrators = this.groupManager.getGroup(ADMINISTRATORS);
 			if (defaults.getDefaultUser() != null) {
-				this.administrators.addMember(defaults.getDefaultUser()
-						.getGridId());
+				this.administrators.addMember(defaults.getDefaultUser().getGridId());
 			} else {
 				logWarning("COULD NOT ADD DEFAULT USER TO ADMINISTRATORS GROUP, NO DEFAULT USER WAS FOUND!!!");
 			}
@@ -109,17 +109,17 @@ public class IFS extends LoggingObject implements Publisher {
 		publishCRL();
 	}
 
-	public IFSUserPolicy[] getUserPolicies(String callerGridIdentity)
-			throws DorianInternalFault, PermissionDeniedFault {
+
+	public IFSUserPolicy[] getUserPolicies(String callerGridIdentity) throws DorianInternalFault, PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		return tm.getAccountPolicies();
 	}
 
-	public String getUserIdVerifyTrustedIdP(X509Certificate idpCert,
-			String identity) throws DorianInternalFault, InvalidUserFault,
-			InvalidTrustedIdPFault, PermissionDeniedFault {
+
+	public String getUserIdVerifyTrustedIdP(X509Certificate idpCert, String identity) throws DorianInternalFault,
+		InvalidUserFault, InvalidTrustedIdPFault, PermissionDeniedFault {
 		if (identity == null) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("No credentials specified.");
@@ -129,33 +129,30 @@ public class IFS extends LoggingObject implements Publisher {
 		IFSUser usr = um.getUser(identity);
 		if (usr.getIdPId() != idp.getId()) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault
-					.setFaultString("Not a valid user of the IdP "
-							+ idp.getName());
+			fault.setFaultString("Not a valid user of the IdP " + idp.getName());
 			throw fault;
 		}
 		return usr.getUID();
 	}
 
-	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp)
-			throws DorianInternalFault, InvalidTrustedIdPFault,
-			PermissionDeniedFault {
+
+	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
+		InvalidTrustedIdPFault, PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		return tm.addTrustedIdP(idp);
 	}
 
-	public void updateTrustedIdP(String callerGridIdentity, TrustedIdP idp)
-			throws DorianInternalFault, InvalidTrustedIdPFault,
-			PermissionDeniedFault {
+
+	public void updateTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
+		InvalidTrustedIdPFault, PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		TrustedIdP curr = tm.getTrustedIdPById(idp.getId());
 		boolean statusChanged = false;
-		if ((idp.getStatus() != null)
-				&& (!idp.getStatus().equals(curr.getStatus()))) {
+		if ((idp.getStatus() != null) && (!idp.getStatus().equals(curr.getStatus()))) {
 			statusChanged = true;
 		}
 		tm.updateIdP(idp);
@@ -164,9 +161,9 @@ public class IFS extends LoggingObject implements Publisher {
 		}
 	}
 
-	public void removeTrustedIdP(String callerGridIdentity, long idpId)
-			throws DorianInternalFault, InvalidTrustedIdPFault,
-			PermissionDeniedFault {
+
+	public void removeTrustedIdP(String callerGridIdentity, long idpId) throws DorianInternalFault,
+		InvalidTrustedIdPFault, PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
@@ -177,8 +174,7 @@ public class IFS extends LoggingObject implements Publisher {
 		for (int i = 0; i < users.length; i++) {
 			try {
 				um.removeUser(users[i]);
-				this.hostManager.ownerRemovedUpdateHostCertificates(users[i]
-						.getGridId());
+				this.hostManager.ownerRemovedUpdateHostCertificates(users[i].getGridId());
 				this.groupManager.removeUserFromAllGroups(users[i].getGridId());
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
@@ -186,16 +182,17 @@ public class IFS extends LoggingObject implements Publisher {
 		}
 	}
 
-	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity)
-			throws DorianInternalFault, PermissionDeniedFault {
+
+	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity) throws DorianInternalFault, PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		return tm.getTrustedIdPs();
 	}
 
-	public IFSUser getUser(String callerGridIdentity, long idpId, String uid)
-			throws DorianInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public IFSUser getUser(String callerGridIdentity, long idpId, String uid) throws DorianInternalFault,
+		InvalidUserFault, PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
@@ -203,16 +200,18 @@ public class IFS extends LoggingObject implements Publisher {
 		return um.getUser(idpId, uid);
 	}
 
-	public IFSUser[] findUsers(String callerGridIdentity, IFSUserFilter filter)
-			throws DorianInternalFault, PermissionDeniedFault {
+
+	public IFSUser[] findUsers(String callerGridIdentity, IFSUserFilter filter) throws DorianInternalFault,
+		PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		return um.getUsers(filter);
 	}
 
-	public void updateUser(String callerGridIdentity, IFSUser usr)
-			throws DorianInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public void updateUser(String callerGridIdentity, IFSUser usr) throws DorianInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
@@ -220,31 +219,28 @@ public class IFS extends LoggingObject implements Publisher {
 		um.updateUser(usr);
 	}
 
-	public void removeUserByLocalIdIfExists(X509Certificate idpCert,
-			String localId) throws DorianInternalFault {
+
+	public void removeUserByLocalIdIfExists(X509Certificate idpCert, String localId) throws DorianInternalFault {
 		try {
-			TrustedIdP idp = tm.getTrustedIdPByDN(idpCert.getSubjectDN()
-					.getName());
+			TrustedIdP idp = tm.getTrustedIdPByDN(idpCert.getSubjectDN().getName());
 			IFSUser usr = um.getUser(idp.getId(), localId);
 			um.removeUser(usr);
-			this.hostManager
-					.ownerRemovedUpdateHostCertificates(usr.getGridId());
+			this.hostManager.ownerRemovedUpdateHostCertificates(usr.getGridId());
 			this.groupManager.removeUserFromAllGroups(usr.getGridId());
 		} catch (InvalidUserFault e) {
 
 		} catch (InvalidTrustedIdPFault f) {
 			logError(f.getFaultString(), f);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("An unexpected error occurred removing the grid user, the IdP "
-							+ idpCert.getSubjectDN().getName()
-							+ " could not be resolved!!!");
+			fault.setFaultString("An unexpected error occurred removing the grid user, the IdP "
+				+ idpCert.getSubjectDN().getName() + " could not be resolved!!!");
 			throw fault;
 		}
 	}
 
-	public void removeUser(String callerGridIdentity, IFSUser usr)
-			throws DorianInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public void removeUser(String callerGridIdentity, IFSUser usr) throws DorianInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
@@ -253,25 +249,25 @@ public class IFS extends LoggingObject implements Publisher {
 		this.groupManager.removeUserFromAllGroups(usr.getGridId());
 	}
 
-	public IFSUser renewUserCredentials(String callerGridIdentity, IFSUser usr)
-			throws DorianInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public IFSUser renewUserCredentials(String callerGridIdentity, IFSUser usr) throws DorianInternalFault,
+		InvalidUserFault, PermissionDeniedFault {
 		try {
 			IFSUser caller = um.getUser(callerGridIdentity);
 			verifyActiveUser(caller);
 			verifyAdminUser(caller);
-			return um.renewUserCredentials(
-					tm.getTrustedIdPById(usr.getIdPId()), usr);
+			return um.renewUserCredentials(tm.getTrustedIdPById(usr.getIdPId()), usr);
 		} catch (InvalidTrustedIdPFault f) {
 			logError(f.getFaultString(), f);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("An unexpected error occurred renewing the user's credentials.");
+			fault.setFaultString("An unexpected error occurred renewing the user's credentials.");
 			throw fault;
 		}
 	}
 
-	public void addAdmin(String callerGridIdentity, String gridIdentity)
-			throws RemoteException, DorianInternalFault, PermissionDeniedFault {
+
+	public void addAdmin(String callerGridIdentity, String gridIdentity) throws RemoteException, DorianInternalFault,
+		PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
@@ -282,16 +278,18 @@ public class IFS extends LoggingObject implements Publisher {
 		}
 	}
 
-	public void removeAdmin(String callerGridIdentity, String gridIdentity)
-			throws RemoteException, DorianInternalFault, PermissionDeniedFault {
+
+	public void removeAdmin(String callerGridIdentity, String gridIdentity) throws RemoteException,
+		DorianInternalFault, PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		this.administrators.removeMember(gridIdentity);
 	}
 
-	public String[] getAdmins(String callerGridIdentity)
-			throws RemoteException, DorianInternalFault, PermissionDeniedFault {
+
+	public String[] getAdmins(String callerGridIdentity) throws RemoteException, DorianInternalFault,
+		PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
@@ -303,28 +301,24 @@ public class IFS extends LoggingObject implements Publisher {
 		return admins;
 	}
 
-	public X509Certificate[] createProxy(SAMLAssertion saml,
-			PublicKey publicKey, ProxyLifetime lifetime,
-			int delegationPathLength) throws DorianInternalFault,
-			InvalidAssertionFault, InvalidProxyFault, UserPolicyFault,
-			PermissionDeniedFault {
+
+	public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime,
+		int delegationPathLength) throws DorianInternalFault, InvalidAssertionFault, InvalidProxyFault,
+		UserPolicyFault, PermissionDeniedFault {
 
 		if (!saml.isSigned()) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
-			fault
-					.setFaultString("The assertion specified is invalid, it MUST be signed by a trusted IdP");
+			fault.setFaultString("The assertion specified is invalid, it MUST be signed by a trusted IdP");
 			throw fault;
 		}
 
 		// Determine whether or not the assertion is expired
 		Calendar cal = new GregorianCalendar();
 		Date now = cal.getTime();
-		if ((now.before(saml.getNotBefore()))
-				|| (now.after(saml.getNotOnOrAfter()))) {
+		if ((now.before(saml.getNotBefore())) || (now.after(saml.getNotOnOrAfter()))) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
-			fault.setFaultString("The Assertion is not valid at " + now
-					+ ", the assertion is valid from " + saml.getNotBefore()
-					+ " to " + saml.getNotOnOrAfter());
+			fault.setFaultString("The Assertion is not valid at " + now + ", the assertion is valid from "
+				+ saml.getNotBefore() + " to " + saml.getNotOnOrAfter());
 			throw fault;
 		}
 
@@ -335,32 +329,26 @@ public class IFS extends LoggingObject implements Publisher {
 		// We need to verify the authentication method now
 		boolean allowed = false;
 		for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
-			if (idp.getAuthenticationMethod(i).getValue().equals(
-					auth.getAuthMethod())) {
+			if (idp.getAuthenticationMethod(i).getValue().equals(auth.getAuthMethod())) {
 				allowed = true;
 			}
 		}
 		if (!allowed) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
-			fault.setFaultString("The authentication method "
-					+ auth.getAuthMethod() + " is not acceptable for the IdP "
-					+ idp.getName());
+			fault.setFaultString("The authentication method " + auth.getAuthMethod()
+				+ " is not acceptable for the IdP " + idp.getName());
 			throw fault;
 		}
 
 		// If the user does not exist, add them
-		String uid = this.getAttribute(saml, idp.getUserIdAttributeDescriptor()
-				.getNamespaceURI(), idp.getUserIdAttributeDescriptor()
-				.getName());
-		String email = this.getAttribute(saml, idp
-				.getEmailAttributeDescriptor().getNamespaceURI(), idp
-				.getEmailAttributeDescriptor().getName());
-		String firstName = this.getAttribute(saml, idp
-				.getFirstNameAttributeDescriptor().getNamespaceURI(), idp
-				.getFirstNameAttributeDescriptor().getName());
-		String lastName = this.getAttribute(saml, idp
-				.getLastNameAttributeDescriptor().getNamespaceURI(), idp
-				.getLastNameAttributeDescriptor().getName());
+		String uid = this.getAttribute(saml, idp.getUserIdAttributeDescriptor().getNamespaceURI(), idp
+			.getUserIdAttributeDescriptor().getName());
+		String email = this.getAttribute(saml, idp.getEmailAttributeDescriptor().getNamespaceURI(), idp
+			.getEmailAttributeDescriptor().getName());
+		String firstName = this.getAttribute(saml, idp.getFirstNameAttributeDescriptor().getNamespaceURI(), idp
+			.getFirstNameAttributeDescriptor().getName());
+		String lastName = this.getAttribute(saml, idp.getLastNameAttributeDescriptor().getNamespaceURI(), idp
+			.getLastNameAttributeDescriptor().getName());
 
 		AddressValidator.validateEmail(email);
 
@@ -378,11 +366,8 @@ public class IFS extends LoggingObject implements Publisher {
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
 				DorianInternalFault fault = new DorianInternalFault();
-				fault
-						.setFaultString("An unexpected error occurred in adding the user "
-								+ usr.getUID()
-								+ " from the IdP "
-								+ idp.getName());
+				fault.setFaultString("An unexpected error occurred in adding the user " + usr.getUID()
+					+ " from the IdP " + idp.getName());
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
 				fault = (DorianInternalFault) helper.getFault();
@@ -393,13 +378,11 @@ public class IFS extends LoggingObject implements Publisher {
 				usr = um.getUser(idp.getId(), uid);
 				boolean performUpdate = false;
 
-				if ((usr.getFirstName() == null)
-						|| (!usr.getFirstName().equals(firstName))) {
+				if ((usr.getFirstName() == null) || (!usr.getFirstName().equals(firstName))) {
 					usr.setFirstName(firstName);
 					performUpdate = true;
 				}
-				if ((usr.getLastName() == null)
-						|| (!usr.getLastName().equals(lastName))) {
+				if ((usr.getLastName() == null) || (!usr.getLastName().equals(lastName))) {
 					usr.setLastName(lastName);
 					performUpdate = true;
 				}
@@ -414,11 +397,8 @@ public class IFS extends LoggingObject implements Publisher {
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
 				DorianInternalFault fault = new DorianInternalFault();
-				fault
-						.setFaultString("An unexpected error occurred in obtaining the user "
-								+ usr.getUID()
-								+ " from the IdP "
-								+ idp.getName());
+				fault.setFaultString("An unexpected error occurred in obtaining the user " + usr.getUID()
+					+ " from the IdP " + idp.getName());
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
 				fault = (DorianInternalFault) helper.getFault();
@@ -428,19 +408,12 @@ public class IFS extends LoggingObject implements Publisher {
 
 		// Validate that the proxy is of valid length
 
-		if (IFSUtils.getProxyValid(lifetime).after(
-				IFSUtils.getMaxProxyLifetime(conf))) {
+		if (IFSUtils.getProxyValid(lifetime).after(IFSUtils.getMaxProxyLifetime(conf))) {
 			InvalidProxyFault fault = new InvalidProxyFault();
-			fault
-					.setFaultString("The proxy valid length exceeds the maximum proxy valid length (hrs="
-							+ conf.getProxyPolicy().getProxyLifetime()
-									.getHours()
-							+ ", mins="
-							+ conf.getProxyPolicy().getProxyLifetime()
-									.getMinutes()
-							+ ", sec="
-							+ conf.getProxyPolicy().getProxyLifetime()
-									.getSeconds() + ")");
+			fault.setFaultString("The proxy valid length exceeds the maximum proxy valid length (hrs="
+				+ conf.getProxyPolicy().getProxyLifetime().getHours() + ", mins="
+				+ conf.getProxyPolicy().getProxyLifetime().getMinutes() + ", sec="
+				+ conf.getProxyPolicy().getProxyLifetime().getSeconds() + ")");
 			throw fault;
 		}
 
@@ -453,9 +426,8 @@ public class IFS extends LoggingObject implements Publisher {
 
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("An unexpected error occurred in creating an instance of the user policy "
-							+ idp.getUserPolicyClass());
+			fault.setFaultString("An unexpected error occurred in creating an instance of the user policy "
+				+ idp.getUserPolicyClass());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -473,8 +445,7 @@ public class IFS extends LoggingObject implements Publisher {
 		X509Certificate cert = null;
 
 		try {
-			cert = CertUtil.loadCertificate(usr.getCertificate()
-					.getCertificateAsString());
+			cert = CertUtil.loadCertificate(usr.getCertificate().getCertificateAsString());
 
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
@@ -491,37 +462,31 @@ public class IFS extends LoggingObject implements Publisher {
 				um.updateUser(usr);
 			} catch (Exception e) {
 				DorianInternalFault fault = new DorianInternalFault();
-				fault
-						.setFaultString("Unexpected Error, updating the user's status");
+				fault.setFaultString("Unexpected Error, updating the user's status");
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
 				fault = (DorianInternalFault) helper.getFault();
 			}
 
 			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault
-					.setFaultString("The credentials for this account have expired.");
+			fault.setFaultString("The credentials for this account have expired.");
 			throw fault;
 
 		} else if (IFSUtils.getProxyValid(lifetime).after(cert.getNotAfter())) {
 			InvalidProxyFault fault = new InvalidProxyFault();
-			fault
-					.setFaultString("The proxy valid length exceeds the expiration date of the user's certificate.");
+			fault.setFaultString("The proxy valid length exceeds the expiration date of the user's certificate.");
 			throw fault;
 		}
 
 		// create the proxy
 
 		try {
-			X509Certificate[] certs = ca.createImpersonationProxyCertificate(um
-					.getCredentialsManagerUID(usr.getIdPId(), usr.getUID()),
-					null, publicKey, lifetime, delegationPathLength);
+			X509Certificate[] certs = ca.createImpersonationProxyCertificate(um.getCredentialsManagerUID(
+				usr.getIdPId(), usr.getUID()), null, publicKey, lifetime, delegationPathLength);
 			return certs;
 		} catch (Exception e) {
 			InvalidProxyFault fault = new InvalidProxyFault();
-			fault
-					.setFaultString("An unexpected error occurred in creating the user "
-							+ usr.getGridId() + "'s proxy.");
+			fault.setFaultString("An unexpected error occurred in creating the user " + usr.getGridId() + "'s proxy.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (InvalidProxyFault) helper.getFault();
@@ -530,13 +495,13 @@ public class IFS extends LoggingObject implements Publisher {
 
 	}
 
+
 	// ///////////////////////////////
 	/* HOST CERTIFICATE OPERATIONS */
 	// ///////////////////////////////
-	public HostCertificateRecord requestHostCertificate(String callerGridId,
-			HostCertificateRequest req) throws DorianInternalFault,
-			InvalidHostCertificateRequestFault, InvalidHostCertificateFault,
-			PermissionDeniedFault {
+	public HostCertificateRecord requestHostCertificate(String callerGridId, HostCertificateRequest req)
+		throws DorianInternalFault, InvalidHostCertificateRequestFault, InvalidHostCertificateFault,
+		PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridId);
 		verifyActiveUser(caller);
 		long id = hostManager.requestHostCertifcate(callerGridId, req);
@@ -549,13 +514,12 @@ public class IFS extends LoggingObject implements Publisher {
 		return record;
 	}
 
-	public HostCertificateRecord[] getHostCertificatesForCaller(
-			String callerGridId) throws DorianInternalFault,
-			PermissionDeniedFault {
+
+	public HostCertificateRecord[] getHostCertificatesForCaller(String callerGridId) throws DorianInternalFault,
+		PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridId);
 		verifyActiveUser(caller);
-		List<HostCertificateRecord> list = hostManager
-				.getHostCertificateRecords(callerGridId);
+		List<HostCertificateRecord> list = hostManager.getHostCertificateRecords(callerGridId);
 		HostCertificateRecord[] records = new HostCertificateRecord[list.size()];
 		for (int i = 0; i < list.size(); i++) {
 			records[i] = list.get(i);
@@ -564,18 +528,18 @@ public class IFS extends LoggingObject implements Publisher {
 		return records;
 	}
 
-	public HostCertificateRecord approveHostCertificate(String callerGridId,
-			long recordId) throws DorianInternalFault,
-			InvalidHostCertificateFault, PermissionDeniedFault {
+
+	public HostCertificateRecord approveHostCertificate(String callerGridId, long recordId) throws DorianInternalFault,
+		InvalidHostCertificateFault, PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridId);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		return hostManager.approveHostCertifcate(recordId);
 	}
 
-	public HostCertificateRecord[] findHostCertificates(String callerGridId,
-			HostCertificateFilter f) throws DorianInternalFault,
-			PermissionDeniedFault {
+
+	public HostCertificateRecord[] findHostCertificates(String callerGridId, HostCertificateFilter f)
+		throws DorianInternalFault, PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridId);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
@@ -587,28 +551,44 @@ public class IFS extends LoggingObject implements Publisher {
 		return records;
 	}
 
-	public void updateHostCertificateRecord(String callerGridId,
-			HostCertificateUpdate update) throws DorianInternalFault,
-			InvalidHostCertificateFault, PermissionDeniedFault {
+
+	public void updateHostCertificateRecord(String callerGridId, HostCertificateUpdate update)
+		throws DorianInternalFault, InvalidHostCertificateFault, PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridId);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
+
+		// We need to make sure that if the owner changed, that the owner is an
+		// active user.
+		if (Utils.clean(update.getOwner()) != null) {
+			HostCertificateRecord record = hostManager.getHostCertificateRecord(update.getId());
+			if (!record.getOwner().equals(update.getOwner())) {
+				try {
+					verifyActiveUser(getUser(update.getOwner()));
+				} catch (PermissionDeniedFault f) {
+					InvalidHostCertificateFault fault = new InvalidHostCertificateFault();
+					fault.setFaultString("The owner specified does not exist or is not an active user.");
+					throw fault;
+				}
+			}
+		}
+
 		hostManager.updateHostCertificateRecord(update);
 	}
 
-	public HostCertificateRecord renewHostCertificate(String callerGridId,
-			long recordId) throws DorianInternalFault,
-			InvalidHostCertificateFault, PermissionDeniedFault {
+
+	public HostCertificateRecord renewHostCertificate(String callerGridId, long recordId) throws DorianInternalFault,
+		InvalidHostCertificateFault, PermissionDeniedFault {
 		IFSUser caller = getUser(callerGridId);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
 		return hostManager.renewHostCertificate(recordId);
 	}
 
+
 	public void publishCRL() {
 		if (conf.getCRLPublish() != null) {
-			if ((conf.getCRLPublish().getGts() != null)
-					&& (conf.getCRLPublish().getGts().length > 0)) {
+			if ((conf.getCRLPublish().getGts() != null) && (conf.getCRLPublish().getGts().length > 0)) {
 				Runner runner = new Runner() {
 					public void execute() {
 						synchronized (mutex) {
@@ -617,33 +597,23 @@ public class IFS extends LoggingObject implements Publisher {
 								try {
 									X509CRL crl = getCRL();
 									gov.nih.nci.cagrid.gts.bean.X509CRL x509 = new gov.nih.nci.cagrid.gts.bean.X509CRL();
-									x509.setCrlEncodedString(CertUtil
-											.writeCRL(crl));
-									String authName = ca.getCACertificate()
-											.getSubjectDN().getName();
+									x509.setCrlEncodedString(CertUtil.writeCRL(crl));
+									String authName = ca.getCACertificate().getSubjectDN().getName();
 									for (int i = 0; i < services.length; i++) {
 										String uri = services[i];
 										try {
-											debug("Publishing CRL to the GTS "
-													+ uri);
-											GTSAdminClient client = new GTSAdminClient(
-													uri, null);
+											debug("Publishing CRL to the GTS " + uri);
+											GTSAdminClient client = new GTSAdminClient(uri, null);
 											client.updateCRL(authName, x509);
-											debug("Published CRL to the GTS "
-													+ uri);
+											debug("Published CRL to the GTS " + uri);
 										} catch (Exception ex) {
-											getLog().error(
-													"Error publishing the CRL to the GTS "
-															+ uri + "!!!", ex);
+											getLog().error("Error publishing the CRL to the GTS " + uri + "!!!", ex);
 										}
 
 									}
 
 								} catch (Exception e) {
-									getLog()
-											.error(
-													"Unexpected Error publishing the CRL!!!",
-													e);
+									getLog().error("Unexpected Error publishing the CRL!!!", e);
 								}
 							}
 						}
@@ -658,6 +628,7 @@ public class IFS extends LoggingObject implements Publisher {
 		}
 	}
 
+
 	public X509CRL getCRL() throws DorianInternalFault {
 
 		Map<String, DisabledUser> users = this.um.getDisabledUsers();
@@ -668,28 +639,23 @@ public class IFS extends LoggingObject implements Publisher {
 			DisabledUser usr = itr.next();
 			Long sn = new Long(usr.getSerialNumber());
 			if (!list.containsKey(sn)) {
-				CRLEntry entry = new CRLEntry(BigInteger
-						.valueOf(sn.longValue()), usr.getCRLReason());
+				CRLEntry entry = new CRLEntry(BigInteger.valueOf(sn.longValue()), usr.getCRLReason());
 				list.put(sn, entry);
 			}
-			List<Long> hostCerts = this.hostManager
-					.getHostCertificateRecordsSerialNumbers(usr
-							.getGridIdentity());
+			List<Long> hostCerts = this.hostManager.getHostCertificateRecordsSerialNumbers(usr.getGridIdentity());
 			for (int i = 0; i < hostCerts.size(); i++) {
 				if (!list.containsKey(hostCerts.get(i))) {
-					CRLEntry entry = new CRLEntry(BigInteger.valueOf(hostCerts
-							.get(i).longValue()), usr.getCRLReason());
+					CRLEntry entry = new CRLEntry(BigInteger.valueOf(hostCerts.get(i).longValue()), usr.getCRLReason());
 					list.put(hostCerts.get(i), entry);
 				}
 			}
 		}
 
-		List<Long> hosts = this.hostManager
-				.getDisabledHostCertificatesSerialNumbers();
+		List<Long> hosts = this.hostManager.getDisabledHostCertificatesSerialNumbers();
 		for (int i = 0; i < hosts.size(); i++) {
 			if (!list.containsKey(hosts.get(i))) {
-				CRLEntry entry = new CRLEntry(BigInteger.valueOf(hosts.get(i)
-						.longValue()), CRLReason.PRIVILEGE_WITHDRAWN);
+				CRLEntry entry = new CRLEntry(BigInteger.valueOf(hosts.get(i).longValue()),
+					CRLReason.PRIVILEGE_WITHDRAWN);
 				list.put(hosts.get(i), entry);
 			}
 		}
@@ -717,8 +683,8 @@ public class IFS extends LoggingObject implements Publisher {
 
 	}
 
-	private IFSUser getUser(String gridId) throws DorianInternalFault,
-			PermissionDeniedFault {
+
+	private IFSUser getUser(String gridId) throws DorianInternalFault, PermissionDeniedFault {
 		try {
 			return um.getUser(gridId);
 		} catch (InvalidUserFault f) {
@@ -728,8 +694,8 @@ public class IFS extends LoggingObject implements Publisher {
 		}
 	}
 
-	private void verifyAdminUser(IFSUser usr) throws DorianInternalFault,
-			PermissionDeniedFault {
+
+	private void verifyAdminUser(IFSUser usr) throws DorianInternalFault, PermissionDeniedFault {
 		if (administrators.isMember(usr.getGridId())) {
 			return;
 		} else {
@@ -739,22 +705,20 @@ public class IFS extends LoggingObject implements Publisher {
 		}
 	}
 
-	private void verifyActiveUser(IFSUser usr) throws DorianInternalFault,
-			PermissionDeniedFault {
+
+	private void verifyActiveUser(IFSUser usr) throws DorianInternalFault, PermissionDeniedFault {
 
 		try {
 			TrustedIdP idp = this.tm.getTrustedIdPById(usr.getIdPId());
 
 			if (!idp.getStatus().equals(TrustedIdPStatus.Active)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault
-						.setFaultString("Access for your Identity Provider has been suspended!!!");
+				fault.setFaultString("Access for your Identity Provider has been suspended!!!");
 				throw fault;
 			}
 		} catch (InvalidTrustedIdPFault f) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault
-					.setFaultString("Unexpected error in determining your Identity Provider has been suspended!!!");
+			fault.setFaultString("Unexpected error in determining your Identity Provider has been suspended!!!");
 			throw fault;
 		}
 
@@ -766,19 +730,16 @@ public class IFS extends LoggingObject implements Publisher {
 
 			} else if (usr.getUserStatus().equals(IFSUserStatus.Rejected)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault
-						.setFaultString("The request for an account was rejected.");
+				fault.setFaultString("The request for an account was rejected.");
 				throw fault;
 
 			} else if (usr.getUserStatus().equals(IFSUserStatus.Pending)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault
-						.setFaultString("The request for an account has not been reviewed.");
+				fault.setFaultString("The request for an account has not been reviewed.");
 				throw fault;
 			} else if (usr.getUserStatus().equals(IFSUserStatus.Expired)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault
-						.setFaultString("The credentials for this account have expired.");
+				fault.setFaultString("The credentials for this account have expired.");
 				throw fault;
 			} else {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
@@ -789,12 +750,13 @@ public class IFS extends LoggingObject implements Publisher {
 
 	}
 
+
 	protected UserManager getUserManager() {
 		return um;
 	}
 
-	private String getAttribute(SAMLAssertion saml, String namespace,
-			String name) throws InvalidAssertionFault {
+
+	private String getAttribute(SAMLAssertion saml, String namespace, String name) throws InvalidAssertionFault {
 		Iterator itr = saml.getStatements();
 		while (itr.hasNext()) {
 			Object o = itr.next();
@@ -803,8 +765,7 @@ public class IFS extends LoggingObject implements Publisher {
 				Iterator attItr = att.getAttributes();
 				while (attItr.hasNext()) {
 					SAMLAttribute a = (SAMLAttribute) attItr.next();
-					if ((a.getNamespace().equals(namespace))
-							&& (a.getName().equals(name))) {
+					if ((a.getNamespace().equals(namespace)) && (a.getName().equals(name))) {
 						Iterator vals = a.getValues();
 						while (vals.hasNext()) {
 
@@ -818,14 +779,12 @@ public class IFS extends LoggingObject implements Publisher {
 			}
 		}
 		InvalidAssertionFault fault = new InvalidAssertionFault();
-		fault
-				.setFaultString("The assertion does not contain the required attribute, "
-						+ namespace + ":" + name);
+		fault.setFaultString("The assertion does not contain the required attribute, " + namespace + ":" + name);
 		throw fault;
 	}
 
-	private SAMLAuthenticationStatement getAuthenticationStatement(
-			SAMLAssertion saml) throws InvalidAssertionFault {
+
+	private SAMLAuthenticationStatement getAuthenticationStatement(SAMLAssertion saml) throws InvalidAssertionFault {
 		Iterator itr = saml.getStatements();
 		SAMLAuthenticationStatement auth = null;
 		while (itr.hasNext()) {
@@ -833,8 +792,7 @@ public class IFS extends LoggingObject implements Publisher {
 			if (o instanceof SAMLAuthenticationStatement) {
 				if (auth != null) {
 					InvalidAssertionFault fault = new InvalidAssertionFault();
-					fault
-							.setFaultString("The assertion specified contained more that one authentication statement.");
+					fault.setFaultString("The assertion specified contained more that one authentication statement.");
 					throw fault;
 				}
 				auth = (SAMLAuthenticationStatement) o;
@@ -842,12 +800,12 @@ public class IFS extends LoggingObject implements Publisher {
 		}
 		if (auth == null) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
-			fault
-					.setFaultString("No authentication statement specified in the assertion provided.");
+			fault.setFaultString("No authentication statement specified in the assertion provided.");
 			throw fault;
 		}
 		return auth;
 	}
+
 
 	public void clearDatabase() throws DorianInternalFault {
 		this.um.clearDatabase();
