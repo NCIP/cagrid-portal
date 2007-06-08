@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.bean.X509Certificate;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
+import gov.nih.nci.cagrid.dorian.common.PreparedStatementBuilder;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter;
@@ -25,13 +26,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 
 public class HostCertificateManager extends LoggingObject {
 
-	private static final String TABLE = "host_certificates";
+	public static final String TABLE = "host_certificates";
 	private static final String ID = "ID";
 	private static final String SERIAL = "SERIAL_NUMBER";
 	private static final String HOST = "HOST";
@@ -40,6 +43,7 @@ public class HostCertificateManager extends LoggingObject {
 	private static final String OWNER = "OWNER";
 	private static final String CERTIFICATE = "CERTIFICATE";
 	private static final String PUBLIC_KEY = "PUBLIC_KEY";
+	private static final String EXPIRATION = "EXPIRATION";
 
 	private boolean dbBuilt = false;
 	private Database db;
@@ -132,12 +136,14 @@ public class HostCertificateManager extends LoggingObject {
 			x509.setCertificateAsString(CertUtil.writeCertificate(cert));
 			record.setCertificate(x509);
 			c = db.getConnection();
+
 			PreparedStatement s = c.prepareStatement("update " + TABLE + " SET " + SERIAL + " = ? , " + SUBJECT
-				+ " = ? , " + CERTIFICATE + " = ? WHERE " + ID + "= ?");
+				+ " = ? , " + EXPIRATION + " = ? , " + CERTIFICATE + " = ? WHERE " + ID + "= ?");
 			s.setLong(1, record.getSerialNumber());
 			s.setString(2, record.getSubject());
-			s.setString(3, record.getCertificate().getCertificateAsString());
-			s.setLong(4, record.getId());
+			s.setLong(3, cert.getNotAfter().getTime());
+			s.setString(4, record.getCertificate().getCertificateAsString());
+			s.setLong(5, record.getId());
 			s.execute();
 			return record;
 		} catch (Exception e) {
@@ -189,12 +195,13 @@ public class HostCertificateManager extends LoggingObject {
 			record.setCertificate(x509);
 			c = db.getConnection();
 			PreparedStatement s = c.prepareStatement("update " + TABLE + " SET " + SERIAL + " = ? , " + SUBJECT
-				+ " = ? , " + STATUS + " = ? , " + CERTIFICATE + " = ? WHERE " + ID + "= ?");
+				+ " = ? , " + STATUS + " = ? , " + EXPIRATION + " = ?, " + CERTIFICATE + " = ? WHERE " + ID + "= ?");
 			s.setLong(1, record.getSerialNumber());
 			s.setString(2, record.getSubject());
 			s.setString(3, record.getStatus().getValue());
-			s.setString(4, record.getCertificate().getCertificateAsString());
-			s.setLong(5, record.getId());
+			s.setLong(4, cert.getNotAfter().getTime());
+			s.setString(5, record.getCertificate().getCertificateAsString());
+			s.setLong(6, record.getId());
 			s.execute();
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
@@ -326,55 +333,53 @@ public class HostCertificateManager extends LoggingObject {
 
 		try {
 			c = db.getConnection();
-			PreparedStatement s = null;
+			PreparedStatementBuilder select = new PreparedStatementBuilder(TABLE);
+			select.addSelectField(ID);
+			select.addSelectField(HOST);
+			select.addSelectField(OWNER);
+			select.addSelectField(SUBJECT);
+			select.addSelectField(SERIAL);
+			select.addSelectField(STATUS);
+			select.addSelectField(PUBLIC_KEY);
+			select.addSelectField(CERTIFICATE);
+
 			if (f != null) {
-				s = c.prepareStatement("select " + ID + "," + HOST + "," + OWNER + "," + SUBJECT + "," + SERIAL + ","
-					+ STATUS + "," + PUBLIC_KEY + "," + CERTIFICATE + " from  " + TABLE + " WHERE " + ID + ">= ? AND "
-					+ ID + "<= ? AND " + SERIAL + ">= ? AND " + SERIAL + "<= ? " + " AND " + HOST + " LIKE ? "
-					+ " AND " + SUBJECT + " LIKE ? " + " AND " + OWNER + " LIKE ? " + " AND " + STATUS + " LIKE ? ");
+
 				if (f.getId() != null) {
-					s.setLong(1, f.getId().intValue());
-					s.setLong(2, f.getId().intValue());
-				} else {
-					s.setLong(1, Long.MIN_VALUE);
-					s.setLong(2, Long.MAX_VALUE);
+					select.addWhereField(ID, "=", f.getId());
 				}
 
 				if (f.getSerialNumber() != null) {
-					s.setLong(3, f.getSerialNumber().longValue());
-					s.setLong(4, f.getSerialNumber().longValue());
-				} else {
-					s.setLong(3, Long.MIN_VALUE);
-					s.setLong(4, Long.MAX_VALUE);
+					select.addWhereField(SERIAL, "=", f.getSerialNumber());
 				}
 
 				if (f.getHost() != null) {
-					s.setString(5, "%" + f.getHost() + "%");
-				} else {
-					s.setString(5, "%");
+					select.addWhereField(HOST, "LIKE", "%" + f.getHost() + "%");
 				}
 
 				if (f.getSubject() != null) {
-					s.setString(6, "%" + f.getSubject() + "%");
-				} else {
-					s.setString(6, "%");
+					select.addWhereField(SUBJECT, "LIKE", "%" + f.getSubject() + "%");
 				}
-
 				if (f.getOwner() != null) {
-					s.setString(7, "%" + f.getOwner() + "%");
-				} else {
-					s.setString(7, "%");
+					select.addWhereField(OWNER, "LIKE", "%" + f.getOwner() + "%");
 				}
 
 				if (f.getStatus() != null) {
-					s.setString(8, f.getStatus().getValue());
-				} else {
-					s.setString(8, "%");
+					select.addWhereField(STATUS, "=", f.getStatus().getValue());
 				}
-			} else {
-				s = c.prepareStatement("select " + ID + "," + HOST + "," + OWNER + "," + SUBJECT + "," + SERIAL + ","
-					+ STATUS + "," + PUBLIC_KEY + "," + CERTIFICATE + " from  " + TABLE);
+
+				if (f.getIsExpired() != null) {
+					Calendar cal = new GregorianCalendar();
+					long time = cal.getTimeInMillis();
+					if (f.getIsExpired().booleanValue()) {
+						select.addClause("(" + EXPIRATION + ">0 AND " + EXPIRATION + "<" + Long.valueOf(time) + ")");
+					} else {
+						select.addClause("(" + EXPIRATION + ">0 AND " + EXPIRATION + ">" + Long.valueOf(time) + ")");
+					}
+				}
+
 			}
+			PreparedStatement s = select.prepareStatement(c);
 			ResultSet rs = s.executeQuery();
 			while (rs.next()) {
 				HostCertificateRecord record = new HostCertificateRecord();
@@ -727,8 +732,8 @@ public class HostCertificateManager extends LoggingObject {
 			if (!this.db.tableExists(TABLE)) {
 				String certificates = "CREATE TABLE " + TABLE + " (" + ID + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 					+ SERIAL + " BIGINT," + HOST + " VARCHAR(255) NOT NULL," + SUBJECT + " VARCHAR(255)," + STATUS
-					+ " VARCHAR(15) NOT NULL," + OWNER + " VARCHAR(255) NOT NULL," + CERTIFICATE + " TEXT,"
-					+ PUBLIC_KEY + " TEXT NOT NULL, " + "INDEX document_index (ID));";
+					+ " VARCHAR(15) NOT NULL," + OWNER + " VARCHAR(255) NOT NULL," + EXPIRATION + " BIGINT,"
+					+ CERTIFICATE + " TEXT," + PUBLIC_KEY + " TEXT NOT NULL, " + "INDEX document_index (ID));";
 				db.update(certificates);
 			}
 			this.dbBuilt = true;

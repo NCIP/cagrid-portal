@@ -160,6 +160,7 @@
 			    <xsd:element name="Subject" type="xsd:string"/>
 			    <xsd:element name="Owner" type="xsd:string"/>
 			    <xsd:element name="Status" type="ifs:HostCertificateStatus"/>
+<xsd:element name="IsExpired" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
 			</xsd:sequence>
 	    </xsd:complexType>
 	    
