@@ -8,14 +8,14 @@
             <name>Authentication Service(s)</name>
             <description>The URL(s) of available Authentication Service(s)</description>
             <values>
-                <value>https://cagrid-auth.nci.nih.gov:8443/wsrf/services/cagrid/AuthenticationService</value>
+                <value>https://cbiovdev5038.nci.nih.gov:8443/wsrf/services/cagrid/AuthenticationService</value>
             </values>
         </property>
         <property>
             <name>Dorian Service(s)</name>
             <description>The URL(s) of available Dorian Service(s)</description>
             <values>
-                <value>https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian</value>
+                <value>https://cbiovdev5034.nci.nih.gov:8443/wsrf/services/cagrid/Dorian</value>
             </values>
         </property>
     </properties>
