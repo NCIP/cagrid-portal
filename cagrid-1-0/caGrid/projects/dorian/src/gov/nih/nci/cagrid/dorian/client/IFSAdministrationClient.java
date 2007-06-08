@@ -6,15 +6,18 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 
+import java.math.BigInteger;
 import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
@@ -316,6 +319,74 @@ public class IFSAdministrationClient {
 			throw fault;
 		}
 
+	}
+
+	public HostCertificateRecord approveHostCertificate(long recordId)
+			throws DorianFault, DorianInternalFault,
+			InvalidHostCertificateFault, PermissionDeniedFault {
+		try {
+			return client.approveHostCertificate(BigInteger.valueOf(recordId));
+		} catch (DorianInternalFault gie) {
+			throw gie;
+		} catch (InvalidHostCertificateFault gie) {
+			throw gie;
+		} catch (PermissionDeniedFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			DorianFault fault = new DorianFault();
+			fault.setFaultString(Utils.getExceptionMessage(e));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianFault) helper.getFault();
+			throw fault;
+		}
+
+	}
+
+	public void updateHostCertificateRecord(HostCertificateUpdate update)
+			throws DorianFault, DorianInternalFault,
+			InvalidHostCertificateFault, PermissionDeniedFault {
+		try {
+			client.updateHostCertificateRecord(update);
+		} catch (DorianInternalFault gie) {
+			throw gie;
+		} catch (InvalidHostCertificateFault gie) {
+			throw gie;
+		} catch (PermissionDeniedFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			DorianFault fault = new DorianFault();
+			fault.setFaultString(Utils.getExceptionMessage(e));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianFault) helper.getFault();
+			throw fault;
+		}
+
+	}
+
+	public HostCertificateRecord renewHostCertificate(long recordId) throws DorianFault,
+			DorianInternalFault, InvalidHostCertificateFault,
+			PermissionDeniedFault {
+		try {
+			return client.renewHostCertificate(BigInteger.valueOf(recordId));
+		} catch (DorianInternalFault gie) {
+			throw gie;
+		} catch (InvalidHostCertificateFault gie) {
+			throw gie;
+		} catch (PermissionDeniedFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			DorianFault fault = new DorianFault();
+			fault.setFaultString(Utils.getExceptionMessage(e));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 }

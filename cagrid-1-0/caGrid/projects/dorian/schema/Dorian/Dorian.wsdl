@@ -448,7 +448,9 @@
       </element>
       <element name="RenewHostCertificateResponse">
         <complexType>
-          <sequence />
+          <sequence>
+            <element ref="ns0:HostCertificateRecord" minOccurs="1" maxOccurs="1" />
+          </sequence>
         </complexType>
       </element>
       <element name="DorianResourceProperties">

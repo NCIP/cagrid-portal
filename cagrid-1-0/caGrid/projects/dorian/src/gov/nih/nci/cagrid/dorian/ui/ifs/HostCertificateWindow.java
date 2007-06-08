@@ -1,9 +1,11 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
-import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
@@ -15,6 +17,7 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.File;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
@@ -22,7 +25,9 @@ import java.security.interfaces.RSAPublicKey;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -38,7 +43,8 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: HostCertificateWindow.java,v 1.1 2007-06-06 20:55:45 langella Exp $
+ * @version $Id: HostCertificateWindow.java,v 1.1 2007/06/06 20:55:45 langella
+ *          Exp $
  */
 public class HostCertificateWindow extends ApplicationComponent {
 
@@ -106,6 +112,14 @@ public class HostCertificateWindow extends ApplicationComponent {
 
 	private JTextField strength = null;
 
+	private JButton approve = null;
+
+	private JButton renew = null;
+
+	private JButton save = null;
+
+	private JButton update = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -126,6 +140,12 @@ public class HostCertificateWindow extends ApplicationComponent {
 		getHost().setText(record.getHost());
 		getOwner().setText(record.getOwner());
 		getStatus().setSelectedItem(record.getStatus());
+		if (record.getStatus().equals(HostCertificateStatus.Compromised)) {
+			getStatus().setEnabled(false);
+			getOwner().setEditable(false);
+			getFindUser().setVisible(false);
+			getFindUser().setEnabled(false);
+		}
 		try {
 			PublicKey key = KeyUtil.loadPublicKey(record.getPublicKey()
 					.getKeyAsString());
@@ -142,11 +162,32 @@ public class HostCertificateWindow extends ApplicationComponent {
 				X509Certificate cert = CertUtil.loadCertificate(record
 						.getCertificate().getCertificateAsString());
 				getCredPanel().setCertificate(cert);
+				getSave().setEnabled(true);
+				getSave().setVisible(true);
+			} else {
+				getSave().setEnabled(false);
+				getSave().setVisible(false);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+		if (record.getStatus().equals(HostCertificateStatus.Pending) && admin) {
+			getApprove().setEnabled(true);
+			getApprove().setVisible(true);
+		} else {
+			getApprove().setEnabled(false);
+			getApprove().setVisible(false);
+		}
+
+		if (record.getStatus().equals(HostCertificateStatus.Active) && admin) {
+			getRenew().setEnabled(true);
+			getRenew().setVisible(true);
+		} else {
+			getRenew().setEnabled(false);
+			getRenew().setVisible(false);
+		}
+		detectUpdate();
 	}
 
 	/**
@@ -213,6 +254,10 @@ public class HostCertificateWindow extends ApplicationComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
+			buttonPanel.add(getApprove(), null);
+			buttonPanel.add(getUpdate(), null);
+			buttonPanel.add(getRenew(), null);
+			buttonPanel.add(getSave(), null);
 			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
@@ -239,15 +284,98 @@ public class HostCertificateWindow extends ApplicationComponent {
 
 	private void approveHostCertificate() {
 		try {
+			getApprove().setEnabled(false);
 			String serviceUrl = getService().getText();
 			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem())
 					.getProxy();
 			IFSAdministrationClient client = new IFSAdministrationClient(
 					serviceUrl, c);
-		} catch (PermissionDeniedFault pdf) {
-			ErrorDialog.showError(pdf);
+			record = client.approveHostCertificate(record.getId());
+			loadRecord();
+			JOptionPane.showMessageDialog(this,
+					"The host certificate has been succesfully approved.");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
+			getApprove().setEnabled(true);
+		}
+
+	}
+
+	private void renewHostCertificate() {
+		try {
+			getRenew().setEnabled(false);
+			String serviceUrl = getService().getText();
+			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem())
+					.getProxy();
+			IFSAdministrationClient client = new IFSAdministrationClient(
+					serviceUrl, c);
+			record = client.renewHostCertificate(record.getId());
+			loadRecord();
+			JOptionPane.showMessageDialog(this,
+					"The host certificate has been succesfully renewed.");
+		} catch (Exception e) {
+			ErrorDialog.showError(e);
+			getRenew().setEnabled(true);
+		}
+
+	}
+
+	private void detectUpdate() {
+		if (admin) {
+			if (!record.getStatus().equals(getStatus().getSelectedItem())) {
+				getUpdate().setEnabled(true);
+			} else if (!record.getOwner().equals(getOwner().getText())) {
+				getUpdate().setEnabled(true);
+			} else {
+				getUpdate().setEnabled(false);
+			}
+		}
+	}
+
+	private void updateHostCertificate() {
+		try {
+			getUpdate().setEnabled(false);
+
+			boolean performUpdate = false;
+			HostCertificateUpdate update = new HostCertificateUpdate();
+			update.setId(record.getId());
+			if (!record.getStatus().equals(getStatus().getSelectedItem())) {
+				update.setStatus((HostCertificateStatus) getStatus()
+						.getSelectedItem());
+				performUpdate = true;
+			}
+
+			if (!record.getOwner().equals(getOwner().getText())) {
+				update.setOwner(getOwner().getText());
+				performUpdate = true;
+			}
+
+			if (performUpdate) {
+				String serviceUrl = getService().getText();
+				GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem())
+						.getProxy();
+				IFSAdministrationClient client = new IFSAdministrationClient(
+						serviceUrl, c);
+				client.updateHostCertificateRecord(update);
+				if (!record.getStatus().equals(getStatus().getSelectedItem())) {
+					record.setStatus((HostCertificateStatus) getStatus()
+							.getSelectedItem());
+				}
+
+				if (!record.getOwner().equals(getOwner().getText())) {
+					record.setOwner(getOwner().getText());
+				}
+				loadRecord();
+				JOptionPane.showMessageDialog(this,
+						"The host certificate has been succesfully updated.");
+			} else {
+				JOptionPane.showMessageDialog(this,
+						"There are no changes to update.");
+			}
+
+		} catch (Exception e) {
+			ErrorDialog.showError(e);
+			getUpdate().setEnabled(true);
 		}
 
 	}
@@ -569,8 +697,14 @@ public class HostCertificateWindow extends ApplicationComponent {
 	private JTextField getOwner() {
 		if (owner == null) {
 			owner = new JTextField();
+			owner.addCaretListener(new javax.swing.event.CaretListener() {
+				public void caretUpdate(javax.swing.event.CaretEvent e) {
+					detectUpdate();
+				}
+			});
 			if (!admin) {
 				owner.setEditable(false);
+
 			}
 		}
 		return owner;
@@ -611,8 +745,14 @@ public class HostCertificateWindow extends ApplicationComponent {
 	private HostCertificateStatusComboBox getStatus() {
 		if (status == null) {
 			status = new HostCertificateStatusComboBox(false);
+			status.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					detectUpdate();
+				}
+			});
 			if (!admin) {
 				status.setEnabled(false);
+
 			}
 		}
 		return status;
@@ -629,6 +769,137 @@ public class HostCertificateWindow extends ApplicationComponent {
 			strength.setEditable(false);
 		}
 		return strength;
+	}
+
+	/**
+	 * This method initializes approve
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getApprove() {
+		if (approve == null) {
+			approve = new JButton();
+			approve.setText("Approve Certificate");
+			approve.setIcon(DorianLookAndFeel.getSelectIcon());
+			approve.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Runner runner = new Runner() {
+						public void execute() {
+							approveHostCertificate();
+						}
+					};
+					try {
+						GridApplication.getContext()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+
+				}
+			});
+		}
+		return approve;
+	}
+
+	/**
+	 * This method initializes renew
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getRenew() {
+		if (renew == null) {
+			renew = new JButton();
+			renew.setText("Renew Certificate");
+			renew.setIcon(DorianLookAndFeel.getRenewIcon());
+			renew.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Runner runner = new Runner() {
+						public void execute() {
+							renewHostCertificate();
+						}
+					};
+					try {
+						GridApplication.getContext()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+
+				}
+			});
+		}
+		return renew;
+	}
+
+	/**
+	 * This method initializes save
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getSave() {
+		if (save == null) {
+			save = new JButton();
+			save.setText("Save Certificate");
+			save.setIcon(DorianLookAndFeel.getSaveIcon());
+			save.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					exportCertificate();
+				}
+			});
+		}
+		return save;
+	}
+
+	private void exportCertificate() {
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		int returnVal = fc.showSaveDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				X509Certificate cert = CertUtil.loadCertificate(record
+						.getCertificate().getCertificateAsString());
+				CertUtil.writeCertificate(cert, new File(fc.getSelectedFile()
+						.getAbsolutePath()));
+			} catch (Exception ex) {
+				ErrorDialog.showError(ex);
+			}
+		}
+
+	}
+
+	/**
+	 * This method initializes update
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getUpdate() {
+		if (update == null) {
+			update = new JButton();
+			update.setText("Update Certificate");
+			update.setIcon(DorianLookAndFeel.getHostIcon());
+			update.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Runner runner = new Runner() {
+						public void execute() {
+							updateHostCertificate();
+						}
+					};
+					try {
+						GridApplication.getContext()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+
+				}
+			});
+			if (!admin) {
+				update.setEnabled(false);
+				update.setVisible(false);
+
+			}
+		}
+		return update;
 	}
 
 }

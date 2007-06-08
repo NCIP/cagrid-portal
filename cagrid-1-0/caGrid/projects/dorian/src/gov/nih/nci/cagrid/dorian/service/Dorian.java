@@ -363,10 +363,10 @@ public class Dorian extends LoggingObject {
 		ifs.updateHostCertificateRecord(callerGridId, update);
 	}
 
-	public void renewHostCertificate(String callerGridId, long recordId)
+	public HostCertificateRecord renewHostCertificate(String callerGridId, long recordId)
 			throws DorianInternalFault, InvalidHostCertificateFault,
 			PermissionDeniedFault {
-		ifs.renewHostCertificate(callerGridId, recordId);
+		return ifs.renewHostCertificate(callerGridId, recordId);
 	}
 
 	public void clearDatabase() throws DorianInternalFault {

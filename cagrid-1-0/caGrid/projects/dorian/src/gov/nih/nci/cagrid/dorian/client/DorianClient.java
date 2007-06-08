@@ -96,35 +96,6 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
 		}
 	}
 
-	public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord[] findHostCertificates(gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter hostCertificateFilter) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findHostCertificates");
-        gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesRequest params = new gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesRequest();
-        gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesRequestHostCertificateFilter hostCertificateFilterContainer = new gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesRequestHostCertificateFilter();
-        hostCertificateFilterContainer.setHostCertificateFilter(hostCertificateFilter);
-        params.setHostCertificateFilter(hostCertificateFilterContainer);
-        gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesResponse boxedResult = portType.findHostCertificates(params);
-        return boxedResult.getHostCertificateRecord();
-      }
-    }
-	public void updateHostCertificateRecord(gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate hostCertificateUpdate) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"updateHostCertificateRecord");
-        gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordRequest params = new gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordRequest();
-        gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordRequestHostCertificateUpdate hostCertificateUpdateContainer = new gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordRequestHostCertificateUpdate();
-        hostCertificateUpdateContainer.setHostCertificateUpdate(hostCertificateUpdate);
-        params.setHostCertificateUpdate(hostCertificateUpdateContainer);
-        gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordResponse boxedResult = portType.updateHostCertificateRecord(params);
-      }
-    }
-	public void renewHostCertificate(java.math.BigInteger recordId) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"renewHostCertificate");
-        gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateRequest params = new gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateRequest();
-        params.setRecordId(recordId);
-        gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateResponse boxedResult = portType.renewHostCertificate(params);
-      }
-    }
 	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
@@ -361,6 +332,36 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
         gov.nih.nci.cagrid.dorian.stubs.ApproveHostCertificateRequest params = new gov.nih.nci.cagrid.dorian.stubs.ApproveHostCertificateRequest();
         params.setRecordId(recordId);
         gov.nih.nci.cagrid.dorian.stubs.ApproveHostCertificateResponse boxedResult = portType.approveHostCertificate(params);
+        return boxedResult.getHostCertificateRecord();
+      }
+    }
+	public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord[] findHostCertificates(gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter hostCertificateFilter) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"findHostCertificates");
+        gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesRequest params = new gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesRequest();
+        gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesRequestHostCertificateFilter hostCertificateFilterContainer = new gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesRequestHostCertificateFilter();
+        hostCertificateFilterContainer.setHostCertificateFilter(hostCertificateFilter);
+        params.setHostCertificateFilter(hostCertificateFilterContainer);
+        gov.nih.nci.cagrid.dorian.stubs.FindHostCertificatesResponse boxedResult = portType.findHostCertificates(params);
+        return boxedResult.getHostCertificateRecord();
+      }
+    }
+	public void updateHostCertificateRecord(gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate hostCertificateUpdate) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"updateHostCertificateRecord");
+        gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordRequest params = new gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordRequest();
+        gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordRequestHostCertificateUpdate hostCertificateUpdateContainer = new gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordRequestHostCertificateUpdate();
+        hostCertificateUpdateContainer.setHostCertificateUpdate(hostCertificateUpdate);
+        params.setHostCertificateUpdate(hostCertificateUpdateContainer);
+        gov.nih.nci.cagrid.dorian.stubs.UpdateHostCertificateRecordResponse boxedResult = portType.updateHostCertificateRecord(params);
+      }
+    }
+	public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord renewHostCertificate(java.math.BigInteger recordId) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"renewHostCertificate");
+        gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateRequest params = new gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateRequest();
+        params.setRecordId(recordId);
+        gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateResponse boxedResult = portType.renewHostCertificate(params);
         return boxedResult.getHostCertificateRecord();
       }
     }

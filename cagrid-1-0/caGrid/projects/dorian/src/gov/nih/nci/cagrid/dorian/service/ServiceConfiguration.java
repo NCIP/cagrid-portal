@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.dorian.service;
 
+import org.globus.wsrf.config.ContainerConfig;
+import java.io.File;
 import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;
