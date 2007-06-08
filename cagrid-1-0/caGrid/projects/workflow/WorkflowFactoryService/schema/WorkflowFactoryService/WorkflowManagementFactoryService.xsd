@@ -80,7 +80,7 @@
 
   <xsd:complexType name="WorkflowStatusEventType">
     <xsd:sequence>
-        <xsd:element name="timestamp" type="xsd:dateTime"/>
+        <xsd:element name="timestamp" type="xsd:string"/>
         <xsd:element name="state" type="tns:WorkflowStateType"/>
         <xsd:element name="currentOperation" type="xsd:string"/>
     </xsd:sequence>

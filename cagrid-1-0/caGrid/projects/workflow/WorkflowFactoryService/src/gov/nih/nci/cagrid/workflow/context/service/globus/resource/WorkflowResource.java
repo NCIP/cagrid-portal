@@ -12,15 +12,9 @@ import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusEventType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.util.Calendar;
-import java.util.Vector;
 
 import javax.naming.InitialContext;
 import javax.xml.namespace.QName;
@@ -89,7 +83,6 @@ public class WorkflowResource implements Resource,
 	
 	private TopicList topicList = null;
 	
-	private String logFileLocation = null;
 	
 	protected void initialize(Object key) {
 		this.key = key;

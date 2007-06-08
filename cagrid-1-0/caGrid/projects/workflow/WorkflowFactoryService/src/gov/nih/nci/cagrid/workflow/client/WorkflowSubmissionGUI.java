@@ -7,8 +7,11 @@ import gov.nih.nci.cagrid.workflow.context.client.WorkflowServiceImplClient;
 import gov.nih.nci.cagrid.workflow.stubs.types.StartInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStateType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusEventType;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -34,6 +37,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.StringReader;
+import java.rmi.RemoteException;
 
 import javax.swing.SwingConstants;
 import javax.xml.namespace.QName;
@@ -97,6 +101,8 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 	
 	private String status = "Pending";
 
+	private JButton getDetailedStatusButton = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -123,6 +129,10 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.gridy = 4;
+			gridBagConstraints14.fill = GridBagConstraints.BOTH;
+			gridBagConstraints14.gridx = 2;
 			GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
 			gridBagConstraints61.gridy = 2;
 			gridBagConstraints61.gridx = 0;
@@ -228,6 +238,7 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 			jContentPane.add(getPartnerLinkButton(), gridBagConstraints4);
 			jContentPane.add(getJTextArea(), gridBagConstraints5);
 			jContentPane.add(jLabel5, gridBagConstraints61);
+			jContentPane.add(getGetDetailedStatusButton(), gridBagConstraints14);
 		}
 		return jContentPane;
 	}
@@ -475,6 +486,46 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 			jTextArea.setPreferredSize(new Dimension(200, 200));
 		}
 		return jTextArea;
+	}
+
+	/**
+	 * This method initializes getDetailedStatusButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getGetDetailedStatusButton() {
+		if (getDetailedStatusButton == null) {
+			getDetailedStatusButton = new JButton();
+			getDetailedStatusButton.setPreferredSize(new Dimension(50, 20));
+			getDetailedStatusButton.setText("Get Details");
+			getDetailedStatusButton.setEnabled(true);
+			getDetailedStatusButton.setName("getDetailedStatusButton");
+			getDetailedStatusButton
+					.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+						public void propertyChange(java.beans.PropertyChangeEvent e) {
+							if ((e.getPropertyName().equals("enabled"))) {
+								System.out.println("propertyChange(enabled)"); // TODO Auto-generated property Event stub "enabled" 
+							}
+						}
+					});
+			getDetailedStatusButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						WorkflowStatusEventType[] eve = wclient.getDetailedStatus();
+						WorkflowDetailedStatusGUI detGUI = new WorkflowDetailedStatusGUI();
+						detGUI.show();
+					} catch (WorkflowExceptionType e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+		}
+		return getDetailedStatusButton;
 	}
 
 	public static void main(String args[]) {

@@ -2,7 +2,14 @@
 <project name="Introduce Developer Modified Build File" basedir=".">
 
     <property name="ext.lib.dir" value="ext/lib" />
-	<!-- ============================================================== -->
+    <property file="ext/resources/cagrid.properties" />
+    <property name="service.jar.name" value="${cagrid.master.jar.prefix}${service.name}-service.jar" />
+	<property name="common.jar.name" value="${cagrid.master.jar.prefix}${service.name}-common.jar" />
+    <property name="client.jar.name" value="${cagrid.master.jar.prefix}${service.name}-client.jar" />
+    <property name="service.jar.name" value="${cagrid.master.jar.prefix}${service.name}-service.jar" />
+    <property name="stubs.jar.name" value="${cagrid.master.jar.prefix}${service.name}-stubs.jar" />
+    <property name="test.jar.name" value="${cagrid.master.jar.prefix}${service.name}-tests.jar" />
+<!-- ============================================================== -->
 	<!-- This file is designed to allow the developer to extend the     -->
 	<!-- build process without having to edit the master build.xml      -->
 	<!-- file. DO NOT REMOVE ANY TARGETS                                -->
