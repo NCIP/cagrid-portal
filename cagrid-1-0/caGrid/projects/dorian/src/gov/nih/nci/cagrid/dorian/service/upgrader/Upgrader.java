@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
 import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.PropertyManager;
-import gov.nih.nci.cagrid.dorian.service.ca.tools.ImportCA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,7 +131,7 @@ public class Upgrader {
 
 			if (line.getOptionValue(HELP_OPT) != null) {
 				HelpFormatter formatter = new HelpFormatter();
-				formatter.printHelp(ImportCA.class.getName(), options);
+				formatter.printHelp(Upgrader.class.getName(), options);
 				System.exit(0);
 			} else {
 				String configFile = line.getOptionValue(CONFIG_FILE_OPT);
@@ -147,7 +146,7 @@ public class Upgrader {
 			}
 		} catch (ParseException exp) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp(ImportCA.class.getName(), options, false);
+			formatter.printHelp(Upgrader.class.getName(), options, false);
 			System.exit(1);
 		} catch (Exception e) {
 			e.printStackTrace();
