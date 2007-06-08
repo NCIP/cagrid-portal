@@ -696,6 +696,7 @@ public class HostCertificatesWindow extends ApplicationComponent implements
 		if (findUser == null) {
 			findUser = new JButton();
 			findUser.setText("Find...");
+			findUser.setIcon(DorianLookAndFeel.getUserIcon());
 			findUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					FindUserDialog dialog = new FindUserDialog();

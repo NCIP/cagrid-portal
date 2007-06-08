@@ -13,7 +13,7 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: HostCertificatesTable.java,v 1.2 2007-06-06 20:55:45 langella Exp $
+ * @version $Id: HostCertificatesTable.java,v 1.3 2007-06-08 03:47:37 langella Exp $
  */
 public class HostCertificatesTable extends GrapeBaseTable {
 	public final static String HOST_CERTIFICATE_RECORD = "record";
@@ -40,8 +40,8 @@ public class HostCertificatesTable extends GrapeBaseTable {
 		c.setMinWidth(75);
 
 		c = this.getColumn(STATUS);
-		c.setMaxWidth(50);
-		c.setMinWidth(50);
+		c.setMaxWidth(75);
+		c.setMinWidth(75);
 
 		this.clearTable();
 

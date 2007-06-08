@@ -718,7 +718,7 @@ public class HostCertificateWindow extends ApplicationComponent {
 	private JButton getFindUser() {
 		if (findUser == null) {
 			findUser = new JButton();
-			findUser.setText("Find");
+			findUser.setText("Find...");
 			if (!admin) {
 				findUser.setVisible(false);
 			} else {
