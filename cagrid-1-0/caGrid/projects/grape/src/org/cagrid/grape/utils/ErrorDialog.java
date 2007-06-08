@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.Utils;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
@@ -60,13 +61,29 @@ public class ErrorDialog extends JDialog {
 
 	public static void showError(String message, Throwable ex) {
 		ErrorDialog window = new ErrorDialog(getOwnerFrame(), message, ex);
+		centerDialog(window);
 		window.setVisible(true);
 	}
 
 
 	public static void showError(String message, String details) {
 		ErrorDialog window = new ErrorDialog(getOwnerFrame(), message, details);
+		centerDialog(window);
 		window.setVisible(true);
+	}
+
+
+	private static void centerDialog(ErrorDialog dialog) {
+		// Determine the new location of the window
+		Frame owner = getOwnerFrame();
+		if (owner != null) {
+			int w = owner.getSize().width;
+			int h = owner.getSize().height;
+			int x = owner.getLocationOnScreen().x;
+			int y = owner.getLocationOnScreen().y;
+			Dimension dim = dialog.getSize();
+			dialog.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
+		}
 	}
 
 
@@ -320,19 +337,6 @@ public class ErrorDialog extends JDialog {
 			});
 		}
 		return detailsButton;
-	}
-
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		ErrorDialog window = new ErrorDialog(
-			null,
-			"When the moon hits your eyes like a big pizza pie thats amore.   When the world seem to shine like you had too much whine, that amore.",
-			(String) null);
-		window.setVisible(true);
-
 	}
 
 

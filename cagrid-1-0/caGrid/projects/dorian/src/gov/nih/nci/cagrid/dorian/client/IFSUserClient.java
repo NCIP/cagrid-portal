@@ -114,4 +114,24 @@ public class IFSUserClient {
 		}
 	}
 
+	public HostCertificateRecord[] getOwnedHostCertificates()
+			throws DorianFault, DorianInternalFault, PermissionDeniedFault {
+		try {
+			return client.getOwnedHostCertificates();
+		} catch (DorianInternalFault gie) {
+			throw gie;
+		} catch (PermissionDeniedFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			DorianFault fault = new DorianFault();
+			fault.setFaultString(Utils.getExceptionMessage(e));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianFault) helper.getFault();
+			throw fault;
+		}
+
+	}
+
 }

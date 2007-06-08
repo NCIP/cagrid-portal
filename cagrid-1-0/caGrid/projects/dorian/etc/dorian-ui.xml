@@ -49,6 +49,18 @@
                         <height>325</height>
                     </dimensions>
                 </component>
+                 <component>
+                    <title>My Host Certificates</title>
+                    <description>Allows a user to obtain the host certificates in which they own.</description>
+                    <classname>gov.nih.nci.cagrid.dorian.ui.ifs.MyHostCertificatesWindow</classname>
+                    <icon>/network-idle.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                        <width>550</width>
+                        <height>400</height>
+                    </dimensions>
+                </component>
+                
                 <component>
                     <title>Download CA Certificate(s)</title>
                     <description>Download the Dorian CA certificate.</description>
