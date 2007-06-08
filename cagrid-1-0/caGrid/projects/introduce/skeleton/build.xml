@@ -3,6 +3,7 @@
 
     <!-- ============================================================== -->
     <!-- MASTER BUILD FILE DO NOT EDIT OR INTRODUCE MAY OVERWRITE       -->
+	<!-- In order to customize the build please edit the dev-build.xml  -->
     <!-- ============================================================== -->
 
     <!-- Define the environment variable -->
