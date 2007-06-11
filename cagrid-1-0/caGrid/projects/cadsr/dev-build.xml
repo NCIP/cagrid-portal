@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+<project name="Developer Modified Build File" basedir=".">
+	<!-- ============================================================== -->
+	<!-- This file is designed to allow the developer to extend the     -->
+	<!-- build process without having to edit the master build.xml      -->
+	<!-- file. DO NOT REMOVE ANY TARGETS                                -->
+	<!-- ============================================================== -->
+
+
+	<!-- ============================================================== -->
+	<!-- Place any other properties you will need here                  -->
+	<!-- ============================================================== -->
+	<property file="${basedir}/ext/resources/cagrid.properties" />
+	<property name="jar.prefix" value="${cagrid.master.jar.prefix}caDSR" />
+	<property name="ext.lib" value="${basedir}/ext/lib" />
+	<property name="ext.test.lib" value="${basedir}/ext/test/lib" />
+	<property name="portal.src.dir" value="Portal/src" />
+	<property name="portal.jar.name" value="${jar.prefix}-portal.jar" />
+	<property name="portal.build.dest" location="${basedir}/build/Portal/classes" />
+	
+	 <!-- We want detailed error messages -->
+	 <property name="java.debug" value="on" />
+	 <property name="java.source" value="1.5" />
+
+
+	<!-- ============================================================== -->
+	<!-- Create any extended Classpaths here                            -->
+	<!-- ============================================================== -->
+	<target name="defineExtendedClasspaths">
+		<path id="base.extended.classpath">
+			<fileset dir="${ext.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		<path id="service.build.extended.classpath">
+		</path>
+		<path id="service.run.extended.classpath">
+		</path>
+		<path id="test.build.extended.classpath">
+			<fileset dir="${ext.test.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		<path id="test.run.extended.classpath">
+		</path>
+		<path id="run.extended.classpath">
+		</path>
+	</target>
+
+
+	<!-- ============================================================== -->
+	<!-- Pre Init Target                                                -->
+	<!-- ============================================================== -->
+	<target name="preInit">
+		<runtarget target="configure" />
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Post Init Build Target                                         -->
+	<!-- ============================================================== -->
+	<target name="postInit">
+		<mkdir dir="${portal.build.dest}" />
+	</target>
+
+
+	<!-- ============================================================== -->
+	<!-- Pre Stubs Target                                               -->
+	<!-- ============================================================== -->
+	<target name="preStubs">
+
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Post Stubs Build Target                                        -->
+	<!-- ============================================================== -->
+	<target name="postStubs">
+
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Pre Compile Stubs Build Target                                 -->
+	<!-- ============================================================== -->
+	<target name="preCompileStubs">
+
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Post Compile Stubs Build Target                                -->
+	<!-- ============================================================== -->
+	<target name="postCompileStubs">
+
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Pre Jar Stubs Build Target                                     -->
+	<!-- ============================================================== -->
+	<target name="preJarStubs">
+
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Post Jar Stubs Build Target                                    -->
+	<!-- ============================================================== -->
+	<target name="postJarStubs">
+
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Pre Compile Build Target                                       -->
+	<!-- ============================================================== -->
+	<target name="preCompile">
+
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Post Compile Build Target                                       -->
+	<!-- ============================================================== -->
+	<target name="postCompile">
+		<runtarget target="compilePortal" />
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Pre Jar Build Target                                       -->
+	<!-- ============================================================== -->
+	<target name="preJar">
+
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Post Jar Build Target                                          -->
+	<!-- ============================================================== -->
+	<target name="postJar">
+		<runtarget target="jarPortal" />
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Pre Compile Tests Build Target                                 -->
+	<!-- ============================================================== -->
+	<target name="preCompileTests">
+
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Post Compile Tests Build Target                                -->
+	<!-- ============================================================== -->
+	<target name="postCompileTests">
+
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Pre Jar Tests Build Target                                     -->
+	<!-- ============================================================== -->
+	<target name="preJarTests">
+        <!-- Copy the source code, wsdd, properties, etc to the build dir for include in the jar -->
+        <copy toDir="${test.build.dest}">
+            <fileset dir="${test.src.dir}">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Post Jar Tests Build Target                                    -->
+	<!-- ============================================================== -->
+	<target name="postJarTests">
+
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Pre Clean Target                                               -->
+	<!-- ============================================================== -->
+	<target name="preClean">
+
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Post Clean Target                                              -->
+	<!-- ============================================================== -->
+	<target name="postClean">
+
+	</target>
+	
+    <!-- Compile the portal implementation classes  -->
+    <target name="compilePortal">
+        <javac srcdir="${portal.src.dir}" destdir="${portal.build.dest}" debug="${java.debug}" source="${java.source}" deprecation="${deprecation}" classpathref="run.classpath" />
+    </target>
+	
+    <!-- Create a JAR file with the test implementation classes -->
+    <target name="jarPortal">
+        <jar jarfile="${build.lib.dir}/${portal.jar.name}" basedir="${portal.build.dest}" />
+    </target>
+	
+    <target name="configure" description="Configures the project based on settings.">		
+        <copy todir="${basedir}" overwrite="true">
+            <fileset dir="${basedir}">
+                <include name="*.template" />
+            </fileset>
+            <mapper type="glob" from="*.template" to="*" />
+            <filterset filtersfile="${basedir}/ext/resources/service_urls.properties"/>
+        </copy>
+    </target>
+	
+
+    <!-- call the test target for each project and aggregates the log resutls  -->
+    <target name="test" depends="checkGlobus" description="Runs the service's tests.">
+        <echo message="Test results dir: ${junit.results.dir}" />
+        <mkdir dir="${junit.results.dir}" />
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" forkmode="once">
+            <classpath refid="test.run.classpath" />
+            <sysproperty key="build.dir" value="${build.dest}" />
+            <jvmarg value="-Xmx512M" />
+            <jvmarg value="-Dbuild.dir=${build.dest}" />
+            <formatter type="xml" />
+            <batchtest fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/Test*.java" />
+                    <include name="**/*TestCase.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />
+    </target>
+	
+	
+    <target name="installIntroduceExtensions" description="Installs the caDSR extensions into Introduce (you must build first).">
+        <delete dir="${introduce.extensions.dir}/caDSR-discovery" />
+        <mkdir dir="${introduce.extensions.dir}/caDSR-discovery" />
+        <copy todir="${introduce.extensions.dir}/caDSR-discovery" file="extension.xml" />
+        <copy todir="${introduce.extensions.dir}/lib">
+            <fileset dir="${lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${ext.lib}">
+                <include name="*.jar" />
+            	<exclude name="${cagrid.master.jar.prefix}*Introduce*.jar"/>
+            </fileset>
+            <fileset dir="${build.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+        </copy>
+    </target>
+
+
+</project>
