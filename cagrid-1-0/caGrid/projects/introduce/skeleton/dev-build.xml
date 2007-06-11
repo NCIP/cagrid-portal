@@ -161,7 +161,9 @@
 	</target>
 	
 	
-    <!-- call the test target for each project and aggregates the log resutls  -->
+	<!-- ============================================================== -->
+	<!-- Call any tests.                                                -->
+	<!-- ============================================================== -->
     <target name="test" depends="checkGlobus" description="Runs the service's tests.">
         <echo message="Test results dir: ${junit.results.dir}" />
         <mkdir dir="${junit.results.dir}" />

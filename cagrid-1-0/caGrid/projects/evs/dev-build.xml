@@ -22,9 +22,9 @@
 	<!-- ============================================================== -->
 	<target name="defineExtendedClasspaths">
 		<path id="base.extended.classpath">
-			 <fileset dir="${ext.lib}">
-			     <include name="*.jar" />               
-			 </fileset>
+			<fileset dir="${ext.lib}">
+				<include name="*.jar" />
+			</fileset>
 		</path>
 		<path id="service.build.extended.classpath">
 		</path>
@@ -32,12 +32,12 @@
 		</path>
 		<path id="test.build.extended.classpath">
 			<fileset dir="${ext.test.lib}">
-				<include name="*.jar" />               
+				<include name="*.jar" />
 			</fileset>
 		</path>
 		<path id="test.run.extended.classpath">
 		</path>
-		<path id="run.extended.classpath">	
+		<path id="run.extended.classpath">
 		</path>
 	</target>
 
@@ -168,34 +168,36 @@
 	<target name="postClean">
 
 	</target>
-	
-	
+
+
+	<target name="configure" description="Configures the project based on settings.">
+		<copy filtering="true" file="deploy.properties.template" tofile="deploy.properties" overwrite="true">
+			<filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
+		</copy>
+	</target>
+
+
+
 	<!-- ============================================================== -->
 	<!-- Call any tests.                                                -->
 	<!-- ============================================================== -->
-    <target name="test" depends="checkGlobus" description="Runs the service's tests.">
-        <echo message="Test results dir: ${junit.results.dir}" />
-        <mkdir dir="${junit.results.dir}" />
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" forkmode="once">
-            <classpath refid="test.run.classpath" />
-            <sysproperty key="build.dir" value="${build.dest}" />
-            <jvmarg value="-Xmx512M" />
-            <jvmarg value="-Dbuild.dir=${build.dest}" />
-            <formatter type="xml" />
-            <batchtest fork="yes" todir="${junit.results.dir}">
-                <fileset dir="${test.src.dir}">
-                    <include name="**/Test*.java" />
-                    <include name="**/*TestCase.java" />
-                </fileset>
-            </batchtest>
-        </junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />
-    </target>
-
-    <target name="configure" description="Configures the project based on settings.">		
-        <copy filtering="true" file="deploy.properties.template" tofile="deploy.properties" overwrite="true">
-            <filterset filtersfile="${basedir}/ext/resources/service_urls.properties"/>
-        </copy>
-    </target>
+	<target name="test" depends="checkGlobus" description="Runs the service's tests.">
+		<echo message="Test results dir: ${junit.results.dir}" />
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" forkmode="once">
+			<classpath refid="test.run.classpath" />
+			<sysproperty key="build.dir" value="${build.dest}" />
+			<jvmarg value="-Xmx512M" />
+			<jvmarg value="-Dbuild.dir=${build.dest}" />
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/Test*.java" />
+					<include name="**/*TestCase.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed" />
+	</target>
 
 </project>
