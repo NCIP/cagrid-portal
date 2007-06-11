@@ -1,12 +1,8 @@
 package gov.nih.nci.cagrid.introduce.test.steps;
 
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
-import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.upgrade.UpgradeManager;
 import gov.nih.nci.cagrid.introduce.upgrade.common.UpgradeStatus;
-
-import java.io.File;
 
 
 public class UpgradesStep extends BaseStep {
@@ -32,17 +28,8 @@ public class UpgradesStep extends BaseStep {
             e.printStackTrace();
             fail(e.getMessage());
         }
-        
-        ServiceInformation info = new ServiceInformation(new File(getBaseDir() + File.separator + this.tci.getDir()
-            + File.separator));
-
-        try {
-            SyncTools sync = new SyncTools(new File(getBaseDir() + File.separator + this.tci.getDir()));
-            sync.sync();
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
+     
+      
 
         buildStep();
     }

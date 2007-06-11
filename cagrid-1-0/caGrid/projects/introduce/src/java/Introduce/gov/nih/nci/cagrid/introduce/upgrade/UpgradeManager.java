@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.upgrade;
 import java.io.File;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
@@ -75,11 +76,11 @@ public class UpgradeManager {
         logger.info("Recovering backup of service after failed upgrade.");
         ResourceManager.restoreSpecific(id, getUpgradeServiceName(), pathToService);
     }
-    
-    
+
+
     private String getUpgradeServiceName() throws Exception {
-        String upgradeServiceName = UpgradeUtilities.getServiceName(
-            pathToService + File.separator + IntroduceConstants.INTRODUCE_XML_FILE) 
+        String upgradeServiceName = UpgradeUtilities.getServiceName(pathToService + File.separator
+            + IntroduceConstants.INTRODUCE_XML_FILE)
             + "UPGRADE";
         return upgradeServiceName;
     }
@@ -90,14 +91,19 @@ public class UpgradeManager {
         backup();
 
         if (canIntroduceBeUpgraded()) {
-           upgradeIntroduce(status);
-           return status;
+            upgradeIntroduce(status);
+            SyncTools sync = new SyncTools(new File(this.pathToService));
+            sync.sync();
+            return status;
         } else if (extensionsNeedUpgraded()) {
             status.addIntroduceUpgradeStatus(upgradeExtensionsOnly());
+            SyncTools sync = new SyncTools(new File(this.pathToService));
+            sync.sync();
             return status;
         } else {
             return status;
         }
+
     }
 
 
@@ -108,7 +114,8 @@ public class UpgradeManager {
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new Exception(
-                    "Service upgrader failed.  This service does not appear to be upgradable possibly due to modification of Introduce managed files.", e);
+                    "Service upgrader failed.  This service does not appear to be upgradable possibly due to modification of Introduce managed files.",
+                    e);
             }
         }
     }
@@ -131,7 +138,8 @@ public class UpgradeManager {
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new Exception(
-                    "Extensions upgrader failed.  Certain Extensions upgraders must have failed. Please see upgrade status log.", e);
+                    "Extensions upgrader failed.  Certain Extensions upgraders must have failed. Please see upgrade status log.",
+                    e);
             }
         }
         return null;
