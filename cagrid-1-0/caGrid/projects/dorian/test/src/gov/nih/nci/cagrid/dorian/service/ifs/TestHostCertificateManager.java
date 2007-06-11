@@ -376,6 +376,36 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 	}
 
 
+	public void testFindExpiredHostCertificates() {
+		try {
+			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
+			HostCertificateManager hcm = new HostCertificateManager(db, conf, ca, this);
+			hcm.clearDatabase();
+			long id1 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost1"));
+			hcm.approveHostCertifcate(id1);
+			long id2 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost2"));
+			HostCertificateFilter f1 = new HostCertificateFilter();
+			f1.setIsExpired(Boolean.TRUE);
+			HostCertificateFilter f2 = new HostCertificateFilter();
+			f2.setIsExpired(Boolean.FALSE);
+			assertEquals(0, hcm.findHostCertificates(f1).size());
+			assertEquals(1, hcm.findHostCertificates(f2).size());
+			Thread.sleep((conf.getCredentialPolicy().getCredentialLifetime().getSeconds() * 1000) + 100);
+			assertEquals(1, hcm.findHostCertificates(f1).size());
+			assertEquals(0, hcm.findHostCertificates(f2).size());
+			hcm.approveHostCertifcate(id2);
+			assertEquals(1, hcm.findHostCertificates(f1).size());
+			assertEquals(1, hcm.findHostCertificates(f2).size());
+			Thread.sleep((conf.getCredentialPolicy().getCredentialLifetime().getSeconds() * 1000) + 100);
+			assertEquals(2, hcm.findHostCertificates(f1).size());
+			assertEquals(0, hcm.findHostCertificates(f2).size());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
+
+
 	public void testCreateAndApproveHostCertificate() {
 		try {
 			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
@@ -1057,6 +1087,22 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		l.setHours(0);
 		l.setMinutes(0);
 		l.setSeconds(0);
+		cp.setCredentialLifetime(l);
+		conf.setCredentialPolicy(cp);
+		return conf;
+	}
+
+
+	private IdentityFederationConfiguration getExpiringCredentialsConf() {
+		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
+		CredentialPolicy cp = new CredentialPolicy();
+		CredentialLifetime l = new CredentialLifetime();
+		l.setYears(0);
+		l.setMonths(0);
+		l.setDays(0);
+		l.setHours(0);
+		l.setMinutes(0);
+		l.setSeconds(10);
 		cp.setCredentialLifetime(l);
 		conf.setCredentialPolicy(cp);
 		return conf;
