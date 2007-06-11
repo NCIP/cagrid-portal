@@ -1,16 +1,24 @@
 <?xml version="1.0"?>
 <project name="build-deploy file" basedir="." default="deploy">
+	<!-- ============================================================== -->
+	<!-- MASTER DEPLOY FILE DO NOT EDIT OR INTRODUCE MAY OVERWRITE      -->
+	<!-- In order to customize the deployment process please edit the   -->
+	<!-- dev-build-deploy.xml                                           -->
+	<!-- ============================================================== -->
+		
+		
 	<property file="deploy.properties" />
 	<property name="service.deployment.path" value="${service.deployment.prefix}/${introduce.skeleton.service.name}" />
-		<pathconvert dirsep="_" property="service.deployment.dir.name">
+	<pathconvert dirsep="_" property="service.deployment.dir.name">
 		<path>
 			<pathelement path="${service.deployment.path}" />
 		</path>
 		<map from="${basedir}\" to="" />
 		<map from="${basedir}/" to="" />
 	</pathconvert>
-    
-    <property name="service.properties.file" value="service.properties"/>
+	
+	
+	<property name="service.properties.file" value="service.properties"/>
 	
 	<!-- Tomcat Properties -->
 	<property name="tomcat.dir" value="${env.CATALINA_HOME}" />
@@ -20,6 +28,7 @@
 	<property name="tomcat.wsrf.schema.dir" value="${tomcat.dir}/webapps/wsrf/share/schema" />
 	
 	<property name="gar.name" value="${service.deployment.dir.name}.gar" />
+	
 	<!-- Filesets -->
 	<!-- JARs to be included in the GAR file -->
 	<fileset dir="${build.lib.dir}" id="garjars" />
@@ -60,14 +69,19 @@
 	</target>
 	
 	<!-- deploy  a gar to tomcat -->
-	<target name="deployTomcat" depends="addFilters, all, configureGlobusToTrustDorian" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+	<target name="deployTomcat" depends="addFilters, all" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 		<echo message="Deploying service ${service.deployment.path} under Tomcat at ${tomcat.dir}" />
-		
+
 		<property name="service.deployment.dir" value="${tomcat.deploy.dir}/etc/${service.deployment.dir.name}" />
 		<!-- prepare the deployment directory -->
 		<mkdir dir="${service.deployment.dir}" />
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
+		
+		
+		<runtarget target="preDeployTomcat"/>
+			
+			
 		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/server-config.wsdd" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
@@ -85,6 +99,7 @@
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.prefix}" token="SERVICE-INSTANCE-PREFIX" />
 		<replace file="tmp/jndi-config.xml" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
+		<replace file="tmp/jndi-config.xml" value="${perform.index.service.registration}" token="PERFORM_REGISTRATION" />
 		<copy overwrite="true" toDir="${service.deployment.dir}">
 			<fileset dir="tmp">
 				<include name="jndi-config.xml" />
@@ -96,7 +111,20 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		<replace file="tmp/etc/registration.xml" value="${index.service.url}" token="INDEX_SERVICE_URL" />
+		<replace 
+		    dir="tmp/etc/"
+		    value="defaultvalue">
+			<include name="*_registration.xml"/>
+		  <replacefilter 
+		    token="INDEX_SERVICE_URL"
+		    value="${index.service.url}"/>
+		  <replacefilter 
+		    token="REGISTRATION_REFRESH" 
+		    value="${index.service.registration.refresh_seconds}"/>
+		  <replacefilter 
+		    token="INDEX_REFRESH" 
+		    value="${index.service.index.refresh_milliseconds}"/>
+		</replace>
 		<!-- Copy skeleton files to Tomcat and rename -->
 		<copy overwrite="true" toDir="${service.deployment.dir}">
 			<fileset dir="tmp/etc">
@@ -109,12 +137,8 @@
 			<fileset dir="lib">
 				<include name="*" />
 			</fileset>
-			<fileset dir="build/lib">
+			<fileset dir="${build.lib.dir}">
 				<include name="*" />
-			</fileset>
-			<!-- Post Introduce Edit-->
-			 <fileset dir="${ext.lib.dir}">
-				<include name="*.jar" />
 			</fileset>
 		</copy>
 		<!--copy over the schema service files-->
@@ -123,36 +147,25 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
-		
-		<!-- Post Introduce Edit-->
-				<copy todir="${tomcat.dir}/common/endorsed">
-							<fileset dir="${ext.endorsed.dir}">
-								<include name="*.jar" />
-							</fileset>
-				</copy>	
 		<delete dir="tmp" />
 	</target>
 	
 	<!-- make deployment configured gar -->
 	<target name="createDeploymentGar" depends="all, addFilters">
 		
+		<!-- prepare the server-config file -->
+		<mkdir dir="tmp" />
+		
 		<echo message="Creating a gar for service ${gar.name}" />
 		
+		<runtarget target="preDeployGlobus"/>
 		
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
 				<include name="*.jar" />
 			</fileset>
-			<!-- Post Introduce Edit-->
-			<fileset dir="${ext.lib.dir}">
-									<include name="*.jar" />
-								</fileset>
 		</copy>
-		
-		
-		
-		<!-- prepare the server-config file -->
-		<mkdir dir="tmp" />
+				
 		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/server-config.wsdd" value="${introduce.skeleton.service.name}" token="SERVICE-INSTANCE-PATH" />
@@ -164,13 +177,27 @@
 		<replace file="tmp/jndi-config.xml" value="${introduce.skeleton.service.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.prefix}" token="SERVICE-INSTANCE-PREFIX" />
 		<replace file="tmp/jndi-config.xml" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
+		<replace file="tmp/jndi-config.xml" value="${perform.index.service.registration}" token="PERFORM_REGISTRATION" />
 		<mkdir dir="tmp/etc"/>
 		<copy overwrite="true" toDir="tmp/etc">
 			<fileset dir="etc">
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		<replace file="tmp/etc/registration.xml" value="${index.service.url}" token="INDEX_SERVICE_URL" />
+		<replace 
+		    dir="tmp/etc/"
+		    value="defaultvalue">
+			<include name="*_registration.xml"/>
+		  <replacefilter 
+		    token="INDEX_SERVICE_URL"
+		    value="${index.service.url}"/>
+		  <replacefilter 
+		    token="REGISTRATION_REFRESH" 
+		    value="${index.service.registration.refresh_seconds}"/>
+		  <replacefilter 
+		    token="INDEX_REFRESH" 
+		    value="${index.service.index.refresh_milliseconds}"/>
+		</replace>
 		<!-- make the gar file -->
 		<ant antfile="${build.packages}" target="makeGar">
 			<property name="garserverdeployment.file" value="${basedir}/tmp/server-config.wsdd" />
@@ -186,7 +213,8 @@
 	
 	
 	<!-- deploy a gar to globus -->
-	<target name="deployGlobus" depends="checkGlobus, createDeploymentGar, configureGlobusToTrustDorian" description="Deploys a gar to GLOBUS_LOCATION (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+	<target name="deployGlobus" depends="checkGlobus, createDeploymentGar" description="Deploys a gar to GLOBUS_LOCATION (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+		
 		<echo message="Deploying server to Globus Container" />
 		
 		<java classname="org.globus.bootstrap.AntBootstrap" fork="yes" failonerror="true">
@@ -205,12 +233,6 @@
 				</fileset>
 			</classpath>
 		</java>
-		<!-- Post Introduce Edit-->
-		<copy todir="${ext.globus.dir}/endorsed">
-					<fileset dir="${ext.endorsed.dir}">
-						<include name="*.jar" />
-					</fileset>
-		</copy>
 		
 		<delete dir="${gar.name}" />
 		<!-- deploy the gar -->

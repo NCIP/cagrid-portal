@@ -1,49 +1,47 @@
 <?xml version="1.0"?>
-<!-- adopted from GTBS and modified -->
-<project default="all" name="Introduce Build File" basedir=".">
+<project default="help" name="Introduce Master Build File" basedir=".">
+
+    <!-- ============================================================== -->
+    <!-- MASTER BUILD FILE DO NOT EDIT OR INTRODUCE MAY OVERWRITE       -->
+	<!-- In order to customize the build please edit the dev-build.xml  -->
+    <!-- ============================================================== -->
 
     <!-- Define the environment variable -->
     <property environment="env" />
 
-    <!-- 
-		Properties in these files will override the properties defined in this file.
-    -->
     <property file="introduce.properties" />
     <property name="introduce.ns.excludes" value="" />
     <property name="service.name" value="${introduce.skeleton.service.name}" />
     <property name="schema.path" value="${introduce.skeleton.service.name}" />
 
-    <property file="${basedir}/ext/resources/cagrid.properties" />
-    <property file="${basedir}/ext/resources/service_urls.properties" />
-    
-    <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}dorian-" />
-
     <!-- Important directories and files -->
     <property name="src.dir" value="src" />
     <property name="lib.dir" value="lib" />
-    <!-- Post Introduce Edit-->
-    <property name="ext.lib.dir" value="ext/lib" />
-    <!-- Post Introduce Edit-->
-    <property name="ext.endorsed.dir" value="ext/endorsed/lib" />
     <property name="etc.dir" value="etc" />
+    <property name="tools.dir" value="tools" />
+    <property name="tools.lib.dir" value="tools/lib" />
     <property name="schema.dir" value="schema" />
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-    <!-- Post Introduce Edit-->
-    <property name="ui.jar.name" value="${project.jar.prefix}ui.jar" />
-    <property name="common.jar.name" value="${project.jar.prefix}common.jar" />
-    <property name="client.jar.name" value="${project.jar.prefix}client.jar" />
-    <property name="service.jar.name" value="${project.jar.prefix}service.jar" />
-    <property name="stubs.jar.name" value="${project.jar.prefix}stubs.jar" />
+
+    <!--import developers targets and properties (which can be overridden)-->
+    <import file="dev-build.xml" />
+
+    <!-- Jars -->
+    <!-- Jars -->
+	<property name="jar.prefix" value="${service.name}" />
+    <property name="common.jar.name" value="${jar.prefix}-common.jar" />
+    <property name="client.jar.name" value="${jar.prefix}-client.jar" />
+    <property name="service.jar.name" value="${jar.prefix}-service.jar" />
+    <property name="stubs.jar.name" value="${jar.prefix}-stubs.jar" />
+    <property name="test.jar.name" value="${jar.prefix}-tests.jar" />
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="test" />
     <property name="test.src.dir" value="${test.dir}/src" />
     <property name="test.lib.dir" value="${test.dir}/lib" />
     <property name="test.log.dir" value="test/logs" />
-    <property name="test.jar.name" value="${project.jar.prefix}tests.jar" />
-    <property name="ext.test.lib.dir" value="ext/test/lib" />
     <property name="junit.results.dir" value="${test.log.dir}/junit" />
-    <property name="force.config.replace" value="false" />
+
 
     <!-- Basic Build directories -->
 
@@ -57,24 +55,32 @@
     <property name="build.lib.dir" location="${build.dir}/lib" />
     <!-- Directory where stub source and class files are placed -->
     <property name="stubs.dir" location="${build.dir}/stubs-${service.name}" />
+    <property name="javadoc.dir" value="${build.dir}/javadoc" />
     <!-- Stub source files -->
     <property name="stubs.src" location="${stubs.dir}/src" />
     <!-- Compiled stub classes -->
     <property name="stubs.dest" location="${stubs.dir}/classes" />
-
     <!-- Where we have to copy schema files inside the build directory -->
     <property name="schema.dest" location="${build.dir}/schema" />
 
-
+        
     <!-- We want detailed error messages -->
     <property name="java.debug" value="on" />
+
+    <!--import run ant files -->
+    <import file="run-tools.xml" />
 
     <!--import deployment ant files -->
     <import file="build-deploy.xml" />
 
+    <!--import developers deploy targets and properties -->
+    <import file="dev-build-deploy.xml" />
+
+
+    <!-- using ant contrib for contidionals, looping , and runtarget -->
     <taskdef resource="net/sf/antcontrib/antlib.xml">
         <classpath>
-            <pathelement location="${lib.dir}/ant-contrib.jar" />
+            <pathelement location="${tools.lib.dir}/ant-contrib.jar" />
         </classpath>
     </taskdef>
 
@@ -101,15 +107,13 @@
         <property name="schema.src" location="${ext.globus.dir}/share/schema" />
         <property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
         <!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
-        <property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" />
-
+        <property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd -x http://schemas.xmlsoap.org/ws/2004/09/enumeration" />
     </target>
 
 
     <!-- Sets up the build directory structure -->
-    <target name="init" depends="checkGlobus, defineClasspaths, configure">
-
-
+    <target name="init" depends="checkGlobus, defineClasspaths">
+        <runtarget target="preInit" />
         <mkdir dir="${build.dir}" />
         <mkdir dir="${build.dest}" />
         <mkdir dir="${test.build.dest}" />
@@ -133,15 +137,13 @@
 
         <!-- Creates etc.dir in case it doesn't exist. Has no effect if dir already exists -->
         <mkdir dir="${etc.dir}" />
+        <runtarget target="postInit" />
     </target>
 
     <target name="defineClasspaths">
+        <runtarget target="defineExtendedClasspaths" />
         <path id="base.classpath">
             <fileset dir="${lib.dir}">
-                <include name="*.jar" />
-            </fileset>
-            <!-- Post Introduce Edit-->
-            <fileset dir="${ext.lib.dir}">
                 <include name="*.jar" />
             </fileset>
             <fileset dir="${ext.globus.dir}/lib">
@@ -150,41 +152,44 @@
                 <exclude name="${common.jar.name}" />
                 <exclude name="${client.jar.name}" />
                 <exclude name="${service.jar.name}" />
-                <exclude name="${ui.jar.name}" />
             </fileset>
+        	<path refid="base.extended.classpath" />
         </path>
         <path id="service.build.classpath">
             <pathelement location="${stubs.dest}" />
+        	<path refid="service.build.extended.classpath" />
             <path refid="base.classpath" />
         </path>
         <path id="service.run.classpath">
             <pathelement location="${build.dest}" />
+        	<path refid="service.run.extended.classpath" />
             <path refid="service.build.classpath" />
         </path>
         <path id="test.build.classpath">
             <fileset dir="${test.lib.dir}">
                 <include name="*.jar" />
             </fileset>
-            <fileset dir="${ext.test.lib.dir}">
-                <include name="*.jar" />
-            </fileset>
             <pathelement location="${build.dest}" />
+        	<path refid="test.build.extended.classpath" />
             <path refid="service.build.classpath" />
         </path>
         <path id="test.run.classpath">
-            <!-- Post Introduce Edit-->
-            <pathelement location="${test.dir}/resources" />
             <pathelement location="${test.build.dest}" />
+        	<path refid="test.run.extended.classpath" />
             <path refid="test.build.classpath" />
         </path>
+        <path id="run.classpath">
+            <pathelement location="${build.dest}" />
+        	<path refid="run.extended.classpath" />
+            <path refid="service.build.classpath" />
+        </path>
+        <path id="processor.run.classpath">
+            <fileset dir="${tools.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <path refid="run.classpath" />
+        </path>
     </target>
-
-    <target name="configure" description="Configures the project based on settings.">
-        <copy filtering="true" file="deploy.properties.template" tofile="deploy.properties" overwrite="true">
-            <filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
-        </copy>
-    </target>
-
 
     <!-- Generate bindings for our WSDL file -->
     <!-- This is done with a GT4 tool -->
@@ -216,20 +221,12 @@
             <property name="wsdl.file" value="${interface.name}_service.wsdl" />
             <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
         </ant>
-        <!-- DORIAN CONFIGURATION SCHEMA -->
-        <ant antfile="${build.stubs}" target="generateStubs">
-            <property name="source.stubs.dir" location="${schema.dest}" />
-            <property name="wsdl.file" value="DorianConfiguration.wsdl" />
-            <property name="target.stubs.dir" location="${stubs.src}" />
-            <property name="ns.excludes" value="${GT4.ns.excludes}" />
-        </ant>
     </target>
-
-
 
     <!-- Generate the stub source files -->
     <!-- This is done with a GT4 tool -->
     <target name="stubs" depends="init">
+        <runtarget target="preStubs" />
         <for list="${introduce.skeleton.services.list}" parallel="false" param="service.name" trim="true">
             <sequential>
                 <echo message="Generating stubs for @{service.name}." />
@@ -238,95 +235,81 @@
                 </antcall>
             </sequential>
         </for>
+        <antcall target="stubGenerationPostProcessor" />
+        <runtarget target="postStubs" />
     </target>
 
+    <target name="stubGenerationPostProcessor">
+        <java classname="gov.nih.nci.cagrid.introduce.axis.FixSoapBindingStub" classpathref="processor.run.classpath" fork="no">
+            <arg value="${basedir}" />
+        </java>
+    </target>
 
 
     <!-- Compile the stubs generated in the previous step -->
     <target name="compileStubs" depends="stubs">
-        <javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
+        <runtarget target="preCompileStubs" />
+        <javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}" classpathref="base.classpath">
             <include name="**/*.java" />
-            <classpath>
-                <!-- need to include libs incase they are using their own types -->
-                <fileset dir="${lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
-                <fileset dir="${ext.lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
-                <fileset dir="${ext.globus.dir}/lib">
-                    <include name="*.jar" />
-                    <exclude name="${stubs.jar.name}" />
-                    <exclude name="${common.jar.name}" />
-                    <exclude name="${client.jar.name}" />
-                    <exclude name="${service.jar.name}" />
-                </fileset>
-            </classpath>
         </javac>
+        <runtarget target="postCompileStubs" />
     </target>
 
 
     <!-- Compile the implementation classes (service, resource, etc.) -->
-    <target name="compile" depends="compileStubs">
+    <target name="compile" depends="compileStubs" description="Compiles the service.">
+        <runtarget target="preCompile" />
+        <javac srcdir="${src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
 
-        <javac srcdir="${src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
-        </javac>
+        <!-- Copy the source code, wsdd, properties, etc to the build dir for include in the jar -->
         <copy toDir="${build.dest}">
             <fileset dir="${src.dir}">
                 <include name="**/*" />
             </fileset>
         </copy>
-
+        <runtarget target="postCompile" />
     </target>
+
 
     <!-- Compile the test implementation classes (service, resource, etc.) -->
     <target name="compileTests" depends="compile">
-
-        <javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}">
-        </javac>
-
+        <runtarget target="preCompileTests" />
+        <javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
+        <runtarget target="postCompileStubs" />
     </target>
 
 
     <!-- Create a JAR file with the implementation classes -->
     <target name="jar" depends="compile">
+        <runtarget target="preJar" />
         <jar jarfile="${build.lib.dir}/${client.jar.name}" basedir="${build.dest}">
             <include name="**/client/**" />
         </jar>
-        <!-- Post Introduce Edit-->
-        <jar jarfile="${build.lib.dir}/${ui.jar.name}" basedir="${build.dest}">
-            <fileset dir="${build.dest}" includes="**/ui/**" />
-            <fileset dir="resources/ui/dorian" />
-        </jar>
-
         <jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
             <include name="**/service/**" />
-            <!-- Post Introduce Edit-->
-            <include name="**/ca/**" />
         </jar>
         <jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
-            <include name="**/*.xml" />
-            <include name="**/*.dtd" />
-            <include name="**/*.properties" />
-            <include name="**/*.xsd" />
-            <include name="**/*.wsdd" />
-            <!-- Post Introduce Edit-->
-            <include name="**/common/**" />
+            <include name="**/*" />
             <exclude name="**/client/**" />
             <exclude name="**/service/**" />
         </jar>
+        <runtarget target="postJar" />
     </target>
 
 
     <!-- Create a JAR file with the test implementation classes -->
     <target name="jarTests" depends="jar,compileTests">
+        <runtarget target="preJarTests" />
         <jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}" />
+        <runtarget target="postJarTests" />
     </target>
 
 
     <!-- Create a JAR file with the stub classes -->
     <target name="jarStubs" depends="compileStubs">
+        <runtarget target="preJarStubs" />
         <jar destfile="${build.lib.dir}/${stubs.jar.name}" basedir="${stubs.dest}" />
+        <runtarget target="postJarStubs" />
     </target>
 
 
@@ -335,131 +318,46 @@
 
 
     <!-- Clean up all the intermediate files -->
-    <target name="clean">
+    <target name="clean" description="Removes all generated build artifacts.">
+        <runtarget target="preClean" />
         <delete dir="tmp" />
         <delete dir="${build.dir}" />
         <delete file="${gar.name}" />
+        <runtarget target="postClean" />
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Builds Code Docuementation                                          -->
+    <!-- =================================================================== -->
+    <target name="javadoc" depends="compile" description="Creates the API documentation.">
+        <javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="${service.name} API">
+
+            <sourcepath>
+                <pathelement path="${src.dir}" />
+            </sourcepath>
+
+            <classpath>
+                <path refid="service.build.classpath" />
+            </classpath>
+
+            <tag name="todo" scope="all" description="To do:" />
+            <tag name="created" scope="all" description="Created On:" />
+
+        </javadoc>
     </target>
 
     <!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
-    <target name="all" depends="jars" />
+    <target name="all" depends="jars" description="Builds the entire service." />
 
-    <!-- Post Introduce Edit-->
-    <!--
-	<target name="test" depends="checkGlobus">
-		<echo message="Test results dir: ${junit.results.dir}" />
-		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" showoutput="true">
-			<sysproperty key="basedir" value="${basedir}" />
-			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
-			<classpath refid="test.run.classpath"/>
-			<formatter type="xml" />
-			<batchtest fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/Test*.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-	</target>
-	-->
-    <!-- Post Introduce Edit-->
-    <!-- Load test files -->
-    <import file="test/test.xml" />
-
-    <!-- Post Introduce Edit-->
-    <target name="ui" description="Run the dorian ui" depends="checkGlobus">
-        <java classname="org.cagrid.grape.GridApplication" fork="yes">
-            <jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
-            <arg value="etc/dorian-ui.xml" />
-            <classpath refid="service.run.classpath" />
-            <classpath>
-                <pathelement location="resources/ui/dorian" />
-                <pathelement location="ext/resources/portal/common" />
-            </classpath>
-        </java>
-    </target>
-
-    <target name="createProxy" description="Create a Grid User Proxy." depends="checkGlobus">
-        
-        <input message="Please enter the Authentication Service URL [${cagrid.master.dorian.service.url}]:" addproperty="auth.input" defaultvalue="${cagrid.master.dorian.service.url}" />
-        <input message="Please enter the Dorian Service URL [${cagrid.master.dorian.service.url}]:" addproperty="dorian.input" defaultvalue="${cagrid.master.dorian.service.url}" />
-
-        <input message="Please enter your username:" addproperty="username.input" />
-        <input message="Please enter your password:" addproperty="password.input" />
-        <input message="Please enter the number of hours the proxy should be valid for [12]:" addproperty="hours.input" defaultvalue="12" />
-        <java classname="gov.nih.nci.cagrid.dorian.tools.GridProxyInit" fork="yes" newenvironment="true">
-            <jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
-            <arg value="-a" />
-            <arg value="${auth.input}" />
-            <arg value="-d" />
-            <arg value="${dorian.input}" />
-            <arg value="-u" />
-            <arg value="${username.input}" />
-            <arg value="-p" />
-            <arg value="${password.input}" />
-            <arg value="-h" />
-            <arg value="${hours.input}" />
-            <classpath refid="service.run.classpath" />
-        </java>
-    </target>
-
-    <target name="importCA" description="Imports an external CA, for Dorian to use as its CA." depends="checkGlobus">
-        <input message="Please enter the location to the CA's certificate (PEM Format):" addproperty="cacert.input" />
-        <input message="Please enter the location to the CA's private key (PEM Format):" addproperty="cakey.input" />
-        <input message="Please enter the password to the CA's private key (Enter if None):" addproperty="password.input" />
-        <java classname="gov.nih.nci.cagrid.dorian.service.tools.ImportCA" fork="yes" newenvironment="true">
-            <arg value="-conf" />
-            <arg value="etc/dorian-conf.xml" />
-            <arg value="-cert" />
-            <arg value="${cacert.input}" />
-            <arg value="-key" />
-            <arg value="${cakey.input}" />
-            <arg value="-password" />
-            <arg value="${password.input}" />
-            <classpath refid="service.run.classpath" />
-        </java>
-    </target>
-	
-	
-	 <target name="configureGlobusToTrustDorian" description="Configures Globus to trust the Dorian CA." depends="checkGlobus">
-		        <java classname="gov.nih.nci.cagrid.dorian.service.tools.ConfigureGlobusToTrustDorian" fork="yes" newenvironment="true">
-		            <arg value="-conf" />
-		            <arg value="etc/dorian-conf.xml" />
-		            <classpath refid="service.run.classpath" />
-		        </java>
-		    </target>
-	
-	 <target name="createDorianHostCredentials" description="Creates host credentials for the Dorian Service." depends="checkGlobus">
-	        <input message="Please enter the host:" addproperty="host.input" />
-	        <input message="Please enter the directory to write out the host credentials:" addproperty="dir.input" />
-	        <java classname="gov.nih.nci.cagrid.dorian.service.tools.CreateHostCertificate" fork="yes" newenvironment="true">
-	            <arg value="-conf" />
-	            <arg value="etc/dorian-conf.xml" />
-	            <arg value="-host" />
-	            <arg value="${host.input}" />
-	            <arg value="-directory" />
-	            <arg value="${dir.input}" />
-	            <classpath refid="service.run.classpath" />
-	        </java>
-	    </target>
-
-    <target name="upgrade" description="Upgrades old versions of the Dorian database to the latest version." depends="checkGlobus">
-        <java classname="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true">
-            <jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
-            <arg value="-conf" />
-            <arg value="etc/dorian-conf.xml" />
-            <classpath refid="service.run.classpath" />
-        </java>
-    </target>
-
-    <target name="testUpgrade" description="Tests upgrading old versions of the Dorian database to the latest version." depends="checkGlobus">
-        <java classname="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true">
-            <jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
-            <arg value="-conf" />
-            <arg value="etc/dorian-conf.xml" />
-            <arg value="-trial" />
-            <classpath refid="service.run.classpath" />
-        </java>
+    <target name="help" description="Prints usage information.">
+        <echo message="================================================================================" />
+        <echo message="|    Introduce Created Grid Service                                            |" />
+        <echo message="          Service: ${service.name}" />
+        <echo message="--------------------------------------------------------------------------------" />
+        <echo message="|  USAGE:                                                                      |" />
+        <echo message="|    Type 'ant -h' for general help with Ant                                   |" />
+        <echo message="|    Type 'ant -p' for a description of this service's build targets.          |" />
+        <echo message="================================================================================" />
     </target>
 
 </project>
