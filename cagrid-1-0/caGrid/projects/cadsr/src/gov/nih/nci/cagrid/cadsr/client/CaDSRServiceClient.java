@@ -189,215 +189,232 @@ public class CaDSRServiceClient extends ServiceSecurityClient implements CaDSRSe
 		}
 	}
 
-	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
-        gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
-        gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
-        return boxedResult.getServiceSecurityMetadata();
-      }
+  public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
+    return boxedResult.getServiceSecurityMetadata();
     }
-	public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findAllProjects");
-        gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse boxedResult = portType.findAllProjects(params);
-        return boxedResult.getProject();
-      }
+  }
+
+  public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findAllProjects");
+    gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse boxedResult = portType.findAllProjects(params);
+    return boxedResult.getProject();
     }
-	public gov.nih.nci.cadsr.umlproject.domain.Project[] findProjects(java.lang.String context) throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findProjects");
-        gov.nih.nci.cagrid.cadsr.stubs.FindProjectsRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindProjectsRequest();
-        params.setContext(context);
-        gov.nih.nci.cagrid.cadsr.stubs.FindProjectsResponse boxedResult = portType.findProjects(params);
-        return boxedResult.getProject();
-      }
+  }
+
+  public gov.nih.nci.cadsr.umlproject.domain.Project[] findProjects(java.lang.String context) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findProjects");
+    gov.nih.nci.cagrid.cadsr.stubs.FindProjectsRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindProjectsRequest();
+    params.setContext(context);
+    gov.nih.nci.cagrid.cadsr.stubs.FindProjectsResponse boxedResult = portType.findProjects(params);
+    return boxedResult.getProject();
     }
-	public gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] findPackagesInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findPackagesInProject");
-        gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectResponse boxedResult = portType.findPackagesInProject(params);
-        return boxedResult.getUMLPackageMetadata();
-      }
+  }
+
+  public gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] findPackagesInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findPackagesInProject");
+    gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.FindPackagesInProjectResponse boxedResult = portType.findPackagesInProject(params);
+    return boxedResult.getUMLPackageMetadata();
     }
-	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findClassesInProject");
-        gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectResponse boxedResult = portType.findClassesInProject(params);
-        return boxedResult.getUMLClassMetadata();
-      }
+  }
+
+  public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findClassesInProject");
+    gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.FindClassesInProjectResponse boxedResult = portType.findClassesInProject(params);
+    return boxedResult.getUMLClassMetadata();
     }
-	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInPackage(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String packageName) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findClassesInPackage");
-        gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        params.setPackageName(packageName);
-        gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageResponse boxedResult = portType.findClassesInPackage(params);
-        return boxedResult.getUMLClassMetadata();
-      }
+  }
+
+  public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInPackage(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String packageName) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findClassesInPackage");
+    gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    params.setPackageName(packageName);
+    gov.nih.nci.cagrid.cadsr.stubs.FindClassesInPackageResponse boxedResult = portType.findClassesInPackage(params);
+    return boxedResult.getUMLClassMetadata();
     }
-	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"generateDomainModelForProject");
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectRequest params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectResponse boxedResult = portType.generateDomainModelForProject(params);
-        return boxedResult.getDomainModel();
-      }
+  }
+
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"generateDomainModelForProject");
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectRequest params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForProjectResponse boxedResult = portType.generateDomainModelForProject(params);
+    return boxedResult.getDomainModel();
     }
-	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForPackages(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] packageNames) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"generateDomainModelForPackages");
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesRequest params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        params.setPackageNames(packageNames);
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesResponse boxedResult = portType.generateDomainModelForPackages(params);
-        return boxedResult.getDomainModel();
-      }
+  }
+
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForPackages(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] packageNames) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"generateDomainModelForPackages");
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesRequest params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    params.setPackageNames(packageNames);
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForPackagesResponse boxedResult = portType.generateDomainModelForPackages(params);
+    return boxedResult.getDomainModel();
     }
-	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] fullClassNames,gov.nih.nci.cagrid.cadsrservice.UMLAssociationExclude[] associationExcludes) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"generateDomainModelForClassesWithExcludes");
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequest params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        params.setFullClassNames(fullClassNames);
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestAssociationExcludes associationExcludesContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestAssociationExcludes();
-        associationExcludesContainer.setUMLAssociationExclude(associationExcludes);
-        params.setAssociationExcludes(associationExcludesContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesResponse boxedResult = portType.generateDomainModelForClassesWithExcludes(params);
-        return boxedResult.getDomainModel();
-      }
+  }
+
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] fullClassNames,gov.nih.nci.cagrid.cadsrservice.UMLAssociationExclude[] associationExcludes) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"generateDomainModelForClassesWithExcludes");
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequest params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    params.setFullClassNames(fullClassNames);
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestAssociationExcludes associationExcludesContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestAssociationExcludes();
+    associationExcludesContainer.setUMLAssociationExclude(associationExcludes);
+    params.setAssociationExcludes(associationExcludesContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesResponse boxedResult = portType.generateDomainModelForClassesWithExcludes(params);
+    return boxedResult.getDomainModel();
     }
-	public gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata[] findAttributesInClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findAttributesInClass");
-        gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassRequestClazz clazzContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassRequestClazz();
-        clazzContainer.setUMLClassMetadata(clazz);
-        params.setClazz(clazzContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassResponse boxedResult = portType.findAttributesInClass(params);
-        return boxedResult.getUMLAttributeMetadata();
-      }
+  }
+
+  public gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata[] findAttributesInClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findAttributesInClass");
+    gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassRequestClazz clazzContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassRequestClazz();
+    clazzContainer.setUMLClassMetadata(clazz);
+    params.setClazz(clazzContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.FindAttributesInClassResponse boxedResult = portType.findAttributesInClass(params);
+    return boxedResult.getUMLAttributeMetadata();
     }
-	public gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] findSemanticMetadataForClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findSemanticMetadataForClass");
-        gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassRequestClazz clazzContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassRequestClazz();
-        clazzContainer.setUMLClassMetadata(clazz);
-        params.setClazz(clazzContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassResponse boxedResult = portType.findSemanticMetadataForClass(params);
-        return boxedResult.getSemanticMetadata();
-      }
+  }
+
+  public gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] findSemanticMetadataForClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findSemanticMetadataForClass");
+    gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassRequestClazz clazzContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassRequestClazz();
+    clazzContainer.setUMLClassMetadata(clazz);
+    params.setClazz(clazzContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.FindSemanticMetadataForClassResponse boxedResult = portType.findSemanticMetadataForClass(params);
+    return boxedResult.getSemanticMetadata();
     }
-	public gov.nih.nci.cadsr.domain.ValueDomain findValueDomainForAttribute(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findValueDomainForAttribute");
-        gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeRequestAttribute attributeContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeRequestAttribute();
-        attributeContainer.setUMLAttributeMetadata(attribute);
-        params.setAttribute(attributeContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeResponse boxedResult = portType.findValueDomainForAttribute(params);
-        return boxedResult.getValueDomain();
-      }
+  }
+
+  public gov.nih.nci.cadsr.domain.ValueDomain findValueDomainForAttribute(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findValueDomainForAttribute");
+    gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeRequestAttribute attributeContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeRequestAttribute();
+    attributeContainer.setUMLAttributeMetadata(attribute);
+    params.setAttribute(attributeContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.FindValueDomainForAttributeResponse boxedResult = portType.findValueDomainForAttribute(params);
+    return boxedResult.getValueDomain();
     }
-	public gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] findAssociationsForClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findAssociationsForClass");
-        gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassRequestClazz clazzContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassRequestClazz();
-        clazzContainer.setUMLClassMetadata(clazz);
-        params.setClazz(clazzContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassResponse boxedResult = portType.findAssociationsForClass(params);
-        return boxedResult.getUMLAssociation();
-      }
+  }
+
+  public gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] findAssociationsForClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findAssociationsForClass");
+    gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassRequestClazz clazzContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassRequestClazz();
+    clazzContainer.setUMLClassMetadata(clazz);
+    params.setClazz(clazzContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsForClassResponse boxedResult = portType.findAssociationsForClass(params);
+    return boxedResult.getUMLAssociation();
     }
-	public gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] findAssociationsInPackage(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String packageName) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findAssociationsInPackage");
-        gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        params.setPackageName(packageName);
-        gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageResponse boxedResult = portType.findAssociationsInPackage(params);
-        return boxedResult.getUMLAssociation();
-      }
+  }
+
+  public gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] findAssociationsInPackage(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String packageName) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findAssociationsInPackage");
+    gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    params.setPackageName(packageName);
+    gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInPackageResponse boxedResult = portType.findAssociationsInPackage(params);
+    return boxedResult.getUMLAssociation();
     }
-	public gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] findAssociationsInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findAssociationsInProject");
-        gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectResponse boxedResult = portType.findAssociationsInProject(params);
-        return boxedResult.getUMLAssociation();
-      }
+  }
+
+  public gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] findAssociationsInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findAssociationsInProject");
+    gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectResponse boxedResult = portType.findAssociationsInProject(params);
+    return boxedResult.getUMLAssociation();
     }
-	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] fullClassNames) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"generateDomainModelForClasses");
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequest params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        params.setFullClassNames(fullClassNames);
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse boxedResult = portType.generateDomainModelForClasses(params);
-        return boxedResult.getDomainModel();
-      }
+  }
+
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] fullClassNames) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"generateDomainModelForClasses");
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequest params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    params.setFullClassNames(fullClassNames);
+    gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse boxedResult = portType.generateDomainModelForClasses(params);
+    return boxedResult.getDomainModel();
     }
-	public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata) throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"annotateServiceMetadata");
-        gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequest params = new gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequestServiceMetadata serviceMetadataContainer = new gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequestServiceMetadata();
-        serviceMetadataContainer.setServiceMetadata(serviceMetadata);
-        params.setServiceMetadata(serviceMetadataContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataResponse boxedResult = portType.annotateServiceMetadata(params);
-        return boxedResult.getServiceMetadata();
-      }
+  }
+
+  public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"annotateServiceMetadata");
+    gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequest params = new gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequestServiceMetadata serviceMetadataContainer = new gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequestServiceMetadata();
+    serviceMetadataContainer.setServiceMetadata(serviceMetadata);
+    params.setServiceMetadata(serviceMetadataContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataResponse boxedResult = portType.annotateServiceMetadata(params);
+    return boxedResult.getServiceMetadata();
     }
-	public gov.nih.nci.cadsr.domain.Context findContextForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findContextForProject");
-        gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse boxedResult = portType.findContextForProject(params);
-        return boxedResult.getContext();
-      }
+  }
+
+  public gov.nih.nci.cadsr.domain.Context findContextForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findContextForProject");
+    gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequest();
+    gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequestProject();
+    projectContainer.setProject(project);
+    params.setProject(projectContainer);
+    gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse boxedResult = portType.findContextForProject(params);
+    return boxedResult.getContext();
     }
+  }
 
 }

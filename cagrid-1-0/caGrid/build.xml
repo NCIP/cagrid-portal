@@ -279,6 +279,7 @@
             <artifact refid="metadatautils.jars" />
             <artifact refid="caCORE.jars" />
             <artifact refid="introduce.jars" />
+        	<artifact refid="advertisement.jars" />
             <artifact refid="graph.jars" />
             <artifact refid="gme.globus.client.jars" />
             <artifact refid="servicesecurity.jars" />
@@ -311,6 +312,8 @@
             <artifact refid="common.metadata.jars" />
             <artifact refid="caCORE.jars" />
             <artifact refid="servicesecurity.jars" />
+        	<artifact refid="advertisement.jars" />
+        	<artifact refid="jdom.jars" />
         </resolveDependencies>
         <delete dir="${projects.dir}/evs/schema/EVSGridService/xsd" />
         <resolveDependencies extdir="${projects.dir}/evs/schema/EVSGridService">
