@@ -3,978 +3,980 @@
 <!-- caGrid Master build file                                          -->
 <!-- ================================================================= -->
 <project name="caGrid-Master" default="all" basedir=".">
-    <dirname property="caGrid-Master.basedir" file="${ant.file.caGrid-Master}" />
+	<dirname property="caGrid-Master.basedir" file="${ant.file.caGrid-Master}" />
 
-    <!-- Give user the chance to override properties -->
-    <property environment="env" />
-    <property file="build.properties" />
-    <!-- Load in project listings -->
-    <property file="${caGrid-Master.basedir}/project.properties" />
+	<!-- Give user the chance to override properties -->
+	<property environment="env" />
+	<property file="build.properties" />
+	<!-- Load in project listings -->
+	<property file="${caGrid-Master.basedir}/project.properties" />
 
-    <!-- Layout info -->
-    <property name="projects.dir" location="${caGrid-Master.basedir}/projects" />
-    <property name="test.dir" location="${caGrid-Master.basedir}/test" />
-    <property name="share.dir" location="${caGrid-Master.basedir}/share" />
-    <property name="build.dir" location="${caGrid-Master.basedir}/build" />
-    <property name="antfiles.dir" location="${caGrid-Master.basedir}/antfiles" />
-    
-    <property name="share.lib.dir" location="${share.dir}/lib" />
-    <property name="test.lib.dir" location="${test.dir}/lib" />
-    <property name="anttask.classes.dir" location="${build.dir}/anttasks/classes" />
+	<!-- Layout info -->
+	<property name="projects.dir" location="${caGrid-Master.basedir}/projects" />
+	<property name="test.dir" location="${caGrid-Master.basedir}/test" />
+	<property name="share.dir" location="${caGrid-Master.basedir}/share" />
+	<property name="build.dir" location="${caGrid-Master.basedir}/build" />
+	<property name="antfiles.dir" location="${caGrid-Master.basedir}/antfiles" />
 
-    <property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
+	<property name="share.lib.dir" location="${share.dir}/lib" />
+	<property name="test.lib.dir" location="${test.dir}/lib" />
+	<property name="anttask.classes.dir" location="${build.dir}/anttasks/classes" />
 
-    <condition property="isJDK1.5" value="true">
-        <or>
-            <equals arg1="${ant.java.version}" arg2="1.5" />
-            <equals arg1="${ant.java.version}" arg2="1.6" />
-        </or>
-    </condition>
-    <!-- Require Java 1.5 for now -->
-    <fail message="JDK 1.5 is currently required to build this project!" unless="isJDK1.5" />
+	<property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
 
-    <!-- IMPORT THE UTILITIES TARGETS -->
-    <import file="${antfiles.dir}/ant-tasks.xml" />
-    <import file="${antfiles.dir}/target-grid.xml" />
-    <import file="${antfiles.dir}/artifacts.xml" />
-    <import file="${antfiles.dir}/run-utilities.xml" />
+	<condition property="isJDK1.5" value="true">
+		<or>
+			<equals arg1="${ant.java.version}" arg2="1.5" />
+			<equals arg1="${ant.java.version}" arg2="1.6" />
+		</or>
+	</condition>
+	<!-- Require Java 1.5 for now -->
+	<fail message="JDK 1.5 is currently required to build this project!" unless="isJDK1.5" />
 
-    <!-- IMPORT THE TEST TARGET -->
-    <import file="${test.dir}/test.xml" />
+	<!-- IMPORT THE UTILITIES TARGETS -->
+	<import file="${antfiles.dir}/ant-tasks.xml" />
+	<import file="${antfiles.dir}/target-grid.xml" />
+	<import file="${antfiles.dir}/artifacts.xml" />
+	<import file="${antfiles.dir}/run-utilities.xml" />
 
-    <!-- At parse time we clean out the custom ant task build, to be sure it gets built at parse time -->
-    <delete failonerror="false" dir="${anttask.classes.dir}" />
+	<!-- IMPORT THE TEST TARGET -->
+	<import file="${test.dir}/test.xml" />
 
-    <!-- =============================================================== -->
-    <!-- Bootstrap the build by setting up the structure and building    -->
-    <!-- our custom ant tasks.                                           -->
-    <!-- =============================================================== -->
-    <target name="prepare" depends="define-ant-tasks, prepare-target-grid">
-        <tstamp />
-    </target>
+	<!-- At parse time we clean out the custom ant task build, to be sure it gets built at parse time -->
+	<delete failonerror="false" dir="${anttask.classes.dir}" />
 
-    <!-- =============================================================== -->
-    <!-- CORE: This cannot have any dependencies on other projects       -->
-    <!-- =============================================================== -->
-    <target name="build-core" depends="prepare" description="Builds the core">
-        <resolveDependencies extdir="${projects.dir}/core/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="mobius.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- Bootstrap the build by setting up the structure and building    -->
+	<!-- our custom ant tasks.                                           -->
+	<!-- =============================================================== -->
+	<target name="prepare" depends="define-ant-tasks, prepare-target-grid">
+		<tstamp />
+	</target>
 
-
-    <!-- =============================================================== -->
-    <!-- OPENSAML: This cannot have any dependencies on other projects   -->
-    <!-- =============================================================== -->
-    <target name="build-opensaml" depends="prepare" description="Builds opensaml">
-        <resolveDependencies extdir="${projects.dir}/opensaml/ext">
-            <artifact refid="cagrid.properties" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- CORE: This cannot have any dependencies on other projects       -->
+	<!-- =============================================================== -->
+	<target name="build-core" depends="prepare" description="Builds the core">
+		<resolveDependencies extdir="${projects.dir}/core/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="mobius.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- METADATA: This may only depend on core                          -->
-    <!-- =============================================================== -->
-    <target name="build-metadata" depends="prepare" description="Builds the common metadata">
-        <resolveDependencies extdir="${projects.dir}/metadata/ext">
-            <artifact refid="cagrid.properties" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- ADVERTISEMENT:                                                  -->
-    <!-- =============================================================== -->
-    <target name="build-advertisement" depends="prepare" description="Builds the advertisement clients">
-        <resolveDependencies extdir="${projects.dir}/advertisement/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="mds.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/advertisement" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- DISCOVERY:                                                      -->
-    <!-- =============================================================== -->
-    <target name="configure-discovery" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/discovery/ext">
-            <artifact refid="service_urls.properties" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-discovery" depends="configure-discovery" description="Builds the discovery clients">
-        <resolveDependencies extdir="${projects.dir}/discovery/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="metadata.schemas" />
-            <artifact refid="metadatautils.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="data.metadata.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- METADATA UTILS:                                                      -->
-    <!-- =============================================================== -->
-    <target name="build-metadatautils" depends="prepare" description="Builds the metadata utils">
-        <resolveDependencies extdir="${projects.dir}/metadatautils/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="data.metadata.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/metadatautils" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- Grid Application Envrionment (GRAPE)                            -->
-    <!-- =============================================================== -->
-    <target name="build-grape" depends="prepare" description="Builds the Grid Application Envrionment (GRAPE)">
-        <resolveDependencies extdir="${projects.dir}/grape/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/grape" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- PORTAL:                                                    	 -->
-    <!-- =============================================================== -->
-    <target name="configure-portal" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/portal/ext">
-            <artifact refid="gts.sync.description" />
-        </resolveDependencies>
-        <!-- <ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="configure" /> -->
-    </target>
-    <target name="build-portal" depends="configure-portal" description="Builds the portal project">
-        <resolveDependencies extdir="${projects.dir}/portal/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="caCORE.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="data.metadata.jars" />
-            <artifact refid="discovery.jars" />
-            <artifact refid="metadatautils.jars" />
-            <artifact refid="syncgts.client.jars" />
-            <artifact refid="security.metadata.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- PORTAL 2:                                                    	 -->
-    <!-- =============================================================== -->
-    <target name="configure-portal2" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/portal2/ext">
-            <artifact refid="gts.sync.description" />
-        </resolveDependencies>
-        <!-- <ant dir="${projects.dir}/portal2" inheritAll="false" antfile="build.xml" target="configure" /> -->
-    </target>
-    <target name="build-portal2" depends="configure-portal2" description="Builds the portal2 project">
-        <resolveDependencies extdir="${projects.dir}/portal2/ext">
-            <artifact refid="advertisement.jars" />
-            <artifact refid="authentication.service.client.jars" />
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="data.jars" />
-            <artifact refid="data.metadata.jars" />
-            <artifact refid="dorian.client.jars" />
-            <artifact refid="discovery.jars" />
-            <artifact refid="metadatautils.jars" />
-            <artifact refid="syncgts.client.jars" />
-            <artifact refid="security.metadata.jars" />
-            <artifact refid="ws.enum.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/portal2" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- caBIG Introduce Extensions:                                     -->
-    <!-- =============================================================== -->
-    <target name="configure-cabigextensions" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/cabigextensions/ext">
-            <artifact refid="service_urls.properties" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/cabigextensions" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-cabigextensions" depends="configure-cabigextensions" description="Builds the caBIG Introduce extensions">
-        <resolveDependencies extdir="${projects.dir}/cabigextensions/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="ant-contrib.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="system.test.jars" />
-            <artifact refid="introduce.full.test.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="cadsr.jars" />
-            <artifact refid="data.jars" />
-            <artifact refid="data.metadata.jars" />
-            <artifact refid="metadata.schemas" />
-            <artifact refid="metadatautils.jars" />
-            <artifact refid="graph.jars" />
-            <artifact refid="discovery.jars" />
-            <artifact refid="introduce.jars" />
-            <artifact refid="ws.enum.jars" />
-            <artifact refid="ws.enum.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/cabigextensions" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- GRAPH: Graphing/UML diagrams                                    -->
-    <!-- =============================================================== -->
-    <target name="build-graph" depends="prepare" description="Builds graph">
-        <resolveDependencies extdir="${projects.dir}/graph/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/graph" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- OPENSAML: This cannot have any dependencies on other projects   -->
+	<!-- =============================================================== -->
+	<target name="build-opensaml" depends="prepare" description="Builds opensaml">
+		<resolveDependencies extdir="${projects.dir}/opensaml/ext">
+			<artifact refid="cagrid.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- caDSR:                                                          -->
-    <!-- =============================================================== -->
-    <target name="configure-cadsr" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/cadsr/ext">
-            <artifact refid="service_urls.properties" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-cadsr" depends="configure-cadsr" description="Builds the cadsr project">
-        <resolveDependencies extdir="${projects.dir}/cadsr/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="data.metadata.jars" />
-            <artifact refid="metadatautils.jars" />
-            <artifact refid="caCORE.jars" />
-            <artifact refid="introduce.jars" />
-        	<artifact refid="advertisement.jars" />
-            <artifact refid="graph.jars" />
-            <artifact refid="gme.globus.client.jars" />
-            <artifact refid="servicesecurity.jars" />
-        </resolveDependencies>
-        <delete dir="${projects.dir}/cadsr/schema/CaDSRService/xsd" />
-        <resolveDependencies extdir="${projects.dir}/cadsr/schema/CaDSRService">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
+	<!-- =============================================================== -->
+	<!-- METADATA: This may only depend on core                          -->
+	<!-- =============================================================== -->
+	<target name="build-metadata" depends="prepare" description="Builds the common metadata">
+		<resolveDependencies extdir="${projects.dir}/metadata/ext">
+			<artifact refid="cagrid.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
+	</target>
 
-        <ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- ADVERTISEMENT:                                                  -->
+	<!-- =============================================================== -->
+	<target name="build-advertisement" depends="prepare" description="Builds the advertisement clients">
+		<resolveDependencies extdir="${projects.dir}/advertisement/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="mds.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/advertisement" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- DISCOVERY:                                                      -->
+	<!-- =============================================================== -->
+	<target name="configure-discovery" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/discovery/ext">
+			<artifact refid="service_urls.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-discovery" depends="configure-discovery" description="Builds the discovery clients">
+		<resolveDependencies extdir="${projects.dir}/discovery/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="metadata.schemas" />
+			<artifact refid="metadatautils.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.metadata.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- METADATA UTILS:                                                      -->
+	<!-- =============================================================== -->
+	<target name="build-metadatautils" depends="prepare" description="Builds the metadata utils">
+		<resolveDependencies extdir="${projects.dir}/metadatautils/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.metadata.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/metadatautils" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- Grid Application Envrionment (GRAPE)                            -->
+	<!-- =============================================================== -->
+	<target name="build-grape" depends="prepare" description="Builds the Grid Application Envrionment (GRAPE)">
+		<resolveDependencies extdir="${projects.dir}/grape/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/grape" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- PORTAL:                                                    	 -->
+	<!-- =============================================================== -->
+	<target name="configure-portal" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/portal/ext">
+			<artifact refid="gts.sync.description" />
+		</resolveDependencies>
+		<!-- <ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="configure" /> -->
+	</target>
+	<target name="build-portal" depends="configure-portal" description="Builds the portal project">
+		<resolveDependencies extdir="${projects.dir}/portal/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="caCORE.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.metadata.jars" />
+			<artifact refid="discovery.jars" />
+			<artifact refid="metadatautils.jars" />
+			<artifact refid="syncgts.client.jars" />
+			<artifact refid="security.metadata.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- PORTAL 2:                                                    	 -->
+	<!-- =============================================================== -->
+	<target name="configure-portal2" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/portal2/ext">
+			<artifact refid="gts.sync.description" />
+		</resolveDependencies>
+		<!-- <ant dir="${projects.dir}/portal2" inheritAll="false" antfile="build.xml" target="configure" /> -->
+	</target>
+	<target name="build-portal2" depends="configure-portal2" description="Builds the portal2 project">
+		<resolveDependencies extdir="${projects.dir}/portal2/ext">
+			<artifact refid="advertisement.jars" />
+			<artifact refid="authentication.service.client.jars" />
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.jars" />
+			<artifact refid="data.metadata.jars" />
+			<artifact refid="dorian.client.jars" />
+			<artifact refid="discovery.jars" />
+			<artifact refid="metadatautils.jars" />
+			<artifact refid="syncgts.client.jars" />
+			<artifact refid="security.metadata.jars" />
+			<artifact refid="ws.enum.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/portal2" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- caBIG Introduce Extensions:                                     -->
+	<!-- =============================================================== -->
+	<target name="configure-cabigextensions" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/cabigextensions/ext">
+			<artifact refid="service_urls.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/cabigextensions" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-cabigextensions" depends="configure-cabigextensions" description="Builds the caBIG Introduce extensions">
+		<resolveDependencies extdir="${projects.dir}/cabigextensions/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="ant-contrib.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="system.test.jars" />
+			<artifact refid="introduce.full.test.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="cadsr.jars" />
+			<artifact refid="data.jars" />
+			<artifact refid="data.metadata.jars" />
+			<artifact refid="metadata.schemas" />
+			<artifact refid="metadatautils.jars" />
+			<artifact refid="graph.jars" />
+			<artifact refid="discovery.jars" />
+			<artifact refid="introduce.jars" />
+			<artifact refid="ws.enum.jars" />
+			<artifact refid="ws.enum.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/cabigextensions" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- GRAPH: Graphing/UML diagrams                                    -->
+	<!-- =============================================================== -->
+	<target name="build-graph" depends="prepare" description="Builds graph">
+		<resolveDependencies extdir="${projects.dir}/graph/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/graph" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- EVS:                                                            -->
-    <!-- =============================================================== -->
-    <target name="configure-evs" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/evs/ext">
-            <artifact refid="service_urls.properties" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/evs" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-evs" depends="configure-evs" description="Builds the evs project">
-        <resolveDependencies extdir="${projects.dir}/evs/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="caCORE.jars" />
-            <artifact refid="servicesecurity.jars" />
-        	<artifact refid="advertisement.jars" />
-        	<artifact refid="jdom.jars" />
-        </resolveDependencies>
-        <delete dir="${projects.dir}/evs/schema/EVSGridService/xsd" />
-        <resolveDependencies extdir="${projects.dir}/evs/schema/EVSGridService">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
+	<!-- =============================================================== -->
+	<!-- caDSR:                                                          -->
+	<!-- =============================================================== -->
+	<target name="configure-cadsr" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/cadsr/ext">
+			<artifact refid="service_urls.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-cadsr" depends="configure-cadsr" description="Builds the cadsr project">
+		<resolveDependencies extdir="${projects.dir}/cadsr/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.metadata.jars" />
+			<artifact refid="metadatautils.jars" />
+			<artifact refid="caCORE.jars" />
+			<artifact refid="introduce.jars" />
+			<artifact refid="advertisement.jars" />
+			<artifact refid="graph.jars" />
+			<artifact refid="gme.globus.client.jars" />
+			<artifact refid="servicesecurity.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/cadsr/schema/CaDSRService/xsd" />
+		<resolveDependencies extdir="${projects.dir}/cadsr/schema/CaDSRService">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
 
-        <ant dir="${projects.dir}/evs" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- Grid CA:                                                        -->
-    <!-- =============================================================== -->
-    <target name="build-gridca" depends="prepare" description="Builds the gridca project">
-        <resolveDependencies extdir="${projects.dir}/gridca/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="grape.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
+	<!-- =============================================================== -->
+	<!-- EVS:                                                            -->
+	<!-- =============================================================== -->
+	<target name="configure-evs" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/evs/ext">
+			<artifact refid="service_urls.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/evs" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-evs" depends="configure-evs" description="Builds the evs project">
+		<resolveDependencies extdir="${projects.dir}/evs/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="caCORE.jars" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="advertisement.jars" />
+			<artifact refid="jdom.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/evs/schema/EVSGridService/xsd" />
+		<resolveDependencies extdir="${projects.dir}/evs/schema/EVSGridService">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
 
-    <!-- =============================================================== -->
-    <!-- Authentication Service:                                         -->
-    <!-- =============================================================== -->
-    <target name="configure-authentication-service" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/authentication-service/ext">
-            <artifact refid="service_urls.properties" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/authentication-service" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-authentication-service" depends="configure-authentication-service" description="Builds the Authentication Service project">
-        <resolveDependencies extdir="${projects.dir}/authentication-service/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="ant-contrib.jars" />
-            <artifact refid="csm.auth.jars" />
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="data.metadata.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="core.resources" />
-            <artifact refid="gridca.jars" />
-            <artifact refid="mobius.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="opensaml.jars" />
-            <artifact refid="opensaml.endorsed" />
-            <artifact refid="opensaml.codec" />
-            <artifact refid="servicesecurity.jars" />
-            <artifact refid="security.metadata.jars" />
-        </resolveDependencies>
-        <delete dir="${projects.dir}/authentication-service/schema/AuthenticationService/xsd" />
-        <resolveDependencies extdir="${projects.dir}/authentication-service/schema/AuthenticationService">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/authentication-service" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+		<ant dir="${projects.dir}/evs" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
-    <!-- =============================================================== -->
-    <!-- DORIAN:                                                         -->
-    <!-- =============================================================== -->
-    <target name="configure-dorian" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/dorian/ext">
-            <artifact refid="service_urls.properties" />
-            <artifact refid="dorian.ui.conf" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-dorian" depends="configure-dorian" description="Builds the dorian project">
-        <resolveDependencies extdir="${projects.dir}/dorian/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="grape.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="gridca.jars" />
-            <artifact refid="authentication.service.client.jars" />
-            <artifact refid="opensaml.jars" />
-            <artifact refid="opensaml.endorsed" />
-            <artifact refid="gts.client.jars" />
-            <artifact refid="servicesecurity.jars" />
-            <artifact refid="security.metadata.jars" />
-            <artifact refid="common.metadata.jars" />
-        </resolveDependencies>
-        <delete dir="${projects.dir}/dorian/schema/Dorian/xsd" />
-        <resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
 
-    <target name="configure-security-ui" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/security-ui/ext">
-            <artifact refid="dorian.ui.conf" />
-            <artifact refid="gts.ui.conf" />
-            <artifact refid="gridgrouper.ui.conf" />
-        </resolveDependencies>
-    </target>
-    <target name="build-security-ui" depends="configure-security-ui" description="Builds the Security UI project">
-        <resolveDependencies extdir="${projects.dir}/security-ui/ext">
-            <artifact refid="dorian.ui.jars" />
-            <artifact refid="grape.jars" />
-            <artifact refid="dorian.endorsed" />
-            <artifact refid="gts.ui.jars" />
-            <artifact refid="gridgrouper.ui.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/security-ui" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- Build Grid Grouper:                                             -->
-    <!-- =============================================================== -->
-    <target name="configure-gridgrouper" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/gridgrouper/ext">
-            <artifact refid="service_urls.properties" />
-            <artifact refid="gridgrouper.ui.conf" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/gridgrouper" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-gridgrouper" depends="configure-gridgrouper" description="Builds the Grid Grouper project">
-        <resolveDependencies extdir="${projects.dir}/gridgrouper/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="grape.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="gridca.jars" />
-            <artifact refid="servicesecurity.jars" />
-            <artifact refid="security.metadata.jars" />
-            <artifact refid="common.metadata.jars" />
-        </resolveDependencies>
-        <delete dir="${projects.dir}/gridgrouper/schema/GridGrouper/xsd" />
-        <resolveDependencies extdir="${projects.dir}/gridgrouper/schema/GridGrouper">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/gridgrouper" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- Grid CA:                                                        -->
+	<!-- =============================================================== -->
+	<target name="build-gridca" depends="prepare" description="Builds the gridca project">
+		<resolveDependencies extdir="${projects.dir}/gridca/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="grape.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
 
-    <!-- =============================================================== -->
-    <!-- Grid Trust Service:                                             -->
-    <!-- =============================================================== -->
-    <target name="configure-gts" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/gts/ext">
-            <artifact refid="service_urls.properties" />
-            <artifact refid="gts.ui.conf" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-gts" depends="configure-gts" description="Builds the GTS project">
-        <resolveDependencies extdir="${projects.dir}/gts/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="grape.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="gridca.jars" />
-            <artifact refid="mobius.jars" />
-            <artifact refid="servicesecurity.jars" />
-            <artifact refid="security.metadata.jars" />
-        </resolveDependencies>
-        <delete dir="${projects.dir}/gts/schema/GTS/xsd" />
-        <resolveDependencies extdir="${projects.dir}/gts/schema/GTS">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- Authentication Service:                                         -->
+	<!-- =============================================================== -->
+	<target name="configure-authentication-service" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/authentication-service/ext">
+			<artifact refid="service_urls.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/authentication-service" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-authentication-service" depends="configure-authentication-service" description="Builds the Authentication Service project">
+		<resolveDependencies extdir="${projects.dir}/authentication-service/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="ant-contrib.jars" />
+			<artifact refid="csm.auth.jars" />
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.metadata.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="mobius.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="opensaml.jars" />
+			<artifact refid="opensaml.endorsed" />
+			<artifact refid="opensaml.codec" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="security.metadata.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/authentication-service/schema/AuthenticationService/xsd" />
+		<resolveDependencies extdir="${projects.dir}/authentication-service/schema/AuthenticationService">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/authentication-service" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- DORIAN:                                                         -->
+	<!-- =============================================================== -->
+	<target name="configure-dorian" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/dorian/ext">
+			<artifact refid="service_urls.properties" />
+			<artifact refid="dorian.ui.conf" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-dorian" depends="configure-dorian" description="Builds the dorian project">
+		<resolveDependencies extdir="${projects.dir}/dorian/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="grape.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="authentication.service.client.jars" />
+			<artifact refid="opensaml.jars" />
+			<artifact refid="opensaml.endorsed" />
+			<artifact refid="gts.client.jars" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="security.metadata.jars" />
+			<artifact refid="common.metadata.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/dorian/schema/Dorian/xsd" />
+		<resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<target name="configure-security-ui" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/security-ui/ext">
+			<artifact refid="dorian.ui.conf" />
+			<artifact refid="gts.ui.conf" />
+			<artifact refid="gridgrouper.ui.conf" />
+		</resolveDependencies>
+	</target>
+	<target name="build-security-ui" depends="configure-security-ui" description="Builds the Security UI project">
+		<resolveDependencies extdir="${projects.dir}/security-ui/ext">
+			<artifact refid="dorian.ui.jars" />
+			<artifact refid="grape.jars" />
+			<artifact refid="dorian.endorsed" />
+			<artifact refid="gts.ui.jars" />
+			<artifact refid="gridgrouper.ui.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/security-ui" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- Build Grid Grouper:                                             -->
+	<!-- =============================================================== -->
+	<target name="configure-gridgrouper" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/gridgrouper/ext">
+			<artifact refid="service_urls.properties" />
+			<artifact refid="gridgrouper.ui.conf" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gridgrouper" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-gridgrouper" depends="configure-gridgrouper" description="Builds the Grid Grouper project">
+		<resolveDependencies extdir="${projects.dir}/gridgrouper/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="grape.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="security.metadata.jars" />
+			<artifact refid="common.metadata.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/gridgrouper/schema/GridGrouper/xsd" />
+		<resolveDependencies extdir="${projects.dir}/gridgrouper/schema/GridGrouper">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gridgrouper" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- Sync GTS                                                        -->
-    <!-- =============================================================== -->
-    <target name="configure-syncgts" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/syncgts/ext">
-            <artifact refid="service_urls.properties" />
-            <artifact refid="gts.sync.description" />
-            <artifact refid="gts.ca.files" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-syncgts" depends="configure-syncgts" description="Builds the syncgts project">
-        <resolveDependencies extdir="${projects.dir}/syncgts/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="gridca.jars" />
-            <artifact refid="mobius.jars" />
-            <artifact refid="gts.client.jars" />
-            <artifact refid="servicesecurity.jars" />
-            <artifact refid="security.metadata.jars" />
-        </resolveDependencies>
-        <delete dir="${projects.dir}/syncgts/schema/SyncGTS/xsd" />
-        <resolveDependencies extdir="${projects.dir}/syncgts/schema/SyncGTS">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
 
-    <!-- =============================================================== -->
-    <!-- INTRODUCE:                                                      -->
-    <!-- =============================================================== -->
-    <target name="configure-introduce" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/introduce/ext">
-            <artifact refid="service_urls.properties" />
-            <artifact refid="introduce.properties" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-introduce" depends="configure-introduce" description="Builds Introduce">
-        <resolveDependencies extdir="${projects.dir}/introduce/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="core.resources" />
-            <artifact refid="mobius.jars" />
-            <artifact refid="jdom.jars" />
-            <artifact refid="jet.jars" />
-            <artifact refid="gme.globus.client.jars" />
-            <artifact refid="metadata.schemas" />
-            <artifact refid="gridca.jars" />
-            <artifact refid="security.metadata.jars" />
-            <artifact refid="servicesecurity.jars" />
-            <artifact refid="gridgrouper.ui.jars" />
-        </resolveDependencies>
-
-        <delete>
-            <fileset dir="${projects.dir}/introduce/skeleton/lib">
-                <include name="*.jar" />
-            </fileset>
-        </delete>
-        <resolveDependencies extdir="${projects.dir}/introduce/skeleton">
-            <artifact refid="core.jars" />
-            <artifact refid="advertisement.jars" />
-            <artifact refid="jdom.jars" />
-            <artifact refid="security.metadata.jars" />
-            <artifact refid="servicesecurity.jars" />
-        </resolveDependencies>
-
-        <resolveDependencies extdir="${projects.dir}/introduce/ext/skeleton/gridgrouper">
-            <artifact refid="gridgrouper.client.jars" />
-        </resolveDependencies>
-
-        <resolveDependencies extdir="${projects.dir}/introduce/ext/skeleton/csm">
-            <artifact refid="authz.jars" />
-        </resolveDependencies>
-
-        <delete dir="${projects.dir}/introduce/schema/gridgrouper/xsd" />
-        <resolveDependencies extdir="${projects.dir}/introduce/schema/gridgrouper">
-            <artifact refid="gridgrouper.schemas" />
-        </resolveDependencies>
-        <resolveDependencies extdir="${projects.dir}/introduce/ext">
-            <artifact refid="servicesecurity.wsdl" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- REMOTE APPLICATION VIRTUALIZATION EXTENSION:                                                      -->
-    <!-- =============================================================== -->
-    <target name="build-rav" depends="prepare" description="Builds the Remote Virtualization Extension">
-        <resolveDependencies extdir="${projects.dir}/rav/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="introduce.jars" />
-            <artifact refid="introduce.resources" />
-            <artifact refid="core.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="test.coverage.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/rav" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- SERVICE SECURITY PROVIDER:                                      -->
-    <!-- =============================================================== -->
-    <target name="build-service-security-provider" depends="prepare" description="Builds Service Security Provider">
-        <resolveDependencies extdir="${projects.dir}/service-security-provider/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="security.metadata.jars" />
-        </resolveDependencies>
-        <delete dir="${projects.dir}/service-security-provider/schema/ServiceSecurity/xsd" />
-        <resolveDependencies extdir="${projects.dir}/service-security-provider/schema/ServiceSecurity">
-            <artifact refid="security.metadata.schemas" />
-        </resolveDependencies>
-
-        <ant dir="${projects.dir}/service-security-provider" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- Grid Trust Service:                                             -->
+	<!-- =============================================================== -->
+	<target name="configure-gts" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/gts/ext">
+			<artifact refid="service_urls.properties" />
+			<artifact refid="gts.ui.conf" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-gts" depends="configure-gts" description="Builds the GTS project">
+		<resolveDependencies extdir="${projects.dir}/gts/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="grape.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="mobius.jars" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="security.metadata.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/gts/schema/GTS/xsd" />
+		<resolveDependencies extdir="${projects.dir}/gts/schema/GTS">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- CAGRID GME:                                                     -->
-    <!-- =============================================================== -->
-    <target name="configure-gme" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/gme/ext">
-            <artifact refid="service_urls.properties" />
-        </resolveDependencies>
-        <!--<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="configure" />-->
-    </target>
-    <target name="build-gme" depends="configure-gme" description="Builds caGrid GME">
-        <resolveDependencies extdir="${projects.dir}/gme/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="core.resources" />
-            <artifact refid="mobius.jars" />
-        </resolveDependencies>
-        <resolveDependencies extdir="${projects.dir}/gme/schema/GlobalModelExchange">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- Sync GTS                                                        -->
+	<!-- =============================================================== -->
+	<target name="configure-syncgts" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/syncgts/ext">
+			<artifact refid="service_urls.properties" />
+			<artifact refid="gts.sync.description" />
+			<artifact refid="gts.ca.files" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-syncgts" depends="configure-syncgts" description="Builds the syncgts project">
+		<resolveDependencies extdir="${projects.dir}/syncgts/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="mobius.jars" />
+			<artifact refid="gts.client.jars" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="security.metadata.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/syncgts/schema/SyncGTS/xsd" />
+		<resolveDependencies extdir="${projects.dir}/syncgts/schema/SyncGTS">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- INTRODUCE:                                                      -->
+	<!-- =============================================================== -->
+	<target name="configure-introduce" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/introduce/ext">
+			<artifact refid="service_urls.properties" />
+			<artifact refid="introduce.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-introduce" depends="configure-introduce" description="Builds Introduce">
+		<resolveDependencies extdir="${projects.dir}/introduce/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="mobius.jars" />
+			<artifact refid="jdom.jars" />
+			<artifact refid="jet.jars" />
+			<artifact refid="gme.globus.client.jars" />
+			<artifact refid="metadata.schemas" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="security.metadata.jars" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="gridgrouper.ui.jars" />
+		</resolveDependencies>
+
+		<delete>
+			<fileset dir="${projects.dir}/introduce/skeleton/lib">
+				<include name="*.jar" />
+			</fileset>
+		</delete>
+		<resolveDependencies extdir="${projects.dir}/introduce/skeleton">
+			<artifact refid="core.jars" />
+			<artifact refid="advertisement.jars" />
+			<artifact refid="jdom.jars" />
+			<artifact refid="security.metadata.jars" />
+			<artifact refid="servicesecurity.jars" />
+		</resolveDependencies>
+
+		<resolveDependencies extdir="${projects.dir}/introduce/ext/skeleton/gridgrouper">
+			<artifact refid="gridgrouper.client.jars" />
+		</resolveDependencies>
+
+		<resolveDependencies extdir="${projects.dir}/introduce/ext/skeleton/csm">
+			<artifact refid="authz.jars" />
+		</resolveDependencies>
+
+		<delete dir="${projects.dir}/introduce/schema/gridgrouper/xsd" />
+		<resolveDependencies extdir="${projects.dir}/introduce/schema/gridgrouper">
+			<artifact refid="gridgrouper.schemas" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/introduce/ext">
+			<artifact refid="servicesecurity.wsdl" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- REMOTE APPLICATION VIRTUALIZATION EXTENSION:                                                      -->
+	<!-- =============================================================== -->
+	<target name="build-rav" depends="prepare" description="Builds the Remote Virtualization Extension">
+		<resolveDependencies extdir="${projects.dir}/rav/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="introduce.jars" />
+			<artifact refid="introduce.resources" />
+			<artifact refid="core.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/rav" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- SERVICE SECURITY PROVIDER:                                      -->
+	<!-- =============================================================== -->
+	<target name="build-service-security-provider" depends="prepare" description="Builds Service Security Provider">
+		<resolveDependencies extdir="${projects.dir}/service-security-provider/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="security.metadata.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/service-security-provider/schema/ServiceSecurity/xsd" />
+		<resolveDependencies extdir="${projects.dir}/service-security-provider/schema/ServiceSecurity">
+			<artifact refid="security.metadata.schemas" />
+		</resolveDependencies>
+
+		<ant dir="${projects.dir}/service-security-provider" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- CAGRID Installer:                                               -->
-    <!-- =============================================================== -->
-    <target name="build-installer" depends="prepare" description="Builds caGrid Installer">
-        <resolveDependencies extdir="${projects.dir}/installer/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="wizard.jars" />
-        </resolveDependencies>
-        <!--
+	<!-- =============================================================== -->
+	<!-- CAGRID GME:                                                     -->
+	<!-- =============================================================== -->
+	<target name="configure-gme" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/gme/ext">
+			<artifact refid="service_urls.properties" />
+		</resolveDependencies>
+		<!--<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="configure" />-->
+	</target>
+	<target name="build-gme" depends="configure-gme" description="Builds caGrid GME">
+		<resolveDependencies extdir="${projects.dir}/gme/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="mobius.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/gme/schema/GlobalModelExchange">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- CAGRID Installer:                                               -->
+	<!-- =============================================================== -->
+	<target name="build-installer" depends="prepare" description="Builds caGrid Installer">
+		<resolveDependencies extdir="${projects.dir}/installer/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="wizard.jars" />
+		</resolveDependencies>
+		<!--
     	        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
     	        -->
-    </target>
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- CAGRID DataService:                                             -->
-    <!-- =============================================================== -->
-    <target name="configure-data" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/data/ext">
-            <artifact refid="service_urls.properties" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-data" depends="configure-data" description="Builds caGrid Data Services components">
-        <resolveDependencies extdir="${projects.dir}/data/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="introduce.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="gme.globus.client.jars" />
-            <artifact refid="core.resources" />
-            <artifact refid="introduce.resources" />
-            <artifact refid="cadsr.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="jet.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="data.metadata.jars" />
-            <artifact refid="metadata.schemas" />
-            <artifact refid="metadatautils.jars" />
-            <artifact refid="graph.jars" />
-            <artifact refid="security.metadata.schemas" />
-            <artifact refid="introduce.core.test.jars" />
-            <artifact refid="ws.enum.jars" />
-            <artifact refid="ws.enum.schemas" />
-            <artifact refid="bdt.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- CAGRID DataService:                                             -->
+	<!-- =============================================================== -->
+	<target name="configure-data" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/data/ext">
+			<artifact refid="service_urls.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-data" depends="configure-data" description="Builds caGrid Data Services components">
+		<resolveDependencies extdir="${projects.dir}/data/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="introduce.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="gme.globus.client.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="introduce.resources" />
+			<artifact refid="cadsr.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="jet.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="data.metadata.jars" />
+			<artifact refid="metadata.schemas" />
+			<artifact refid="metadatautils.jars" />
+			<artifact refid="graph.jars" />
+			<artifact refid="security.metadata.schemas" />
+			<artifact refid="introduce.core.test.jars" />
+			<artifact refid="ws.enum.jars" />
+			<artifact refid="ws.enum.schemas" />
+			<artifact refid="bdt.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- CAGRID BulkDataTransfer:                                        -->
-    <!-- =============================================================== -->
-    <target name="build-bulkDataTransfer" depends="prepare" description="Builds caGrid BulkDataTransfer Services components">
-        <resolveDependencies extdir="${projects.dir}/bulkDataTransfer/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="introduce.jars" />
-            <artifact refid="introduce.resources" />
-            <artifact refid="mds.jars" />
-            <artifact refid="ws.enum.jars" />
-            <artifact refid="ws.enum.schemas" />
-            <artifact refid="core.jars" />
-            <artifact refid="jet.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="security.metadata.jars" />
-            <artifact refid="servicesecurity.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/bulkDataTransfer" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- CAGRID BulkDataTransfer:                                        -->
+	<!-- =============================================================== -->
+	<target name="build-bulkDataTransfer" depends="prepare" description="Builds caGrid BulkDataTransfer Services components">
+		<resolveDependencies extdir="${projects.dir}/bulkDataTransfer/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="introduce.jars" />
+			<artifact refid="introduce.resources" />
+			<artifact refid="mds.jars" />
+			<artifact refid="ws.enum.jars" />
+			<artifact refid="ws.enum.schemas" />
+			<artifact refid="core.jars" />
+			<artifact refid="jet.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="security.metadata.jars" />
+			<artifact refid="servicesecurity.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/bulkDataTransfer" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- CAGRID WsEnum:                                             	 -->
-    <!-- =============================================================== -->
-    <target name="build-wsEnum" depends="prepare" description="Builds caGrid WS-Enumeration components">
-        <resolveDependencies extdir="${projects.dir}/wsEnum/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="introduce.jars" />
-            <artifact refid="core.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="servicesecurity.jars" />
-            <artifact refid="security.metadata.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/wsEnum" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- CAGRID WsEnum:                                             	 -->
+	<!-- =============================================================== -->
+	<target name="build-wsEnum" depends="prepare" description="Builds caGrid WS-Enumeration components">
+		<resolveDependencies extdir="${projects.dir}/wsEnum/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="introduce.jars" />
+			<artifact refid="core.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="security.metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/wsEnum" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
-    <!-- =============================================================== -->
-    <!-- CAGRID WS-TRANSFER:                                             	 -->
-    <!-- =============================================================== -->
-    <target name="build-ws-transfer" depends="prepare" description="Builds caGrid WS-transfer components">
-        <ant dir="${projects.dir}/ws-transfer" inheritAll="false" antfile="build.xml" target="deploy" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- CAGRID WS-TRANSFER:                                             	 -->
+	<!-- =============================================================== -->
+	<target name="build-ws-transfer" depends="prepare" description="Builds caGrid WS-transfer components">
+		<ant dir="${projects.dir}/ws-transfer" inheritAll="false" antfile="build.xml" target="deploy" />
+	</target>
 
-    <!-- =============================================================== -->
-    <!-- CAGRID WS-NAMING:                                             	 -->
-    <!-- =============================================================== -->
-    <target name="build-ws-naming" depends="prepare" description="Builds caGrid WS-naming components">
-        <ant dir="${projects.dir}/ws-naming" inheritAll="false" antfile="build.xml" target="deploy" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- CAGRID WS-NAMING:                                             	 -->
+	<!-- =============================================================== -->
+	<target name="build-ws-naming" depends="prepare" description="Builds caGrid WS-naming components">
+		<ant dir="${projects.dir}/ws-naming" inheritAll="false" antfile="build.xml" target="deploy" />
+	</target>
 
-    <!-- =============================================================== -->
-    <!-- CAGRID WS-HANDLESYSTEM:                                             	 -->
-    <!-- =============================================================== -->
-    <target name="build-ws-handlesystem" depends="prepare" description="Builds caGrid WS-handlesystem components">
-        <ant dir="${projects.dir}/ws-handlesystem" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- CAGRID WS-HANDLESYSTEM:                                             	 -->
+	<!-- =============================================================== -->
+	<target name="build-ws-handlesystem" depends="prepare" description="Builds caGrid WS-handlesystem components">
+		<ant dir="${projects.dir}/ws-handlesystem" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- CAGRID SDK Data Service Query Processor:                        -->
-    <!-- =============================================================== -->
-    <target name="build-sdkQuery" depends="prepare" description="Builds caGrid SDK Query processor">
-        <resolveDependencies extdir="${projects.dir}/sdkQuery/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="caCORE.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="data.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="data.cql.testing.docs" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- CAGRID SDK Data Service Query Processor:                        -->
+	<!-- =============================================================== -->
+	<target name="build-sdkQuery" depends="prepare" description="Builds caGrid SDK Query processor">
+		<resolveDependencies extdir="${projects.dir}/sdkQuery/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="caCORE.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="data.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="data.cql.testing.docs" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
-    <!-- =============================================================== -->
-    <!-- CAGRID SDK 3.2 Data Service Query Processor:                    -->
-    <!-- =============================================================== -->
-    <target name="build-sdkQuery32" depends="prepare" description="Builds caGrid SDK 3.2 Query Processor">
-        <resolveDependencies extdir="${projects.dir}/sdkQuery32/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="data.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="data.cql.testing.docs" />
-       	</resolveDependencies>
+	<!-- =============================================================== -->
+	<!-- CAGRID SDK 3.2 Data Service Query Processor:                    -->
+	<!-- =============================================================== -->
+	<target name="build-sdkQuery32" depends="prepare" description="Builds caGrid SDK 3.2 Query Processor">
+		<resolveDependencies extdir="${projects.dir}/sdkQuery32/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="data.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="data.cql.testing.docs" />
+		</resolveDependencies>
 		<resolveDependencies targetdir="${projects.dir}/sdkQuery32/ext/lib/authz">
-            <artifact refid="authz.jars" />
+			<artifact refid="authz.jars" />
 		</resolveDependencies>
 		<resolveDependencies targetdir="${projects.dir}/sdkQuery32/ext/lib/sdkClient">
-			<artifact refid="caCORE.3.2.1.jars"/>
+			<artifact refid="caCORE.3.2.1.jars" />
 		</resolveDependencies>
 		<resolveDependencies targetdir="${projects.dir}/sdkQuery32/ext/lib/sdkThickClient">
-			<artifact refid="caCORE.3.2.1.thickclient.jars"/>
+			<artifact refid="caCORE.3.2.1.thickclient.jars" />
 		</resolveDependencies>
-        <ant dir="${projects.dir}/sdkQuery32" inheritall="false" antfile="build.xml" target="all" />
-    </target>
+		<ant dir="${projects.dir}/sdkQuery32" inheritall="false" antfile="build.xml" target="all" />
+	</target>
 
-    <!-- =============================================================== -->
-    <!-- Federated Query Processor:                                      -->
-    <!-- =============================================================== -->
-    <target name="configure-fqp" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/fqp/ext">
-            <artifact refid="service_urls.properties" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-fqp" depends="configure-fqp" description="Build the caGrid Federated Query Processor">
-        <resolveDependencies extdir="${projects.dir}/fqp/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="servicesecurity.jars" />
-            <artifact refid="data.jars" />
-        </resolveDependencies>
-        <delete dir="${projects.dir}/fqp/schema/FederatedQueryProcessor/xsd" />
-        <resolveDependencies extdir="${projects.dir}/fqp/schema/FederatedQueryProcessor">
-            <artifact refid="data.cql.schemas" />
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- CAGRID Workflow:                                               -->
-    <!-- =============================================================== -->
-    <target name="configure-workflow/WorkflowFactoryService" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/workflow/WorkflowFactoryService/ext">
-            <artifact refid="service_urls.properties" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/workflow/WorkflowFactoryService" inheritAll="false" antfile="build.xml" target="configure" />
-    </target>
-    <target name="build-workflow/WorkflowFactoryService" depends="configure-workflow/WorkflowFactoryService" description="Builds caGrid workflow">
-        <resolveDependencies extdir="${projects.dir}/workflow/WorkflowFactoryService/ext">
-            <artifact refid="jdom.jars" />
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="servicesecurity.jars" />
-            <artifact refid="grape.jars" />
-            <artifact refid="advertisement.jars"/>
-        </resolveDependencies>
-        <delete dir="${projects.dir}/workflow/WorkflowFactoryService/schema/WorkflowFactoryService/xsd" />
-        <resolveDependencies extdir="${projects.dir}/workflow/WorkflowFactoryService/schema/WorkflowFactoryService">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-
-        <ant dir="${projects.dir}/workflow/WorkflowFactoryService" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- Authz:                                               			 -->
-    <!-- =============================================================== -->
-    <target name="build-authz" depends="prepare" description="Builds the authz component">
-        <resolveDependencies extdir="${projects.dir}/authz/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="authz.misc.jars" />
-            <artifact refid="core.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="servicesecurity.jars" />
-            <artifact refid="gridgrouper.client.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/authz" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- GRIDFTPAUTHZ:                                                   -->
-    <!-- =============================================================== -->
-    <target name="build-gridftpauthz" depends="prepare" description="Builds GridFTP Java Authorization API">
-        <resolveDependencies extdir="${projects.dir}/gridftpauthz/ext">
-            <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="gridgrouper.client.jars" />
-        </resolveDependencies>
-        <delete dir="${projects.dir}/gridftpauthz/schema/xsd" />
-        <resolveDependencies extdir="${projects.dir}/gridftpauthz/schema">
-            <artifact refid="gridgrouper.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/gridftpauthz" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- WIZARD:                                                         -->
-    <!-- =============================================================== -->
-    <target name="build-wizard" depends="prepare" description="Builds Wizard API">
-        <resolveDependencies extdir="${projects.dir}/wizard/ext">
-            <artifact refid="cagrid.properties" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/wizard" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- ============================================================== -->
-    <!-- Installs the Introduce Extensions                              -->
-    <!-- ============================================================== -->
-    <target name="installIntroduceExtensions" depends="prepare">
-
-        <!--Can be removed once data services seperates its extension from its project-->
-        <resolveDependencies extdir="${projects.dir}/data/extension/sdk31">
-            <artifact refid="sdk.query.jars" />
-        </resolveDependencies>
-        <resolveDependencies extdir="${projects.dir}/data/extension/sdk32">
-            <artifact refid="sdk.32.query.jars" />
-        </resolveDependencies>
-
-        <delete>
-            <fileset dir="${introduce.extensions.dir}/lib" includes="**" />
-        </delete>
-        <for list="${introduce.extension.projects.list}" parallel="true" param="project.name" trim="true">
-            <sequential>
-                <echo message="Installing Introduce Extensions from @{project.name}." />
-                <ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="installIntroduceExtensions">
-                    <property name="introduce.extensions.dir" value="${introduce.extensions.dir}" />
-                </ant>
-            </sequential>
-        </for>
-    </target>
+	<!-- =============================================================== -->
+	<!-- Federated Query Processor:                                      -->
+	<!-- =============================================================== -->
+	<target name="configure-fqp" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/fqp/ext">
+			<artifact refid="service_urls.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-fqp" depends="configure-fqp" description="Build the caGrid Federated Query Processor">
+		<resolveDependencies extdir="${projects.dir}/fqp/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="data.jars" />
+			<artifact refid="advertisement.jars" />
+			<artifact refid="jdom.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/fqp/schema/FederatedQueryProcessor/xsd" />
+		<resolveDependencies extdir="${projects.dir}/fqp/schema/FederatedQueryProcessor">
+			<artifact refid="data.cql.schemas" />
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- ============================================================== -->
-    <!-- Cleans up generated stuff                                      -->
-    <!-- ============================================================== -->
-    <target name="clean" depends="prepare" description="Cleans all projects.">
-        <delete failonerror="false">
-            <fileset dir="${junit.results.dir}">
-                <include name="*" />
-            </fileset>
-        </delete>
+	<!-- =============================================================== -->
+	<!-- CAGRID Workflow:                                               -->
+	<!-- =============================================================== -->
+	<target name="configure-workflow/WorkflowFactoryService" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/workflow/WorkflowFactoryService/ext">
+			<artifact refid="service_urls.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/workflow/WorkflowFactoryService" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-workflow/WorkflowFactoryService" depends="configure-workflow/WorkflowFactoryService" description="Builds caGrid workflow">
+		<resolveDependencies extdir="${projects.dir}/workflow/WorkflowFactoryService/ext">
+			<artifact refid="jdom.jars" />
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="grape.jars" />
+			<artifact refid="advertisement.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/workflow/WorkflowFactoryService/schema/WorkflowFactoryService/xsd" />
+		<resolveDependencies extdir="${projects.dir}/workflow/WorkflowFactoryService/schema/WorkflowFactoryService">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
 
-        <for list="${projects.list}" parallel="true" param="project.name" trim="true">
-            <sequential>
-                <echo message="Cleaning project @{project.name}." />
-                <delete dir="${projects.dir}/@{project.name}/ext" />
-                <ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />
-            </sequential>
-        </for>
-    </target>
+		<ant dir="${projects.dir}/workflow/WorkflowFactoryService" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- Authz:                                               			 -->
+	<!-- =============================================================== -->
+	<target name="build-authz" depends="prepare" description="Builds the authz component">
+		<resolveDependencies extdir="${projects.dir}/authz/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="authz.misc.jars" />
+			<artifact refid="core.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="gridgrouper.client.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/authz" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- GRIDFTPAUTHZ:                                                   -->
+	<!-- =============================================================== -->
+	<target name="build-gridftpauthz" depends="prepare" description="Builds GridFTP Java Authorization API">
+		<resolveDependencies extdir="${projects.dir}/gridftpauthz/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="gridgrouper.client.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/gridftpauthz/schema/xsd" />
+		<resolveDependencies extdir="${projects.dir}/gridftpauthz/schema">
+			<artifact refid="gridgrouper.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gridftpauthz" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- WIZARD:                                                         -->
+	<!-- =============================================================== -->
+	<target name="build-wizard" depends="prepare" description="Builds Wizard API">
+		<resolveDependencies extdir="${projects.dir}/wizard/ext">
+			<artifact refid="cagrid.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/wizard" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Installs the Introduce Extensions                              -->
+	<!-- ============================================================== -->
+	<target name="installIntroduceExtensions" depends="prepare">
+
+		<!--Can be removed once data services seperates its extension from its project-->
+		<resolveDependencies extdir="${projects.dir}/data/extension/sdk31">
+			<artifact refid="sdk.query.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/data/extension/sdk32">
+			<artifact refid="sdk.32.query.jars" />
+		</resolveDependencies>
+
+		<delete>
+			<fileset dir="${introduce.extensions.dir}/lib" includes="**" />
+		</delete>
+		<for list="${introduce.extension.projects.list}" parallel="true" param="project.name" trim="true">
+			<sequential>
+				<echo message="Installing Introduce Extensions from @{project.name}." />
+				<ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="installIntroduceExtensions">
+					<property name="introduce.extensions.dir" value="${introduce.extensions.dir}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
 
 
-    <!-- Calling this target will configure the build process to not build dependent projects. -->
-    <target name="noDeps">
-        <echo message="Disabling calling of generatingantcalls." />
-        <property name="skip.artifact.antcalls" value="true" />
-    </target>
+	<!-- ============================================================== -->
+	<!-- Cleans up generated stuff                                      -->
+	<!-- ============================================================== -->
+	<target name="clean" depends="prepare" description="Cleans all projects.">
+		<delete failonerror="false">
+			<fileset dir="${junit.results.dir}">
+				<include name="*" />
+			</fileset>
+		</delete>
+
+		<for list="${projects.list}" parallel="true" param="project.name" trim="true">
+			<sequential>
+				<echo message="Cleaning project @{project.name}." />
+				<delete dir="${projects.dir}/@{project.name}/ext" />
+				<ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />
+			</sequential>
+		</for>
+	</target>
 
 
-    <!-- ============================================================== -->
-    <!-- Builds from scratch                                            -->
-    <!-- ============================================================== -->
-    <target name="all" depends="prepare, clean" description="Builds the entire application">
-        <for list="${projects.list}" parallel="false" param="project.name" trim="true">
-            <sequential>
-                <echo message="=====================================================================================" />
-                <echo message="Building project @{project.name}." />
-                <echo message="=====================================================================================" />
-                <runtarget target="build-@{project.name}" />
-                <echo message="Built project @{project.name}." />
-            </sequential>
-        </for>
-        <runtarget target="installIntroduceExtensions" />
-    </target>
+	<!-- Calling this target will configure the build process to not build dependent projects. -->
+	<target name="noDeps">
+		<echo message="Disabling calling of generatingantcalls." />
+		<property name="skip.artifact.antcalls" value="true" />
+	</target>
+
+
+	<!-- ============================================================== -->
+	<!-- Builds from scratch                                            -->
+	<!-- ============================================================== -->
+	<target name="all" depends="prepare, clean" description="Builds the entire application">
+		<for list="${projects.list}" parallel="false" param="project.name" trim="true">
+			<sequential>
+				<echo message="=====================================================================================" />
+				<echo message="Building project @{project.name}." />
+				<echo message="=====================================================================================" />
+				<runtarget target="build-@{project.name}" />
+				<echo message="Built project @{project.name}." />
+			</sequential>
+		</for>
+		<runtarget target="installIntroduceExtensions" />
+	</target>
 </project>
