@@ -46,7 +46,7 @@
 	<!-- Pre Init Target                                                -->
 	<!-- ============================================================== -->
 	<target name="preInit">
-
+		<runtarget target="configure" />
 	</target>
 
 	<!-- ============================================================== -->
@@ -189,5 +189,10 @@
         <fail message="Tests failed! Check test reports." if="test.failed" />
     </target>
 
+    <target name="configure" description="Configures the project based on settings.">		
+        <copy filtering="true" file="deploy.properties.template" tofile="deploy.properties" overwrite="true">
+            <filterset filtersfile="${basedir}/ext/resources/service_urls.properties"/>
+        </copy>
+    </target>
 
 </project>
