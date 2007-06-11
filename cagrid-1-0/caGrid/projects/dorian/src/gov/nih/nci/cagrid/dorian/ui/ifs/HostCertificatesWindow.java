@@ -14,6 +14,7 @@ import java.awt.Insets;
 import java.math.BigInteger;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -93,6 +94,10 @@ public class HostCertificatesWindow extends ApplicationComponent implements
 	private JTextField owner = null;
 
 	private JButton findUser = null;
+
+	private JLabel jLabel6 = null;
+
+	private JComboBox expiration = null;
 
 	/**
 	 * This is the default constructor
@@ -408,6 +413,12 @@ public class HostCertificatesWindow extends ApplicationComponent implements
 				filter.setOwner(getOwner().getText());
 			}
 
+			if (getExpiration().getSelectedItem() instanceof Boolean) {
+				filter
+						.setIsExpired((Boolean) getExpiration()
+								.getSelectedItem());
+			}
+
 			IFSAdministrationClient client = getSession().getAdminClient();
 			HostCertificateRecord[] certs = client.findHostCertificates(filter);
 			int length = 0;
@@ -483,15 +494,29 @@ public class HostCertificatesWindow extends ApplicationComponent implements
 	 */
 	private JPanel getCriteriaPanel() {
 		if (criteriaPanel == null) {
+			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+			gridBagConstraints19.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints19.gridy = 5;
+			gridBagConstraints19.weightx = 1.0;
+			gridBagConstraints19.anchor = GridBagConstraints.WEST;
+			gridBagConstraints19.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints19.gridx = 1;
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.gridx = 0;
+			gridBagConstraints18.anchor = GridBagConstraints.WEST;
+			gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints18.gridy = 5;
+			jLabel6 = new JLabel();
+			jLabel6.setText("Expiration");
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.gridx = 1;
 			gridBagConstraints15.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints15.gridy = 5;
+			gridBagConstraints15.gridy = 6;
 			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
 			gridBagConstraints14.gridx = 0;
 			gridBagConstraints14.anchor = GridBagConstraints.WEST;
 			gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints14.gridy = 5;
+			gridBagConstraints14.gridy = 6;
 			jLabel5 = new JLabel();
 			jLabel5.setText("Owner");
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
@@ -586,6 +611,8 @@ public class HostCertificatesWindow extends ApplicationComponent implements
 			criteriaPanel.add(getSubject(), gridBagConstraints13);
 			criteriaPanel.add(jLabel5, gridBagConstraints14);
 			criteriaPanel.add(getOwnerPanel(), gridBagConstraints15);
+			criteriaPanel.add(jLabel6, gridBagConstraints18);
+			criteriaPanel.add(getExpiration(), gridBagConstraints19);
 		}
 		return criteriaPanel;
 	}
@@ -709,5 +736,20 @@ public class HostCertificatesWindow extends ApplicationComponent implements
 			});
 		}
 		return findUser;
+	}
+
+	/**
+	 * This method initializes expiration
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getExpiration() {
+		if (expiration == null) {
+			expiration = new JComboBox();
+			expiration.addItem("");
+			expiration.addItem(Boolean.TRUE);
+			expiration.addItem(Boolean.FALSE);
+		}
+		return expiration;
 	}
 }
