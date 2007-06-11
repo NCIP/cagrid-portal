@@ -36,7 +36,7 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 	public Resource findSingleton() {
 		logger.info("Creating a single resource.");
 		try {
-			<%=info.getService().getName()%>.Resource resource = new <%=info.getService().getName()%>Resource();
+			<%=info.getService().getName()%>Resource resource = new <%=info.getService().getName()%>Resource();
 			resource.initialize();
 			return resource;
 		} catch (Exception e) {
