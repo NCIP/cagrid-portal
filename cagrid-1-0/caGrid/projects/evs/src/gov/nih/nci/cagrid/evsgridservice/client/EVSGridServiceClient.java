@@ -249,73 +249,79 @@ public class EVSGridServiceClient extends ServiceSecurityClient implements EVSGr
         }
     }
 
-	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
-        gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
-        gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
-        return boxedResult.getServiceSecurityMetadata();
-      }
+  public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
+    return boxedResult.getServiceSecurityMetadata();
     }
-	public gov.nih.nci.cagrid.evs.service.DescLogicConceptVocabularyName[] getVocabularyNames() throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getVocabularyNames");
-        gov.nih.nci.cagrid.evsgridservice.stubs.GetVocabularyNamesRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.GetVocabularyNamesRequest();
-        gov.nih.nci.cagrid.evsgridservice.stubs.GetVocabularyNamesResponse boxedResult = portType.getVocabularyNames(params);
-        return boxedResult.getDescLogicConceptVocabularyName();
-      }
+  }
+
+  public gov.nih.nci.cagrid.evs.service.DescLogicConceptVocabularyName[] getVocabularyNames() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getVocabularyNames");
+    gov.nih.nci.cagrid.evsgridservice.stubs.GetVocabularyNamesRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.GetVocabularyNamesRequest();
+    gov.nih.nci.cagrid.evsgridservice.stubs.GetVocabularyNamesResponse boxedResult = portType.getVocabularyNames(params);
+    return boxedResult.getDescLogicConceptVocabularyName();
     }
-	public gov.nih.nci.evs.domain.Source[] getMetaSources() throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getMetaSources");
-        gov.nih.nci.cagrid.evsgridservice.stubs.GetMetaSourcesRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.GetMetaSourcesRequest();
-        gov.nih.nci.cagrid.evsgridservice.stubs.GetMetaSourcesResponse boxedResult = portType.getMetaSources(params);
-        return boxedResult.getSource();
-      }
+  }
+
+  public gov.nih.nci.evs.domain.Source[] getMetaSources() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getMetaSources");
+    gov.nih.nci.cagrid.evsgridservice.stubs.GetMetaSourcesRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.GetMetaSourcesRequest();
+    gov.nih.nci.cagrid.evsgridservice.stubs.GetMetaSourcesResponse boxedResult = portType.getMetaSources(params);
+    return boxedResult.getSource();
     }
-	public gov.nih.nci.evs.domain.DescLogicConcept[] searchDescLogicConcept(gov.nih.nci.cagrid.evs.service.EVSDescLogicConceptSearchParams eVSDescLogicConceptSearchParams) throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"searchDescLogicConcept");
-        gov.nih.nci.cagrid.evsgridservice.stubs.SearchDescLogicConceptRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchDescLogicConceptRequest();
-        gov.nih.nci.cagrid.evsgridservice.stubs.SearchDescLogicConceptRequestEVSDescLogicConceptSearchParams eVSDescLogicConceptSearchParamsContainer = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchDescLogicConceptRequestEVSDescLogicConceptSearchParams();
-        eVSDescLogicConceptSearchParamsContainer.setEVSDescLogicConceptSearchParams(eVSDescLogicConceptSearchParams);
-        params.setEVSDescLogicConceptSearchParams(eVSDescLogicConceptSearchParamsContainer);
-        gov.nih.nci.cagrid.evsgridservice.stubs.SearchDescLogicConceptResponse boxedResult = portType.searchDescLogicConcept(params);
-        return boxedResult.getDescLogicConcept();
-      }
+  }
+
+  public gov.nih.nci.evs.domain.DescLogicConcept[] searchDescLogicConcept(gov.nih.nci.cagrid.evs.service.EVSDescLogicConceptSearchParams eVSDescLogicConceptSearchParams) throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"searchDescLogicConcept");
+    gov.nih.nci.cagrid.evsgridservice.stubs.SearchDescLogicConceptRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchDescLogicConceptRequest();
+    gov.nih.nci.cagrid.evsgridservice.stubs.SearchDescLogicConceptRequestEVSDescLogicConceptSearchParams eVSDescLogicConceptSearchParamsContainer = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchDescLogicConceptRequestEVSDescLogicConceptSearchParams();
+    eVSDescLogicConceptSearchParamsContainer.setEVSDescLogicConceptSearchParams(eVSDescLogicConceptSearchParams);
+    params.setEVSDescLogicConceptSearchParams(eVSDescLogicConceptSearchParamsContainer);
+    gov.nih.nci.cagrid.evsgridservice.stubs.SearchDescLogicConceptResponse boxedResult = portType.searchDescLogicConcept(params);
+    return boxedResult.getDescLogicConcept();
     }
-	public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchMetaThesaurus(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams) throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"searchMetaThesaurus");
-        gov.nih.nci.cagrid.evsgridservice.stubs.SearchMetaThesaurusRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchMetaThesaurusRequest();
-        gov.nih.nci.cagrid.evsgridservice.stubs.SearchMetaThesaurusRequestEVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParamsContainer = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchMetaThesaurusRequestEVSMetaThesaurusSearchParams();
-        eVSMetaThesaurusSearchParamsContainer.setEVSMetaThesaurusSearchParams(eVSMetaThesaurusSearchParams);
-        params.setEVSMetaThesaurusSearchParams(eVSMetaThesaurusSearchParamsContainer);
-        gov.nih.nci.cagrid.evsgridservice.stubs.SearchMetaThesaurusResponse boxedResult = portType.searchMetaThesaurus(params);
-        return boxedResult.getMetaThesaurusConcept();
-      }
+  }
+
+  public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchMetaThesaurus(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams) throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"searchMetaThesaurus");
+    gov.nih.nci.cagrid.evsgridservice.stubs.SearchMetaThesaurusRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchMetaThesaurusRequest();
+    gov.nih.nci.cagrid.evsgridservice.stubs.SearchMetaThesaurusRequestEVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParamsContainer = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchMetaThesaurusRequestEVSMetaThesaurusSearchParams();
+    eVSMetaThesaurusSearchParamsContainer.setEVSMetaThesaurusSearchParams(eVSMetaThesaurusSearchParams);
+    params.setEVSMetaThesaurusSearchParams(eVSMetaThesaurusSearchParamsContainer);
+    gov.nih.nci.cagrid.evsgridservice.stubs.SearchMetaThesaurusResponse boxedResult = portType.searchMetaThesaurus(params);
+    return boxedResult.getMetaThesaurusConcept();
     }
-	public gov.nih.nci.evs.domain.HistoryRecord[] getHistoryRecords(gov.nih.nci.cagrid.evs.service.EVSHistoryRecordsSearchParams eVSHistoryRecordsSearchParams) throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getHistoryRecords");
-        gov.nih.nci.cagrid.evsgridservice.stubs.GetHistoryRecordsRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.GetHistoryRecordsRequest();
-        gov.nih.nci.cagrid.evsgridservice.stubs.GetHistoryRecordsRequestEVSHistoryRecordsSearchParams eVSHistoryRecordsSearchParamsContainer = new gov.nih.nci.cagrid.evsgridservice.stubs.GetHistoryRecordsRequestEVSHistoryRecordsSearchParams();
-        eVSHistoryRecordsSearchParamsContainer.setEVSHistoryRecordsSearchParams(eVSHistoryRecordsSearchParams);
-        params.setEVSHistoryRecordsSearchParams(eVSHistoryRecordsSearchParamsContainer);
-        gov.nih.nci.cagrid.evsgridservice.stubs.GetHistoryRecordsResponse boxedResult = portType.getHistoryRecords(params);
-        return boxedResult.getHistoryRecord();
-      }
+  }
+
+  public gov.nih.nci.evs.domain.HistoryRecord[] getHistoryRecords(gov.nih.nci.cagrid.evs.service.EVSHistoryRecordsSearchParams eVSHistoryRecordsSearchParams) throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getHistoryRecords");
+    gov.nih.nci.cagrid.evsgridservice.stubs.GetHistoryRecordsRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.GetHistoryRecordsRequest();
+    gov.nih.nci.cagrid.evsgridservice.stubs.GetHistoryRecordsRequestEVSHistoryRecordsSearchParams eVSHistoryRecordsSearchParamsContainer = new gov.nih.nci.cagrid.evsgridservice.stubs.GetHistoryRecordsRequestEVSHistoryRecordsSearchParams();
+    eVSHistoryRecordsSearchParamsContainer.setEVSHistoryRecordsSearchParams(eVSHistoryRecordsSearchParams);
+    params.setEVSHistoryRecordsSearchParams(eVSHistoryRecordsSearchParamsContainer);
+    gov.nih.nci.cagrid.evsgridservice.stubs.GetHistoryRecordsResponse boxedResult = portType.getHistoryRecords(params);
+    return boxedResult.getHistoryRecord();
     }
-	public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchSourceByCode(gov.nih.nci.cagrid.evs.service.EVSSourceSearchParams eVSSourceSearchParams) throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"searchSourceByCode");
-        gov.nih.nci.cagrid.evsgridservice.stubs.SearchSourceByCodeRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchSourceByCodeRequest();
-        gov.nih.nci.cagrid.evsgridservice.stubs.SearchSourceByCodeRequestEVSSourceSearchParams eVSSourceSearchParamsContainer = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchSourceByCodeRequestEVSSourceSearchParams();
-        eVSSourceSearchParamsContainer.setEVSSourceSearchParams(eVSSourceSearchParams);
-        params.setEVSSourceSearchParams(eVSSourceSearchParamsContainer);
-        gov.nih.nci.cagrid.evsgridservice.stubs.SearchSourceByCodeResponse boxedResult = portType.searchSourceByCode(params);
-        return boxedResult.getMetaThesaurusConcept();
-      }
+  }
+
+  public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchSourceByCode(gov.nih.nci.cagrid.evs.service.EVSSourceSearchParams eVSSourceSearchParams) throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"searchSourceByCode");
+    gov.nih.nci.cagrid.evsgridservice.stubs.SearchSourceByCodeRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchSourceByCodeRequest();
+    gov.nih.nci.cagrid.evsgridservice.stubs.SearchSourceByCodeRequestEVSSourceSearchParams eVSSourceSearchParamsContainer = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchSourceByCodeRequestEVSSourceSearchParams();
+    eVSSourceSearchParamsContainer.setEVSSourceSearchParams(eVSSourceSearchParams);
+    params.setEVSSourceSearchParams(eVSSourceSearchParamsContainer);
+    gov.nih.nci.cagrid.evsgridservice.stubs.SearchSourceByCodeResponse boxedResult = portType.searchSourceByCode(params);
+    return boxedResult.getMetaThesaurusConcept();
     }
+  }
 
 }
