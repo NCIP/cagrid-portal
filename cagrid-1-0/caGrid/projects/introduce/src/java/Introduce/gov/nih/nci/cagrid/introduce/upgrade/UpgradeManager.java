@@ -92,13 +92,29 @@ public class UpgradeManager {
 
         if (canIntroduceBeUpgraded()) {
             upgradeIntroduce(status);
-            SyncTools sync = new SyncTools(new File(this.pathToService));
-            sync.sync();
+            try {
+                SyncTools sync = new SyncTools(new File(this.pathToService));
+                sync.sync();
+            } catch (Exception e) {
+                status
+                    .addIssue(
+                        "Build Failed",
+                        "Upgrade was successfull but service does not build.  Customizations that were made to the build.xml will now need to be moved to the dev-build.xml and same for build-deploy.xml to dev-build-deploy.xml.");
+                e.printStackTrace();
+            }
             return status;
         } else if (extensionsNeedUpgraded()) {
             status.addIntroduceUpgradeStatus(upgradeExtensionsOnly());
-            SyncTools sync = new SyncTools(new File(this.pathToService));
-            sync.sync();
+            try {
+                SyncTools sync = new SyncTools(new File(this.pathToService));
+                sync.sync();
+            } catch (Exception e) {
+                status
+                    .addIssue(
+                        "Build Failed",
+                        "Upgrade was successfull but service does not build.  Customizations that were made to the build.xml will now need to be moved to the dev-build.xml and the same for build-deploy.xml to dev-build-deploy.xml.");
+                e.printStackTrace();
+            }
             return status;
         } else {
             return status;
