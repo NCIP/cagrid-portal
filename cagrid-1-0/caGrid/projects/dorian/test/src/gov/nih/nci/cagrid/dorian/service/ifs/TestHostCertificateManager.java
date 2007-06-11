@@ -381,6 +381,8 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
 			HostCertificateManager hcm = new HostCertificateManager(db, conf, ca, this);
 			hcm.clearDatabase();
+			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+			Thread.currentThread().yield();
 			long id1 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost1"));
 			hcm.approveHostCertifcate(id1);
 			long id2 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost2"));
