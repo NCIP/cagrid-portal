@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.fqp.service.globus.resource;
+package gov.nih.nci.cagrid.fqp.results.service.globus.resource;
 
 
 /** 
@@ -13,7 +13,6 @@ package gov.nih.nci.cagrid.fqp.service.globus.resource;
 public class ResourceConfiguration {
 	private String registrationTemplateFile;
 	private boolean performRegistration;
-	private String serviceMetadataFile;
 
 
 
@@ -34,17 +33,6 @@ public class ResourceConfiguration {
 
 	public void setRegistrationTemplateFile(String registrationTemplateFile) {
 		this.registrationTemplateFile = registrationTemplateFile;
-	}
-	
-	
-	
-	public String getServiceMetadataFile() {
-		return serviceMetadataFile;
-	}
-	
-	
-	public void setServiceMetadataFile(String serviceMetadataFile) {
-		this.serviceMetadataFile = serviceMetadataFile;
 	}
 		
 }

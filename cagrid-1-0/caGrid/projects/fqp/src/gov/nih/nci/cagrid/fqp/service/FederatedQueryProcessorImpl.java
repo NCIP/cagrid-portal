@@ -45,7 +45,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		super();
 	}
 
-	public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults executeAndAggregateResults(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+  public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults executeAndAggregateResults(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
 		FederatedQueryEngine engine = new FederatedQueryEngine();
 		CQLQueryResults results = null;
 		try {
@@ -61,7 +61,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		return results;
 	}
 
-	public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection execute(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+  public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection execute(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
 		FederatedQueryEngine engine = new FederatedQueryEngine();
 		DCQLQueryResultsCollection results = null;
 		try {
@@ -77,7 +77,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		return results;
 	}
 
-	public gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference executeAsynchronously(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException {
+  public gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference executeAsynchronously(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException {
 
 		// create a result resource
 		FQPResultResourceHome resultHome = null;

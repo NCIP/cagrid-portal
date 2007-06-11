@@ -19,18 +19,16 @@ public class FederatedQueryResultsProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.fqp.results.stubs.GetResultsResponse getResults(gov.nih.nci.cagrid.fqp.results.stubs.GetResultsRequest params) throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.stubs.types.InternalErrorFault {
-		FederatedQueryResultsAuthorization.authorizeGetResults();
-		gov.nih.nci.cagrid.fqp.results.stubs.GetResultsResponse boxedResult = new gov.nih.nci.cagrid.fqp.results.stubs.GetResultsResponse();
-		boxedResult.setDCQLQueryResultsCollection(impl.getResults());
-		return boxedResult;
-	}
+    public gov.nih.nci.cagrid.fqp.results.stubs.GetResultsResponse getResults(gov.nih.nci.cagrid.fqp.results.stubs.GetResultsRequest params) throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.stubs.types.InternalErrorFault {
+    gov.nih.nci.cagrid.fqp.results.stubs.GetResultsResponse boxedResult = new gov.nih.nci.cagrid.fqp.results.stubs.GetResultsResponse();
+    boxedResult.setDCQLQueryResultsCollection(impl.getResults());
+    return boxedResult;
+  }
 
-	public gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteResponse isProcessingComplete(gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteRequest params) throws RemoteException {
-		FederatedQueryResultsAuthorization.authorizeIsProcessingComplete();
-		gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteResponse boxedResult = new gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteResponse();
-		boxedResult.setResponse(impl.isProcessingComplete());
-		return boxedResult;
-	}
+    public gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteResponse isProcessingComplete(gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteRequest params) throws RemoteException {
+    gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteResponse boxedResult = new gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteResponse();
+    boxedResult.setResponse(impl.isProcessingComplete());
+    return boxedResult;
+  }
 
 }

@@ -14,7 +14,7 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version 1.0
+ * @created by Introduce Toolkit version 1.1
  * 
  */
 public class ServiceConfiguration {

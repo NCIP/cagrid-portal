@@ -9,7 +9,7 @@
     <wsa:Address>INDEX_SERVICE_URL</wsa:Address>
   </ServiceGroupEPR>
   <!-- Specifies that the registration will be renewed every 10 minutes -->
-  <RefreshIntervalSecs>600</RefreshIntervalSecs>
+  <RefreshIntervalSecs>REGISTRATION_REFRESH</RefreshIntervalSecs>
   <Content xsi:type="agg:AggregatorContent" xmlns:agg="http://mds.globus.org/aggregator/types">
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
       <agg:GetMultipleResourcePropertiesPollType
@@ -25,7 +25,7 @@
 			xmlns:ns0="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd">
         <!-- Specifies that the index should refresh information
             every 300000 milliseconds (once every 5 minutes) -->
-        <agg:PollIntervalMillis>300000</agg:PollIntervalMillis>
+        <agg:PollIntervalMillis>INDEX_REFRESH</agg:PollIntervalMillis>
         <!-- specifies all Resource Properties that should be retrieved from the service -->
 		<agg:ResourcePropertyNames>ns7:ServiceMetadata</agg:ResourcePropertyNames>
 	

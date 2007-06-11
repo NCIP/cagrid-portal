@@ -260,41 +260,46 @@ public class FederatedQueryResultsClient extends ServiceSecurityClient implement
 			}
 		}
 	}
-	public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"destroy");
-        return portType.destroy(params);
-      }
+
+  public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"destroy");
+    return portType.destroy(params);
     }
-	public org.oasis.wsrf.lifetime.SetTerminationTimeResponse setTerminationTime(org.oasis.wsrf.lifetime.SetTerminationTime params) throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"setTerminationTime");
-        return portType.setTerminationTime(params);
-      }
+  }
+
+  public org.oasis.wsrf.lifetime.SetTerminationTimeResponse setTerminationTime(org.oasis.wsrf.lifetime.SetTerminationTime params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"setTerminationTime");
+    return portType.setTerminationTime(params);
     }
-	public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection getResults() throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.stubs.types.InternalErrorFault {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getResults");
-        gov.nih.nci.cagrid.fqp.results.stubs.GetResultsRequest params = new gov.nih.nci.cagrid.fqp.results.stubs.GetResultsRequest();
-        gov.nih.nci.cagrid.fqp.results.stubs.GetResultsResponse boxedResult = portType.getResults(params);
-        return boxedResult.getDCQLQueryResultsCollection();
-      }
+  }
+
+  public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection getResults() throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.stubs.types.InternalErrorFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getResults");
+    gov.nih.nci.cagrid.fqp.results.stubs.GetResultsRequest params = new gov.nih.nci.cagrid.fqp.results.stubs.GetResultsRequest();
+    gov.nih.nci.cagrid.fqp.results.stubs.GetResultsResponse boxedResult = portType.getResults(params);
+    return boxedResult.getDCQLQueryResultsCollection();
     }
-	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
-        gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
-        gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
-        return boxedResult.getServiceSecurityMetadata();
-      }
+  }
+
+  public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
+    return boxedResult.getServiceSecurityMetadata();
     }
-	public boolean isProcessingComplete() throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"isProcessingComplete");
-        gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteRequest params = new gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteRequest();
-        gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteResponse boxedResult = portType.isProcessingComplete(params);
-        return boxedResult.isResponse();
-      }
+  }
+
+  public boolean isProcessingComplete() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"isProcessingComplete");
+    gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteRequest params = new gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteRequest();
+    gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteResponse boxedResult = portType.isProcessingComplete(params);
+    return boxedResult.isResponse();
     }
+  }
 
 }
