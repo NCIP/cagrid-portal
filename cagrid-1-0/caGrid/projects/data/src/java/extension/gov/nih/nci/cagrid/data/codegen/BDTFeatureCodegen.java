@@ -20,7 +20,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 1:10:16 PM
- * @version $Id: BDTFeatureCodegen.java,v 1.11 2007-05-18 19:05:05 dervin Exp $ 
+ * @version $Id: BDTFeatureCodegen.java,v 1.12 2007-06-11 17:05:34 dervin Exp $ 
  */
 public class BDTFeatureCodegen extends FeatureCodegen {
 	// public static final String NL = System.getProperties().getProperty("line.separator");
@@ -39,7 +39,7 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 	public static final String RESOURCE_INITIALIZE = 
 		"\tvoid initialize(gov.nih.nci.cagrid.cqlquery.CQLQuery query, " + NL +
 		"\t\t\tString classToQnameMapfile, " + NL + 
-		"\t\t\tjava.io.InputStream wsddStream) throws java.rmi.RemoteException {" + NL +
+		"\t\t\tjava.io.InputStream wsddStream) throws java.rmi.RemoteException, gov.nih.nci.cagrid.data.service.DataServiceInitializationException {" + NL +
 		"\t\tthis.helper = new gov.nih.nci.cagrid.data.bdt.service.BDTResourceHelper(" + NL +
 		"\t\t\tquery, classToQnameMapfile, wsddStream);" + NL +
 		"\t}";

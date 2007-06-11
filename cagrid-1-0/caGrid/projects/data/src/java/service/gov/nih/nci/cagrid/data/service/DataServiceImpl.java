@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.data.service;
 
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
+import gov.nih.nci.cagrid.data.MalformedQueryException;
+import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
@@ -23,7 +25,7 @@ import org.globus.wsrf.ResourceHome;
  */
 public class DataServiceImpl extends BaseServiceImpl {
 	
-	public DataServiceImpl() throws RemoteException {
+	public DataServiceImpl() throws DataServiceInitializationException {
 		super();
 	}
 	
@@ -32,7 +34,13 @@ public class DataServiceImpl extends BaseServiceImpl {
 		throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
         fireAuditQueryBegins(cqlQuery);
         
-		preProcess(cqlQuery);
+        try {
+            preProcess(cqlQuery);
+        } catch (MalformedQueryException ex) {
+            throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
+        } catch (QueryProcessingException ex) {
+            throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
+        }
 		
 		// process the query
 		gov.nih.nci.cagrid.data.cql.CQLQueryProcessor processor = null;

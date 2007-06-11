@@ -7,12 +7,14 @@ import gov.nih.nci.cagrid.cqlresultset.CQLCountResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.data.service.BaseServiceImpl;
+import gov.nih.nci.cagrid.data.service.DataServiceInitializationException;
 import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
@@ -52,7 +54,7 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerationContextType;
 public class EnumerationDataServiceImpl extends BaseServiceImpl {
 
 	
-	public EnumerationDataServiceImpl() throws RemoteException {
+	public EnumerationDataServiceImpl() throws DataServiceInitializationException {
 		super();
 	}
     
@@ -62,9 +64,20 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 		gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
         fireAuditQueryBegins(cqlQuery);
         
-		preProcess(cqlQuery);
+        try {
+            preProcess(cqlQuery);
+        } catch (MalformedQueryException ex) {
+            throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
+        } catch (QueryProcessingException ex) {
+            throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
+        }
 		
-		CQLQueryProcessor processor = getCqlQueryProcessorInstance();
+		CQLQueryProcessor processor = null;
+        try {
+            processor = getCqlQueryProcessorInstance();
+        } catch (QueryProcessingException ex) {
+            throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
+        }
 		EnumIterator enumIter = null;
 		try {
 			if (processor instanceof LazyCQLQueryProcessor) {

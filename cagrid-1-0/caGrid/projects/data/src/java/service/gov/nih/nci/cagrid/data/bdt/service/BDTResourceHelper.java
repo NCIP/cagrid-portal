@@ -12,6 +12,7 @@ import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.data.mapping.ClassToQname;
 import gov.nih.nci.cagrid.data.mapping.Mappings;
 import gov.nih.nci.cagrid.data.service.BaseServiceImpl;
+import gov.nih.nci.cagrid.data.service.DataServiceInitializationException;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.wsenum.utils.EnumIteratorFactory;
 import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
@@ -39,7 +40,7 @@ import org.w3c.dom.Document;
  * @author David Ervin
  * 
  * @created Mar 12, 2007 2:08:57 PM
- * @version $Id: BDTResourceHelper.java,v 1.3 2007-05-18 19:05:05 dervin Exp $ 
+ * @version $Id: BDTResourceHelper.java,v 1.4 2007-06-11 17:05:34 dervin Exp $ 
  */
 public class BDTResourceHelper extends BaseServiceImpl {
 	private CQLQuery query;
@@ -51,7 +52,8 @@ public class BDTResourceHelper extends BaseServiceImpl {
 	private CQLQueryResults queryResults;
 	private byte[] wsddBytes;
 	
-	public BDTResourceHelper(CQLQuery query, String classToQNameMapfile, InputStream wsddInput) throws RemoteException {
+	public BDTResourceHelper(CQLQuery query, String classToQNameMapfile, InputStream wsddInput) 
+        throws RemoteException, DataServiceInitializationException {
         super();
         fireAuditQueryBegins(query);
 		this.query = query;
@@ -64,7 +66,13 @@ public class BDTResourceHelper extends BaseServiceImpl {
 		throws QueryProcessingExceptionType, MalformedQueryExceptionType {
 		if (enumIter == null) {
 			// preprocessing on the query (validation, etc)
-			preProcess(query);
+            try {
+                preProcess(query);
+            } catch (MalformedQueryException ex) {
+                throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
+            } catch (QueryProcessingException ex) {
+                throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
+            }
 			
 			try {
 				Iterator resultIter = processQueryAndIterate();
@@ -156,12 +164,7 @@ public class BDTResourceHelper extends BaseServiceImpl {
 	private CQLQueryResults processQuery() throws QueryProcessingException, MalformedQueryException {
 		if (queryResults == null) {
 			// initialize the CQL Query Processor
-			CQLQueryProcessor processor = null;
-			try {
-				processor = getCqlQueryProcessorInstance();
-			} catch (QueryProcessingExceptionType ex) {
-				throw new QueryProcessingException(ex);
-			}
+			CQLQueryProcessor processor = getCqlQueryProcessorInstance();
 			// perform the query
 			queryResults = processor.processQuery(query);
 		}

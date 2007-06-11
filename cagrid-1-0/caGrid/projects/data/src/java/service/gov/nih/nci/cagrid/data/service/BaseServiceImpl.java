@@ -12,8 +12,6 @@ import gov.nih.nci.cagrid.data.auditing.DataServiceAuditors;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.validation.CqlDomainValidator;
 import gov.nih.nci.cagrid.data.cql.validation.CqlStructureValidator;
-import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
-import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.data.service.auditing.DataServiceAuditor;
 import gov.nih.nci.cagrid.data.service.auditing.QueryBeginAuditingEvent;
 import gov.nih.nci.cagrid.data.service.auditing.QueryProcessingFailedAuditingEvent;
@@ -59,23 +57,31 @@ public abstract class BaseServiceImpl {
     
     private List<DataServiceAuditor> auditors = null;
 
-	public BaseServiceImpl() throws RemoteException {
+	public BaseServiceImpl() throws DataServiceInitializationException {
 		domainModelSearchedFor = false;
-        initializeAuditors();
+        try {
+            initializeAuditors();
+        } catch (Exception ex) {
+            throw new DataServiceInitializationException("Error initializing data service auditors: " + ex.getMessage(), ex);
+        }
         // force initialization of the query processor at creation
-        getCqlQueryProcessorInstance();
+        try {
+            getCqlQueryProcessorInstance();
+        } catch (Exception ex) {
+            throw new DataServiceInitializationException("Error initializing query processor instance: " + ex.getMessage(), ex);
+        }
 	}
     
 	
-	protected void preProcess(CQLQuery cqlQuery) throws QueryProcessingExceptionType, MalformedQueryExceptionType {
-		// validation for cql structure		
+	protected void preProcess(CQLQuery cqlQuery) throws QueryProcessingException, MalformedQueryException {
+		// validation for cql structure
 		if (shouldValidateCqlStructure()) {
 			CqlStructureValidator validator = getCqlStructureValidator();  
 			try {
 				validator.validateCqlStructure(cqlQuery);
 			} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
                 fireAuditValidationFailure(cqlQuery, ex, null);
-				throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
+				throw ex;
 			}
 		}
 		
@@ -87,74 +93,76 @@ public abstract class BaseServiceImpl {
 				validator.validateDomainModel(cqlQuery, model);
 			} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
                 fireAuditValidationFailure(cqlQuery, null, ex);
-				throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
-			} catch (Exception ex) {
-				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
-			}
+				throw ex;
+            } catch (Exception ex) {
+                throw new QueryProcessingException("Error getting domain model for validation: " + ex.getMessage(), ex);
+            }
 		}
 	}
 	
 	
-	protected boolean shouldValidateCqlStructure() throws QueryProcessingExceptionType {
+	protected boolean shouldValidateCqlStructure() throws QueryProcessingException {
 		return getDataServiceConfig().getProperty(DataServiceConstants.VALIDATE_CQL_FLAG) != null 
 			&& Boolean.valueOf(getDataServiceConfig().getProperty(
 				DataServiceConstants.VALIDATE_CQL_FLAG)).booleanValue();
 	}
 	
 	
-	protected boolean shouldValidateDomainModel() throws QueryProcessingExceptionType {
+	protected boolean shouldValidateDomainModel() throws QueryProcessingException {
 		return getDataServiceConfig().getProperty(DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG) != null
 			&& Boolean.valueOf(getDataServiceConfig().getProperty(
 				DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)).booleanValue();
 	}
 	
 	
-	protected CqlStructureValidator getCqlStructureValidator() throws QueryProcessingExceptionType {
+	protected CqlStructureValidator getCqlStructureValidator() throws QueryProcessingException {
 		if (cqlStructureValidator == null) {
 			try {
 				String validatorClassName = getDataServiceConfig().getProperty(DataServiceConstants.CQL_VALIDATOR_CLASS);
 				Class validatorClass = Class.forName(validatorClassName);
 				cqlStructureValidator = (CqlStructureValidator) validatorClass.newInstance();
 			} catch (Exception ex) {
-				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
+				throw new QueryProcessingException("Error getting CQL structure validator: " + ex.getMessage(), ex);
 			}
 		}
 		return cqlStructureValidator;
 	}
 	
 	
-	protected CqlDomainValidator getCqlDomainValidator() throws QueryProcessingExceptionType {
+	protected CqlDomainValidator getCqlDomainValidator() throws QueryProcessingException {
 		if (cqlDomainValidator == null) {
 			try {
 				String validatorClassName = getDataServiceConfig().getProperty(DataServiceConstants.DOMAIN_MODEL_VALIDATOR_CLASS);
 				Class validatorClass = Class.forName(validatorClassName);
 				cqlDomainValidator = (CqlDomainValidator) validatorClass.newInstance();
 			} catch (Exception ex) {
-				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
+				throw new QueryProcessingException("Error getting CQL domain validator: " + ex.getMessage(), ex);
 			}
 		}
 		return cqlDomainValidator;
 	}
 	
 	
-	protected Properties getDataServiceConfig() throws QueryProcessingExceptionType {
+	protected Properties getDataServiceConfig() throws QueryProcessingException {
 		if (dataServiceConfig == null) {
 			try {
 				dataServiceConfig = ServiceConfigUtil.getDataServiceParams();
 			} catch (Exception ex) {
-				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
+				throw new QueryProcessingException(
+                    "Error getting data service configuration parameters: " + ex.getMessage(), ex);
 			}
 		}
 		return dataServiceConfig;
 	}
 	
 	
-	protected Properties getCqlQueryProcessorConfig() throws QueryProcessingExceptionType {
+	protected Properties getCqlQueryProcessorConfig() throws QueryProcessingException {
 		if (cqlQueryProcessorConfig == null) {
 			try {
                 cqlQueryProcessorConfig = ServiceConfigUtil.getQueryProcessorConfigurationParameters();
 			} catch (Exception ex) {
-				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
+				throw new QueryProcessingException(
+                    "Error getting query processor configuration parameters: " + ex.getMessage(), ex);
 			}
 		}
         // clone the query processor config instance 
@@ -170,36 +178,52 @@ public abstract class BaseServiceImpl {
 	}
 	
 	
-	protected Properties getResourceProperties() throws QueryProcessingExceptionType {
+	protected Properties getResourceProperties() throws QueryProcessingException {
 		if (resourceProperties == null) {
 			try {
 				resourceProperties = ResourcePropertiesUtil.getResourceProperties();
 			} catch (Exception ex) {
-				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
+				throw new QueryProcessingException("Error getting resource properties: " + ex.getMessage(), ex);
 			}
 		}
 		return resourceProperties;
 	}
 	
 	
-	protected CQLQueryProcessor getCqlQueryProcessorInstance() throws QueryProcessingExceptionType {
+	protected CQLQueryProcessor getCqlQueryProcessorInstance() throws QueryProcessingException {
 	    if (queryProcessorInstance == null) {
-	        try {
-                // get the query processor's class
-                String qpClassName = ServiceConfigUtil.getCqlQueryProcessorClassName();
-                Class cqlQueryProcessorClass = Class.forName(qpClassName);
-                // create a new instance of the query processor
-	            queryProcessorInstance = (gov.nih.nci.cagrid.data.cql.CQLQueryProcessor) 
-	                cqlQueryProcessorClass.newInstance();
-                // configure the instance
-	            String serverConfigLocation = ServiceConfigUtil.getConfigProperty(
-	                DataServiceConstants.SERVER_CONFIG_LOCATION);
-	            InputStream configStream = new FileInputStream(serverConfigLocation);
-	            queryProcessorInstance.initialize(getCqlQueryProcessorConfig(), configStream);
-	        } catch (Exception ex) {
-	            throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
-	        }
-        }
+	        // get the query processor's class
+	        String qpClassName = null;
+            try {
+                qpClassName = ServiceConfigUtil.getCqlQueryProcessorClassName();
+            } catch (Exception ex) {
+                throw new QueryProcessingException(
+                    "Error determining query processor class name: " + ex.getMessage(), ex);
+            }
+	        Class cqlQueryProcessorClass = null;
+            try {
+                cqlQueryProcessorClass = Class.forName(qpClassName);
+            } catch (ClassNotFoundException ex) {
+                throw new QueryProcessingException(
+                    "Error loading query processor class: " + ex.getMessage(), ex);
+            }
+	        // create a new instance of the query processor
+            try {
+                queryProcessorInstance = (gov.nih.nci.cagrid.data.cql.CQLQueryProcessor) cqlQueryProcessorClass.newInstance();
+            } catch (Exception ex) {
+                throw new QueryProcessingException(
+                    "Error creating query processor instance: " + ex.getMessage(), ex);
+            }
+	        // configure the instance
+            try {
+                String serverConfigLocation = ServiceConfigUtil.getConfigProperty(
+                    DataServiceConstants.SERVER_CONFIG_LOCATION);
+                InputStream configStream = new FileInputStream(serverConfigLocation);
+                queryProcessorInstance.initialize(getCqlQueryProcessorConfig(), configStream);
+            } catch (Exception ex) {
+                throw new QueryProcessingException("Error initializing query processor: " + ex.getMessage(), ex);
+            }
+	    }
         return queryProcessorInstance;
 	}
 	

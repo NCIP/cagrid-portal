@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data.service.globus;
 
 import gov.nih.nci.cagrid.data.service.DataServiceImpl;
+import gov.nih.nci.cagrid.data.service.DataServiceInitializationException;
 
 import java.rmi.RemoteException;
 
@@ -14,13 +15,16 @@ public class DataServiceProviderImpl{
 	
 	DataServiceImpl impl;
 	
-	public DataServiceProviderImpl() throws RemoteException {
+	public DataServiceProviderImpl() throws DataServiceInitializationException {
 		impl = new DataServiceImpl();
 	}
 	
 
-	public gov.nih.nci.cagrid.data.stubs.QueryResponse query(gov.nih.nci.cagrid.data.stubs.QueryRequest params) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
-		gov.nih.nci.cagrid.data.stubs.QueryResponse boxedResult = new gov.nih.nci.cagrid.data.stubs.QueryResponse();
+	public gov.nih.nci.cagrid.data.stubs.QueryResponse query(gov.nih.nci.cagrid.data.stubs.QueryRequest params)
+            throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType, 
+            gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
+		gov.nih.nci.cagrid.data.stubs.QueryResponse boxedResult = 
+            new gov.nih.nci.cagrid.data.stubs.QueryResponse();
 		boxedResult.setCQLQueryResultCollection(impl.query(params.getCqlQuery().getCQLQuery()));
 		return boxedResult;
 	}

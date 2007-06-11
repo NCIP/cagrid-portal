@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data.enumeration.service.globus;
 
 import gov.nih.nci.cagrid.data.enumeration.service.EnumerationDataServiceImpl;
+import gov.nih.nci.cagrid.data.service.DataServiceInitializationException;
 
 import java.rmi.RemoteException;
 
@@ -21,16 +22,19 @@ public class EnumerationDataServiceProviderImpl{
 	
 	EnumerationDataServiceImpl impl;
 	
-	public EnumerationDataServiceProviderImpl() throws RemoteException {
+	public EnumerationDataServiceProviderImpl() throws DataServiceInitializationException {
 		impl = new EnumerationDataServiceImpl();
 	}
 	
 
-	public gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryResponse enumerationQuery(gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryRequest params) throws RemoteException, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
+	public gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryResponse enumerationQuery(
+        gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryRequest params) 
+            throws RemoteException, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType, 
+            gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
 		EnumerationDataServiceAuthorization.authorizeEnumerationQuery();
-		gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryResponse boxedResult = new gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryResponse();
+		gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryResponse boxedResult = 
+            new gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryResponse();
 		boxedResult.setEnumerationResponseContainer(impl.enumerationQuery(params.getCqlQuery().getCQLQuery()));
 		return boxedResult;
 	}
-
 }
