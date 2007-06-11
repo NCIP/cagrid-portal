@@ -35,6 +35,8 @@ Upgrade Cycle
 
 To Do:  
 
+need to validate schemas when importing them into introduce
+
 should add a service creation test which creates a service context of every variation of resource type
 
 need to make namespace exist policy a dropdown in the config so user knows what the options are
