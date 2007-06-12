@@ -169,7 +169,8 @@ public abstract class BaseResourceBase implements Resource, RemoveCallback, Reso
 
 		String servicePath = ctx.getTargetService();
 		servicePath = servicePath.substring(0,servicePath.lastIndexOf("/"));
-		servicePath+="/<%=serviceName%>";
+		servicePath+="/<%=arguments.getService().getName()%>";
+
 
 		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/configuration";
 		logger.debug("Will read configuration from jndi name: " + jndiName);
