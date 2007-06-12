@@ -17,7 +17,7 @@
 	<property name="ext.test.lib" value="${basedir}/ext/test/lib" />
 	<property name="ext.endorsed.dir" value="ext/endorsed/lib" />
 	<!--need to preset these for the testing build-->
-	<property name="test.log.dir" value="test/log" />
+	<property name="test.log.dir" value="test/logs" />
 	<property name="build.dir" location="build" />
 	
 	<!--need to import the test build-->
