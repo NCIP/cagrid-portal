@@ -26,6 +26,7 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.DBCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.EracomCertificateAuthority;
+import gov.nih.nci.cagrid.dorian.service.ca.EracomWrappingCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.idp.IdentityProvider;
 import gov.nih.nci.cagrid.dorian.service.idp.UserManager;
 import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy;
@@ -89,9 +90,14 @@ public class Dorian extends LoggingObject {
 			this.properties = new PropertyManager(this.db);
 			if (configuration.getDorianCAConfiguration()
 					.getCertificateAuthorityType().equals(
-							CertificateAuthorityType.eracom)) {
+							CertificateAuthorityType.Eracom)) {
 				this.ca = new EracomCertificateAuthority(configuration
 						.getDorianCAConfiguration());
+			} else if (configuration.getDorianCAConfiguration()
+					.getCertificateAuthorityType().equals(
+							CertificateAuthorityType.EracomHybrid)) {
+				this.ca = new EracomWrappingCertificateAuthority(db,
+						configuration.getDorianCAConfiguration());
 			} else {
 				this.ca = new DBCertificateAuthority(db, configuration
 						.getDorianCAConfiguration());
@@ -363,9 +369,9 @@ public class Dorian extends LoggingObject {
 		ifs.updateHostCertificateRecord(callerGridId, update);
 	}
 
-	public HostCertificateRecord renewHostCertificate(String callerGridId, long recordId)
-			throws DorianInternalFault, InvalidHostCertificateFault,
-			PermissionDeniedFault {
+	public HostCertificateRecord renewHostCertificate(String callerGridId,
+			long recordId) throws DorianInternalFault,
+			InvalidHostCertificateFault, PermissionDeniedFault {
 		return ifs.renewHostCertificate(callerGridId, recordId);
 	}
 

@@ -2,7 +2,7 @@
 <DorianCAConfiguration xmlns="http://cagrid.nci.nih.gov/dorian/conf"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:dorian="http://cagrid.nci.nih.gov/dorian/conf">
-        <CertificateAuthorityType>dbca</CertificateAuthorityType>
+        <CertificateAuthorityType>DBCA</CertificateAuthorityType>
         <CertificateAuthorityPassword>password</CertificateAuthorityPassword>
         <CertificatePolicyOID>5.5.5.5.5.5.5555.555.5.5</CertificatePolicyOID>
         <UserKeySize>1024</UserKeySize>

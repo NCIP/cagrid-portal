@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.gridca.common.SecurityUtil;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -22,32 +21,37 @@ public class DBCertificateAuthority extends CertificateAuthority {
 
 	private CredentialsManager manager;
 
-
 	public DBCertificateAuthority(Database db, DorianCAConfiguration conf) {
 		super(conf);
 		SecurityUtil.init();
 		this.manager = new CredentialsManager(db);
 	}
 
+	public String getCACredentialsProvider() {
+		return getProvider();
+	}
+
+	public String getUserCredentialsProvider() {
+		return getProvider();
+	}
 
 	public String getProvider() {
 		return "BC";
 	}
 
-
 	public String getSignatureAlgorithm() {
 		return SIGNATURE_ALGORITHM;
 	}
 
-
-	public long getCertificateSerialNumber(String alias) throws CertificateAuthorityFault {
+	public long getCertificateSerialNumber(String alias)
+			throws CertificateAuthorityFault {
 		try {
 			return manager.getCertificateSerialNumber(alias);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
 			fault
-				.setFaultString("An unexpected error occurred, could not the serial number of the requested certificate.");
+					.setFaultString("An unexpected error occurred, could not the serial number of the requested certificate.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();
@@ -55,9 +59,9 @@ public class DBCertificateAuthority extends CertificateAuthority {
 		}
 	}
 
-
-	public void addCredentials(String alias, String password, X509Certificate cert, PrivateKey key)
-		throws CertificateAuthorityFault {
+	public void addCredentials(String alias, String password,
+			X509Certificate cert, PrivateKey key)
+			throws CertificateAuthorityFault {
 		try {
 
 			if (manager.hasCredentials(alias)) {
@@ -69,7 +73,8 @@ public class DBCertificateAuthority extends CertificateAuthority {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("An unexpected error occurred, could not add credentials.");
+			fault
+					.setFaultString("An unexpected error occurred, could not add credentials.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();
@@ -78,7 +83,8 @@ public class DBCertificateAuthority extends CertificateAuthority {
 
 	}
 
-	public void addCertificate(String alias, X509Certificate cert) throws CertificateAuthorityFault {
+	public void addCertificate(String alias, X509Certificate cert)
+			throws CertificateAuthorityFault {
 		try {
 
 			if (manager.hasCredentials(alias)) {
@@ -90,7 +96,8 @@ public class DBCertificateAuthority extends CertificateAuthority {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("An unexpected error occurred, could not add certificate.");
+			fault
+					.setFaultString("An unexpected error occurred, could not add certificate.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();
@@ -99,14 +106,15 @@ public class DBCertificateAuthority extends CertificateAuthority {
 
 	}
 
-
-	public void deleteCredentials(String alias) throws CertificateAuthorityFault {
+	public void deleteCredentials(String alias)
+			throws CertificateAuthorityFault {
 		try {
 			manager.deleteCredentials(alias);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("An unexpected error occurred, could not delete credentials.");
+			fault
+					.setFaultString("An unexpected error occurred, could not delete credentials.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();
@@ -115,14 +123,15 @@ public class DBCertificateAuthority extends CertificateAuthority {
 
 	}
 
-
-	public boolean hasCredentials(String alias) throws CertificateAuthorityFault {
+	public boolean hasCredentials(String alias)
+			throws CertificateAuthorityFault {
 		try {
 			return manager.hasCredentials(alias);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("An unexpected error occurred, could determin if credentials exist.");
+			fault
+					.setFaultString("An unexpected error occurred, could determin if credentials exist.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();
@@ -130,13 +139,14 @@ public class DBCertificateAuthority extends CertificateAuthority {
 		}
 	}
 
-
-	public PrivateKey getPrivateKey(String alias, String password) throws CertificateAuthorityFault {
+	public PrivateKey getPrivateKey(String alias, String password)
+			throws CertificateAuthorityFault {
 
 		try {
 			if (!hasCredentials(alias)) {
 				CertificateAuthorityFault fault = new CertificateAuthorityFault();
-				fault.setFaultString("The requested private key does not exist.");
+				fault
+						.setFaultString("The requested private key does not exist.");
 				throw fault;
 			} else {
 				return manager.getPrivateKey(alias, password);
@@ -146,7 +156,8 @@ public class DBCertificateAuthority extends CertificateAuthority {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("Unexpected Error, could not obtain the private key.");
+			fault
+					.setFaultString("Unexpected Error, could not obtain the private key.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();
@@ -155,12 +166,13 @@ public class DBCertificateAuthority extends CertificateAuthority {
 
 	}
 
-
-	public X509Certificate getCertificate(String alias) throws CertificateAuthorityFault {
+	public X509Certificate getCertificate(String alias)
+			throws CertificateAuthorityFault {
 		try {
 			if (!hasCredentials(alias)) {
 				CertificateAuthorityFault fault = new CertificateAuthorityFault();
-				fault.setFaultString("The requested certificate does not exist.");
+				fault
+						.setFaultString("The requested certificate does not exist.");
 				throw fault;
 			} else {
 				return manager.getCertificate(alias);
@@ -170,7 +182,8 @@ public class DBCertificateAuthority extends CertificateAuthority {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("Unexpected Error, could not obtain the certificate.");
+			fault
+					.setFaultString("Unexpected Error, could not obtain the certificate.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();
@@ -178,7 +191,6 @@ public class DBCertificateAuthority extends CertificateAuthority {
 		}
 
 	}
-
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -188,7 +200,8 @@ public class DBCertificateAuthority extends CertificateAuthority {
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
-			fault.setFaultString("Unexpected Error, could not destroy Dorian Certificate Authority.");
+			fault
+					.setFaultString("Unexpected Error, could not destroy Dorian Certificate Authority.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (CertificateAuthorityFault) helper.getFault();

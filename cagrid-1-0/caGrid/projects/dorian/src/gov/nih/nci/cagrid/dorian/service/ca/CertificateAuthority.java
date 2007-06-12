@@ -43,7 +43,9 @@ public abstract class CertificateAuthority extends LoggingObject {
 	}
 
 
-	public abstract String getProvider();
+	public abstract String getUserCredentialsProvider();
+	
+	public abstract String getCACredentialsProvider();
 
 
 	public abstract String getSignatureAlgorithm();
@@ -107,8 +109,8 @@ public abstract class CertificateAuthority extends LoggingObject {
 	private void createCertifcateAuthorityCredentials(String dn, Date expirationDate, int keySize)
 		throws CertificateAuthorityFault, NoCACredentialsFault {
 		try {
-			KeyPair pair = KeyUtil.generateRSAKeyPair(getProvider(), keySize);
-			X509Certificate cacert = CertUtil.generateCACertificate(getProvider(), new X509Name(dn), new Date(),
+			KeyPair pair = KeyUtil.generateRSAKeyPair(getCACredentialsProvider(), keySize);
+			X509Certificate cacert = CertUtil.generateCACertificate(getCACredentialsProvider(), new X509Name(dn), new Date(),
 				expirationDate, pair, getSignatureAlgorithm());
 			deleteCACredentials();
 			this.setCACredentials(cacert, pair.getPrivate());
@@ -262,8 +264,8 @@ public abstract class CertificateAuthority extends LoggingObject {
 				fault.setFaultString("Invalid certificate subject, the subject must start with, " + caPreSub);
 				throw fault;
 			}
-			KeyPair pair = KeyUtil.generateRSAKeyPair(getProvider(), conf.getUserKeySize().getValue());
-			X509Certificate cert = CertUtil.generateCertificate(getProvider(), new X509Name(subject), start,
+			KeyPair pair = KeyUtil.generateRSAKeyPair(getUserCredentialsProvider(), conf.getUserKeySize().getValue());
+			X509Certificate cert = CertUtil.generateCertificate(getCACredentialsProvider(), new X509Name(subject), start,
 				expiration, pair.getPublic(), cacert, getCAPrivateKey(), getSignatureAlgorithm(), this.conf
 					.getCertificatePolicyOID());
 			addCredentials(alias, password, cert, pair.getPrivate());
@@ -316,7 +318,7 @@ public abstract class CertificateAuthority extends LoggingObject {
 				fault.setFaultString("Invalid certificate subject, the subject must start with, " + caPreSub);
 				throw fault;
 			}
-			X509Certificate cert = CertUtil.generateCertificate(getProvider(), new X509Name(subject), start,
+			X509Certificate cert = CertUtil.generateCertificate(getCACredentialsProvider(), new X509Name(subject), start,
 				expiration, publicKey, cacert, getCAPrivateKey(), getSignatureAlgorithm(), this.conf
 					.getCertificatePolicyOID());
 			addCertificate(alias, cert);
@@ -362,8 +364,8 @@ public abstract class CertificateAuthority extends LoggingObject {
 		try {
 			X509Certificate oldcert = getCACertificate(false);
 			int size = ((RSAPublicKey) oldcert.getPublicKey()).getModulus().bitLength();
-			KeyPair pair = KeyUtil.generateRSAKeyPair(getProvider(), size);
-			X509Certificate cacert = CertUtil.generateCACertificate(getProvider(), new X509Name(oldcert.getSubjectDN()
+			KeyPair pair = KeyUtil.generateRSAKeyPair(getCACredentialsProvider(), size);
+			X509Certificate cacert = CertUtil.generateCACertificate(getCACredentialsProvider(), new X509Name(oldcert.getSubjectDN()
 				.getName()), new Date(), expirationDate, pair, getSignatureAlgorithm());
 			deleteCACredentials();
 			this.setCACredentials(cacert, pair.getPrivate());
@@ -383,7 +385,7 @@ public abstract class CertificateAuthority extends LoggingObject {
 	public X509CRL getCRL(CRLEntry[] entries) throws CertificateAuthorityFault, NoCACredentialsFault {
 		try {
 			init();
-			return CertUtil.createCRL(getProvider(), getCACertificate(), getCAPrivateKey(), entries, getCACertificate()
+			return CertUtil.createCRL(getCACredentialsProvider(), getCACertificate(), getCAPrivateKey(), entries, getCACertificate()
 				.getNotAfter(), getSignatureAlgorithm());
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
@@ -402,7 +404,7 @@ public abstract class CertificateAuthority extends LoggingObject {
 		try {
 			X509Certificate[] certs = new X509Certificate[]{getCertificate(alias)};
 			PrivateKey key = getPrivateKey(alias, password);
-			return ProxyCreator.createImpersonationProxyCertificate(getProvider(), certs, key, proxyPublicKey, lifetime
+			return ProxyCreator.createImpersonationProxyCertificate(getUserCredentialsProvider(), certs, key, proxyPublicKey, lifetime
 				.getHours(), lifetime.getMinutes(), lifetime.getSeconds(), delegationPathLength,
 				getSignatureAlgorithm());
 		} catch (Exception e) {

@@ -126,8 +126,9 @@
     </xs:simpleType>
      <xs:simpleType name="CertificateAuthorityType">
    			<xs:restriction base="xs:string">
-   				<xs:enumeration value="dbca"/>
-   				<xs:enumeration value="eracom"/>
+   				<xs:enumeration value="DBCA"/>
+   				<xs:enumeration value="Eracom"/>
+   				<xs:enumeration value="EracomHybrid"/>
   			</xs:restriction>
     </xs:simpleType>
 </xs:schema>
