@@ -409,8 +409,8 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
         if (namespaces != null && namespaces.getNamespace() != null) {
             for (NamespaceType namespace : namespaces.getNamespace()) {
                 String schemaLocation = namespace.getLocation();
-                if (schemaLocation != null && schemaLocation.indexOf('/') != -1) {
-                    String cleanLocation = schemaLocation.replace('/', '\\');
+                if (schemaLocation != null && schemaLocation.indexOf('\\') != -1) {
+                    String cleanLocation = schemaLocation.replace('\\', '/');
                     namespace.setLocation(cleanLocation);
                     getStatus().addDescriptionLine("Edited schema location of namespace " 
                         + namespace.getNamespace());
@@ -421,7 +421,7 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
         }
         if (editsMade) {
             getStatus().addIssue("Schema locations may not be platform independent", 
-                "Please ensure that all schema locations are specified using backslashes(\\) as file separators.");
+                "Please ensure that all schema locations are specified using forward slash(/) as file separators.");
         }
     }
 }
