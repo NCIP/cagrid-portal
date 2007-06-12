@@ -41,7 +41,7 @@ public class StatusBase {
     private String fromVersion = "";
     private String toVersion = "";
     private String status = "";
-    private String description = "";
+    private StringBuilder description = null;
     private String name = "";
     private List issues;
  
@@ -51,10 +51,12 @@ public class StatusBase {
         this.type = type;
         this.fromVersion = fromVersion;
         this.toVersion = toVersion;
+        this.description = new StringBuilder();
         this.issues = new ArrayList();
     }
     
-    public StatusBase(){
+    public StatusBase() {
+        this.description = new StringBuilder();
         this.issues = new ArrayList();
     }
     
@@ -67,11 +69,11 @@ public class StatusBase {
     }
     
     public String getDescription() {
-        return description;
+        return description.toString();
     }
     
     public void addDescriptionLine(String line) {
-        this.description += line + "\n";
+        this.description.append(line).append("\n");
     }
     
     public void addIssue(String issue, String resolution){
