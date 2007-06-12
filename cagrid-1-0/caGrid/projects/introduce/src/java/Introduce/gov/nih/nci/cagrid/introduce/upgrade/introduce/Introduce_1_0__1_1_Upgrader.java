@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.introduce.upgrade.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -332,6 +334,8 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
         upgradeJars();
         getStatus().addDescriptionLine("updating service with the new version of the jars");
+        
+        fixUpSchemaLocationsInModel();
 
         // recreate the authorization class
         // recreate the service descriptor
@@ -395,6 +399,29 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             ex.printStackTrace();
             // throw new Exception("Error updating Eclipse .classpath file:
             // " + ex.getMessage(), ex);
+        }
+    }
+    
+    
+    private void fixUpSchemaLocationsInModel() {
+        boolean editsMade = false;
+        NamespacesType namespaces = getServiceInformation().getServiceDescriptor().getNamespaces();
+        if (namespaces != null && namespaces.getNamespace() != null) {
+            for (NamespaceType namespace : namespaces.getNamespace()) {
+                String schemaLocation = namespace.getLocation();
+                if (schemaLocation != null && schemaLocation.indexOf('/') != -1) {
+                    String cleanLocation = schemaLocation.replace('/', '\\');
+                    namespace.setLocation(cleanLocation);
+                    getStatus().addDescriptionLine("Edited schema location of namespace " 
+                        + namespace.getNamespace());
+                    getStatus().addDescriptionLine("\t(" + schemaLocation + " -> " + cleanLocation + ")");
+                    editsMade = true;
+                }
+            }
+        }
+        if (editsMade) {
+            getStatus().addIssue("Schema locations may not be platform independent", 
+                "Please ensure that all schema locations are specified using backslashes(\\) as file separators.");
         }
     }
 }
