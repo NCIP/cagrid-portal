@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base.BaseResourceBaseTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.lifetime.LifetimeResourceBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main.MainConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main.MainResourceBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.singleton.SingletonResourceBaseTemplate;
@@ -57,8 +58,7 @@ public class SyncResource extends SyncTool {
             metadataConfigurationFW.write(metadataConfigurationS);
             metadataConfigurationFW.close();
 
-            if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)
-                || service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
+            if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
                 // not the base service do nothing....
                 ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
                 String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
@@ -72,6 +72,30 @@ public class SyncResource extends SyncTool {
                 resourceContanstsFW.close();
 
                 BaseResourceBaseTemplate baseResourceBaseT = new BaseResourceBaseTemplate();
+                String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(
+                    getServiceInformation(), service));
+                File baseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + "BaseResourceBase.java");
+
+                FileWriter baseResourceBaseFW = new FileWriter(baseResourceBaseF);
+                baseResourceBaseFW.write(baseResourceBaseS);
+                baseResourceBaseFW.close();
+
+            }  if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
+                // not the base service do nothing....
+                ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+                String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
+                    getServiceInformation(), service));
+                File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + "ResourceConstants.java");
+
+                FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+                resourceContanstsFW.write(resourceContanstsS);
+                resourceContanstsFW.close();
+
+                LifetimeResourceBaseTemplate baseResourceBaseT = new LifetimeResourceBaseTemplate();
                 String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(
                     getServiceInformation(), service));
                 File baseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
