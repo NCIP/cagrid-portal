@@ -50,12 +50,13 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 
     public DataServiceUpgrade1pt0to1pt1(ExtensionType extensionType, ServiceInformation serviceInformation,
         String servicePath, String fromVersion, String toVersion) {
-        super("DataServiceUpgrade1pt0to1pt1",extensionType, serviceInformation, servicePath, fromVersion, toVersion);
+        super("DataServiceUpgrade1pt0to1pt1", extensionType, serviceInformation,
+            servicePath, fromVersion, toVersion);
     }
 
 
     protected void upgrade() throws Exception {
-        // ensure we're upgrading appropriatly
+        // ensure we're upgrading appropriately
         validateUpgrade();
         // get the extension data in raw form
         Element extensionData = getExtensionDataElement();
@@ -86,16 +87,17 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 
     private void validateUpgrade() throws UpgradeException {
         if (!((getFromVersion() == null) || getFromVersion().equals("1.0"))) {
-            throw new UpgradeException(getClass().getName() + " upgrades FROM 1.0 TO 1.1, found FROM = "
-                + getFromVersion());
+            throw new UpgradeException(getClass().getName() 
+                + " upgrades FROM 1.0 TO 1.1, found FROM = " + getFromVersion());
         }
         if (!getToVersion().equals("1.1")) {
-            throw new UpgradeException(getClass().getName() + " upgrades FROM 1.0 TO 1.1, found TO = " + getToVersion());
+            throw new UpgradeException(getClass().getName() 
+                + " upgrades FROM 1.0 TO 1.1, found TO = " + getToVersion());
         }
         String currentVersion = getExtensionType().getVersion();
         if (!((currentVersion == null) || currentVersion.equals("1.0"))) {
-            throw new UpgradeException(getClass().getName() + " upgrades FROM 1.0 TO 1.1, current version found is "
-                + currentVersion);
+            throw new UpgradeException(getClass().getName() 
+                + " upgrades FROM 1.0 TO 1.1, current version found is " + currentVersion);
         }
     }
 
@@ -109,22 +111,22 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             updateSdkQueryLibraries();
         }
     }
-    
+
 
     private void updateDataLibraries() throws UpgradeException {
         FileFilter dataLibFilter = new FileFilter() {
             public boolean accept(File pathname) {
                 String name = pathname.getName();
                 return (name.endsWith(".jar") && (name.startsWith("caGrid-1.0-data")
-                    || name.startsWith("caGrid-1.0-core") || name.startsWith("caGrid-1.0-caDSR")
+                    || name.startsWith("caGrid-1.0-core") || name.startsWith("caGrid-1.0-caDSR") 
                     || name.startsWith("caGrid-1.0-metadata")));
             }
         };
-        FileFilter newDataLibFilter =new FileFilter() {
+        FileFilter newDataLibFilter = new FileFilter() {
             public boolean accept(File pathname) {
                 String name = pathname.getName();
                 return (name.endsWith(".jar") && (name.startsWith("caGrid-1.1-data")
-                    || name.startsWith("caGrid-1.1-core") || name.startsWith("caGrid-1.1-caDSR")
+                    || name.startsWith("caGrid-1.1-core") || name.startsWith("caGrid-1.1-caDSR") 
                     || name.startsWith("caGrid-1.1-metadata")));
             }
         };
@@ -140,11 +142,13 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         File[] dataLibs = extLibDir.listFiles(newDataLibFilter);
         File[] outLibs = new File[dataLibs.length];
         for (int i = 0; i < dataLibs.length; i++) {
-            File out = new File(serviceLibDir.getAbsolutePath() + File.separator + dataLibs[i].getName());
+            File out = new File(serviceLibDir.getAbsolutePath() 
+                + File.separator + dataLibs[i].getName());
             try {
                 Utils.copyFile(dataLibs[i], out);
             } catch (IOException ex) {
-                throw new UpgradeException("Error copying new data service library: " + ex.getMessage(), ex);
+                throw new UpgradeException("Error copying new data service library: " 
+                    + ex.getMessage(), ex);
             }
             outLibs[i] = out;
         }
@@ -153,7 +157,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         try {
             ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
         } catch (Exception ex) {
-            throw new UpgradeException("Error updating Eclipse .classpath file: " + ex.getMessage(), ex);
+            throw new UpgradeException("Error updating Eclipse .classpath file: " 
+                + ex.getMessage(), ex);
         }
     }
 
@@ -168,6 +173,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         FileFilter newEnumLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
+                // TODO: evaluate if this should stay hard-coded or not
                 return filename.equals("caGrid-1.1-wsEnum.jar");
             }
         };
@@ -182,11 +188,13 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         File[] newEnumLibs = extLibDir.listFiles(newEnumLibFilter);
         File[] outLibs = new File[newEnumLibs.length];
         for (int i = 0; i < newEnumLibs.length; i++) {
-            File outFile = new File(serviceLibDir.getAbsolutePath() + File.separator + newEnumLibs[i].getName());
+            File outFile = new File(serviceLibDir.getAbsolutePath() 
+                + File.separator + newEnumLibs[i].getName());
             try {
                 Utils.copyFile(newEnumLibs[i], outFile);
             } catch (IOException ex) {
-                throw new UpgradeException("Error copying new enumeration library: " + ex.getMessage(), ex);
+                throw new UpgradeException("Error copying new enumeration library: " 
+                    + ex.getMessage(), ex);
             }
             outLibs[i] = outFile;
         }
@@ -195,7 +203,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         try {
             ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
         } catch (Exception ex) {
-            throw new UpgradeException("Error updating Eclipse .classpath file: " + ex.getMessage(), ex);
+            throw new UpgradeException("Error updating Eclipse .classpath file: " 
+                + ex.getMessage(), ex);
         }
     }
 
@@ -204,14 +213,16 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         FileFilter sdkLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
-                return (filename.startsWith("caGrid-1.0-sdkQuery") || filename.startsWith("caGrid-1.0-sdkQuery32"))
+                return (filename.startsWith("caGrid-1.0-sdkQuery") 
+                    || filename.startsWith("caGrid-1.0-sdkQuery32"))
                     && filename.endsWith(".jar");
             }
         };
         FileFilter newSdkLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
-                return (filename.startsWith("caGrid-1.1-sdkQuery") || filename.startsWith("caGrid-1.1-sdkQuery32"))
+                return (filename.startsWith("caGrid-1.1-sdkQuery") 
+                    || filename.startsWith("caGrid-1.1-sdkQuery32"))
                     && filename.endsWith(".jar");
             }
         };
@@ -240,20 +251,24 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         // locate new libraries
         File[] newLibs = null;
         if (isSdk31) {
-            File sdk31LibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"  + File.separator + "sdk31" + File.separator + "lib");
+            File sdk31LibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator 
+                + "data" + File.separator + "sdk31" + File.separator + "lib");
             newLibs = sdk31LibDir.listFiles(newSdkLibFilter);
         } else if (isSdk32) {
-            File sdk32LibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator + "sdk32" + File.separator + "lib");
+            File sdk32LibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator 
+                + "data" + File.separator + "sdk32" + File.separator + "lib");
             newLibs = sdk32LibDir.listFiles(newSdkLibFilter);
         }
         // copy the libraries in
         File[] outLibs = new File[newLibs.length];
         for (int i = 0; i < newLibs.length; i++) {
-            File output = new File(getServicePath() + File.separator + "lib" + File.separator + newLibs[i].getName());
+            File output = new File(getServicePath() + File.separator + "lib" 
+                + File.separator + newLibs[i].getName());
             try {
                 Utils.copyFile(newLibs[i], output);
             } catch (IOException ex) {
-                throw new UpgradeException("Error copying SDK Query Processor library: " + ex.getMessage(), ex);
+                throw new UpgradeException("Error copying SDK Query Processor library: " 
+                    + ex.getMessage(), ex);
             }
             outLibs[i] = output;
         }
@@ -262,9 +277,10 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         try {
             ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
         } catch (Exception ex) {
-            throw new UpgradeException("Error updating Eclipse .classpath file: " + ex.getMessage(), ex);
+            throw new UpgradeException("Error updating Eclipse .classpath file: " 
+                + ex.getMessage(), ex);
         }
-        
+
     }
 
 
@@ -273,14 +289,15 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         if (oldCastorMapping.exists()) {
             Properties introduceProperties = new Properties();
             try {
-                introduceProperties
-                    .load(new FileInputStream(getServicePath() + File.separator + "introduce.properties"));
+                introduceProperties.load(new FileInputStream(
+                    getServicePath() + File.separator + "introduce.properties"));
             } catch (IOException ex) {
-                throw new UpgradeException("Error loading introduce properties for this service: " + ex.getMessage(),
-                    ex);
+                throw new UpgradeException("Error loading introduce properties for this service: " 
+                    + ex.getMessage(), ex);
             }
 
-            File newCastorMapping = new File(CastorMappingUtil.getCustomCastorMappingFileName(getServiceInformation()));
+            File newCastorMapping = new File(
+                CastorMappingUtil.getCustomCastorMappingFileName(getServiceInformation()));
             try {
                 Utils.copyFile(oldCastorMapping, newCastorMapping);
             } catch (IOException ex) {
@@ -289,9 +306,10 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             // fix the server-config.wsdd file's castrorMapping parameter
             File serverConfigFile = new File(getServicePath() + File.separator + "server-config.wsdd");
             try {
-                WsddUtil.setServiceParameter(serverConfigFile.getAbsolutePath(), getServiceInformation().getServices()
-                    .getService(0).getName(), DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, CastorMappingUtil
-                    .getCustomCastorMappingName(getServiceInformation()));
+                WsddUtil.setServiceParameter(serverConfigFile.getAbsolutePath(), 
+                    getServiceInformation().getServices().getService(0).getName(), 
+                    DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, 
+                    CastorMappingUtil.getCustomCastorMappingName(getServiceInformation()));
             } catch (Exception ex) {
                 throw new UpgradeException("Error setting castor mapping parameter in server-config.wsdd: "
                     + ex.getMessage(), ex);
@@ -299,15 +317,16 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             // fix the client config file
             String mainServiceName = getServiceInformation().getIntroduceServiceProperties().getProperty(
                 IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-            ServiceType mainService = CommonTools.getService(getServiceInformation().getServices(), mainServiceName);
+            ServiceType mainService = CommonTools.getService(
+                getServiceInformation().getServices(), mainServiceName);
             String servicePackageName = mainService.getPackageName();
             String packageDir = servicePackageName.replace('.', File.separatorChar);
-            File clientConfigFile = new File(getServicePath() + File.separator + "src" + File.separator + packageDir
-                + File.separator + "client" + File.separator + "client-config.wsdd");
+            File clientConfigFile = new File(getServicePath() + File.separator + "src" + File.separator 
+                + packageDir + File.separator + "client" + File.separator + "client-config.wsdd");
             try {
                 WsddUtil.setGlobalClientParameter(clientConfigFile.getAbsolutePath(),
-                    DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, CastorMappingUtil
-                        .getCustomCastorMappingName(getServiceInformation()));
+                    DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, 
+                    CastorMappingUtil.getCustomCastorMappingName(getServiceInformation()));
             } catch (Exception ex) {
                 throw new UpgradeException("Error setting castor mapping parameter in client-config.wsdd: "
                     + ex.getMessage(), ex);
@@ -320,15 +339,16 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
     private void updateDataSchemas() throws UpgradeException {
         String serviceName = getServiceInformation().getServices().getService(0).getName();
         // extension data has been updated
-        File serviceExtensionDataSchema = new File(getServicePath() + File.separator + "schema" + File.separator
-            + serviceName + "DataServiceExtensionData.xsd");
-        File newExtensionDataSchema = new File(ExtensionsLoader.getInstance().getExtensionsDir() + File.separator
-            + "data" + File.separator + "schema" + File.separator + "Data" + File.separator
-            + "DataServiceExtensionData.xsd");
+        File serviceExtensionDataSchema = new File(getServicePath() + File.separator + "schema" 
+            + File.separator + serviceName + "DataServiceExtensionData.xsd");
+        File newExtensionDataSchema = new File(ExtensionsLoader.getInstance().getExtensionsDir() 
+            + File.separator + "data" + File.separator + "schema" + File.separator 
+            + "Data" + File.separator + "DataServiceExtensionData.xsd");
         try {
             Utils.copyFile(newExtensionDataSchema, serviceExtensionDataSchema);
         } catch (IOException ex) {
-            throw new UpgradeException("Error upgrading extension data schema: " + ex.getMessage(), ex);
+            throw new UpgradeException("Error upgrading extension data schema: " 
+                + ex.getMessage(), ex);
         }
 
         // if the CQL schema changes, upgrade it here
@@ -337,7 +357,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 
     private void updateServiceFeatures() throws UpgradeException {
         Element extDataElement = getExtensionDataElement();
-        Element serviceFeaturesElement = extDataElement.getChild("ServiceFeatures", extDataElement.getNamespace());
+        Element serviceFeaturesElement = extDataElement.getChild(
+            "ServiceFeatures", extDataElement.getNamespace());
         serviceFeaturesElement.setAttribute("useBdt", String.valueOf(false));
         setExtensionDataElement(extDataElement);
     }
@@ -350,28 +371,36 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 
     private void reconfigureCqlQueryProcessor(Element extensionData) throws UpgradeException {
         // make sure to replace the processor jar with the new one in the libs listing
-        Element additionalLibraries = extensionData.getChild("AdditionalLibraries",extensionData.getNamespace());
-        List libsEls = additionalLibraries.getChildren();
-        Iterator libsElsIt = libsEls.iterator();
-        while(libsElsIt.hasNext()){
-            Element nextLib = (Element)libsElsIt.next();
-            String jarName = nextLib.getText();
-            if(jarName.equals("caGrid-1.0-sdkQuery.jar")){
-                nextLib.setText("caGrid-1.1-sdkQuery-core.jar");
-            } else if(jarName.equals("caGrid-1.0-sdkQuery32.jar")){
-                nextLib.setText("caGrid-1.1-sdkQuery32-core.jar");
+        Element additionalLibraries = extensionData.getChild(
+            "AdditionalLibraries", extensionData.getNamespace());
+        // additional libs are optional
+        if (additionalLibraries != null) {
+            List libsEls = additionalLibraries.getChildren();
+            Iterator libsElsIt = libsEls.iterator();
+            while (libsElsIt.hasNext()) {
+                Element nextLib = (Element) libsElsIt.next();
+                String jarName = nextLib.getText();
+                if (jarName.equals("caGrid-1.0-sdkQuery.jar")) {
+                    nextLib.setText("caGrid-1.1-sdkQuery-core.jar");
+                } else if (jarName.equals("caGrid-1.0-sdkQuery32.jar")) {
+                    nextLib.setText("caGrid-1.1-sdkQuery32-core.jar");
+                }
             }
         }
         // service properties now contain CQL Query Processor configuration
         // get the current config properties out of the data element
         Element procConfig = extensionData.getChild("CQLProcessorConfig", extensionData.getNamespace());
         Properties configuredProps = new Properties();
-        Iterator configuredPropElemIter = procConfig.getChildren("Property", procConfig.getNamespace()).iterator();
-        while (configuredPropElemIter.hasNext()) {
-            Element propElem = (Element) configuredPropElemIter.next();
-            String key = propElem.getAttributeValue("name");
-            String value = propElem.getAttributeValue("value");
-            configuredProps.setProperty(key, value);
+        // processor config is optional
+        if (procConfig != null) {
+            Iterator configuredPropElemIter = procConfig.getChildren(
+                "Property", procConfig.getNamespace()).iterator();
+            while (configuredPropElemIter.hasNext()) {
+                Element propElem = (Element) configuredPropElemIter.next();
+                String key = propElem.getAttributeValue("name");
+                String value = propElem.getAttributeValue("value");
+                configuredProps.setProperty(key, value);
+            }
         }
         // remove all the processor config properties from the model
         extensionData.removeChild("CQLProcessorConfig", extensionData.getNamespace());
@@ -379,26 +408,30 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         // locate the query processor class property
         String queryProcessorClassName = null;
         try {
-            queryProcessorClassName = CommonTools.getServicePropertyValue(getServiceInformation()
-                .getServiceDescriptor(), "queryProcessorClass");
+            queryProcessorClassName = CommonTools.getServicePropertyValue(
+                getServiceInformation().getServiceDescriptor(), "queryProcessorClass");
         } catch (Exception ex) {
-            throw new UpgradeException("Error getting query processor class name: " + ex.getMessage(), ex);
+            throw new UpgradeException("Error getting query processor class name: " 
+                + ex.getMessage(), ex);
         }
-        // load the query processor so we can ask it some questions
-        CQLQueryProcessor proc = loadQueryProcessorInstance(queryProcessorClassName);
-        // get the properties for the query processor
-        Properties qpProps = proc.getRequiredParameters();
-        // set the user configured properties
-        Enumeration keyEnum = qpProps.keys();
-        while (keyEnum.hasMoreElements()) {
-            String key = (String) keyEnum.nextElement();
-            String value = qpProps.getProperty(key);
-            if (configuredProps.containsKey(key)) {
-                value = configuredProps.getProperty(key);
+        if (queryProcessorClassName != null) {
+            // load the query processor so we can ask it some questions
+            CQLQueryProcessor proc = loadQueryProcessorInstance(queryProcessorClassName);
+            // get the properties for the query processor
+            Properties qpProps = proc.getRequiredParameters();
+            // set the user configured properties
+            Enumeration keyEnum = qpProps.keys();
+            while (keyEnum.hasMoreElements()) {
+                String key = (String) keyEnum.nextElement();
+                String value = qpProps.getProperty(key);
+                if (configuredProps.containsKey(key)) {
+                    value = configuredProps.getProperty(key);
+                }
+                // add the property to the service properties
+                String extendedKey = "cqlQueryProcessorConfig_" + key;
+                CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
+                    extendedKey, value, false);
             }
-            // add the property to the service properties
-            String extendedKey = "cqlQueryProcessorConfig_" + key;
-            CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), extendedKey, value, false);
         }
     }
 
@@ -406,17 +439,21 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
     private void setEnumIteratorSelection() throws UpgradeException {
         if (serviceIsUsingEnumeration()) {
             CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
-                DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY, IterImplType.CAGRID_CONCURRENT_COMPLETE
-                    .toString(), false);
+                DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY, 
+                IterImplType.CAGRID_CONCURRENT_COMPLETE.toString(), false);
         }
     }
 
 
     private CQLQueryProcessor loadQueryProcessorInstance(String queryProcessorClassName) throws UpgradeException {
-        // reflect load the query processor (this should live in the service's
-        // lib dir)
+        // reflect load the query processor (this should live in the service's lib dir)
         File libDir = new File(getServicePath() + File.separator + "lib");
+        File buildLibDir = new File(getServicePath() + File.separator + "build" + File.separator + "lib");
         File[] libs = libDir.listFiles(new FileFilters.JarFileFilter());
+        if (buildLibDir.exists() && buildLibDir.canRead() && buildLibDir.isDirectory()) {
+            File[] buildLibs = buildLibDir.listFiles(new FileFilters.JarFileFilter());
+            libs = (File[]) Utils.concatenateArrays(File.class, libs, buildLibs);
+        }
         URL[] libUrls = new URL[libs.length];
         try {
             for (int i = 0; i < libs.length; i++) {
@@ -425,13 +462,15 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         } catch (MalformedURLException ex) {
             throw new UpgradeException("Error converting library path to URL: " + ex.getMessage(), ex);
         }
-        ClassLoader libLoader = new URLClassLoader(libUrls, Thread.currentThread().getContextClassLoader());
+        ClassLoader libLoader = new URLClassLoader(
+            libUrls, Thread.currentThread().getContextClassLoader());
         CQLQueryProcessor proc = null;
         try {
             Class qpClass = libLoader.loadClass(queryProcessorClassName);
             proc = (CQLQueryProcessor) qpClass.newInstance();
         } catch (Exception ex) {
-            throw new UpgradeException("Error instantiating query processor class: " + ex.getMessage(), ex);
+            throw new UpgradeException("Error instantiating query processor class: " 
+                + ex.getMessage(), ex);
         }
         return proc;
     }
@@ -441,12 +480,15 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         // additional libraries / jar names elements are unchanged
         // get cadsr information
         Element cadsrInfo = extensionData.getChild("CadsrInformation", extensionData.getNamespace());
-        // now we have a noDomainModel boolean flag...
-        boolean hasCadsrUrl = cadsrInfo.getAttributeValue("serviceUrl") != null;
-        boolean usingSuppliedModel = (cadsrInfo.getAttributeValue("useSuppliedModel") != null)
-            && cadsrInfo.getAttributeValue("useSuppliedModel").equals("true");
-        boolean noDomainModel = (!hasCadsrUrl && !usingSuppliedModel);
-        cadsrInfo.setAttribute("noDomainModel", String.valueOf(noDomainModel));
+        // cadsr info is optional
+        if (cadsrInfo != null) {
+            // now we have a noDomainModel boolean flag...
+            boolean hasCadsrUrl = cadsrInfo.getAttributeValue("serviceUrl") != null;
+            boolean usingSuppliedModel = (cadsrInfo.getAttributeValue("useSuppliedModel") != null)
+                && cadsrInfo.getAttributeValue("useSuppliedModel").equals("true");
+            boolean noDomainModel = (!hasCadsrUrl && !usingSuppliedModel);
+            cadsrInfo.setAttribute("noDomainModel", String.valueOf(noDomainModel));
+        }
     }
 
 
@@ -454,7 +496,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         // get the query method
         MethodType queryMethod = null;
         MethodType enumerationMethod = null;
-        MethodType[] allMethods = getServiceInformation().getServices().getService(0).getMethods().getMethod();
+        MethodType[] allMethods = 
+            getServiceInformation().getServices().getService(0).getMethods().getMethod();
         for (int i = 0; i < allMethods.length; i++) {
             if (allMethods[i].getName().equals(DataServiceConstants.QUERY_METHOD_NAME)) {
                 queryMethod = allMethods[i];
@@ -525,7 +568,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         try {
             rawExtensionData = AxisJdomUtils.fromElement(extensionData);
         } catch (JDOMException ex) {
-            throw new UpgradeException("Error converting extension data to Axis MessageElement: " + ex.getMessage(), ex);
+            throw new UpgradeException("Error converting extension data to Axis MessageElement: " 
+                + ex.getMessage(), ex);
         }
         ext.set_any(new MessageElement[]{rawExtensionData});
     }
