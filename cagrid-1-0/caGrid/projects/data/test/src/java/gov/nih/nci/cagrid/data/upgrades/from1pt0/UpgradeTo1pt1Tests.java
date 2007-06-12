@@ -1,7 +1,8 @@
 package gov.nih.nci.cagrid.data.upgrades.from1pt0;
 
+import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.DeleteOldServiceStep;
-import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
 import java.io.File;
 import java.util.Vector;
@@ -18,10 +19,11 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTo1pt1Tests.java,v 1.8 2007-04-16 13:36:12 dervin Exp $ 
+ * @version $Id: UpgradeTo1pt1Tests.java,v 1.9 2007-06-12 16:13:40 dervin Exp $ 
  */
 public class UpgradeTo1pt1Tests extends Story {
 	public static final String TEST_DIR = "../data/test";
+    public static final String SERVICE_ZIP_NAME = "BasicDataService_1-0.zip";
     
 	public static final String SERVICE_DIR = TEST_DIR + File.separator + "BasicDataService";
     public static final String SERVICE_NAME = "BasicDataService";
@@ -40,11 +42,11 @@ public class UpgradeTo1pt1Tests extends Story {
 	
 
 	protected Vector steps() {
-        TestServiceInfo info = new Upgrade1pt0to1pt1TestServiceInfo();
+        TestCaseInfo info = new Upgrade1pt0to1pt1TestServiceInfo();
 		Vector steps = new Vector();
 		// steps to unpack and upgrade the old service
 		steps.add(new DeleteOldServiceStep(info));
-		steps.add(new UnzipOldServiceStep(TEST_DIR));
+		steps.add(new UnzipOldServiceStep(TEST_DIR, SERVICE_ZIP_NAME));
 		steps.add(new UpgradeIntroduceServiceStep(info.getDir()));
 		steps.add(new BuildUpgradedServiceStep(info.getDir()));
 		
@@ -66,7 +68,7 @@ public class UpgradeTo1pt1Tests extends Story {
 	}
 	
 	
-	public static class Upgrade1pt0to1pt1TestServiceInfo implements TestServiceInfo {
+	public static class Upgrade1pt0to1pt1TestServiceInfo extends DataTestCaseInfo {
 	    public String getDir() {
 	        return UpgradeTo1pt1Tests.SERVICE_DIR;
 	    }
@@ -82,13 +84,8 @@ public class UpgradeTo1pt1Tests extends Story {
 	    }
 
 
-	    public String getPackage() {
+	    public String getPackageName() {
 	        return SERVICE_PACKAGE;
-	    }
-
-
-	    public String getExtensions() {
-	        return "data";
 	    }
 	}
 }

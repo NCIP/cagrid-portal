@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.system.bdt;
 
-import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.bdt.BDTDataServiceCreationTests;
 import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
 import gov.nih.nci.cagrid.data.system.BaseSystemTest;
@@ -32,7 +32,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:19:42 PM
- * @version $Id: BDTDataServiceSystemTests.java,v 1.3 2007-04-05 16:57:58 dervin Exp $ 
+ * @version $Id: BDTDataServiceSystemTests.java,v 1.4 2007-06-12 16:13:40 dervin Exp $ 
  */
 public class BDTDataServiceSystemTests extends BaseSystemTest {
 	private static GlobusHelper globusHelper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
@@ -63,7 +63,7 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 
 
 	protected Vector steps() {
-        TestServiceInfo info = new BDTDataServiceCreationTests.TestBDTDataServiceInfo();
+        DataTestCaseInfo info = new BDTDataServiceCreationTests.TestBDTDataServiceInfo();
 		Vector steps = new Vector();
 		// assumes the BDT service has been created already
 		// 1) Add the bookstore schema to the data service

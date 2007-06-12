@@ -14,7 +14,7 @@ import com.atomicobject.haste.framework.Step;
 
 /** 
  *  CreationStep
- *  TODO:DOCUMENT ME
+ *  Step to create a service
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
@@ -22,10 +22,10 @@ import com.atomicobject.haste.framework.Step;
  * @version $Id$ 
  */
 public class CreationStep extends Step {
-    protected TestServiceInfo serviceInfo;
+    protected DataTestCaseInfo serviceInfo;
     protected String introduceDir;
 	
-	public CreationStep(TestServiceInfo serviceInfo, String introduceDir) {
+	public CreationStep(DataTestCaseInfo serviceInfo, String introduceDir) {
 		super();
         this.serviceInfo = serviceInfo;
 		this.introduceDir = introduceDir;
@@ -36,7 +36,7 @@ public class CreationStep extends Step {
 		System.out.println("Creating service...");
 
 		String cmd = CommonTools.getAntSkeletonCreationCommand(introduceDir, serviceInfo.getName(), 
-			serviceInfo.getDir(), serviceInfo.getPackage(), serviceInfo.getNamespace(), serviceInfo.getExtensions());
+			serviceInfo.getDir(), serviceInfo.getPackageName(), serviceInfo.getNamespace(), serviceInfo.getExtensions());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process createSkeletonProcess = CommonTools.createAndOutputProcess(cmd);
         new StreamPrinter(createSkeletonProcess.getInputStream(), System.out).start();
@@ -48,7 +48,7 @@ public class CreationStep extends Step {
 		
 		System.out.println("Invoking post creation processes...");
 		cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, serviceInfo.getName(),
-			serviceInfo.getDir(), serviceInfo.getPackage(), serviceInfo.getNamespace(), getServiceExtensions());
+			serviceInfo.getDir(), serviceInfo.getPackageName(), serviceInfo.getNamespace(), getServiceExtensions());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process postCreateProcess = CommonTools.createAndOutputProcess(cmd);
         new StreamPrinter(postCreateProcess.getInputStream(), System.out).start();

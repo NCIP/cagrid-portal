@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.upgrades.from1pt0.system;
 
-import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
 import gov.nih.nci.cagrid.data.system.CreateCleanGlobusStep;
 import gov.nih.nci.cagrid.data.system.DeployDataServiceStep;
@@ -27,7 +27,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.5 2007-04-05 18:12:05 dervin Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.6 2007-06-12 16:13:40 dervin Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -53,7 +53,7 @@ public class UpgradedServiceSystemTest extends Story {
 
 
 	protected Vector steps() {
-        TestServiceInfo info = new UpgradeTo1pt1Tests.Upgrade1pt0to1pt1TestServiceInfo();
+        DataTestCaseInfo info = new UpgradeTo1pt1Tests.Upgrade1pt0to1pt1TestServiceInfo();
 		Vector steps = new Vector();
 		// steps to invoke the upgraded service 
 		// by the data service creation tests

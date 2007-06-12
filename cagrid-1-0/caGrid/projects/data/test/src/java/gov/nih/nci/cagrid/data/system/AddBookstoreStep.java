@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.data.system;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -17,14 +17,14 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: AddBookstoreStep.java,v 1.6 2007-05-14 16:03:12 dervin Exp $
+ * @version $Id: AddBookstoreStep.java,v 1.7 2007-06-12 16:13:40 dervin Exp $
  */
 public class AddBookstoreStep extends Step {
 
-    private TestServiceInfo serviceInfo;
+    private DataTestCaseInfo serviceInfo;
 
 
-	public AddBookstoreStep(TestServiceInfo info) {
+	public AddBookstoreStep(DataTestCaseInfo info) {
 		super();
 		this.serviceInfo = info;
 	}

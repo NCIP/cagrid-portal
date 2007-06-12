@@ -36,7 +36,7 @@ public class CreationTests extends Story {
 	
 
 	protected Vector steps() {
-        TestServiceInfo info = new TestDataServiceInfo();
+        DataTestCaseInfo info = new TestDataServiceInfo();
 		Vector steps = new Vector();
 		// delete any existing service
 		steps.add(new DeleteOldServiceStep(info));
@@ -72,7 +72,7 @@ public class CreationTests extends Story {
 	}
     
     
-	public static class TestDataServiceInfo implements TestServiceInfo {
+	public static class TestDataServiceInfo extends DataTestCaseInfo {
 	    public String getName() {
 	        return SERVICE_NAME;
 	    }
@@ -88,13 +88,8 @@ public class CreationTests extends Story {
 	    }
 
 
-	    public String getPackage() {
+	    public String getPackageName() {
 	        return PACKAGE_NAME;
-	    }
-
-
-	    public String getExtensions() {
-	        return "data";
 	    }
 	}
 }

@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.data.creation.enumeration;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.creation.CreationStep;
-import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ServiceFeatures;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -19,11 +19,11 @@ import java.io.File;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 30, 2006 
- * @version $Id: CreateEnumerationDataServiceStep.java,v 1.5 2007-05-14 16:03:12 dervin Exp $ 
+ * @version $Id: CreateEnumerationDataServiceStep.java,v 1.6 2007-06-12 16:13:40 dervin Exp $ 
  */
 public class CreateEnumerationDataServiceStep extends CreationStep {
 	
-	public CreateEnumerationDataServiceStep(TestServiceInfo info, String introduceDir) {
+	public CreateEnumerationDataServiceStep(DataTestCaseInfo info, String introduceDir) {
 		super(info, introduceDir);
 	}
     

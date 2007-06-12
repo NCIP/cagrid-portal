@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.data.creation.bdt;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.creation.CreationStep;
-import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ServiceFeatures;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -20,11 +20,11 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 2:53:13 PM
- * @version $Id: CreateBDTServiceStep.java,v 1.2 2007-03-22 14:21:25 dervin Exp $ 
+ * @version $Id: CreateBDTServiceStep.java,v 1.3 2007-06-12 16:13:40 dervin Exp $ 
  */
 public class CreateBDTServiceStep extends CreationStep {
 	
-	public CreateBDTServiceStep(TestServiceInfo serviceInfo, String introduceDir) {
+	public CreateBDTServiceStep(DataTestCaseInfo serviceInfo, String introduceDir) {
         super(serviceInfo, introduceDir);
 	}
     

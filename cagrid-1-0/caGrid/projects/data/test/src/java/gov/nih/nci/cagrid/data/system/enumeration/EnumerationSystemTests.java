@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.system.enumeration;
 
-import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.enumeration.CreateEnumerationTests;
 import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
 import gov.nih.nci.cagrid.data.system.BaseSystemTest;
@@ -62,7 +62,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 
 
 	protected Vector steps() {
-        TestServiceInfo info = new CreateEnumerationTests.TestEnumerationDataServiceInfo();
+        DataTestCaseInfo info = new CreateEnumerationTests.TestEnumerationDataServiceInfo();
 		Vector steps = new Vector();
 		// an enumeration supporting data service is presumed to have been
 		// created by a previous testing process

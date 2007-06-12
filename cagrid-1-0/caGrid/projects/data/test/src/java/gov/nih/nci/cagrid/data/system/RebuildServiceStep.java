@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.data.system;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.StreamPrinter;
-import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -19,14 +19,14 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: RebuildServiceStep.java,v 1.6 2007-05-14 16:03:12 dervin Exp $ 
+ * @version $Id: RebuildServiceStep.java,v 1.7 2007-06-12 16:13:40 dervin Exp $ 
  */
 public class RebuildServiceStep extends Step {
 	
-    private TestServiceInfo serviceInfo;
+    private DataTestCaseInfo serviceInfo;
 	private String introduceDir;
 	
-	public RebuildServiceStep(TestServiceInfo serviceInfo, String introduceDir) {
+	public RebuildServiceStep(DataTestCaseInfo serviceInfo, String introduceDir) {
 		super();
         this.serviceInfo = serviceInfo;
 		this.introduceDir = introduceDir;
@@ -38,7 +38,7 @@ public class RebuildServiceStep extends Step {
 		
 		System.out.println("Invoking post creation processes...");
 		String cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, 
-            serviceInfo.getName(), serviceInfo.getDir(), serviceInfo.getPackage(), 
+            serviceInfo.getName(), serviceInfo.getDir(), serviceInfo.getPackageName(), 
             serviceInfo.getNamespace(), getServiceExtensions());
         System.out.println("Invoking ant:");
         System.out.println(cmd);

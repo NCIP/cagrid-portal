@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.data.system;
 
 import gov.nih.nci.cagrid.data.creation.CreationTests;
-import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
+import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
 import gov.nih.nci.cagrid.introduce.test.util.GlobusHelper;
 
@@ -21,7 +21,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.15 2007-05-25 20:03:40 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.16 2007-06-12 16:13:40 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     private static GlobusHelper globusHelper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
@@ -52,7 +52,7 @@ public class SystemTests extends BaseSystemTest {
 
 
     protected Vector steps() {
-        TestServiceInfo info = new CreationTests.TestDataServiceInfo();
+        DataTestCaseInfo info = new CreationTests.TestDataServiceInfo();
         Vector steps = new Vector();
         // data service presumed to have been created
         // by the data service creation tests

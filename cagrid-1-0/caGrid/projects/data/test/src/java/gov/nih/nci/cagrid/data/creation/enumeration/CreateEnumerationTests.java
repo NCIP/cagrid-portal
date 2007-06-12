@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.data.creation.enumeration;
 
+import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.DeleteOldServiceStep;
-import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
 
 import java.io.File;
 import java.util.Vector;
@@ -18,7 +18,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 30, 2006 
- * @version $Id: CreateEnumerationTests.java,v 1.3 2007-04-05 16:57:58 dervin Exp $ 
+ * @version $Id: CreateEnumerationTests.java,v 1.4 2007-06-12 16:13:40 dervin Exp $ 
  */
 public class CreateEnumerationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -39,7 +39,7 @@ public class CreateEnumerationTests extends Story {
 
 
 	protected Vector steps() {
-        TestServiceInfo info = new TestEnumerationDataServiceInfo();
+        DataTestCaseInfo info = new TestEnumerationDataServiceInfo();
 		Vector steps = new Vector();
 		// 1. delete any existing enumeration data service directory
 		steps.add(new DeleteOldServiceStep(info));
@@ -72,7 +72,7 @@ public class CreateEnumerationTests extends Story {
 	}
     
     
-    public static class TestEnumerationDataServiceInfo implements TestServiceInfo {
+    public static class TestEnumerationDataServiceInfo extends DataTestCaseInfo {
         public String getName() {
             return SERVICE_NAME;
         }
@@ -88,13 +88,8 @@ public class CreateEnumerationTests extends Story {
         }
 
 
-        public String getPackage() {
+        public String getPackageName() {
             return PACKAGE_NAME;
-        }
-
-
-        public String getExtensions() {
-            return "data";
         }
     }
 }

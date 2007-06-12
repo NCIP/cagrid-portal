@@ -8,23 +8,25 @@ import com.atomicobject.haste.framework.Step;
 
 /** 
  *  UnzipOldServiceStep
- *  Step to unzip the old service
+ *  Step to unzip an old service
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UnzipOldServiceStep.java,v 1.3 2007-02-26 21:43:11 dervin Exp $ 
+ * @version $Id: UnzipOldServiceStep.java,v 1.4 2007-06-12 16:13:40 dervin Exp $ 
  */
 public class UnzipOldServiceStep extends Step {
 	private String testDir;
+    private String serviceZipName;
 	
-	public UnzipOldServiceStep(String testDir) {
+	public UnzipOldServiceStep(String testDir, String serviceZipName) {
 		super();
 		this.testDir = testDir;
+        this.serviceZipName = serviceZipName;
 	}
 	
 
 	public void runStep() throws Throwable {
-		File zippedService = new File(testDir + File.separator + "resources" + File.separator + "BasicDataService_1-0.zip");
+		File zippedService = new File(testDir + File.separator + "resources" + File.separator + serviceZipName);
 		ZipUtilities.unzip(zippedService, new File(testDir));
 	}
 }

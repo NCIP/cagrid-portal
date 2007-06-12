@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.data.creation.bdt;
 
+import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.DeleteOldServiceStep;
-import gov.nih.nci.cagrid.data.creation.TestServiceInfo;
 
 import java.io.File;
 import java.util.Vector;
@@ -19,7 +19,7 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 2:41:25 PM
- * @version $Id: BDTDataServiceCreationTests.java,v 1.4 2007-04-05 16:57:58 dervin Exp $ 
+ * @version $Id: BDTDataServiceCreationTests.java,v 1.5 2007-06-12 16:13:40 dervin Exp $ 
  */
 public class BDTDataServiceCreationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -40,7 +40,7 @@ public class BDTDataServiceCreationTests extends Story {
 
 
 	protected Vector steps() {
-        TestServiceInfo info = new TestBDTDataServiceInfo();
+        DataTestCaseInfo info = new TestBDTDataServiceInfo();
 		Vector steps = new Vector();
 		steps.add(new DeleteOldServiceStep(info));
 		steps.add(new CreateBDTServiceStep(info, getIntroduceBaseDir()));
@@ -74,7 +74,7 @@ public class BDTDataServiceCreationTests extends Story {
 	}
     
     
-    public static class TestBDTDataServiceInfo implements TestServiceInfo {
+    public static class TestBDTDataServiceInfo extends DataTestCaseInfo {
         public String getName() {
             return SERVICE_NAME;
         }
@@ -90,7 +90,7 @@ public class BDTDataServiceCreationTests extends Story {
         }
 
 
-        public String getPackage() {
+        public String getPackageName() {
             return PACKAGE_NAME;
         }
 
