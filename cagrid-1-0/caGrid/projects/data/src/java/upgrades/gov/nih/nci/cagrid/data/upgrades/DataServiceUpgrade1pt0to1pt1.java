@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -134,28 +135,34 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         File serviceLibDir = new File(getServicePath() + File.separator + "lib");
         File[] serviceDataLibs = serviceLibDir.listFiles(dataLibFilter);
         // delete the old libraries
-        for (int i = 0; i < serviceDataLibs.length; i++) {
-            serviceDataLibs[i].delete();
+        for (File oldLib : serviceDataLibs) {
+            oldLib.delete();
+            getStatus().addDescriptionLine("caGrid 1.0 library " + oldLib.getName() + " removed");
         }
         // copy new libraries in
         File extLibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "lib");
         File[] dataLibs = extLibDir.listFiles(newDataLibFilter);
-        File[] outLibs = new File[dataLibs.length];
-        for (int i = 0; i < dataLibs.length; i++) {
+        List<File> outLibs = new ArrayList(dataLibs.length);
+        for (File newLib : dataLibs) {
             File out = new File(serviceLibDir.getAbsolutePath() 
-                + File.separator + dataLibs[i].getName());
+                + File.separator + newLib.getName());
             try {
-                Utils.copyFile(dataLibs[i], out);
+                Utils.copyFile(newLib, out);
+                getStatus().addDescriptionLine("caGrid 1.1 library " + newLib.getName() + " added");
             } catch (IOException ex) {
                 throw new UpgradeException("Error copying new data service library: " 
                     + ex.getMessage(), ex);
             }
-            outLibs[i] = out;
+            outLibs.add(out);
         }
+        
         // update the Eclipse .classpath file
         File classpathFile = new File(getServicePath() + File.separator + ".classpath");
+        File[] outLibArray = new File[dataLibs.length];
+        outLibs.toArray(outLibArray);
         try {
-            ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
+            ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibArray);
+            getStatus().addDescriptionLine("Eclipse .classpath file updated");
         } catch (Exception ex) {
             throw new UpgradeException("Error updating Eclipse .classpath file: " 
                 + ex.getMessage(), ex);
@@ -180,8 +187,9 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         // locate old enumeration libraries in the service
         File serviceLibDir = new File(getServicePath() + File.separator + "lib");
         File[] oldEnumLibs = serviceLibDir.listFiles(enumLibFilter);
-        for (int i = 0; i < oldEnumLibs.length; i++) {
-            oldEnumLibs[i].delete();
+        for (File oldLib : oldEnumLibs) {
+            oldLib.delete();
+            getStatus().addDescriptionLine("caGrid 1.0 library " + oldLib.getName() + " removed");
         }
         // copy in new libraries
         File extLibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "lib");
@@ -192,6 +200,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
                 + File.separator + newEnumLibs[i].getName());
             try {
                 Utils.copyFile(newEnumLibs[i], outFile);
+                getStatus().addDescriptionLine("caGrid 1.1 library " + newEnumLibs[i].getName() + " added");
             } catch (IOException ex) {
                 throw new UpgradeException("Error copying new enumeration library: " 
                     + ex.getMessage(), ex);
@@ -202,10 +211,12 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         File classpathFile = new File(getServicePath() + File.separator + ".classpath");
         try {
             ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
+            getStatus().addDescriptionLine("Eclipse .classpath file updated");
         } catch (Exception ex) {
             throw new UpgradeException("Error updating Eclipse .classpath file: " 
                 + ex.getMessage(), ex);
         }
+        getStatus().addDescriptionLine("-- WS-Enumeration support upgraded");
     }
 
 
@@ -245,8 +256,9 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             throw new UpgradeException("Unable to determine SDK version to upgrade");
         }
         // delete old libs
-        for (int i = 0; i < oldLibs.length; i++) {
-            oldLibs[i].delete();
+        for (File oldLib : oldLibs) {
+            oldLib.delete();
+            getStatus().addDescriptionLine("caGrid 1.0 library " + oldLib.getName() + " removed");
         }
         // locate new libraries
         File[] newLibs = null;
@@ -266,6 +278,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
                 + File.separator + newLibs[i].getName());
             try {
                 Utils.copyFile(newLibs[i], output);
+                getStatus().addDescriptionLine("caGrid 1.1 library " + newLibs[i].getName() + " added");
             } catch (IOException ex) {
                 throw new UpgradeException("Error copying SDK Query Processor library: " 
                     + ex.getMessage(), ex);
@@ -276,11 +289,12 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         File classpathFile = new File(getServicePath() + File.separator + ".classpath");
         try {
             ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
+            getStatus().addDescriptionLine("Eclipse .classpath file updated");
         } catch (Exception ex) {
             throw new UpgradeException("Error updating Eclipse .classpath file: " 
                 + ex.getMessage(), ex);
         }
-
+        getStatus().addDescriptionLine("-- caCORE SDK Support upgraded");
     }
 
 
@@ -300,6 +314,9 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
                 CastorMappingUtil.getCustomCastorMappingFileName(getServiceInformation()));
             try {
                 Utils.copyFile(oldCastorMapping, newCastorMapping);
+                getStatus().addDescriptionLine("Castor mapping file moved:");
+                getStatus().addDescriptionLine("\tFrom " + oldCastorMapping.getAbsolutePath());
+                getStatus().addDescriptionLine("\tTo " + newCastorMapping.getAbsolutePath());
             } catch (IOException ex) {
                 throw new UpgradeException("Error moving castor mapping file: " + ex.getMessage(), ex);
             }
@@ -310,6 +327,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
                     getServiceInformation().getServices().getService(0).getName(), 
                     DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, 
                     CastorMappingUtil.getCustomCastorMappingName(getServiceInformation()));
+                getStatus().addDescriptionLine("Edited server-config.wsdd to reference moved castor mapping");
             } catch (Exception ex) {
                 throw new UpgradeException("Error setting castor mapping parameter in server-config.wsdd: "
                     + ex.getMessage(), ex);
@@ -327,6 +345,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
                 WsddUtil.setGlobalClientParameter(clientConfigFile.getAbsolutePath(),
                     DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, 
                     CastorMappingUtil.getCustomCastorMappingName(getServiceInformation()));
+                getStatus().addDescriptionLine("Edited client-config.wsdd to reference moved castor mapping");
             } catch (Exception ex) {
                 throw new UpgradeException("Error setting castor mapping parameter in client-config.wsdd: "
                     + ex.getMessage(), ex);
@@ -346,6 +365,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             + "Data" + File.separator + "DataServiceExtensionData.xsd");
         try {
             Utils.copyFile(newExtensionDataSchema, serviceExtensionDataSchema);
+            getStatus().addDescriptionLine("Data service extension data schema updated");
         } catch (IOException ex) {
             throw new UpgradeException("Error upgrading extension data schema: " 
                 + ex.getMessage(), ex);
@@ -433,6 +453,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
                     extendedKey, value, false);
             }
         }
+        getStatus().addDescriptionLine(
+            "CQL Query Processor configuration properties are now managed in service properties");
     }
 
 
@@ -441,6 +463,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
                 DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY, 
                 IterImplType.CAGRID_CONCURRENT_COMPLETE.toString(), false);
+            getStatus().addDescriptionLine("Server side WS-Enumeration implementation upgraded to " 
+                + IterImplType.CAGRID_CONCURRENT_COMPLETE);
         }
     }
 
@@ -488,6 +512,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
                 && cadsrInfo.getAttributeValue("useSuppliedModel").equals("true");
             boolean noDomainModel = (!hasCadsrUrl && !usingSuppliedModel);
             cadsrInfo.setAttribute("noDomainModel", String.valueOf(noDomainModel));
+            getStatus().addDescriptionLine("Cadsr information added, no domain model flag set to true");
         }
     }
 
@@ -543,6 +568,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
                 }
             }
         }
+        getStatus().addDescriptionLine("Query method and parameters now have description strings");
     }
 
 
