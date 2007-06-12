@@ -5,31 +5,29 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 
 import java.io.File;
 
-public class TestCaseInfo3 extends TestCaseInfo {
+public class TestCaseInfo4 extends TestCaseInfo {
 	public static final String GOLD_SCHEMA_DIR= "test" + File.separator + "resources" + File.separator + "schema";
 
-	public String name = "IntroduceTestService3";
+	public String name = "IntroduceTestSingletonService";
 
 	public String dir = "IntroduceTest";
 
-	public String packageName = "org.test3";
+	public String packageName = "org.test.singleton";
 	
-	public String packageDir = "org" + File.separator + "test3";
+	public String packageDir = "org" + File.separator + "test";
 
-	public String namespaceDomain = "http://test3.org/IntroduceTest";
+	public String namespaceDomain = "http://test.org/IntroduceTestSingletonService";
 
-	public TestCaseInfo3() {
+	public TestCaseInfo4() {
 
 	}
 
-	public TestCaseInfo3(String name, String dir, String packageName,
+	public TestCaseInfo4(String name, String dir, String packageName,
 			String namespaceDomain) {
 		this.name = name;
 		this.dir = dir;
 		this.packageName = packageName;
 		this.namespaceDomain = namespaceDomain;
-		
-
 	}
 
 	/* (non-Javadoc)
@@ -79,9 +77,9 @@ public class TestCaseInfo3 extends TestCaseInfo {
 	public String getPackageDir() {
 		return getPackageName().replace('.',File.separatorChar);
 	}
-	
+
 	public String getResourceFrameworkType() {
-		return IntroduceConstants.INTRODUCE_BASE_RESOURCE;
+		return IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE;
 	}
 
 }
