@@ -22,7 +22,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeSDKTo1pt1Tests.java,v 1.1 2007-06-12 17:08:55 dervin Exp $ 
+ * @version $Id: UpgradeSDKTo1pt1Tests.java,v 1.2 2007-06-12 18:04:00 dervin Exp $ 
  */
 public class UpgradeSDKTo1pt1Tests extends Story {
 	public static final String TEST_DIR = "../data/test";
@@ -35,12 +35,12 @@ public class UpgradeSDKTo1pt1Tests extends Story {
     
 	
 	public String getDescription() {
-		return "Tests upgrade of a data service with WS-Enumeration from version 1.0 to 1.1";
+		return "Tests upgrade of a data service backed by the SDK from version 1.0 to 1.1";
 	}
     
     
     public String getName() {
-        return "Data Service with WS-Enumeration from 1_0 to 1_1 Upgrade Tests";
+        return "Data Service backed by the SDK from 1_0 to 1_1 Upgrade Tests";
     }
 	
 
