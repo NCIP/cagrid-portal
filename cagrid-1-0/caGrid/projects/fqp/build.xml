@@ -140,7 +140,7 @@
         <runtarget target="postInit" />
     </target>
 
-    <target name="defineClasspaths">
+    <target name="defineClasspaths" depends="checkGlobus">
         <runtarget target="defineExtendedClasspaths" />
         <path id="base.classpath">
             <fileset dir="${lib.dir}">
@@ -179,6 +179,7 @@
             <path refid="test.build.classpath" />
         </path>
         <path id="run.classpath">
+            <pathelement location="${ext.globus.dir}" />
             <pathelement location="${build.dest}" />
         	<path refid="run.extended.classpath" />
             <path refid="service.build.classpath" />
