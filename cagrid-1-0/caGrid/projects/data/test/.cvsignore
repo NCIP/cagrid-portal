@@ -4,3 +4,5 @@ TestEnumerationDataService
 CaGridTutorialService
 BasicDataService
 TestBDTDataService
+DataServiceWithEnumeration
+DataServiceBackedBySDK
