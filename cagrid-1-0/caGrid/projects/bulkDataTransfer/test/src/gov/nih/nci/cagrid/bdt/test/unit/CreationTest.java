@@ -15,12 +15,12 @@ import com.atomicobject.haste.framework.Story;
 
 /** 
  *  CreationTests
- *  TODO:DOCUMENT ME
+ *  BDT service creation tests
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006 
- * @version $Id: CreationTest.java,v 1.5 2007-04-03 15:06:49 dervin Exp $ 
+ * @version $Id: CreationTest.java,v 1.6 2007-06-12 20:19:03 dervin Exp $ 
  */
 public class CreationTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -28,6 +28,11 @@ public class CreationTest extends Story {
 	public static final String SERVICE_DIR = (new File("..")).getAbsolutePath() + File.separator + "bulkDataTransfer" + File.separator + "test" + File.separator + "TestBDTService";
 	public static final String PACKAGE_NAME = "gov.nih.nci.cagrid.testbdt";
 	public static final String SERVICE_NAMESPACE = "http://" + PACKAGE_NAME + "/" + SERVICE_NAME;
+    
+    public String getName() {
+        return "BDT service creation tests";
+    }
+    
 	
 	public String getDescription() {
 		return "Testing the data service creation extension for Introduce"; 
