@@ -166,7 +166,7 @@ public class SecurityDescriptorGenerator {
 			xml.append("<authz value=\"" + service.getName().toLowerCase() + ":" + service.getPackageName()
 				+ ".service.globus." + service.getName() + "Authorization" + "\" />");
 		} else if (!usedServiceAuth && !needMethodAuth) {
-			xml.append("<authz value=\"\" />");
+			xml.append("<authz value=\"none\" />");
 		}
 
 		return xml.toString();
