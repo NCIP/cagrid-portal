@@ -89,13 +89,13 @@ public class FQPServiceTest extends AbstractServiceTest {
 
     @Override
     public String getDescription() {
-        return "IndexServiceTest";
+        return "FQPServiceTest";
     }
 
 
     @Override
     public String getName() {
-        return "Index Service Story";
+        return "FQP Service Story";
     }
 
 
