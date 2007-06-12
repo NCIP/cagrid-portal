@@ -59,7 +59,7 @@
                 <Measurement name="StageName" type="text/string">
                     <xsl:value-of select="@name"/>
                 </Measurement>
-                <!-- parse the sentenance like time to necessary format  -->
+                <!-- parse the sentence like time to necessary format  -->
                 <Measurement name="ElapsedTime" type="numeric/float">
                     <xsl:call-template name="duration-string-to-seconds">
                         <xsl:with-param name="durationString" select="@time"/>
