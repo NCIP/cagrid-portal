@@ -24,9 +24,11 @@ import java.awt.Insets;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.jar.JarEntry;
@@ -50,7 +52,7 @@ import javax.swing.ScrollPaneConstants;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.4 2007-06-11 14:11:58 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.5 2007-06-12 15:10:53 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String[] LOCAL_CLIENT_REQUIRED_FILES = new String[] {
@@ -62,7 +64,6 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         "ehcache.xml", "remoteService.xml",
         "sdk.csm.new.hibernate.cfg.xml"
     };
-    public static final String LOCAL_CONFIG_COPIED_DIR = "localSdkConfig";
     
     // from HQLCoreQueryProcessor...
     public static final String USE_LOCAL_APPSERVICE = "useLocalAppservice";
@@ -174,6 +175,11 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
 
 
     public void update() {
+        // enable / disable the local API selection radio button based on the SDK version selected
+        boolean localApiSupported = !getBitBucket().get(CoreDsIntroPanel.CACORE_VERSION_PROPERTY)
+            .equals(CoreDsIntroPanel.CACORE_31_VERSION);
+        getLocalRadioButton().setEnabled(localApiSupported);
+        
         // verify the sdk query library has been copied into the service
         File sdkQueryLib = null;
         String sdkVersion = (String) getBitBucket().get(CoreDsIntroPanel.CACORE_VERSION_PROPERTY);
@@ -221,6 +227,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             ErrorDialog.showErrorDialog("Error updating UI", ex);
         }
         
+        // update the availability of the next button
         updateNextEnabledState();
     }
 
@@ -363,7 +370,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             clientBrowseButton.setText("Browse");
             clientBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    selectClientDir2();
+                    selectClientDir();
                     updateNextEnabledState();
                 }
             });
@@ -469,14 +476,16 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     }
     
     
-    private void selectClientDir2() {
+    private void selectClientDir() {
         try {
             // prompt for a client package directory
             String clientDir = ResourceManager.promptDir(null);
             if (clientDir != null) {
                 // locate the client jar file
                 final File clientJarFile = locateClientJarInDir(clientDir);
-                if (clientJarFile != null && isValidClientJar(clientJarFile) && isValidConfDir(clientDir + File.separator + "conf")) {
+                if (clientJarFile != null && isValidClientJar(clientJarFile) && 
+                    (getLocalRadioButton().isSelected() && isValidConfDir(clientDir + File.separator + "conf"))
+                        || getRemoteApiRadioButton().isSelected()) {
                     if (getClientDirTextField().getText().length() != 0) {
                         // delete the old client jar
                         File oldClientJarFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
@@ -514,8 +523,6 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                             + File.separator + "lib" + File.separator + lib.getName());
                         Utils.copyFile(lib, libOut);
                     }
-                    // store that information
-                    storeLibrariesInExtensionData();
                     
                     if (getLocalRadioButton().isSelected()) {
                         // turn the conf dir into a jar library
@@ -532,6 +539,9 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
 
                     // set the directory name in the UI
                     getClientDirTextField().setText(clientDir);
+                    
+                    // store the library information
+                    storeLibrariesInExtensionData();
                 } else {
                     String[] message = {
                         "The selected jar does not appear to be a valid",
@@ -562,51 +572,6 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         }
         return null;
     }
-    
-    
-    /*
-    private void selectClientDir() {
-        try {
-            String jarFile = ResourceManager.promptFile(null, FileFilters.JAR_FILTER);
-            if (jarFile != null) {
-                if (isValidClientJar(new File(jarFile))) {
-                    if (getClientDirTextField().getText().length() != 0) {
-                        // delete the old client jar
-                        File oldClientJarFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-                            + File.separator + "lib" + File.separator + getClientDirTextField().getText());
-                        oldClientJarFile.delete();                                
-                    }
-                    // copy in the client jar
-                    File selectedClientJarFile = new File(jarFile);
-                    File copyOfClient = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-                        + File.separator + "lib" + File.separator + selectedClientJarFile.getName());
-                    Utils.copyFile(selectedClientJarFile, copyOfClient);
-                    // set the filename in the UI
-                    getClientDirTextField().setText(selectedClientJarFile.getName());
-                    
-                    // copy the castor mapping file
-                    JarFile jar = new JarFile(jarFile);
-                    StringBuffer mappingFile = JarUtilities.getFileContents(
-                        jar, DataServiceConstants.CACORE_CASTOR_MAPPING_FILE);
-                    // copy the mapping file to the service's source dir + base package name
-                    String mappingOut = CastorMappingUtil.getCustomCastorMappingFileName(getServiceInformation());
-                    Utils.stringBufferToFile(mappingFile, mappingOut);
-                    storeLibrariesInExtensionData();
-                } else {
-                    String[] message = {
-                        "The selected jar does not appear to be a valid",
-                        "client jar file for the currently selected API.",
-                        "Please choose a valid client jar file."
-                    };
-                    PortalUtils.showMessage(message);
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error selecting client jar!", ex.getMessage(), ex);
-        }
-    }
-    */
     
     
     private boolean isValidClientJar(File jarFile) throws IOException {
@@ -653,14 +618,19 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                 libs = new AdditionalLibraries();
                 data.setAdditionalLibraries(libs);
             }
-            String[] jarNames = new String[getDependsList().getModel().getSize() + 2];
+            List<String> jarNames = new ArrayList();
             for (int i = 0; i < getDependsList().getModel().getSize(); i++) {
-                jarNames[i] = (String) getDependsList().getModel().getElementAt(i);
+                jarNames.add((String) getDependsList().getModel().getElementAt(i));
             }
-            jarNames[jarNames.length - 2] = getQpJarTextField().getText();
-            jarNames[jarNames.length - 1] = 
-                locateClientJarInDir(getClientDirTextField().getText()).getName();
-            libs.setJarName(jarNames);
+            // add the query processor jar
+            jarNames.add(getQpJarTextField().getText());
+            if (getClientDirTextField().getText().length() != 0) {
+                jarNames.add(locateClientJarInDir(
+                    getClientDirTextField().getText()).getName());
+            }
+            String[] jarNameArray = new String[jarNames.size()];
+            jarNames.toArray(jarNameArray);
+            libs.setJarName(jarNameArray);
             ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
         } catch (Exception ex) {
             ex.printStackTrace();
