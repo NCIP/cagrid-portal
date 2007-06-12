@@ -269,8 +269,8 @@
   <ns59:Extension name="cagrid_metadata" version="1.1" xsi:type="ns59:ExtensionType"/>
  </ns59:Extensions>
  <ns60:ServiceProperties xmlns:ns60="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns60:Property description="" key="caCOREServiceURL" value="http://cabio.nci.nih.gov/cacore31/http/remoteService"/>
-  <ns60:Property description="" key="threadPoolSize" value="10"/>
-  <ns60:Property description="" isFromETC="false" key="uml2xmlBindingClassname" value="gov.nih.nci.cagrid.cadsr.uml2xml.UML2XMLBindingNamingConventionImpl"/>
+  <ns60:Property description="The ApplicationService URL of the caCORE caDSR Service" key="caCOREServiceURL" value="http://cabio.nci.nih.gov/cacore31/http/remoteService"/>
+  <ns60:Property description="The number of threads to make available to the thread pool." key="threadPoolSize" value="10"/>
+  <ns60:Property description="The name of the Class which implements the UML to XML binding (must be on classpath)." isFromETC="false" key="uml2xmlBindingClassname" value="gov.nih.nci.cagrid.cadsr.uml2xml.UML2XMLBindingNamingConventionImpl"/>
  </ns60:ServiceProperties>
 </ns1:ServiceDescription>
