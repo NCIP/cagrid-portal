@@ -102,14 +102,14 @@
      <ns4:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
     </ns4:Method>
-    <ns4:Method isImported="true" isProvided="true" name="query" xsi:type="ns4:MethodType">
+    <ns4:Method description="The standard caGrid Data Service query method." isImported="true" isProvided="true" name="query" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns6:CQLQuery" isArray="false" name="cqlQuery" xmlns:ns6="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"/>
+      <ns4:Input qName="ns6:CQLQuery" description="The CQL query to be executed against the data source." isArray="false" name="cqlQuery" xmlns:ns6="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns7:CQLQueryResultCollection" isArray="false" xmlns:ns7="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
+     <ns4:Output qName="ns7:CQLQueryResultCollection" description="The result of executing the CQL query against the data source." isArray="false" xmlns:ns7="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
      <ns4:Exceptions>
-      <ns4:Exception name="QueryProcessingException" qname="ns8:QueryProcessingException" xmlns:ns8="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
-      <ns4:Exception name="MalformedQueryException" qname="ns9:MalformedQueryException" xmlns:ns9="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
+      <ns4:Exception description="Thrown when an error occurs in processing a CQL query" name="QueryProcessingException" qname="ns8:QueryProcessingException" xmlns:ns8="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
+      <ns4:Exception description="Thrown when a query is found to be improperly formed" name="MalformedQueryException" qname="ns9:MalformedQueryException" xmlns:ns9="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
      </ns4:Exceptions>
      <ns4:ImportInformation inputMessage="ns10:QueryRequest" namespace="http://gov.nih.nci.cagrid.data/DataService" outputMessage="ns10:QueryResponse" packageName="gov.nih.nci.cagrid.data" portTypeName="DataServicePortType" wsdlFile="DataService.wsdl" xmlns:ns10="http://gov.nih.nci.cagrid.data/DataService"/>
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.data.service.globus.DataServiceProviderImpl"/>
@@ -155,6 +155,7 @@
  </ns14:Extensions>
  <ns15:ServiceProperties xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Property">
   <ns15:Property isFromETC="false" key="queryProcessorClass" value="gov.nci.nih.cagrid.tests.cqlprocessors.SimpleCQLQueryProcessor"/>
+  <ns15:Property isFromETC="true" key="serverConfigLocation" value="server-config.wsdd"/>
   <ns15:Property isFromETC="false" key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
   <ns15:Property isFromETC="false" key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>
   <ns15:Property isFromETC="false" key="dataService_validateCqlFlag" value="false"/>
