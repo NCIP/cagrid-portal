@@ -25,6 +25,7 @@ public class KeyWrapper2 {
 	public static void main(String[] args) {
 		try {
 			KeyPair pair = KeyUtil.generateRSAKeyPair(1024);
+			/*
 			String alias = "dorian-wrapper-key";
 
 			Provider provider = new ERACOMProvider();
@@ -40,9 +41,18 @@ public class KeyWrapper2 {
 			keyStore.setKeyEntry(alias, generator1.generateKey(), null, null);
 
 			Key signer = keyStore.getKey(alias, null);
-
 			Cipher cipher = Cipher
 					.getInstance("AES/ECB/PKCS5Padding", provider);
+			*/
+			
+			KeyGenerator generator1 = KeyGenerator.getInstance("AES", "BC");
+
+			generator1.init(256, new SecureRandom());
+
+			Key signer = generator1.generateKey();
+			Cipher cipher = Cipher
+			.getInstance("AES/ECB/PKCS5Padding", "BC");
+			
 
 			// ---------------WRAP----------------
 
