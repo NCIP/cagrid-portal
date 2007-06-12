@@ -492,19 +492,19 @@ public class TestTrustedIdPManager extends TestCase {
 		try {
 			TrustedIdP idp = getTrustedIdp("Test IdP").getIdp();
 			int count = getAuthenticationMethods().length / 2;
-			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[count];
+			SAMLAuthenticationMethod[] authMethods = new SAMLAuthenticationMethod[count];
 			for (int i = 0; i < count; i++) {
-				methods[i] = getAuthenticationMethods()[i];
+				authMethods[i] = getAuthenticationMethods()[i];
 			}
-			idp.setAuthenticationMethod(methods);
+			idp.setAuthenticationMethod(authMethods);
 			idp = tm.addTrustedIdP(idp);
 			assertEquals(1, tm.getTrustedIdPs().length);
 
-			methods = new SAMLAuthenticationMethod[count - 1];
+			authMethods = new SAMLAuthenticationMethod[count - 1];
 			for (int i = 0; i < (count - 1); i++) {
-				methods[i] = getAuthenticationMethods()[i];
+				authMethods[i] = getAuthenticationMethods()[i];
 			}
-			idp.setAuthenticationMethod(methods);
+			idp.setAuthenticationMethod(authMethods);
 			tm.updateIdP(idp);
 			assertEquals(idp, tm.getTrustedIdPById(idp.getId()));
 
