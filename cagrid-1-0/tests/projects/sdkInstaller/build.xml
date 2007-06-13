@@ -47,6 +47,7 @@
 	<!-- The Build Classpath                                             -->
 	<!-- =============================================================== -->
 	<path id="build.classpath">
+		<pathelement path="${stubs.dest}"/>
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
