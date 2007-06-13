@@ -44,6 +44,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 	private KeyStore keyStore;
 	private Database db;
 	private Key wrapper;
+	private boolean isInit = false;
 
 	private boolean dbBuilt = false;
 
@@ -57,16 +58,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 			keyStore = KeyStore.getInstance("CRYPTOKI", provider.getName());
 			keyStore.load(null, conf.getCertificateAuthorityPassword()
 					.toCharArray());
-			if (keyStore.containsAlias(WRAPPER_KEY_ALIAS)) {
-				wrapper = keyStore.getKey(WRAPPER_KEY_ALIAS, null);
-			} else {
-				KeyGenerator generator1 = KeyGenerator.getInstance("AES",
-						provider);
-				generator1.init(256, new SecureRandom());
-				keyStore.setKeyEntry(WRAPPER_KEY_ALIAS, generator1
-						.generateKey(), null, null);
-				wrapper = keyStore.getKey(WRAPPER_KEY_ALIAS, null);
-			}
+
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();
@@ -79,9 +71,36 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 		}
 	}
 
-	@Override
+	private void init() throws CertificateAuthorityFault {
+		try {
+			if (!isInit) {
+				if (keyStore.containsAlias(WRAPPER_KEY_ALIAS)) {
+					wrapper = keyStore.getKey(WRAPPER_KEY_ALIAS, null);
+				} else {
+					KeyGenerator generator1 = KeyGenerator.getInstance("AES",
+							provider);
+					generator1.init(256, new SecureRandom());
+					keyStore.setKeyEntry(WRAPPER_KEY_ALIAS, generator1
+							.generateKey(), null, null);
+					wrapper = keyStore.getKey(WRAPPER_KEY_ALIAS, null);
+				}
+				isInit = true;
+			}
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			CertificateAuthorityFault fault = new CertificateAuthorityFault();
+			fault
+					.setFaultString("An unexpected error occurred, could not add certificate.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CertificateAuthorityFault) helper.getFault();
+			throw fault;
+		}
+	}
+
 	public void addCertificate(String alias, X509Certificate cert)
 			throws CertificateAuthorityFault {
+		init();
 		if (alias.equals(CertificateAuthority.CA_ALIAS)) {
 			try {
 
@@ -102,10 +121,10 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 
 	}
 
-	@Override
 	public void addCredentials(String alias, String password,
 			X509Certificate cert, PrivateKey key)
 			throws CertificateAuthorityFault {
+		init();
 		if (alias.equals(CertificateAuthority.CA_ALIAS)) {
 			try {
 				keyStore.setKeyEntry(alias, key, null,
@@ -121,7 +140,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 				throw fault;
 			}
 		} else {
-			this.addCredentials(alias, password, cert, key);
+			this.addUserCredentials(alias, cert, key);
 		}
 
 	}
@@ -130,6 +149,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 	protected void clear() throws CertificateAuthorityFault {
 		buildDatabase();
 		try {
+			this.isInit = false;
 			db.update("delete from " + CREDENTIALS_TABLE);
 
 			Enumeration<String> e = keyStore.aliases();
@@ -150,6 +170,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 	@Override
 	public void deleteCredentials(String alias)
 			throws CertificateAuthorityFault {
+		init();
 		if (alias.equals(CertificateAuthority.CA_ALIAS)) {
 			try {
 				keyStore.deleteEntry(alias);
@@ -171,6 +192,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 	@Override
 	public X509Certificate getCertificate(String alias)
 			throws CertificateAuthorityFault {
+		init();
 		if (alias.equals(CertificateAuthority.CA_ALIAS)) {
 			try {
 				if (!hasCredentials(alias)) {
@@ -202,6 +224,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 	@Override
 	public long getCertificateSerialNumber(String alias)
 			throws CertificateAuthorityFault {
+		init();
 		if (alias.equals(CertificateAuthority.CA_ALIAS)) {
 			try {
 				X509Certificate cert = getCertificate(alias);
@@ -224,6 +247,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 	@Override
 	public PrivateKey getPrivateKey(String alias, String password)
 			throws CertificateAuthorityFault {
+		init();
 		if (alias.equals(CertificateAuthority.CA_ALIAS)) {
 			try {
 				if (!hasCredentials(alias)) {
@@ -254,6 +278,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 	@Override
 	public boolean hasCredentials(String alias)
 			throws CertificateAuthorityFault {
+		init();
 		if (alias.equals(CertificateAuthority.CA_ALIAS)) {
 			try {
 				return keyStore.containsAlias(alias);
@@ -284,7 +309,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 		return SIGNATURE_ALGORITHM;
 	}
 
-	public void addUserCertificate(String alias, X509Certificate cert)
+	private void addUserCertificate(String alias, X509Certificate cert)
 			throws CertificateAuthorityFault {
 		this.buildDatabase();
 		Connection c = null;
@@ -316,7 +341,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 		}
 	}
 
-	public boolean hasUserCredentials(String alias)
+	private boolean hasUserCredentials(String alias)
 			throws CertificateAuthorityFault {
 		this.buildDatabase();
 		Connection c = null;
@@ -351,7 +376,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 		return exists;
 	}
 
-	public void deleteUserCredentials(String alias)
+	private void deleteUserCredentials(String alias)
 			throws CertificateAuthorityFault {
 		this.buildDatabase();
 		Connection c = null;
@@ -377,13 +402,12 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 		}
 	}
 
-	public void addUserCredentials(String alias, X509Certificate cert,
+	private void addUserCredentials(String alias, X509Certificate cert,
 			PrivateKey key) throws CertificateAuthorityFault {
 		this.buildDatabase();
 		Connection c = null;
 		try {
 			if (!hasUserCredentials(alias)) {
-
 				long serial = cert.getSerialNumber().longValue();
 				byte[] input = KeyUtil.writePrivateKey(key, (String) null)
 						.getBytes();
@@ -420,7 +444,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 		}
 	}
 
-	public PrivateKey getUserPrivateKey(String alias)
+	private PrivateKey getUserPrivateKey(String alias)
 			throws CertificateAuthorityFault {
 		this.buildDatabase();
 		Connection c = null;
@@ -467,7 +491,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 		return key;
 	}
 
-	public X509Certificate getUserCertificate(String alias)
+	private X509Certificate getUserCertificate(String alias)
 			throws CertificateAuthorityFault {
 		this.buildDatabase();
 		Connection c = null;
@@ -506,7 +530,7 @@ public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 		return cert;
 	}
 
-	public long getUserCertificateSerialNumber(String alias)
+	private long getUserCertificateSerialNumber(String alias)
 			throws CertificateAuthorityFault {
 		this.buildDatabase();
 		Connection c = null;
