@@ -1,5 +1,9 @@
 package gov.nci.nih.cagrid.tests.core;
 
+import gov.nci.nih.cagrid.tests.core.steps.FQPAsynchronousQueryImmediateTerminationStep;
+import gov.nci.nih.cagrid.tests.core.steps.FQPAsynchronousQueryScheduledTerminationStep;
+import gov.nci.nih.cagrid.tests.core.steps.FQPConfigStep;
+import gov.nci.nih.cagrid.tests.core.steps.FQPQueryStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusInstallSecurityDescriptorStep;
@@ -7,6 +11,8 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 import gov.nci.nih.cagrid.tests.core.util.PortPreference;
+import gov.nih.nci.cagrid.dcql.DCQLQuery;
+import gov.nih.nci.cagrid.dcql.Object;
 
 import java.io.File;
 import java.util.Vector;
@@ -14,6 +20,8 @@ import java.util.Vector;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+
+import org.apache.axis.types.URI.MalformedURIException;
 
 
 /**
@@ -59,7 +67,16 @@ public class FQPServiceTest extends AbstractServiceTest {
             e1.printStackTrace();
             fail("Problem getting fqp port:" + e1.getMessage());
         }
-        this.fqpGlobus = new GlobusHelper(true, fqpPortPref);
+        this.fqpGlobus = new GlobusHelper(false, fqpPortPref);
+        String fqpURL = null;
+        try {
+            fqpURL = this.fqpGlobus.getServiceEPR("cagrid/FederatedQueryProcessor").getAddress().toString();
+        } catch (MalformedURIException e) {
+            fail("Problem getting FQP URL:" + e.getMessage());
+        }
+
+        // 5 seconds (how often resource will be cleaned up)
+        long duration = 5000;
 
         Vector steps = new Vector();
 
@@ -69,6 +86,7 @@ public class FQPServiceTest extends AbstractServiceTest {
             steps.add(new GlobusInstallSecurityDescriptorStep(this.fqpGlobus));
         }
         steps.add(new GlobusDeployServiceStep(this.fqpGlobus, fqpServiceDir, "deployGlobus"));
+        steps.add(new FQPConfigStep(this.fqpGlobus, duration));
         steps.add(new GlobusStartStep(this.fqpGlobus));
 
         // stand up the data service
@@ -77,7 +95,15 @@ public class FQPServiceTest extends AbstractServiceTest {
         steps.add(new GlobusDeployServiceStep(getGlobus(), getCreateServiceStep().getServiceDir()));
         steps.add(new GlobusStartStep(getGlobus()));
 
-        // TODO: issue DCQL queries to FQP
+        // issue DCQL queries to FQP
+        DCQLQuery dcql1 = new DCQLQuery();
+        Object targetObject = new Object();
+        targetObject.setName("java.lang.String");
+        dcql1.setTargetObject(targetObject);
+        dcql1.setTargetServiceURL(new String[]{getEndpoint().getAddress().toString()});
+        steps.add(new FQPQueryStep(fqpURL, dcql1));
+        steps.add(new FQPAsynchronousQueryImmediateTerminationStep(fqpURL, dcql1));
+        steps.add(new FQPAsynchronousQueryScheduledTerminationStep(fqpURL, dcql1, duration));
 
         // shutdown the services
         steps.add(new GlobusStopStep(getGlobus()));

@@ -87,6 +87,7 @@
             <artifact refid="gridgrouper.jars" />
             <artifact refid="gridgrouper.client.jars" />
             <artifact refid="evs.jars" />
+            <artifact refid="fqp.jars" />
         </resolveDependencies>
         <delete failonerror="false">
             <fileset dir="${tests.projects.dir}/coretests/test/resources/services/BasicDataService/lib">
