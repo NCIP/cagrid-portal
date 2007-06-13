@@ -17,7 +17,7 @@ import java.security.cert.X509Certificate;
  */
 public class DBCertificateAuthority extends CertificateAuthority {
 
-	public static final String SIGNATURE_ALGORITHM = "MD5WithRSAEncryption";
+	public static final String SIGNATURE_ALGORITHM = "SHA1WithRSAEncryption";
 
 	private CredentialsManager manager;
 

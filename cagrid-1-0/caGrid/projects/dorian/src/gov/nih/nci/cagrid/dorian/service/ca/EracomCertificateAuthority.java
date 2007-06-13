@@ -22,7 +22,7 @@ import au.com.eracom.crypto.provider.ERACOMProvider;
  */
 public class EracomCertificateAuthority extends CertificateAuthority {
 
-	public static final String SIGNATURE_ALGORITHM = "MD5WithRSA";
+	public static final String SIGNATURE_ALGORITHM = "SHA1WithRSA";
 	private Provider provider;
 	private KeyStore keyStore;
 

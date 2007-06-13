@@ -34,7 +34,7 @@ import au.com.eracom.crypto.provider.ERACOMProvider;
  */
 public class EracomWrappingCertificateAuthority extends CertificateAuthority {
 
-	public static final String SIGNATURE_ALGORITHM = "MD5WithRSA";
+	public static final String SIGNATURE_ALGORITHM = "SHA1WithRSA";
 
 	public static String CREDENTIALS_TABLE = "eracom_wrapped_ca";
 
