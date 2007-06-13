@@ -24,7 +24,7 @@
 
     <!-- configuring (repurposing) the caGrid build -->
     <property name="system.testable.projects.list" value="" />
-    <property name="unit.testable.projects.list" value="cqlprocessors,coretests" />
+    <property name="unit.testable.projects.list" value="cqlprocessors,coretests,sdkInstaller" />
 
 
     <!-- IMPORT THE UTILITIES TARGETS -->
