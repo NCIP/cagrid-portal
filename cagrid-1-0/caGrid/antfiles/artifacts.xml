@@ -47,6 +47,11 @@
     	    	<include name="*.jar"/>
     	    </fileset>
     	</artifact>
+    	<artifact track="main" type="resources" id="caCORE.3.2.1.sdk">
+    		<fileset dir="${share.dir}/resources/caCORE/v321">
+    			<include name="*.zip"/>
+    		</fileset>
+    	</artifact>
         <artifact track="main" type="jars" id="jet.jars">
             <fileset dir="${share.dir}/lib/jet">
                 <include name="*.jar" />
