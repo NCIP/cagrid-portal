@@ -1104,7 +1104,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		l.setDays(0);
 		l.setHours(0);
 		l.setMinutes(0);
-		l.setSeconds(10);
+		l.setSeconds(35);
 		cp.setCredentialLifetime(l);
 		conf.setCredentialPolicy(cp);
 		return conf;
