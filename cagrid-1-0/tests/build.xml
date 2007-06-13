@@ -20,7 +20,7 @@
     <!--                          DEFINE THE SUB PROJECTS                                 -->
     <!-- ================================================================================ -->
     <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-    <property name="tests.projects.list" value="echo,cqlprocessors,coretests,workflow-services" />
+    <property name="tests.projects.list" value="echo,cqlprocessors,coretests,workflow-services,sdkInstaller" />
 
     <!-- configuring (repurposing) the caGrid build -->
     <property name="system.testable.projects.list" value="" />
@@ -45,7 +45,7 @@
 
 
     <!-- =============================================================== -->
-    <!-- echo                                                            -->
+    <!-- cqlprocessors                                                   -->
     <!-- =============================================================== -->
     <target name="build-cqlprocessors" depends="prepare" description="Builds cqlprocessors">
         <resolveDependencies extdir="${tests.projects.dir}/cqlprocessors/ext">
@@ -57,6 +57,23 @@
         <ant dir="${tests.projects.dir}/cqlprocessors" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
+	
+	<!-- =============================================================== -->
+	<!-- sdkInstaller                                                    -->
+	<!-- =============================================================== -->
+	<target name="build-sdkInstaller" depends="prepare" description="Builds the caCORE SDK installer utility">
+		<resolveDependencies extdir="${tests.projects.dir}/sdkInstaller/ext">
+			<artifact refid="cagrid.properties"/>
+			<artifact refid="core.jars"/>
+			<artifact refid="core.test.jars"/>
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="caCORE.3.2.1.sdk"/>
+		</resolveDependencies>
+		<ant dir="${tests.projects.dir}/sdkInstaller" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+	
+	
     <!-- =============================================================== -->
     <!-- coretests                                                       -->
     <!-- =============================================================== -->
