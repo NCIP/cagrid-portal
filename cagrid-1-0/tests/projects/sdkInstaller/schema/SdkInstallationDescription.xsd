@@ -11,18 +11,31 @@
 	</xsd:complexType>
 	<xsd:complexType name="JBossDescription">
 		<xsd:attribute name="jbossLocation" type="xsd:string" use="required"/>
-		<xsd:attribute name="installJboss" type="xsd:boolean" use="required"/>
+		<xsd:attribute name="installJboss" type="xsd:boolean" use="optional" default="true"/>
 		<xsd:attribute name="jbossZipFile" type="xsd:string" use="optional"/>
 		<xsd:attribute name="jbossPort" type="xsd:integer" use="optional" default="8080"/>
 	</xsd:complexType>
 	<xsd:complexType name="MySQLDescription">
+		<xsd:sequence>
+			<xsd:element name="DataOptions" minOccurs="0">
+				<xsd:complexType>
+					<xsd:attribute name="schemaName" type="xsd:string" use="required"/>
+					<xsd:attribute name="schemaFilename" type="xsd:string" use="optional"/>
+					<xsd:attribute name="createSchema" type="xsd:boolean" use="optional" default="false"/>
+					<xsd:attribute name="dataFilename" type="xsd:string" use="optional"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ServerInformation">
+				<xsd:complexType>
+					<xsd:attribute name="hostname" type="xsd:string" use="required"/>
+					<xsd:attribute name="username" type="xsd:string" use="optional"/>
+					<xsd:attribute name="password" type="xsd:string" use="optional"/>
+					<xsd:attribute name="createUser" type="xsd:boolean" use="optional" default="false"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
 		<xsd:attribute name="installMysql" type="xsd:boolean" use="required"/>
-		<xsd:attribute name="importData" type="xsd:boolean" use="required"/>
-		<xsd:attribute name="createSchema" type="xsd:boolean" use="required"/>
 		<xsd:attribute name="mysqlLocation" type="xsd:string" use="required"/>
 		<xsd:attribute name="mysqlZipFile" type="xsd:string" use="optional"/>
-		<xsd:attribute name="serverName" type="xsd:string" use="required"/>
-		<xsd:attribute name="userName" type="xsd:string" use="required"/>
-		<xsd:attribute name="password" type="xsd:string" use="required"/>
 	</xsd:complexType>
 </xsd:schema>
