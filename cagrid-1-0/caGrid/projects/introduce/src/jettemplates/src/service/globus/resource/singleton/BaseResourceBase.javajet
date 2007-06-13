@@ -260,11 +260,7 @@ public abstract class BaseResourceBase implements Resource, RemoveCallback, Reso
 				// since this is a singleton, pretty sure we dont't want to
 				// register the key (allows multiple instances of same service
 				// on successive restarts)
-				// epr = AddressingUtils.createEndpointReference(ctx, key);
-				String transportURL = (String) ctx.getProperty(org.apache.axis.MessageContext.TRANS_URL);
-	            transportURL = transportURL.substring(0,transportURL.lastIndexOf('/') +1 );
-	            transportURL += "<%=arguments.getService().getName()%>";
-				epr = AddressingUtils.createEndpointReference(transportURL, null);
+				epr = AddressingUtils.createEndpointReference(ctx, null);
 			} catch (Exception e) {
 				logger.error("Could not form EPR: " + e, e);
 				return;
