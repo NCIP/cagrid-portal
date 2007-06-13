@@ -1,9 +1,12 @@
 package gov.nih.nci.cagrid.introduce.portal.init;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.help.IntroduceHelp;
+import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 import gov.nih.nci.cagrid.introduce.portal.preferences.PreferencesDialog;
 import gov.nih.nci.cagrid.introduce.portal.updater.IntroduceUpdateWizard;
 
@@ -11,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -33,7 +38,34 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
             + "log4j.properties");
 
         ExtensionsLoader.getInstance();
+        setConfigurationOptions();
         prepareMenus();
+    }
+
+
+    private boolean hasKey(Enumeration keys, String key) {
+        while (keys.hasMoreElements()) {
+            String testKey = (String) keys.nextElement();
+            if (testKey.equals(key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private void setConfigurationOptions() {
+        try {
+            if (!hasKey(ResourceManager.getConfigurationPropertyKeys(),
+                IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY)) {
+                ResourceManager.setConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY,
+                    NamespaceTypeDiscoveryComponent.ERROR);
+            }
+            ResourceManager.setConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY + ".options",
+                NamespaceTypeDiscoveryComponent.ERROR + "," + NamespaceTypeDiscoveryComponent.REPLACE + "," + NamespaceTypeDiscoveryComponent.IGNORE);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
     }
 
 
@@ -53,7 +85,7 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
         helpMenu.insert(updateMenuItem, 1);
 
         JMenu configMenu = PortalResourceManager.getInstance().getGridPortal().getJMenuBar().getMenu(CONFIG_MENU);
-        JMenuItem configMenuItem = new JMenuItem("Preferences",IntroduceLookAndFeel.getPreferencesIcon());
+        JMenuItem configMenuItem = new JMenuItem("Preferences", IntroduceLookAndFeel.getPreferencesIcon());
 
         configMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

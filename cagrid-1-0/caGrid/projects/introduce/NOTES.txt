@@ -44,10 +44,6 @@ To Do:
 
 need to validate schemas when importing them into introduce
 
-should add a service creation test which creates a service context of every variation of resource type
-
-need to make namespace exist policy a dropdown in the config so user knows what the options are
-
 Add notification support to any resource
 
 upgrading is not really dont until sync is ran, so in modification gui make sure the user
@@ -95,6 +91,9 @@ add tests to system tests for (coverage report shows no coverage):
 add a .cvsignore file to generated skeletons that includes the gar.  my right mouse button is slowly wearing out... and i am lazy...
 
 ============================ D O N E ================================================================
+should add a service creation test which creates a service context of every variation of resource type
+
+need to make namespace exist policy a dropdown in the config so user knows what the options are
 
 on some smaller resolution screen when the "do you want to upgrade" pop up comes up, you can not see some of the buttons.....
 

@@ -34,12 +34,7 @@ public final class Introduce {
 
 
     private static void initialize() {
-        try {
-            ResourceManager.setConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY,
-                NamespaceTypeDiscoveryComponent.ERROR);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+
     }
 
 

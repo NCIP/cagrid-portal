@@ -3,7 +3,11 @@ package gov.nih.nci.cagrid.introduce.portal.preferences;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.StringTokenizer;
 
 
 public class PreferencesPreferencesConfigurationPanel extends DynamicPreferencesConfigurationPanel {
@@ -11,6 +15,17 @@ public class PreferencesPreferencesConfigurationPanel extends DynamicPreferences
     public PreferencesPreferencesConfigurationPanel() {
         super();
         initialize();
+    }
+
+
+    private boolean hasKey(Enumeration keys, String key) {
+        while (keys.hasMoreElements()) {
+            String testKey = (String) keys.nextElement();
+            if (testKey.equals(key)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -23,7 +38,18 @@ public class PreferencesPreferencesConfigurationPanel extends DynamicPreferences
                 String value = ResourceManager.getConfigurationProperty(key);
                 if (key.equals(IntroduceConstants.GLOBUS_LOCATION)) {
                     addTextField(this, key, value, count++, false);
-                } else {
+                }
+                if (hasKey(ResourceManager.getConfigurationPropertyKeys(), key + ".options")) {
+                    String options = ResourceManager.getConfigurationProperty(key + ".options");
+                    StringTokenizer strtok = new StringTokenizer(options, ",", false);
+                    List optionsList = new ArrayList();
+                    while (strtok.hasMoreElements()) {
+                        optionsList.add(strtok.nextToken());
+                    }
+                    String[] optionsArray = new String[optionsList.size()];
+                    optionsList.toArray(optionsArray);
+                    addDropDown(this, key, value, optionsArray, count++, true);
+                } else if (!key.endsWith(".options")) {
                     addTextField(this, key, value, count++, true);
                 }
             }
@@ -41,7 +67,12 @@ public class PreferencesPreferencesConfigurationPanel extends DynamicPreferences
             while (enumeration.hasMoreElements()) {
                 String key = (String) enumeration.nextElement();
                 String value = this.getTextFieldValue(key);
-                ResourceManager.setConfigurationProperty(key, value);
+                if (value == null) {
+                    value = this.getDropDownValue(key);
+                }
+                if (value != null) {
+                    ResourceManager.setConfigurationProperty(key, value);
+                }
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block

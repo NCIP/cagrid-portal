@@ -8,6 +8,7 @@ import java.awt.LayoutManager;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,6 +18,7 @@ import javax.swing.JTextField;
 
 public abstract class DynamicPreferencesConfigurationPanel extends BasePreferenceConfigurationPanel {
 	private Map textFields;
+	private Map dropDowns;
 	private Map labels;
 	private Map passwordFields;
 
@@ -25,6 +27,7 @@ public abstract class DynamicPreferencesConfigurationPanel extends BasePreferenc
 		super();
 		this.setLayout(new GridBagLayout());
 		this.textFields = new HashMap();
+		this.dropDowns = new HashMap();
 		this.labels = new HashMap();
 		this.passwordFields = new HashMap();
 	}
@@ -38,6 +41,15 @@ public abstract class DynamicPreferencesConfigurationPanel extends BasePreferenc
 			return null;
 		}
 	}
+	
+	   protected String getDropDownValue(String label) {
+	        JComboBox field = (JComboBox) dropDowns.get(label);
+	        if (field != null) {
+	            return (String)field.getSelectedItem();
+	        } else {
+	            return null;
+	        }
+	    }
 
 
 	protected JTextField getTextField(String label) {
@@ -126,6 +138,35 @@ public abstract class DynamicPreferencesConfigurationPanel extends BasePreferenc
 		panel.add(label1, const1);
 		panel.add(component, const2);
 	}
+	
+	   protected void addDropDown(JPanel panel, String label, String value, String[] options, int y, boolean enabled) {
+	        JLabel label1 = new JLabel();
+	        label1.setText(label);
+	        JComponent component = null;
+	        JComboBox box = new JComboBox(options);
+	        box.setSelectedItem(value);
+	        component = box;
+	        this.dropDowns.put(label, box);
+	        this.labels.put(label, label1);
+
+	        GridBagConstraints const1 = new GridBagConstraints();
+	        const1.gridx = 0;
+	        const1.gridy = y;
+	        const1.insets = new java.awt.Insets(5, 5, 5, 5);
+	        const1.anchor = java.awt.GridBagConstraints.WEST;
+
+	        GridBagConstraints const2 = new GridBagConstraints();
+	        const2.gridx = 1;
+	        const2.gridy = y;
+	        const2.weightx = 1;
+	        const2.weighty = 1;
+	        const2.fill = GridBagConstraints.HORIZONTAL;
+	        const2.insets = new java.awt.Insets(5, 5, 5, 5);
+	        const2.anchor = java.awt.GridBagConstraints.WEST;
+
+	        panel.add(label1, const1);
+	        panel.add(component, const2);
+	    }
 
 
 	protected void addPasswordField(JPanel panel, String label, String value, int y, boolean enabled) {
