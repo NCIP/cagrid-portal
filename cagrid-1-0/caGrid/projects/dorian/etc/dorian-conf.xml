@@ -54,7 +54,7 @@
         -->
     </IdentityFederationConfiguration>
     <DorianCAConfiguration>
-    	<CertificateAuthorityType>dbca</CertificateAuthorityType>
+    	<CertificateAuthorityType>DBCA</CertificateAuthorityType>
         <CertificateAuthorityPassword>admin</CertificateAuthorityPassword>
         <!--<CertificatePolicyOID>5.5.5.5.5.5.5555.555.5.5</CertificatePolicyOID>-->
         <UserKeySize>1024</UserKeySize>
