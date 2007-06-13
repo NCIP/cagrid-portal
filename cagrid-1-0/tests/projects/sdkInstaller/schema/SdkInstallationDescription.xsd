@@ -34,8 +34,8 @@
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:sequence>
-		<xsd:attribute name="installMysql" type="xsd:boolean" use="required"/>
 		<xsd:attribute name="mysqlLocation" type="xsd:string" use="required"/>
+		<xsd:attribute name="installMysql" type="xsd:boolean" use="optional" default="false"/>
 		<xsd:attribute name="mysqlZipFile" type="xsd:string" use="optional"/>
 	</xsd:complexType>
 </xsd:schema>
