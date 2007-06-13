@@ -151,7 +151,7 @@
 	</target>
 	
 	<!-- make deployment configured gar -->
-	<target name="createDeploymentGar" depends="all, addFilters">
+	<target name="createDeploymentGar" depends="addFilters, all">
 		
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
