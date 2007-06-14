@@ -156,11 +156,14 @@ public class TestAssertionCredentialsManager extends TestCase {
 			Date start = cal.getTime();
 			cal.add(Calendar.SECOND, 6);
 			Date end = cal.getTime();
-			ca.deleteCredentials(AssertionCredentialsManager.CERT_DN);
+			cm.deleteAssertingCredentials();
 			X509Certificate shortCert = ca.signCertificate(AssertionCredentialsManager.CERT_DN, subject, pair
 				.getPublic(), start, end);
+
 			cm.storeCredentials(shortCert, pair.getPrivate());
+
 			X509Certificate idpShortCert = cm.getIdPCertificate();
+
 			assertEquals(shortCert, idpShortCert);
 			if (cert.equals(idpShortCert)) {
 				assertTrue(false);
@@ -220,7 +223,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 			Date start = cal.getTime();
 			cal.add(Calendar.SECOND, 2);
 			Date end = cal.getTime();
-			ca.deleteCredentials(AssertionCredentialsManager.CERT_DN);
+			cm.deleteAssertingCredentials();
 			X509Certificate shortCert = ca.signCertificate(AssertionCredentialsManager.CERT_DN, subject, pair
 				.getPublic(), start, end);
 			cm.storeCredentials(shortCert, pair.getPrivate());

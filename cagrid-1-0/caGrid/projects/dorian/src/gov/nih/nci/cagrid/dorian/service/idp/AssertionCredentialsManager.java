@@ -47,8 +47,6 @@ public class AssertionCredentialsManager extends LoggingObject {
 
 	public static String CREDENTIALS_TABLE = "idp_asserter";
 
-	private final static String CREDENTIAL_ALIAS = "DorianIdP Asserting Credentials";
-
 	public final static String CERT_DN = "Dorian IdP Authentication Asserter";
 
 	private CertificateAuthority ca;
@@ -89,7 +87,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 		try {
 			c = db.getConnection();
 			PreparedStatement s = c.prepareStatement("select count(*) from " + CREDENTIALS_TABLE + " where ALIAS= ?");
-			s.setString(1, CREDENTIAL_ALIAS);
+			s.setString(1, CERT_DN);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				int count = rs.getInt(1);
@@ -117,6 +115,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 	public synchronized void storeCredentials(X509Certificate cert, PrivateKey key) throws Exception {
 		this.buildDatabase();
 		Connection c = null;
+		
 		try {
 			if (!hasAssertingCredentials()) {
 				if (ca instanceof WrappingCertificateAuthority) {
@@ -126,7 +125,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 					c = db.getConnection();
 					PreparedStatement s = c.prepareStatement("INSERT INTO " + CREDENTIALS_TABLE
 						+ " SET ALIAS= ?,CERTIFICATE= ?,PRIVATE_KEY= ?,IV= ?");
-					s.setString(1, CREDENTIAL_ALIAS);
+					s.setString(1, CERT_DN);
 					s.setString(2, certStr);
 					s.setBytes(3, wk.getWrappedKeyData());
 					s.setBytes(4, wk.getIV());
@@ -137,7 +136,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 					c = db.getConnection();
 					PreparedStatement s = c.prepareStatement("INSERT INTO " + CREDENTIALS_TABLE
 						+ " SET ALIAS= ?,CERTIFICATE= ?,PRIVATE_KEY= ?");
-					s.setString(1, CREDENTIAL_ALIAS);
+					s.setString(1, CERT_DN);
 					s.setString(2, certStr);
 					s.setBytes(3, KeyUtil.writePrivateKey(key, conf.getAssertingCredentials().getKeyPassword())
 						.getBytes());
@@ -186,7 +185,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 			c = db.getConnection();
 			PreparedStatement s = c.prepareStatement("select PRIVATE_KEY, IV from " + CREDENTIALS_TABLE
 				+ " where ALIAS= ?");
-			s.setString(1, CREDENTIAL_ALIAS);
+			s.setString(1, CERT_DN);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				byte[] wrapped = rs.getBytes("PRIVATE_KEY");
@@ -314,7 +313,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 			c = db.getConnection();
 			PreparedStatement s = c
 				.prepareStatement("select CERTIFICATE from " + CREDENTIALS_TABLE + " where ALIAS= ?");
-			s.setString(1,  CREDENTIAL_ALIAS);
+			s.setString(1,  CERT_DN);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				String certStr = rs.getString("CERTIFICATE");
@@ -368,15 +367,16 @@ public class AssertionCredentialsManager extends LoggingObject {
 	}
 
 
-	private synchronized void deleteAssertingCredentials() throws DorianInternalFault {
+	public synchronized void deleteAssertingCredentials() throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
 			PreparedStatement s = c.prepareStatement("delete from " + CREDENTIALS_TABLE + " where ALIAS= ? ");
-			s.setString(1, CREDENTIALS_TABLE);
+			s.setString(1, CERT_DN);
 			s.execute();
 			s.close();
+			ca.deleteCredentials(CERT_DN);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
