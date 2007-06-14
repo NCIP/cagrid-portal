@@ -973,10 +973,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		assertEquals(req.getPublicKey(), record.getPublicKey());
 		assertEquals(owner, record.getOwner());
 		assertEquals(HostCertificateStatus.Active, record.getStatus());
-		String caSubject = ca.getCACertificate().getSubjectDN().getName();
-		int caindex = caSubject.lastIndexOf(",");
-		String caPreSub = caSubject.substring(0, caindex);
-		String subject = caPreSub + ",CN=host/" + req.getHostname();
+		String subject = gov.nih.nci.cagrid.dorian.common.Utils.getHostCertificateSubject(ca.getCACertificate(), req.getHostname());
 		assertEquals(subject, record.getSubject());
 		HostCertificateRecord r = hcm.getHostCertificateRecord(id);
 		assertEquals(record.getPublicKey(), r.getPublicKey());

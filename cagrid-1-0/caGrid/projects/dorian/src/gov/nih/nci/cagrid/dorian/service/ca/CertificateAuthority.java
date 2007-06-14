@@ -341,11 +341,7 @@ public abstract class CertificateAuthority extends LoggingObject {
 		init();
 		X509Certificate cacert = getCACertificate();
 		try {
-			// VALIDATE DN
-			String caSubject = cacert.getSubjectDN().getName();
-			int caindex = caSubject.lastIndexOf(",");
-			String caPreSub = caSubject.substring(0, caindex);
-			String subject = caPreSub + ",OU=Services,CN=host/" + host;
+			String subject = Utils.getHostCertificateSubject(cacert, host);
 			return signCertificate(alias, subject, publicKey, start, expiration);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);

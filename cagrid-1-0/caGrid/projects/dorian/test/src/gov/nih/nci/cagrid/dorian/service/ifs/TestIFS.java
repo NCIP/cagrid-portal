@@ -110,10 +110,8 @@ public class TestIFS extends TestCase {
 			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
 			assertEquals(HostCertificateStatus.Pending, record.getStatus());
 			assertEquals(null, record.getCertificate());
-
-			String caSubject = ca.getCACertificate().getSubjectDN().getName();
-			int index = caSubject.lastIndexOf(",");
-			String subject = caSubject.substring(0, index) + ",CN=host/" + host;
+			String subject = gov.nih.nci.cagrid.dorian.common.Utils.getHostCertificateSubject(ca.getCACertificate(),
+				host);
 			record = ifs.approveHostCertificate(adminGridId, record.getId());
 			assertEquals(HostCertificateStatus.Active, record.getStatus());;
 			assertEquals(subject, record.getSubject());
@@ -147,9 +145,8 @@ public class TestIFS extends TestCase {
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
 			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
-			String caSubject = ca.getCACertificate().getSubjectDN().getName();
-			int index = caSubject.lastIndexOf(",");
-			String subject = caSubject.substring(0, index) + ",CN=host/" + host;
+			String subject = gov.nih.nci.cagrid.dorian.common.Utils.getHostCertificateSubject(ca.getCACertificate(),
+				host);
 			assertEquals(HostCertificateStatus.Active, record.getStatus());;
 			assertEquals(subject, record.getSubject());
 			assertEquals(subject, CertUtil.loadCertificate(record.getCertificate().getCertificateAsString())
@@ -251,9 +248,7 @@ public class TestIFS extends TestCase {
 				.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
 			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
-			String caSubject = ca.getCACertificate().getSubjectDN().getName();
-			int index = caSubject.lastIndexOf(",");
-			String subjectPrefix = caSubject.substring(0, index) + ",CN=host/";
+			String subjectPrefix = gov.nih.nci.cagrid.dorian.common.Utils.getHostCertificateSubjectPrefix(ca.getCACertificate());
 			String hostPrefix = "localhost";
 			int total = 3;
 
@@ -267,7 +262,8 @@ public class TestIFS extends TestCase {
 			f1.setSubject(subjectPrefix);
 			assertEquals(total, ifs.findHostCertificates(adminGridId, f1).length);
 			for (int i = 0; i < total; i++) {
-				String subject = subjectPrefix + hostPrefix + i;
+				String subject = gov.nih.nci.cagrid.dorian.common.Utils.getHostCertificateSubject(
+					ca.getCACertificate(), hostPrefix + i);
 				f1.setSubject(subject);
 				HostCertificateRecord[] r = ifs.findHostCertificates(adminGridId, f1);
 				assertEquals(1, r.length);
@@ -356,9 +352,8 @@ public class TestIFS extends TestCase {
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
 			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
-			String caSubject = ca.getCACertificate().getSubjectDN().getName();
-			int index = caSubject.lastIndexOf(",");
-			String subject = caSubject.substring(0, index) + ",CN=host/" + host;
+			String subject = gov.nih.nci.cagrid.dorian.common.Utils.getHostCertificateSubject(ca.getCACertificate(),
+				host);
 			assertEquals(HostCertificateStatus.Active, record.getStatus());;
 			assertEquals(subject, record.getSubject());
 			assertEquals(subject, CertUtil.loadCertificate(record.getCertificate().getCertificateAsString())
@@ -579,9 +574,8 @@ public class TestIFS extends TestCase {
 			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
 			assertEquals(HostCertificateStatus.Pending, record.getStatus());
 			assertEquals(null, record.getCertificate());
-			String caSubject = ca.getCACertificate().getSubjectDN().getName();
-			int index = caSubject.lastIndexOf(",");
-			String subject = caSubject.substring(0, index) + ",CN=host/" + host;
+			String subject = gov.nih.nci.cagrid.dorian.common.Utils.getHostCertificateSubject(ca.getCACertificate(),
+				host);
 			record = ifs.approveHostCertificate(adminGridId, record.getId());
 			assertEquals(HostCertificateStatus.Active, record.getStatus());;
 			assertEquals(subject, record.getSubject());
