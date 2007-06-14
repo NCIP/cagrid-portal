@@ -133,6 +133,9 @@
 	<bean id="gridServiceDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.GridServiceDao" />
 
+	<bean id="pointOfContactDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal2.dao.PointOfContactDao" />
+		
 	<bean id="serviceMetadataDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.ServiceMetadataDao" />
 

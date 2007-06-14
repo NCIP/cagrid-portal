@@ -8,10 +8,23 @@
 	<short-title>Directory</short-title>
 	<defaults layout-decorator="cagridportal1" />
 
-	<fragment id="cp-dir-1" type="layout"
-		name="jetspeed-layouts::VelocityOneColumn">
-		<fragment id="cp-dir-1-1" type="portlet"
+  <fragment id="cp-dir-1" type="layout" name="jetspeed-layouts::VelocityTwoColumns">
+			
+		<fragment id="cp-dir-1-1" type="portlet" name="cagridportlets::pocdiscovery">
+	      <property layout="TwoColumns" name="row" value="0" />
+	      <property layout="TwoColumns" name="column" value="0" />
+	    </fragment>                                
+	    <fragment id="cp-dir-1-2" type="portlet" name="cagridportlets::pocdetails">
+	      <property layout="TwoColumns" name="row" value="0" />
+	      <property layout="TwoColumns" name="column" value="1" />
+	    </fragment>                                
+	    <fragment id="cp-dir-1-3" type="portlet" name="cagridportlets::poclist">
+	      <property layout="TwoColumns" name="row" value="1" />
+	      <property layout="TwoColumns" name="column" value="0" />
+	    </fragment>
+		<fragment id="cp-dir-1-4" type="portlet"
 			name="cagridportlets::WelcomeToCaGridPortal" />
+			
 	</fragment>
 
 </page>
