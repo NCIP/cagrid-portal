@@ -16,7 +16,7 @@
 				<patternset refid="portal2.dependencies" />
 			</fileset>
 			<fileset dir="../../common/build/">
-				<include name="cagrid-portal2-common.jar" />
+				<include name="${cagrid.master.jar.prefix}portal2-common.jar" />
 			</fileset>
 			<!--
 			<fileset dir="../../common/tools/hyperjaxb2/target">

@@ -1,5 +1,9 @@
 <project name="common">
 
+	
+	<property file="ext/resources/cagrid.properties"/>
+	<property name="common.jar.name" value="${cagrid.master.jar.prefix}portal2-common.jar"/>
+	
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
 			<fileset dir="${cagrid.home}/share/lib">

@@ -24,10 +24,11 @@
 
     <!--import developers targets and properties (which can be overridden)-->
     <import file="dev-build.xml" />
+	<property file="../../ext/resources/cagrid.properties"/>
 
     <!-- Jars -->
     <!-- Jars -->
-	<property name="jar.prefix" value="${service.name}" />
+	<property name="jar.prefix" value="${cagrid.master.jar.prefix}${service.name}" />
     <property name="common.jar.name" value="${jar.prefix}-common.jar" />
     <property name="client.jar.name" value="${jar.prefix}-client.jar" />
     <property name="service.jar.name" value="${jar.prefix}-service.jar" />

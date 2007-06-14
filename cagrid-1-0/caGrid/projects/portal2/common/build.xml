@@ -1,12 +1,19 @@
 <project name="portal2" default="compile">
 
 	<property file="build.properties" />
+	<property file="../ext/resources/cagrid.properties"/>
+	
 	<property name="hibernate.properties"
 		value="db/${db}.hibernate.properties" />
+	
 	<property file="${hibernate.properties}" />
+	
 	<property name="data.file.prefix" value="" />
+	
 	<property environment="env" />
-
+	
+	<property name="common.jar.name" value="${cagrid.master.jar.prefix}portal2-common.jar"/>
+	
 	<path id="cp">
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
@@ -119,12 +126,13 @@
 			<formatter type="plain" />
 			<batchtest todir="test/reports">
 				<fileset dir="${test.src.dir}">
-					<!-- 
+
 					<include name="**/*Test.java"/>
-					 -->
+
+					<!--
 					<include name="**/ServiceMetadataAggregatorTest.java" />
 					<exclude name="**/ServiceMetadataDaoTest.java" />
-
+					-->
 
 					<exclude name="**/Abstract*.java" />
 				</fileset>

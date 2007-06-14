@@ -1,4 +1,7 @@
 <project name="common">
+	
+	<property file="../../ext/resources/cagrid.properties"/>
+	
 	<property name="ext.lib.dir" value="ext/lib"/>	
 	
 	<patternset id="portal2.dependencies">

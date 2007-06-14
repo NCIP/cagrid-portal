@@ -2,7 +2,7 @@
 
 	<property file="build.properties" />
 	<property environment="env" />
-
+	<property file="../../ext/resources/cagrid.properties"/>
 	<import file="../../ant-files/common.xml" />
 
 	<patternset id="compile.jars">
@@ -21,16 +21,16 @@
 			<patternset refid="compile.jars" />
 		</fileset>
 		<fileset dir="../../common/build">
-			<include name="cagrid-portal2-common.jar" />
+			<include name="${cagrid.master.jar.prefix}portal2-common.jar" />
 		</fileset>
 		<fileset dir="../../ext/lib">
 			<patternset refid="ext.jars" />
 			<patternset refid="crypto.jars" />
 		</fileset>
 		<fileset dir="../../services/webauthn/build/lib">
-			<include name="WebAuthnSvc-client.jar" />
-			<include name="WebAuthnSvc-common.jar" />
-			<include name="WebAuthnSvc-stubs.jar" />
+			<include name="${cagrid.master.jar.prefix}WebAuthnSvc-client.jar" />
+			<include name="${cagrid.master.jar.prefix}WebAuthnSvc-common.jar" />
+			<include name="${cagrid.master.jar.prefix}WebAuthnSvc-stubs.jar" />
 		</fileset>
 		<fileset dir="${env.GLOBUS_LOCATION}/lib">
 			<patternset refid="globus.jars" />
@@ -51,7 +51,7 @@
 				<patternset refid="compile.jars" />
 			</fileset>
 			<fileset dir="../../common/build">
-				<include name="cagrid-portal2-common.jar" />
+				<include name="${cagrid.master.jar.prefix}portal2-common.jar" />
 			</fileset>
 
 			<fileset dir="../../ext/lib">
@@ -59,9 +59,9 @@
 			</fileset>
 
 			<fileset dir="../../services/webauthn/build/lib">
-				<include name="WebAuthnSvc-client.jar" />
-				<include name="WebAuthnSvc-common.jar" />
-				<include name="WebAuthnSvc-stubs.jar" />
+				<include name="${cagrid.master.jar.prefix}WebAuthnSvc-client.jar" />
+				<include name="${cagrid.master.jar.prefix}WebAuthnSvc-common.jar" />
+				<include name="${cagrid.master.jar.prefix}WebAuthnSvc-stubs.jar" />
 			</fileset>
 
 			<fileset dir="${env.GLOBUS_LOCATION}/lib">
@@ -77,7 +77,7 @@
 			classpathref="compile.cp" />
 	</target>
 
-	<target name="war" depends="compile">
+	<target name="war" depends="compile,build-war">
 		<war destfile="${build.dir}/${webapp.name}.war"
 			webxml="${src.war.dir}/WEB-INF/web.xml">
 			<fileset dir="${src.war.dir}" />
@@ -92,7 +92,6 @@
 
 	<target name="all">
 		<antcall target="clean" />
-		<antcall target="build-war" />
 		<antcall target="war" />
 	</target>
 

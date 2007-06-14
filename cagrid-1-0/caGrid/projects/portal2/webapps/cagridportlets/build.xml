@@ -4,7 +4,9 @@
 	
 	<property file="build.properties" />
 
+	<property file="../../ext/resources/cagrid.properties"/>
 	<import file="../../ant-files/common.xml" />
+	
 
 	<patternset id="compile.jars">
 		<include name="spring/*.jar" />
@@ -23,7 +25,7 @@
 			<patternset refid="compile.jars" />
 		</fileset>
 		<fileset dir="../../common/build">
-			<include name="cagrid-portal2-common.jar" />
+			<include name="${cagrid.master.jar.prefix}portal2-common.jar" />
 		</fileset>
 		<fileset dir="../../ext/lib">
 				<patternset refid="ext.jars" />
@@ -51,7 +53,7 @@
 				<patternset refid="globus.jars" />
 			</fileset>
 			<fileset dir="../../common/build">
-				<include name="cagrid-portal2-common.jar" />
+				<include name="${cagrid.master.jar.prefix}portal2-common.jar" />
 			</fileset>
 		</copy>
 	</target>
@@ -62,7 +64,7 @@
 			classpathref="compile.cp" />
 	</target>
 
-	<target name="war" depends="compile">
+	<target name="war" depends="compile,build-war">
 		<war destfile="${build.dir}/${webapp.name}.war"
 			webxml="${src.war.dir}/WEB-INF/web.xml">
 			<fileset dir="${src.war.dir}" />
@@ -77,7 +79,6 @@
 
 	<target name="all">
 		<antcall target="clean" />
-		<antcall target="build-war" />
 		<antcall target="war" />
 	</target>
 

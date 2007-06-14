@@ -1,15 +1,10 @@
 <project name="jetspeed">
 
 	<property file="../../ant-files/common.properties" />
+	<property file="../../ext/resources/cagrid.properties" />	
 	<property file="build.properties" />
-
 	<import file="../../ant-files/common.xml" />
-
 	<property environment="env" />
-
-
-
-
 
 	<target name="copy-conf">
 		<copy todir="${jetspeed.ext.dir}" overwrite="true">
@@ -62,7 +57,7 @@
 			todir="${jetspeed.tomcat.dir}/webapps/${jetspeed.custom.portal.name}/WEB-INF/lib"
 			overwrite="true">
 			<fileset dir="build">
-				<include name="cagrid-portal2-jetspeed.jar" />
+				<include name="${cagrid.master.jar.prefix}portal2-jetspeed.jar" />
 			</fileset>
 			<fileset dir="../../ext/lib/">
 				<patternset refid="ext.jars" />
@@ -71,9 +66,9 @@
 				<patternset refid="globus.jars" />
 			</fileset>
 			<fileset dir="../../services/webauthn/build/lib">
-				<include name="WebAuthnSvc-client.jar" />
-				<include name="WebAuthnSvc-common.jar" />
-				<include name="WebAuthnSvc-stubs.jar" />
+				<include name="${cagrid.master.jar.prefix}WebAuthnSvc-client.jar" />
+				<include name="${cagrid.master.jar.prefix}WebAuthnSvc-common.jar" />
+				<include name="${cagrid.master.jar.prefix}WebAuthnSvc-stubs.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${jetspeed.tomcat.dir}/common/lib"
@@ -124,16 +119,16 @@
 					<patternset refid="crypto.jars" />
 				</fileset>
 				<fileset dir="../../services/webauthn/build/lib">
-					<include name="WebAuthnSvc-client.jar" />
-					<include name="WebAuthnSvc-common.jar" />
-					<include name="WebAuthnSvc-stubs.jar" />
+					<include name="${cagrid.master.jar.prefix}WebAuthnSvc-client.jar" />
+					<include name="${cagrid.master.jar.prefix}WebAuthnSvc-common.jar" />
+					<include name="${cagrid.master.jar.prefix}WebAuthnSvc-stubs.jar" />
 				</fileset>
 			</classpath>
 		</javac>
 	</target>
 
 	<target name="jar" depends="compile">
-		<jar destfile="build/cagrid-portal2-jetspeed.jar">
+		<jar destfile="build/${cagrid.master.jar.prefix}portal2-jetspeed.jar">
 			<fileset dir="build/classes" />
 		</jar>
 	</target>
