@@ -10,6 +10,8 @@ public interface FileFilters {
 
 	public static final FileFilter XML_FILTER = new XMLFileFilter();
 	
+	public static final FileFilter XMI_FILTER = new XMIFileFilter();
+	
 	public static final FileFilter JAR_FILTER = new JarFileFilter();
 	
 	public static final FileFilter WSDL_FILTER = new WSDLFileFilter();
@@ -22,6 +24,17 @@ public interface FileFilters {
 
 		public String getDescription() {
 			return "XML Schema Files (*.xsd)";
+		}
+	}
+	
+	public class XMIFileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter {
+		public boolean accept(File file) {
+			String filename = file.getName();
+			return file.isDirectory() || filename.endsWith(".xmi");
+		}
+
+		public String getDescription() {
+			return "XML Metadata Interchange Files (*.xmi)";
 		}
 	}
 	

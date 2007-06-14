@@ -44,10 +44,6 @@ import com.jgoodies.validation.view.ValidationResultViewFactory;
 
 
 public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
-
-    /**
-     * Comment for <code>YOUR_PROJECT</code>
-     */
     private static final String DEFAULT_PROJECT = "YourProject";
     private static final String CONTEXT = "Context";
     private static final String PROJECT_SHORT_NAME = "Project Short Name";
@@ -71,6 +67,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
     private JLabel contextLabel = null;
     private JLabel projNameLabel = null;
     private JLabel projVersionLabel = null;
+
     // for package regexs
     private PatternCompiler compiler = new Perl5Compiler();
 
