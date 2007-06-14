@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+
+	<bean id="searchPointOfContactController" class="gov.nih.nci.cagrid.portal2.portlet.pointofcontact.PointOfContactDiscoveryController">
+		<property name="successAction" value="view"/>
+		<property name="pointOfContactDao" ref="pointOfContactDao"/>
+	</bean>
+	
+	<bean id="viewPointOfContactController"
+		class="org.springframework.web.portlet.mvc.ParameterizableViewController">
+		<property name="viewName" value="pointOfContactSearch" />
+	</bean>
+	
+	<bean id="portletModeParameterHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+		
+		<property name="order" value="1" />
+		
+		<property name="interceptors">
+			<list>
+				<ref bean="parameterMappingInterceptor" />
+				<ref bean="openSessionInViewInterceptor" />
+			</list>
+		</property>
+		
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="view">
+					<map>
+						<entry key="pointOfContactSearch"
+							value-ref="searchPointOfContactController" />
+						<entry key="view"
+							value-ref="viewPointOfContactController" />
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>	
+
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+
+		<property name="order" value="2" />
+
+		<property name="interceptors">
+			<list>
+				<ref bean="parameterMappingInterceptor" />
+				<ref bean="openSessionInViewInterceptor" />
+			</list>
+		</property>
+
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="viewPointOfContactController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/pointofcontact/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>	
+
+	<!-- Exception Handler -->
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate" />
+
+</beans>

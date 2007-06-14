@@ -304,6 +304,133 @@
 		</portlet-preferences>
 	</portlet>
 	
+	
+	
+	
+
+	<portlet>
+		<portlet-name>pocdiscovery</portlet-name>
+		<display-name>caGrid Point Of Contact Discovery</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/pocdiscovery-portlet.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Point Of Contact Discovery</title>
+			<short-title>Point Of Contact Discovery</short-title>
+			<keywords>cagrid,discovery,Point Of Contact</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>MsgOutput1Name</name>
+				<value>pointOfContactIds</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishName1</name>
+				<value>publishedPointOfContactIds</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishNamespace1</name>
+				<value></value>
+			</preference>
+		</portlet-preferences>
+	</portlet>
+
+	<portlet>
+		<portlet-name>poclist</portlet-name>
+		<display-name>caGrid Point Of Contact List</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/poclist-portlet.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Point Of Contact List</title>
+			<short-title>Point Of Contact List</short-title>
+			<keywords>cagrid,discovery,Point Of Contact,list</keywords>
+		</portlet-info>
+		<portlet-preferences>
+
+			<preference>
+				<name>MsgOutput1Name</name>
+				<value>selectedPointOfContactId</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishName1</name>
+				<value>publishedSelectedPointOfContactId</value>
+			</preference>
+			<preference>
+				<name>MsgOutput1PublishNamespace1</name>
+				<value></value>
+			</preference>
+			
+			<preference>
+				<name>MsgInput1Name</name>
+				<value>pointOfContactIds</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceName</name>
+				<value>publishedPointOfContactIds</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceNamespace</name>
+				<value></value>
+			</preference>			
+			
+		</portlet-preferences>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>pocdetails</portlet-name>
+		<display-name>caGrid Point Of Contact Details</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/pocdetails-portlet.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Point Of Contact Details</title>
+			<short-title>Point Of Contact Details</short-title>
+			<keywords>cagrid,discovery,Point Of Contact,details</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>MsgInput1Name</name>
+				<value>selectedPointOfContactId</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceName</name>
+				<value>publishedSelectedPointOfContactId</value>
+			</preference>
+			<preference>
+				<name>MsgInput1SourceNamespace</name>
+				<value></value>
+			</preference>
+		</portlet-preferences>
+	</portlet>
+	
 	<portlet>
 		<portlet-name>ipctest1</portlet-name>
 		<display-name>IPC Test 1</display-name>
