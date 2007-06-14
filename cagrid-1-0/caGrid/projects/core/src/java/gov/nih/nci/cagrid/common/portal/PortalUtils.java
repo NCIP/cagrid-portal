@@ -10,6 +10,7 @@ import java.awt.Window;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -79,22 +80,44 @@ public class PortalUtils {
 
 
     /**
-     * Centers the componenet withen the current application
+     * Centers the component within the current application
+     * 
      * @param comp
      */
     public final static void centerComponent(JComponent comp) {
+        // nothing to do for null components
+        if (comp == null) {
+            return;
+        }
+
         // Determine the new location of the window
-        int w = PortalResourceManager.getInstance().getGridPortal().getSize().width;
-        int h = PortalResourceManager.getInstance().getGridPortal().getSize().height;
-        int x = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().x;
-        int y = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().y;
-        Dimension dim = comp.getSize();
-        comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
+        Component root = null;
+        // try the portal first
+        PortalResourceManager instance = PortalResourceManager.getInstance();
+        if (instance != null) {
+            root = instance.getGridPortal();
+        }
+        // if still null try the root window
+        if (root == null) {
+            root = SwingUtilities.getRoot(comp);
+        }
+
+        // only do anything if root is non-null
+        if (root != null) {
+            int w = root.getSize().width;
+            int h = root.getSize().height;
+            int x = root.getLocationOnScreen().x;
+            int y = root.getLocationOnScreen().y;
+
+            Dimension dim = comp.getSize();
+            comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
+        }
     }
 
 
     /**
      * Centers the window on the users monitor
+     * 
      * @param comp
      */
     public final static void centerWindowInScreen(Window comp) {
@@ -108,8 +131,10 @@ public class PortalUtils {
         comp.setLocation(x, y);
     }
 
+
     /**
      * Centers the window within the current application window
+     * 
      * @param comp
      */
     public final static void centerWindow(Window comp) {
