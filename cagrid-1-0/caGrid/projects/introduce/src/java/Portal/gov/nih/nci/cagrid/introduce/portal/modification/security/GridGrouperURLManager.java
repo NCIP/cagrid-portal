@@ -27,7 +27,7 @@ public class GridGrouperURLManager {
                 ResourceManager.setConfigurationProperty(GRID_GROUPER_LOAD_PROPERTY, String.valueOf(loadPropVal));
                 load = ResourceManager.getConfigurationProperty(GRID_GROUPER_LOAD_PROPERTY);
             }
-
+            ResourceManager.setConfigurationProperty(GRID_GROUPER_LOAD_PROPERTY + ".boolean", "");
             loadOnStartup = Boolean.parseBoolean(load);
         } catch (Exception e) {
             e.printStackTrace();

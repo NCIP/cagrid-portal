@@ -49,7 +49,9 @@ public class PreferencesPreferencesConfigurationPanel extends DynamicPreferences
                     String[] optionsArray = new String[optionsList.size()];
                     optionsList.toArray(optionsArray);
                     addDropDown(this, key, value, optionsArray, count++, true);
-                } else if (!key.endsWith(".options")) {
+                } else if(hasKey(ResourceManager.getConfigurationPropertyKeys(), key + ".boolean")){
+                    addCheckBox(this, key, new Boolean(value).booleanValue(), count++, true);
+                } else if (!key.endsWith(".options") && !key.endsWith(".boolean")) {
                     addTextField(this, key, value, count++, true);
                 }
             }
@@ -69,6 +71,9 @@ public class PreferencesPreferencesConfigurationPanel extends DynamicPreferences
                 String value = this.getTextFieldValue(key);
                 if (value == null) {
                     value = this.getDropDownValue(key);
+                }
+                if(value == null){
+                    value = this.getCheckBoxValue(key);
                 }
                 if (value != null) {
                     ResourceManager.setConfigurationProperty(key, value);
