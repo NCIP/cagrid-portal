@@ -314,7 +314,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 			c = db.getConnection();
 			PreparedStatement s = c
 				.prepareStatement("select CERTIFICATE from " + CREDENTIALS_TABLE + " where ALIAS= ?");
-			s.setString(1, CREDENTIALS_TABLE);
+			s.setString(1,  CREDENTIAL_ALIAS);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				String certStr = rs.getString("CERTIFICATE");
