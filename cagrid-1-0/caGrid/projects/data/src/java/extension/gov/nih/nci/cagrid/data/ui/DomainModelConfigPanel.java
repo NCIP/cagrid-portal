@@ -28,15 +28,16 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -46,13 +47,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 
 import org.projectmobius.portal.PortalResourceManager;
@@ -64,7 +62,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.3 2007-05-08 19:56:10 hastings Exp $ 
+ * @version $Id: DomainModelConfigPanel.java,v 1.4 2007-06-15 13:55:22 dervin Exp $ 
  */
 public class DomainModelConfigPanel extends JPanel {
 
@@ -74,16 +72,7 @@ public class DomainModelConfigPanel extends JPanel {
     private ExtensionDataManager extensionDataManager;
     private Project mostRecentProject;
     
-    private NotifyingButtonGroup domainSourceGroup = null;
-
-    private JPanel domainModelSourcePanel = null;
-    private JRadioButton noDomainModelRadioButton = null;
-    private JRadioButton cadsrDomainModelRadioButton = null;
-    private JRadioButton suppliedDomainModelRadioButton = null;    
-    private JPanel domainModelSelectionPanel = null;
-    private JTextField domainModelNameTextField = null;
-    private JButton selectDomainModelButton = null;
-    private JButton visualizeDomainModelButton = null;    
+    private JButton visualizeDomainModelButton = null;
     private JPanel cadsrDomainModelPanel = null;    
     private CaDSRBrowserPanel cadsrBrowserPanel = null;    
     private JPanel packageSelectionButtonPanel = null;
@@ -92,6 +81,8 @@ public class DomainModelConfigPanel extends JPanel {
     private JButton removePackageButton = null;    
     private JScrollPane umlClassScrollPane = null;
     private UMLProjectTree umlTree = null;
+    private JButton advancedOptionsButton = null;
+    private JPanel specialtyButtonsPanel = null;
     
     public DomainModelConfigPanel(ExtensionTypeExtensionData extensionData,
         ServiceInformation info, ExtensionDataManager dataManager) {
@@ -104,17 +95,29 @@ public class DomainModelConfigPanel extends JPanel {
     
     
     public void populateFromExtensionData() {
-        getDomainSourceGroup();
-        if (getSuppliedDomainModelRadioButton().isSelected()) {
+        boolean noDomainModel = false;
+        boolean suppliedDomainModel = false;
+        try {
+            noDomainModel = extensionDataManager.isNoDomainModel();
+            suppliedDomainModel = extensionDataManager.isSuppliedDomainModel();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorDialog.showErrorDialog("Error loading domain model source", ex.getMessage(), ex);
+        }
+        if (suppliedDomainModel) {
             try {
+                File dmFile = getSuppliedDomainModelFile();
                 DomainModel model = MetadataUtils.deserializeDomainModel(
-                    new FileReader(getDomainModelNameTextField().getText()));
+                    new FileReader(dmFile.getAbsolutePath()));
                 installDomainModel(model);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 ErrorDialog.showErrorDialog("Error loading domain model", ex.getMessage(), ex);
             }
-        } else if (getCadsrDomainModelRadioButton().isSelected()) {
+        } else if (noDomainModel) {
+            
+        } else if (!noDomainModel && !suppliedDomainModel) {
+            // domain model must be from caDSR
             try {
                 // get the project from cadsr that has been selected
                 String projectLongName = extensionDataManager.getCadsrProjectLongName();
@@ -154,234 +157,30 @@ public class DomainModelConfigPanel extends JPanel {
     
     
     private void initialize() {
-        GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-        gridBagConstraints19.gridx = 1;
-        gridBagConstraints19.gridy = 1;
-        GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-        gridBagConstraints15.gridx = 0;
-        gridBagConstraints15.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints15.gridwidth = 2;
-        gridBagConstraints15.weightx = 1.0D;
-        gridBagConstraints15.weighty = 1.0D;
-        gridBagConstraints15.gridy = 2;
-        GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-        gridBagConstraints11.gridx = 1;
-        gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints11.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints11.weightx = 1.0D;
-        gridBagConstraints11.gridy = 0;
-        GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-        gridBagConstraints10.gridx = 0;
-        gridBagConstraints10.gridheight = 2;
-        gridBagConstraints10.gridy = 0;;
+        GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+        gridBagConstraints1.gridx = 0;
+        gridBagConstraints1.gridy = 0;
+        gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints1.weightx = 1.0D;
+        gridBagConstraints1.weighty = 1.0D;
+        GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+        gridBagConstraints2.gridx = 0;
+        gridBagConstraints2.gridy = 1;
+        gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
         this.setLayout(new GridBagLayout());
-        this.add(getDomainModelSourcePanel(), gridBagConstraints10);
-        this.add(getDomainModelSelectionPanel(), gridBagConstraints11);
-        this.add(getCadsrDomainModelPanel(), gridBagConstraints15);
-        this.add(getVisualizeDomainModelButton(), gridBagConstraints19);
-    }
-    
-    
-    private NotifyingButtonGroup getDomainSourceGroup() {
-        if (domainSourceGroup == null) {
-            domainSourceGroup = new NotifyingButtonGroup();
-            domainSourceGroup.add(getNoDomainModelRadioButton());
-            domainSourceGroup.add(getCadsrDomainModelRadioButton());
-            domainSourceGroup.add(getSuppliedDomainModelRadioButton());
-            domainSourceGroup.addGroupSelectionListener(new GroupSelectionListener() {
-                public void selectionChanged(final ButtonModel previousSelection, final ButtonModel currentSelection) {
-                    try {
-                        extensionDataManager.storeDomainModelSource(
-                            getNoDomainModelRadioButton().isSelected(),
-                            getSuppliedDomainModelRadioButton().isSelected());
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing domain model source", 
-                            ex.getMessage(), ex);
-                    }
-                    
-                    // enable / disable panels and components as needed
-                    PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), 
-                        currentSelection == getCadsrDomainModelRadioButton().getModel());
-                    PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(),
-                        currentSelection == getSuppliedDomainModelRadioButton().getModel());
-                    getVisualizeDomainModelButton().setEnabled(
-                        currentSelection != getNoDomainModelRadioButton().getModel());
-                }
-            });
-            // select radio buttons according to stored cadsr information
-            try {
-                if (extensionDataManager.isNoDomainModel()) {
-                    domainSourceGroup.setSelected(getNoDomainModelRadioButton().getModel(), true);
-                } else if (extensionDataManager.isSuppliedDomainModel()) {
-                    domainSourceGroup.setSelected(getSuppliedDomainModelRadioButton().getModel(), true);
-                    ResourcePropertyType[] resourceProps = serviceInfo.getServices().getService(0)
-                        .getResourcePropertiesList().getResourceProperty();
-                    for (ResourcePropertyType prop : resourceProps) {
-                        if (prop.getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
-                            File dmFile = new File(serviceInfo.getBaseDirectory().getAbsolutePath() 
-                                + File.separator + "etc" + File.separator + prop.getFileLocation());
-                            getDomainModelNameTextField().setText(dmFile.getCanonicalPath());
-                            break;
-                        }
-                    }
-                } else {
-                    domainSourceGroup.setSelected(getCadsrDomainModelRadioButton().getModel(), true);
-                }                
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error determining configured domain model source", 
-                    ex.getMessage(), ex);
-            }
-        }
-        return domainSourceGroup;
-    }
-    
-    
-    private JPanel getDomainModelSourcePanel() {
-        if (domainModelSourcePanel == null) {
-            GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-            gridBagConstraints9.gridx = 0;
-            gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints9.gridy = 2;
-            GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-            gridBagConstraints8.gridx = 0;
-            gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints8.gridy = 1;
-            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-            gridBagConstraints5.gridx = 0;
-            gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints5.gridy = 0;
-            domainModelSourcePanel = new JPanel();
-            domainModelSourcePanel.setLayout(new GridBagLayout());
-            domainModelSourcePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                null, "Domain Model Source", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
-                PortalLookAndFeel.getPanelLabelColor()));
-            domainModelSourcePanel.add(getNoDomainModelRadioButton(), gridBagConstraints5);
-            domainModelSourcePanel.add(getCadsrDomainModelRadioButton(), gridBagConstraints8);
-            domainModelSourcePanel.add(getSuppliedDomainModelRadioButton(), gridBagConstraints9);
-        }
-        return domainModelSourcePanel;
-    }
-    
-    
-    private JRadioButton getNoDomainModelRadioButton() {
-        if (noDomainModelRadioButton == null) {
-            noDomainModelRadioButton = new JRadioButton();
-            noDomainModelRadioButton.setText("No Domain Model");
-        }
-        return noDomainModelRadioButton;
-    }
-    
-    
-    private JRadioButton getCadsrDomainModelRadioButton() {
-        if (cadsrDomainModelRadioButton == null) {
-            cadsrDomainModelRadioButton = new JRadioButton();
-            cadsrDomainModelRadioButton.setText("caDSR Domain Model");
-        }
-        return cadsrDomainModelRadioButton;
-    }
-    
-    
-    private JRadioButton getSuppliedDomainModelRadioButton() {
-        if (suppliedDomainModelRadioButton == null) {
-            suppliedDomainModelRadioButton = new JRadioButton();
-            suppliedDomainModelRadioButton.setText("Supplied Domain Model");
-        }
-        return suppliedDomainModelRadioButton;
-    }
-    
-    
-    private JPanel getDomainModelSelectionPanel() {
-        if (domainModelSelectionPanel == null) {
-            GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-            gridBagConstraints7.gridx = 1;
-            gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints7.gridy = 0;
-            GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-            gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints6.gridy = 0;
-            gridBagConstraints6.weightx = 1.0;
-            gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints6.gridx = 0;
-            domainModelSelectionPanel = new JPanel();
-            domainModelSelectionPanel.setLayout(new GridBagLayout());
-            domainModelSelectionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-                "Supplied Domain Model", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, 
-                null, PortalLookAndFeel.getPanelLabelColor()));
-            domainModelSelectionPanel.add(getDomainModelNameTextField(), gridBagConstraints6);
-            domainModelSelectionPanel.add(getSelectDomainModelButton(), gridBagConstraints7);
-        }
-        return domainModelSelectionPanel;
-    }
-    
-    
-    private JTextField getDomainModelNameTextField() {
-        if (domainModelNameTextField == null) {
-            domainModelNameTextField = new JTextField();
-            domainModelNameTextField.setToolTipText(
-                "Optional xml file name of an existing domain model");
-            domainModelNameTextField.setEditable(false);
-        }
-        return domainModelNameTextField;
-    }
-    
-    
-    private JButton getSelectDomainModelButton() {
-        if (selectDomainModelButton == null) {
-            selectDomainModelButton = new JButton();
-            selectDomainModelButton.setText("Select Domain Model");
-            selectDomainModelButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    // prompt the user for the file
-                    String selectedFile = null;
-                    try {
-                        selectedFile = ResourceManager.promptFile(null, FileFilters.XML_FILTER);
-                        if (selectedFile != null) {
-                            File inFile = new File(selectedFile);
-                            // install the new domain model
-                            DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader(inFile));
-                            boolean installed = installDomainModel(model);
-                            if (installed) {
-                                // if that succeded, copy the file in to the service's directory
-                                File outFile = new File(serviceInfo.getBaseDirectory().getAbsolutePath() 
-                                    + File.separator + "etc" + File.separator + inFile.getName());
-                                Utils.copyFile(inFile, outFile);
-                                // set up the domain model resource property
-                                ResourcePropertyType dmResourceProp = CommonTools.getResourcePropertiesOfType(
-                                    serviceInfo.getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
-                                dmResourceProp.setFileLocation(outFile.getName());
-                                dmResourceProp.setPopulateFromFile(true);
-                                // change the domain model text field
-                                getDomainModelNameTextField().setText(outFile.getCanonicalPath());
-                            }
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error in file selection: " + ex.getMessage(), ex);
-                    }
-                }
-            });
-        }
-        return selectDomainModelButton;
+        this.setSize(new Dimension(501, 570));
+        this.add(getCadsrDomainModelPanel(), gridBagConstraints1);
+        this.add(getSpecialtyButtonsPanel(), gridBagConstraints2);
     }
     
     
     private JPanel getCadsrDomainModelPanel() {
         if (cadsrDomainModelPanel == null) {
             GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-            gridBagConstraints14.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints14.fill = GridBagConstraints.BOTH;
             gridBagConstraints14.gridy = 2;
             gridBagConstraints14.weightx = 1.0;
-            gridBagConstraints14.weighty = 1.0;
+            gridBagConstraints14.weighty = 1.0D;
             gridBagConstraints14.gridx = 0;
             GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
             gridBagConstraints13.gridx = 0;
@@ -602,20 +401,30 @@ public class DomainModelConfigPanel extends JPanel {
             visualizeDomainModelButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     DomainModel model = null;
+                    boolean noModel = false;
+                    boolean isSupplied = false;
+                    try {
+                        noModel = extensionDataManager.isNoDomainModel();
+                        isSupplied = extensionDataManager.isSuppliedDomainModel();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        ErrorDialog.showErrorDialog("Error determining domain model source", ex.getMessage(), ex);
+                    }
                     // get the domain model selected
-                    if (getSuppliedDomainModelRadioButton().isSelected()
-                        && getDomainModelNameTextField().getText().length() != 0) {
+                    if (isSupplied) {
                         // domain model from file system
-                        String filename = getDomainModelNameTextField().getText();
-                        try {
-                            model = MetadataUtils.deserializeDomainModel(
-                                new FileReader(filename));
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            ErrorDialog.showErrorDialog(
-                                "Error loading domain model: " + ex.getMessage(), ex);
+                        File suppliedFile = getSuppliedDomainModelFile();
+                        if (suppliedFile != null) {
+                            try {
+                                model = MetadataUtils.deserializeDomainModel(
+                                    new FileReader(suppliedFile));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                ErrorDialog.showErrorDialog(
+                                    "Error loading domain model: " + ex.getMessage(), ex);
+                            }
                         }
-                    } else if (getCadsrDomainModelRadioButton().isSelected()) {
+                    } else if (!noModel) {
                         // build the domain model
                         try {
                             Data data = ExtensionDataUtils.getExtensionData(
@@ -637,6 +446,53 @@ public class DomainModelConfigPanel extends JPanel {
             });
         }
         return visualizeDomainModelButton;
+    }
+    
+    
+    /**
+     * This method initializes advancedOptionsButton    
+     *  
+     * @return javax.swing.JButton  
+     */
+    private JButton getAdvancedOptionsButton() {
+        if (advancedOptionsButton == null) {
+            advancedOptionsButton = new JButton();
+            advancedOptionsButton.setText("Advanced Options");
+            advancedOptionsButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    DomainModelAdvancedOptionsDialog dialog = new DomainModelAdvancedOptionsDialog(serviceInfo, extensionDataManager);
+                    dialog.setVisible(true);
+                    populateFromExtensionData();
+                }
+            });
+        }
+        return advancedOptionsButton;
+    }
+    
+    
+    /**
+     * This method initializes specialtyButtonsPanel 
+     *  
+     * @return javax.swing.JPanel   
+     */
+    private JPanel getSpecialtyButtonsPanel() {
+        if (specialtyButtonsPanel == null) {
+            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+            gridBagConstraints1.gridx = 1;
+            gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints1.gridy = 0;
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints.gridy = 0;
+            specialtyButtonsPanel = new JPanel();
+            specialtyButtonsPanel.setLayout(new GridBagLayout());
+            specialtyButtonsPanel.add(getVisualizeDomainModelButton(), gridBagConstraints);
+            specialtyButtonsPanel.add(getAdvancedOptionsButton(), gridBagConstraints1);
+        }
+        return specialtyButtonsPanel;
     }
     
     
@@ -923,6 +779,17 @@ public class DomainModelConfigPanel extends JPanel {
             }
         }
         return true;
+    }
+    
+    
+    private File getSuppliedDomainModelFile() {
+        ResourcePropertyType[] domainModelProps = CommonTools.getResourcePropertiesOfType(
+            serviceInfo.getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME);
+        if (domainModelProps != null && domainModelProps.length != 0) {
+            return new File(serviceInfo.getBaseDirectory().getAbsolutePath() 
+                + File.separator + "etc" + File.separator + domainModelProps[0].getFileLocation());
+        }
+        return null;
     }
     
     
