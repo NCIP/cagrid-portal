@@ -11,7 +11,7 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Jun 13, 2007 2:13:14 PM
- * @version $Id: DeployPropertiesManager.java,v 1.1 2007-06-13 18:35:00 dervin Exp $ 
+ * @version $Id: DeployPropertiesManager.java,v 1.2 2007-06-15 16:57:33 dervin Exp $ 
  */
 public abstract class DeployPropertiesManager {
     private InstallationDescription description;
@@ -33,5 +33,10 @@ public abstract class DeployPropertiesManager {
     }
     
 
-    public abstract void update();
+    /**
+     * Subclasses should override this method to perform any modifications
+     * which may be required on the SDK's configuration before
+     * building
+     */
+    public abstract void configureDeployment() throws DeploymentConfigurationException;
 }
