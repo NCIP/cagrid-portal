@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 
 import org.projectmobius.portal.PortalResourceManager;
@@ -43,7 +44,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Jun 14, 2007 10:14:20 AM
- * @version $Id: DomainModelAdvancedOptionsDialog.java,v 1.1 2007-06-15 13:55:22 dervin Exp $
+ * @version $Id: DomainModelAdvancedOptionsDialog.java,v 1.2 2007-06-15 14:26:31 dervin Exp $
  */
 public class DomainModelAdvancedOptionsDialog extends JDialog {
     public static final String INFORMATION = 
@@ -79,6 +80,8 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
     private JTextArea informationTextArea = null;
     private JScrollPane infoScrollPane = null;
     private JPanel fromFilePanel = null;
+
+    private JButton doneButton = null;
     
     
     public DomainModelAdvancedOptionsDialog(ServiceInformation info, ExtensionDataManager dataManager) {
@@ -86,6 +89,8 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
             "Advanced Domain Model Options", true);
         this.serviceInfo = info;
         this.dataManager = dataManager;
+        // make the dialog ignore the close button, it's confusing
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         initialize();
     }
 
@@ -96,7 +101,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
      */
     private void initialize() {
         loadFromExtensionData();
-        this.setSize(new Dimension(450, 220));
+        this.setSize(new Dimension(450, 280));
         this.setContentPane(getMainPanel());
     }
     
@@ -248,6 +253,11 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
      */
     private JPanel getMainPanel() {
         if (mainPanel == null) {
+            GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+            gridBagConstraints8.gridx = 0;
+            gridBagConstraints8.anchor = GridBagConstraints.EAST;
+            gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints8.gridy = 3;
             GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
             gridBagConstraints6.gridx = 0;
             gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
@@ -269,6 +279,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
             mainPanel.add(getFromFilePanel(), gridBagConstraints4);
             mainPanel.add(getInfoScrollPane(), gridBagConstraints5);
             mainPanel.add(getCheckBoxPanel(), gridBagConstraints6);
+            mainPanel.add(getDoneButton(), gridBagConstraints8);
         }
         return mainPanel;
     }
@@ -443,5 +454,24 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
                     serviceInfo.getServices().getService(0), domainModelResourceProperty);
             }
         }
+    }
+
+
+    /**
+     * This method initializes doneButton	
+     * 	
+     * @return javax.swing.JButton	
+     */
+    private JButton getDoneButton() {
+        if (doneButton == null) {
+            doneButton = new JButton();
+            doneButton.setText("Done");
+            doneButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    dispose();
+                }
+            });
+        }
+        return doneButton;
     }
 }
