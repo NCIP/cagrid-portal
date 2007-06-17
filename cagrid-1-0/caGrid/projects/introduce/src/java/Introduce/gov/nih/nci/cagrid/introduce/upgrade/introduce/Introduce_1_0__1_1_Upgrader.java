@@ -45,16 +45,19 @@ import org.projectmobius.common.XMLUtilities;
 
 public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
-    public Introduce_1_0__1_1_Upgrader(IntroduceUpgradeStatus status,ServiceInformation serviceInformation, String servicePath) {
-        super(status,serviceInformation, servicePath, "1.0", "1.1");
+    public Introduce_1_0__1_1_Upgrader(IntroduceUpgradeStatus status, ServiceInformation serviceInformation,
+        String servicePath) {
+        super(status, serviceInformation, servicePath, "1.0", "1.1");
     }
 
 
     protected void upgrade() throws Exception {
         // need to delete the old registration.xml file
-        File registrationFile = new File(getServicePath() + File.separator + "etc" + File.separator + "registration.xml");
+        File registrationFile = new File(getServicePath() + File.separator + "etc" + File.separator
+            + "registration.xml");
         registrationFile.delete();
-        getStatus().addDescriptionLine("removed old registration.xml file, it is now replaced with service specific one for each service");
+        getStatus().addDescriptionLine(
+            "removed old registration.xml file, it is now replaced with service specific one for each service");
 
         // need to replace the build.xml
         Utils.copyFile(new File(getServicePath() + File.separator + "build.xml"), new File(getServicePath()
@@ -64,7 +67,8 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "dev-build.xml"), new File(
             getServicePath() + File.separator + "dev-build.xml"));
         getStatus().addDescriptionLine("replaced build.xml with new version");
-        getStatus().addIssue("Replaced the build.xml file.", "Put any additions you need to the service build in the dev-build.xml file which has now been created.");
+        getStatus().addIssue("Replaced the build.xml file.",
+            "Put any additions you need to the service build in the dev-build.xml file which has now been created.");
 
         // need to replace the build-deploy.xml
         Utils.copyFile(new File(getServicePath() + File.separator + "build-deploy.xml"), new File(getServicePath()
@@ -74,204 +78,219 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "dev-build-deploy.xml"), new File(
             getServicePath() + File.separator + "dev-build-deploy.xml"));
         getStatus().addDescriptionLine("replaced build-deploy.xml with new version");
-        getStatus().addIssue("Replaced the build-deploy.xml file.", "Put any additions you need to the service deployment in the dev-build-deploy.xml file which has now been created.");
+        getStatus()
+            .addIssue("Replaced the build-deploy.xml file.",
+                "Put any additions you need to the service deployment in the dev-build-deploy.xml file which has now been created.");
 
-        
-        
-
-        //foreach service need to replace the resource files.....
+        // foreach service need to replace the resource files.....
         File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
-        for(int i = 0 ; i < getServiceInformation().getServices().getService().length; i ++){
+        for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
             ServiceType service = getServiceInformation().getServices().getService(i);
-            
-            //delete the old base resource
-            File oldbaseResourceF = new File(srcDir.getAbsolutePath() + File.separator
-                + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                + File.separator + "resource" + File.separator + "BaseResource.java");
-            oldbaseResourceF.delete();
-            
-           
-            MainConfigurationTemplate metadataConfigurationT = new MainConfigurationTemplate();
-            String metadataConfigurationS = metadataConfigurationT.generate(new SpecificServiceInformation(getServiceInformation(),
-                service));
-            File metadataConfigurationF = new File(srcDir.getAbsolutePath() + File.separator
-                + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                + File.separator + "resource" + File.separator + "ResourceConfiguration.java");
 
-            FileWriter metadataConfigurationFW = new FileWriter(metadataConfigurationF);
-            metadataConfigurationFW.write(metadataConfigurationS);
-            metadataConfigurationFW.close();
+            if (!service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)) {
 
-            if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
-                ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
-                String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                // delete the old base resource
+                File oldbaseResourceF = new File(srcDir.getAbsolutePath() + File.separator
                     + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "ResourceConstants.java");
+                    + File.separator + "resource" + File.separator + "BaseResource.java");
+                oldbaseResourceF.delete();
 
-                FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
-                resourceContanstsFW.write(resourceContanstsS);
-                resourceContanstsFW.close();
-
-                BaseResourceBaseTemplate baseResourceBaseT = new BaseResourceBaseTemplate();
-                String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File baseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
+                MainConfigurationTemplate metadataConfigurationT = new MainConfigurationTemplate();
+                String metadataConfigurationS = metadataConfigurationT.generate(new SpecificServiceInformation(
+                    getServiceInformation(), service));
+                File metadataConfigurationF = new File(srcDir.getAbsolutePath() + File.separator
                     + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "BaseResourceBase.java");
+                    + File.separator + "resource" + File.separator + "ResourceConfiguration.java");
 
-                FileWriter baseResourceBaseFW = new FileWriter(baseResourceBaseF);
-                baseResourceBaseFW.write(baseResourceBaseS);
-                baseResourceBaseFW.close();
+                FileWriter metadataConfigurationFW = new FileWriter(metadataConfigurationF);
+                metadataConfigurationFW.write(metadataConfigurationS);
+                metadataConfigurationFW.close();
 
-                BaseResourceTemplate baseResourceT = new BaseResourceTemplate();
-                String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + service.getName() + "Resource.java");
+                if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
+                    ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+                    String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + "ResourceConstants.java");
 
-                FileWriter baseResourceFW = new FileWriter(baseResourceF);
-                baseResourceFW.write(baseResourceS);
-                baseResourceFW.close();
+                    FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+                    resourceContanstsFW.write(resourceContanstsS);
+                    resourceContanstsFW.close();
 
-                BaseResourceHomeTemplate baseResourceHomeT = new BaseResourceHomeTemplate();
-                String baseResourceHomeS = baseResourceHomeT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File baseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "BaseResourceHome.java");
+                    BaseResourceBaseTemplate baseResourceBaseT = new BaseResourceBaseTemplate();
+                    String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File baseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + "BaseResourceBase.java");
 
-                FileWriter baseResourceHomeFW = new FileWriter(baseResourceHomeF);
-                baseResourceHomeFW.write(baseResourceHomeS);
-                baseResourceHomeFW.close();
+                    FileWriter baseResourceBaseFW = new FileWriter(baseResourceBaseF);
+                    baseResourceBaseFW.write(baseResourceBaseS);
+                    baseResourceBaseFW.close();
 
-            } else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
-                ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
-                String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "ResourceConstants.java");
+                    BaseResourceTemplate baseResourceT = new BaseResourceTemplate();
+                    String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + service.getName() + "Resource.java");
 
-                FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
-                resourceContanstsFW.write(resourceContanstsS);
-                resourceContanstsFW.close();
+                    FileWriter baseResourceFW = new FileWriter(baseResourceF);
+                    baseResourceFW.write(baseResourceS);
+                    baseResourceFW.close();
 
-                LifetimeResourceBaseTemplate lifetimeResourceBaseT = new LifetimeResourceBaseTemplate();
-                String lifetimeResourceBaseS = lifetimeResourceBaseT
-                    .generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File lifetimeResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "BaseResourceBase.java");
+                    BaseResourceHomeTemplate baseResourceHomeT = new BaseResourceHomeTemplate();
+                    String baseResourceHomeS = baseResourceHomeT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File baseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + "BaseResourceHome.java");
 
-                FileWriter lifetimeResourceBaseFW = new FileWriter(lifetimeResourceBaseF);
-                lifetimeResourceBaseFW.write(lifetimeResourceBaseS);
-                lifetimeResourceBaseFW.close();
+                    FileWriter baseResourceHomeFW = new FileWriter(baseResourceHomeF);
+                    baseResourceHomeFW.write(baseResourceHomeS);
+                    baseResourceHomeFW.close();
 
-                LifetimeResourceTemplate lifetimeResourceT = new LifetimeResourceTemplate();
-                String lifetimeResourceS = lifetimeResourceT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File lifetimeResourceF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + service.getName() + "Resource.java");
+                } else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
+                    ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+                    String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + "ResourceConstants.java");
 
-                FileWriter lifetimeResourceFW = new FileWriter(lifetimeResourceF);
-                lifetimeResourceFW.write(lifetimeResourceS);
-                lifetimeResourceFW.close();
+                    FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+                    resourceContanstsFW.write(resourceContanstsS);
+                    resourceContanstsFW.close();
 
-                LifetimeResourceHomeTemplate lifetimeResourceHomeT = new LifetimeResourceHomeTemplate();
-                String lifetimeResourceHomeS = lifetimeResourceHomeT
-                    .generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File lifetimeResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "BaseResourceHome.java");
+                    LifetimeResourceBaseTemplate lifetimeResourceBaseT = new LifetimeResourceBaseTemplate();
+                    String lifetimeResourceBaseS = lifetimeResourceBaseT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File lifetimeResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + "BaseResourceBase.java");
 
-                FileWriter lifetimeResourceHomeFW = new FileWriter(lifetimeResourceHomeF);
-                lifetimeResourceHomeFW.write(lifetimeResourceHomeS);
-                lifetimeResourceHomeFW.close();
+                    FileWriter lifetimeResourceBaseFW = new FileWriter(lifetimeResourceBaseF);
+                    lifetimeResourceBaseFW.write(lifetimeResourceBaseS);
+                    lifetimeResourceBaseFW.close();
 
-            } else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
-                ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
-                String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "ResourceConstants.java");
+                    LifetimeResourceTemplate lifetimeResourceT = new LifetimeResourceTemplate();
+                    String lifetimeResourceS = lifetimeResourceT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File lifetimeResourceF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + service.getName() + "Resource.java");
 
-                FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
-                resourceContanstsFW.write(resourceContanstsS);
-                resourceContanstsFW.close();
+                    FileWriter lifetimeResourceFW = new FileWriter(lifetimeResourceF);
+                    lifetimeResourceFW.write(lifetimeResourceS);
+                    lifetimeResourceFW.close();
 
-                SingletonResourceTemplate baseResourceT = new SingletonResourceTemplate();
-                String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + service.getName() + "Resource.java");
+                    LifetimeResourceHomeTemplate lifetimeResourceHomeT = new LifetimeResourceHomeTemplate();
+                    String lifetimeResourceHomeS = lifetimeResourceHomeT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File lifetimeResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + "BaseResourceHome.java");
 
-                FileWriter baseResourceFW = new FileWriter(baseResourceF);
-                baseResourceFW.write(baseResourceS);
-                baseResourceFW.close();
+                    FileWriter lifetimeResourceHomeFW = new FileWriter(lifetimeResourceHomeF);
+                    lifetimeResourceHomeFW.write(lifetimeResourceHomeS);
+                    lifetimeResourceHomeFW.close();
 
-                SingletonResourceBaseTemplate baseResourceBaseT = new SingletonResourceBaseTemplate();
-                String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File baseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "BaseResourceBase.java");
+                } else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
+                    ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+                    String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + "ResourceConstants.java");
 
-                FileWriter baseResourceBaseFW = new FileWriter(baseResourceBaseF);
-                baseResourceBaseFW.write(baseResourceBaseS);
-                baseResourceBaseFW.close();
+                    FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+                    resourceContanstsFW.write(resourceContanstsS);
+                    resourceContanstsFW.close();
 
-                SingletonResourceHomeTemplate baseResourceHomeT = new SingletonResourceHomeTemplate();
-                String baseResourceHomeS = baseResourceHomeT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File baseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "BaseResourceHome.java");
+                    SingletonResourceTemplate baseResourceT = new SingletonResourceTemplate();
+                    String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + service.getName() + "Resource.java");
 
-                FileWriter baseResourceHomeFW = new FileWriter(baseResourceHomeF);
-                baseResourceHomeFW.write(baseResourceHomeS);
-                baseResourceHomeFW.close();
+                    FileWriter baseResourceFW = new FileWriter(baseResourceF);
+                    baseResourceFW.write(baseResourceS);
+                    baseResourceFW.close();
 
-            } else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
-                ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
-                String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "ResourceConstants.java");
+                    SingletonResourceBaseTemplate baseResourceBaseT = new SingletonResourceBaseTemplate();
+                    String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File baseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + "BaseResourceBase.java");
 
-                FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
-                resourceContanstsFW.write(resourceContanstsS);
-                resourceContanstsFW.close();
+                    FileWriter baseResourceBaseFW = new FileWriter(baseResourceBaseF);
+                    baseResourceBaseFW.write(baseResourceBaseS);
+                    baseResourceBaseFW.close();
 
-                ServiceConfigurationTemplate serviceConfT = new ServiceConfigurationTemplate();
-                String serviceConfS = serviceConfT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
-                    + File.separator + "service" + File.separator + "ServiceConfiguration.java");
+                    SingletonResourceHomeTemplate baseResourceHomeT = new SingletonResourceHomeTemplate();
+                    String baseResourceHomeS = baseResourceHomeT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File baseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + "BaseResourceHome.java");
 
-                FileWriter serviceConfFW = new FileWriter(serviceConfF);
-                serviceConfFW.write(serviceConfS);
-                serviceConfFW.close();
+                    FileWriter baseResourceHomeFW = new FileWriter(baseResourceHomeF);
+                    baseResourceHomeFW.write(baseResourceHomeS);
+                    baseResourceHomeFW.close();
 
-                MainResourceTemplate baseResourceT = new MainResourceTemplate();
-                String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + service.getName() + "Resource.java");
+                } else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
+                    ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+                    String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + "ResourceConstants.java");
 
-                FileWriter baseResourceFW = new FileWriter(baseResourceF);
-                baseResourceFW.write(baseResourceS);
-                baseResourceFW.close();
+                    FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+                    resourceContanstsFW.write(resourceContanstsS);
+                    resourceContanstsFW.close();
 
-                MainResourceHomeTemplate baseResourceHomeT = new MainResourceHomeTemplate();
-                String baseResourceHomeS = baseResourceHomeT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-                File baseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "BaseResourceHome.java");
+                    ServiceConfigurationTemplate serviceConfT = new ServiceConfigurationTemplate();
+                    String serviceConfS = serviceConfT.generate(new SpecificServiceInformation(getServiceInformation(),
+                        service));
+                    File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator
+                        + "ServiceConfiguration.java");
 
-                FileWriter baseResourceHomeFW = new FileWriter(baseResourceHomeF);
-                baseResourceHomeFW.write(baseResourceHomeS);
-                baseResourceHomeFW.close();
+                    FileWriter serviceConfFW = new FileWriter(serviceConfF);
+                    serviceConfFW.write(serviceConfS);
+                    serviceConfFW.close();
 
+                    MainResourceTemplate baseResourceT = new MainResourceTemplate();
+                    String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + service.getName() + "Resource.java");
+
+                    FileWriter baseResourceFW = new FileWriter(baseResourceF);
+                    baseResourceFW.write(baseResourceS);
+                    baseResourceFW.close();
+
+                    MainResourceHomeTemplate baseResourceHomeT = new MainResourceHomeTemplate();
+                    String baseResourceHomeS = baseResourceHomeT.generate(new SpecificServiceInformation(
+                        getServiceInformation(), service));
+                    File baseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
+                        + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                        + File.separator + "resource" + File.separator + "BaseResourceHome.java");
+
+                    FileWriter baseResourceHomeFW = new FileWriter(baseResourceHomeF);
+                    baseResourceHomeFW.write(baseResourceHomeS);
+                    baseResourceHomeFW.close();
+
+                }
+                getStatus().addDescriptionLine("replaced resource source files for service: " + service.getName());
             }
-            getStatus().addDescriptionLine("replaced resource source files for service: " + service.getName());
         }
-        
-        
+
         // need to add to the deploy.properties
         Properties deployProperties = new Properties();
         deployProperties.load(new FileInputStream(new File(getServicePath() + File.separator
@@ -282,7 +301,7 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
         deployProperties.store(new FileOutputStream(new File(getServicePath() + File.separator
             + IntroduceConstants.DEPLOY_PROPERTIES_FILE)), "Service Deployment Properties");
         getStatus().addDescriptionLine("adding new deployment variables to deploy.properties");
-        
+
         // need to add the new template var to the jndi so that it can be
         // replaced
         // by the new property for shutting off registration
@@ -319,29 +338,28 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             + File.separator + "caGrid-1.1-Introduce-1.1-soapBindingFix.jar"), new File(getServicePath()
             + File.separator + "tools" + File.separator + "lib" + File.separator
             + "caGrid-1.1-Introduce-1.1-soapBindingFix.jar"));
-        getStatus().addDescriptionLine("added soapFix jar to enable patching the soap bindings that get generated for custom beans");
-        
+        getStatus().addDescriptionLine(
+            "added soapFix jar to enable patching the soap bindings that get generated for custom beans");
+
         // need to move the ant-contrib.jar to the tools lib directory
-        File currentContribFile = new File(getServicePath()
-            + File.separator + "lib" + File.separator
+        File currentContribFile = new File(getServicePath() + File.separator + "lib" + File.separator
             + "ant-contrib.jar");
-        Utils.copyFile(currentContribFile , new File(getServicePath()
-            + File.separator + "tools" + File.separator + "lib" + File.separator
-            + "ant-contrib.jar"));
+        Utils.copyFile(currentContribFile, new File(getServicePath() + File.separator + "tools" + File.separator
+            + "lib" + File.separator + "ant-contrib.jar"));
         currentContribFile.delete();
-        getStatus().addDescriptionLine("moving ant-contrib to a location which will not cause it to be deployed with the service");
-        
+        getStatus().addDescriptionLine(
+            "moving ant-contrib to a location which will not cause it to be deployed with the service");
 
         upgradeJars();
         getStatus().addDescriptionLine("updating service with the new version of the jars");
-        
+
         fixUpSchemaLocationsInModel();
 
         // recreate the authorization class
         // recreate the service descriptor
         // recreate the provider impl
         // those will be done during the resync
-        
+
         getStatus().setStatus(StatusBase.UPGRADE_OK);
     }
 
@@ -401,8 +419,8 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             // " + ex.getMessage(), ex);
         }
     }
-    
-    
+
+
     private void fixUpSchemaLocationsInModel() {
         boolean editsMade = false;
         NamespacesType namespaces = getServiceInformation().getServiceDescriptor().getNamespaces();
@@ -412,15 +430,14 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
                 if (schemaLocation != null && schemaLocation.indexOf('\\') != -1) {
                     String cleanLocation = schemaLocation.replace('\\', '/');
                     namespace.setLocation(cleanLocation);
-                    getStatus().addDescriptionLine("Edited schema location of namespace " 
-                        + namespace.getNamespace());
+                    getStatus().addDescriptionLine("Edited schema location of namespace " + namespace.getNamespace());
                     getStatus().addDescriptionLine("\t(" + schemaLocation + " -> " + cleanLocation + ")");
                     editsMade = true;
                 }
             }
         }
         if (editsMade) {
-            getStatus().addIssue("Schema locations may not be platform independent", 
+            getStatus().addIssue("Schema locations may not be platform independent",
                 "Please ensure that all schema locations are specified using forward slash(/) as file separators.");
         }
     }

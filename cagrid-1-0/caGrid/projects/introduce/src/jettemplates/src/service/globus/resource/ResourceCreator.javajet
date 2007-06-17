@@ -8,6 +8,7 @@
 	if(serviceName.endsWith("Service")){
 		modifiedServiceName = serviceName.substring(0,serviceName.length()-"Service".length());
 	}
+	if(!resourceService.getName().equals(arguments.getService().getName())){
 %>
 		org.apache.axis.message.addressing.EndpointReferenceType epr = new org.apache.axis.message.addressing.EndpointReferenceType();
 		<%=resourceService.getPackageName()%>.service.globus.resource.BaseResourceHome home = null;
@@ -50,3 +51,33 @@
 		ref.setEndpointReference(epr);
 
 		return ref;
+
+<%
+} else {
+%>
+		try {
+            <%=resourceService.getPackageName()%>.service.globus.resource.BaseResourceHome home = getResourceHome(); 
+            org.globus.wsrf.ResourceKey key = home.createResource(); 
+            
+            //  Grab the newly created resource
+			<%=resourceService.getPackageName()%>.service.globus.resource.<%=resourceService.getName()%>Resource thisResource = (<%=resourceService.getPackageName()%>.service.globus.resource.<%=resourceService.getName()%>Resource)home.find(key);
+			
+			//  This is where the creator of this resource type can set whatever needs
+			//  to be set on the resource so that it can function appropriatly  for instance
+			//  if you want the resouce to only have the query string then there is where you would
+			//  give it the query string.
+			
+			
+			// sample of setting creator only security.  This will only allow the caller that created
+			// this resource to be able to use it.
+			//thisResource.setSecurityDescriptor(gov.nih.nci.cagrid.introduce.servicetools.security.SecurityUtils.createCreatorOnlyResourceSecurityDescriptor());
+
+            <%=resourceService.getPackageName()%>.stubs.types.<%=resourceService.getName()%>Reference reference = home.getResourceReference(key);
+            return reference; 
+        } catch (Exception e) {
+			throw new RemoteException("Error creating new resource <%=resourceService.getName()%>:" + e.getMessage(), e);
+		}
+
+<%
+}
+%>
