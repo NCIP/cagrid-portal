@@ -35,8 +35,8 @@
           </dimensions>
         </component>
         <component>
-          <title>Modify Service Skeleton</title>
-          <description>Modify Service Skeleton</description>
+          <title>Modify Service</title>
+          <description>Modify Grid Service</description>
           <class>gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer</class>
           <icon>/cog_edit.png</icon>
           <dimensions>
@@ -45,7 +45,7 @@
           </dimensions>
         </component>
         <component>
-          <title>Deploy Grid Service</title>
+          <title>Deploy Service</title>
           <description>Deploy Grid Service</description>
           <class>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer</class>
           <icon>/cog_go.png</icon>
