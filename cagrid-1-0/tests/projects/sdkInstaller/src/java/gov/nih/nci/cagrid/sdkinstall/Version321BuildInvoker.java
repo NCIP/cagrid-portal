@@ -12,7 +12,7 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Jun 18, 2007 10:38:41 AM
- * @version $Id: Version321BuildInvoker.java,v 1.1 2007-06-18 15:29:40 dervin Exp $ 
+ * @version $Id: Version321BuildInvoker.java,v 1.2 2007-06-18 20:52:34 dervin Exp $ 
  */
 public class Version321BuildInvoker extends BuildInvoker {
     public static final String BUILD_COMMAND = "build-system";
@@ -48,8 +48,8 @@ public class Version321BuildInvoker extends BuildInvoker {
         }
         if (iex != null || exitCode != 0) {
             throw new BuildInvocationException(
-                "Error executing build process: " + iex == null ? 
-                    " exit status " + exitCode : iex.getMessage(), iex);
+                "Error executing build process: " + (iex == null ? 
+                    " exit status " + exitCode : iex.getMessage()), iex);
         }
     }
 }

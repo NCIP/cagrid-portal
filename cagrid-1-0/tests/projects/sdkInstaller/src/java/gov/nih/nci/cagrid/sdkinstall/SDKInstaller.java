@@ -14,7 +14,7 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Jun 13, 2007 10:45:43 AM
- * @version $Id: SDKInstaller.java,v 1.5 2007-06-18 17:23:23 dervin Exp $ 
+ * @version $Id: SDKInstaller.java,v 1.6 2007-06-18 20:52:34 dervin Exp $ 
  */
 public class SDKInstaller {
 
@@ -33,19 +33,21 @@ public class SDKInstaller {
         // deal with JBoss
         JBossDescription jbossDesc = description.getJBossDescription();
         if (jbossDesc.getInstallJboss() != null && jbossDesc.getInstallJboss().booleanValue()) {
-            File jbossZip = new File(jbossDesc.getJbossZipFile());
-            File jbossDir = new File(jbossDesc.getJbossLocation());
+            File jbossZip = new File(jbossDesc.getJbossZipFile()).getAbsoluteFile();
+            File jbossDir = new File(jbossDesc.getJbossLocation()).getAbsoluteFile();
             ZipUtilities.unzip(jbossZip, jbossDir);
         }
+        // locate the directory the SDK itself was installed into
+        File sdkDir = new File(installDir.getAbsolutePath() + File.separator + "cacoresdk");
         
         // handle the specialized deployment configuration
-        runDeployPropertiesManager(version, description, installDir);
+        runDeployPropertiesManager(version, description, sdkDir);
         
         // invoke the build process
-        invokeBuildProcess(version, description, installDir);
+        invokeBuildProcess(version, description, sdkDir);
         
         // invoke the deploy process
-        invokeDeployProcess(version, description, installDir);
+        invokeDeployProcess(version, description, sdkDir);
     }
     
     
@@ -86,7 +88,7 @@ public class SDKInstaller {
     
     
     private static void unpackSdk(SdkVersion version, File dir) throws IOException {
-        String resourcesDir = "etc" + File.separator + "resources" + File.separator;
+        String resourcesDir = "ext" + File.separator + "resources" + File.separator;
         File sdkZip = new File(resourcesDir + version.getZipFileName());
         ZipUtilities.unzip(sdkZip, dir);
     }

@@ -13,7 +13,7 @@ import java.math.BigInteger;
  * @author David Ervin
  * 
  * @created Jun 13, 2007 2:25:49 PM
- * @version $Id: Version321DeployPropertiesManager.java,v 1.4 2007-06-18 14:24:41 dervin Exp $ 
+ * @version $Id: Version321DeployPropertiesManager.java,v 1.5 2007-06-18 20:52:34 dervin Exp $ 
  */
 public class Version321DeployPropertiesManager extends DeployPropertiesManager {
     // general properties
@@ -74,17 +74,19 @@ public class Version321DeployPropertiesManager extends DeployPropertiesManager {
     
     private void setGeneralParameters() {
         String projectName = getInstallationDescription().getApplicationName();
-        String projectWebName = projectName + "Service";
-        deployProperties.setProperty(PROPERTY_PROJECT_NAME, projectName);
-        deployProperties.setProperty(PROPERTY_WEB_PROJECT_NAME, projectWebName);
+        if (projectName != null) {
+            String projectWebName = projectName + "Service";
+            deployProperties.setProperty(PROPERTY_PROJECT_NAME, projectName);
+            deployProperties.setProperty(PROPERTY_WEB_PROJECT_NAME, projectWebName);
+        }
         
         // bass-ackwards
-        String disableWritable = "no";
-        if (getInstallationDescription().getEnableWritableApi() != null) {
-            disableWritable = getInstallationDescription()
+        Boolean enableWritable = getInstallationDescription().getEnableWritableApi();
+        if (enableWritable != null) {
+            String disableWritable = getInstallationDescription()
                 .getEnableWritableApi().booleanValue() ? "no" : "yes";
+            deployProperties.setProperty(PROPERTY_ENABLE_WRITABLE_API, disableWritable);
         }
-        deployProperties.setProperty(PROPERTY_ENABLE_WRITABLE_API, disableWritable);
         
         String javaHome = System.getenv("JAVA_HOME");
         deployProperties.setProperty(PROPERTY_JAVA_HOME, javaHome);
@@ -108,33 +110,37 @@ public class Version321DeployPropertiesManager extends DeployPropertiesManager {
         deployProperties.setProperty(PROPERTY_MYSQL_SERVER_NAME, mysqlHost);
         
         String dbUser = getInstallationDescription().getMySQLDescription().getServerInformation().getUsername();
+        if (dbUser != null) {
+            deployProperties.setProperty(PROPERTY_MYSQL_USER, dbUser);
+        }
         String passwd = getInstallationDescription().getMySQLDescription().getServerInformation().getPassword();
-        String createUserValue = "no";
+        if (passwd != null) {
+            deployProperties.setProperty(PROPERTY_MYSQL_PASSWD, passwd);
+        }
         Boolean createUser = getInstallationDescription().getMySQLDescription().getServerInformation().getCreateUser();
         if (createUser != null) {
-            createUserValue = createUser.booleanValue() ? "yes" : "no";
+            String createUserValue = createUser.booleanValue() ? "yes" : "no";
+            deployProperties.setProperty(PROPERTY_MYSQL_CREATE_USER, createUserValue);
         }
-        deployProperties.setProperty(PROPERTY_MYSQL_USER, dbUser);
-        deployProperties.setProperty(PROPERTY_MYSQL_PASSWD, passwd);
-        deployProperties.setProperty(PROPERTY_MYSQL_CREATE_USER, createUserValue);
-        
         String schemaName = getInstallationDescription().getMySQLDescription().getDataOptions().getSchemaName();
-        String createSchemaValue = "no";
+        deployProperties.setProperty(PROPERTY_MYSQL_SCHEMA, schemaName);
         Boolean createSchema = getInstallationDescription().getMySQLDescription().getDataOptions().getCreateSchema();
         if (createSchema != null) {
-            createSchemaValue = createSchema.booleanValue() ? "yes" : "no";
+            String createSchemaValue = createSchema.booleanValue() ? "yes" : "no";
+            deployProperties.setProperty(PROPERTY_MYSQL_CREATE_SCHEMA, createSchemaValue);
         }
         String schemaFileName = getInstallationDescription().getMySQLDescription().getDataOptions().getSchemaFilename();
-        String importDataValue = "no";
+        if (schemaFileName != null) {
+            deployProperties.setProperty(PROPERTY_MYSQL_SCHEMA_FILENAME, schemaFileName);            
+        }
         Boolean importData = getInstallationDescription().getMySQLDescription().getDataOptions().getLoadData();
         if (importData != null) {
-            importDataValue = importData.booleanValue() ? "yes" : "no";
+            String importDataValue = importData.booleanValue() ? "yes" : "no";
+            deployProperties.setProperty(PROPERTY_MYSQL_IMPORT_DATA, importDataValue);
         }
         String dataDumpFile = getInstallationDescription().getMySQLDescription().getDataOptions().getDataFilename();
-        deployProperties.setProperty(PROPERTY_MYSQL_SCHEMA, schemaName);
-        deployProperties.setProperty(PROPERTY_MYSQL_SCHEMA_FILENAME, schemaFileName);
-        deployProperties.setProperty(PROPERTY_MYSQL_CREATE_SCHEMA, createSchemaValue);
-        deployProperties.setProperty(PROPERTY_MYSQL_IMPORT_DATA, importDataValue);
-        deployProperties.setProperty(PROPERTY_MYSQL_DATA_FILENAME, dataDumpFile);
+        if (dataDumpFile != null) {
+            deployProperties.setProperty(PROPERTY_MYSQL_DATA_FILENAME, dataDumpFile);
+        }
     }
 }
