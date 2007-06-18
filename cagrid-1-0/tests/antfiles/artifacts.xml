@@ -24,6 +24,14 @@
 				<exclude name="*-test.jar" />
 			</fileset>
 		</artifact>
+		
+		<artifact track="main" type="jars" id="sdkInstaller.jars">
+			<generatingantcall target="build-sdkInstaller" />
+			<fileset dir="${tests.projects.dir}/sdkInstaller/build/lib">
+				<include name="*.jar"/>
+				<exclude name="*-test.jar"/>
+			</fileset>
+		</artifact>
 	</target>
 
 </project>
