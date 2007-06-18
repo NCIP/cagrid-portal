@@ -23,6 +23,7 @@
 					<xsd:attribute name="schemaFilename" type="xsd:string" use="optional"/>
 					<xsd:attribute name="createSchema" type="xsd:boolean" use="optional" default="false"/>
 					<xsd:attribute name="dataFilename" type="xsd:string" use="optional"/>
+					<xsd:attribute name="loadData" type="xsd:boolean" use="optional" default="false"/>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="ServerInformation">

@@ -20,7 +20,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Jun 15, 2007 11:28:40 AM
- * @version $Id: PropertiesPreservingComments.java,v 1.1 2007-06-15 16:57:33 dervin Exp $ 
+ * @version $Id: PropertiesPreservingComments.java,v 1.2 2007-06-18 14:20:46 dervin Exp $ 
  */
 public class PropertiesPreservingComments {
     
@@ -106,7 +106,7 @@ public class PropertiesPreservingComments {
         
         public Object next() {
             int endIndex = buff.indexOf("\n", currentIndex);
-            String next = buff.substring(currentIndex, endIndex);
+            String next = buff.substring(currentIndex, endIndex - 1);
             currentIndex = endIndex + 1;
             return next;
         }
