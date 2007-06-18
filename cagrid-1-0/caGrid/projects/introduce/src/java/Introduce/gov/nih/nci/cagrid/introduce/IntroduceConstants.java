@@ -39,6 +39,14 @@ public class IntroduceConstants {
 
     public static final String NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY = "Namespace Type Replacement Policy";
 
+    public static final String DEFAULT_SERVICE_NAME = "introduce.default.service.name";
+   
+    public static final String DEFAULT_SERVICE_NAMESPACE = "introduce.default.service.namespace";
+   
+    public static final String DEFAULT_SERVICE_PACKAGE = "introduce.default.service.package";
+   
+    public static final String DEFAULT_DEPLOYMENT_PREFIX = "introduce.default.deployment.prefix";
+
     // service skeleton properties
     public static final String INTRODUCE_PROPERTIES_FILE = "introduce.properties";
 

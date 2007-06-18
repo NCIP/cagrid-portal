@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal.creation;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -38,12 +40,6 @@ import javax.swing.event.DocumentListener;
 public class CreationViewer extends CreationViewerBaseComponent {
 
 	public static final String SCHEMA_DIR = "schema";
-
-	private static final String DEFAULT_NAME = "HelloWorld";
-
-	private static final String DEFAULT_JAVA_PACKAGE = "gov.nih.nci.cagrid.helloworld";
-
-	private static final String DEFAULT_NAMESPACE = "http://helloworld.cagrid.nci.nih.gov/HelloWorld";
 
 	private JPanel inputPanel = null;
 
@@ -341,7 +337,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 	private JTextField getService() {
 		if (service == null) {
 			service = new JTextField();
-			service.setText(DEFAULT_NAME);
+			service.setText(CommonTools.getIntroducePropertyValue(IntroduceConstants.DEFAULT_SERVICE_NAME));
 			service.getDocument().addDocumentListener(new DocumentListener() {
 				public void changedUpdate(DocumentEvent e) {
 					updateSuggestedNamespace();
@@ -394,7 +390,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		if (dir == null) {
 			dir = new JTextField();
 			String home = System.getProperty("user.home");
-			dir.setText(home + File.separator + DEFAULT_NAME);
+			dir.setText(home + File.separator + CommonTools.getIntroducePropertyValue(IntroduceConstants.DEFAULT_SERVICE_NAME));
 		}
 		return dir;
 	}
@@ -438,7 +434,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 	private JTextField getServicePackage() {
 		if (servicePackage == null) {
 			servicePackage = new JTextField();
-			servicePackage.setText((DEFAULT_JAVA_PACKAGE).toLowerCase());
+			servicePackage.setText((CommonTools.getIntroducePropertyValue(IntroduceConstants.DEFAULT_SERVICE_PACKAGE)).toLowerCase());
 			servicePackage.getDocument().addDocumentListener(new DocumentListener() {
 				public void changedUpdate(DocumentEvent e) {
 					updateSuggestedNamespace();
@@ -467,7 +463,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 	private JTextField getNamespaceDomain() {
 		if (namespaceDomain == null) {
 			namespaceDomain = new JTextField();
-			namespaceDomain.setText(DEFAULT_NAMESPACE);
+			namespaceDomain.setText(CommonTools.getIntroducePropertyValue(IntroduceConstants.DEFAULT_SERVICE_NAMESPACE));
 		}
 		return namespaceDomain;
 	}
