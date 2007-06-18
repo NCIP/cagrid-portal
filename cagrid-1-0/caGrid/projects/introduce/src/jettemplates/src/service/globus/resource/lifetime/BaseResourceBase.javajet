@@ -68,7 +68,6 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 	private Object id;
 	private static final UUIDGen UUIDGEN = UUIDGenFactory.getUUIDGen();
 	private ResourcePropertySet propSet;
-	private Calendar terminationTime;
 	private ResourceSecurityDescriptor desc;
 	private ResourceConfiguration configuration;
 	private ResourceKey key;
@@ -111,7 +110,7 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 	/**
 	 * @see org.globus.wsrf.jndi.Initializable#initialize()
 	 */
-	public final void initialize() throws Exception {
+	public void initialize() throws Exception {
 		this.id = UUIDGEN.nextUUID();
 		this.desc = null;
 
@@ -192,7 +191,7 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 	 * @see org.globus.wsrf.ResourceLifetime#setTerminationTime(java.util.Calendar)
 	 */
 	public void setTerminationTime(Calendar time) {
-		this.terminationTime = time;
+		this.setTerminationTimeValue(time);
 	}
 
 
@@ -200,7 +199,7 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 	 * @see org.globus.wsrf.ResourceLifetime#getTerminationTime()
 	 */
 	public Calendar getTerminationTime() {
-		return this.terminationTime;
+		return this.getTerminationTimeValue();
 	}
 
 

@@ -109,7 +109,7 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 	/**
 	 * @see org.globus.wsrf.jndi.Initializable#initialize()
 	 */
-	public final void initialize() throws Exception {
+	public void initialize() throws Exception {
 		this.id = UUIDGEN.nextUUID();
 		this.desc = null;
 		
