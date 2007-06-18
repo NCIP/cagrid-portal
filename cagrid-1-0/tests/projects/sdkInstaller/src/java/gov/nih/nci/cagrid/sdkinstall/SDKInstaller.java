@@ -14,7 +14,7 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Jun 13, 2007 10:45:43 AM
- * @version $Id: SDKInstaller.java,v 1.4 2007-06-18 15:31:14 dervin Exp $ 
+ * @version $Id: SDKInstaller.java,v 1.5 2007-06-18 17:23:23 dervin Exp $ 
  */
 public class SDKInstaller {
 
@@ -37,8 +37,15 @@ public class SDKInstaller {
             File jbossDir = new File(jbossDesc.getJbossLocation());
             ZipUtilities.unzip(jbossZip, jbossDir);
         }
+        
         // handle the specialized deployment configuration
         runDeployPropertiesManager(version, description, installDir);
+        
+        // invoke the build process
+        invokeBuildProcess(version, description, installDir);
+        
+        // invoke the deploy process
+        invokeDeployProcess(version, description, installDir);
     }
     
     
@@ -51,6 +58,30 @@ public class SDKInstaller {
                 deployManager = new Version321DeployPropertiesManager(description, sdkDir);
         }
         deployManager.configureDeployment();
+    }
+    
+    
+    private static void invokeBuildProcess(SdkVersion version, 
+        InstallationDescription description, File sdkDir) 
+        throws BuildInvocationException {
+        BuildInvoker builder = null;
+        switch (version) {
+            case VERSION_3_2_1:
+                builder = new Version321BuildInvoker(description, sdkDir);
+        }
+        builder.invokeBuildProcess();
+    }
+    
+    
+    private static void invokeDeployProcess(SdkVersion version,
+        InstallationDescription description, File sdkDir) 
+        throws DeployInvocationException {
+        DeployInvoker invoker = null;
+        switch (version) {
+            case VERSION_3_2_1:
+                invoker = new Version321DeployInvoker(description, sdkDir);
+        }
+        invoker.invokeDeployProcess();
     }
     
     
