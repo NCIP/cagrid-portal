@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.sdkinstall;
 import gov.nih.nci.cagrid.common.ZipUtilities;
 import gov.nih.nci.cagrid.sdkinstall.description.InstallationDescription;
 import gov.nih.nci.cagrid.sdkinstall.description.JBossDescription;
-import gov.nih.nci.cagrid.sdkinstall.description.MySQLDescription;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +14,7 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Jun 13, 2007 10:45:43 AM
- * @version $Id: SDKInstaller.java,v 1.3 2007-06-18 15:29:39 dervin Exp $ 
+ * @version $Id: SDKInstaller.java,v 1.4 2007-06-18 15:31:14 dervin Exp $ 
  */
 public class SDKInstaller {
 
