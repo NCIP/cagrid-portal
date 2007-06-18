@@ -702,6 +702,7 @@
 		<copy todir="${introduce.extensions.dir}/data">
 			<fileset dir="${extension.dir}">
 				<include name="**/*" />
+			    <exclude name="*.template" />
 			</fileset>
 		</copy>
 	</target>
