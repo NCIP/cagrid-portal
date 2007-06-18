@@ -15,7 +15,7 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Jun 13, 2007 10:45:43 AM
- * @version $Id: SDKInstaller.java,v 1.2 2007-06-15 16:57:33 dervin Exp $ 
+ * @version $Id: SDKInstaller.java,v 1.3 2007-06-18 15:29:39 dervin Exp $ 
  */
 public class SDKInstaller {
 
@@ -44,13 +44,14 @@ public class SDKInstaller {
     
     
     private static void runDeployPropertiesManager(
-        SdkVersion version, InstallationDescription description, File sdkDir) {
+        SdkVersion version, InstallationDescription description, File sdkDir) 
+        throws DeploymentConfigurationException {
         DeployPropertiesManager deployManager = null;
         switch (version) {
             case VERSION_3_2_1:
                 deployManager = new Version321DeployPropertiesManager(description, sdkDir);
         }
-        
+        deployManager.configureDeployment();
     }
     
     
