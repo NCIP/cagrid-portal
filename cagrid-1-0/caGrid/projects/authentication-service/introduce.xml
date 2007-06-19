@@ -1,4 +1,4 @@
-<ns1:ServiceDescription introduceVersion="1.0" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+<ns1:ServiceDescription description="The AuthenticationService serves as an integration point between local identity management and caGrid identity federation. This implementation exposes the NCICB's Common Securty Module (CSM) as an Identity Provider (IdP) that may be used in conjuction with the dorian Identity federation service." introduceVersion="1.1" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -75,20 +75,20 @@
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns3:Service name="AuthenticationService" namespace="http://cagrid.nci.nih.gov/AuthenticationService" packageName="gov.nih.nci.cagrid.authentication" resourceFrameworkType="main" xsi:type="ns3:ServiceType">
    <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods">
-    <ns4:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns4:MethodType">
+    <ns4:Method description="Returns a description of the security requirements for interacting with this service." isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns4:MethodType">
      <ns4:Output qName="ns5:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
      <ns4:ImportInformation inputMessage="ns6:GetServiceSecurityMetadataRequest" namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" outputMessage="ns6:GetServiceSecurityMetadataResponse" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl" xmlns:ns6="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity"/>
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
     </ns4:Method>
-    <ns4:Method isImported="false" isProvided="false" name="authenticate" xsi:type="ns4:MethodType">
+    <ns4:Method description="Returns a SAMLAssertion about the identity of the caller." isImported="false" isProvided="false" name="authenticate" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns7:Credential" isArray="false" name="credential" xmlns:ns7="http://cagrid.nci.nih.gov/1/authentication-service"/>
      </ns4:Inputs>
      <ns4:Output qName="ns8:SAMLAssertion" isArray="false" xmlns:ns8="http://cagrid.nci.nih.gov/1/authentication-service"/>
      <ns4:Exceptions>
-      <ns4:Exception name="InvalidCredentialFault" qname="ns9:InvalidCredentialFault" xmlns:ns9="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
-      <ns4:Exception name="InsufficientAttributeFault" qname="ns10:InsufficientAttributeFault" xmlns:ns10="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
-      <ns4:Exception name="AuthenticationProviderFault" qname="ns11:AuthenticationProviderFault" xmlns:ns11="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
+      <ns4:Exception description="Returned if the supplied credentials are invalid." name="InvalidCredentialFault" qname="ns9:InvalidCredentialFault" xmlns:ns9="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
+      <ns4:Exception description="Returned if the attributes returned by the underlying IdP are insufficient for identity federation." name="InsufficientAttributeFault" qname="ns10:InsufficientAttributeFault" xmlns:ns10="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
+      <ns4:Exception description="Returned if an internal error occurs during this operation." name="AuthenticationProviderFault" qname="ns11:AuthenticationProviderFault" xmlns:ns11="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
      </ns4:Exceptions>
      <ns12:MethodSecurity xsi:type="ns12:MethodSecurity" xmlns:ns12="gme://gov.nih.nci.cagrid.introduce/1/Security">
       <ns12:SecuritySetting xsi:type="ns12:SecuritySetting">Custom</ns12:SecuritySetting>
@@ -104,7 +104,7 @@
     </ns4:Method>
    </ns4:Methods>
    <ns13:ResourcePropertiesList xsi:type="ns13:ResourcePropertiesListType" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns13:ResourceProperty qName="ns14:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns13:ResourcePropertyType" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns13:ResourceProperty qName="ns14:ServiceMetadata" description="caGrid standard service metadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns13:ResourcePropertyType" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
    </ns13:ResourcePropertiesList>
    <ns15:ServiceSecurity xsi:type="ns15:ServiceSecurity" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Security">
     <ns15:SecuritySetting xsi:type="ns15:SecuritySetting">Custom</ns15:SecuritySetting>
@@ -117,9 +117,10 @@
      <ns15:NoAuthorization xsi:type="ns15:NoAuthorization"/>
     </ns15:ServiceAuthorization>
    </ns15:ServiceSecurity>
+   <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The main service context</ns3:description>
   </ns3:Service>
  </ns3:Services>
  <ns16:Extensions xsi:type="ns16:ExtensionsType" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns16:Extension name="cagrid_metadata" xsi:type="ns16:ExtensionType"/>
+  <ns16:Extension name="cagrid_metadata" version="1.1" xsi:type="ns16:ExtensionType"/>
  </ns16:Extensions>
 </ns1:ServiceDescription>
