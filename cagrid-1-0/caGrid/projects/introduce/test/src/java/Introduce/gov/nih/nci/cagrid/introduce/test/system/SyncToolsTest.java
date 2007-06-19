@@ -54,6 +54,16 @@ public class SyncToolsTest extends Story {
     public SyncToolsTest() {
         this.setName("Introduce Codegen System Test");
     }
+    
+    
+    public String getName() {
+        return "Introduce Codegen System Test";
+    }
+    
+    
+    public String getDescription() {
+        return "Testing the Introduce code generation tools";
+    }
 
 
     protected Vector steps() {
@@ -102,13 +112,7 @@ public class SyncToolsTest extends Story {
     }
 
 
-    public String getDescription() {
-        return "Testing the Introduce code generation tools";
-    }
-
-
     protected boolean storySetUp() throws Throwable {
-        // TODO Auto-generated method stub
         super.storySetUp();
 
         StopGlobusStep step2 = new StopGlobusStep(helper);

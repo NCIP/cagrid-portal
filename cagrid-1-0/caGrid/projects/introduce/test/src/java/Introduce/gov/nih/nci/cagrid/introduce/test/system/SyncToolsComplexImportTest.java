@@ -25,8 +25,18 @@ public class SyncToolsComplexImportTest extends Story {
 
 
 	public SyncToolsComplexImportTest() {
-		this.setName("IntroduceCodegenComplexImportSystemTest");
+		this.setName("Introduce Codegen Complex Import System Test");
 	}
+    
+    
+    public String getName() {
+        return "Introduce Codegen Complex Import System Test";
+    }
+    
+    
+    public String getDescription() {
+        return "Testing the Introduce code generation tools";
+    }
 
 
 	protected Vector steps() {
@@ -46,11 +56,6 @@ public class SyncToolsComplexImportTest extends Story {
 			fail();
 		}
 		return steps;
-	}
-
-
-	public String getDescription() {
-		return "Testing the Introduce code generation tools";
 	}
 
 

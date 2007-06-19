@@ -42,6 +42,17 @@ public class ResourceCreationTest extends Story {
     public ResourceCreationTest() {
         this.setName("Introduce Resource Creation System Test");
     }
+    
+    
+    public String getName() {
+        return "Introduce Resource Creation System Test";
+    }
+    
+    
+    public String getDescription() {
+        return "Testing the Introduce code generation tools";
+    }
+    
 
     protected Vector steps() {
         tci1 = new TestCaseInfo1();
@@ -68,11 +79,6 @@ public class ResourceCreationTest extends Story {
             fail();
         }
         return steps;
-    }
-
-
-    public String getDescription() {
-        return "Testing the Introduce code generation tools";
     }
 
 

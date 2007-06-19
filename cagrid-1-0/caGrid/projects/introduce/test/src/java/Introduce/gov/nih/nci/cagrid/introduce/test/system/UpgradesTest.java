@@ -33,6 +33,16 @@ public class UpgradesTest extends Story {
     public UpgradesTest() {
         this.setName("Introduce Upgrades System Test");
     }
+    
+    
+    public String getName() {
+        return "Introduce Upgrades System Test";
+    }
+    
+    
+    public String getDescription() {
+        return "Testing the Introduce code generation tools";
+    }
 
 
     protected Vector steps() {
@@ -54,11 +64,6 @@ public class UpgradesTest extends Story {
             fail();
         }
         return steps;
-    }
-
-
-    public String getDescription() {
-        return "Testing the Introduce code generation tools";
     }
 
 

@@ -29,6 +29,18 @@ public class SyncToolsSmokeTest extends Story {
 	public SyncToolsSmokeTest() {
 		this.setName("Introduce Codegen System Test");
 	}
+    
+    
+    public String getName() {
+        return "Introduce Codegen System Test";
+    }
+    
+    
+
+    public String getDescription() {
+        return "Testing the Introduce code generation tools";
+    }
+    
 
 	protected Vector steps() {
 		tci1 = new TestCaseInfo1();
@@ -53,9 +65,6 @@ public class SyncToolsSmokeTest extends Story {
 		return steps;
 	}
 
-	public String getDescription() {
-		return "Testing the Introduce code generation tools";
-	}
 
 	protected boolean storySetUp() throws Throwable {
 		// TODO Auto-generated method stub
