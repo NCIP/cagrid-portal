@@ -25,7 +25,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * 
  * @created Aug 22, 2006
- * @version $Id: CreationStep.java,v 1.6 2007-06-19 15:58:07 dervin Exp $
+ * @version $Id: CreationStep.java,v 1.7 2007-06-19 16:10:09 dervin Exp $
  */
 public class CreationStep extends Step {
     private static final String BDT_START_RETURNS_CLIENT = "bdtStartReturnsClient";
@@ -142,8 +142,8 @@ public class CreationStep extends Step {
         bdtHandleOutput.setQName(handleQname);
         bdtHandleOutput.setIsArray(false);
         bdtHandleOutput.setIsClientHandle(Boolean.TRUE);
-        // TODO: make this match what the GUI does wrt 
-        // 'isCreatingResourceForClientHandle' and 'resourceClientIntroduceServiceName'
+        bdtHandleOutput.setIsCreatingResourceForClientHandle(Boolean.TRUE);
+        bdtHandleOutput.setResourceClientIntroduceServiceName(mainService.getName() + "BulkDataHandler");
         String clientHandleClass = mainService.getPackageName() 
             + ".bdt.client." + mainService.getName() + "BulkDataHandlerClient";
         bdtHandleOutput.setClientHandleClass(clientHandleClass);
