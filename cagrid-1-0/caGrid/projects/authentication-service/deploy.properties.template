@@ -1,5 +1,8 @@
 service.deployment.prefix=cagrid
 index.service.url=@cagrid.master.index.service.url@
+perform.index.service.registration=true
+index.service.index.refresh_milliseconds=30000
+index.service.registration.refresh_seconds=600
 csm.app.context=SDK
 saml.provider.crt=/Users/auth_svc/certs/auth_svc_crt.pem
 saml.provider.key=/Users/auth_svc/certs/auth_svc_key.pem
