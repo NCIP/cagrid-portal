@@ -1124,6 +1124,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
+			ca.clearCertificateAuthority();
 			assertEquals(0, db.getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
