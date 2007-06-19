@@ -379,7 +379,9 @@ public class SyncSource {
                 method.getOutput().getResourceClientIntroduceServiceName()).getResourceFrameworkType().equals(
                 IntroduceConstants.INTRODUCE_MAIN_RESOURCE) || CommonTools.getService(serviceInfo.getServices(),
                 method.getOutput().getResourceClientIntroduceServiceName()).getResourceFrameworkType().equals(
-                IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE))) {
+                IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE) || CommonTools.getService(serviceInfo.getServices(),
+                    method.getOutput().getResourceClientIntroduceServiceName()).getResourceFrameworkType().equals(
+                        IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE))) {
             SpecificMethodInformation smi = new SpecificMethodInformation(serviceInfo, service, method);
             ResourceCreatorTemplate resourceCreatorTemplate = new ResourceCreatorTemplate();
             String createResourceCode = resourceCreatorTemplate.generate(smi);
