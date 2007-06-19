@@ -353,6 +353,8 @@
 		<resolveDependencies extdir="${projects.dir}/authentication-service/ext">
 			<artifact refid="cagrid.properties" />
 			<artifact refid="ant-contrib.jars" />
+			<artifact refid="advertisement.jars" />
+			<artifact refid="jdom.jars" />
 			<artifact refid="csm.auth.jars" />
 			<artifact refid="core.jars" />
 			<artifact refid="common.test.jars" />
