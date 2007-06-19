@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.sdkinstall;
 import gov.nih.nci.cagrid.sdkinstall.description.InstallationDescription;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -13,7 +14,7 @@ import java.math.BigInteger;
  * @author David Ervin
  * 
  * @created Jun 13, 2007 2:25:49 PM
- * @version $Id: Version321DeployPropertiesManager.java,v 1.5 2007-06-18 20:52:34 dervin Exp $ 
+ * @version $Id: Version321DeployPropertiesManager.java,v 1.6 2007-06-19 15:13:12 dervin Exp $ 
  */
 public class Version321DeployPropertiesManager extends DeployPropertiesManager {
     // general properties
@@ -69,6 +70,16 @@ public class Version321DeployPropertiesManager extends DeployPropertiesManager {
         setGeneralParameters();
         setJBossParameters();
         setMysqlParameters();
+        
+        try {
+            FileOutputStream out = new FileOutputStream(deployPropertiesFile);
+            deployProperties.write(out);
+            out.flush();
+            out.close();
+        } catch (IOException ex) {
+            throw new DeploymentConfigurationException(
+                "Error storing edited deployment properties file: " + ex.getMessage(), ex);
+        }
     }
     
     
