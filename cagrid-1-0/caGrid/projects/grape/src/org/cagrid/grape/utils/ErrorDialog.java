@@ -296,6 +296,9 @@ public class ErrorDialog extends JDialog {
 		} else {
 			disableDetails();
 		}
+		invalidate();
+		validate();
+		repaint();
 	}
 
 
@@ -315,6 +318,9 @@ public class ErrorDialog extends JDialog {
 		} else {
 			disableDetails();
 		}
+		invalidate();
+		validate();
+		repaint();
 	}
 
 
@@ -339,7 +345,17 @@ public class ErrorDialog extends JDialog {
 		return detailsButton;
 	}
 
+    /**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		ErrorDialog window = new ErrorDialog(
+			null,
+			"When the moon hits your eyes like a big pizza pie thats amore.   When the world seem to shine like you had too much whine, that amore.",
+			"When the moon hits your eyes like a big pizza pie thats amore.   When the world seem to shine like you had too much whine, that amore.");
+		window.setVisible(true);
 
+	}
 	/**
 	 * This method initializes this
 	 * 
