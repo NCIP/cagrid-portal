@@ -14,7 +14,7 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Jun 13, 2007 10:45:43 AM
- * @version $Id: SDKInstaller.java,v 1.6 2007-06-18 20:52:34 dervin Exp $ 
+ * @version $Id: SDKInstaller.java,v 1.7 2007-06-19 19:58:05 dervin Exp $ 
  */
 public class SDKInstaller {
 
@@ -32,9 +32,9 @@ public class SDKInstaller {
         unpackSdk(version, installDir);
         // deal with JBoss
         JBossDescription jbossDesc = description.getJBossDescription();
+        File jbossDir = new File(jbossDesc.getJbossLocation()).getAbsoluteFile();
         if (jbossDesc.getInstallJboss() != null && jbossDesc.getInstallJboss().booleanValue()) {
             File jbossZip = new File(jbossDesc.getJbossZipFile()).getAbsoluteFile();
-            File jbossDir = new File(jbossDesc.getJbossLocation()).getAbsoluteFile();
             ZipUtilities.unzip(jbossZip, jbossDir);
         }
         // locate the directory the SDK itself was installed into
@@ -45,6 +45,17 @@ public class SDKInstaller {
         
         // invoke the build process
         invokeBuildProcess(version, description, sdkDir);
+        
+        // wait for JBoss to finish up
+        JBossTwiddler twiddler = new JBossTwiddler(jbossDir);
+        while (!twiddler.isJBossRunning()) {
+            System.out.println("JBoss not ready yet...");
+            try {
+                Thread.sleep(3000);
+            } catch (Exception ex) {
+                // 
+            }
+        }
         
         // invoke the deploy process
         invokeDeployProcess(version, description, sdkDir);
