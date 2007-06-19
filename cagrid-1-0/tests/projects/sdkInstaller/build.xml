@@ -95,6 +95,9 @@
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
 		</fileset>
+		<fileset dir="${ant.library.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
 	</path>
 
 
