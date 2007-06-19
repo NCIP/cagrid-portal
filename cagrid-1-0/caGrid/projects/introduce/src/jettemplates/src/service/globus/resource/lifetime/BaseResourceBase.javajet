@@ -76,6 +76,9 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
     private AdvertisementClient registrationClient;
     
     private URL baseURL;
+    
+    private java.util.Calendar terminationTime;
+    
 
 	//Define the metadata resource properties
 
@@ -85,7 +88,7 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
 			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(arguments.getNamespaces(),metadata.getQName());
 			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);
-			
+			if(!name.equals("terminationTime") && !name.equals("currentTime")){	
 			//define the RP
 			stringBuffer.append("\tprivate ResourceProperty "+name+"RP;\n");
 			//define the Value bean to hold the value
@@ -93,6 +96,7 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 				stringBuffer.append("\tprivate "+ schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()+" "+name+"Value;\n");
 			} else {
 			    stringBuffer.append("\tprivate " + schemaInformation.getType().getClassName()+" "+name+"Value;\n");
+			}
 			}
 		}
 	}
@@ -114,7 +118,7 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 		this.id = UUIDGEN.nextUUID();
 		this.desc = null;
 
-		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
+		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERTY_SET);
 
 		// these are the RPs necessary for resource lifetime management
 		ResourceProperty prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.TERMINATION_TIME, this);
@@ -130,7 +134,7 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
 			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(arguments.getNamespaces(),metadata.getQName());
 			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);
-			
+		  if(!name.equals("terminationTime") && !name.equals("currentTime")){	
 			stringBuffer.append("\t\t//init the rp\n");
 			stringBuffer.append("\t\tthis."+name+"RP = new SimpleResourceProperty(ResourceConstants."+name.toUpperCase()+"_Value_RP);\n");
 	
@@ -139,10 +143,40 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 	
 			stringBuffer.append("\t\t//add the rp to the prop set\n");
 			stringBuffer.append("\t\tthis.propSet.add(this."+name+"RP);\n");
+		  }
 		}
 		}%>	
 
 	}
+	
+	
+	/**
+	 * 
+	 * @see org.globus.wsrf.ResourceLifetime#setTerminationTime(java.util.Calendar)
+	 */
+	public void setTerminationTime(Calendar time) {
+		this.terminationTime = time;
+	}
+
+
+	/**
+	 * 
+	 * 
+	 * @see org.globus.wsrf.ResourceLifetime#getTerminationTime()
+	 */
+	public Calendar getTerminationTime() {
+		return this.terminationTime;
+	}
+
+
+	/**
+	 * 
+	 * @see org.globus.wsrf.ResourceLifetime#getCurrentTime()
+	 */
+	public Calendar getCurrentTime() {
+		return Calendar.getInstance();
+	}
+	
 
 
 	//Getters/Setters for ResourceProperties
@@ -150,7 +184,8 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
 			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
 			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(arguments.getNamespaces(),metadata.getQName());
-			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);		
+			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);	
+			if(!name.equals("terminationTime") && !name.equals("currentTime")){	
 	%>
 	
 	protected ResourceProperty get<%=CommonTools.upperCaseFirstCharacter(name)%>RP(){
@@ -183,32 +218,9 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 	}
 	}
 	}
+	}
 	%>
-	
 
-
-	/**
-	 * @see org.globus.wsrf.ResourceLifetime#setTerminationTime(java.util.Calendar)
-	 */
-	public void setTerminationTime(Calendar time) {
-		this.setTerminationTimeValue(time);
-	}
-
-
-	/**
-	 * @see org.globus.wsrf.ResourceLifetime#getTerminationTime()
-	 */
-	public Calendar getTerminationTime() {
-		return this.getTerminationTimeValue();
-	}
-
-
-	/**
-	 * @see org.globus.wsrf.ResourceLifetime#getCurrentTime()
-	 */
-	public Calendar getCurrentTime() {
-		return Calendar.getInstance();
-	}
 
 
 	/**

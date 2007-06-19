@@ -113,7 +113,7 @@ public abstract class BaseResourceBase implements SecureResource, RemoveCallback
 		this.id = UUIDGEN.nextUUID();
 		this.desc = null;
 		
-		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
+		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERTY_SET);
 
 		// now add the metadata as resource properties
 <%	
