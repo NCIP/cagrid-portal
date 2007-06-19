@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.introduce.extensions.sdk.discovery;
 
-
-
 /**
  * @author oster
  */
@@ -14,6 +12,7 @@ public class SDKGenerationInformation {
     private String xmiFile;
     private String packageIncludes;
     private String packageExcludes;
+    private boolean isXSDOnly = true;
 
 
     public SDKGenerationInformation() {
@@ -106,6 +105,17 @@ public class SDKGenerationInformation {
     public String toString() {
         return "Generation will read file: " + this.xmiFile + "\n\tincluding packages: " + this.packageIncludes
             + "\n\texcluding packages: " + this.packageExcludes + "\nrepresenting Project: " + this.caDSRProjectName
-            + "\n\tversion: " + this.caDSRProjectVersion + "\n\tin context:" + this.caDSRcontext;
+            + "\n\tversion: " + this.caDSRProjectVersion + "\n\tin context:" + this.caDSRcontext + "\n"
+            + "generate schemas only:" + this.isXSDOnly;
+    }
+
+
+    public boolean isXSDOnly() {
+        return this.isXSDOnly;
+    }
+
+
+    public void setIsXSDOnly(boolean isXSDOnly) {
+        this.isXSDOnly = isXSDOnly;
     }
 }

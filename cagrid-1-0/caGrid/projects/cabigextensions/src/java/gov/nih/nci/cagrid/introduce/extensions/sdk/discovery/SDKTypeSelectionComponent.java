@@ -1,11 +1,13 @@
 package gov.nih.nci.cagrid.introduce.extensions.sdk.discovery;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.ZipUtilities;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
@@ -21,6 +23,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -29,9 +33,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.PropertyConfigurator;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.Perl5Compiler;
+import org.projectmobius.common.MobiusException;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
@@ -44,6 +53,8 @@ import com.jgoodies.validation.view.ValidationResultViewFactory;
 
 
 public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
+
+    private static final String CACORESDK_DIR_NAME = "cacoresdk";
     private static final String DEFAULT_PROJECT = "YourProject";
     private static final String CONTEXT = "Context";
     private static final String PROJECT_SHORT_NAME = "Project Short Name";
@@ -51,6 +62,8 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
     private static final String MODEL_XMI_FILE = "Model XMI File";
     private static final String PACKAGE_INCLUDES = "Package Includes";
     private static final String PACKAGE_EXCLUDES = "Package Excludes";
+
+    private static final String CACORE_SDK_ZIPFILE_NAME = "caCORE_SDK_321.zip";
 
     private JTextField modelTextField = null;
     private JButton modelBrowseButton = null;
@@ -74,6 +87,8 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
     private File extensionDir = null;
     private ValidationResultModel validationModel = new DefaultValidationResultModel();
     private SDKGenerationInformation genInfo = null;
+
+    protected static Log LOG = LogFactory.getLog(SDKTypeSelectionComponent.class.getName());
 
 
     public SDKTypeSelectionComponent(DiscoveryExtensionDescriptionType desc, NamespacesType currentNamespaces) {
@@ -131,7 +146,9 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
         ValidationComponentUtils.setMessageKey(getProjNameTextField(), PROJECT_SHORT_NAME);
         ValidationComponentUtils.setMessageKey(getProjVersionTextField(), PROJECT_VERSION);
 
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener(new FocusChangeHandler());
+        // install a focus listener; pass in ourselves so we can uninstall it
+        // when we go away
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener(new FocusChangeHandler(this));
 
         updateModel();
         validateInput();
@@ -140,8 +157,20 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 
 
     private final class FocusChangeHandler implements PropertyChangeListener {
+        private JComponent owner;
+
+
+        public FocusChangeHandler(JComponent owner) {
+            this.owner = owner;
+        }
+
 
         public void propertyChange(PropertyChangeEvent evt) {
+            // make sure we are removed when our component is no longer visible
+            if (this.owner == null || !this.owner.isVisible()) {
+                //TODO: is this happening to early when ran in Introduce?
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().removePropertyChangeListener(this);
+            }
             String propertyName = evt.getPropertyName();
             if (!"permanentFocusOwner".equals(propertyName)) {
                 return;
@@ -221,114 +250,189 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 
     @Override
     public NamespaceType[] createNamespaceType(File schemaDestinationDir, String policy) {
+        // updates genInfo
         updateModel();
+
+        // updates validationModel
         validateInput();
 
         if (this.validationModel.getResult().hasErrors()) {
-            System.out.println("Not valid");
+            System.out.println("Inputs not valid, see error messages.");
             return null;
         }
 
-        System.out.println(this.genInfo);
+        SDKExecutionResult result = null;
+        try {
+            try {
+                File sdkDir = new File(this.extensionDir, CACORESDK_DIR_NAME);
+                // create working dir from zip if not extracted yet
+                if (!sdkDir.exists()) {
+                    File zip = new File(this.extensionDir, CACORE_SDK_ZIPFILE_NAME);
+                    if (zip.exists() && zip.canRead() && zip.isFile()) {
+                        try {
+                            ZipUtilities.unzipInPlace(zip);
+                        } catch (IOException e) {
+                            ErrorDialog.showErrorDialog("Problem extracting SDK from zip file: " + zip, e);
+                            return null;
+                        }
+                    } else {
+                        ErrorDialog.showErrorDialog("SDK directory [" + sdkDir
+                            + "] not found, and couldn't locate zip file: " + zip);
+                        return null;
+                    }
+                }
 
-        // try {
-        // List namespaceTypes = new ArrayList();
-        // NamespaceType rootNamespace = new NamespaceType();
-        // String ns = getNsTextField().getText();
-        // if (ns.equals("") || ns.equals("unavailable")) {
-        // return null;
-        // }
-        // Namespace namespace = new Namespace(ns);
-        // List namespaceDomainList = getGME().getNamespaceDomainList();
-        // if (!namespaceDomainList.contains(namespace.getDomain())) {
-        // // prompt for alternate
-        // String alternativeDomain = (String) JOptionPane.showInputDialog(this,
-        // "The GME does not appear to contain schemas under the specified
-        // domain.\n"
-        // + "Select an alternative domain, or cancel if no viable option is
-        // available.\n"
-        // + "\nExpected domain: " + namespace.getDomain(), "Schema Location
-        // Error",
-        // JOptionPane.ERROR_MESSAGE, null, namespaceDomainList.toArray(),
-        // null);
-        //
-        // if (alternativeDomain != null) {
-        // namespace = new Namespace(namespace.getProtocol() + "://" +
-        // alternativeDomain + "/"
-        // + namespace.getName());
-        // getNsTextField().setText(namespace.getRaw());
-        // } else {
-        // return null;
-        // }
-        // }
-        // String schemaContents = null;
-        // try {
-        // schemaContents = getSchema(namespace);
-        // } catch (NoSuchSchemaException e) {
-        // // prompt for alternate
-        // List schemas =
-        // getGME().getSchemaListForNamespaceDomain(namespace.getDomain());
-        // Namespace alternativeSchema = (Namespace)
-        // JOptionPane.showInputDialog(this,
-        // "Unable to locate schema for the selected caDSR package.\n"
-        // + "This package may not have a published Schema."
-        // + "\nSelect an alternative Schema, or cancel.\n\nExpected schema: " +
-        // namespace.getName(),
-        // "Schema Location Error", JOptionPane.ERROR_MESSAGE, null,
-        // schemas.toArray(), null);
-        //
-        // if (alternativeSchema != null) {
-        // namespace = alternativeSchema;
-        // getNsTextField().setText(namespace.getRaw());
-        // } else {
-        // return null;
-        // }
-        // schemaContents = getSchema(namespace);
-        // }
-        //
-        // // set the package name
-        // String packageName = CommonTools.getPackageName(namespace);
-        // rootNamespace.setPackageName(packageName);
-        //
-        // rootNamespace.setNamespace(namespace.getRaw());
-        // ImportInfo ii = new ImportInfo(namespace);
-        // rootNamespace.setLocation("./" + ii.getFileName());
-        //
-        // // popualte the schema elements
-        // gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(rootNamespace,
-        // XMLUtilities
-        // .stringToDocument(schemaContents));
-        // namespaceTypes.add(rootNamespace);
-        // // write the schema and its imports to the filesystem
-        // List writtenNamespaces = getGME().cacheSchema(namespace,
-        // schemaDestinationDir);
-        // Iterator nsIter = writtenNamespaces.iterator();
-        // while (nsIter.hasNext()) {
-        // Namespace importedNamesapce = (Namespace) nsIter.next();
-        // if (!importedNamesapce.getRaw().equals(rootNamespace.getNamespace()))
-        // {
-        // ImportInfo imp = new ImportInfo(importedNamesapce);
-        // String filename = imp.getFileName();
-        // // create a namespace type from the imported schema
-        // String fullSchemaName = schemaDestinationDir.getAbsolutePath() +
-        // File.separator + filename;
-        // NamespaceType type = CommonTools.createNamespaceType(fullSchemaName);
-        // // fix the location to be relative to the root schema
-        // type.setLocation("./" + filename);
-        // namespaceTypes.add(type);
-        // }
-        // }
-        //
-        // NamespaceType[] nsTypeArray = new
-        // NamespaceType[namespaceTypes.size()];
-        // namespaceTypes.toArray(nsTypeArray);
-        // return nsTypeArray;
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // return null;
-        // }
-        //		
-        return null;
+                // TODO: run a busy dialog
+                // // MultiEventProgressBar diag = new BusyDialogRunnable();
+                // BusyDialogRunnable progress = new BusyDialogRunnable((JFrame)
+                // SwingUtilities.getRoot(this), "Progress") {
+                //
+                // @Override
+                // public void process() {
+                // this.setProgressText()
+                // }
+                //
+                // };
+
+                result = SDKExecutor.runSDK(sdkDir, this.genInfo);
+            } catch (SDKExecutionException e) {
+                ErrorDialog.showErrorDialog("Problem executing SDK: " + e.getMessage(), e);
+                return null;
+            }
+
+            // validate any existing schemas against the namespace replacement
+            // policy
+            try {
+                validateGeneratedXSDs(result, policy);
+            } catch (SDKExecutionException e) {
+                ErrorDialog.showErrorDialog("Problem validating schemas generated by SDK against replacement policy.",
+                    e.getMessage(), e);
+                return null;
+            }
+
+            // copy the XSD(s) to service schema dir
+            List<File> copiedXSDs = null;
+            try {
+                copiedXSDs = copyGeneratedXSDs(schemaDestinationDir, result, policy);
+            } catch (IOException e) {
+                ErrorDialog.showErrorDialog("Problem copying schemas generated by SDK.", e.getMessage(), e);
+                return null;
+            }
+
+            if (!this.genInfo.isXSDOnly()) {
+                // copy castor mapping to service common package
+                // add castorMapping property to service and client configs
+                // (wsdd)
+                // copy jar to service lib
+                // set serializer/deserializer to sdk for all schema types
+            }
+
+            // add schema types to introduce namespaces
+            NamespaceType[] results = null;
+            try {
+                results = createNamespaceTypes(schemaDestinationDir, result, copiedXSDs);
+            } catch (MobiusException e) {
+                ErrorDialog.showErrorDialog("Problem processing schemas created by SDK: " + e.getMessage(), e);
+                return null;
+            }
+
+            return results;
+        } finally {
+            if (result != null) {
+                // clean up our working area when we are done with it
+                result.destroy();
+            }
+        }
+
+    }
+
+
+    /**
+     * @param result
+     * @throws MobiusException
+     */
+    private NamespaceType[] createNamespaceTypes(File schemaDestinationDir, SDKExecutionResult result,
+        List<File> schemas) throws MobiusException {
+        List<NamespaceType> namespaceTypes = new ArrayList<NamespaceType>();
+        for (File schema : schemas) {
+            NamespaceType nsType = CommonTools.createNamespaceType(schema.getAbsolutePath(), schemaDestinationDir);
+            namespaceTypes.add(nsType);
+        }
+
+        NamespaceType[] nsTypeArray = new NamespaceType[namespaceTypes.size()];
+        namespaceTypes.toArray(nsTypeArray);
+        return nsTypeArray;
+    }
+
+
+    /**
+     * Copies schemas into service directory, honoring
+     * 
+     * @param schemaDestinationDir
+     * @param result
+     * @param namespaceExistsPolicy
+     * @return
+     * @throws IOException
+     */
+    private List<File> copyGeneratedXSDs(File schemaDestinationDir, SDKExecutionResult result,
+        String namespaceExistsPolicy) throws IOException {
+        List<File> results = new ArrayList<File>();
+        for (File schema : result.getGeneratedXMLSchemas()) {
+            String targetNamespace = null;
+            try {
+                targetNamespace = CommonTools.getTargetNamespace(schema);
+            } catch (Exception e) {
+                String error = "Problem determining targetNamespace of generated schema:" + schema.getAbsolutePath();
+                LOG.error(error, e);
+                throw new IOException(error);
+            }
+
+            // this should have been handled by the validation method and we
+            // shouldn't be copying schemas
+            assert (!(namespaceAlreadyExists(targetNamespace) && namespaceExistsPolicy.equals(ERROR)));
+
+            if (namespaceAlreadyExists(targetNamespace) && namespaceExistsPolicy.equals(IGNORE)) {
+                LOG.info("Ignoring schema [" + schema.getAbsolutePath() + "] with namespace [" + targetNamespace
+                    + "], as it already exists");
+            } else {
+                File dest = new File(schemaDestinationDir, this.genInfo.getCaDSRProjectName().replace(" ", "_") + "/"
+                    + schema.getName());
+                FileUtils.copyFile(schema, dest);
+                LOG.info("Adding schema:" + dest);
+                results.add(dest);
+            }
+        }
+        return results;
+    }
+
+
+    /**
+     * Checks generated schemas against ERROR policy so no schemas are copied
+     * into service if they already exist
+     * 
+     * @param result
+     * @param namespaceExistsPolicy
+     * @throws SDKExecutionException
+     */
+    private void validateGeneratedXSDs(SDKExecutionResult result, String namespaceExistsPolicy)
+        throws SDKExecutionException {
+        for (File schema : result.getGeneratedXMLSchemas()) {
+            String targetNamespace = null;
+            try {
+                targetNamespace = CommonTools.getTargetNamespace(schema);
+            } catch (Exception e) {
+                String error = "Problem determining targetNamespace of generated schema:" + schema.getAbsolutePath();
+                LOG.error(error, e);
+                throw new SDKExecutionException(error, e);
+            }
+            if (namespaceAlreadyExists(targetNamespace) && namespaceExistsPolicy.equals(ERROR)) {
+                String error = "Could not add generated schema with namespace ["
+                    + targetNamespace
+                    + "], as it already exists and Introduce preference was to error.  To change this behavior, edit your preferences.";
+                throw new SDKExecutionException(error);
+            }
+
+        }
     }
 
 
@@ -606,6 +710,8 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
     public static void main(String[] args) {
         // NOTE: Needs to run from introduce directory!
         try {
+            PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce"
+                + File.separator + "log4j.properties");
             JFrame frame = new JFrame();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

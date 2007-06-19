@@ -47,7 +47,7 @@
     <!--                          DEFINE THE EXTENSIONS                                   -->
     <!-- ================================================================================ -->
     <!-- The name should be the path relative from extensions.dir.  Its strongly encouraged you use a flat layout -->
-    <property name="extensions.list" value="cagrid_metadata,cagrid_wsEnum,domainmodel_viewer,servicemetadata_editor" />
+    <property name="extensions.list" value="cagrid_metadata,cagrid_wsEnum,domainmodel_viewer,servicemetadata_editor, sdk_discovery" />
     <property name="introduce.extensions.dir" location="../introduce/extensions" />
 
     <fileset dir="${ext.schema.dir}" id="cagrid_metadata.schema.fileset">
@@ -59,8 +59,8 @@
     <fileset dir="${ext.schema.dir}" id="cagrid_wsEnum.schema.fileset">
         <include name="*.xsd" />
         <include name="*.wsdl" />
-    	<include name="CaGridEnumeration/**/*.xsd"/>
-		<include name="CaGridEnumeration/**/*.wsdl"/>
+        <include name="CaGridEnumeration/**/*.xsd" />
+        <include name="CaGridEnumeration/**/*.wsdl" />
     </fileset>
 
     <taskdef resource="net/sf/antcontrib/antlib.xml">
@@ -156,9 +156,9 @@
         <mkdir dir="${build.dir}" />
     </target>
 
-    <target name="configure" description="Configures the project based on settings.">		
+    <target name="configure" description="Configures the project based on settings.">
         <copy filtering="true" file="${extensions.dir}/cagrid_metadata/extension.xml.template" tofile="${extensions.dir}/cagrid_metadata/extension.xml" overwrite="true">
-            <filterset filtersfile="${basedir}/ext/resources/service_urls.properties"/>
+            <filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
         </copy>
     </target>
 
@@ -278,7 +278,12 @@
             <mkdir dir="${introduce.extensions.dir}/@{extension.name}" />
 
             <!-- extension description file -->
-            <copy todir="${introduce.extensions.dir}/@{extension.name}" file="${extensions.dir}/@{extension.name}/extension.xml" />
+            <copy todir="${introduce.extensions.dir}/@{extension.name}">
+                <fileset dir="${extensions.dir}/@{extension.name}">
+                    <include name="*.*" />
+                    <exclude name="*.template" />
+                </fileset>
+            </copy>
 
             <if>
                 <isreference refid="@{extension.name}.schema.fileset" />
@@ -306,7 +311,7 @@
             </fileset>
             <fileset dir="${ext.lib.dir}">
                 <include name="*.jar" />
-            	<exclude name="${cagrid.master.jar.prefix}*Introduce*.jar"/>
+                <exclude name="${cagrid.master.jar.prefix}*Introduce*.jar" />
             </fileset>
             <fileset dir="${jar.dir}">
                 <include name="**/*.jar" />
