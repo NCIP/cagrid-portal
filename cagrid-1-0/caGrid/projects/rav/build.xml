@@ -235,18 +235,12 @@
             <include name="**/*.java" />
             <classpath>
                 <path refid="base.classpath" />
-                <fileset dir="${globus.dir}/lib">
-                    <include name="*.jar" />
-                </fileset>
             </classpath>
         </javac>
         <javac srcdir="${test.stubs.src}" destdir="${test.stubs.dest}" debug="${java.debug}" source="${java.source}">
             <include name="**/*.java" />
             <classpath>
                 <path refid="base.classpath" />
-                <fileset dir="${globus.dir}/lib">
-                    <include name="*.jar" />
-                </fileset>
             </classpath>
         </javac>
     </target>
