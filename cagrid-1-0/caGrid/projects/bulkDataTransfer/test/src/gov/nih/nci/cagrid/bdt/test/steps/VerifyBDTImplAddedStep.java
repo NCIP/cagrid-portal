@@ -25,7 +25,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 29, 2007 2:28:04 PM
- * @version $Id: VerifyBDTImplAddedStep.java,v 1.4 2007-04-03 16:07:38 dervin Exp $ 
+ * @version $Id: VerifyBDTImplAddedStep.java,v 1.5 2007-06-19 15:58:07 dervin Exp $ 
  */
 public class VerifyBDTImplAddedStep extends Step {
     
@@ -47,7 +47,7 @@ public class VerifyBDTImplAddedStep extends Step {
         ServiceType mainService = desc.getServices().getService(0);
         MethodType bdtStartMethod = null;
         for (MethodType method : mainService.getMethods().getMethod()) {
-            if (method.getName().equals("bdtStart")) {
+            if (method.getName().equals(CreationStep.BDT_START_RETURNS_REFERENCE)) {
                 bdtStartMethod = method;
                 break;
             }

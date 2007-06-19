@@ -25,9 +25,12 @@ import com.atomicobject.haste.framework.Step;
  * 
  * 
  * @created Aug 22, 2006
- * @version $Id: CreationStep.java,v 1.5 2007-05-11 16:32:26 dervin Exp $
+ * @version $Id: CreationStep.java,v 1.6 2007-06-19 15:58:07 dervin Exp $
  */
 public class CreationStep extends Step {
+    private static final String BDT_START_RETURNS_CLIENT = "bdtStartReturnsClient";
+    public static final String BDT_START_RETURNS_REFERENCE = "bdtStartReturnsReference";
+   
     private String introduceDir;
 
 
@@ -47,7 +50,7 @@ public class CreationStep extends Step {
         p.waitFor();
         assertTrue("Creating new bdt service failed", p.exitValue() == 0);
         
-        addBdtStartMethod();
+        addBdtMethods();
 
         System.out.println("Invoking post creation processes...");
         cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, CreationTest.SERVICE_NAME,
@@ -66,9 +69,9 @@ public class CreationStep extends Step {
         p.waitFor();
         assertTrue("Build process failed", p.exitValue() == 0);
     }
-
-
-    private void addBdtStartMethod() throws Throwable {
+    
+    
+    private void addBdtMethods() throws Throwable {
         // verify the service model exists
         System.out.println("Verifying the service model file exists");
         File serviceModelFile = new File(CreationTest.SERVICE_DIR + File.separator
@@ -94,11 +97,42 @@ public class CreationStep extends Step {
         }
         assertNotNull("BDT extension was not found in the service model", bdtExtension);
         
-        // create the BDT start
+        addBdtMethodReturnsBdtReference(serviceDesc);
+        addBdtMethodReturnsClientHandle(serviceDesc);
+        
+        // save the model back to disk for the post creation process
+        Utils.serializeDocument(serviceModelFile.getAbsolutePath(), serviceDesc,
+            IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+    }
+    
+    
+    private void addBdtMethodReturnsBdtReference(ServiceDescription serviceDesc) throws Throwable {
+        // create the BDT start method
         ServiceType mainService = serviceDesc.getServices().getService(0);
         MethodType bdtQueryMethod = new MethodType();
-        bdtQueryMethod.setName("bdtStart");
-        bdtQueryMethod.setDescription("Starts a BDT operation");
+        bdtQueryMethod.setName(BDT_START_RETURNS_REFERENCE);
+        bdtQueryMethod.setDescription("Starts a BDT operation and returns a BDT reference");
+        // output of BDT client handle
+        MethodTypeOutput bdtReferenceOutput = new MethodTypeOutput();
+        QName referenceQname = new QName(
+            "http://cagrid.nci.nih.gov/BulkDataHandlerReference",
+            "BulkDataHandlerReference"
+        );
+        bdtReferenceOutput.setQName(referenceQname);
+        bdtReferenceOutput.setIsArray(false);
+        bdtQueryMethod.setOutput(bdtReferenceOutput);
+        
+        // add the method to the service
+        CommonTools.addMethod(mainService, bdtQueryMethod);
+    }
+    
+    
+    private void addBdtMethodReturnsClientHandle(ServiceDescription serviceDesc) throws Throwable {
+        // create the BDT start method
+        ServiceType mainService = serviceDesc.getServices().getService(0);
+        MethodType bdtQueryMethod = new MethodType();
+        bdtQueryMethod.setName(BDT_START_RETURNS_CLIENT);
+        bdtQueryMethod.setDescription("Starts a BDT operation and returns a client handle");
         // output of BDT client handle
         MethodTypeOutput bdtHandleOutput = new MethodTypeOutput();
         QName handleQname = new QName(
@@ -108,6 +142,8 @@ public class CreationStep extends Step {
         bdtHandleOutput.setQName(handleQname);
         bdtHandleOutput.setIsArray(false);
         bdtHandleOutput.setIsClientHandle(Boolean.TRUE);
+        // TODO: make this match what the GUI does wrt 
+        // 'isCreatingResourceForClientHandle' and 'resourceClientIntroduceServiceName'
         String clientHandleClass = mainService.getPackageName() 
             + ".bdt.client." + mainService.getName() + "BulkDataHandlerClient";
         bdtHandleOutput.setClientHandleClass(clientHandleClass);
@@ -115,10 +151,6 @@ public class CreationStep extends Step {
         
         // add the method to the service
         CommonTools.addMethod(mainService, bdtQueryMethod);
-        
-        // save the model back to disk for the post creation process
-        Utils.serializeDocument(serviceModelFile.getAbsolutePath(), serviceDesc,
-            IntroduceConstants.INTRODUCE_SKELETON_QNAME);
     }
     
     
