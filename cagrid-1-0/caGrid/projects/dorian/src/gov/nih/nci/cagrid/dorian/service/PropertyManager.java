@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.service;
 
 import gov.nih.nci.cagrid.dorian.bean.Metadata;
+import gov.nih.nci.cagrid.dorian.conf.CertificateAuthorityType;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 
 
@@ -15,9 +16,11 @@ public class PropertyManager {
 
 	private static String TABLE = "properties";
 	private static String VERSION_PROPERTY = "version";
+	private static String CA_TYPE_PROPERTY = "certificate authority";
 	public static float CURRENT_VERSION = 1.1F;
 	private MetadataManager manager;
 	private Metadata version;
+	private Metadata certificateAuthorityType;
 
 
 	public PropertyManager(Database db) throws DorianInternalFault {
@@ -25,9 +28,28 @@ public class PropertyManager {
 		version = manager.get(VERSION_PROPERTY);
 		if (version == null) {
 			version = new Metadata();
-			version.setName("version");
-			version.setDescription("The software version of this Dorian!!!");
+			version.setName(VERSION_PROPERTY);
+			version.setDescription("The software version of this Dorian.");
 		}
+		certificateAuthorityType = manager.get(CA_TYPE_PROPERTY);
+	}
+
+
+	public CertificateAuthorityType getCertificateAuthorityType() {
+		if (this.certificateAuthorityType == null) {
+			return null;
+		} else {
+			return CertificateAuthorityType.fromValue(certificateAuthorityType.getValue());
+		}
+	}
+
+
+	public void setCertificateAuthorityType(CertificateAuthorityType ca) throws DorianInternalFault {
+		this.certificateAuthorityType = new Metadata();
+		this.certificateAuthorityType.setName(CA_TYPE_PROPERTY);
+		this.certificateAuthorityType.setDescription("The certificate authority type used by this Dorian.");
+		this.certificateAuthorityType.setValue(ca.getValue());
+		this.manager.update(this.certificateAuthorityType);
 	}
 
 
