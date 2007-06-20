@@ -20,6 +20,60 @@
 	<property name="globus.trusted.ca.dir" value="${globus.user.home.dir}/certificates/" />
 
 
+	<target name="defineClasspaths" depends="checkGlobus">
+			<runtarget target="defineExtendedClasspaths" />
+			<path id="base.classpath">
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ext.globus.dir}/lib">
+					<include name="*.jar" />
+					<exclude name="cog-jglobus.jar" />
+					<exclude name="${stubs.jar.name}" />
+					<exclude name="${common.jar.name}" />
+					<exclude name="${client.jar.name}" />
+					<exclude name="${service.jar.name}" />
+				</fileset>
+				<path refid="base.extended.classpath" />
+			</path>
+			<path id="service.build.classpath">
+				<pathelement location="${stubs.dest}" />
+				<path refid="service.build.extended.classpath" />
+				<path refid="base.classpath" />
+			</path>
+			<path id="service.run.classpath">
+				<pathelement location="${build.dest}" />
+				<path refid="service.run.extended.classpath" />
+				<path refid="service.build.classpath" />
+			</path>
+			<path id="test.build.classpath">
+				<fileset dir="${test.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<pathelement location="${build.dest}" />
+				<path refid="test.build.extended.classpath" />
+				<path refid="service.build.classpath" />
+			</path>
+			<path id="test.run.classpath">
+				<pathelement location="${test.build.dest}" />
+				<path refid="test.run.extended.classpath" />
+				<path refid="test.build.classpath" />
+			</path>
+			<path id="run.classpath">
+				<pathelement location="${build.dest}" />
+				<path refid="run.extended.classpath" />
+				<path refid="service.build.classpath" />
+				<pathelement location="${ext.globus.dir}" />
+			</path>
+			<path id="processor.run.classpath">
+				<fileset dir="${tools.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<path refid="run.classpath" />
+			</path>
+		</target>
+
+	
 	<!-- ============================================================== -->
 	<!-- Create any extended Classpaths here                            -->
 	<!-- ============================================================== -->
@@ -126,6 +180,25 @@
 	<target name="preJar">
 
 	</target>
+	
+	
+	<target name="jar" depends="compile">
+			<runtarget target="preJar" />
+			<jar jarfile="${build.lib.dir}/${client.jar.name}" basedir="${build.dest}">
+				<include name="**/client/**" />
+				<include name="**/tools/**" />
+			</jar>
+			<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
+				<include name="**/service/**" />
+			</jar>
+			<jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
+				<include name="**/*" />
+				<exclude name="**/client/**" />
+				<exclude name="**/service/**" />
+				<exclude name="**/tools/**" />
+			</jar>
+			<runtarget target="postJar" />
+		</target>
 
 	<!-- ============================================================== -->
 	<!-- Post Jar Build Target                                          -->
