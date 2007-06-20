@@ -495,6 +495,8 @@
             <artifact refid="mobius.jars" />
             <artifact refid="servicesecurity.jars" />
             <artifact refid="security.metadata.jars" />
+        	<artifact refid="advertisement.jars" />
+        	<artifact refid="jdom.jars" />
         </resolveDependencies>
         <delete dir="${projects.dir}/gts/schema/GTS/xsd" />
         <resolveDependencies extdir="${projects.dir}/gts/schema/GTS">
