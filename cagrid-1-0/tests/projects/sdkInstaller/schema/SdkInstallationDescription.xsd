@@ -10,10 +10,20 @@
 		<xsd:attribute name="enableWritableApi" type="xsd:boolean" use="optional" default="true"/>
 	</xsd:complexType>
 	<xsd:complexType name="JBossDescription">
-		<xsd:attribute name="jbossLocation" type="xsd:string" use="required"/>
-		<xsd:attribute name="installJboss" type="xsd:boolean" use="optional" default="true"/>
-		<xsd:attribute name="jbossZipFile" type="xsd:string" use="optional"/>
-		<xsd:attribute name="jbossPort" type="xsd:integer" use="optional" default="8080"/>
+		<xsd:choice>
+			<xsd:element name="ExistingInstallation">
+				<xsd:complexType>
+					<xsd:attribute name="jbossLocation" type="xsd:string" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NewInstallation">
+				<xsd:complexType>
+					<xsd:attribute name="jbossZipFile" type="xsd:string" use="required"/>
+					<xsd:attribute name="unpackDirectory" type="xsd:string" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attribute name="jbossPort" type="xsd:int" use="optional" default="8080"/>
 	</xsd:complexType>
 	<xsd:complexType name="MySQLDescription">
 		<xsd:sequence>
