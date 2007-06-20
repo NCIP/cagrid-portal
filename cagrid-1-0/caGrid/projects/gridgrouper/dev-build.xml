@@ -48,7 +48,6 @@
 				<exclude name="${client.jar.name}" />
 				<exclude name="${service.jar.name}" />
 				<exclude name="${resources.jar.name}" />
-				<exclude name="${service.jar.name}" />
 				<exclude name="${ui.jar.name}" />
 				<exclude name="commons-collections-3.0.jar" />
 			</fileset>
@@ -371,9 +370,7 @@
 			<arg value="etc/gridgrouper-ui.xml" />
 			<classpath refid="run.classpath" />
 			<classpath>
-				<pathelement location="resources/ui/gridgrouper" />
-				<pathelement location="ext/resources/portal/common" />
-				<pathelement location="ext/resources/portal/gridca" />
+				<pathelement location="resources/ui/gridgrouper" />	
 			</classpath>
 		</java>
 	</target>
