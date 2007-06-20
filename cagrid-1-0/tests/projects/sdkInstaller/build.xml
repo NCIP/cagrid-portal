@@ -80,6 +80,7 @@
 	<!-- =============================================================== -->
 	<path id="test.classpath">
 		<pathelement path="${classes.dir}" />
+		<pathelement path="${stubs.dest}" />
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>

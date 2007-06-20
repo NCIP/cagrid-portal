@@ -6,6 +6,7 @@
     <property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes" />
     <property name="cobertura.report.dir" value="${build.dir}/coverage" />
     <property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" />
+	
     <target name="instrument">
         <taskdef classpathref="test.classpath" resource="tasks.properties" />
         <mkdir dir="${instrumented.classes.dir}" />
@@ -15,11 +16,13 @@
             </fileset>
         </cobertura-instrument>
     </target>
+	
     <!-- call the test target for each project and aggregates the log resutls  -->
     <target name="test" depends="instrument" description="Runs the tests.">
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="build.dir" value="${classes.dir}" />
+        	<sysproperty key="test.properties" value="test/resources/test.sdkinstall.properties.example"/>
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dbuild.dir=${classes.dir}" />
             <classpath location="${instrumented.classes.dir}" />
@@ -36,6 +39,8 @@
         </junit>
         <fail message="Tests failed! Check test reports." if="test.failed" />
     </target>
+	
+	<!-- run the cobertura coverage report -->
     <target name="coverageReport" depends="test" description="Runs the tests and generates a test
 		coverage report.">
         <cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
