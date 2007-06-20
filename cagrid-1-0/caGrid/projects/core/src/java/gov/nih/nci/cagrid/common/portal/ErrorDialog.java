@@ -45,6 +45,8 @@ public class ErrorDialog extends JDialog {
 	private static ErrorDialog dialog = null;
 	private static String lastFileLocation = null;
     
+    private static Object errorAdditionMutex = new Object();
+    
     private ErrorContainer currentError = null;
     private boolean showingErrorDetails = false;
     private boolean showingErrorException = false;
@@ -100,21 +102,23 @@ public class ErrorDialog extends JDialog {
 		}
 		Runnable r = new Runnable() {
 			public void run() {
-				dialog.setAlwaysOnTop(true);
-				ErrorContainer container = new ErrorContainer(message, detail, error);
-				if (errors == null) {
-					errors = new Vector<ErrorContainer>();
-				}
-				errors.add(container);
-				dialog.getErrorTable().addError(container);
-				if (!dialog.isVisible()) {
-					dialog.setModal(true);
-					// dialog.pack();
-					dialog.setSize(500, 450);
-					// attempt to center the dialog
-					centerDialog();
-					dialog.setVisible(true);
-				}
+                synchronized (errorAdditionMutex) {
+                    dialog.setAlwaysOnTop(true);
+                    ErrorContainer container = new ErrorContainer(message, detail, error);
+                    if (errors == null) {
+                        errors = new Vector<ErrorContainer>();
+                    }
+                    errors.add(container);
+                    dialog.getErrorTable().addError(container);
+                    if (!dialog.isVisible()) {
+                        dialog.setModal(true);
+                        // dialog.pack();
+                        dialog.setSize(500, 450);
+                        // attempt to center the dialog
+                        centerDialog();
+                        dialog.setVisible(true);
+                    }                    
+                }
 			}
 		};
 		SwingUtilities.invokeLater(r);
@@ -192,7 +196,7 @@ public class ErrorDialog extends JDialog {
      */
 	public static void showErrorDialog(String message, String[] details, Throwable ex) {
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < details.length; i++) {
+        for (int i = 0; details != null && i < details.length; i++) {
             builder.append(details[i]).append("\n");
         }
         addError(message, builder.toString(), ex);
@@ -517,6 +521,15 @@ public class ErrorDialog extends JDialog {
         for (int i = 0; i < 30; i++) {
             message += "This is line " + i + "\n";
         }
+        ErrorDialog.showErrorDialog("This is an error");
+        ErrorDialog.showErrorDialog(new Exception("This is an exception with a short message"));
+        ErrorDialog.showErrorDialog(new Exception(message));
+        ErrorDialog.showErrorDialog("This is an error with a long message", message.split("\n"));
+        ErrorDialog.showErrorDialog("This is an error with a null exception", message.split("\n"), null);
+        ErrorDialog.showErrorDialog("This is an error with null message", (Exception) null);
+        ErrorDialog.showErrorDialog("This is an error with null message and exception", (String) null, null);
+        
+        /*
 		for (int i = 0; i < 10; i++) {
 			try {
 				Thread.sleep(5000);
@@ -526,5 +539,6 @@ public class ErrorDialog extends JDialog {
 			ErrorDialog.showErrorDialog("Test error", message,
                 new Exception(message));		
 		}
+        */
 	}
 }
