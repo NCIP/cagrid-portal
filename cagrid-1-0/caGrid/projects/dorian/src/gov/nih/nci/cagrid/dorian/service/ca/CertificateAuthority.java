@@ -5,6 +5,8 @@ import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.Utils;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
+import gov.nih.nci.cagrid.dorian.conf.Properties;
+import gov.nih.nci.cagrid.dorian.conf.Property;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
@@ -412,6 +414,22 @@ public abstract class CertificateAuthority extends LoggingObject {
 			fault = (CertificateAuthorityFault) helper.getFault();
 			throw fault;
 		}
+	}
+
+
+	public String getProperty(String name) {
+		Properties props = getConfiguration().getProperties();
+		if (props != null) {
+			Property[] p = props.getProperty();
+			if (p != null) {
+				for (int i = 0; i < p.length; i++) {
+					if (p[i].getName().equals(name)) {
+						return p[i].getValue();
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 

@@ -18,13 +18,12 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
 
-import au.com.eracom.crypto.provider.ERACOMProvider;
-
 
 public abstract class BaseEracomCertificateAuthority extends CertificateAuthority {
 
-	public static String WRAPPER_KEY_ALIAS = "dorian-wrapper-key";
+	public static final String WRAPPER_KEY_ALIAS = "dorian-wrapper-key";
 	public static final String SIGNATURE_ALGORITHM = "SHA1WithRSA";
+	public static final String SLOT_PROPERTY = "slot";
 	private Provider provider;
 	private KeyStore keyStore;
 	private Key wrapper;
@@ -35,7 +34,20 @@ public abstract class BaseEracomCertificateAuthority extends CertificateAuthorit
 		super(conf);
 		try {
 			isInit = false;
-			provider = new ERACOMProvider();
+			int slot = 0;
+			String strSlot = getProperty(SLOT_PROPERTY);
+			if (strSlot != null) {
+				try {
+					slot = Integer.valueOf(strSlot).intValue();
+					if ((slot < 0) || (slot > 15)) {
+						throw new Exception("Invalid slot specified in configuration, slot must be between 0 and 15.");
+					}
+				} catch (Exception e) {
+					throw new Exception("Invalid slot specified in configuration.");
+				}
+			}
+			provider = (Provider) Class.forName("au.com.eracom.crypto.provider.slot" + slot + ".ERACOMProvider")
+				.newInstance();
 			Security.addProvider(provider);
 			keyStore = KeyStore.getInstance("CRYPTOKI", provider.getName());
 			keyStore.load(null, conf.getCertificateAuthorityPassword().toCharArray());

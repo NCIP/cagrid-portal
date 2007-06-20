@@ -75,6 +75,8 @@
         <xs:attribute name="min" type="xs:int" use="required"/> 
         <xs:attribute name="max" type="xs:int" use="required"/> 
     </xs:complexType>
+    
+    
 
     <xs:complexType name="AccountPolicies">
         <xs:sequence>
@@ -101,8 +103,20 @@
             <xs:element name="UserKeySize" type="dorian:KeySize" minOccurs="1" maxOccurs="1"/>
             <xs:element name="AutoCreate" type="dorian:AutoCreate" minOccurs="0" maxOccurs="1"/>
             <xs:element name="AutoRenewal" type="dorian:CredentialLifetime" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Properties" type="dorian:Properties" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType> 
+    
+    <xs:complexType name="Properties">
+        <xs:sequence>
+            <xs:element name="Property" type="dorian:Property" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType> 
+    
+    <xs:complexType name="Property">
+        <xs:attribute name="name" type="xs:string" use="required"/> 
+        <xs:attribute name="value" type="xs:string" use="required"/> 
+    </xs:complexType>
     
     <xs:complexType name="AutoCreate">
         <xs:sequence>
