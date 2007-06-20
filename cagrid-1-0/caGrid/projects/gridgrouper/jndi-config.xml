@@ -10,12 +10,12 @@
         <parameter>
           <name>performRegistration</name>
           <!-- Set this to false to skip ServiceGroup registration -->
-          <value>true</value>
+          <value>PERFORM_REGISTRATION</value>
         </parameter>
         <parameter>
           <name>registrationTemplateFile</name>
           <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
-          <value>ETC-PATH/registration.xml</value>
+          <value>ETC-PATH/GridGrouper_registration.xml</value>
         </parameter>
         <parameter>
           <name>serviceMetadataFile</name>

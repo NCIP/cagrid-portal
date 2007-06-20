@@ -50,7 +50,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="lib/cglib-full-2.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-dbcp-1.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.0.jar"/>
@@ -73,7 +72,6 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate2-2.1.8.jar"/>
-	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/grouper.jar" sourcepath="/Grouper"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
@@ -87,5 +85,12 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
+	<classpathentry kind="lib" path="lib/caGrid-1.1-Introduce-1.1-serviceTools.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-advertisement.jar"/>
+	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
