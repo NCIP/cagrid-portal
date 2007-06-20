@@ -16,7 +16,8 @@
 	<property name="ext.resources.dir" value="${basedir}/ext/resources" />
 	<property name="ext.test.lib" value="${basedir}/ext/test/lib" />
 	<property name="sync.description.file" value="${ext.resources.dir}/sync-description.xml" />
-
+	<property name="globus.user.home.dir" value="${user.home}/.globus/" />
+	<property name="globus.trusted.ca.dir" value="${globus.user.home.dir}/certificates/" />
 
 
 	<!-- ============================================================== -->
