@@ -459,6 +459,8 @@
             <artifact refid="servicesecurity.jars" />
             <artifact refid="security.metadata.jars" />
             <artifact refid="common.metadata.jars" />
+        	<artifact refid="advertisement.jars" />
+        	<artifact refid="jdom.jars" />
         </resolveDependencies>
         <delete dir="${projects.dir}/gridgrouper/schema/GridGrouper/xsd" />
         <resolveDependencies extdir="${projects.dir}/gridgrouper/schema/GridGrouper">
