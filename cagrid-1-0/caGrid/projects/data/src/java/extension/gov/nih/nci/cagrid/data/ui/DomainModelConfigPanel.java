@@ -62,7 +62,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.4 2007-06-15 13:55:22 dervin Exp $ 
+ * @version $Id: DomainModelConfigPanel.java,v 1.5 2007-06-20 17:07:13 dervin Exp $ 
  */
 public class DomainModelConfigPanel extends JPanel {
 
@@ -104,6 +104,7 @@ public class DomainModelConfigPanel extends JPanel {
             ex.printStackTrace();
             ErrorDialog.showErrorDialog("Error loading domain model source", ex.getMessage(), ex);
         }
+        PortalUtils.setContainerEnabled(getCadsrBrowserPanel(), !noDomainModel);
         if (suppliedDomainModel) {
             try {
                 File dmFile = getSuppliedDomainModelFile();
@@ -114,8 +115,6 @@ public class DomainModelConfigPanel extends JPanel {
                 ex.printStackTrace();
                 ErrorDialog.showErrorDialog("Error loading domain model", ex.getMessage(), ex);
             }
-        } else if (noDomainModel) {
-            
         } else if (!noDomainModel && !suppliedDomainModel) {
             // domain model must be from caDSR
             try {
