@@ -12,51 +12,52 @@ import javax.swing.JPopupMenu;
 
 public class ServicePopUpMenu extends JPopupMenu {
 
-	ServiceTypeTreeNode node;
-	private JMenuItem modificationMenuItem = null;
+    ServiceTypeTreeNode node;
+    private JMenuItem modificationMenuItem = null;
 
 
-	/**
-	 * This method initializes
-	 */
-	public ServicePopUpMenu(ServiceTypeTreeNode node) {
-		super();
-		this.node = node;
-		initialize();
-	}
+    /**
+     * This method initializes
+     */
+    public ServicePopUpMenu(ServiceTypeTreeNode node) {
+        super();
+        this.node = node;
+        initialize();
+    }
 
 
-	/**
-	 * This method initializes this
-	 */
-	private void initialize() {
-		this.add(getModificationMenuItem());
-	}
+    /**
+     * This method initializes this
+     */
+    private void initialize() {
+        this.add(getModificationMenuItem());
+    }
 
 
-	/**
-	 * This method initializes modificationMenuItem
-	 * 
-	 * @return javax.swing.JMenuItem
-	 */
-	private JMenuItem getModificationMenuItem() {
-		if (modificationMenuItem == null) {
-			modificationMenuItem = new JMenuItem();
-			modificationMenuItem.setText("Modify Service Context");
-			modificationMenuItem.addMouseListener(new MouseAdapter() {
+    /**
+     * This method initializes modificationMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem getModificationMenuItem() {
+        if (this.modificationMenuItem == null) {
+            this.modificationMenuItem = new JMenuItem();
+            this.modificationMenuItem.setText("Modify Service Context");
+            this.modificationMenuItem.addMouseListener(new MouseAdapter() {
 
-				public void mousePressed(MouseEvent e) {
-					super.mousePressed(e);
-					
-					ModifyService comp = new ModifyService(node, new SpecificServiceInformation(node.getInfo(),
-						node.getServiceType()),false);
-					comp.pack();
-					PortalUtils.centerWindow(comp);
-					comp.setVisible(true);
-				}
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
 
-			});
-		}
-		return modificationMenuItem;
-	}
+                    ModifyService comp = new ModifyService(ServicePopUpMenu.this.node, new SpecificServiceInformation(
+                        ServicePopUpMenu.this.node.getInfo(), ServicePopUpMenu.this.node.getServiceType()), false);
+                    comp.pack();
+                    PortalUtils.centerComponent(comp);
+                    comp.setVisible(true);
+                }
+
+            });
+        }
+        return this.modificationMenuItem;
+    }
 }

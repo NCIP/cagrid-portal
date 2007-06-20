@@ -61,8 +61,9 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
                 ResourceManager.setConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY,
                     NamespaceTypeDiscoveryComponent.ERROR);
             }
-            ResourceManager.setConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY + ".options",
-                NamespaceTypeDiscoveryComponent.ERROR + "," + NamespaceTypeDiscoveryComponent.REPLACE + "," + NamespaceTypeDiscoveryComponent.IGNORE);
+            ResourceManager.setConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY
+                + ".options", NamespaceTypeDiscoveryComponent.ERROR + "," + NamespaceTypeDiscoveryComponent.REPLACE
+                + "," + NamespaceTypeDiscoveryComponent.IGNORE);
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -92,7 +93,7 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
                 PreferencesDialog preferences = new PreferencesDialog(PortalResourceManager.getInstance()
                     .getGridPortal());
                 // user want to configure preferences....
-                PortalUtils.centerWindow(preferences);
+                PortalUtils.centerComponent(preferences);
                 preferences.setVisible(true);
             }
         });

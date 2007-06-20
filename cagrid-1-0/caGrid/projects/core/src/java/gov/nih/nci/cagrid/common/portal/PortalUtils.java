@@ -5,10 +5,8 @@ import gov.nih.nci.cagrid.common.Utils;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.Window;
 
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -84,7 +82,7 @@ public class PortalUtils {
      * 
      * @param comp
      */
-    public final static void centerComponent(JComponent comp) {
+    public final static void centerComponent(Component comp) {
         // nothing to do for null components
         if (comp == null) {
             return;
@@ -100,14 +98,22 @@ public class PortalUtils {
         // if still null try the root window
         if (root == null) {
             root = SwingUtilities.getRoot(comp);
+            if (root == comp) {
+                // don't want to center with respect to ourselves
+                root = comp.getParent();
+            }
         }
 
         // only do anything if root is non-null
         if (root != null) {
             int w = root.getSize().width;
             int h = root.getSize().height;
-            int x = root.getLocationOnScreen().x;
-            int y = root.getLocationOnScreen().y;
+            int x = 0;
+            int y = 0;
+            if (root.isShowing()) {
+                x = root.getLocationOnScreen().x;
+                y = root.getLocationOnScreen().y;
+            }
 
             Dimension dim = comp.getSize();
             comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
@@ -121,30 +127,7 @@ public class PortalUtils {
      * @param comp
      */
     public final static void centerWindowInScreen(Window comp) {
-        // Determine the new location of the window
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        int w = comp.getSize().width;
-        int h = comp.getSize().height;
-        int x = (dim.width - w) / 2;
-        int y = (dim.height - h) / 2;
-
-        comp.setLocation(x, y);
-    }
-
-
-    /**
-     * Centers the window within the current application window
-     * 
-     * @param comp
-     */
-    public final static void centerWindow(Window comp) {
-        // Determine the new location of the window
-        int w = PortalResourceManager.getInstance().getGridPortal().getSize().width;
-        int h = PortalResourceManager.getInstance().getGridPortal().getSize().height;
-        int x = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().x;
-        int y = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().y;
-        Dimension dim = comp.getSize();
-        comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
+        comp.setLocationRelativeTo(null);
     }
 
 

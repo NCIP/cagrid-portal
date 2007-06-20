@@ -92,7 +92,6 @@
 	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_enum.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_stubs_enum.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
 	<classpathentry kind="lib" path="test/lib/ao-util.jar"/>

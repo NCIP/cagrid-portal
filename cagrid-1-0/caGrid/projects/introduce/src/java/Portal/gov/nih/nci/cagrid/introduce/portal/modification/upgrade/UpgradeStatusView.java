@@ -64,7 +64,7 @@ public class UpgradeStatusView extends JDialog {
      * @return javax.swing.JPanel
      */
     private JPanel getMainPanel() {
-        if (mainPanel == null) {
+        if (this.mainPanel == null) {
             GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
             gridBagConstraints1.gridx = 0;
             gridBagConstraints1.fill = GridBagConstraints.BOTH;
@@ -77,12 +77,12 @@ public class UpgradeStatusView extends JDialog {
             gridBagConstraints.weightx = 1.0D;
             gridBagConstraints.weighty = 0.0D;
             gridBagConstraints.gridx = 0;
-            mainPanel = new JPanel();
-            mainPanel.setLayout(new GridBagLayout());
-            mainPanel.add(getButtonPanel(), gridBagConstraints);
-            mainPanel.add(getStatusPanel(), gridBagConstraints1);
+            this.mainPanel = new JPanel();
+            this.mainPanel.setLayout(new GridBagLayout());
+            this.mainPanel.add(getButtonPanel(), gridBagConstraints);
+            this.mainPanel.add(getStatusPanel(), gridBagConstraints1);
         }
-        return mainPanel;
+        return this.mainPanel;
     }
 
 
@@ -92,7 +92,7 @@ public class UpgradeStatusView extends JDialog {
      * @return javax.swing.JPanel
      */
     private JPanel getButtonPanel() {
-        if (buttonPanel == null) {
+        if (this.buttonPanel == null) {
             GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
             gridBagConstraints5.gridx = 1;
             gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
@@ -105,13 +105,13 @@ public class UpgradeStatusView extends JDialog {
             gridBagConstraints3.gridx = 0;
             gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints3.gridy = 0;
-            buttonPanel = new JPanel();
-            buttonPanel.setLayout(new GridBagLayout());
-            buttonPanel.add(getProceedButton(), gridBagConstraints3);
-            buttonPanel.add(getRollBackButton(), gridBagConstraints4);
-            buttonPanel.add(getEditButton(), gridBagConstraints5);
+            this.buttonPanel = new JPanel();
+            this.buttonPanel.setLayout(new GridBagLayout());
+            this.buttonPanel.add(getProceedButton(), gridBagConstraints3);
+            this.buttonPanel.add(getRollBackButton(), gridBagConstraints4);
+            this.buttonPanel.add(getEditButton(), gridBagConstraints5);
         }
-        return buttonPanel;
+        return this.buttonPanel;
     }
 
 
@@ -121,16 +121,16 @@ public class UpgradeStatusView extends JDialog {
      * @return javax.swing.JPanel
      */
     private JPanel getStatusPanel() {
-        if (statusPanel == null) {
+        if (this.statusPanel == null) {
             GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
             gridBagConstraints6.fill = GridBagConstraints.BOTH;
             gridBagConstraints6.weighty = 1.0;
             gridBagConstraints6.weightx = 1.0;
-            statusPanel = new JPanel();
-            statusPanel.setLayout(new GridBagLayout());
-            statusPanel.add(getStatusScrollPane(), gridBagConstraints6);
+            this.statusPanel = new JPanel();
+            this.statusPanel.setLayout(new GridBagLayout());
+            this.statusPanel.add(getStatusScrollPane(), gridBagConstraints6);
         }
-        return statusPanel;
+        return this.statusPanel;
     }
 
 
@@ -140,12 +140,12 @@ public class UpgradeStatusView extends JDialog {
      * @return javax.swing.JTextArea
      */
     private JTextArea getStatusTextArea() {
-        if (statusTextArea == null) {
-            statusTextArea = new JTextArea();
-            statusTextArea.setEditable(false);
-            statusTextArea.setText(status.toString());
+        if (this.statusTextArea == null) {
+            this.statusTextArea = new JTextArea();
+            this.statusTextArea.setEditable(false);
+            this.statusTextArea.setText(this.status.toString());
         }
-        return statusTextArea;
+        return this.statusTextArea;
     }
 
 
@@ -155,20 +155,20 @@ public class UpgradeStatusView extends JDialog {
      * @return javax.swing.JButton
      */
     private JButton getProceedButton() {
-        if (proceedButton == null) {
-            proceedButton = new JButton();
-            proceedButton.setText("Proceed");
-            proceedButton.addActionListener(new ActionListener() {
+        if (this.proceedButton == null) {
+            this.proceedButton = new JButton();
+            this.proceedButton.setText("Proceed");
+            this.proceedButton.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    result = UpgradeStatusView.PROCEED;
+                    UpgradeStatusView.this.result = UpgradeStatusView.PROCEED;
                     dispose();
 
                 }
 
             });
         }
-        return proceedButton;
+        return this.proceedButton;
     }
 
 
@@ -178,20 +178,20 @@ public class UpgradeStatusView extends JDialog {
      * @return javax.swing.JButton
      */
     private JButton getRollBackButton() {
-        if (rollBackButton == null) {
-            rollBackButton = new JButton();
-            rollBackButton.setText("Roll Back");
-            rollBackButton.addActionListener(new ActionListener() {
+        if (this.rollBackButton == null) {
+            this.rollBackButton = new JButton();
+            this.rollBackButton.setText("Roll Back");
+            this.rollBackButton.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    result = UpgradeStatusView.ROLL_BACK;
+                    UpgradeStatusView.this.result = UpgradeStatusView.ROLL_BACK;
                     dispose();
 
                 }
 
             });
         }
-        return rollBackButton;
+        return this.rollBackButton;
     }
 
 
@@ -201,20 +201,20 @@ public class UpgradeStatusView extends JDialog {
      * @return javax.swing.JButton
      */
     private JButton getEditButton() {
-        if (editButton == null) {
-            editButton = new JButton();
-            editButton.setText("Edit");
-            editButton.addActionListener(new ActionListener() {
+        if (this.editButton == null) {
+            this.editButton = new JButton();
+            this.editButton.setText("Edit");
+            this.editButton.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    result = UpgradeStatusView.CANCEL;
+                    UpgradeStatusView.this.result = UpgradeStatusView.CANCEL;
                     dispose();
 
                 }
 
             });
         }
-        return editButton;
+        return this.editButton;
     }
 
 
@@ -224,11 +224,11 @@ public class UpgradeStatusView extends JDialog {
      * @return javax.swing.JScrollPane
      */
     private JScrollPane getStatusScrollPane() {
-        if (statusScrollPane == null) {
-            statusScrollPane = new JScrollPane();
-            statusScrollPane.setViewportView(getStatusTextArea());
+        if (this.statusScrollPane == null) {
+            this.statusScrollPane = new JScrollPane();
+            this.statusScrollPane.setViewportView(getStatusTextArea());
         }
-        return statusScrollPane;
+        return this.statusScrollPane;
     }
 
 
@@ -238,8 +238,8 @@ public class UpgradeStatusView extends JDialog {
 
 
     public static int showUpgradeStatusView(UpgradeStatus status) {
-        UpgradeStatusView view = new UpgradeStatusView( status);
-        PortalUtils.centerWindow(view);
+        UpgradeStatusView view = new UpgradeStatusView(status);
+        PortalUtils.centerComponent(view);
         view.setVisible(true);
         return view.getResult();
     }

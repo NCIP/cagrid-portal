@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -83,7 +84,9 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
     }
 
 
-    public NamespaceType[] createNamespaceType(File schemaDestinationDir, String namespaceExistsPolicy) {
+    @Override
+    public NamespaceType[] createNamespaceType(File schemaDestinationDir, String namespaceExistsPolicy,
+        MultiEventProgressBar progress) {
         Namespace selectedNS = getGmePanel().getSelectedSchemaNamespace();
         if (!selectedNS.getRaw().equals(IntroduceConstants.W3CNAMESPACE)) {
             try {

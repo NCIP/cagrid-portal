@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.introduce.extensions.sdk.discovery;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.ZipUtilities;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
+import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -16,11 +16,10 @@ import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeD
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,6 +42,7 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.projectmobius.common.MobiusException;
 
 import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationMessage;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.message.SimpleValidationMessage;
@@ -112,8 +112,8 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
         GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
         gridBagConstraints22.gridx = 0;
         gridBagConstraints22.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints22.weightx = 0.0D;
-        gridBagConstraints22.weighty = 0.0D;
+        gridBagConstraints22.weightx = 1.0D;
+        gridBagConstraints22.weighty = 1.0D;
         gridBagConstraints22.gridy = 2;
         GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
         gridBagConstraints1.gridx = 0;
@@ -146,35 +146,26 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
         ValidationComponentUtils.setMessageKey(getProjNameTextField(), PROJECT_SHORT_NAME);
         ValidationComponentUtils.setMessageKey(getProjVersionTextField(), PROJECT_VERSION);
 
-        // install a focus listener; pass in ourselves so we can uninstall it
-        // when we go away
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener(new FocusChangeHandler(this));
-
         updateModel();
         validateInput();
         updateComponentTreeSeverity();
     }
 
 
-    private final class FocusChangeHandler implements PropertyChangeListener {
-        private JComponent owner;
+    private final class FocusChangeHandler implements FocusListener {
 
+        public void focusGained(FocusEvent e) {
+            update();
 
-        public FocusChangeHandler(JComponent owner) {
-            this.owner = owner;
         }
 
 
-        public void propertyChange(PropertyChangeEvent evt) {
-            // make sure we are removed when our component is no longer visible
-            if (this.owner == null || !this.owner.isVisible()) {
-                //TODO: is this happening to early when ran in Introduce?
-                KeyboardFocusManager.getCurrentKeyboardFocusManager().removePropertyChangeListener(this);
-            }
-            String propertyName = evt.getPropertyName();
-            if (!"permanentFocusOwner".equals(propertyName)) {
-                return;
-            }
+        public void focusLost(FocusEvent e) {
+            update();
+        }
+
+
+        private void update() {
             updateModel();
             validateInput();
         }
@@ -249,73 +240,76 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 
 
     @Override
-    public NamespaceType[] createNamespaceType(File schemaDestinationDir, String policy) {
+    public NamespaceType[] createNamespaceType(File schemaDestinationDir, String policy, MultiEventProgressBar progress) {
         // updates genInfo
         updateModel();
 
         // updates validationModel
         validateInput();
 
+        // populate the error dialog with messages
         if (this.validationModel.getResult().hasErrors()) {
             System.out.println("Inputs not valid, see error messages.");
+            for (ValidationMessage message : this.validationModel.getResult().getErrors()) {
+                addError(message.formattedText());
+            }
             return null;
         }
 
         SDKExecutionResult result = null;
         try {
             try {
+                int initEventID = progress.startEvent("Initializing SDK...");
                 File sdkDir = new File(this.extensionDir, CACORESDK_DIR_NAME);
                 // create working dir from zip if not extracted yet
                 if (!sdkDir.exists()) {
+                    // progress.getProgress().setString("Extracting SDK...");
                     File zip = new File(this.extensionDir, CACORE_SDK_ZIPFILE_NAME);
                     if (zip.exists() && zip.canRead() && zip.isFile()) {
                         try {
                             ZipUtilities.unzipInPlace(zip);
                         } catch (IOException e) {
-                            ErrorDialog.showErrorDialog("Problem extracting SDK from zip file: " + zip, e);
+                            addError("Problem extracting SDK from zip file: " + zip);
+                            setErrorCauseThrowable(e);
                             return null;
                         }
                     } else {
-                        ErrorDialog.showErrorDialog("SDK directory [" + sdkDir
-                            + "] not found, and couldn't locate zip file: " + zip);
+                        addError("SDK directory [" + sdkDir + "] not found, and couldn't locate zip file: " + zip);
                         return null;
                     }
                 }
+                progress.stopEvent(initEventID, "Initialization Complete");
 
-                // TODO: run a busy dialog
-                // // MultiEventProgressBar diag = new BusyDialogRunnable();
-                // BusyDialogRunnable progress = new BusyDialogRunnable((JFrame)
-                // SwingUtilities.getRoot(this), "Progress") {
-                //
-                // @Override
-                // public void process() {
-                // this.setProgressText()
-                // }
-                //
-                // };
-
-                result = SDKExecutor.runSDK(sdkDir, this.genInfo);
+                int sdkEventID = progress.startEvent("Executing SDK...");
+                result = SDKExecutor.runSDK(sdkDir, this.genInfo, progress);
+                progress.stopEvent(sdkEventID, "SDK execution complete.");
             } catch (SDKExecutionException e) {
-                ErrorDialog.showErrorDialog("Problem executing SDK: " + e.getMessage(), e);
+                addError("Problem executing SDK: " + e.getMessage());
+                setErrorCauseThrowable(e);
                 return null;
             }
 
             // validate any existing schemas against the namespace replacement
             // policy
             try {
+                int validateEventID = progress.startEvent("Validating results...");
                 validateGeneratedXSDs(result, policy);
+                progress.stopEvent(validateEventID, "Validation complete.");
             } catch (SDKExecutionException e) {
-                ErrorDialog.showErrorDialog("Problem validating schemas generated by SDK against replacement policy.",
-                    e.getMessage(), e);
+                addError("Problem validating schemas generated by SDK against replacement policy:" + e.getMessage());
+                setErrorCauseThrowable(e);
                 return null;
             }
 
             // copy the XSD(s) to service schema dir
             List<File> copiedXSDs = null;
             try {
+                int copyEventID = progress.startEvent("Copying schemas to service...");
                 copiedXSDs = copyGeneratedXSDs(schemaDestinationDir, result, policy);
+                progress.stopEvent(copyEventID, "Copy successful.");
             } catch (IOException e) {
-                ErrorDialog.showErrorDialog("Problem copying schemas generated by SDK.", e.getMessage(), e);
+                addError("Problem copying schemas generated by SDK:" + e.getMessage());
+                setErrorCauseThrowable(e);
                 return null;
             }
 
@@ -330,17 +324,22 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
             // add schema types to introduce namespaces
             NamespaceType[] results = null;
             try {
+                // progress.getProgress().setString("Adding results to
+                // service...");
                 results = createNamespaceTypes(schemaDestinationDir, result, copiedXSDs);
             } catch (MobiusException e) {
-                ErrorDialog.showErrorDialog("Problem processing schemas created by SDK: " + e.getMessage(), e);
+                addError("Problem processing schemas created by SDK: " + e.getMessage());
+                setErrorCauseThrowable(e);
                 return null;
             }
 
             return results;
         } finally {
             if (result != null) {
+                int cleanupEventID = progress.startEvent("Cleaning up working directory.");
                 // clean up our working area when we are done with it
                 result.destroy();
+                progress.stopAll("Complete.");
             }
         }
 
@@ -460,6 +459,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
         if (this.modelTextField == null) {
             this.modelTextField = new JTextField();
             this.modelTextField.setColumns(20);
+            this.modelTextField.addFocusListener(new FocusChangeHandler());
         }
         return this.modelTextField;
     }
@@ -489,12 +489,15 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
         try {
             selectedFilename = ResourceManager.promptFile(null, FileFilters.XMI_FILTER);
         } catch (IOException e) {
-            ErrorDialog.showErrorDialog("Problem selecting file, please try again or manually type the file path.", e);
+            addError("Problem selecting file, please try again or manually type the file path.");
+            setErrorCauseThrowable(e);
             return;
         }
 
         if (selectedFilename != null) {
             getModelTextField().setText(new File(selectedFilename).getAbsolutePath());
+            updateModel();
+            validateInput();
         }
     }
 
@@ -509,6 +512,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
             this.packageIncludeTextField = new JTextField();
             this.packageIncludeTextField.setText(".*domain.*");
             this.packageIncludeTextField.setColumns(20);
+            this.packageIncludeTextField.addFocusListener(new FocusChangeHandler());
         }
         return this.packageIncludeTextField;
     }
@@ -522,6 +526,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
     private JTextField getPackageExcludeTextField() {
         if (this.packageExcludeTextField == null) {
             this.packageExcludeTextField = new JTextField();
+            this.packageExcludeTextField.addFocusListener(new FocusChangeHandler());
         }
         return this.packageExcludeTextField;
     }
@@ -672,8 +677,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
         if (this.contextTextField == null) {
             this.contextTextField = new JTextField();
             this.contextTextField.setText("caBIG");
-            // this.contextTextField.setInputVerifier(new
-            // NonWhiteSpaceValidator(this, this.contextTextField));
+            this.contextTextField.addFocusListener(new FocusChangeHandler());
         }
         return this.contextTextField;
     }
@@ -688,6 +692,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
         if (this.projNameTextField == null) {
             this.projNameTextField = new JTextField();
             this.projNameTextField.setText(DEFAULT_PROJECT);
+            this.projNameTextField.addFocusListener(new FocusChangeHandler());
         }
         return this.projNameTextField;
     }
@@ -702,6 +707,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
         if (this.projVersionTextField == null) {
             this.projVersionTextField = new JTextField();
             this.projVersionTextField.setText("1.0");
+            this.projVersionTextField.addFocusListener(new FocusChangeHandler());
         }
         return this.projVersionTextField;
     }
@@ -725,7 +731,8 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
             JButton createButton = new JButton("Test Create");
             createButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    NamespaceType[] createdNs = panel.createNamespaceType(new File("."), "");
+                    NamespaceType[] createdNs = panel.createNamespaceType(new File("."), "", new MultiEventProgressBar(
+                        false));
                     if (createdNs != null) {
                         for (NamespaceType element : createdNs) {
                             System.out.println("Created Namespace:" + element.getNamespace() + " at location:"

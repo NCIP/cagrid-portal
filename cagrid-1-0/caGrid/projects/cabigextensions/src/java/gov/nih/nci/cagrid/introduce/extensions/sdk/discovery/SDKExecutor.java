@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.extensions.sdk.discovery;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
@@ -49,13 +50,15 @@ public class SDKExecutor {
     // include_package = package regex to include
     // exclude_package = package regex to exclude
 
-    public static SDKExecutionResult runSDK(File sdkDirectory, SDKGenerationInformation info)
-        throws SDKExecutionException {
+    public static SDKExecutionResult runSDK(File sdkDirectory, SDKGenerationInformation info,
+        MultiEventProgressBar progress) throws SDKExecutionException {
         LOG.debug("SDK Directory:" + sdkDirectory.getAbsolutePath());
         LOG.debug("SDK Generation Info:" + info);
 
         File workDir = null;
+        int currEventID = -1;
         try {
+            currEventID = progress.startEvent("Creating SDK working area.");
             // create temporary working area
             workDir = File.createTempFile("SDKWorkArea", "");
             workDir.delete();
@@ -64,6 +67,7 @@ public class SDKExecutor {
             LOG.debug("SDK Work directory:" + workDir.getAbsolutePath());
             // copy sdk to it
             Utils.copyDirectory(sdkDirectory, workDir);
+            progress.stopEvent(currEventID, "Creating working area.");
         } catch (IOException e) {
             String error = "Problem creating work area for SDK execution.";
             LOG.error(error, e);
@@ -93,12 +97,16 @@ public class SDKExecutor {
 
         // template the SDK config with values from user
         LOG.debug("Applying configuration changes.");
+        currEventID = progress.startEvent("Applying configuration changes.");
         applyConfigurationChanges(workDir, info);
+        progress.stopEvent(currEventID, "Successfully configured.");
 
         // execute the SDK
+        currEventID = progress.startEvent("Applying configuration changes.");
         String antTargets = info.isXSDOnly() ? XSD_ONLY_ANT_TARGETS : XSD_CASTOR_ANT_TARGETS;
         LOG.debug("Invoking ant targets (" + antTargets + ")");
         invokeAnt(antTargets, workDir);
+        progress.stopEvent(currEventID, "Configuration Complete.");
 
         // create and validate the result
         SDKExecutionResult result = new SDKExecutionResult(workDir, info);

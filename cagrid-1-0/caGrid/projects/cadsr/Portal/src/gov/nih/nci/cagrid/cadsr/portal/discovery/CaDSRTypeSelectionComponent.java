@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.cadsr.portal.PackageSelectedListener;
 import gov.nih.nci.cagrid.cadsr.portal.ProjectSelectedListener;
+import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
@@ -106,12 +107,14 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 
     @Override
-    public NamespaceType[] createNamespaceType(File schemaDestinationDir, String namespaceExistsPolicy) {
+    public NamespaceType[] createNamespaceType(File schemaDestinationDir, String namespaceExistsPolicy,
+        MultiEventProgressBar progress) {
         try {
             List namespaceTypes = new ArrayList();
             NamespaceType rootNamespace = new NamespaceType();
             String ns = getNsTextField().getText();
             if (ns.equals("") || ns.equals("unavailable")) {
+                addError("Nothing selected.");
                 return null;
             }
             Namespace namespace = new Namespace(ns);
@@ -129,6 +132,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
                         + namespace.getName());
                     getNsTextField().setText(namespace.getRaw());
                 } else {
+                    addError("No alternative domain selected.");
                     return null;
                 }
             }
@@ -148,6 +152,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
                     namespace = alternativeSchema;
                     getNsTextField().setText(namespace.getRaw());
                 } else {
+                    addError("No alternative schema selected.");
                     return null;
                 }
                 schemaContents = getSchema(namespace);
@@ -184,7 +189,8 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
             namespaceTypes.toArray(nsTypeArray);
             return nsTypeArray;
         } catch (Exception e) {
-            e.printStackTrace();
+            addError(e.getMessage());
+            setErrorCauseThrowable(e);
             return null;
         }
     }

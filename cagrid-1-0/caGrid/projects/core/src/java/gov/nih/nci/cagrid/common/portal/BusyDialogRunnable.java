@@ -7,19 +7,18 @@ import javax.swing.WindowConstants;
 
 
 public abstract class BusyDialogRunnable implements Runnable {
-
     final private BusyDialog dialog;
-
     private String errorMessage = "";
-
     private boolean valid = true;
-
-    private JFrame owner;
 
 
     public BusyDialogRunnable(JFrame owner, String title) {
-        this.owner = owner;
-        this.dialog = new BusyDialog(owner, "Progress (" + title + ")");
+        this(new BusyDialog(owner, "Progress (" + title + ")"));
+    }
+
+
+    public BusyDialogRunnable(BusyDialog dialog) {
+        this.dialog = dialog;
         this.dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
@@ -59,7 +58,7 @@ public abstract class BusyDialogRunnable implements Runnable {
         }
 
         if (!this.valid) {
-            JOptionPane.showMessageDialog(this.owner, this.errorMessage);
+            JOptionPane.showMessageDialog(this.dialog.getOwner(), this.errorMessage);
         }
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
