@@ -1,4 +1,4 @@
-<ns1:ServiceDescription introduceVersion="1.0" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+<ns1:ServiceDescription introduceVersion="1.1" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./sync-gts.xsd" namespace="http://cagrid.nci.nih.gov/12/SyncGTS" packageName="gov.nih.nci.cagrid.syncgts.bean" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="SyncDescription" xsi:type="ns2:SchemaElementType"/>
@@ -42,10 +42,11 @@
     </ns4:Method>
    </ns4:Methods>
    <ns6:ResourcePropertiesList xsi:type="ns6:ResourcePropertiesListType" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
   </ns3:Service>
  </ns3:Services>
  <ns7:Extensions xsi:type="ns7:ExtensionsType" xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
  <ns8:ServiceProperties xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns8:Property key="performFirstSync" value="true"/>
+  <ns8:Property description="" key="performFirstSync" value="true"/>
  </ns8:ServiceProperties>
 </ns1:ServiceDescription>
