@@ -20,7 +20,7 @@
       <none />
     </auth-method>
   </method>
-  <authz value="none" />
+  <authz value="gts:gov.nih.nci.cagrid.gts.service.globus.GTSAuthorization" />
   <auth-method>
     <GSITransport>
       <protection-level>
