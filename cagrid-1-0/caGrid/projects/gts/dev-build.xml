@@ -55,6 +55,7 @@
 			</fileset>
 		</path>
 		<path id="test.run.extended.classpath">
+			<pathelement location="${test.dir}/resources" />
 		</path>
 		<path id="run.extended.classpath">
 		</path>
