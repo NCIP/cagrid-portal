@@ -112,7 +112,11 @@
 	<!-- Post Compile Build Target                                       -->
 	<!-- ============================================================== -->
 	<target name="postCompile">
-
+		<copy toDir="${build.dest}">
+			<fileset dir="${basedir}">
+				<include name="sync-gts-log4j.properties" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- ============================================================== -->
