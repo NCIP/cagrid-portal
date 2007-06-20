@@ -12,7 +12,7 @@
 	<!-- ============================================================== -->
 	<!-- Pre Deploy Tomcat                                              -->
 	<!-- ============================================================== -->
-	<target name="preDeployTomcat" depends="deployPatchedCogToTomcat">
+	<target name="preDeployTomcat" depends="deployTrustedCerts,deployPatchedCogToTomcat">
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${ext.lib}">
 				<include name="*.jar" />
@@ -48,7 +48,7 @@
 	<!-- ============================================================== -->
 	<!-- Pre Deploy Globus                                              -->
 	<!-- ============================================================== -->
-	<target name="preDeployGlobus">
+	<target name="preDeployGlobus" depends="deployTrustedCerts">
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${ext.lib}">
 				<include name="*.jar" />

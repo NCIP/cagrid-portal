@@ -46,7 +46,6 @@
 	
 	
 	<target name="prepareDeploymentTmp" depends="">
-		<mkdir dir="tmp" />
 		
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
@@ -121,6 +120,7 @@
 		<mkdir dir="${service.deployment.dir}" />
 		<!-- prepare the server-config file -->
 		
+		<mkdir dir="tmp" />
 		
 		<runtarget target="preDeployTomcat"/>
 		
