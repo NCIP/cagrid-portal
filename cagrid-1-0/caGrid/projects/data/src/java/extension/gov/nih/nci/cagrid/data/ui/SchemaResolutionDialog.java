@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeD
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +28,8 @@ import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
- * SchemaResolutionDialog Dialog to resolve schemas from all available namespace
+ * SchemaResolutionDialog 
+ * Dialog to resolve schemas from all available namespace
  * type discovery extension components
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
@@ -42,14 +44,15 @@ public class SchemaResolutionDialog extends JDialog {
 
     private JButton loadSchemasButton = null;
     private JButton cancelButton = null;
-    private JPanel buttonPanel = null;
+    private JPanel interactionPanel = null;
     private JPanel mainPanel = null;
     private JTabbedPane discoveryTabbedPane = null;
+    private MultiEventProgressBar namespaceDiscoveryProgressBar = null;
     private NamespaceType[] resolvedSchemas;
 
-
     private SchemaResolutionDialog(ServiceInformation info) {
-        super(PortalResourceManager.getInstance().getGridPortal(), "Schema Resolution", true);
+        super(PortalResourceManager.getInstance().getGridPortal(), 
+            "Schema Resolution", true);
         this.serviceInfo = info;
         this.resolvedSchemas = null;
         initialize();
@@ -125,22 +128,29 @@ public class SchemaResolutionDialog extends JDialog {
      * 
      * @return javax.swing.JPanel
      */
-    private JPanel getButtonPanel() {
-        if (this.buttonPanel == null) {
+    private JPanel getInteractionPanel() {
+        if (this.interactionPanel == null) {
+            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+            gridBagConstraints1.gridx = 0;
+            gridBagConstraints1.weightx = 1.0D;
+            gridBagConstraints1.insets = new Insets(4, 4, 4, 4);
+            gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints1.gridy = 0;
             GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-            gridBagConstraints15.gridx = 1;
+            gridBagConstraints15.gridx = 2;
             gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints15.gridy = 0;
             GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-            gridBagConstraints14.gridx = 0;
+            gridBagConstraints14.gridx = 1;
             gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints14.gridy = 0;
-            this.buttonPanel = new JPanel();
-            this.buttonPanel.setLayout(new GridBagLayout());
-            this.buttonPanel.add(getLoadSchemasButton(), gridBagConstraints14);
-            this.buttonPanel.add(getCancelButton(), gridBagConstraints15);
+            this.interactionPanel = new JPanel();
+            this.interactionPanel.setLayout(new GridBagLayout());
+            interactionPanel.add(getLoadSchemasButton(), gridBagConstraints14);
+            interactionPanel.add(getCancelButton(), gridBagConstraints15);
+            interactionPanel.add(getNamespaceDiscoveryProgressBar(), gridBagConstraints1);
         }
-        return this.buttonPanel;
+        return this.interactionPanel;
     }
 
 
@@ -162,10 +172,11 @@ public class SchemaResolutionDialog extends JDialog {
             gridBagConstraints19.gridx = 0;
             gridBagConstraints19.anchor = java.awt.GridBagConstraints.EAST;
             gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints19.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints19.gridy = 1;
             this.mainPanel = new JPanel();
             this.mainPanel.setLayout(new GridBagLayout());
-            this.mainPanel.add(getButtonPanel(), gridBagConstraints19);
+            mainPanel.add(getInteractionPanel(), gridBagConstraints19);
             this.mainPanel.add(getDiscoveryTabbedPane(), gridBagConstraints);
         }
         return this.mainPanel;
@@ -182,8 +193,8 @@ public class SchemaResolutionDialog extends JDialog {
                 while (discoIter.hasNext()) {
                     DiscoveryExtensionDescriptionType dd = (DiscoveryExtensionDescriptionType) discoIter.next();
                     try {
-                        NamespaceTypeDiscoveryComponent comp = ExtensionTools.getNamespaceTypeDiscoveryComponent(dd
-                            .getName(), this.serviceInfo.getNamespaces());
+                        NamespaceTypeDiscoveryComponent comp = ExtensionTools.getNamespaceTypeDiscoveryComponent(
+                            dd.getName(), this.serviceInfo.getNamespaces());
                         if (comp != null) {
                             this.discoveryTabbedPane.addTab(dd.getDisplayName(), comp);
                         }
@@ -196,6 +207,14 @@ public class SchemaResolutionDialog extends JDialog {
         }
         return this.discoveryTabbedPane;
     }
+    
+    
+    private MultiEventProgressBar getNamespaceDiscoveryProgressBar() {
+        if (namespaceDiscoveryProgressBar == null) {
+            namespaceDiscoveryProgressBar = new MultiEventProgressBar(false);
+        }
+        return namespaceDiscoveryProgressBar;
+    }
 
 
     private NamespaceType[] loadSchemas() {
@@ -204,18 +223,14 @@ public class SchemaResolutionDialog extends JDialog {
             .getSelectedComponent();
         // get the service's schema directory
         File schemaDir = new File(CacoreWizardUtils.getServiceBaseDir(this.serviceInfo)
-            + File.separator
-            + "schema"
-            + File.separator
+            + File.separator + "schema" + File.separator
             + this.serviceInfo.getIntroduceServiceProperties().getProperty(
                 IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 
-        // TODO: add this to the GUI somewhere
-        MultiEventProgressBar multiEventProgressBar = new MultiEventProgressBar(true);
-
-        NamespaceType[] namespaces = discComponent.createNamespaceType(schemaDir, ResourceManager
-            .getConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY),
-            multiEventProgressBar);
+        NamespaceType[] namespaces = discComponent.createNamespaceType(schemaDir, 
+            ResourceManager.getConfigurationProperty(
+                IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY),
+            getNamespaceDiscoveryProgressBar());
         if (namespaces == null) {
             ErrorDialog.showErrorDialog("Error getting types from discovery component");
         }
