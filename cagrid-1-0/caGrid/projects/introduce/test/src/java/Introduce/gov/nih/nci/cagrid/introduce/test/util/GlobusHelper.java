@@ -47,7 +47,7 @@ public class GlobusHelper {
         }
 
         // create tmp globus location
-        tmpGlobusLocation = FileUtils.createTempDir("Globus", "dir", tmpDir);
+        tmpGlobusLocation = createTempDir("Globus", "dir", tmpDir);
 
         // copy globus to tmp location
         Utils.copyDirectory(new File(globusLocation), tmpGlobusLocation);
@@ -203,5 +203,19 @@ public class GlobusHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    
+    private static File createTempDir(String prefix, String suffix, File dir) throws IOException {
+        File temp = null;
+        if (dir == null) {
+            temp = File.createTempFile(prefix, suffix);
+        } else {
+            dir.mkdirs();
+            temp = File.createTempFile(prefix, suffix, dir);
+        }
+        temp.delete();
+        temp.mkdirs();
+        return temp;
     }
 }
