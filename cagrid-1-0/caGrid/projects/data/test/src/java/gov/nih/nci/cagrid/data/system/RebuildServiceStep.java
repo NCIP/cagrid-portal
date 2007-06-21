@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.data.system;
 
+import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.data.StreamPrinter;
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -19,7 +19,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: RebuildServiceStep.java,v 1.7 2007-06-12 16:13:40 dervin Exp $ 
+ * @version $Id: RebuildServiceStep.java,v 1.8 2007-06-21 16:21:15 dervin Exp $ 
  */
 public class RebuildServiceStep extends Step {
 	
@@ -43,8 +43,8 @@ public class RebuildServiceStep extends Step {
         System.out.println("Invoking ant:");
         System.out.println(cmd);
 		Process p = CommonTools.createAndOutputProcess(cmd);
-        new StreamPrinter(p.getInputStream(), System.out).start();
-        new StreamPrinter(p.getErrorStream(), System.err).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
 		p.waitFor();
 		assertTrue("Service post creation process failed", p.exitValue() == 0);
 
@@ -53,8 +53,8 @@ public class RebuildServiceStep extends Step {
         System.out.println("Invoking ant:");
         System.out.println(cmd);
 		p = CommonTools.createAndOutputProcess(cmd);
-        new StreamPrinter(p.getInputStream(), System.out).start();
-        new StreamPrinter(p.getErrorStream(), System.err).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
         p.waitFor();
 		assertTrue("Build process failed", p.exitValue() == 0);
 	}

@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.sdkinstall;
 
+import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.sdkinstall.description.InstallationDescription;
 
@@ -12,7 +13,7 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Jun 18, 2007 10:38:41 AM
- * @version $Id: Version321BuildInvoker.java,v 1.2 2007-06-18 20:52:34 dervin Exp $ 
+ * @version $Id: Version321BuildInvoker.java,v 1.3 2007-06-21 16:23:18 dervin Exp $ 
  */
 public class Version321BuildInvoker extends BuildInvoker {
     public static final String BUILD_COMMAND = "build-system";
@@ -37,8 +38,10 @@ public class Version321BuildInvoker extends BuildInvoker {
         } catch (Exception ex) {
             throw new BuildInvocationException("Error creating ant build process: " + ex.getMessage(), ex);
         }
-        new StreamRedirector(proc.getInputStream(), System.out).start();
-        new StreamRedirector(proc.getErrorStream(), System.err).start();
+        new StreamGobbler(proc.getInputStream(), 
+            StreamGobbler.TYPE_OUT, System.out).start();
+        new StreamGobbler(proc.getErrorStream(), 
+            StreamGobbler.TYPE_ERR, System.err).start();
         int exitCode = 0;
         InterruptedException iex = null;
         try {

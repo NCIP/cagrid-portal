@@ -1,5 +1,7 @@
 package org.cagrid.installer.common;
 
+import gov.nih.nci.cagrid.common.StreamGobbler;
+
 import java.io.File;
 import java.util.StringTokenizer;
 

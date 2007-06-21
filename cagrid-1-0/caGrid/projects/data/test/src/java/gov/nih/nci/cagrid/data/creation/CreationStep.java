@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.data.creation;
 
 
+import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.data.StreamPrinter;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -39,8 +39,10 @@ public class CreationStep extends Step {
 			serviceInfo.getDir(), serviceInfo.getPackageName(), serviceInfo.getNamespace(), serviceInfo.getExtensions());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process createSkeletonProcess = CommonTools.createAndOutputProcess(cmd);
-        new StreamPrinter(createSkeletonProcess.getInputStream(), System.out).start();
-        new StreamPrinter(createSkeletonProcess.getErrorStream(), System.err).start();
+        new StreamGobbler(createSkeletonProcess.getInputStream(), 
+            StreamGobbler.TYPE_OUT, System.out).start();
+        new StreamGobbler(createSkeletonProcess.getErrorStream(), 
+            StreamGobbler.TYPE_ERR, System.err).start();
         createSkeletonProcess.waitFor();
 		assertTrue("Creating new data service failed", createSkeletonProcess.exitValue() == 0);
         
@@ -51,8 +53,10 @@ public class CreationStep extends Step {
 			serviceInfo.getDir(), serviceInfo.getPackageName(), serviceInfo.getNamespace(), getServiceExtensions());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process postCreateProcess = CommonTools.createAndOutputProcess(cmd);
-        new StreamPrinter(postCreateProcess.getInputStream(), System.out).start();
-        new StreamPrinter(postCreateProcess.getErrorStream(), System.err).start();
+        new StreamGobbler(postCreateProcess.getInputStream(), 
+            StreamGobbler.TYPE_OUT, System.out).start();
+        new StreamGobbler(postCreateProcess.getErrorStream(), 
+            StreamGobbler.TYPE_ERR, System.err).start();
         postCreateProcess.waitFor();
 		assertTrue("Service post creation process failed", postCreateProcess.exitValue() == 0);
         
@@ -62,8 +66,10 @@ public class CreationStep extends Step {
 		cmd = CommonTools.getAntAllCommand(serviceInfo.getDir());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process antAllProcess = CommonTools.createAndOutputProcess(cmd);
-        new StreamPrinter(antAllProcess.getInputStream(), System.out).start();
-        new StreamPrinter(antAllProcess.getErrorStream(), System.err).start();
+        new StreamGobbler(antAllProcess.getInputStream(), 
+            StreamGobbler.TYPE_OUT, System.out).start();
+        new StreamGobbler(antAllProcess.getErrorStream(), 
+            StreamGobbler.TYPE_ERR, System.err).start();
         antAllProcess.waitFor();
 		assertTrue("Build process failed", antAllProcess.exitValue() == 0);
 	}

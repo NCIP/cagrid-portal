@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.sdkinstall;
 
+import gov.nih.nci.cagrid.common.StreamGobbler;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +13,7 @@ import java.io.IOException;
   * @author David Ervin
   * 
   * @created Jun 20, 2007 10:55:05 AM
-  * @version $Id: ProcessExecutor.java,v 1.1 2007-06-20 16:16:47 dervin Exp $
+  * @version $Id: ProcessExecutor.java,v 1.2 2007-06-21 16:23:18 dervin Exp $
  */
 public class ProcessExecutor {
     private String command;
@@ -30,8 +32,10 @@ public class ProcessExecutor {
     
     public void exec() throws IOException {
         process = Runtime.getRuntime().exec(command, null, workingDir);
-        new StreamRedirector(process.getInputStream(), stdOutStream).start();
-        new StreamRedirector(process.getErrorStream(), stdErrStream).start();
+        new StreamGobbler(process.getInputStream(), 
+            StreamGobbler.TYPE_OUT, stdOutStream).start();
+        new StreamGobbler(process.getErrorStream(), 
+            StreamGobbler.TYPE_ERR, stdErrStream).start();
     }
     
     
