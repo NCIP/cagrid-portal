@@ -69,7 +69,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
         this.toStringComparator = new Comparator() {
             public int compare(Object o1, Object o2) {
-                return o1.toString().compareTo(o2.toString());
+                return o1.toString().toLowerCase().compareTo(o2.toString().toLowerCase());
             }
         };
 
@@ -291,8 +291,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
                     Project project = getSelectedProject();
                     if (e.getStateChange() == ItemEvent.SELECTED && project != null) {
                         for (int i = 0; i < CaDSRBrowserPanel.this.projectSelectionListeners.size(); i++) {
-                            ProjectSelectedListener listener = (ProjectSelectedListener) CaDSRBrowserPanel.this.projectSelectionListeners
-                                .get(i);
+                            ProjectSelectedListener listener = (ProjectSelectedListener) 
+                                CaDSRBrowserPanel.this.projectSelectionListeners.get(i);
                             listener.handleProjectSelection(project);
                         }
                     }
@@ -317,8 +317,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
                     UMLPackageMetadata pkg = getSelectedPackage();
                     if (e.getStateChange() == ItemEvent.SELECTED && pkg != null) {
                         for (int i = 0; i < CaDSRBrowserPanel.this.packageSelectionListeners.size(); i++) {
-                            PackageSelectedListener listener = (PackageSelectedListener) CaDSRBrowserPanel.this.packageSelectionListeners
-                                .get(i);
+                            PackageSelectedListener listener = (PackageSelectedListener) 
+                                CaDSRBrowserPanel.this.packageSelectionListeners.get(i);
                             listener.handlePackageSelection(pkg);
                         }
                     }
@@ -429,8 +429,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
                     UMLClassMetadata clazz = getSelectedClass();
                     if (e.getStateChange() == ItemEvent.SELECTED && clazz != null) {
                         for (int i = 0; i < CaDSRBrowserPanel.this.classSelectionListeners.size(); i++) {
-                            ClassSelectedListener listener = (ClassSelectedListener) CaDSRBrowserPanel.this.classSelectionListeners
-                                .get(i);
+                            ClassSelectedListener listener = (ClassSelectedListener) 
+                                CaDSRBrowserPanel.this.classSelectionListeners.get(i);
                             listener.handleClassSelection(clazz);
                         }
                     }
