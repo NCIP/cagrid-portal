@@ -102,6 +102,14 @@ public class GMESchemaLocatorPanel extends JPanel {
                     .getGridService(ResourceManager.getServiceURLProperty(GME_URL));
                 List domains = handle.getNamespaceDomainList();
 
+                Collections.sort(domains, new Comparator() {
+                    public int compare(Object o1, Object o2) {
+                        String s1 = o1.toString();
+                        String s2 = o2.toString();
+                        return s1.toLowerCase().compareTo(s2.toLowerCase());
+                    }
+                });
+                
                 makeCombosEnabled(false);
 
                 getNamespaceComboBox().removeAllItems();
@@ -152,7 +160,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 	                            public int compare(Object o1, Object o2) {
 	                                String ns1 = ((Namespace) o1).getNamespace();
 	                                String ns2 = ((Namespace) o2).getNamespace();
-	                                return ns1.compareTo(ns2);
+	                                return ns1.toLowerCase().compareTo(ns2.toLowerCase());
 	                            }
 	                        };
 	                        synchronized (modificationMutex) {
