@@ -242,6 +242,7 @@
 			<artifact refid="introduce.jars" />
 			<artifact refid="ws.enum.jars" />
 			<artifact refid="ws.enum.schemas" />
+		    <artifact refid="caCORE.jars" />
 		</resolveDependencies>
 		<resolveDependencies targetdir="${projects.dir}/cabigextensions/extensions/sdk_discovery">
 			<artifact refid="caCORE.3.2.1.sdk" />
