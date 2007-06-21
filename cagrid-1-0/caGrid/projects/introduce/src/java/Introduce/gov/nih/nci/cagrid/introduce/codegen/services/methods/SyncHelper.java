@@ -28,7 +28,7 @@ import org.apache.ws.jaxme.js.Parameter;
  * @author David Ervin
  * 
  * @created Apr 4, 2007 1:32:03 PM
- * @version $Id: SyncHelper.java,v 1.2 2007-04-10 14:30:29 hastings Exp $ 
+ * @version $Id: SyncHelper.java,v 1.3 2007-06-21 14:56:52 dervin Exp $ 
  */
 public class SyncHelper {
     private static final Logger logger = Logger.getLogger(SyncHelper.class);
@@ -537,19 +537,11 @@ public class SyncHelper {
      *      The index of the end of the method signature
      */
     public static int endOfSignature(StringBuffer sb, int startingIndex) {
-        int index = startingIndex;
-        if (index < 0) {
-            return index;
+        if (startingIndex < 0) {
+            return startingIndex;
         }
-        boolean found = false;
-        while (!found) {
-            char ch = sb.charAt(index);
-            if (ch == '{') {
-                found = true;
-            }
-            index++;
-        }
-        return index;
+        int index = sb.indexOf("{", startingIndex);
+        return index != -1 ? index + 1 : startingIndex;
     }
 
 
