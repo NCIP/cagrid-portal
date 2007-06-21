@@ -80,7 +80,6 @@
 	<classpathentry kind="lib" path="lib/myfaces/struts.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/tomahawk.jar"/>
 	<classpathentry kind="lib" path="lib/nocopy/servlet-api.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
