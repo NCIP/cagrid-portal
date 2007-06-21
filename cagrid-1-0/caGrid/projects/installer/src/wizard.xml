@@ -13,6 +13,20 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 		<property name="frameTitle" value="caGrid 1.1 Installer" />
 	</bean>
 
+	<bean id="masterModel" class="org.cagrid.installer.DynamicTreeModel">
+		<constructor-arg ref="rootNodes"/>
+		<constructor-arg ref="lastStep"/>
+	</bean>
+	
+	<util:list id="rootNodes">
+	
+		<bean class="">
+		
+		</bean>
+	
+	</util:list>
+
+<!-- 
 	<bean id="masterModel"
 		class="org.cagrid.installer.model.OverviewModel">
 
@@ -27,7 +41,9 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 		</property>
 
 	</bean>
+ -->
 
+<!-- 
 	<bean id="masterPath"
 		class="org.cagrid.installer.path.MasterInstallerPath">
 
@@ -65,14 +81,15 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 		<property name="description" value="Install the Dorian service" />
 		<property name="path" ref="dorianInstallPath" />
 	</bean>
-	
+
 	<bean id="namedDorianInstallPath2"
 		class="org.cagrid.installer.path.DelegatingPath">
 		<property name="name" value="Dorian" />
-		<property name="description" value="Install the Dorian service 2" />
+		<property name="description"
+			value="Install the Dorian service 2" />
 		<property name="path" ref="dorianInstallPath2" />
 	</bean>
-	
+
 
 	<bean id="dorianInstallPath"
 		class="org.cagrid.installer.path.ConfigurableMultiStepPath">
@@ -96,14 +113,17 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 					<constructor-arg>
 						<value>Installing Dorian</value>
 					</constructor-arg>
-					
-					<property name="defaultBuildFileName" value="/Users/joshua/dev/svn/caaers_maven/trunk/projects/core/tools/tomcat/harden-tomcat.xml"/>
-					<property name="defaultTargetName" value="harden"/>
+
+					<property name="defaultBuildFileName"
+						value="/Users/joshua/dev/svn/caaers_maven/trunk/projects/core/tools/tomcat/harden-tomcat.xml" />
+					<property name="defaultTargetName" value="harden" />
 				</bean>
 			</list>
 		</property>
 	</bean>
-	
+
+
+
 	<bean id="dorianInstallPath2"
 		class="org.cagrid.installer.path.ConfigurableMultiStepPath">
 
@@ -126,18 +146,20 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 					<constructor-arg>
 						<value>Installing Dorian 2</value>
 					</constructor-arg>
-					
-					<property name="defaultBuildFileName" value="/Users/joshua/dev/svn/caaers_maven/trunk/projects/core/tools/tomcat/harden-tomcat.xml"/>
-					<property name="defaultTargetName" value="harden"/>
+
+					<property name="defaultBuildFileName"
+						value="/Users/joshua/dev/svn/caaers_maven/trunk/projects/core/tools/tomcat/harden-tomcat.xml" />
+					<property name="defaultTargetName" value="harden" />
 				</bean>
 			</list>
 		</property>
-	</bean>	
+	</bean>
 
 	<util:map id="dorianGlobalProperties">
 		<entry key="prop.one" value="prop.one.value" />
 		<entry key="prop.two" value="prop.two.value" />
 		<entry key="prop.three" value="prop.three.value" />
 	</util:map>
+ -->	
 
 </beans>

@@ -71,7 +71,7 @@ public class RunAntStep extends BaseBusyStep {
         try {
             File tempDir = new File(getTempDirName());
             tempDir.mkdirs();
-            File propsFile = new File(tempDir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".properties");
+            File propsFile = new File(tempDir.getAbsolutePath() + "/" + Math.random() + ".properties");
             Properties props = new Properties();
             props.putAll(this.properties);
             props.store(new FileOutputStream(propsFile), "Temporary Properties File");

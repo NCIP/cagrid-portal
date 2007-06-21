@@ -45,6 +45,7 @@ public class AntUtils {
 		// build command
 		ArrayList<String> cmd = new ArrayList<String>();
 		cmd.add(getAntCommand());
+		cmd.add("-v");
 
 		// add system properties
 		if (sysProps != null) {
@@ -88,8 +89,9 @@ public class AntUtils {
 				|| stderr.indexOf("BUILD FAILED") != -1
 				|| stdout.indexOf("Build failed") != -1
 				|| stderr.indexOf("Build failed") != -1) {
-			System.err.println(stderr);
+//			System.err.println(stderr);
 			System.out.println(stdout);
+			System.out.println(stderr);
 			throw new IOException("ant command '" + target + "' failed");
 		}
 	}

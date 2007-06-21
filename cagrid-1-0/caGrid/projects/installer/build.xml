@@ -54,7 +54,7 @@
 	<target name="jar-core" depends="compile">
 		<jar destfile="${build.jars}/${project.jar.prefix}core.jar"
 			basedir="${build.classes}"
-			includes="org/cagrid/**/*.class images/**" />
+			includes="org/cagrid/**/*.class images/** test/**" />
 	</target>
 
 	<target name="jar" depends="jar-core"></target>
