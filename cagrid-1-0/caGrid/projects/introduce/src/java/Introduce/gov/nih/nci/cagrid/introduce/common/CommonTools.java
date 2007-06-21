@@ -1059,20 +1059,20 @@ public class CommonTools {
      * @return True if the property existed and was removed, false otherwise
      */
     public static boolean removeServiceProperty(ServiceDescription desc, String key) {
-        ServicePropertiesProperty[] newProperties = new ServicePropertiesProperty[desc.getServiceProperties()
-            .getProperty().length - 1];
-        int newIndex = 0;
+        List<ServicePropertiesProperty> keptProperties = new ArrayList();
         boolean removed = false;
         for (int i = 0; i < desc.getServiceProperties().getProperty().length; i++) {
             ServicePropertiesProperty current = desc.getServiceProperties().getProperty(i);
             if (!current.getKey().equals(key)) {
-                newProperties[newIndex] = current;
-                newIndex++;
+                keptProperties.add(current);
             } else {
                 removed = true;
             }
         }
-        desc.getServiceProperties().setProperty(newProperties);
+        ServicePropertiesProperty[] propertyArray = 
+            new ServicePropertiesProperty[keptProperties.size()];
+        keptProperties.toArray(propertyArray);
+        desc.getServiceProperties().setProperty(propertyArray);
         return removed;
     }
 
