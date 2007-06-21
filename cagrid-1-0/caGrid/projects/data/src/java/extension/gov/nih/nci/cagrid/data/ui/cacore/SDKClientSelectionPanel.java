@@ -52,7 +52,7 @@ import javax.swing.ScrollPaneConstants;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.5 2007-06-12 15:10:53 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.6 2007-06-21 18:44:59 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String[] LOCAL_CLIENT_REQUIRED_FILES = new String[] {
@@ -69,18 +69,21 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String USE_LOCAL_APPSERVICE = "useLocalAppservice";
 
     private JLabel qpJarLabel = null;
-    private JLabel clientDirLabel = null;
+    private JLabel clientLibDirLabel = null;
     private JRadioButton remoteApiRadioButton = null;
     private JRadioButton localRadioButton = null;
     private JTextField qpJarTextField = null;
-    private JTextField clientDirTextField = null;
+    private JTextField clientLibDirTextField = null;
     private JLabel dependsLabel = null;
     private JList dependsList = null;
     private JScrollPane dependsScrollPane = null;
-    private JButton clientBrowseButton = null;
+    private JButton clientLibBrowseButton = null;
     private JButton addDependButton = null;
     private JButton removeDependButton = null;
     private JPanel apiSelectionPanel = null;
+    private JLabel clientConfDirLabel = null;
+    private JTextField clientConfDirTextField = null;
+    private JButton clientConfDirBrowseButton = null;
 
 
     public SDKClientSelectionPanel(
@@ -91,6 +94,22 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     
     
     private void initialize() {
+        GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
+        gridBagConstraints32.gridx = 2;
+        gridBagConstraints32.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints32.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints32.gridy = 3;
+        GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+        gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints21.gridy = 3;
+        gridBagConstraints21.weightx = 1.0;
+        gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints21.gridx = 1;
+        GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+        gridBagConstraints11.gridx = 0;
+        gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints11.gridy = 3;
         GridBagConstraints gridBagConstraints81 = new GridBagConstraints();
         gridBagConstraints81.gridx = 0;
         gridBagConstraints81.fill = GridBagConstraints.HORIZONTAL;
@@ -101,15 +120,15 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
         gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints7.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints7.gridy = 4;
+        gridBagConstraints7.gridy = 5;
         GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
         gridBagConstraints6.gridx = 2;
         gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints6.gridy = 3;
+        gridBagConstraints6.gridy = 4;
         GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
         gridBagConstraints5.fill = GridBagConstraints.BOTH;
-        gridBagConstraints5.gridy = 3;
+        gridBagConstraints5.gridy = 4;
         gridBagConstraints5.weightx = 1.0;
         gridBagConstraints5.weighty = 1.0;
         gridBagConstraints5.gridheight = 2;
@@ -138,7 +157,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints2.gridheight = 2;
         gridBagConstraints2.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints2.gridy = 3;
+        gridBagConstraints2.gridy = 4;
         GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
         gridBagConstraints1.gridx = 0;
         gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
@@ -152,15 +171,18 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         this.setLayout(new GridBagLayout());
         this.setSize(new Dimension(465, 258));
         this.add(getQpJarLabel(), gridBagConstraints);
-        this.add(getClientDirLabel(), gridBagConstraints1);
+        this.add(getClientLibDirLabel(), gridBagConstraints1);
         this.add(getDependsLabel(), gridBagConstraints2);
         this.add(getQpJarTextField(), gridBagConstraints3);
-        this.add(getClientDirTextField(), gridBagConstraints4);
-        this.add(getClientBrowseButton(), gridBagConstraints31);
+        this.add(getClientLibDirTextField(), gridBagConstraints4);
+        this.add(getClientLibBrowseButton(), gridBagConstraints31);
         this.add(getDependsScrollPane(), gridBagConstraints5);
         this.add(getAddDependButton(), gridBagConstraints6);
         this.add(getRemoveDependButton(), gridBagConstraints7);
         this.add(getApiSelectionPanel(), gridBagConstraints81);
+        this.add(getClientConfDirLabel(), gridBagConstraints11);
+        this.add(getClientConfDirTextField(), gridBagConstraints21);
+        this.add(getClientConfDirBrowseButton(), gridBagConstraints32);
     }
 
 
@@ -175,26 +197,29 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
 
 
     public void update() {
-        // enable / disable the local API selection radio button based on the SDK version selected
-        boolean localApiSupported = !getBitBucket().get(CoreDsIntroPanel.CACORE_VERSION_PROPERTY)
+        boolean isSdk31 = getBitBucket().get(CoreDsIntroPanel.CACORE_VERSION_PROPERTY)
             .equals(CoreDsIntroPanel.CACORE_31_VERSION);
-        getLocalRadioButton().setEnabled(localApiSupported);
+        boolean isSdk32 = getBitBucket().get(CoreDsIntroPanel.CACORE_VERSION_PROPERTY)
+            .equals(CoreDsIntroPanel.CACORE_32_VERSION);
+        if (!isSdk31 && !isSdk32) {
+            ErrorDialog.showErrorDialog("No SDK version could be determined!");
+        }
         
+        // -- enable / disable UI components based on SDK version -- //
+        // local API not available in sdk 3.1
+        getLocalRadioButton().setEnabled(isSdk32);
+                
+        // -- configure the UI -- //
         // verify the sdk query library has been copied into the service
         File sdkQueryLib = null;
-        String sdkVersion = (String) getBitBucket().get(CoreDsIntroPanel.CACORE_VERSION_PROPERTY);
-        if (sdkVersion != null) {
-            if (sdkVersion.equals(CoreDsIntroPanel.CACORE_31_VERSION)) {
-                String sdkQueryLibName = new File(CoreDsIntroPanel.SDK_31_QUERY_LIB).getName();
-                sdkQueryLib = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-                    + File.separator + "lib" + File.separator + sdkQueryLibName);
-            } else if (sdkVersion.equals(CoreDsIntroPanel.CACORE_32_VERSION)) {
-                String sdkQueryLibName = new File(CoreDsIntroPanel.SDK_32_QUERY_LIB).getName();
-                sdkQueryLib = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-                    + File.separator + "lib" + File.separator + sdkQueryLibName);
-            } else {
-                ErrorDialog.showErrorDialog("No SDK version could be determined!");
-            }
+        if (isSdk31) {
+            String sdkQueryLibName = new File(CoreDsIntroPanel.SDK_31_QUERY_LIB).getName();
+            sdkQueryLib = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
+                + File.separator + "lib" + File.separator + sdkQueryLibName);
+        } else if (isSdk32) {
+            String sdkQueryLibName = new File(CoreDsIntroPanel.SDK_32_QUERY_LIB).getName();
+            sdkQueryLib = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
+                + File.separator + "lib" + File.separator + sdkQueryLibName);
         }
         
         if (sdkQueryLib.exists()) {
@@ -202,21 +227,29 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         } else {
             getQpJarTextField().setText("ERROR: LIBRARY NOT FOUND");
         }
-        
 
         try {
-            // state of the local API use
-            boolean localApi = false;
-            if (CommonTools.servicePropertyExists(getServiceInformation().getServiceDescriptor(), 
-                DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_LOCAL_APPSERVICE)) {
-                localApi = Boolean.valueOf(CommonTools.getServicePropertyValue(
-                    getServiceInformation().getServiceDescriptor(), 
-                    DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_LOCAL_APPSERVICE)).booleanValue();
-                if (localApi) {
-                    getLocalRadioButton().setSelected(true);
-                } else {
-                    getRemoteApiRadioButton().setSelected(true);
+            String prefixedLocalAppserviceProperty = 
+                DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_LOCAL_APPSERVICE;
+            if (isSdk32) {
+                // state of the local API use
+                if (CommonTools.servicePropertyExists(getServiceInformation().getServiceDescriptor(), 
+                    prefixedLocalAppserviceProperty)) {
+                    boolean localApi = Boolean.valueOf(CommonTools.getServicePropertyValue(
+                        getServiceInformation().getServiceDescriptor(), 
+                        prefixedLocalAppserviceProperty)).booleanValue();
+                    setClientConfDirEnabled(localApi);
+                    if (localApi) {
+                        getLocalRadioButton().setSelected(true);
+                    } else {
+                        getRemoteApiRadioButton().setSelected(true);
+                    }
                 }
+            } else {
+                // don't need the use local property at all
+                CommonTools.removeServiceProperty(getServiceInformation().getServiceDescriptor(), 
+                    prefixedLocalAppserviceProperty);
+                setClientConfDirEnabled(false);
             }
             
             // any 'additional libs' added previously should show up
@@ -229,6 +262,13 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         
         // update the availability of the next button
         updateNextEnabledState();
+    }
+    
+    
+    private void setClientConfDirEnabled(boolean enable) {
+        getClientConfDirLabel().setEnabled(enable);
+        getClientConfDirTextField().setEnabled(enable);
+        getClientConfDirBrowseButton().setEnabled(enable);
     }
 
 
@@ -247,16 +287,16 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
 
 
     /**
-     * This method initializes clientDirLabel	
+     * This method initializes clientLibDirLabel	
      * 	
      * @return javax.swing.JLabel	
      */
-    private JLabel getClientDirLabel() {
-        if (clientDirLabel == null) {
-            clientDirLabel = new JLabel();
-            clientDirLabel.setText("Client Directory:");
+    private JLabel getClientLibDirLabel() {
+        if (clientLibDirLabel == null) {
+            clientLibDirLabel = new JLabel();
+            clientLibDirLabel.setText("Client Lib Directory:");
         }
-        return clientDirLabel;
+        return clientLibDirLabel;
     }
 
 
@@ -303,16 +343,16 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
 
 
     /**
-     * This method initializes clientDirTextField	
+     * This method initializes clientLibDirTextField	
      * 	
      * @return javax.swing.JTextField	
      */
-    private JTextField getClientDirTextField() {
-        if (clientDirTextField == null) {
-            clientDirTextField = new JTextField();
-            clientDirTextField.setEditable(false);
+    private JTextField getClientLibDirTextField() {
+        if (clientLibDirTextField == null) {
+            clientLibDirTextField = new JTextField();
+            clientLibDirTextField.setEditable(false);
         }
-        return clientDirTextField;
+        return clientLibDirTextField;
     }
 
 
@@ -360,22 +400,22 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
 
 
     /**
-     * This method initializes clientBrowseButton	
+     * This method initializes clientLibBrowseButton	
      * 	
      * @return javax.swing.JButton	
      */
-    private JButton getClientBrowseButton() {
-        if (clientBrowseButton == null) {
-            clientBrowseButton = new JButton();
-            clientBrowseButton.setText("Browse");
-            clientBrowseButton.addActionListener(new java.awt.event.ActionListener() {
+    private JButton getClientLibBrowseButton() {
+        if (clientLibBrowseButton == null) {
+            clientLibBrowseButton = new JButton();
+            clientLibBrowseButton.setText("Browse");
+            clientLibBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    selectClientDir();
+                    selectClientLibDir();
                     updateNextEnabledState();
                 }
             });
         }
-        return clientBrowseButton;
+        return clientLibBrowseButton;
     }
 
 
@@ -444,11 +484,15 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             group.addGroupSelectionListener(new GroupSelectionListener() {
                 public void selectionChanged(
                     final ButtonModel previousSelection, final ButtonModel currentSelection) {
-                    boolean enable = currentSelection == getLocalRadioButton().getModel();
+                    boolean localEnabled = currentSelection == getLocalRadioButton().getModel();
                     // set the service property
                     CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
                         DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_LOCAL_APPSERVICE, 
-                        String.valueOf(enable), false);
+                        String.valueOf(localEnabled), false);
+                    // enable / disable parts of the UI
+                    getClientConfDirLabel().setEnabled(localEnabled);
+                    getClientConfDirTextField().setEnabled(localEnabled);
+                    getClientConfDirBrowseButton().setEnabled(localEnabled);
                     // decide if the next button should be enabled
                     updateNextEnabledState();
                 }
@@ -460,14 +504,17 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     
     private void updateNextEnabledState() {
         setNextEnabled(false);
-        File clientJarFile = locateClientJarInDir(getClientDirTextField().getText());
+        // verify the client jar exists and is valid
+        File clientJarFile = locateClientJarInDir(getClientLibDirTextField().getText());
         try {
             if (clientJarFile != null && clientJarFile.exists() && isValidClientJar(clientJarFile)) {
                 setNextEnabled(true);
-                if (getLocalRadioButton().isSelected() 
-                    && !isValidClientJar(
-                        new File(getClientDirTextField().getText() + File.separator + "conf"))) {
-                    setNextEnabled(false);
+                // if local api, need to validate the client dir selection
+                if (getLocalRadioButton().isSelected()) {
+                    String clientConfDir = getClientConfDirTextField().getText();
+                    if (clientConfDir.length() == 0 || !isValidConfDir(clientConfDir)) {
+                        setNextEnabled(false);
+                    }
                 }
             }
         } catch (IOException ex) {
@@ -476,20 +523,17 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     }
     
     
-    private void selectClientDir() {
+    private void selectClientLibDir() {
         try {
-            // prompt for a client package directory
-            String clientDir = ResourceManager.promptDir(null);
-            if (clientDir != null) {
+            String clientLibDir = ResourceManager.promptDir(null);
+            if (clientLibDir != null) {
                 // locate the client jar file
-                final File clientJarFile = locateClientJarInDir(clientDir);
-                if (clientJarFile != null && isValidClientJar(clientJarFile) && 
-                    (getLocalRadioButton().isSelected() && isValidConfDir(clientDir + File.separator + "conf"))
-                        || getRemoteApiRadioButton().isSelected()) {
-                    if (getClientDirTextField().getText().length() != 0) {
+                final File clientJarFile = locateClientJarInDir(clientLibDir);
+                if (clientJarFile != null && isValidClientJar(clientJarFile)) {
+                    if (getClientLibDirTextField().getText().length() != 0) {
                         // delete the old client jar
                         File oldClientJarFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-                            + File.separator + "lib" + File.separator + getClientDirTextField().getText());
+                            + File.separator + "lib" + File.separator + getClientLibDirTextField().getText());
                         oldClientJarFile.delete();                                
                     }
                     // copy in the client jar
@@ -508,8 +552,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
 
                     // get a list of the rest of the jars in the client lib dir
                     // and set them as jars the client depends on
-                    File clientLibDir = new File(clientDir + File.separator + "lib");
-                    File[] extraLibraries = clientLibDir.listFiles(new FileFilter() {
+                    File[] extraLibraries = new File(clientLibDir).listFiles(new FileFilter() {
                         public boolean accept(File pathname) {
                             String name = pathname.getName();
                             return name.toLowerCase().endsWith(".jar") 
@@ -524,47 +567,38 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                         Utils.copyFile(lib, libOut);
                     }
                     
-                    if (getLocalRadioButton().isSelected()) {
-                        // turn the conf dir into a jar library
-                        File confJarFile = new File(
-                            getServiceInformation().getBaseDirectory().getAbsolutePath() + 
-                            File.separator + "lib" + File.separator + 
-                            getServiceInformation().getServices().getService(0).getName() + 
-                            DataServiceConstants.LOCAL_SDK_CONF_JAR_POSTFIX + ".jar");
-                        if (confJarFile.exists()) {
-                            confJarFile.delete();
-                        }
-                        JarUtilities.jarDirectory(new File(clientDir + File.separator + "conf"), confJarFile);
-                    }
-
                     // set the directory name in the UI
-                    getClientDirTextField().setText(clientDir);
+                    getClientLibDirTextField().setText(clientLibDir);
                     
                     // store the library information
                     storeLibrariesInExtensionData();
                 } else {
                     String[] message = {
-                        "The selected jar does not appear to be a valid",
-                        "client jar file for the currently selected API.",
-                        "Please choose a valid client jar file."
+                        "The selected directory does not appear to contain",
+                        "a valid client jar file for the currently",
+                        "selected version of the caCORE API.",
+                        "Please choose a valid library directory file."
                     };
                     PortalUtils.showMessage(message);
                 }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog(
-                "Error selecting client directory", ex.getMessage(), ex);
+            ErrorDialog.showErrorDialog("Error in selection of client lib dir", 
+                ex.getMessage(), ex);
         }
     }
     
-    
     private File locateClientJarInDir(String dirName) {
-        File libDir = new File(dirName + File.separator + "lib");
+        File libDir = new File(dirName);
         File[] jars = libDir.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
                 String name = pathname.getName().toLowerCase();
-                return (name.endsWith("-client.jar") || name.endsWith("-thickclient.jar")) && !name.contains("jboss");
+                if (name.endsWith(".jar")) {
+                    return (name.startsWith("client") || name.endsWith("-client.jar") 
+                        || name.endsWith("-thickclient.jar")) && !name.contains("jboss");
+                }
+                return false;
             }
         });
         if (jars != null && jars.length == 1) {
@@ -575,17 +609,22 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     
     
     private boolean isValidClientJar(File jarFile) throws IOException {
+        boolean isSdk32 = getBitBucket().get(CoreDsIntroPanel.CACORE_VERSION_PROPERTY)
+            .equals(CoreDsIntroPanel.CACORE_32_VERSION);
+        
         JarFile jar = new JarFile(jarFile);
         // verify the file is a client.jar with a castor mapping file
         JarEntry mappingEntry = jar.getJarEntry(DataServiceConstants.CACORE_CASTOR_MAPPING_FILE);
-        // both local and remote client jars need this xml mapping file
+        // all versions, local and remote client jars need this xml mapping file
         if (mappingEntry == null) {
+            jar.close();
             return false;
         }
-        if (getLocalRadioButton().isSelected()) {
+        if (isSdk32 && getLocalRadioButton().isSelected()) {
             // local has more restrictions
             for (String requirement : LOCAL_CLIENT_REQUIRED_FILES) {
                 if (jar.getEntry(requirement) == null) {
+                    jar.close();
                     return false;
                 }
             }
@@ -594,7 +633,15 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         return true;
     }
     
-    
+
+    /**
+     * Assumes you're using SDK 3.2
+     * 
+     * @param dirName
+     * @return
+     *      True if the selected conf directory is valid, false otherwise
+     * @throws IOException
+     */
     private boolean isValidConfDir(String dirName) throws IOException {
         File dir = new File(dirName);
         if (!dir.isDirectory() || !dir.canRead()) {
@@ -624,9 +671,9 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             }
             // add the query processor jar
             jarNames.add(getQpJarTextField().getText());
-            if (getClientDirTextField().getText().length() != 0) {
+            if (getClientLibDirTextField().getText().length() != 0) {
                 jarNames.add(locateClientJarInDir(
-                    getClientDirTextField().getText()).getName());
+                    getClientLibDirTextField().getText()).getName());
             }
             String[] jarNameArray = new String[jarNames.size()];
             jarNames.toArray(jarNameArray);
@@ -644,7 +691,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
         AdditionalLibraries additionalLibs = data.getAdditionalLibraries();
         Vector<String> dependJars = new Vector();
-        File clientJar = locateClientJarInDir(getClientDirTextField().getText());
+        File clientJar = locateClientJarInDir(getClientLibDirTextField().getText());
         if (additionalLibs != null && additionalLibs.getJarName() != null) {
             String[] jarNames = additionalLibs.getJarName();
             for (int i = 0; i < jarNames.length; i++) {
@@ -699,7 +746,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     private boolean shouldAddJar(String jarName) {
         Set usedNames = new HashSet();
         usedNames.add(getQpJarTextField().getText());
-        usedNames.add(getClientDirTextField().getText());
+        usedNames.add(getClientLibDirTextField().getText());
         for (int i = 0; i < getDependsList().getModel().getSize(); i++) {
             usedNames.add(getDependsList().getModel().getElementAt(i));
         }
@@ -729,5 +776,88 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             libFile.delete();
         }
         storeLibrariesInExtensionData();
+    }
+
+
+    /**
+     * This method initializes clientConfDirectoryLabel	
+     * 	
+     * @return javax.swing.JLabel	
+     */
+    private JLabel getClientConfDirLabel() {
+        if (clientConfDirLabel == null) {
+            clientConfDirLabel = new JLabel();
+            clientConfDirLabel.setText("Client Conf Directory:");
+        }
+        return clientConfDirLabel;
+    }
+
+
+    /**
+     * This method initializes clientConfDirTextField	
+     * 	
+     * @return javax.swing.JTextField	
+     */
+    private JTextField getClientConfDirTextField() {
+        if (clientConfDirTextField == null) {
+            clientConfDirTextField = new JTextField();
+            clientConfDirTextField.setEditable(false);
+        }
+        return clientConfDirTextField;
+    }
+
+
+    /**
+     * This method initializes clientConfDirBrowseButton	
+     * 	
+     * @return javax.swing.JButton	
+     */
+    private JButton getClientConfDirBrowseButton() {
+        if (clientConfDirBrowseButton == null) {
+            clientConfDirBrowseButton = new JButton();
+            clientConfDirBrowseButton.setText("Browse");
+            clientConfDirBrowseButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    selectClientConfDir();
+                    updateNextEnabledState();
+                }
+            });
+        }
+        return clientConfDirBrowseButton;
+    }
+    
+    
+    private void selectClientConfDir() {
+        try {
+            String confDir = ResourceManager.promptDir(null);
+            if (confDir != null) {
+                if (isValidConfDir(confDir)) {
+                    // turn the conf dir into a jar library
+                    File confJarFile = new File(
+                        getServiceInformation().getBaseDirectory().getAbsolutePath() + 
+                            File.separator + "lib" + File.separator + 
+                        getServiceInformation().getServices().getService(0).getName() + 
+                        DataServiceConstants.LOCAL_SDK_CONF_JAR_POSTFIX + ".jar");
+                    if (confJarFile.exists()) {
+                        confJarFile.delete();
+                    }
+                    
+                    JarUtilities.jarDirectory(new File(confDir), confJarFile);
+                    
+                    getClientConfDirTextField().setText(confDir);
+                } else {
+                    String[] message = {
+                        "The selected directory does not appear to be a",
+                        "valid configuration directory for the currently",
+                        "selected caCORE API version.  Please select a",
+                        "valid configuration directory"
+                    };
+                    PortalUtils.showMessage(message);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorDialog.showErrorDialog("Error selecting client configuration directory", ex.getMessage(), ex);
+        }
     }
 }
