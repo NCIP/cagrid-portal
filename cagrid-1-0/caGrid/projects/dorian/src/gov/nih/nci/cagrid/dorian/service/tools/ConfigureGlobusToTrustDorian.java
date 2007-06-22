@@ -63,12 +63,15 @@ public class ConfigureGlobusToTrustDorian {
 				String caDir = CoGProperties.getDefault().getCaCertLocations();
 				File dir = new File(caDir);
 				dir.mkdirs();
-				File caFile = new File(dir.getAbsolutePath() + File.separator + c.getDorianInternalId() + ".0");
+				File caFile = new File(dir.getAbsolutePath() + File.separator + CertUtil.getHashCode(cacert) + ".0");
+				File policyFile = new File(dir.getAbsolutePath() + File.separator + CertUtil.getHashCode(cacert)
+					+ ".signing_policy");
 				CertUtil.writeCertificate(cacert, caFile);
+				CertUtil.writeSigningPolicy(cacert, policyFile);
 				System.out.println("Succesfully configured Globus to trust the Dorian CA: "
 					+ cacert.getSubjectDN().getName());
 				System.out.println("Succesfully wrote CA certificate to " + caFile.getAbsolutePath());
-
+				System.out.println("Succesfully wrote CA signing policy to " + policyFile.getAbsolutePath());
 			}
 		} catch (ParseException exp) {
 			HelpFormatter formatter = new HelpFormatter();
