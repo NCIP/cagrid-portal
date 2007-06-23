@@ -171,6 +171,18 @@
 	<target name="postClean">
 
 	</target>
+ <target name="runGUI" depends="compile" description="Execute the GUI: runGUI">  
+        <java classname="gov.nih.nci.cagrid.workflow.client.WorkflowSubmissionGUI" fork="yes">
+            <classpath refid="service.run.classpath" />
+        </java>
+    </target>
+    
+    <target name="ui" depends="compile" description="Runs the workflow submission UI.">
+            <java classname="org.cagrid.grape.GridApplication" fork="yes">
+                <arg value="etc/workflow-submission-ui.xml" />
+                <classpath refid="service.run.classpath" />
+            </java>
+        </target>
 
 
 </project>

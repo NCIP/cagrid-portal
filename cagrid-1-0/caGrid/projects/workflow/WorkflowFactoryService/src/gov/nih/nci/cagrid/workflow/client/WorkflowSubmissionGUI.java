@@ -7,10 +7,10 @@ import gov.nih.nci.cagrid.workflow.context.client.WorkflowServiceImplClient;
 import gov.nih.nci.cagrid.workflow.stubs.types.StartInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
-import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStateType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusEventType;
 
 import java.awt.Font;
@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.StringReader;
 import java.rmi.RemoteException;
+import java.util.Vector;
 
 import javax.swing.SwingConstants;
 import javax.xml.namespace.QName;
@@ -83,7 +84,7 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 
 	private JButton getStatusButton = null;
 
-	private String workflowFactoryURL = "http://localhost:8080/wsrf/services/cagrid/WorkflowFactoryService";
+	private String workflowFactoryURL = "http://localhost:8080/wsrf/services/cagrid/WorkflowFactoryService";  //  @jve:decl-index=0:
 
 	private WorkflowServiceImplClient wclient = null;
 
@@ -102,6 +103,10 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 	private String status = "Pending";
 
 	private JButton getDetailedStatusButton = null;
+	
+	private WSDLReferences[] wsdlReferences = null;
+	
+	private Vector wsdlReferencesVector = new Vector();
 
 	/**
 	 * This is the default constructor
@@ -343,10 +348,11 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 						ErrorDialog.showError("BPEL File cannot be empty");
 					}
 					try {
+						wsdlReferences = new WSDLReferences[wsdlReferencesVector.size()];
 						factoryClient = new WorkflowFactoryServiceClient(
 								workflowFactoryURL);
 						WMSInputType input = factoryClient.createInput(bpelFile
-								.getAbsolutePath(), nameTextField.getText(), null);
+								.getAbsolutePath(), nameTextField.getText(), wsdlReferences);
 						WMSOutputType output = factoryClient
 								.createWorkflow(input);
 						epr = output.getWorkflowEPR();
@@ -359,7 +365,6 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					System.out.println("actionPerformed()"); 
 				}
 			});
 		}
@@ -469,6 +474,13 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 			partnerLinkButton.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			partnerLinkButton.setText("Add Partners..");
 			partnerLinkButton.setPreferredSize(new Dimension(100, 20));
+			partnerLinkButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					PartnerLinkFrame fr = new PartnerLinkFrame();
+					fr.show();
+					wsdlReferencesVector.add(fr.getWSDLReference());
+				}
+			});
 		}
 		return partnerLinkButton;
 	}
