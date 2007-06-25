@@ -19,11 +19,11 @@ import com.atomicobject.haste.framework.Step;
 
 
 /**
- * CreationStep TODO:DOCUMENT ME
- * 
+ * CreationStep 
+ * Step to create a BDT service using the Introduce engine
  * 
  * @created Aug 22, 2006
- * @version $Id: CreationStep.java,v 1.8 2007-06-21 16:20:50 dervin Exp $
+ * @version $Id: CreationStep.java,v 1.9 2007-06-25 19:06:17 dervin Exp $
  */
 public class CreationStep extends Step {
     private static final String BDT_START_RETURNS_CLIENT = "bdtStartReturnsClient";
