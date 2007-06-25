@@ -40,7 +40,6 @@
     <property name="test.lib.dir" value="${test.dir}/lib" />
     <property name="ext.test.lib.dir" value="ext/test/lib" />
     <property name="test.log.dir" value="test/logs" />
-    <property name="ext.test.lib.dir" value="ext/test/lib" />
     <property name="junit.results.dir" value="${test.log.dir}/junit" />
 
 
@@ -94,6 +93,7 @@
         <fail message="Globus installation is not set in either GLOBUS_LOCATION or ext.globus.dir" if="globus.not.found" />
         <echo message="Globus: ${ext.globus.dir}" />
     </target>
+	
     <target name="setGlobus" if="env.GLOBUS_LOCATION">
         <!-- GT4 build files and directories-->
         <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
@@ -187,6 +187,9 @@
         <path id="test.run.classpath">
             <pathelement location="${test.build.dest}" />
             <pathelement location="${test.dir}/resources" />
+			<fileset dir="${ext.test.lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
             <path refid="test.build.classpath" />
         </path>
         <path id="run.classpath">

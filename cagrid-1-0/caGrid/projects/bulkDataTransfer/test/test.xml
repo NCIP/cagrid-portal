@@ -8,7 +8,7 @@
 	<property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser"/>
 	<property name="introduce.dir" location="../introduce"/>
 
-	<target name="prepareClasspaths" depends="defineClasspaths">
+	<target name="prepareClasspaths" depends="checkGlobus, defineClasspaths">
 		<path id="Introduce.test.classpath">
 			<fileset dir="${introduce.dir}/lib">
 				<include name="*.jar"/>
@@ -38,16 +38,22 @@
 		</path>
 	</target>
 
-	<target name="instrument">
+	<target name="instrument" depends="prepareClasspaths">
 		<taskdef classpathref="test.run.classpath" resource="tasks.properties"/>
 		<mkdir dir="${instrumented.classes.dir}"/>
 		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
 			<fileset dir="${build.dest}">
+			    <include name="**/*.class"/>	
+			</fileset>
+			<fileset dir="${test.build.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${stubs.dest}">
 				<include name="**/*.class"/>
 			</fileset>
 		</cobertura-instrument>
 	</target>
-
+	
 	<target name="test" depends="setGlobus, prepareClasspaths" description="Runs tests" >
 		<mkdir dir="${junit.results.dir}"/>
 		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
@@ -90,7 +96,7 @@
 	</target>
 
 
-	<target name="coverageReport" depends="instrument,test" description="Runs the tests and generates a test
+	<target name="coverageReport" depends="instrument,test,systemTest" description="Runs the tests and generates a test
 		coverage report.">
 		<cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
 			<fileset dir="${test.src.dir}">
