@@ -80,10 +80,8 @@ when adding a serviceContext and then adding a method that returns its referece
 before you hit save, then when you hit save the reference type is not yet in the
 namespaceType list and therefore cant be refered to yet
 
-Introduce Portal (or something it uses) is leaving file handles open
-  - when i create a service, then close the mod viewer, and try to create it again, it can't delete the creation dir
 
-jaxmejs is leaving file handles laying around somewhere. (update.. System.gc call is owrking for now, might have to patch jaxmejs)
+
 
 add tests to system tests for (coverage report shows no coverage):
 - (DONE) SystemProperties
@@ -96,9 +94,16 @@ add tests to system tests for (coverage report shows no coverage):
 - (DONE) methods returning arrays
 - (DONE) servicename ending in Service
 
-add a .cvsignore file to generated skeletons that includes the gar.  my right mouse button is slowly wearing out... and i am lazy...
+
 
 ============================ D O N E ================================================================
+add a .cvsignore file to generated skeletons that includes the gar.  my right mouse button is slowly wearing out... and i am lazy...
+
+Introduce Portal (or something it uses) is leaving file handles open
+  - when i create a service, then close the mod viewer, and try to create it again, it can't delete the creation dir
+
+jaxmejs is leaving file handles laying around somewhere. (update.. System.gc call is owrking for now, might have to patch jaxmejs)
+
 should add a service creation test which creates a service context of every variation of resource type
 
 need to make namespace exist policy a dropdown in the config so user knows what the options are
