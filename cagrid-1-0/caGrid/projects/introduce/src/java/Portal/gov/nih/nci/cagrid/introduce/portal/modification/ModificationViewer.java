@@ -2213,4 +2213,5 @@ public class ModificationViewer extends GridPortalComponent {
             JOptionPane.showMessageDialog(ModificationViewer.this, "Please select namespace to Remove");
         }
     }
+    
 }

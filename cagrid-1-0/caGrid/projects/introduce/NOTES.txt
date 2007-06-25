@@ -46,11 +46,15 @@ Upgrade Cycle
 
 To Do:  
 
+if you use globus dir in the classpath for the runtarget, then the client-config.wsdd for globus is used and not the one that contains your custom mappings
+
+check the upgrade framework, make sure it is giving enough information
+
 need to validate schemas when importing them into introduce
 
 Add notification support to any resource
 
-upgrading is not really dont until sync is ran, so in modification gui make sure the user
+upgrading is not really done until sync is ran, so in modification gui make sure the user
 is notified that it is not complete until they hit save.
 
 resource refactoring needs to be done completely (first pass done still need to combine into one)

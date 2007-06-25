@@ -88,12 +88,14 @@ import com.sun.xml.xsom.parser.XSOMParser;
  */
 public class MethodViewer extends GridPortalBaseFrame {
     private static final Logger logger = Logger.getLogger(MethodViewer.class);
-    
+
+
     public class ElementHolder {
 
         Element serviceElement;
 
         Element methodElement;
+
 
         public ElementHolder(Element service, Element method) {
             serviceElement = service;
@@ -611,7 +613,9 @@ public class MethodViewer extends GridPortalBaseFrame {
                                         }
                                     }
                                 }
-                                if (importMethod.getOutput() != null) {
+                                if (importMethod.getOutput() != null
+                                    && importMethod.getOutput().getQName().getNamespaceURI().length() > 0
+                                    && !importMethod.getOutput().getQName().getLocalPart().equals("void")) {
                                     if (!requiredNamespaces.contains(importMethod.getOutput().getQName()
                                         .getNamespaceURI())) {
                                         requiredNamespaces.add(importMethod.getOutput().getQName().getNamespaceURI());
@@ -632,9 +636,9 @@ public class MethodViewer extends GridPortalBaseFrame {
                                 for (int nsI = 0; nsI < requiredNamespaces.size(); nsI++) {
                                     String uri = (String) requiredNamespaces.get(nsI);
                                     if (CommonTools.getNamespaceType(info.getNamespaces(), uri) == null) {
-                                        JOptionPane
-                                            .showMessageDialog(MethodViewer.this,
-                                                "There are namespaces/types that are used by the imported method which are not yet imported into this service");
+                                        JOptionPane.showMessageDialog(MethodViewer.this,
+                                            "There are namespaces/types that are used by the imported method which are not yet imported into this service: "
+                                                + uri);
                                         return;
                                     }
                                 }
@@ -653,7 +657,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                                 try {
                                     remoteWsdlDoc = XMLUtilities.fileNameToDocument(remoteWsdlFile);
                                 } catch (MobiusException e1) {
-                                    logger.error("ERROR",e1);
+                                    logger.error("ERROR", e1);
                                     return;
                                 }
 
@@ -726,7 +730,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                                 }
 
                                 MethodTypeImportInformation importInfo = new MethodTypeImportInformation();
-                                importInfo.setWsdlFile(localWsdlFileName);
+                                importInfo.setWsdlFile(localWsdlFileName.replace('\\', '/'));
                                 importInfo.setNamespace(importService.getNamespace());
                                 importInfo.setPortTypeName(importService.getName() + "PortType");
                                 importInfo.setPackageName(importService.getPackageName());
@@ -763,7 +767,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                                 MethodTypeImportInformation importInfo = new MethodTypeImportInformation();
                                 importInfo.setFromIntroduce(new Boolean(false));
                                 importInfo.setNamespace(namespace);
-                                importInfo.setWsdlFile(getWsdlFileNameTextField().getText());
+                                importInfo.setWsdlFile(getWsdlFileNameTextField().getText().replace('\\', '/'));
                                 importInfo.setPortTypeName(((ElementHolder) getWsdlServiceServicesComboBox()
                                     .getSelectedItem()).getServiceElement().getAttributeValue("name"));
                                 importInfo.setInputMessage(new QName(inputMessageNamespace, inputMessageName));
@@ -777,7 +781,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                         }
 
                     } catch (Exception ex) {
-                       logger.warn("WARNING",ex);
+                        logger.warn("WARNING", ex);
                         // PortalUtils.showErrorMessage(ex);
                         ErrorDialog.showErrorDialog(ex);
                     }
@@ -1077,7 +1081,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                             try {
                                 exception = getExceptionsTable().getRowData(i);
                             } catch (Exception e1) {
-                                logger.error("Exception getting data from exceptions table",e1);
+                                logger.error("Exception getting data from exceptions table", e1);
                             }
                             if ((exception != null) && (exception.getQname() != null)
                                 && exception.getQname().equals(exceptionHolder.qname)) {
@@ -1402,7 +1406,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                             try {
                                 getOutputTypeTable().modifyRow(0, output);
                             } catch (Exception ex) {
-                                logger.error("Error modifying output table",ex);
+                                logger.error("Error modifying output table", ex);
                             }
                         }
                     }
@@ -1499,7 +1503,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                     try {
                         getInputParamTable().moveSelectedRowDown();
                     } catch (Exception e1) {
-                       logger.error("Error moving input param down",e1);
+                        logger.error("Error moving input param down", e1);
                     }
 
                 }
@@ -1513,7 +1517,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                     try {
                         getInputParamTable().moveSelectedRowUp();
                     } catch (Exception e1) {
-                        logger.error("Error moving input param up",e1);
+                        logger.error("Error moving input param up", e1);
                     }
                 }
 
@@ -1543,7 +1547,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                     try {
                         getOutputTypeTable().modifyRow(0, output);
                     } catch (Exception e1) {
-                        logger.error("Error modifying row on output table",e1);
+                        logger.error("Error modifying row on output table", e1);
                     }
                 }
             });
@@ -1712,12 +1716,12 @@ public class MethodViewer extends GridPortalBaseFrame {
                                 + "." + "client" + "." + getServicesTypeTable().getSelectedRowData().getName()
                                 + "Client");
                         } catch (Exception e1) {
-                            logger.error("Error setting client handle class",e1);
+                            logger.error("Error setting client handle class", e1);
                         }
                         try {
                             getOutputTypeTable().modifyRow(0, output);
                         } catch (Exception ex) {
-                            logger.error("Error modifying row on output types table",ex);
+                            logger.error("Error modifying row on output types table", ex);
                         }
                     }
                 }
@@ -1992,7 +1996,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                             }
                         } catch (Exception ex) {
                             logger.error("Unable to validate type extends from {"
-                                + IntroduceConstants.BASEFAULTS_NAMESPACE + "}BaseFaultType : " + ex.getMessage(),ex);
+                                + IntroduceConstants.BASEFAULTS_NAMESPACE + "}BaseFaultType : " + ex.getMessage(), ex);
                             JOptionPane.showMessageDialog(MethodViewer.this, "Unable to validate type extends from {"
                                 + IntroduceConstants.BASEFAULTS_NAMESPACE + "}BaseFaultType : " + ex.getMessage());
                         }
@@ -2050,23 +2054,22 @@ public class MethodViewer extends GridPortalBaseFrame {
 
     public static boolean validateIsFaultType(NamespaceType namespace, SchemaElementType type, File baseSchemaDir)
         throws Exception {
-            XSOMParser parser = new XSOMParser();
-            parser.setErrorHandler(new DefaultErrorHandler());
+        XSOMParser parser = new XSOMParser();
+        parser.setErrorHandler(new DefaultErrorHandler());
 
-            parser.parse(new File(baseSchemaDir.getAbsolutePath() + File.separator + namespace.getLocation()));
+        parser.parse(new File(baseSchemaDir.getAbsolutePath() + File.separator + namespace.getLocation()));
 
-            parser
-                .parse(new File(CommonTools.getGlobusLocation() + File.separator + "share" + File.separator + "schema"
-                    + File.separator + "wsrf" + File.separator + "faults" + File.separator + "WS-BaseFaults.xsd"));
+        parser.parse(new File(CommonTools.getGlobusLocation() + File.separator + "share" + File.separator + "schema"
+            + File.separator + "wsrf" + File.separator + "faults" + File.separator + "WS-BaseFaults.xsd"));
 
-            XSSchemaSet sset = parser.getResult();
-            XSComplexType bfct = sset.getComplexType(IntroduceConstants.BASEFAULTS_NAMESPACE, "BaseFaultType");
-            XSElementDecl ct = sset.getElementDecl(namespace.getNamespace(), type.getType());
-            if (ct.getType().isDerivedFrom(bfct)) {
-                return true;
-            } else {
-                return false;
-            }
+        XSSchemaSet sset = parser.getResult();
+        XSComplexType bfct = sset.getComplexType(IntroduceConstants.BASEFAULTS_NAMESPACE, "BaseFaultType");
+        XSElementDecl ct = sset.getElementDecl(namespace.getNamespace(), type.getType());
+        if (ct.getType().isDerivedFrom(bfct)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
@@ -2327,7 +2330,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                         desc = (ServiceDescription) Utils.deserializeDocument(introduceFile.getAbsolutePath(),
                             ServiceDescription.class);
                     } catch (Exception e1) {
-                        logger.error("Unable to deserialize introduce.xml file",e1);
+                        logger.error("Unable to deserialize introduce.xml file", e1);
                         return;
                     }
 
@@ -2432,7 +2435,7 @@ public class MethodViewer extends GridPortalBaseFrame {
                         wsdlDoc = XMLUtilities.fileNameToDocument(chooser.getSelectedFile().getAbsolutePath());
                         currentImporWSDL = wsdlDoc;
                     } catch (MobiusException e1) {
-                        logger.error("ERROR",e1);
+                        logger.error("ERROR", e1);
                         return;
                     }
 

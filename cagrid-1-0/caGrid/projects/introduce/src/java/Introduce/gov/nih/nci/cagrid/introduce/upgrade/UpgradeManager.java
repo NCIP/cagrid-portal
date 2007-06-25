@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.introduce.upgrade;
 
-import java.io.File;
-
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
@@ -9,6 +7,8 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.UpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.UpgradeUtilities;
+
+import java.io.File;
 
 import org.apache.log4j.Logger;
 
@@ -99,7 +99,7 @@ public class UpgradeManager {
                 status
                     .addIssue(
                         "Build Failed",
-                        "Upgrade was successfull but service does not build.  Customizations that were made to the build.xml will now need to be moved to the dev-build.xml and same for build-deploy.xml to dev-build-deploy.xml.");
+                        "Upgrade was successfull but service does not build.  Customizations that were made to the build.xml will now need to be moved to the dev-build.xml and same for build-deploy.xml to dev-build-deploy.xml.  Once the build is fixed then a sync must be done to complete the upgrade.  To complete the upgrade simply open introduce and open this service for modification and then click save.");
                 e.printStackTrace();
             }
             return status;
@@ -112,7 +112,7 @@ public class UpgradeManager {
                 status
                     .addIssue(
                         "Build Failed",
-                        "Upgrade was successfull but service does not build.  Customizations that were made to the build.xml will now need to be moved to the dev-build.xml and the same for build-deploy.xml to dev-build-deploy.xml.");
+                        "Upgrade was successfull but service does not build.  Customizations that were made to the build.xml will now need to be moved to the dev-build.xml and the same for build-deploy.xml to dev-build-deploy.xml.  To complete the upgrade simply open introduce and open this service for modification and then click save.");
                 e.printStackTrace();
             }
             return status;
