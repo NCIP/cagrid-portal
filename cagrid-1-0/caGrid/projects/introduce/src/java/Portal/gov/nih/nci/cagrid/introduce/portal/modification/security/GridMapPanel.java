@@ -89,7 +89,6 @@ public class GridMapPanel extends JPanel {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();

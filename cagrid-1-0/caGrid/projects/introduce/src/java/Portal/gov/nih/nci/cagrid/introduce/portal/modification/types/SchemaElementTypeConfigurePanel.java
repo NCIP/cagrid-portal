@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.types;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -86,7 +86,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		this.setLayout(new GridBagLayout());
 		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Element Type Configuration",
 			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-			null, IntroduceLookAndFeel.getPanelLabelColor()));
+			null, PortalLookAndFeel.getPanelLabelColor()));
 		this.add(getBeanPanel(), gridBagConstraints2);
 		this.add(getCustomBeanWrapperPanel(), gridBagConstraints8);
 	}
@@ -360,7 +360,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		this.hide = hide;
 		if (hide) {
 			getCustomBeanPanel().setVisible(false);
-			customizeLabel.setIcon(IntroduceLookAndFeel.getAddIcon());
+			customizeLabel.setIcon(PortalLookAndFeel.getAddIcon());
 			customizeLabel.setEnabled(false);
 			getTypeText().setEnabled(false);
 			typeLabel.setEnabled(false);
@@ -391,7 +391,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			gridBagConstraints6.weightx = 1.0D;
 			gridBagConstraints6.gridy = 0;
 			customizeLabel = new JLabel();
-			customizeLabel.setIcon(IntroduceLookAndFeel.getAddIcon());
+			customizeLabel.setIcon(PortalLookAndFeel.getAddIcon());
 			customizeLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 10));
 			customizeLabel.setText("Customize Beans");
 			customizeLabel.addMouseListener(new MouseAdapter() {
@@ -400,10 +400,10 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 					super.mouseClicked(e);
 					if (getCustomBeanPanel().isVisible()) {
 						getCustomBeanPanel().setVisible(false);
-						customizeLabel.setIcon(IntroduceLookAndFeel.getAddIcon());
+						customizeLabel.setIcon(PortalLookAndFeel.getAddIcon());
 					} else if (!getHide()) {
 						getCustomBeanPanel().setVisible(true);
-						customizeLabel.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+						customizeLabel.setIcon(PortalLookAndFeel.getRemoveIcon());
 					}
 				}
 

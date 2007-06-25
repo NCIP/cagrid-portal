@@ -30,9 +30,9 @@ import javax.swing.JPanel;
  * @author hastings
  */
 public abstract class NamespaceTypeDiscoveryComponent extends JPanel {
-    public static final String REPLACE = "replace";
-    public static final String IGNORE = "ignore";
-    public static final String ERROR = "error";
+    public static final String REPLACE_POLICY = "replace";
+    public static final String IGNORE_POLICY = "ignore";
+    public static final String ERROR_POLICY = "error";
 
     private DiscoveryExtensionDescriptionType descriptor;
     private NamespacesType currentNamespaces;

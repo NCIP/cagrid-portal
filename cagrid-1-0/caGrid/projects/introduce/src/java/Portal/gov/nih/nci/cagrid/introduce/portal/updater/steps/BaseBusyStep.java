@@ -19,8 +19,6 @@ public abstract class BaseBusyStep extends PanelWizardStep {
 
 	private JLabel busyLabel = null;
 
-	private Thread workerThread = null; // @jve:decl-index=0:
-
 	private JPanel busyPanel = null;
 
 	private JProgressBar busyProgressBar = null;

@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.introduce.common.BasePreferenceConfigurationPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.LayoutManager;
 import java.util.HashMap;
 import java.util.Map;
 

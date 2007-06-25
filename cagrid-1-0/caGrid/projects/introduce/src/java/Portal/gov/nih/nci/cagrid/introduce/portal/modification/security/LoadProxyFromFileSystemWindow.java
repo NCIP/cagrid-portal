@@ -54,7 +54,6 @@ public class LoadProxyFromFileSystemWindow extends GridPortalComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());

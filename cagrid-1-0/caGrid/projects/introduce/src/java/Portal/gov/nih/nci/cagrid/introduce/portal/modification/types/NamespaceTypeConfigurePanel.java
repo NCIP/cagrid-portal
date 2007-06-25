@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.types;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,6 +23,8 @@ public class NamespaceTypeConfigurePanel extends JPanel{
 	private JTextField locationText = null;
 
 	private NamespaceType type;
+    
+    
 	/**
 	 * This method initializes 
 	 * 
@@ -90,7 +92,11 @@ public class NamespaceTypeConfigurePanel extends JPanel{
         namespaceLabel = new JLabel();
         namespaceLabel.setText("Namespace");
         this.setLayout(new GridBagLayout());
-        this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Namespace Type Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+        this.setBorder(javax.swing.BorderFactory.createTitledBorder(
+            null, "Namespace Type Configuration", 
+            javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+            javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
+            PortalLookAndFeel.getPanelLabelColor()));
         this.add(namespaceLabel, gridBagConstraints);
         this.add(packageNameLabel, gridBagConstraints1);
         this.add(locationLabel, gridBagConstraints2);

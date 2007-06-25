@@ -388,9 +388,9 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 
             // this should have been handled by the validation method and we
             // shouldn't be copying schemas
-            assert (!(namespaceAlreadyExists(targetNamespace) && namespaceExistsPolicy.equals(ERROR)));
+            assert (!(namespaceAlreadyExists(targetNamespace) && namespaceExistsPolicy.equals(ERROR_POLICY)));
 
-            if (namespaceAlreadyExists(targetNamespace) && namespaceExistsPolicy.equals(IGNORE)) {
+            if (namespaceAlreadyExists(targetNamespace) && namespaceExistsPolicy.equals(IGNORE_POLICY)) {
                 LOG.info("Ignoring schema [" + schema.getAbsolutePath() + "] with namespace [" + targetNamespace
                     + "], as it already exists");
             } else {
@@ -424,7 +424,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
                 LOG.error(error, e);
                 throw new SDKExecutionException(error, e);
             }
-            if (namespaceAlreadyExists(targetNamespace) && namespaceExistsPolicy.equals(ERROR)) {
+            if (namespaceAlreadyExists(targetNamespace) && namespaceExistsPolicy.equals(ERROR_POLICY)) {
                 String error = "Could not add generated schema with namespace ["
                     + targetNamespace
                     + "], as it already exists and Introduce preference was to error.  To change this behavior, edit your preferences.";

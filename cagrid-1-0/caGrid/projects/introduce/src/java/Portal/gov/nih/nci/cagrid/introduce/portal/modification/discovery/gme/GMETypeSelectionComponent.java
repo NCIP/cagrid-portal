@@ -132,7 +132,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
     public NamespaceType[] createNamespaceTypeFromFiles(String startingSchema, Namespace startingNamespace,
         File schemaDestinationDir, String namespaceExistsPolicy) {
         try {
-            if (namespaceAlreadyExists(startingNamespace.getRaw()) && namespaceExistsPolicy.equals(ERROR)) {
+            if (namespaceAlreadyExists(startingNamespace.getRaw()) && namespaceExistsPolicy.equals(ERROR_POLICY)) {
                 addError("Namespace already exists.");
                 return null;
             }
@@ -196,7 +196,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
                             // property
                             // to see if supposed to error;
                             if (namespaceAlreadyExists(namespace)) {
-                                if (namespaceExistsPolicy.equals(ERROR)) {
+                                if (namespaceExistsPolicy.equals(ERROR_POLICY)) {
                                     addError("Imported namespace already exists: "
                                         + namespace
                                         + ". \nIf you want this schema to be overwriten please change the policy to \"ignore\" in the introduce preferences menu");
@@ -238,7 +238,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
         File schemaFile = new File(fileName);
         Document schema = XMLUtilities.fileNameToDocument(schemaFile.getCanonicalPath());
         String namespaceURI = schema.getRootElement().getAttribute("targetNamespace").getValue();
-        if (namespaceAlreadyExists(namespaceURI) && namespaceExistsPolicy.equals(IGNORE)) {
+        if (namespaceAlreadyExists(namespaceURI) && namespaceExistsPolicy.equals(IGNORE_POLICY)) {
             // do nothing just ignore.....
         } else {
             System.out.println("Copying schema " + fileName + " to " + copyToDirectory.getCanonicalPath());

@@ -20,14 +20,12 @@ import java.util.Enumeration;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.projectmobius.portal.GridPortalInitializer;
 import org.projectmobius.portal.PortalResourceManager;
 
 
 public class IntroducePortalInitializer implements GridPortalInitializer {
-    private static final Logger logger = Logger.getLogger(IntroducePortalInitializer.class);
     private static final int HELP_MENU = 4;
 
     private static final int CONFIG_MENU = 3;
@@ -59,11 +57,11 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
             if (!hasKey(ResourceManager.getConfigurationPropertyKeys(),
                 IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY)) {
                 ResourceManager.setConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY,
-                    NamespaceTypeDiscoveryComponent.ERROR);
+                    NamespaceTypeDiscoveryComponent.ERROR_POLICY);
             }
             ResourceManager.setConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY
-                + ".options", NamespaceTypeDiscoveryComponent.ERROR + "," + NamespaceTypeDiscoveryComponent.REPLACE
-                + "," + NamespaceTypeDiscoveryComponent.IGNORE);
+                + ".options", NamespaceTypeDiscoveryComponent.ERROR_POLICY + "," + NamespaceTypeDiscoveryComponent.REPLACE_POLICY
+                + "," + NamespaceTypeDiscoveryComponent.IGNORE_POLICY);
         } catch (IOException e1) {
             e1.printStackTrace();
         }

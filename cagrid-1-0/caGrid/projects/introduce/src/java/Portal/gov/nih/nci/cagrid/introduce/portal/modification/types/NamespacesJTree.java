@@ -138,10 +138,10 @@ public class NamespacesJTree extends JTree {
 	// Otherwise, collapses all nodes in the tree.
 	public void expandAll(boolean expand) {
 		JTree tree = this;
-		TreeNode root = (TreeNode) tree.getModel().getRoot();
+		TreeNode rootNode = (TreeNode) tree.getModel().getRoot();
 
 		// Traverse tree from root
-		expandAll(new TreePath(root), expand);
+		expandAll(new TreePath(rootNode), expand);
 	}
 
 
@@ -177,9 +177,9 @@ public class NamespacesJTree extends JTree {
 
 
 	private boolean checkTypeExists(NamespaceType type) {
-		TreeNode root = (TreeNode) this.getModel().getRoot();
+		TreeNode rootNode = (TreeNode) this.getModel().getRoot();
 		// Traverse tree from root
-		return checkTypeExists(type, new TreePath(root));
+		return checkTypeExists(type, new TreePath(rootNode));
 	}
 
 
@@ -198,14 +198,4 @@ public class NamespacesJTree extends JTree {
 		}
 		return false;
 	}
-
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

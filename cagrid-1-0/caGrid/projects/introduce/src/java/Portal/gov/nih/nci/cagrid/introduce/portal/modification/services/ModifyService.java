@@ -21,8 +21,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.projectmobius.portal.GridPortalComponent;
-
 
 public class ModifyService extends JDialog {
 

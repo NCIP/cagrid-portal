@@ -224,22 +224,22 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 									.setText("Updates found.  Press Next to view and select updates.");
 							try {
 								checkForUpdates();
-							} catch (MalformedURLException e) {
+							} catch (MalformedURLException ex) {
 								statusLabel
 										.setText("ERROR: Malformed update site URL!");
-								e.printStackTrace();
-							} catch (IOException e) {
+								ex.printStackTrace();
+							} catch (IOException ex) {
 								statusLabel
 										.setText("ERROR: Unable to connect or read from update site!");
-								e.printStackTrace();
-							} catch (MobiusException e) {
+								ex.printStackTrace();
+							} catch (MobiusException ex) {
 								statusLabel
 										.setText("ERROR: Update site information is corupt");
-								e.printStackTrace();
-							} catch (Exception e) {
+								ex.printStackTrace();
+							} catch (Exception ex) {
 								statusLabel
 										.setText("ERROR: Undetermined Exception");
-								e.printStackTrace();
+								ex.printStackTrace();
 							}
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {

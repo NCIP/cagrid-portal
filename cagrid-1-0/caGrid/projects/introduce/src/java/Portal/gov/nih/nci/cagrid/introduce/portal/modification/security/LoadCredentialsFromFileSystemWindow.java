@@ -59,7 +59,6 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());

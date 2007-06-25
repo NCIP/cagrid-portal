@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.updater;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
