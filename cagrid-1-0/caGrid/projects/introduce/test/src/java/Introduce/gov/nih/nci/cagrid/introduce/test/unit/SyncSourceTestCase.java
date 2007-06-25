@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.test.unit;
 
 import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncHelper;
-import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
 import junit.framework.TestCase;
 
 public class SyncSourceTestCase extends TestCase {

@@ -16,7 +16,7 @@ public class RemoveSkeletonStep extends BaseStep {
 	public void runStep() throws Throwable {
 		System.out.println("Removing the service skeleton");
 
-		boolean results = Utils.deleteDir(new File(getBaseDir()
+		Utils.deleteDir(new File(getBaseDir()
 				+ File.separator + tci.getDir()));
 		//assertTrue(results);
 	}

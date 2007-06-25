@@ -18,7 +18,6 @@ public class AddMethodReturningClientHandleMethodStep extends BaseStep {
     private TestCaseInfo tci;
     private TestCaseInfo contextTCI;
     private String methodName;
-    private boolean copyFiles;
     private boolean isArray;
 
 

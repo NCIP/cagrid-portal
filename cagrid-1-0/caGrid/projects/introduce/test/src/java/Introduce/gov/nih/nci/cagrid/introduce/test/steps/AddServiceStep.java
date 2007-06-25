@@ -13,7 +13,6 @@ import java.io.File;
 
 public class AddServiceStep extends BaseStep {
 	private TestCaseInfo tci;
-	private File baseDir;
 
 	public AddServiceStep(TestCaseInfo tci, boolean build) throws Exception {
 		super(tci.getDir(),build);

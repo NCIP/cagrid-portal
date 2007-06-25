@@ -1,12 +1,7 @@
 package gov.nih.nci.cagrid.introduce.test.steps;
 
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.extension.example.ExampleCodegenPostProcessor;
-import gov.nih.nci.cagrid.introduce.extension.example.ExampleCodegenPreProcessor;
-import gov.nih.nci.cagrid.introduce.extension.example.ExampleCreationPostProcessor;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
-
-import java.io.File;
 
 public class CreateSkeletonStep extends BaseStep {
 	private TestCaseInfo tci;
