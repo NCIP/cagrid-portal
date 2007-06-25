@@ -727,6 +727,7 @@
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="security.metadata.jars" />
 			<artifact refid="servicesecurity.jars" />
+			<artifact refid="test.coverage.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/bulkDataTransfer" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
