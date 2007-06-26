@@ -30,7 +30,7 @@ import javax.swing.JTextField;
  * @author David Ervin
  * 
  * @created May 21, 2007 11:38:54 AM
- * @version $Id: AuditorSelectionPanel.java,v 1.2 2007-05-24 16:11:22 dervin Exp $ 
+ * @version $Id: AuditorSelectionPanel.java,v 1.3 2007-06-26 19:09:40 dervin Exp $ 
  */
 public class AuditorSelectionPanel extends JPanel {
 
@@ -40,8 +40,6 @@ public class AuditorSelectionPanel extends JPanel {
     private JTextField instanceNameTextField = null;
     private JPanel buttonPanel = null;
     private JButton addButton = null;
-    private JButton removeButton = null;
-    
     private File serviceBaseDir = null;
     private List<AuditorAdditionListener> auditorAdditionListeners = null;    
 
@@ -92,6 +90,10 @@ public class AuditorSelectionPanel extends JPanel {
             ErrorDialog.showErrorDialog(
                 "Error loading classes for data service auditor selection", ex.getMessage(), ex);
         }
+        GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+        gridBagConstraints11.gridx = 2;
+        gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints11.gridy = 1;
         GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
         gridBagConstraints4.gridx = 1;
         gridBagConstraints4.gridy = 2;
@@ -107,6 +109,7 @@ public class AuditorSelectionPanel extends JPanel {
         gridBagConstraints2.gridy = 0;
         gridBagConstraints2.gridx = 1;
         gridBagConstraints2.weightx = 1.0;
+        gridBagConstraints2.gridwidth = 2;
         gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
         GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
         gridBagConstraints1.gridx = 0;
@@ -119,12 +122,13 @@ public class AuditorSelectionPanel extends JPanel {
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(361, 116));
+        this.setSize(new Dimension(526, 116));
         this.add(getAuditorClassLabel(), gridBagConstraints);
         this.add(getInstanceNameLabel(), gridBagConstraints1);
         this.add(getAuditorClassComboBox(), gridBagConstraints2);
         this.add(getInstanceNameTextField(), gridBagConstraints3);
         this.add(getButtonPanel(), gridBagConstraints4);
+        this.add(getAddButton(), gridBagConstraints11);
     }
 
 
@@ -207,8 +211,6 @@ public class AuditorSelectionPanel extends JPanel {
             gridLayout.setColumns(2);
             buttonPanel = new JPanel();
             buttonPanel.setLayout(gridLayout);
-            buttonPanel.add(getAddButton(), null);
-            buttonPanel.add(getRemoveButton(), null);
         }
         return buttonPanel;
     }
@@ -233,25 +235,6 @@ public class AuditorSelectionPanel extends JPanel {
     }
 
 
-    /**
-     * This method initializes removeButton	
-     * 	
-     * @return javax.swing.JButton	
-     */
-    private JButton getRemoveButton() {
-        if (removeButton == null) {
-            removeButton = new JButton();
-            removeButton.setText("Remove Auditor");
-            removeButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    fireAuditorRemoved();
-                }
-            });
-        }
-        return removeButton;
-    }
-    
-    
     private void populateClassDropdown() throws MalformedURLException, IOException {
         File libDir = new File(serviceBaseDir.getAbsolutePath() + File.separator + "lib");
         List<Class> auditorClassses = AuditorsLoader.getAvailableAuditorClasses(libDir);
@@ -284,13 +267,4 @@ public class AuditorSelectionPanel extends JPanel {
             }
         }
     }
-    
-    
-    protected void fireAuditorRemoved() {
-        for (AuditorAdditionListener listener : auditorAdditionListeners) {
-            listener.auditorRemoved(
-                ((Class) getAuditorClassComboBox().getSelectedItem()).getName(),
-                getInstanceNameTextField().getText());
-        }
-    }
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}

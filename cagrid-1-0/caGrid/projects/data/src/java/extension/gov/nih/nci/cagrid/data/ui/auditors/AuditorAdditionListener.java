@@ -6,17 +6,14 @@ import java.util.EventListener;
 
 /** 
  *  AuditorAdditionListener
- *  Listens for changes to the auditor selection on a data service
+ *  Listens for additions to the auditors of a data service
  * 
  * @author David Ervin
  * 
  * @created May 21, 2007 11:57:48 AM
- * @version $Id: AuditorAdditionListener.java,v 1.1 2007-05-24 16:11:22 dervin Exp $ 
+ * @version $Id: AuditorAdditionListener.java,v 1.2 2007-06-26 19:09:40 dervin Exp $ 
  */
 public interface AuditorAdditionListener extends EventListener {
 
     public void auditorAdded(DataServiceAuditor auditor, String auditorClass, String instanceName);
-    
-    
-    public void auditorRemoved(String auditorClass, String instanceName);
 }

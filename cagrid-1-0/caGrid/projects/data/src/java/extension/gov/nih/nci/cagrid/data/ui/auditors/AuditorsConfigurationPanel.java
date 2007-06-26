@@ -18,7 +18,9 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
@@ -33,18 +35,15 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:40:27 AM
- * @version $Id: AuditorsConfigurationPanel.java,v 1.4 2007-05-25 17:32:12 dervin Exp $ 
+ * @version $Id: AuditorsConfigurationPanel.java,v 1.5 2007-06-26 19:09:40 dervin Exp $ 
  */
 public class AuditorsConfigurationPanel extends JPanel {
-
-    private AuditorsTable auditorsTable = null;
-    private MonitoredEventsPanel monitoredEventsPanel = null;
-    private AuditorConfigurationPropertiesTable propertiesTable = null;
-    private JScrollPane auditorsTableScrollPane = null;
-    private JScrollPane propertiesTableScrollPane = null;
-    private AuditorSelectionPanel auditorSelectionPanel = null;
     
     private ServiceInformation serviceInfo;
+
+    private AuditorsTable auditorsTable = null;
+    private JScrollPane auditorsTableScrollPane = null;
+    private AuditorSelectionPanel auditorSelectionPanel = null;
     
     public AuditorsConfigurationPanel(ServiceInformation serviceInfo) {
         super();
@@ -59,20 +58,11 @@ public class AuditorsConfigurationPanel extends JPanel {
     
     
     private void initialize() {
-        GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-        gridBagConstraints3.gridx = 0;
-        gridBagConstraints3.gridy = 3;
-        GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-        gridBagConstraints2.fill = GridBagConstraints.BOTH;
-        gridBagConstraints2.gridy = 2;
-        gridBagConstraints2.weightx = 1.0;
-        gridBagConstraints2.weighty = 1.0D;
-        gridBagConstraints2.gridx = 0;
         GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
         gridBagConstraints1.fill = GridBagConstraints.BOTH;
         gridBagConstraints1.gridy = 1;
         gridBagConstraints1.weightx = 1.0;
-        gridBagConstraints1.weighty = 0.0D;
+        gridBagConstraints1.weighty = 1.0;
         gridBagConstraints1.ipady = 100;
         gridBagConstraints1.gridx = 0;
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -84,9 +74,6 @@ public class AuditorsConfigurationPanel extends JPanel {
         this.setSize(new Dimension(570, 460));
         this.add(getAuditorSelectionPanel(), gridBagConstraints);
         this.add(getAuditorsTableScrollPane(), gridBagConstraints1);
-        this.add(getPropertiesTableScrollPane(), gridBagConstraints2);
-        this.add(getMonitoredEventsPanel(), gridBagConstraints3);
-        PortalUtils.setContainerEnabled(getMonitoredEventsPanel(), false);
     }
     
     
@@ -94,47 +81,33 @@ public class AuditorsConfigurationPanel extends JPanel {
         if (auditorsTable == null) {
             auditorsTable = new AuditorsTable();
             auditorsTable.addAuditorChangeListener(new AuditorChangeListener() {
-                public void auditorSelectionChanged(String className, String instanceName) {
-                    boolean validSelection = (className != null) && (instanceName != null);
-                    PortalUtils.setContainerEnabled(getMonitoredEventsPanel(), validSelection);
-                    
-                    if (validSelection) {
-                        File libDir = new File(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "lib");
-                        try {
-                            DataServiceAuditor auditor = AuditorsLoader.loadAuditor(libDir, className);
-
-                            // dig up the properties for this auditor and put them in
-                            // the auditor configuration table
-                            Properties auditorDefaultProps = auditor.getDefaultConfigurationProperties();
-                            DataServiceAuditors auditors = getAuditorsDescription();
-                            AuditorConfigurationConfigurationProperties configProps = null;
-                            MonitoredEvents monitoredEvents = null;
-                            for (AuditorConfiguration config : auditors.getAuditorConfiguration()) {
-                                if (config.getClassName().equals(className)
-                                    && config.getInstanceName().equals(instanceName)) {
-                                    configProps = config.getConfigurationProperties();
-                                    monitoredEvents = config.getMonitoredEvents();
-                                    if (monitoredEvents == null) {
-                                        monitoredEvents = new MonitoredEvents();
-                                        config.setMonitoredEvents(monitoredEvents);
-                                    }
-                                    break;
-                                }
+                public void auditorConfigureButtonClicked(String className, String instanceName) {
+                    new AuditorConfigurationDialog(serviceInfo, className, instanceName);
+                }
+                
+                
+                public void auditorRemoveButtonClicked(String className, String instanceName) {
+                    // remove the auditor from the configuration file
+                    try {
+                        DataServiceAuditors auditors = getAuditorsDescription();
+                        List<AuditorConfiguration> keptConfigurations = 
+                            new ArrayList(auditors.getAuditorConfiguration().length - 1);
+                        for (AuditorConfiguration config : auditors.getAuditorConfiguration()) {
+                            if (!(config.getClassName().equals(className) 
+                                && config.getInstanceName().equals(instanceName))) {
+                                keptConfigurations.add(config);
                             }
-                            getPropertiesTable().setConfigurationProperties(configProps, auditorDefaultProps);
-
-                            // set the monitored events
-                            getMonitoredEventsPanel().setMonitoredEvents(monitoredEvents);
-                            
-                            // set the selected auditor
-                            getAuditorSelectionPanel().setSelectedAuditor(className, instanceName);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            ErrorDialog.showErrorDialog(
-                                "Error loading properties for auditor " + className + " : " + instanceName, 
-                                ex.getMessage(), ex);
                         }
+                        AuditorConfiguration[] config = new AuditorConfiguration[keptConfigurations.size()];
+                        keptConfigurations.toArray(config);
+                        auditors.setAuditorConfiguration(config);
+                        storeAuditorsDescription(auditors);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        ErrorDialog.showErrorDialog("Error removing auditor", ex.getMessage(), ex);
                     }
+                    // remove the auditor from the UI
+                    getAuditorsTable().removeAuditor(className, instanceName);                    
                 }
             });
         }
@@ -142,76 +115,6 @@ public class AuditorsConfigurationPanel extends JPanel {
     }
     
     
-    private MonitoredEventsPanel getMonitoredEventsPanel() {
-        if (monitoredEventsPanel == null) {
-            monitoredEventsPanel = new MonitoredEventsPanel();
-            monitoredEventsPanel.setBorder(BorderFactory.createTitledBorder(
-                null, "Monitored Events", TitledBorder.DEFAULT_JUSTIFICATION, 
-                TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-            monitoredEventsPanel.addMonitoredEventsChangeListener(new MonitoredEventsChangeListener() {
-                public void monitoredEventsChanged() {
-                    try {
-                        String selectedClassName = getAuditorsTable().getSelectedClassName();
-                        String selectedInstanceName = getAuditorsTable().getSelectedInstanceName();
-                        DataServiceAuditors auditors = getAuditorsDescription();
-                        AuditorConfiguration selectedAuditor = null;
-                        for (AuditorConfiguration config : auditors.getAuditorConfiguration()) {
-                            if (config.getClassName().equals(selectedClassName)
-                                && config.getInstanceName().equals(selectedInstanceName)) {
-                                selectedAuditor = config;
-                                break;
-                            }
-                        }
-                        selectedAuditor.setMonitoredEvents(
-                            getMonitoredEventsPanel().getMonitoredEvents());
-                        storeAuditorsDescription(auditors);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing monitored events", ex.getMessage(), ex);
-                    }
-                }
-            });
-        }
-        return monitoredEventsPanel;
-    }
-    
-    
-    private AuditorConfigurationPropertiesTable getPropertiesTable() {
-        if (propertiesTable == null) {
-            propertiesTable = new AuditorConfigurationPropertiesTable();
-            propertiesTable.addAuditorPropertyListener(new AuditorPropertyChangeListener() {
-                public void propertyValueEdited(String key, String newValue) {
-                    // store the property
-                    try {
-                        String className = getAuditorsTable().getSelectedClassName();
-                        String instanceName = getAuditorsTable().getSelectedInstanceName();
-                        DataServiceAuditors auditors = getAuditorsDescription();
-                        for (AuditorConfiguration config : auditors.getAuditorConfiguration()) {
-                            if (config.getClassName().equals(className)
-                                && config.getInstanceName().equals(instanceName)) {
-                                AuditorConfigurationConfigurationProperties props =
-                                    config.getConfigurationProperties();
-                                for (ConfigurationProperty prop : props.getProperty()) {
-                                    if (prop.getKey().equals(key)) {
-                                        prop.setValue(newValue);
-                                        break;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                        storeAuditorsDescription(auditors);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing changed property", ex.getMessage(), ex);
-                    }
-                }
-            });
-        }
-        return propertiesTable;
-    }
-
-
     /**
      * This method initializes auditorsTableScrollPane	
      * 	
@@ -229,23 +132,6 @@ public class AuditorsConfigurationPanel extends JPanel {
     }
 
 
-    /**
-     * This method initializes propertiesTableScrollPane	
-     * 	
-     * @return javax.swing.JScrollPane	
-     */
-    private JScrollPane getPropertiesTableScrollPane() {
-        if (propertiesTableScrollPane == null) {
-            propertiesTableScrollPane = new JScrollPane();
-            propertiesTableScrollPane.setBorder(BorderFactory.createTitledBorder(
-                null, "Auditor Properties", TitledBorder.DEFAULT_JUSTIFICATION, 
-                TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-            propertiesTableScrollPane.setViewportView(getPropertiesTable());
-        }
-        return propertiesTableScrollPane;
-    }
-    
-    
     private AuditorSelectionPanel getAuditorSelectionPanel() {
         if (auditorSelectionPanel == null) {
             auditorSelectionPanel = new AuditorSelectionPanel(serviceInfo.getBaseDirectory());
@@ -255,37 +141,6 @@ public class AuditorsConfigurationPanel extends JPanel {
             auditorSelectionPanel.addAuditorAdditionListener(new AuditorAdditionListener() {
                public void auditorAdded(DataServiceAuditor auditor, String className, String instanceName) {
                    addAuditor(auditor, className, instanceName);
-               }
-               
-               
-               public void auditorRemoved(String className, String instanceName) {
-                   try {
-                       // remove the auditor from the auditors description file
-                       DataServiceAuditors auditorsDescription = getAuditorsDescription();
-                       if (auditorExists(auditorsDescription, className, instanceName)) {
-                           for (AuditorConfiguration config : auditorsDescription.getAuditorConfiguration()) {
-                               if (config.getClassName().equals(className)
-                                   && config.getInstanceName().equals(instanceName)) {
-                                   AuditorConfiguration[] cleanedUp = 
-                                       (AuditorConfiguration[]) Utils.removeFromArray(
-                                           auditorsDescription.getAuditorConfiguration(), config);
-                                   auditorsDescription.setAuditorConfiguration(cleanedUp);
-                                   break;
-                               }
-                           }
-                           // save the edited configuration
-                           storeAuditorsDescription(auditorsDescription);
-                       } else {
-                           PortalUtils.showMessage("Auditor " + className + " : " + instanceName + " not found.");
-                       }
-                   } catch (Exception ex) {
-                       ex.printStackTrace();
-                       ErrorDialog.showErrorDialog("Error removing auditor", ex.getMessage(), ex);
-                   }
-                   // remove the auditor from the GUI
-                   getAuditorsTable().removeAuditor(className, instanceName);
-                   // clear out the properties table
-                   getPropertiesTable().clearTable();
                }
             });
         }
