@@ -76,7 +76,7 @@
             </fileset>
         </copy>
         <replace dir="tmp/etc/" value="defaultvalue">
-            <include name="*_registration.xml" />
+            <include name="*registration.xml" />
             <replacefilter token="INDEX_SERVICE_URL" value="${index.service.url}" />
             <replacefilter token="REGISTRATION_REFRESH" value="${index.service.registration.refresh_seconds}" />
             <replacefilter token="INDEX_REFRESH" value="${index.service.index.refresh_milliseconds}" />
