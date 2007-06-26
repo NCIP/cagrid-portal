@@ -83,17 +83,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                         String dirName = dir;
                         String packageName = servicePackage;
                         String serviceNsDomain = serviceNamespace;
-                        // String templateFilename =
-                        // getMethodsTemplateFile().getText();
-                        if (!CommonTools.isValidServiceName(serviceName)) {
-                            setErrorMessage("Service Name is not valid.  Service name must be a java compatible class name. ("
-                                + CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")");
-                            return;
-                        }
-                        if (!CommonTools.isValidPackageName(packageName)) {
-                            setErrorMessage("Package Name is not valid.  Service name must have a valid java Package Name");
-                            return;
-                        }
+              
 
                         if (dirFile.exists()) {
                             setProgressText("Deleting existing directory...");
