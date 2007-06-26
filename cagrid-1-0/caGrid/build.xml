@@ -964,9 +964,9 @@
 
 		<for list="${projects.list}" parallel="true" param="project.name" trim="true">
 			<sequential>
-				<echo message="Cleaning project @{project.name}." />
+				<echo message="Cleaning project @{project.name}." /> 
 				<delete dir="${projects.dir}/@{project.name}/ext" />
-				<ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />
+				<ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />			    
 			</sequential>
 		</for>
 	</target>
@@ -985,11 +985,13 @@
 	<target name="all" depends="prepare, clean" description="Builds the entire application">
 		<for list="${projects.list}" parallel="false" param="project.name" trim="true">
 			<sequential>
+			    <stopwatch name="@{project.name}"/> 
 				<echo message="=====================================================================================" />
 				<echo message="Building project @{project.name}." />
 				<echo message="=====================================================================================" />
 				<runtarget target="build-@{project.name}" />
 				<echo message="Built project @{project.name}." />
+			    <stopwatch name="@{project.name}" action="total"/> 
 			</sequential>
 		</for>
 		<runtarget target="installIntroduceExtensions" />

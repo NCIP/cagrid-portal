@@ -127,6 +127,7 @@
     <target name="unit-test">
         <for list="${unit.testable.projects.list}" parallel="true" param="project.name" trim="true">
             <sequential>
+                <stopwatch name="@{project.name}"/> 
                 <echo message="Unit testing project @{project.name}." />
                 <trycatch property="@{project.name}.unit.test.failed.message">
                     <try>
@@ -140,6 +141,7 @@
                         <property name="unit.test.failed" value="true" />
                     </catch>
                 </trycatch>
+                <stopwatch name="@{project.name}" action="total"/> 
             </sequential>
         </for>
 
@@ -150,6 +152,7 @@
     <target name="system-test">
         <for list="${system.testable.projects.list}" parallel="true" param="project.name" trim="true">
             <sequential>
+                <stopwatch name="@{project.name}"/> 
                 <echo message="System Testing project @{project.name}." />
                 <trycatch property="@{project.name}.system.test.failed.message">
                     <try>
@@ -163,6 +166,7 @@
                         <property name="test.failed" value="true" />
                     </catch>
                 </trycatch>
+                <stopwatch name="@{project.name}" action="total"/> 
             </sequential>
         </for>
 
