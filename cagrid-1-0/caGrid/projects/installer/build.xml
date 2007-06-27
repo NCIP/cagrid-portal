@@ -34,7 +34,7 @@
 	<target name="compile" depends="init"
 		description="compile the source ">
 		<!-- Compile the java code from ${src} into ${build} -->
-		<javac destdir="${build.classes}" source="1.5">
+		<javac destdir="${build.classes}" source="1.5" debug="true">
 			<src path="${src}" />
 			<classpath refid="build.classpath" />
 		</javac>
@@ -54,7 +54,8 @@
 	<target name="jar-core" depends="compile">
 		<jar destfile="${build.jars}/${project.jar.prefix}core.jar"
 			basedir="${build.classes}"
-			includes="org/cagrid/**/*.class images/** test/**" />
+			includes="org/cagrid/**/*.class images/** test/** **/*.properties"
+			manifest="manifest.txt"/>
 	</target>
 
 	<target name="jar" depends="jar-core"></target>
@@ -85,6 +86,43 @@
 				<![CDATA[<i>Copyright &#169; 2000 NCICB. All Rights Reserved.</i>]]>
 			</bottom>
 		</javadoc>
+	</target>
+	
+	<target name="dist-cagrid">
+		<!--
+		<property name="cagrid.home" value="/Users/joshua/packages/cagrid/1.1/cagrid-1-0"/>
+		-->
+		<mkdir dir="build"/>
+		<property name="cagrid.home" value="../../.."/>
+		<zip destfile="build/caGrid.zip">
+			<fileset dir="${cagrid.home}">
+				<include name="caGrid/**"/>
+				<exclude name="caGrid/projects/portal*"/>
+				<exclude name="caGrid/projects/installer/installers/**"/>
+				<exclude name="caGrid/projects/installer/deployer/temp/**"/>
+				<exclude name="caGrid/projects/installer/deployer/software/**"/>
+				<exclude name="caGrid/projects/installer/deployer/certs/**"/>
+				<exclude name="**/bin/**"/>
+			</fileset>
+		</zip>
+	</target>
+	
+	<target name="dist-installer" depends="jar">
+		<mkdir dir="build/installer/lib"/>
+		<copy todir="build/installer" file="${build.jars}/${project.jar.prefix}core.jar" overwrite="true"/>
+		<copy todir="build/installer/lib">
+			<fileset dir="../dorian/lib">
+				<include name="mysql-connector*.jar"/>
+			</fileset>
+			<fileset dir="lib">
+				<include name="commons-logging*.jar"/>
+				<include name="log4j*.jar"/>
+			</fileset>
+			<fileset dir="ext/lib">
+				<include name="caGrid*wizard.jar"/>
+			</fileset>
+		</copy>
+		<zip destfile="build/installer.zip" basedir="build/installer"/>
 	</target>
 
 </project>

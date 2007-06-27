@@ -13,12 +13,15 @@ public class AntUtils {
 	public static String getAntCommand() {
 		// ant home
 		String ant = System.getenv("ANT_HOME");
-		if (ant == null)
+		if (ant == null){
 			throw new IllegalArgumentException("ANT_HOME not set");
+		}
 
 		// ant home/bin
-		if (!ant.endsWith(File.separator))
+		if (!ant.endsWith(File.separator)){
 			ant += File.separator;
+		}
+		
 		ant += "bin" + File.separator;
 
 		// ant home/bin/ant
@@ -28,8 +31,9 @@ public class AntUtils {
 			ant += "ant";
 		}
 
-		if (!new File(ant).exists())
+		if (!new File(ant).exists()){
 			throw new IllegalArgumentException(ant + " does not exist");
+		}
 		return ant;
 	}
 
@@ -45,7 +49,7 @@ public class AntUtils {
 		// build command
 		ArrayList<String> cmd = new ArrayList<String>();
 		cmd.add(getAntCommand());
-		cmd.add("-v");
+//		cmd.add("-v");
 
 		// add system properties
 		if (sysProps != null) {
@@ -53,8 +57,9 @@ public class AntUtils {
 			while (keys.hasMoreElements()) {
 				String name = (String) keys.nextElement();
 				String value = (String) sysProps.getProperty(name);
-				if (!OSUtils.isWindows())
+				if (!OSUtils.isWindows()){
 					value = value.replaceAll(" ", "\\\\ ");
+				}
 				cmd.add("\"-D" + name + "=" + value + "\"");
 			}
 		}

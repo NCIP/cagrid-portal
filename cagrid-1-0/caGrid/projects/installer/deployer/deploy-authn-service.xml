@@ -3,8 +3,8 @@
 	<import file="common.xml"/>
 
 	<target name="create-jaas-config">
-		<delete file="${temp.dir}/.java.login.config" />
-		<concat destfile="${temp.dir}/.java.login.config">
+		<delete file="${temp.dir.path}/.java.login.config" />
+		<concat destfile="${temp.dir.path}/.java.login.config">
 			${authn.csm.app.context}{
 			gov.nih.nci.security.authentication.loginmodules.LDAPLoginModule
 			required ldapHost="${authn.ldapHost}"
@@ -45,7 +45,7 @@
 			remoteToFile="${username}:${password}@${host}:${catalina.home}/${authn.cert.path}" />
 		<scp file="${certs.dir}/${host}.key"
 			remoteToFile="${username}:${password}@${host}:${catalina.home}/${authn.key.path}" />
-		<scp file="${temp.dir}/.java.login.config"
+		<scp file="${temp.dir.path}/.java.login.config"
 			remoteToFile="${username}:${password}@${host}:~/.java.login.config" />
 
 	</target>

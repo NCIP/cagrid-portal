@@ -15,10 +15,9 @@ import org.pietschy.wizard.InvalidStateException;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
-public class FindDirectoryNameTask implements Task {
+public class FindDirectoryNameTask extends BasicTask {
 	
-	private String name;
-	private String description;
+
 	private String parentDirPathProperty;
 	private String pattern;
 	private String propertyName;
@@ -26,18 +25,14 @@ public class FindDirectoryNameTask implements Task {
 	private static final Log logger = LogFactory.getLog(FindDirectoryNameTask.class);
 	
 	public FindDirectoryNameTask(String name, String description, String parentDirPathProperty, String pattern, String propertyName){
-		this.name = name;
-		this.description = description;
+		super(name, description);
 		this.parentDirPathProperty = parentDirPathProperty;
 		this.pattern = pattern;
 		this.propertyName = propertyName;
 	}
 	
 
-	/* (non-Javadoc)
-	 * @see org.cagrid.installer.tasks.Task#execute(java.util.Map)
-	 */
-	public Object execute(Map state) throws Exception {
+	protected Object internalExecute(Map state) throws Exception {
 		
 		String parentDirPath = PropertyUtils.getRequiredProperty(state, this.parentDirPathProperty);
 		File dir = new File(parentDirPath);
@@ -62,20 +57,5 @@ public class FindDirectoryNameTask implements Task {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.cagrid.installer.tasks.Task#getDescription()
-	 */
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.cagrid.installer.tasks.Task#getName()
-	 */
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

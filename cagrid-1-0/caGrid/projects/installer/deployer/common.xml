@@ -16,7 +16,7 @@
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
-			<fileset dir="${cagrid.home}/caGrid/share/lib">
+			<fileset dir="${cagrid.home}/share/lib">
 				<include name="ant-contrib*.jar" />
 			</fileset>
 		</classpath>
@@ -58,11 +58,11 @@
 
 	<target name="deploy-service">
 		<property name="build.dir"
-			value="${basedir}/${temp.dir}/${deploy.service.name}-service" />
+			value="${basedir}/${temp.dir.path}/${deploy.service.name}-service" />
 		<property name="zip.file.name"
 			value="${deploy.service.name}-service.zip" />
 		<property name="zip.file.path"
-			value="${basedir}/${temp.dir}/${zip.file.name}" />
+			value="${basedir}/${temp.dir.path}/${zip.file.name}" />
 		<mkdir dir="${build.dir}" />
 		<ant
 			antfile="${cagrid.home}/caGrid/projects/${deploy.service.name}/build.xml"
@@ -72,6 +72,7 @@
 				value="http://${node1.host}:8080/wsrf/services/DefaultIndexService" />
 		</ant>
 
+		<!--
 		<zip destfile="${zip.file.path}" basedir="${build.dir}" />
 
 		<scp file="${zip.file.path}"
@@ -91,10 +92,11 @@
 			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.trust.cert.deploy.filename}" />
 		<scp file="${ca.dorian.cert.input}"
 			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.dorian.cert.deploy.filename}" />
+			-->
 	</target>
 
 	<target name="clean">
-		<delete dir="${temp.dir}" />
+		<delete dir="${temp.dir.path}" />
 		<delete dir="${certs.dir}" />
 	</target>
 </project>

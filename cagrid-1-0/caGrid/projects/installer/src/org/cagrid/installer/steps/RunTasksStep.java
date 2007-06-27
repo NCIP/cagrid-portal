@@ -11,18 +11,25 @@ import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.model.CaGridInstallerModel;
+import org.cagrid.installer.tasks.ProgressBarTaskMonitor;
 import org.cagrid.installer.tasks.Task;
 import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.PanelWizardStep;
@@ -54,6 +61,10 @@ public class RunTasksStep extends PanelWizardStep implements
 
 	private static final Log logger = LogFactory.getLog(RunTasksStep.class);
 
+	private static final int PROGRESS_SCALE = 100;
+
+	private ProgressBarTaskMonitor monitor;
+
 	/**
 	 * 
 	 */
@@ -84,6 +95,13 @@ public class RunTasksStep extends PanelWizardStep implements
 		}
 		this.model = (CaGridInstallerModel) m;
 
+		
+		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+		gridBagConstraints3.fill = GridBagConstraints.BOTH;
+		gridBagConstraints3.gridy = 2;
+		gridBagConstraints3.weightx = 1.0D;
+		gridBagConstraints3.weighty = 0.2D;
+		gridBagConstraints3.gridx = 0;
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.fill = GridBagConstraints.BOTH;
 		gridBagConstraints2.gridy = 1;
@@ -108,6 +126,15 @@ public class RunTasksStep extends PanelWizardStep implements
 
 		this.add(getBusyPanel(), gridBagConstraints2);
 
+		JTextArea taskOutput = new JTextArea(5, 20);
+//		taskOutput.setAutoscrolls(true);
+		taskOutput.setMargin(new Insets(5, 5, 5, 5));
+		taskOutput.setEditable(false);
+		PrintStream out = new PrintStream(new TextAreaOutputStream(taskOutput));
+		System.setOut(out);
+		System.setErr(out);
+		
+		add(new JScrollPane(taskOutput), gridBagConstraints3);
 	}
 
 	public void applyState() throws InvalidStateException {
@@ -121,6 +148,13 @@ public class RunTasksStep extends PanelWizardStep implements
 
 	public void prepare() {
 		getStartButton().setEnabled(true);
+		for (Task t : getTasks()) {
+			if (t instanceof Condition && !((Condition) t).evaluate(this.model)) {
+				continue;
+			}
+			this.monitor.addTask(t);
+		}
+		this.monitor.reset();
 	}
 
 	private JPanel getDescriptionPanel() {
@@ -170,11 +204,14 @@ public class RunTasksStep extends PanelWizardStep implements
 	 * @return javax.swing.JProgressBar
 	 */
 	private JProgressBar getBusyProgressBar() {
+
 		if (busyProgressBar == null) {
-			busyProgressBar = new JProgressBar(0, getTasks().size());
+			busyProgressBar = new JProgressBar(0, 1);
 			busyProgressBar.setStringPainted(true);
 			busyProgressBar.setValue(0);
 			busyProgressBar.setPreferredSize(new Dimension(148, 16));
+			monitor = new ProgressBarTaskMonitor(busyProgressBar,
+					PROGRESS_SCALE);
 		}
 		return busyProgressBar;
 	}
@@ -203,10 +240,13 @@ public class RunTasksStep extends PanelWizardStep implements
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
+
 		if ("progress" == evt.getPropertyName()) {
+
 			int progress = (Integer) evt.getNewValue();
-			getBusyProgressBar().setValue(progress);
 			if (progress == getTasks().size()) {
+				getBusyProgressBar()
+						.setValue(getBusyProgressBar().getMaximum());
 				setBusyLabel("Finished.");
 				setComplete(true);
 			}
@@ -216,8 +256,11 @@ public class RunTasksStep extends PanelWizardStep implements
 		} else if ("exception" == evt.getPropertyName()) {
 			this.exception = (Exception) evt.getNewValue();
 			setBusyLabel("Error occurred.");
-			logger.error("Error occurred", this.exception);
-			setComplete(true);
+			String msg = this.exception.getMessage();
+			logger.error(msg, this.exception);
+			setComplete(false);
+			JOptionPane.showMessageDialog(null, msg, "Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -263,14 +306,14 @@ public class RunTasksStep extends PanelWizardStep implements
 					setCurrentTask(task);
 					try {
 						task.execute(this.model.getState());
-						
 					} catch (Exception ex) {
 						setException(ex);
+						break;
 					}
-				}else{
+				} else {
 					logger.info("Skipping task " + task.getName());
 				}
-				setProgress(i + 1);
+				setProgress(getProgress() + 1);
 			}
 		}
 
@@ -303,6 +346,20 @@ public class RunTasksStep extends PanelWizardStep implements
 			this.currentTask = task;
 			this.psc.firePropertyChange("currentTask", oldValue,
 					this.currentTask);
+		}
+
+	}
+
+	class TextAreaOutputStream extends OutputStream {
+		private JTextArea textControl;
+
+		public TextAreaOutputStream(JTextArea control) {
+			textControl = control;
+		}
+
+		public void write(int b) throws IOException {
+			textControl.append(String.valueOf((char) b));
+			textControl.setCaretPosition(textControl.getDocument().getLength());
 		}
 	}
 

@@ -3,6 +3,7 @@
  */
 package org.cagrid.installer.tasks;
 
+import java.beans.PropertyChangeListener;
 import java.util.Map;
 
 import org.pietschy.wizard.WizardModel;
@@ -58,6 +59,26 @@ public class ConditionalTask implements Condition, Task {
 	 */
 	public String getName() {
 		return this.task.getName();
+	}
+
+	public void addPropertyChangeListener(PropertyChangeListener l) {
+		this.task.addPropertyChangeListener(l);
+	}
+
+	public int getLastStep() {
+		return this.task.getLastStep();
+	}
+
+	public int getStepCount() {
+		return this.task.getStepCount();
+	}
+
+	public void setLastStep(int lastStep) {
+		this.task.setLastStep(lastStep);
+	}
+
+	public void setStepCount(int count) {
+		this.task.setStepCount(count);
 	}
 
 }

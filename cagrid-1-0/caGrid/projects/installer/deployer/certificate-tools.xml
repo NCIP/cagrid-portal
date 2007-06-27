@@ -1,6 +1,6 @@
 <project name="certificate-tools" default="generate-certs">
 
-	<import file="common.xml"/>
+	<import file="common.xml" />
 
 	<target name="generate-service-ca-cert">
 		<ant inheritAll="false" inheritRefs="false"
@@ -13,6 +13,21 @@
 			<property name="key.input" value="${ca.service.key.input}" />
 			<property name="cert.input"
 				value="${ca.service.cert.input}" />
+		</ant>
+	</target>
+
+	<target name="generate-ca">
+	
+		<touch mkdirs="true" file="${ca.key.path}"/>
+		<touch mkdirs="true" file="${ca.cert.path}"/>
+		
+		<ant inheritAll="false" inheritRefs="false"
+			antfile="${gridca.build.file.path}" target="generateCA">
+			<property name="dn.input" value="${ca.dn.input}" />
+			<property name="days.input" value="${ca.days.valid}" />
+			<property name="password.input" value="${ca.key.pwd}" />
+			<property name="key.input" value="${ca.key.path}" />
+			<property name="cert.input" value="${ca.cert.path}" />
 		</ant>
 	</target>
 
@@ -93,7 +108,26 @@
 			</sequential>
 		</for>
 	</target>
+
+	<target name="generate-host-creds">
 	
+		<touch mkdirs="true" file="${service.cert.path}"/>
+		<touch mkdirs="true" file="${service.key.path}"/>
+	
+		<ant inheritAll="false" inheritRefs="false"
+			antfile="${gridca.build.file.path}"
+			target="createAndSignHostCertificate">
+			<property name="key.input" value="${ca.key.path}" />
+			<property name="password.input" value="${ca.key.pwd}" />
+			<property name="ca.input" value="${ca.cert.path}" />
+			<property name="hostname.input" value="service.hostname" />
+			<property name="days.input"
+				value="${service.cert.days.valid}" />
+			<property name="hostkey.input" value="${service.key.path}" />
+			<property name="cert.input" value="${service.cert.path}" />
+		</ant>
+	</target>
+
 	<target name="generate-certs">
 		<mkdir dir="${certs.dir}" />
 		<antcall target="generate-service-ca-cert" />
@@ -101,6 +135,6 @@
 		<antcall target="generate-dorian-ca-cert" />
 		<antcall target="generate-host-certs" />
 		<antcall target="generate-authn-ca-cert" />
-	</target>	
+	</target>
 
 </project>

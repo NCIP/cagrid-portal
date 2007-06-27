@@ -5,10 +5,10 @@
 	<target name="deploy-index-service">
 
 		<property name="build.dir"
-			value="${basedir}/${temp.dir}/index-service" />
+			value="${basedir}/${temp.dir.path}/index-service" />
 		<property name="zip.file.name" value="index-service.zip" />
 		<property name="zip.file.path"
-			value="${basedir}/${temp.dir}/${zip.file.name}" />
+			value="${basedir}/${temp.dir.path}/${zip.file.name}" />
 		<mkdir dir="${build.dir}" />
 		<ant antfile="${cagrid.home}/caGrid/projects/index/build.xml"
 			inheritAll="false" inheritRefs="false" target="deployIndexTomcat">

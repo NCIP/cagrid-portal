@@ -23,6 +23,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -122,11 +124,22 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 		}
 		checkComplete();
 	}
-
+	
+	public void prepare(){
+		for(String key : this.requiredFields.keySet()){
+			if(this.model.getState().containsKey(key)){
+				this.requiredFields.put(key, true);
+			}
+		}
+		checkComplete();
+	}
+	
 	protected void checkComplete() {
 		boolean allRequiredFieldsSpecified = true;
 		for (String key : this.requiredFields.keySet()) {
-			if (!this.requiredFields.get(key)) {
+			boolean isSet = this.requiredFields.get(key);
+//			logger.debug("Checking " + key + ": " + isSet);
+			if (!isSet) {
 				allRequiredFieldsSpecified = false;
 				break;
 			}
@@ -135,7 +148,8 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 	}
 
 	protected void addBooleanOption(BooleanPropertyConfigurationOption option) {
-		String defaultValue = (String)this.model.getState().get(option.getName());
+		String defaultValue = (String) this.model.getState().get(
+				option.getName());
 		try {
 			Boolean.valueOf(defaultValue);
 		} catch (Exception ex) {
@@ -146,13 +160,12 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 			addRequiredListener(option.getName(), valueField);
 		}
 		valueField.setSelected(option.getDefaultValue());
-		addOption(option.getName(), option.getDescription(),
-				valueField);
+		addOption(option.getName(), option.getDescription(), valueField);
 	}
 
 	protected void addRequiredListener(final String requiredField,
 			ItemSelectable valueField) {
-		logger.debug("Added required field: " + requiredField);
+//		logger.debug("Added required field: " + requiredField);
 		this.requiredFields.put(requiredField, false);
 		valueField.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -169,7 +182,8 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 	}
 
 	protected void addListOption(ListPropertyConfigurationOption option) {
-		String defaultValue = (String) this.model.getState().get(option.getName());
+		String defaultValue = (String) this.model.getState().get(
+				option.getName());
 		if (defaultValue != null) {
 			boolean foundIt = false;
 			for (String value : option.getChoices()) {
@@ -188,25 +202,27 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 			defaultValue = option.getChoices()[0];
 		}
 		JComboBox valueField = new JComboBox(option.getChoices());
+		valueField.setSelectedItem(defaultValue);
 		if (option.isRequired()) {
 			addRequiredListener(option.getName(), valueField);
+			this.requiredFields.put(option.getName(), true);
 		}
-		valueField.setSelectedItem(defaultValue);
-		addOption(option.getName(), option.getDescription(),
-				valueField);
+		addOption(option.getName(), option.getDescription(), valueField);
 	}
 
 	protected void addTextOption(TextPropertyConfigurationOption option) {
-		String defaultValue = (String) this.model.getState().get(option.getName());
+		String defaultValue = (String) this.model.getState().get(
+				option.getName());
 		if (defaultValue == null) {
 			defaultValue = option.getDefaultValue();
 		}
 		final String requiredField = option.getName();
 		final JTextField valueField = new JTextField(defaultValue);
 		if (option.isRequired()) {
-
-			valueField.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent evt) {
+			boolean isSet = defaultValue != null && defaultValue.trim().length() > 0;
+			this.requiredFields.put(option.getName(), isSet);
+			valueField.addCaretListener(new CaretListener() {
+				public void caretUpdate(CaretEvent evt) {
 					if (PropertyConfigurationStep.this.requiredFields
 							.containsKey(requiredField)) {
 						boolean selected = valueField.getText() != null
@@ -219,12 +235,11 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 
 			});
 		}
-		addOption(option.getName(), option.getDescription(),
-				valueField);
+		addOption(option.getName(), option.getDescription(), valueField);
 	}
 
-	protected void addOption(String key,
-			String description, Component valueField) {
+	protected void addOption(String key, String description,
+			Component valueField) {
 		this.optionKeys.add(key);
 		JLabel label = new JLabel(description);
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
@@ -258,7 +273,7 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 					value = String.valueOf(((JComboBox) optionValueFields
 							.get(i)).getSelectedItem());
 				}
-				logger.debug("Setting " + key + " = " + value);
+//				logger.debug("Setting " + key + " = " + value);
 				tempState.put(key, value);
 			}
 		} catch (Exception ex) {
@@ -266,7 +281,11 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 					+ ex.getMessage(), ex);
 		}
 
-		validate(tempState);
+		
+		Map m = new HashMap();
+		m.putAll(this.model.getState());
+		m.putAll(tempState);
+		validate(m);
 
 		this.model.getState().putAll(tempState);
 

@@ -14,8 +14,9 @@ import org.pietschy.wizard.WizardModel;
 public interface CaGridInstallerModel extends WizardModel {
 
 	Map getState();
-	void setState(Map state);
+//	void setState(Map state);
 	
 	String getMessage(String key);
+
 	
 }

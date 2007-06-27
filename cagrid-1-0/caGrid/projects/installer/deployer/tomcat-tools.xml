@@ -3,15 +3,16 @@
 	<import file="common.xml"/>
 
 	<target name="unzip-tomcat">
-		<unzip src="${tomcat.zip}" dest="${temp.dir}" />
+		<unzip src="${tomcat.zip.path}" dest="${temp.dir.path}" />
 	</target>
 	<target name="unzip-globus">
-		<unzip src="${globus.zip}" dest="${temp.dir}" />
+		<unzip src="${globus.zip.path}" dest="${temp.dir.path}" />
 	</target>
 
 	<target name="insert-secure-connector">
-		<xmltask source="${temp.dir}/${tomcat.release}/conf/server.xml"
-			dest="${temp.dir}/${tomcat.release}/conf/server.xml">
+		<xmltask source="${tomcat.dir.path}/conf/server.xml"
+			dest="${tomcat.dir.path}/conf/server.xml">
+			<remove path="/Service/Service[@name='Catalina']/Connector[@port='${tomcat.secure.port}']"/>
 			<insert path="/Server/Service[@name='Catalina']">
 				<![CDATA[
 				<Connector
@@ -29,8 +30,9 @@
 
 	<target name="insert-valve">
 
-		<xmltask source="${temp.dir}/${tomcat.release}/conf/server.xml"
-			dest="${temp.dir}/${tomcat.release}/conf/server.xml">
+		<xmltask source="${tomcat.dir.path}/conf/server.xml"
+			dest="${tomcat.dir.path}/conf/server.xml">
+			<remove path="/Server/Service[@name='Catalina']/Engine[@name='Catalina']/Valve[className='org.globus.tomcat.coyote.valves.HTTPSValve']"/>
 			<insert
 				path="/Server/Service[@name='Catalina']/Engine[@name='Catalina']">
 				<![CDATA[
@@ -42,7 +44,7 @@
 
 	<target name="set-global-cert-and-key-paths">
 		<property name="secdesc.file"
-			value="${temp.dir}/${tomcat.release}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core/global_security_descriptor.xml" />
+			value="${tomcat.dir.path}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core/global_security_descriptor.xml" />
 		<xmltask source="${secdesc.file}" dest="${secdesc.file}">
 			<attr
 				path="/*[local-name()='securityConfig']/*[local-name()='credential']/*[local-name()='key-file']"
@@ -55,9 +57,9 @@
 
 	<target name="copy-global-cert-and-key">
 		<property name="tomcat.cert.dest"
-			value="${temp.dir}/${tomcat.release}/${tomcat.cert.path}" />
+			value="${tomcat.dir.path}/${tomcat.cert.path}" />
 		<property name="tomcat.key.dest"
-			value="${temp.dir}/${tomcat.release}/${tomcat.key.path}" />
+			value="${tomcat.dir.path}/${tomcat.key.path}" />
 
 		<touch mkdirs="true" file="${tomcat.cert.dest}" />
 		<touch mkdirs="true" file="${tomcat.key.dest}" />
@@ -67,22 +69,33 @@
 		<copy file="${tomcat.key}" tofile="${tomcat.key.dest}"
 			overwrite="true" />
 	</target>
+	
+	<target name="fix-secure-web-xml">
+		<antcall target="fix-web-xml">
+			<param name="scheme" value="https"/>
+			<param name="tomcat.port" value="${tomcat.secure.port}"/>
+		</antcall>
+	</target>
 
 	<target name="fix-web-xml">
+		<property name="scheme" value="http"/>
+		<property name="tomcat.port" value="8080"/>
 		<property name="web.xml.file"
-			value="${temp.dir}/${tomcat.release}/webapps/wsrf/WEB-INF/web.xml" />
+			value="${tomcat.dir.path}/webapps/wsrf/WEB-INF/web.xml" />
 		<xmltask source="${web.xml.file}" dest="${web.xml.file}">
+			<remove path="/web-app/servlet[servlet-name='WSRFServlet']/init-param[param-name='defaultProtocol']"/>
+			<remove path="/web-app/servlet[servlet-name='WSRFServlet']/init-param[param-name='defaultPort']"/>
 			<insert
 				path="/web-app/servlet[servlet-name='WSRFServlet']/servlet-class"
 				position="after">
 				<![CDATA[
 				         <init-param>
 				<param-name>defaultProtocol</param-name>
-				<param-value>https</param-value>
+				<param-value>${scheme}</param-value>
 			</init-param>
 			<init-param>
 				<param-name>defaultPort</param-name>
-				<param-value>${tomcat.secure.port}</param-value>
+				<param-value>${tomcat.port}</param-value>
 			</init-param>
 				]]>
 			</insert>
@@ -92,7 +105,7 @@
 	<target name="fix-server-wsdd">
 		<property name="host.name" value="localhost" />
 		<property name="server.wsdd.file"
-			value="${temp.dir}/${tomcat.release}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core/server-config.wsdd" />
+			value="${tomcat.dir.path}/webapps/wsrf/WEB-INF/etc/globus_wsrf_core/server-config.wsdd" />
 		<xmltask source="${server.wsdd.file}"
 			dest="${server.wsdd.file}">
 			<insert
@@ -106,38 +119,51 @@
 		</xmltask>
 	</target>
 
-	<target name="globus-deploy-secure-tomcat">
+	<target name="globus-deploy-tomcat">
+
+		<property name="target.name" value="deployTomcat"/>
 
 		<property name="old.tomcat.build.file"
-			value="${temp.dir}/${globus.release}/share/globus_wsrf_common/tomcat/tomcat.xml" />
+			value="${globus.dir.path}/share/globus_wsrf_common/tomcat/tomcat.xml" />
 		<property name="new.tomcat.build.file"
-			value="${temp.dir}/${globus.release}/share/globus_wsrf_common/tomcat/tomcat-fixed.xml" />
+			value="${globus.dir.path}/share/globus_wsrf_common/tomcat/tomcat-fixed.xml" />
 
 		<xmltask source="${old.tomcat.build.file}"
 			dest="${new.tomcat.build.file}">
 			<attr
 				path="/project/target[@name='_baseTomcatDeploy']/copy[contains(@file, 'web.xml')]"
 				attr="file"
-				value="${basedir}/${temp.dir}/${globus.release}/share/globus_wsrf_common/tomcat/web.xml" />
+				value="${globus.dir.path}/share/globus_wsrf_common/tomcat/web.xml" />
 		</xmltask>
 
 		<ant antfile="${new.tomcat.build.file}" dir="."
-			target="deploySecureTomcat">
+			target="${target.name}">
 			<property name="tomcat.dir"
-				value="${temp.dir}/${tomcat.release}" />
+				value="${tomcat.dir.path}" />
 		</ant>
+	</target>
+	
+	<target name="globus-deploy-secure-tomcat">
+		<antcall target="globus-deploy-tomcat">
+			<param name="target.name" value="deploySecureTomcat"/>
+		</antcall>
 	</target>
 
 	<target name="zip-deploy-tomcat">
-		<echo>Zipping: ${temp.dir}/${tomcat.release}</echo>
-		<zip destfile="${temp.dir}/${tomcat.release}.zip"
-			basedir="${temp.dir}/${tomcat.release}" />
+		<echo>Zipping: ${tomcat.dir.path}</echo>
+		<zip destfile="${tomcat.dir.path}.zip"
+			basedir="${tomcat.dir.path}" />
 	</target>
 
 	<target name="package-tomcat">
-		<mkdir dir="${temp.dir}" />
+		<mkdir dir="${temp.dir.path}" />
+	
+		<property name="globus.dir.path" value="${temp.dir.path}/ws-core-4.0.3"/>
+		<property name="tomcat.dir.path" value="${temp.dir.path}/jakarta-tomcat-5.0.28"/>
+	
 		<antcall target="unzip-tomcat" />
 		<antcall target="unzip-globus" />
+	
 		<antcall target="globus-deploy-secure-tomcat" />
 		<antcall target="insert-secure-connector" />
 		<antcall target="insert-valve" />
@@ -152,7 +178,7 @@
 		<for list="${nodes.list}" param="node" parallel="false">
 			<sequential>
 				<antcall target="package-tomcat">
-					<param name="temp.dir" value="${temp.dir}/@{node}" />
+					<param name="temp.dir.path" value="${temp.dir.path}/@{node}" />
 					<param name="host.name" value="${@{node}.host}" />
 					<param name="tomcat.key"
 						value="${certs.dir}/${@{node}.host}.key" />
@@ -244,7 +270,7 @@
 					<param name="catalina.home"
 						value="${host.catalina.home}" />
 					<param name="tomcat.deploy.zip"
-						value="${temp.dir}/@{node}/${tomcat.release}.zip" />
+						value="${temp.dir.path}/@{node}/${tomcat.release}.zip" />
 				</antcall>
 			</sequential>
 		</for>
