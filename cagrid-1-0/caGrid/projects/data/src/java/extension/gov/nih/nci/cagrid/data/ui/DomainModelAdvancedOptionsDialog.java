@@ -44,7 +44,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Jun 14, 2007 10:14:20 AM
- * @version $Id: DomainModelAdvancedOptionsDialog.java,v 1.2 2007-06-15 14:26:31 dervin Exp $
+ * @version $Id: DomainModelAdvancedOptionsDialog.java,v 1.3 2007-06-27 14:46:31 dervin Exp $
  */
 public class DomainModelAdvancedOptionsDialog extends JDialog {
     public static final String INFORMATION = 
@@ -296,6 +296,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
             informationTextArea.setWrapStyleWord(true);
             informationTextArea.setLineWrap(true);
             informationTextArea.setText(INFORMATION);
+            informationTextArea.setCaretPosition(0);
         }
         return informationTextArea;
     }
