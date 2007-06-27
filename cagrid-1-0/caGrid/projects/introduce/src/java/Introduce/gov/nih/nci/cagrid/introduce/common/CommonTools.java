@@ -144,8 +144,6 @@ public class CommonTools {
 						.lastIndexOf("."));
 				String classname = packageclass.substring(packageclass
 						.lastIndexOf(".") + 1);
-				System.out.println("packages:" + packages);
-				System.out.println("classname:" + classname);
 				if (packages.length() <= 0 || classname.length() <= 0) {
 					return false;
 				}
