@@ -2,7 +2,10 @@ package gov.nih.nci.cagrid.introduce.portal.modification.types;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.portal.common.IconFeedbackPanel;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
@@ -15,26 +18,53 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.message.SimpleValidationMessage;
+import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.util.ValidationUtils;
+import com.jgoodies.validation.view.ValidationComponentUtils;
 
 public class SchemaElementTypeConfigurePanel extends JPanel {
 
 	private JTextField typeText = null;
+
 	private JTextField classNameText = null;
+
 	private boolean hide = false;
 
 	private SchemaElementType type;
+
 	private JPanel beanPanel = null;
+
 	private JPanel customBeanPanel = null;
+
 	private JLabel typeLabel = null;
+
 	private JLabel classNameLabell = null;
+
 	private JLabel serializerLabel = null;
+
 	private JTextField serializerText = null;
+
 	private JLabel deserializerLabel = null;
+
 	private JTextField deserializerText = null;
+
 	private JTextArea helpArea = null;
+
 	private JPanel customBeanWrapperPanel = null;
+
 	private JLabel customizeLabel = null;
 
+	private ValidationResultModel validationModel = new DefaultValidationResultModel();
+
+	private static final String CLASSNAME = "Classname";
+
+	private static final String SERIALIZER = "Serializer"; // @jve:decl-index=0:
+
+	private static final String DESERIALIZER = "Deserializer"; // @jve:decl-index=0:
 
 	/**
 	 * This method initializes
@@ -45,8 +75,8 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		this.setHide(true);
 	}
 
-
-	public void setSchemaElementType(SchemaElementType type, boolean classEditable) {
+	public void setSchemaElementType(SchemaElementType type,
+			boolean classEditable) {
 		this.type = type;
 		getTypeText().setText(type.getType());
 		getClassNameText().setText(type.getClassName());
@@ -55,8 +85,8 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		getClassNameText().setEditable(classEditable);
 		getDeserializerText().setEditable(classEditable);
 		getSerializerText().setEditable(classEditable);
+		validateInput();
 	}
-
 
 	public void clear() {
 		type = null;
@@ -64,8 +94,8 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		getClassNameText().setText("");
 		getDeserializerText().setText("");
 		getSerializerText().setText("");
+		validateInput();
 	}
-
 
 	/**
 	 * This method initializes this
@@ -84,13 +114,86 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		gridBagConstraints2.ipady = 2;
 		gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
 		this.setLayout(new GridBagLayout());
-		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Element Type Configuration",
-			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-			null, PortalLookAndFeel.getPanelLabelColor()));
+		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				"Element Type Configuration",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+				PortalLookAndFeel.getPanelLabelColor()));
+		this.setSize(new Dimension(265, 279));
 		this.add(getBeanPanel(), gridBagConstraints2);
 		this.add(getCustomBeanWrapperPanel(), gridBagConstraints8);
+		
+		initValidation();
 	}
 
+	private void initValidation() {
+		ValidationComponentUtils.setMessageKey(getClassNameText(), CLASSNAME);
+		ValidationComponentUtils.setMessageKey(getSerializerText(), SERIALIZER);
+		ValidationComponentUtils.setMessageKey(getDeserializerText(),
+				DESERIALIZER);
+		validateInput();
+		updateComponentTreeSeverity();
+	}
+
+	private void validateInput() {
+
+		ValidationResult result = new ValidationResult();
+
+		if (ValidationUtils.isNotBlank(this.getClassNameText().getText())) {
+			if (ValidationUtils.isBlank(this.getSerializerText().getText())) {
+				result.add(new SimpleValidationMessage(SERIALIZER
+						+ " must not be blank.", Severity.ERROR, SERIALIZER));
+			}
+			if (ValidationUtils.isBlank(this.getDeserializerText().getText())) {
+				result.add(new SimpleValidationMessage(DESERIALIZER
+						+ " must not be blank.", Severity.ERROR, DESERIALIZER));
+			}
+			if(!CommonTools.isValidPackageAndClassName(this.getClassNameText().getText())){
+				result.add(new SimpleValidationMessage(CLASSNAME
+						+ " must be a valid fully qualified class name.", Severity.ERROR, CLASSNAME));
+			}
+		}
+
+		if (ValidationUtils.isNotBlank(this.getSerializerText().getText())) {
+			if (ValidationUtils.isBlank(this.getClassNameText().getText())) {
+				result.add(new SimpleValidationMessage(CLASSNAME
+						+ " must not be blank.", Severity.ERROR, CLASSNAME));
+			}
+			if (ValidationUtils.isBlank(this.getDeserializerText().getText())) {
+				result.add(new SimpleValidationMessage(DESERIALIZER
+						+ " must not be blank.", Severity.ERROR, DESERIALIZER));
+			}
+			if(!CommonTools.isValidPackageAndClassName(this.getSerializerText().getText())){
+				result.add(new SimpleValidationMessage(SERIALIZER
+						+ " must be a valid fully qualified class name.", Severity.ERROR, SERIALIZER));
+			}
+		}
+
+		if (ValidationUtils.isNotBlank(this.getDeserializerText().getText())) {
+			if (ValidationUtils.isBlank(this.getSerializerText().getText())) {
+				result.add(new SimpleValidationMessage(SERIALIZER
+						+ " must not be blank.", Severity.ERROR, SERIALIZER));
+			}
+			if (ValidationUtils.isBlank(this.getClassNameText().getText())) {
+				result.add(new SimpleValidationMessage(CLASSNAME
+						+ " must not be blank.", Severity.ERROR, CLASSNAME));
+			}
+			if(!CommonTools.isValidPackageAndClassName(this.getDeserializerText().getText())){
+				result.add(new SimpleValidationMessage(DESERIALIZER
+						+ " must be a valid fully qualified class name.", Severity.ERROR, DESERIALIZER));
+			}
+		}
+
+		this.validationModel.setResult(result);
+		updateComponentTreeSeverity();
+	}
+
+	private void updateComponentTreeSeverity() {
+		ValidationComponentUtils
+				.updateComponentTreeMandatoryAndBlankBackground(this);
+		ValidationComponentUtils.updateComponentTreeSeverityBackground(this,
+				this.validationModel.getResult());
+	}
 
 	/**
 	 * This method initializes typeText
@@ -108,13 +211,11 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 					}
 				}
 
-
 				public void removeUpdate(DocumentEvent e) {
 					if (type != null) {
 						type.setType(getTypeText().getText());
 					}
 				}
-
 
 				public void insertUpdate(DocumentEvent e) {
 					if (type != null) {
@@ -126,7 +227,6 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		return typeText;
 	}
 
-
 	/**
 	 * This method initializes classNameText
 	 * 
@@ -135,31 +235,32 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 	private JTextField getClassNameText() {
 		if (classNameText == null) {
 			classNameText = new JTextField();
-			classNameText.getDocument().addDocumentListener(new DocumentListener() {
-				public void changedUpdate(DocumentEvent e) {
-					if (type != null) {
-						type.setClassName(getClassNameText().getText());
-					}
-				}
+			classNameText.getDocument().addDocumentListener(
+					new DocumentListener() {
+						public void changedUpdate(DocumentEvent e) {
+							if (type != null) {
+								type.setClassName(getClassNameText().getText());
+								validateInput();
+							}
+						}
 
+						public void removeUpdate(DocumentEvent e) {
+							if (type != null) {
+								type.setClassName(getClassNameText().getText());
+								validateInput();
+							}
+						}
 
-				public void removeUpdate(DocumentEvent e) {
-					if (type != null) {
-						type.setClassName(getClassNameText().getText());
-					}
-				}
-
-
-				public void insertUpdate(DocumentEvent e) {
-					if (type != null) {
-						type.setClassName(getClassNameText().getText());
-					}
-				}
-			});
+						public void insertUpdate(DocumentEvent e) {
+							if (type != null) {
+								type.setClassName(getClassNameText().getText());
+								validateInput();
+							}
+						}
+					});
 		}
 		return classNameText;
 	}
-
 
 	/**
 	 * This method initializes beanPanel
@@ -191,7 +292,6 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		}
 		return beanPanel;
 	}
-
 
 	/**
 	 * This method initializes customBeanPanel
@@ -261,7 +361,6 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		return customBeanPanel;
 	}
 
-
 	/**
 	 * This method initializes serializerText
 	 * 
@@ -270,31 +369,35 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 	private JTextField getSerializerText() {
 		if (serializerText == null) {
 			serializerText = new JTextField();
-			serializerText.getDocument().addDocumentListener(new DocumentListener() {
-				public void changedUpdate(DocumentEvent e) {
-					if (type != null) {
-						type.setSerializer(getSerializerText().getText());
-					}
-				}
+			serializerText.getDocument().addDocumentListener(
+					new DocumentListener() {
+						public void changedUpdate(DocumentEvent e) {
+							if (type != null) {
+								type.setSerializer(getSerializerText()
+										.getText());
+								validateInput();
+							}
+						}
 
+						public void removeUpdate(DocumentEvent e) {
+							if (type != null) {
+								type.setSerializer(getSerializerText()
+										.getText());
+								validateInput();
+							}
+						}
 
-				public void removeUpdate(DocumentEvent e) {
-					if (type != null) {
-						type.setSerializer(getSerializerText().getText());
-					}
-				}
-
-
-				public void insertUpdate(DocumentEvent e) {
-					if (type != null) {
-						type.setSerializer(getSerializerText().getText());
-					}
-				}
-			});
+						public void insertUpdate(DocumentEvent e) {
+							if (type != null) {
+								type.setSerializer(getSerializerText()
+										.getText());
+								validateInput();
+							}
+						}
+					});
 		}
 		return serializerText;
 	}
-
 
 	/**
 	 * This method initializes deserializerText
@@ -304,31 +407,35 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 	private JTextField getDeserializerText() {
 		if (deserializerText == null) {
 			deserializerText = new JTextField();
-			deserializerText.getDocument().addDocumentListener(new DocumentListener() {
-				public void changedUpdate(DocumentEvent e) {
-					if (type != null) {
-						type.setDeserializer(getDeserializerText().getText());
-					}
-				}
+			deserializerText.getDocument().addDocumentListener(
+					new DocumentListener() {
+						public void changedUpdate(DocumentEvent e) {
+							if (type != null) {
+								type.setDeserializer(getDeserializerText()
+										.getText());
+								validateInput();
+							}
+						}
 
+						public void removeUpdate(DocumentEvent e) {
+							if (type != null) {
+								type.setDeserializer(getDeserializerText()
+										.getText());
+								validateInput();
+							}
+						}
 
-				public void removeUpdate(DocumentEvent e) {
-					if (type != null) {
-						type.setDeserializer(getDeserializerText().getText());
-					}
-				}
-
-
-				public void insertUpdate(DocumentEvent e) {
-					if (type != null) {
-						type.setDeserializer(getDeserializerText().getText());
-					}
-				}
-			});
+						public void insertUpdate(DocumentEvent e) {
+							if (type != null) {
+								type.setDeserializer(getDeserializerText()
+										.getText());
+								validateInput();
+							}
+						}
+					});
 		}
 		return deserializerText;
 	}
-
 
 	/**
 	 * This method initializes helpArea
@@ -339,22 +446,22 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		if (helpArea == null) {
 			helpArea = new JTextArea();
 			helpArea.setEditable(false);
-			helpArea.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 10));
+			helpArea.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC,
+					10));
 			helpArea.setLineWrap(true);
 			helpArea.setBackground(new java.awt.Color(204, 204, 204));
 			helpArea
-				.setToolTipText("<html>For every Schema that omits these fields for all of its data types, "
-					+ "default Classes, Serializers, and Deserializers will be generated and used.<br>"
-					+ "If you specify a customization of any data types in a given "
-					+ "Schema, no Classes, Serializers, or Deserializers will be generated for any other data types"
-					+ " in that Schema.<br><b>Therefore, if you customize a data type in a Schema,"
-					+ " you need to also customize all other data types in that Schema that you are using in your service.");
+					.setToolTipText("<html>For every Schema that omits these fields for all of its data types, "
+							+ "default Classes, Serializers, and Deserializers will be generated and used.<br>"
+							+ "If you specify a customization of any data types in a given "
+							+ "Schema, no Classes, Serializers, or Deserializers will be generated for any other data types"
+							+ " in that Schema.<br><b>Therefore, if you customize a data type in a Schema,"
+							+ " you need to also customize all other data types in that Schema that you are using in your service.");
 			helpArea
-				.setText("* Optional.  You must specify all these fields if you specify any. [See tooltip, and documentation, for more details]");
+					.setText("* Optional.  You must specify all these fields if you specify any. [See tooltip, and documentation, for more details]");
 		}
 		return helpArea;
 	}
-
 
 	public void setHide(boolean hide) {
 		this.hide = hide;
@@ -371,11 +478,9 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		}
 	}
 
-
 	public boolean getHide() {
 		return hide;
 	}
-
 
 	/**
 	 * This method initializes customBeanWrapperPanel
@@ -392,7 +497,8 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			gridBagConstraints6.gridy = 0;
 			customizeLabel = new JLabel();
 			customizeLabel.setIcon(PortalLookAndFeel.getAddIcon());
-			customizeLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 10));
+			customizeLabel.setFont(new java.awt.Font("Dialog",
+					java.awt.Font.ITALIC, 10));
 			customizeLabel.setText("Customize Beans");
 			customizeLabel.addMouseListener(new MouseAdapter() {
 
@@ -403,7 +509,8 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 						customizeLabel.setIcon(PortalLookAndFeel.getAddIcon());
 					} else if (!getHide()) {
 						getCustomBeanPanel().setVisible(true);
-						customizeLabel.setIcon(PortalLookAndFeel.getRemoveIcon());
+						customizeLabel.setIcon(PortalLookAndFeel
+								.getRemoveIcon());
 					}
 				}
 
@@ -418,7 +525,9 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			gridBagConstraints3.gridheight = 2;
 			customBeanWrapperPanel = new JPanel();
 			customBeanWrapperPanel.setLayout(new GridBagLayout());
-			customBeanWrapperPanel.add(getCustomBeanPanel(), gridBagConstraints3);
+			customBeanWrapperPanel.add(new IconFeedbackPanel(
+					this.validationModel, getCustomBeanPanel()),
+					gridBagConstraints3);
 			customBeanWrapperPanel.add(customizeLabel, gridBagConstraints6);
 		}
 		return customBeanWrapperPanel;

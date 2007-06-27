@@ -32,6 +32,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
+import gov.nih.nci.cagrid.introduce.portal.common.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
@@ -65,12 +66,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,6 +107,14 @@ import javax.xml.namespace.QName;
 import org.apache.log4j.Logger;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
+
+import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.message.SimpleValidationMessage;
+import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.util.ValidationUtils;
+import com.jgoodies.validation.view.ValidationComponentUtils;
 
 
 /**
@@ -240,6 +251,8 @@ public class ModificationViewer extends GridPortalComponent {
     private JTextField servicePropertyDescriptionTextField = null;
 
     private boolean beenDisposed = false;
+    
+    private ValidationResultModel namespaceSelectionValidationModel = new DefaultValidationResultModel();
 
 
     /**
@@ -454,6 +467,34 @@ public class ModificationViewer extends GridPortalComponent {
             setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 
         }
+    }
+    
+    
+    private void initValidation() {
+//        ValidationComponentUtils.setMessageKey(getService(), SERVICE_NAME);
+//        ValidationComponentUtils.setMessageKey(getServicePackage(), SERVICE_PACKAGE);
+//        ValidationComponentUtils.setMessageKey(getNamespaceDomain(), SERVICE_NAMESPACE);
+//        ValidationComponentUtils.setMessageKey(getDir(), SERVICE_DIR);
+
+        validateNamespaceConfigurationInput();
+        updateComponentTreeSeverity();
+    }
+
+
+
+    private void validateNamespaceConfigurationInput() {
+        ValidationResult result = new ValidationResult();
+
+   
+        
+        this.namespaceSelectionValidationModel.setResult(result);
+        updateComponentTreeSeverity();
+    }
+
+
+    private void updateComponentTreeSeverity() {
+        ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
+        ValidationComponentUtils.updateComponentTreeSeverityBackground(this, this.namespaceSelectionValidationModel.getResult());
     }
 
 
