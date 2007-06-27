@@ -72,6 +72,11 @@
                 <include name="ant-contrib*.jar" />
             </fileset>
         </artifact>
+        <artifact track="main" type="jars" id="validation.jars">
+            <fileset dir="${share.dir}/lib/validation">
+                <include name="*" />
+            </fileset>
+        </artifact>
         <artifact track="test" type="jars" id="common.test.jars">
             <fileset dir="${test.lib.dir}">
                 <include name="jdepend*.jar" />
