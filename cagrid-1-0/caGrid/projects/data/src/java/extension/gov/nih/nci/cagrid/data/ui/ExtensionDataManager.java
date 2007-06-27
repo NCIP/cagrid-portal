@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.ui;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.ClassMapping;
@@ -20,7 +21,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 10:04:04 AM
- * @version $Id: ExtensionDataManager.java,v 1.3 2007-04-30 19:04:29 dervin Exp $ 
+ * @version $Id: ExtensionDataManager.java,v 1.4 2007-06-27 14:45:02 dervin Exp $ 
  */
 public class ExtensionDataManager {
     
@@ -28,6 +29,63 @@ public class ExtensionDataManager {
     
     public ExtensionDataManager(ExtensionTypeExtensionData data) {
         this.extensionData = data;
+    }
+    
+    
+    /**
+     * Gets the jar names of the additional libraries added to the service
+     * for supporting the query processor class
+     * 
+     * @return
+     *      The names of the additional jars, or <code>null</code> if none are present
+     * @throws Exception
+     */
+    public String[] getAdditionalJarNames() throws Exception {
+        AdditionalLibraries libs = getAdditionalLibraries();
+        return libs.getJarName();
+    }
+    
+    
+    /**
+     * Adds an additional jar
+     * 
+     * @param jarName
+     *      The name of the jar to add
+     * @throws Exception
+     */
+    public void addAdditionalJar(String jarName) throws Exception {
+        AdditionalLibraries libs = getAdditionalLibraries();
+        String[] jarNames = null;
+        if (libs.getJarName() == null) {
+            jarNames = new String[] {jarName};
+        } else {
+            boolean shouldAdd = true;
+            for (String name : libs.getJarName()) {
+                if (name.equals(jarName)) {
+                    shouldAdd = false;
+                    break;
+                }
+            }
+            if (shouldAdd) {
+                jarNames = (String[]) Utils.appendToArray(libs.getJarName(), jarName);
+            }
+        }
+        libs.setJarName(jarNames);
+        storeAdditionalLibraries(libs);
+    }
+    
+    
+    /**
+     * Sets the additional jars
+     * 
+     * @param jarNames
+     *      All the jar names to be set as additional jars
+     * @throws Exception
+     */
+    public void setAdditionalJars(String[] jarNames) throws Exception {
+        AdditionalLibraries libs = getAdditionalLibraries();
+        libs.setJarName(jarNames);
+        storeAdditionalLibraries(libs);
     }
     
     
@@ -419,6 +477,23 @@ public class ExtensionDataManager {
     
     private void saveExtensionData(Data data) throws Exception {
         ExtensionDataUtils.storeExtensionData(extensionData, data);
+    }
+    
+    
+    private AdditionalLibraries getAdditionalLibraries() throws Exception {
+        Data data = getExtensionData();
+        AdditionalLibraries libs = data.getAdditionalLibraries();
+        if (libs == null) {
+            libs = new AdditionalLibraries();
+        }
+        return libs;
+    }
+    
+    
+    private void storeAdditionalLibraries(AdditionalLibraries libs) throws Exception {
+        Data data = getExtensionData();
+        data.setAdditionalLibraries(libs);
+        saveExtensionData(data);
     }
     
     

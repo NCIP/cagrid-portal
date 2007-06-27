@@ -6,9 +6,8 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
-import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
+import gov.nih.nci.cagrid.data.ui.ExtensionDataManager;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
@@ -70,11 +69,11 @@ public class ClassBrowserPanel extends JPanel {
 	private transient List classSelectionListeners = null;
 	private transient List additionalJarsListeners = null;
 	
-	private transient ExtensionTypeExtensionData extensionData = null;
+	private transient ExtensionDataManager extensionDataManager = null;
 	private transient ServiceInformation serviceInfo = null;
 
-	public ClassBrowserPanel(ExtensionTypeExtensionData extensionData, ServiceInformation serviceInfo) {
-		this.extensionData = extensionData;
+	public ClassBrowserPanel(ExtensionDataManager extensionDataManager, ServiceInformation serviceInfo) {
+		this.extensionDataManager = extensionDataManager;
 		this.serviceInfo = serviceInfo;
 		classSelectionListeners = new LinkedList();
 		additionalJarsListeners = new LinkedList();
@@ -85,14 +84,14 @@ public class ClassBrowserPanel extends JPanel {
 	
 	private void populateFields() {
 		// get the additional jars
-		AdditionalLibraries additionalLibs = null;
+		String[] jarNames = null; 
 		try {
-			additionalLibs = ExtensionDataUtils.getExtensionData(extensionData).getAdditionalLibraries();
+			jarNames = extensionDataManager.getAdditionalJarNames();
 		} catch (Exception ex) {
 			ErrorDialog.showErrorDialog("Error loading list of additional jars", ex);
 		}
-		if (additionalLibs != null && additionalLibs.getJarName() != null) {
-			addJars(additionalLibs.getJarName());
+		if (jarNames != null) {
+			addJars(jarNames);
 		}
 		// populate available classes from the jars
 		populateClassDropdown();
@@ -186,16 +185,15 @@ public class ClassBrowserPanel extends JPanel {
 		if (additionalJarsList == null) {
 			additionalJarsList = new JList();
 			// load any previous additional jars information
-			if (extensionData != null) {
-				AdditionalLibraries additionalLibs = null;
-				try {
-					additionalLibs = ExtensionDataUtils.getExtensionData(extensionData).getAdditionalLibraries();
-				} catch (Exception ex) {
-					ErrorDialog.showErrorDialog("Error loading list of additional jars", ex);
-				}
-				if (additionalLibs != null && additionalLibs.getJarName() != null) {
-					additionalJarsList.setListData(additionalLibs.getJarName());
-				}
+            String[] jarNames = null;
+            try {
+                jarNames = extensionDataManager.getAdditionalJarNames();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                ErrorDialog.showErrorDialog("Error loading list of additional jars", ex);
+            }
+			if (jarNames != null) {
+                additionalJarsList.setListData(jarNames);
 			}
 		}
 		return additionalJarsList;

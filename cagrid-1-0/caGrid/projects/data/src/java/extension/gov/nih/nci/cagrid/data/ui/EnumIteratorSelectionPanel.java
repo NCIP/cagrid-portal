@@ -27,9 +27,9 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created Apr 30, 2007 1:59:16 PM
- * @version $Id: EnumIteratorSelectionPanel.java,v 1.1 2007-04-30 19:04:28 dervin Exp $ 
+ * @version $Id: EnumIteratorSelectionPanel.java,v 1.2 2007-06-27 14:45:02 dervin Exp $ 
  */
-public class EnumIteratorSelectionPanel extends JPanel {
+public class EnumIteratorSelectionPanel extends JPanel implements UpdatablePanel {
     private ServiceInformation serviceInfo;
     
     private JLabel iterTypeLabel = null;
@@ -46,7 +46,7 @@ public class EnumIteratorSelectionPanel extends JPanel {
     }
     
     
-    public void updateUi() throws Exception {
+    public void updateDisplayedConfiguration() throws Exception {
         if (CommonTools.servicePropertyExists(serviceInfo.getServiceDescriptor(),
             DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY)) {
             String value = CommonTools.getServicePropertyValue(serviceInfo.getServiceDescriptor(),

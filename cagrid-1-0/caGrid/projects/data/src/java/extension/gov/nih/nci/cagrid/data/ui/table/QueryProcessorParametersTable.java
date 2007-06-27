@@ -2,10 +2,8 @@ package gov.nih.nci.cagrid.data.ui.table;
 
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
-import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.data.ui.ExtensionDataManager;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -37,14 +35,14 @@ import javax.swing.table.DefaultTableModel;
  * @version $Id$
  */
 public class QueryProcessorParametersTable extends JTable {
-	private ExtensionTypeExtensionData extData;
+	private ExtensionDataManager extensionDataManager;
 	private ServiceInformation serviceInfo;
 	private JTextField editorTextField = null;
     private Set<String> propertiesFromEtc = null;
 
-	public QueryProcessorParametersTable(ExtensionTypeExtensionData extensionData, ServiceInformation serviceInfo) {
+	public QueryProcessorParametersTable(ExtensionDataManager dataManager, ServiceInformation serviceInfo) {
 		super(createModel());
-		extData = extensionData;
+		this.extensionDataManager = dataManager;
 		this.serviceInfo = serviceInfo;
 		setDefaultEditor(Object.class, new DefaultCellEditor(getEditorTextField()));
 		classChanged();
@@ -186,17 +184,16 @@ public class QueryProcessorParametersTable extends JTable {
 	private String[] getJarFilenames() throws Exception {
 		String libDir = serviceInfo.getBaseDirectory()
 			+ File.separator + "lib";
-		AdditionalLibraries additionalLibs = ExtensionDataUtils.getExtensionData(extData).getAdditionalLibraries();
+		String[] jarNames = extensionDataManager.getAdditionalJarNames();
 		List namesList = new ArrayList();
-		if ((additionalLibs != null) && (additionalLibs.getJarName() != null)) {
-			for (int i = 0; i < additionalLibs.getJarName().length; i++) {
-				String name = additionalLibs.getJarName(i);
-				namesList.add(libDir + File.separator + name);
-			}
+		if (jarNames != null) {
+            for (String name : jarNames) {
+                namesList.add(libDir + File.separator + name);
+            }
 		}
-		String[] names = new String[namesList.size()];
-		namesList.toArray(names);
-		return names;
+		String[] namesArray = new String[namesList.size()];
+		namesList.toArray(namesArray);
+		return namesArray;
 	}
 
 

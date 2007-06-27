@@ -2,47 +2,24 @@ package gov.nih.nci.cagrid.data.ui;
 
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.data.ExtensionDataUtils;
-import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
-import gov.nih.nci.cagrid.data.cql.ui.CQLQueryProcessorConfigUI;
-import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.ClassMapping;
-import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.ui.auditors.AuditorsConfigurationPanel;
-import gov.nih.nci.cagrid.data.ui.browser.AdditionalJarsChangeListener;
-import gov.nih.nci.cagrid.data.ui.browser.AdditionalJarsChangedEvent;
-import gov.nih.nci.cagrid.data.ui.browser.ClassBrowserPanel;
-import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionEvent;
-import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionListener;
 import gov.nih.nci.cagrid.data.ui.table.ClassChangeEvent;
 import gov.nih.nci.cagrid.data.ui.table.ClassElementSerializationTable;
 import gov.nih.nci.cagrid.data.ui.table.ClassInformatonChangeListener;
-import gov.nih.nci.cagrid.data.ui.table.QueryProcessorParametersTable;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -64,24 +41,18 @@ import javax.swing.event.ChangeListener;
 public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 
 	private ClassElementSerializationTable classConfigTable = null;
-	private ClassBrowserPanel classBrowserPanel = null;
 	private JCheckBox cqlSyntaxValidationCheckBox = null;
 	private JCheckBox domainModelValidationCheckBox = null;
 	private JScrollPane classConfigScrollPane = null;
 	private JPanel validationCheckPanel = null;
 	private DomainModelConfigPanel domainConfigPanel = null;
 	private JTabbedPane mainTabbedPane = null;
-	private JPanel processorConfigPanel = null;
+	private QueryProcessorConfigPanel processorConfigPanel = null;
 	private JPanel detailConfigPanel = null;
-	private QueryProcessorParametersTable qpParamsTable = null;
-	private JScrollPane qpParamsScrollPane = null;
-    private JPanel processorConfigurationPanel = null;
-    private JButton launchProcessorConfigButton = null;
-    private EnumIteratorSelectionPanel iterSelectionPanel = null;
+	private EnumIteratorSelectionPanel iterSelectionPanel = null;
     private AuditorsConfigurationPanel auditorConfigPanel = null;
 
-	private transient Map packageToClassMap = null;
-    
+	private transient Map packageToClassMap = null;    
     private transient ExtensionDataManager dataManager = null;
 
 	public DataServiceModificationPanel(ServiceExtensionDescriptionType desc, ServiceInformation info) {
@@ -105,7 +76,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 
 
 	protected void resetGUI() {
-		// TODO Auto-generated method stub
+        // TODO Auto-generated method stub
+        getDomainConfigPanel().populateFromExtensionData();
 	}
     
 
@@ -174,49 +146,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			});
 		}
 		return classConfigTable;
-	}
-
-
-	private ClassBrowserPanel getClassBrowserPanel() {
-		if (classBrowserPanel == null) {
-			classBrowserPanel = new ClassBrowserPanel(getExtensionTypeExtensionData(), getServiceInfo());
-			// classBrowserPanel = new ClassBrowserPanel(null, null); //uncomment this line to edit in VE
-			classBrowserPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-				"Query Processor Class Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, 
-                null, PortalLookAndFeel.getPanelLabelColor()));
-			// listen for class selection events
-			classBrowserPanel.addClassSelectionListener(new ClassSelectionListener() {
-				public void classSelectionChanged(ClassSelectionEvent e) {
-					try {
-						saveProcessorClassName(classBrowserPanel.getSelectedClassName());
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						ErrorDialog.showErrorDialog(
-                            "Error setting the query processor class: " + ex.getMessage(), ex);
-					}
-				}
-			});
-			// listen for jar addition events
-			classBrowserPanel.addAdditionalJarsChangeListener(new AdditionalJarsChangeListener() {
-				public void additionalJarsChanged(AdditionalJarsChangedEvent e) {
-					// remove any existing qp jars element from the service data
-					AdditionalLibraries additionalLibs = new AdditionalLibraries();
-					String[] additionalJars = classBrowserPanel.getAdditionalJars();
-					additionalLibs.setJarName(additionalJars);
-					try {
-						Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
-						data.setAdditionalLibraries(additionalLibs);
-						ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						ErrorDialog.showErrorDialog("Error storing additional libraries information: "
-							+ ex.getMessage(), ex);
-					}
-				}
-			});
-		}
-		return classBrowserPanel;
 	}
 
 
@@ -415,23 +344,10 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getProcessorConfigPanel() {
+	private QueryProcessorConfigPanel getProcessorConfigPanel() {
 		if (processorConfigPanel == null) {
-			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
-			gridBagConstraints22.gridx = 0;
-            gridBagConstraints22.gridy = 1;
-			gridBagConstraints22.fill = GridBagConstraints.BOTH;
-            gridBagConstraints22.weightx = 1.0D;
-            gridBagConstraints22.weighty = 1.0D;
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.gridx = 0;
-			gridBagConstraints16.weightx = 1.0D;
-			gridBagConstraints16.gridy = 0;
-			gridBagConstraints16.fill = GridBagConstraints.HORIZONTAL;
-			processorConfigPanel = new JPanel();
-			processorConfigPanel.setLayout(new GridBagLayout());
-			processorConfigPanel.add(getClassBrowserPanel(), gridBagConstraints16);
-			processorConfigPanel.add(getProcessorConfigurationPanel(), gridBagConstraints22);
+			processorConfigPanel = new QueryProcessorConfigPanel(
+                getServiceInfo(), dataManager);
 		}
 		return processorConfigPanel;
 	}
@@ -463,94 +379,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	}
 
 
-	private QueryProcessorParametersTable getQpParamsTable() {
-		if (qpParamsTable == null) {
-			qpParamsTable = new QueryProcessorParametersTable(getExtensionTypeExtensionData(), getServiceInfo());
-            // uncomment the following to edit with VE
-            // qpParamsTable = new QueryProcessorParametersTable(null, null);
-		}
-		return qpParamsTable;
-	}
-
-
-	private JScrollPane getQpParamsScrollPane() {
-		if (qpParamsScrollPane == null) {
-			qpParamsScrollPane = new JScrollPane();
-			qpParamsScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-				"Processor Parameter Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-			qpParamsScrollPane.setViewportView(getQpParamsTable());
-		}
-		return qpParamsScrollPane;
-	}
-
-
-	private void saveProcessorClassName(String className) throws Exception {
-		// store the property
-		CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(),
-			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
-		// remove all query processor config properties from the service properties
-		ServicePropertiesProperty[] oldProperties = getServiceInfo().getServiceProperties().getProperty();
-		List keptProperties = new ArrayList();
-		for (int i = 0; i < oldProperties.length; i++) {
-			if (!oldProperties[i].getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
-				keptProperties.add(oldProperties[i]);
-			}
-		}
-		ServicePropertiesProperty[] properties = new ServicePropertiesProperty[keptProperties.size()];
-		keptProperties.toArray(properties);
-		getServiceInfo().getServiceDescriptor().getServiceProperties().setProperty(properties);
-		// inform the parameters table that the class name is different
-		getQpParamsTable().classChanged();
-	}
-
-
-    /**
-     * This method initializes processorConfigurationPanel	
-     * 	
-     * @return javax.swing.JPanel	
-     */
-    private JPanel getProcessorConfigurationPanel() {
-        if (processorConfigurationPanel == null) {
-            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-            gridBagConstraints21.gridx = 0;
-            gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints21.gridy = 0;
-            GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
-            gridBagConstraints20.fill = GridBagConstraints.BOTH;
-            gridBagConstraints20.gridx = 0;
-            gridBagConstraints20.gridy = 1;
-            gridBagConstraints20.weightx = 1.0D;
-            gridBagConstraints20.weighty = 1.0D;
-            gridBagConstraints20.insets = new Insets(6, 6, 6, 6);
-            processorConfigurationPanel = new JPanel();
-            processorConfigurationPanel.setLayout(new GridBagLayout());
-            processorConfigurationPanel.add(getQpParamsScrollPane(), gridBagConstraints20);
-            processorConfigurationPanel.add(getLaunchProcessorConfigButton(), gridBagConstraints21);
-        }
-        return processorConfigurationPanel;
-    }
-
-
-    /**
-     * This method initializes launchProcessorConfigButton	
-     * 	
-     * @return javax.swing.JButton	
-     */
-    private JButton getLaunchProcessorConfigButton() {
-        if (launchProcessorConfigButton == null) {
-            launchProcessorConfigButton = new JButton();
-            launchProcessorConfigButton.setText("Launch Query Processor Configurator");
-            launchProcessorConfigButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    launchQueryProcessorConfigUi();
-                }
-            });
-        }
-        return launchProcessorConfigButton;
-    }
-    
-    
     private EnumIteratorSelectionPanel getIterSelectionPanel() {
         if (iterSelectionPanel == null) {
             iterSelectionPanel = new EnumIteratorSelectionPanel(getServiceInfo());
@@ -564,87 +392,5 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
             auditorConfigPanel = new AuditorsConfigurationPanel(getServiceInfo());
         }
         return auditorConfigPanel;
-    }
-    
-    
-    private String[] getJarFilenames() {
-        String libDir = getServiceInfo().getIntroduceServiceProperties().getProperty(
-            IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-            + File.separator + "lib";
-        String[] qpJarNames = getClassBrowserPanel().getAdditionalJars();
-        if (qpJarNames != null) {
-            for (int i = 0; i < qpJarNames.length; i++) {
-                qpJarNames[i] = libDir + File.separator + qpJarNames[i];
-            }
-        }
-        return qpJarNames;
-    }
-    
-    
-    private void launchQueryProcessorConfigUi() {
-        String qpClassname = getClassBrowserPanel().getSelectedClassName();
-        if (qpClassname != null && qpClassname.length() != 0) {
-            try {
-                // reflect-load the class
-                String[] libs = getJarFilenames();
-                URL[] urls = new URL[libs.length];
-                for (int i = 0; i < libs.length; i++) {
-                    File libFile = new File(libs[i]);
-                    urls[i] = libFile.toURL();
-                }
-                ClassLoader loader = new URLClassLoader(
-                    urls, Thread.currentThread().getContextClassLoader());
-                Class qpClass = loader.loadClass(qpClassname);
-                CQLQueryProcessor processorInstance = (CQLQueryProcessor) qpClass.newInstance();
-                String configUiCLassname = processorInstance.getConfigurationUiClassname();
-                if (configUiCLassname != null) {
-                    Class uiClass = loader.loadClass(configUiCLassname);
-                    CQLQueryProcessorConfigUI uiPanel = 
-                        (CQLQueryProcessorConfigUI) uiClass.newInstance();
-                    // get the current configuration out of the table
-                    Properties currentConfig = getQpParamsTable().getNonPrefixedConfiguredProperties();
-                    Properties postUiConfig = QueryProcessorConfigurationDialog
-                        .showConfigurationUi(uiPanel, getServiceInfo().getBaseDirectory(), currentConfig);
-                    if (postUiConfig != null) {
-                        // store the configuration that came back from the UI config dialog
-                        // start by removing the old query processor properties
-                        ServicePropertiesProperty[] oldProperties = 
-                            getServiceInfo().getServiceProperties().getProperty();
-                        List<ServicePropertiesProperty> keptProperties = new ArrayList();
-                        for (ServicePropertiesProperty prop : oldProperties) {
-                            if (!prop.getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
-                                keptProperties.add(prop);
-                            }
-                        }
-                        // add the changed properties
-                        Iterator postUiPropKeys = postUiConfig.keySet().iterator();
-                        while (postUiPropKeys.hasNext()) {
-                            String key = (String) postUiPropKeys.next();
-                            String value = postUiConfig.getProperty(key);
-                            String prefixedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + key;
-                            ServicePropertiesProperty configProperty = new ServicePropertiesProperty();
-                            configProperty.setKey(prefixedKey);
-                            configProperty.setValue(value);
-                            configProperty.setIsFromETC(Boolean.FALSE);
-                            keptProperties.add(configProperty);
-                        }
-                        // set the properties into the model
-                        ServicePropertiesProperty[] properties = 
-                            new ServicePropertiesProperty[keptProperties.size()];
-                        keptProperties.toArray(properties);
-                        getServiceInfo().getServiceDescriptor().getServiceProperties().setProperty(properties);
-                        // inform the parameters table that it should update
-                        getQpParamsTable().classChanged();
-                    }
-                } else {
-                    PortalUtils.showMessage(new String[] {
-                        "The query processor " + qpClassname,
-                    "did not supply a configuration UI"});
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error loading query processor class: " + ex.getMessage(), ex);
-            }
-        }
     }
 }
