@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.cadsr.portal.discovery.CaDSRDiscoveryConstants;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
@@ -62,7 +63,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.5 2007-06-20 17:07:13 dervin Exp $ 
+ * @version $Id: DomainModelConfigPanel.java,v 1.6 2007-06-27 19:19:52 dervin Exp $ 
  */
 public class DomainModelConfigPanel extends JPanel {
 
@@ -399,48 +400,7 @@ public class DomainModelConfigPanel extends JPanel {
             visualizeDomainModelButton.setText("Visualize Domain Model");
             visualizeDomainModelButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    DomainModel model = null;
-                    boolean noModel = false;
-                    boolean isSupplied = false;
-                    try {
-                        noModel = extensionDataManager.isNoDomainModel();
-                        isSupplied = extensionDataManager.isSuppliedDomainModel();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error determining domain model source", ex.getMessage(), ex);
-                    }
-                    // get the domain model selected
-                    if (isSupplied) {
-                        // domain model from file system
-                        File suppliedFile = getSuppliedDomainModelFile();
-                        if (suppliedFile != null) {
-                            try {
-                                model = MetadataUtils.deserializeDomainModel(
-                                    new FileReader(suppliedFile));
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                ErrorDialog.showErrorDialog(
-                                    "Error loading domain model: " + ex.getMessage(), ex);
-                            }
-                        }
-                    } else if (!noModel) {
-                        // build the domain model
-                        try {
-                            Data data = ExtensionDataUtils.getExtensionData(
-                                extensionTypeExtensionData);
-                            final CadsrInformation info = data.getCadsrInformation();
-                            // TODO: thread this out
-                            model = DomainModelCreationUtil.createDomainModel(info);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            ErrorDialog.showErrorDialog(
-                                "Error getting caDSR information: " + ex.getMessage(), ex);
-                        }   
-                    }
-                    if (model != null) {
-                        new DomainModelVisualizationDialog(
-                            PortalResourceManager.getInstance().getGridPortal(), model);
-                    }
+                    visualizeDomainModel();
                 }
             });
         }
@@ -500,6 +460,63 @@ public class DomainModelConfigPanel extends JPanel {
     // non UI related helpers
     // ---
     //
+    
+    
+    private void visualizeDomainModel() {
+        BusyDialogRunnable modelCreationRunnable = new BusyDialogRunnable(
+            PortalResourceManager.getInstance().getGridPortal(), "Creating Domain Model") {
+            public void process() {
+                DomainModel model = null;
+                boolean noModel = false;
+                boolean isSupplied = false;
+                setProgressText("Determining model's source");
+                try {
+                    noModel = extensionDataManager.isNoDomainModel();
+                    isSupplied = extensionDataManager.isSuppliedDomainModel();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    ErrorDialog.showErrorDialog("Error determining domain model source", 
+                        ex.getMessage(), ex);
+                }
+                // get the domain model selected
+                if (isSupplied) {
+                    setProgressText("Loading from file system");
+                    // domain model from file system
+                    File suppliedFile = getSuppliedDomainModelFile();
+                    if (suppliedFile != null) {
+                        try {
+                            model = MetadataUtils.deserializeDomainModel(
+                                new FileReader(suppliedFile));
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            ErrorDialog.showErrorDialog(
+                                "Error loading domain model: " + ex.getMessage(), ex);
+                        }
+                    }
+                } else if (!noModel) {
+                    setProgressText("Creating Model From caDSR");
+                    // build the domain model
+                    try {
+                        Data data = ExtensionDataUtils.getExtensionData(
+                            extensionTypeExtensionData);
+                        final CadsrInformation info = data.getCadsrInformation();
+                        model = DomainModelCreationUtil.createDomainModel(info);                            
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        ErrorDialog.showErrorDialog(
+                            "Error getting caDSR information: " + ex.getMessage(), ex);
+                    }   
+                }
+                if (model != null) {
+                    setProgressText("Visualizing domain model");
+                    new DomainModelVisualizationDialog(
+                        PortalResourceManager.getInstance().getGridPortal(), model);
+                }
+            }
+        };
+        Thread runner = new Thread(modelCreationRunnable);
+        runner.start();
+    }
     
     
     private boolean removeUmlPackage(Project proj, String packageName) {
