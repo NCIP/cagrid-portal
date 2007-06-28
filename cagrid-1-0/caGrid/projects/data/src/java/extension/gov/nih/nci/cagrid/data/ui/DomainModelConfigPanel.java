@@ -63,7 +63,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.8 2007-06-28 18:29:30 dervin Exp $ 
+ * @version $Id: DomainModelConfigPanel.java,v 1.9 2007-06-28 19:01:11 dervin Exp $ 
  */
 public class DomainModelConfigPanel extends JPanel implements UpdatablePanel {
 
@@ -127,6 +127,12 @@ public class DomainModelConfigPanel extends JPanel implements UpdatablePanel {
                 // get the project from cadsr that has been selected
                 String projectLongName = extensionDataManager.getCadsrProjectLongName();
                 String projectVersion = extensionDataManager.getCadsrProjectVersion();
+                String caDsrUrl = extensionDataManager.getCadsrUrl();
+                // set the cadsr URL to that used in the extension data
+                if (caDsrUrl != null) {
+                    getCadsrBrowserPanel().getCadsr().setText(caDsrUrl);
+                }
+                // find the requested project in the caDSR
                 CaDSRServiceClient cadsrClient = new CaDSRServiceClient(
                     getCadsrBrowserPanel().getCadsr().getText());
                 Project[] allProjects = cadsrClient.findAllProjects();
@@ -142,13 +148,16 @@ public class DomainModelConfigPanel extends JPanel implements UpdatablePanel {
                 List<String> packageNames = extensionDataManager.getCadsrPackageNames();
                 if (packageNames != null) {
                     for (String packName : packageNames) {
-                        getUmlTree().addUmlPackage(packName);
-                        List<ClassMapping> mappings = 
-                            extensionDataManager.getClassMappingsInPackage(packName);
-                        for (ClassMapping mapping : mappings) {
-                            UMLClassTreeNode classNode = getUmlTree().addUmlClass(
-                                packName, mapping.getClassName());
-                            classNode.getCheckBox().setSelected(mapping.isSelected());
+                        if (getUmlTree().getUmlPackageNode(packName) == null) {
+                            // package isn't in the tree yet
+                            getUmlTree().addUmlPackage(packName);
+                            List<ClassMapping> mappings = 
+                                extensionDataManager.getClassMappingsInPackage(packName);
+                            for (ClassMapping mapping : mappings) {
+                                UMLClassTreeNode classNode = getUmlTree().addUmlClass(
+                                    packName, mapping.getClassName());
+                                classNode.getCheckBox().setSelected(mapping.isSelected());
+                            }
                         }
                     }
                 }
