@@ -58,16 +58,21 @@ public class PromptButtonDialog extends JDialog {
 	
 	public static String prompt(Frame owner, String title, String[] message, String[] options, String def) {
 		PromptButtonDialog dialog = new PromptButtonDialog(owner, title, message, options, def);
-		dialog.setVisible(true);
-		return dialog.getSelection();
+		return displayDialog(dialog);
 	}
 	
 	
 	public static String prompt(Dialog owner, String title, String[] message, String[] options, String def) {
 		PromptButtonDialog dialog = new PromptButtonDialog(owner, title, message, options, def);
-		dialog.setVisible(true);
-		return dialog.getSelection();
+        return displayDialog(dialog);
 	}
+    
+    
+    private static String displayDialog(PromptButtonDialog dialog) {
+        PortalUtils.centerComponent(dialog);
+        dialog.setVisible(true);
+        return dialog.getSelection();
+    }
 	
 	
 	private void initialize() {
