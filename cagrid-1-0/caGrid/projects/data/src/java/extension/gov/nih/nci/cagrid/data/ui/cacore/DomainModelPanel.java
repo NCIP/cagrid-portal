@@ -272,7 +272,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			group.add(getNoDomainModelRadioButton());
 			group.add(getFromFileRadioButton());
 			group.add(getFromCaDsrRadioButton());
-			group.setSelected(getNoDomainModelRadioButton().getModel(), true);
+			group.setSelected(getFromCaDsrRadioButton().getModel(), true);
 		}
 		return dmSourcePanel;
 	}

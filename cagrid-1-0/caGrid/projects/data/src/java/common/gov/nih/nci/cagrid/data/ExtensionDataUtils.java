@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -37,7 +38,9 @@ public class ExtensionDataUtils {
 			}
 		}
 		if (dataElement == null) {
-			dataElement = new MessageElement(Data.getTypeDesc().getXmlType(), new Data());
+            Data cleanData = new Data();
+            cleanData.setCadsrInformation(new CadsrInformation());
+			dataElement = new MessageElement(Data.getTypeDesc().getXmlType(), cleanData);
 			MessageElement[] newAnys = null;
 			if (anys == null) {
 				newAnys = new MessageElement[] {dataElement};

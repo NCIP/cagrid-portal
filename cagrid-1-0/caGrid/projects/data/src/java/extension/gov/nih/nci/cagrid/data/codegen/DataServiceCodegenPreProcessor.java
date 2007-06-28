@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
+import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -105,7 +106,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			// in the resource property.  Make sure the resource property has
 			// the populate from file flag set, and we're done
 			dmResourceProp.setPopulateFromFile(true);
-		} else if (!cadsrInfo.isNoDomainModel()) {
+		} else if (!isNoDomainModel(cadsrInfo)) {
 			// the domain model is to be generated from the caDSR
 			LOG.info("No domain model supplied, generating from caDSR");
 			generateDomainModel(cadsrInfo, info, domainModelFile);
@@ -118,6 +119,29 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		File dmFile = new File(domainModelFile);
 		dmResourceProp.setPopulateFromFile(dmFile.exists());
 	}
+    
+    
+    private boolean isNoDomainModel(CadsrInformation cadsrInfo) {
+        if (cadsrInfo.isNoDomainModel()) {
+            return true;
+        }
+        // states where the no domain model flag has NOT been set, but
+        // the caDSR information doesn't contain a project / package / classes
+        // are also treated as no domain model
+        if (cadsrInfo.getProjectLongName() == null ||
+            cadsrInfo.getProjectVersion() == null ||
+            cadsrInfo.getPackages() == null ||
+            cadsrInfo.getPackages().length == 0) {
+            LOG.warn("No domain model was specified, falling back to no model state");
+            return true;
+        }
+        for (CadsrPackage pkg : cadsrInfo.getPackages()) {
+            if (pkg.getCadsrClass() != null && pkg.getCadsrClass().length != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
 	/**
