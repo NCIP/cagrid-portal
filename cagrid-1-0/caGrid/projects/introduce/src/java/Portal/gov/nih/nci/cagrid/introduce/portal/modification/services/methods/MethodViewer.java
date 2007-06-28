@@ -58,6 +58,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
@@ -333,9 +335,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private static final String METHOD_DESCRIPTION = "Method description";
 
+	private ValidationResultModel methodProviderValidationModel = new DefaultValidationResultModel(); // @jve:decl-index=0:
+
+	private static final String METHOD_PROVIDER = "Provider classname"; // @jve:decl-index=0:
+
 	private ValidationResultModel methodFaultValidationModel = new DefaultValidationResultModel(); // @jve:decl-index=0:
 
-	private static final String METHOD_FAULT = "New fault";
+	private static final String METHOD_FAULT = "New fault"; // @jve:decl-index=0:
 
 	// @jve:decl-index=0:
 
@@ -356,6 +362,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		initMethodNameValidation();
 		initMethodDescriptionValidation();
 		initNewFaultValidation();
+		initProviderValidation();
 	}
 
 	private void updateDoneButton() {
@@ -504,9 +511,56 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private void updateNewFaultComponentTreeSeverity() {
 		ValidationComponentUtils
-				.updateComponentTreeMandatoryAndBlankBackground(this.getExceptionsPanel());
-		ValidationComponentUtils.updateComponentTreeSeverityBackground(this.getExceptionsPanel(),
-				this.methodFaultValidationModel.getResult());
+				.updateComponentTreeMandatoryAndBlankBackground(this
+						.getExceptionsPanel());
+		ValidationComponentUtils.updateComponentTreeSeverityBackground(this
+				.getExceptionsPanel(), this.methodFaultValidationModel
+				.getResult());
+	}
+
+	private void initProviderValidation() {
+		ValidationComponentUtils.setMessageKey(getProviderClassnameTextField(),
+				METHOD_PROVIDER);
+
+		validateProviderInput();
+		updateProviderComponentTreeSeverity();
+	}
+
+	private void validateProviderInput() {
+
+		ValidationResult result = new ValidationResult();
+
+		if (getIsProvidedCheckBox().isSelected()) {
+			if (ValidationUtils.isNotBlank(this.getProviderClassnameTextField()
+					.getText())
+					&& !CommonTools.isValidPackageAndClassName(this
+							.getProviderClassnameTextField().getText())) {
+				result.add(new SimpleValidationMessage(
+						"Provider classname might not be in valid fully qualified java class name format. ("
+								+ CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")",
+						Severity.WARNING, METHOD_PROVIDER));
+			} else if (ValidationUtils.isBlank(this.getProviderClassnameTextField()
+					.getText())) {
+				result
+						.add(new SimpleValidationMessage(
+								"If isProvided is selected you must provide the provider class name.",
+								Severity.ERROR, METHOD_PROVIDER));
+			}
+		}
+
+		System.out.println("Testing");
+		this.methodProviderValidationModel.setResult(result);
+		updateProviderComponentTreeSeverity();
+
+	}
+
+	private void updateProviderComponentTreeSeverity() {
+		ValidationComponentUtils
+				.updateComponentTreeMandatoryAndBlankBackground(this
+						.getProviderInfoPanel());
+		ValidationComponentUtils.updateComponentTreeSeverityBackground(this
+				.getProviderInfoPanel(), this.methodProviderValidationModel
+				.getResult());
 	}
 
 	/**
@@ -1469,6 +1523,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 				tabbedPanel.setEnabledAt(2, false);
 				tabbedPanel.setEnabledAt(3, false);
 			}
+			tabbedPanel.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					updateMethodDescriptionComponentTreeSeverity();
+					updateNewFaultComponentTreeSeverity();
+					updateProviderComponentTreeSeverity();
+				}
+
+			});
 		}
 		return tabbedPanel;
 	}
@@ -2028,6 +2090,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					} else {
 						getTabbedPanel().setEnabledAt(2, false);
 					}
+					validateProviderInput();
 				}
 
 			});
@@ -2127,6 +2190,22 @@ public class MethodViewer extends GridPortalBaseFrame {
 				providerClassnameTextField.setText(method
 						.getProviderInformation().getProviderClass());
 			}
+			providerClassnameTextField.getDocument().addDocumentListener(
+					new DocumentListener() {
+
+						public void removeUpdate(DocumentEvent e) {
+							validateProviderInput();
+						}
+
+						public void insertUpdate(DocumentEvent e) {
+							validateProviderInput();
+						}
+
+						public void changedUpdate(DocumentEvent e) {
+							validateProviderInput();
+						}
+
+					});
 		}
 		return providerClassnameTextField;
 	}
@@ -2497,8 +2576,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints36.gridwidth = 2;
 			providerInfoPanel = new JPanel();
 			providerInfoPanel.setLayout(new GridBagLayout());
-			providerInfoPanel.add(getProviderInformationPanel(),
-					gridBagConstraints36);
+			providerInfoPanel.add(new IconFeedbackPanel(
+					methodProviderValidationModel,
+					getProviderInformationPanel()), gridBagConstraints36);
 		}
 		return providerInfoPanel;
 	}

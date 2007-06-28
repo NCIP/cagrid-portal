@@ -150,7 +150,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			}
 			if(!CommonTools.isValidPackageAndClassName(this.getClassNameText().getText())){
 				result.add(new SimpleValidationMessage(CLASSNAME
-						+ " must be a valid fully qualified class name.", Severity.ERROR, CLASSNAME));
+						+ " might not be a valid fully qualified class name.", Severity.WARNING, CLASSNAME));
 			}
 		}
 
@@ -165,7 +165,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			}
 			if(!CommonTools.isValidPackageAndClassName(this.getSerializerText().getText())){
 				result.add(new SimpleValidationMessage(SERIALIZER
-						+ " must be a valid fully qualified class name.", Severity.ERROR, SERIALIZER));
+						+ " might not be a valid fully qualified class name.", Severity.WARNING, SERIALIZER));
 			}
 		}
 
@@ -180,7 +180,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 			}
 			if(!CommonTools.isValidPackageAndClassName(this.getDeserializerText().getText())){
 				result.add(new SimpleValidationMessage(DESERIALIZER
-						+ " must be a valid fully qualified class name.", Severity.ERROR, DESERIALIZER));
+						+ " might not be a valid fully qualified class name.", Severity.WARNING, DESERIALIZER));
 			}
 		}
 
