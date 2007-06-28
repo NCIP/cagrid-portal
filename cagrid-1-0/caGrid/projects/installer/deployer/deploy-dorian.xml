@@ -15,8 +15,9 @@
 	<target name="configure-dorian-conf">
 
 
-		<property name="dorian.config.ns" value="http://cagrid.nci.nih.gov/dorian/conf"/>
-		
+		<property name="dorian.config.ns"
+			value="http://cagrid.nci.nih.gov/dorian/conf" />
+
 		<property name="config.file"
 			value="${cagrid.home}/projects/dorian/etc/dorian-conf.xml" />
 		<xmltask source="${config.file}" dest="${config.file}">
@@ -130,14 +131,36 @@
 			<attr attr="max"
 				path="/*[local-name()='DorianConfiguration']/*[local-name()='IdentityFederationConfiguration']/*[local-name()='IdentityProviderNameLength']"
 				value="${dorian.ifs.idpname.max}" />
+		</xmltask>
 
-			<replace
-				path="/*[local-name()='DorianConfiguration']/*[local-name()='IdentityFederationConfiguration']/*[local-name()='IdentityAssignmentPolicy']">
-				<![CDATA[
-						<IdentityAssignmentPolicy xmlns="${dorian.config.ns}">${dorian.idp.idpolicy}</IdentityAssignmentPolicy>
+		<if>
+			<equals arg1="${dorian.ifs.idpolicy}" arg2="Name"
+				trim="true" />
+			<then>
+				<xmltask source="${config.file}"
+					dest="${config.file}">
+					<replace
+						path="/*[local-name()='DorianConfiguration']/*[local-name()='IdentityFederationConfiguration']/*[local-name()='IdentityAssignmentPolicy']">
+						<![CDATA[
+						<IdentityAssignmentPolicy xmlns="${dorian.config.ns}">name</IdentityAssignmentPolicy>
 					]]>
-			</replace>
+					</replace>
+				</xmltask>
+			</then>
+			<else>
+				<xmltask source="${config.file}"
+					dest="${config.file}">
+					<replace
+						path="/*[local-name()='DorianConfiguration']/*[local-name()='IdentityFederationConfiguration']/*[local-name()='IdentityAssignmentPolicy']">
+						<![CDATA[
+						<IdentityAssignmentPolicy xmlns="${dorian.config.ns}">id</IdentityAssignmentPolicy>
+					]]>
+					</replace>
+				</xmltask>
+			</else>
+		</if>
 
+		<xmltask source="${config.file}" dest="${config.file}">
 			<attr attr="years"
 				path="/*[local-name()='DorianConfiguration']/*[local-name()='IdentityFederationConfiguration']/*[local-name()='CredentialPolicy']/*[local-name()='CredentialLifetime']"
 				value="${dorian.ifs.credlifetime.years}" />
@@ -176,6 +199,8 @@
 
 			<remove
 				path="/*[local-name()='DorianConfiguration']/*[local-name()='IdentityFederationConfiguration']/*[local-name()='CRLPublish']" />
+				
+				<!-- TODO: figure out why this causes an error
 			<insert
 				path="/*[local-name()='DorianConfiguration']/*[local-name()='IdentityFederationConfiguration']">
 				<![CDATA[
@@ -184,6 +209,7 @@
         		</CRLPublish>
 				]]>
 			</insert>
+			-->
 
 			<replace
 				path="/*[local-name()='DorianConfiguration']/*[local-name()='DorianCAConfiguration']/*[local-name()='CertificateAuthorityPassword']">
@@ -191,14 +217,19 @@
 						<CertificateAuthorityPassword xmlns="${dorian.config.ns}">${dorian.ca.key.pwd}</CertificateAuthorityPassword>
 					]]>
 			</replace>
+
+
+			<remove
+				path="/*[local-name()='DorianConfiguration']/*[local-name()='DorianCAConfiguration']/*[local-name()='CertificatePolicyOID']" />
 		</xmltask>
 		<if>
-			<isset property="dorian.ca.oid" />
+			<not>
+				<equals arg1="${dorian.ca.oid}" arg2="" trim="true" />
+			</not>
 			<then>
 				<xmltask source="${config.file}"
 					dest="${config.file}">
-					<remove
-						path="/*[local-name()='DorianConfiguration']/*[local-name()='DorianCAConfiguration']/*[local-name()='CertificatePolicyOID']" />
+
 					<insert
 						path="/*[local-name()='DorianConfiguration']/*[local-name()='DorianCAConfiguration']/*[local-name()='CertificateAuthorityPassword']"
 						position="after">
@@ -218,15 +249,18 @@
 			</replace>
 
 		</xmltask>
-		
-		<remove path="/*[local-name()='DorianConfiguration']/*[local-name()='DorianCAConfiguration']/*[local-name()='AutoCreate']"/>
+		<xmltask source="${config.file}" dest="${config.file}">
+			<remove
+				path="/*[local-name()='DorianConfiguration']/*[local-name()='DorianCAConfiguration']/*[local-name()='AutoCreate']" />
+		</xmltask>
 		<if>
 			<not>
-				<istrue value="${dorian.ca.present}"/>
+				<istrue value="${dorian.ca.present}" />
 			</not>
 			<then>
-				<xmltask source="${config.file}" dest="${config.file}">
-					
+				<xmltask source="${config.file}"
+					dest="${config.file}">
+
 					<insert position="after"
 						path="/*[local-name()='DorianConfiguration']/*[local-name()='DorianCAConfiguration']/*[local-name()='UserKeySize']">
 						<![CDATA[
@@ -246,7 +280,7 @@
 				</xmltask>
 			</then>
 		</if>
-		
+
 		<xmltask source="${config.file}" dest="${config.file}">
 			<attr attr="years"
 				path="/*[local-name()='DorianConfiguration']/*[local-name()='DorianCAConfiguration']/*[local-name()='AutoRenewal']"

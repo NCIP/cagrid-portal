@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.model.CaGridInstallerModel;
@@ -20,13 +23,13 @@ import org.cagrid.installer.steps.ConfigureDorianDBStep;
 import org.cagrid.installer.steps.ConfigureServiceCertStep;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.steps.DisplayMessageStep;
+import org.cagrid.installer.steps.InstallationCompleteStep;
 import org.cagrid.installer.steps.PropertyConfigurationStep;
 import org.cagrid.installer.steps.RunTasksStep;
 import org.cagrid.installer.steps.SelectInstallationTypeStep;
 import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
-import org.cagrid.installer.tasks.AntTask;
 import org.cagrid.installer.tasks.CompileCaGridTask;
 import org.cagrid.installer.tasks.ConditionalTask;
 import org.cagrid.installer.tasks.ConfigureDorianTask;
@@ -42,7 +45,6 @@ import org.cagrid.installer.util.Utils;
 import org.cagrid.installer.validator.CreateFilePermissionValidator;
 import org.cagrid.installer.validator.DBConnectionValidator;
 import org.cagrid.installer.validator.DorianIdpInfoValidator;
-import org.cagrid.installer.validator.DorianIfsInfoValidator;
 import org.pietschy.wizard.Wizard;
 import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.models.Condition;
@@ -57,51 +59,136 @@ public class Installer {
 
 	private DynamicStatefulWizardModel model;
 
+	private SplashScreen screen;
+
+	private final int TOTAL_INIT_STEPS = 100;
+
+	private int initProgress = 0;
+
 	public Installer() {
 
 	}
 
+	public static void main(String[] args) {
+		Installer installer = new Installer();
+		installer.initialize();
+		installer.run();
+	}
+
+	private void splashScreenDestruct() {
+		screen.setScreenVisible(false);
+		screen.dispose();
+	}
+
+	private void splashScreenInit() {
+		ImageIcon myImage = new ImageIcon(Thread.currentThread()
+				.getContextClassLoader().getResource("images/installer.gif"));
+		screen = new SplashScreen(myImage);
+		screen.setLocationRelativeTo(null);
+		screen.setProgressMax(TOTAL_INIT_STEPS);
+		screen.setScreenVisible(true);
+	}
+
 	public void initialize() {
 
-		Map defaultState = new HashMap();
-
-		// Set up temp dir
-		String tempDir = System.getProperty("user.home")
-				+ "/.cagrid/installer/tmp";
-		defaultState.put(Constants.TEMP_DIR_PATH, tempDir);
-		File tempDirFile = new File(tempDir);
-		if (tempDirFile.exists()) {
-			tempDirFile.delete();
-		}
-		logger.info("Creating temporary directory '" + tempDir + "'");
 		try {
-			tempDirFile.mkdirs();
-		} catch (Exception ex) {
-			String msg = "Error creating temporary directory '" + tempDir
-					+ "': " + ex.getMessage();
-			logger.error(msg, ex);
-			throw new RuntimeException(msg, ex);
-		}
+			// Show the splash screen
+			splashScreenInit();
 
-		// Load default properties
-		try {
-			Properties props = new Properties();
-			props.load(Thread.currentThread().getContextClassLoader()
-					.getResourceAsStream("download.properties"));
-			String downloadUrl = props.getProperty(Constants.DOWNLOAD_URL);
+			incrementProgress();
 
+			Map defaultState = new HashMap();
+
+			// Set up temp dir
+			String tempDir = System.getProperty("user.home")
+					+ "/.cagrid/installer/tmp";
+			defaultState.put(Constants.TEMP_DIR_PATH, tempDir);
+			File tempDirFile = new File(tempDir);
+			if (tempDirFile.exists()) {
+				tempDirFile.delete();
+			}
+			logger.info("Creating temporary directory '" + tempDir + "'");
+			try {
+				tempDirFile.mkdirs();
+			} catch (Exception ex) {
+				String msg = "Error creating temporary directory '" + tempDir
+						+ "': " + ex.getMessage();
+				logger.error(msg, ex);
+				throw new RuntimeException(msg, ex);
+			}
+
+			incrementProgress();
+
+			// Load default properties
+			String downloadUrl = null;
+			try {
+				Properties props = new Properties();
+				props.load(Thread.currentThread().getContextClassLoader()
+						.getResourceAsStream("download.properties"));
+				downloadUrl = props.getProperty(Constants.DOWNLOAD_URL);
+			} catch (Exception ex) {
+				handleException("Error getting default properties", ex);
+			}
+			incrementProgress();
 			logger.info("Downloading default properties from: " + downloadUrl);
-			File propsFile = new File(tempDir + "/downloaded.properties");
-			Utils.downloadFile(new URL(downloadUrl), propsFile);
-			props = new Properties();
-			props.load(new FileInputStream(propsFile));
-			defaultState.putAll(props);
 
-		} catch (Exception ex) {
-			String msg = "Error loading default properties: " + ex.getMessage();
-			logger.error(msg, ex);
-			throw new RuntimeException(msg, ex);
+			String toFile = tempDir + "/downloaded.properties";
+			DownloadPropsThread dpt = new DownloadPropsThread(downloadUrl,
+					toFile);
+			dpt.start();
+			try {
+				dpt.join(5000);
+			} catch (InterruptedException ex) {
+				handleException("Download thread interrupted", ex);
+			}
+
+			if (dpt.getException() != null) {
+				Exception ex = dpt.getException();
+				String msg = "Error loading default properties: "
+						+ ex.getMessage();
+				handleException(msg, ex);
+			}
+
+			incrementProgress();
+
+			try {
+				Properties props = new Properties();
+				props.load(new FileInputStream(toFile));
+				defaultState.putAll(props);
+			} catch (Exception ex) {
+				handleException("Error loading default properties", ex);
+			}
+			incrementProgress();
+
+			initSteps(defaultState);
+
+			while (this.initProgress < TOTAL_INIT_STEPS) {
+				incrementProgress();
+				try {
+					Thread.sleep(50);
+				} catch (Exception ex) {
+
+				}
+			}
+
+		} finally {
+
+			splashScreenDestruct();
 		}
+	}
+
+	private void incrementProgress() {
+		screen.setProgress("Initializing installer...", ++this.initProgress);
+	}
+
+	private void handleException(String msg, Exception ex) {
+		logger.error(msg, ex);
+		JOptionPane.showMessageDialog(null, msg, "Error",
+				JOptionPane.ERROR_MESSAGE);
+		throw new RuntimeException(msg, ex);
+	}
+
+	private void initSteps(Map defaultState) {
 
 		// Check for presence of .cagrid.installer file
 		String cagridInstallerFileName = System
@@ -138,6 +225,8 @@ public class Installer {
 			logger.info("Did not find '" + cagridInstallerFileName + "'");
 		}
 
+		incrementProgress();
+
 		this.model = new DynamicStatefulWizardModel(defaultState);
 
 		// Clear some flags
@@ -157,31 +246,38 @@ public class Installer {
 		this.model.getState().put(Constants.INSTALL_WORKFLOW, "false");
 		this.model.getState().put(Constants.USE_SECURE_CONTAINER, "false");
 
+		incrementProgress();
+
 		// Check for the presence of Ant
 		checkInstalled("Ant", "ANT_HOME", Constants.ANT_HOME,
 				Constants.ANT_INSTALLED, Constants.INSTALL_ANT, this.model
 						.getState());
+		incrementProgress();
 		// TODO: check Ant version
 
 		// Check for presence of Tomcat
 		checkInstalled("Tomcat", "CATALINA_HOME", Constants.TOMCAT_HOME,
 				Constants.TOMCAT_INSTALLED, Constants.INSTALL_TOMCAT,
 				this.model.getState());
+		incrementProgress();
 		// TODO: check Tomcat version
 
 		// Check for presence of Globus
 		checkInstalled("Globus", "GLOBUS_LOCATION", Constants.GLOBUS_HOME,
 				Constants.GLOBUS_INSTALLED, Constants.INSTALL_GLOBUS,
 				this.model.getState());
+		incrementProgress();
 		// TODO: check Globus version
 
 		// Check for presence of caGrid
 		checkInstalled("caGrid", null, Constants.CAGRID_HOME,
 				Constants.CAGRID_INSTALLED, Constants.INSTALL_CAGRID,
 				this.model.getState());
+		incrementProgress();
 		// TODO: check caGrid version
 
 		checkGlobusDeployed(this.model.getState());
+		incrementProgress();
 
 		// Initialize steps
 
@@ -201,6 +297,7 @@ public class Installer {
 								.getMessage("select.install.install.services"),
 						true, true));
 		this.model.add(selectInstallStep);
+		incrementProgress();
 
 		// Presents list of services that can be installed
 		PropertyConfigurationStep selectServicesStep = new PropertyConfigurationStep(
@@ -248,46 +345,55 @@ public class Installer {
 			}
 
 		});
+		incrementProgress();
 
 		// Asks user if Ant should be installed.
 		addCheckInstallStep(this.model, "ant.check.reinstall.title",
 				"ant.check.reinstall.desc", Constants.INSTALL_ANT,
 				Constants.ANT_INSTALLED);
+		incrementProgress();
 
 		// Allows user to specify where Ant should be installed
 		addInstallInfoStep(this.model, Constants.ANT_HOME, "ant",
 				"ant.home.title", "ant.home.desc",
 				Constants.ANT_INSTALL_DIR_PATH, Constants.INSTALL_ANT);
+		incrementProgress();
 
 		// Asks user if Tomcat should be installed
 		addCheckInstallStep(this.model, "tomcat.check.reinstall.title",
 				"tomcat.check.reinstall.desc", Constants.INSTALL_TOMCAT,
 				Constants.TOMCAT_INSTALLED);
+		incrementProgress();
 
 		// Allows user to specify where Tomcat should be installed
 		addInstallInfoStep(this.model, Constants.TOMCAT_HOME, "tomcat",
 				"tomcat.home.title", "tomcat.home.desc",
 				Constants.TOMCAT_INSTALL_DIR_PATH, Constants.INSTALL_TOMCAT);
+		incrementProgress();
 
 		// Asks user if Globus should be installed
 		addCheckInstallStep(this.model, "globus.check.reinstall.title",
 				"globus.check.reinstall.desc", Constants.INSTALL_GLOBUS,
 				Constants.GLOBUS_INSTALLED);
+		incrementProgress();
 
 		// Allows user to specify where Globus should be installed
 		addInstallInfoStep(this.model, Constants.GLOBUS_HOME, "globus",
 				"globus.home.title", "globus.home.desc",
 				Constants.GLOBUS_INSTALL_DIR_PATH, Constants.INSTALL_GLOBUS);
+		incrementProgress();
 
 		// Asks user if caGrid should be installed
 		addCheckInstallStep(this.model, "cagrid.check.reinstall.title",
 				"cagrid.check.reinstall.desc", Constants.INSTALL_CAGRID,
 				Constants.CAGRID_INSTALLED);
+		incrementProgress();
 
 		// Allows user to specify where caGrid should be installed
 		addInstallInfoStep(this.model, Constants.CAGRID_HOME, "cagrid",
 				"cagrid.home.title", "cagrid.home.desc",
 				Constants.CAGRID_INSTALL_DIR_PATH, Constants.INSTALL_CAGRID);
+		incrementProgress();
 
 		// If Globus has already been deployed, allow user to specify whether
 		// it should be redployed.
@@ -306,7 +412,7 @@ public class Installer {
 			}
 
 		});
-
+		incrementProgress();
 
 		// Checks if globus should be deployed to secure tomcat
 		PropertyConfigurationStep checkDeployGlobusSecureStep = new PropertyConfigurationStep(
@@ -328,6 +434,7 @@ public class Installer {
 			}
 
 		});
+		incrementProgress();
 
 		// Checks if service cert is present
 		PropertyConfigurationStep checkServiceCertPresentStep = new PropertyConfigurationStep(
@@ -348,6 +455,7 @@ public class Installer {
 								Constants.SERVICE_CERT_PRESENT));
 			}
 		});
+		incrementProgress();
 
 		// Checks if CA cert is present
 		PropertyConfigurationStep checkCAPresentStep = new PropertyConfigurationStep(
@@ -406,6 +514,7 @@ public class Installer {
 								Constants.CA_CERT_PRESENT));
 			}
 		});
+		incrementProgress();
 
 		// Allows user to enter info necessary to gen new CA cert
 		ConfigureCAStep newCaCertInfoStep = new ConfigureCAStep(this.model
@@ -454,6 +563,7 @@ public class Installer {
 								Constants.CA_CERT_PRESENT));
 			}
 		});
+		incrementProgress();
 
 		// Allows user to enter info necessary to gen new service cert
 		ConfigureServiceCertStep newServiceCertInfoStep = new ConfigureServiceCertStep(
@@ -493,6 +603,7 @@ public class Installer {
 								Constants.SERVICE_CERT_PRESENT));
 			}
 		});
+		incrementProgress();
 
 		ConfigureServiceCertStep serviceCertInfoStep = new ConfigureServiceCertStep(
 				this.model.getMessage("service.cert.info.title"), this.model
@@ -526,7 +637,8 @@ public class Installer {
 								Constants.SERVICE_CERT_PRESENT));
 			}
 		});
-		
+		incrementProgress();
+
 		// Allows user to specify Dorian DB information.
 		ConfigureDorianDBStep dorianDbInfoStep = new ConfigureDorianDBStep(
 				this.model.getMessage("dorian.db.config.title"), this.model
@@ -576,6 +688,7 @@ public class Installer {
 						Constants.INSTALL_DORIAN));
 			}
 		});
+		incrementProgress();
 
 		// Dorian IdP config
 		PropertyConfigurationStep dorianIdpInfoStep = new PropertyConfigurationStep(
@@ -649,6 +762,7 @@ public class Installer {
 						Constants.INSTALL_DORIAN));
 			}
 		});
+		incrementProgress();
 
 		// Dorian Ifs Config
 		PropertyConfigurationStep dorianIfsInfoStep = new PropertyConfigurationStep(
@@ -733,7 +847,7 @@ public class Installer {
 						Constants.DORIAN_IFS_HOSTCERT_AUTOAPPROVE, this.model
 								.getMessage("dorian.ifs.hostcert.autoapprove"),
 						true, false));
-		
+
 		dorianIfsInfoStep.getOptions().add(
 				new TextPropertyConfigurationOption(
 						Constants.DORIAN_IFS_PROXYLIFETIME_HOURS, this.model
@@ -763,7 +877,7 @@ public class Installer {
 										this.model.getState(),
 										Constants.DORIAN_IFS_PROXYLIFETIME_SECONDS,
 										"0"), true));
-		
+
 		dorianIfsInfoStep
 				.getOptions()
 				.add(
@@ -787,6 +901,7 @@ public class Installer {
 						Constants.INSTALL_DORIAN));
 			}
 		});
+		incrementProgress();
 
 		// Checks if user will supply Dorian CA
 		PropertyConfigurationStep checkDorianCAPresentStep = new PropertyConfigurationStep(
@@ -806,6 +921,7 @@ public class Installer {
 			}
 
 		});
+		incrementProgress();
 
 		// Configure existing Dorian CA
 		ConfigureDorianCAStep dorianCaCertInfoStep = new ConfigureDorianCAStep(
@@ -838,6 +954,7 @@ public class Installer {
 								Constants.DORIAN_CA_PRESENT));
 			}
 		});
+		incrementProgress();
 
 		// Configure new Dorian CA
 		PropertyConfigurationStep dorianCaNewCertInfoStep = new PropertyConfigurationStep(
@@ -846,18 +963,18 @@ public class Installer {
 
 		addCommonDorianCAConfigFields(dorianCaNewCertInfoStep);
 
-		
 		dorianCaNewCertInfoStep
-		.getOptions()
-		.add(
-				new TextPropertyConfigurationOption(
-						Constants.DORIAN_CA_SUBJECT,
-						this.model
-								.getMessage("dorian.ca.cert.info.subject"),
-						getProperty(this.model.getState(),
-								Constants.DORIAN_CA_SUBJECT, "C=US,O=abc,OU=xyz,OU=caGrid,OU=Users,CN=caGrid Dorian CA"),
-						true));
-		
+				.getOptions()
+				.add(
+						new TextPropertyConfigurationOption(
+								Constants.DORIAN_CA_SUBJECT,
+								this.model
+										.getMessage("dorian.ca.cert.info.subject"),
+								getProperty(this.model.getState(),
+										Constants.DORIAN_CA_SUBJECT,
+										"C=US,O=abc,OU=xyz,OU=caGrid,OU=Users,CN=caGrid Dorian CA"),
+								true));
+
 		dorianCaNewCertInfoStep.getOptions().add(
 				new ListPropertyConfigurationOption(
 						Constants.DORIAN_CA_CAKEY_SIZE, this.model
@@ -873,8 +990,8 @@ public class Installer {
 								this.model
 										.getMessage("dorian.ca.cert.info.lifetime.years"),
 								getProperty(this.model.getState(),
-										Constants.DORIAN_CA_LIFETIME_YEARS, "10"),
-								true));
+										Constants.DORIAN_CA_LIFETIME_YEARS,
+										"10"), true));
 		dorianCaNewCertInfoStep
 				.getOptions()
 				.add(
@@ -936,7 +1053,8 @@ public class Installer {
 								Constants.DORIAN_CA_PRESENT));
 			}
 		});
-		
+		incrementProgress();
+
 		// Performs the installation
 		RunTasksStep installStep = new RunTasksStep(this.model
 				.getMessage("install.title"), this.model
@@ -1023,15 +1141,16 @@ public class Installer {
 
 		installStep.getTasks().add(
 				new ConditionalTask(new ConfigureDorianTask(this.model
-						.getMessage("configuring.dorian.title"), ""), new Condition() {
+						.getMessage("configuring.dorian.title"), ""),
+						new Condition() {
 
-					public boolean evaluate(WizardModel m) {
-						CaGridInstallerModel model = (CaGridInstallerModel) m;
-						return "true".equals(model.getState().get(
-								Constants.INSTALL_DORIAN));
-					}
+							public boolean evaluate(WizardModel m) {
+								CaGridInstallerModel model = (CaGridInstallerModel) m;
+								return "true".equals(model.getState().get(
+										Constants.INSTALL_DORIAN));
+							}
 
-				}));
+						}));
 
 		installStep.getTasks().add(
 				new ConditionalTask(new DeployServiceTask(this.model
@@ -1050,11 +1169,12 @@ public class Installer {
 				new SaveSettingsTask(this.model
 						.getMessage("saving.settings.title"), ""));
 
+		incrementProgress();
+
 		this.model.add(installStep);
 
-		// TODO: change finished step
-		this.model.add(new DisplayMessageStep("Finished", "Finished",
-				"caGrid has been installed."));
+		this.model.add(new InstallationCompleteStep(this.model
+				.getMessage("installation.complete.title"), ""));
 
 	}
 
@@ -1281,6 +1401,37 @@ public class Installer {
 			props.put(propInstall, "true");
 		}
 		return installed;
+	}
+
+	private class DownloadPropsThread extends Thread {
+
+		private Exception ex;
+
+		private String fromUrl;
+
+		private String toFile;
+
+		DownloadPropsThread(String fromUrl, String toFile) {
+			this.fromUrl = fromUrl;
+			;
+			this.toFile = toFile;
+		}
+
+		Exception getException() {
+			return this.ex;
+		}
+
+		public void run() {
+			try {
+				File to = new File(this.toFile);
+				URL from = new URL(this.fromUrl);
+				Utils.downloadFile(from, to);
+
+			} catch (Exception ex) {
+				this.ex = ex;
+			}
+		}
+
 	}
 
 }
