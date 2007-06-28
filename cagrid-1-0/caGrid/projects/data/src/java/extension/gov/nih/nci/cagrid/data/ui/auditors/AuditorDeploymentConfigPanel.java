@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.ui.auditors;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceDeploymentUIPanel;
@@ -14,7 +15,7 @@ import gov.nih.nci.cagrid.introduce.portal.extension.ServiceDeploymentUIPanel;
  * @author David Ervin
  * 
  * @created May 24, 2007 1:34:32 PM
- * @version $Id: AuditorDeploymentConfigPanel.java,v 1.1 2007-05-25 14:34:25 dervin Exp $ 
+ * @version $Id: AuditorDeploymentConfigPanel.java,v 1.2 2007-06-28 15:00:10 dervin Exp $ 
  */
 public class AuditorDeploymentConfigPanel extends ServiceDeploymentUIPanel {
     
@@ -39,7 +40,13 @@ public class AuditorDeploymentConfigPanel extends ServiceDeploymentUIPanel {
     
 
     public void resetGUI() {
-        getAuditorsConfigPanel().forceReload();
+        try {
+            getAuditorsConfigPanel().updateDisplayedConfiguration();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorDialog.showErrorDialog("Error displaying auditor configuration", 
+                ex.getMessage(), ex);
+        }
     }
     
     

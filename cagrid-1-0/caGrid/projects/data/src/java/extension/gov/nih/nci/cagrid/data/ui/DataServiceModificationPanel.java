@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -54,8 +55,19 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 
 
 	protected void resetGUI() {
-        // TODO Auto-generated method stub
-        getDomainConfigPanel().populateFromExtensionData();
+        int tabs = getMainTabbedPane().getTabCount();
+        for (int i = 0; i < tabs; i++) {
+            Component tab = getMainTabbedPane().getComponentAt(i);
+            if (tab instanceof UpdatablePanel) {
+                try {
+                    ((UpdatablePanel) tab).updateDisplayedConfiguration();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    ErrorDialog.showErrorDialog("Error updating information on " 
+                        + getMainTabbedPane().getTitleAt(i), ex.getMessage(), ex);
+                }
+            }
+        }
 	}
     
 
@@ -96,7 +108,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                     getDetailConfigPanel().getClassConfigTable().clearTable();
                 }
             });
-            domainConfigPanel.populateFromExtensionData();
+            domainConfigPanel.updateDisplayedConfiguration();
 		}
 		return domainConfigPanel;
 	}

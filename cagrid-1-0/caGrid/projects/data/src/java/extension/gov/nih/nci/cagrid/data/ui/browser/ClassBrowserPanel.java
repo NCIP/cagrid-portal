@@ -82,7 +82,7 @@ public class ClassBrowserPanel extends JPanel {
 	}
 	
 	
-	private void populateFields() {
+	public void populateFields() {
 		// get the additional jars
 		String[] jarNames = null; 
 		try {

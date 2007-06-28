@@ -40,9 +40,9 @@ import javax.swing.JScrollPane;
  * @author David Ervin
  * 
  * @created Jun 27, 2007 8:58:22 AM
- * @version $Id: QueryProcessorConfigPanel.java,v 1.1 2007-06-27 14:45:02 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigPanel.java,v 1.2 2007-06-28 15:00:10 dervin Exp $ 
  */
-public class QueryProcessorConfigPanel extends JPanel {
+public class QueryProcessorConfigPanel extends JPanel implements UpdatablePanel {
     private ServiceInformation serviceInfo;
     private ExtensionDataManager dataManager;
     
@@ -74,6 +74,12 @@ public class QueryProcessorConfigPanel extends JPanel {
         setLayout(new GridBagLayout());
         add(getClassBrowserPanel(), gridBagConstraints16);
         add(getProcessorConfigurationPanel(), gridBagConstraints22);
+    }
+    
+    
+    public void updateDisplayedConfiguration() {
+        getQpParamsTable().classChanged();
+        getClassBrowserPanel().populateFields();
     }
     
     

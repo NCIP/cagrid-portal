@@ -37,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Jun 26, 2007 11:41:25 AM
- * @version $Id: AuditorConfigurationDialog.java,v 1.1 2007-06-26 19:09:40 dervin Exp $ 
+ * @version $Id: AuditorConfigurationDialog.java,v 1.2 2007-06-28 15:00:10 dervin Exp $ 
  */
 public class AuditorConfigurationDialog extends JDialog {
 
@@ -111,6 +111,7 @@ public class AuditorConfigurationDialog extends JDialog {
         if (classNameTextField == null) {
             classNameTextField = new JTextField();
             classNameTextField.setEditable(false);
+            classNameTextField.setText(auditorClass);
         }
         return classNameTextField;
     }
@@ -125,6 +126,7 @@ public class AuditorConfigurationDialog extends JDialog {
         if (instanceNameTextField == null) {
             instanceNameTextField = new JTextField();
             instanceNameTextField.setEditable(false);
+            instanceNameTextField.setText(auditorInstance);
         }
         return instanceNameTextField;
     }

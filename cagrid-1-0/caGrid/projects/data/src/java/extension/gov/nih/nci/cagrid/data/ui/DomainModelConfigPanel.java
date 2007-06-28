@@ -63,11 +63,12 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.6 2007-06-27 19:19:52 dervin Exp $ 
+ * @version $Id: DomainModelConfigPanel.java,v 1.7 2007-06-28 15:00:10 dervin Exp $ 
  */
-public class DomainModelConfigPanel extends JPanel {
+public class DomainModelConfigPanel extends JPanel implements UpdatablePanel {
 
     private transient List<DomainModelClassSelectionListener> classSelectionListeners = null;
+    
     private ExtensionTypeExtensionData extensionTypeExtensionData;
     private ServiceInformation serviceInfo;
     private ExtensionDataManager extensionDataManager;
@@ -95,7 +96,7 @@ public class DomainModelConfigPanel extends JPanel {
     }
     
     
-    public void populateFromExtensionData() {
+    public void updateDisplayedConfiguration() {
         boolean noDomainModel = false;
         boolean suppliedDomainModel = false;
         try {
@@ -105,7 +106,11 @@ public class DomainModelConfigPanel extends JPanel {
             ex.printStackTrace();
             ErrorDialog.showErrorDialog("Error loading domain model source", ex.getMessage(), ex);
         }
-        PortalUtils.setContainerEnabled(getCadsrBrowserPanel(), !noDomainModel);
+        // only enabled if domain model from caDSR
+        PortalUtils.setContainerEnabled(getCadsrBrowserPanel(), !noDomainModel && !suppliedDomainModel);
+        getAddFullProjectButton().setEnabled(!noDomainModel && !suppliedDomainModel);
+        getAddPackageButton().setEnabled(!noDomainModel && !suppliedDomainModel);
+        getRemovePackageButton().setEnabled(!noDomainModel && !suppliedDomainModel);
         if (suppliedDomainModel) {
             try {
                 File dmFile = getSuppliedDomainModelFile();
@@ -421,7 +426,7 @@ public class DomainModelConfigPanel extends JPanel {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     DomainModelAdvancedOptionsDialog dialog = new DomainModelAdvancedOptionsDialog(serviceInfo, extensionDataManager);
                     dialog.setVisible(true);
-                    populateFromExtensionData();
+                    updateDisplayedConfiguration();
                 }
             });
         }

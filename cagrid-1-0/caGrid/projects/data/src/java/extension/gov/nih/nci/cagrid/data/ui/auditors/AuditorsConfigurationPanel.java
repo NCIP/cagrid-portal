@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.data.auditing.ConfigurationProperty;
 import gov.nih.nci.cagrid.data.auditing.DataServiceAuditors;
 import gov.nih.nci.cagrid.data.auditing.MonitoredEvents;
 import gov.nih.nci.cagrid.data.service.auditing.DataServiceAuditor;
+import gov.nih.nci.cagrid.data.ui.UpdatablePanel;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
@@ -35,9 +36,9 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:40:27 AM
- * @version $Id: AuditorsConfigurationPanel.java,v 1.5 2007-06-26 19:09:40 dervin Exp $ 
+ * @version $Id: AuditorsConfigurationPanel.java,v 1.6 2007-06-28 15:00:10 dervin Exp $ 
  */
-public class AuditorsConfigurationPanel extends JPanel {
+public class AuditorsConfigurationPanel extends JPanel implements UpdatablePanel {
     
     private ServiceInformation serviceInfo;
 
@@ -52,8 +53,13 @@ public class AuditorsConfigurationPanel extends JPanel {
     }
     
     
-    public void forceReload() {
-        // TODO: reload everything from the configuration file
+    public void updateDisplayedConfiguration() throws Exception {
+        AuditorConfiguration[] configs = getAuditorsDescription().getAuditorConfiguration();
+        if (configs != null) {
+            for (AuditorConfiguration config : configs) {
+                getAuditorsTable().addAuditor(config.getClassName(), config.getInstanceName());
+            }
+        }
     }
     
     
