@@ -10,14 +10,14 @@
 			<param name="deploy.service.name" value="syncgts" />
 		</antcall>
 		<scp
-			file="${cagrid.home}/caGrid/projects/syncgts/lib/cog-jglobus.jar"
+			file="${cagrid.home}/projects/syncgts/lib/cog-jglobus.jar"
 			remoteToFile="${username}:${password}@${host}:${catalina.home}/common/lib/cog-jglobus.jar" />
 
 	</target>
 
 	<target name="configure-syncgts-sync-description">
 		<property name="config.file"
-			value="${cagrid.home}/caGrid/projects/syncgts/etc/sync-description.xml" />
+			value="${cagrid.home}/projects/syncgts/etc/sync-description.xml" />
 		<if>
 			<or>
 				<istrue value="${syncgts.isGTSMaster}" />
@@ -114,13 +114,13 @@
 			<istrue value="${syncgts.isGTSMaster}"/>
 			<then>
 				<propertyfile
-					file="${cagrid.home}/caGrid/projects/syncgts/service.properties">
+					file="${cagrid.home}/projects/syncgts/service.properties">
 					<entry key="performFirstSync" value="false" />
 				</propertyfile>
 			</then>
 			<else>
 				<propertyfile
-					file="${cagrid.home}/caGrid/projects/syncgts/service.properties">
+					file="${cagrid.home}/projects/syncgts/service.properties">
 					<entry key="performFirstSync" value="true" />
 				</propertyfile>
 			</else>

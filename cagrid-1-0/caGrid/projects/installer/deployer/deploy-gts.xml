@@ -22,7 +22,7 @@
 
 	<target name="configure-gts-conf">
 		<property name="config.file"
-			value="${cagrid.home}/caGrid/projects/gts/etc/gts-conf.xml" />
+			value="${cagrid.home}/projects/gts/etc/gts-conf.xml" />
 		<xmltask source="${config.file}" dest="${config.file}">
 			<replace path="/gts/resource/gts-config/gts-internal-id">
 				<![CDATA[

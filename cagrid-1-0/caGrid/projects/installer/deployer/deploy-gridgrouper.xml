@@ -25,7 +25,7 @@
 
 	<target name="configure-grouper-hibernate-properties">
 		<propertyfile
-			file="${cagrid.home}/caGrid/projects/gridgrouper/resources/conf/grouper.hibernate.properties">
+			file="${cagrid.home}/projects/gridgrouper/resources/conf/grouper.hibernate.properties">
 			<entry key="hibernate.connection.url"
 				value="jdbc:mysql://${db.host}:${db.port}/grouper" />
 			<entry key="hibernate.connection.username"

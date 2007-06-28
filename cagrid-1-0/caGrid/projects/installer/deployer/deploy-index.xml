@@ -10,7 +10,7 @@
 		<property name="zip.file.path"
 			value="${basedir}/${temp.dir.path}/${zip.file.name}" />
 		<mkdir dir="${build.dir}" />
-		<ant antfile="${cagrid.home}/caGrid/projects/index/build.xml"
+		<ant antfile="${cagrid.home}/projects/index/build.xml"
 			inheritAll="false" inheritRefs="false" target="deployIndexTomcat">
 			<property name="tomcat.dir" value="${build.dir}" />
 		</ant>

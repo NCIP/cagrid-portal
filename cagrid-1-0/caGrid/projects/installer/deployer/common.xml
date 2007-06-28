@@ -16,7 +16,7 @@
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
-			<fileset dir="${cagrid.home}/share/lib">
+			<fileset dir="${cagrid.home}/../share/lib">
 				<include name="ant-contrib*.jar" />
 			</fileset>
 		</classpath>
@@ -65,14 +65,14 @@
 			value="${basedir}/${temp.dir.path}/${zip.file.name}" />
 		<mkdir dir="${build.dir}" />
 		<ant
-			antfile="${cagrid.home}/caGrid/projects/${deploy.service.name}/build.xml"
+			antfile="${cagrid.home}/projects/${deploy.service.name}/build.xml"
 			inheritAll="false" inheritRefs="false" target="deployTomcat">
 			<property name="tomcat.dir" value="${build.dir}" />
 			<property name="index.service.url"
 				value="http://${node1.host}:8080/wsrf/services/DefaultIndexService" />
 		</ant>
 
-		<!--
+
 		<zip destfile="${zip.file.path}" basedir="${build.dir}" />
 
 		<scp file="${zip.file.path}"
@@ -92,7 +92,7 @@
 			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.trust.cert.deploy.filename}" />
 		<scp file="${ca.dorian.cert.input}"
 			remoteToFile="${username}:${password}@${host}:~/.globus/certificates/${ca.dorian.cert.deploy.filename}" />
-			-->
+
 	</target>
 
 	<target name="clean">

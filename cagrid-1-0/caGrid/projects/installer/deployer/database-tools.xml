@@ -33,7 +33,7 @@
 			${db.operation} database ${db.name};
 			<classpath>
 				<fileset
-					dir="${cagrid.home}/caGrid/projects/gridgrouper/lib">
+					dir="${cagrid.home}/projects/gridgrouper/lib">
 					<include name="mysql-connector-java*.jar" />
 				</fileset>
 			</classpath>
@@ -69,7 +69,7 @@
 	</target>	
 	
 	<target name="import-dorian-ca">
-		<ant antfile="${cagrid.home}/caGrid/projects/dorian/build.xml"
+		<ant antfile="${cagrid.home}/projects/dorian/build.xml"
 			inheritAll="false" inheritRefs="false" target="importCA">
 			<property name="cacert.input"
 				value="${ca.dorian.cert.input}" />
@@ -82,20 +82,20 @@
 
 	<target name="gridgrouper-init">
 		<ant
-			antfile="${cagrid.home}/caGrid/projects/gridgrouper/build.xml"
+			antfile="${cagrid.home}/projects/gridgrouper/build.xml"
 			inheritAll="false" inheritRefs="false" target="grouperInit" />
 	</target>
 
 	<target name="gridgrouper-add-admin">
 		<ant
-			antfile="${cagrid.home}/caGrid/projects/gridgrouper/build.xml"
+			antfile="${cagrid.home}/projects/gridgrouper/build.xml"
 			inheritAll="false" inheritRefs="false" target="addAdmin">
 			<property name="gridId.input" value="${manager.identity}" />
 		</ant>
 	</target>
 	
 	<target name="add-gts-admin">
-		<ant antfile="${cagrid.home}/caGrid/projects/gts/build.xml"
+		<ant antfile="${cagrid.home}/projects/gts/build.xml"
 			inheritAll="false" inheritRefs="false" target="addAdmin">
 			<property name="gridId.input" value="${manager.identity}" />
 		</ant>

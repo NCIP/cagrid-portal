@@ -5,7 +5,7 @@
 	<target name="deploy-gme-service">
 
 		<propertyfile
-			file="${cagrid.home}/caGrid/projects/gme/deploy.properties">
+			file="${cagrid.home}/projects/gme/deploy.properties">
 			<entry key="service.deployment.host.default"
 				value="${host}" />
 			<entry key="service.deployment.host" value="${host}" />
@@ -22,7 +22,7 @@
 
 	<target name="configure-gme-registration">
 		<property name="config.file"
-			value="${cagrid.home}/caGrid/projects/gme/etc/registration.xml" />
+			value="${cagrid.home}/projects/gme/etc/registration.xml" />
 		<xmltask source="${config.file}" dest="${config.file}">
 			<replace
 				path="/*[local-name()='ServiceGroupRegistrationParameters']/*[local-name()='ServiceGroupEPR']/*[local-name()='Address']/text()"
@@ -32,7 +32,7 @@
 
 	<target name="configure-gme-globus-config">
 		<property name="config.file"
-			value="${cagrid.home}/caGrid/projects/gme/etc/gme-globus-config.xml" />
+			value="${cagrid.home}/projects/gme/etc/gme-globus-config.xml" />
 		<xmltask source="${config.file}" dest="${config.file}">
 			<replace
 				path="/mobius/resource[@name='gmeConfig']/gmeConfiguration-configuration/root-database/host">

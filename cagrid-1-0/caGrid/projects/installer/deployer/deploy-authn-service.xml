@@ -18,7 +18,7 @@
 
 	<target name="set-authn-service-deploy-properties">
 		<propertyfile
-			file="${cagrid.home}/caGrid/projects/authentication-service/deploy.properties">
+			file="${cagrid.home}/projects/authentication-service/deploy.properties">
 			<entry key="csm.app.context"
 				value="${authn.csm.app.context}" />
 			<entry key="saml.provider.crt"
