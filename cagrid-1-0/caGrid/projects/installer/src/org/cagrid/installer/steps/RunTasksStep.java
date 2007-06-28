@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -95,7 +96,6 @@ public class RunTasksStep extends PanelWizardStep implements
 		}
 		this.model = (CaGridInstallerModel) m;
 
-		
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.fill = GridBagConstraints.BOTH;
 		gridBagConstraints3.gridy = 2;
@@ -127,13 +127,13 @@ public class RunTasksStep extends PanelWizardStep implements
 		this.add(getBusyPanel(), gridBagConstraints2);
 
 		JTextArea taskOutput = new JTextArea(5, 20);
-//		taskOutput.setAutoscrolls(true);
+		// taskOutput.setAutoscrolls(true);
 		taskOutput.setMargin(new Insets(5, 5, 5, 5));
 		taskOutput.setEditable(false);
 		PrintStream out = new PrintStream(new TextAreaOutputStream(taskOutput));
 		System.setOut(out);
 		System.setErr(out);
-		
+
 		add(new JScrollPane(taskOutput), gridBagConstraints3);
 	}
 
@@ -357,9 +357,11 @@ public class RunTasksStep extends PanelWizardStep implements
 			textControl = control;
 		}
 
-		public void write(int b) throws IOException {
+		public void write(final int b) throws IOException {
+
 			textControl.append(String.valueOf((char) b));
 			textControl.setCaretPosition(textControl.getDocument().getLength());
+
 		}
 	}
 

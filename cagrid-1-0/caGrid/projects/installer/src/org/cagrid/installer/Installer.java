@@ -481,20 +481,18 @@ public class Installer {
 		ConfigureCAStep caCertInfoStep = new ConfigureCAStep(this.model
 				.getMessage("ca.cert.info.title"), this.model
 				.getMessage("ca.cert.info.desc"));
-		caCertInfoStep.getOptions()
-				.add(
-						new TextPropertyConfigurationOption(
-								Constants.CA_CERT_PATH, this.model
-										.getMessage("ca.cert.info.cert.path"),
-								this.model.getState().get(
-										Constants.CA_CERT_PATH), true));
-		caCertInfoStep.getOptions()
-				.add(
-						new TextPropertyConfigurationOption(
-								Constants.CA_KEY_PATH, this.model
-										.getMessage("ca.cert.info.key.path"),
-								this.model.getState()
-										.get(Constants.CA_KEY_PATH), true));
+		caCertInfoStep.getOptions().add(
+				new TextPropertyConfigurationOption(Constants.CA_CERT_PATH,
+						this.model.getMessage("ca.cert.info.cert.path"),
+						getProperty(this.model.getState(),
+								Constants.CA_CERT_PATH, "temp/certs/ca.cert"),
+						true));
+		caCertInfoStep.getOptions().add(
+				new TextPropertyConfigurationOption(Constants.CA_KEY_PATH,
+						this.model.getMessage("ca.cert.info.key.path"),
+						getProperty(this.model.getState(),
+								Constants.CA_KEY_PATH, "temp/certs/ca.key"),
+						true));
 		caCertInfoStep.getOptions().add(
 				new TextPropertyConfigurationOption(Constants.CA_KEY_PWD,
 						this.model.getMessage("ca.cert.info.key.pwd"),
@@ -520,33 +518,32 @@ public class Installer {
 		ConfigureCAStep newCaCertInfoStep = new ConfigureCAStep(this.model
 				.getMessage("ca.cert.new.info.title"), this.model
 				.getMessage("ca.cert.new.info.desc"));
-		newCaCertInfoStep.getOptions()
-				.add(
-						new TextPropertyConfigurationOption(
-								Constants.CA_CERT_PATH, this.model
-										.getMessage("ca.cert.info.cert.path"),
-								this.model.getState().get(
-										Constants.CA_CERT_PATH), true));
-		newCaCertInfoStep.getOptions()
-				.add(
-						new TextPropertyConfigurationOption(
-								Constants.CA_KEY_PATH, this.model
-										.getMessage("ca.cert.info.key.path"),
-								this.model.getState()
-										.get(Constants.CA_KEY_PATH), true));
+		newCaCertInfoStep.getOptions().add(
+				new TextPropertyConfigurationOption(Constants.CA_CERT_PATH,
+						this.model.getMessage("ca.cert.info.cert.path"),
+						getProperty(this.model.getState(),
+								Constants.CA_CERT_PATH, "temp/certs/ca.cert"),
+						true));
+		newCaCertInfoStep.getOptions().add(
+				new TextPropertyConfigurationOption(Constants.CA_KEY_PATH,
+						this.model.getMessage("ca.cert.info.key.path"),
+						getProperty(this.model.getState(),
+								Constants.CA_KEY_PATH, "temp/certs/ca.key"),
+						true));
 		newCaCertInfoStep.getOptions().add(
 				new TextPropertyConfigurationOption(Constants.CA_KEY_PWD,
 						this.model.getMessage("ca.cert.info.key.pwd"),
 						this.model.getState().get(Constants.CA_KEY_PWD), true));
 		newCaCertInfoStep.getOptions().add(
 				new TextPropertyConfigurationOption(Constants.CA_DN, this.model
-						.getMessage("ca.cert.info.dn"), this.model.getState()
-						.get(Constants.CA_DN), true));
+						.getMessage("ca.cert.info.dn"), getProperty(this.model
+						.getState(), Constants.CA_DN, "O=org,OU=unit,CN=name"),
+						true));
 		newCaCertInfoStep.getOptions().add(
 				new TextPropertyConfigurationOption(Constants.CA_DAYS_VALID,
 						this.model.getMessage("ca.cert.info.days.valid"),
-						this.model.getState().get(Constants.CA_DAYS_VALID),
-						true));
+						getProperty(this.model.getState(),
+								Constants.CA_DAYS_VALID, "1000"), true));
 
 		// TODO: add validation
 		this.model.add(newCaCertInfoStep, new Condition() {
@@ -573,23 +570,30 @@ public class Installer {
 				new TextPropertyConfigurationOption(
 						Constants.SERVICE_CERT_PATH, this.model
 								.getMessage("service.cert.info.cert.path"),
-						this.model.getState().get(Constants.SERVICE_CERT_PATH),
-						true));
+						getProperty(this.model.getState(),
+								Constants.SERVICE_CERT_PATH,
+								"temp/certs/service.cert"), true));
 		newServiceCertInfoStep.getOptions().add(
 				new TextPropertyConfigurationOption(Constants.SERVICE_KEY_PATH,
 						this.model.getMessage("service.cert.info.key.path"),
-						this.model.getState().get(Constants.SERVICE_KEY_PATH),
-						true));
+						getProperty(this.model.getState(),
+								Constants.SERVICE_KEY_PATH,
+								"temp/certs/servce.key"), true));
 		newServiceCertInfoStep.getOptions().add(
 				new TextPropertyConfigurationOption(Constants.SERVICE_KEY_PWD,
 						this.model.getMessage("service.cert.info.key.pwd"),
 						this.model.getState().get(Constants.SERVICE_KEY_PWD),
 						true));
-		newServiceCertInfoStep.getOptions().add(
-				new TextPropertyConfigurationOption(Constants.SERVICE_HOSTNAME,
-						this.model.getMessage("service.cert.info.hostname"),
-						this.model.getState().get(Constants.SERVICE_HOSTNAME),
-						true));
+		newServiceCertInfoStep
+				.getOptions()
+				.add(
+						new TextPropertyConfigurationOption(
+								Constants.SERVICE_HOSTNAME,
+								this.model
+										.getMessage("service.cert.info.hostname"),
+								getProperty(this.model.getState(),
+										Constants.SERVICE_HOSTNAME, "localhost"),
+								true));
 		// TODO: add validation
 		this.model.add(newServiceCertInfoStep, new Condition() {
 
@@ -612,13 +616,15 @@ public class Installer {
 				new TextPropertyConfigurationOption(
 						Constants.SERVICE_CERT_PATH, this.model
 								.getMessage("service.cert.info.cert.path"),
-						this.model.getState().get(Constants.SERVICE_CERT_PATH),
-						true));
+						getProperty(this.model.getState(),
+								Constants.SERVICE_CERT_PATH,
+								"temp/certs/service.cert"), true));
 		serviceCertInfoStep.getOptions().add(
 				new TextPropertyConfigurationOption(Constants.SERVICE_KEY_PATH,
 						this.model.getMessage("service.cert.info.key.path"),
-						this.model.getState().get(Constants.SERVICE_KEY_PATH),
-						true));
+						getProperty(this.model.getState(),
+								Constants.SERVICE_KEY_PATH,
+								"temp/certs/service.key"), true));
 		serviceCertInfoStep.getOptions().add(
 				new TextPropertyConfigurationOption(Constants.SERVICE_KEY_PWD,
 						this.model.getMessage("service.cert.info.key.pwd"),
@@ -643,29 +649,26 @@ public class Installer {
 		ConfigureDorianDBStep dorianDbInfoStep = new ConfigureDorianDBStep(
 				this.model.getMessage("dorian.db.config.title"), this.model
 						.getMessage("dorian.db.config.desc"));
-		dorianDbInfoStep.getOptions()
-				.add(
-						new TextPropertyConfigurationOption(
-								Constants.DORIAN_DB_HOST, this.model
-										.getMessage("dorian.db.host"),
-								this.model.getState().get(
-										Constants.DORIAN_DB_HOST), true));
-		dorianDbInfoStep.getOptions()
-				.add(
-						new TextPropertyConfigurationOption(
-								Constants.DORIAN_DB_PORT, this.model
-										.getMessage("dorian.db.port"),
-								this.model.getState().get(
-										Constants.DORIAN_DB_PORT), true));
+		dorianDbInfoStep.getOptions().add(
+				new TextPropertyConfigurationOption(Constants.DORIAN_DB_HOST,
+						this.model.getMessage("dorian.db.host"), getProperty(
+								this.model.getState(),
+								Constants.DORIAN_DB_HOST, "localhost"), true));
+		dorianDbInfoStep.getOptions().add(
+				new TextPropertyConfigurationOption(Constants.DORIAN_DB_PORT,
+						this.model.getMessage("dorian.db.port"), getProperty(
+								this.model.getState(),
+								Constants.DORIAN_DB_PORT, "3306"), true));
 		dorianDbInfoStep.getOptions().add(
 				new TextPropertyConfigurationOption(Constants.DORIAN_DB_ID,
-						this.model.getMessage("dorian.db.id"), this.model
-								.getState().get(Constants.DORIAN_DB_ID), true));
+						this.model.getMessage("dorian.db.id"), getProperty(
+								this.model.getState(), Constants.DORIAN_DB_ID,
+								"dorian"), true));
 		dorianDbInfoStep.getOptions().add(
 				new TextPropertyConfigurationOption(
 						Constants.DORIAN_DB_USERNAME, this.model
-								.getMessage("dorian.db.username"), this.model
-								.getState().get(Constants.DORIAN_DB_USERNAME),
+								.getMessage("dorian.db.username"), getProperty(this.model
+								.getState(), Constants.DORIAN_DB_USERNAME, "root"),
 						true));
 		dorianDbInfoStep.getOptions().add(
 				new TextPropertyConfigurationOption(
