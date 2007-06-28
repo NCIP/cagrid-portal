@@ -345,11 +345,20 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 		initMethodNameValidation();
 	}
+	
+	private void updateDoneButton(){
+		if(methodNameValidationModel.hasErrors()) {
+			getDoneButton().setEnabled(false);
+		} else {
+			getDoneButton().setEnabled(true);
+		}
+	}
 
 	private void initMethodNameValidation() {
 		ValidationComponentUtils.setMessageKey(getNameField(), METHOD_NAME);
 
 		updateMethodNameComponentTreeSeverity();
+		updateDoneButton();
 	}
 
 	private void validateMethodNameInput() {
@@ -399,6 +408,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 		this.methodNameValidationModel.setResult(result);
 		updateMethodNameComponentTreeSeverity();
+		updateDoneButton();
 	}
 
 	private void updateMethodNameComponentTreeSeverity() {
