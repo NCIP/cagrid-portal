@@ -45,14 +45,7 @@ public class UMLProjectTree extends CheckBoxTree {
 	
 	
 	public UMLPackageTreeNode getUmlPackageNode(String packageName) {
-		Enumeration packEnum = getRootNode().children();
-		while (packEnum.hasMoreElements()) {
-			UMLPackageTreeNode node = (UMLPackageTreeNode) packEnum.nextElement();
-			if (node.getPackageName().equals(packageName)) {
-				return node;
-			}
-		}
-		return null;
+        return packageNodes.get(packageName);
 	}
 	
 	
