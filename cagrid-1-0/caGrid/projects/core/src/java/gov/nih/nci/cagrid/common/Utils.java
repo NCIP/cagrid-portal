@@ -34,6 +34,7 @@ import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.server.AxisServer;
 import org.apache.axis.utils.XMLUtils;
+import org.globus.common.CoGProperties;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.encoding.ObjectSerializer;
@@ -51,6 +52,23 @@ public class Utils {
 			caGridCache.mkdirs();
 		}
 		return caGridCache;
+	}
+
+
+	public static File getTrustedCerificatesDirectory() {
+		String caDir = CoGProperties.getDefault().getCaCertLocations();
+		if (caDir != null) {
+			return new File(caDir);
+		} else {
+			String userHome = System.getProperty("user.home");
+			File userHomeF = new File(userHome);
+			File dir = new File(userHomeF.getAbsolutePath() + File.separator + ".globus" + File.separator
+				+ "certificates");
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
+			return dir;
+		}
 	}
 
 
@@ -121,7 +139,7 @@ public class Utils {
 
 		BufferedInputStream fis = new BufferedInputStream(new FileInputStream(in));
 		BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(out));
-		
+
 		// a temporary buffer to read into
 		byte[] tmpBuffer = new byte[8192];
 		int len = 0;
@@ -199,8 +217,7 @@ public class Utils {
 	 *            The array to append to
 	 * @param appendix
 	 *            The object to append to the array
-	 * @return
-	 * 		An array with the new item appended
+	 * @return An array with the new item appended
 	 */
 	public static java.lang.Object appendToArray(java.lang.Object array, java.lang.Object appendix) {
 		Class arrayType = array.getClass().getComponentType();
@@ -216,8 +233,7 @@ public class Utils {
 	 * 
 	 * @param array
 	 * @param removal
-	 * @return
-	 * 		An array with the item removed
+	 * @return An array with the item removed
 	 */
 	public static java.lang.Object removeFromArray(java.lang.Object array, java.lang.Object removal) {
 		Class arrayType = array.getClass().getComponentType();
@@ -332,13 +348,12 @@ public class Utils {
 	 * Deserializes XML into an object
 	 * 
 	 * @param xmlReader
-	 *      The reader for the XML (eg: FileReader, StringReader, etc)
+	 *            The reader for the XML (eg: FileReader, StringReader, etc)
 	 * @param clazz
-	 *      The class to serialize to
+	 *            The class to serialize to
 	 * @param wsdd
-	 *      A stream containing the WSDD configuration
-	 * @return
-	 * 		The object deserialized from the XML
+	 *            A stream containing the WSDD configuration
+	 * @return The object deserialized from the XML
 	 * @throws SAXException
 	 * @throws DeserializationException
 	 */
@@ -394,9 +409,8 @@ public class Utils {
 	 * Gets the QName that Axis has registered for the given java class
 	 * 
 	 * @param clazz
-	 * @return
-	 * 		The QName corresponding to the class registered 
-	 * 		in the Axis type mappings
+	 * @return The QName corresponding to the class registered in the Axis type
+	 *         mappings
 	 */
 	public static QName getRegisteredQName(Class clazz) {
 		return MessageContext.getCurrentContext().getTypeMapping().getTypeQName(clazz);
@@ -407,9 +421,8 @@ public class Utils {
 	 * Gets the Class that Axis has registerd for the given QName
 	 * 
 	 * @param qname
-	 * @return
-	 * 		The class corresponding to the QName as registered 
-	 * 		in the Axis type mappings
+	 * @return The class corresponding to the QName as registered in the Axis
+	 *         type mappings
 	 */
 	public static Class getRegisteredClass(QName qname) {
 		return MessageContext.getCurrentContext().getTypeMapping().getClassForQName(qname);
@@ -523,8 +536,8 @@ public class Utils {
 		}
 		return count;
 	}
-	
-	
+
+
 	public static Object cloneBean(Object bean, QName qname) throws Exception {
 		StringWriter writer = new StringWriter();
 		serializeObject(bean, qname, writer);

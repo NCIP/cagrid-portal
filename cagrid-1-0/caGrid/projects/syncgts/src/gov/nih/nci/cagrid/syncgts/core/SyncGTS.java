@@ -573,9 +573,8 @@ public class SyncGTS {
 	private void readInCurrentCADirectory(SyncDescription description) throws Exception {
 		caListings = new HashMap();
 		this.listingsById = new HashMap();
-		String caDir = CoGProperties.getDefault().getCaCertLocations();
-		logger.info("Taking Snapshot of Trusted CA Directory (" + caDir + ")....");
-		File dir = new File(caDir);
+		File dir = Utils.getTrustedCerificatesDirectory();
+		logger.info("Taking Snapshot of Trusted CA Directory (" + dir.getAbsolutePath() + ")....");
 		if (dir.exists()) {
 			if (!dir.isDirectory()) {
 				Message mess = new Message();

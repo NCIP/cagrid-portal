@@ -15,7 +15,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.globus.common.CoGProperties;
 
 
 /**
@@ -60,9 +59,8 @@ public class ConfigureGlobusToTrustDorian {
 				c.getIdentityFederationConfiguration().getCredentialPolicy().setHostCertificateAutoApproval(true);
 				Dorian dorian = new Dorian(c, "localhost");
 				X509Certificate cacert = dorian.getCACertificate();
-				String caDir = CoGProperties.getDefault().getCaCertLocations();
-				File dir = new File(caDir);
-				dir.mkdirs();
+				
+				File dir = Utils.getTrustedCerificatesDirectory();
 				File caFile = new File(dir.getAbsolutePath() + File.separator + CertUtil.getHashCode(cacert) + ".0");
 				File policyFile = new File(dir.getAbsolutePath() + File.separator + CertUtil.getHashCode(cacert)
 					+ ".signing_policy");
