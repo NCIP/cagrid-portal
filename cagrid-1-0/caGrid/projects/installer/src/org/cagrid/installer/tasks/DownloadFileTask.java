@@ -11,6 +11,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.steps.Constants;
@@ -24,6 +26,8 @@ public class DownloadFileTask extends BasicTask {
 	private static final Log logger = LogFactory.getLog(DownloadFileTask.class);
 
 	private static final int BUFFER_SIZE = 1024;
+	
+	private static final int LOGAFTER_SIZE = BUFFER_SIZE * 1000;
 
 	private String fromUrlProp;
 
@@ -81,9 +85,16 @@ public class DownloadFileTask extends BasicTask {
 		byte[] buffer = new byte[BUFFER_SIZE];
 		int len = -1;
 		int stepNum = 0;
+		int bytesRead = 0;
+		int nextLog = -1;
 		while ((len = inputStream.read(buffer)) > 0) {
 			out.write(buffer, 0, len);
 			stepNum += 1;
+			bytesRead += len;
+			if(bytesRead > nextLog){
+				nextLog += LOGAFTER_SIZE;
+				System.out.println(bytesRead + " bytes read...");
+			}
 //			if (stepNum >= getStepCount()) {
 //				updateStepCount(inputStream);
 //

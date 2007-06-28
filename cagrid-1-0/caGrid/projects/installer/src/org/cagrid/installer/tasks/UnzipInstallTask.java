@@ -81,6 +81,9 @@ public class UnzipInstallTask extends BasicTask {
 		String baseOut = installDir.getAbsolutePath() + "/";
 		Enumeration entries = zipFile.entries();
 		int subTaskNum = 0;
+		int logAfterSize = 100;
+		int nextLog = -1;
+		int numFiles = 0;
 		while (entries.hasMoreElements()) {
 			ZipEntry entry = (ZipEntry) entries.nextElement();
 			if (entry.isDirectory()) {
@@ -92,8 +95,14 @@ public class UnzipInstallTask extends BasicTask {
 			} else {
 
 				InputStream in = zipFile.getInputStream(entry);
+				String fileName = baseOut + entry.getName();
+				numFiles++;
+				if(numFiles > nextLog){
+					nextLog += logAfterSize;
+					System.out.println("Extracting: " + fileName);
+				}
 				BufferedOutputStream out = new BufferedOutputStream(
-						new FileOutputStream(baseOut + entry.getName()));
+						new FileOutputStream(fileName));
 				byte[] buffer = new byte[BUFFER_SIZE];
 				int len = -1;
 				while ((len = in.read(buffer)) > 0) {
