@@ -63,7 +63,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.7 2007-06-28 15:00:10 dervin Exp $ 
+ * @version $Id: DomainModelConfigPanel.java,v 1.8 2007-06-28 18:29:30 dervin Exp $ 
  */
 public class DomainModelConfigPanel extends JPanel implements UpdatablePanel {
 
@@ -282,10 +282,12 @@ public class DomainModelConfigPanel extends JPanel implements UpdatablePanel {
                         try {
                             CaDSRServiceClient cadsrClient = new CaDSRServiceClient(
                                 getCadsrBrowserPanel().getCadsr().getText());
-                            // TODO: this can be time consuming... use Busy Dialog Runnable here
                             UMLPackageMetadata[] umlPackages = cadsrClient.findPackagesInProject(selectedProject);
-                            for (UMLPackageMetadata pack : umlPackages) {
-                                addUmlPackageToModel(selectedProject, pack);
+                            // only one project validation for all packages
+                            if (verifyProjectSelection(selectedProject)) {
+                                for (UMLPackageMetadata pack : umlPackages) {
+                                    addUmlPackageToModel(selectedProject, pack);
+                                }
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -311,7 +313,9 @@ public class DomainModelConfigPanel extends JPanel implements UpdatablePanel {
                     Project selectedProject = getCadsrBrowserPanel().getSelectedProject();
                     UMLPackageMetadata selectedPackage = cadsrBrowserPanel.getSelectedPackage();
                     if (selectedProject != null && selectedPackage != null) {
-                        addUmlPackageToModel(selectedProject, selectedPackage);
+                        if (verifyProjectSelection(selectedProject)) {
+                            addUmlPackageToModel(selectedProject, selectedPackage);
+                        }
                     } else {
                         PortalUtils.showMessage("Please select both a project and package");
                     }
@@ -687,15 +691,10 @@ public class DomainModelConfigPanel extends JPanel implements UpdatablePanel {
     
     
     private boolean addUmlPackageToModel(Project project, UMLPackageMetadata pack) {
-        // verify the project is the same as the current one
-        boolean projectOk = verifyProjectSelection(project);
-        if (!projectOk) {
-            return false;
-        }
-        
         // store the project selection
         try {
             extensionDataManager.storeCadsrProjectInformation(project);
+            mostRecentProject = project;
         } catch (Exception ex) {
             ex.printStackTrace();
             ErrorDialog.showErrorDialog("Error storing project selection", ex.getMessage(), ex);
