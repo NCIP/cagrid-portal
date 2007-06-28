@@ -504,8 +504,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private void updateNewFaultComponentTreeSeverity() {
 		ValidationComponentUtils
-				.updateComponentTreeMandatoryAndBlankBackground(this);
-		ValidationComponentUtils.updateComponentTreeSeverityBackground(this,
+				.updateComponentTreeMandatoryAndBlankBackground(this.getExceptionsPanel());
+		ValidationComponentUtils.updateComponentTreeSeverityBackground(this.getExceptionsPanel(),
 				this.methodFaultValidationModel.getResult());
 	}
 

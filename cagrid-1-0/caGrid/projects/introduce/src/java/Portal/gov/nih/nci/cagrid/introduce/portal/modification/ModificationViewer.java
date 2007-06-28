@@ -2011,9 +2011,11 @@ public class ModificationViewer extends GridPortalComponent {
 		updateAddServicePropertiesButton();
 		updateServicePropertyComponentTreeSeverity();
 	}
-	
-	private void updateAddServicePropertiesButton(){
-		if(this.servicePropertiesValidation.hasErrors() || this.getServicePropertyKeyTextField().getText().length()<=0){
+
+	private void updateAddServicePropertiesButton() {
+		if (this.servicePropertiesValidation.hasErrors()
+				|| this.getServicePropertyKeyTextField().getText().trim()
+						.length() <= 0) {
 			getAddServiceProperyButton().setEnabled(false);
 		} else {
 			getAddServiceProperyButton().setEnabled(true);
@@ -2048,10 +2050,11 @@ public class ModificationViewer extends GridPortalComponent {
 										isFromETC, desc);
 								getServicePropertiesIsFromETCCheckBox()
 										.setSelected(false);
-								
+
 								getServicePropertyKeyTextField().setText("");
 								getServicePropertyValueTextField().setText("");
-								getServicePropertyDescriptionTextField().setText("");
+								getServicePropertyDescriptionTextField()
+										.setText("");
 							}
 						}
 					});
