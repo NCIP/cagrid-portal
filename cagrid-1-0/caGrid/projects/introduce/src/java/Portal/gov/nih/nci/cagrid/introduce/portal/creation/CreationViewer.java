@@ -188,7 +188,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
                 SERVICE_PACKAGE));
         } else if (!CommonTools.isValidPackageName(this.getServicePackage().getText())) {
             result.add(new SimpleValidationMessage(SERVICE_PACKAGE
-                + " is not valid.  Service must have a valid java compatible package name. ("
+                + " is not valid.  Service package must be in valid java package format. ("
                 + CommonTools.ALLOWED_JAVA_PACKAGE_REGEX + ")", Severity.ERROR, SERVICE_PACKAGE));
         }
 

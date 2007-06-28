@@ -60,7 +60,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 
 	private ValidationResultModel validationModel = new DefaultValidationResultModel();
 
-	private static final String CLASSNAME = "Classname";
+	private static final String CLASSNAME = "Classname";  //  @jve:decl-index=0:
 
 	private static final String SERIALIZER = "Serializer"; // @jve:decl-index=0:
 
