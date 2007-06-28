@@ -329,6 +329,16 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private static final String METHOD_NAME = "Method name";
 
+	private ValidationResultModel methodDescriptionValidationModel = new DefaultValidationResultModel(); // @jve:decl-index=0:
+
+	private static final String METHOD_DESCRIPTION = "Method description";
+
+	private ValidationResultModel methodFaultValidationModel = new DefaultValidationResultModel(); // @jve:decl-index=0:
+
+	private static final String METHOD_FAULT = "New fault";
+
+	// @jve:decl-index=0:
+
 	public MethodViewer(MethodType method, SpecificServiceInformation info) {
 		this.info = info;
 		this.method = method;
@@ -344,10 +354,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 
 		initMethodNameValidation();
+		initMethodDescriptionValidation();
+		initNewFaultValidation();
 	}
-	
-	private void updateDoneButton(){
-		if(methodNameValidationModel.hasErrors()) {
+
+	private void updateDoneButton() {
+		if (methodNameValidationModel.hasErrors()) {
 			getDoneButton().setEnabled(false);
 		} else {
 			getDoneButton().setEnabled(true);
@@ -357,6 +369,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private void initMethodNameValidation() {
 		ValidationComponentUtils.setMessageKey(getNameField(), METHOD_NAME);
 
+		validateMethodNameInput();
 		updateMethodNameComponentTreeSeverity();
 		updateDoneButton();
 	}
@@ -416,6 +429,84 @@ public class MethodViewer extends GridPortalBaseFrame {
 				.updateComponentTreeMandatoryAndBlankBackground(this);
 		ValidationComponentUtils.updateComponentTreeSeverityBackground(this,
 				this.methodNameValidationModel.getResult());
+	}
+
+	private void initMethodDescriptionValidation() {
+		ValidationComponentUtils.setMessageKey(getDescriptionTextField(),
+				METHOD_DESCRIPTION);
+
+		validateDescriptionInput();
+		updateMethodDescriptionComponentTreeSeverity();
+		updateDoneButton();
+	}
+
+	private void validateDescriptionInput() {
+
+		ValidationResult result = new ValidationResult();
+
+		if (ValidationUtils.isBlank(this.getDescriptionTextField().getText())) {
+			result
+					.add(new SimpleValidationMessage(
+							"Method description is blank.\n If populated will be used to document the generated source code",
+							Severity.WARNING, METHOD_DESCRIPTION));
+		}
+
+		this.methodDescriptionValidationModel.setResult(result);
+		updateMethodDescriptionComponentTreeSeverity();
+
+	}
+
+	private void updateMethodDescriptionComponentTreeSeverity() {
+		ValidationComponentUtils
+				.updateComponentTreeMandatoryAndBlankBackground(this);
+		ValidationComponentUtils.updateComponentTreeSeverityBackground(this,
+				this.methodDescriptionValidationModel.getResult());
+	}
+
+	private void initNewFaultValidation() {
+		ValidationComponentUtils.setMessageKey(getNewFaultNameTextField(),
+				METHOD_FAULT);
+
+		validateNewFaultInput();
+		updateNewFaultComponentTreeSeverity();
+		updateAddNewFaultButton();
+	}
+
+	private void updateAddNewFaultButton() {
+		if (ValidationUtils.isBlank(this.getNewFaultNameTextField().getText())) {
+			getCreateFaultButton().setEnabled(false);
+		} else if (methodFaultValidationModel.hasErrors()) {
+			getCreateFaultButton().setEnabled(false);
+		} else {
+			getCreateFaultButton().setEnabled(true);
+		}
+	}
+
+	private void validateNewFaultInput() {
+
+		ValidationResult result = new ValidationResult();
+
+		if (ValidationUtils.isNotBlank(this.getNewFaultNameTextField()
+				.getText())
+				&& !CommonTools.isValidClassName(this
+						.getNewFaultNameTextField().getText())) {
+			result.add(new SimpleValidationMessage(
+					"New fault must be a valid java class name format. ("
+							+ CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")",
+					Severity.ERROR, METHOD_FAULT));
+		}
+
+		this.methodFaultValidationModel.setResult(result);
+		updateNewFaultComponentTreeSeverity();
+		updateAddNewFaultButton();
+
+	}
+
+	private void updateNewFaultComponentTreeSeverity() {
+		ValidationComponentUtils
+				.updateComponentTreeMandatoryAndBlankBackground(this);
+		ValidationComponentUtils.updateComponentTreeSeverityBackground(this,
+				this.methodFaultValidationModel.getResult());
 	}
 
 	/**
@@ -1182,7 +1273,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 											.getPanelLabelColor()));
 			exceptionsPanel.add(getExceptionsPanelSplitPane(),
 					gridBagConstraints3);
-			exceptionsPanel.add(getCreateFaultPanel(), gridBagConstraints12);
+			exceptionsPanel.add(new IconFeedbackPanel(
+					methodFaultValidationModel, getCreateFaultPanel()),
+					gridBagConstraints12);
 			exceptionsPanel.add(getExceptionInputPanel(), gridBagConstraints11);
 			exceptionsPanel
 					.add(getFaultsFromTypesPanel(), gridBagConstraints46);
@@ -1401,7 +1494,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 			methodPanel = new JPanel();
 			methodPanel.setLayout(new GridBagLayout());
 			methodPanel.add(getConfigureTabbedPane(), gridBagConstraints1);
-			methodPanel.add(getDescriptionPanel(), gridBagConstraints43);
+			methodPanel.add(new IconFeedbackPanel(
+					methodDescriptionValidationModel, getDescriptionPanel()),
+					gridBagConstraints43);
 		}
 		return methodPanel;
 	}
@@ -2172,6 +2267,22 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getNewFaultNameTextField() {
 		if (newFaultNameTextField == null) {
 			newFaultNameTextField = new JTextField();
+			newFaultNameTextField.getDocument().addDocumentListener(
+					new DocumentListener() {
+
+						public void removeUpdate(DocumentEvent e) {
+							validateNewFaultInput();
+						}
+
+						public void insertUpdate(DocumentEvent e) {
+							validateNewFaultInput();
+						}
+
+						public void changedUpdate(DocumentEvent e) {
+							validateNewFaultInput();
+						}
+
+					});
 		}
 		return newFaultNameTextField;
 	}
@@ -2192,27 +2303,18 @@ public class MethodViewer extends GridPortalBaseFrame {
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							QName exceptionQName = null;
-							if (CommonTools
-									.isValidServiceName(getNewFaultNameTextField()
-											.getText())) {
-								exceptionQName = new QName(info.getService()
-										.getNamespace()
-										+ "/types", getNewFaultNameTextField()
-										.getText());
-							} else {
-								JOptionPane
-										.showMessageDialog(
-												MethodViewer.this,
-												"Invalid Exception Name("
-														+ getNewFaultNameTextField()
-														+ "):  Exception must be a valid java indentifier.");
-								return;
-							}
+
+							exceptionQName = new QName(info.getService()
+									.getNamespace()
+									+ "/types", getNewFaultNameTextField()
+									.getText());
+
 							ExceptionHolder holder = new ExceptionHolder(
 									exceptionQName, false);
 							getExceptionJComboBox().addItem(holder);
 							getExceptionsTable().addRow(holder.qname,
 									holder.isCreated, "");
+							getNewFaultNameTextField().setText("");
 
 						}
 					});
@@ -3019,6 +3121,21 @@ public class MethodViewer extends GridPortalBaseFrame {
 			if (method.getDescription() != null) {
 				descriptionTextField.setText(method.getDescription());
 			}
+			descriptionTextField.getDocument().addDocumentListener(
+					new DocumentListener() {
+
+						public void removeUpdate(DocumentEvent e) {
+							validateDescriptionInput();
+						}
+
+						public void insertUpdate(DocumentEvent e) {
+							validateDescriptionInput();
+						}
+
+						public void changedUpdate(DocumentEvent e) {
+							validateDescriptionInput();
+						}
+					});
 		}
 		return descriptionTextField;
 	}
