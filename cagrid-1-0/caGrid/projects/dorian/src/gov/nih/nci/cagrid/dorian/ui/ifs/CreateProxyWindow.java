@@ -34,6 +34,7 @@ import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
+
 public class CreateProxyWindow extends ApplicationComponent {
 
 	private JPanel jContentPane = null;
@@ -94,13 +95,13 @@ public class CreateProxyWindow extends ApplicationComponent {
 
 	private JPasswordField password = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
 	public CreateProxyWindow() {
 		super();
 		initialize();
-
 		List services = DorianUIUtils.getAuthenticationServices();
 		for (int i = 0; i < services.size(); i++) {
 			try {
@@ -111,6 +112,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		}
 	}
 
+
 	/**
 	 * This method initializes this
 	 */
@@ -120,6 +122,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		this.setTitle("Create Proxy");
 		this.setSize(500, 400);
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -134,6 +137,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes mainPanel
@@ -162,6 +166,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		}
 		return mainPanel;
 	}
+
 
 	/**
 	 * This method initializes idpPanel
@@ -244,11 +249,9 @@ public class CreateProxyWindow extends ApplicationComponent {
 			idpLabel.setText("Authentication Service");
 			idpPanel = new JPanel();
 			idpPanel.setLayout(new GridBagLayout());
-			idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Create Proxy",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					LookAndFeel.getPanelLabelColor()));
+			idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Proxy",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			idpPanel.add(getProgressPanel(), gridBagConstraints15);
 			idpPanel.add(idpLabel, gridBagConstraints1);
 			idpPanel.add(getIdentityProvider(), gridBagConstraints2);
@@ -263,6 +266,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		return idpPanel;
 	}
 
+
 	/**
 	 * This method initializes identityProvider
 	 * 
@@ -274,6 +278,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		}
 		return identityProvider;
 	}
+
 
 	/**
 	 * This method initializes buttonPanel
@@ -288,6 +293,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		}
 		return buttonPanel;
 	}
+
 
 	/**
 	 * This method initializes loginPanel
@@ -326,11 +332,9 @@ public class CreateProxyWindow extends ApplicationComponent {
 			gridBagConstraints19.weightx = 1.0;
 			loginPanel = new JPanel();
 			loginPanel.setLayout(new GridBagLayout());
-			loginPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Login Information",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					LookAndFeel.getPanelLabelColor()));
+			loginPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Login Information",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			loginPanel.add(getUserId(), gridBagConstraints19);
 			loginPanel.add(jLabel1, gridBagConstraints20);
 			loginPanel.add(jLabel2, gridBagConstraints21);
@@ -338,6 +342,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		}
 		return loginPanel;
 	}
+
 
 	/**
 	 * This method initializes ifs
@@ -351,6 +356,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		return ifs;
 	}
 
+
 	/**
 	 * This method initializes authenticateButton
 	 * 
@@ -360,32 +366,30 @@ public class CreateProxyWindow extends ApplicationComponent {
 		if (authenticateButton == null) {
 			authenticateButton = new JButton();
 			authenticateButton.setText("Authenticate");
-			authenticateButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							Runner runner = new Runner() {
-								public void execute() {
-									authenticate();
-								}
-							};
-							try {
-								GridApplication.getContext()
-										.executeInBackground(runner);
-							} catch (Exception t) {
-								t.getMessage();
-							}
+			authenticateButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Runner runner = new Runner() {
+						public void execute() {
+							authenticate();
 						}
-					});
+					};
+					try {
+						GridApplication.getContext().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+			});
 			authenticateButton.setIcon(DorianLookAndFeel.getAuthenticateIcon());
 		}
 		return authenticateButton;
 	}
 
+
 	private void authenticate() {
 		synchronized (mutex) {
 			if (isCreating) {
-				ErrorDialog
-						.showError("Already trying to create a proxy, please wait!!!");
+				ErrorDialog.showError("Already trying to create a proxy, please wait!!!");
 				return;
 			} else {
 				isCreating = true;
@@ -394,8 +398,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		// prevent clicking this button while working
 		getAuthenticateButton().setEnabled(false);
 
-		String ifsService = ((DorianServiceListComboBox) this.getIfs())
-				.getSelectedService();
+		String ifsService = ((DorianServiceListComboBox) this.getIfs()).getSelectedService();
 		String idpService = ((String) getIdentityProvider().getSelectedItem());
 
 		this.updateProgress(true, "Authenticating with IdP...");
@@ -406,32 +409,25 @@ public class CreateProxyWindow extends ApplicationComponent {
 			bac.setUserId(userId.getText());
 			bac.setPassword(new String(password.getPassword()));
 			credential.setBasicAuthenticationCredential(bac);
-			AuthenticationClient client = new AuthenticationClient(idpService,
-					credential);
+			AuthenticationClient client = new AuthenticationClient(idpService, credential);
 			SAMLAssertion saml = client.authenticate();
 			this.updateProgress(true, "Creating Proxy...");
 			IFSUserClient c2 = new IFSUserClient(ifsService);
 			ProxyLifetime lifetime = new ProxyLifetime();
-			lifetime.setHours(Integer.valueOf(
-					(String) getHours().getSelectedItem()).intValue());
-			lifetime.setMinutes(Integer.valueOf(
-					(String) getMinutes().getSelectedItem()).intValue());
-			lifetime.setSeconds(Integer.valueOf(
-					(String) getSeconds().getSelectedItem()).intValue());
+			lifetime.setHours(Integer.valueOf((String) getHours().getSelectedItem()).intValue());
+			lifetime.setMinutes(Integer.valueOf((String) getMinutes().getSelectedItem()).intValue());
+			lifetime.setSeconds(Integer.valueOf((String) getSeconds().getSelectedItem()).intValue());
 			int delegation = 0;
 			try {
-				delegation = Integer.valueOf(delegationPathLength.getText())
-						.intValue();
+				delegation = Integer.valueOf(delegationPathLength.getText()).intValue();
 			} catch (Exception e) {
-				ErrorDialog
-						.showError("The delegation path length must be an integer.");
+				ErrorDialog.showError("The delegation path length must be an integer.");
 				return;
 			}
 			GlobusCredential cred = c2.createProxy(saml, lifetime, delegation);
 			this.updateProgress(false, "Proxy Created!!!");
 			ProxyManager.getInstance().addProxy(cred);
-			GridApplication.getContext().addApplicationComponent(
-					new ProxyManagerComponent(cred), 700, 450);
+			GridApplication.getContext().addApplicationComponent(new ProxyManagerComponent(cred), 700, 450);
 
 			// enable the authenticate button
 			getAuthenticateButton().setEnabled(true);
@@ -446,6 +442,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		isCreating = false;
 	}
 
+
 	private JButton getClose() {
 		if (close == null) {
 			close = new JButton();
@@ -459,6 +456,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		}
 		return close;
 	}
+
 
 	/**
 	 * This method initializes lifetimePanel
@@ -521,6 +519,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		return lifetimePanel;
 	}
 
+
 	/**
 	 * This method initializes hours
 	 * 
@@ -537,6 +536,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		return hours;
 	}
 
+
 	/**
 	 * This method initializes minutes
 	 * 
@@ -552,6 +552,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		return minutes;
 	}
 
+
 	/**
 	 * This method initializes seconds
 	 * 
@@ -566,6 +567,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		}
 		return seconds;
 	}
+
 
 	/**
 	 * This method initializes progressPanel
@@ -587,6 +589,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		return progressPanel;
 	}
 
+
 	/**
 	 * This method initializes progress
 	 * 
@@ -602,6 +605,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		return progress;
 	}
 
+
 	public void updateProgress(final boolean working, final String s) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -611,6 +615,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		});
 
 	}
+
 
 	/**
 	 * This method initializes delegationPathLength
@@ -625,6 +630,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		return delegationPathLength;
 	}
 
+
 	/**
 	 * This method initializes userId
 	 * 
@@ -636,6 +642,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 		}
 		return userId;
 	}
+
 
 	/**
 	 * This method initializes password
