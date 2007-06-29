@@ -66,8 +66,8 @@ public class CommonTools {
 		final Process p;
 
 		p = Runtime.getRuntime().exec(cmd);
-		StreamGobbler errGobbler = new StreamGobbler(p.getErrorStream(), "ERR");
-		StreamGobbler outGobbler = new StreamGobbler(p.getInputStream(), "OUT");
+		StreamGobbler errGobbler = new StreamGobbler(p.getErrorStream(), "ERR", System.err);
+		StreamGobbler outGobbler = new StreamGobbler(p.getInputStream(), "OUT", System.out);
 		errGobbler.start();
 		outGobbler.start();
 
