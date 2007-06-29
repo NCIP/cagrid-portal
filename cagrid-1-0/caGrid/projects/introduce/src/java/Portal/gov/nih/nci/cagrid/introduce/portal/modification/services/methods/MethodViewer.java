@@ -77,6 +77,7 @@ import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.portal.GridPortalBaseFrame;
 
 import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.Validatable;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.message.SimpleValidationMessage;
@@ -343,6 +344,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private static final String METHOD_FAULT = "New fault"; // @jve:decl-index=0:
 
+	private ValidationResultModel methodImportValidationModel = new DefaultValidationResultModel(); // @jve:decl-index=0:
+
+	private static final String METHOD_IMPORT_PACKAGE = "Method import package name"; // @jve:decl-index=0:
+
+	private static final String METHOD_IMPORT_PORT_TYPE = "Method import port type";
+
+	private static final String METHOD_IMPORT_WSDL_FILE = "Method import wsdl file";
+
 	// @jve:decl-index=0:
 
 	public MethodViewer(MethodType method, SpecificServiceInformation info) {
@@ -363,10 +372,15 @@ public class MethodViewer extends GridPortalBaseFrame {
 		initMethodDescriptionValidation();
 		initNewFaultValidation();
 		initProviderValidation();
+		initImportValidation();
 	}
 
 	private void updateDoneButton() {
-		if (methodNameValidationModel.hasErrors()) {
+		if (methodNameValidationModel.hasErrors()
+				|| methodDescriptionValidationModel.hasErrors()
+				|| methodFaultValidationModel.hasErrors()
+				|| methodProviderValidationModel.hasErrors()
+				|| methodImportValidationModel.hasErrors()) {
 			getDoneButton().setEnabled(false);
 		} else {
 			getDoneButton().setEnabled(true);
@@ -460,7 +474,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 		this.methodDescriptionValidationModel.setResult(result);
 		updateMethodDescriptionComponentTreeSeverity();
-
+		updateDoneButton();
 	}
 
 	private void updateMethodDescriptionComponentTreeSeverity() {
@@ -477,6 +491,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		validateNewFaultInput();
 		updateNewFaultComponentTreeSeverity();
 		updateAddNewFaultButton();
+		updateDoneButton();
 	}
 
 	private void updateAddNewFaultButton() {
@@ -506,7 +521,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 		this.methodFaultValidationModel.setResult(result);
 		updateNewFaultComponentTreeSeverity();
 		updateAddNewFaultButton();
-
+		updateDoneButton();
 	}
 
 	private void updateNewFaultComponentTreeSeverity() {
@@ -524,6 +539,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 		validateProviderInput();
 		updateProviderComponentTreeSeverity();
+		updateDoneButton();
 	}
 
 	private void validateProviderInput() {
@@ -535,12 +551,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 					.getText())
 					&& !CommonTools.isValidPackageAndClassName(this
 							.getProviderClassnameTextField().getText())) {
-				result.add(new SimpleValidationMessage(
-						"Provider classname might not be in valid fully qualified java class name format. ("
-								+ CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")",
-						Severity.WARNING, METHOD_PROVIDER));
-			} else if (ValidationUtils.isBlank(this.getProviderClassnameTextField()
-					.getText())) {
+				result
+						.add(new SimpleValidationMessage(
+								"Provider classname might not be in valid fully qualified java class name format. ("
+										+ CommonTools.ALLOWED_JAVA_CLASS_REGEX
+										+ ")", Severity.WARNING,
+								METHOD_PROVIDER));
+			} else if (ValidationUtils.isBlank(this
+					.getProviderClassnameTextField().getText())) {
 				result
 						.add(new SimpleValidationMessage(
 								"If isProvided is selected you must provide the provider class name.",
@@ -548,10 +566,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 			}
 		}
 
-		System.out.println("Testing");
 		this.methodProviderValidationModel.setResult(result);
 		updateProviderComponentTreeSeverity();
-
+		updateDoneButton();
 	}
 
 	private void updateProviderComponentTreeSeverity() {
@@ -560,6 +577,72 @@ public class MethodViewer extends GridPortalBaseFrame {
 						.getProviderInfoPanel());
 		ValidationComponentUtils.updateComponentTreeSeverityBackground(this
 				.getProviderInfoPanel(), this.methodProviderValidationModel
+				.getResult());
+	}
+
+	private void initImportValidation() {
+		ValidationComponentUtils.setMessageKey(
+				getWsdlImportPackageNameTextField(), METHOD_IMPORT_PACKAGE);
+		ValidationComponentUtils.setMessageKey(
+				getWsdlServiceServicesComboBox(), METHOD_IMPORT_PORT_TYPE);
+		ValidationComponentUtils.setMessageKey(getWsdlFileNameTextField(),
+				METHOD_IMPORT_WSDL_FILE);
+
+		validateImportInput();
+		updateImportComponentTreeSeverity();
+		updateDoneButton();
+	}
+
+	private void validateImportInput() {
+
+		ValidationResult result = new ValidationResult();
+
+		if (getIsImportedCheckBox().isSelected()) {
+			if (!getIsFromIntroduceCheckBox().isSelected()) {
+
+				if (ValidationUtils.isNotBlank(this
+						.getWsdlImportPackageNameTextField().getText())
+						&& !CommonTools.isValidPackageAndClassName(this
+								.getWsdlImportPackageNameTextField().getText())) {
+					result
+							.add(new SimpleValidationMessage(
+									"Package does not appear to be a valid java package name.",
+									Severity.WARNING, METHOD_IMPORT_PACKAGE));
+				} else if (ValidationUtils.isBlank(this
+						.getWsdlImportPackageNameTextField().getText())) {
+					result.add(new SimpleValidationMessage(
+							"Package name cannot be black", Severity.ERROR,
+							METHOD_IMPORT_PACKAGE));
+				}
+
+				if (getWsdlServiceServicesComboBox().getItemCount() == 0) {
+					result
+							.add(new SimpleValidationMessage(
+									"You must browse to a wsdl document and choose the port type to import the definition of this operation from.",
+									Severity.ERROR, METHOD_IMPORT_PORT_TYPE));
+				}
+
+				if (ValidationUtils.isBlank(this.getWsdlFileNameTextField()
+						.getText())) {
+					result
+							.add(new SimpleValidationMessage(
+									"You must browse to select a WSDL file containing the method description.",
+									Severity.ERROR, METHOD_IMPORT_WSDL_FILE));
+				}
+
+			}
+		}
+		this.methodImportValidationModel.setResult(result);
+		updateImportComponentTreeSeverity();
+		updateDoneButton();
+	}
+
+	private void updateImportComponentTreeSeverity() {
+		ValidationComponentUtils
+				.updateComponentTreeMandatoryAndBlankBackground(this
+						.getImportInformationPanel());
+		ValidationComponentUtils.updateComponentTreeSeverityBackground(this
+				.getImportInformationPanel(), this.methodImportValidationModel
 				.getResult());
 	}
 
@@ -1528,6 +1611,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					updateMethodDescriptionComponentTreeSeverity();
 					updateNewFaultComponentTreeSeverity();
 					updateProviderComponentTreeSeverity();
+					updateImportComponentTreeSeverity();
 				}
 
 			});
@@ -2058,6 +2142,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 								getTabbedPanel().setSelectedIndex(0);
 							}
 						}
+						validateImportInput();
 					}
 
 				});
@@ -2628,6 +2713,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	}
 
 	/**
+	 * 
 	 * This method initializes importTypeCardPanel
 	 * 
 	 * @return javax.swing.JPanel
@@ -2637,7 +2723,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 			importTypeCardPanel = new JPanel();
 			importTypeCardPanel.setLayout(new CardLayout());
 			importTypeCardPanel.add(getFromIntroducePanel(), "from-introduce");
-			importTypeCardPanel.add(getNotFromIntroducePanel(),
+			importTypeCardPanel.add(new IconFeedbackPanel(
+					methodImportValidationModel, getNotFromIntroducePanel()),
 					"not-from-introduce");
 			if (getIsFromIntroduceCheckBox().isSelected()) {
 				((CardLayout) importTypeCardPanel.getLayout()).show(
@@ -2672,6 +2759,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 										.show(importTypeCardPanel,
 												"not-from-introduce");
 							}
+							validateImportInput();
 						}
 					});
 			isFromIntroduceCheckBox.setSelected(true);
@@ -2974,6 +3062,22 @@ public class MethodViewer extends GridPortalBaseFrame {
 		if (wsdlFileNameTextField == null) {
 			wsdlFileNameTextField = new JTextField();
 			wsdlFileNameTextField.setEditable(false);
+			wsdlFileNameTextField.getDocument().addDocumentListener(
+					new DocumentListener() {
+
+						public void removeUpdate(DocumentEvent e) {
+							validateImportInput();
+						}
+
+						public void insertUpdate(DocumentEvent e) {
+							validateImportInput();
+						}
+
+						public void changedUpdate(DocumentEvent e) {
+							validateImportInput();
+						}
+
+					});
 		}
 		return wsdlFileNameTextField;
 	}
@@ -3155,6 +3259,22 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getWsdlImportPackageNameTextField() {
 		if (wsdlImportPackageNameTextField == null) {
 			wsdlImportPackageNameTextField = new JTextField();
+			wsdlImportPackageNameTextField.getDocument().addDocumentListener(
+					new DocumentListener() {
+
+						public void removeUpdate(DocumentEvent e) {
+							validateImportInput();
+						}
+
+						public void insertUpdate(DocumentEvent e) {
+							validateImportInput();
+						}
+
+						public void changedUpdate(DocumentEvent e) {
+							validateImportInput();
+						}
+
+					});
 		}
 		return wsdlImportPackageNameTextField;
 	}
