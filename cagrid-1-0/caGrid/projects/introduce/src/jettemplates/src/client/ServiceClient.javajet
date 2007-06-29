@@ -25,7 +25,6 @@ import org.apache.axis.client.Stub;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
-import org.apache.axis.utils.ClassUtils;
 
 import org.oasis.wsrf.properties.GetResourcePropertyResponse;
 
@@ -79,7 +78,7 @@ public class <%=info.getService().getName()%>Client extends ServiceSecurityClien
 
 		<%=modifiedServiceName%>ServiceAddressingLocator locator = new <%=modifiedServiceName%>ServiceAddressingLocator();
 		// attempt to load our context sensitive wsdd file
-		InputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
+		InputStream resourceAsStream = getClass().getResourceAsStream("client-config.wsdd");
 		if (resourceAsStream != null) {
 			// we found it, so tell axis to configure an engine to use it
 			EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
