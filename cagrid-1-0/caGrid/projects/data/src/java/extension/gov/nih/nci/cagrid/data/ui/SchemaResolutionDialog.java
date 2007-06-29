@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.data.ui.cacore.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
@@ -228,8 +227,7 @@ public class SchemaResolutionDialog extends JDialog {
                 IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 
         NamespaceType[] namespaces = discComponent.createNamespaceType(schemaDir, 
-            ResourceManager.getConfigurationProperty(
-                IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY),
+            NamespaceTypeDiscoveryComponent.REPLACE_POLICY,
             getNamespaceDiscoveryProgressBar());
         if (namespaces == null) {
             ErrorDialog.showErrorDialog("Error getting types from discovery component");

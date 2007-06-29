@@ -43,7 +43,8 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 
 
 /**
- * SchemaTypesPanel Panel to select schemas for the types in the domain model
+ * SchemaTypesPanel 
+ * Panel to match up schema types with exposed packages from a domain model
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 26, 2006
