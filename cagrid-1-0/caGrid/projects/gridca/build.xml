@@ -173,7 +173,7 @@ GSBT - Globus Service Build Tools
 		<input message="Please enter a password for the new CA:" addproperty="password.input" />
 		<input message="Please enter a location to write the new CA's private key:" addproperty="key.input" />
 		<input message="Please enter a location to write the new CA's certificate:" addproperty="cert.input" />
-		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntGenerateCA" fork="true" newenvironment="true">
+		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntGenerateCA" fork="true" newenvironment="true" failonerror="true">
 			<arg value="${dn.input}" />
 			<arg value="${days.input}" />
 			<arg value="${password.input}" />
@@ -206,7 +206,7 @@ GSBT - Globus Service Build Tools
 		<input message="Please enter the number of days the new CA will be valid for:" addproperty="days.input" />
 		<input message="Please enter a slot number on the HSM to store the CA:" addproperty="slot.input" />
 		<input message="Please enter the password for the HSM:" addproperty="password.input" />
-		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntGenerateEracomCA" fork="true" newenvironment="true">
+		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntGenerateEracomCA" fork="true" newenvironment="true" failonerror="true">
 			<arg value="${alias.input}" />
 			<arg value="${dn.input}" />
 			<arg value="${days.input}" />
@@ -241,7 +241,7 @@ GSBT - Globus Service Build Tools
 			<input message="Please enter a location to write the host key:" addproperty="hostkey.input" />
 
 			<input message="Please enter a location to write the host certificate:" addproperty="cert.input" />
-			<java classname="gov.nih.nci.cagrid.gridca.commandline.AntCreateHostCertificateWithEracomCA" fork="true" newenvironment="true">
+			<java classname="gov.nih.nci.cagrid.gridca.commandline.AntCreateHostCertificateWithEracomCA" fork="true" newenvironment="true" failonerror="true">
 				<arg value="${alias.input}" />
 				<arg value="${slot.input}" />
 				<arg value="${password.input}" />
@@ -278,7 +278,7 @@ GSBT - Globus Service Build Tools
 		<input message="Please enter a location to write the host key:" addproperty="hostkey.input" />
 
 		<input message="Please enter a location to write the host certificate:" addproperty="cert.input" />
-		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntCreateHostCertificate" fork="true" newenvironment="true">
+		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntCreateHostCertificate" fork="true" newenvironment="true" failonerror="true">
 			<arg value="${key.input}" />
 			<arg value="${password.input}" />
 			<arg value="${ca.input}" />
@@ -314,7 +314,7 @@ GSBT - Globus Service Build Tools
 		<input message="Please enter the project you are working on:" addproperty="project.input" />
 		<input message="Please enter a phone number where you can be reached:" addproperty="phone.input" />
 		<input message="Please enter the reason for you request:" addproperty="reason.input" />
-		<java classname="gov.nih.nci.cagrid.gridca.commandline.HostCertificateRequestUtility" fork="yes" newenvironment="true">
+		<java classname="gov.nih.nci.cagrid.gridca.commandline.HostCertificateRequestUtility" fork="yes" newenvironment="true" failonerror="true">
 			<arg value="langella@bmi.osu.edu" />
 			<arg value="caGrid Development Host Certificate Request" />
 			<arg value="5" />
@@ -353,7 +353,7 @@ GSBT - Globus Service Build Tools
 		<input message="Please enter the number of days the host certificate will be valid for:" addproperty="days.input" />
 		<input message="Please enter a location to write the host certificate:" addproperty="cert.input" />
 
-		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntSignHostCertificate" fork="true" newenvironment="true">
+		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntSignHostCertificate" fork="true" newenvironment="true" failonerror="true">
 			<arg value="${key.input}" />
 			<arg value="${password.input}" />
 			<arg value="${ca.input}" />

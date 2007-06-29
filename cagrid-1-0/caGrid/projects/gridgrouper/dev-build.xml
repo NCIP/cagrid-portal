@@ -380,7 +380,7 @@
 	<!-- Post Introduce Edit-->
 	<target name="testGrouperInit" depends="createTestGrouperSchema" description="initialize database">
 
-		<java fork="true" classpathref="test.run.classpath" classname="edu.internet2.middleware.grouper.RegistryInstall" />
+		<java fork="true" classpathref="test.run.classpath" classname="edu.internet2.middleware.grouper.RegistryInstall" failonerror="true"/>
 	</target>
 
 	<!-- Post Introduce Edit-->
@@ -405,11 +405,11 @@
 	
 	<!-- Post Introduce Edit-->
 	<target name="grouperInit" depends="createGrouperSchema" description="initialize database">
-		<java fork="true" classpathref="service.run.classpath" classname="edu.internet2.middleware.grouper.RegistryInstall" />
+		<java fork="true" classpathref="service.run.classpath" classname="edu.internet2.middleware.grouper.RegistryInstall" failonerror="true"/>
 	</target>
 
 	<target name="ui" description="Run the Grid Grouper Admin UI" depends="checkGlobus">
-		<java classname="org.cagrid.grape.GridApplication" fork="yes">
+		<java classname="org.cagrid.grape.GridApplication" fork="yes" failonerror="true">
 			<arg value="etc/gridgrouper-ui.xml" />
 			<classpath refid="run.classpath" />
 			<classpath>
@@ -420,7 +420,7 @@
 
 	<target name="addAdmin" description="Add administrator to grid grouper" depends="checkGlobus">
 		<input message="Please enter the grid identity:" addproperty="gridId.input" />
-		<java classname="gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper" fork="yes" newenvironment="true">
+		<java classname="gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper" fork="yes" newenvironment="true" failonerror="true">
 			<arg value="-addAdmin" />
 			<arg value="-userId" />
 			<arg value="${gridId.input}" />

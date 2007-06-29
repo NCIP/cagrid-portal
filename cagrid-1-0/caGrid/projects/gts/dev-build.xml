@@ -361,7 +361,7 @@
 
 	<!-- Post Introduce Edit-->
 	<target name="ui" description="Run the GTS UI" depends="checkGlobus">
-		<java classname="org.cagrid.grape.GridApplication" fork="yes">
+		<java classname="org.cagrid.grape.GridApplication" fork="yes" failonerror="true">
 			<arg value="etc/gts-ui.xml" />
 			<classpath refid="run.classpath" />
 			<classpath>
@@ -376,7 +376,7 @@
 			<input message="Please enter a password for the new CA:" addproperty="password.input" />
 			<input message="Please enter a location to write the new CA's private key:" addproperty="key.input" />
 			<input message="Please enter a location to write the new CA's certificate:" addproperty="cert.input" />
-			<java classname="gov.nih.nci.cagrid.gridca.commandline.AntGenerateCA" fork="true" newenvironment="true">
+			<java classname="gov.nih.nci.cagrid.gridca.commandline.AntGenerateCA" fork="true" newenvironment="true" failonerror="true">
 				<arg value="${dn.input}" />
 				<arg value="${days.input}" />
 				<arg value="${password.input}" />
@@ -395,7 +395,7 @@
 			<input message="Please enter a location to write the host key:" addproperty="hostkey.input" />
 
 			<input message="Please enter a location to write the host certificate:" addproperty="cert.input" />
-			<java classname="gov.nih.nci.cagrid.gridca.commandline.AntCreateHostCertificate" fork="true" newenvironment="true">
+			<java classname="gov.nih.nci.cagrid.gridca.commandline.AntCreateHostCertificate" fork="true" newenvironment="true" failonerror="true">
 				<arg value="${key.input}" />
 				<arg value="${password.input}" />
 				<arg value="${ca.input}" />
@@ -409,7 +409,7 @@
 
 	<target name="addAdmin" description="Add a administrator to the GTS" depends="checkGlobus">
 		<input message="Please enter the grid identity for the admin you wish to add:" addproperty="gridId.input" />
-		<java classname="gov.nih.nci.cagrid.gts.tools.service.AntPermissionBootstapper" fork="yes">
+		<java classname="gov.nih.nci.cagrid.gts.tools.service.AntPermissionBootstapper" fork="yes" failonerror="true">
 			<arg value="etc/gts-conf.xml" />
 			<arg value="${gridId.input}" />
 			<classpath refid="service.run.classpath" />
