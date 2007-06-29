@@ -90,10 +90,13 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
             // is derived from the data service Domain Model.  If no domain model is to be used,
             // the mappings are still required to do anything with caCORE SDK beans, or BDT in general
             CadsrInformation cadsrInfo = extData.getCadsrInformation();
-            if (cadsrInfo != null && !cadsrInfo.isNoDomainModel()) {
+            if (cadsrInfo != null && !cadsrInfo.isNoDomainModel()
+                && cadsrInfo.getPackages() != null) {
+                logger.debug("caDSR information / domain model found in service model.");
+                logger.debug("Generating class to qname mapping from the information");
+                logger.debug("stored in the service model");
                 // load the caDSR package to namespace mapping information
-                for (int pack = 0; cadsrInfo.getPackages() != null 
-                    && pack < cadsrInfo.getPackages().length; pack++) {
+                for (int pack = 0; pack < cadsrInfo.getPackages().length; pack++) {
                     CadsrPackage currentPackage = cadsrInfo.getPackages(pack);
                     for (int clazz = 0; currentPackage.getCadsrClass() != null 
                         && clazz < currentPackage.getCadsrClass().length; clazz++) {
