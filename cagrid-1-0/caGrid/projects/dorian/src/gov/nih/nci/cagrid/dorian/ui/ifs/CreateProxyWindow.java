@@ -120,7 +120,6 @@ public class CreateProxyWindow extends ApplicationComponent {
 		this.setContentPane(getJContentPane());
 		this.setFrameIcon(DorianLookAndFeel.getCertificateIcon());
 		this.setTitle("Create Proxy");
-		this.setSize(500, 400);
 	}
 
 
