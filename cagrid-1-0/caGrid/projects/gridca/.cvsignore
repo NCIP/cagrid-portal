@@ -2,3 +2,4 @@ ext
 build
 bin
 *.pem
+grid-trust-report.txt
