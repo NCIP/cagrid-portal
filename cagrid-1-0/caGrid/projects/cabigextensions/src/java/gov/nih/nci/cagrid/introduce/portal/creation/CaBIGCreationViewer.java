@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.creation;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extensions.metadata.constants.MetadataConstants;
@@ -9,9 +10,12 @@ import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -27,6 +31,15 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.message.SimpleValidationMessage;
+import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.util.ValidationUtils;
+import com.jgoodies.validation.view.ValidationComponentUtils;
+
 import java.awt.Insets;
 
 
@@ -42,6 +55,12 @@ import java.awt.Insets;
  *          Exp $
  */
 public class CaBIGCreationViewer extends CreationViewerBaseComponent {
+    
+    public static final String SERVICE_DIR = "Service directory";
+    public static final String SERVICE_NAME = "Service name";
+    public static final String SERVICE_PACKAGE = "Service package name";
+    public static final String SERVICE_NAMESPACE = "Service namespace";
+
 
     public static final String SCHEMA_DIR = "schema";
 
@@ -114,6 +133,9 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
     private JRadioButton analyticalRadioButton = null;
 
     private ButtonGroup serviceStyleButtonGroup = null;
+    
+    private ValidationResultModel validationModel = new DefaultValidationResultModel();
+
 
 
     public CaBIGCreationViewer() {
@@ -134,6 +156,102 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
         getServiceStyleButtonGroup().add(getAnalyticalRadioButton());
         getServiceStyleButtonGroup().setSelected(getAnalyticalRadioButton().getModel(), true);
         addAnalyticalExtensions();
+    }
+    
+
+    private void initValidation() {
+        ValidationComponentUtils.setMessageKey(getService(), SERVICE_NAME);
+        ValidationComponentUtils.setMessageKey(getServicePackage(), SERVICE_PACKAGE);
+        ValidationComponentUtils.setMessageKey(getNamespaceDomain(), SERVICE_NAMESPACE);
+        ValidationComponentUtils.setMessageKey(getDir(), SERVICE_DIR);
+
+        // updateModel();
+        validateInput();
+        updateComponentTreeSeverity();
+    }
+
+
+    private final class FocusChangeHandler implements FocusListener {
+
+        public void focusGained(FocusEvent e) {
+            update();
+
+        }
+
+
+        public void focusLost(FocusEvent e) {
+            update();
+        }
+
+
+        private void update() {
+            // updateModel();
+            validateInput();
+        }
+    }
+
+
+    private void validateInput() {
+
+        ValidationResult result = new ValidationResult();
+
+        if (!ValidationUtils.isNotBlank(this.getDir().getText())) {
+            result.add(new SimpleValidationMessage(SERVICE_DIR + " must not be blank.", Severity.ERROR, SERVICE_DIR));
+        } else {
+            File file = new File(this.getDir().getText());
+            if(file.exists()){
+                result.add(new SimpleValidationMessage(SERVICE_DIR + " already exists and will be removed when new skeleton is created.", Severity.WARNING, SERVICE_DIR));
+            }
+        }
+
+        if (!ValidationUtils.isNotBlank(this.getService().getText())) {
+            result.add(new SimpleValidationMessage(SERVICE_NAME + " must not be blank.", Severity.ERROR, SERVICE_NAME));
+        } else if (!CommonTools.isValidServiceName(this.getService().getText())) {
+            result.add(new SimpleValidationMessage(SERVICE_NAME
+                + " is not valid.  Service name must be a java compatible class name. ("
+                + CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")", Severity.ERROR, SERVICE_NAME));
+        }
+
+        if (!ValidationUtils.isNotBlank(this.getServicePackage().getText())) {
+            result.add(new SimpleValidationMessage(SERVICE_PACKAGE + " must not be blank.", Severity.ERROR,
+                SERVICE_PACKAGE));
+        } else if (!CommonTools.isValidPackageName(this.getServicePackage().getText())) {
+            result.add(new SimpleValidationMessage(SERVICE_PACKAGE
+                + " is not valid.  Service package must be in valid java package format. ("
+                + CommonTools.ALLOWED_JAVA_PACKAGE_REGEX + ")", Severity.ERROR, SERVICE_PACKAGE));
+        }
+
+        if (!ValidationUtils.isNotBlank(this.getNamespaceDomain().getText())) {
+            result.add(new SimpleValidationMessage(SERVICE_NAMESPACE + " must not be blank.", Severity.ERROR,
+                SERVICE_NAMESPACE));
+        } else {
+            try {
+                URI uri = new URI(this.getNamespaceDomain().getText());
+            } catch (Exception e) {
+                result.add(new SimpleValidationMessage(SERVICE_NAMESPACE + " is not a well formed namespace",
+                    Severity.ERROR, SERVICE_NAMESPACE));
+            }
+        }
+
+        this.validationModel.setResult(result);
+
+        updateComponentTreeSeverity();
+        updateCreationButton();
+    }
+
+
+    private void updateComponentTreeSeverity() {
+        ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
+        ValidationComponentUtils.updateComponentTreeSeverityBackground(this, this.validationModel.getResult());
+    }
+
+
+    private void updateCreationButton() {
+        if (this.validationModel.hasErrors()) {
+            this.getCreateButton().setEnabled(false);
+        } else {
+            this.getCreateButton().setEnabled(true);
+        }
     }
 
 
