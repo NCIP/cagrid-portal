@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extensions.metadata.constants.MetadataConstants;
+import gov.nih.nci.cagrid.introduce.extensions.sdk.discovery.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
@@ -149,13 +150,15 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
      * 
      */
     private void initialize() {
-        this.setContentPane(getMainPanel());
+        this.setContentPane(new IconFeedbackPanel(validationModel, getMainPanel()));
         this.setFrameIcon(IntroduceLookAndFeel.getCreateServiceIcon());
         this.setTitle("Create a caBIG Grid Service");
         getServiceStyleButtonGroup().add(getDataRadioButton());
         getServiceStyleButtonGroup().add(getAnalyticalRadioButton());
         getServiceStyleButtonGroup().setSelected(getAnalyticalRadioButton().getModel(), true);
         addAnalyticalExtensions();
+        
+        initValidation();
     }
     
 
@@ -168,6 +171,25 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
         // updateModel();
         validateInput();
         updateComponentTreeSeverity();
+    }
+    
+    private final class TextChangeDocumentListner implements DocumentListener {
+
+		public void changedUpdate(DocumentEvent e) {
+			validateInput();
+			
+		}
+
+		public void insertUpdate(DocumentEvent e) {
+			validateInput();
+			
+		}
+
+		public void removeUpdate(DocumentEvent e) {
+			validateInput();
+			
+		}
+    	
     }
 
 
@@ -512,16 +534,19 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
             service.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                     updateSuggestedNamespace();
+                    validateInput();
                 }
 
 
                 public void removeUpdate(DocumentEvent e) {
                     updateSuggestedNamespace();
+                    validateInput();
                 }
 
 
                 public void insertUpdate(DocumentEvent e) {
                     updateSuggestedNamespace();
+                    validateInput();
                 }
             });
         }
@@ -562,6 +587,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
             dir = new JTextField();
             String home = System.getProperty("user.home");
             dir.setText(home + File.separator + DEFAULT_NAME);
+            dir.getDocument().addDocumentListener(new TextChangeDocumentListner());
         }
         return dir;
     }
@@ -609,16 +635,19 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
             servicePackage.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                     updateSuggestedNamespace();
+                    validateInput();
                 }
 
 
                 public void removeUpdate(DocumentEvent e) {
                     updateSuggestedNamespace();
+                    validateInput();
                 }
 
 
                 public void insertUpdate(DocumentEvent e) {
                     updateSuggestedNamespace();
+                    validateInput();
                 }
             });
         }
@@ -635,6 +664,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
         if (namespaceDomain == null) {
             namespaceDomain = new JTextField();
             namespaceDomain.setText(DEFAULT_NAMESPACE);
+            namespaceDomain.getDocument().addDocumentListener(new TextChangeDocumentListner());
         }
         return namespaceDomain;
     }
