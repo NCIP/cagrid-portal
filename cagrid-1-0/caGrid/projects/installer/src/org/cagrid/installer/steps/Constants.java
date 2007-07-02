@@ -250,5 +250,7 @@ public abstract class Constants {
 
 	public static final String CONTAINER_TYPE = "container.type";
 
+	public static final String DORIAN_USE_GEN_CA = "dorian.use.gen.ca";
+
 	
 }

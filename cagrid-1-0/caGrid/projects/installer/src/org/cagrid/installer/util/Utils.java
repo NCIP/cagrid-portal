@@ -15,6 +15,9 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.cagrid.installer.model.CaGridInstallerModel;
+import org.cagrid.installer.steps.Constants;
+
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
@@ -108,5 +111,11 @@ public class Utils {
 					"Error, could not add URL to system classloader");
 		}
 
+	}
+
+	public static boolean checkGenerateCA(CaGridInstallerModel model) {
+		return "true".equals(model.getState().get(Constants.USE_SECURE_CONTAINER)) && 
+		!"true".equals(model.getState().get(Constants.SERVICE_CERT_PRESENT)) &&
+		!"true".equals(model.getState().get(Constants.CA_CERT_PRESENT));
 	}
 }

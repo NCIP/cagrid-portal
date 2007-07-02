@@ -22,6 +22,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -31,6 +32,7 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
+import org.cagrid.installer.steps.options.PasswordPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.PropertyConfigurationOption;
 import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
 import org.cagrid.installer.validator.Validator;
@@ -110,7 +112,9 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 		this.add(getOptionsPanel(), gridBagConstraints1);
 
 		for (PropertyConfigurationOption option : getOptions()) {
-			if (option instanceof TextPropertyConfigurationOption) {
+			if (option instanceof PasswordPropertyConfigurationOption) {
+				addPasswordOption((PasswordPropertyConfigurationOption) option);
+			} else if (option instanceof TextPropertyConfigurationOption) {
 				addTextOption((TextPropertyConfigurationOption) option);
 			} else if (option instanceof ListPropertyConfigurationOption) {
 				addListOption((ListPropertyConfigurationOption) option);
@@ -124,21 +128,21 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 		}
 		checkComplete();
 	}
-	
-	public void prepare(){
-		for(String key : this.requiredFields.keySet()){
-			if(this.model.getState().containsKey(key)){
+
+	public void prepare() {
+		for (String key : this.requiredFields.keySet()) {
+			if (this.model.getState().containsKey(key)) {
 				this.requiredFields.put(key, true);
 			}
 		}
 		checkComplete();
 	}
-	
+
 	protected void checkComplete() {
 		boolean allRequiredFieldsSpecified = true;
 		for (String key : this.requiredFields.keySet()) {
 			boolean isSet = this.requiredFields.get(key);
-//			logger.debug("Checking " + key + ": " + isSet);
+			// logger.debug("Checking " + key + ": " + isSet);
 			if (!isSet) {
 				allRequiredFieldsSpecified = false;
 				break;
@@ -165,7 +169,7 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 
 	protected void addRequiredListener(final String requiredField,
 			ItemSelectable valueField) {
-//		logger.debug("Added required field: " + requiredField);
+		// logger.debug("Added required field: " + requiredField);
 		this.requiredFields.put(requiredField, false);
 		valueField.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -219,7 +223,8 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 		final String requiredField = option.getName();
 		final JTextField valueField = new JTextField(defaultValue);
 		if (option.isRequired()) {
-			boolean isSet = defaultValue != null && defaultValue.trim().length() > 0;
+			boolean isSet = defaultValue != null
+					&& defaultValue.trim().length() > 0;
 			this.requiredFields.put(option.getName(), isSet);
 			valueField.addCaretListener(new CaretListener() {
 				public void caretUpdate(CaretEvent evt) {
@@ -227,6 +232,36 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 							.containsKey(requiredField)) {
 						boolean selected = valueField.getText() != null
 								&& valueField.getText().trim().length() > 0;
+						PropertyConfigurationStep.this.requiredFields.put(
+								requiredField, selected);
+						PropertyConfigurationStep.this.checkComplete();
+					}
+				}
+
+			});
+		}
+		addOption(option.getName(), option.getDescription(), valueField);
+	}
+
+	protected void addPasswordOption(PasswordPropertyConfigurationOption option) {
+		String defaultValue = (String) this.model.getState().get(
+				option.getName());
+		if (defaultValue == null) {
+			defaultValue = option.getDefaultValue();
+		}
+		final String requiredField = option.getName();
+		final JPasswordField valueField = new JPasswordField(defaultValue);
+		if (option.isRequired()) {
+			boolean isSet = defaultValue != null
+					&& defaultValue.trim().length() > 0;
+			this.requiredFields.put(option.getName(), isSet);
+			valueField.addCaretListener(new CaretListener() {
+				public void caretUpdate(CaretEvent evt) {
+					if (PropertyConfigurationStep.this.requiredFields
+							.containsKey(requiredField)) {
+						boolean selected = valueField.getPassword() != null
+								&& String.valueOf(valueField.getPassword())
+										.trim().length() > 0;
 						PropertyConfigurationStep.this.requiredFields.put(
 								requiredField, selected);
 						PropertyConfigurationStep.this.checkComplete();
@@ -264,7 +299,10 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 			for (int i = 0; i < optionKeys.size(); i++) {
 				String key = optionKeys.get(i);
 				String value = null;
-				if (optionValueFields.get(i) instanceof JTextField) {
+				if (optionValueFields.get(i) instanceof JPasswordField) {
+					value = String.valueOf(((JPasswordField) optionValueFields
+							.get(i)).getPassword());
+				} else if (optionValueFields.get(i) instanceof JTextField) {
 					value = ((JTextField) optionValueFields.get(i)).getText();
 				} else if (optionValueFields.get(i) instanceof JCheckBox) {
 					value = String.valueOf(((JCheckBox) optionValueFields
@@ -273,7 +311,7 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 					value = String.valueOf(((JComboBox) optionValueFields
 							.get(i)).getSelectedItem());
 				}
-//				logger.debug("Setting " + key + " = " + value);
+				// logger.debug("Setting " + key + " = " + value);
 				tempState.put(key, value);
 			}
 		} catch (Exception ex) {
@@ -281,7 +319,6 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 					+ ex.getMessage(), ex);
 		}
 
-		
 		Map m = new HashMap();
 		m.putAll(this.model.getState());
 		m.putAll(tempState);
@@ -312,6 +349,15 @@ public class PropertyConfigurationStep extends PanelWizardStep {
 
 	public void setOptions(List<PropertyConfigurationOption> options) {
 		this.options = options;
+	}
+
+	protected Component getOption(String key) {
+		Component option = null;
+		int idx = this.optionKeys.indexOf(key);
+		if (idx != -1) {
+			option = this.optionValueFields.get(idx);
+		}
+		return option;
 	}
 
 }
