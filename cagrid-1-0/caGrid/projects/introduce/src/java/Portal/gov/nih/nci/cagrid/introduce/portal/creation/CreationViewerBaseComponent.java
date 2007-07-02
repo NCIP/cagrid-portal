@@ -159,11 +159,12 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                         p = CommonTools.createAndOutputProcess(cmd);
                         p.waitFor();
                         if (p.exitValue() == 0) {
+                        	CreationViewerBaseComponent.this.setVisible(false);
                             setProgressText("Launching modification viewer...");
-                            dispose();
                             ModificationViewer modViewer = new ModificationViewer(new File(dirName));
                             PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(modViewer);
                             modViewer.setMaximum(true);
+                            dispose();
                         } else {
                             setErrorMessage("Error creating new service!");
                             return;
