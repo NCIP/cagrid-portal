@@ -14,11 +14,12 @@ import org.cagrid.installer.steps.Constants;
  * 
  */
 public class ConfigureDorianTask extends CaGridAntTask {
+	
+//	private static final Log logger = LogFactory.getLog(ConfigureDorianTask.class);
 
 	/**
 	 * @param name
 	 * @param description
-	 * @param targetName
 	 */
 	public ConfigureDorianTask(String name, String description) {
 		super(name, description, null);
@@ -28,10 +29,11 @@ public class ConfigureDorianTask extends CaGridAntTask {
 			Properties sysProps) throws Exception {
 
 		Map m = new HashMap(state);
+//		logger.debug("########## " + Constants.DORIAN_IFS_PROXYLIFETIME_HOURS
+//				+ " = " + state.get(Constants.DORIAN_IFS_PROXYLIFETIME_HOURS));
 		m.put(Constants.BUILD_FILE_PATH, state.get(Constants.CAGRID_HOME)
 				+ "/projects/installer/deployer/build.xml");
-		new AntTask("", "", "configure-dorian-conf", env, sysProps)
-				.execute(m);
+		new AntTask("", "", "configure-dorian-conf2", env, sysProps).execute(m);
 
 		if ("true".equals(state.get(Constants.DORIAN_CA_PRESENT))) {
 			m.put(Constants.BUILD_FILE_PATH, state.get(Constants.CAGRID_HOME)

@@ -120,7 +120,7 @@
 			<property name="key.input" value="${ca.key.path}" />
 			<property name="password.input" value="${ca.key.pwd}" />
 			<property name="ca.input" value="${ca.cert.path}" />
-			<property name="hostname.input" value="service.hostname" />
+			<property name="hostname.input" value="${service.hostname}" />
 			<property name="days.input"
 				value="${service.cert.days.valid}" />
 			<property name="hostkey.input" value="${service.key.path}" />

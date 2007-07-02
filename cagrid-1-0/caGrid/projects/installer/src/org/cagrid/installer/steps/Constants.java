@@ -248,5 +248,7 @@ public abstract class Constants {
 
 	public static final String DORIAN_CA_SUBJECT = "dorian.ca.subject";
 
+	public static final String CONTAINER_TYPE = "container.type";
+
 	
 }

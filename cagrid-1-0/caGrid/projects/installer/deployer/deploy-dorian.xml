@@ -17,6 +17,22 @@
 
 	</target>
 	
+	<target name="deployTomcatEndorsedJars">
+		<copy todir="${tomcat.home}/common/endorsed" overwrite="true">
+			<fileset dir="${cagrid.home}/projects/dorian/ext/endorsed/lib">
+				<include name="*.jar" />
+			</fileset>
+		</copy>		
+	</target>
+	
+	<target name="deployGlobusEndorsedJars">
+		<copy todir="${globus.home}/endorsed" overwrite="true">
+			<fileset dir="${cagrid.home}/projects/dorian/ext/endorsed/lib">
+				<include name="*.jar" />
+			</fileset>
+		</copy>		
+	</target>
+	
 	<target name="configure-dorian-conf">
 		<property name="dorian.config.ns"
 			value="http://cagrid.nci.nih.gov/dorian/conf" />

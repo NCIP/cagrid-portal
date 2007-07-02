@@ -39,34 +39,32 @@ public class ConfigureEnvironmentTask extends BasicTask {
 		state.put(Constants.SERVICE_CERT_DAYS_VALID, String
 				.valueOf(caDaysValid - 1));
 
-		if ("true".equals(state.get(Constants.DEPLOY_GLOBUS))) {
-			if ("true".equals(state.get(Constants.USE_SECURE_CONTAINER))) {
-				if (!"true".equals(state.get(Constants.SERVICE_CERT_PRESENT))) {
-					state.put(Constants.GENERATE_SERVICE_CERT, "true");
-					if (!"true".equals(state.get(Constants.CA_CERT_PRESENT))) {
-						state.put(Constants.GENERATE_CA_CERT, "true");
-					}
-				} else {
-					state.put(Constants.GENERATE_SERVICE_CERT, "false");
-					state.put(Constants.GENERATE_CA_CERT, "false");
+		if ("true".equals(state.get(Constants.USE_SECURE_CONTAINER))) {
+			if (!"true".equals(state.get(Constants.SERVICE_CERT_PRESENT))) {
+				state.put(Constants.GENERATE_SERVICE_CERT, "true");
+				if (!"true".equals(state.get(Constants.CA_CERT_PRESENT))) {
+					state.put(Constants.GENERATE_CA_CERT, "true");
 				}
-				
-				state.put(Constants.TOMCAT_KEY, state
-						.get(Constants.SERVICE_KEY_PATH));
-				state.put(Constants.TOMCAT_CERT, state
-						.get(Constants.SERVICE_CERT_PATH));
-				state.put(Constants.TOMCAT_KEY_DEST, state
-						.get(Constants.TOMCAT_HOME)
-						+ "/conf/certs/server.key");
-				state.put(Constants.TOMCAT_CERT_DEST, state
-						.get(Constants.TOMCAT_HOME)
-						+ "/conf/certs/server.cert");
-
+			} else {
+				state.put(Constants.GENERATE_SERVICE_CERT, "false");
+				state.put(Constants.GENERATE_CA_CERT, "false");
 			}
+
+			state.put(Constants.TOMCAT_KEY, state
+					.get(Constants.SERVICE_KEY_PATH));
+			state.put(Constants.TOMCAT_CERT, state
+					.get(Constants.SERVICE_CERT_PATH));
+			state.put(Constants.TOMCAT_KEY_DEST, state
+					.get(Constants.TOMCAT_HOME)
+					+ "/conf/certs/server.key");
+			state.put(Constants.TOMCAT_CERT_DEST, state
+					.get(Constants.TOMCAT_HOME)
+					+ "/conf/certs/server.cert");
+
 		}
 
 		logger.debug(state);
-		
+
 		return null;
 	}
 

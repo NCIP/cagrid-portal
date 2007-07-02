@@ -1,0 +1,22 @@
+<project name="globus-tools" >
+
+	<import file="common.xml"/>
+	
+	<target name="configure-security-descriptor">
+		<property name="secdesc.file"
+			value="${globus.home}/etc/globus_wsrf_core/global_security_descriptor.xml" />
+		
+		<xmltask source="${secdesc.file}" dest="${secdesc.file}">
+		
+			<remove path="/*[local-name()='securityConfig']/*[local-name()='gridmap']"/>
+			
+			<attr
+				path="/*[local-name()='securityConfig']/*[local-name()='credential']/*[local-name()='key-file']"
+				attr="value" value="${service.key.path}" />
+			<attr
+				path="/*[local-name()='securityConfig']/*[local-name()='credential']/*[local-name()='cert-file']"
+				attr="value" value="${service.cert.path}" />
+		</xmltask>
+	</target>	
+	
+</project>

@@ -10,9 +10,12 @@
 	</target>
 
 	<target name="insert-secure-connector">
+		<property name="to.remove.path" value="/Server/Service[@name='Catalina']/Connector[@port='${tomcat.secure.port}']"/>
+		<echo>${to.remove.path}</echo>
 		<xmltask source="${tomcat.dir.path}/conf/server.xml"
 			dest="${tomcat.dir.path}/conf/server.xml">
-			<remove path="/Service/Service[@name='Catalina']/Connector[@port='${tomcat.secure.port}']"/>
+
+			<remove path="${to.remove.path}"/>
 			<insert path="/Server/Service[@name='Catalina']">
 				<![CDATA[
 				<Connector
@@ -32,7 +35,7 @@
 
 		<xmltask source="${tomcat.dir.path}/conf/server.xml"
 			dest="${tomcat.dir.path}/conf/server.xml">
-			<remove path="/Server/Service[@name='Catalina']/Engine[@name='Catalina']/Valve[className='org.globus.tomcat.coyote.valves.HTTPSValve']"/>
+			<remove path="/Server/Service[@name='Catalina']/Engine[@name='Catalina']/Valve[@className='org.globus.tomcat.coyote.valves.HTTPSValve']"/>
 			<insert
 				path="/Server/Service[@name='Catalina']/Engine[@name='Catalina']">
 				<![CDATA[
