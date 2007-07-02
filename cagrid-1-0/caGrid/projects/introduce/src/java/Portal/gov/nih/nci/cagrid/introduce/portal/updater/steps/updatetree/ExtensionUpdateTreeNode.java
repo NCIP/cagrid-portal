@@ -23,6 +23,8 @@ public class ExtensionUpdateTreeNode extends UpdateTypeTreeNode {
 		}
 		if ((ExtensionsLoader.getInstance().getExtension(extension.getName()) != null)
 				&& ExtensionsLoader.getInstance().getExtension(
+						extension.getName()).getVersion() != null
+				&& ExtensionsLoader.getInstance().getExtension(
 						extension.getName()).getVersion().equals(
 						extension.getVersion())) {
 			checkBox.setEnabled(false);
