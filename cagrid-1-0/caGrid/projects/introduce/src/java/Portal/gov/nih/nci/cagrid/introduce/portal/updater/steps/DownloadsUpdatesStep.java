@@ -348,6 +348,8 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 	private JTextArea getStatusTextArea() {
 		if (statusTextArea == null) {
 			statusTextArea = new JTextArea();
+			statusTextArea.setEditable(false);
+			statusTextArea.setFont(new Font("Sanserif", Font.PLAIN, 10));
 		}
 		return statusTextArea;
 	}

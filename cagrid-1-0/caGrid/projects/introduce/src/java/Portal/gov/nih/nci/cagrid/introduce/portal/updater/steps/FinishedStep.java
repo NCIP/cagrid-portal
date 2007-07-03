@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -58,6 +59,7 @@ public class FinishedStep extends PanelWizardStep {
 	private JTextPane getIntroTextPane() {
 		if (IntroTextPane == null) {
 			IntroTextPane = new JTextPane();
+			IntroTextPane.setFont(new Font("Sanserif", Font.PLAIN, 10));
 			IntroTextPane
 					.setText("Introduce needs to restart to complete the installation.  Click Finish to proceed.");
 		}
