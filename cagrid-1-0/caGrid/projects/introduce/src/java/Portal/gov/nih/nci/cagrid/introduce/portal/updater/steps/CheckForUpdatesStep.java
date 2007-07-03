@@ -72,7 +72,7 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 	protected void checkForUpdates() throws MalformedURLException, IOException,
 			MobiusException, Exception {
 		URL url = null;
-		url = new URL(getUpdateSiteTextField().getText());
+		url = new URL(getUpdateSiteTextField().getText() + "/software.xml");
 		URLConnection connection = url.openConnection();
 		InputStream stream = connection.getInputStream();
 		org.w3c.dom.Document doc = XMLUtils.newDocument(stream);
