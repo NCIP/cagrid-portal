@@ -47,6 +47,7 @@ import org.globus.wsrf.container.ServiceHost;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.impl.ReflectionResourceProperty;
+import org.globus.wsrf.impl.SimpleResourceProperty;
 import org.globus.wsrf.impl.SimpleResourcePropertyMetaData;
 import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.impl.security.descriptor.ResourceSecurityDescriptor;
