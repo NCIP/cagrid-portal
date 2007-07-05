@@ -123,7 +123,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                         Process p = CommonTools.createAndOutputProcess(cmd);
                         p.waitFor();
                         if (p.exitValue() != 0) {
-                            setErrorMessage("Error creating new service!");
+                            setErrorMessage("Error creating new service!  Please check the console output for more details.");
                             return;
                         }
 
