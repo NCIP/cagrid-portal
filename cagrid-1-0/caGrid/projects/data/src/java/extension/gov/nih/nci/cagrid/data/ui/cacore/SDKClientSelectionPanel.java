@@ -52,7 +52,7 @@ import javax.swing.ScrollPaneConstants;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.6 2007-06-21 18:44:59 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.7 2007-07-05 14:25:34 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String[] LOCAL_CLIENT_REQUIRED_FILES = new String[] {
@@ -244,6 +244,9 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                     } else {
                         getRemoteApiRadioButton().setSelected(true);
                     }
+                } else {
+                    // default is remote API, keep local conf disabled until set otherwise
+                    setClientConfDirEnabled(false);
                 }
             } else {
                 // don't need the use local property at all
