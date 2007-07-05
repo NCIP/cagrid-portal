@@ -333,7 +333,6 @@ public class TestUserManager extends TestCase {
 
 			IdPUser[] list = um.getUsers(null);
 			assertEquals(2, list.length);
-			assertEquals(u1, list[0]);
 			IdPUserFilter f = new IdPUserFilter();
 			f.setStatus(IdPUserStatus.Active);
 			f.setRole(IdPUserRole.Non_Administrator);

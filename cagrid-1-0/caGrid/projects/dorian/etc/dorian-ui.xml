@@ -131,7 +131,7 @@
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
                         <width>400</width>
-                        <height>500</height>
+                        <height>550</height>
                     </dimensions>
                 </component>
                 <component>
@@ -142,7 +142,7 @@
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
                         <width>600</width>
-                        <height>500</height>
+                        <height>550</height>
                     </dimensions>
                 </component>
                

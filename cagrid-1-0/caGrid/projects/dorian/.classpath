@@ -72,8 +72,6 @@
 	<classpathentry kind="lib" path="lib/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-pool-1.2.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-collections-3.0.jar"/>
-	<classpathentry kind="lib" path="lib/jce.zip"/>
-	<classpathentry kind="lib" path="lib/jprov.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-authentication-service-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-authentication-service-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-authentication-service-stubs.jar"/>
@@ -100,5 +98,9 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-1.1-Introduce-1.1-serviceTools.jar"/>
+	<classpathentry kind="lib" path="lib/eracom/gctadmin.jar"/>
+	<classpathentry kind="lib" path="lib/eracom/jce.zip"/>
+	<classpathentry kind="lib" path="lib/eracom/jprov.jar"/>
+	<classpathentry kind="lib" path="lib/eracom/kmu.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

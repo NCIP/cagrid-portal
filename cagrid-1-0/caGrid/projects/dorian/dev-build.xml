@@ -77,6 +77,9 @@
 	            <path refid="run.classpath" />
 	        </path>
 	    </target>
+	
+	
+	
 
 
 	<!-- ============================================================== -->
@@ -91,6 +94,11 @@
 		<path id="service.build.extended.classpath">
 		</path>
 		<path id="service.run.extended.classpath">
+			<!-- Eracom -->
+		    <fileset dir="${lib.dir}/eracom">
+				<include name="jce.jar" />
+				<include name="jprov.jar" />
+		   </fileset>
 		</path>
 		<path id="test.build.extended.classpath">
 			<fileset dir="${ext.test.lib}">
@@ -103,6 +111,20 @@
 		<path id="run.extended.classpath">
 		</path>
 	</target>
+	
+	<!-- Eracom -->
+	
+	<target name="defineEracomClasspaths" depends="init">
+			<path refid="run.classpath" />
+			<path id="eracom.run.classpath">	
+					<fileset dir="${lib.dir}/eracom">
+					<include name="jce.jar" />
+					<include name="jprov.jar" />
+				    <include name="kmu.jar" />
+					<include name="gctadmin.jar" />
+					</fileset>
+			</path>
+	    </target>
 	
 	
 	 <!-- Create a JAR file with the implementation classes -->
@@ -320,7 +342,7 @@
 
 	
     <!-- Post Introduce Edit-->
-    <target name="ui" description="Run the dorian ui" depends="checkGlobus">
+    <target name="ui" description="Run the dorian ui" depends="init">
         <java classname="org.cagrid.grape.GridApplication" fork="yes" failonerror="true">
             <jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
             <arg value="etc/dorian-ui.xml" />
@@ -332,7 +354,7 @@
         </java>
     </target>
 
-    <target name="createProxy" description="Create a Grid User Proxy." depends="checkGlobus">
+    <target name="createProxy" description="Create a Grid User Proxy." depends="init">
         
         <input message="Please enter the Authentication Service URL [${cagrid.master.dorian.service.url}]:" addproperty="auth.input" defaultvalue="${cagrid.master.dorian.service.url}" />
         <input message="Please enter the Dorian Service URL [${cagrid.master.dorian.service.url}]:" addproperty="dorian.input" defaultvalue="${cagrid.master.dorian.service.url}" />
@@ -356,7 +378,7 @@
         </java>
     </target>
 
-    <target name="importCA" description="Imports an external CA, for Dorian to use as its CA." depends="checkGlobus">
+    <target name="importCA" description="Imports an external CA, for Dorian to use as its CA." depends="init">
         <input message="Please enter the location to the CA's certificate (PEM Format):" addproperty="cacert.input" />
         <input message="Please enter the location to the CA's private key (PEM Format):" addproperty="cakey.input" />
         <input message="Please enter the password to the CA's private key (Enter if None):" addproperty="password.input" />
@@ -374,7 +396,7 @@
     </target>
 	
 	
-	 <target name="configureGlobusToTrustDorian" description="Configures Globus to trust the Dorian CA." depends="checkGlobus">
+	 <target name="configureGlobusToTrustDorian" description="Configures Globus to trust the Dorian CA." depends="init">
 		        <java classname="gov.nih.nci.cagrid.dorian.service.tools.ConfigureGlobusToTrustDorian" fork="yes" newenvironment="true" failonerror="true">
 		            <arg value="-conf" />
 		            <arg value="etc/dorian-conf.xml" />
@@ -382,7 +404,7 @@
 		        </java>
 		    </target>
 	
-	 <target name="createDorianHostCredentials" description="Creates host credentials for the Dorian Service." depends="checkGlobus">
+	 <target name="createDorianHostCredentials" description="Creates host credentials for the Dorian Service." depends="init">
 	        <input message="Please enter the host:" addproperty="host.input" />
 	        <input message="Please enter the directory to write out the host credentials:" addproperty="dir.input" />
 	        <java classname="gov.nih.nci.cagrid.dorian.service.tools.CreateHostCertificate" fork="yes" newenvironment="true" failonerror="true">
@@ -396,7 +418,7 @@
 	        </java>
 	    </target>
 
-    <target name="upgrade" description="Upgrades old versions of the Dorian database to the latest version." depends="checkGlobus">
+    <target name="upgrade" description="Upgrades old versions of the Dorian database to the latest version." depends="init">
         <java classname="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true" failonerror="true">
             <jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
             <arg value="-conf" />
@@ -405,7 +427,7 @@
         </java>
     </target>
 
-    <target name="testUpgrade" description="Tests upgrading old versions of the Dorian database to the latest version." depends="checkGlobus">
+    <target name="testUpgrade" description="Tests upgrading old versions of the Dorian database to the latest version." depends="init">
         <java classname="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true" failonerror="true">
             <jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
             <arg value="-conf" />
@@ -415,12 +437,26 @@
         </java>
     </target>
 	
-	<target name="generateTrustReport" description="Generates a Grid Trust Report." depends="checkGlobus">
+	<target name="generateTrustReport" description="Generates a Grid Trust Report." depends="init">
 			<input message="Please enter a file location to write the report to [grid-trust-report.txt]:" addproperty="out.input" defaultvalue="grid-trust-report.txt" />
-			<java classname="gov.nih.nci.cagrid.gridca.commandline.GenerateTrustReport" fork="true" newenvironment="true" failonerror="true">
-				<arg value="${out.input}" />
+		<echo message="${service.run.classpath}"/>	
+		<java classname="gov.nih.nci.cagrid.gridca.commandline.GenerateTrustReport" fork="true" newenvironment="true" failonerror="true">
+				<arg value="${out.input}" />	
 				<classpath refid="service.run.classpath" />
 			</java>
 		</target>
+	
+	<target name="adminEracomHSM" description="Brings up the Eracom Admin tool." depends="defineEracomClasspaths">
+				<java classname="jprov.tools.admin.CtAdmin" fork="true" newenvironment="true" failonerror="true">
+					<classpath refid="eracom.run.classpath" />
+				</java>
+	</target>
+	
+	<target name="manageEracomKeys" description="Brings up the Eracom Admin tool." depends="defineEracomClasspaths">
+					<java classname="jprov.tools.kmu.KMU" fork="true" newenvironment="true" failonerror="true">
+						<classpath refid="eracom.run.classpath" />
+					</java>
+		</target>
+
 
 </project>
