@@ -81,7 +81,6 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
                             node.getServiceType()), false);
                         comp.pack();
                         PortalUtils.centerComponent(comp);
-                        PortalResourceManager.getInstance().getGridPortal().add(comp);
                         comp.setVisible(true);
                     }
                 }
