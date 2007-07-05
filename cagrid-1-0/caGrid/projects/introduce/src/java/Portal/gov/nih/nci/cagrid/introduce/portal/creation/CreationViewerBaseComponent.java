@@ -20,6 +20,7 @@ import java.util.Properties;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
@@ -73,6 +74,11 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
         }
 
         if (doIdeleteResult == JOptionPane.OK_OPTION) {
+            
+            CreationViewerBaseComponent.this.setVisible(false);
+            dispose();
+            
+            
             BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
                 "Creating") {
                 @Override
@@ -159,12 +165,10 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                         p = CommonTools.createAndOutputProcess(cmd);
                         p.waitFor();
                         if (p.exitValue() == 0) {
-                        	CreationViewerBaseComponent.this.setVisible(false);
                             setProgressText("Launching modification viewer...");
                             ModificationViewer modViewer = new ModificationViewer(new File(dirName));
                             PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(modViewer);
                             modViewer.setMaximum(true);
-                            dispose();
                         } else {
                             setErrorMessage("Error creating new service!");
                             return;
@@ -179,6 +183,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 
             Thread th = new Thread(r);
             th.start();
+            
 
         }
     }
