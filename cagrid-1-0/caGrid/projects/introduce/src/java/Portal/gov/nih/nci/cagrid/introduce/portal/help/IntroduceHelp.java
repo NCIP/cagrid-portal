@@ -60,7 +60,7 @@ public class IntroduceHelp extends JFrame {
 
 		// (uses the classloader mechanism)
 		ClassLoader loader = this.getClass().getClassLoader();
-		URL helpSetURL = HelpSet.findHelpSet(loader, "IntroduceHelp.hs");
+		URL helpSetURL = HelpSet.findHelpSet(loader, "introduce.hs");
 		try {
 			helpSet = new HelpSet(null, helpSetURL);
 			fHelp = helpSet.createHelpBroker();

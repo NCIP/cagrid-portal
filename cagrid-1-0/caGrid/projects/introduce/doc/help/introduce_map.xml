@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE map PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN" "http://java.sun.com/products/javahelp/map_1_0.dtd">
+
+<map version="1.0">
+  <mapID target="Overview" url="introduce/overview.htm" />
+  <mapID target="Software_Prerequisites" url="introduce/software_prerequisites.htm" />
+  <mapID target="Changes_from_Introduce_1_0" url="introduce/changes_from_introduce_1_0.htm" />
+  <mapID target="Introduce_Graphical_Development_Environment" url="introduce/introduce_graphical_development_environment.htm" />
+  <mapID target="Service_Creation" url="introduce/service_creation.htm" />
+  <mapID target="Service_Modification" url="introduce/service_modification.htm" />
+  <mapID target="Data_Types" url="introduce/data_types.htm" />
+  <mapID target="Importing_Data_Types" url="introduce/importing_data_types.htm" />
+  <mapID target="Re_Importing_a_Modified_Data_Type" url="introduce/re_importing_a_modified_data_type.htm" />
+  <mapID target="Using_Custom_or_Pre_Existing_Java_Beans" url="introduce/using_custom_or_pre_existing_java_beans.htm" />
+  <mapID target="Operations" url="introduce/operations.htm" />
+  <mapID target="Using_a_Pre_Existing_Operation_Implementation" url="introduce/using_a_pre_existing_operation_implementation.htm" />
+  <mapID target="Importing_Operations" url="introduce/importing_operations.htm" />
+  <mapID target="Resource_Properties" url="introduce/resource_properties.htm" />
+  <mapID target="Service_Properties" url="introduce/service_properties.htm" />
+  <mapID target="Security" url="introduce/security.htm" />
+  <mapID target="Service_Contexts" url="introduce/service_contexts.htm" />
+  <mapID target="Utilizing_the_Factory_Pattern" url="introduce/utilizing_the_factory_pattern.htm" />
+  <mapID target="Implementing_the_Service" url="introduce/implementing_the_service.htm" />
+  <mapID target="Deployment" url="introduce/deployment.htm" />
+  <mapID target="Using_the_Client" url="introduce/using_the_client.htm" />
+  <mapID target="Software_Updates" url="introduce/software_updates.htm" />
+  <mapID target="Service_Migration" url="introduce/service_migration.htm" />
+  <mapID target="Introduce_Engine" url="introduce/introduce_engine.htm" />
+  <mapID target="Service_Creator" url="introduce/service_creator.htm" />
+  <mapID target="Service_Synchronizer" url="introduce/service_synchronizer.htm" />
+  <mapID target="Service_Deployer" url="introduce/service_deployer.htm" />
+  <mapID target="Other_Features_of_the_Introduce_Engine" url="introduce/other_features_of_the_introduce_engine.htm" />
+  <mapID target="Auto_Boxing_Unboxing_of_Service_Operations" url="introduce/auto_boxing_unboxing_of_service_operations.htm" />
+  <mapID target="Resource_Framework" url="introduce/resource_framework.htm" />
+  <mapID target="Compositional_Inheritance" url="introduce/compositional_inheritance.htm" />
+  <mapID target="Service_Contexts_1" url="introduce/service_contexts_1.htm" />
+  <mapID target="Security_1" url="introduce/security_1.htm" />
+  <mapID target="Introduce_Extension_Framework" url="introduce/introduce_extension_framework.htm" />
+  <mapID target="Service_Extensions" url="introduce/service_extensions.htm" />
+  <mapID target="Data_Type_Discovery_Extensions" url="introduce/data_type_discovery_extensions.htm" />
+  <mapID target="Introduce_Developers" url="introduce/introduce_developers.htm" />
+  <mapID target="Creating_an_Update_Site" url="introduce/creating_an_update_site.htm" />
+  <mapID target="Creating_an_Extension" url="introduce/creating_an_extension.htm" />
+</map>

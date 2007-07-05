@@ -1,0 +1,14 @@
+<HTML>
+<HEAD>
+ <TITLE>Data Types</TITLE>
+ <META NAME="generator" CONTENT="Adobe RoboHelp - www.adobe.com">
+</HEAD>
+<BODY style="font-family:'Arial'; font-size:12pt;  background-color:white;">
+ <div id='NavBar' STYLE='text-align:right;' align='right'><nobr><font size=1 color='#c0c0c0' style='font-size:9pt;' ><a href='service_modification.htm'><img src='../bsscnav4.gif' width=27 height=19 border=no></a><a href='importing_data_types.htm'><img src='../bsscnav5.gif' width=27 height=19 border=no></a></font>&nbsp;&nbsp;&nbsp;</nobr>
+ </div>
+ <H1 align="left"  style="font-size:12pt;margin-left:5.75pt;margin-right:6.50pt;margin-top:6.00pt;margin-bottom:2.00pt;text-align:left;" ><B><FONT size=3  style="font-family:'Arial'; font-size:12pt; font-weight:bold; " >Data Types</FONT></B></H1>
+ <P  style="margin-top:0.00pt;margin-bottom:0.00pt;" ><IMG src="../image/ebx_-140730572.jpg" border=0 height=549 width=666 alt="image\ebx_-140730572.jpg"></P>
+ <P  style="margin-top:0.00pt;margin-bottom:0.00pt;" ><FONT size=3  style="font-family:'Arial'; font-size:12pt; " >Introduce GDE Service Modification Component</FONT></P>
+ <P align="left"  style="margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-size:12pt; " >The first task in the modification of a grid service is to discover the data types that are desired to be used as the input and output types of methods of the service and the data types for describing the resource properties of the service. Adding a data types to the service is equivalent to copying schemas into the schema location of the service and importing the schemas into the WSDL file so that the types can be referenced by the service. This is done via the &quot;Types&quot; tab of the Graphical Service Modification Environment. This tab shows the current types the service is using, and provides access to the data type discovery components (such as the Mobius GME), for selecting and configuring additional types. The &quot;Select Type&quot; frame enables several types of ways to locate data types and bring them into the service. Currently there are three main discovery mechanisms (GME, Globus, and File System) that come with introduce, however, this is extensible via the Discovery Extension described in the Extensions section. Once a set of data types from a namespace are brought into the service the user has the ability to describe how these data types will be mapped into there respective Java classes. This can, by default, be done automatically by Introduce via Axis. By default, Axis will create new java beans for each data type and also provide a serializer and deserializer for those objects. If for example, a set of objects already exist for this particular data types then a user can decide to provide there own classes and serialization/deserialization factories. </FONT></P>
+</BODY>
+</HTML>

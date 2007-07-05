@@ -1,0 +1,56 @@
+<HTML>
+<HEAD>
+ <TITLE>Changes from Introduce 1.0</TITLE>
+ <META NAME="generator" CONTENT="Adobe RoboHelp - www.adobe.com">
+</HEAD>
+<BODY style="font-family:'Arial'; font-size:12pt;  background-color:white;">
+ <div id='NavBar' STYLE='text-align:right;' align='right'><nobr><font size=1 color='#c0c0c0' style='font-size:9pt;' ><a href='software_prerequisites.htm'><img src='../bsscnav4.gif' width=27 height=19 border=no></a><a href='introduce_graphical_development_environment.htm'><img src='../bsscnav5.gif' width=27 height=19 border=no></a></font>&nbsp;&nbsp;&nbsp;</nobr>
+ </div>
+ <H1 align="left"  style="font-size:12pt;margin-left:5.75pt;margin-right:6.50pt;margin-top:6.00pt;margin-bottom:2.00pt;text-align:left;" ><B><FONT size=3  style="font-family:'Arial'; font-size:12pt; font-weight:bold; " >Changes from Introduce 1.0</FONT></B></H1>
+ <P align="left"  style="margin-right:6.50pt;margin-top:4.00pt;margin-bottom:0.00pt;text-align:left;" >&nbsp;</P>
+ <UL>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Added a new target in the service build file which enables fixing the soap bindings to work with custom serialization. </FONT></P></LI>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Added property &quot;perform.index.service.registration&quot; to the deploy.properties to enable or disable index service registration. </FONT></P></LI>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Added two new properties in the deploy.properties enabling the metadata pub/sub timing to be controlled. </FONT></P></LI>
+  <UL type=circle>
+   <LI style="font-size:12pt; ">
+   <P align="left"  style="margin-left:42.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >index.service.registration.refresh_seconds=600 </FONT></P></LI>
+   <LI style="font-size:12pt; ">
+   <P align="left"  style="margin-left:42.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >index.service.index.refresh_milliseconds=30000 </FONT></P></LI>
+  </UL>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Added &quot;dev&quot; build.xml and build-deploy.xml which the user can freely edit without expecting changes by updates </FONT></P></LI>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Moved ant-contrib.jar to ext/lib in the service instead of lib because the service itself does not need that jar as it is only used for building </FONT></P></LI>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Created a soap binding fix that will enable us to use custom serialization of &quot;some&quot; types of a schema and added it to the services build process. </FONT></P></LI>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Descriptions on the service, methods, inputs, outputs, faults, are now used to create javadoc on the &quot;common&quot; service interface. </FONT></P></LI>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Moved to Policy Decision Point (PDP/authz) based authorization </FONT></P></LI>
+  <UL type=circle>
+   <LI style="font-size:12pt; ">
+   <P align="left"  style="margin-left:42.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >made the authorization class a PDP </FONT></P></LI>
+   <LI style="font-size:12pt; ">
+   <P align="left"  style="margin-left:42.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >configures the service security descriptor to use the PDP </FONT></P></LI>
+   <LI style="font-size:12pt; ">
+   <P align="left"  style="margin-left:42.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >added a gui panel to enable entering a custom PDP chain if desired </FONT></P></LI>
+  </UL>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Added support for resource factory/creation code to automatically be generated and placed into any method which is creating and returning a handle to a new service/resource instance. </FONT></P></LI>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Added upgrader framework to enable migration of services from 1.0 - 1.1 </FONT></P></LI>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Added updater framework enabling Introduce to find and install extensions and newer versions directly from the software. </FONT></P></LI>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Refactored service resource framework in order to enable registration of resource properties as well as enable the resource class itself to be user modified and extended to there liking. In doing this the BaseResource class was also renamed to &lt;serviceName&gt;Resource to make more sence to the developer. This also caused the renaming of the etc/registration.xml to etc/&lt;serviceName&gt;_registration.xml in order to support registration for the all the resource framework types. </FONT></P></LI>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Only services which have resource properties that are to be registered will attempt to register with the index service. </FONT></P></LI>
+  <LI style="font-size:12pt; ">
+  <P align="left"  style="margin-left:6.00pt;margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-family:'Times New Roman'; font-size:12pt; " >Most fields in the GDE which require user input are all dynamically validated and will give graphical feedback to the user if a warning or error is detected. </FONT></P></LI>
+ </UL>
+</BODY>
+</HTML>

@@ -1,0 +1,12 @@
+<HTML>
+<HEAD>
+ <TITLE>Using a Pre-Existing Operation Implementation</TITLE>
+ <META NAME="generator" CONTENT="Adobe RoboHelp - www.adobe.com">
+</HEAD>
+<BODY style="font-family:'Arial'; font-size:12pt;  background-color:white;">
+ <div id='NavBar' STYLE='text-align:right;' align='right'><nobr><font size=1 color='#c0c0c0' style='font-size:9pt;' ><a href='operations.htm'><img src='../bsscnav4.gif' width=27 height=19 border=no></a><a href='importing_operations.htm'><img src='../bsscnav5.gif' width=27 height=19 border=no></a></font>&nbsp;&nbsp;&nbsp;</nobr>
+ </div>
+ <H1 align="left"  style="font-size:12pt;margin-left:5.75pt;margin-right:6.50pt;margin-top:6.00pt;margin-bottom:2.00pt;text-align:left;" ><B><FONT size=3  style="font-family:'Arial'; font-size:12pt; font-weight:bold; " >Using a Pre-Existing Operation Implementation</FONT></B></H1>
+ <P align="left"  style="margin-top:5.00pt;margin-bottom:5.00pt;text-align:left;" ><FONT size=3  style="font-size:12pt; " >The implementation of a described operation may already exist in another class which is provided by a jar file. You can tell Introduce not to stub this methods server side implementation but instead call this provided method implementation directly in the class provided. In order to use this functionality the &quot;Provided&quot; checkbox must be selected and the Class name attribute must be filled out in the &quot;Provider&quot; tab. The class name attribute will point to the fully qualified class name of the class which implements this WSDL described operation. The jar file that contains the provided Class which implements this operation must also me copied into the lib directory of the service. This will ensure that the operation will be located at the time the operation is called on the service. For more information on this particular topic refer to the Globus Documentation on Operation Providers. </FONT></P>
+</BODY>
+</HTML>
