@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.sdkquery32.test.equivalence;
 import gov.nih.nci.cagrid.common.Utils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
  * @author David Ervin
  * 
  * @created Jun 12, 2007 3:28:16 PM
- * @version $Id: FieldEqualityTest.java,v 1.1 2007-06-13 14:25:15 dervin Exp $ 
+ * @version $Id: FieldEqualityTest.java,v 1.2 2007-07-06 18:43:53 dervin Exp $ 
  */
 public class FieldEqualityTest {
     
@@ -33,10 +34,14 @@ public class FieldEqualityTest {
         Class c = o1.getClass();
         Field[] fields = classFields.get(c);
         if (fields == null) {
-            fields = c.getFields();
+            fields = c.getDeclaredFields();
             classFields.put(c, fields);
         }
         for (Field f : fields) {
+            int fieldMods = f.getModifiers();
+            if (Modifier.isStatic(fieldMods) || Modifier.isFinal(fieldMods) || Modifier.isPrivate(fieldMods)) {
+                continue;
+            }
             Class type = f.getType();
             if (!type.isArray() && !Collection.class.isAssignableFrom(type)) {
                 // handle any non-array / collection values
