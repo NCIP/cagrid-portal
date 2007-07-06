@@ -32,6 +32,8 @@
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
 	<property name="test.project.jar" location="${jar.dir}/${project.name}${cagrid.master.jar.separator}tests.jar" />
+	
+	<import file="test/test.xml" />
 
 	<!-- =============================================================== -->
 	<!-- The Build Classpath                                             -->
