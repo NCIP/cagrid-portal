@@ -49,10 +49,10 @@ public class DomainModelGenerationExample {
             // Chromosome.class.getName(), Taxon.class.getName(),
             // Tissue.class.getName()};
             // UMLAssociationExclude exclude1 = new
-            // UMLAssociationExclude(Gene.class.getName(), "geneCollection",
-            // Chromosome.class.getName(), "chromosome");
-            // UMLAssociationExclude exclude2 = new UMLAssociationExclude("*",
-            // "*", Tissue.class.getName(), "*");
+            // UMLAssociationExclude(Chromosome.class.getName(), "chromosome",
+            // Gene.class.getName(), "geneCollection");
+            // UMLAssociationExclude exclude2 = new
+            // UMLAssociationExclude(Tissue.class.getName(), "*", "*", "*");
             // UMLAssociationExclude associationExcludes[] = new
             // UMLAssociationExclude[]{exclude1, exclude2};
             // DomainModel domainModel =
