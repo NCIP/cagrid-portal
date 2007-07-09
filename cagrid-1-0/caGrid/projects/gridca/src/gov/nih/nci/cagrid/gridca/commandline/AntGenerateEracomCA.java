@@ -58,7 +58,7 @@ public class AntGenerateEracomCA {
 
 			keyStore.setKeyEntry(alias, root.getPrivate(), null, new X509Certificate[]{cert});
 			String hash = CertUtil.getHashCode(cert);
-			File certFile = new File(dir + File.separator + hash + "-cert.pem");
+			File certFile = new File(dir + File.separator + hash + ".pem");
 			CertUtil.writeCertificate(cert, certFile);
 			System.out.println("Successfully create the CA certificate:");
 			System.out.println(dn);
