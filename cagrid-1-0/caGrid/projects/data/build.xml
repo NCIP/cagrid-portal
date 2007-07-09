@@ -247,41 +247,17 @@
 		<property name="mapping.dst" value="${build.dir}/NStoPkg.properties" />
 		<ant antfile="${ant.build.stubs}" target="mergePackageMapping" />
 		<property name="mapping.file" value="${mapping.dst}" />
-		<!-- generate stubs for CQLQuery classes -->
+		<!-- generate stubs in general for the data service -->
 		<ant antfile="${ant.build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}/Data" />
-			<property name="wsdl.file" value="Query.wsdl" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
-		</ant>
-		<!-- generate stubs for CQLQueryResponse classes -->
-		<ant antfile="${ant.build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}/Data" />
-			<property name="wsdl.file" value="Response.wsdl" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
-		</ant>
-		<!-- generate stubs for DataServiceExtensionData classes -->
-		<ant antfile="${ant.build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}/Data" />
-			<property name="wsdl.file" value="ExtensionData.wsdl" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
-		</ant>
-		<!-- generate stubs for Class to QName mapping classes -->
-		<ant antfile="${ant.build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}/Data" />
-			<property name="wsdl.file" value="ClassToQname.wsdl" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
+			<property name="source.stubs.dir" location="${schema.dest}/Data"/>
+			<property name="wsdl.file" value="Beans.wsdl"/>
+			<property name="target.stubs.dir" location="${stubs.src}"/>
 		</ant>
 		<!-- generate stubs for Bookstore classes used in testing -->
 		<ant antfile="${ant.build.stubs}" target="generateStubs">
 			<property name="source.stubs.dir" location="${test.resources.dir}" />
 			<property name="wsdl.file" value="bookstore.wsdl" />
 			<property name="target.stubs.dir" location="${test.stubs.src}" />
-		</ant>
-		<!-- generate stubs for Auditor configuration classes -->
-		<ant antfile="${ant.build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}/Data" />
-			<property name="wsdl.file" value="DataServiceAuditorConfiguration.wsdl"/>
-			<property name="target.stubs.dir" location="${stubs.src}"/>
 		</ant>
 		<!-- generate data service bindings for globus -->
 		<ant antfile="${ant.build.stubs}" target="generateBinding">
