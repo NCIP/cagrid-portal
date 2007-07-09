@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gridca.commandline;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
+import java.io.File;
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.Provider;
@@ -14,6 +15,7 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import org.bouncycastle.asn1.x509.X509Name;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -31,12 +33,11 @@ public class AntGenerateEracomCA {
 			String daysValid = args[2];
 			int slot = Integer.valueOf(args[3]).intValue();
 			String password = args[4];
+			String dir = args[5];
 			Provider provider = (Provider) Class.forName(
-					"au.com.eracom.crypto.provider.slot" + slot
-							+ ".ERACOMProvider").newInstance();
+				"au.com.eracom.crypto.provider.slot" + slot + ".ERACOMProvider").newInstance();
 			Security.addProvider(provider);
-			KeyStore keyStore = KeyStore.getInstance("CRYPTOKI", provider
-					.getName());
+			KeyStore keyStore = KeyStore.getInstance("CRYPTOKI", provider.getName());
 			keyStore.load(null, password.toCharArray());
 			KeyPair root = KeyUtil.generateRSAKeyPair2048(provider.getName());
 			int days = Integer.valueOf(daysValid).intValue();
@@ -44,8 +45,7 @@ public class AntGenerateEracomCA {
 				System.err.println("Days Valid must be >0");
 				System.exit(1);
 			}
-			GregorianCalendar date = new GregorianCalendar(TimeZone
-					.getTimeZone("GMT"));
+			GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 
 			date.add(Calendar.MINUTE, -5);
 
@@ -53,19 +53,19 @@ public class AntGenerateEracomCA {
 			date.add(Calendar.MINUTE, 5);
 			date.add(Calendar.DAY_OF_MONTH, days);
 			Date end = new Date(date.getTimeInMillis());
-			X509Certificate cert = CertUtil.generateCACertificate(provider
-					.getName(), new X509Name(dn), start, end, root,
-					"SHA1WithRSA");
+			X509Certificate cert = CertUtil.generateCACertificate(provider.getName(), new X509Name(dn), start, end,
+				root, "SHA1WithRSA");
 
-			keyStore.setKeyEntry(alias, root.getPrivate(), null,
-					new X509Certificate[] { cert });
+			keyStore.setKeyEntry(alias, root.getPrivate(), null, new X509Certificate[]{cert});
+			String hash = CertUtil.getHashCode(cert);
+			File certFile = new File(dir + File.separator + hash + "-cert.pem");
+			CertUtil.writeCertificate(cert, certFile);
 			System.out.println("Successfully create the CA certificate:");
 			System.out.println(dn);
 			System.out.println("CA Certificate Valid Till:");
 			System.out.println(cert.getNotAfter());
-			System.out
-					.println("The CA C=certificate and private key were written to slot "
-							+ slot + " on the HSM.");
+			System.out.println("The CA certificate and private key were written to slot " + slot + " on the HSM.");
+			System.out.println("The CA certificate was written to the file: " + certFile.getAbsolutePath());
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);

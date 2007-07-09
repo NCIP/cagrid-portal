@@ -206,12 +206,14 @@ GSBT - Globus Service Build Tools
 		<input message="Please enter the number of days the new CA will be valid for:" addproperty="days.input" />
 		<input message="Please enter a slot number on the HSM to store the CA:" addproperty="slot.input" />
 		<input message="Please enter the password for the HSM:" addproperty="password.input" />
+		<input message="Please enter a directory to write the CA certificate to:" addproperty="dir.input" />
 		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntGenerateEracomCA" fork="true" newenvironment="true" failonerror="true">
 			<arg value="${alias.input}" />
 			<arg value="${dn.input}" />
 			<arg value="${days.input}" />
 			<arg value="${slot.input}" />
 			<arg value="${password.input}" />
+			<arg value="${dir.input}" />
 			<classpath>
 				<fileset dir="${build.lib.dir}">
 					<include name="**/*.jar" />
