@@ -58,14 +58,17 @@ public class AntGenerateEracomCA {
 
 			keyStore.setKeyEntry(alias, root.getPrivate(), null, new X509Certificate[]{cert});
 			String hash = CertUtil.getHashCode(cert);
-			File certFile = new File(dir + File.separator + hash + ".pem");
+			File certFile = new File(dir + File.separator + hash + ".0");
+			File policyFile = new File(dir + File.separator + hash + ".signing_policy");
 			CertUtil.writeCertificate(cert, certFile);
+			CertUtil.writeSigningPolicy(cert, policyFile);
 			System.out.println("Successfully create the CA certificate:");
 			System.out.println(dn);
 			System.out.println("CA Certificate Valid Till:");
 			System.out.println(cert.getNotAfter());
 			System.out.println("The CA certificate and private key were written to slot " + slot + " on the HSM.");
 			System.out.println("The CA certificate was written to the file: " + certFile.getAbsolutePath());
+			System.out.println("The CA signing policy was written to the file: " + policyFile.getAbsolutePath());
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
