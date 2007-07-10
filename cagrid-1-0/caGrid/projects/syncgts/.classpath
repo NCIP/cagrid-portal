@@ -63,7 +63,6 @@
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
-	<classpathentry kind="lib" path="lib/cog-jglobus.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
@@ -81,5 +80,6 @@
 	<classpathentry kind="lib" path="lib/caGrid-1.1-Introduce-1.1-serviceTools.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-advertisement.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-serviceTools.jar"/>
+	<classpathentry kind="lib" path="lib/globus-patches/cog-jglobus.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

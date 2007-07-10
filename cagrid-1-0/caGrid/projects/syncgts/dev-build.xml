@@ -26,6 +26,9 @@
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
+				<fileset dir="${lib.dir}/globus-patches">
+					<include name="*.jar" />
+				</fileset>
 				<fileset dir="${ext.globus.dir}/lib">
 					<include name="*.jar" />
 					<exclude name="cog-jglobus.jar" />
