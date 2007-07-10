@@ -10,7 +10,8 @@
     <!-- artifact for groups of files that will probably be copied to    -->
     <!-- separate directoris (e.g. jars and conf files)                  -->
     <!-- =============================================================== -->
-    <target name="defineArtifacts">
+    <target name="defineArtifacts" unless="artifacts.defined" depends="define-ant-tasks">
+        <property name="artificats.defined" value="true" />
         <!-- Common Jar Artifacts -->
         <artifact track="main" type="resources" id="cagrid.properties">
             <fileset dir="${share.dir}/resources">
@@ -37,21 +38,21 @@
                 <include name="*.xsd" />
             </fileset>
         </artifact>
-    	<artifact track="main" type="jars" id="caCORE.3.2.1.jars">
-    		<fileset dir="${share.dir}/lib/caCORE321/client">
-    			<include name="*.jar"/>
-    		</fileset>
-    	</artifact>
-    	<artifact track="main" type="jars" id="caCORE.3.2.1.thickclient.jars">
-    	    <fileset dir="${share.dir}/lib/caCORE321/thick-client">
-    	    	<include name="*.jar"/>
-    	    </fileset>
-    	</artifact>
-    	<artifact track="main" type="resources" id="caCORE.3.2.1.sdk">
-    		<fileset dir="${share.dir}/resources/caCORE/v321">
-    			<include name="*.zip"/>
-    		</fileset>
-    	</artifact>
+        <artifact track="main" type="jars" id="caCORE.3.2.1.jars">
+            <fileset dir="${share.dir}/lib/caCORE321/client">
+                <include name="*.jar" />
+            </fileset>
+        </artifact>
+        <artifact track="main" type="jars" id="caCORE.3.2.1.thickclient.jars">
+            <fileset dir="${share.dir}/lib/caCORE321/thick-client">
+                <include name="*.jar" />
+            </fileset>
+        </artifact>
+        <artifact track="main" type="resources" id="caCORE.3.2.1.sdk">
+            <fileset dir="${share.dir}/resources/caCORE/v321">
+                <include name="*.zip" />
+            </fileset>
+        </artifact>
         <artifact track="main" type="jars" id="jet.jars">
             <fileset dir="${share.dir}/lib/jet">
                 <include name="*.jar" />

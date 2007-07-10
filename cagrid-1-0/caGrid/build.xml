@@ -44,12 +44,13 @@
 
 	<!-- At parse time we clean out the custom ant task build, to be sure it gets built at parse time -->
 	<delete failonerror="false" dir="${anttask.classes.dir}" />
+    
 
 	<!-- =============================================================== -->
 	<!-- Bootstrap the build by setting up the structure and building    -->
 	<!-- our custom ant tasks.                                           -->
 	<!-- =============================================================== -->
-	<target name="prepare" depends="define-ant-tasks, defineArtifacts, prepare-target-grid">
+	<target name="prepare" depends="define-ant-tasks, prepare-target-grid">
 		<tstamp />
 	</target>
 
