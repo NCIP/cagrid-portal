@@ -49,7 +49,7 @@
 	<!-- Bootstrap the build by setting up the structure and building    -->
 	<!-- our custom ant tasks.                                           -->
 	<!-- =============================================================== -->
-	<target name="prepare" depends="define-ant-tasks, prepare-target-grid">
+	<target name="prepare" depends="define-ant-tasks, defineArtifacts, prepare-target-grid">
 		<tstamp />
 	</target>
 
@@ -512,6 +512,7 @@
 	<!-- Sync GTS                                                        -->
 	<!-- =============================================================== -->
 	<target name="configure-syncgts" depends="prepare">
+	    <delete dir="${projects.dir}/syncgts/ext/resources/certificates" />
 		<resolveDependencies extdir="${projects.dir}/syncgts/ext">
 			<artifact refid="service_urls.properties" />
 			<artifact refid="gts.sync.description" />

@@ -10,7 +10,7 @@
     <!-- artifact for groups of files that will probably be copied to    -->
     <!-- separate directoris (e.g. jars and conf files)                  -->
     <!-- =============================================================== -->
-    <target name="defineArtifacts" depends="prepare">
+    <target name="defineArtifacts">
         <!-- Common Jar Artifacts -->
         <artifact track="main" type="resources" id="cagrid.properties">
             <fileset dir="${share.dir}/resources">
