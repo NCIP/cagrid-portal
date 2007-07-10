@@ -53,14 +53,15 @@ public class AntCreateHostCertificateWithEracomCA {
 					.getName());
 			keyStore.load(null, password.toCharArray());
 			PrivateKey cakey = (PrivateKey) keyStore.getKey(alias, null);
-			X509Certificate cacert = (X509Certificate) keyStore
-					.getCertificate(alias);
+			X509Certificate cacert = convert((X509Certificate) keyStore
+					.getCertificate(alias));
+			
 
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024("BC");
 			String rootSub = cacert.getSubjectDN().toString();
 			int index = rootSub.lastIndexOf(",");
 			String subject = rootSub.substring(0, index)
-					+ "OU=Services,CN=host/" + host;
+					+ ",OU=Services,CN=host/" + host;
 
 			GregorianCalendar date = new GregorianCalendar(TimeZone
 					.getTimeZone("GMT"));
@@ -81,9 +82,9 @@ public class AntCreateHostCertificateWithEracomCA {
 				}
 				end = d;
 			}
-			X509Certificate userCert = CertUtil.generateCertificate(provider
+			X509Certificate userCert = convert(CertUtil.generateCertificate(provider
 					.getName(), new X509Name(subject), start, end, pair
-					.getPublic(), cacert, cakey, "SHA1WithRSA", null);
+					.getPublic(), cacert, cakey, "SHA1WithRSA", null));
 
 			KeyUtil.writePrivateKey(pair.getPrivate(), new File(keyOut));
 			CertUtil.writeCertificate(userCert, new File(certOut));
@@ -103,6 +104,11 @@ public class AntCreateHostCertificateWithEracomCA {
 			System.exit(1);
 		}
 
+	}
+	
+	protected static X509Certificate convert(X509Certificate cert) throws Exception {
+		String str = CertUtil.writeCertificate(cert);
+		return CertUtil.loadCertificate(str);
 	}
 
 }
