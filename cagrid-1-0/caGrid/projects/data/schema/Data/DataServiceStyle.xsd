@@ -13,6 +13,8 @@
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element ref="tns:ModificationUiPanel" minOccurs="0"/>
+			<xsd:element ref="tns:CodegenHelpers" minOccurs="0"/>
+			<xsd:element ref="tns:CreationHelper" minOccurs="0"/>
 		</xsd:sequence>
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
 		<xsd:attribute name="version" type="xsd:string" use="required"/>
@@ -42,5 +44,14 @@
 		<xsd:attribute name="fromVersion" type="xsd:string" use="required"/>
 		<xsd:attribute name="toVersion" type="xsd:string" use="required"/>
 		<xsd:attribute name="classname" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="CodegenHelpers" type="tns:CodegenHelpers"/>
+	<xsd:complexType name="CodegenHelpers">
+		<xsd:attribute name="preCodegenClassname" type="xsd:string" use="optional"/>
+		<xsd:attribute name="postCodegenClassname" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="CreationHelper" type="tns:CreationHelper"/>
+	<xsd:complexType name="CreationHelper">
+		<xsd:attribute name="postCreationClassname" type="xsd:string" use="required"/>
 	</xsd:complexType>
 </xsd:schema>
