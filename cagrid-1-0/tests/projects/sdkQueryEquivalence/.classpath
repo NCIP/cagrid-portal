@@ -7,40 +7,13 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-sdkQuery32-core.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-cql.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-sdkQuery32-tests.jar" sourcepath="/caGrid-1.0-sdkQuery32"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/example-client.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-common.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/activation.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/antlr-2.7.6.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/asm.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/asm-attrs.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/axis.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/castor-1.0.2.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/cglib-2.1.3.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/commons-discovery-0.2.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/commons-logging-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/jaxrpc.jar"/>
 	<classpathentry kind="lib" path="lib/sdk321Example/log4j-1.2.13.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/mail.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/saaj.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/spring.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/spring-aop-1.2.8.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/spring-beans-1.2.8.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/spring-context-1.2.8.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/spring-core-1.2.8.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/spring-richclient-full-0.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/spring-web-1.2.8.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/wsdl4j-1.5.1.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="lib/sdk321Example/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar" sourcepath="/GT4_LOCATION/ws-core-4.0.3-src.zip"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
@@ -110,5 +83,31 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-tests-sdkInstaller.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-tests-sdkInstaller-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-tests-sdkInstaller-tests.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/activation.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/asm.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/asm-attrs.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/axis.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/castor-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/cglib-2.1.3.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/commons-discovery-0.2.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/example-client.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/hibernate3.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/jaxrpc.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/mail.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/saaj.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/spring.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/spring-aop-1.2.8.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/spring-beans-1.2.8.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/spring-context-1.2.8.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/spring-core-1.2.8.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/spring-richclient-full-0.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/spring-web-1.2.8.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/wsdl4j-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/sdk321Example/xml-apis.jar"/>
+	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
