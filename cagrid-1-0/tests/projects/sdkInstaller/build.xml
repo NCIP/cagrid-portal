@@ -12,7 +12,7 @@
 
 	<!-- Information -->
 	<property name="project.version" value="1.0" />
-	<property name="project.name" value="${cagrid.master.jar.prefix}${ant.project.name}" />
+	<property name="project.name" value="${cagrid.master.jar.prefix}tests${cagrid.master.jar.separator}${ant.project.name}" />
 	<property name="java.source" value="1.5"/>
 
 
@@ -76,7 +76,7 @@
 	</path>
 
 	<!-- =============================================================== -->
-	<!-- The Test Classpath                                                   -->
+	<!-- The Test Classpath                                              -->
 	<!-- =============================================================== -->
 	<path id="test.classpath">
 		<pathelement path="${classes.dir}" />
