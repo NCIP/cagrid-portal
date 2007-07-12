@@ -7,36 +7,43 @@
     <property name="cobertura.report.dir" value="${build.dir}/coverage" />
     <property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" />
     <property name="introduce.dir" location="../introduce" />
-
-    <target name="prepareClasspaths">
-        <path id="Introduce.test.classpath">
-            <fileset dir="${introduce.dir}/lib">
-                <include name="*.jar" />
-            </fileset>
-            <fileset dir="${introduce.dir}/ext/lib">
-                <include name="*.jar" />
-            </fileset>
-            <fileset dir="${introduce.dir}/build/jars">
-                <include name="*.jar" />
-            </fileset>
-            <fileset dir="${introduce.dir}/test/lib">
-                <include name="*.jar" />
-            </fileset>
-            <fileset dir="${introduce.dir}/ext/test/lib">
-                <include name="*.jar" />
-            </fileset>
-            <fileset dir="${ant.library.dir}">
-                <include name="*.jar" />
-            </fileset>
-            <fileset dir="${ext.globus.dir}/lib">
-                <include name="*.jar" />
-            </fileset>
-        </path>
-        <path id="all.test.classpath">
-            <path refid="test.classpath" />
-            <path refid="Introduce.test.classpath" />
-        </path>
-    </target>
+	
+	<!-- using ant contrib for contidionals, looping, and runtarget -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+	    	<pathelement location="${lib.dir}/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+	
+	<target name="prepareClasspaths">
+		<path id="Introduce.test.classpath">
+	    	<fileset dir="${introduce.dir}/lib">
+				<include name="*.jar" />
+	        </fileset>
+	        <fileset dir="${introduce.dir}/ext/lib">
+	        	<include name="*.jar" />
+			</fileset>
+	        <fileset dir="${introduce.dir}/build/jars">
+	       		<include name="*.jar" />
+			</fileset>
+	        <fileset dir="${introduce.dir}/test/lib">
+	        	<include name="*.jar" />
+			</fileset>
+	        <fileset dir="${introduce.dir}/ext/test/lib">
+	        	<include name="*.jar" />
+			</fileset>
+	        <fileset dir="${ant.library.dir}">
+	        	<include name="*.jar" />
+			</fileset>
+	        <fileset dir="${globus.dir}/lib">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+	    <path id="all.test.classpath">
+		    <path refid="test.classpath" />
+	    	<path refid="Introduce.test.classpath" />
+		</path>
+	</target>
 
     <target name="instrument">
         <taskdef classpathref="test.classpath" resource="tasks.properties" />
@@ -45,34 +52,46 @@
             <fileset dir="${build.core.dest}">
                 <include name="**/*.class" />
             </fileset>
+        	<fileset dir="${build.ui.dest}">
+        		<include name="**/*.class"/>
+        	</fileset>
+        	<fileset dir="${build.sdkstyle.dest}">
+        		<include name="**/*.class"/>
+        	</fileset>
+        	<fileset dir="${test.classes.dir}">
+        		<include name="**/*.class"/>
+        	</fileset>
         </cobertura-instrument>
     </target>
 	
 	
-	<target name="test" description="tests"/>
+	<target name="test" depends="instrument, prepareClasspaths" description="tests">
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+			<sysproperty key="build.dirs" value="${build.utils.dest};${build.extension.dest};${build.service.dest}" />
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+			<jvmarg value="-Dintroduce.base.dir=../introduce" />
+			<jvmarg value="-Dbuild.dir=${test.classes.dir}" />
+			<jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples" />
+			<classpath location="${instrumented.classes.dir}" />
+			<classpath refid="all.test.classpath" />
+			<classpath>
+				<pathelement path="${test.classes.dir}" />
+			</classpath>
+		    <formatter type="xml" />
+		    <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+		    <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+		        <fileset dir="${test.src.dir}">
+		            <include name="**/*TestCase.java" />
+		        </fileset>
+		    </batchtest>
+		</junit>    
+	</target>
 
 
     <target name="coverageReport" depends="test" description="Runs the tests and generates a test
 		coverage report.">
         <cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
-            <fileset dir="${cql.src.dir}">
-                <include name="**/*.java" />
-            </fileset>
-            <fileset dir="${common.src.dir}">
-                <include name="**/*.java" />
-            </fileset>
-            <fileset dir="${validation.src.dir}">
-                <include name="**/*.java" />
-            </fileset>
-            <fileset dir="${service.src.dir}">
-                <include name="**/*.java" />
-            </fileset>
-            <fileset dir="${extension.src.dir}">
-                <include name="**/*.java" />
-            </fileset>
-            <fileset dir="${utils.src.dir}">
-                <include name="**/*.java" />
-            </fileset>
             <fileset dir="${test.src.dir}">
                 <include name="**/*.java" />
             </fileset>

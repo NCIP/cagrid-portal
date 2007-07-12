@@ -330,5 +330,5 @@
 	</target>
 
 	<!-- build and jar everything -->
-	<target name="all" depends="jarCore, jarUi, jarTests, jarSdkStyle, jarStyles" description="Builds and jars all the classes in the project" />
+	<target name="all" depends="jarCore, jarUi, jarSdkStyle, jarStyles, jarTests" description="Builds and jars all the classes in the project" />
 </project>
