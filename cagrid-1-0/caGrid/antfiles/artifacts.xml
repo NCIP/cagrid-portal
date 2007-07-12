@@ -420,6 +420,12 @@
                 <include name="**/*.xsd" />
             </fileset>
         </artifact>
+    	<artifact track="main" type="schemas" id="data.schemas">
+    		<fileset dir="${projects.dir}/data/schema">
+    			<include name="**/*.xsd" />
+    			<include name="**/*.wsdl" />
+    		</fileset>
+		</artifact>
         <artifact track="main" type="resources" id="data.cql.testing.docs">
             <fileset dir="${projects.dir}/data/docs/cqlExamples">
                 <include name="**/*.xml" />
