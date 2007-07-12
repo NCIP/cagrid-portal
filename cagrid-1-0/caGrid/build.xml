@@ -714,6 +714,41 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
+	
+	
+	<!-- =============================================================== -->
+	<!-- CAGRID DataServiceExtensions:                                   -->
+	<!-- =============================================================== -->
+	<target name="configure-dataExtensions" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/dataExtensions/ext">
+			<artifact refid="service_urls.properties" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/dataExtensions" inheritAll="false" antfile="build.xml" target="configure" />
+	</target>
+	<target name="build-dataExtensions" depends="configure-dataExtensions" description="Builds caGrid Data Services extension">
+		<resolveDependencies extdir="${projects.dir}/dataExtensions/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="introduce.jars" />
+			<artifact refid="gme.globus.client.jars" />
+			<artifact refid="cadsr.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="data.metadata.jars" />
+			<artifact refid="metadata.schemas" />
+			<artifact refid="metadatautils.jars" />
+			<artifact refid="graph.jars" />
+			<artifact refid="introduce.core.test.jars" />
+			<artifact refid="validation.jars" />
+			<artifact refid="ws.enum.jars" />
+			<artifact refid="bdt.jars" />
+			<artifact refid="data.jars"/>
+			<artifact refid="data.schemas"/>
+		</resolveDependencies>
+		<ant dir="${projects.dir}/dataExtensions" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
 	<!-- =============================================================== -->
