@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.Data;
-import gov.nih.nci.cagrid.data.style.sdkstyle.wizard.CoreDsIntroPanel;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.data.utilities.CastorMappingUtil;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -48,7 +47,7 @@ import javax.swing.ScrollPaneConstants;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.2 2007-07-12 19:53:06 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String[] LOCAL_CLIENT_REQUIRED_FILES = new String[] {
@@ -154,7 +153,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public void update() {
         // -- configure the UI -- //
         // verify the sdk query library has been copied into the service
-        String sdkQueryLibName = new File(CoreDsIntroPanel.SDK_31_QUERY_LIB).getName();
+        String sdkQueryLibName = new File(SDK31InitializationPanel.SDK_31_QUERY_LIB).getName();
         File sdkQueryLib = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
                 + File.separator + "lib" + File.separator + sdkQueryLibName);
         
