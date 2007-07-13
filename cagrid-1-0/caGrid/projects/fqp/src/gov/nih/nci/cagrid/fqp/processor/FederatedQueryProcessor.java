@@ -43,8 +43,9 @@ class FederatedQueryProcessor {
 	/**
 	 * Process root element DCQLQuery Element
 	 * 
-	 * @param dcqlQryPlan
+	 * @param targetObject
 	 * @return
+     *      The CQL query required to process the target
 	 * @throws FederatedQueryProcessingException
 	 */
 	public CQLQuery processDCQLQuery(Object targetObject) throws FederatedQueryProcessingException {
@@ -111,6 +112,7 @@ class FederatedQueryProcessor {
 	 * 
 	 * @param dcqlGroup
 	 * @return
+     *      The CQL group
 	 * @throws FederatedQueryProcessingException
 	 */
 	private gov.nih.nci.cagrid.cqlquery.Group processGroup(Group dcqlGroup) throws FederatedQueryProcessingException {
@@ -171,6 +173,7 @@ class FederatedQueryProcessor {
 	 * 
 	 * @param dcqlAssociation
 	 * @return
+     *      The CQL Association
 	 * @throws QueryExecutionException
 	 */
 	private gov.nih.nci.cagrid.cqlquery.Association processAssociation(Association dcqlAssociation)
@@ -197,6 +200,7 @@ class FederatedQueryProcessor {
 	 * 
 	 * @param foreignAssociation
 	 * @return
+     *      The CQL Group representing the foreign association
 	 * @throws FederatedQueryProcessingException
 	 */
 	private gov.nih.nci.cagrid.cqlquery.Group processForeignAssociation(ForeignAssociation foreignAssociation)
@@ -265,6 +269,7 @@ class FederatedQueryProcessor {
 	 * 
 	 * @param list
 	 * @return
+     *      A CQL Group of attributes
 	 * @throws FederatedQueryProcessingException 
 	 */
 	public static gov.nih.nci.cagrid.cqlquery.Group buildGroup(JoinCondition joinCondition, List list) throws FederatedQueryProcessingException {
@@ -346,6 +351,7 @@ class FederatedQueryProcessor {
 	 * @param property
 	 * @param value
 	 * @return
+     *      A CQL Attribute
 	 * @throws FederatedQueryProcessingException 
 	 */
 	private static gov.nih.nci.cagrid.cqlquery.Attribute createAttributeFromValue(JoinCondition joinCondition,

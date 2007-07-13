@@ -36,6 +36,7 @@ public class FederatedQueryEngine {
 	 * 
 	 * @param dcqlQuery
 	 * @return
+     *      The results of executing the DCQL query
 	 * @throws FederatedQueryProcessingException
 	 */
 	public DCQLQueryResultsCollection execute(DCQLQuery dcqlQuery) throws FederatedQueryProcessingException {
@@ -73,7 +74,8 @@ public class FederatedQueryEngine {
 	 * 
 	 * @param dcqlQuery
 	 * @return
-	 * @throws FederatedQueryException
+     *      Aggregated results of the DCQL query
+	 * @throws FederatedQueryProcessingException
 	 */
 	public CQLQueryResults executeAndAggregateResults(DCQLQuery dcqlQuery) throws FederatedQueryProcessingException {
 		FederatedQueryProcessor processor = new FederatedQueryProcessor();

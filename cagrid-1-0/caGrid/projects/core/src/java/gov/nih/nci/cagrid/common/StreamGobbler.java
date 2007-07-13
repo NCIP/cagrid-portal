@@ -16,7 +16,7 @@ import java.io.PrintWriter;
  * @author David Ervin
  * 
  * @created Jun 21, 2007 11:03:06 AM
- * @version $Id: StreamGobbler.java,v 1.1 2007-06-21 15:07:59 dervin Exp $
+ * @version $Id: StreamGobbler.java,v 1.2 2007-07-13 17:00:23 dervin Exp $
  */
 public class StreamGobbler extends Thread {
     public static final String TYPE_OUT = "OUT";
@@ -55,6 +55,9 @@ public class StreamGobbler extends Thread {
             while ((line = br.readLine()) != null) {
                 if (pw != null) {
                     pw.println(type != null ? type + "> " + line : line);
+                    if (line.length() != 0) {
+                        pw.flush();
+                    }
                 }
             }
             if (pw != null) {
