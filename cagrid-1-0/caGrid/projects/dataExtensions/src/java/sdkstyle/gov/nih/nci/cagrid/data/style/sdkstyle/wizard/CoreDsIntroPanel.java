@@ -26,7 +26,7 @@ import javax.swing.border.BevelBorder;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 25, 2006
- * @version $Id: CoreDsIntroPanel.java,v 1.2 2007-07-12 19:53:06 dervin Exp $
+ * @version $Id: CoreDsIntroPanel.java,v 1.3 2007-07-13 15:23:46 dervin Exp $
  */
 public abstract class CoreDsIntroPanel extends AbstractWizardPanel {
 
@@ -96,8 +96,7 @@ public abstract class CoreDsIntroPanel extends AbstractWizardPanel {
     private JLabel getWizardLabel() {
         if (wizardLabel == null) {
             wizardLabel = new JLabel();
-            Icon icon = new ImageIcon(getClass().getResource(
-                "/" + getClass().getPackage().getName().replace('.', '/') + "/resources/sdk3.gif"));
+            Icon icon = new ImageIcon(CoreDsIntroPanel.class.getResource("resources/sdk3.gif"));
             wizardLabel.setIcon(icon);
         }
         return wizardLabel;
