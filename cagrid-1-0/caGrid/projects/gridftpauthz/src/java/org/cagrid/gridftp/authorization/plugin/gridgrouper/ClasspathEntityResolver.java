@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
 
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -40,8 +39,7 @@ class ClasspathEntityResolver implements EntityResolver {
 			source = new InputSource(stream);
 			source.setSystemId(systemId);
 			source.setPublicId(publicID);
-		} else
-		if (systemId.contains("gridgrouper.xsd")) {
+		} else if (systemId.contains("gridgrouper.xsd")) {
 			InputStream stream = this.getClass().getClassLoader().getResourceAsStream(
 				GridGrouperAuthCallout.PARENT_SCHEMA);
 			source = new InputSource(stream);
