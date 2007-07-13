@@ -997,21 +997,6 @@
 	
 	
 	<!-- ============================================================== -->
-	<!-- Installs the Data Service Style Extensions                     -->
-	<!-- ============================================================== -->
-	<target name="installDataServiceStyles" depends="prepare">
-		<for list="${data.service.style.projects.list}" parallel="true" param="project.name" trim="true">
-			<sequential>
-				<echo message="Installing Data Service Style from @{project.name}." />
-				<ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="installDataServiceStyle">
-					<property name="introduce.extensions.dir" value="${introduce.extensions.dir}" />
-				</ant>
-			</sequential>
-		</for>
-	</target>
-
-
-	<!-- ============================================================== -->
 	<!-- Cleans up generated stuff                                      -->
 	<!-- ============================================================== -->
 	<target name="clean" depends="prepare" description="Cleans all projects.">
