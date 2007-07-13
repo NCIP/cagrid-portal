@@ -61,10 +61,9 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar" sourcepath="/caGrid-1.0-core"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-cql.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-extension.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-tests.jar"/>

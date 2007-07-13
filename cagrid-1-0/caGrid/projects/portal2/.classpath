@@ -110,7 +110,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jaxrpc.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-cql.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-extension.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-tests.jar"/>
