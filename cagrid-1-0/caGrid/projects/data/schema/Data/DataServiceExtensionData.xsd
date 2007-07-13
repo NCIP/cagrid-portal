@@ -50,8 +50,10 @@
 		</xsd:annotation>
 		<xsd:attribute name="useWsEnumeration" type="xsd:boolean" use="required"/>
 		<xsd:attribute name="useGridIdeitifiers" type="xsd:boolean" use="required"/>
-		<xsd:attribute name="useSdkDataSource" type="xsd:boolean" use="required"/>
 		<xsd:attribute name="useBdt" type="xsd:boolean" use="required"/>
+		<!-- remove this attribute once upgrader is working properly with service styles -->
+		<xsd:attribute name="useSdkDataSource" type="xsd:boolean" use="required"/>
+		<xsd:attribute name="serviceStyle" type="xsd:string" use="optional"/>
 	</xsd:complexType>
 	<xsd:complexType name="ClassMapping">
 		<xsd:annotation>
