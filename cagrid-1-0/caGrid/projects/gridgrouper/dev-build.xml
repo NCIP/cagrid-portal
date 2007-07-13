@@ -18,17 +18,17 @@
 	<property name="build.dir" location="build" />
 	<property name="build.dest" location="${build.dir}/classes" />
 	<property name="test.dir" value="test" />
-	
+
 	<property name="ui.jar.name" value="${jar.prefix}-ui.jar" />
 	<property name="resources.jar.name" value="${jar.prefix}-resources.jar" />
 
 	<property name="conf.dir" value="resources/conf" />
 	<property name="hbm.dir" value="resources/hbm" />
 	<property name="hibernate.props" value="${conf.dir}/grouper.hibernate.properties" />
-	<property name="build.sql" location="${build.dir}/sql"/>
-	
+	<property name="build.sql" location="${build.dir}/sql" />
+
 	<property name="test.log.dir" value="test/logs" />
-	
+
 	<property name="test.resources.dir" value="${test.dir}/resources" />
 
 	<property name="test.hibernate.props" value="${test.resources.dir}/grouper.hibernate.properties" />
@@ -130,7 +130,7 @@
 	<!-- Post Init Build Target                                         -->
 	<!-- ============================================================== -->
 	<target name="postInit">
-		<mkdir dir="${build.sql}"/>
+		<mkdir dir="${build.sql}" />
 	</target>
 
 
@@ -275,53 +275,53 @@
 
 	</target>
 
-    <target name="configure" description="Configures the project based on settings.">
-            <!-- These are the template files we are copying from -->
-            <fileset id="templates.fileset" dir="${basedir}">
-                <include name="*.template" />
-            </fileset>
-            <!-- We need to basically reverse the mapper used in the copy to 
+	<target name="configure" description="Configures the project based on settings.">
+		<!-- These are the template files we are copying from -->
+		<fileset id="templates.fileset" dir="${basedir}">
+			<include name="*.template" />
+		</fileset>
+		<!-- We need to basically reverse the mapper used in the copy to 
                  identify the target files -->
-            <fileset id="template.results.fileset" dir="${basedir}">
-                <include name="*" />
-                <present targetdir="${basedir}">
-                    <mapper type="glob" from="*" to="*.template" />
-                </present>
-            </fileset>
+		<fileset id="template.results.fileset" dir="${basedir}">
+			<include name="*" />
+			<present targetdir="${basedir}">
+				<mapper type="glob" from="*" to="*.template" />
+			</present>
+		</fileset>
 
-            <!-- First, create any target file that doesn't exist; outofdate doesn't handle this case -->
-            <copy todir="${basedir}">
-                <fileset dir="${basedir}">
-                    <include name="*.template" />
-                    <not>
-                        <present targetdir="${basedir}">
-                            <mapper type="glob" from="*.template" to="*" />
-                        </present>
-                    </not>
-                </fileset>
-                <mapper type="glob" from="*.template" to="*" />
-                <filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
-            </copy>
+		<!-- First, create any target file that doesn't exist; outofdate doesn't handle this case -->
+		<copy todir="${basedir}">
+			<fileset dir="${basedir}">
+				<include name="*.template" />
+				<not>
+					<present targetdir="${basedir}">
+						<mapper type="glob" from="*.template" to="*" />
+					</present>
+				</not>
+			</fileset>
+			<mapper type="glob" from="*.template" to="*" />
+			<filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
+		</copy>
 
-            <!-- Next, re-template all the files, if either the filter value files or the template files 
+		<!-- Next, re-template all the files, if either the filter value files or the template files 
                  are newer than the their targets -->
-            <outofdate verbose="true">
-                <sourcefiles>
-                    <pathelement path="${basedir}/ext/resources/service_urls.properties" />
-                    <fileset refid="templates.fileset" />
-                </sourcefiles>
-                <targetfiles>
-                    <fileset refid="template.results.fileset" />
-                </targetfiles>
-                <sequential>
-                    <copy todir="${basedir}" overwrite="true">
-                        <fileset refid="templates.fileset" />
-                        <mapper type="glob" from="*.template" to="*" />
-                        <filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
-                    </copy>
-                </sequential>
-            </outofdate>
-        </target>
+		<outofdate verbose="true">
+			<sourcefiles>
+				<pathelement path="${basedir}/ext/resources/service_urls.properties" />
+				<fileset refid="templates.fileset" />
+			</sourcefiles>
+			<targetfiles>
+				<fileset refid="template.results.fileset" />
+			</targetfiles>
+			<sequential>
+				<copy todir="${basedir}" overwrite="true">
+					<fileset refid="templates.fileset" />
+					<mapper type="glob" from="*.template" to="*" />
+					<filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
+				</copy>
+			</sequential>
+		</outofdate>
+	</target>
 
 
 	<!-- call the test target for each project and aggregates the log resutls  -->
@@ -380,7 +380,7 @@
 	<!-- Post Introduce Edit-->
 	<target name="testGrouperInit" depends="createTestGrouperSchema" description="initialize database">
 
-		<java fork="true" classpathref="test.run.classpath" classname="edu.internet2.middleware.grouper.RegistryInstall" failonerror="true"/>
+		<java fork="true" classpathref="test.run.classpath" classname="edu.internet2.middleware.grouper.RegistryInstall" failonerror="true" />
 	</target>
 
 	<!-- Post Introduce Edit-->
@@ -402,10 +402,10 @@
 			</fileset>
 		</schemacreate>
 	</target>
-	
+
 	<!-- Post Introduce Edit-->
 	<target name="grouperInit" depends="createGrouperSchema" description="initialize database">
-		<java fork="true" classpathref="service.run.classpath" classname="edu.internet2.middleware.grouper.RegistryInstall" failonerror="true"/>
+		<java fork="true" classpathref="service.run.classpath" classname="edu.internet2.middleware.grouper.RegistryInstall" failonerror="true" />
 	</target>
 
 	<target name="ui" description="Run the Grid Grouper Admin UI" depends="checkGlobus">
@@ -413,7 +413,7 @@
 			<arg value="etc/gridgrouper-ui.xml" />
 			<classpath refid="run.classpath" />
 			<classpath>
-				<pathelement location="resources/ui/gridgrouper" />	
+				<pathelement location="resources/ui/gridgrouper" />
 			</classpath>
 		</java>
 	</target>
@@ -427,6 +427,52 @@
 			<classpath refid="run.classpath" />
 		</java>
 	</target>
+
+	<target name="generateCA" description="Generates a certificate authority." depends="checkGlobus">
+		<input message="Please enter the DN for the new CA (ex. O=xyz,OU=abc,CN=My CA):" addproperty="dn.input" />
+		<input message="Please enter the number of days the new CA will be valid for:" addproperty="days.input" />
+		<input message="Please enter a password for the new CA:" addproperty="password.input" />
+		<input message="Please enter a location to write the new CA's private key:" addproperty="key.input" />
+		<input message="Please enter a location to write the new CA's certificate:" addproperty="cert.input" />
+		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntGenerateCA" fork="true" newenvironment="true" failonerror="true">
+			<arg value="${dn.input}" />
+			<arg value="${days.input}" />
+			<arg value="${password.input}" />
+			<arg value="${key.input}" />
+			<arg value="${cert.input}" />
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
+
+	<target name="createAndSignHostCertificate" description="Create and signs a host certificate." depends="checkGlobus">
+		<input message="Please enter the location of the CA's private key:" addproperty="key.input" />
+		<input message="Please enter the CA's password:" addproperty="password.input" />
+		<input message="Please enter the location of the CA's certificate:" addproperty="ca.input" />
+		<input message="Please enter the Hostname [${env.HOST}]:" addproperty="hostname.input" defaultvalue="${env.HOST}" />
+		<input message="Please enter the number of days the host certificate will be valid for:" addproperty="days.input" />
+		<input message="Please enter a location to write the host key:" addproperty="hostkey.input" />
+
+		<input message="Please enter a location to write the host certificate:" addproperty="cert.input" />
+		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntCreateHostCertificate" fork="true" newenvironment="true" failonerror="true">
+			<arg value="${key.input}" />
+			<arg value="${password.input}" />
+			<arg value="${ca.input}" />
+			<arg value="${hostname.input}" />
+			<arg value="${days.input}" />
+			<arg value="${hostkey.input}" />
+			<arg value="${cert.input}" />
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
+
+	<target name="generateTrustReport" description="Generates a Grid Trust Report." depends="checkGlobus">
+		<input message="Please enter a file location to write the report to [grid-trust-report.txt]:" addproperty="out.input" defaultvalue="grid-trust-report.txt" />
+		<java classname="gov.nih.nci.cagrid.gridca.commandline.GenerateTrustReport" fork="true" newenvironment="true" failonerror="true">
+			<arg value="${out.input}" />
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
+
 
 
 </project>
