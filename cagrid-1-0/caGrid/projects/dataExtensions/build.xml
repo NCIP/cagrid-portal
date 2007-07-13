@@ -158,9 +158,13 @@
 	
 	<!-- compiles the data service styles -->
 	<target name="compileStyles" depends="compileCore, compileUi, compileSdkStyle">
-		<for list="${data.service.styles}" parallel="true" param="style.name" trim="true">
+		<!-- must not run in parallel due to use of a variable -->
+		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
 			<sequential>
-				<property name="build.style.dir" location="${build.dir}/@{style.name}/classes"/>
+				<echo message="Compiling style @{style.name}"/>
+				<!-- CANNOT USE A PROPERTY, since they are immutable once set -->
+				<var name="build.style.dir" value="${build.dir}/@{style.name}/classes"/>
+				<mkdir dir="${build.dir}/@{style.name}"/>
 				<mkdir dir="${build.style.dir}"/>
 				<javac srcdir="${src.dir}/style/@{style.name}" destdir="${build.style.dir}" debug="${java.debug}" source="${java.source}">
 					<classpath>
@@ -223,11 +227,14 @@
 	
 	<!-- jars the styles -->
 	<target name="jarStyles" depends="compileStyles" description="Jars the styles">
-		<for list="${data.service.styles}" parallel="true" param="style.name" trim="true">
+		<!-- must not run in parallel due to use of a variable -->
+		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
 			<sequential>
-				<property name="style.lib.file" value="${build.jars.dir}/${project.jar.prefix}style${cagrid.master.jar.separator}@{style.name}.jar"/>
-				<property name="build.style.dir" location="${build.dir}/@{style.name}/classes"/>
-				<property name="style.src.dir" location="${src.dir}/style/@{style.name}" />
+				<echo message="Jaring style @{style.name}"/>
+				<!-- CANNOT USE A PROPERTY, since they are immutable once set -->
+				<var name="style.lib.file" value="${build.jars.dir}/${project.jar.prefix}style${cagrid.master.jar.separator}@{style.name}.jar"/>
+				<var name="build.style.dir" value="${build.dir}/@{style.name}/classes"/>
+				<var name="style.src.dir" value="${src.dir}/style/@{style.name}" />
 				<jar destfile="${style.lib.file}">
 					<fileset dir="${build.style.dir}">
 						<include name="**/*.class"/>
@@ -308,13 +315,15 @@
 		</copy>
 	
 		<!-- install the service styles -->
-		<for list="${data.service.styles}" parallel="true" param="style.name" trim="true">
+		<!-- must not run in parallel due to use of a variable -->
+		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
 			<sequential>
 				<echo message="Installing Data Service Style @{style.name}." />
 				<!-- some properties for the install -->
-				<property name="style.dest.dir" value="${introduce.extensions.dir}/data/styles/@{style.name}"/>
-				<property name="style.description" location="${basedir}/styles/@{style.name}/style.xml"/>
-				<property name="style.lib.file" location="${build.jars.dir}/${project.jar.prefix}style${cagrid.master.jar.separator}@{style.name}.jar"/>
+				<!-- CANNOT USE A PROPERTY, since they are immutable once set -->
+				<var name="style.dest.dir" value="${introduce.extensions.dir}/data/styles/@{style.name}"/>
+				<var name="style.description" value="${basedir}/styles/@{style.name}/style.xml"/>
+				<var name="style.lib.file" value="${build.jars.dir}/${project.jar.prefix}style${cagrid.master.jar.separator}@{style.name}.jar"/>
 				<!-- make requisite directories -->
 				<delete dir="${style.dest.dir}"/>
 				<mkdir dir="${style.dest.dir}"/>
