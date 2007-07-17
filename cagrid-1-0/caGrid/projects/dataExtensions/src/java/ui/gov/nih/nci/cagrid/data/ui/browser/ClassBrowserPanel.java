@@ -13,7 +13,6 @@ import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
@@ -21,6 +20,7 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -34,15 +34,13 @@ import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 
 /**
@@ -52,7 +50,7 @@ import javax.swing.event.DocumentListener;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created May 11, 2006
- * @version $Id: ClassBrowserPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: ClassBrowserPanel.java,v 1.2 2007-07-17 13:40:36 dervin Exp $
  */
 public class ClassBrowserPanel extends JPanel {
 
@@ -66,8 +64,8 @@ public class ClassBrowserPanel extends JPanel {
 	private JPanel classSelectionPanel = null;
 	private JLabel classSelectionLabel = null;
 	
-	private transient List classSelectionListeners = null;
-	private transient List additionalJarsListeners = null;
+	private transient List<ClassSelectionListener> classSelectionListeners = null;
+	private transient List<AdditionalJarsChangeListener> additionalJarsListeners = null;
 	
 	private transient ExtensionDataManager extensionDataManager = null;
 	private transient ServiceInformation serviceInfo = null;
@@ -77,63 +75,85 @@ public class ClassBrowserPanel extends JPanel {
 		this.serviceInfo = serviceInfo;
 		classSelectionListeners = new LinkedList();
 		additionalJarsListeners = new LinkedList();
-		populateFields();
+		initFirstTime();
 		initialize();
 	}
+    
+    
+    private void initFirstTime() {
+        // get the additional jars
+        String[] jarNames = null; 
+        try {
+            jarNames = extensionDataManager.getAdditionalJarNames();
+        } catch (Exception ex) {
+            ErrorDialog.showErrorDialog("Error loading list of additional jars", ex);
+        }
+        if (jarNames != null) {
+            addJars(jarNames);
+        }
+        
+        // populate available classes from the jars
+        populateClassDropdown();
+        
+        // set the selected query processor class
+        if (CommonTools.servicePropertyExists(
+            serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
+            try {
+                String qpClassname = CommonTools.getServicePropertyValue(
+                    serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+                getClassSelectionComboBox().setSelectedItem(qpClassname);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                ErrorDialog.showErrorDialog("Error getting query processor class name from properties",
+                    ex.getMessage(), ex);
+            }
+        }   
+    }
 	
 	
 	public void populateFields() {
-		// get the additional jars
-		String[] jarNames = null; 
-		try {
-			jarNames = extensionDataManager.getAdditionalJarNames();
-		} catch (Exception ex) {
-			ErrorDialog.showErrorDialog("Error loading list of additional jars", ex);
-		}
-		if (jarNames != null) {
-			addJars(jarNames);
-		}
-		// populate available classes from the jars
-		populateClassDropdown();
-		// set the selected query processor class
-		if (CommonTools.servicePropertyExists(
-			serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
-			try {
-				String qpClassname = CommonTools.getServicePropertyValue(
-					serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-				getClassSelectionComboBox().setSelectedItem(qpClassname);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				ErrorDialog.showErrorDialog("Error getting query processor class name from properties", ex);
-			}
-		}
+		// check that the service property for the query processor class
+        // hasn't changed in value
+	    try {
+	        if (servicePropertyClassDifferentFromDisplayed()) {
+	            String qpClassname = CommonTools.getServicePropertyValue(
+	                serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+	            getClassSelectionComboBox().setSelectedItem(qpClassname);
+            }
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	        ErrorDialog.showErrorDialog("Error getting query processor classname from properties", 
+	            ex.getMessage(), ex);
+	    }    
 	}
+
+
+    public boolean servicePropertyClassDifferentFromDisplayed() throws Exception {
+        String propertyValue = null;
+        if (CommonTools.servicePropertyExists(
+            serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
+                propertyValue = CommonTools.getServicePropertyValue(
+                    serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+        }
+        String displayedValue = getSelectedClassName();
+        return !Utils.equals(propertyValue, displayedValue);
+    }
 	
 	
 	private void addJars(String[] jarFiles) {
 		// only bother adding the jar file to the list if it's not in there yet
-		for (int i = 0; i < jarFiles.length; i++) {
-			String jarFile = jarFiles[i];
-			String shortJarName = (new File(jarFile)).getName();
-			boolean shouldAdd = true;
-			String[] currentJars = getAdditionalJars();
-			for (int j = 0; j < currentJars.length; j++) {
-				if (shortJarName.equals(currentJars[j])) {
-					shouldAdd = false;
-					break;
-				}
-			}
-			if (shouldAdd) {
-				// copy the jar to the service's lib directory
-				copyJarToService(jarFile, shortJarName);
-				// add the jar to the extension data's list of additional jars
-				// add the new jar name to the jars list
-				String[] additionalJars = new String[currentJars.length + 1];
-				System.arraycopy(currentJars, 0, additionalJars, 0, currentJars.length);
-				additionalJars[additionalJars.length - 1] = shortJarName;
-				getAdditionalJarsList().setListData(additionalJars);
-			}
-		}
+        List<String> uniqueJars = new ArrayList();
+        Collections.addAll(uniqueJars, getAdditionalJars());
+        for (String jarFile : jarFiles) {
+            String shortJarName = (new File(jarFile)).getName();
+            if (!uniqueJars.contains(shortJarName)) {
+                copyJarToService(jarFile, shortJarName);
+                uniqueJars.add(shortJarName);
+            }
+        }
+        String[] additionalJars = new String[uniqueJars.size()];
+        uniqueJars.toArray(additionalJars);
+        getAdditionalJarsList().setListData(additionalJars);
 	}
 
 
@@ -345,26 +365,9 @@ public class ClassBrowserPanel extends JPanel {
 	private JComboBox getClassSelectionComboBox() {
 		if (classSelectionComboBox == null) {
 			classSelectionComboBox = new JComboBox();
-			classSelectionComboBox.setEditable(true);
+			classSelectionComboBox.setEditable(false);
 			classSelectionComboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					fireClassSelectionChanged();
-				}
-			});
-			// add listener for manual changes to the class selection
-			Component c = classSelectionComboBox.getEditor().getEditorComponent();
-			((JTextField) c).getDocument().addDocumentListener(new DocumentListener() {
-				public void insertUpdate(DocumentEvent e) {
-					fireClassSelectionChanged();
-				}
-
-
-				public void removeUpdate(DocumentEvent e) {
-					fireClassSelectionChanged();
-				}
-
-
-				public void changedUpdate(DocumentEvent e) {
 					fireClassSelectionChanged();
 				}
 			});
@@ -442,8 +445,8 @@ public class ClassBrowserPanel extends JPanel {
 
 
 	private void populateClassDropdown() {
-		String libDir = serviceInfo.getBaseDirectory() + File.separator + "lib";
-		SortedSet classNames = new TreeSet();
+        SortedSet<String> foundClassNames = new TreeSet();
+		String libDir = serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "lib";
 		String[] jars = getAdditionalJars();
 		try {
 			URL[] urls = new URL[jars.length];
@@ -452,48 +455,72 @@ public class ClassBrowserPanel extends JPanel {
 			}
 			ClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
 			Class queryProcessorClass = CQLQueryProcessor.class;
-			for (int i = 0; i < jars.length; i++) {
-				JarFile jarFile = new JarFile(libDir + File.separator + jars[i]);
-				Enumeration jarEntries = jarFile.entries();
-				while (jarEntries.hasMoreElements()) {
-					JarEntry entry = (JarEntry) jarEntries.nextElement();
-					String name = entry.getName();
-					if (name.endsWith(".class")) {
-						name = name.replace('/', '.');
-						name = name.substring(0, name.length() - 6);
-						Class loadedClass = null;
-						try {
-							loadedClass = loader.loadClass(name);
-						} catch (Throwable e) {
-							// theres a lot of these...
-							// System.err.println("Error loading class (" + name
-							// + "):" + e.getMessage());
-						}
-						if (loadedClass != null && queryProcessorClass.isAssignableFrom(loadedClass)) {
-							classNames.add(name);
-						}
-					}
-				}
-				jarFile.close();
-			}
+            for (String jarName : jars) {
+                JarFile jarFile = new JarFile(libDir + File.separator + jarName);
+                Enumeration jarEntries = jarFile.entries();
+                while (jarEntries.hasMoreElements()) {
+                    JarEntry entry = (JarEntry) jarEntries.nextElement();
+                    String name = entry.getName();
+                    if (name.endsWith(".class")) {
+                        name = name.replace('/', '.');
+                        name = name.substring(0, name.length() - 6);
+                        Class loadedClass = null;
+                        try {
+                            loadedClass = loader.loadClass(name);
+                        } catch (Throwable e) {
+                            // theres a lot of these...
+                            // System.err.println("Error loading class (" + name
+                            // + "):" + e.getMessage());
+                        }
+                        if (loadedClass != null && queryProcessorClass.isAssignableFrom(loadedClass)) {
+                            foundClassNames.add(name);
+                        }
+                    }
+                }
+                jarFile.close();
+            }
+            // allow the created class loader to be reclaimed by GC
 			loader = null;
-			// remove all the classes currently in the drop down
-			while (getClassSelectionComboBox().getItemCount() != 0) {
-				getClassSelectionComboBox().removeItemAt(0);
-			}
-			// ensure the query processor stub is available
-			String qpStubName = ExtensionDataUtils.getQueryProcessorStubClassName(serviceInfo);
-			if (!classNames.contains(qpStubName)) {
-				classNames.add(qpStubName);
-			}
-			// populate the drop down
-			Iterator nameIter = classNames.iterator();
-			while (nameIter.hasNext()) {
-				getClassSelectionComboBox().addItem(nameIter.next());
-			}
+            // potentially populate the class drop down
+            DefaultComboBoxModel model = (DefaultComboBoxModel) getClassSelectionComboBox().getModel();
+            SortedSet<String> currentClassNames = new TreeSet();
+            for (int i = 0; i < model.getSize(); i++) {
+                currentClassNames.add(model.getElementAt(i).toString());
+            }
+            String qpStubName = ExtensionDataUtils.getQueryProcessorStubClassName(serviceInfo);
+            Set diff = SetUtil.difference(currentClassNames, foundClassNames);
+            // the query processor stub will frequently be a difference between found and current...
+            diff.remove(qpStubName);
+            if (diff.size() != 0) {
+                // just replace the current with the found jars
+                model.removeAllElements();
+                for (String className : foundClassNames) {
+                    model.addElement(className);
+                }
+            }
+            // ensure the query processor stub is always available
+            if (model.getIndexOf(qpStubName) == -1) {
+                model.addElement(qpStubName);
+            }
+            // set the selected query processor class
+            if (CommonTools.servicePropertyExists(
+                serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
+                try {
+                    String qpClassname = CommonTools.getServicePropertyValue(
+                        serviceInfo.getServiceDescriptor(), 
+                        DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+                    if (model.getIndexOf(qpClassname) != -1) {
+                        getClassSelectionComboBox().setSelectedItem(qpClassname);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    ErrorDialog.showErrorDialog("Error getting query processor class name from properties",
+                        ex.getMessage(), ex);
+                }
+            }
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error populating class names: " + ex.getMessage(), ex);
+			ErrorDialog.showErrorDialog("Error populating class names", ex.getMessage(), ex);
 		}
 	}
 
@@ -536,24 +563,22 @@ public class ClassBrowserPanel extends JPanel {
 
 	protected synchronized void fireClassSelectionChanged() {
 		ClassSelectionEvent event = null;
-		Iterator listenerIter = classSelectionListeners.iterator();
-		while (listenerIter.hasNext()) {
-			if (event == null) {
-				event = new ClassSelectionEvent(this);
-			}
-			((ClassSelectionListener) listenerIter.next()).classSelectionChanged(event);
-		}
+        for (ClassSelectionListener listener : classSelectionListeners) {
+            if (event == null) {
+                event = new ClassSelectionEvent(this);
+            }
+            listener.classSelectionChanged(event);
+        }
 	}
 
 
 	protected synchronized void fireAdditionalJarsChanged() {
 		AdditionalJarsChangedEvent event = null;
-		Iterator listenerIter = additionalJarsListeners.iterator();
-		while (listenerIter.hasNext()) {
-			if (event == null) {
-				event = new AdditionalJarsChangedEvent(this);
-			}
-			((AdditionalJarsChangeListener) listenerIter.next()).additionalJarsChanged(event);
-		}
+        for (AdditionalJarsChangeListener listener : additionalJarsListeners) {
+            if (event == null) {
+                event = new AdditionalJarsChangedEvent(this);
+            }
+            listener.additionalJarsChanged(event);
+        }
 	}
 }

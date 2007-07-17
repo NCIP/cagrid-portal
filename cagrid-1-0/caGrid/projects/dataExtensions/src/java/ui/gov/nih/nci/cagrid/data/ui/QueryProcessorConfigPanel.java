@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionEvent;
 import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionListener;
 import gov.nih.nci.cagrid.data.ui.table.QueryProcessorParametersTable;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -41,7 +42,7 @@ import javax.swing.JScrollPane;
  * @author David Ervin
  * 
  * @created Jun 27, 2007 8:58:22 AM
- * @version $Id: QueryProcessorConfigPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigPanel.java,v 1.2 2007-07-17 13:40:36 dervin Exp $ 
  */
 public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     
@@ -76,8 +77,15 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     
     
     public void updateDisplayedConfiguration() {
-        getQpParamsTable().classChanged();
+        // check for change to class
         getClassBrowserPanel().populateFields();
+        // repopulate qp params table based on service property values
+        try {
+            getQpParamsTable().populateProperties();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorDialog.showErrorDialog("Error updating displayed properties", ex.getMessage(), ex);
+        }
     }
     
     
@@ -92,6 +100,10 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
             // listen for class selection events
             classBrowserPanel.addClassSelectionListener(new ClassSelectionListener() {
                 public void classSelectionChanged(ClassSelectionEvent e) {
+                    // class selection changed...
+                    // a) Blow away QP service properties
+                    // b) Load new service properties into service properties
+                    // c) Populate QP properties table
                     try {
                         saveProcessorClassName(classBrowserPanel.getSelectedClassName());
                     } catch (Exception ex) {
@@ -194,22 +206,38 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     // -----------------------------------------
     
     private void saveProcessorClassName(String className) throws Exception {
-        // store the property
-        CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(),
-            DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
-        // remove all query processor config properties from the service properties
-        ServicePropertiesProperty[] oldProperties = getServiceInfo().getServiceProperties().getProperty();
-        List keptProperties = new ArrayList();
-        for (int i = 0; i < oldProperties.length; i++) {
-            if (!oldProperties[i].getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
-                keptProperties.add(oldProperties[i]);
+        // if property does not exist or current class is not same as selected, perform update
+        if (isDifferentProcessorClass(className)) {
+            // store the property
+            CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(),
+                DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
+            // remove all query processor config properties from the service properties
+            ServicePropertiesProperty[] oldProperties = getServiceInfo().getServiceProperties().getProperty();
+            List<ServicePropertiesProperty> keptProperties = new ArrayList();
+            for (ServicePropertiesProperty oldProp : oldProperties) {
+                if (!oldProp.getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
+                    keptProperties.add(oldProp);
+                }
             }
+            ServicePropertiesProperty[] properties = new ServicePropertiesProperty[keptProperties.size()];
+            keptProperties.toArray(properties);
+            getServiceInfo().getServiceDescriptor().getServiceProperties().setProperty(properties);
+            // inform the parameters table that the class name is different
+            getQpParamsTable().classChanged();
         }
-        ServicePropertiesProperty[] properties = new ServicePropertiesProperty[keptProperties.size()];
-        keptProperties.toArray(properties);
-        getServiceInfo().getServiceDescriptor().getServiceProperties().setProperty(properties);
-        // inform the parameters table that the class name is different
-        getQpParamsTable().classChanged();
+    }
+    
+    
+    private boolean isDifferentProcessorClass(String className) throws Exception {
+        ServiceDescription desc = getServiceInfo().getServiceDescriptor();
+        boolean propertyExists = CommonTools.servicePropertyExists(
+            desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+        if (propertyExists) {
+            String current = CommonTools.getServicePropertyValue(
+                desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+            return current == null || !current.equals(className);
+        }
+        return true;
     }
     
     
