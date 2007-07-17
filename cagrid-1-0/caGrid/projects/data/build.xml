@@ -186,20 +186,6 @@
 			</fileset>
 		</copy>
 		<available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
-
-		<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
-			<classpath>
-				<fileset dir="${ext.lib.dir}">
-					<include name="boot.jar" />
-					<include name="osgi.jar" />
-					<include name="resources.jar" />
-					<include name="runtime.jar" />
-					<include name="codegen.jar" />
-					<include name="jdtcore.jar" />
-					<include name="jetc-task.jar" />
-				</fileset>
-			</classpath>
-		</taskdef>
 	</target>
 
 	<target name="configure" description="Configures the project based on settings.">
@@ -360,15 +346,6 @@
 				<pathelement location="${stubs.dest}" />
 			</classpath>
 		</javac>
-	</target>
-
-
-	<!-- =================================================================== -->
-	<!--  Generate JET template classes                                      -->
-	<!-- =================================================================== -->
-	<target name="generateJETClasses" depends="init">
-		<jetc destdir="${extension.src.dir}" template="${src.dir}/jettemplates/codegen/CQLResultTypes.xsd.xmljet" />
-		<jetc destdir="${extension.src.dir}" template="${src.dir}/jettemplates/codegen/EnumerationServiceClient.javajet" />
 	</target>
 
 
