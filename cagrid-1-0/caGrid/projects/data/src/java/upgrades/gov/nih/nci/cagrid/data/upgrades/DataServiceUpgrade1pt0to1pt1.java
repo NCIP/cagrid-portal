@@ -18,6 +18,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
+import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
 import gov.nih.nci.cagrid.introduce.upgrade.one.one.ExtensionUpgraderBase;
 import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
@@ -57,32 +58,38 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 
 
     protected void upgrade() throws Exception {
-        // ensure we're upgrading appropriately
-        validateUpgrade();
-        // get the extension data in raw form
-        Element extensionData = getExtensionDataElement();
-        // update the data service libraries
-        updateLibraries();
-        // fix the cadsr information block
-        setCadsrInformation(extensionData);
-        // move the configuration for the CQL query processor into
-        // the service properties and remove it from the extension data
-        reconfigureCqlQueryProcessor(extensionData);
-        // add selected enum iterator
-        setEnumIteratorSelection();
-        // update schemas
-        updateDataSchemas();
-        // change the version number
-        setCurrentExtensionVersion();
-        // set the method documentation strings
-        setDescriptionStrings();
-        // add new attributes to extension data's Service Features
-        updateServiceFeatures();
-        // fix up the castor mapping location
-        moveCastorMappingFile();
-        // store the modified extension data back into the service model
-        setExtensionDataElement(extensionData);
-
+        try {
+            // ensure we're upgrading appropriately
+            validateUpgrade();
+            // get the extension data in raw form
+            Element extensionData = getExtensionDataElement();
+            // update the data service libraries
+            updateLibraries();
+            // fix the cadsr information block
+            setCadsrInformation(extensionData);
+            // move the configuration for the CQL query processor into
+            // the service properties and remove it from the extension data
+            reconfigureCqlQueryProcessor(extensionData);
+            // add selected enum iterator
+            setEnumIteratorSelection();
+            // update schemas
+            updateDataSchemas();
+            // change the version number
+            setCurrentExtensionVersion();
+            // set the method documentation strings
+            setDescriptionStrings();
+            // add new attributes to extension data's Service Features
+            updateServiceFeatures();
+            // fix up the castor mapping location
+            moveCastorMappingFile();
+            // store the modified extension data back into the service model
+            setExtensionDataElement(extensionData);
+            // if nothing has errored out by this point, the upgrade was a success
+            getStatus().setStatus(StatusBase.UPGRADE_OK);
+        } catch (UpgradeException ex) {
+            getStatus().setStatus(StatusBase.UPGRADE_FAIL);
+            throw ex;
+        }
     }
 
 
@@ -255,6 +262,9 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         if ((!isSdk31 && !isSdk32) || (isSdk31 && isSdk32)) {
             throw new UpgradeException("Unable to determine SDK version to upgrade");
         }
+        // tell user what we think the sdk version was
+        getStatus().addDescriptionLine("caCORE SDK version determined to be " 
+            + (isSdk31 ? "3.1" : "3.2 / 3.2.1"));
         // delete old libs
         for (File oldLib : oldLibs) {
             oldLib.delete();
@@ -414,6 +424,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             String styleName = isSdk31 ? "caCORE SDK v 3.1" : "caCORE SDK v 3.2(.1)";
             serviceFeaturesElement.setAttribute("serviceStyle", styleName);
         }
+        // use sdk data source attribute no longer exists
+        serviceFeaturesElement.removeAttribute("useSdkDataSource");
         setExtensionDataElement(extDataElement);
     }
 

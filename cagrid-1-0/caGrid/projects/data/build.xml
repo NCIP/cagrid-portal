@@ -21,11 +21,9 @@
 	<property name="project.name" value="${cagrid.master.project.name}-${project.version}-${ant.project.name}" />
 	<property name="project.jar.prefix" value="${cagrid.master.jar.prefix}${ant.project.name}${cagrid.master.jar.separator}" />
 
-
 	<!-- build output dirs -->
 	<property name="build.dir" location="build" />
 	<property name="build.utils.dest" location="${build.dir}/utilities/classes" />
-	<property name="build.extension.dest" location="${build.dir}/extension/classes" />
 	<property name="build.service.dest" location="${build.dir}/service/classes" />
 	<property name="build.validation.dest" location="${build.dir}/validation/classes" />
 	<property name="build.common.dest" location="${build.dir}/common/classes" />
@@ -36,7 +34,6 @@
 
 	<!-- jar names -->
 	<property name="utils.jar.name" value="${project.jar.prefix}utils.jar" />
-	<property name="extension.jar.name" value="${project.jar.prefix}extension.jar" />
 	<property name="service.jar.name" value="${project.jar.prefix}service.jar" />
 	<property name="validation.jar.name" value="${project.jar.prefix}validation.jar" />
 	<property name="common.jar.name" value="${project.jar.prefix}common.jar" />
@@ -46,7 +43,6 @@
 	<property name="tests.jar.name" value="${project.jar.prefix}tests.jar" />
 
 	<!-- jar files -->
-	<property name="extension.jar.file" value="${build.jars.dir}/${extension.jar.name}" />
 	<property name="utils.jar.file" value="${build.jars.dir}/${utils.jar.name}" />
 	<property name="service.jar.file" value="${build.jars.dir}/${service.jar.name}" />
 	<property name="validation.jar.file" value="${build.jars.dir}/${validation.jar.name}" />
@@ -55,11 +51,6 @@
 	<property name="tools.jar.file" value="${build.jars.dir}/${tools.jar.name}" />
 	<property name="upgrades.jar.file" value="${build.jars.dir}/${upgrades.jar.name}" />
 	<property name="tests.jar.file" value="${build.jars.dir}/${tests.jar.name}" />
-
-	<!-- extension -->
-	<property name="extension.description.file" value="${basedir}/extension/extension.xml" />
-	<property name="from.scratch.extension.description.file" value="${basedir}/extension/fromScratchExtension.xml" />
-	<property name="introduce.extensions.dir" location="../introduce/extensions" />
 
 	<!-- stubs -->
 	<property name="stubs.dir" location="${build.dir}/stubs" />
@@ -82,7 +73,6 @@
 	<property name="src.dir" location="${basedir}/src" />
 	<property name="java.src.dir" location="${src.dir}/java" />
 	<property name="utils.src.dir" location="${java.src.dir}/utilities" />
-	<property name="extension.src.dir" location="${java.src.dir}/extension" />
 	<property name="service.src.dir" location="${java.src.dir}/service" />
 	<property name="validation.src.dir" location="${java.src.dir}/validation" />
 	<property name="common.src.dir" location="${java.src.dir}/common" />
@@ -154,11 +144,10 @@
 
 
 	<!-- creates output directories -->
-    <target name="init" depends="configure">
+    <target name="init">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.common.dest}" />
 		<mkdir dir="${build.utils.dest}" />
-		<mkdir dir="${build.extension.dest}" />
 		<mkdir dir="${build.service.dest}" />
 		<mkdir dir="${build.validation.dest}" />
 		<mkdir dir="${build.cql.dest}" />
@@ -213,7 +202,7 @@
 		</taskdef>
 	</target>
 
-    <target name="configure" description="Configures the project based on settings.">
+	<target name="configure" description="Configures the project based on settings.">
         <copy todir="${extension.dir}" overwrite="true">
             <fileset dir="${extension.dir}">
                 <include name="*.template" />
@@ -360,33 +349,11 @@
 		</javac>
 	</target>
 
-
-	<!-- compiles the extension source code -->
-	<target name="compileExtension" depends="generateJETClasses, compileStubs, compileCommon, compileService, compileCql, compileValidation, compileUtils, compileTools">
-		<javac srcdir="${extension.src.dir}" destdir="${build.extension.dest}" debug="${java.debug}" source="${java.source}">
-			<classpath>
-				<path refid="base.classpath" />
-				<pathelement location="${stubs.dest}" />
-				<pathelement location="${build.service.dest}" />
-				<pathelement location="${build.common.dest}" />
-				<pathelement location="${build.cql.dest}" />
-				<pathelement location="${build.validation.dest}" />
-				<pathelement location="${build.utils.dest}" />
-				<pathelement location="${build.tools.dest}" />
-				<fileset dir="${globus.dir}/lib">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</javac>
-	</target>
-
-
 	<!-- compiles the upgrade source code -->
-	<target name="compileUpgrades" depends="compileStubs, compileExtension, compileUtils, compileCql, compileCommon">
+	<target name="compileUpgrades" depends="compileStubs, compileUtils, compileCql, compileCommon">
 		<javac srcdir="${upgrades.src.dir}" destdir="${build.upgrades.dest}" debug="${java.debug}" source="${java.source}">
 			<classpath>
 				<path refid="base.classpath" />
-				<pathelement location="${build.extension.dest}" />
 				<pathelement location="${build.utils.dest}" />
 				<pathelement location="${build.cql.dest}" />
 				<pathelement location="${build.common.dest}" />
@@ -473,7 +440,7 @@
 
 
 	<!-- compiles the test code -->
-	<target name="compileTests" depends="compileStubs, compileUtils, compileExtension, compileService">
+	<target name="compileTests" depends="compileStubs, compileUtils, compileService">
 		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="${java.debug}" source="${java.source}">
 			<classpath refid="test.classpath" />
 		</javac>
@@ -520,23 +487,6 @@
 			</fileset>
 		</jar>
 	</target>
-
-
-	<!-- jars the extension -->
-	<target name="jarExtension" depends="compileExtension" description="Jars the introduce extension code">
-		<jar destfile="${extension.jar.file}">
-			<fileset dir="${build.extension.dest}">
-				<include name="**/*.class" />
-			</fileset>
-			<fileset dir="${extension.src.dir}">
-				<include name="**/*.java" />
-			</fileset>
-			<fileset dir="src">
-				<include name="resources/**" />
-			</fileset>
-		</jar>
-	</target>
-
 
 	<!-- jars the validation -->
 	<target name="jarValidation" depends="compileValidation" description="Jars the validation code">
@@ -627,9 +577,6 @@
 	<target name="clean">
 		<delete dir="tmp" />
 		<delete dir="${build.dir}" />
-		<delete dir="${extension.out.dir}" />
-		<delete dir="${extension.src.dir}/gov/nih/nci/cagrid/data/codegen/templates" failonerror="false" />
-		<delete file="${extension.base.dir}/DataServiceExtension.zip" />
 	</target>
 
 
@@ -638,51 +585,6 @@
 		<delete dir="${stubs.src}" />
 		<delete dir="${stubs.dest}" />
 	</target>
-
-
-	<!-- Build and install extensions for introduce -->
-	<!-- this target installs the default introduce extension, which adds an operation provider to a service
-	which MAKES it a data service -->
-	<target name="installIntroduceExtensions" description="Builds and installs the Data Services extensions into Introduce.">
-		<delete dir="${introduce.extensions.dir}/data" failonerror="false" />
-		<mkdir dir="${introduce.extensions.dir}/data" />
-		<mkdir dir="${introduce.extensions.dir}/data/lib" />
-		<mkdir dir="${introduce.extensions.dir}/data/schema" />
-		<!-- libraries -->
-		<copy todir="${introduce.extensions.dir}/lib">
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.lib.dir}">
-				<include name="*.jar" />
-				<exclude name="*Introduce*.jar"/>
-			</fileset>
-			<fileset dir="${build.jars.dir}">
-				<include name="**/*.jar" />
-			</fileset>
-		</copy>
-		<!-- data service schemas -->
-		<copy todir="${introduce.extensions.dir}/data/schema">
-			<fileset dir="${schema.dest}">
-				<include name="**/*.xsd" />
-				<include name="**/*.wsdl" />
-			</fileset>
-		</copy>
-		<!-- DomainModel client-config.wsdd -->
-		<copy todir="${introduce.extensions.dir}/data">
-			<fileset dir="${basedir}">
-				<include name="DomainModel-client-config.wsdd" />
-			</fileset>
-		</copy>
-		<!-- everything else -->
-		<copy todir="${introduce.extensions.dir}/data">
-			<fileset dir="${extension.dir}">
-				<include name="**/*" />
-			    <exclude name="*.template" />
-			</fileset>
-		</copy>
-	</target>
-
 
 	<!-- runs the query building tool -->
 	<target name="queryBuilder" depends="all" description="Runs the CQL query builder tool">
@@ -708,5 +610,5 @@
 
 
 	<!-- build and jar everything -->
-	<target name="all" depends="jarStubs, jarCommon, jarUtils, jarExtension, jarService, jarValidation, jarCql, jarTools, jarUpgrades, jarTests" description="Builds and jars all the classes in the project" />
+	<target name="all" depends="jarStubs, jarCommon, jarUtils, jarService, jarValidation, jarCql, jarTools, jarUpgrades, jarTests" description="Builds and jars all the classes in the project" />
 </project>

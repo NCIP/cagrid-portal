@@ -28,9 +28,6 @@
             <fileset dir="${ant.library.dir}">
                 <include name="*.jar" />
             </fileset>
-            <fileset dir="${ext.globus.dir}/lib">
-                <include name="*.jar" />
-            </fileset>
         </path>
         <path id="all.test.classpath">
             <path refid="test.classpath" />
@@ -43,9 +40,6 @@
         <mkdir dir="${instrumented.classes.dir}" />
         <cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
             <fileset dir="${build.utils.dest}">
-                <include name="**/*.class" />
-            </fileset>
-            <fileset dir="${build.extension.dest}">
                 <include name="**/*.class" />
             </fileset>
             <fileset dir="${build.service.dest}">
@@ -96,7 +90,7 @@
 
 
     <!-- tests creation of a basic data service -->
-    <target name="testCreation" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Runs the service creation tests" unless="base.service.created">
+    <target name="testCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests" unless="base.service.created">
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
@@ -122,7 +116,7 @@
 
 
     <!-- tests creation of an enumeration supporting data service -->
-    <target name="testEnumerationCreation" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="enumeration.service.created">
+    <target name="testEnumerationCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="enumeration.service.created">
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
@@ -148,7 +142,7 @@
 
 
     <!-- tests creation of a BDT data service -->
-    <target name="testBdtCreation" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="bdt.service.created">
+    <target name="testBdtCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="bdt.service.created">
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
@@ -178,7 +172,7 @@
 
 
     <!-- system tests against the basic data service -->
-    <target name="testBasicSystem" depends="setGlobus, installIntroduceExtensions, prepareClasspaths, testCreation" description="Runs the service creation and then system tests">
+    <target name="testBasicSystem" depends="setGlobus, prepareClasspaths, testCreation" description="Runs the service creation and then system tests">
         <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
@@ -222,7 +216,7 @@
 
 
     <!-- tests upgrading a 1.0 service to 1.1 -->
-    <target name="testUpgradeFrom1pt0to1pt1" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to 1.1" unless="upgrade.1pt0.to.1pt1.completed">
+    <target name="testUpgradeFrom1pt0to1pt1" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to 1.1" unless="upgrade.1pt0.to.1pt1.completed">
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
@@ -231,17 +225,17 @@
             <classpath>
                 <pathelement path="${test.classes.dir}" />
             </classpath>
-            <!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
+        	<!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
             <classpath>
-                <fileset dir="${introduce.dir}/extensions/lib">
-                    <include name="*.jar" />
-                </fileset>
-            </classpath>
+				<fileset dir="${introduce.dir}/extensions/lib">
+        	    	<include name="*.jar" />
+        	    </fileset>
+        	</classpath>
             <formatter type="xml" />
             <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
             <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
                 <fileset dir="${test.src.dir}">
-                    <include name="**/Upgrade*To1pt1Tests.java" />
+                    <include name="**/UpgradeTo1pt1Tests.java" />
                 </fileset>
             </batchtest>
         </junit>
@@ -307,9 +301,6 @@
                 <include name="**/*.java" />
             </fileset>
             <fileset dir="${service.src.dir}">
-                <include name="**/*.java" />
-            </fileset>
-            <fileset dir="${extension.src.dir}">
                 <include name="**/*.java" />
             </fileset>
             <fileset dir="${utils.src.dir}">
