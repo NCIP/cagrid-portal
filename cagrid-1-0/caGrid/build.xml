@@ -1039,8 +1039,5 @@
 			</sequential>
 		</for>
 		<runtarget target="installIntroduceExtensions" />
-		<!--
-		<runtarget target="installDataServiceStyles" />
-		-->
 	</target>
 </project>
