@@ -71,21 +71,6 @@
 	    	<pathelement location="${lib.dir}/ant-contrib.jar" />
 		</classpath>
 	</taskdef>
-	
-	<!-- using jet for templates -->
-	<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
-		<classpath>
-			<fileset dir="${ext.lib.dir}">
-				<include name="boot.jar" />
-				<include name="osgi.jar" />
-				<include name="resources.jar" />
-				<include name="runtime.jar" />
-				<include name="codegen.jar" />
-				<include name="jdtcore.jar" />
-				<include name="jetc-task.jar" />
-			</fileset>
-		</classpath>
-	</taskdef>
 
 	<!-- =============================================================== -->
 	<!-- Classpaths                                                      -->
@@ -127,6 +112,21 @@
 		<mkdir dir="${build.ui.dest}" />
     	<mkdir dir="${build.sdkstyle.dest}" />
 		<mkdir dir="${test.classes.dir}" />
+	
+		<!-- using jet for templates -->
+		<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
+			<classpath>
+				<fileset dir="${ext.lib.dir}">
+					<include name="boot.jar" />
+					<include name="osgi.jar" />
+					<include name="resources.jar" />
+					<include name="runtime.jar" />
+					<include name="codegen.jar" />
+					<include name="jdtcore.jar" />
+					<include name="jetc-task.jar" />
+				</fileset>
+			</classpath>
+		</taskdef>
     </target>
 
     <target name="configure" description="Configures the project based on settings.">
