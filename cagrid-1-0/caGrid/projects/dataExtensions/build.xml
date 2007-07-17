@@ -300,7 +300,7 @@
 	<target name="installIntroduceExtensions" description="Builds and installs the Data Services extensions into Introduce.">
 		<mkdir dir="${introduce.extensions.dir}/data" />
 		<mkdir dir="${introduce.extensions.dir}/data/lib" />
-		<mkdir dir="${introduce.extensions.dir}/data/schema" />
+		<mkdir dir="${introduce.extensions.dir}/data/schema/Data" />
 		<mkdir dir="${introduce.extensions.dir}/data/styles" />
 		<!-- libraries -->
 		<copy todir="${introduce.extensions.dir}/lib">
@@ -318,7 +318,7 @@
 			</fileset>
 		</copy>
 		<!-- data service schemas -->
-		<copy todir="${introduce.extensions.dir}/data/schema">
+		<copy todir="${introduce.extensions.dir}/data/schema/Data">
 			<fileset dir="${data.schemas.dir}">
 				<include name="**/*.xsd" />
 				<include name="**/*.wsdl" />
