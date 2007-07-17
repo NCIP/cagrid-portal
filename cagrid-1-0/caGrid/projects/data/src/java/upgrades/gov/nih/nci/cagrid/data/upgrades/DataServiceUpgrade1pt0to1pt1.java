@@ -379,7 +379,41 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         Element extDataElement = getExtensionDataElement();
         Element serviceFeaturesElement = extDataElement.getChild(
             "ServiceFeatures", extDataElement.getNamespace());
+        // BDT feature didn't exist in 1.0, so set it to false for 1.1
         serviceFeaturesElement.setAttribute("useBdt", String.valueOf(false));
+        // determine if using SDK
+        if (serviceIsUsingSdkDataSource()) {
+            // since this part of the upgrade runs AFTER upgraded the SDK libraries
+            // have been updated, look for the caGrid-1.1 libs...
+            FileFilter sdkLibFilter = new FileFilter() {
+                public boolean accept(File name) {
+                    String filename = name.getName();
+                    return (filename.startsWith("caGrid-1.1-sdkQuery") 
+                        || filename.startsWith("caGrid-1.1-sdkQuery32"))
+                        && filename.endsWith(".jar");
+                }
+            };
+            File serviceLibDir = new File(getServicePath() + File.separator + "lib");
+            boolean isSdk31 = false;
+            boolean isSdk32 = false;
+            File[] oldLibs = serviceLibDir.listFiles(sdkLibFilter);
+            // first must see which version of SDK we're using
+            for (int i = 0; i < oldLibs.length; i++) {
+                if (oldLibs[i].getName().indexOf("caGrid-1.1-sdkQuery32") != -1) {
+                    isSdk32 = true;
+                } else {
+                    if (oldLibs[i].getName().indexOf("caGrid-1.1-sdkQuery") != -1) {
+                        isSdk31 = true;
+                    }
+                }
+            }
+            if ((!isSdk31 && !isSdk32) || (isSdk31 && isSdk32)) {
+                throw new UpgradeException("Unable to determine SDK version to be switched to a style!");
+            }
+            
+            String styleName = isSdk31 ? "caCORE SDK v 3.1" : "caCORE SDK v 3.2(.1)";
+            serviceFeaturesElement.setAttribute("serviceStyle", styleName);
+        }
         setExtensionDataElement(extDataElement);
     }
 
