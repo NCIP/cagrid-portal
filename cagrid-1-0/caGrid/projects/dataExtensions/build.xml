@@ -46,6 +46,7 @@
 
 	<!-- source directories -->
 	<property name="src.dir" location="${basedir}/src/java" />
+	<property name="templates.src.dir" location="${basedir}/src/jettemplates"/>
 	<property name="core.src.dir" location="${src.dir}/core" />
 	<property name="ui.src.dir" location="${src.dir}/ui"/>
 	<property name="sdkstyle.src.dir" location="${src.dir}/sdkstyle"/>
@@ -68,6 +69,21 @@
     <taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
 	    	<pathelement location="${lib.dir}/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+	
+	<!-- using jet for templates -->
+	<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
+		<classpath>
+			<fileset dir="${ext.lib.dir}">
+				<include name="boot.jar" />
+				<include name="osgi.jar" />
+				<include name="resources.jar" />
+				<include name="runtime.jar" />
+				<include name="codegen.jar" />
+				<include name="jdtcore.jar" />
+				<include name="jetc-task.jar" />
+			</fileset>
 		</classpath>
 	</taskdef>
 
@@ -123,9 +139,17 @@
         </copy>
     </target>
 	
+	<!-- =================================================================== -->
+	<!--  Generate JET template classes                                      -->
+	<!-- =================================================================== -->
+	<target name="generateJETClasses" depends="init">
+		<jetc destdir="${core.src.dir}" template="${templates.src.dir}/codegen/CQLResultTypes.xsd.xmljet" />
+		<jetc destdir="${core.src.dir}" template="${templates.src.dir}/codegen/EnumerationServiceClient.javajet" />
+	</target>
+	
 	
 	<!-- compiles the core classes for data service extensions -->
-	<target name="compileCore" depends="init">
+	<target name="compileCore" depends="init, generateJETClasses">
 		<javac srcdir="${core.src.dir}" destdir="${build.core.dest}" debug="${java.debug}" source="${java.source}">
 			<classpath>
 				<path refid="base.classpath" />
