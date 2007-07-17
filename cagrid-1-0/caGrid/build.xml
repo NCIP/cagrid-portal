@@ -682,13 +682,7 @@
 	<!-- =============================================================== -->
 	<!-- CAGRID DataService:                                             -->
 	<!-- =============================================================== -->
-	<target name="configure-data" depends="prepare">
-		<resolveDependencies extdir="${projects.dir}/data/ext">
-			<artifact refid="service_urls.properties" />
-		</resolveDependencies>
-		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="configure" />
-	</target>
-	<target name="build-data" depends="configure-data" description="Builds caGrid Data Services components">
+	<target name="build-data" description="Builds caGrid Data Services components">
 		<resolveDependencies extdir="${projects.dir}/data/ext">
 			<artifact refid="cagrid.properties" />
 			<artifact refid="core.jars" />
