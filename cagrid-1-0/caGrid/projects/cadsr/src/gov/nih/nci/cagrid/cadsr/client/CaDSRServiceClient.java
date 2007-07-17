@@ -24,7 +24,6 @@ import org.apache.axis.client.Stub;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
-import org.apache.axis.utils.ClassUtils;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.encoding.ObjectSerializer;
 
@@ -76,7 +75,9 @@ public class CaDSRServiceClient extends ServiceSecurityClient implements CaDSRSe
 
         CaDSRServiceAddressingLocator locator = new CaDSRServiceAddressingLocator();
         // attempt to load our context sensitive wsdd file
-        InputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
+        // InputStream resourceAsStream =
+        // ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
+        InputStream resourceAsStream = getClass().getResourceAsStream("client-config.wsdd");
         if (resourceAsStream != null) {
             // we found it, so tell axis to configure an engine to use it
             EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
