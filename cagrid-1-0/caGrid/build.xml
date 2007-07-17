@@ -693,7 +693,6 @@
 			<artifact refid="introduce.resources" />
 			<artifact refid="cadsr.jars" />
 			<artifact refid="common.test.jars" />
-			<artifact refid="jet.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="data.metadata.jars" />
 			<artifact refid="metadata.schemas" />
@@ -716,12 +715,14 @@
 	<target name="configure-dataExtensions" depends="prepare">
 		<resolveDependencies extdir="${projects.dir}/dataExtensions/ext">
 			<artifact refid="service_urls.properties" />
+			<artifact refid="jet.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/dataExtensions" inheritAll="false" antfile="build.xml" target="configure" />
 	</target>
 	<target name="build-dataExtensions" depends="configure-dataExtensions" description="Builds caGrid Data Services extension">
 		<resolveDependencies extdir="${projects.dir}/dataExtensions/ext">
 			<artifact refid="cagrid.properties" />
+			<artifact refid="jet.jars" />
 			<artifact refid="core.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="core.test.jars" />
