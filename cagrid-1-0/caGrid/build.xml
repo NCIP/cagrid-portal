@@ -715,7 +715,6 @@
 	<target name="configure-dataExtensions" depends="prepare">
 		<resolveDependencies extdir="${projects.dir}/dataExtensions/ext">
 			<artifact refid="service_urls.properties" />
-			<artifact refid="jet.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/dataExtensions" inheritAll="false" antfile="build.xml" target="configure" />
 	</target>
