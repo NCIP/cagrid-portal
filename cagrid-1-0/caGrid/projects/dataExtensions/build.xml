@@ -42,7 +42,7 @@
 	<property name="extension.dir" location="${basedir}/extension" />
 	<property name="extension.description.file" value="${extension.dir}/extension.xml" />
 	<property name="introduce.extensions.dir" location="../introduce/extensions" />
-	<property name="data.schemas.dir" location="${basedir}/ext/xsd/Data" />
+	<property name="ext.schema.dir" location="${basedir}/ext/xsd"/>
 
 	<!-- source directories -->
 	<property name="src.dir" location="${basedir}/src/java" />
@@ -322,9 +322,17 @@
 		</copy>
 		<!-- data service schemas -->
 		<copy todir="${introduce.extensions.dir}/data/schema/Data">
-			<fileset dir="${data.schemas.dir}">
+			<fileset dir="${ext.schema.dir}/Data">
 				<include name="**/*.xsd" />
 				<include name="**/*.wsdl" />
+			</fileset>
+		</copy>
+		<!-- other schemas -->
+		<copy todir="${introduce.extensions.dir}/data/schema">
+			<fileset dir="${basedir}/ext">
+				<include name="xsd/**/*.xsd"/>
+				<include name="xsd/**/*.wsdl"/>
+				<exclude name="xsd/Data/*"/>
 			</fileset>
 		</copy>
 		<!-- DomainModel client-config.wsdd -->

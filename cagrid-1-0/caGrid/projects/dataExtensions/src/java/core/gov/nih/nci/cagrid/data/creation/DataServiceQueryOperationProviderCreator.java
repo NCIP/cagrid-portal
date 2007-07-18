@@ -55,7 +55,7 @@ import org.projectmobius.common.MobiusException;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Jun 15, 2006
- * @version $Id: DataServiceQueryOperationProviderCreator.java,v 1.2 2007-07-18 14:01:47 dervin Exp $
+ * @version $Id: DataServiceQueryOperationProviderCreator.java,v 1.3 2007-07-18 14:30:53 dervin Exp $
  */
 public class DataServiceQueryOperationProviderCreator implements CreationExtensionPostProcessor {
 
@@ -92,24 +92,24 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		// service's directory
 		String schemaDir = getServiceSchemaDir(serviceInfo);
 		System.out.println("Copying schemas to " + schemaDir);
-		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
-			+ File.separator + "schema" + File.separator + "Data");
-		List schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, new FileFilter() {
-			public boolean accept(File pathname) {
-				if (pathname.isDirectory() || pathname.getName().endsWith(".xsd")) {
-					return !pathname.getName().equals(WsEnumConstants.ENUMERATION_WSDL_NAME)
-						&& !pathname.getName().equals(WsEnumConstants.ENUMERATION_XSD_NAME)
-						&& !pathname.getName().equals(WsEnumConstants.ADDRESSING_XSD_NAME);
-				}
-				return false;
-			}
-		});
+        FileFilter dataXsdFilter = new FileFilter() {
+            public boolean accept(File pathname) {
+                if (pathname.isDirectory() || pathname.getName().endsWith(".xsd")) {
+                    return !pathname.getName().equals(WsEnumConstants.ENUMERATION_WSDL_NAME)
+                        && !pathname.getName().equals(WsEnumConstants.ENUMERATION_XSD_NAME)
+                        && !pathname.getName().equals(WsEnumConstants.ADDRESSING_XSD_NAME);
+                }
+                return false;
+            }
+        };
+		File extensionSchemaDir = new File(ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath()
+            + File.separator + "data" + File.separator + "schema" + File.separator + "Data");
+		List<File> schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, dataXsdFilter);
 		// also copy the WSDL for data services
 		// schemaFiles.add(new File(getWsdlFileName(props)));
 		schemaFiles.add(new File(extensionSchemaDir + File.separator + "DataService.wsdl"));
-		try {
-			for (int i = 0; i < schemaFiles.size(); i++) {
-				File schemaFile = (File) schemaFiles.get(i);
+        try {
+            for (File schemaFile : schemaFiles) {
 				String subname = schemaFile.getAbsolutePath().substring(
 					extensionSchemaDir.getAbsolutePath().length() + File.separator.length());
 				File schemaOut = new File(schemaDir + File.separator + subname);
@@ -118,6 +118,15 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		} catch (Exception ex) {
 			throw new CreationExtensionException("Error copying data service schemas: " + ex.getMessage(), ex);
 		}
+		// finally, all external (to data services) schemas
+        File xsdDir = new File(ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath()
+            + File.separator + "data" + File.separator + "schema" + File.separator + "xsd");
+        File xsdOutDir = new File(schemaDir + File.separator + "xsd");
+        try {
+            Utils.copyDirectory(xsdDir, xsdOutDir);
+        } catch (Exception ex) {
+            throw new CreationExtensionException("Error copying external schemas: " + ex.getMessage(), ex);
+        }
 	}
 
 
@@ -209,7 +218,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 			directory.mkdirs();
 		}
 		// from the lib directory
-		File libDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "lib");
+		File libDir = new File(ExtensionsLoader.getInstance().getExtensionsDir() 
+            + File.separator + "lib");
 		File[] libs = libDir.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
 				String name = pathname.getName();
