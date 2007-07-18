@@ -12,7 +12,6 @@ import gov.nih.nci.cagrid.data.service.globus.DataServiceProviderImpl;
 import gov.nih.nci.cagrid.data.style.ServiceStyleContainer;
 import gov.nih.nci.cagrid.data.style.ServiceStyleLoader;
 import gov.nih.nci.cagrid.data.style.StyleCreationPostProcessor;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -42,7 +41,6 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import javax.xml.namespace.QName;
 
@@ -57,7 +55,7 @@ import org.projectmobius.common.MobiusException;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Jun 15, 2006
- * @version $Id: DataServiceQueryOperationProviderCreator.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: DataServiceQueryOperationProviderCreator.java,v 1.2 2007-07-18 14:01:47 dervin Exp $
  */
 public class DataServiceQueryOperationProviderCreator implements CreationExtensionPostProcessor {
 
@@ -71,10 +69,9 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		throws CreationExtensionException {
 	    if (!queryOperationCreated(serviceInfo)) {
 	        ServiceType mainService = serviceInfo.getServices().getService(0);
-	        Properties serviceProperties = serviceInfo.getIntroduceServiceProperties();
 
-	        copyDataServiceSchemas(serviceProperties);
-	        copyDataServiceLibraries(serviceProperties);
+	        copyDataServiceSchemas(serviceInfo);
+	        copyDataServiceLibraries(serviceInfo);
 	        ResultTypeGeneratorInformation typeInfo = new ResultTypeGeneratorInformation();
 	        typeInfo.setServiceInfo(serviceInfo);
 	        try {
@@ -82,18 +79,18 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	        } catch (CodegenExtensionException e) {
 	            throw new CreationExtensionException("Problen creating initial permissible result type XSD.", e);
 	        }
-	        addDataServiceNamespaces(serviceInfo.getServiceDescriptor(), serviceProperties);
+	        addDataServiceNamespaces(serviceInfo);
 	        modifyServiceProperties(serviceInfo.getServiceDescriptor());
 	        addQueryMethod(serviceInfo.getServiceDescriptor(), mainService);
-	        processFeatures(serviceInfo, mainService, desc, serviceProperties);
+	        processFeatures(serviceInfo, mainService, desc);
         }
 	}
 
 
-	private void copyDataServiceSchemas(Properties props) throws CreationExtensionException {
+	private void copyDataServiceSchemas(ServiceInformation serviceInfo) throws CreationExtensionException {
 		// grab cql query and result set schemas and move them into the
 		// service's directory
-		String schemaDir = getServiceSchemaDir(props);
+		String schemaDir = getServiceSchemaDir(serviceInfo);
 		System.out.println("Copying schemas to " + schemaDir);
 		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
 			+ File.separator + "schema" + File.separator + "Data");
@@ -124,11 +121,11 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	}
 
 
-	private void addDataServiceNamespaces(ServiceDescription description, Properties properties)
+	private void addDataServiceNamespaces(ServiceInformation serviceInfo)
 		throws CreationExtensionException {
-		String schemaDir = getServiceSchemaDir(properties);
+		String schemaDir = getServiceSchemaDir(serviceInfo);
 		File schemaDirFile = new File(schemaDir);
-		NamespacesType namespaces = description.getNamespaces();
+		NamespacesType namespaces = serviceInfo.getServiceDescriptor().getNamespaces();
 		if (namespaces == null) {
 			namespaces = new NamespacesType();
 		}
@@ -148,7 +145,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 			resultNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.CQL_RESULT_SET_SCHEMA, schemaDirFile);
 			resultRestrictionNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-				+ CQLResultTypesGenerator.getResultTypeXSDFileName(getDataService(description)), schemaDirFile);
+				+ CQLResultTypesGenerator.getResultTypeXSDFileName(getDataService(
+                    serviceInfo.getServiceDescriptor())), schemaDirFile);
 			// ds metadata namespace
 			dsMetadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.DATA_METADATA_SCHEMA, schemaDirFile);
@@ -159,6 +157,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 			cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.CAGRID_METADATA_SCHEMA, schemaDirFile);
 		} catch (MobiusException ex) {
+            ex.printStackTrace();
 			throw new CreationExtensionException("Error creating namespace for data service: " + ex.getMessage(), ex);
 		}
 		// prevent the metadata beans from being generated
@@ -166,8 +165,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		dsExceptionsNamespace.setGenerateStubs(Boolean.FALSE);
 
 		// set package mappings for result restriction types
-		resultRestrictionNamespace.setPackageName(description.getServices().getService(0).getPackageName()
-			+ ".cqlresulttypes");
+		resultRestrictionNamespace.setPackageName(serviceInfo.getServiceDescriptor()
+            .getServices().getService(0).getPackageName() + ".cqlresulttypes");
 
 		// set package mappings for exceptions
 		dsExceptionsNamespace.setPackageName(DataServiceConstants.DATA_SERVICE_PACKAGE + ".faults");
@@ -182,7 +181,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		NamespaceType[] nsArray = new NamespaceType[dsNamespaces.size()];
 		dsNamespaces.toArray(nsArray);
 		namespaces.setNamespace(nsArray);
-		description.setNamespaces(namespaces);
+		serviceInfo.getServiceDescriptor().setNamespaces(namespaces);
 	}
 
 
@@ -203,8 +202,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	}
 
 
-	private void copyDataServiceLibraries(Properties props) throws CreationExtensionException {
-		String toDir = getServiceLibDir(props);
+	private void copyDataServiceLibraries(ServiceInformation serviceInfo) throws CreationExtensionException {
+		String toDir = getServiceLibDir(serviceInfo);
 		File directory = new File(toDir);
 		if (!directory.exists()) {
 			directory.mkdirs();
@@ -232,26 +231,28 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 			throw new CreationExtensionException("Error copying data service libraries: " + ex.getMessage(), ex);
 		}
 		try {
-			modifyClasspathFile(copiedLibs, props);
+			modifyClasspathFile(copiedLibs, serviceInfo);
 		} catch (Exception ex) {
 			throw new CreationExtensionException("Error modifying eclipse .classpath file: " + ex.getMessage(), ex);
 		}
 	}
 
 
-	private String getServiceSchemaDir(Properties props) {
-		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "schema"
-			+ File.separator + props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+	private String getServiceSchemaDir(ServiceInformation serviceInfo) {
+        String schemaDir = serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "schema";
+        String serviceName = serviceInfo.getServiceDescriptor().getServices().getService(0).getName();
+        return schemaDir + File.separator + serviceName;
 	}
 
 
-	private String getServiceLibDir(Properties props) {
-		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
+	private String getServiceLibDir(ServiceInformation serviceInfo) {
+        String libDir = serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "lib";
+        return libDir;
 	}
 
 
-	private void modifyClasspathFile(File[] libs, Properties props) throws Exception {
-		File classpathFile = new File(props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+	private void modifyClasspathFile(File[] libs, ServiceInformation serviceInfo) throws Exception {
+		File classpathFile = new File(serviceInfo.getBaseDirectory().getAbsolutePath() 
 			+ File.separator + ".classpath");
 		if (classpathFile.exists()) {
 			ExtensionUtilities.syncEclipseClasspath(classpathFile, libs);
@@ -295,7 +296,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
     
 
 	private void processFeatures(ServiceInformation info, ServiceType service, 
-        ServiceExtensionDescriptionType extensionDesc, Properties serviceProps)
+        ServiceExtensionDescriptionType extensionDesc)
 		throws CreationExtensionException {
 		ExtensionTypeExtensionData extensionData = getExtensionData(info.getServiceDescriptor());
 		ServiceFeatures features = null;
@@ -307,12 +308,12 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		if (features != null) {
 			// ws-enumeration
 			if (features.isUseWsEnumeration()) {
-				FeatureCreator wsEnumCreator = new WsEnumerationFeatureCreator(info, service, serviceProps);
+				FeatureCreator wsEnumCreator = new WsEnumerationFeatureCreator(info, service);
 				wsEnumCreator.addFeature();
 			}
 			// bdt
 			if (features.isUseBdt()) {
-				FeatureCreator bdtCreator = new BDTFeatureCreator(info, service, serviceProps);
+				FeatureCreator bdtCreator = new BDTFeatureCreator(info, service);
 				bdtCreator.addFeature();
 			}
             // service style

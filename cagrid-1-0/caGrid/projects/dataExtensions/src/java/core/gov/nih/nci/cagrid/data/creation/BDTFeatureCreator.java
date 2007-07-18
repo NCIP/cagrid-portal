@@ -27,7 +27,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
@@ -40,12 +39,12 @@ import org.projectmobius.common.XMLUtilities;
  * @author David Ervin
  * 
  * @created Apr 4, 2007 9:56:09 AM
- * @version $Id: BDTFeatureCreator.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: BDTFeatureCreator.java,v 1.2 2007-07-18 14:01:47 dervin Exp $ 
  */
 public class BDTFeatureCreator extends FeatureCreator {
 
-   public BDTFeatureCreator(ServiceInformation info, ServiceType mainService, Properties serviceProps) {
-        super(info, mainService, serviceProps);
+   public BDTFeatureCreator(ServiceInformation info, ServiceType mainService) {
+        super(info, mainService);
     }
 
 

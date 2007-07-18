@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.enumeration.service.globus.EnumerationDataServiceProviderImpl;
 import gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationDataServicePortType;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -26,7 +25,6 @@ import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
 import java.io.File;
 import java.util.List;
-import java.util.Properties;
 
 import javax.xml.namespace.QName;
 
@@ -39,13 +37,13 @@ import javax.xml.namespace.QName;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006
- * @version $Id: WsEnumerationFeatureCreator.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: WsEnumerationFeatureCreator.java,v 1.2 2007-07-18 14:01:47 dervin Exp $
  */
 public class WsEnumerationFeatureCreator extends FeatureCreator {
 	public static final String WS_ENUM_EXTENSION_NAME = "cagrid_wsEnum";
 
-	public WsEnumerationFeatureCreator(ServiceInformation info, ServiceType mainService, Properties serviceProps) {
-		super(info, mainService, serviceProps);
+	public WsEnumerationFeatureCreator(ServiceInformation info, ServiceType mainService) {
+		super(info, mainService);
 	}
 
 
@@ -169,9 +167,8 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 
 
 	private String getServiceSchemaDir() {
-		return getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-			+ File.separator + "schema" + File.separator
-			+ getServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+	    return getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator 
+            + "schema" + File.separator + getMainService().getName();
 	}
     
     
