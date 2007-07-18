@@ -120,7 +120,7 @@ public class CreateHostCertificate {
 				String gridId = null;
 				if (c.getIdentityFederationConfiguration().getIdentityAssignmentPolicy().equals(
 					IdentityAssignmentPolicy.name)) {
-					gridId = CertUtil.subjectToIdentity(subjectPrefix + ",OU=Dorian IdP/CN=dorian");
+					gridId = CertUtil.subjectToIdentity(subjectPrefix + ",OU="+c.getIdentityProviderConfiguration().getIdentityProviderName()+"/CN=dorian");
 				} else {
 					gridId = CertUtil.subjectToIdentity(subjectPrefix + ",OU=IdP [1]/CN=dorian");
 				}
