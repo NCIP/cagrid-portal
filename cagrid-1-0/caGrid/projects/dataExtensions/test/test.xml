@@ -58,7 +58,7 @@
         	<fileset dir="${build.sdkstyle.dest}">
         		<include name="**/*.class"/>
         	</fileset>
-        	<fileset dir="${test.classes.dir}">
+        	<fileset dir="${test.core.classes.dir}">
         		<include name="**/*.class"/>
         	</fileset>
         </cobertura-instrument>
@@ -71,17 +71,17 @@
 			<sysproperty key="build.dirs" value="${build.utils.dest};${build.extension.dest};${build.service.dest}" />
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
 			<jvmarg value="-Dintroduce.base.dir=../introduce" />
-			<jvmarg value="-Dbuild.dir=${test.classes.dir}" />
+			<jvmarg value="-Dbuild.dir=${test.core.classes.dir}" />
 			<jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples" />
 			<classpath location="${instrumented.classes.dir}" />
 			<classpath refid="all.test.classpath" />
 			<classpath>
-				<pathelement path="${test.classes.dir}" />
+				<pathelement path="${test.core.classes.dir}" />
 			</classpath>
 		    <formatter type="xml" />
 		    <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
 		    <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-		        <fileset dir="${test.src.dir}">
+		        <fileset dir="${test.core.src.dir}">
 		            <include name="**/*TestCase.java" />
 		        </fileset>
 		    </batchtest>
@@ -92,7 +92,7 @@
     <target name="coverageReport" depends="test" description="Runs the tests and generates a test
 		coverage report.">
         <cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
-            <fileset dir="${test.src.dir}">
+            <fileset dir="${test.core.src.dir}">
                 <include name="**/*.java" />
             </fileset>
         </cobertura-report>
