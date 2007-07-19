@@ -65,14 +65,15 @@
     </target>
 	
 	
-	<target name="test" depends="instrument, prepareClasspaths" description="tests">
+	<target name="test" depends="testCore, testStyles" description="Tests the data extension"/>
+	
+	
+	<target name="testCore" depends="instrument, prepareClasspaths" description="tests the extension core">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
-			<sysproperty key="build.dirs" value="${build.utils.dest};${build.extension.dest};${build.service.dest}" />
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
 			<jvmarg value="-Dintroduce.base.dir=../introduce" />
 			<jvmarg value="-Dbuild.dir=${test.core.classes.dir}" />
-			<jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples" />
 			<classpath location="${instrumented.classes.dir}" />
 			<classpath refid="all.test.classpath" />
 			<classpath>
@@ -85,9 +86,40 @@
 		            <include name="**/*TestCase.java" />
 		        </fileset>
 		    </batchtest>
-		</junit>    
+		</junit>
 	</target>
 
+	<target name="testStyles" depends="instrument, prepareClasspaths" description="Tests service styles">
+		<mkdir dir="${junit.results.dir}" />
+		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
+			<sequential>
+				<echo message="Testing service style @{style.name}"/>
+				<var name="style.test.lib.file" value="${build.jars.dir}/${project.jar.prefix}style${cagrid.master.jar.separator}tests${cagrid.master.jar.separator}@{style.name}.jar"/>
+				<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+					<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+					<jvmarg value="-Dintroduce.base.dir=${introduce.dir}" />
+					<jvmarg value="-Dbuild.dir=${test.core.classes.dir}" />
+					<classpath location="${instrumented.classes.dir}" />
+					<classpath refid="all.test.classpath" />
+					<classpath>
+						<pathelement path="${test.core.classes.dir}" />
+					</classpath>
+					<classpath>
+						<pathelement path="${style.test.lib.file}"/>
+						<pathelement path="${build.dir}/@{style.name}/classes"/>
+					</classpath>
+				    <formatter type="xml" />
+				    <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+				    <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+		        		<fileset dir="${test.src.dir}/style/@{style.name}">
+				            <include name="**/*TestCase.java" />
+				        	<include name="**/*Story.java"/>
+		        		</fileset>
+				    </batchtest>
+				</junit>
+			</sequential>
+		</for>
+	</target>
 
     <target name="coverageReport" depends="test" description="Runs the tests and generates a test
 		coverage report.">

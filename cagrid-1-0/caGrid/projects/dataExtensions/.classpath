@@ -6,6 +6,8 @@
 	<classpathentry kind="src" path="src/java/style/cacore32"/>
 	<classpathentry kind="src" path="src/java/sdkstyle"/>
 	<classpathentry kind="src" path="test/src/java/core"/>
+	<classpathentry kind="src" path="test/src/java/style/cacore31"/>
+	<classpathentry kind="src" path="test/src/java/style/cacore32"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jaxmejs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/acme.jar"/>
@@ -142,5 +144,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
+	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.1-core-tests.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
