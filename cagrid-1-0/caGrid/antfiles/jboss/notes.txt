@@ -1,6 +1,6 @@
-JBOSS 4.0.4 Support for cagrid
+=JBOSS 4.0.4 Support for caGrid=
 
-Preparing Globus for JBOSS
+==Preparing Globus for JBOSS==
 In order to deploy Globus to the Tomcat in JBOSS Globus WSRF-Core needs two specific modifications.
 	1.  The AxisServlet needs to be able to support setting the root context based on the "webContext" 
 	    variable set in the web.xml in the deployed wsrf.war/WEB-INF directory.  Code exists in globus CVS head.
@@ -10,13 +10,13 @@ These required modifications all come in a modified and rebuilt wsrf-core.jar fi
 placed into {globus_location}/lib prior to deploying globus into JBOSS.
 
 
-To deploy Globus to JBOSS Tomcat:
-%> cd CAGRID_LOCATION/antfiles/jboss
-%> ant deployJBOSS -Djboss.dir="<path to your jboss deployment>"
+==Deploy Globus to JBOSS Tomcat==
+ %> cd CAGRID_LOCATION/antfiles/jboss
+ %> ant deployJBOSS -Djboss.dir="<path to your jboss deployment>"
 
 
-To deploy Globus to Secure JBOSS Tomcat:
-%> cd CAGRID_LOCATION/antfiles/jboss
-%> ant deploySecureJBOSS -Djboss.dir="<path to your jboss deployment>"
+==Deploy Globus to Secure JBOSS Tomcat==
+ %> cd CAGRID_LOCATION/antfiles/jboss
+ %> ant deploySecureJBOSS -Djboss.dir="<path to your jboss deployment>"
 
 Make the following tomcat configuration modifications:
