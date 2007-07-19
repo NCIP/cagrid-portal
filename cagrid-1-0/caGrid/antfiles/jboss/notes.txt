@@ -23,7 +23,6 @@ placed into {globus_location}/lib prior to deploying globus into JBOSS.
 
 Follow these directions for modifying the Tomcat installation for Tomcat 5.5:
 
-http://www.globus.org/toolkit/docs/4.0/common/javawscore/admin-index.html#javawscore-admin-tomcat-deploying
+* http://www.globus.org/toolkit/docs/4.0/common/javawscore/admin-index.html#javawscore-admin-tomcat-deploying
 
-
-Not sure if we really need to edit the web.xml and add the tomcat thing, still need to look at that.  
+* Make sure to shut off the 8080 connector by commenting that section out.
