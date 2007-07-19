@@ -84,13 +84,14 @@ Build Instructions:
 		<property name="common.lib.dir" value="${jboss.dir}/server/default/lib" />
 
 		<antcall target="deployJBoss" />
-		
+
+		<echo message="${webapp.webinf.dir}/etc/globus_wsrf_core/server-config.wsdd" />
+
 		<replace file="${webapp.webinf.dir}/etc/globus_wsrf_core/server-config.wsdd">
-			<replacetoken>
-				<![CDATA[<!-- @TOMCAT_SEC_HANDLER@ -->]]></replacetoken>
-			<replacevalue>
-				<![CDATA[<handler type="java:org.globus.wsrf.impl.security.authentication.transport.TomcatTransportSecurityHandler"/>]]></replacevalue>
+			<replacetoken><![CDATA[<!-- @TOMCAT_SEC_HANDLER@ -->]]></replacetoken>
+			<replacevalue><![CDATA[<handler type="java:org.globus.wsrf.impl.security.authentication.transport.TomcatTransportSecurityHandler"/>]]></replacevalue>
 		</replace>
+
 	</target>
 
 	<target name="deployJBoss" description="Deploy GT4 into JBoss. Must specify -Djboss.dir=&lt;JBoss root&gt;">

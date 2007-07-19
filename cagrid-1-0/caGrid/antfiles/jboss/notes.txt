@@ -12,12 +12,12 @@ placed into {globus_location}/lib prior to deploying globus into JBOSS.
 
 ==Deploy Globus to JBOSS Tomcat==
  %> cd CAGRID_LOCATION/antfiles/jboss
- %> ant deployJBOSS -Djboss.dir="<path to your jboss deployment>"
+ %> ant -f jboss.xml deployJBOSS -Djboss.dir="<path to your jboss deployment>"
 
 
 ==Deploy Globus to Secure JBOSS Tomcat==
  %> cd CAGRID_LOCATION/antfiles/jboss
- %> ant deploySecureJBOSS -Djboss.dir="<path to your jboss deployment>"
+ %> ant -f jboss.xml deploySecureJBOSS -Djboss.dir="<path to your jboss deployment>"
 
 
 
