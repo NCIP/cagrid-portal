@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.Crypt;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
@@ -129,7 +130,11 @@ public class UserManager extends LoggingObject {
 			ps.setString(5, user.getLastName());
 			ps.setString(6, user.getOrganization());
 			ps.setString(7, user.getAddress());
-			ps.setString(8, user.getAddress2());
+			if(Utils.clean(user.getAddress2())==null){
+				ps.setString(8, "");
+			}else{
+				ps.setString(8, user.getAddress2());
+			}
 			ps.setString(9, user.getCity());
 			ps.setString(10, user.getState().getValue());
 			ps.setString(11, user.getZipcode());

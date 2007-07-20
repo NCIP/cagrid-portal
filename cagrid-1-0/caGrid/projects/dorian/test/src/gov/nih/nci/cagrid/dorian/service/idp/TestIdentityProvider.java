@@ -73,6 +73,34 @@ public class TestIdentityProvider extends TestCase {
 			}
 		}
 	}
+	
+	public void testRegistrationNoAddress2() {
+		IdentityProvider idp = null;
+		try {
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
+			idp = new IdentityProvider(conf, db, ca);
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			Application a = createApplication();
+			a.setAddress2(null);
+			idp.register(a);
+			BasicAuthCredential cred = getAdminCreds();
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Active, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 
 	public void testManualRegistration() {
