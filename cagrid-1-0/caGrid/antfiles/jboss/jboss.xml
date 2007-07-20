@@ -203,6 +203,12 @@ Build Instructions:
 			</fileset>
 		</copy>
 
+		<!-- copy over the patched jar files for wsrf-core -->
+		<copy toDir="${webapp.webinf.lib.dir}">
+			<fileset dir="${basedir}" casesensitive="yes">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
 
 		<copy toDir="${common.lib.dir}">
 			<fileset dir="${abs.deploy.dir}/lib" casesensitive="yes">

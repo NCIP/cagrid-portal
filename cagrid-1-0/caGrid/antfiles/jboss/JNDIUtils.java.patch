@@ -1,0 +1,289 @@
+Index: JNDIUtils.java
+===================================================================
+RCS file: /home/globdev/CVS/globus-packages/wsrf/java/core/source/src/org/globus/wsrf/jndi/JNDIUtils.java,v
+retrieving revision 1.9.2.1
+diff -u -r1.9.2.1 JNDIUtils.java
+--- JNDIUtils.java	6 Apr 2006 21:57:07 -0000	1.9.2.1
++++ JNDIUtils.java	20 Jul 2007 17:48:05 -0000
+@@ -25,6 +25,7 @@
+ import javax.naming.NamingException;
+ import javax.naming.NamingEnumeration;
+ import javax.naming.NameClassPair;
++import javax.naming.Binding;
+ 
+ import org.apache.naming.ContextBindings;
+ import org.apache.naming.SynchronizedContext;
+@@ -44,10 +45,11 @@
+ import org.globus.util.I18n;
+ 
+ import org.xml.sax.SAXException;
++import org.xml.sax.SAXParseException;
+ 
+ /**
+  * A utility class containing methods for setting up the JNDI environment and
+- * performing JNDI lookups
++ * performing JNDI lookups.
+  */
+ public class JNDIUtils
+ {
+@@ -59,11 +61,30 @@
+ 
+     public static final String JNDI_CONFIG = "jndi-config.xml";
+ 
++    private static final String DEFAULT_CONTEXT_FACTORY =
++        "org.globus.wsrf.jndi.javaURLContextFactory";
++    
++    private static final String CONTEXT_NAME = "wsrfContext";
++
++    private static final String HOME = 
++        org.globus.wsrf.Constants.HOME_NAME.substring(1);
++
++    private static final Hashtable ENV;
++
++    static {
++        ENV = new Hashtable();
++        ENV.put(javax.naming.Context.INITIAL_CONTEXT_FACTORY,
++                DEFAULT_CONTEXT_FACTORY);
++    }
++
+     private static Context initialContext = null;
+ 
+     /**
+      * Configure JNDI with the Apache Tomcat naming service classes and create
+-     * the comp and env contexts
++     * the <code>java:comp/env</code> context. The JNDI context will be 
++     * associated with the current thread context class loader.
++     *
++     * <i>This is an internal method and should not be called directly.</i>
+      *
+      * @return The initial context
+      * @throws Exception
+@@ -100,7 +121,7 @@
+         if(value == null)
+         {
+             System.setProperty(javax.naming.Context.INITIAL_CONTEXT_FACTORY,
+-                               "org.apache.naming.java.javaURLContextFactory");
++                               DEFAULT_CONTEXT_FACTORY);
+         }
+         else
+         {
+@@ -109,12 +130,14 @@
+ 
+         Hashtable env = new Hashtable();
+         env.put(SynchronizedContext.SYNCHRONIZED, "true");
++        env.put(javax.naming.Context.INITIAL_CONTEXT_FACTORY,
++                DEFAULT_CONTEXT_FACTORY);
+ 
+         result = new InitialContext(env);
+         if(!ContextBindings.isClassLoaderBound())
+         {
+-            ContextBindings.bindContext("wsrfContext", result);
+-            ContextBindings.bindClassLoader("wsrfContext");
++            ContextBindings.bindContext(CONTEXT_NAME, result);
++            ContextBindings.bindClassLoader(CONTEXT_NAME);
+         }
+ 
+         try
+@@ -126,10 +149,96 @@
+             compContext = result.createSubcontext("comp");
+             compContext.createSubcontext("env");
+         }
++
+         return result;
+     }
+ 
+     /**
++     * Looks for a <code>home</code> object associated with the specified
++     * service and calls <code>destroy</code> operation on it if it is
++     * initialized and it implements the <code>Destroyable</code> interface.
++     */
++    public static void destroyHome(String serviceName) 
++        throws NamingException {
++        Context initialContext = getInitialContext();
++        Context servicesContext = (Context)initialContext.lookup(
++                           org.globus.wsrf.Constants.JNDI_SERVICES_BASE_NAME);
++        NamingEnumeration enumeration = 
++            servicesContext.listBindings(serviceName);
++        while(enumeration.hasMore()) {
++            Binding binding = (Binding)enumeration.next();
++            if (HOME.equals(binding.getName())) {
++                Object object = binding.getObject();
++                if (object instanceof Destroyable) {
++                    try {
++                        ((Destroyable)object).destroy();
++                    } catch (RuntimeException e) {
++                        logger.debug(i18n.getMessage("jndiDestroyFailed"), e);
++                    }
++                }
++                break;
++            }
++        }
++    }
++
++    /**
++     * Goes through the entire JNDI tree and calls <code>destroy</code>
++     * operation on any object that is initialized and implements
++     * the <code>Destroyable</code> interface. It skips any object
++     * with the name <code>home</code>. 
++     *
++     * <i>This is an internal method and should not be called directly.</i>
++     */
++    public static synchronized void destroyAll() {
++        try {
++            Context initialContext = JNDIUtils.getInitialContext();
++            destroyAll(initialContext, 
++                       org.globus.wsrf.Constants.JNDI_BASE_NAME);
++        } catch (NamingException e) {
++            logger.debug(i18n.getMessage("jndiDestroyAllFailed"), e);
++        }
++    }
++    
++    private static void destroyAll(Context context, String name) 
++        throws NamingException {
++        NamingEnumeration enumeration = context.listBindings(name);
++        while(enumeration.hasMore()) {
++            Binding binding = (Binding)enumeration.next();
++            Object object = binding.getObject();
++            if (object instanceof Context) {
++                try {
++                    destroyAll(context, name + "/" + binding.getName());
++                } catch (NamingException e) {
++                    logger.debug(i18n.getMessage("jndiDestroyAllFailed"), e);
++                }
++            } else if (!HOME.equals(binding.getName()) &&
++                       object instanceof Destroyable) {
++                try {
++                    ((Destroyable)object).destroy();
++                } catch (RuntimeException e) {
++                    logger.debug(i18n.getMessage("jndiDestroyFailed"), e);
++                }
++            }
++        }
++    }
++
++    /**
++     * Destroys the JNDI context associated with the current ClassLoader
++     * (must be called with the thread thas has the right context class loader)
++     *
++     * <i>This is an internal method and should not be called directly.</i>
++     */
++    public static synchronized void destroy() {
++        // call destroy() on Destroyable objects
++        destroyAll();
++        // unbind the context from class loader
++        ContextBindings.unbindClassLoader(CONTEXT_NAME);
++        ContextBindings.unbindContext(CONTEXT_NAME);
++        // reset the context
++        initialContext = null;
++    }
++
++    /**
+      * Get the location of the JNDI configuration file from the deployment
+      * descriptor
+      *
+@@ -167,7 +276,6 @@
+      * Parse the given JNDI configuration and populate the JNDI registry using
+      * the parsed configuration
+      *
+-     * @param configInput The configuration stream to parse
+      * @throws NamingException
+      * @throws IOException
+      * @throws SAXException
+@@ -203,6 +311,16 @@
+         digester.clear();
+     }
+ 
++    /*
++     * Returns properly-initialized initial context.
++     *
++     * @return initial context
++     */
++    public static InitialContext getInitialContext() 
++        throws NamingException {
++        return new InitialContext(ENV);
++    }
++
+     /**
+      * Retrieves the named object on the specified context. The object returned
+      * must be of assignable from the type specified.
+@@ -234,10 +352,8 @@
+         }
+         else
+         {
+-            Object[] args = 
+-                new Object[] {type.getName(),
+-                              (tmp == null) ? null : tmp.getClass().getName()};
+-            throw new NamingException(i18n.getMessage("expectedType", args));
++            throw new NamingException(i18n.getMessage(
++                "expectedType", type.getName()));
+         }
+     }
+ 
+@@ -247,7 +363,18 @@
+         }
+     }
+ 
+-    // multiple file configuration
++    /*
++     * Returns true if JNDI registry is initialized, false otherwise.
++     */
++    public static synchronized boolean isInitialized() {
++        return (initialContext != null);
++    }
++
++    /**
++     * Initializes JNDI registry using multiple configuration files.
++     *
++     * <i>This is an internal method and should not be called directly.</i>
++     */
+     public static synchronized Context initializeDir(MessageContext msgCtx) 
+         throws Exception 
+     {
+@@ -289,7 +416,7 @@
+         throws Exception 
+     {
+         File file = new File(dir, configFile);
+-        if (!file.exists()) 
++        if (!file.exists() || !file.canRead()) 
+         {
+             return;
+         }
+@@ -306,10 +433,24 @@
+         {
+             throw e;
+         }
++        catch (SAXParseException e)
++        {
++            Integer column = new Integer(e.getColumnNumber());
++            Integer line = new Integer(e.getLineNumber());
++            NamingException ex = 
++                new NamingException(i18n.getMessage(
++                                       "jndiConfigParseError",
++                                       new Object[] {file,  
++                                                     column,
++                                                     line,
++                                                     e.getMessage()}));
++            ex.setRootCause(e);
++            throw ex;
++        }
+         catch (Exception e)
+         {
+             NamingException ex = 
+-                new NamingException(i18n.getMessage("jndiConfigParseError",
++                new NamingException(i18n.getMessage("jndiConfigReadError",
+                                                     file));
+             ex.setRootCause(e);
+             throw ex;
+@@ -329,7 +470,11 @@
+         }
+     }
+ 
+-    // single file configuration
++    /**
++     * Initializes JNDI registry using a single configuration file.
++     *
++     * <i>This is an internal method and should not be called directly.</i>
++     */
+     public static synchronized Context initializeFile(MessageContext msgCtx) 
+         throws Exception 
+     {
