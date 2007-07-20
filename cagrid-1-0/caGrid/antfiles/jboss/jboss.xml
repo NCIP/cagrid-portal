@@ -204,7 +204,7 @@ Build Instructions:
 		</copy>
 
 		<!-- copy over the patched jar files for wsrf-core -->
-		<copy toDir="${webapp.webinf.lib.dir}">
+		<copy toDir="${webapp.webinf.lib.dir}" overwrite="true">
 			<fileset dir="${basedir}" casesensitive="yes">
 				<include name="*.jar" />
 			</fileset>
