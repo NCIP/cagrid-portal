@@ -28,6 +28,12 @@ new extensions architecture to support callbacks for different areas of editing.
 
 To Do:  
 
+make sure that the validators on package names show error if invalid and warn if just bad practice
+
+invalid introduce xml threw null pointer stop refreshing screen with no error.....
+
+synctools 540: make sure that if there are no parts that you throw a nicer exception than null pointer.
+
 if you use globus dir in the classpath for the runtarget, then the client-config.wsdd for globus is used and not the one that contains your custom mappings
 
 check the upgrade framework, make sure it is giving enough information

@@ -57,6 +57,8 @@ public class DeploymentViewer extends GridPortalBaseFrame {
     private static final String GLOBUS = "GLOBUS_LOCATION";
 
     private static final String TOMCAT = "CATALINA_HOME";
+    
+    private static final String JBOSS = "JBOSS_HOME";
 
     private ServiceInformation info = null;
 
@@ -343,8 +345,10 @@ public class DeploymentViewer extends GridPortalBaseFrame {
                                 String cmd = "";
                                 if (((String) getDeploymentTypeSelector().getSelectedItem()).equals(GLOBUS)) {
                                     cmd = CommonTools.getAntDeployGlobusCommand(serviceDirectory.getAbsolutePath());
-                                } else {
+                                } else if (((String) getDeploymentTypeSelector().getSelectedItem()).equals(TOMCAT)) {
                                     cmd = CommonTools.getAntDeployTomcatCommand(serviceDirectory.getAbsolutePath());
+                                } else {
+                                    cmd = CommonTools.getAntDeployJBossCommand(serviceDirectory.getAbsolutePath());
                                 }
                                 Process p = CommonTools.createAndOutputProcess(cmd);
                                 p.waitFor();
@@ -399,6 +403,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
             deploymentTypeSelector = new JComboBox();
             deploymentTypeSelector.addItem(TOMCAT);
             deploymentTypeSelector.addItem(GLOBUS);
+            deploymentTypeSelector.addItem(JBOSS);
             try {
                 if (ResourceManager.getStateProperty(ResourceManager.LAST_DEPLOYMENT) != null) {
                     deploymentTypeSelector.setSelectedItem(

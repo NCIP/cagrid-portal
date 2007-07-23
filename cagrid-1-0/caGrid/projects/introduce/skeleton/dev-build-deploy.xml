@@ -21,5 +21,13 @@
 	<target name="preDeployGlobus">
 
 	</target>
+	
+	<!-- ============================================================== -->
+	<!-- Pre Deploy JBOSS                                               -->
+	<!-- ============================================================== -->
+	<target name="preDeployJBoss">
+
+	</target>
+
 
 </project>
