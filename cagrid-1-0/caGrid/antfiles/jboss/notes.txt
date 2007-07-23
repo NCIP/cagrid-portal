@@ -1,6 +1,6 @@
 =JBOSS 4.0.4 Support for caGrid=
 
-==Preparing Globus for JBOSS==
+==Changes to Globus for JBOSS==
 In order to deploy Globus to the Tomcat in JBOSS Globus WSRF-Core needs two specific modifications.
 	1.  The AxisServlet needs to be able to support setting the root context based on the "webContext" 
 	    variable set in the web.xml in the deployed wsrf.war/WEB-INF directory.  Code exists in globus CVS head.
@@ -8,8 +8,8 @@ In order to deploy Globus to the Tomcat in JBOSS Globus WSRF-Core needs two spec
 	    to the existing JNDI that JBOSS starts up.  Code already exists in globus CVS head.
 	   
 
-These required modifications all come in a modified and rebuilt wsrf-core.jar file which will need to be 
-placed into {globus_location}/lib prior to deploying globus into JBOSS.
+These required modifications all come in a modified and rebuilt wsrf-core.jar file which will be 
+placed into {jboss_globus_location}/lib post deploying globus into JBOSS.
 
 
 ==Deploy Globus to JBOSS Tomcat==
@@ -22,9 +22,10 @@ placed into {globus_location}/lib prior to deploying globus into JBOSS.
  %> ant -f jboss.xml deploySecureJBOSS -Djboss.dir="<path to your jboss deployment>"
 
 
-
+==Post Deployment Edits to Tomcat==
 Follow these directions for modifying the Tomcat installation for Tomcat 5.5:
 
-* http://www.globus.org/toolkit/docs/4.0/common/javawscore/admin-index.html#javawscore-admin-tomcat-deploying
+* The tomcat ''server.xml'' file is located in ''{JBOSS_HOME}server/default/deploy/jbossweb-tomcat55.sar''
+* [http://www.globus.org/toolkit/docs/4.0/common/javawscore/admin-index.html#javawscore-admin-tomcat-deploying]
 
 * Make sure to shut off the 8080 connector by commenting that section out.
