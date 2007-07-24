@@ -2,7 +2,7 @@
  <ns1:serviceDescription>
   <ns2:Service description="A grid service for the provisioning and management of grid users accounts.  Dorian provides an integration point between external security domains and the grid, allowing accounts managed in external domains to be federated and managed in the grid.   Dorian allows users to use their existing credentials to authenticate to the grid." name="Dorian" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection>
-    <ns3:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Developer" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+    <ns3:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Architect" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    </ns2:pointOfContactCollection>
    <ns2:serviceContextCollection>
     <ns2:ServiceContext description="Dorian Grid Service" name="Dorian">
@@ -285,7 +285,7 @@
   <ns41:ResearchCenter displayName="Ohio State University" shortName="OSU" xmlns:ns41="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
    <ns41:Address country="US" postalCode="43210" stateProvince="OH" street1="333 W. 10th Ave"/>
    <ns41:pointOfContactCollection>
-    <ns41:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="maintainer"/>
+    <ns41:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Administrator"/>
    </ns41:pointOfContactCollection>
   </ns41:ResearchCenter>
  </ns1:hostingResearchCenter>
