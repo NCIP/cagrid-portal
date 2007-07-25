@@ -30,6 +30,16 @@
 
 	<xs:element name="IntroduceRev" type="IntroduceRevType"></xs:element>
 	<xs:complexType name="IntroduceRevType">
+		<xs:annotation>
+		<xs:documentation>patchVersion must be a positive integer.  The system default
+		                  is that no patch yet installed to the current main version 
+		                  is patch version 0.  That is if any patch is to be installed
+		                  on top of a main version, for example 1.1, then the patch must
+		                  be greater than 0, 1 for example.  After the 1 patch was installed
+		                  onto the 1.1 version the full version would 
+		                  now be 1.1 patch 1 or 1.1.1.
+		</xs:documentation>
+		</xs:annotation>
 		<xs:attribute name="patchVersion" use="required" type="xs:int"></xs:attribute>
 		<xs:attribute name="zipFileURL" use="required"
 			type="xs:anyURI">
