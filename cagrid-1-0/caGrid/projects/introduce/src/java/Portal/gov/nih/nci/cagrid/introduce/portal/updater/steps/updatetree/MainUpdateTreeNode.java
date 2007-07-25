@@ -36,6 +36,7 @@ public class MainUpdateTreeNode extends UpdateTypeTreeNode {
 						IntroduceUpdateTreeNode introduceNode = new IntroduceUpdateTreeNode(
 								"Introduce (" + introduce.getVersion() + ")",
 								this.getModel(), introduce, software);
+						introduceNode.setInstalled(false);
 						getModel().insertNodeInto(introduceNode, this,
 								this.getChildCount());
 

@@ -51,6 +51,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 
+
 /**
  * Renders the grid service tree
  * 
@@ -58,53 +59,56 @@ import javax.swing.tree.DefaultTreeModel;
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
- * 
  * @created Nov 17, 2004
  * @version $Id: NamespacesTreeRenderer.java,v 1.4 2006/03/22 17:28:01 hastings
  *          Exp $
  */
 public class UpdateTreeRenderer extends DefaultTreeCellRenderer {
-	DefaultTreeModel model = null;
+    DefaultTreeModel model = null;
 
-	Font normal = null;
+    Font normal = null;
 
-	public UpdateTreeRenderer(DefaultTreeModel model) {
-		super();
-		this.model = model;
-	}
 
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean sel, boolean expanded, boolean leaf, int row,
-			boolean localHasFocus) {
-		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
-				row, localHasFocus);
-		if (normal == null) {
-			normal = this.getFont();
-		}
-		this.setFont(normal);
-		if (value instanceof UpdateTypeTreeNode) {
-			UpdateTypeTreeNode node = (UpdateTypeTreeNode) value;
-			this.setFont(normal.deriveFont(Font.BOLD, 12));
-			if(node.getPath().length>1){
-				this.setFont(normal.deriveFont(Font.PLAIN, 12));
-				if(node.getPath().length>1){
-					this.setFont(normal.deriveFont(Font.ITALIC, 12));
-				}
-			}
-			this.setOpenIcon(null);
-			this.setClosedIcon(null);
-			this.setText(node.toString());
-			
-		}
-		if (value instanceof IntroduceUpdateTreeNode) {
-			IntroduceUpdateTreeNode node = (IntroduceUpdateTreeNode) value;
-			return (JCheckBox)node.getUserObject();
-		}
-		if (value instanceof ExtensionUpdateTreeNode) {
-			ExtensionUpdateTreeNode node = (ExtensionUpdateTreeNode) value;
-			return (JCheckBox)node.getUserObject();
-		}
-		return this;
-	}
+    public UpdateTreeRenderer(DefaultTreeModel model) {
+        super();
+        this.model = model;
+    }
+
+
+    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
+        boolean leaf, int row, boolean localHasFocus) {
+        super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, localHasFocus);
+        if (normal == null) {
+            normal = this.getFont();
+        }
+        this.setFont(normal);
+        if (value instanceof UpdateTypeTreeNode) {
+            UpdateTypeTreeNode node = (UpdateTypeTreeNode) value;
+            this.setFont(normal.deriveFont(Font.BOLD, 12));
+            if (node.getPath().length > 1) {
+                this.setFont(normal.deriveFont(Font.PLAIN, 12));
+                if (node.getPath().length > 1) {
+                    this.setFont(normal.deriveFont(Font.ITALIC, 12));
+                }
+            }
+            this.setOpenIcon(null);
+            this.setClosedIcon(null);
+            this.setText(node.toString());
+
+        }
+        if (value instanceof IntroduceUpdateTreeNode) {
+            IntroduceUpdateTreeNode node = (IntroduceUpdateTreeNode) value;
+            return (JCheckBox) node.getUserObject();
+        }
+        if (value instanceof ExtensionUpdateTreeNode) {
+            ExtensionUpdateTreeNode node = (ExtensionUpdateTreeNode) value;
+            return (JCheckBox) node.getUserObject();
+        }
+        if (value instanceof IntroduceRevUpdateTreeNode) {
+            IntroduceRevUpdateTreeNode node = (IntroduceRevUpdateTreeNode) value;
+            return (JCheckBox) node.getUserObject();
+        }
+        return this;
+    }
 
 }

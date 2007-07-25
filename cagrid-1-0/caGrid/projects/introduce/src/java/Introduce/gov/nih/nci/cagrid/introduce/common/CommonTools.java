@@ -1265,6 +1265,10 @@ public class CommonTools {
     public static String getIntroduceVersion() {
         return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_VERSION_PROPERTY);
     }
+    
+    public static String getIntroducePatchVersion() {
+        return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_PATCH_VERSION_PROPERTY);
+    }
 
 
     public static String getIntroduceUpdateSite() {

@@ -20,6 +20,8 @@ public class IntroduceConstants {
 
     // introduce specific constants
     public static final String INTRODUCE_VERSION_PROPERTY = "introduce.version";
+    
+    public static final String INTRODUCE_PATCH_VERSION_PROPERTY = "introduce.patch.version";
 
     public static final String INTRODUCE_UPDATE_SITE_PROPERTY = "introduce.update.site";
 

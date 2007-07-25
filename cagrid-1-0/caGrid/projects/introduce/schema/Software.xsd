@@ -16,20 +16,37 @@
 
 	<xs:element name="Introduce" type="IntroduceType"></xs:element>
 	<xs:complexType name="IntroduceType">
+		<xs:sequence>
+			<xs:element ref="IntroduceRev" minOccurs="0" maxOccurs="unbounded"></xs:element>
+		</xs:sequence>
 		<xs:attribute name="version" use="required" type="xs:string"></xs:attribute>
-		<xs:attribute name="zipFileURL" use="required" type="xs:anyURI"></xs:attribute>
+		<xs:attribute name="zipFileURL" use="required"
+			type="xs:anyURI">
+		</xs:attribute>
+		<xs:attribute name="isInstalled" use="optional"
+			type="xs:boolean">
+		</xs:attribute>
+	</xs:complexType>
+
+	<xs:element name="IntroduceRev" type="IntroduceRevType"></xs:element>
+	<xs:complexType name="IntroduceRevType">
+		<xs:attribute name="patchVersion" use="required" type="xs:int"></xs:attribute>
+		<xs:attribute name="zipFileURL" use="required"
+			type="xs:anyURI">
+		</xs:attribute>
 	</xs:complexType>
 
 	<xs:element name="Extension" type="ExtensionType"></xs:element>
 	<xs:complexType name="ExtensionType">
-	    <xs:attribute name="name"
-			type="xs:string" use="required" />
-		<xs:attribute name="displayName"
-			type="xs:string" use="required" />
-		<xs:attribute name="version" type="xs:string" use="required" ></xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="displayName" type="xs:string"
+			use="required" />
+		<xs:attribute name="version" type="xs:string" use="required"></xs:attribute>
 		<xs:attribute name="compatibleIntroduceVersions"
-			type="xs:string" use="required" >
+			type="xs:string" use="required">
 		</xs:attribute>
-		<xs:attribute name="zipFileURL" use="required" type="xs:anyURI"></xs:attribute>
+		<xs:attribute name="zipFileURL" use="required"
+			type="xs:anyURI">
+		</xs:attribute>
 	</xs:complexType>
 </xs:schema>
