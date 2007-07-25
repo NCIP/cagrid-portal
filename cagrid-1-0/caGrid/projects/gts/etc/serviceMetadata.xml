@@ -205,7 +205,7 @@
   <ns26:ResearchCenter displayName="Ohio State University" shortName="OSU" xmlns:ns26="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
    <ns26:Address country="US" postalCode="43210" stateProvince="OH" street1="333 W. 10th Ave"/>
    <ns26:pointOfContactCollection>
-    <ns26:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="administrator"/>
+    <ns26:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Administrator"/>
    </ns26:pointOfContactCollection>
   </ns26:ResearchCenter>
  </ns1:hostingResearchCenter>
