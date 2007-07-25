@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -79,6 +80,23 @@ public class UpdateManager {
                     try {
                         unzipIntroduce(updateFile);
                         updateFile.delete();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    // need to set the patch version in the
+                    // introduce.engine.properties file
+                    File engineProps = new File("." + File.separator + "conf" + File.separator + "introduce"
+                        + File.separator + "introduce.engine.properties");
+                    Properties props = new Properties();
+                    try {
+                        props.load(new FileInputStream(engineProps));
+                        props.setProperty("introduce.patch.version", String.valueOf(update.getIntroduceRev(0)
+                            .getPatchVersion()));
+                        props.store(new FileOutputStream(engineProps), "Introduce Engine Properties");
+                    } catch (FileNotFoundException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
