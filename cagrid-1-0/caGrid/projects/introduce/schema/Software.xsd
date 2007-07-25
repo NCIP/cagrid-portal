@@ -23,6 +23,13 @@
 		<xs:attribute name="zipFileURL" use="required"
 			type="xs:anyURI">
 		</xs:attribute>
+		<xs:annotation>
+		<xs:documentation>isInstalled is only used internally on the introduce side
+						  and not on the update site.  This attribute indicates that 
+						  this main version of introduce is already installed but that
+						  there may be a patch that is yet to be installed.
+		</xs:documentation>
+		</xs:annotation>
 		<xs:attribute name="isInstalled" use="optional"
 			type="xs:boolean">
 		</xs:attribute>
