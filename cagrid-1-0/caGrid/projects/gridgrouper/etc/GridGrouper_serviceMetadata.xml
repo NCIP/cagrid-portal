@@ -2,7 +2,7 @@
  <ns1:serviceDescription>
   <ns2:Service description="Grid Grouper provides a group-based authorization solution for the Grid, wherein grid services and applications enforce authorization policy based on membership to groups defined and managed at the grid level." name="GridGrouper" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection>
-    <ns3:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Developer" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+    <ns3:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Architect" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    </ns2:pointOfContactCollection>
    <ns2:serviceContextCollection>
     <ns2:ServiceContext description="GridGrouper Service" name="GridGrouper">
@@ -389,7 +389,7 @@
   <ns85:ResearchCenter displayName="Ohio State University" shortName="OSU" xmlns:ns85="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
    <ns85:Address country="US" postalCode="43210" stateProvince="OH" street1="333 W. 10th Ave"/>
    <ns85:pointOfContactCollection>
-    <ns85:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="maintainer"/>
+    <ns85:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Administrator"/>
    </ns85:pointOfContactCollection>
   </ns85:ResearchCenter>
  </ns1:hostingResearchCenter>
