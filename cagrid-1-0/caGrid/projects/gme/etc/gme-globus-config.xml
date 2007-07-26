@@ -1,8 +1,8 @@
 <mobius>
 	<resource name="mobiusConfig" class="org.projectmobius.services.common.MobiusConfiguration">
 		<mobius-configuration>
-			<MobiusNetworkServiceDescriptor serviceType="GME" hostname="http://SERVICE-DEPLOY-HOST:8080/wsrf/services/SERVICE-INSTANCE-NAME">
-				<serviceIdentifier serviceId="http://SERVICE-DEPLOY-HOST:8080/wsrf/services/SERVICE-INSTANCE-NAME"/>
+			<MobiusNetworkServiceDescriptor serviceType="GME" hostname="SERVICE-DEPLOY-PROTOCOL://SERVICE-DEPLOY-HOST:SERVICE-DEPLOY-PORT/wsrf/services/SERVICE-INSTANCE-NAME">
+				<serviceIdentifier serviceId="SERVICE-DEPLOY-PROTOCOL://SERVICE-DEPLOY-HOST:SERVICE-DEPLOY-PORT/wsrf/services/SERVICE-INSTANCE-NAME"/>
 			  	<ports>
 					<port protocol="TCP" portNumber="1111"/>
 			  	</ports>
