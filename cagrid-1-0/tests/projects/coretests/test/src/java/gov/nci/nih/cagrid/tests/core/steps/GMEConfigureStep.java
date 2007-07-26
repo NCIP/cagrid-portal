@@ -3,7 +3,6 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
-import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 import gov.nci.nih.cagrid.tests.core.util.SimpleXmlReplacer;
 
@@ -46,7 +45,5 @@ public class GMEConfigureStep extends Step {
         replacer.addReplacement("username", this.user);
         replacer.addReplacement("password", this.password);
         replacer.performReplacement(configFile);
-
-        FileUtils.replace(configFile, "localhost:8080", "localhost:" + this.globus.getPort());
     }
 }

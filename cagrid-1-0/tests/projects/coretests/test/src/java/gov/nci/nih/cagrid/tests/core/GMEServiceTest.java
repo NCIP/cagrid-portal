@@ -12,9 +12,12 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
+import gov.nci.nih.cagrid.tests.core.util.NoAvailablePortException;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import junit.framework.TestResult;
@@ -84,7 +87,19 @@ public class GMEServiceTest extends Story {
 
         Vector steps = new Vector();
         steps.add(new GlobusCreateStep(this.globus));
-        steps.add(new GlobusDeployServiceStep(this.globus, this.serviceDir));
+        try {
+            List<String> deployArgs = new ArrayList<String>();
+            deployArgs.add("-Dservice.deployment.host=\"localhost\"");
+            deployArgs.add("-Dservice.deployment.port=\"" + String.valueOf(this.globus.getPort()) + "\"");
+            deployArgs.add("-Dservice.deployment.protocol=\"" + (this.globus.isSecure() ? "https" : "http") + "\"");
+
+            GlobusDeployServiceStep globusDeployServiceStep = new GlobusDeployServiceStep(this.globus, this.serviceDir);
+            globusDeployServiceStep.setArgs(deployArgs);
+            steps.add(globusDeployServiceStep);
+        } catch (NoAvailablePortException e) {
+            throw new IllegalArgumentException("unable to instantiate GMEStep", e);
+        }
+
         steps.add(new GMEConfigureStep(this.globus));
         steps.add(new GlobusStartStep(this.globus));
 

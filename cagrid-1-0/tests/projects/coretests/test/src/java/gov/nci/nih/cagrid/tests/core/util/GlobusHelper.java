@@ -145,25 +145,47 @@ public class GlobusHelper {
 
 
     public synchronized void deployService(File serviceDir) throws IOException, InterruptedException {
-        deployService(serviceDir, "deployGlobus");
+        deployService(serviceDir, null);
     }
 
 
-    public synchronized void deployService(File serviceDir, String target) throws IOException, InterruptedException {
+    public synchronized void deployService(File serviceDir, List<String> args) throws IOException, InterruptedException {
+        deployService(serviceDir, "deployGlobus", args);
+    }
+
+
+    public synchronized void deployService(File serviceDir, String target, List<String> args) throws IOException,
+        InterruptedException {
         String antHome = System.getenv("ANT_HOME");
         if (antHome == null || antHome.equals("")) {
             throw new IllegalArgumentException("ANT_HOME not set");
         }
         File ant = new File(antHome, "bin" + File.separator + "ant");
 
-        String[] cmd = new String[]{ant.toString(), "-Dservice.deployment.host=\"localhost\"", target};
+        List<String> command = new ArrayList<String>();
+
+        // executable to call
         if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            cmd = new String[]{"cmd", "/c", ant + ".bat", "-Dservice.deployment.host=\"localhost\"", target,};
+            command.add("cmd");
+            command.add("/c");
+            command.add(ant + ".bat");
+        } else {
+            command.add(ant.toString());
         }
+
+        // any arguments
+        if (args != null && args.size() > 0) {
+            command.addAll(args);
+        }
+
+        // target to execute
+        command.add(target);
+
         String[] envp = new String[]{"GLOBUS_LOCATION=" + this.tmpGlobusLocation.toString(),};
         envp = EnvUtils.overrideEnv(envp);
 
-        Process p = Runtime.getRuntime().exec(cmd, envp, serviceDir);
+        String[] commandArray = command.toArray(new String[command.size()]);
+        Process p = Runtime.getRuntime().exec(commandArray, envp, serviceDir);
         new StdIOThread(p.getInputStream()).start();
         new StdIOThread(p.getErrorStream()).start();
         p.waitFor();
