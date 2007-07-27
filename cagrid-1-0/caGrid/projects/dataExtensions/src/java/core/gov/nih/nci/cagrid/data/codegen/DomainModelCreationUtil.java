@@ -22,11 +22,15 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Apr 2, 2007 1:35:01 PM
- * @version $Id: DomainModelCreationUtil.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: DomainModelCreationUtil.java,v 1.2 2007-07-27 13:41:26 dervin Exp $ 
  */
 public class DomainModelCreationUtil {
     
-    private static Logger LOG = Logger.getLogger(DomainModelCreationUtil.class.getName());
+    private static final Logger LOG = Logger.getLogger(DomainModelCreationUtil.class.getName());
+    
+    private DomainModelCreationUtil() {
+        // no instantiation of this class, all methods are static
+    }
     
 
     public static DomainModel createDomainModel(CadsrInformation cadsrInfo) 
