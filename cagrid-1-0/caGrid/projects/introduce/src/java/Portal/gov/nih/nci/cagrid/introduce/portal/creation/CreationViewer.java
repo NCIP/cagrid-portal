@@ -197,7 +197,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
                 SERVICE_NAMESPACE));
         } else {
             try {
-                URI uri = new URI(this.getNamespaceDomain().getText());
+                new URI(this.getNamespaceDomain().getText());
             } catch (Exception e) {
                 result.add(new SimpleValidationMessage(SERVICE_NAMESPACE + " is not a well formed namespace",
                     Severity.ERROR, SERVICE_NAMESPACE));
