@@ -19,12 +19,12 @@ import javax.swing.JScrollPane;
 
 /** 
  *  UMLTreeTest
- *  TODO:DOCUMENT ME
+ *  Util to test the UML Tree
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 5, 2006 
- * @version $Id: UMLTreeTest.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: UMLTreeTest.java,v 1.2 2007-07-27 01:56:26 dervin Exp $ 
  */
 public class UMLTreeTest extends JFrame {
 	private UMLProjectTree projectTree = null;
@@ -34,6 +34,7 @@ public class UMLTreeTest extends JFrame {
 	private JPanel jPanel = null;  //  @jve:decl-index=0:visual-constraint="11,69"
 	
 	public UMLTreeTest() {
+        super();
 		initialize();
 	}
 	

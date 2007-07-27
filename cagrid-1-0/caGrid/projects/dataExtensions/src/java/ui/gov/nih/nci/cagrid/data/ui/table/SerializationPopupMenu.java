@@ -19,7 +19,7 @@ import javax.swing.JPopupMenu;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 6, 2006 
- * @version $Id: SerializationPopupMenu.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: SerializationPopupMenu.java,v 1.2 2007-07-27 01:56:19 dervin Exp $ 
  */
 public class SerializationPopupMenu extends JPopupMenu {
 	private JCheckBoxMenuItem defaultCheckItem = null;
@@ -29,6 +29,7 @@ public class SerializationPopupMenu extends JPopupMenu {
 	private ClassElementSerializationTable classConfigTable = null;
 
 	public SerializationPopupMenu(ClassElementSerializationTable typesTable) {
+        super();
 		this.classConfigTable = typesTable;
 		add(getDefaultCheckItem());
 		add(getSdkCheckItem());

@@ -21,7 +21,7 @@ import javax.swing.JPanel;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: AbstractWizardPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: AbstractWizardPanel.java,v 1.2 2007-07-27 01:56:26 dervin Exp $ 
  */
 public abstract class AbstractWizardPanel extends JPanel {
 	private static Map bitBucket;
@@ -31,6 +31,7 @@ public abstract class AbstractWizardPanel extends JPanel {
 	private List listeners;
 	
 	public AbstractWizardPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
+        super();
 		this.extDescription = extensionDescription;
 		this.serviceInfo = info;
 		this.listeners = new LinkedList();

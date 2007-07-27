@@ -6,17 +6,21 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 /** 
- *  CacoreWizardConstants
- *  TODO:DOCUMENT ME
+ *  CacoreWizardUtils
+ *  Utils for manipulating stuff within caCORE wizard panels
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: CacoreWizardUtils.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: CacoreWizardUtils.java,v 1.2 2007-07-27 01:56:26 dervin Exp $ 
  */
 public class CacoreWizardUtils {
 
 	public static final String LAST_DIRECTORY_KEY = "LastDirectory";
+    
+    private CacoreWizardUtils() {
+        // prevent instantiation of class w/ all static methods
+    }
 		
 	
 	public static String getServiceBaseDir(ServiceInformation info) {
