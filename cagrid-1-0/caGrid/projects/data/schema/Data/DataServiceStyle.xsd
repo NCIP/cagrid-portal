@@ -15,6 +15,7 @@
 			<xsd:element ref="tns:ModificationUiPanel" minOccurs="0"/>
 			<xsd:element ref="tns:CodegenHelpers" minOccurs="0"/>
 			<xsd:element ref="tns:CreationHelper" minOccurs="0"/>
+			<xsd:element ref="tns:VersionUpgrade" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
 		<xsd:attribute name="version" type="xsd:string" use="required"/>
@@ -33,10 +34,16 @@
 	</xsd:complexType>
 	<xsd:element name="CreationWizardPanel" type="tns:CreationWizardPanel"/>
 	<xsd:complexType name="CreationWizardPanel">
+		<xsd:annotation>
+			<xsd:documentation>Must extend from gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel</xsd:documentation>
+		</xsd:annotation>
 		<xsd:attribute name="classname" type="xsd:string" use="required"/>
 	</xsd:complexType>
 	<xsd:element name="ModificationUiPanel" type="tns:ModificationUiPanel"/>
 	<xsd:complexType name="ModificationUiPanel">
+		<xsd:annotation>
+			<xsd:documentation>Must extend from gov.nih.nci.cagrid.data.ui.DataServiceModificationSubPanel</xsd:documentation>
+		</xsd:annotation>
 		<xsd:attribute name="classname" type="xsd:string" use="required"/>
 	</xsd:complexType>
 	<xsd:element name="VersionUpgrade" type="tns:VersionUpgrade"/>
@@ -47,11 +54,17 @@
 	</xsd:complexType>
 	<xsd:element name="CodegenHelpers" type="tns:CodegenHelpers"/>
 	<xsd:complexType name="CodegenHelpers">
+		<xsd:annotation>
+			<xsd:documentation>Pre codegen must implement Must implement interface gov.nih.nci.cagrid.data.style.StyleCodegenPreProcessor, post codegen must implement Must implement interface gov.nih.nci.cagrid.data.style.StyleCodegenPostProcessor</xsd:documentation>
+		</xsd:annotation>
 		<xsd:attribute name="preCodegenClassname" type="xsd:string" use="optional"/>
 		<xsd:attribute name="postCodegenClassname" type="xsd:string" use="optional"/>
 	</xsd:complexType>
 	<xsd:element name="CreationHelper" type="tns:CreationHelper"/>
 	<xsd:complexType name="CreationHelper">
+		<xsd:annotation>
+			<xsd:documentation>Must implement interface gov.nih.nci.cagrid.data.style.StyleCreationPostProcessor</xsd:documentation>
+		</xsd:annotation>
 		<xsd:attribute name="postCreationClassname" type="xsd:string" use="required"/>
 	</xsd:complexType>
 </xsd:schema>
