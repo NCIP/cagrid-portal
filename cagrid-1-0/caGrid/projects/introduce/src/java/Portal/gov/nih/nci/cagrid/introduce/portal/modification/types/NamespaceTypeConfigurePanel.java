@@ -100,7 +100,6 @@ public class NamespaceTypeConfigurePanel extends JPanel {
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 				PortalLookAndFeel.getPanelLabelColor()));
-		this.setSize(new Dimension(201, 103));
 		//this.add(getMainPanel(), gridBagConstraints6);
 		this.add(new IconFeedbackPanel(this.validationModel,this.getMainPanel()),gridBagConstraints6);
 	
