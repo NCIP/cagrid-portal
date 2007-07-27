@@ -64,7 +64,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: DomainModelConfigPanel.java,v 1.2 2007-07-27 14:17:03 dervin Exp $ 
  */
 public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
@@ -640,6 +640,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             ClassMapping mapping = new ClassMapping();
             mapping.setClassName(className);
             mapping.setElementName(classToElement.get(className));
+            // TODO: determine if these should be true or false by default
             mapping.setSelected(true);
             mapping.setTargetable(true);
             mappingList.add(mapping);
@@ -741,8 +742,11 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             cadsrPack.setCadsrClass(classMappings);
             getExtensionDataManager().storeCadsrPackage(cadsrPack);
             // add the classes to the UML tree
-            for (String className: classNames) {
-                getUmlTree().addUmlClass(pack.getName(), className);
+            String packName = pack.getName();
+            for (ClassMapping mapping : classMappings) {
+                UMLClassTreeNode classNode = getUmlTree().addUmlClass(
+                    packName, mapping.getClassName());
+                classNode.getCheckBox().setSelected(mapping.isSelected());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
