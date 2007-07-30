@@ -129,7 +129,7 @@ public class UpdateTree extends JTree {
 
             if (!introducenode.isInstalled() && introducenode.isSelected()) {
                 introduceInstalls.add(introducenode.getIntroduce());
-            } else if (introducenode.isInstalled() && introducenode.isSelected()) {
+            } else if (introducenode.isInstalled()) {
                 if (introducenode.getChildCount() > 0
                     && introducenode.getChildAt(0) instanceof IntroduceRevUpdateTreeNode) {
                     DefaultMutableTreeNode treenodetemp = (DefaultMutableTreeNode) introducenode.getChildAt(0);

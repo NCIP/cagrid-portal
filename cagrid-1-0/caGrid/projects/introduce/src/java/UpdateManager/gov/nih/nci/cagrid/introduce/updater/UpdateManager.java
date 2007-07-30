@@ -72,7 +72,7 @@ public class UpdateManager {
                     }
                 }
 
-                if (update.getIntroduceRev(0) != null) {
+                if (update.getIntroduceRev()!=null && update.getIntroduceRev(0) != null) {
                     // just a patch, unzip overtop
                     System.out.println("Installing updates for current version of Introduce.");
                     File updateFile = new File("." + File.separator + "updates" + File.separator + "introduce"
@@ -93,7 +93,9 @@ public class UpdateManager {
                         props.load(new FileInputStream(engineProps));
                         props.setProperty("introduce.patch.version", String.valueOf(update.getIntroduceRev(0)
                             .getPatchVersion()));
-                        props.store(new FileOutputStream(engineProps), "Introduce Engine Properties");
+                        FileOutputStream fos = new FileOutputStream(engineProps);
+                        props.store(fos, "Introduce Engine Properties");
+                        fos.close();
                     } catch (FileNotFoundException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
