@@ -30,12 +30,11 @@ public class DomainModelGenerationExample {
             long start = System.currentTimeMillis();
 
             // UNCOMMENT FOR: Whole project
-            DomainModel domainModel = builder.createDomainModel(project);
+            // DomainModel domainModel = builder.createDomainModel(project);
 
             // UNCOMMENT FOR: a single package
-            // DomainModel domainModel =
-            // builder.createDomainModelForPackages(project,
-            // new String[]{"gov.nih.nci.cabio.domain"});
+            DomainModel domainModel = builder.createDomainModelForPackages(project,
+                new String[]{"gov.nih.nci.cabio.domain"});
 
             // UNCOMMENT FOR: a specific set of classes
             // String classNames[] = new String[]{Gene.class.getName(),
