@@ -120,7 +120,7 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
                             }
                         }
 
-                        if (introduceTypes[i].getIntroduceRev(0) != null) {
+                        if (introduceTypes[i].getIntroduceRev()!=null && introduceTypes[i].getIntroduceRev(0) != null) {
                             // need to get the patch
                             URL url = null;
                             try {

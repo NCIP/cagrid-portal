@@ -47,7 +47,7 @@ public class MainUpdateTreeNode extends UpdateTypeTreeNode {
 								"Introduce (" + introduce.getVersion() + ")",
 								this.getModel(), introduce, software);
 						introduceNode.getCheckBox().setEnabled(false);
-						introduceNode.getCheckBox().setSelected(true);
+						introduceNode.getCheckBox().setSelected(false);
 						introduceNode.setInstalled(true);
 						introduceNode.getCheckBox().setText(
 								introduceNode.getCheckBox().getText()

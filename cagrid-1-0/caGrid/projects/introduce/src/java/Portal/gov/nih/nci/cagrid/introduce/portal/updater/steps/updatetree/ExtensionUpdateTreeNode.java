@@ -28,7 +28,7 @@ public class ExtensionUpdateTreeNode extends UpdateTypeTreeNode {
 						extension.getName()).getVersion().equals(
 						extension.getVersion())) {
 			checkBox.setEnabled(false);
-			checkBox.setSelected(true);
+			checkBox.setSelected(false);
 			installed = true;
 			checkBox.setText(checkBox.getText() + " installed");
 			checkBox.setFont(checkBox.getFont().deriveFont(Font.ITALIC));

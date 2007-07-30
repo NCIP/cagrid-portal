@@ -83,7 +83,7 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
                     IntroduceRevUpdateTreeNode revNode = new IntroduceRevUpdateTreeNode("Introduce Cummulative Patch Update "
                         + latestRev.getPatchVersion(), getModel(), latestRev, software);
                     revNode.getCheckBox().setEnabled(false);
-                    revNode.getCheckBox().setSelected(true);
+                    revNode.getCheckBox().setSelected(false);
                     revNode.setInstalled(true);
                     revNode.getCheckBox().setText(revNode.getCheckBox().getText() + " installed");
                     revNode.getCheckBox().setFont(revNode.getCheckBox().getFont().deriveFont(Font.ITALIC));

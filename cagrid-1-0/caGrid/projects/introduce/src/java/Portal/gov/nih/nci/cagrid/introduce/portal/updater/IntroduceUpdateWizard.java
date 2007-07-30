@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.updater;
 
+import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+
 import org.pietschy.wizard.Wizard;
 
 public class IntroduceUpdateWizard {
@@ -9,7 +11,7 @@ public class IntroduceUpdateWizard {
 		UpdateWizardModel model = new UpdateWizardModel(paths);
 		Wizard wizard = new Wizard(model);
 		wizard.setOverviewVisible(true);
-		wizard.showInFrame("Introduce Update Manager");
+		wizard.showInFrame("Introduce Update Manager",IntroduceLookAndFeel.getUpdateIcon().getImage());
 	}
 
 	public static void main(String[] args) {

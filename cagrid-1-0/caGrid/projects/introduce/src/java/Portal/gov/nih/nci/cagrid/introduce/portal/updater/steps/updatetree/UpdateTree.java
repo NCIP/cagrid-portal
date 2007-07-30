@@ -54,11 +54,22 @@ public class UpdateTree extends JTree {
                     JCheckBox box = (JCheckBox) obj;
                     // return if this software is already installed
                     if (node instanceof IntroduceUpdateTreeNode) {
+
                         if (((IntroduceUpdateTreeNode) node).isInstalled()) {
                             return;
                         }
                     } else if (node instanceof ExtensionUpdateTreeNode) {
+                        if (!box.isSelected() && !((IntroduceUpdateTreeNode) node.getParent()).isInstalled()) {
+                            return;
+                        }
                         if (((ExtensionUpdateTreeNode) node).isInstalled()) {
+                            return;
+                        }
+                    } else if (node instanceof IntroduceRevUpdateTreeNode) {
+                        if (!box.isSelected() && !((IntroduceUpdateTreeNode) node.getParent()).isInstalled()) {
+                            return;
+                        }
+                        if (((IntroduceRevUpdateTreeNode) node).isInstalled()) {
                             return;
                         }
                     }
@@ -70,7 +81,13 @@ public class UpdateTree extends JTree {
                             ((ExtensionUpdateTreeNode) node.getChildAt(i)).getCheckBox().setSelected(box.isSelected());
                         }
                     }
-                    if ((node instanceof IntroduceUpdateTreeNode) && box.isSelected()) {
+                    if ((node instanceof ExtensionUpdateTreeNode) && box.isSelected()) {
+                        node = (DefaultMutableTreeNode) node.getParent();
+                    } else if ((node instanceof IntroduceRevUpdateTreeNode) && box.isSelected()) {
+                        node = (DefaultMutableTreeNode) node.getParent();
+                    }
+                    if ((node instanceof IntroduceUpdateTreeNode)
+                        && (box.isSelected() || ((IntroduceUpdateTreeNode) node).isInstalled())) {
                         // need to unselect anything else not in this branch
                         int introduceNodeCount = root.getChildCount();
                         for (int i = 0; i < introduceNodeCount; i++) {
@@ -80,8 +97,13 @@ public class UpdateTree extends JTree {
                                 introducenode.getCheckBox().setSelected(false);
                                 int children = introducenode.getChildCount();
                                 for (int j = 0; j < children; j++) {
-                                    ((ExtensionUpdateTreeNode) introducenode.getChildAt(j)).getCheckBox().setSelected(
-                                        false);
+                                    if (introducenode.getChildAt(j) instanceof ExtensionUpdateTreeNode) {
+                                        ((ExtensionUpdateTreeNode) introducenode.getChildAt(j)).getCheckBox()
+                                            .setSelected(false);
+                                    } else if (introducenode.getChildAt(j) instanceof IntroduceRevUpdateTreeNode) {
+                                        ((IntroduceRevUpdateTreeNode) introducenode.getChildAt(j)).getCheckBox()
+                                            .setSelected(false);
+                                    }
                                 }
                             }
                         }
@@ -104,7 +126,7 @@ public class UpdateTree extends JTree {
         for (int i = 0; i < introduceNodeCount; i++) {
             DefaultMutableTreeNode treenode = (DefaultMutableTreeNode) root.getChildAt(i);
             IntroduceUpdateTreeNode introducenode = (IntroduceUpdateTreeNode) treenode;
-            int startExtensionsChild = 0;
+
             if (!introducenode.isInstalled() && introducenode.isSelected()) {
                 introduceInstalls.add(introducenode.getIntroduce());
             } else if (introducenode.isInstalled() && introducenode.isSelected()) {
@@ -115,15 +137,18 @@ public class UpdateTree extends JTree {
                     if (introducerevnode.isSelected() && !introducerevnode.isInstalled()) {
                         introduceInstalls.add(introducenode.getIntroduce());
                     }
-                    startExtensionsChild=1;
+
                 }
             }
             introducenode.getCheckBox().setSelected(false);
             int children = introducenode.getChildCount();
-            for (int j = startExtensionsChild; j < children; j++) {
-                ExtensionUpdateTreeNode extensionnode = (ExtensionUpdateTreeNode) introducenode.getChildAt(j);
-                if (!extensionnode.isInstalled() && extensionnode.isSelected()) {
-                    extensionInstalls.add(extensionnode.getExtension());
+            for (int j = 0; j < children; j++) {
+                if (introducenode.getChildAt(j) instanceof ExtensionUpdateTreeNode) {
+                    ExtensionUpdateTreeNode extensionnode = (ExtensionUpdateTreeNode) introducenode.getChildAt(j);
+
+                    if (!extensionnode.isInstalled() && extensionnode.isSelected()) {
+                        extensionInstalls.add(extensionnode.getExtension());
+                    }
                 }
             }
 
