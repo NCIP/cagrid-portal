@@ -103,6 +103,23 @@ public class UpdateManager {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
+                    File enginePropsT = new File("." + File.separator + "conf" + File.separator + "introduce"
+                        + File.separator + "introduce.engine.properties.template");
+                    Properties propsT = new Properties();
+                    try {
+                        propsT.load(new FileInputStream(enginePropsT));
+                        propsT.setProperty("introduce.patch.version", String.valueOf(update.getIntroduceRev(0)
+                            .getPatchVersion()));
+                        FileOutputStream fos = new FileOutputStream(enginePropsT);
+                        propsT.store(fos, "Introduce Engine Properties");
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
 
                 }
 
@@ -178,6 +195,7 @@ public class UpdateManager {
         File file = new File(new File(baseDir).getAbsolutePath() + File.separator + s);
         file.getParentFile().mkdirs();
         FileOutputStream out = new FileOutputStream(file);
+        System.out.print(".");
         byte[] b = new byte[512];
         int len = 0;
         while ((len = zin.read(b)) != -1) {
