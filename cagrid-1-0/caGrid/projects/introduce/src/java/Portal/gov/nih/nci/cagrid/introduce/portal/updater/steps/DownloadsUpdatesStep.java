@@ -86,7 +86,7 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
                             try {
                                 connection = url.openConnection();
                                 addStatusLine("Downloading Introduce " + introduceTypes[i].getVersion() + " ("
-                                    + connection.getContentLength() + " bytes)");
+                                    + connection.getContentLength()/1024/1024 + " MB)");
                                 getBusyProgressBar().setMinimum(0);
                                 getBusyProgressBar().setMaximum(connection.getContentLength());
                                 getBusyProgressBar().setValue(0);

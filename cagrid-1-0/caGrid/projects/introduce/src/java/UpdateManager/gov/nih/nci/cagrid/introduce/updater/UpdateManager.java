@@ -54,11 +54,12 @@ public class UpdateManager {
                     for (int fileI = 0; fileI < files.length; fileI++) {
                         File f = files[fileI];
                         if (f.isDirectory() && !f.getName().equals("updates")) {
-                            deleteDir(f);
-                        } else {
-                            f.delete();
+                            delete(f);
+                        } else if (!f.isDirectory()) {
+                            delete(f);
                         }
                     }
+                    delete(new File("." + File.separator + "updates" + File.separator + "lib"));
 
                     System.out.println("Installing new version of Introduce.");
                     File updateFile = new File("." + File.separator + "updates" + File.separator + "introduce"
@@ -72,7 +73,7 @@ public class UpdateManager {
                     }
                 }
 
-                if (update.getIntroduceRev()!=null && update.getIntroduceRev(0) != null) {
+                if (update.getIntroduceRev() != null && update.getIntroduceRev(0) != null) {
                     // just a patch, unzip overtop
                     System.out.println("Installing updates for current version of Introduce.");
                     File updateFile = new File("." + File.separator + "updates" + File.separator + "introduce"
@@ -144,18 +145,23 @@ public class UpdateManager {
     }
 
 
-    public static boolean deleteDir(File dir) {
+    public static void delete(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
             for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    System.err.println("could not remove directory: " + dir.getAbsolutePath());
-                    return false;
-                }
+                delete(new File(dir, children[i]));
+            }
+            boolean success = dir.delete();
+            if (!success) {
+                System.err.println("unable to delete directory: " + dir.getAbsolutePath());
+            }
+        } else {
+            boolean success = dir.delete();
+            if (!success) {
+                System.err.println("unable to delete file: " + dir.getAbsolutePath());
             }
         }
-        return dir.delete();
+
     }
 
 

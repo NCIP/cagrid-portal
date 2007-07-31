@@ -31,7 +31,7 @@
 		</path>
 		<path id="UpdateManager.run.classpath">
 			<fileset dir="${updates.lib.dir}">
-				<include name="caGrid-1.1-Introduce-1_1-updater.jar" />
+				<include name="caGrid-1.1-Introduce-1.1-updater.jar" />
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="*.jar" />
