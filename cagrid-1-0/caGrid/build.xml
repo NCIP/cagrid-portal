@@ -605,21 +605,7 @@
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
-	<!-- =============================================================== -->
-	<!-- REMOTE APPLICATION VIRTUALIZATION EXTENSION:                                                      -->
-	<!-- =============================================================== -->
-	<target name="build-rav" depends="prepare" description="Builds the Remote Virtualization Extension">
-		<resolveDependencies extdir="${projects.dir}/rav/ext">
-			<artifact refid="cagrid.properties" />
-			<artifact refid="introduce.jars" />
-			<artifact refid="introduce.resources" />
-			<artifact refid="core.jars" />
-			<artifact refid="core.test.jars" />
-			<artifact refid="test.coverage.jars" />
-		</resolveDependencies>
-		<ant dir="${projects.dir}/rav" inheritAll="false" antfile="build.xml" target="all" />
-	</target>
-
+    
 	<!-- =============================================================== -->
 	<!-- SERVICE SECURITY PROVIDER:                                      -->
 	<!-- =============================================================== -->
@@ -673,9 +659,8 @@
 			<artifact refid="core.jars" />
 			<artifact refid="wizard.jars" />
 		</resolveDependencies>
-		<!--
-    	        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
-    	        -->
+
+        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
@@ -791,21 +776,7 @@
 		<ant dir="${projects.dir}/ws-transfer" inheritAll="false" antfile="build.xml" target="deploy" />
 	</target>
 
-	<!-- =============================================================== -->
-	<!-- CAGRID WS-NAMING:                                             	 -->
-	<!-- =============================================================== -->
-	<target name="build-ws-naming" depends="prepare" description="Builds caGrid WS-naming components">
-		<ant dir="${projects.dir}/ws-naming" inheritAll="false" antfile="build.xml" target="deploy" />
-	</target>
-
-	<!-- =============================================================== -->
-	<!-- CAGRID WS-HANDLESYSTEM:                                             	 -->
-	<!-- =============================================================== -->
-	<target name="build-ws-handlesystem" depends="prepare" description="Builds caGrid WS-handlesystem components">
-		<ant dir="${projects.dir}/ws-handlesystem" inheritAll="false" antfile="build.xml" target="all" />
-	</target>
-
-
+    
 	<!-- =============================================================== -->
 	<!-- CAGRID SDK Data Service Query Processor:                        -->
 	<!-- =============================================================== -->
