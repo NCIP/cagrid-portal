@@ -406,17 +406,12 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 		}
 
 		// need to add to the deploy.properties
-		Properties deployProperties = new Properties();
-		deployProperties.load(new FileInputStream(new File(getServicePath()
-				+ File.separator + IntroduceConstants.DEPLOY_PROPERTIES_FILE)));
+		Properties deployProperties  = getServiceInformation().getDeploymentProperties();
 		deployProperties.put("index.service.registration.refresh_seconds",
 				"600");
 		deployProperties.put("index.service.index.refresh_milliseconds",
 				"30000");
 		deployProperties.put("perform.index.service.registration", "true");
-		deployProperties.store(new FileOutputStream(new File(getServicePath()
-				+ File.separator + IntroduceConstants.DEPLOY_PROPERTIES_FILE)),
-				"Service Deployment Properties");
 		getStatus().addDescriptionLine(
 				"adding new deployment variables to deploy.properties");
 

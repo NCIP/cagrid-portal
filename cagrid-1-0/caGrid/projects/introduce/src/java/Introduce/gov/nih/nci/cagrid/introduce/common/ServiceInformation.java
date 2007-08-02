@@ -146,7 +146,9 @@ public class ServiceInformation {
         introduceServiceProperties.store(new FileOutputStream(servicePropertiesFile), "Introduce Properties");
         File deploymentPropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator
                 + IntroduceConstants.DEPLOY_PROPERTIES_FILE);
-            deploymentProperties.store(new FileOutputStream(deploymentPropertiesFile), "Service Deployment Properties");
+        FileOutputStream fos = new FileOutputStream(deploymentPropertiesFile);
+            deploymentProperties.store(fos, "Service Deployment Properties");
+        fos.close();
     }
 
 
