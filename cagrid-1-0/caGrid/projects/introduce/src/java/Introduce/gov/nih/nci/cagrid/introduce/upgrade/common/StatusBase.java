@@ -73,7 +73,7 @@ public class StatusBase {
     }
     
     public void addDescriptionLine(String line) {
-        this.description.append(line).append("\n");
+        this.description.append("\t"+ line).append("\n");
     }
     
     public void addIssue(String issue, String resolution){
