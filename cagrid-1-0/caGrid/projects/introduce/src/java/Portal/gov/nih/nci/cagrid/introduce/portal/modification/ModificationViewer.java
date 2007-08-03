@@ -278,7 +278,7 @@ public class ModificationViewer extends GridPortalComponent {
 		this.methodsDirectory = methodsDirectory;
 		try {
 
-			initialize();
+			initialize(null);
 
 		} catch (Exception e) {
 			// should never get here but in case.....
@@ -315,7 +315,7 @@ public class ModificationViewer extends GridPortalComponent {
 								this
 										.setProgressText("Initializing Modification Viewer");
 								try {
-									initialize();
+									initialize(this);
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
@@ -380,7 +380,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 	public void reInitialize(File serviceDir) throws Exception {
 		this.methodsDirectory = serviceDir;
-		this.initialize();
+		this.initialize(null);
 		this.reInitializeGUI();
 	}
 
@@ -404,14 +404,18 @@ public class ModificationViewer extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes this viewer componenet
+	 * This method initializes this viewer component
 	 */
-	private void initialize() throws Exception {
+	private void initialize(BusyDialogRunnable dialog) throws Exception {
 		if (this.methodsDirectory != null) {
+		    
+		    if(dialog!=null){
+		        dialog.setProgressText("Checking introduce version of service");
+		    }
 
 			UpgradeManager upgrader = new UpgradeManager(this.methodsDirectory
 					.getAbsolutePath());
-
+			
 			if (upgrader.canIntroduceBeUpgraded()
 					|| upgrader.extensionsNeedUpgraded()) {
 				String message = "This service is from an older of version of\n"
@@ -427,6 +431,9 @@ public class ModificationViewer extends GridPortalComponent {
 						JOptionPane.WARNING_MESSAGE);
 				if (answer == JOptionPane.YES_OPTION) {
 					try {
+				           if(dialog!=null){
+				                dialog.setProgressText("Upgrading service");
+				            }
 						UpgradeStatus status = upgrader.upgrade();
 						logger.info("SERVICE UPGRADE STATUS:\n" + status);
 						answer = UpgradeStatusView
@@ -459,6 +466,9 @@ public class ModificationViewer extends GridPortalComponent {
 										JOptionPane.OK_CANCEL_OPTION);
 						if (answer == JOptionPane.OK_OPTION) {
 							try {
+							    if(dialog!=null){
+				                    dialog.setProgressText("Rolling back upgrade changes");
+				                }
 								upgrader.recover();
 							} catch (Exception ex) {
 								ErrorDialog.showErrorDialog(e);
@@ -479,6 +489,9 @@ public class ModificationViewer extends GridPortalComponent {
 			// reload the info incase it has changed during
 			// upgrading.....
 			try {
+			    if(dialog!=null){
+                    dialog.setProgressText("Reloading service description");
+                }
 				this.info = new ServiceInformation(this.methodsDirectory);
 			} catch (Exception e) {
 				e.printStackTrace();
