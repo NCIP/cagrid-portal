@@ -11,4 +11,5 @@
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.data.style.sdkstyle.wizard.SchemaTypesPanel"/>
 	</CreationWizardPanels>
 	<CodegenHelpers postCodegenClassname="gov.nih.nci.cagrid.data.style.sdkstyle.helpers.PostCodegenHelper"/>
+	<ModificationUiPanel classname="gov.nih.nci.cagrid.data.style.cacore32.modification.CaCoreVersionPanel"/>
 </DataServiceStyle>
