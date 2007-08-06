@@ -47,7 +47,7 @@ import javax.swing.ScrollPaneConstants;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.2 2007-07-12 19:53:06 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.3 2007-08-06 14:04:30 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String[] LOCAL_CLIENT_REQUIRED_FILES = new String[] {
@@ -396,7 +396,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                     getClientLibDirTextField().setText(clientLibDir);
                     
                     // store the library information
-                    storeLibrariesInExtensionData();
+                    // storeLibrariesInExtensionData();
                 } else {
                     String[] message = {
                         "The selected directory does not appear to contain",
