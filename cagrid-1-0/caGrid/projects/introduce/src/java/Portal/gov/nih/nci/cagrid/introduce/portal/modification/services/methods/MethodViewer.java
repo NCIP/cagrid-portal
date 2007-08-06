@@ -2117,36 +2117,36 @@ public class MethodViewer extends GridPortalBaseFrame {
 					.setToolTipText("Check this if you want to import the the WSDL operation from another service");
 			isImportedCheckBox.setText("Imported");
 			isImportedCheckBox.setSelected(method.isIsImported());
-			if (!method.isIsImported()) {
-				if (isImportedCheckBox.isSelected()) {
-					getTabbedPanel().setEnabledAt(3, true);
-					getTabbedPanel().setEnabledAt(0, false);
-					getTabbedPanel().setSelectedIndex(3);
-				} else {
-					getTabbedPanel().setEnabledAt(3, false);
-					if (getTabbedPanel().getSelectedIndex() == 3) {
-						getTabbedPanel().setEnabledAt(0, true);
-						getTabbedPanel().setSelectedIndex(0);
-					}
+			if (isImportedCheckBox.isSelected()) {
+				getTabbedPanel().setEnabledAt(3, true);
+				getTabbedPanel().setEnabledAt(0, false);
+				getTabbedPanel().setSelectedIndex(3);
+			} else {
+				getTabbedPanel().setEnabledAt(3, false);
+				getTabbedPanel().setEnabledAt(0, true);
+				if (getTabbedPanel().getSelectedIndex() == 3) {
+					getTabbedPanel().setSelectedIndex(0);
 				}
-				isImportedCheckBox.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						if (isImportedCheckBox.isSelected()) {
-							getTabbedPanel().setEnabledAt(3, true);
-							getTabbedPanel().setEnabledAt(0, false);
-							getTabbedPanel().setSelectedIndex(3);
-						} else {
-							getTabbedPanel().setEnabledAt(3, false);
-							if (getTabbedPanel().getSelectedIndex() == 3) {
-								getTabbedPanel().setEnabledAt(0, true);
-								getTabbedPanel().setSelectedIndex(0);
-							}
-						}
-						validateImportInput();
-					}
-
-				});
 			}
+
+			isImportedCheckBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (isImportedCheckBox.isSelected()) {
+						getTabbedPanel().setEnabledAt(3, true);
+						getTabbedPanel().setEnabledAt(0, false);
+						getTabbedPanel().setSelectedIndex(3);
+					} else {
+						getTabbedPanel().setEnabledAt(3, false);
+						getTabbedPanel().setEnabledAt(0, true);
+						if (getTabbedPanel().getSelectedIndex() == 3) {
+							getTabbedPanel().setSelectedIndex(0);
+						}
+					}
+					validateImportInput();
+				}
+
+			});
+
 		}
 		return isImportedCheckBox;
 	}
@@ -2167,6 +2167,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 				getTabbedPanel().setEnabledAt(2, true);
 			} else {
 				getTabbedPanel().setEnabledAt(2, false);
+				if (getTabbedPanel().getSelectedIndex() == 2
+						&& !getIsImportedCheckBox().isSelected()) {
+					getTabbedPanel().setSelectedIndex(0);
+				} else {
+					getTabbedPanel().setSelectedIndex(1);
+				}
 			}
 			isProvidedCheckBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -2174,6 +2180,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 						getTabbedPanel().setEnabledAt(2, true);
 					} else {
 						getTabbedPanel().setEnabledAt(2, false);
+						if (getTabbedPanel().getSelectedIndex() == 2
+								&& !getIsImportedCheckBox().isSelected()) {
+							getTabbedPanel().setSelectedIndex(0);
+						} else {
+							getTabbedPanel().setSelectedIndex(1);
+						}
 					}
 					validateProviderInput();
 				}
