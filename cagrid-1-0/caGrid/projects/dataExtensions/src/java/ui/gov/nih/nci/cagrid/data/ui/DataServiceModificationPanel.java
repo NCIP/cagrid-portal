@@ -17,6 +17,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 /**
@@ -26,7 +28,7 @@ import javax.swing.JTabbedPane;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Oct 10, 2006
- * @version $Id: DataServiceModificationPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: DataServiceModificationPanel.java,v 1.2 2007-08-06 19:34:11 dervin Exp $
  */
 public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 
@@ -126,6 +128,13 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private JTabbedPane getMainTabbedPane() {
 		if (mainTabbedPane == null) {
 			mainTabbedPane = new JTabbedPane();
+            // when the tab changes, update values on all the tabs
+            mainTabbedPane.addChangeListener(new ChangeListener() {
+                public void stateChanged(ChangeEvent e) {
+                    resetGUI();
+                }
+            });
+            
 			mainTabbedPane.addTab("Domain Model", null, getDomainConfigPanel(), 
                 "Selection of packages and classes in domain model");
 			mainTabbedPane.addTab("Query Processor", null, getProcessorConfigPanel(), 
