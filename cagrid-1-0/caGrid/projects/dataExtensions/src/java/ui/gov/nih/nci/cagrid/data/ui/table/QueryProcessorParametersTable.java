@@ -8,14 +8,13 @@ import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -169,13 +168,12 @@ public class QueryProcessorParametersTable extends JTable {
         String className = getQpClassname();
         if ((className != null) && (className.length() != 0)
             && !className.endsWith(DataServiceConstants.QUERY_PROCESSOR_STUB_NAME)) {
-            String[] libs = getJarFilenames();
+            File[] libs = getJarFiles();
             URL[] urls = new URL[libs.length];
             for (int i = 0; i < libs.length; i++) {
-                File libFile = new File(libs[i]);
-                urls[i] = libFile.toURL();
+                urls[i] = libs[i].toURL();
             }
-            ClassLoader loader = new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
+            ClassLoader loader = new URLClassLoader(urls);
             Class qpClass = loader.loadClass(className);
             return qpClass;
         }
@@ -183,18 +181,10 @@ public class QueryProcessorParametersTable extends JTable {
     }
 
 
-    private String[] getJarFilenames() throws Exception {
+    private File[] getJarFiles() throws Exception {
         String libDir = serviceInfo.getBaseDirectory() + File.separator + "lib";
-        String[] jarNames = extensionDataManager.getAdditionalJarNames();
-        List namesList = new ArrayList();
-        if (jarNames != null) {
-            for (String name : jarNames) {
-                namesList.add(libDir + File.separator + name);
-            }
-        }
-        String[] namesArray = new String[namesList.size()];
-        namesList.toArray(namesArray);
-        return namesArray;
+        File[] libArray = (new File(libDir)).listFiles(new FileFilters.JarFileFilter());
+        return libArray;
     }
 
 

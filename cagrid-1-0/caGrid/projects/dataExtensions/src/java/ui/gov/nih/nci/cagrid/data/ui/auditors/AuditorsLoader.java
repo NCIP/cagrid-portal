@@ -22,7 +22,7 @@ import java.util.jar.JarFile;
  * @author David Ervin
  * 
  * @created May 23, 2007 4:05:52 PM
- * @version $Id: AuditorsLoader.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: AuditorsLoader.java,v 1.2 2007-08-06 14:04:08 dervin Exp $ 
  */
 public class AuditorsLoader {
 
@@ -38,13 +38,14 @@ public class AuditorsLoader {
         }
         URL[] urlArray = new URL[jarUrls.size()];
         jarUrls.toArray(urlArray);
-        
+        System.out.println("Looking for data service auditor subclasses");
         // load all subclasses of DataServiceAuditor
         List<Class> subclasses = new LinkedList();
-        ClassLoader loader = new URLClassLoader(
-            urlArray, Thread.currentThread().getContextClassLoader());
         Class baseClass = DataServiceAuditor.class;
         for (int i = 0; i < jarFiles.size(); i++) {
+            // loader created each time because 
+            // iterating over many classes clogs up the cache in the loader
+            ClassLoader loader = new URLClassLoader(urlArray);
             JarFile jar = new JarFile((File) jarFiles.get(i));
             Enumeration jarEntries = jar.entries();
             while (jarEntries.hasMoreElements()) {
@@ -62,11 +63,13 @@ public class AuditorsLoader {
                         // + "):" + e.getMessage());
                     }
                     if (loadedClass != null && baseClass.isAssignableFrom(loadedClass)
-                        && !baseClass.equals(loadedClass)) {
+                        && !baseClass.getName().equals(loadedClass.getName())) {
                         subclasses.add(loadedClass);
                     }
                 }
             }
+            loader = null;
+            jar.close();
         }
         return subclasses;
     }

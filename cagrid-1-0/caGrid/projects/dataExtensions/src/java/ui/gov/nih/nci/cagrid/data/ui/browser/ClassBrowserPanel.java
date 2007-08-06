@@ -50,7 +50,7 @@ import javax.swing.JScrollPane;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created May 11, 2006
- * @version $Id: ClassBrowserPanel.java,v 1.2 2007-07-17 13:40:36 dervin Exp $
+ * @version $Id: ClassBrowserPanel.java,v 1.3 2007-08-06 14:04:08 dervin Exp $
  */
 public class ClassBrowserPanel extends JPanel {
 
@@ -75,8 +75,8 @@ public class ClassBrowserPanel extends JPanel {
 		this.serviceInfo = serviceInfo;
 		classSelectionListeners = new LinkedList();
 		additionalJarsListeners = new LinkedList();
-		initFirstTime();
-		initialize();
+        initFirstTime();
+        initialize();
 	}
     
     
@@ -94,7 +94,6 @@ public class ClassBrowserPanel extends JPanel {
         
         // populate available classes from the jars
         populateClassDropdown();
-        
         // set the selected query processor class
         if (CommonTools.servicePropertyExists(
             serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
@@ -107,7 +106,7 @@ public class ClassBrowserPanel extends JPanel {
                 ErrorDialog.showErrorDialog("Error getting query processor class name from properties",
                     ex.getMessage(), ex);
             }
-        }   
+        }
     }
 	
 	
@@ -118,7 +117,7 @@ public class ClassBrowserPanel extends JPanel {
 	        if (servicePropertyClassDifferentFromDisplayed()) {
 	            String qpClassname = CommonTools.getServicePropertyValue(
 	                serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-	            getClassSelectionComboBox().setSelectedItem(qpClassname);
+                getClassSelectionComboBox().setSelectedItem(qpClassname);
             }
 	    } catch (Exception ex) {
 	        ex.printStackTrace();
@@ -132,8 +131,8 @@ public class ClassBrowserPanel extends JPanel {
         String propertyValue = null;
         if (CommonTools.servicePropertyExists(
             serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
-                propertyValue = CommonTools.getServicePropertyValue(
-                    serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+            propertyValue = CommonTools.getServicePropertyValue(
+                serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
         }
         String displayedValue = getSelectedClassName();
         return !Utils.equals(propertyValue, displayedValue);
@@ -447,15 +446,20 @@ public class ClassBrowserPanel extends JPanel {
 	private void populateClassDropdown() {
         SortedSet<String> foundClassNames = new TreeSet();
 		String libDir = serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "lib";
-		String[] jars = getAdditionalJars();
+		String[] additionalJarNames = getAdditionalJars();
 		try {
-			URL[] urls = new URL[jars.length];
-			for (int i = 0; i < jars.length; i++) {
-				urls[i] = (new File(libDir + File.separator + jars[i])).toURL();
-			}
-			ClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
+            // get URLs for all jar files in the service's lib dir
+            File[] libFiles = (new File(libDir)).listFiles(new FileFilters.JarFileFilter());
+            URL[] urls = new URL[libFiles.length];
+            for (int i = 0; i < libFiles.length; i++) {
+                urls[i] = libFiles[i].toURL();
+            }
 			Class queryProcessorClass = CQLQueryProcessor.class;
-            for (String jarName : jars) {
+            // search for query processor classes from additional jars list
+            for (String jarName : additionalJarNames) {
+                // creates a new loader each time to avoid having every class in the service
+                // loaded at once, clogging up the loader
+                ClassLoader loader = new URLClassLoader(urls);
                 JarFile jarFile = new JarFile(libDir + File.separator + jarName);
                 Enumeration jarEntries = jarFile.entries();
                 while (jarEntries.hasMoreElements()) {
@@ -469,18 +473,19 @@ public class ClassBrowserPanel extends JPanel {
                             loadedClass = loader.loadClass(name);
                         } catch (Throwable e) {
                             // theres a lot of these...
-                            // System.err.println("Error loading class (" + name
-                            // + "):" + e.getMessage());
                         }
-                        if (loadedClass != null && queryProcessorClass.isAssignableFrom(loadedClass)) {
-                            foundClassNames.add(name);
+                        if (loadedClass != null) {
+                            if (queryProcessorClass.isAssignableFrom(loadedClass)) {
+                                foundClassNames.add(name);
+                            }
                         }
                     }
+                    // allow the created class loader to be reclaimed by GC
+                    loader = null;
+                    
                 }
                 jarFile.close();
             }
-            // allow the created class loader to be reclaimed by GC
-			loader = null;
             // potentially populate the class drop down
             DefaultComboBoxModel model = (DefaultComboBoxModel) getClassSelectionComboBox().getModel();
             SortedSet<String> currentClassNames = new TreeSet();
@@ -511,7 +516,7 @@ public class ClassBrowserPanel extends JPanel {
                         DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
                     if (model.getIndexOf(qpClassname) != -1) {
                         getClassSelectionComboBox().setSelectedItem(qpClassname);
-                    }
+                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     ErrorDialog.showErrorDialog("Error getting query processor class name from properties",
