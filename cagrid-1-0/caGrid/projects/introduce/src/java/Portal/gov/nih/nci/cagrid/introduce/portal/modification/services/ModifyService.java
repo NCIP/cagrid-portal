@@ -14,10 +14,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -65,8 +68,6 @@ public class ModifyService extends JDialog {
 
 	private JTextField servicePackageNameTextField = null;
 
-	private ServiceTypeTreeNode node;
-
 	private ServiceSecurityPanel securityPanel = null;
 
 	private boolean isNew;
@@ -78,17 +79,19 @@ public class ModifyService extends JDialog {
 	private static final String SERVICE_NAMESPACE = "Service namespace"; // @jve:decl-index=0:
 
 	private static final String SERVICE_PACKAGE = "Service package name";
+	
+	private boolean wasClosed = false;
 
 	/**
 	 * This method initializes
 	 */
-	public ModifyService(ServiceTypeTreeNode node,
+	public ModifyService(
 			SpecificServiceInformation service, boolean isNew) {
 		super(PortalResourceManager.getInstance().getGridPortal());
 		this.setModal(true);
 		this.isNew = isNew;
 		this.service = service;
-		this.node = node;
+		
 		initialize();
 		if (service.getService().getName() != null
 				&& service.getService().getName().length() > 0) {
@@ -137,11 +140,29 @@ public class ModifyService extends JDialog {
 			getResourceFrameworkTypeComboBox().setSelectedIndex(-1);
 		}
 	}
+	
+	public boolean wasClosed(){
+	    return this.wasClosed;
+	}
 
 	/**
 	 * This method initializes this
 	 */
 	private void initialize() {
+	    this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+	    this.addWindowListener(new WindowAdapter() {
+        
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // TODO Auto-generated method stub
+                super.windowClosing(e);
+                wasClosed = true;
+                setVisible(false);
+                dispose();
+            }
+        
+        });
+	    
 		this.setContentPane(getMainPanel());
 		this.setTitle("Modify Service Context");
 
@@ -377,8 +398,6 @@ public class ModifyService extends JDialog {
 								.getMessage());
 						return;
 					}
-					node.getModel().nodeStructureChanged(node);
-					node.getModel().nodeChanged(node);
 					dispose();
 				}
 			});

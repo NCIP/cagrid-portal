@@ -49,10 +49,12 @@ public class ServicePopUpMenu extends JPopupMenu {
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
 
-                    ModifyService comp = new ModifyService(ServicePopUpMenu.this.node, new SpecificServiceInformation(
+                    ModifyService comp = new ModifyService(new SpecificServiceInformation(
                         ServicePopUpMenu.this.node.getInfo(), ServicePopUpMenu.this.node.getServiceType()), false);
                     comp.pack();
                     comp.setVisible(true);
+                    ServicePopUpMenu.this.node.getModel().nodeStructureChanged(node);
+                    ServicePopUpMenu.this.node.getModel().nodeChanged(node);
                 }
 
             });

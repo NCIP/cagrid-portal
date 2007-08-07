@@ -804,10 +804,10 @@ public class ModificationViewer extends GridPortalComponent {
 
                     mv.setVisible(true);
 
-                    
+                    if (!mv.wasClosed()) {
                         getMethodsTable().addRow(method);
                         getMethodsTable().sort();
-                    
+                    }
 
                 }
             });

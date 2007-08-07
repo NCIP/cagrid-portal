@@ -19,7 +19,7 @@ import org.projectmobius.portal.PortalResourceManager;
 
 public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 
-	private JButton addServiceButton = null;
+	private JButton modifyMethodButton = null;
 	private JButton removeButton = null;
 
 
@@ -47,13 +47,13 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints.gridx = 0;
 		this.setLayout(new GridBagLayout());
-		this.add(getAddServiceButton(), gridBagConstraints);
+		this.add(getModifyMethodButton(), gridBagConstraints);
 		this.add(getRemoveButton(), gridBagConstraints3);
 	}
 
 
 	public void setCanModify(boolean canModify) {
-		this.getAddServiceButton().setEnabled(canModify);
+		this.getModifyMethodButton().setEnabled(canModify);
 	}
 
 
@@ -62,12 +62,12 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getAddServiceButton() {
-		if (addServiceButton == null) {
-			addServiceButton = new JButton();
-			addServiceButton.setText("Modify Method");
-			addServiceButton.setIcon(IntroduceLookAndFeel.getModifyIcon());
-			addServiceButton.addActionListener(new ActionListener() {
+	private JButton getModifyMethodButton() {
+		if (modifyMethodButton == null) {
+		    modifyMethodButton = new JButton();
+		    modifyMethodButton.setText("Modify Method");
+		    modifyMethodButton.setIcon(IntroduceLookAndFeel.getModifyIcon());
+		    modifyMethodButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
 					DefaultMutableTreeNode tnode = MethodButtonPanel.this.getTree().getCurrentNode();
@@ -82,7 +82,7 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 
 			});
 		}
-		return addServiceButton;
+		return modifyMethodButton;
 	}
 
 

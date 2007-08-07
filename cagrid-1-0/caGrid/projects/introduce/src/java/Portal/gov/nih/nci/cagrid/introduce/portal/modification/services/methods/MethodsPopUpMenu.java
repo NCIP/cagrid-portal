@@ -16,62 +16,63 @@ import org.projectmobius.portal.PortalResourceManager;
 
 public class MethodsPopUpMenu extends JPopupMenu {
 
-	private JMenuItem addMethodMenuItem = null;
-	MethodsTypeTreeNode node;
+    private JMenuItem addMethodMenuItem = null;
+    MethodsTypeTreeNode node;
 
 
-	/**
-	 * This method initializes
-	 * 
-	 */
-	public MethodsPopUpMenu(MethodsTypeTreeNode node) {
-		super();
-		this.node = node;
-		initialize();
-	}
+    /**
+     * This method initializes
+     */
+    public MethodsPopUpMenu(MethodsTypeTreeNode node) {
+        super();
+        this.node = node;
+        initialize();
+    }
 
 
-	/**
-	 * This method initializes this
-	 * 
-	 */
-	private void initialize() {
-		this.add(getAddMethodMenuItem());
+    /**
+     * This method initializes this
+     */
+    private void initialize() {
+        this.add(getAddMethodMenuItem());
 
-	}
+    }
 
 
-	/**
-	 * This method initializes addMethodMenuItem
-	 * 
-	 * @return javax.swing.JMenuItem
-	 */
-	private JMenuItem getAddMethodMenuItem() {
-		if (addMethodMenuItem == null) {
-			addMethodMenuItem = new JMenuItem();
-			addMethodMenuItem.setText("Add Method");
-			addMethodMenuItem.setIcon(PortalLookAndFeel.getAddIcon());
-			addMethodMenuItem.addMouseListener(new MouseAdapter() {
-				public void mousePressed(MouseEvent e) {
-					super.mousePressed(e);
-					MethodsPopUpMenu.addMethod(MethodsPopUpMenu.this.node);
-				}
-			});
-		}
-		return addMethodMenuItem;
-	}
+    /**
+     * This method initializes addMethodMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem getAddMethodMenuItem() {
+        if (addMethodMenuItem == null) {
+            addMethodMenuItem = new JMenuItem();
+            addMethodMenuItem.setText("Add Method");
+            addMethodMenuItem.setIcon(PortalLookAndFeel.getAddIcon());
+            addMethodMenuItem.addMouseListener(new MouseAdapter() {
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    MethodsPopUpMenu.addMethod(MethodsPopUpMenu.this.node);
+                }
+            });
+        }
+        return addMethodMenuItem;
+    }
 
-	public static void addMethod(MethodsTypeTreeNode node) {
-		MethodType method = new MethodType();
-		method.setName("newMethod");
-		MethodTypeOutput output = new MethodTypeOutput();
-		output.setQName(new QName("", "void"));
-		method.setOutput(output);
 
-		node.addMethod(method);
+    public static void addMethod(MethodsTypeTreeNode node) {
+        MethodType method = new MethodType();
+        method.setName("newMethod");
+        MethodTypeOutput output = new MethodTypeOutput();
+        output.setQName(new QName("", "void"));
+        method.setOutput(output);
 
-		MethodViewer viewer = new MethodViewer(method, node.getInfo());
+        MethodViewer viewer = new MethodViewer(method, node.getInfo());
         viewer.setVisible(true);
-	}
+
+        if (!viewer.wasClosed()) {
+            node.addMethod(method);
+        }
+    }
 
 }

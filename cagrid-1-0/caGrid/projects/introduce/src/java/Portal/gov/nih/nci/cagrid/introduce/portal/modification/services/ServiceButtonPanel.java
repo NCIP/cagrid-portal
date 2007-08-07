@@ -77,10 +77,12 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
                     DefaultMutableTreeNode tnode = ServiceButtonPanel.this.getTree().getCurrentNode();
                     if (tnode instanceof ServiceTypeTreeNode) {
                         ServiceTypeTreeNode node = (ServiceTypeTreeNode) tnode;
-                        ModifyService comp = new ModifyService(node, new SpecificServiceInformation(node.getInfo(),
+                        ModifyService comp = new ModifyService( new SpecificServiceInformation(node.getInfo(),
                             node.getServiceType()), false);
                         comp.pack();
                         comp.setVisible(true);
+                        node.getModel().nodeStructureChanged(node);
+                        node.getModel().nodeChanged(node);
                     }
                 }
 
