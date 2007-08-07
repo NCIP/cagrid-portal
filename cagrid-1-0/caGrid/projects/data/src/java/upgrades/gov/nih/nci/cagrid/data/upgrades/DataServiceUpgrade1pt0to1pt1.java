@@ -558,7 +558,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
                 && cadsrInfo.getAttributeValue("useSuppliedModel").equals("true");
             boolean noDomainModel = (!hasCadsrUrl && !usingSuppliedModel);
             cadsrInfo.setAttribute("noDomainModel", String.valueOf(noDomainModel));
-            getStatus().addDescriptionLine("Cadsr information added, no domain model flag set to true");
+            getStatus().addDescriptionLine("Cadsr Information block updated: flag for 'no domain model' set to " + String.valueOf(noDomainModel));
         }
     }
 
