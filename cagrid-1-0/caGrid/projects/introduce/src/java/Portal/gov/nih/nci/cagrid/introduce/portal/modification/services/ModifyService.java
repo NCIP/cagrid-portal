@@ -24,6 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
@@ -81,7 +83,7 @@ public class ModifyService extends JDialog {
 	 */
 	public ModifyService(ServiceTypeTreeNode node,
 			SpecificServiceInformation service, boolean isNew) {
-		super();
+		super(PortalResourceManager.getInstance().getGridPortal());
 		this.isNew = isNew;
 		this.service = service;
 		this.node = node;

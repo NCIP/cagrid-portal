@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 
 public class UpgradeStatusView extends JDialog {
 
@@ -40,7 +42,7 @@ public class UpgradeStatusView extends JDialog {
      * This method initializes
      */
     public UpgradeStatusView(UpgradeStatus status) {
-        super();
+        super(PortalResourceManager.getInstance().getGridPortal());
         this.status = status;
         this.setModal(true);
         initialize();

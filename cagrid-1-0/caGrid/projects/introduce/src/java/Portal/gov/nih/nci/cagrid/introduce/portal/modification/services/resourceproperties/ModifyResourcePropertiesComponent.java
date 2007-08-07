@@ -14,6 +14,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 
 public class ModifyResourcePropertiesComponent extends JDialog {
 
@@ -33,7 +35,7 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 	 */
 	public ModifyResourcePropertiesComponent(ServiceType service, NamespacesType namespaces, File etcDir,
 		File schemaDir, boolean showW3Cnamespaces) {
-		super();
+		super(PortalResourceManager.getInstance().getGridPortal());
 		this.service = service;
 		this.etcDir = etcDir;
 		this.schemaDir = schemaDir;

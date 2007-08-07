@@ -340,7 +340,7 @@ public class ModificationViewer extends GridPortalComponent {
 				} else {
 					JOptionPane
 							.showMessageDialog(
-									ModificationViewer.this,
+									PortalResourceManager.getInstance().getGridPortal(),
 									"Directory "
 											+ ModificationViewer.this.methodsDirectory
 													.getAbsolutePath()
