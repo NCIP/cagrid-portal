@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.data.codegen;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.codegen.templates.StubCQLQueryProcessorTemplate;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.Data;
@@ -24,10 +24,9 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.InputStream;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
@@ -38,7 +37,7 @@ import org.apache.log4j.Logger;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created May 11, 2006
- * @version $Id: DataServiceCodegenPreProcessor.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: DataServiceCodegenPreProcessor.java,v 1.2 2007-08-07 15:11:09 dervin Exp $
  */
 public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProcessor {
 
@@ -48,9 +47,11 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 	public void preCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
-		if (stubQueryProcessorSelected(info)) {
-			addQueryProcessorStub(info, ExtensionDataUtils.getQueryProcessorStubClassName(info));
-		}
+        // check for and potentially create the stub query processor java file
+        if (!stubQueryProcessorExists(info)) {
+            createStubQueryProcessor(info);
+        }
+        
 		modifyMetadata(desc, info);
         
         // execute the service style's pre codegen processor
@@ -75,21 +76,34 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
             }
         }
 	}
-	
-	
-	private boolean stubQueryProcessorSelected(ServiceInformation info) throws CodegenExtensionException {
-		try {
-			String selectedQpClassName = CommonTools.getServicePropertyValue(info.getServiceDescriptor(), 
-				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-			if (selectedQpClassName != null) {
-				String stubName = ExtensionDataUtils.getQueryProcessorStubClassName(info);
-				return stubName.equals(selectedQpClassName);
-			}
-			return true;
-		} catch (Exception ex) {
-			throw new CodegenExtensionException(ex.getMessage(), ex);
-		}
-	}
+    
+    
+    private boolean stubQueryProcessorExists(ServiceInformation info) {
+        String stubName = ExtensionDataUtils.getQueryProcessorStubClassName(info);
+        File stubJavaFile = new File(info.getBaseDirectory().getAbsolutePath() 
+            + File.separator + "src" + File.separator 
+            + stubName.replace('.', File.separatorChar) + ".java");
+        return stubJavaFile.exists();
+    }
+    
+    
+    private void createStubQueryProcessor(ServiceInformation info) throws CodegenExtensionException {
+        String stubName = ExtensionDataUtils.getQueryProcessorStubClassName(info);
+        File stubJavaFile = new File(info.getBaseDirectory().getAbsolutePath() 
+            + File.separator + "src" + File.separator 
+            + stubName.replace('.', File.separatorChar) + ".java");
+        stubJavaFile.getParentFile().mkdirs();
+        StubCQLQueryProcessorTemplate stubTemplate = new StubCQLQueryProcessorTemplate();
+        String stubJavaCode = stubTemplate.generate(info);
+        try {
+            FileWriter writer = new FileWriter(stubJavaFile);
+            writer.write(stubJavaCode);
+            writer.close();
+        } catch (IOException ex) {
+            throw new CodegenExtensionException("Error creating stub query processor: " 
+                + ex.getMessage(), ex);
+        }
+    }
 	
 	
 	private CadsrInformation getCadsrInformation(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
@@ -262,44 +276,6 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			// start packing up the resource property info
 			propertyList.setResourceProperty(propertyArray);
 			dataService.setResourcePropertiesList(propertyList);
-		}
-	}
-	
-	
-	/**
-	 * Adds the CQL Query processor stub to the service
-	 * 
-	 * @param info
-	 * 		The service model
-	 * @param className
-	 * 		The name to give to the stub class
-	 * @throws CodegenExtensionException
-	 */
-	private void addQueryProcessorStub(ServiceInformation info, String className) throws CodegenExtensionException {
-		try {
-			// find / create the output directory
-			int index = className.lastIndexOf('.');
-			String basePackage = className.substring(0, index);
-			String outSrcDir = info.getIntroduceServiceProperties().getProperty(
-				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "src";
-			outSrcDir += File.separator + basePackage.replace('.', File.separatorChar);
-			File outSrcDirFile = new File(outSrcDir);
-			outSrcDirFile.mkdirs();
-			File outSourceFile = new File(outSrcDir + File.separator + DataServiceConstants.QUERY_PROCESSOR_STUB_NAME + ".java");
-			// read the code file
-			InputStream codeStream = getClass().getResourceAsStream("/resources/StubCQLQueryProcessor.java");
-			StringBuffer code = Utils.inputStreamToStringBuffer(codeStream);
-			// build the whole java file
-			StringBuffer processorStub = new StringBuffer();
-			processorStub.append("package ").append(basePackage).append(";").append("\n");
-			processorStub.append(code);
-			// output the file
-			BufferedWriter writer = new BufferedWriter(new FileWriter(outSourceFile));
-			writer.write(processorStub.toString());
-			writer.flush();
-			writer.close();		
-		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error providing stub CQL implementation: " + ex.getMessage(), ex);
 		}
 	}
 	

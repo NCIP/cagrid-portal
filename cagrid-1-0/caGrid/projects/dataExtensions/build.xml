@@ -146,6 +146,7 @@
 	<target name="generateJETClasses" depends="init">
 		<jetc destdir="${core.src.dir}" template="${templates.src.dir}/codegen/CQLResultTypes.xsd.xmljet" />
 		<jetc destdir="${core.src.dir}" template="${templates.src.dir}/codegen/EnumerationServiceClient.javajet" />
+		<jetc destdir="${core.src.dir}" template="${templates.src.dir}/codegen/StubCQLQueryProcessor.javajet"/>
 	</target>
 	
 	
