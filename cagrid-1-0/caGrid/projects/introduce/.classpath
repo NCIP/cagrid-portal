@@ -61,10 +61,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="lib" path="test/lib/abbot.jar"/>
-	<classpathentry kind="lib" path="test/lib/ao-util.jar"/>
 	<classpathentry kind="lib" path="test/lib/docall.jar"/>
-	<classpathentry kind="lib" path="test/lib/gnu-regexp-110.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
@@ -72,7 +69,6 @@
 	<classpathentry kind="var" path="ANT_HOME/lib/ant.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-launcher.jar"/>
 	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
-	<classpathentry kind="lib" path="test/lib/uispec4j-0.15.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar" sourcepath="/mobius"/>
@@ -85,12 +81,8 @@
 	<classpathentry kind="lib" path="lib/jhall.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
-	<classpathentry kind="lib" path="test/lib/bsh.jar"/>
 	<classpathentry kind="lib" path="test/lib/example.jar"/>
-	<classpathentry kind="lib" path="test/lib/gnu-regexp.jar"/>
-	<classpathentry kind="lib" path="test/lib/jgraph.jar"/>
 	<classpathentry kind="lib" path="test/lib/junit.jar"/>
-	<classpathentry kind="lib" path="test/lib/MRJToolkitStubs.zip"/>
 	<classpathentry kind="lib" path="test/lib/xerces.jar"/>
 	<classpathentry kind="lib" path="test/lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
