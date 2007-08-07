@@ -156,6 +156,17 @@ public abstract class BaseServiceImpl {
 	}
 	
 	
+    /**
+     * Gets the cql query processor configuration properties specified in
+     * the service's deploy.properties and therefore JNDI at runtime.
+     * 
+     * This will NOT return the default properties for the query processor
+     * 
+     * @return
+     *      The configured cql query processor properties available
+     *      at runtime in the JNDI
+     * @throws QueryProcessingException
+     */
 	protected Properties getCqlQueryProcessorConfig() throws QueryProcessingException {
 		if (cqlQueryProcessorConfig == null) {
 			try {
@@ -219,7 +230,21 @@ public abstract class BaseServiceImpl {
                 String serverConfigLocation = ServiceConfigUtil.getConfigProperty(
                     DataServiceConstants.SERVER_CONFIG_LOCATION);
                 InputStream configStream = new FileInputStream(serverConfigLocation);
-                queryProcessorInstance.initialize(getCqlQueryProcessorConfig(), configStream);
+                Properties configuredProperties = getCqlQueryProcessorConfig();
+                Properties defaultProperties = queryProcessorInstance.getRequiredParameters();
+                Properties unionProperties = new Properties();
+                Enumeration defaultKeys = defaultProperties.keys();
+                while (defaultKeys.hasMoreElements()) {
+                    String key = (String) defaultKeys.nextElement();
+                    String value = null;
+                    if (configuredProperties.keySet().contains(key)) {
+                        value = configuredProperties.getProperty(key);
+                    } else {
+                        value = defaultProperties.getProperty(key);
+                    }
+                    unionProperties.setProperty(key, value);
+                }
+                queryProcessorInstance.initialize(unionProperties, configStream);
             } catch (Exception ex) {
                 throw new QueryProcessingException("Error initializing query processor: " + ex.getMessage(), ex);
             }
