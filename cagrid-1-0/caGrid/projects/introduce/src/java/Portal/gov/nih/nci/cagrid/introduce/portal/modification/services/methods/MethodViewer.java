@@ -37,6 +37,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -75,6 +77,9 @@ import org.jdom.Namespace;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.portal.GridPortalBaseFrame;
+import org.projectmobius.portal.PortalResourceManager;
+
+import sun.awt.WindowClosingListener;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.Validatable;
@@ -96,7 +101,7 @@ import com.sun.xml.xsom.parser.XSOMParser;
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  */
-public class MethodViewer extends GridPortalBaseFrame {
+public class MethodViewer extends javax.swing.JDialog {
 	private static final Logger logger = Logger.getLogger(MethodViewer.class);
 
 	public class ElementHolder {
@@ -355,6 +360,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 	// @jve:decl-index=0:
 
 	public MethodViewer(MethodType method, SpecificServiceInformation info) {
+	    super(PortalResourceManager.getInstance().getGridPortal());
+	    this.setModal(true);
 		this.info = info;
 		this.method = method;
 		this.setTitle("Modify Method");
@@ -362,19 +369,22 @@ public class MethodViewer extends GridPortalBaseFrame {
 	}
 
 	private void initialize() {
+
 		this.setContentPane(getMainPanel());
 		this.setTitle("Build/Modify Operation");
 		this.setSize(new Dimension(683, 539));
 		this.setContentPane(getMainPanel());
-		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
-
+		//this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
+		
 		initMethodNameValidation();
 		initMethodDescriptionValidation();
 		initNewFaultValidation();
 		initProviderValidation();
 		initImportValidation();
-	}
+		PortalUtils.centerComponent(this);
 
+	}
+	
 	private void updateDoneButton() {
 		if (methodNameValidationModel.hasErrors()
 				|| methodDescriptionValidationModel.hasErrors()

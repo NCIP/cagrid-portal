@@ -72,9 +72,8 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 
 					DefaultMutableTreeNode tnode = MethodButtonPanel.this.getTree().getCurrentNode();
 					if (tnode instanceof MethodTypeTreeNode) {
-						PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-							new MethodViewer(((MethodTypeTreeNode) tnode).getMethod(), ((MethodTypeTreeNode) tnode)
-								.getInfo()));
+					    MethodViewer viewer = new MethodViewer(((MethodTypeTreeNode) tnode).getMethod(), ((MethodTypeTreeNode) tnode).getInfo());
+	                    viewer.setVisible(true);
 						((DefaultTreeModel) getTree().getModel()).nodeStructureChanged(tnode);
 						((DefaultTreeModel) getTree().getModel()).nodeChanged(tnode);
 					}

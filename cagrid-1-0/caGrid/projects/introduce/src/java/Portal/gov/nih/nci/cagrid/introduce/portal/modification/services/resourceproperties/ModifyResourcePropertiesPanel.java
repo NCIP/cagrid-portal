@@ -506,11 +506,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
                                         ModifyResourcePropertiesPanel.this.schemaDir.getAbsolutePath() + File.separator
                                             + nsType.getLocation()), ModifyResourcePropertiesPanel.this.schemaDir);
                                 }
-                                ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(
-                                    (Frame) SwingUtilities.getRoot(ModifyResourcePropertiesPanel.this), mdec,
+                                ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(mdec,
                                     resourcePropertyFile);
-                                diag.pack();
-                                PortalUtils.centerComponent(diag);
                                 diag.setVisible(true);
                             }
 

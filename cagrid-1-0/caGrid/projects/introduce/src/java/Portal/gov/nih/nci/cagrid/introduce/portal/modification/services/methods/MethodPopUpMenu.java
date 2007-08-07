@@ -72,8 +72,8 @@ public class MethodPopUpMenu extends JPopupMenu {
 			modifyMethodMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-						new MethodViewer(node.getMethod(), node.getInfo()));
+					MethodViewer viewer = new MethodViewer(node.getMethod(), node.getInfo());
+					viewer.setVisible(true);
 
 				}
 			});

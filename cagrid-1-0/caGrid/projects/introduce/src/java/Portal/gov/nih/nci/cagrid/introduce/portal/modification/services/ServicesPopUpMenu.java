@@ -77,7 +77,6 @@ public class ServicesPopUpMenu extends JPopupMenu {
         // new ModifyService(newNode, new
         // SpecificServiceInformation(node.getInfo(),service)));
         comp.pack();
-        PortalUtils.centerComponent(comp);
         comp.setVisible(true);
     }
 

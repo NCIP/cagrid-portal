@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
 
 import java.awt.Frame;
@@ -14,6 +15,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import org.projectmobius.common.XMLUtilities;
+import org.projectmobius.portal.PortalResourceManager;
 
 
 public class ResourcePropertyEditorDialog extends JDialog {
@@ -26,8 +28,9 @@ public class ResourcePropertyEditorDialog extends JDialog {
 	private JButton cancelButton = null;
 
 
-	public ResourcePropertyEditorDialog(Frame owner, ResourcePropertyEditorPanel component, File resourcePropertyFile) {
-		super(owner);
+	public ResourcePropertyEditorDialog(ResourcePropertyEditorPanel component, File resourcePropertyFile) {
+		super(PortalResourceManager.getInstance().getGridPortal());
+		this.setModal(true);
 		this.component = component;
 		this.resourcePropertyFile = resourcePropertyFile;
 		initialize();
@@ -40,6 +43,8 @@ public class ResourcePropertyEditorDialog extends JDialog {
 	private void initialize() {
 		this.setTitle("Resource Property Editor");
 		this.setContentPane(getMainPanel());
+		this.pack();
+		PortalUtils.centerComponent(this);
 	}
 
 

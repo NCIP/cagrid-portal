@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -84,6 +85,7 @@ public class ModifyService extends JDialog {
 	public ModifyService(ServiceTypeTreeNode node,
 			SpecificServiceInformation service, boolean isNew) {
 		super(PortalResourceManager.getInstance().getGridPortal());
+		this.setModal(true);
 		this.isNew = isNew;
 		this.service = service;
 		this.node = node;
@@ -146,6 +148,9 @@ public class ModifyService extends JDialog {
 		this.setSize(new Dimension(315, 275));
 
 		initValidation();
+		
+		this.pack();
+		PortalUtils.centerComponent(this);
 	}
 
 	private void initValidation() {

@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -36,6 +37,7 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 	public ModifyResourcePropertiesComponent(ServiceType service, NamespacesType namespaces, File etcDir,
 		File schemaDir, boolean showW3Cnamespaces) {
 		super(PortalResourceManager.getInstance().getGridPortal());
+		this.setModal(true);
 		this.service = service;
 		this.etcDir = etcDir;
 		this.schemaDir = schemaDir;
@@ -51,6 +53,7 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 	private void initialize() {
 		this.setSize(new java.awt.Dimension(401, 244));
 		this.setContentPane(getMainPanel());
+		PortalUtils.centerComponent(this);
 
 	}
 

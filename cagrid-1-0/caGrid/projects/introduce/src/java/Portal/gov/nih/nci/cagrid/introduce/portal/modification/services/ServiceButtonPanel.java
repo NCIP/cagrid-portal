@@ -80,7 +80,6 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
                         ModifyService comp = new ModifyService(node, new SpecificServiceInformation(node.getInfo(),
                             node.getServiceType()), false);
                         comp.pack();
-                        PortalUtils.centerComponent(comp);
                         comp.setVisible(true);
                     }
                 }
