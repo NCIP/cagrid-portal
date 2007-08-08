@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.extension.utils;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -23,7 +24,7 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 7, 2006 
- * @version $Id: ExtensionUtilities.java,v 1.6 2007-08-08 12:30:23 dervin Exp $ 
+ * @version $Id: ExtensionUtilities.java,v 1.7 2007-08-08 13:56:21 dervin Exp $ 
  */
 public class ExtensionUtilities {
 	public static final String CLASSPATHENTRY_ELEMENT = "classpathentry";
@@ -149,6 +150,67 @@ public class ExtensionUtilities {
         // remove ALL classpath entries
         classpathElement.removeChildren(CLASSPATHENTRY_ELEMENT, classpathElement.getNamespace());
         // restore the ones we're not removing
+        for (Element e : keptEntries) {
+            classpathElement.addContent(e);
+        }
+        
+        // write the .classpath file back out to disk
+        XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+        FileWriter writer = new FileWriter(classpathFile);
+        outputter.output(classpathElement, writer);
+        writer.flush();
+        writer.close();
+    }
+    
+    
+    /**
+     * Resynchronizes a classpath file's entries with the contents
+     * of the lib dir.  This method removes all entries in the classpath which
+     * begin with 'lib/' and adds all jar files found recursively in 
+     * the lib directory which is a sibling to the .classpath file.
+     * 
+     * @param classpathFile
+     * @throws Exception
+     */
+    public static void resyncWithLibDir(File classpathFile) throws Exception {
+        Element classpathElement = XMLUtilities.fileNameToDocument(classpathFile.getAbsolutePath()).getRootElement();
+        
+        // start removing entries
+        List<Element> keptEntries = new LinkedList();
+        Iterator classpathEntryIter = classpathElement.getChildren(
+            CLASSPATHENTRY_ELEMENT, classpathElement.getNamespace()).iterator();
+        while (classpathEntryIter.hasNext()) {
+            Element entry = (Element) classpathEntryIter.next();
+            boolean keep = true;
+            if (entry.getAttributeValue("kind").equals("lib")) {
+                String libPath = entry.getAttributeValue("path");
+                // strip out anything from the lib directory
+                keep = !libPath.startsWith("lib/");
+            }
+            if (keep) {
+                keptEntries.add(entry);
+            }
+        }
+        // remove ALL classpath entries from the root element
+        classpathElement.removeChildren(CLASSPATHENTRY_ELEMENT, classpathElement.getNamespace());
+        
+        // list all libs in the lib dir
+        File libDir = new File(classpathFile.getParentFile().getAbsolutePath() 
+            + File.separator + "lib");
+        List<File> libs = Utils.recursiveListFiles(libDir, new FileFilters.JarFileFilter());
+        
+        // create new entry elements for the libs
+        for (File lib : libs) {
+            Element entry = new Element(CLASSPATHENTRY_ELEMENT, classpathElement.getNamespace());
+            entry.setAttribute("kind", "lib");
+            String relPath = Utils.getRelativePath(libDir.getParentFile(), lib);
+            relPath = convertToUnixStylePath(relPath);
+            entry.setAttribute("path", relPath);
+            // add the entry element
+            keptEntries.add(entry);
+        }
+        
+        // put all classpath entries in the classpath element
         for (Element e : keptEntries) {
             classpathElement.addContent(e);
         }
