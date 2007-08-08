@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.style.cacore32.modification;
+package gov.nih.nci.cagrid.data.style.cacore31.modification;
 
 import gov.nih.nci.cagrid.common.portal.NonEditableCheckBox;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
@@ -8,7 +8,9 @@ import gov.nih.nci.cagrid.data.ui.DataServiceModificationSubPanel;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
+import java.awt.AWTEvent;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -28,16 +30,14 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created Jul 27, 2007 10:38:51 AM
- * @version $Id: CaCoreVersionPanel.java,v 1.2 2007-08-08 15:08:57 dervin Exp $ 
+ * @version $Id: CaCoreVersionPanel.java,v 1.1 2007-08-08 15:08:57 dervin Exp $ 
  */
 public class CaCoreVersionPanel extends DataServiceModificationSubPanel {
     // from HQLCoreQueryProcessor...
-    public static final String USE_LOCAL_APPSERVICE = "useLocalAppservice";
     public static final String USE_CSM_FLAG = "useCsmSecurity";
     public static final String CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
     
     private JLabel sdkLogoLabel = null;
-    private JCheckBox localApiCheckBox = null;
     private JCheckBox usingCsmCheckBox = null;
     private JCheckBox caseInsensitiveCheckBox = null;
     private JPanel statusPanel = null;
@@ -74,13 +74,6 @@ public class CaCoreVersionPanel extends DataServiceModificationSubPanel {
     
     public void updateDisplayedConfiguration() throws Exception {
         if (CommonTools.servicePropertyExists(getServiceInfo().getServiceDescriptor(),
-                DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_LOCAL_APPSERVICE)) {
-            boolean useLocal = Boolean.parseBoolean(CommonTools.getServicePropertyValue(
-                getServiceInfo().getServiceDescriptor(),
-                DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_LOCAL_APPSERVICE));
-            getLocalApiCheckBox().setSelected(useLocal);
-        }
-        if (CommonTools.servicePropertyExists(getServiceInfo().getServiceDescriptor(),
                 DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_CSM_FLAG)) {
             boolean useCsm = Boolean.parseBoolean(CommonTools.getServicePropertyValue(
                 getServiceInfo().getServiceDescriptor(),
@@ -108,20 +101,6 @@ public class CaCoreVersionPanel extends DataServiceModificationSubPanel {
 
 
     /**
-     * This method initializes localApiCheckBox	
-     * 	
-     * @return javax.swing.JCheckBox	
-     */
-    private JCheckBox getLocalApiCheckBox() {
-        if (localApiCheckBox == null) {
-            localApiCheckBox = new NonEditableCheckBox();
-            localApiCheckBox.setText("Using Local API");
-        }
-        return localApiCheckBox;
-    }
-
-
-    /**
      * This method initializes usingCsmCheckBox	
      * 	
      * @return javax.swing.JCheckBox	
@@ -142,7 +121,14 @@ public class CaCoreVersionPanel extends DataServiceModificationSubPanel {
      */
     private JCheckBox getCaseInsensitiveCheckBox() {
         if (caseInsensitiveCheckBox == null) {
-            caseInsensitiveCheckBox = new NonEditableCheckBox();
+            caseInsensitiveCheckBox = new JCheckBox() {
+                public void processEvent(AWTEvent e) {
+                    /// nuke all events
+                }
+            };
+            Font font = caseInsensitiveCheckBox.getFont();
+            Font italFont = new Font(font.getName(), Font.ITALIC, font.getSize());
+            caseInsensitiveCheckBox.setFont(italFont);
             caseInsensitiveCheckBox.setText("Case Insensitive Queries");
         }
         return caseInsensitiveCheckBox;
@@ -158,26 +144,19 @@ public class CaCoreVersionPanel extends DataServiceModificationSubPanel {
         if (statusPanel == null) {
             GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
             gridBagConstraints11.gridx = 0;
-            gridBagConstraints11.gridwidth = 2;
             gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints11.gridy = 1;
             GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-            gridBagConstraints1.gridx = 1;
+            gridBagConstraints1.gridx = 0;
             gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints1.gridy = 0;
-            GridBagConstraints gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints.gridy = 0;
             statusPanel = new JPanel();
             statusPanel.setLayout(new GridBagLayout());
             statusPanel.setBorder(BorderFactory.createTitledBorder(
                 null, "Configuration Status", TitledBorder.DEFAULT_JUSTIFICATION, 
                 TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-            statusPanel.add(getLocalApiCheckBox(), gridBagConstraints);
             statusPanel.add(getUsingCsmCheckBox(), gridBagConstraints1);
             statusPanel.add(getCaseInsensitiveCheckBox(), gridBagConstraints11);
         }
@@ -193,7 +172,7 @@ public class CaCoreVersionPanel extends DataServiceModificationSubPanel {
     private JLabel getVersionLabel() {
         if (versionLabel == null) {
             versionLabel = new JLabel();
-            versionLabel.setText("Version 3.2 / 3.2.1");
+            versionLabel.setText("Version 3.1");
         }
         return versionLabel;
     }
