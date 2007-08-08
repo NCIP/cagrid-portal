@@ -136,7 +136,7 @@ public class ApplicationWindow extends ApplicationComponent {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new BorderLayout());
-			jContentPane.add(getMainPanel(), java.awt.BorderLayout.NORTH);
+			jContentPane.add(getMainPanel(), BorderLayout.CENTER);
 		}
 		return jContentPane;
 	}
@@ -152,8 +152,8 @@ public class ApplicationWindow extends ApplicationComponent {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.gridy = 2;
-			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints2.anchor = GridBagConstraints.SOUTH;
+			gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.weightx = 1.0D;
 			gridBagConstraints2.gridx = 0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
@@ -162,6 +162,7 @@ public class ApplicationWindow extends ApplicationComponent {
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weightx = 1.0D;
+			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints1.gridx = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -169,6 +170,7 @@ public class ApplicationWindow extends ApplicationComponent {
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints.weightx = 1.0D;
+			gridBagConstraints.weighty = 1.0D;
 			gridBagConstraints.gridx = 0;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
