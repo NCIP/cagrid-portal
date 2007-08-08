@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
+import java.awt.Dimension;
 
 
 /**
@@ -50,7 +51,6 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
     public static final String CSM_CONTEXT_NAME = "csmContextName";
     public static final String USE_LOCAL_APPSERVICE = "useLocalAppservice";
 
-    private JCheckBox useLocalCheckBox = null;
     private JCheckBox caseInsensitiveCheckBox = null;
     private JCheckBox useCsmCheckBox = null;
     private JPanel checkBoxPanel = null;
@@ -83,6 +83,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
         gridBagConstraints8.gridx = 0;
         gridBagConstraints8.gridy = 0;
         this.setLayout(new GridBagLayout());
+        this.setSize(new Dimension(503, 108));
         this.add(getCheckBoxPanel(), gridBagConstraints8);
         this.add(getInputPanel(), gridBagConstraints9);
     }
@@ -134,7 +135,8 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                 String useLocalValue = CommonTools.getServicePropertyValue(desc,
                     DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_LOCAL_APPSERVICE);
                 boolean useLocal = Boolean.valueOf(useLocalValue).booleanValue();
-                getUseLocalCheckBox().setSelected(useLocal);
+                getUrlLabel().setEnabled(!useLocal);
+                getUrlTextField().setEnabled(!useLocal);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -156,29 +158,6 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
     public void update() {
         initializeValues();
-    }
-
-
-    /**
-     * This method initializes useLocalCheckBox
-     * 
-     * @return javax.swing.JCheckBox
-     */
-    private JCheckBox getUseLocalCheckBox() {
-        if (useLocalCheckBox == null) {
-            useLocalCheckBox = new JCheckBox();
-            useLocalCheckBox.setText("Use Local Service API");
-            useLocalCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
-            useLocalCheckBox.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
-                        DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_LOCAL_APPSERVICE, 
-                        String.valueOf(getUseLocalCheckBox().isSelected()), false);
-                    enableRelaventComponents();
-                }
-            });
-        }
-        return useLocalCheckBox;
     }
 
 
@@ -240,7 +219,6 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
             gridLayout.setColumns(3);
             checkBoxPanel = new JPanel();
             checkBoxPanel.setLayout(gridLayout);
-            checkBoxPanel.add(getUseLocalCheckBox(), null);
             checkBoxPanel.add(getCaseInsensitiveCheckBox(), null);
             checkBoxPanel.add(getUseCsmCheckBox(), null);
         }
@@ -482,7 +460,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
     private void enableRelaventComponents() {
-        boolean localChecked = getUseLocalCheckBox().isSelected();
+        boolean usingLocalApi = !getUrlTextField().isEnabled();
         boolean csmChecked = getUseCsmCheckBox().isSelected();
 
         PortalUtils.setContainerEnabled(getInputPanel(), true);
@@ -499,7 +477,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
         getCsmConfigTextField().setText("");
         getBrowseButton().setEnabled(csmChecked);
 
-        if (localChecked) {
+        if (usingLocalApi) {
             PortalUtils.setContainerEnabled(getInputPanel(), false);
             getUseCsmCheckBox().setSelected(false);
             getUseCsmCheckBox().setEnabled(false);
@@ -523,4 +501,4 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
             listener.completionStatusChanged(complete);
         }
     }
-}
+}  //  @jve:decl-index=0:visual-constraint="10,10"
