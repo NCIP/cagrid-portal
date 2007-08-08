@@ -17,6 +17,7 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -53,7 +54,7 @@ import javax.swing.ScrollPaneConstants;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.2 2007-08-06 14:04:30 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.3 2007-08-08 13:33:19 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String[] LOCAL_CLIENT_REQUIRED_FILES = new String[] {
@@ -508,16 +509,33 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                 // locate the client jar file
                 final File clientJarFile = locateClientJarInDir(clientLibDir);
                 if (clientJarFile != null && isValidClientJar(clientJarFile)) {
+                    // the eclipse .classpath file
+                    File classpathFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
+                        + File.separator + ".classpath");
+
+                    // is there an old client jar??
                     if (getClientLibDirTextField().getText().length() != 0) {
                         // delete the old client jar
-                        File oldClientJarFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-                            + File.separator + "lib" + File.separator + getClientLibDirTextField().getText());
-                        oldClientJarFile.delete();                                
+                        File oldClientJar = locateClientJarInDir(getClientLibDirTextField().getText());
+                        if (oldClientJar != null) {
+                            File localOldClientJar = new File(
+                                getServiceInformation().getBaseDirectory().getAbsolutePath() 
+                                    + File.separator + "lib" + File.separator + oldClientJar.getName());
+                            // remove the eclipse .classpath file entry
+                            ExtensionUtilities.removeLibrariesFromClasspath(
+                                classpathFile, new File[] {localOldClientJar});
+                            // delete the old file
+                            localOldClientJar.delete();
+                        }
                     }
-                    // copy in the client jar
+                    
+                    // copy in the new client jar
                     File copyOfClient = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
                         + File.separator + "lib" + File.separator + clientJarFile.getName());
                     Utils.copyFile(clientJarFile, copyOfClient);
+                    
+                    // add the new client jar to the .classpath file
+                    ExtensionUtilities.syncEclipseClasspath(classpathFile, new File[] {copyOfClient});
 
                     // copy the castor mapping file
                     JarFile jar = new JarFile(copyOfClient);
@@ -537,19 +555,28 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                             && !pathname.getName().equals(clientJarFile.getName());
                         }
                     });
+                    
+                    // list jars in the globus lib dir and avoid copying anything
+                    // from the SDK which overlaps that in globus
+                    File globusLibDir = new File(CommonTools.getGlobusLocation() + File.separator + "lib");
+                    File[] globusLibs = globusLibDir.listFiles(new FileFilters.JarFileFilter());
+                    
+                    Set<String> globusLibNames = new HashSet<String>();
+                    for (File lib : globusLibs) {
+                        globusLibNames.add(lib.getName());
+                    }
 
                     // copy them into the service's lib dir
                     for (File lib : extraLibraries) {
-                        File libOut = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-                            + File.separator + "lib" + File.separator + lib.getName());
-                        Utils.copyFile(lib, libOut);
+                        if (!globusLibNames.contains(lib.getName())) {
+                            File libOut = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
+                                + File.separator + "lib" + File.separator + lib.getName());
+                            Utils.copyFile(lib, libOut);
+                        }
                     }
                     
                     // set the directory name in the UI
                     getClientLibDirTextField().setText(clientLibDir);
-                    
-                    // store the library information
-                    // storeLibrariesInExtensionData();
                 } else {
                     String[] message = {
                         "The selected directory does not appear to contain",
