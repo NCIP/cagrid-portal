@@ -381,8 +381,8 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
                 + File.separator + service.getName() + "Client.java";
             try {
                 fileContent = Utils.fileToStringBuffer(new File(serviceClient));
-                int startOfMethod = SyncHelper.startOfSignature(fileContent,
-                    "private " + service.getName() + "PortType createPortType()");
+                int startOfMethod = SyncHelper.startOfSignature(fileContent, "private " + service.getName()
+                    + "PortType createPortType()");
                 if (startOfMethod >= 0) {
                     int endOfMethod = SyncHelper.bracketMatch(fileContent, startOfMethod);
                     String subString = fileContent.substring(startOfMethod, endOfMethod);
@@ -424,22 +424,46 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
     }
 
 
+    private final class OldJarsFilter implements FileFilter {
+        boolean hadGridGrouperJars = false;
+        boolean hadGridCAJars = false;
+        boolean hadCSMJars = false;
+
+
+        public boolean accept(File name) {
+            String filename = name.getName();
+            boolean core = filename.startsWith("caGrid-1.0-core") && filename.endsWith(".jar");
+            boolean security = (filename.startsWith("caGrid-1.0-ServiceSecurityProvider") || filename
+                .startsWith("caGrid-1.0-metadata-security"))
+                && filename.endsWith(".jar");
+            boolean gridCA = (filename.startsWith("caGrid-1.0-gridca") || filename.startsWith("caGrid-1.0-gridgrouper"))
+                && filename.endsWith(".jar");
+            if (gridCA) {
+                hadGridCAJars = true;
+            }
+            boolean gridGrouper = (filename.startsWith("caGrid-1.0-gridca") || filename
+                .startsWith("caGrid-1.0-gridgrouper"))
+                && filename.endsWith(".jar");
+            if (gridGrouper) {
+                hadGridGrouperJars = true;
+            }
+            boolean csm = (filename.startsWith("csmapi"))
+                && filename.endsWith(".jar");
+            if(csm){
+                hadCSMJars = true;
+            }
+            boolean wsrf = (filename.startsWith("globus_wsrf_mds") || filename.startsWith("globus_wsrf_servicegroup"))
+                && filename.endsWith(".jar");
+            boolean mobius = filename.startsWith("mobius") && filename.endsWith(".jar");
+            return core || security || gridCA || gridGrouper || csm || wsrf || mobius;
+        }
+
+    };
+
+
     private void upgradeJars() throws Exception {
 
-        FileFilter oldDkeletonLibFilter = new FileFilter() {
-            public boolean accept(File name) {
-                String filename = name.getName();
-                boolean core = filename.startsWith("caGrid-1.0-core") && filename.endsWith(".jar");
-                boolean security = (filename.startsWith("caGrid-1.0-ServiceSecurityProvider") || filename
-                    .startsWith("caGrid-1.0-metadata-security"))
-                    && filename.endsWith(".jar");
-                boolean wsrf = (filename.startsWith("globus_wsrf_mds") || filename
-                    .startsWith("globus_wsrf_servicegroup"))
-                    && filename.endsWith(".jar");
-                boolean mobius = filename.startsWith("mobius") && filename.endsWith(".jar");
-                return core || security || wsrf || mobius;
-            }
-        };
+        OldJarsFilter oldDkeletonLibFilter = new OldJarsFilter();
 
         // locate the old libs in the service
         File serviceLibDir = new File(getServicePath() + File.separator + "lib");
@@ -449,16 +473,41 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             serviceLibs[i].delete();
         }
 
+        //TODO: needs to be more specific.
+        FileFilter newGrouperJars = new FileFilter() {
+            public boolean accept(File name) {
+                return true;
+            }
+        };
+
+        FileFilter newGridCAJars = new FileFilter() {
+            public boolean accept(File name) {
+                String filename = name.getName();
+                return (filename.startsWith("caGrid-1.1-gridca")) && filename.endsWith(".jar");
+            }
+        };
+
+        //TODO: needs to be more specific
+        FileFilter newCSMJars = new FileFilter() {
+            public boolean accept(File name) {
+                String filename = name.getName();
+                return true;
+            }
+        };
+
         FileFilter srcSkeletonLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
                 return filename.endsWith(".jar");
             }
         };
-        // copy new libraries in (every thing in skeleton/lib)
+
+        
         File skeletonLibDir = new File("skeleton" + File.separator + "lib");
+        File extLibDir = new File("ext" + File.separator + "lib");
+
+        // copy new libraries in (every thing in skeleton/lib)
         File[] skeletonLibs = skeletonLibDir.listFiles(srcSkeletonLibFilter);
-        File[] outLibs = new File[skeletonLibs.length];
         for (int i = 0; i < skeletonLibs.length; i++) {
             File out = new File(serviceLibDir.getAbsolutePath() + File.separator + skeletonLibs[i].getName());
             try {
@@ -467,12 +516,56 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
                 throw new Exception("Error copying library (" + skeletonLibs[i] + ") to service: " + ex.getMessage(),
                     ex);
             }
-            outLibs[i] = out;
         }
+
+        // need to go through the security jars and determine which ones to add
+        // back to the service
+        if (oldDkeletonLibFilter.hadGridCAJars) {
+            // need to add in the optional grid ca security jars
+            File[] gridCALibs = extLibDir.listFiles(newGridCAJars);
+            for (int i = 0; i < gridCALibs.length; i++) {
+                File out = new File(serviceLibDir.getAbsolutePath() + File.separator + gridCALibs[i].getName());
+                try {
+                    Utils.copyFile(gridCALibs[i], out);
+                } catch (IOException ex) {
+                    throw new Exception("Error copying library (" + gridCALibs[i] + ") to service: " + ex.getMessage(),
+                        ex);
+                }
+            }
+        }
+
+        if (oldDkeletonLibFilter.hadGridGrouperJars) {
+            // need to add in the optional grouper security jars
+            File[] gridGrouperLibs = extLibDir.listFiles(newGrouperJars);
+            for (int i = 0; i < gridGrouperLibs.length; i++) {
+                File out = new File(serviceLibDir.getAbsolutePath() + File.separator + gridGrouperLibs[i].getName());
+                try {
+                    Utils.copyFile(gridGrouperLibs[i], out);
+                } catch (IOException ex) {
+                    throw new Exception("Error copying library (" + gridGrouperLibs[i] + ") to service: " + ex.getMessage(),
+                        ex);
+                }
+            }
+        }
+
+        if (oldDkeletonLibFilter.hadCSMJars) {
+            // need to add in the CSM security jars
+            File[] gridCSMLibs = extLibDir.listFiles(newCSMJars);
+            for (int i = 0; i < gridCSMLibs.length; i++) {
+                File out = new File(serviceLibDir.getAbsolutePath() + File.separator + gridCSMLibs[i].getName());
+                try {
+                    Utils.copyFile(gridCSMLibs[i], out);
+                } catch (IOException ex) {
+                    throw new Exception("Error copying library (" + gridCSMLibs[i] + ") to service: " + ex.getMessage(),
+                        ex);
+                }
+            }
+        }
+
         // update the Eclipse .classpath file
         File classpathFile = new File(getServicePath() + File.separator + ".classpath");
         try {
-            ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
+            ExtensionUtilities.resyncWithLibDir(classpathFile);
         } catch (Exception ex) {
             ex.printStackTrace();
             // throw new Exception("Error updating Eclipse .classpath file:
