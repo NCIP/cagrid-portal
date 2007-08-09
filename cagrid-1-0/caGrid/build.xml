@@ -726,6 +726,13 @@
 			<artifact refid="data.jars"/>
 			<artifact refid="data.schemas"/>
 		</resolveDependencies>
+		<!-- query processor jars required by the styles -->
+		<resolveDependencies extdir="${projects.dir}/dataExtensions/extension/sdk31">
+			<artifact refid="sdk.query.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/dataExtensions/extension/sdk32">
+			<artifact refid="sdk.32.query.jars" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/dataExtensions" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
@@ -938,15 +945,6 @@
 	<!-- Installs the Introduce Extensions                              -->
 	<!-- ============================================================== -->
 	<target name="installIntroduceExtensions" depends="prepare">
-
-		<!--Can be removed once data services seperates its extension from its project-->
-		<resolveDependencies extdir="${projects.dir}/dataExtensions/extension/sdk31">
-			<artifact refid="sdk.query.jars" />
-		</resolveDependencies>
-		<resolveDependencies extdir="${projects.dir}/dataExtensions/extension/sdk32">
-			<artifact refid="sdk.32.query.jars" />
-		</resolveDependencies>
-
 		<delete>
 			<fileset dir="${introduce.extensions.dir}/lib" includes="**" />
 		</delete>
