@@ -57,6 +57,7 @@ public class ErrorDialog extends JDialog {
 	private Throwable exception;
 
 	private String strDetails;
+	private JButton close = null;
 
 
 	public static void showError(String message, Throwable ex) {
@@ -146,6 +147,10 @@ public class ErrorDialog extends JDialog {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints13.gridy = 3;
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.gridx = 0;
 			gridBagConstraints12.anchor = GridBagConstraints.EAST;
@@ -169,6 +174,7 @@ public class ErrorDialog extends JDialog {
 			mainPanel.add(getMessagePanel(), gridBagConstraints);
 			mainPanel.add(getDetailsPanel(), gridBagConstraints11);
 			mainPanel.add(getDetailsButton(), gridBagConstraints12);
+			mainPanel.add(getClose(), gridBagConstraints13);
 		}
 		return mainPanel;
 	}
@@ -346,6 +352,26 @@ public class ErrorDialog extends JDialog {
 	}
 
     /**
+	 * This method initializes close	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getClose() {
+		if (close == null) {
+			close = new JButton();
+			close.setText("Close");
+			close.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dispose();
+				}
+			});
+			
+		}
+		return close;
+	}
+
+
+	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
