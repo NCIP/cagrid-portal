@@ -26,7 +26,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.7 2007-04-26 20:04:04 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.8 2007-08-09 14:41:35 langella Exp $
  */
 public class TrustedIdPsWindow extends ApplicationComponent {
 
@@ -440,7 +440,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 						}
 					});
 			removeTrustedIdPButton.setIcon(DorianLookAndFeel
-					.getRemoveTrustedIdPIcon());
+					.getRemoveIcon());
 		}
 		return removeTrustedIdPButton;
 	}
@@ -481,7 +481,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 				}
 			});
-			addUser.setIcon(DorianLookAndFeel.getAddTrustedIdPIcon());
+			addUser.setIcon(DorianLookAndFeel.getAddIcon());
 		}
 		return addUser;
 	}

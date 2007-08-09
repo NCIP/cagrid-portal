@@ -36,7 +36,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: FindUserDialog.java,v 1.4 2007-06-01 15:42:43 langella Exp $
+ * @version $Id: FindUserDialog.java,v 1.5 2007-08-09 14:41:35 langella Exp $
  */
 public class FindUserDialog extends JDialog {
 
@@ -290,7 +290,7 @@ public class FindUserDialog extends JDialog {
 		if (select == null) {
 			select = new JButton();
 			select.setText("Select User");
-			select.setIcon(DorianLookAndFeel.getUserBrowse());
+			select.setIcon(DorianLookAndFeel.getUserIcon());
 			select.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {

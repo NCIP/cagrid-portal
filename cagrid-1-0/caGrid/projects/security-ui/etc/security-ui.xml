@@ -20,7 +20,7 @@
                     <title>Login</title>
                     <description>Obtain Grid Credentials!!!</description>
                     <classname>gov.nih.nci.cagrid.dorian.ui.ifs.CreateProxyWindow</classname>
-                    <icon>/Door.gif</icon>
+                    <icon>/login.png</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                         <width>600</width>
@@ -31,7 +31,7 @@
                     <title>Credential Manager</title>
                     <description>Allows the management of grid proxy credentials.</description>
                     <classname>gov.nih.nci.cagrid.gridca.ui.ProxyManagerComponent</classname>
-                    <icon>/contact-new.png</icon>
+                    <icon>/certificate.png</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                         <width>700</width>
@@ -64,7 +64,7 @@
                     <title>My Host Certificates</title>
                     <description>Allows a user to obtain the host certificates in which they own.</description>
                     <classname>gov.nih.nci.cagrid.dorian.ui.ifs.MyHostCertificatesWindow</classname>
-                    <icon>/network-idle.png</icon>
+                    <icon>/computers.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
                         <width>550</width>
@@ -98,7 +98,7 @@
                     <title>Grid User Management</title>
                     <description>Manage Grid User Accounts</description>
                     <classname>gov.nih.nci.cagrid.dorian.ui.ifs.UserManagerWindow</classname>
-                    <icon>/system-users.png</icon>
+                    <icon>/users.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
                         <width>700</width>
@@ -109,7 +109,7 @@
                     <title>Host Certificate Management</title>
                     <description>Manage Host Certificates</description>
                     <classname>gov.nih.nci.cagrid.dorian.ui.ifs.HostCertificatesWindow</classname>
-                    <icon>/network-idle.png</icon>
+                    <icon>/computers.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
                         <width>700</width>
@@ -120,7 +120,7 @@
                     <title>Trusted Identity Provider(s)</title>
                     <description>Trusted Identity Provider(s)</description>
                     <classname>gov.nih.nci.cagrid.dorian.ui.ifs.TrustedIdPsWindow</classname>
-                    <icon>/group_link.png</icon>
+                    <icon>/trusted-idp.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                 </component>
                   <component>
@@ -141,7 +141,7 @@
                     <title>Registration</title>
                     <description>Register with a Dorian for a local account.</description>
                     <classname>gov.nih.nci.cagrid.dorian.ui.idp.ApplicationWindow</classname>
-                    <icon>/edit-paste.png</icon>
+                    <icon>/application.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
                         <width>400</width>
@@ -152,7 +152,7 @@
                     <title>Local Account Management</title>
                     <description>Local Account Management</description>
                     <classname>gov.nih.nci.cagrid.dorian.ui.idp.UserManagerWindow</classname>
-                    <icon>/system-users.png</icon>
+                    <icon>/users.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
                         <width>600</width>

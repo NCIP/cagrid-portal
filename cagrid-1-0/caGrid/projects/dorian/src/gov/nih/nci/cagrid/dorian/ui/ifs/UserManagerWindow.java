@@ -35,7 +35,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.9 2007-04-26 20:04:04 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.10 2007-08-09 14:41:35 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -286,7 +286,7 @@ public class UserManagerWindow extends ApplicationComponent {
 		if (manageUser == null) {
 			manageUser = new JButton();
 			manageUser.setText("Manage User");
-			manageUser.setIcon(DorianLookAndFeel.getUserBrowse());
+			manageUser.setIcon(DorianLookAndFeel.getUserIcon());
 			manageUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					getUsersTable().doubleClick();
@@ -765,7 +765,7 @@ public class UserManagerWindow extends ApplicationComponent {
 					}
 				}
 			});
-			removeUser.setIcon(DorianLookAndFeel.getRemoveUserIcon());
+			removeUser.setIcon(DorianLookAndFeel.getRemoveIcon());
 		}
 		return removeUser;
 	}

@@ -36,7 +36,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.7 2007-04-26 18:43:49 langella Exp $
+ * @version $Id: UserWindow.java,v 1.8 2007-08-09 14:41:35 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 
@@ -123,7 +123,7 @@ public class UserWindow extends ApplicationComponent {
 		this.user = u;
 		this.idp = idp;
 		initialize();
-		this.setFrameIcon(DorianLookAndFeel.getUserBrowse());
+		this.setFrameIcon(DorianLookAndFeel.getUserIcon());
 	}
 
 	/**
@@ -242,7 +242,7 @@ public class UserWindow extends ApplicationComponent {
 
 				}
 			});
-			updateUser.setIcon(DorianLookAndFeel.getUpdateUserIcon());
+			updateUser.setIcon(DorianLookAndFeel.getUserIcon());
 		}
 		return updateUser;
 	}
