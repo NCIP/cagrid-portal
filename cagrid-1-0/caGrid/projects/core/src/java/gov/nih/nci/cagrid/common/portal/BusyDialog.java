@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.common.portal;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -39,6 +40,8 @@ public class BusyDialog extends JDialog {
      * This method initializes this
      */
     private void initialize() {
+        this.setModal(true);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setContentPane(getMainPanel());
         this.setSize(new java.awt.Dimension(400, 100));
         // this.pack();

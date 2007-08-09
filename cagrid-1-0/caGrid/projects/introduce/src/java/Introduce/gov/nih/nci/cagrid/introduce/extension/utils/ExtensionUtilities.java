@@ -24,7 +24,7 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 7, 2006 
- * @version $Id: ExtensionUtilities.java,v 1.7 2007-08-08 13:56:21 dervin Exp $ 
+ * @version $Id: ExtensionUtilities.java,v 1.8 2007-08-09 02:04:46 hastings Exp $ 
  */
 public class ExtensionUtilities {
 	public static final String CLASSPATHENTRY_ELEMENT = "classpathentry";
@@ -214,6 +214,7 @@ public class ExtensionUtilities {
         for (Element e : keptEntries) {
             classpathElement.addContent(e);
         }
+        
         
         // write the .classpath file back out to disk
         XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());

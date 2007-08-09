@@ -562,15 +562,6 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             }
         }
 
-        // update the Eclipse .classpath file
-        File classpathFile = new File(getServicePath() + File.separator + ".classpath");
-        try {
-            ExtensionUtilities.resyncWithLibDir(classpathFile);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            // throw new Exception("Error updating Eclipse .classpath file:
-            // " + ex.getMessage(), ex);
-        }
     }
 
 

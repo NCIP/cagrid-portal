@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -44,7 +45,6 @@ public class UpgradeStatusView extends JDialog {
     public UpgradeStatusView(UpgradeStatus status) {
         super(PortalResourceManager.getInstance().getGridPortal());
         this.status = status;
-        this.setModal(true);
         initialize();
     }
 
@@ -56,7 +56,9 @@ public class UpgradeStatusView extends JDialog {
         this.setSize(new Dimension(500, 600));
         this.setTitle("Upgrade Status Report");
         this.setContentPane(getMainPanel());
-
+        this.setModal(true);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        PortalUtils.centerComponent(this);
     }
 
 
@@ -241,7 +243,6 @@ public class UpgradeStatusView extends JDialog {
 
     public static int showUpgradeStatusView(UpgradeStatus status) {
         UpgradeStatusView view = new UpgradeStatusView(status);
-        PortalUtils.centerComponent(view);
         view.setVisible(true);
         return view.getResult();
     }
