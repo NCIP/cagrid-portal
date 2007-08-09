@@ -17,12 +17,10 @@ import java.awt.Dimension;
 import javax.swing.JComboBox;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import javax.swing.SwingConstants;
 import java.awt.Insets;
 import javax.swing.JButton;
 
 import org.apache.axis.types.URI;
-import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.grape.utils.ErrorDialog;
 
 import java.awt.ComponentOrientation;
