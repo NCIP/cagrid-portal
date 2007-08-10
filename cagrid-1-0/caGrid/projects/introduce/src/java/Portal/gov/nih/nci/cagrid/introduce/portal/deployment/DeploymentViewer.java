@@ -15,7 +15,9 @@ import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceDeploymentUIPanel;
 import gov.nih.nci.cagrid.introduce.statistics.StatisticsClient;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
@@ -39,6 +41,7 @@ import javax.swing.SwingUtilities;
 
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
+import java.awt.Dimension;
 
 
 /**
@@ -162,12 +165,14 @@ public class DeploymentViewer extends GridPortalBaseFrame {
                 for (i = 0; i < info.getServiceDescriptor().getServiceProperties().getProperty().length; i++) {
                     ServicePropertiesProperty prop = info.getServiceProperties().getProperty(i);
                     this.addTextField(this.getServicePropertiesPanel(), prop.getKey(), prop.getValue(), i, true);
+                    this.getTextField(prop.getKey()).setForeground(Color.BLUE);
 
                 }
             }
         }
 
         this.setFrameIcon(IntroduceLookAndFeel.getDeployIcon());
+        this.setSize(new Dimension(301, 365));
         this.setContentPane(getHolderPanel());
         this.setTitle("Deploy Grid Service");
         pack();
@@ -426,6 +431,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
     private JPanel getServicePropertiesPanel() {
         if (servicePropertiesPanel == null) {
             servicePropertiesPanel = new JPanel();
+            servicePropertiesPanel.setBackground(Color.WHITE);
             servicePropertiesPanel.setLayout(new GridBagLayout());
         }
         return servicePropertiesPanel;
@@ -440,7 +446,8 @@ public class DeploymentViewer extends GridPortalBaseFrame {
     private JScrollPane getServicePropertiesScrollPane() {
         if (servicePropertiesScrollPane == null) {
             servicePropertiesScrollPane = new JScrollPane();
-            servicePropertiesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            servicePropertiesScrollPane.setSize(new Dimension(400,200));
+            servicePropertiesScrollPane.setPreferredSize(new Dimension(400,200));
             servicePropertiesScrollPane.setViewportView(getServicePropertiesPanel());
             servicePropertiesScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
                 null, "Service Properties", 
@@ -517,4 +524,4 @@ public class DeploymentViewer extends GridPortalBaseFrame {
         }
         return holderPanel;
     }
-}
+}  //  @jve:decl-index=0:visual-constraint="10,10"
