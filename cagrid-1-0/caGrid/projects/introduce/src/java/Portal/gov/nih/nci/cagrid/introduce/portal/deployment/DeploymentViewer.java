@@ -157,6 +157,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
                 String key = (String) keys.nextElement();
                 this.addTextField(this.getDeployPropertiesPanel(), key,
                     info.getDeploymentProperties().getProperty(key), i++, true);
+                this.getLabel( key).setFont(this.getLabel( key).getFont().deriveFont(Font.BOLD));
             }
 
             // load up the service properties
