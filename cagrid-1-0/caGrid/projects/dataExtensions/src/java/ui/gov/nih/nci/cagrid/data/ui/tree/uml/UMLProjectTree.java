@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
+
 /** 
  *  UMLProjectTree
  *  Tree for describing and selecting items from caDSR UML Projects
@@ -17,7 +20,7 @@ import java.util.Set;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 5, 2006 
- * @version $Id: UMLProjectTree.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: UMLProjectTree.java,v 1.2 2007-08-10 17:27:01 dervin Exp $ 
  */
 public class UMLProjectTree extends CheckBoxTree {
 	private Map<String, UMLPackageTreeNode> packageNodes;
@@ -123,4 +126,19 @@ public class UMLProjectTree extends CheckBoxTree {
 		names.toArray(nameArray);
 		return nameArray;
 	}
+    
+    
+    public void expandFullTree() {
+        DefaultMutableTreeNode mostRecentNode = null;
+        if (getRootNode() != null) {
+            Enumeration nodes = getRootNode().breadthFirstEnumeration();
+            while (nodes.hasMoreElements()) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) nodes.nextElement();
+                if (!node.isNodeSibling(mostRecentNode)) {
+                    expandPath(new TreePath(node.getPath()));
+                }
+                mostRecentNode = node;
+            }
+        }
+    }
 }
