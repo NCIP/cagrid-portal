@@ -5,7 +5,7 @@ package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
-import gov.nih.nci.cagrid.dorian.client.IdPAuthenticationClient;
+import gov.nih.nci.cagrid.dorian.client.IdPUserClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.gridca.ui.ProxyManager; // import
@@ -57,8 +57,8 @@ public class DorianAuthenticateStep extends Step {
         BasicAuthCredential authCred = new BasicAuthCredential();
         authCred.setUserId(this.userId);
         authCred.setPassword(this.password);
-        IdPAuthenticationClient client = new IdPAuthenticationClient(this.serviceURL, authCred);
-        this.saml = client.authenticate();
+        IdPUserClient client = new IdPUserClient(this.serviceURL);
+        this.saml = client.authenticate(authCred);
 
         IFSUserClient c2 = new IFSUserClient(this.serviceURL);
         this.credential = c2.createProxy(this.saml, new ProxyLifetime(this.hours, 0, 0), 2);
