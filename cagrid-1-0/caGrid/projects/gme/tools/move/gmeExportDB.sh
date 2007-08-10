@@ -19,7 +19,7 @@ mysqldump -u root --add-drop-database --add-drop-table --add-locks ${database} |
 
 done
 
-tar cvf gmeExport.tar GlobusGME_GME_REGISTRY.sql.gz GlobusGME_GME_SCHEMA_STORE.sql.gz GlobusGME_GME_SCHEMA_CACHE.sql.gz
+tar cvf gmeDBExport.tar GlobusGME_GME_REGISTRY.sql.gz GlobusGME_GME_SCHEMA_STORE.sql.gz GlobusGME_GME_SCHEMA_CACHE.sql.gz
 
 rm -fr GlobusGME_GME_REGISTRY.sql.gz
 rm -fr GlobusGME_GME_SCHEMA_STORE.sql.gz
