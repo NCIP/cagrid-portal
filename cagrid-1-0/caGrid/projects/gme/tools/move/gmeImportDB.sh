@@ -5,12 +5,13 @@
 #
 
 if [ $# -le 1 ]; then
-         echo usage: gmeImportDB.sh import_file database_prefix [database_password]
+         echo usage: gmeImportDB.sh database_prefix import_file [database_password]
          exit 1
 fi
 
-importFileName=$1
-databaseprefix=$2
+
+databaseprefix=$1
+importFileName=$2
 
 tar -xvf ${importFileName}
 
