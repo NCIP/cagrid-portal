@@ -30,6 +30,10 @@ public class DorianLookAndFeel extends LookAndFeel {
 	public final static ImageIcon getTrustedIdPIcon() {
 		return IconUtils.loadIcon("/trusted-idp.png");
 	}
+	
+	public final static ImageIcon getPasswordIcon() {
+		return IconUtils.loadIcon("/password.png");
+	}
 
 
 	

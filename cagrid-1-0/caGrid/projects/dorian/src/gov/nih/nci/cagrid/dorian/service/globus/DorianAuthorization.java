@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.globus;
 
 
 import java.rmi.RemoteException;
-
 import javax.security.auth.Subject;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.handler.MessageContext;
@@ -180,6 +179,11 @@ public class DorianAuthorization implements PDP {
 	}
 					
 	public static void authorizeRenewHostCertificate() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeChangeIdPUserPassword() throws RemoteException {
 		
 		
 	}
@@ -402,6 +406,14 @@ public class DorianAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("renewHostCertificate")){
 			try{
 				authorizeRenewHostCertificate();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("changeIdPUserPassword")){
+			try{
+				authorizeChangeIdPUserPassword();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

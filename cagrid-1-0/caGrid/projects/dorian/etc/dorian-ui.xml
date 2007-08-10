@@ -134,6 +134,17 @@
                         <height>550</height>
                     </dimensions>
                 </component>
+                   <component>
+                    <title>Change Password</title>
+                    <description>Allows a Dorian IdP user to change their password.</description>
+                    <classname>gov.nih.nci.cagrid.dorian.ui.idp.ChangePasswordWindow</classname>
+                    <icon>/password.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                        <width>500</width>
+                        <height>250</height>
+                    </dimensions>
+                </component>
                 <component>
                     <title>Local Account Management</title>
                     <description>Local Account Management</description>

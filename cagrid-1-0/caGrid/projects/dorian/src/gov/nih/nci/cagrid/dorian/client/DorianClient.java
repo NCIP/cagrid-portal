@@ -96,6 +96,18 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
 		}
 	}
 
+  public void changeIdPUserPassword(gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential credential,java.lang.String newPassword) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"changeIdPUserPassword");
+    gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordRequest params = new gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordRequest();
+    gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordRequestCredential credentialContainer = new gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordRequestCredential();
+    credentialContainer.setBasicAuthCredential(credential);
+    params.setCredential(credentialContainer);
+    params.setNewPassword(newPassword);
+    gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordResponse boxedResult = portType.changeIdPUserPassword(params);
+    }
+  }
+
   public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
@@ -289,8 +301,12 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
     }
   }
 
-  public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(gov.nih.nci.cagrid.authentication.bean.Credential credential) throws RemoteException, gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault, gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault, gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
-    synchronized(portTypeMutex){
+  public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(
+		gov.nih.nci.cagrid.authentication.bean.Credential credential) throws RemoteException,
+		gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault,
+		gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault,
+		gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
+		synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"authenticate");
     gov.nih.nci.cagrid.authentication.AuthenticateRequest params = new gov.nih.nci.cagrid.authentication.AuthenticateRequest();
     gov.nih.nci.cagrid.authentication.AuthenticateRequestCredential credentialContainer = new gov.nih.nci.cagrid.authentication.AuthenticateRequestCredential();

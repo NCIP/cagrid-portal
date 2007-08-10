@@ -453,6 +453,25 @@
           </sequence>
         </complexType>
       </element>
+      <element name="ChangeIdPUserPasswordRequest">
+        <complexType>
+          <sequence>
+            <element name="credential">
+              <complexType>
+                <sequence>
+                  <element ref="ns4:BasicAuthCredential" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="newPassword" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="ChangeIdPUserPasswordResponse">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
       <element name="DorianResourceProperties">
         <complexType>
           <sequence>
@@ -612,6 +631,12 @@
   </message>
   <message name="RenewHostCertificateResponse">
     <part name="parameters" element="tns:RenewHostCertificateResponse" />
+  </message>
+  <message name="ChangeIdPUserPasswordRequest">
+    <part name="parameters" element="tns:ChangeIdPUserPasswordRequest" />
+  </message>
+  <message name="ChangeIdPUserPasswordResponse">
+    <part name="parameters" element="tns:ChangeIdPUserPasswordResponse" />
   </message>
   <message name="DorianInternalFaultFaultMessage">
     <part name="fault" element="ns7:DorianInternalFault" />
@@ -815,6 +840,13 @@
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="InvalidHostCertificateFault" message="tns:InvalidHostCertificateFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidHostCertificateFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="changeIdPUserPassword">
+      <input message="tns:ChangeIdPUserPasswordRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/ChangeIdPUserPasswordRequest" />
+      <output message="tns:ChangeIdPUserPasswordResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/ChangeIdPUserPasswordResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+      <fault name="InvalidUserPropertyFault" message="tns:InvalidUserPropertyFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidUserPropertyFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

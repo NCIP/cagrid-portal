@@ -64,6 +64,24 @@ public class IdentityProvider extends LoggingObject {
 	}
 
 
+	public void changePassword(BasicAuthCredential credential, String newPassword) throws DorianInternalFault,
+		PermissionDeniedFault, InvalidUserPropertyFault {
+		IdPUser requestor = authenticateAndVerifyUser(credential);
+		requestor.setPassword(newPassword);
+		try {
+			this.userManager.updateUser(requestor);
+		} catch (NoSuchUserFault e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected error occurred in trying to change the requested user's password.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+
 	public X509Certificate getIdPCertificate() throws DorianInternalFault {
 		return assertionManager.getIdPCertificate();
 	}

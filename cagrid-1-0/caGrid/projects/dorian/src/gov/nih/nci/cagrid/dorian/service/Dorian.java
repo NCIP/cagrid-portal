@@ -206,6 +206,12 @@ public class Dorian extends LoggingObject {
 	}
 
 
+	public void changeIdPUserPassword(BasicAuthCredential credential, String newPassword) throws DorianInternalFault,
+		PermissionDeniedFault, InvalidUserPropertyFault {
+		this.identityProvider.changePassword(credential, newPassword);
+	}
+
+
 	public IdPUser[] findIdPUsers(String gridIdentity, IdPUserFilter filter) throws DorianInternalFault,
 		PermissionDeniedFault {
 		String uid = null;

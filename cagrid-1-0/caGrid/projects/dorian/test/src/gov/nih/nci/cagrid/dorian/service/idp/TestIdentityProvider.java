@@ -73,7 +73,156 @@ public class TestIdentityProvider extends TestCase {
 			}
 		}
 	}
+
+
+	public void testAuthenticate() {
+		IdentityProvider idp = null;
+		try {
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
+			idp = new IdentityProvider(conf, db, ca);
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			Application a = createApplication();
+			idp.register(a);
+			BasicAuthCredential cred = getAdminCreds();
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Active, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			verifyAuthentication(idp, a);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testAuthenticateBadPassword() {
+		IdentityProvider idp = null;
+		try {
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
+			idp = new IdentityProvider(conf, db, ca);
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			Application a = createApplication();
+			idp.register(a);
+			BasicAuthCredential cred = getAdminCreds();
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Active, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			BasicAuthCredential c = getCredential(a);
+			c.setPassword("bad password");
+			try {
+				idp.authenticate(c);
+				fail("Should not be able to authenticate with a bad password!!!");
+			} catch (PermissionDeniedFault f) {
+
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
+	
+	public void testChangePassword() {
+		IdentityProvider idp = null;
+		try {
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
+			idp = new IdentityProvider(conf, db, ca);
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			Application a = createApplication();
+			idp.register(a);
+			BasicAuthCredential cred = getAdminCreds();
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Active, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			verifyAuthentication(idp, a);
+			BasicAuthCredential c = getCredential(a);
+			String newPassword = "mynewpass";
+			idp.changePassword(getCredential(a), newPassword);
+			
+			try {
+				idp.authenticate(c);
+				fail("Should not be able to authenticate with the old password!!!");
+			} catch (PermissionDeniedFault f) {
+
+			}
+			a.setPassword(newPassword);
+			verifyAuthentication(idp, a);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	public void testChangePasswordToBadPassword() {
+		IdentityProvider idp = null;
+		try {
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
+			idp = new IdentityProvider(conf, db, ca);
+			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			Application a = createApplication();
+			idp.register(a);
+			BasicAuthCredential cred = getAdminCreds();
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Active, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			verifyAuthentication(idp, a);
+			try{
+			idp.changePassword(getCredential(a), "short");
+			fail("Should not be able to change the password to something to short");
+			}catch (InvalidUserPropertyFault f) {
+			}
+			
+			try{
+				idp.changePassword(getCredential(a), "thispasswordiswaytoolong");
+				fail("Should not be able to change the password to something to long");
+				}catch (InvalidUserPropertyFault f) {
+				}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+
 	public void testRegistrationNoAddress2() {
 		IdentityProvider idp = null;
 		try {
@@ -314,6 +463,12 @@ public class TestIdentityProvider extends TestCase {
 	}
 
 
+	private void verifyAuthentication(IdentityProvider idp, Application a) throws Exception {
+		SAMLAssertion saml = idp.authenticate(getCredential(a));
+		verifySAMLAssertion(saml, idp, a);
+	}
+
+
 	public void verifySAMLAssertion(SAMLAssertion saml, IdentityProvider idp, Application app) throws Exception {
 		assertNotNull(saml);
 		saml.verify(idp.getIdPCertificate());
@@ -360,6 +515,14 @@ public class TestIdentityProvider extends TestCase {
 
 		assertEquals(2, statementCount);
 		assertTrue(authFound);
+	}
+
+
+	private BasicAuthCredential getCredential(Application app) {
+		BasicAuthCredential cred = new BasicAuthCredential();
+		cred.setUserId(app.getUserId());
+		cred.setPassword(app.getPassword());
+		return cred;
 	}
 
 
