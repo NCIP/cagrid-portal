@@ -20,7 +20,7 @@ echo Importing database ${database}
 cp -fr ${backupdir}/${database}.sql.gz.1 ${backupdir}/${database}.sql.gz
 gunzip ${backupdir}/${database}.sql.gz
 
-mysql -uroot ${database} < ${backupdir}/${database}.sql
+mysql -u root ${database} < ${backupdir}/${database}.sql
 
 rm -fr ${backupdir}/${database}.sql.gz
 rm -fr ${backupdir}/${database}.sql
