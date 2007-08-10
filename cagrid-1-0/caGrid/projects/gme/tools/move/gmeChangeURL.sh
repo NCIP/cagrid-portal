@@ -10,17 +10,29 @@
 # -p <password> after the -u root on the below call to mysql
 
 
-oldservicename=$1
-newservicename=$2
+if [ $# -le 3 ]; then
+         echo usage: gmeChangeURL.sh database_prefix old_service_url new_service_url [database_password]
+         exit 1
+fi
+
+database_prefix=$1
+oldservicename=$2
+newservicename=$3
 
 
-database="GlobusGME_GME_REGISTRY"
+database="${databaseprefix}_GME_REGISTRY"
 
 
 echo changing hostname to ${newservicename}
-
+if [ $# -eq 3 ]; then
 echo "use ${database}; update namespaces set service_ID='${newservicename}' where service_id='${oldservicename}';" | mysql -u root
+fi
 
-echo Finished Importing databases
+if [ $# -eq 4 ]; then
+echo "use ${database}; update namespaces set service_ID='${newservicename}' where service_id='${oldservicename}';" | mysql -u root -p=$2
+fi
+
+
+echo Finished Modifying Databases
 
 exit 

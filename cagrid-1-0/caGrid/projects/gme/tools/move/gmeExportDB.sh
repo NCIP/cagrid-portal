@@ -1,21 +1,33 @@
 #!/bin/sh
 
-# This script will export the data base to a file.
-#   This script is designed to work when there is no password on database.  If there is
-#   a password on the database just add a "-p <password>" after the "-u root" line
-#   of the mysqldump call.  The "root" username of the database can also be changed.
-#
+# This script will export the gme databases data to a tar file.
+# this file will contain the database data only and not the database
+# or table creation commands
+
+if [ $# -le 0 ]; then
+         echo usage: gmeExportDB.sh database_prefix [database_password]
+         exit 1
+fi
+
+
+databaseprefix=$1
 
 
 echo Starting to backup databases
 
-databases="GlobusGME_GME_REGISTRY GlobusGME_GME_SCHEMA_STORE GlobusGME_GME_SCHEMA_CACHE"
+databases="${databaseprefix}_GME_REGISTRY ${databaseprefix}_GME_SCHEMA_STORE ${databaseprefix}_GME_SCHEMA_CACHE"
 
 for database in $databases ; do
 
 echo Backing up database ${database}
 
-mysqldump -u root --add-drop-database --add-drop-table --add-locks ${database} | gzip > ${database}.sql.gz
+if [ $# -eq 1 ]; then
+	mysqldump -u root --add-locks -n -t ${database} | gzip > ${database}.sql.gz
+fi
+
+if [ $# -eq 2 ]; then
+	mysqldump -u root -p=$2 --add-locks -n -t ${database} | gzip > ${database}.sql.gz
+fi
 
 done
 

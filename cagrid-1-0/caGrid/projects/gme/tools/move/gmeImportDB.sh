@@ -1,24 +1,34 @@
 #!/bin/sh
 
 #
-# This script is designed to work when there is no password on  the database.  If there is
-#   a password on the database just add a "-p <password>" after the "-u root" line
-#   of the mysqldump call.  The "root" username for the database can also be changed.  The filenames for the imports are assumed to be the <databasename>.sql.gz.
+# Import gme table data into a gme database on another server
 #
 
+if [ $# -le 1 ]; then
+         echo usage: gmeImportDB.sh import_file database_prefix [database_password]
+         exit 1
+fi
+
 importFileName=$1
+databaseprefix=$2
 
 tar -xvf ${importFileName}
 
-databases="GlobusGME_GME_REGISTRY GlobusGME_GME_SCHEMA_STORE GlobusGME_GME_SCHEMA_CACHE"
+databases="${databaseprefix}_GME_REGISTRY ${databaseprefix}_GME_SCHEMA_STORE ${databaseprefix}_GME_SCHEMA_CACHE"
 
 for database in $databases ; do
 
-echo Importing database ${database}
+echo Importing gme database table data into ${database}
 
 gunzip ${database}.sql.gz
 
-mysql -u root ${database} < ${database}.sql
+if [ $# -eq 2 ]; then
+        mysql -u root ${database} < ${database}.sql
+fi
+
+if [ $# -eq 3 ]; then
+        mysql -u root -p=$2 ${database} < ${database}.sql
+fi
 
 rm -fr ${database}.sql.gz
 rm -fr ${database}.sql
