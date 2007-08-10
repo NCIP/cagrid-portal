@@ -24,7 +24,7 @@ import javax.swing.tree.TreeSelectionModel;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 5, 2006 
- * @version $Id: CheckBoxTree.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: CheckBoxTree.java,v 1.2 2007-08-10 17:01:02 dervin Exp $ 
  */
 public class CheckBoxTree extends JTree {
 	private DefaultTreeModel model;
@@ -118,11 +118,29 @@ public class CheckBoxTree extends JTree {
 		return types;
 	}
     
+    
+    public void repaint() {
+        // check boxes changed in the repaint method instead of 'setEnabled()' because
+        // nodes added after a call to setEnabled() will always appear 'enabled'
+        if (getRootNode() != null) {
+            boolean enable = isEnabled();
+            Enumeration allNodes = getRootNode().breadthFirstEnumeration();
+            while (allNodes.hasMoreElements()) {
+                Object o = allNodes.nextElement();
+                if (o instanceof CheckBoxTreeNode) {
+                    CheckBoxTreeNode node = (CheckBoxTreeNode) o;
+                    node.getCheckBox().setEnabled(enable);
+                }
+            }
+        }
+        super.repaint();
+    }
+    
 	
 	private static class CellRenderer extends DefaultTreeCellRenderer {
 		
 		public CellRenderer() {
-			// super();
+			super();
 		}
 		
 		
@@ -132,7 +150,6 @@ public class CheckBoxTree extends JTree {
             if (value instanceof CheckBoxTreeNode) {
 				CheckBoxTreeNode cbNode = (CheckBoxTreeNode) value;
 				cbNode.getCheckBox().setBackground(getBackground());
-                cbNode.getCheckBox().setEnabled(tree.isEnabled());
 				return cbNode.getCheckBox();
 			}
             setEnabled(tree.isEnabled());
