@@ -77,7 +77,6 @@ public class ProxyManagerComponent extends ApplicationComponent {
 
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -312,8 +311,7 @@ public class ProxyManagerComponent extends ApplicationComponent {
 					try {
 						ProxyCaddy caddy = (ProxyCaddy) getProxyComboBox().getSelectedItem();
 						ProxyUtil.saveProxyAsDefault(caddy.getProxy());
-                        GridApplication.getContext().showMessage(
-                            "Selected proxy saved as the default");
+						GridApplication.getContext().showMessage("Selected proxy saved as the default");
 					} catch (Exception ex) {
 						ErrorDialog.showError("An unexpected error occurred in saving the currently selected proxy!!!",
 							ex);
@@ -339,13 +337,15 @@ public class ProxyManagerComponent extends ApplicationComponent {
 			deleteProxyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					ProxyCaddy caddy = (ProxyCaddy) getProxyComboBox().getSelectedItem();
-					proxyInfoPanel.clearProxy();
-					getProxyComboBox().removeItemAt(getProxyComboBox().getSelectedIndex());
-					if (caddy.getIdentity() == DEFAULT_PROXY) {
-						ProxyUtil.destroyDefaultProxy();
-					} else {
-						ProxyManager.getInstance().deleteProxy(caddy.getProxy());
+					if (caddy != null) {
+						proxyInfoPanel.clearProxy();
+						getProxyComboBox().removeItemAt(getProxyComboBox().getSelectedIndex());
+						if (caddy.getIdentity() == DEFAULT_PROXY) {
+							ProxyUtil.destroyDefaultProxy();
+						} else {
+							ProxyManager.getInstance().deleteProxy(caddy.getProxy());
 
+						}
 					}
 				}
 			});
