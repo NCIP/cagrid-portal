@@ -155,7 +155,6 @@ public class PreferencesDialog extends JDialog {
 			prefencesScrollPane.setViewportView(getPreferencesTree());
 			prefencesScrollPane.setSize(new Dimension(150,400));
 			prefencesScrollPane.setPreferredSize(new Dimension(150,400));
-			prefencesScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		}
 		return prefencesScrollPane;
 	}
