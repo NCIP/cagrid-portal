@@ -20,6 +20,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * DataServiceModificationPanel 
@@ -28,9 +30,11 @@ import javax.swing.event.ChangeListener;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Oct 10, 2006
- * @version $Id: DataServiceModificationPanel.java,v 1.2 2007-08-06 19:34:11 dervin Exp $
+ * @version $Id: DataServiceModificationPanel.java,v 1.3 2007-08-13 14:13:51 dervin Exp $
  */
 public class DataServiceModificationPanel extends ServiceModificationUIPanel {
+    
+    private static final Logger LOG = Logger.getLogger(DataServiceModificationPanel.class.getName()); 
 
     private DomainModelConfigPanel domainConfigPanel = null;
 	private JTabbedPane mainTabbedPane = null;
@@ -61,12 +65,16 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 
 
 	protected void resetGUI() {
+        long start = System.currentTimeMillis();
         int tabs = getMainTabbedPane().getTabCount();
         for (int i = 0; i < tabs; i++) {
             Component tab = getMainTabbedPane().getComponentAt(i);
             if (tab instanceof UpdatablePanel) {
                 try {
+                    String tabName = getMainTabbedPane().getTitleAt(i);
+                    long tabStart = System.currentTimeMillis();
                     ((UpdatablePanel) tab).updateDisplayedConfiguration();
+                    LOG.debug("Tab " + tabName + " updated in " + (System.currentTimeMillis() - tabStart) + " ms");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     ErrorDialog.showErrorDialog("Error updating information on " 
@@ -74,6 +82,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                 }
             }
         }
+        LOG.debug("All tabs updated in " + (System.currentTimeMillis() - start) + " ms");
 	}
     
 
