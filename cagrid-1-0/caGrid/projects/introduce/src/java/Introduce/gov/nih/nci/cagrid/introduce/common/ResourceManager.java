@@ -58,7 +58,8 @@ public class ResourceManager {
     public static File getIntroduceUserHome() {
         String userHome = System.getProperty("user.home");
         File userHomeF = new File(userHome);
-        File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".introduce_" + CommonTools.getIntroduceVersion().replace(".", "_"));
+        File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".introduce_"
+            + CommonTools.getIntroduceVersion().replace(".", "_"));
         if (!caGridCache.exists()) {
             caGridCache.mkdirs();
         }
@@ -256,9 +257,9 @@ public class ResourceManager {
         // Create the ZIP file
         String outFilename = introduceCache + File.separator + serviceName + "_" + id + CACHE_POSTFIX;
         logger.debug("Creating service archive: " + outFilename);
-        
+
         ZipUtilities.zipDirectory(dir, new File(outFilename));
-        
+
         // cleanup if there are more that MAX_ARCHIVE files in the backup area
         cleanup(serviceName);
     }
@@ -297,14 +298,14 @@ public class ResourceManager {
         // remove the directory first
         boolean deleted = Utils.deleteDir(new File(baseDir));
         if (!deleted) {
-            logger.warn("Was not able to completely remove the service before restoring the new one. " +
-                "May be unused new files leftover.");
+            logger.warn("Was not able to completely remove the service before restoring the new one. "
+                + "May be unused new files leftover.");
         }
 
         File introduceCache = new File(getResourcePath());
         introduceCache.mkdir();
-        File cachedFile = new File(introduceCache.getAbsolutePath() + File.separator 
-            + serviceName + "_" + currentId + CACHE_POSTFIX);
+        File cachedFile = new File(introduceCache.getAbsolutePath() + File.separator + serviceName + "_" + currentId
+            + CACHE_POSTFIX);
 
         logger.debug("Restoring service from archive:" + cachedFile.getAbsolutePath());
 
@@ -313,14 +314,7 @@ public class ResourceManager {
 
 
     public static synchronized void restoreLatest(String currentId, String serviceName, String baseDir)
-        throws FileNotFoundException, IOException {
-
-        // remove the directory first
-        boolean deleted = Utils.deleteDir(new File(baseDir));
-        if (!deleted) {
-            logger.warn("Was not able to completely remove the service before restoring the new one.  " +
-                "May be unused new files leftover.");
-        }
+        throws FileNotFoundException, IOException, Exception {
 
         File introduceCache = new File(getResourcePath());
         final String finalServiceName = serviceName;
@@ -346,7 +340,20 @@ public class ResourceManager {
         File cachedFile = new File(introduceCache.getAbsolutePath() + File.separator + serviceName + "_"
             + String.valueOf(lastTime) + CACHE_POSTFIX);
 
-        ZipUtilities.unzip(cachedFile, new File(baseDir));
+        if (cachedFile.exists() && cachedFile.canRead()) {
+            // remove the directory
+            boolean deleted = Utils.deleteDir(new File(baseDir));
+            if (!deleted) {
+                logger.warn("Introduce was not able to completely remove the service before restoring the old one.  "
+                    + "There may be unused new files leftover.");
+            }
+            
+            ZipUtilities.unzip(cachedFile, new File(baseDir));
+        } else {
+            throw new Exception("Cache file does not exist or is not readable : " + cachedFile.getAbsolutePath());
+        }
+
+       
     }
 
 

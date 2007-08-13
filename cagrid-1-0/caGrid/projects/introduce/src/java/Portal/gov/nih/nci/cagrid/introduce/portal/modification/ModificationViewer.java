@@ -71,6 +71,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -151,6 +152,8 @@ public class ModificationViewer extends GridPortalComponent {
     private JPanel operationsButtonPanel = null;
 
     private JButton undoButton = null;
+
+    private JButton reloadButton = null;
 
     private boolean dirty = false;
 
@@ -471,7 +474,7 @@ public class ModificationViewer extends GridPortalComponent {
             // upgrading.....
             try {
                 if (dialog != null) {
-                    dialog.setProgressText("Reloading service description");
+                    dialog.setProgressText("loading service description");
                 }
                 this.info = new ServiceInformation(this.methodsDirectory);
             } catch (Exception e) {
@@ -589,45 +592,58 @@ public class ModificationViewer extends GridPortalComponent {
      */
     private JPanel getButtonPanel() {
         if (this.buttonPanel == null) {
-            GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-            gridBagConstraints10.insets = new java.awt.Insets(5, 5, 5, 5);
-            gridBagConstraints10.gridy = 0;
-            gridBagConstraints10.fill = java.awt.GridBagConstraints.NONE;
-            gridBagConstraints10.gridx = 2;
             GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
             gridBagConstraints9.insets = new java.awt.Insets(5, 5, 5, 5);
             gridBagConstraints9.gridy = 0;
-            gridBagConstraints9.gridx = 1;
+            gridBagConstraints9.gridx = 2;
             GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
             gridBagConstraints8.insets = new java.awt.Insets(5, 5, 5, 5);
             gridBagConstraints8.gridy = 0;
-            gridBagConstraints8.gridx = 0;
+            gridBagConstraints8.gridx = 1;
+            GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+            gridBagConstraints11.insets = new java.awt.Insets(5, 5, 5, 5);
+            gridBagConstraints11.gridy = 0;
+            gridBagConstraints11.gridx = 0;
             this.buttonPanel = new JPanel();
             this.buttonPanel.setLayout(new GridBagLayout());
             this.buttonPanel.add(getSaveButton(), gridBagConstraints9);
-            this.buttonPanel.add(getCancel(), gridBagConstraints10);
-            this.buttonPanel.add(getUndoButton(), gridBagConstraints8);
+            this.buttonPanel.add(getReloadButton(), gridBagConstraints8);
+            this.buttonPanel.add(getUndoButton(), gridBagConstraints11);
         }
         return this.buttonPanel;
     }
 
 
-    /**
-     * This method initializes jButton1
-     * 
-     * @return javax.swing.JButton
-     */
-    private JButton getCancel() {
-        if (this.cancel == null) {
-            this.cancel = new JButton(PortalLookAndFeel.getCloseIcon());
-            this.cancel.setText("Cancel");
-            this.cancel.addActionListener(new java.awt.event.ActionListener() {
+    private JButton getReloadButton() {
+        if (this.reloadButton == null) {
+            this.reloadButton = new JButton(IntroduceLookAndFeel.getResyncIcon());
+            this.reloadButton.setText("Reload");
+            this.reloadButton.setToolTipText("reload the service and throw away the current modifications");
+            this.reloadButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    dispose();
+                    int decision = JOptionPane
+                        .showConfirmDialog(
+                            ModificationViewer.this,
+                            "Are you sure you wish to reload?\nAll current modifactions will be lost!\nThis will simply reload the modification viewer with the\nservice without saving the current changes since the last save.");
+                    if (decision == JOptionPane.OK_OPTION) {
+                        BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
+                            .getGridPortal(), "Reload") {
+                            @Override
+                            public void process() {
+                                logger.info("Reloading service");
+                                setProgressText("Reloading service");
+                                dispose();
+                                PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+                                    new ModificationViewer(ModificationViewer.this.methodsDirectory));
+                            }
+                        };
+                        Thread th = new Thread(r);
+                        th.start();
+                    }
                 }
             });
         }
-        return this.cancel;
+        return this.reloadButton;
     }
 
 
@@ -995,15 +1011,17 @@ public class ModificationViewer extends GridPortalComponent {
     private JButton getUndoButton() {
         if (this.undoButton == null) {
             this.undoButton = new JButton(IntroduceLookAndFeel.getUndoIcon());
-            this.undoButton.setText("Undo");
+            this.undoButton.setText("Roll Back");
             this.undoButton.setToolTipText("roll back to last save state");
             this.undoButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    int decision = JOptionPane.showConfirmDialog(ModificationViewer.this,
-                        "Are you sure you wish to roll back?");
+                    int decision = JOptionPane
+                        .showConfirmDialog(
+                            ModificationViewer.this,
+                            "Are you sure you wish to roll back?\nThis will roll back to the last save point!\nAll current modifactions will be lost!\nIf you simply wish to throw away current modifications and reopen\nthe modification viewer to start again just close the window and click Modify Service again.");
                     if (decision == JOptionPane.OK_OPTION) {
                         BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
-                            .getGridPortal(), "Undo") {
+                            .getGridPortal(), "Roll Back") {
                             @Override
                             public void process() {
                                 logger.info("Loading in last known save for this project");
@@ -1014,9 +1032,8 @@ public class ModificationViewer extends GridPortalComponent {
                                             .getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP);
                                         String name = ModificationViewer.this.info.getIntroduceServiceProperties()
                                             .getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-                                        String destDir = ModificationViewer.this.info.getIntroduceServiceProperties()
-                                            .getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
-                                        ResourceManager.restoreLatest(timestamp, name, destDir);
+                                        ResourceManager.restoreLatest(timestamp, name, info.getBaseDirectory()
+                                            .getAbsolutePath());
                                     }
                                     dispose();
                                     PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
@@ -1555,6 +1572,9 @@ public class ModificationViewer extends GridPortalComponent {
 
                         if (p.exitValue() != 0) {
                             setErrorMessage("Error: Unable to rebuild the skeleton");
+                        } else {
+                            setProgressText("creating service archive");
+                            info.createArchive();
                         }
                         ModificationViewer.this.dirty = false;
                         setProgressText("loading service properties");

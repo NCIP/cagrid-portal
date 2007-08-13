@@ -251,8 +251,6 @@ public class SyncTools {
 
         File schemaDir = new File(this.baseDirectory.getAbsolutePath() + File.separator + "schema");
 
-        // STEP 2: make a backup of the service implementation
-        this.createArchive(info);
 
         // before we actually process anything we must create the code and conf
         // required for any new services which were added.....
@@ -943,21 +941,6 @@ public class SyncTools {
 
         writeNamespaceMappings(info);
 
-    }
-
-
-    private void createArchive(ServiceInformation info) throws Exception {
-        // create the archive
-        long id = System.currentTimeMillis();
-
-        info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP,
-            String.valueOf(id));
-        info.getIntroduceServiceProperties().store(
-            new FileOutputStream(this.baseDirectory.getAbsolutePath() + File.separator
-                + IntroduceConstants.INTRODUCE_PROPERTIES_FILE), "Introduce Properties");
-
-        ResourceManager.createArchive(String.valueOf(id), info.getIntroduceServiceProperties().getProperty(
-            IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), this.baseDirectory.getAbsolutePath());
     }
 
 

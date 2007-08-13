@@ -159,5 +159,20 @@ public class ServiceInformation {
     private String getIntroduceXSD() {
         return new File("schema" + File.separator + IntroduceConstants.INTRODUCE_XML_XSD_FILE).getAbsolutePath();
     }
+    
+    public void createArchive() throws Exception {
+        // create the archive
+        long id = System.currentTimeMillis();
+
+        getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP,
+            String.valueOf(id));
+        getIntroduceServiceProperties().store(
+            new FileOutputStream(getBaseDirectory().getAbsolutePath() + File.separator
+                + IntroduceConstants.INTRODUCE_PROPERTIES_FILE), "Introduce Properties");
+
+        ResourceManager.createArchive(String.valueOf(id), getIntroduceServiceProperties().getProperty(
+            IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), getBaseDirectory().getAbsolutePath());
+    }
+
 
 }

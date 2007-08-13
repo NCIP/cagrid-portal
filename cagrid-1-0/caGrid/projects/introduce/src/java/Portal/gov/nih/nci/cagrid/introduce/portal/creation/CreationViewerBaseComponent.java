@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.introduce.statistics.StatisticsClient;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Properties;
 
@@ -83,7 +84,6 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                 @Override
                 public void process() {
                     try {
-                        setProgressText("Validating service name...");
                         String serviceName = service;
                         String dirName = dir;
                         String packageName = servicePackage;
@@ -91,7 +91,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
               
 
                         if (dirFile.exists()) {
-                            setProgressText("Deleting existing directory...");
+                            setProgressText("deleting existing directory");
                             boolean deleted = Utils.deleteDir(dirFile);
                             if (!deleted) {
                                 setErrorMessage("Unable to delete creation directory");
@@ -99,7 +99,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                             }
                         }
 
-                        setProgressText("Purging old archives...");
+                        setProgressText("purging old archives");
                         ResourceManager.purgeArchives(serviceName);
 
                         String serviceExtensions = "";
@@ -112,7 +112,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                             }
                         }
 
-                        setProgressText("Creating service...");
+                        setProgressText("creating service");
 
                         StatisticsClient.sendCreatedServiceStat(CommonTools.getIntroduceVersion(), serviceName,
                             serviceNsDomain, serviceExtensions);
@@ -149,7 +149,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                         Utils.serializeDocument(dir + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
                             introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
-                        setProgressText("Invoking post creation processes...");
+                        setProgressText("invoking post creation processes");
                         cmd = CommonTools.getAntSkeletonPostCreationCommand(".", serviceName, dirName, packageName,
                             serviceNsDomain, serviceExtensions);
                         p = CommonTools.createAndOutputProcess(cmd);
@@ -164,7 +164,9 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                         p = CommonTools.createAndOutputProcess(cmd);
                         p.waitFor();
                         if (p.exitValue() == 0) {
-                            setProgressText("Launching modification viewer...");
+                            setProgressText("creating archive");
+                            info.createArchive();
+                            setProgressText("launching modification viewer");
                             ModificationViewer modViewer = new ModificationViewer(new File(dirName));
                             PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(modViewer);
                             modViewer.setMaximum(true);
