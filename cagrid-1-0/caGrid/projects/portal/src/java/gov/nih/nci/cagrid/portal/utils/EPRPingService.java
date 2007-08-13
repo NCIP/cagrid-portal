@@ -1,11 +1,12 @@
 package gov.nih.nci.cagrid.portal.utils;
 
 import gov.nih.nci.cagrid.metadata.MetadataConstants;
-import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.oasis.wsrf.properties.WSResourcePropertiesServiceAddressingLocator;
+import gov.nih.nci.cagrid.metadata.ResourcePropertyHelper;
+import gov.nih.nci.cagrid.metadata.exceptions.InvalidResourcePropertyException;
+import gov.nih.nci.cagrid.metadata.exceptions.RemoteResourcePropertyRetrievalException;
+import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 
-import javax.xml.rpc.ServiceException;
-import java.rmi.RemoteException;
+import org.apache.axis.message.addressing.EndpointReferenceType;
 
 /**
  * Utility that will ping an EPR to see if the endpoint is
@@ -41,22 +42,19 @@ public class EPRPingService {
      *         -1 means service is active but not a valid caGrid service
      */
     public static int ping(EndpointReferenceType epr) {
-        WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
+    	 try {
+         	ResourcePropertyHelper.getResourceProperty(epr,
+ 					MetadataConstants.CAGRID_MD_QNAME);
+         }catch(InvalidResourcePropertyException ex){
+         	return SERVICE_INVALID;
+         }catch(RemoteResourcePropertyRetrievalException ex){
+         	return SERVICE_INACTIVE;
+         }catch(ResourcePropertyRetrievalException ex){
+         	throw new RuntimeException("Error checking status of service: " + ex.getMessage(), ex);
+         }
 
-
-        try {
-            org.oasis.wsrf.properties.GetResourceProperty props = locator.getGetResourcePropertyPort(epr);
-            props.getResourceProperty(MetadataConstants.CAGRID_MD_QNAME);
-        } catch (RemoteException e) {
-            return SERVICE_INACTIVE;
-        } catch (ServiceException e) {
-            /** no remote exception means service is valid but error getting
-             * cagrid metadata **/
-            return SERVICE_INVALID;
-        }
-
-        //if it reaches this point
-        return SERVICE_ACTIVE;
+         //if it reaches this point
+         return SERVICE_ACTIVE;
     }
 
     /**
