@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.data.ui.auditors;
 
+import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.service.auditing.DataServiceAuditor;
 
 import java.awt.Component;
@@ -11,7 +13,6 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,6 +24,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 /** 
  *  AuditorSelectionPanel
  *  Panel to select / add / remove auditors
@@ -30,7 +33,7 @@ import javax.swing.JTextField;
  * @author David Ervin
  * 
  * @created May 21, 2007 11:38:54 AM
- * @version $Id: AuditorSelectionPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: AuditorSelectionPanel.java,v 1.2 2007-08-13 14:14:07 dervin Exp $ 
  */
 public class AuditorSelectionPanel extends JPanel {
 
@@ -41,7 +44,8 @@ public class AuditorSelectionPanel extends JPanel {
     private JPanel buttonPanel = null;
     private JButton addButton = null;
     private File serviceBaseDir = null;
-    private List<AuditorAdditionListener> auditorAdditionListeners = null;    
+    private List<AuditorAdditionListener> auditorAdditionListeners = null;
+    private JButton discoverAuditorsButton = null;
 
 
     public AuditorSelectionPanel(File serviceBaseDir) {
@@ -71,28 +75,21 @@ public class AuditorSelectionPanel extends JPanel {
     
     
     public void setSelectedAuditor(String className, String instanceName) {
-        for (int i = 0; i < getAuditorClassComboBox().getItemCount(); i++) {
-            Class classInCombo = (Class) getAuditorClassComboBox().getItemAt(i);
-            if (classInCombo.getName().equals(className)) {
-                getAuditorClassComboBox().setSelectedIndex(i);
-                break;
-            }
-        }
+        getAuditorClassComboBox().setSelectedItem(className);
         getInstanceNameTextField().setText(instanceName);
     }
     
     
     private void initialize() {
-        try {
-            populateClassDropdown();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            ErrorDialog.showErrorDialog(
-                "Error loading classes for data service auditor selection", ex.getMessage(), ex);
-        }
+        GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+        gridBagConstraints12.gridx = 3;
+        gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints12.gridy = 0;
         GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-        gridBagConstraints11.gridx = 2;
+        gridBagConstraints11.gridx = 3;
         gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints11.gridy = 1;
         GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
         gridBagConstraints4.gridx = 1;
@@ -103,6 +100,7 @@ public class AuditorSelectionPanel extends JPanel {
         gridBagConstraints3.gridy = 1;
         gridBagConstraints3.gridx = 1;
         gridBagConstraints3.weightx = 1.0;
+        gridBagConstraints3.gridwidth = 2;
         gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
         GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
         gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
@@ -129,6 +127,7 @@ public class AuditorSelectionPanel extends JPanel {
         this.add(getInstanceNameTextField(), gridBagConstraints3);
         this.add(getButtonPanel(), gridBagConstraints4);
         this.add(getAddButton(), gridBagConstraints11);
+        this.add(getDiscoverAuditorsButton(), gridBagConstraints12);
     }
 
 
@@ -227,7 +226,11 @@ public class AuditorSelectionPanel extends JPanel {
             addButton.setText("Add Auditor");
             addButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    fireAuditorAdded();
+                    if (getAuditorClassComboBox().getSelectedItem() != null) {
+                        fireAuditorAdded();
+                    } else {
+                        PortalUtils.showMessage("Please select an auditor class first");
+                    }
                 }
             });
         }
@@ -235,14 +238,54 @@ public class AuditorSelectionPanel extends JPanel {
     }
 
 
-    private void populateClassDropdown() throws MalformedURLException, IOException {
-        File libDir = new File(serviceBaseDir.getAbsolutePath() + File.separator + "lib");
-        List<Class> auditorClassses = AuditorsLoader.getAvailableAuditorClasses(libDir);
-        
-        // add the classes to the drop-down
-        for (Class c : auditorClassses) {
-            getAuditorClassComboBox().addItem(c);
+    /**
+     * This method initializes discoverAuditorsButton   
+     *  
+     * @return javax.swing.JButton  
+     */
+    private JButton getDiscoverAuditorsButton() {
+        if (discoverAuditorsButton == null) {
+            discoverAuditorsButton = new JButton();
+            discoverAuditorsButton.setToolTipText(
+                "Loads classes which implement the auditor interface from the service's libraries");
+            discoverAuditorsButton.setText("Discover");
+            discoverAuditorsButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    populateClassDropdown();
+                }
+            });
         }
+        return discoverAuditorsButton;
+    }
+
+
+    private void populateClassDropdown() {
+        BusyDialogRunnable bdr = new BusyDialogRunnable(
+            PortalResourceManager.getInstance().getGridPortal(), "Loading Auditor Classes") {
+            public void process() {
+                setProgressText("Locating classes in service's lib directory");
+                File libDir = new File(serviceBaseDir.getAbsolutePath() + File.separator + "lib");
+                List<Class> auditorClassses = null;
+                try {
+                    auditorClassses = AuditorsLoader.getAvailableAuditorClasses(libDir);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    ErrorDialog.showErrorDialog("Error loading auditor classes", ex.getMessage(), ex);
+                    setErrorMessage(ex.getMessage());
+                }
+                
+                setProgressText("Clearing old classes from dropdown");
+                getAuditorClassComboBox().removeAllItems();
+                
+                // add the classes to the drop-down
+                setProgressText("Adding classes to dropdown");
+                for (Class c : auditorClassses) {
+                    getAuditorClassComboBox().addItem(c);
+                }
+            }
+        };
+        Thread runner = new Thread(bdr);
+        runner.start();
     }
     
     
@@ -258,7 +301,7 @@ public class AuditorSelectionPanel extends JPanel {
                 return;
             } catch (IllegalAccessException ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error accessing auditor's constructpr", ex.getMessage(), ex);
+                ErrorDialog.showErrorDialog("Error accessing auditor's constructor", ex.getMessage(), ex);
                 return;
             }
             
