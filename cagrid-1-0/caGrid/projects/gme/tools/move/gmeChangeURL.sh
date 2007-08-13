@@ -10,12 +10,12 @@
 # -p <password> after the -u root on the below call to mysql
 
 
-if [ $# -le 3 ]; then
+if [ $# -le 2 ]; then
          echo usage: gmeChangeURL.sh database_prefix old_service_url new_service_url [database_password]
          exit 1
 fi
 
-database_prefix=$1
+databaseprefix=$1
 oldservicename=$2
 newservicename=$3
 
@@ -29,7 +29,7 @@ echo "use ${database}; update namespaces set service_ID='${newservicename}' wher
 fi
 
 if [ $# -eq 4 ]; then
-echo "use ${database}; update namespaces set service_ID='${newservicename}' where service_id='${oldservicename}';" | mysql -u root -p=$2
+echo "use ${database}; update namespaces set service_ID='${newservicename}' where service_id='${oldservicename}';" | mysql -u root -p=$4
 fi
 
 
