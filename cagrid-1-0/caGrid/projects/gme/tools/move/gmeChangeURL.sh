@@ -25,11 +25,11 @@ database="${databaseprefix}_GME_REGISTRY"
 
 echo changing hostname to ${newservicename}
 if [ $# -eq 3 ]; then
-echo "use ${database}; update namespaces set service_ID='${newservicename}' where service_id='${oldservicename}';" | mysql -u root
+echo "use ${database}; update NAMESPACES set SERVICE_ID='${newservicename}' where SERVICE_id='${oldservicename}';" | mysql -u root
 fi
 
 if [ $# -eq 4 ]; then
-echo "use ${database}; update namespaces set service_ID='${newservicename}' where service_id='${oldservicename}';" | mysql -u root -p=$4
+echo "use ${database}; update NAMESPACES set SERVICE_ID='${newservicename}' where SERVICE_id='${oldservicename}';" | mysql -u root -p=$4
 fi
 
 
