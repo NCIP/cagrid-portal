@@ -1,8 +1,10 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -41,9 +43,7 @@ public class PreferencesDialog extends JDialog {
 	 */
 	public PreferencesDialog(Frame owner) {
 		super(owner);
-		setModal(true);
 		initialize();
-		pack();
 	}
 
 
@@ -55,6 +55,9 @@ public class PreferencesDialog extends JDialog {
 		this.setTitle("Preferences");
 		this.setSize(new java.awt.Dimension(650,400));
 		this.setPreferredSize(new java.awt.Dimension(650,400));
+		this.setModal(true);
+		pack();
+		PortalUtils.centerComponent(this);
 		
 	}
 
@@ -76,7 +79,7 @@ public class PreferencesDialog extends JDialog {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints.weightx = 0.0D;
+			gridBagConstraints.weightx = 0.8D;
 			gridBagConstraints.weighty = 0.0D;
 			gridBagConstraints.gridy = 0;
 			mainPanel = new JPanel();
@@ -150,6 +153,9 @@ public class PreferencesDialog extends JDialog {
 		if (prefencesScrollPane == null) {
 			prefencesScrollPane = new JScrollPane();
 			prefencesScrollPane.setViewportView(getPreferencesTree());
+			prefencesScrollPane.setSize(new Dimension(150,400));
+			prefencesScrollPane.setPreferredSize(new Dimension(150,400));
+			prefencesScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		}
 		return prefencesScrollPane;
 	}
