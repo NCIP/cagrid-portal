@@ -457,7 +457,7 @@
                 <dirset dir="${props.src.dir}"/>
             </classpath>
         </java>
-
+		<!--
         <echo message="Testing if the upload process was sucessful. Check your ${build.log.dir} directory for logs"/>
 
         <junit dir="${build.log.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed"
@@ -476,7 +476,7 @@
             </batchtest>
         </junit>
         <fail message="Tests failed! Check test reports." if="test.failed"/>
-
+		-->
     </target>
 
 
