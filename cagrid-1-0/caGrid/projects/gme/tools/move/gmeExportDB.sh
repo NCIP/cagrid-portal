@@ -17,25 +17,29 @@ echo Starting to backup databases
 
 databases="${databaseprefix}_GME_REGISTRY ${databaseprefix}_GME_SCHEMA_STORE ${databaseprefix}_GME_SCHEMA_CACHE"
 
-for database in $databases ; do
-
-echo Backing up database ${database}
 
 if [ $# -eq 1 ]; then
-	mysqldump -u root --add-locks -n -t ${database} | gzip > ${database}.sql.gz
+	mysqldump -u root --add-locks -n -t ${databaseprefix}_GME_REGISTRY | gzip > GME_REGISTRY.sql.gz
+
+	mysqldump -u root --add-locks -n -t ${databaseprefix}_GME_SCHEMA_STORE | gzip > GME_SCHEMA_STORE.sql.gz
+
+	mysqldump -u root --add-locks -n -t ${databaseprefix}_GME_SCHEMA_CACHE | gzip > GME_SCHEMA_CACHE.sql.gz
 fi
 
 if [ $# -eq 2 ]; then
-	mysqldump -u root -p=$2 --add-locks -n -t ${database} | gzip > ${database}.sql.gz
+	mysqldump -u root -p=$2 --add-locks -n -t ${databaseprefix}_GME_REGISTRY | gzip > GME_REGISTRY.sql.gz
+
+	mysqldump -u root -p=$2 --add-locks -n -t ${databaseprefix}_GME_SCHEMA_STORE | gzip > GME_SCHEMA_STORE.sql.gz
+
+	mysqldump -u root -p=$2 --add-locks -n -t ${databaseprefix}_GME_SCHEMA_CACHE | gzip > GME_SCHEMA_CACHE.sql.gz
 fi
 
-done
 
-tar cvf gmeDBExport.tar GlobusGME_GME_REGISTRY.sql.gz GlobusGME_GME_SCHEMA_STORE.sql.gz GlobusGME_GME_SCHEMA_CACHE.sql.gz
+tar cvf gmeDBExport.tar GME_REGISTRY.sql.gz GME_SCHEMA_STORE.sql.gz GME_SCHEMA_CACHE.sql.gz
 
-rm -fr GlobusGME_GME_REGISTRY.sql.gz
-rm -fr GlobusGME_GME_SCHEMA_STORE.sql.gz
-rm -fr GlobusGME_GME_SCHEMA_CACHE.sql.gz
+rm -fr GME_REGISTRY.sql.gz
+rm -fr GME_SCHEMA_STORE.sql.gz
+rm -fr GME_SCHEMA_CACHE.sql.gz
 
 echo Finished backing up databases into file gmeDBExport.tar
 
