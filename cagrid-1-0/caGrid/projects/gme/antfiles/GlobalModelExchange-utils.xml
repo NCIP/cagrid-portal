@@ -42,7 +42,7 @@
 				<arg value="-directory" />
 				<arg value="@{directory}" />
 				<arg value="-factory" />
-				<arg value="org.projectmobius.cagrid.gme.client.GlobusGMEXMLDataModelServiceFactory" />
+				<arg value="org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory" />
 				<classpath>
 					<path refid="GlobalModelExchange.classpath" />
 				</classpath>
