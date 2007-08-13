@@ -15,8 +15,6 @@ databaseprefix=$1
 
 echo Starting to backup databases
 
-databases="${databaseprefix}_GME_REGISTRY ${databaseprefix}_GME_SCHEMA_STORE ${databaseprefix}_GME_SCHEMA_CACHE"
-
 
 if [ $# -eq 1 ]; then
 	mysqldump -u root --add-locks -n -t ${databaseprefix}_GME_REGISTRY | gzip > GME_REGISTRY.sql.gz

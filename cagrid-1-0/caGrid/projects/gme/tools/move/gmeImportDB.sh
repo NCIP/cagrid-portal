@@ -15,7 +15,7 @@ importFileName=$2
 
 tar -xvf ${importFileName}
 
-databases="${databaseprefix}_GME_REGISTRY ${databaseprefix}_GME_SCHEMA_STORE ${databaseprefix}_GME_SCHEMA_CACHE"
+databases="GME_REGISTRY GME_SCHEMA_STORE GME_SCHEMA_CACHE"
 
 for database in $databases ; do
 
@@ -24,11 +24,11 @@ echo Importing gme database table data into ${database}
 gunzip ${database}.sql.gz
 
 if [ $# -eq 2 ]; then
-        mysql -u root ${database} < ${database}.sql
+        mysql -u root ${databaseprefix}_${database} < ${database}.sql
 fi
 
 if [ $# -eq 3 ]; then
-        mysql -u root -p=$2 ${database} < ${database}.sql
+        mysql -u root -p=$2 ${databaseprefix}_${database} < ${database}.sql
 fi
 
 rm -fr ${database}.sql.gz
