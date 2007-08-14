@@ -441,7 +441,7 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             if (gridGrouper) {
                 hadGridGrouperJars = true;
             }
-            boolean csm = (filename.startsWith("caGrid-1.0-authz")) 
+            boolean csm = (filename.startsWith("caGrid-1.0-authz-common")) 
                 && filename.endsWith(".jar");
             if(csm){
                 hadCSMJars = true;
