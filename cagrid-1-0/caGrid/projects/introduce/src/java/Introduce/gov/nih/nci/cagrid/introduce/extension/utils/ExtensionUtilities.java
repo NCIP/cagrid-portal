@@ -24,7 +24,7 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 7, 2006 
- * @version $Id: ExtensionUtilities.java,v 1.8 2007-08-09 02:04:46 hastings Exp $ 
+ * @version $Id: ExtensionUtilities.java,v 1.9 2007-08-14 19:29:16 hastings Exp $ 
  */
 public class ExtensionUtilities {
 	public static final String CLASSPATHENTRY_ELEMENT = "classpathentry";

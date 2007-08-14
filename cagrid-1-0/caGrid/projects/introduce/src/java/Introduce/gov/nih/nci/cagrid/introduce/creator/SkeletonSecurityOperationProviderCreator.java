@@ -110,9 +110,14 @@ public class SkeletonSecurityOperationProviderCreator {
 				Properties props = new Properties();
 				props.load(new FileInputStream(new File(info.getBaseDirectory().getAbsolutePath() + File.separator
 					+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE)));
+				if(props
+                    .getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES)!=null){
 				props.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, props
 					.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES)
 					+ " " + SERVICE_NS_EXCLUDE);
+				} else {
+				    props.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES,SERVICE_NS_EXCLUDE);
+				}
 				props.store(new FileOutputStream(new File(info.getBaseDirectory().getAbsolutePath() + File.separator
 					+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE)), "Introduce service properties");
 			}

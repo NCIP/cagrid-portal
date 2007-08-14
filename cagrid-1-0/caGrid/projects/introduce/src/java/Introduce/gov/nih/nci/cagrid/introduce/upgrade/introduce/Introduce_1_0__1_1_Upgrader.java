@@ -426,7 +426,6 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
     private final class OldJarsFilter implements FileFilter {
         boolean hadGridGrouperJars = false;
-        boolean hadGridCAJars = false;
         boolean hadCSMJars = false;
 
 
@@ -436,26 +435,25 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             boolean security = (filename.startsWith("caGrid-1.0-ServiceSecurityProvider") || filename
                 .startsWith("caGrid-1.0-metadata-security"))
                 && filename.endsWith(".jar");
-            boolean gridCA = (filename.startsWith("caGrid-1.0-gridca") || filename.startsWith("caGrid-1.0-gridgrouper"))
-                && filename.endsWith(".jar");
-            if (gridCA) {
-                hadGridCAJars = true;
-            }
-            boolean gridGrouper = (filename.startsWith("caGrid-1.0-gridca") || filename
-                .startsWith("caGrid-1.0-gridgrouper"))
+            boolean gridGrouper = (filename
+                .startsWith("caGrid-1.0-gridgrouper") )
                 && filename.endsWith(".jar");
             if (gridGrouper) {
                 hadGridGrouperJars = true;
             }
-            boolean csm = (filename.startsWith("csmapi"))
+            boolean csm = (filename.startsWith("caGrid-1.0-authz")) 
                 && filename.endsWith(".jar");
             if(csm){
                 hadCSMJars = true;
             }
+            boolean otherSecurityJarsNotNeeded= (filename.startsWith("caGrid-1.0-gridca") || filename.startsWith("caGrid-1.0-metadata-common"))
+            && filename.endsWith(".jar");
+            
             boolean wsrf = (filename.startsWith("globus_wsrf_mds") || filename.startsWith("globus_wsrf_servicegroup"))
                 && filename.endsWith(".jar");
             boolean mobius = filename.startsWith("mobius") && filename.endsWith(".jar");
-            return core || security || gridCA || gridGrouper || csm || wsrf || mobius;
+            
+            return core || security || gridGrouper || csm || wsrf || mobius || otherSecurityJarsNotNeeded;
         }
 
     };
@@ -473,27 +471,6 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             serviceLibs[i].delete();
         }
 
-        //TODO: needs to be more specific.
-        FileFilter newGrouperJars = new FileFilter() {
-            public boolean accept(File name) {
-                return true;
-            }
-        };
-
-        FileFilter newGridCAJars = new FileFilter() {
-            public boolean accept(File name) {
-                String filename = name.getName();
-                return (filename.startsWith("caGrid-1.1-gridca")) && filename.endsWith(".jar");
-            }
-        };
-
-        //TODO: needs to be more specific
-        FileFilter newCSMJars = new FileFilter() {
-            public boolean accept(File name) {
-                String filename = name.getName();
-                return true;
-            }
-        };
 
         FileFilter srcSkeletonLibFilter = new FileFilter() {
             public boolean accept(File name) {
@@ -518,25 +495,10 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             }
         }
 
-        // need to go through the security jars and determine which ones to add
-        // back to the service
-        if (oldDkeletonLibFilter.hadGridCAJars) {
-            // need to add in the optional grid ca security jars
-            File[] gridCALibs = extLibDir.listFiles(newGridCAJars);
-            for (int i = 0; i < gridCALibs.length; i++) {
-                File out = new File(serviceLibDir.getAbsolutePath() + File.separator + gridCALibs[i].getName());
-                try {
-                    Utils.copyFile(gridCALibs[i], out);
-                } catch (IOException ex) {
-                    throw new Exception("Error copying library (" + gridCALibs[i] + ") to service: " + ex.getMessage(),
-                        ex);
-                }
-            }
-        }
 
         if (oldDkeletonLibFilter.hadGridGrouperJars) {
             // need to add in the optional grouper security jars
-            File[] gridGrouperLibs = extLibDir.listFiles(newGrouperJars);
+            File[] gridGrouperLibs = extLibDir.listFiles();
             for (int i = 0; i < gridGrouperLibs.length; i++) {
                 File out = new File(serviceLibDir.getAbsolutePath() + File.separator + gridGrouperLibs[i].getName());
                 try {
@@ -550,7 +512,7 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
         if (oldDkeletonLibFilter.hadCSMJars) {
             // need to add in the CSM security jars
-            File[] gridCSMLibs = extLibDir.listFiles(newCSMJars);
+            File[] gridCSMLibs = extLibDir.listFiles();
             for (int i = 0; i < gridCSMLibs.length; i++) {
                 File out = new File(serviceLibDir.getAbsolutePath() + File.separator + gridCSMLibs[i].getName());
                 try {
