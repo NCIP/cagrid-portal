@@ -223,7 +223,7 @@
                 <include name="caGrid*.jar" />
             </fileset>
         </artifact>
-        <artifact track="main" type="jars" id="gridgrouper.client.jars">
+      <artifact track="main" type="jars" id="gridgrouper.client.jars">
             <generatingantcall target="build-gridgrouper" />
             <fileset dir="${projects.dir}/gridgrouper/build/lib">
                 <include name="caGrid-*-gridgrouper-*stubs.jar" />
@@ -235,10 +235,28 @@
                 <include name="*subject*.jar" />
             </fileset>
             <fileset dir="${projects.dir}/gridgrouper/ext/lib">
-                <include name="*.jar" />
-                <exclude name="*test*.jar" />
+                <include name="caGrid-*-metadata-security.jar.jar" />
+            	<include name="caGrid-*-metadata-common.jar" />
+            	<include name="caGrid-*-ServiceSecurityProvider-stubs.jar" />
+            	<include name="caGrid-*-ServiceSecurityProvider-common.jar" />
+            	<include name="caGrid-*-ServiceSecurityProvider-client.jar" />
+            	<include name="caGrid-*-core.jar" />
             </fileset>
         </artifact>
+    	
+        <artifact track="main" type="jars" id="introduce.gridgrouper.jars">
+              <generatingantcall target="build-gridgrouper" />
+              <fileset dir="${projects.dir}/gridgrouper/build/lib">
+                  <include name="caGrid-*-gridgrouper-*stubs.jar" />
+                  <include name="caGrid-*-gridgrouper-*common.jar" />
+                  <include name="caGrid-*-gridgrouper-*client.jar" />
+              </fileset>
+              <fileset dir="${projects.dir}/gridgrouper/lib">
+                  <include name="*grouper*.jar" />
+                  <include name="*subject*.jar" />
+              </fileset>
+          </artifact>
+    	
         <artifact track="main" type="jars" id="gridgrouper.ui.jars">
             <generatingantcall target="build-gridgrouper" />
             <fileset dir="${projects.dir}/gridgrouper/build/lib">
@@ -252,8 +270,15 @@
                 <include name="*subject*.jar" />
             </fileset>
             <fileset dir="${projects.dir}/gridgrouper/ext/lib">
-                <include name="*.jar" />
-                <exclude name="*test*.jar" />
+            	 <include name="caGrid-*-metadata-security.jar.jar" />
+            	 <include name="caGrid-*-metadata-common.jar" />
+            	 <include name="caGrid-*-ServiceSecurityProvider-stubs.jar" />
+            	 <include name="caGrid-*-ServiceSecurityProvider-common.jar" />
+            	 <include name="caGrid-*-ServiceSecurityProvider-client.jar" />
+            	 <include name="caGrid-*-core.jar" />
+            	 <include name="caGrid-*-grape.jar" />
+            	 <include name="caGrid-*-grape-resources.jar" />
+            	 <include name="caGrid-*-gridca.jar" />
             </fileset>
         </artifact>
         <artifact track="main" type="jars" id="gridgrouper.jars">
