@@ -97,8 +97,9 @@ public class SyncToolsTest extends Story {
             steps.add(new AddSimpleMethodWithFaultStep(tci1, "newMethodWithFault", false));
             steps.add(new AddSimpleMethodWithReturnStep(tci1, "newMethodWithReturn", false));
             steps.add(new AddSimpleMethodWithArraysStep(tci1, "newMethodWithArrays", true));
-            steps.add(new RollBackStep(tci1));
-            steps.add(new AddComplexMethodWithFaultStep(tci1, "newComplexMethodWithFault", false));
+            //archive is done in the gui now
+            //steps.add(new RollBackStep(tci1));
+            steps.add(new AddComplexMethodWithFaultStep(tci1, "newComplexMethodWithFault", true));
             steps
                 .add(new AddComplexMethodWithFaulsAndArraysStep(tci1, "newComplexMethodWithFaultStepsAndArrays", true));
             steps.add(new AddMetadatatWithLoadFromFileStep(tci1, true));
