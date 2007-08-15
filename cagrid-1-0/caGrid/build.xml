@@ -667,15 +667,12 @@
 	<!-- =============================================================== -->
 	<!-- CAGRID DataService:                                             -->
 	<!-- =============================================================== -->
-	<target name="build-data" description="Builds caGrid Data Services components">
+	<target name="build-data" depends="prepare" description="Builds caGrid Data Services components">
 		<resolveDependencies extdir="${projects.dir}/data/ext">
 			<artifact refid="cagrid.properties" />
 			<artifact refid="core.jars" />
-			<artifact refid="introduce.jars" />
 			<artifact refid="core.test.jars" />
-			<artifact refid="gme.globus.client.jars" />
 			<artifact refid="core.resources" />
-			<artifact refid="introduce.resources" />
 			<artifact refid="cadsr.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
@@ -685,6 +682,7 @@
 			<artifact refid="graph.jars" />
 			<artifact refid="security.metadata.schemas" />
 			<artifact refid="introduce.core.test.jars" />
+			<artifact refid="introduce.jars"/>
 			<artifact refid="ws.enum.jars" />
 			<artifact refid="ws.enum.schemas" />
 			<artifact refid="bdt.jars" />
