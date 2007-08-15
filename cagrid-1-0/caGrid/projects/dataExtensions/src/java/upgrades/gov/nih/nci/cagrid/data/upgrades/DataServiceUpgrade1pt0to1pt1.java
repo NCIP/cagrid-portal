@@ -2,9 +2,9 @@ package gov.nih.nci.cagrid.data.upgrades;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.extension.Data;
-import gov.nih.nci.cagrid.data.utilities.CastorMappingUtil;
 import gov.nih.nci.cagrid.data.utilities.WsddUtil;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -560,6 +560,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             cadsrInfo.setAttribute("noDomainModel", String.valueOf(noDomainModel));
             getStatus().addDescriptionLine("Cadsr Information block updated: flag for 'no domain model' set to " + String.valueOf(noDomainModel));
         }
+        getStatus().addIssue("caDSR Service URL not updated", 
+            "If the caDSR grid service's URL has changed, you will need to change it manually");
     }
 
 

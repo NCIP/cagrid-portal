@@ -1,15 +1,13 @@
 package gov.nih.nci.cagrid.data.style.sdkstyle.helpers;
 
-import java.io.File;
-
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.style.StyleCodegenPostProcessor;
-import gov.nih.nci.cagrid.data.utilities.CastorMappingUtil;
 import gov.nih.nci.cagrid.data.utilities.WsddUtil;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -20,6 +18,8 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 
+import java.io.File;
+
 
 /**
  * PostCodegenHelper 
@@ -28,7 +28,7 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
  * @author David Ervin
  * 
  * @created Jul 10, 2007 2:24:14 PM
- * @version $Id: PostCodegenHelper.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: PostCodegenHelper.java,v 1.2 2007-08-15 18:33:44 dervin Exp $
  */
 public class PostCodegenHelper implements StyleCodegenPostProcessor {
 

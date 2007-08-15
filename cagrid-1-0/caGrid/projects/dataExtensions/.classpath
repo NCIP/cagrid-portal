@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/java/core"/>
+	<classpathentry kind="src" path="src/java/upgrades"/>
 	<classpathentry kind="src" path="src/java/ui"/>
 	<classpathentry kind="src" path="src/java/style/cacore31"/>
 	<classpathentry kind="src" path="src/java/style/cacore32"/>
@@ -31,7 +32,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-tools.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-upgrades.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-utils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-validation.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-GlobalModelExchange.jar"/>

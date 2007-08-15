@@ -2,11 +2,11 @@ package gov.nih.nci.cagrid.data.style.cacore31.test;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
 import gov.nih.nci.cagrid.data.creation.CreationStep;
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ServiceFeatures;
-import gov.nih.nci.cagrid.data.utilities.CastorMappingUtil;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -23,7 +23,7 @@ import java.io.InputStream;
  * @author David Ervin
  * 
  * @created Jul 18, 2007 2:53:54 PM
- * @version $Id: CreateSDK31StyleServiceStep.java,v 1.1 2007-07-19 14:59:33 dervin Exp $ 
+ * @version $Id: CreateSDK31StyleServiceStep.java,v 1.2 2007-08-15 18:33:44 dervin Exp $ 
  */
 public class CreateSDK31StyleServiceStep extends CreationStep {
 
