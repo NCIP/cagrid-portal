@@ -6,7 +6,6 @@
     <!-- Define the build artifacts (created/used by projects) here      -->
     <!--                                                                 -->
     <!-- NOTE:  These should be all of the files necessary to "depend" on-->
-    <!-- the project (not just the built files).  Make a separate        -->
     <!-- artifact for groups of files that will probably be copied to    -->
     <!-- separate directoris (e.g. jars and conf files)                  -->
     <!-- =============================================================== -->
@@ -306,46 +305,55 @@
         </artifact>
 
 
-        <artifact track="main" type="jars" id="dorian.ui.jars">
-            <generatingantcall target="build-dorian" />
-            <fileset dir="${projects.dir}/dorian/build/lib">
-                <include name="caGrid-*-dorian-*stubs.jar" />
-                <include name="caGrid-*-dorian-*common.jar" />
-                <include name="caGrid-*-dorian-*client.jar" />
-                <include name="caGrid-*-dorian-*ui.jar" />
-            </fileset>
-            <fileset dir="${projects.dir}/dorian/lib">
-                <include name="*.jar" />
-                <exclude name="*test*.jar" />
-            </fileset>
-            <fileset dir="${projects.dir}/dorian/ext/lib">
-                <include name="*.jar" />
-                <exclude name="*test*.jar" />
-            </fileset>
-        </artifact>
+    	<artifact track="main" type="jars" id="dorian.ui.jars">
+    				<generatingantcall target="build-dorian" />
+    				<fileset dir="${projects.dir}/dorian/build/lib">
+    					<include name="caGrid-*-dorian-*stubs.jar" />
+    					<include name="caGrid-*-dorian-*common.jar" />
+    					<include name="caGrid-*-dorian-*client.jar" />
+    					<include name="caGrid-*-dorian-*ui.jar" />
+    				</fileset>
+    				<fileset dir="${projects.dir}/dorian/ext/lib">
+    					<include name="caGrid-*-authentication-service-client.jar" />
+    					<include name="caGrid-*-authentication-service-common.jar" />
+    					<include name="caGrid-*-authentication-service-stubs.jar" />
+    					<include name="caGrid-*-opensaml-1.1.jar" />
+    					<include name="caGrid-*-ServiceSecurityProvider-client.jar" />
+    					<include name="caGrid-*-ServiceSecurityProvider-common.jar" />
+    					<include name="caGrid-*-ServiceSecurityProvider-stubs.jar" />
+    					<include name="caGrid-*-metadata-common.jar" />
+    					<include name="caGrid-*-metadata-security.jar" />
+    					<include name="caGrid-*-gridca.jar" />
+    				</fileset>
+    			</artifact>
 
-        <artifact track="endorsed" type="jars" id="dorian.endorsed">
-            <fileset dir="${projects.dir}/dorian/ext/endorsed/lib">
-                <include name="*.jar" />
-            </fileset>
-        </artifact>
-        <artifact track="main" type="jars" id="dorian.client.jars">
-            <generatingantcall target="build-dorian" />
-            <fileset dir="${projects.dir}/dorian/build/lib">
-                <include name="caGrid-*-dorian-*stubs.jar" />
-                <include name="caGrid-*-dorian-*common.jar" />
-                <include name="caGrid-*-dorian-*client.jar" />
-            </fileset>
-            <fileset dir="${projects.dir}/dorian/lib">
-                <include name="*.jar" />
-                <exclude name="*test*.jar" />
-            </fileset>
-            <fileset dir="${projects.dir}/dorian/ext/lib">
-                <include name="*.jar" />
-                <exclude name="*test*.jar" />
-            </fileset>
-        </artifact>
+    			<artifact track="endorsed" type="jars" id="dorian.endorsed">
+    				<fileset dir="${projects.dir}/dorian/ext/endorsed/lib">
+    					<include name="*.jar" />
+    				</fileset>
+    			</artifact>
 
+
+    			<artifact track="main" type="jars" id="dorian.client.jars">
+    				<generatingantcall target="build-dorian" />
+    				<fileset dir="${projects.dir}/dorian/build/lib">
+    					<include name="caGrid-*-dorian-*stubs.jar" />
+    					<include name="caGrid-*-dorian-*common.jar" />
+    					<include name="caGrid-*-dorian-*client.jar" />
+    				</fileset>
+    				<fileset dir="${projects.dir}/dorian/ext/lib">
+    					<include name="caGrid-*-authentication-service-client.jar" />
+    					<include name="caGrid-*-authentication-service-common.jar" />
+    					<include name="caGrid-*-authentication-service-stubs.jar" />
+    					<include name="caGrid-*-opensaml-1.1.jar" />
+    					<include name="caGrid-*-ServiceSecurityProvider-client.jar" />
+    					<include name="caGrid-*-ServiceSecurityProvider-common.jar" />
+    					<include name="caGrid-*-ServiceSecurityProvider-stubs.jar" />
+    					<include name="caGrid-*-metadata-common.jar" />
+    					<include name="caGrid-*-metadata-security.jar" />
+    					<include name="caGrid-*-gridca.jar" />
+    				</fileset>
+    			</artifact>
         <artifact track="main" type="jars" id="dorian.jars">
             <generatingantcall target="build-dorian" />
             <fileset dir="${projects.dir}/dorian/build/lib">
