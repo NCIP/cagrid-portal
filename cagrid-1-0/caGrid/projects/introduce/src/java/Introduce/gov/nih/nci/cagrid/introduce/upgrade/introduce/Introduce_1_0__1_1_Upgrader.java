@@ -435,24 +435,22 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             boolean security = (filename.startsWith("caGrid-1.0-ServiceSecurityProvider") || filename
                 .startsWith("caGrid-1.0-metadata-security"))
                 && filename.endsWith(".jar");
-            boolean gridGrouper = (filename
-                .startsWith("caGrid-1.0-gridgrouper") )
-                && filename.endsWith(".jar");
+            boolean gridGrouper = (filename.startsWith("caGrid-1.0-gridgrouper")) && filename.endsWith(".jar");
             if (gridGrouper) {
                 hadGridGrouperJars = true;
             }
-            boolean csm = (filename.startsWith("caGrid-1.0-authz-common")) 
-                && filename.endsWith(".jar");
-            if(csm){
+            boolean csm = (filename.startsWith("caGrid-1.0-authz-common")) && filename.endsWith(".jar");
+            if (csm) {
                 hadCSMJars = true;
             }
-            boolean otherSecurityJarsNotNeeded= (filename.startsWith("caGrid-1.0-gridca") || filename.startsWith("caGrid-1.0-metadata-common"))
-            && filename.endsWith(".jar");
-            
+
+            boolean otherSecurityJarsNotNeeded = (filename.startsWith("caGrid-1.0-gridca"))
+                && filename.endsWith(".jar");
+
             boolean wsrf = (filename.startsWith("globus_wsrf_mds") || filename.startsWith("globus_wsrf_servicegroup"))
                 && filename.endsWith(".jar");
             boolean mobius = filename.startsWith("mobius") && filename.endsWith(".jar");
-            
+
             return core || security || gridGrouper || csm || wsrf || mobius || otherSecurityJarsNotNeeded;
         }
 
@@ -469,8 +467,8 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
         // delete the old libraries
         for (int i = 0; i < serviceLibs.length; i++) {
             serviceLibs[i].delete();
+            getStatus().addDescriptionLine(serviceLibs[i].getName() + " removed");
         }
-
 
         FileFilter srcSkeletonLibFilter = new FileFilter() {
             public boolean accept(File name) {
@@ -479,9 +477,11 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             }
         };
 
-        
         File skeletonLibDir = new File("skeleton" + File.separator + "lib");
         File extLibDir = new File("ext" + File.separator + "lib");
+        File csmLibDir = new File("ext" + File.separator + "skeleton" + File.separator + "csm" + File.separator + "lib");
+        File grouperLibDir = new File("ext" + File.separator + "skeleton" + File.separator + "gridgrouper"
+            + File.separator + "lib");
 
         // copy new libraries in (every thing in skeleton/lib)
         File[] skeletonLibs = skeletonLibDir.listFiles(srcSkeletonLibFilter);
@@ -489,37 +489,39 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
             File out = new File(serviceLibDir.getAbsolutePath() + File.separator + skeletonLibs[i].getName());
             try {
                 Utils.copyFile(skeletonLibs[i], out);
+                getStatus().addDescriptionLine(skeletonLibs[i].getName() + " added");
             } catch (IOException ex) {
                 throw new Exception("Error copying library (" + skeletonLibs[i] + ") to service: " + ex.getMessage(),
                     ex);
             }
         }
 
-
         if (oldDkeletonLibFilter.hadGridGrouperJars) {
             // need to add in the optional grouper security jars
-            File[] gridGrouperLibs = extLibDir.listFiles();
+            File[] gridGrouperLibs = grouperLibDir.listFiles();
             for (int i = 0; i < gridGrouperLibs.length; i++) {
                 File out = new File(serviceLibDir.getAbsolutePath() + File.separator + gridGrouperLibs[i].getName());
                 try {
                     Utils.copyFile(gridGrouperLibs[i], out);
+                    getStatus().addDescriptionLine(gridGrouperLibs[i].getName() + " added");
                 } catch (IOException ex) {
-                    throw new Exception("Error copying library (" + gridGrouperLibs[i] + ") to service: " + ex.getMessage(),
-                        ex);
+                    throw new Exception("Error copying library (" + gridGrouperLibs[i] + ") to service: "
+                        + ex.getMessage(), ex);
                 }
             }
         }
 
         if (oldDkeletonLibFilter.hadCSMJars) {
             // need to add in the CSM security jars
-            File[] gridCSMLibs = extLibDir.listFiles();
+            File[] gridCSMLibs = csmLibDir.listFiles();
             for (int i = 0; i < gridCSMLibs.length; i++) {
                 File out = new File(serviceLibDir.getAbsolutePath() + File.separator + gridCSMLibs[i].getName());
                 try {
                     Utils.copyFile(gridCSMLibs[i], out);
+                    getStatus().addDescriptionLine(gridCSMLibs[i].getName() + " added");
                 } catch (IOException ex) {
-                    throw new Exception("Error copying library (" + gridCSMLibs[i] + ") to service: " + ex.getMessage(),
-                        ex);
+                    throw new Exception(
+                        "Error copying library (" + gridCSMLibs[i] + ") to service: " + ex.getMessage(), ex);
                 }
             }
         }
