@@ -114,7 +114,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-tools.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-upgrades.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-utils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-validation.jar"/>
 	<classpathentry kind="output" path="bin"/>

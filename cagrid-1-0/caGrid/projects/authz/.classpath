@@ -57,9 +57,6 @@
 	<classpathentry kind="lib" path="lib/clm.jar"/>
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridca.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-stubs.jar"/>
