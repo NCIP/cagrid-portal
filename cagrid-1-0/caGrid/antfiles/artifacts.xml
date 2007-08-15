@@ -2,13 +2,14 @@
 <!-- caGrid Artifacts build file                                             -->
 <!-- ======================================================================= -->
 <project name="caGrid_artifacts" basedir="." default="usage">
-    <!-- =============================================================== -->
-    <!-- Define the build artifacts (created/used by projects) here      -->
-    <!--                                                                 -->
-    <!-- NOTE:  These should be all of the files necessary to "depend" on-->
-    <!-- artifact for groups of files that will probably be copied to    -->
-    <!-- separate directoris (e.g. jars and conf files)                  -->
-    <!-- =============================================================== -->
+	<!-- =============================================================== -->
+	<!-- Define the build artifacts (created/used by projects) here      -->
+	<!--                                                                 -->
+	<!-- NOTE:  These should be all of the files necessary to "depend" on-->
+	<!-- the project (not just the built files).  Make a separate        -->
+	<!-- artifact for groups of files that will probably be copied to    -->
+	<!-- separate directoris (e.g. jars and conf files)                  -->
+	<!-- =============================================================== -->
     <target name="defineArtifacts" unless="artifacts.defined" depends="define-ant-tasks">
         <property name="artificats.defined" value="true" />
         <!-- Common Jar Artifacts -->
@@ -333,6 +334,27 @@
     			<artifact track="endorsed" type="jars" id="dorian.endorsed">
     				<fileset dir="${projects.dir}/dorian/ext/endorsed/lib">
     					<include name="*.jar" />
+    				</fileset>
+    			</artifact>
+    	<artifact track="main" type="jars" id="gts.ui.jars">
+    				<generatingantcall target="build-gts" />
+    				<fileset dir="${projects.dir}/gts/build/lib">
+    					<include name="caGrid-*-gts-*stubs.jar" />
+    					<include name="caGrid-*-gts-*common.jar" />
+    					<include name="caGrid-*-gts-*client.jar" />
+    					<include name="caGrid-*-gts-*ui.jar" />
+    				</fileset>
+
+    				<fileset dir="${projects.dir}/gts/ext/lib">
+    					<include name="caGrid-*-ServiceSecurityProvider-client.jar" />
+    					<include name="caGrid-*-ServiceSecurityProvider-common.jar" />
+    					<include name="caGrid-*-ServiceSecurityProvider-stubs.jar" />
+    					<include name="caGrid-*-metadata-security.jar" />
+    					<include name="caGrid-*-metadata-common.jar" />
+    					<include name="caGrid-*-gridca.jar" />
+    					<include name="caGrid-*-core.jar" />
+    					<include name="caGrid-1.1-grape-resources.jar" />
+    					<include name="caGrid-1.1-grape.jar" />
     				</fileset>
     			</artifact>
 
