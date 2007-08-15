@@ -36,9 +36,6 @@ import org.projectmobius.tools.common.viewer.XSDFileFilter;
  */
 public class ServiceMetadataCreationPostProcessor implements CreationExtensionPostProcessor {
 
-	private static final String METADATA_JAR_PREFIX = "caGrid-1.1-metadata";
-
-
 	public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CreationExtensionException {
 		try {
@@ -162,7 +159,7 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
 		File[] libs = libDir.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
 				String name = pathname.getName();
-				return (name.endsWith(".jar") && (name.startsWith(METADATA_JAR_PREFIX)));
+				return (name.endsWith(".jar") && (name.startsWith(MetadataConstants.METADATA_JAR_PREFIX)));
 			}
 		});
 
