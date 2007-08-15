@@ -336,27 +336,7 @@
     					<include name="*.jar" />
     				</fileset>
     			</artifact>
-    	<artifact track="main" type="jars" id="gts.ui.jars">
-    				<generatingantcall target="build-gts" />
-    				<fileset dir="${projects.dir}/gts/build/lib">
-    					<include name="caGrid-*-gts-*stubs.jar" />
-    					<include name="caGrid-*-gts-*common.jar" />
-    					<include name="caGrid-*-gts-*client.jar" />
-    					<include name="caGrid-*-gts-*ui.jar" />
-    				</fileset>
-
-    				<fileset dir="${projects.dir}/gts/ext/lib">
-    					<include name="caGrid-*-ServiceSecurityProvider-client.jar" />
-    					<include name="caGrid-*-ServiceSecurityProvider-common.jar" />
-    					<include name="caGrid-*-ServiceSecurityProvider-stubs.jar" />
-    					<include name="caGrid-*-metadata-security.jar" />
-    					<include name="caGrid-*-metadata-common.jar" />
-    					<include name="caGrid-*-gridca.jar" />
-    					<include name="caGrid-*-core.jar" />
-    					<include name="caGrid-1.1-grape-resources.jar" />
-    					<include name="caGrid-1.1-grape.jar" />
-    				</fileset>
-    			</artifact>
+    	
 
 
     			<artifact track="main" type="jars" id="dorian.client.jars">
@@ -393,6 +373,28 @@
             </fileset>
         </artifact>
       
+    	<artifact track="main" type="jars" id="gts.ui.jars">
+    	    				<generatingantcall target="build-gts" />
+    	    				<fileset dir="${projects.dir}/gts/build/lib">
+    	    					<include name="caGrid-*-gts-*stubs.jar" />
+    	    					<include name="caGrid-*-gts-*common.jar" />
+    	    					<include name="caGrid-*-gts-*client.jar" />
+    	    					<include name="caGrid-*-gts-*ui.jar" />
+    	    				</fileset>
+
+    	    				<fileset dir="${projects.dir}/gts/ext/lib">
+    	    					<include name="caGrid-*-ServiceSecurityProvider-client.jar" />
+    	    					<include name="caGrid-*-ServiceSecurityProvider-common.jar" />
+    	    					<include name="caGrid-*-ServiceSecurityProvider-stubs.jar" />
+    	    					<include name="caGrid-*-metadata-security.jar" />
+    	    					<include name="caGrid-*-metadata-common.jar" />
+    	    					<include name="caGrid-*-gridca.jar" />
+    	    					<include name="caGrid-*-core.jar" />
+    	    					<include name="caGrid-*-grape-resources.jar" />
+    	    					<include name="caGrid-*-grape.jar" />
+    	    				</fileset>
+    	    			</artifact>
+    	
 		<artifact track="main" type="jars" id="gts.client.jars">
 			<generatingantcall target="build-gts" />
 			<fileset dir="${projects.dir}/gts/build/lib">
