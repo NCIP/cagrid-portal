@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.upgrade;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.data.upgrades.UpgradeException;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -103,7 +102,7 @@ public class MetadataUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
     /**
      * Upgrade the jars which are required for metadata
      */
-    private void upgradeJars() throws UpgradeException {
+    private void upgradeJars() {
         FileFilter metadataLibFilter = new FileFilter() {
             public boolean accept(File pathname) {
                 String name = pathname.getName();
@@ -138,7 +137,8 @@ public class MetadataUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
                 Utils.copyFile(newLib, out);
                 getStatus().addDescriptionLine("caGrid 1.1 library " + newLib.getName() + " added");
             } catch (IOException ex) {
-                throw new UpgradeException("Error copying new metadata library: " + ex.getMessage(), ex);
+                // TODO: change this to use a better exception
+                throw new RuntimeException("Error copying new metadata library: " + ex.getMessage(), ex);
             }
             outLibs.add(out);
         }
@@ -151,7 +151,8 @@ public class MetadataUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibArray);
             getStatus().addDescriptionLine("Eclipse .classpath file updated");
         } catch (Exception ex) {
-            throw new UpgradeException("Error updating Eclipse .classpath file: " + ex.getMessage(), ex);
+            // TODO: change this to use a better exception
+            throw new RuntimeException("Error updating Eclipse .classpath file: " + ex.getMessage(), ex);
         }
 
     }
