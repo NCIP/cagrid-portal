@@ -48,10 +48,10 @@ TODO:
 36[D]: Add unit tests for CQL Results validation
 37[D]: Make CQL Object Results iterator perform better by avoiding repeated object creation
 38[D]: Break appart DataServiceModificationPanel... it's 1700 lines long, and unweildy
-39[ ]: BDT Data Service's Grid FTP impl should give an option of a single large chunk or individual results per URL
+39[E]: BDT Data Service's Grid FTP impl should give an option of a single large chunk or individual results per URL
 	-- Dependent on having 'a way' to create Grid FTP urls / resources
-40[ ]: Upgrade tests for an SDK-backed data service
-41[ ]: Upgrade tests for an Enumeration data service
+40[D]: Upgrade tests for an SDK-backed data service
+41[D]: Upgrade tests for an Enumeration data service
 
 I = In Progress
 D = Done
@@ -95,8 +95,15 @@ Type Serialization Table sizing is screwed up
 	
 Need a "None" option for query processor... theres no way to not select an impl found in a jar
 	-- Not a bug, you can edit the query processor class selection manually, including blanking it out
+	-- This is no longer the case... if you can't select the query processor from the drop down, 
+	that means it's not a query processor anyway, so what's the point?
 	
 CAVEATS:
+When upgrading, the caDSR service URL stored in the extension data is not upgraded.  This should be a non-issue
+for most users when upgrading 1.0 to 1.1 since we're using the same service URL.  If a custom URL was used,
+this might cause problems if the service no longer exists / has changed.  This will *PROBABLY* be a problem
+with upgrades to 2.0, since the service URL is likley to be different.  We'll see when we get there.
+
 CQL cannot query for nor return 'attributes' of a type that are complexTypes in XML.
 
 Multiple DataServices using the SDK query processor cannot be run in the same container due to a bug in the caCORE API
