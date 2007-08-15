@@ -355,6 +355,7 @@
     					<include name="caGrid-*-metadata-common.jar" />
     					<include name="caGrid-*-metadata-security.jar" />
     					<include name="caGrid-*-gridca.jar" />
+    					<include name="caGrid-*-core.jar" />
     				</fileset>
     			</artifact>
         <artifact track="main" type="jars" id="dorian.jars">
