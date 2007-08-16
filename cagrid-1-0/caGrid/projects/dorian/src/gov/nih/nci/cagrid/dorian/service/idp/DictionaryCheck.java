@@ -90,7 +90,7 @@ public class DictionaryCheck {
         fullList.addAll(backwardSubStrings);
 
         for (int i = 0; i < fullList.size(); i++) {
-            if (sb.indexOf("\n" + (String) fullList.get(i) + "\n") >= 0) {
+            if (StringUtils.isAlpha((String) fullList.get(i)) && sb.indexOf("\n" + ((String) fullList.get(i)).toLowerCase() + "\n") >= 0) {
                 return true;
             }
         }
