@@ -93,6 +93,7 @@ Build Instructions:
 
 	</target>
 
+
 	<target name="deployJBoss" description="Deploy GT4 into JBoss. Must specify -Djboss.dir=&lt;JBoss root&gt;">
 		<property name="defaultProtocol" value="http" />
 		<property name="defaultPort" value="8080" />
@@ -122,6 +123,17 @@ Build Instructions:
 		<copy file="${basedir}/jboss-web.xml.in" toFile="${webapp.webinf.dir}/jboss-web.xml" />
 		<replace file="${webapp.webinf.dir}/jboss-web.xml" token="@webapp.name@" value="${webapp.name}.war" />
 
+		<available file="${webapp.dir}/share/schema/resolutionService/resolution_port_type.wsdl" property="resolutionService.exists" />
+		<antcall target="fixResourceServicePortType" />
+	</target>
+
+	<target name="fixResourceServicePortType" if="resolutionService.exists">
+		<concat destfile="${webapp.dir}/share/schema/resolutionService/resolution_port_type.wsdl.tmp">
+			<header filtering="no" trimleading="yes"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]>
+			</header>
+			<filelist dir="${webapp.dir}/share/schema/resolutionService/" files="resolution_port_type.wsdl"></filelist>
+		</concat>
+		<move overwrite="true" tofile="${webapp.dir}/share/schema/resolutionService/resolution_port_type.wsdl" file="${webapp.dir}/share/schema/resolutionService/resolution_port_type.wsdl.tmp"/>
 	</target>
 
 	<target name="redeployJBoss" description="Redeploy GT4 into JBoss. Must specify -Djboss.dir=&lt;JBosst root&gt;">
@@ -144,14 +156,14 @@ Build Instructions:
 
 	<target name="_baseDeploy">
 		<mkdir dir="${webapp.dir}" />
-		<copy toDir="${webapp.dir}">
+		<copy toDir="${webapp.dir}" overwrite="true">
 			<fileset dir="${abs.deploy.dir}" casesensitive="yes">
 				<include name="share/schema/**" />
 			</fileset>
 		</copy>
 
 		<mkdir dir="${webapp.webinf.dir}" />
-		<copy toDir="${webapp.webinf.dir}">
+		<copy toDir="${webapp.webinf.dir}" overwrite="true">
 			<fileset dir="${abs.deploy.dir}" casesensitive="yes">
 				<include name="etc/**" />
 				<exclude name="etc/globus_packages/**" />
@@ -169,23 +181,23 @@ Build Instructions:
 		</chmod>
 
 		<mkdir dir="${webapp.webinf.dir}/classes" />
-		<copy toDir="${webapp.webinf.dir}/classes">
+		<copy toDir="${webapp.webinf.dir}/classes" overwrite="true">
 			<fileset dir="${abs.deploy.dir}" casesensitive="yes">
 				<include name="client-config.wsdd" />
 			</fileset>
 		</copy>
-		<copy file="${abs.deploy.dir}/container-log4j.properties" toFile="${webapp.webinf.dir}/classes/log4j.properties" />
+		<copy overwrite="true" file="${abs.deploy.dir}/container-log4j.properties" toFile="${webapp.webinf.dir}/classes/log4j.properties" />
 		<replace file="${webapp.webinf.dir}/classes/log4j.properties" token="org.globus.util.log4j.PatternLayout" value="org.apache.log4j.PatternLayout" />
 
 		<mkdir dir="${webapp.webinf.lib.dir}" />
-		<copy file="${basedir}/web.xml" toDir="${webapp.webinf.dir}" />
+		<copy overwrite="true" file="${basedir}/web.xml" toDir="${webapp.webinf.dir}" />
 
 		<antcall target="_setDefaults" />
 
 	</target>
 
 	<target name="_baseLibDeploy">
-		<copy toDir="${webapp.webinf.lib.dir}">
+		<copy toDir="${webapp.webinf.lib.dir}" overwrite="true">
 			<fileset dir="${abs.deploy.dir}/lib" casesensitive="yes">
 				<include name="*.jar" />
 				<include name="*.zip" />
@@ -210,7 +222,7 @@ Build Instructions:
 			</fileset>
 		</copy>
 
-		<copy toDir="${common.lib.dir}">
+		<copy toDir="${common.lib.dir}" overwrite="true">
 			<fileset dir="${abs.deploy.dir}/lib" casesensitive="yes">
 				<include name="cog-jglobus.jar" />
 				<include name="xml-apis.jar" />
