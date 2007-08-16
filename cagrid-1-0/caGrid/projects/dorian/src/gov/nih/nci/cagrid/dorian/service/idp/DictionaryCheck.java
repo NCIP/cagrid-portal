@@ -12,12 +12,12 @@ import org.apache.commons.lang.StringUtils;
 
 public class DictionaryCheck {
 
-    public static boolean isDictionaryWordRooted(String password) {
+    public static boolean doesStringContainDictionaryWord(String string) {
 
-        boolean noun = checkNoun(password);
-        boolean adjective = checkAdjective(password);
-        boolean adverb = checkAdverb(password);
-        boolean verb = checkVerb(password);
+        boolean noun = checkNoun(string);
+        boolean adjective = checkAdjective(string);
+        boolean adverb = checkAdverb(string);
+        boolean verb = checkVerb(string);
 
         return noun || adjective || adverb || verb;
     }
@@ -63,7 +63,6 @@ public class DictionaryCheck {
 
         for (int i = 0; i < fullList.size(); i++) {
             if (sb.indexOf("\n"+(String) fullList.get(i)+"\n") >= 0) {
-                System.out.println("Found " + (String) fullList.get(i) + " in file " + indexFile);
                 return true;
             }
         }
@@ -91,7 +90,7 @@ public class DictionaryCheck {
 
 
     public static void main(String[] args) {
-        System.out.println(isDictionaryWordRooted(args[0]));
+        System.out.println(doesStringContainDictionaryWord(args[0]));
     }
 
 }
