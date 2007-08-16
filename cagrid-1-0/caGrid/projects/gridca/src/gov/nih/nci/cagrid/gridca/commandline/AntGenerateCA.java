@@ -56,13 +56,13 @@ public class AntGenerateCA {
 			KeyUtil.writePrivateKey(root.getPrivate(), new File(keyOut),
 					password);
 			CertUtil.writeCertificate(cert, new File(caOut));
-			System.out.println("Successfully create the CA certificate:");
+			System.out.println("Successfully created the CA certificate:");
 			System.out.println(dn);
-			System.out.println("CA Certificate Valid Till:");
+			System.out.println("CA certificate valid till:");
 			System.out.println(cert.getNotAfter());
-			System.out.println("CA Private Key Written to:");
+			System.out.println("CA private key written to:");
 			System.out.println(keyOut);
-			System.out.println("CA Certificate Written to:");
+			System.out.println("CA certificate written to:");
 			System.out.println(caOut);
 		} catch (Exception e) {
 			e.printStackTrace();

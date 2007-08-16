@@ -74,15 +74,15 @@ public class AntCreateHostCertificate {
 
 			KeyUtil.writePrivateKey(pair.getPrivate(), new File(keyOut));
 			CertUtil.writeCertificate(userCert, new File(certOut));
-			System.out.println("Successfully create the user certificate:");
+			System.out.println("Successfully created the host certificate:");
 			System.out.println(userCert.getSubjectDN().toString());
-			System.out.println("User certificate issued by:");
+			System.out.println("Host certificate issued by:");
 			System.out.println(cacert.getSubjectDN().toString());
-			System.out.println("User Certificate Valid Till:");
+			System.out.println("Host certificate valid till:");
 			System.out.println(userCert.getNotAfter());
-			System.out.println("User Private Key Written to:");
+			System.out.println("Host private key written to:");
 			System.out.println(keyOut);
-			System.out.println("User Certificate Written to:");
+			System.out.println("Host certificate written to:");
 			System.out.println(certOut);
 
 		} catch (Exception e) {
