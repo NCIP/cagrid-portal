@@ -72,11 +72,6 @@ public class UserManager extends LoggingObject {
 				+ conf.getPasswordLength().getMin() + " and " + conf.getPasswordLength().getMax() + " characters.");
 			throw fault;
 		}
-		if(DictionaryCheck.doesStringContainDictionaryWord(password)){
-		    InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
-            fault.setFaultString("Unacceptable password, password appears to contain a dictionary word.");
-            throw fault;
-		}
 	}
 
 
