@@ -1095,8 +1095,39 @@ public class ModificationViewer extends GridPortalComponent {
 
             this.contentTabbedPane.addChangeListener(new ChangeListener() {
                 public void stateChanged(ChangeEvent e) {
+
                     try {
-                        reInitializeGUI();
+                        ModificationViewer.this.resetMethodSecurityIfServiceSecurityChanged();
+                        switch (contentTabbedPane.getSelectedIndex()) {
+                            case 0 :
+                                getNamespaceJTree().setNamespaces(info.getNamespaces());
+                                getResourcesJTree().setServices(info.getServices(), info);
+                                break;
+                            case 1 :
+                                getMethodsTable().clearTable();
+                                getMethodsTable().setMethods(info.getServices().getService(0));
+                                break;
+                            case 2 :
+                                getRpHolderPanel().reInitialize(
+                                    info.getServices().getService(0).getResourcePropertiesList(), info.getNamespaces());
+                                break;
+                            case 3 :
+                                getServicePropertiesTable().setServiceInformation(info);
+                                break;
+                            case 4 :
+                                break;
+                            case 5 :
+                                break;
+                            default :
+                                for (int i = 0; i < extensionPanels.size(); i++) {
+                                    ServiceModificationUIPanel panel = (ServiceModificationUIPanel) extensionPanels
+                                        .get(i);
+                                    panel.setServiceInfo(info);
+                                }
+                                break;
+                        }
+
+                        // reInitializeGUI();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
