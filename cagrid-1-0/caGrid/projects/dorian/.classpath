@@ -102,5 +102,6 @@
 	<classpathentry kind="lib" path="lib/eracom/jce.zip"/>
 	<classpathentry kind="lib" path="lib/eracom/jprov.jar"/>
 	<classpathentry kind="lib" path="lib/eracom/kmu.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
