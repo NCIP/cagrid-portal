@@ -91,6 +91,7 @@ public class DictionaryCheck {
 
         for (int i = 0; i < fullList.size(); i++) {
             if (StringUtils.isAlpha((String) fullList.get(i)) && sb.indexOf("\n" + ((String) fullList.get(i)).toLowerCase() + "\n") >= 0) {
+                System.err.println("found word : " + (String) fullList.get(i));
                 return true;
             }
         }
