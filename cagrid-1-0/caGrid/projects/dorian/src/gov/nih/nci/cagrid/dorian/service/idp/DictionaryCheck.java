@@ -12,73 +12,134 @@ import org.apache.commons.lang.StringUtils;
 
 public class DictionaryCheck {
 
-    private static StringBuffer nounsBuffer = null;
-    private static StringBuffer verbsBuffer = null;
-    private static StringBuffer adjBuffer = null;
-    private static StringBuffer advBuffer = null;
+    private static StringBuffer ten = null;
+    private static StringBuffer twenty = null;
+    private static StringBuffer thirtyfive = null;
+    private static StringBuffer fourty = null;
+    private static StringBuffer fifty = null;
+    private static StringBuffer fiftyfive = null;
+    private static StringBuffer sixty = null;
+    private static StringBuffer seventy = null;
+    
     private static final int MINUMUM_WORD_SEARCH_SIZE = 4;
+    private static final int DICTIONARY_COMPEXITY = 70;
 
 
     public static boolean doesStringContainDictionaryWord(String string) {
+        initialize();
 
-        boolean noun = checkNoun(string);
-        boolean adjective = checkAdjective(string);
-        boolean adverb = checkAdverb(string);
-        boolean verb = checkVerb(string);
+        if (DICTIONARY_COMPEXITY >= 10) {
+            System.out.println("ten");
+            if (lookForWord(ten, string))
+                return true;
+        }
+        if (DICTIONARY_COMPEXITY >= 20) {
+            System.out.println("twenty");
+            if (lookForWord(twenty, string))
+                return true;
+        }
+        if (DICTIONARY_COMPEXITY >= 35) {
+            System.out.println("thirtyfive");
+            if (lookForWord(thirtyfive, string))
+                return true;
+        }
+        if (DICTIONARY_COMPEXITY >= 40) {
+            System.out.println("fourty");
+            if (lookForWord(fourty, string))
+                return true;
+        }
+        if (DICTIONARY_COMPEXITY >= 50) {
+            System.out.println("fifty");
+            if (lookForWord(fifty, string))
+                return true;
+        }
+        if (DICTIONARY_COMPEXITY >= 55) {
+            System.out.println("fiftyfive");
+            if (lookForWord(fiftyfive, string))
+                return true;
+        }
+        if (DICTIONARY_COMPEXITY >= 60) {
+            System.out.println("sixty");
+            if (lookForWord(sixty, string))
+                return true;
+        }
+        if (DICTIONARY_COMPEXITY >= 70) {
+            System.out.println("seventy");
+            if (lookForWord(seventy, string))
+                return true;
+        }
 
-        return noun || adjective || adverb || verb;
+        return false;
+
     }
 
 
-    private static boolean checkNoun(String password) {
-        if (nounsBuffer == null) {
-            InputStream fileData = DictionaryCheck.class.getResourceAsStream("dictionary/index.noun");
+    private static void initialize() {
+        if (ten == null) {
+            InputStream fileData = DictionaryCheck.class.getResourceAsStream("dictionary/english-words.10");
             try {
-                nounsBuffer = Utils.inputStreamToStringBuffer(fileData);
+                ten = Utils.inputStreamToStringBuffer(fileData);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return lookForWord(nounsBuffer, password);
-    }
-
-
-    private static boolean checkAdjective(String password) {
-        if (adjBuffer == null) {
-            InputStream fileData = DictionaryCheck.class.getResourceAsStream("dictionary/index.adj");
+        if (twenty == null) {
+            InputStream fileData = DictionaryCheck.class.getResourceAsStream("dictionary/english-words.20");
             try {
-                adjBuffer = Utils.inputStreamToStringBuffer(fileData);
+                twenty = Utils.inputStreamToStringBuffer(fileData);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return lookForWord(adjBuffer, password);
-    }
-
-
-    private static boolean checkAdverb(String password) {
-        if (advBuffer == null) {
-            InputStream fileData = DictionaryCheck.class.getResourceAsStream("dictionary/index.adv");
+        if (thirtyfive == null) {
+            InputStream fileData = DictionaryCheck.class.getResourceAsStream("dictionary/english-words.35");
             try {
-                advBuffer = Utils.inputStreamToStringBuffer(fileData);
+                thirtyfive = Utils.inputStreamToStringBuffer(fileData);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return lookForWord(advBuffer, password);
-    }
-
-
-    private static boolean checkVerb(String password) {
-        if (verbsBuffer == null) {
-            InputStream fileData = DictionaryCheck.class.getResourceAsStream("dictionary/index.verb");
+        if (fourty == null) {
+            InputStream fileData = DictionaryCheck.class.getResourceAsStream("dictionary/english-words.40");
             try {
-                verbsBuffer = Utils.inputStreamToStringBuffer(fileData);
+                fourty = Utils.inputStreamToStringBuffer(fileData);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return lookForWord(verbsBuffer, password);
+        if (fifty == null) {
+            InputStream fileData = DictionaryCheck.class.getResourceAsStream("dictionary/english-words.50");
+            try {
+                fifty = Utils.inputStreamToStringBuffer(fileData);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (fiftyfive == null) {
+            InputStream fileData = DictionaryCheck.class.getResourceAsStream("dictionary/english-words.55");
+            try {
+                fiftyfive = Utils.inputStreamToStringBuffer(fileData);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (sixty == null) {
+            InputStream fileData = DictionaryCheck.class.getResourceAsStream("dictionary/english-words.60");
+            try {
+                sixty = Utils.inputStreamToStringBuffer(fileData);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (seventy == null) {
+            InputStream fileData = DictionaryCheck.class.getResourceAsStream("dictionary/english-words.70");
+            try {
+                seventy = Utils.inputStreamToStringBuffer(fileData);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 
@@ -91,7 +152,9 @@ public class DictionaryCheck {
         fullList.addAll(backwardSubStrings);
 
         for (int i = 0; i < fullList.size(); i++) {
-            if (StringUtils.isAlpha((String) fullList.get(i)) && sb.indexOf("\n" + ((String) fullList.get(i)).toLowerCase() + "\n") >= 0) {
+            System.out.println(((String) fullList.get(i)));
+            if (StringUtils.isAlpha((String) fullList.get(i))
+                && sb.indexOf("\n" + ((String) fullList.get(i)).toLowerCase() + "\n") >= 0) {
                 return true;
             }
         }
