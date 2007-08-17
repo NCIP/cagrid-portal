@@ -19,7 +19,7 @@
       <import namespace="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" schemaLocation="./Distributed_CQL_schema_2.0.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
       <import namespace="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult" schemaLocation="./Distributed_CQL_Results_schema_2.0.xsd" />
-      <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" schemaLocation="..\wsrf\lifetime\WS-ResourceLifetime.xsd" />
+      <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" schemaLocation="../wsrf/lifetime/WS-ResourceLifetime.xsd" />
       <element name="ExecuteAndAggregateResultsRequest">
         <complexType>
           <sequence>
