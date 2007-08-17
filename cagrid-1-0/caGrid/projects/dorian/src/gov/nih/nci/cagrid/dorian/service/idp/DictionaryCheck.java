@@ -16,6 +16,7 @@ public class DictionaryCheck {
     private static StringBuffer verbsBuffer = null;
     private static StringBuffer adjBuffer = null;
     private static StringBuffer advBuffer = null;
+    private static final int MINUMUM_WORD_SEARCH_SIZE = 4;
 
 
     public static boolean doesStringContainDictionaryWord(String string) {
@@ -83,8 +84,8 @@ public class DictionaryCheck {
 
     private static boolean lookForWord(StringBuffer sb, String string) {
 
-        List forwardSubStrings = buildSubStrings(string, 4);
-        List backwardSubStrings = buildSubStrings(StringUtils.reverse(string), 4);
+        List forwardSubStrings = buildSubStrings(string, MINUMUM_WORD_SEARCH_SIZE);
+        List backwardSubStrings = buildSubStrings(StringUtils.reverse(string), MINUMUM_WORD_SEARCH_SIZE);
         List fullList = new ArrayList();
         fullList.addAll(forwardSubStrings);
         fullList.addAll(backwardSubStrings);
@@ -99,7 +100,7 @@ public class DictionaryCheck {
     }
 
 
-    private static List buildSubStrings(String string, int minimumLength) {
+    public static List buildSubStrings(String string, int minimumLength) {
         List list = new ArrayList();
 
         if (string.length() >= minimumLength) {
