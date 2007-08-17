@@ -29,42 +29,34 @@ public class DictionaryCheck {
         initialize();
 
         if (DICTIONARY_COMPEXITY >= 10) {
-            System.out.println("ten");
             if (lookForWord(ten, string))
                 return true;
         }
         if (DICTIONARY_COMPEXITY >= 20) {
-            System.out.println("twenty");
             if (lookForWord(twenty, string))
                 return true;
         }
         if (DICTIONARY_COMPEXITY >= 35) {
-            System.out.println("thirtyfive");
             if (lookForWord(thirtyfive, string))
                 return true;
         }
         if (DICTIONARY_COMPEXITY >= 40) {
-            System.out.println("fourty");
             if (lookForWord(fourty, string))
                 return true;
         }
         if (DICTIONARY_COMPEXITY >= 50) {
-            System.out.println("fifty");
             if (lookForWord(fifty, string))
                 return true;
         }
         if (DICTIONARY_COMPEXITY >= 55) {
-            System.out.println("fiftyfive");
             if (lookForWord(fiftyfive, string))
                 return true;
         }
         if (DICTIONARY_COMPEXITY >= 60) {
-            System.out.println("sixty");
             if (lookForWord(sixty, string))
                 return true;
         }
         if (DICTIONARY_COMPEXITY >= 70) {
-            System.out.println("seventy");
             if (lookForWord(seventy, string))
                 return true;
         }
@@ -152,7 +144,6 @@ public class DictionaryCheck {
         fullList.addAll(backwardSubStrings);
 
         for (int i = 0; i < fullList.size(); i++) {
-            System.out.println(((String) fullList.get(i)));
             if (StringUtils.isAlpha((String) fullList.get(i))
                 && sb.indexOf("\n" + ((String) fullList.get(i)).toLowerCase() + "\n") >= 0) {
                 return true;
