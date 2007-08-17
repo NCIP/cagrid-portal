@@ -241,7 +241,7 @@ public class CommonTools {
 
 
     public static String getAntAllCommand(String buildFileDir) throws Exception {
-        return getAntCommand("all", buildFileDir);
+        return getAntCommand("clean all", buildFileDir);
     }
 
 
