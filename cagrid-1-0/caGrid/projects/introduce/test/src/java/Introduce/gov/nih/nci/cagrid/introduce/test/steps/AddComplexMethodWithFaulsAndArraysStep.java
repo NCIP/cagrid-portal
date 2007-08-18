@@ -47,15 +47,7 @@ public class AddComplexMethodWithFaulsAndArraysStep extends BaseStep {
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
 		
 		
-		int currentLength = 0;
-		NamespacesType namespaces = introService.getNamespaces();
-		if (namespaces.getNamespace() != null) {
-			currentLength = namespaces.getNamespace().length;
-		}
-		NamespaceType[] newNamespaceTypes = new NamespaceType[currentLength + 1];
-		if (currentLength > 0) {
-			System.arraycopy(namespaces.getNamespace(), 0, newNamespaceTypes, 0, currentLength);
-		}
+
 		NamespaceType type = new NamespaceType();
 		type.setLocation("./" + "bookstore.xsd");
 		type.setNamespace("gme://projectmobius.org/1/BookStore");
@@ -65,8 +57,9 @@ public class AddComplexMethodWithFaulsAndArraysStep extends BaseStep {
 		SchemaElementType[] etypeArr = new SchemaElementType[1];
 		etypeArr[0] = etype;
 		type.setSchemaElement(etypeArr);
-		newNamespaceTypes[currentLength] = type;
-		namespaces.setNamespace(newNamespaceTypes);
+		
+		
+		CommonTools.addNamespace(introService, type);
 		
 		MethodsType methodsType =  CommonTools.getService(introService.getServices(),tci.getName()).getMethods();
 

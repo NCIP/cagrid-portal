@@ -9,6 +9,7 @@
 	<!-- <property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" /> -->
 	<!-- had to use default, as sysproperty isn't passed along to introduce forked jvms; this allows it to still work -->
 	<property name="cobertura.data.file" location="cobertura.ser" />
+	<property name="haltonerror" value="false" />
 
 	<target name="instrument">
 		<taskdef resource="tasks.properties">
@@ -31,7 +32,7 @@
 	<target name="test" depends="checkGlobus, instrument">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+		<junit dir="${basedir}" printsummary="yes" haltonerror="${haltonerror}" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
 			<sysproperty key="basedir" value="${basedir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
@@ -61,7 +62,7 @@
 	<target name="systemTest" depends="checkGlobus, instrument">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+		<junit dir="${basedir}" printsummary="yes" haltonerror="${haltonerror}" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
 			<sysproperty key="basedir" value="${basedir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
