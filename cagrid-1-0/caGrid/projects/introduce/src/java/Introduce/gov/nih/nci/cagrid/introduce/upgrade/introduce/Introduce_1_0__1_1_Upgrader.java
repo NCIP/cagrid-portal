@@ -306,6 +306,7 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
         // need to add the new template var to the jndi so that it can be
         // replaced
         // by the new property for shutting off registration
+        // and fix up new resource class value becuase it has a new class name
         Document jndiDoc = XMLUtilities.fileNameToDocument(getServicePath() + File.separator + "jndi-config.xml");
         List services = jndiDoc.getRootElement().getChildren("service",
             Namespace.getNamespace("http://wsrf.globus.org/jndi/config"));
