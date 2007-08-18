@@ -328,10 +328,21 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
                         parameter.getChild("value", Namespace.getNamespace("http://wsrf.globus.org/jndi/config"))
                             .setText("PERFORM_REGISTRATION");
                     }
-
+                    if (parameter.getChild("name", Namespace.getNamespace("http://wsrf.globus.org/jndi/config"))
+                        .getText().equals("resourceClass")) {
+                        String oldValue = parameter.getChild("value", Namespace.getNamespace("http://wsrf.globus.org/jndi/config"))
+                            .getText();
+                        String serviceName = service.getAttributeValue("name");
+                        serviceName = serviceName.substring(serviceName.lastIndexOf("/")+1);
+                        String newValue = oldValue.substring(0,oldValue.lastIndexOf(".")+1) + serviceName + "Resource";
+                        parameter.getChild("value", Namespace.getNamespace("http://wsrf.globus.org/jndi/config")).setText(newValue);
+                    }
                 }
             }
         }
+        FileWriter writer = new FileWriter(new File(getServicePath() + File.separator + "jndi-config.xml"));
+        writer.write(XMLUtilities.formatXML(XMLUtilities.documentToString(jndiDoc)));
+        writer.close();
         getStatus().addDescriptionLine("retemplated jndi file");
 
         // need to add the soapFix.jar to the tools lib directory
