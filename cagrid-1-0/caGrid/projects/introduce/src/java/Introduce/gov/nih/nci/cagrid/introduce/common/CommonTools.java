@@ -246,7 +246,7 @@ public class CommonTools {
 
 
     public static String getAntMergeCommand(String buildFileDir) throws Exception {
-        return getAntCommand("merge", buildFileDir);
+        return getAntCommand("clean merge", buildFileDir);
     }
 
 
