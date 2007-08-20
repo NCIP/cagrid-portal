@@ -86,7 +86,7 @@ public class BasicAnalyticalServiceWithSecurityTest extends AbstractServiceTest 
             fail(e.getMessage());
         }
 
-        steps.add(new DorianAuthenticateStep("dorian", "password", dorianURL));
+        steps.add(new DorianAuthenticateStep("dorian", Constants.DORIAN_ADMIN_PASSWORD, dorianURL));
         steps.add(new DorianAddTrustedCAStep(this.caFile, dorianURL));
         try {
             addInvokeSteps(steps);

@@ -3,6 +3,7 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+import gov.nci.nih.cagrid.tests.core.Constants;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.dorian.client.IdPUserClient;
@@ -33,7 +34,7 @@ public class DorianAuthenticateStep extends Step {
 
 
     public DorianAuthenticateStep(String serviceURL) {
-        this("dorian", "password", serviceURL);
+        this("dorian", Constants.DORIAN_ADMIN_PASSWORD, serviceURL);
     }
 
 

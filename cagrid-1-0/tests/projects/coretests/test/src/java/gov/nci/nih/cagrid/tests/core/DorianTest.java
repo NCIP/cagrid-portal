@@ -55,6 +55,7 @@ public class DorianTest extends Story {
     private GlobusHelper globus;
     private File serviceDir;
     private File caFile;
+    
 
 
     public DorianTest() {
@@ -115,7 +116,7 @@ public class DorianTest extends Story {
         steps.add(new GlobusStartStep(this.globus));
 
         // successful authenticate
-        steps.add(new DorianAuthenticateStep("dorian", "password", dorianURL));
+        steps.add(new DorianAuthenticateStep("dorian", Constants.DORIAN_ADMIN_PASSWORD, dorianURL));
         steps.add(new DorianDestroyDefaultProxyStep());
 
         // failed authenticate
@@ -124,7 +125,7 @@ public class DorianTest extends Story {
         steps.add(new DorianAuthenticateFailStep("junk", "password", dorianURL));
 
         // add trusted ca
-        steps.add(new DorianAuthenticateStep("dorian", "password", dorianURL));
+        steps.add(new DorianAuthenticateStep("dorian", Constants.DORIAN_ADMIN_PASSWORD, dorianURL));
         steps.add(new DorianAddTrustedCAStep(this.caFile, dorianURL));
         steps.add(new DorianDestroyDefaultProxyStep());
 
@@ -141,7 +142,7 @@ public class DorianTest extends Story {
                 steps.add(new DorianSubmitRegistrationStep(application, dorianURL));
 
                 // approve registration
-                DorianAuthenticateStep auth = new DorianAuthenticateStep("dorian", "password", dorianURL);
+                DorianAuthenticateStep auth = new DorianAuthenticateStep("dorian", Constants.DORIAN_ADMIN_PASSWORD, dorianURL);
                 steps.add(auth);
                 steps.add(new DorianApproveRegistrationStep(application, dorianURL, auth.getCredential()));
                 steps.add(new DorianDestroyDefaultProxyStep());

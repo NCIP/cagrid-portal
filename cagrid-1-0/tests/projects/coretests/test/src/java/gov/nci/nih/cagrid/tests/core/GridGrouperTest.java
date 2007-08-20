@@ -176,15 +176,17 @@ public class GridGrouperTest extends Story {
         }
 
         // test successful authenticate
-        steps.add(new DorianAuthenticateStep("dorian", "password", dorianURL));
+        steps.add(new DorianAuthenticateStep("dorian", Constants.DORIAN_ADMIN_PASSWORD, dorianURL));
         steps.add(new DorianDestroyDefaultProxyStep());
 
         // add trusted ca
-        steps.add(new DorianAuthenticateStep("dorian", "password", dorianURL));
+        steps.add(new DorianAuthenticateStep("dorian", Constants.DORIAN_ADMIN_PASSWORD, dorianURL));
         steps.add(new DorianAddTrustedCAStep(this.caFile, dorianURL));
         steps.add(new DorianDestroyDefaultProxyStep());
 
         // register users in dorian
+        String[] users = new String[]{this.grouperAdminName, "subject1", "subject2"};
+        String password = "$W0rdD0ct0R$";
         try {
             File applicationFile = new File("test", "resources" + File.separator + "userApplications")
                 .listFiles(new FileFilter() {
@@ -192,16 +194,16 @@ public class GridGrouperTest extends Story {
                         return file.isFile() && file.getName().endsWith(".xml");
                     }
                 })[0];
-            String[] users = new String[]{this.grouperAdminName, "subject1", "subject2"};
-
-            DorianAuthenticateStep auth = new DorianAuthenticateStep("dorian", "password", dorianURL);
+            
+            
+            DorianAuthenticateStep auth = new DorianAuthenticateStep("dorian", Constants.DORIAN_ADMIN_PASSWORD, dorianURL);
             steps.add(auth);
             for (String user : users) {
                 // create registration
                 Application application = (Application) Utils.deserializeDocument(applicationFile.toString(),
                     Application.class);
                 application.setUserId(user);
-                application.setPassword(user);
+                application.setPassword(password);
 
                 // submit and approve registration
                 steps.add(new DorianSubmitRegistrationStep(application, dorianURL));
@@ -212,7 +214,7 @@ public class GridGrouperTest extends Story {
         }
 
         // authenticate grouper
-        steps.add(new DorianAuthenticateStep(this.grouperAdminName, this.grouperAdminName, dorianURL));
+        steps.add(new DorianAuthenticateStep(this.grouperAdminName, password, dorianURL));
 
         // add stems and groups
         steps.add(new GrouperCreateStemStep("test:stem1", grouperURL));
@@ -257,7 +259,7 @@ public class GridGrouperTest extends Story {
         steps.add(new GrouperCheckPrivilegesStep("test:stem1", idp + "subject1", new String[]{"stem"}, grouperURL));
 
         // test group admin privileges
-        steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
+        steps.add(new DorianAuthenticateStep("subject1", password, dorianURL));
         steps.add(new GrouperAddMemberStep("test:stem1:group1", idp + "subject3", grouperURL));
         steps.add(new GrouperCheckMembersStep("test:stem1:group1", "All", new String[]{idp + "subject1",
                 idp + "subject2", idp + "subject3"}, grouperURL));
@@ -269,26 +271,26 @@ public class GridGrouperTest extends Story {
                 idp + "subject2"}, grouperURL));
 
         // test group admin privileges fail
-        steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
+        steps.add(new DorianAuthenticateStep("subject1",password, dorianURL));
         steps.add(new GrouperRemoveMemberStep("test:stem2:stem3:group2", idp + "subject2", true, grouperURL));
 
         // test group optout privileges
-        steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
+        steps.add(new DorianAuthenticateStep("subject1", password, dorianURL));
         steps.add(new GrouperRemoveMemberStep("test:stem2:stem3:group2", idp + "subject1", grouperURL));
-        steps.add(new DorianAuthenticateStep("subject2", "subject2", dorianURL));
+        steps.add(new DorianAuthenticateStep("subject2", password, dorianURL));
         steps.add(new GrouperAddMemberStep("test:stem2:stem3:group2", idp + "subject1", grouperURL));
         steps.add(new GrouperRevokePrivilegeStep("test:stem2:stem3:group2", idp + "subject1", "optout", grouperURL));
-        steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
+        steps.add(new DorianAuthenticateStep("subject1", password, dorianURL));
         steps.add(new GrouperRemoveMemberStep("test:stem2:stem3:group2", idp + "subject1", true, grouperURL));
-        steps.add(new DorianAuthenticateStep("subject2", "subject2", dorianURL));
+        steps.add(new DorianAuthenticateStep("subject2", password, dorianURL));
         steps.add(new GrouperGrantPrivilegeStep("test:stem2:stem3:group2", idp + "subject1", "optout", grouperURL));
 
         // test stem privileges
-        steps.add(new DorianAuthenticateStep("subject1", "subject1", dorianURL));
+        steps.add(new DorianAuthenticateStep("subject1", password, dorianURL));
         steps.add(new GrouperCreateStemStep("test:stem1:stem5", grouperURL));
         steps.add(new GrouperCheckStemsStep("test:stem1", new String[]{"stem5"}, grouperURL));
         steps.add(new GrouperRemoveStemStep("test:stem1:stem5", grouperURL));
-        steps.add(new DorianAuthenticateStep("subject2", "subject2", dorianURL));
+        steps.add(new DorianAuthenticateStep("subject2", password, dorianURL));
         steps.add(new GrouperCreateStemStep("test:stem1:stem5", true, grouperURL));
 
         return steps;
