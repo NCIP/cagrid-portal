@@ -86,7 +86,7 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
                             try {
                                 connection = url.openConnection();
                                 addStatusLine("Downloading Introduce " + introduceTypes[i].getVersion() + " ("
-                                    + connection.getContentLength()/1024/1024 + " MB)");
+                                    + connection.getContentLength() / 1024 / 1024 + " MB)");
                                 getBusyProgressBar().setMinimum(0);
                                 getBusyProgressBar().setMaximum(connection.getContentLength());
                                 getBusyProgressBar().setValue(0);
@@ -120,7 +120,7 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
                             }
                         }
 
-                        if (introduceTypes[i].getIntroduceRev()!=null && introduceTypes[i].getIntroduceRev(0) != null) {
+                        if (introduceTypes[i].getIntroduceRev() != null && introduceTypes[i].getIntroduceRev(0) != null) {
                             // need to get the patch
                             URL url = null;
                             try {
@@ -134,7 +134,7 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
                                 connection = url.openConnection();
                                 addStatusLine("Downloading Introduce Patch "
                                     + introduceTypes[i].getIntroduceRev(0).getPatchVersion() + " ("
-                                    + connection.getContentLength() + " bytes)");
+                                    + connection.getContentLength() / 1024 / 1024 + " MB)");
                                 getBusyProgressBar().setMinimum(0);
                                 getBusyProgressBar().setMaximum(connection.getContentLength());
                                 getBusyProgressBar().setValue(0);
@@ -184,8 +184,14 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
                         URLConnection connection = null;
                         try {
                             connection = url.openConnection();
-                            addStatusLine("Downloading " + extensionTypes[i].getDisplayName() + " version "
-                                + extensionTypes[i].getVersion() + " (" + connection.getContentLength() + " bytes)");
+                            if (extensionTypes[i].getVersion() != null) {
+                                addStatusLine("Downloading " + extensionTypes[i].getDisplayName() + " version "
+                                    + extensionTypes[i].getVersion() + " (" + connection.getContentLength() / 1024
+                                    / 1024 + " MB)");
+                            } else {
+                                addStatusLine("Downloading " + extensionTypes[i].getDisplayName() + " version "
+                                    + "initial version" + " (" + connection.getContentLength() / 1024 / 1024 + " MB)");
+                            }
                             getBusyProgressBar().setMinimum(0);
                             getBusyProgressBar().setMaximum(connection.getContentLength());
                             getBusyProgressBar().setValue(0);

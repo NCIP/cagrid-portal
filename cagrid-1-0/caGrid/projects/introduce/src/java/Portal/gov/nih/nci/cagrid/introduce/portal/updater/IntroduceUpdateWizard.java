@@ -1,8 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.updater;
 
-import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-
 import org.pietschy.wizard.Wizard;
+import org.projectmobius.portal.PortalResourceManager;
 
 public class IntroduceUpdateWizard {
 	
@@ -11,7 +10,7 @@ public class IntroduceUpdateWizard {
 		UpdateWizardModel model = new UpdateWizardModel(paths);
 		Wizard wizard = new Wizard(model);
 		wizard.setOverviewVisible(true);
-		wizard.showInFrame("Introduce Update Manager",IntroduceLookAndFeel.getUpdateIcon().getImage());
+		wizard.showInDialog("Introduce Update Manager",PortalResourceManager.getInstance().getGridPortal(),true);
 	}
 
 	public static void main(String[] args) {

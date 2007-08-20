@@ -5,6 +5,8 @@ import gov.nih.nci.cagrid.introduce.beans.software.IntroduceRevType;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
 
 import java.awt.Font;
 import java.util.StringTokenizer;
@@ -76,20 +78,22 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
                 int currentRev = Integer.parseInt(CommonTools.getIntroducePatchVersion());
 
                 if (currentRev < latestRev.getPatchVersion()) {
-                    IntroduceRevUpdateTreeNode revNode = new IntroduceRevUpdateTreeNode("Introduce Cummulative Patch Update "
-                        + latestRev.getPatchVersion(), getModel(), latestRev, software);
+                    IntroduceRevUpdateTreeNode revNode = new IntroduceRevUpdateTreeNode(
+                        "Introduce Cummulative Patch Update " + latestRev.getPatchVersion(), getModel(), latestRev,
+                        software);
                     getModel().insertNodeInto(revNode, this, this.getChildCount());
                 } else if (currentRev == latestRev.getPatchVersion()) {
-                    IntroduceRevUpdateTreeNode revNode = new IntroduceRevUpdateTreeNode("Introduce Cummulative Patch Update "
-                        + latestRev.getPatchVersion(), getModel(), latestRev, software);
+                    IntroduceRevUpdateTreeNode revNode = new IntroduceRevUpdateTreeNode(
+                        "Introduce Cummulative Patch Update " + latestRev.getPatchVersion(), getModel(), latestRev,
+                        software);
                     revNode.getCheckBox().setEnabled(false);
                     revNode.getCheckBox().setSelected(false);
                     revNode.setInstalled(true);
                     revNode.getCheckBox().setText(revNode.getCheckBox().getText() + " installed");
                     revNode.getCheckBox().setFont(revNode.getCheckBox().getFont().deriveFont(Font.ITALIC));
                     getModel().insertNodeInto(revNode, this, this.getChildCount());
-                } 
-                introduce.setIntroduceRev(new IntroduceRevType[] {latestRev});
+                }
+                introduce.setIntroduceRev(new IntroduceRevType[]{latestRev});
             }
         }
 
@@ -98,14 +102,83 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
             for (int j = 0; j < extensionVersions.length; j++) {
                 ExtensionType extension = extensionVersions[j];
                 if (extension.getCompatibleIntroduceVersions() != null) {
-                    if (isCompatibleExtension(extension.getCompatibleIntroduceVersions())) {
-                        ExtensionUpdateTreeNode node = new ExtensionUpdateTreeNode(extension.getDisplayName() + " ("
-                            + extension.getVersion() + ")", getModel(), extension);
+                    if (isCompatibleExtension(extension.getCompatibleIntroduceVersions())
+                        && (isExtensionInstalled(extension) || isExtensionNewer(extension))) {
+                        ExtensionUpdateTreeNode node = null;
+                        if (extension.getVersion() != null) {
+                            node = new ExtensionUpdateTreeNode(extension.getDisplayName() + " ("
+                                + extension.getVersion() + ")", getModel(), extension);
+                        } else {
+                            node = new ExtensionUpdateTreeNode(extension.getDisplayName() + " (" + "initial version"
+                                + ")", getModel(), extension);
+                        }
+                        if (isExtensionInstalled(extension)) {
+                            node.getCheckBox().setEnabled(false);
+                            node.getCheckBox().setSelected(false);
+                            node.setInstalled(true);
+                            node.getCheckBox().setText(node.getCheckBox().getText() + " installed");
+                            node.getCheckBox().setFont(node.getCheckBox().getFont().deriveFont(Font.ITALIC));
+                        }
                         getModel().insertNodeInto(node, this, this.getChildCount());
                     }
                 }
             }
         }
+    }
+
+
+    private boolean isExtensionInstalled(ExtensionType extension) {
+        boolean installed = false;
+
+        if (ExtensionsLoader.getInstance().getExtension(extension.getName()) != null) {
+            if (extension.getVersion() == null) {
+                if (ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion() == null) {
+                    installed = true;
+                }
+            } else {
+                if (ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion().equals(
+                    extension.getVersion())) {
+                    installed = true;
+                }
+            }
+        }
+        return installed;
+    }
+
+
+    private boolean isExtensionNewer(ExtensionType extension) {
+        boolean newer = false;
+        if (ExtensionsLoader.getInstance().getExtension(extension.getName()) != null) {
+            String installedVersion = ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion();
+            if (installedVersion == null && extension.getVersion()!=null) {
+                newer = true;
+            } else if (installedVersion != null && extension.getVersion() != null) {
+                if (!isOlderVersion(installedVersion, extension.getVersion()) && !isExtensionInstalled(extension)) {
+                    newer = true;
+                }
+            }
+        }
+        return newer;
+    }
+
+
+    private boolean isOlderVersion(String currentVersion, String proposedVersion) {
+        StringTokenizer currentTokes = new StringTokenizer(currentVersion, ".", false);
+        StringTokenizer proposedTokes = new StringTokenizer(proposedVersion, ".", false);
+        while (proposedTokes.hasMoreElements()) {
+            if (!currentTokes.hasMoreElements()) {
+                return false;
+            }
+            int proposedPartVersion = Integer.valueOf(proposedTokes.nextToken()).intValue();
+            int currentPartVersion = Integer.valueOf(currentTokes.nextToken()).intValue();
+            if (proposedPartVersion > currentPartVersion) {
+                return false;
+            }
+            if (proposedPartVersion < currentPartVersion) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

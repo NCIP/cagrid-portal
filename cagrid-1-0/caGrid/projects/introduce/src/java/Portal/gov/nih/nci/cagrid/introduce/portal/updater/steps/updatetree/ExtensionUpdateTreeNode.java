@@ -21,18 +21,6 @@ public class ExtensionUpdateTreeNode extends UpdateTypeTreeNode {
 		if (model != null) {
 			initialize();
 		}
-		if ((ExtensionsLoader.getInstance().getExtension(extension.getName()) != null)
-				&& ExtensionsLoader.getInstance().getExtension(
-						extension.getName()).getVersion() != null
-				&& ExtensionsLoader.getInstance().getExtension(
-						extension.getName()).getVersion().equals(
-						extension.getVersion())) {
-			checkBox.setEnabled(false);
-			checkBox.setSelected(false);
-			installed = true;
-			checkBox.setText(checkBox.getText() + " installed");
-			checkBox.setFont(checkBox.getFont().deriveFont(Font.ITALIC));
-		}
 	}
 
 	public boolean isSelected() {
