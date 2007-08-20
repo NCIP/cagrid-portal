@@ -16,7 +16,7 @@
          <PasswordSecurityPolicy>
         	<LockoutTime hours="4" minutes="0" seconds="0"/>
         	<MaxConsecutiveInvalidLogins>5</MaxConsecutiveInvalidLogins>
-        	<MaxTotalInvalidLogins>1000</MaxTotalInvalidLogins>
+        	<MaxTotalInvalidLogins>500</MaxTotalInvalidLogins>
         </PasswordSecurityPolicy>    
         <RegistrationPolicy>gov.nih.nci.cagrid.dorian.service.idp.ManualRegistrationPolicy</RegistrationPolicy>
         <AssertingCredentials>
