@@ -1502,6 +1502,7 @@ public class TestIFS extends TestCase {
 
 	private SAMLAssertion getExpiredSAMLAssertion(String id, IdPContainer idp) throws Exception {
 		GregorianCalendar cal = new GregorianCalendar();
+		cal.add(Calendar.MINUTE, -1);
 		Date start = cal.getTime();
 		Date end = cal.getTime();
 		return this.getSAMLAssertion(id, idp, start, end, "urn:oasis:names:tc:SAML:1.0:am:password");

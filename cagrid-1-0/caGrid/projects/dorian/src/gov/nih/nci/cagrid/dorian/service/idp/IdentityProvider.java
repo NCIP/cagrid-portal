@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.dorian.common.Crypt;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
@@ -37,6 +36,7 @@ public class IdentityProvider extends LoggingObject {
 	private AssertionCredentialsManager assertionManager;
 
 	private IdPRegistrationPolicy registrationPolicy;
+	
 
 
 	public IdentityProvider(IdentityProviderConfiguration conf, Database db, CertificateAuthority ca)
@@ -58,7 +58,7 @@ public class IdentityProvider extends LoggingObject {
 
 
 	public SAMLAssertion authenticate(BasicAuthCredential credential) throws DorianInternalFault, PermissionDeniedFault {
-		IdPUser requestor = authenticateAndVerifyUser(credential);
+		IdPUser requestor = userManager.authenticateAndVerifyUser(credential);
 		return assertionManager.getAuthenticationAssertion(requestor.getUserId(), requestor.getFirstName(), requestor
 			.getLastName(), requestor.getEmail());
 	}
@@ -66,7 +66,7 @@ public class IdentityProvider extends LoggingObject {
 
 	public void changePassword(BasicAuthCredential credential, String newPassword) throws DorianInternalFault,
 		PermissionDeniedFault, InvalidUserPropertyFault {
-		IdPUser requestor = authenticateAndVerifyUser(credential);
+		IdPUser requestor = userManager.authenticateAndVerifyUser(credential);
 		requestor.setPassword(newPassword);
 		try {
 			this.userManager.updateUser(requestor);
@@ -160,60 +160,13 @@ public class IdentityProvider extends LoggingObject {
 	private IdPUser verifyUser(String uid) throws DorianInternalFault, PermissionDeniedFault {
 		try {
 			IdPUser u = this.userManager.getUser(uid);
-			verifyUser(u);
+			userManager.verifyUser(u);
 			return u;
 		} catch (NoSuchUserFault e) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("Invalid User!!!");
 			throw fault;
 		}
-	}
-
-
-	private void verifyUser(IdPUser u) throws DorianInternalFault, PermissionDeniedFault {
-
-		if (!u.getStatus().equals(IdPUserStatus.Active)) {
-			if (u.getStatus().equals(IdPUserStatus.Suspended)) {
-				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault.setFaultString("The account has been suspended.");
-				throw fault;
-
-			} else if (u.getStatus().equals(IdPUserStatus.Rejected)) {
-				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault.setFaultString("The application for the account was rejected.");
-				throw fault;
-
-			} else if (u.getStatus().equals(IdPUserStatus.Pending)) {
-				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault.setFaultString("The application for this account has not yet been reviewed.");
-				throw fault;
-			} else {
-				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault.setFaultString("Unknown Reason");
-				throw fault;
-			}
-		}
-
-	}
-
-
-	private IdPUser authenticateAndVerifyUser(BasicAuthCredential credential) throws DorianInternalFault,
-		PermissionDeniedFault {
-		try {
-			IdPUser u = this.userManager.getUser(credential.getUserId());
-			if (!u.getPassword().equals(Crypt.crypt(credential.getPassword()))) {
-				PermissionDeniedFault fault = new PermissionDeniedFault();
-				fault.setFaultString("The uid or password is incorrect.");
-				throw fault;
-			}
-			verifyUser(u);
-			return u;
-		} catch (NoSuchUserFault e) {
-			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault.setFaultString("User Id or password is incorrect");
-			throw fault;
-		}
-
 	}
 
 

@@ -250,7 +250,7 @@ public class TestDorian extends TestCase {
 			us[0].setFirstName("New_First_Name");
 			us[0].setLastName("New_Last_Name");
 			us[0].setOrganization("New_Organization");
-			us[0].setPassword("PASSWORD");
+			us[0].setPassword("$W0rdD0ct0R$");
 			us[0].setPhoneNumber("012-345-6789");
 			us[0].setRole(IdPUserRole.Non_Administrator);
 			us[0].setState(StateCode.AK);
@@ -1049,7 +1049,7 @@ public class TestDorian extends TestCase {
 		Application u = new Application();
 		u.setUserId(count + "user");
 		u.setEmail(count + "user@mail.com");
-		u.setPassword(count + "password");
+		u.setPassword(count + "$D0ct0rC0de$");
 		u.setFirstName(count + "first");
 		u.setLastName(count + "last");
 		u.setAddress(count + "address");

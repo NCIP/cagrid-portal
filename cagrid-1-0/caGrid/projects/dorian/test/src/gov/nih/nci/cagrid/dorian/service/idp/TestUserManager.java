@@ -259,7 +259,7 @@ public class TestUserManager extends TestCase {
 			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
-			u1.setPassword("npassword");
+			u1.setPassword("$W0rdD0ct0R$2");
 			um.updateUser(u1);
 			IdPUser u2 = um.getUser(u1.getUserId());
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
@@ -287,7 +287,7 @@ public class TestUserManager extends TestCase {
 			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
-			u1.setPassword("cpassword");
+			u1.setPassword("$W0rdD0ct0R$");
 			u1.setFirstName("changedfirst");
 			u1.setLastName("changedlast");
 			u1.setAddress("changedaddress");
@@ -551,7 +551,7 @@ public class TestUserManager extends TestCase {
 			IdPUser u = new IdPUser();
 			u.setUserId("user");
 			u.setEmail("user@mail.com");
-			u.setPassword("password");
+			u.setPassword("$W0rdD0ct0R$");
 			u.setFirstName("first");
 			u.setLastName("last");
 			u.setAddress("address");
@@ -602,7 +602,7 @@ public class TestUserManager extends TestCase {
 		IdPUser u = new IdPUser();
 		u.setUserId(count + "user");
 		u.setEmail(count + "user@mail.com");
-		u.setPassword(count + "password");
+		u.setPassword(count + "$W0rdD0ct0R$");
 		u.setFirstName(count + "first");
 		u.setLastName(count + "last");
 		u.setAddress(count + "address");

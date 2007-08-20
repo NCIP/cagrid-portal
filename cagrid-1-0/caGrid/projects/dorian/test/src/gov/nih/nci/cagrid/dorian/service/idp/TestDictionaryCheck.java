@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
-import java.awt.List;
-
 import junit.framework.TestCase;
 
 
@@ -18,6 +16,7 @@ public class TestDictionaryCheck extends TestCase {
         assertFalse(DictionaryCheck.doesStringContainDictionaryWord("987asdf98akjhaf0780"));
         assertFalse(DictionaryCheck.doesStringContainDictionaryWord(",anmdsf-09asdklaf-0"));
         assertFalse(DictionaryCheck.doesStringContainDictionaryWord("af9s87akshf90akh"));
+        assertFalse(DictionaryCheck.doesStringContainDictionaryWord("$DorianAdmin$"));
     }
 
 

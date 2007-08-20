@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.dorian.service.idp;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
+import gov.nih.nci.cagrid.dorian.conf.PasswordSecurityPolicy;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
@@ -105,6 +106,216 @@ public class TestIdentityProvider extends TestCase {
 	}
 
 
+	public void testResetLockedPassword() {
+		IdentityProvider idp = null;
+		try {
+			PasswordSecurityPolicy policy = conf.getPasswordSecurityPolicy();
+			policy.setMaxConsecutiveInvalidLogins(3);
+			policy.setMaxTotalInvalidLogins(4);
+			policy.getLockoutTime().setHours(0);
+			policy.getLockoutTime().setMinutes(0);
+			policy.getLockoutTime().setSeconds(3);
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
+			idp = new IdentityProvider(conf, db, ca);
+			Application a = createApplication();
+
+			idp.register(a);
+			BasicAuthCredential cred = getAdminCreds();
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Active, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+
+			BasicAuthCredential bad = new BasicAuthCredential();
+			bad.setUserId(a.getUserId());
+			bad.setPassword("foobar");
+
+			int localCount = 0;
+			for (int i = 1; i <= (policy.getMaxTotalInvalidLogins() + 2); i++) {
+				if (i > policy.getMaxTotalInvalidLogins()) {
+					try {
+						idp.authenticate(getCredential(a));
+						fail("Should NOT be able to authenticate!!!");
+					} catch (PermissionDeniedFault e) {
+					}
+				} else if (localCount != policy.getMaxConsecutiveInvalidLogins()) {
+					try {
+						idp.authenticate(bad);
+						fail("Should NOT be able to authenticate!!!");
+					} catch (PermissionDeniedFault e) {
+
+					}
+				} else {
+					localCount = 0;
+					try {
+						idp.authenticate(getCredential(a));
+						fail("Should NOT be able to authenticate!!!");
+					} catch (PermissionDeniedFault e) {
+
+					}
+					Thread.sleep((policy.getLockoutTime().getSeconds() * 1000) + 100);
+					verifyAuthentication(idp, a);
+					try {
+						idp.authenticate(bad);
+						fail("Should NOT be able to authenticate!!!");
+					} catch (PermissionDeniedFault e) {
+
+					}
+				}
+				localCount = localCount + 1;
+			}
+			// Now we have an admin reset the password
+			users[0].setPassword("$W0rdD0ct0R$2");
+			a.setPassword(users[0].getPassword());
+			idp.updateUser(cred.getUserId(), users[0]);
+			verifyAuthentication(idp, a);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testResetPasswordSecurityOnSuccessfulLogin() {
+		IdentityProvider idp = null;
+		try {
+			PasswordSecurityPolicy policy = conf.getPasswordSecurityPolicy();
+			policy.setMaxConsecutiveInvalidLogins(3);
+			policy.setMaxTotalInvalidLogins(10);
+			policy.getLockoutTime().setHours(0);
+			policy.getLockoutTime().setMinutes(0);
+			policy.getLockoutTime().setSeconds(3);
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
+			idp = new IdentityProvider(conf, db, ca);
+			Application a = createApplication();
+
+			idp.register(a);
+			BasicAuthCredential cred = getAdminCreds();
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Active, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+
+			BasicAuthCredential bad = new BasicAuthCredential();
+			bad.setUserId(a.getUserId());
+			bad.setPassword("foobar");
+
+			int localCount = 0;
+			for (int i = 1; i <= (policy.getMaxTotalInvalidLogins()); i++) {
+				if (localCount == (policy.getMaxConsecutiveInvalidLogins() - 1)) {
+					verifyAuthentication(idp, a);
+					localCount = 0;
+				} else {
+					try {
+						idp.authenticate(bad);
+						fail("Should NOT be able to authenticate!!!");
+					} catch (PermissionDeniedFault e) {
+
+					}
+					localCount = localCount + 1;
+				}
+
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testPasswordSecurity() {
+		IdentityProvider idp = null;
+		try {
+			PasswordSecurityPolicy policy = conf.getPasswordSecurityPolicy();
+			policy.setMaxConsecutiveInvalidLogins(3);
+			policy.setMaxTotalInvalidLogins(7);
+			policy.getLockoutTime().setHours(0);
+			policy.getLockoutTime().setMinutes(0);
+			policy.getLockoutTime().setSeconds(3);
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
+			idp = new IdentityProvider(conf, db, ca);
+			for (int j = 0; j < 2; j++) {
+				Application a = createApplication();
+
+				idp.register(a);
+				BasicAuthCredential cred = getAdminCreds();
+				IdPUserFilter uf = new IdPUserFilter();
+				uf.setUserId(a.getUserId());
+				IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+				assertEquals(1, users.length);
+				assertEquals(IdPUserStatus.Active, users[0].getStatus());
+				assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+
+				BasicAuthCredential bad = new BasicAuthCredential();
+				bad.setUserId(a.getUserId());
+				bad.setPassword("foobar");
+
+				int localCount = 0;
+				for (int i = 1; i <= (policy.getMaxTotalInvalidLogins() + 1); i++) {
+					if (i > policy.getMaxTotalInvalidLogins()) {
+						try {
+							idp.authenticate(getCredential(a));
+							fail("Should NOT be able to authenticate!!!");
+						} catch (PermissionDeniedFault e) {
+
+						}
+					} else if (localCount != policy.getMaxConsecutiveInvalidLogins()) {
+						try {
+							idp.authenticate(bad);
+							fail("Should NOT be able to authenticate!!!");
+						} catch (PermissionDeniedFault e) {
+
+						}
+					} else {
+						localCount = 0;
+						try {
+							idp.authenticate(getCredential(a));
+							fail("Should NOT be able to authenticate!!!");
+						} catch (PermissionDeniedFault e) {
+
+						}
+						Thread.sleep((policy.getLockoutTime().getSeconds() * 1000) + 100);
+						verifyAuthentication(idp, a);
+						try {
+							idp.authenticate(bad);
+							fail("Should NOT be able to authenticate!!!");
+						} catch (PermissionDeniedFault e) {
+
+						}
+					}
+					localCount = localCount + 1;
+
+				}
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
 	public void testAuthenticateBadPassword() {
 		IdentityProvider idp = null;
 		try {
@@ -139,8 +350,8 @@ public class TestIdentityProvider extends TestCase {
 			}
 		}
 	}
-	
-	
+
+
 	public void testChangePassword() {
 		IdentityProvider idp = null;
 		try {
@@ -158,9 +369,9 @@ public class TestIdentityProvider extends TestCase {
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
 			verifyAuthentication(idp, a);
 			BasicAuthCredential c = getCredential(a);
-			String newPassword = "mynewpass";
+			String newPassword = "$W0rdD0ct0R$2";
 			idp.changePassword(getCredential(a), newPassword);
-			
+
 			try {
 				idp.authenticate(c);
 				fail("Should not be able to authenticate with the old password!!!");
@@ -180,8 +391,8 @@ public class TestIdentityProvider extends TestCase {
 			}
 		}
 	}
-	
-	
+
+
 	public void testChangePasswordToBadPassword() {
 		IdentityProvider idp = null;
 		try {
@@ -198,17 +409,17 @@ public class TestIdentityProvider extends TestCase {
 			assertEquals(IdPUserStatus.Active, users[0].getStatus());
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
 			verifyAuthentication(idp, a);
-			try{
-			idp.changePassword(getCredential(a), "short");
-			fail("Should not be able to change the password to something to short");
-			}catch (InvalidUserPropertyFault f) {
+			try {
+				idp.changePassword(getCredential(a), "short");
+				fail("Should not be able to change the password to something to short");
+			} catch (InvalidUserPropertyFault f) {
 			}
-			
-			try{
-				idp.changePassword(getCredential(a), "thispasswordiswaytoolong");
+
+			try {
+				idp.changePassword(getCredential(a), "$W0rdD0ct0R$$$$$$$$$$$$$$$$$$$$$$$W0rdD0ct0R$");
 				fail("Should not be able to change the password to something to long");
-				}catch (InvalidUserPropertyFault f) {
-				}
+			} catch (InvalidUserPropertyFault f) {
+			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -220,7 +431,6 @@ public class TestIdentityProvider extends TestCase {
 			}
 		}
 	}
-
 
 
 	public void testRegistrationNoAddress2() {
@@ -324,6 +534,30 @@ public class TestIdentityProvider extends TestCase {
 				fail("Should not be able to register with a UserId of this length.");
 			} catch (InvalidUserPropertyFault iupf) {
 			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	public void testPasswordConstraints() {
+		IdentityProvider idp = null;
+		try {
+			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
+			idp = new IdentityProvider(conf, db, ca);
+			assertTrue(isValidPassword(idp, UserManager.ADMIN_PASSWORD));
+			assertFalse(isValidPassword(idp, "$$$$User44"));
+			assertFalse(isValidPassword(idp, "12345Dorian6789"));
+			assertFalse(isValidPassword(idp, "12345dorian6789$"));
+			assertFalse(isValidPassword(idp, "12345DORIAN6789$"));
+			assertFalse(isValidPassword(idp, "$$$$Dorian$$$$"));
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -463,9 +697,25 @@ public class TestIdentityProvider extends TestCase {
 	}
 
 
+	private boolean isValidPassword(IdentityProvider idp, String password) throws Exception {
+		Application app = this.createApplication(password);
+		try {
+			idp.register(app);
+		} catch (InvalidUserPropertyFault f) {
+			if (f.getFaultString().equals(UserManager.INVALID_PASSWORD_MESSAGE)) {
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+
+
 	private void verifyAuthentication(IdentityProvider idp, Application a) throws Exception {
 		SAMLAssertion saml = idp.authenticate(getCredential(a));
 		verifySAMLAssertion(saml, idp, a);
+
 	}
 
 
@@ -535,10 +785,15 @@ public class TestIdentityProvider extends TestCase {
 
 
 	private Application createApplication() {
+		return createApplication(count + "$W0rdD0ct0R$");
+	}
+
+
+	private Application createApplication(String password) {
 		Application u = new Application();
 		u.setUserId(count + "user");
 		u.setEmail(count + "user@mail.com");
-		u.setPassword(count + "password");
+		u.setPassword(password);
 		u.setFirstName(count + "first");
 		u.setLastName(count + "last");
 		u.setAddress(count + "address");
@@ -558,7 +813,7 @@ public class TestIdentityProvider extends TestCase {
 		Application u = new Application();
 		u.setUserId(count + "user");
 		u.setEmail(count + "user@mail.com");
-		u.setPassword(count + "thispasswordiswaytoolong");
+		u.setPassword(count + "$W0rdD0ct0R$$$$$$$$$$$$$$$$$W0rdD0ct0R$");
 		u.setFirstName(count + "first");
 		u.setLastName(count + "last");
 		u.setAddress(count + "address");

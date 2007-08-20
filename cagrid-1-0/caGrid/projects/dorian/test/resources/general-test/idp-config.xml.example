@@ -2,8 +2,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:dorian="http://cagrid.nci.nih.gov/dorian/conf">
         <IdentityProviderName>Dorian IdP</IdentityProviderName>
-        <UIDLength min="4" max="10"/>
-        <PasswordLength min="6" max="10"/>
+        <UIDLength min="4" max="15"/>
+        <PasswordLength min="10" max="20"/>
+        <PasswordSecurityPolicy>
+        	<LockoutTime hours="4" minutes="0" seconds="0"/>
+        	<MaxConsecutiveInvalidLogins>5</MaxConsecutiveInvalidLogins>
+        	<MaxTotalInvalidLogins>1000</MaxTotalInvalidLogins>
+        </PasswordSecurityPolicy>    
         <RegistrationPolicy>gov.nih.nci.cagrid.dorian.service.idp.ManualRegistrationPolicy</RegistrationPolicy>
         <AssertingCredentials>
             <AutoRenew>true</AutoRenew>

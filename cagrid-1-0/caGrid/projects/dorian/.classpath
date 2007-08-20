@@ -68,14 +68,13 @@
 	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="lib/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-pool-1.2.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-collections-3.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-authentication-service-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-authentication-service-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-authentication-service-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar" sourcepath="/caGrid-1.0-core"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridca.jar"/>

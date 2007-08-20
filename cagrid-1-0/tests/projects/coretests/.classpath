@@ -137,8 +137,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-evs-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-GlobalModelExchange-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-graph.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridca.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-client.jar"/>
@@ -168,7 +166,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-fqp-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-cql.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-extension.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-tests.jar"/>
@@ -176,5 +173,11 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-upgrades.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-utils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-validation.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-serviceTools.jar"/>
+	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-tests.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

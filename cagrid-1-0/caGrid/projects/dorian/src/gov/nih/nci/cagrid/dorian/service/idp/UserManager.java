@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.Crypt;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
+import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
@@ -16,6 +17,7 @@ import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.NoSuchUserFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,9 +35,11 @@ import java.util.List;
  */
 public class UserManager extends LoggingObject {
 
+	public static String INVALID_PASSWORD_MESSAGE = "Invalid password, a valid password CANNOT contain a dictionary word and MUST contain at least one upper case letter, at least one lower case letter, at least one number, and at least one symbol (~!@#$%^&*()_-+={}[]|:;<>,.?)";
+
 	public static String ADMIN_USER_ID = "dorian";
 
-	public static String ADMIN_PASSWORD = "password";
+	public static String ADMIN_PASSWORD = "DorianAdmin$1";
 
 	private static final String IDP_USERS_TABLE = "idp_users";
 
@@ -45,10 +49,82 @@ public class UserManager extends LoggingObject {
 
 	private IdentityProviderConfiguration conf;
 
+	private PasswordSecurityManager passwordSecurityManager;
+
 
 	public UserManager(Database db, IdentityProviderConfiguration conf) throws DorianInternalFault {
 		this.db = db;
 		this.conf = conf;
+		this.passwordSecurityManager = new PasswordSecurityManager(db, conf.getPasswordSecurityPolicy());
+	}
+
+
+	public IdPUser authenticateAndVerifyUser(BasicAuthCredential credential) throws DorianInternalFault,
+		PermissionDeniedFault {
+		try {
+			IdPUser u = getUser(credential.getUserId());
+
+			int status = this.passwordSecurityManager.getPasswordStatus(u.getUserId());
+
+			if (status == PasswordSecurityManager.VALID) {
+				if (!u.getPassword().equals(Crypt.crypt(credential.getPassword()))) {
+					passwordSecurityManager.reportInvalidLoginAttempt(u.getUserId());
+					PermissionDeniedFault fault = new PermissionDeniedFault();
+					fault.setFaultString("The uid or password is incorrect.");
+					throw fault;
+				} else {
+					passwordSecurityManager.reportSuccessfulLoginAttempt(u.getUserId());
+				}
+			} else if (status == PasswordSecurityManager.LOCKED_UNTIL_CHANGED) {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault
+					.setFaultString("This account has been locked because the maximum number of invalid logins has been exceeded, please contact an administrator to have your password reset.");
+				throw fault;
+			} else if (status == PasswordSecurityManager.LOCKED) {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault
+					.setFaultString("This account has been temporarily locked because the maximum number of consecutive invalid logins has been exceeded.");
+				throw fault;
+			} else {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault.setFaultString("Unexpected security status code received.");
+				throw fault;
+			}
+			verifyUser(u);
+			return u;
+		} catch (NoSuchUserFault e) {
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault.setFaultString("User Id or password is incorrect");
+			throw fault;
+		}
+
+	}
+
+
+	public void verifyUser(IdPUser u) throws DorianInternalFault, PermissionDeniedFault {
+
+		if (!u.getStatus().equals(IdPUserStatus.Active)) {
+			if (u.getStatus().equals(IdPUserStatus.Suspended)) {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault.setFaultString("The account has been suspended.");
+				throw fault;
+
+			} else if (u.getStatus().equals(IdPUserStatus.Rejected)) {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault.setFaultString("The application for the account was rejected.");
+				throw fault;
+
+			} else if (u.getStatus().equals(IdPUserStatus.Pending)) {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault.setFaultString("The application for this account has not yet been reviewed.");
+				throw fault;
+			} else {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault.setFaultString("Unknown Reason");
+				throw fault;
+			}
+		}
+
 	}
 
 
@@ -71,7 +147,16 @@ public class UserManager extends LoggingObject {
 			fault.setFaultString("Unacceptable password, the length of the password must be between "
 				+ conf.getPasswordLength().getMin() + " and " + conf.getPasswordLength().getMax() + " characters.");
 			throw fault;
+		} else {
+			if (!((PasswordUtils.hasCapitalLetter(password)) && (PasswordUtils.hasLowerCaseLetter(password))
+				&& (PasswordUtils.hasNumber(password)) && (PasswordUtils.hasSymbol(password)) && (!DictionaryCheck
+				.doesStringContainDictionaryWord(password)))) {
+				InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
+				fault.setFaultString(INVALID_PASSWORD_MESSAGE);
+				throw fault;
+			}
 		}
+
 	}
 
 
@@ -130,9 +215,9 @@ public class UserManager extends LoggingObject {
 			ps.setString(5, user.getLastName());
 			ps.setString(6, user.getOrganization());
 			ps.setString(7, user.getAddress());
-			if(Utils.clean(user.getAddress2())==null){
+			if (Utils.clean(user.getAddress2()) == null) {
 				ps.setString(8, "");
-			}else{
+			} else {
 				ps.setString(8, user.getAddress2());
 			}
 			ps.setString(9, user.getCity());
@@ -167,6 +252,7 @@ public class UserManager extends LoggingObject {
 			ps.setString(1, uid);
 			ps.executeUpdate();
 			ps.close();
+			this.passwordSecurityManager.deleteEntry(uid);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
@@ -448,11 +534,13 @@ public class UserManager extends LoggingObject {
 			sb.append("update " + IDP_USERS_TABLE + " SET ");
 			int changes = 0;
 			IdPUser curr = this.getUser(u.getUserId());
+			boolean passwordChanged = false;
 			if (u.getPassword() != null) {
 				validatePassword(u);
 				String newPass = Crypt.crypt(u.getPassword());
 				if (!newPass.equals(curr.getPassword())) {
 					curr.setPassword(newPass);
+					passwordChanged = true;
 				}
 			}
 
@@ -559,6 +647,10 @@ public class UserManager extends LoggingObject {
 				ps.setString(16, curr.getUserId());
 				ps.executeUpdate();
 				ps.close();
+
+				if (passwordChanged) {
+					this.passwordSecurityManager.deleteEntry(curr.getUserId());
+				}
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
 				DorianInternalFault fault = new DorianInternalFault();
@@ -626,6 +718,7 @@ public class UserManager extends LoggingObject {
 	public void clearDatabase() throws DorianInternalFault {
 		this.buildDatabase();
 		db.update("drop TABLE " + IDP_USERS_TABLE);
+		this.passwordSecurityManager.clearDatabase();
 	}
 
 }

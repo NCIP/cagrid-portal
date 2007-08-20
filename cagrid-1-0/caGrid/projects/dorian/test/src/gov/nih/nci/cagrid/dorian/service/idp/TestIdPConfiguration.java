@@ -19,13 +19,13 @@ import junit.framework.TestCase;
  */
 public class TestIdPConfiguration extends TestCase {
 
-	public final static int DEFAULT_MIN_PASSWORD_LENGTH = 6;
+	public final static int DEFAULT_MIN_PASSWORD_LENGTH = 10;
 
-	public final static int DEFAULT_MAX_PASSWORD_LENGTH = 10;
+	public final static int DEFAULT_MAX_PASSWORD_LENGTH = 30;
 
 	public final static int DEFAULT_MIN_UID_LENGTH = 4;
 
-	public final static int DEFAULT_MAX_UID_LENGTH = 10;
+	public final static int DEFAULT_MAX_UID_LENGTH = 20;
 
 	public final static String DEFAULT_KEY_PASSWORD = "idpkey";
 

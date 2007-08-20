@@ -64,7 +64,7 @@ public class Dorian extends LoggingObject {
 
 	public static final String IDP_ADMIN_USER_ID = "dorian";
 
-	public static final String IDP_ADMIN_PASSWORD = "password";
+	public static final String IDP_ADMIN_PASSWORD = "DorianAdmin$1";
 
 	private CertificateAuthority ca;
 
