@@ -149,21 +149,23 @@ public class UserManager extends LoggingObject {
 				+ conf.getPasswordLength().getMin() + " and " + conf.getPasswordLength().getMax() + " characters.");
 			throw fault;
 		} else {
+			boolean dictionaryWord = true;
 			try {
-				if (!((PasswordUtils.hasCapitalLetter(password)) && (PasswordUtils.hasLowerCaseLetter(password))
-					&& (PasswordUtils.hasNumber(password)) && (PasswordUtils.hasSymbol(password)) && (!DictionaryCheck
-					.doesStringContainDictionaryWord(password)))) {
-					InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
-					fault.setFaultString(INVALID_PASSWORD_MESSAGE);
-					throw fault;
-				}
+				dictionaryWord = DictionaryCheck.doesStringContainDictionaryWord(password);
 			} catch (IOException e) {
 				logError(e.getMessage(), e);
 				DorianInternalFault fault = new DorianInternalFault();
 				fault
-					.setFaultString("Unexpected error validting the user's password, please contact an administrator.");
+					.setFaultString("Unexpected error validating the user's password, please contact an administrator.");
 				throw fault;
 			}
+			if (!((PasswordUtils.hasCapitalLetter(password)) && (PasswordUtils.hasLowerCaseLetter(password))
+				&& (PasswordUtils.hasNumber(password)) && (PasswordUtils.hasSymbol(password)) && (!dictionaryWord))) {
+				InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
+				fault.setFaultString(INVALID_PASSWORD_MESSAGE);
+				throw fault;
+			}
+
 		}
 
 	}
