@@ -28,7 +28,7 @@
         <IdentityProviderNameLength min="3" max="50"/>
         <IdentityAssignmentPolicy>name</IdentityAssignmentPolicy>
         <CredentialPolicy>
-            <CredentialLifetime years="1" months="0" days="0" hours="0" minutes="0" seconds="0"/>
+            <CredentialLifetime years="5" months="0" days="0" hours="0" minutes="0" seconds="0"/>
             <HostCertificateAutoApproval>false</HostCertificateAutoApproval>
         </CredentialPolicy>
         <ProxyPolicy>
@@ -66,8 +66,8 @@
         <AutoCreate>
             <CASubject>C=US,O=abc,OU=xyz,OU=caGrid,CN=caGrid Dorian CA</CASubject>
             <CAKeySize>2048</CAKeySize>
-            <lifetime years="10" months="0" days="0" hours="0" minutes="0" seconds="0"/>
+            <lifetime years="25" months="0" days="0" hours="0" minutes="0" seconds="0"/>
         </AutoCreate>
-        <AutoRenewal years="10" months="0" days="0" hours="0" minutes="0" seconds="0"/>
+        <AutoRenewal years="25" months="0" days="0" hours="0" minutes="0" seconds="0"/>
     </DorianCAConfiguration>
 </DorianConfiguration>
