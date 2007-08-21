@@ -55,7 +55,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Aug 1, 2006
- * @version $Id: DataServiceCreationDialog.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: DataServiceCreationDialog.java,v 1.2 2007-08-21 21:02:11 dervin Exp $
  */
 public class DataServiceCreationDialog extends CreationExtensionUIDialog {
     // default service style is "None / Custom Data Source"
@@ -276,6 +276,27 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
                     System.out.println(element.getName());
                 }
                 getServiceInfo().getExtensions().setExtension(newExtensions);
+            } else {
+                // move the BDT extension to the front!
+                ExtensionType bdtExtension = null;
+                ExtensionType[] currentExtensions = getServiceInfo().getExtensions().getExtension();
+                ExtensionType[] orderedExtensions = new ExtensionType[currentExtensions.length];
+                for (ExtensionType ext : currentExtensions) {
+                    if (ext.getName().equals(BDT_EXTENSIONS_NAME)) {
+                        bdtExtension = ext;
+                        break;
+                    }
+                }
+                orderedExtensions[0] = bdtExtension;
+                int index = 1;
+                for (ExtensionType ext : currentExtensions) {
+                    if (!ext.getName().equals(BDT_EXTENSIONS_NAME)) {
+                        orderedExtensions[index] = ext;
+                        index++;
+                    }
+                }
+                getServiceInfo().getExtensions().setExtension(orderedExtensions);
+                System.out.println("Moved use of the BDT extension to the FRONT of extensions list");
             }
         }
 

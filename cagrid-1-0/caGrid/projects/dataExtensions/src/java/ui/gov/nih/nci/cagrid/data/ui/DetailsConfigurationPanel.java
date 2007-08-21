@@ -1,14 +1,10 @@
 package gov.nih.nci.cagrid.data.ui;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.util.HashMap;
-import java.util.Map;
-
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
+import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.ui.table.ClassChangeEvent;
 import gov.nih.nci.cagrid.data.ui.table.ClassElementSerializationTable;
 import gov.nih.nci.cagrid.data.ui.table.ClassInformatonChangeListener;
@@ -16,6 +12,9 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -31,7 +30,7 @@ import javax.swing.event.ChangeListener;
  * @author David Ervin
  * 
  * @created Jun 27, 2007 11:05:29 AM
- * @version $Id: DetailsConfigurationPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: DetailsConfigurationPanel.java,v 1.2 2007-08-21 21:02:11 dervin Exp $ 
  */
 public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
     
@@ -41,11 +40,9 @@ public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
     private JCheckBox cqlSyntaxValidationCheckBox = null;
     private JCheckBox domainModelValidationCheckBox = null;
     
-    private transient Map packageToClassMap = null;
     
     public DetailsConfigurationPanel(ServiceInformation serviceInfo, ExtensionDataManager dataManager) {
         super(serviceInfo, dataManager);
-        packageToClassMap = new HashMap();
         initialize();
     }
     
@@ -96,10 +93,17 @@ public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
             classConfigTable = new ClassElementSerializationTable();
             classConfigTable.addClassInformatonChangeListener(new ClassInformatonChangeListener() {
                 public void elementNameChanged(ClassChangeEvent e) {
-                    // get class to element mapping
-                    Map classToElement = (Map) packageToClassMap.get(e.getPackageName());
-                    // get the old element name mapping for this class
-                    String oldElementName = (String) classToElement.get(e.getClassName());
+                    // get the old element name the class is mapped to
+                    String oldElementName = null;
+                    try {
+                        ClassMapping currentMapping = getExtensionDataManager()
+                            .getClassMapping(e.getPackageName(), e.getClassName());
+                        oldElementName = currentMapping.getElementName();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        ErrorDialog.showErrorDialog("Error loading old class mapping", ex.getMessage(), ex);
+                    }
+
                     // get the namespace type for the class
                     NamespaceType nsType = CommonTools.getNamespaceType(
                         getServiceInfo().getNamespaces(), e.getNamespace());
@@ -113,8 +117,7 @@ public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
                             "No element named " + e.getElementName() 
                             + " in namespace " + e.getNamespace());
                     }
-                    // change the element name mapping
-                    classToElement.put(e.getClassName(), e.getElementName());
+                    
                     // save the mapping info
                     try {
                         getExtensionDataManager().setClassElementNameInModel(

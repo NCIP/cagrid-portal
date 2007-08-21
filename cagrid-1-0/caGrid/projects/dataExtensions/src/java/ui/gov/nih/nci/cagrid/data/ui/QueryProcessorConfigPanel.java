@@ -42,7 +42,7 @@ import javax.swing.JScrollPane;
  * @author David Ervin
  * 
  * @created Jun 27, 2007 8:58:22 AM
- * @version $Id: QueryProcessorConfigPanel.java,v 1.2 2007-07-17 13:40:36 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigPanel.java,v 1.3 2007-08-21 21:02:11 dervin Exp $ 
  */
 public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     
@@ -193,7 +193,7 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     private QueryProcessorParametersTable getQpParamsTable() {
         if (qpParamsTable == null) {
             // comment out the following line to edit with VE
-            qpParamsTable = new QueryProcessorParametersTable(getExtensionDataManager(), getServiceInfo());
+            qpParamsTable = new QueryProcessorParametersTable(getServiceInfo());
             // uncomment the following to edit with VE
             // qpParamsTable = new QueryProcessorParametersTable(null, null);
         }

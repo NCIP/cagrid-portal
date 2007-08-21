@@ -45,7 +45,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Jun 14, 2007 10:14:20 AM
- * @version $Id: DomainModelAdvancedOptionsDialog.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: DomainModelAdvancedOptionsDialog.java,v 1.2 2007-08-21 21:02:11 dervin Exp $
  */
 public class DomainModelAdvancedOptionsDialog extends JDialog {
     public static final String INFORMATION = 
@@ -104,6 +104,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
         loadFromExtensionData();
         this.setSize(new Dimension(450, 280));
         this.setContentPane(getMainPanel());
+        PortalUtils.centerComponent(this);
     }
     
     
@@ -151,6 +152,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
                     }
                     // enable / disable the from file selection as needed
                     PortalUtils.setContainerEnabled(getFromFilePanel(), !noDomainSelected);
+                    getBrowseButton().setEnabled(getFromFileCheckBox().isSelected());
                     // store the domain model source state
                     try {
                         dataManager.storeDomainModelSource(
@@ -180,6 +182,8 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
                 public void itemStateChanged(ItemEvent e) {
                     boolean fromFileSelected = getFromFileCheckBox().isSelected();
                     getNoDomainModelCheckBox().setEnabled(!fromFileSelected);
+                    // can browse now
+                    getBrowseButton().setEnabled(fromFileSelected);
                     if (fromFileSelected) {
                         // cant have NO domain model and be from the file system
                         getNoDomainModelCheckBox().setSelected(false);
@@ -237,6 +241,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
         if (browseButton == null) {
             browseButton = new JButton();
             browseButton.setText("Browse");
+            browseButton.setEnabled(false); // only enabled by check box
             browseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     browseForDomainModel();
@@ -426,6 +431,10 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
                     serviceInfo.getBaseDirectory().getAbsolutePath() + 
                     File.separator + "etc" + File.separator +
                     domainModelResourceProperty.getFileLocation());
+                // FIXME: this is bad... if user plays with domain model from file
+                // but does NOT save the service, the resource property continues to
+                // point to a file which no longer exists, and subsequent loads
+                // of the service will fail.  So will deployment, actually...
                 if (oldFile.exists()) {
                     oldFile.delete();
                 }
@@ -455,6 +464,9 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
                 CommonTools.addResourcePropety(
                     serviceInfo.getServices().getService(0), domainModelResourceProperty);
             }
+            
+            // change the GUI to reflect the new value
+            getFilenameTextField().setText(inFile.getName());
         }
     }
 

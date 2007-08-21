@@ -47,7 +47,7 @@ import javax.swing.ScrollPaneConstants;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.4 2007-08-15 18:33:44 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.5 2007-08-21 21:02:11 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String[] LOCAL_CLIENT_REQUIRED_FILES = new String[] {
@@ -213,6 +213,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     private JTextField getQpJarTextField() {
         if (qpJarTextField == null) {
             qpJarTextField = new JTextField();
+            qpJarTextField.setToolTipText("The JAR file containing the query processor");
             qpJarTextField.setEditable(false);
         }
         return qpJarTextField;
@@ -227,6 +228,8 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     private JTextField getClientLibDirTextField() {
         if (clientLibDirTextField == null) {
             clientLibDirTextField = new JTextField();
+            clientLibDirTextField.setToolTipText(
+                "The directory containing the client libraries for a caCORE SDK data source");
             clientLibDirTextField.setEditable(false);
         }
         return clientLibDirTextField;
@@ -305,6 +308,8 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         if (addDependButton == null) {
             addDependButton = new JButton();
             addDependButton.setText("Add");
+            addDependButton.setToolTipText(
+                "Add additional libraries which the data service will require");
             addDependButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     addDependJars();
@@ -324,6 +329,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         if (removeDependButton == null) {
             removeDependButton = new JButton();
             removeDependButton.setText("Remove");
+            removeDependButton.setToolTipText("Remove the selected libraries");
             removeDependButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     removeDependJars();
@@ -339,7 +345,8 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         // verify the client jar exists and is valid
         File clientJarFile = locateClientJarInDir(getClientLibDirTextField().getText());
         try {
-            if (clientJarFile != null && clientJarFile.exists() && isValidClientJar(clientJarFile)) {
+            if (clientJarFile != null && clientJarFile.exists() 
+                && isValidClientJar(clientJarFile)) {
                 setNextEnabled(true);
             }
         } catch (IOException ex) {

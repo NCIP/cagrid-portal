@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.data.ui.table;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
@@ -36,14 +35,12 @@ import javax.swing.table.DefaultTableModel;
  *          dervin Exp $
  */
 public class QueryProcessorParametersTable extends JTable {
-    private ExtensionDataManager extensionDataManager;
     private ServiceInformation serviceInfo;
     private JTextField editorTextField = null;
     private Set<String> propertiesFromEtc = null;
 
-    public QueryProcessorParametersTable(ExtensionDataManager dataManager, ServiceInformation serviceInfo) {
+    public QueryProcessorParametersTable(ServiceInformation serviceInfo) {
         super(createModel());
-        this.extensionDataManager = dataManager;
         this.serviceInfo = serviceInfo;
         setDefaultEditor(Object.class, new DefaultCellEditor(getEditorTextField()));
         try {

@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.ui.SchemaResolutionDialog;
 import gov.nih.nci.cagrid.data.ui.wizard.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -16,6 +17,8 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.AbstractCellEditor;
@@ -33,7 +36,7 @@ import javax.swing.table.TableCellEditor;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 26, 2006 
- * @version $Id: PackageSchemasTable.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: PackageSchemasTable.java,v 1.2 2007-08-21 21:02:11 dervin Exp $ 
  */
 public class PackageSchemasTable extends JTable {
 
@@ -41,6 +44,7 @@ public class PackageSchemasTable extends JTable {
      * Status messages for the package namespace resolution
      */
     public static final String STATUS_SCHEMA_FOUND = "Found";
+    public static final String STATUS_MAPPING_ERROR = "Mapping Error";
     public static final String STATUS_GME_DOMAIN_NOT_FOUND = "No Domain";
     public static final String STATUS_GME_NAMESPACE_NOT_FOUND = "No Namespace";
     public static final String STATUS_NEVER_TRIED = "Unknown";
@@ -128,7 +132,7 @@ public class PackageSchemasTable extends JTable {
         // resolve the schemas manually
         NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(info);
         if (resolved != null) {
-            if (resolved.length != 0) {
+            if (resolved.length != 0 && packageResolvedByNamespace(pack, resolved[0])) {
                 // set the mapped namespace for the package
                 pack.setMappedNamespace(resolved[0].getNamespace());
                 // set the resolution status on the table
@@ -157,10 +161,38 @@ public class PackageSchemasTable extends JTable {
                             IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
                     }
                 } 
+            } else {
+                setValueAt(STATUS_MAPPING_ERROR, dataRow, 2);
             }
         } else {
             ErrorDialog.showErrorDialog("Error retrieving schemas!");
         }
+    }
+    
+    
+    private boolean packageResolvedByNamespace(CadsrPackage pkg, NamespaceType namespace) {
+        Set<String> classNames = new HashSet();
+        for (ClassMapping mapping : pkg.getCadsrClass()) {
+            classNames.add(mapping.getClassName());
+        }
+        Set<String> elementNames = new HashSet();
+        for (SchemaElementType element : namespace.getSchemaElement()) {
+            elementNames.add(element.getType());
+        }
+        if (elementNames.containsAll(classNames)) {
+            return true;
+        }
+        
+        // sort out the resolution errors
+        Set<String> nonResolvedClasses = new HashSet();
+        nonResolvedClasses.addAll(classNames);
+        nonResolvedClasses.removeAll(elementNames);
+        
+        // display the errors
+        new PackageSchemaMappingErrorDialog(nonResolvedClasses);
+        
+        // return error condition
+        return false;
     }
 
 

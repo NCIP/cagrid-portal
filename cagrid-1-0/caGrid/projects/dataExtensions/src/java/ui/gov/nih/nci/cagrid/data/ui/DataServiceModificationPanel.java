@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Oct 10, 2006
- * @version $Id: DataServiceModificationPanel.java,v 1.3 2007-08-13 14:13:51 dervin Exp $
+ * @version $Id: DataServiceModificationPanel.java,v 1.4 2007-08-21 21:02:11 dervin Exp $
  */
 public class DataServiceModificationPanel extends ServiceModificationUIPanel {
     
@@ -65,24 +65,21 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 
 
 	protected void resetGUI() {
-        long start = System.currentTimeMillis();
-        int tabs = getMainTabbedPane().getTabCount();
-        for (int i = 0; i < tabs; i++) {
-            Component tab = getMainTabbedPane().getComponentAt(i);
-            if (tab instanceof UpdatablePanel) {
-                try {
-                    String tabName = getMainTabbedPane().getTitleAt(i);
-                    long tabStart = System.currentTimeMillis();
-                    ((UpdatablePanel) tab).updateDisplayedConfiguration();
-                    LOG.debug("Tab " + tabName + " updated in " + (System.currentTimeMillis() - tabStart) + " ms");
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error updating information on " 
-                        + getMainTabbedPane().getTitleAt(i), ex.getMessage(), ex);
-                }
+        // only need to update the currently displayed tab
+        Component visibleTab = getMainTabbedPane().getSelectedComponent();
+        if (visibleTab instanceof UpdatablePanel) {
+            try {
+                String tabName = getMainTabbedPane().getTitleAt(getMainTabbedPane().getSelectedIndex());
+                long tabStart = System.currentTimeMillis();
+                ((UpdatablePanel) visibleTab).updateDisplayedConfiguration();
+                LOG.debug("Tab " + tabName + " updated in " + (System.currentTimeMillis() - tabStart) + " ms");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                ErrorDialog.showErrorDialog("Error updating information on " 
+                    + getMainTabbedPane().getTitleAt(
+                        getMainTabbedPane().getSelectedIndex()), ex.getMessage(), ex);
             }
         }
-        LOG.debug("All tabs updated in " + (System.currentTimeMillis() - start) + " ms");
 	}
     
 
@@ -95,7 +92,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		if (domainConfigPanel == null) {
             domainConfigPanel = new DomainModelConfigPanel(getServiceInfo(), dataManager);
             domainConfigPanel.addClassSelectionListener(new gov.nih.nci.cagrid.data.ui.domain.DomainModelClassSelectionListener() {
-                public void classAdded(String packageName, ClassMapping mapping, NamespaceType packageNamespace) {
+                public void classSelected(String packageName, ClassMapping mapping, NamespaceType packageNamespace) {
                     getDetailConfigPanel().getClassConfigTable().addClass(packageName, mapping, packageNamespace);
                     try {
                         dataManager.setClassSelectedInModel(packageName, mapping.getClassName(), true);
@@ -107,7 +104,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                 }
                 
                 
-                public void classRemoved(String packageName, String className) {
+                public void classDeselected(String packageName, String className) {
                     getDetailConfigPanel().getClassConfigTable().removeRow(packageName, className);
                     try {
                         dataManager.setClassSelectedInModel(packageName, className, false);
@@ -144,6 +141,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                 }
             });
             
+            // load tabs into the tabbed pane
 			mainTabbedPane.addTab("Domain Model", null, getDomainConfigPanel(), 
                 "Selection of packages and classes in domain model");
 			mainTabbedPane.addTab("Query Processor", null, getProcessorConfigPanel(), 
@@ -162,6 +160,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				"Class to element mapping, serialization, validation");
             mainTabbedPane.addTab("Auditing", null, getAuditorConfigPanel(),
                 "Optional selection and configuration of auditors");
+            
             // tab for the service style
             try {
                 String styleName = dataManager.getServiceStyle();
@@ -188,6 +187,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                 ErrorDialog.showErrorDialog(
                     "Error loading service style configuration tab", ex.getMessage(), ex);
             }
+            
+            resetGUI();
 		}
 		return mainTabbedPane;
 	}

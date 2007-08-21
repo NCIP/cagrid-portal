@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.ui;
 
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.ui.wizard.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
@@ -33,7 +34,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 27, 2006
- * @version $Id: SchemaResolutionDialog.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: SchemaResolutionDialog.java,v 1.2 2007-08-21 21:02:11 dervin Exp $
  */
 public class SchemaResolutionDialog extends JDialog {
 
@@ -76,6 +77,7 @@ public class SchemaResolutionDialog extends JDialog {
         setModal(true);
         this.setSize(new java.awt.Dimension(400, 330));
         this.setContentPane(getMainPanel());
+        PortalUtils.centerComponent(this);
         this.setVisible(true);
     }
 

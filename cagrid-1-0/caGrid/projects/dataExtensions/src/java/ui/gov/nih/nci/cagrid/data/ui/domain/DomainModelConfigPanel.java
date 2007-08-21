@@ -65,15 +65,17 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.3 2007-08-10 17:27:16 dervin Exp $
+ * @version $Id: DomainModelConfigPanel.java,v 1.4 2007-08-21 21:02:10 dervin Exp $
  */
 public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
     private transient List<DomainModelClassSelectionListener> classSelectionListeners = null;
 
-    private Project mostRecentProject;
+    private transient Project mostRecentProject;
 
-    private DomainModel installedDomainModel = null;
+    private transient DomainModel installedDomainModel = null;
+    
+    private transient boolean currentlyFromCadsr;
 
     private JButton visualizeDomainModelButton = null;
     private JPanel cadsrDomainModelPanel = null;
@@ -113,6 +115,8 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
         getAddPackageButton().setEnabled(!noDomainModel && !suppliedDomainModel);
         getRemovePackageButton().setEnabled(!noDomainModel && !suppliedDomainModel);
         if (suppliedDomainModel) {
+            currentlyFromCadsr = false;
+            System.out.println("The domain model is supplied");
             try {
                 File dmFile = getSuppliedDomainModelFile();
                 FileReader reader = new FileReader(dmFile.getAbsolutePath());
@@ -128,56 +132,62 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             }
         } else {
             installedDomainModel = null;
-            if (!noDomainModel && !suppliedDomainModel) {
-                // domain model must be from caDSR
-                try {
-                    // get the project from cadsr that has been selected
-                    String projectLongName = getExtensionDataManager().getCadsrProjectLongName();
-                    String projectVersion = getExtensionDataManager().getCadsrProjectVersion();
-                    String caDsrUrl = getExtensionDataManager().getCadsrUrl();
-                    // set the cadsr URL to that used in the extension data
-                    if (caDsrUrl != null) {
-                        getCadsrBrowserPanel().getCadsr().setText(caDsrUrl);
-                    }
-                    // find the requested project in the caDSR
-                    CaDSRServiceClient cadsrClient = new CaDSRServiceClient(
-                        getCadsrBrowserPanel().getCadsr().getText());
-                    Project[] allProjects = cadsrClient.findAllProjects();
-                    for (Project proj : allProjects) {
-                        if (proj.getLongName().equals(projectLongName) 
-                            && proj.getVersion().equals(projectVersion)) {
-                            mostRecentProject = proj;
-                            break;
-                        }
-                    }
-
-                    // populate the UI's packages and classes
-                    List<String> packageNames = getExtensionDataManager().getCadsrPackageNames();
-                    if (packageNames != null) {
-                        for (String packName : packageNames) {
-                            if (getUmlTree().getUmlPackageNode(packName) == null) {
-                                // package isn't in the tree yet
-                                getUmlTree().addUmlPackage(packName);
-                                List<ClassMapping> mappings = getExtensionDataManager()
-                                    .getClassMappingsInPackage(packName);
-                                for (ClassMapping mapping : mappings) {
-                                    UMLClassTreeNode classNode = getUmlTree().addUmlClass(
-                                        packName, mapping.getClassName());
-                                    classNode.getCheckBox().setSelected(mapping.isSelected());
-                                }
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error loading cadsr domain model information", 
-                        ex.getMessage(), ex);
-                }
+            if (!noDomainModel && !suppliedDomainModel && !currentlyFromCadsr) {
+                currentlyFromCadsr = true;
+                firstCadsrBrowserInit();
             }
         }
         getUmlTree().setEnabled(!(noDomainModel || suppliedDomainModel));
         if (!getUmlTree().isEnabled()) {
             getUmlTree().expandFullTree();
+        }
+    }
+    
+    
+    private synchronized void firstCadsrBrowserInit() {
+        // domain model must be from caDSR
+        try {
+            // get the project from cadsr that has been selected
+            String projectLongName = getExtensionDataManager().getCadsrProjectLongName();
+            String projectVersion = getExtensionDataManager().getCadsrProjectVersion();
+            String caDsrUrl = getExtensionDataManager().getCadsrUrl();
+            // set the cadsr URL to that used in the extension data
+            if (caDsrUrl != null) {
+                getCadsrBrowserPanel().getCadsr().setText(caDsrUrl);
+            }
+            // find the requested project in the caDSR
+            CaDSRServiceClient cadsrClient = new CaDSRServiceClient(
+                getCadsrBrowserPanel().getCadsr().getText());
+            Project[] allProjects = cadsrClient.findAllProjects();
+            for (Project proj : allProjects) {
+                if (proj.getLongName().equals(projectLongName) 
+                    && proj.getVersion().equals(projectVersion)) {
+                    mostRecentProject = proj;
+                    break;
+                }
+            }
+            // populate the UI's packages and classes
+            List<String> packageNames = getExtensionDataManager().getCadsrPackageNames();
+            if (packageNames != null) {
+                for (String packName : packageNames) {
+                    if (getUmlTree().getUmlPackageNode(packName) == null) {
+                        // package isn't in the tree yet
+                        getUmlTree().addUmlPackage(packName);
+                        List<ClassMapping> mappings = getExtensionDataManager()
+                            .getClassMappingsInPackage(packName);
+                        for (ClassMapping mapping : mappings) {
+                            UMLClassTreeNode classNode = getUmlTree().addUmlClass(
+                                packName, mapping.getClassName());
+                            classNode.getCheckBox().setSelected(mapping.isSelected());
+                        }
+                    }
+                }
+            }
+            currentlyFromCadsr = true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorDialog.showErrorDialog("Error loading cadsr domain model information", 
+                ex.getMessage(), ex);
         }
     }
 
@@ -240,6 +250,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 ErrorDialog.showErrorDialog("Error getting caDSR Service url", message, ex);
             }
             if (cadsrUrl == null || cadsrUrl.length() == 0) {
+                // grab the default URL and store it in the extension data
                 cadsrUrl = ResourceManager.getServiceURLProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY);
                 try {
                     getExtensionDataManager().storeCadsrServiceUrl(cadsrUrl);
@@ -248,6 +259,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                     ErrorDialog.showErrorDialog("Error storing caDSR url", ex.getMessage(), ex);
                 }
             }
+            // set the URL appropriatly in the GUI
             cadsrBrowserPanel.getCadsr().setText(cadsrUrl);
             // add listener to the cadsr URL text field
             cadsrBrowserPanel.getCadsr().getDocument().addDocumentListener(new DocumentChangeAdapter() {
@@ -261,6 +273,23 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                     }
                 }
             });
+            
+            /*
+            boolean noDomainModel = false;
+            boolean suppliedDomainModel = false;
+            try {
+                noDomainModel = getExtensionDataManager().isNoDomainModel();
+                suppliedDomainModel = getExtensionDataManager().isSuppliedDomainModel();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                ErrorDialog.showErrorDialog("Error loading domain model source", 
+                    ex.getMessage(), ex);
+            }
+            
+            if (!noDomainModel && !suppliedDomainModel) {
+                firstCadsrBrowserInit();
+            }
+            */
         }
         return cadsrBrowserPanel;
     }
@@ -403,7 +432,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                             NamespaceType packageNamespace = CommonTools.getNamespaceType(
                                 getServiceInfo().getNamespaces(), namespace);
                             // inform interested parties of the selection
-                            fireClassAdded(packName, mapping, packageNamespace);
+                            fireClassSelected(packName, mapping, packageNamespace);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                             ErrorDialog.showErrorDialog("Error selecting class: " + ex.getMessage(), ex);
@@ -418,7 +447,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                         // add the type to the configuration table
                         String packName = ((UMLPackageTreeNode) classNode.getParent()).getPackageName();
                         String className = classNode.getClassName();
-                        fireClassRemoved(packName, className);
+                        fireClassDeselected(packName, className);
                     }
                 }
             });
@@ -559,7 +588,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             getExtensionDataManager().removeCadsrPackage(packageName);
             String[] classNames = getUmlTree().getSelectedClassNames(packageName);
             for (String name : classNames) {
-                fireClassRemoved(packageName, name);
+                fireClassDeselected(packageName, name);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -603,6 +632,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
         // walk packages names --> class lists, create CadsrPackages
         List<CadsrPackage> cadsrPackages = new ArrayList(packageToClass.keySet().size());
+        List<UMLClassTreeNode> addedClassNodes = new LinkedList();
         for (String packName : packageToClass.keySet()) {
             // get the namespace type for the package
             NamespaceType packageNamespace = getNamespaceForPackage(
@@ -620,10 +650,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             // add the package and classes to the UML tree
             getUmlTree().addUmlPackage(packName);
             for (ClassMapping mapping : mappings) {
-                UMLClassTreeNode node = getUmlTree().addUmlClass(packName, mapping.getClassName());
-                // by definition, this is part of the domain model
-                node.getCheckBox().setSelected(true);
-                fireClassAdded(packName, mapping, packageNamespace);
+                addedClassNodes.add(getUmlTree().addUmlClass(packName, mapping.getClassName()));
             }
         }
         // convert package list to an array
@@ -642,6 +669,12 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             ErrorDialog.showErrorDialog("Error storing domain model information", 
                 ex.getMessage(), ex);
             return false;
+        }
+        
+        // walk through the newly added class nodes, and check them off in the tree,
+        // by definition, they are part of the domain model
+        for (UMLClassTreeNode node : addedClassNodes) {
+            node.getCheckBox().setSelected(true); // selecting the node causes the selection event to fire
         }
         return true;
     }
@@ -871,20 +904,38 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
     }
 
 
-    protected void fireClassAdded(String packageName, ClassMapping classMapping, NamespaceType packageNsType) {
+    /**
+     * Informs listeners that a class has been selected to participate in the
+     * DomainModel of the currently loaded data service
+     * 
+     * @param packageName
+     * @param classMapping
+     * @param packageNsType
+     */
+    protected void fireClassSelected(String packageName, ClassMapping classMapping, NamespaceType packageNsType) {
         for (DomainModelClassSelectionListener listener : classSelectionListeners) {
-            listener.classAdded(packageName, classMapping, packageNsType);
+            listener.classSelected(packageName, classMapping, packageNsType);
         }
     }
 
 
-    protected void fireClassRemoved(String packageName, String className) {
+    /**
+     * Informs listeners that a class has been deselected from participation
+     * in the service's DomainModel
+     * 
+     * @param packageName
+     * @param className
+     */
+    protected void fireClassDeselected(String packageName, String className) {
         for (DomainModelClassSelectionListener listener : classSelectionListeners) {
-            listener.classRemoved(packageName, className);
+            listener.classDeselected(packageName, className);
         }
     }
 
 
+    /**
+     * Informs listeners that all classes have been removed from the domain model
+     */
     protected void fireClassesCleared() {
         for (DomainModelClassSelectionListener listener : classSelectionListeners) {
             listener.classesCleared();

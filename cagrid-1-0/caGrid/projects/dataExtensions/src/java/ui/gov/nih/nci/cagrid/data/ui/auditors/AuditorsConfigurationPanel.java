@@ -36,7 +36,7 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:40:27 AM
- * @version $Id: AuditorsConfigurationPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: AuditorsConfigurationPanel.java,v 1.2 2007-08-21 21:02:11 dervin Exp $ 
  */
 public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel {
 
@@ -54,7 +54,10 @@ public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel 
         AuditorConfiguration[] configs = getAuditorsDescription().getAuditorConfiguration();
         if (configs != null) {
             for (AuditorConfiguration config : configs) {
-                getAuditorsTable().addAuditor(config.getClassName(), config.getInstanceName());
+                if (!getAuditorsTable().isAuditorDisplayed(
+                    config.getClassName(), config.getInstanceName())) {
+                    getAuditorsTable().addAuditor(config.getClassName(), config.getInstanceName());
+                }
             }
         }
     }
