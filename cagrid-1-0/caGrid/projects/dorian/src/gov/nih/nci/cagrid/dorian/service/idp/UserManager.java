@@ -244,6 +244,7 @@ public class UserManager extends LoggingObject {
 			ps.setString(15, user.getRole().getValue());
 			ps.executeUpdate();
 			ps.close();
+			user.setPasswordSecurity(this.passwordSecurityManager.getEntry(user.getUserId()));
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
