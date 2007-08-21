@@ -396,9 +396,6 @@ public class ModificationViewer extends GridPortalComponent {
             panel.setServiceInfo(this.info);
         }
         //repaint the component that was selected before the save
-        int previousViewedTab = getContentTabbedPane().getSelectedIndex();
-        getContentTabbedPane().setSelectedIndex(0);
-        getContentTabbedPane().setSelectedIndex(previousViewedTab);
         this.repaint();
     }
 
