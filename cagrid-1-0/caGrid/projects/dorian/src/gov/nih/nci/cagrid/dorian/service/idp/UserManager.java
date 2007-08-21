@@ -19,6 +19,7 @@ import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.NoSuchUserFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -139,7 +140,7 @@ public class UserManager extends LoggingObject {
 	}
 
 
-	private void validatePassword(IdPUser user) throws InvalidUserPropertyFault {
+	private void validatePassword(IdPUser user) throws DorianInternalFault, InvalidUserPropertyFault {
 		String password = user.getPassword();
 		if ((password == null) || (conf.getPasswordLength().getMin() > password.length())
 			|| (conf.getPasswordLength().getMax() < password.length())) {
@@ -148,11 +149,19 @@ public class UserManager extends LoggingObject {
 				+ conf.getPasswordLength().getMin() + " and " + conf.getPasswordLength().getMax() + " characters.");
 			throw fault;
 		} else {
-			if (!((PasswordUtils.hasCapitalLetter(password)) && (PasswordUtils.hasLowerCaseLetter(password))
-				&& (PasswordUtils.hasNumber(password)) && (PasswordUtils.hasSymbol(password)) && (!DictionaryCheck
-				.doesStringContainDictionaryWord(password)))) {
-				InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
-				fault.setFaultString(INVALID_PASSWORD_MESSAGE);
+			try {
+				if (!((PasswordUtils.hasCapitalLetter(password)) && (PasswordUtils.hasLowerCaseLetter(password))
+					&& (PasswordUtils.hasNumber(password)) && (PasswordUtils.hasSymbol(password)) && (!DictionaryCheck
+					.doesStringContainDictionaryWord(password)))) {
+					InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
+					fault.setFaultString(INVALID_PASSWORD_MESSAGE);
+					throw fault;
+				}
+			} catch (IOException e) {
+				logError(e.getMessage(), e);
+				DorianInternalFault fault = new DorianInternalFault();
+				fault
+					.setFaultString("Unexpected error validting the user's password, please contact an administrator.");
 				throw fault;
 			}
 		}
@@ -172,7 +181,7 @@ public class UserManager extends LoggingObject {
 	}
 
 
-	private void validateUser(IdPUser user) throws InvalidUserPropertyFault {
+	private void validateUser(IdPUser user) throws DorianInternalFault, InvalidUserPropertyFault {
 		validateUserId(user);
 		validatePassword(user);
 		validateSpecifiedField("First Name", user.getFirstName());
@@ -536,9 +545,10 @@ public class UserManager extends LoggingObject {
 			IdPUser curr = this.getUser(u.getUserId());
 			boolean passwordChanged = false;
 			if (u.getPassword() != null) {
-				validatePassword(u);
+
 				String newPass = Crypt.crypt(u.getPassword());
 				if (!newPass.equals(curr.getPassword())) {
+					validatePassword(u);
 					curr.setPassword(newPass);
 					passwordChanged = true;
 				}
