@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.dorian.service.idp;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.PasswordSecurityPolicy;
+import gov.nih.nci.cagrid.dorian.idp.bean.PasswordSecurity;
+import gov.nih.nci.cagrid.dorian.idp.bean.PasswordStatus;
 import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 
@@ -20,9 +22,7 @@ public class PasswordSecurityManager extends LoggingObject {
 	private static final String CONSECUTIVE_INVALID_LOGINS = "CONSECUTIVE_INVALID_LOGINS";
 	private static final String LOCK_OUT_EXPIRATION = "LOCK_OUT_EXPIRATION";
 	private static final String TOTAL_INVALID_LOGINS = "TOTAL_INVALID_LOGINS";
-	public static final int VALID = 0;
-	public static final int LOCKED = 1;
-	public static final int LOCKED_UNTIL_CHANGED = 2;
+	
 
 	private Database db;
 
@@ -97,14 +97,14 @@ public class PasswordSecurityManager extends LoggingObject {
 
 
 	public void reportSuccessfulLoginAttempt(String uid) throws DorianInternalFault {
-		PasswordSecurityEntry entry = getEntry(uid);
+		PasswordSecurity entry = getEntry(uid);
 		entry.setConsecutiveInvalidLogins(0);
-		updateEntry(entry);
+		updateEntry(uid, entry);
 	}
 
 
 	public void reportInvalidLoginAttempt(String uid) throws DorianInternalFault {
-		PasswordSecurityEntry entry = getEntry(uid);
+		PasswordSecurity entry = getEntry(uid);
 		long count = entry.getConsecutiveInvalidLogins() + 1;
 		long total = entry.getTotalInvalidLogins() + 1;
 		if (count >= policy.getMaxConsecutiveInvalidLogins()) {
@@ -114,22 +114,22 @@ public class PasswordSecurityManager extends LoggingObject {
 			exp.add(Calendar.HOUR_OF_DAY, policy.getLockoutTime().getHours());
 			exp.add(Calendar.MINUTE, policy.getLockoutTime().getMinutes());
 			exp.add(Calendar.SECOND, policy.getLockoutTime().getSeconds());
-			entry.setLockOutExpiration(exp.getTimeInMillis());
-			updateEntry(entry);
+			entry.setLockoutExpiration(exp.getTimeInMillis());
+			updateEntry(uid, entry);
 		} else {
 			entry.setConsecutiveInvalidLogins(count);
 			entry.setTotalInvalidLogins(total);
-			updateEntry(entry);
+			updateEntry(uid, entry);
 		}
 	}
 
 
-	public synchronized PasswordSecurityEntry getEntry(String uid) throws DorianInternalFault {
+	public synchronized PasswordSecurity getEntry(String uid) throws DorianInternalFault {
 		this.buildDatabase();
 		if (!entryExists(uid)) {
 			insertEntry(uid);
 		}
-		PasswordSecurityEntry entry = null;
+		PasswordSecurity entry = null;
 		Connection c = null;
 		try {
 			c = db.getConnection();
@@ -137,11 +137,21 @@ public class PasswordSecurityManager extends LoggingObject {
 			s.setString(1, uid);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
-				entry = new PasswordSecurityEntry();
-				entry.setUid(uid);
+				entry = new PasswordSecurity();
 				entry.setConsecutiveInvalidLogins(rs.getLong(CONSECUTIVE_INVALID_LOGINS));
 				entry.setTotalInvalidLogins(rs.getLong(TOTAL_INVALID_LOGINS));
-				entry.setLockOutExpiration(rs.getLong(LOCK_OUT_EXPIRATION));
+				entry.setLockoutExpiration(rs.getLong(LOCK_OUT_EXPIRATION));
+				if (entry.getTotalInvalidLogins() >= policy.getMaxTotalInvalidLogins()) {
+					entry.setPasswordStatus(PasswordStatus.LockedUntilChanged);
+				} else {
+					long curr = System.currentTimeMillis();
+					long expires = entry.getLockoutExpiration();
+					if (curr > expires) {
+						entry.setPasswordStatus(PasswordStatus.Valid);
+					} else {
+						entry.setPasswordStatus(PasswordStatus.Locked);
+					}
+				}
 			}
 			rs.close();
 			s.close();
@@ -168,24 +178,12 @@ public class PasswordSecurityManager extends LoggingObject {
 	}
 
 
-	public int getPasswordStatus(String uid) throws DorianInternalFault {
-		PasswordSecurityEntry entry = getEntry(uid);
-		if (entry.getTotalInvalidLogins() >= policy.getMaxTotalInvalidLogins()) {
-			return LOCKED_UNTIL_CHANGED;
-		} else {
-			long curr = System.currentTimeMillis();
-			long expires = entry.getLockOutExpiration();
-			if (curr > expires) {
-				return VALID;
-			} else {
-				return LOCKED;
-			}
-		}
-
+	public PasswordStatus getPasswordStatus(String uid) throws DorianInternalFault {
+		return getEntry(uid).getPasswordStatus();
 	}
 
 
-	private synchronized void updateEntry(PasswordSecurityEntry entry) throws DorianInternalFault {
+	private synchronized void updateEntry(String uid, PasswordSecurity entry) throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		try {
@@ -194,8 +192,8 @@ public class PasswordSecurityManager extends LoggingObject {
 				+ TOTAL_INVALID_LOGINS + "= ?," + LOCK_OUT_EXPIRATION + "= ?  WHERE " + UID + "=?");
 			ps.setLong(1, entry.getConsecutiveInvalidLogins());
 			ps.setLong(2, entry.getTotalInvalidLogins());
-			ps.setLong(3, entry.getLockOutExpiration());
-			ps.setString(4, entry.getUid());
+			ps.setLong(3, entry.getLockoutExpiration());
+			ps.setString(4, uid);
 			ps.executeUpdate();
 			ps.close();
 		} catch (Exception e) {

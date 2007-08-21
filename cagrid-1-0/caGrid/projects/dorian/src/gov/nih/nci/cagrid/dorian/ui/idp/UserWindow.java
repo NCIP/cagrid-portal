@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -27,12 +28,11 @@ import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.7 2007-08-09 14:41:35 langella Exp $
+ * @version $Id: UserWindow.java,v 1.8 2007-08-21 19:59:18 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 
@@ -41,6 +41,8 @@ public class UserWindow extends ApplicationComponent {
 	private final static String INFO_PANEL = "User Information";
 
 	private final static String PASSWORD_PANEL = "Change Password";
+
+	private final static String PASSWORD_SECURITY = "Password Security";
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -138,6 +140,23 @@ public class UserWindow extends ApplicationComponent {
 
 	private GlobusCredential proxy;
 
+	private JPanel passwordSecurityPanel = null;
+
+	private JLabel jLabel12 = null;
+
+	private JTextField passwordStatus = null;
+
+	private JLabel jLabel13 = null;
+
+	private JTextField consecutiveInvalidLogins = null;
+
+	private JLabel jLabel15 = null;
+
+	private JTextField totalInvalidLogins = null;
+
+	private JLabel jLabel16 = null;
+
+	private JTextField lockoutExpiration = null;
 
 	/**
 	 * This is the default constructor
@@ -151,7 +170,6 @@ public class UserWindow extends ApplicationComponent {
 		this.setFrameIcon(DorianLookAndFeel.getUserIcon());
 	}
 
-
 	/**
 	 * This method initializes this
 	 */
@@ -161,7 +179,6 @@ public class UserWindow extends ApplicationComponent {
 		this.setSize(600, 400);
 
 	}
-
 
 	/**
 	 * This method initializes jContentPane
@@ -176,7 +193,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -212,7 +228,6 @@ public class UserWindow extends ApplicationComponent {
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -226,7 +241,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes jButton1
@@ -247,7 +261,6 @@ public class UserWindow extends ApplicationComponent {
 		return cancel;
 	}
 
-
 	/**
 	 * This method initializes manageUser
 	 * 
@@ -265,7 +278,8 @@ public class UserWindow extends ApplicationComponent {
 						}
 					};
 					try {
-						GridApplication.getContext().executeInBackground(runner);
+						GridApplication.getContext()
+								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -276,7 +290,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return updateUser;
 	}
-
 
 	private String format(char[] array) {
 		if (array == null) {
@@ -291,7 +304,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 	}
 
-
 	private synchronized void updateUser() {
 
 		String pass = format(this.getPassword().getPassword());
@@ -301,12 +313,15 @@ public class UserWindow extends ApplicationComponent {
 			if (pass.equals(verify)) {
 				user.setPassword(pass);
 			} else {
-				ErrorDialog.showError("Cannot update the user " + user.getUserId() + ", password don't match.");
+				ErrorDialog.showError("Cannot update the user "
+						+ user.getUserId() + ", password don't match.");
 			}
 		}
 
-		user.setRole(((UserRolesComboBox) this.getUserRole()).getSelectedUserRole());
-		user.setStatus(((UserStatusComboBox) this.getUserStatus()).getSelectedUserStatus());
+		user.setRole(((UserRolesComboBox) this.getUserRole())
+				.getSelectedUserRole());
+		user.setStatus(((UserStatusComboBox) this.getUserStatus())
+				.getSelectedUserStatus());
 
 		user.setUserId(getUsername().getText());
 		user.setFirstName(getFirstName().getText());
@@ -324,10 +339,12 @@ public class UserWindow extends ApplicationComponent {
 		try {
 			String serviceName = getService().getText();
 
-			IdPAdministrationClient client = new IdPAdministrationClient(serviceName, proxy);
+			IdPAdministrationClient client = new IdPAdministrationClient(
+					serviceName, proxy);
 			client.updateUser(user);
 
-			GridApplication.getContext().showMessage("User " + user.getUserId() + " update successfully.");
+			GridApplication.getContext().showMessage(
+					"User " + user.getUserId() + " update successfully.");
 
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
@@ -335,7 +352,6 @@ public class UserWindow extends ApplicationComponent {
 			ErrorDialog.showError(e);
 		}
 	}
-
 
 	/**
 	 * This method initializes jTabbedPane
@@ -345,16 +361,18 @@ public class UserWindow extends ApplicationComponent {
 	private JTabbedPane getJTabbedPane() {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
-			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-					.getPanelLabelColor()));
+			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null,
+					"Information", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+							.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, null, getInfoPanel(), null);
 			jTabbedPane.addTab(ACCOUNT_PANEL, null, getAccountPanel(), null);
+			jTabbedPane.addTab(PASSWORD_SECURITY, null,
+					getPasswordSecurityPanel(), null);
 			jTabbedPane.addTab(PASSWORD_PANEL, null, getPasswordPanel(), null);
 		}
 		return jTabbedPane;
 	}
-
 
 	/**
 	 * This method initializes jPanel1
@@ -578,7 +596,6 @@ public class UserWindow extends ApplicationComponent {
 		return jPanel1;
 	}
 
-
 	/**
 	 * This method initializes jTextField
 	 * 
@@ -591,7 +608,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return firstName;
 	}
-
 
 	/**
 	 * This method initializes jTextField1
@@ -606,7 +622,6 @@ public class UserWindow extends ApplicationComponent {
 		return lastName;
 	}
 
-
 	/**
 	 * This method initializes jTextField2
 	 * 
@@ -619,7 +634,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return organization;
 	}
-
 
 	/**
 	 * This method initializes jTextField3
@@ -634,7 +648,6 @@ public class UserWindow extends ApplicationComponent {
 		return address;
 	}
 
-
 	/**
 	 * This method initializes jTextField4
 	 * 
@@ -647,7 +660,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return address2;
 	}
-
 
 	/**
 	 * This method initializes jTextField5
@@ -662,7 +674,6 @@ public class UserWindow extends ApplicationComponent {
 		return city;
 	}
 
-
 	private StateListComboBox getState() {
 		if (state == null) {
 			state = new StateListComboBox(false);
@@ -671,7 +682,6 @@ public class UserWindow extends ApplicationComponent {
 		return state;
 	}
 
-
 	private JTextField getZipcode() {
 		if (zipcode == null) {
 			zipcode = new JTextField();
@@ -679,7 +689,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return zipcode;
 	}
-
 
 	/**
 	 * This method initializes jTextField7
@@ -694,7 +703,6 @@ public class UserWindow extends ApplicationComponent {
 		return phoneNumber;
 	}
 
-
 	/**
 	 * This method initializes jTextField8
 	 * 
@@ -708,7 +716,6 @@ public class UserWindow extends ApplicationComponent {
 		return email;
 	}
 
-
 	private CountryListComboBox getCountry() {
 		if (country == null) {
 			country = new CountryListComboBox(false);
@@ -716,7 +723,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return country;
 	}
-
 
 	/**
 	 * This method initializes jTextField9
@@ -731,7 +737,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return username;
 	}
-
 
 	/**
 	 * This method initializes jPanel2
@@ -760,15 +765,15 @@ public class UserWindow extends ApplicationComponent {
 			jLabel14.setText("Service");
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-					.getPanelLabelColor()));
+			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
+					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+							.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);
 		}
 		return jPanel2;
 	}
-
 
 	/**
 	 * This method initializes service1
@@ -784,7 +789,6 @@ public class UserWindow extends ApplicationComponent {
 		return service;
 	}
 
-
 	/**
 	 * This method initializes infoPanel
 	 * 
@@ -798,7 +802,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return infoPanel;
 	}
-
 
 	/**
 	 * This method initializes accountPanel
@@ -845,7 +848,6 @@ public class UserWindow extends ApplicationComponent {
 		return accountPanel;
 	}
 
-
 	/**
 	 * This method initializes userStatus
 	 * 
@@ -859,7 +861,6 @@ public class UserWindow extends ApplicationComponent {
 		return userStatus;
 	}
 
-
 	/**
 	 * This method initializes userRole
 	 * 
@@ -872,7 +873,6 @@ public class UserWindow extends ApplicationComponent {
 		}
 		return userRole;
 	}
-
 
 	/**
 	 * This method initializes passwordPanel
@@ -919,7 +919,6 @@ public class UserWindow extends ApplicationComponent {
 		return passwordPanel;
 	}
 
-
 	/**
 	 * This method initializes password
 	 * 
@@ -932,7 +931,6 @@ public class UserWindow extends ApplicationComponent {
 		return password;
 	}
 
-
 	/**
 	 * This method initializes verifyPassword
 	 * 
@@ -943,6 +941,152 @@ public class UserWindow extends ApplicationComponent {
 			verifyPassword = new JPasswordField();
 		}
 		return verifyPassword;
+	}
+
+	/**
+	 * This method initializes passwordSecurityPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPasswordSecurityPanel() {
+		if (passwordSecurityPanel == null) {
+			GridBagConstraints gridBagConstraints45 = new GridBagConstraints();
+			gridBagConstraints45.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints45.gridy = 3;
+			gridBagConstraints45.weightx = 1.0;
+			gridBagConstraints45.anchor = GridBagConstraints.WEST;
+			gridBagConstraints45.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints45.gridx = 1;
+			GridBagConstraints gridBagConstraints44 = new GridBagConstraints();
+			gridBagConstraints44.gridx = 0;
+			gridBagConstraints44.anchor = GridBagConstraints.WEST;
+			gridBagConstraints44.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints44.gridy = 3;
+			jLabel16 = new JLabel();
+			jLabel16.setText("Lockout Expiration");
+			GridBagConstraints gridBagConstraints43 = new GridBagConstraints();
+			gridBagConstraints43.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints43.gridy = 2;
+			gridBagConstraints43.weightx = 1.0;
+			gridBagConstraints43.anchor = GridBagConstraints.WEST;
+			gridBagConstraints43.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints43.gridx = 1;
+			GridBagConstraints gridBagConstraints42 = new GridBagConstraints();
+			gridBagConstraints42.gridx = 0;
+			gridBagConstraints42.anchor = GridBagConstraints.WEST;
+			gridBagConstraints42.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints42.gridy = 2;
+			jLabel15 = new JLabel();
+			jLabel15.setText("Total Invalid Logins");
+			GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
+			gridBagConstraints41.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints41.gridy = 1;
+			gridBagConstraints41.weightx = 1.0;
+			gridBagConstraints41.anchor = GridBagConstraints.WEST;
+			gridBagConstraints41.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints41.gridx = 1;
+			GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
+			gridBagConstraints40.gridx = 0;
+			gridBagConstraints40.anchor = GridBagConstraints.WEST;
+			gridBagConstraints40.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints40.gridy = 1;
+			jLabel13 = new JLabel();
+			jLabel13.setText("Consecutive Invalid Logins");
+			GridBagConstraints gridBagConstraints39 = new GridBagConstraints();
+			gridBagConstraints39.anchor = GridBagConstraints.WEST;
+			gridBagConstraints39.gridy = 0;
+			gridBagConstraints39.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints39.gridx = 0;
+			GridBagConstraints gridBagConstraints38 = new GridBagConstraints();
+			gridBagConstraints38.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints38.anchor = GridBagConstraints.WEST;
+			gridBagConstraints38.gridx = 1;
+			gridBagConstraints38.gridy = 0;
+			gridBagConstraints38.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints38.weightx = 1.0;
+			jLabel12 = new JLabel();
+			jLabel12.setText("Password Status");
+			passwordSecurityPanel = new JPanel();
+			passwordSecurityPanel.setLayout(new GridBagLayout());
+			passwordSecurityPanel.add(jLabel12, gridBagConstraints39);
+			passwordSecurityPanel
+					.add(getPasswordStatus(), gridBagConstraints38);
+			passwordSecurityPanel.add(jLabel13, gridBagConstraints40);
+			passwordSecurityPanel.add(getConsecutiveInvalidLogins(),
+					gridBagConstraints41);
+			passwordSecurityPanel.add(jLabel15, gridBagConstraints42);
+			passwordSecurityPanel.add(getTotalInvalidLogins(),
+					gridBagConstraints43);
+			passwordSecurityPanel.add(jLabel16, gridBagConstraints44);
+			passwordSecurityPanel.add(getLockoutExpiration(),
+					gridBagConstraints45);
+		}
+		return passwordSecurityPanel;
+	}
+
+	/**
+	 * This method initializes passwordStatus
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getPasswordStatus() {
+		if (passwordStatus == null) {
+			passwordStatus = new JTextField();
+			passwordStatus.setEditable(false);
+			passwordStatus.setText(user.getPasswordSecurity()
+					.getPasswordStatus().getValue());
+		}
+		return passwordStatus;
+	}
+
+	/**
+	 * This method initializes consecutiveInvalidLogins
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getConsecutiveInvalidLogins() {
+		if (consecutiveInvalidLogins == null) {
+			consecutiveInvalidLogins = new JTextField();
+			consecutiveInvalidLogins.setEditable(false);
+			consecutiveInvalidLogins.setText(String.valueOf(user
+					.getPasswordSecurity().getConsecutiveInvalidLogins()));
+		}
+		return consecutiveInvalidLogins;
+	}
+
+	/**
+	 * This method initializes totalInvalidLogins
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getTotalInvalidLogins() {
+		if (totalInvalidLogins == null) {
+			totalInvalidLogins = new JTextField();
+			totalInvalidLogins.setEditable(false);
+			totalInvalidLogins.setText(String.valueOf(user
+					.getPasswordSecurity().getTotalInvalidLogins()));
+		}
+		return totalInvalidLogins;
+	}
+
+	/**
+	 * This method initializes lockoutExpiration
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getLockoutExpiration() {
+		if (lockoutExpiration == null) {
+			lockoutExpiration = new JTextField();
+			lockoutExpiration.setEditable(false);
+			long time = user.getPasswordSecurity().getLockoutExpiration();
+			if (time == 0) {
+				lockoutExpiration.setText("Password has never been locked.");
+			} else {
+				Date d = new Date(time);
+				lockoutExpiration.setText(d.toString());
+			}
+		}
+		return lockoutExpiration;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"

@@ -15,13 +15,13 @@
       <agg:GetMultipleResourcePropertiesPollType
 			xmlns:ns7="http://cagrid.nci.nih.gov/Dorian/types"
 			xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
-			xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-ifs"
-			xmlns:ns2="http://cagrid.nci.nih.gov/1/authentication-service"
+			xmlns:ns1="http://cagrid.nci.nih.gov/1/dorian-ifs"
+			xmlns:ns3="http://cagrid.nci.nih.gov/1/authentication-service"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
 			xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
-			xmlns:ns3="http://cagrid.nci.nih.gov/1/dorian-common"
-			xmlns:ns1="http://cagrid.nci.nih.gov/AuthenticationService/types"
-			xmlns:ns4="http://cagrid.nci.nih.gov/1/dorian-idp">
+			xmlns:ns4="http://cagrid.nci.nih.gov/1/dorian-common"
+			xmlns:ns2="http://cagrid.nci.nih.gov/AuthenticationService/types"
+			xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-idp">
         <!-- Specifies that the index should refresh information
             every 300000 milliseconds (once every 5 minutes) -->
         <agg:PollIntervalMillis>INDEX_REFRESH</agg:PollIntervalMillis>

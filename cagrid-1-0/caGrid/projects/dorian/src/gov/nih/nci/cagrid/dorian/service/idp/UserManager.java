@@ -12,6 +12,7 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
+import gov.nih.nci.cagrid.dorian.idp.bean.PasswordStatus;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
@@ -65,9 +66,9 @@ public class UserManager extends LoggingObject {
 		try {
 			IdPUser u = getUser(credential.getUserId());
 
-			int status = this.passwordSecurityManager.getPasswordStatus(u.getUserId());
+			PasswordStatus  status = this.passwordSecurityManager.getPasswordStatus(u.getUserId());
 
-			if (status == PasswordSecurityManager.VALID) {
+			if (status.equals(PasswordStatus.Valid)) {
 				if (!u.getPassword().equals(Crypt.crypt(credential.getPassword()))) {
 					passwordSecurityManager.reportInvalidLoginAttempt(u.getUserId());
 					PermissionDeniedFault fault = new PermissionDeniedFault();
@@ -76,12 +77,12 @@ public class UserManager extends LoggingObject {
 				} else {
 					passwordSecurityManager.reportSuccessfulLoginAttempt(u.getUserId());
 				}
-			} else if (status == PasswordSecurityManager.LOCKED_UNTIL_CHANGED) {
+			} else if (status.equals(PasswordStatus.LockedUntilChanged)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
 				fault
 					.setFaultString("This account has been locked because the maximum number of invalid logins has been exceeded, please contact an administrator to have your password reset.");
 				throw fault;
-			} else if (status == PasswordSecurityManager.LOCKED) {
+			} else if (status.equals(PasswordStatus.Locked)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
 				fault
 					.setFaultString("This account has been temporarily locked because the maximum number of consecutive invalid logins has been exceeded.");
@@ -407,6 +408,7 @@ public class UserManager extends LoggingObject {
 				user.setPhoneNumber(rs.getString("PHONE_NUMBER"));
 				user.setStatus(IdPUserStatus.fromValue(rs.getString("STATUS")));
 				user.setRole(IdPUserRole.fromValue(rs.getString("ROLE")));
+				user.setPasswordSecurity(this.passwordSecurityManager.getEntry(user.getUserId()));
 				users.add(user);
 			}
 			rs.close();
@@ -464,6 +466,7 @@ public class UserManager extends LoggingObject {
 				user.setPhoneNumber(rs.getString("PHONE_NUMBER"));
 				user.setStatus(IdPUserStatus.fromValue(rs.getString("STATUS")));
 				user.setRole(IdPUserRole.fromValue(rs.getString("ROLE")));
+				user.setPasswordSecurity(this.passwordSecurityManager.getEntry(uid));
 			} else {
 				NoSuchUserFault fault = new NoSuchUserFault();
 				fault.setFaultString("The user " + uid + " does not exist.");
@@ -569,6 +572,8 @@ public class UserManager extends LoggingObject {
 				}
 				curr.setEmail(u.getEmail());
 			}
+			
+
 
 			if ((u.getFirstName() != null) && (!u.getFirstName().equals(curr.getFirstName()))) {
 				validateSpecifiedField("First Name", u.getFirstName());

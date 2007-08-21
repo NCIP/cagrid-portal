@@ -15,20 +15,6 @@ public interface DorianI {
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
   /**
-   * This method allows a user with a Dorian IdP account to change their password.
-   *
-   * @param credential
-   * @param newPassword
-   * @throws DorianInternalFault
-   *	
-   * @throws PermissionDeniedFault
-   *	
-   * @throws InvalidUserPropertyFault
-   *	
-   */
-  public void changeIdPUserPassword(gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential credential,java.lang.String newPassword) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault ;
-
-  /**
    * Submits an application for an account with a the Dorian Identity Provider.
    *
    * @param application
@@ -241,6 +227,20 @@ public interface DorianI {
   public void updateHostCertificateRecord(gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate hostCertificateUpdate) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault ;
 
   public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord renewHostCertificate(java.math.BigInteger recordId) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault ;
+
+  /**
+   * This method allows a user with a Dorian IdP account to change their password.
+   *
+   * @param credential
+   * @param newPassword
+   * @throws DorianInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   * @throws InvalidUserPropertyFault
+   *	
+   */
+  public void changeIdPUserPassword(gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential credential,java.lang.String newPassword) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault ;
 
 }
 

@@ -19,12 +19,6 @@ public class DorianProviderImpl{
 	}
 	
 
-    public gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordResponse changeIdPUserPassword(gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault {
-    gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordResponse();
-    impl.changeIdPUserPassword(params.getCredential().getBasicAuthCredential(),params.getNewPassword());
-    return boxedResult;
-  }
-
     public gov.nih.nci.cagrid.dorian.stubs.RegisterWithIdPResponse registerWithIdP(gov.nih.nci.cagrid.dorian.stubs.RegisterWithIdPRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault {
     gov.nih.nci.cagrid.dorian.stubs.RegisterWithIdPResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.RegisterWithIdPResponse();
     boxedResult.setResponse(impl.registerWithIdP(params.getApplication().getApplication()));
@@ -178,6 +172,12 @@ public class DorianProviderImpl{
     public gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateResponse renewHostCertificate(gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
     gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.RenewHostCertificateResponse();
     boxedResult.setHostCertificateRecord(impl.renewHostCertificate(params.getRecordId()));
+    return boxedResult;
+  }
+
+    public gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordResponse changeIdPUserPassword(gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault {
+    gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordResponse();
+    impl.changeIdPUserPassword(params.getCredential().getBasicAuthCredential(),params.getNewPassword());
     return boxedResult;
   }
 

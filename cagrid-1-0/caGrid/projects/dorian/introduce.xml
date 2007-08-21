@@ -1,5 +1,12 @@
 <ns1:ServiceDescription description="A grid service for the provisioning and management of grid users accounts.  Dorian provides an integration point between external security domains and the grid, allowing accounts managed in external domains to be federated and managed in the grid.   Dorian allows users to use their existing credentials to authenticate to the grid." introduceVersion="1.1" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./dorian-idp.xsd" namespace="http://cagrid.nci.nih.gov/1/dorian-idp" packageName="gov.nih.nci.cagrid.dorian.idp.bean" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="IdPUser" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Application" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IdPUserFilter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BasicAuthCredential" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ApplicationReview" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace location="./dorian-ifs.xsd" namespace="http://cagrid.nci.nih.gov/1/dorian-ifs" packageName="gov.nih.nci.cagrid.dorian.ifs.bean" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="TrustedIdP" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="IFSUser" xsi:type="ns2:SchemaElementType"/>
@@ -27,13 +34,6 @@
    <ns2:SchemaElement type="SAMLAssertion" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="X509Certificate" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Metadata" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./dorian-idp.xsd" namespace="http://cagrid.nci.nih.gov/1/dorian-idp" packageName="gov.nih.nci.cagrid.dorian.idp.bean" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="IdPUser" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Application" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="IdPUserFilter" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BasicAuthCredential" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ApplicationReview" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="" namespace="http://www.w3.org/2001/XMLSchema" packageName="" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
