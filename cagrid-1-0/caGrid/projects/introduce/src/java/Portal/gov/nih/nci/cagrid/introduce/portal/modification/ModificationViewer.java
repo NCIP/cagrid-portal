@@ -387,7 +387,7 @@ public class ModificationViewer extends GridPortalComponent {
         getResourcesJTree().setServices(this.info.getServices(), this.info);
         getMethodsTable().clearTable();
         getMethodsTable().setMethods(this.info.getServices().getService(0));
-        getRpHolderPanel().reInitialize(this.info.getServices().getService(0).getResourcePropertiesList(),
+        getRpHolderPanel().reInitialize(this.info.getServices().getService(0),
             this.info.getNamespaces());
         getServicePropertiesTable().setServiceInformation(this.info);
         this.resetMethodSecurityIfServiceSecurityChanged();
@@ -1109,7 +1109,7 @@ public class ModificationViewer extends GridPortalComponent {
                                 break;
                             case 2 :
                                 getRpHolderPanel().reInitialize(
-                                    info.getServices().getService(0).getResourcePropertiesList(), info.getNamespaces());
+                                    info.getServices().getService(0), info.getNamespaces());
                                 break;
                             case 3 :
                                 getServicePropertiesTable().setServiceInformation(info);

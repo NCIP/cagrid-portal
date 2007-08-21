@@ -110,11 +110,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
     }
 
 
-    public void reInitialize(ResourcePropertiesListType props, NamespacesType ns) {
-        this.properties = props;
+    public void reInitialize(ServiceType service, NamespacesType ns) {
+        this.service = service;
+        this.properties = service.getResourcePropertiesList();
         this.namespaces = ns;
         this.namespacesJTree.setNamespaces(ns);
-        this.resourcePropertiesTable.setResourceProperties(props);
+        this.resourcePropertiesTable.setResourceProperties(this.properties);
     }
 
 
