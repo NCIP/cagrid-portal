@@ -7,10 +7,12 @@ import gov.nci.nih.cagrid.tests.core.steps.DorianAddTrustedCAStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianAuthenticateStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianDestroyDefaultProxyStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusInstallSecurityDescriptorStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 
 import java.io.File;
 import java.util.Vector;
@@ -94,6 +96,8 @@ public class BasicAnalyticalServiceWithSecurityTest extends AbstractServiceTest 
             throw new IllegalArgumentException("could not add invoke steps", e);
         }
 
+        steps.add(new GlobusStopStep(getGlobus()));
+        steps.add(new GlobusCleanupStep(getGlobus()));
         return steps;
     }
 
