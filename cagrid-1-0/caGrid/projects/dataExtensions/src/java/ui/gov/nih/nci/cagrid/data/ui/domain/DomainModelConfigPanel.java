@@ -65,7 +65,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.5 2007-08-22 15:24:59 dervin Exp $
+ * @version $Id: DomainModelConfigPanel.java,v 1.6 2007-08-22 18:05:54 dervin Exp $
  */
 public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
@@ -375,8 +375,21 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                     Project selectedProject = getCadsrBrowserPanel().getSelectedProject();
                     UMLPackageMetadata selectedPackage = cadsrBrowserPanel.getSelectedPackage();
                     if (selectedProject != null && selectedPackage != null) {
+                        // ensure the selected project is consistent with current domain model
                         if (verifyProjectSelection(selectedProject)) {
-                            addUmlPackageToModel(selectedProject, selectedPackage);
+                            // ensure the package is not already present in the model
+                            try {
+                                if (!packageUsedInModel(selectedPackage)) {
+                                    // add the package to the model
+                                    addUmlPackageToModel(selectedProject, selectedPackage);
+                                } else {
+                                    PortalUtils.showMessage(
+                                    "The selected package is already part of the domain model");
+                                }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                ErrorDialog.showErrorDialog("Error determining package use", ex.getMessage(), ex);
+                            }
                         }
                     } else {
                         PortalUtils.showMessage("Please select both a project and package");
@@ -880,6 +893,12 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 + "etc" + File.separator + domainModelProps[0].getFileLocation());
         }
         return null;
+    }
+    
+    
+    private boolean packageUsedInModel(UMLPackageMetadata pack) throws Exception {
+        List<String> names = getExtensionDataManager().getCadsrPackageNames();
+        return (names != null && names.contains(pack.getName()));
     }
 
 
