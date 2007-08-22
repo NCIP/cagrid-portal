@@ -444,12 +444,11 @@ public class ModificationViewer extends GridPortalComponent {
                     } catch (Exception e) {
                         e.printStackTrace();
                         answer = JOptionPane.showConfirmDialog(PortalResourceManager.getInstance().getGridPortal(),
-                            "Error upgrading service",
                             "The service had the following fatal error during the upgrade process:\n" + e.getMessage()
                                 + "\n" + "This could be due to modifications you may have made to Introduce\n"
                                 + "managed files such as the build files, source files or wsdl files.\n"
                                 + "If you select OK, Introduce will roll your service back to its previous\n"
-                                + "state before the upgrade attempt", JOptionPane.OK_CANCEL_OPTION);
+                                + "state before the upgrade attempt", "Error upgrading service", JOptionPane.OK_CANCEL_OPTION);
                         if (answer == JOptionPane.OK_OPTION) {
                             try {
                                 if (dialog != null) {
