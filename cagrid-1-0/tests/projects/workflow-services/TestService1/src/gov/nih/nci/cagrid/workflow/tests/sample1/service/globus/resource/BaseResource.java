@@ -52,7 +52,7 @@ public class BaseResource implements Resource, ResourceProperties {
 	// initializes the resource
 	public void initialize() throws Exception {
 		// create the resource property set
-		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
+		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERTY_SET);
 
 		// this loads the metadata from XML files
 		populateResourceProperty();

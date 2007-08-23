@@ -64,7 +64,7 @@ public class WorkflowTestService1Client extends ServiceSecurityClient implements
 
 		WorkflowTestService1ServiceAddressingLocator locator = new WorkflowTestService1ServiceAddressingLocator();
 		// attempt to load our context sensitive wsdd file
-		InputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
+		InputStream resourceAsStream = getClass().getResourceAsStream("client-config.wsdd");
 		if (resourceAsStream != null) {
 			// we found it, so tell axis to configure an engine to use it
 			EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
@@ -112,22 +112,23 @@ public class WorkflowTestService1Client extends ServiceSecurityClient implements
 		}
 	}
 
-	public java.lang.String invoke(java.lang.String invokeInput) throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"invoke");
-        gov.nih.nci.cagrid.workflow.tests.sample1.stubs.InvokeRequest params = new gov.nih.nci.cagrid.workflow.tests.sample1.stubs.InvokeRequest();
-        params.setInvokeInput(invokeInput);
-        gov.nih.nci.cagrid.workflow.tests.sample1.stubs.InvokeResponse boxedResult = portType.invoke(params);
-        return boxedResult.getResponse();
-      }
+  public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
+    return boxedResult.getServiceSecurityMetadata();
     }
-	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
-        gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
-        gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
-        return boxedResult.getServiceSecurityMetadata();
-      }
+  }
+
+  public java.lang.String invoke(java.lang.String invokeInput) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"invoke");
+    gov.nih.nci.cagrid.workflow.tests.sample1.stubs.InvokeRequest params = new gov.nih.nci.cagrid.workflow.tests.sample1.stubs.InvokeRequest();
+    params.setInvokeInput(invokeInput);
+    gov.nih.nci.cagrid.workflow.tests.sample1.stubs.InvokeResponse boxedResult = portType.invoke(params);
+    return boxedResult.getResponse();
     }
+  }
 
 }

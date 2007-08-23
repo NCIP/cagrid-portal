@@ -12,9 +12,9 @@ import java.rmi.RemoteException;
  */
 public interface WorkflowTestService1I {
 
-    public java.lang.String invoke(java.lang.String invokeInput) throws RemoteException ;
-
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
+
+  public java.lang.String invoke(java.lang.String invokeInput) throws RemoteException ;
 
 }
 
