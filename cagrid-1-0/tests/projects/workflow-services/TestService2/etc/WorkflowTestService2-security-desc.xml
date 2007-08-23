@@ -20,7 +20,7 @@
       <none />
     </auth-method>
   </method>
-  <authz value="none" />
+  <authz value="workflowtestservice2:gov.nih.nci.cagrid.workflow.tests.sample2.service.globus.WorkflowTestService2Authorization" />
   <auth-method>
     <GSISecureConversation>
       <protection-level>

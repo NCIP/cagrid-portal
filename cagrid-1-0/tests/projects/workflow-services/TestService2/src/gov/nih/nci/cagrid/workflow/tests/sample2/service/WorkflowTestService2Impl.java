@@ -15,7 +15,7 @@ public class WorkflowTestService2Impl extends WorkflowTestService2ImplBase {
 		super();
 	}
 	
-	public java.lang.String invoke(java.lang.String invokeInput) throws RemoteException {
+  public java.lang.String invoke(java.lang.String invokeInput) throws RemoteException {
         String returnString = "Test Service2 Got: " ;
         if (invokeInput != null) {
             returnString = returnString + invokeInput;

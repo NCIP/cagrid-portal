@@ -1,4 +1,4 @@
-<ns1:ServiceDescription introduceVersion="1.0" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+<ns1:ServiceDescription introduceVersion="1.1" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
@@ -93,6 +93,7 @@
      <ns7:NoAuthorization xsi:type="ns7:NoAuthorization"/>
     </ns7:ServiceAuthorization>
    </ns7:ServiceSecurity>
+   <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
   </ns3:Service>
  </ns3:Services>
  <ns8:Extensions xsi:type="ns8:ExtensionsType" xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>

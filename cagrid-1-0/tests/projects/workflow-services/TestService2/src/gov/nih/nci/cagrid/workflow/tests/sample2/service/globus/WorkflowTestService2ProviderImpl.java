@@ -26,11 +26,10 @@ public class WorkflowTestService2ProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.workflow.tests.sample2.stubs.InvokeResponse invoke(gov.nih.nci.cagrid.workflow.tests.sample2.stubs.InvokeRequest params) throws RemoteException {
-		WorkflowTestService2Authorization.authorizeInvoke();
-		gov.nih.nci.cagrid.workflow.tests.sample2.stubs.InvokeResponse boxedResult = new gov.nih.nci.cagrid.workflow.tests.sample2.stubs.InvokeResponse();
-		boxedResult.setResponse(impl.invoke(params.getInvokeInput()));
-		return boxedResult;
-	}
+    public gov.nih.nci.cagrid.workflow.tests.sample2.stubs.InvokeResponse invoke(gov.nih.nci.cagrid.workflow.tests.sample2.stubs.InvokeRequest params) throws RemoteException {
+    gov.nih.nci.cagrid.workflow.tests.sample2.stubs.InvokeResponse boxedResult = new gov.nih.nci.cagrid.workflow.tests.sample2.stubs.InvokeResponse();
+    boxedResult.setResponse(impl.invoke(params.getInvokeInput()));
+    return boxedResult;
+  }
 
 }
