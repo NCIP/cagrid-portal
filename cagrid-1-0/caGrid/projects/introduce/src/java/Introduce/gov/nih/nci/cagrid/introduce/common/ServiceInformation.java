@@ -34,6 +34,19 @@ public class ServiceInformation {
 
     public ServiceInformation(File baseDirectory) throws Exception {
         this.baseDirectory = baseDirectory;
+        load();
+    
+    }
+
+
+    public ServiceInformation(ServiceDescription service, Properties properties, File baseDirectory) {
+        this.introService = service;
+        this.introduceServiceProperties = properties;
+        this.baseDirectory = baseDirectory;
+    }
+    
+    
+    public void load() throws Exception {
 
         String introduceXML = baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
         File introduceXMLFile = new File(introduceXML);
@@ -58,14 +71,6 @@ public class ServiceInformation {
                 + IntroduceConstants.DEPLOY_PROPERTIES_FILE);
         deploymentProperties = new Properties();
         deploymentProperties.load(new FileInputStream(deployPropertiesFile));
-    
-    }
-
-
-    public ServiceInformation(ServiceDescription service, Properties properties, File baseDirectory) {
-        this.introService = service;
-        this.introduceServiceProperties = properties;
-        this.baseDirectory = baseDirectory;
     }
 
 
@@ -162,6 +167,7 @@ public class ServiceInformation {
     
     public void createArchive() throws Exception {
         // create the archive
+        load();
         long id = System.currentTimeMillis();
 
         getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP,

@@ -97,14 +97,14 @@ public class ExtensionsUpgradeManager {
 							} else {
 								error
 										.add(extension.getName()
-												+ " does not appear to have correct upgrade.");
+												+ " extension used on service is older than currently installed and does not appear to have correct upgrade.");
 							}
 
 						}
 
 					} else {
 						error.add(extension.getName()
-								+ " does not appear to have any upgrades.");
+								+ " extension used on service is older than currently installed and does not appear to have any upgrades.");
 					}
 
 				}

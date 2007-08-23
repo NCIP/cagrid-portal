@@ -359,7 +359,7 @@ public class SyncTools {
             populateClassnames(info, table);
         } catch (Exception e) {
             String mess = "ERROR: Unable to find all referenced elements in service wsdl and xsd.  Please make sure"
-                + " that if there are imported wsdl or xsd that they all exist and are in the right location";
+                + " that if there are imported wsdl or xsd that they all exist and are in the right location and are well formed and valid.";
             e.printStackTrace();
             throw new Exception(mess, e);
         }

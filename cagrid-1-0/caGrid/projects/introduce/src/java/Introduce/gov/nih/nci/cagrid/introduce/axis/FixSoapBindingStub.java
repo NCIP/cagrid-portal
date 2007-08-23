@@ -32,6 +32,7 @@ public class FixSoapBindingStub {
 
 	public void execute() {
 		if (customSerializationNamespaces == null) {
+		    System.out.println("there are no custom serialized namespaces");
 			return;
 		}
 
@@ -57,6 +58,7 @@ public class FixSoapBindingStub {
 
 		while (strtok.hasMoreElements()) {
 			String namespace = strtok.nextToken();
+			System.out.println("scanning for references to objects from the namespace: " + namespace);
 
 			StringBuffer newFileContent = new StringBuffer();
 
@@ -70,6 +72,7 @@ public class FixSoapBindingStub {
 						for (int i = 0; i < 6; i++) {
 							br.readLine();
 						}
+						System.out.println("removed reference");
 					} else {
 						newFileContent.append(line + "\n");
 					}
@@ -119,6 +122,7 @@ public class FixSoapBindingStub {
 		List services = doc.getRootElement().getChild("Services",Namespace.getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Services")).getChildren("Service", Namespace.getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Services"));
 		String mainServiceName = ((Element)services.get(0)).getAttributeValue("name");
 		for (int i = 0; i < services.size(); i++) {
+		    System.out.println("looking to fix soap binding for service " + ((Element)services.get(i)).getAttributeValue("name"));
 			String stubFileName = args[0] + File.separator + "build" + File.separator + "stubs-" + mainServiceName
 				+ File.separator + "src" + File.separator + ((Element)services.get(i)).getAttributeValue("packageName").replace(".", File.separator)
 				+ File.separator + "stubs" + File.separator + "bindings" + File.separator + ((Element)services.get(i)).getAttributeValue("name")

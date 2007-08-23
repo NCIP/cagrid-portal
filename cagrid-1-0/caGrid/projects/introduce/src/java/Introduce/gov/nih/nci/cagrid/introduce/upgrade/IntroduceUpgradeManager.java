@@ -141,7 +141,7 @@ public class IntroduceUpgradeManager {
                         } catch (Exception e) {
                             e.printStackTrace();
                             throw new Exception(
-                                "Extensions Upgrader Failed.  This service does not appear to be upgradable.");
+                                "Extensions Upgrader Failed: " + e.getMessage());
                         }
                     }
 

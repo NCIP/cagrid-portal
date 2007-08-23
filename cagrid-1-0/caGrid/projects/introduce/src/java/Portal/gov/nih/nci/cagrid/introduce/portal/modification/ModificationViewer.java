@@ -350,23 +350,6 @@ public class ModificationViewer extends GridPortalComponent {
     }
 
 
-    private Properties loadServiceProps() {
-        try {
-            Properties serviceProperties = new Properties();
-            serviceProperties.load(new FileInputStream(this.methodsDirectory.getAbsolutePath() + File.separator
-                + IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-            serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, this.methodsDirectory
-                .getAbsolutePath());
-            return serviceProperties;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
     private void chooseService() throws Exception {
         String dir = ResourceManager.promptDir(null);
         if (dir != null) {
@@ -387,15 +370,14 @@ public class ModificationViewer extends GridPortalComponent {
         getResourcesJTree().setServices(this.info.getServices(), this.info);
         getMethodsTable().clearTable();
         getMethodsTable().setMethods(this.info.getServices().getService(0));
-        getRpHolderPanel().reInitialize(this.info.getServices().getService(0),
-            this.info.getNamespaces());
+        getRpHolderPanel().reInitialize(this.info.getServices().getService(0), this.info.getNamespaces());
         getServicePropertiesTable().setServiceInformation(this.info);
         this.resetMethodSecurityIfServiceSecurityChanged();
         for (int i = 0; i < this.extensionPanels.size(); i++) {
             ServiceModificationUIPanel panel = (ServiceModificationUIPanel) this.extensionPanels.get(i);
             panel.setServiceInfo(this.info);
         }
-        //repaint the component that was selected before the save
+        // repaint the component that was selected before the save
         this.repaint();
     }
 
@@ -445,10 +427,9 @@ public class ModificationViewer extends GridPortalComponent {
                         e.printStackTrace();
                         answer = JOptionPane.showConfirmDialog(PortalResourceManager.getInstance().getGridPortal(),
                             "The service had the following fatal error during the upgrade process:\n" + e.getMessage()
-                                + "\n" + "This could be due to modifications you may have made to Introduce\n"
-                                + "managed files such as the build files, source files or wsdl files.\n"
                                 + "If you select OK, Introduce will roll your service back to its previous\n"
-                                + "state before the upgrade attempt", "Error upgrading service", JOptionPane.OK_CANCEL_OPTION);
+                                + "state before the upgrade attempt", "Error upgrading service",
+                            JOptionPane.OK_CANCEL_OPTION);
                         if (answer == JOptionPane.OK_OPTION) {
                             try {
                                 if (dialog != null) {
@@ -1109,8 +1090,7 @@ public class ModificationViewer extends GridPortalComponent {
                                 getMethodsTable().setMethods(info.getServices().getService(0));
                                 break;
                             case 2 :
-                                getRpHolderPanel().reInitialize(
-                                    info.getServices().getService(0), info.getNamespaces());
+                                getRpHolderPanel().reInitialize(info.getServices().getService(0), info.getNamespaces());
                                 break;
                             case 3 :
                                 getServicePropertiesTable().setServiceInformation(info);
@@ -1590,10 +1570,14 @@ public class ModificationViewer extends GridPortalComponent {
                             + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ModificationViewer.this.info
                             .getServiceDescriptor(), IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
-                        // call the sync tools
-                        setProgressText("synchronizing skeleton");
-                        SyncTools sync = new SyncTools(ModificationViewer.this.methodsDirectory);
-                        sync.sync();
+                        try {
+                            // call the sync tools
+                            setProgressText("synchronizing skeleton");
+                            SyncTools sync = new SyncTools(ModificationViewer.this.methodsDirectory);
+                            sync.sync();
+                        } catch (Exception e) {
+                            throw new Exception("FATAL ERROR: Service was unable to be re-synced: \n" +  e.getMessage() + "\nPlease either roll back to previous save state or re-create the service." ,e);
+                        }
 
                         // build the synchronized service
                         setProgressText("rebuilding skeleton");
@@ -1606,13 +1590,10 @@ public class ModificationViewer extends GridPortalComponent {
                             setErrorMessage("Error: Unable to rebuild the skeleton");
                         } else {
                             setProgressText("creating service archive");
+                            
                             info.createArchive();
                         }
                         ModificationViewer.this.dirty = false;
-                        setProgressText("loading service properties");
-                        ModificationViewer.this.info.setIntroduceServiceProperties(loadServiceProps());
-                        setLastSaved(ModificationViewer.this.info.getIntroduceServiceProperties().getProperty(
-                            IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
                         this.setProgressText("");
                     } catch (Exception e1) {
                         e1.printStackTrace();
@@ -1621,7 +1602,7 @@ public class ModificationViewer extends GridPortalComponent {
                     }
                     // reinitialize the GUI with changes from saved model
                     try {
-                        reInitialize(ModificationViewer.this.methodsDirectory);
+                       reInitialize(ModificationViewer.this.methodsDirectory);
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
