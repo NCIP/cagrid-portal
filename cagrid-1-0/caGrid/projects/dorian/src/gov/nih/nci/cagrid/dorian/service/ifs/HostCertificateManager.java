@@ -422,6 +422,7 @@ public class HostCertificateManager extends LoggingObject {
 
 
 	public List<HostCertificateRecord> getHostCertificateRecords(String owner) throws DorianInternalFault {
+		this.buildDatabase();
 		List<HostCertificateRecord> records = new ArrayList<HostCertificateRecord>();
 		Connection c = null;
 		try {
@@ -450,6 +451,7 @@ public class HostCertificateManager extends LoggingObject {
 
 
 	public List<Long> getHostCertificateRecordsSerialNumbers(String owner) throws DorianInternalFault {
+		this.buildDatabase();
 		List<Long> sn = new ArrayList<Long>();
 		Connection c = null;
 		try {
@@ -481,6 +483,7 @@ public class HostCertificateManager extends LoggingObject {
 
 
 	public List<Long> getDisabledHostCertificatesSerialNumbers() throws DorianInternalFault {
+		this.buildDatabase();
 		List<Long> entries = new ArrayList<Long>();
 		Connection c = null;
 		try {

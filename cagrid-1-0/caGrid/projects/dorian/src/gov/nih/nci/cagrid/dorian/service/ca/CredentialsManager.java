@@ -276,7 +276,7 @@ public class CredentialsManager extends LoggingObject {
 	}
 
 
-	private void buildDatabase() throws DorianInternalFault {
+	private synchronized void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(CREDENTIALS_TABLE)) {
 				String users = "CREATE TABLE " + CREDENTIALS_TABLE + " (" + "ALIAS VARCHAR(255) NOT NULL PRIMARY KEY,"

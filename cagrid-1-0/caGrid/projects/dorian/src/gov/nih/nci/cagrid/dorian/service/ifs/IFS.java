@@ -84,6 +84,8 @@ public class IFS extends LoggingObject implements Publisher {
 
 	private ThreadManager threadManager;
 
+	private boolean publishCRL = false;
+
 
 	public IFS(IdentityFederationConfiguration conf, Database db, PropertyManager properties, CertificateAuthority ca,
 		IFSDefaults defaults) throws DorianInternalFault {
@@ -106,6 +108,7 @@ public class IFS extends LoggingObject implements Publisher {
 			this.administrators = this.groupManager.getGroup(ADMINISTRATORS);
 		}
 		this.hostManager = new HostCertificateManager(db, this.conf, ca, this);
+		publishCRL = true;
 		publishCRL();
 	}
 
@@ -587,42 +590,45 @@ public class IFS extends LoggingObject implements Publisher {
 
 
 	public void publishCRL() {
-		if (conf.getCRLPublish() != null) {
-			if ((conf.getCRLPublish().getGts() != null) && (conf.getCRLPublish().getGts().length > 0)) {
-				Runner runner = new Runner() {
-					public void execute() {
-						synchronized (mutex) {
-							String[] services = conf.getCRLPublish().getGts();
-							if ((services != null) && (services.length > 0)) {
-								try {
-									X509CRL crl = getCRL();
-									gov.nih.nci.cagrid.gts.bean.X509CRL x509 = new gov.nih.nci.cagrid.gts.bean.X509CRL();
-									x509.setCrlEncodedString(CertUtil.writeCRL(crl));
-									String authName = ca.getCACertificate().getSubjectDN().getName();
-									for (int i = 0; i < services.length; i++) {
-										String uri = services[i];
-										try {
-											debug("Publishing CRL to the GTS " + uri);
-											GTSAdminClient client = new GTSAdminClient(uri, null);
-											client.updateCRL(authName, x509);
-											debug("Published CRL to the GTS " + uri);
-										} catch (Exception ex) {
-											getLog().error("Error publishing the CRL to the GTS " + uri + "!!!", ex);
+		if (publishCRL) {
+			if (conf.getCRLPublish() != null) {
+				if ((conf.getCRLPublish().getGts() != null) && (conf.getCRLPublish().getGts().length > 0)) {
+					Runner runner = new Runner() {
+						public void execute() {
+							synchronized (mutex) {
+								String[] services = conf.getCRLPublish().getGts();
+								if ((services != null) && (services.length > 0)) {
+									try {
+										X509CRL crl = getCRL();
+										gov.nih.nci.cagrid.gts.bean.X509CRL x509 = new gov.nih.nci.cagrid.gts.bean.X509CRL();
+										x509.setCrlEncodedString(CertUtil.writeCRL(crl));
+										String authName = ca.getCACertificate().getSubjectDN().getName();
+										for (int i = 0; i < services.length; i++) {
+											String uri = services[i];
+											try {
+												debug("Publishing CRL to the GTS " + uri);
+												GTSAdminClient client = new GTSAdminClient(uri, null);
+												client.updateCRL(authName, x509);
+												debug("Published CRL to the GTS " + uri);
+											} catch (Exception ex) {
+												getLog()
+													.error("Error publishing the CRL to the GTS " + uri + "!!!", ex);
+											}
+
 										}
 
+									} catch (Exception e) {
+										getLog().error("Unexpected Error publishing the CRL!!!", e);
 									}
-
-								} catch (Exception e) {
-									getLog().error("Unexpected Error publishing the CRL!!!", e);
 								}
 							}
 						}
+					};
+					try {
+						threadManager.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
 					}
-				};
-				try {
-					threadManager.executeInBackground(runner);
-				} catch (Exception t) {
-					t.getMessage();
 				}
 			}
 		}

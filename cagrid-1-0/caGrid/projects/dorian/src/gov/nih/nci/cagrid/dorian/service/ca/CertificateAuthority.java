@@ -85,7 +85,7 @@ public abstract class CertificateAuthority extends LoggingObject {
 	}
 
 
-	private void init() throws CertificateAuthorityFault {
+	private synchronized void init() throws CertificateAuthorityFault {
 		try {
 			if (!initialized) {
 				if (!hasCredentials(CA_ALIAS)) {
