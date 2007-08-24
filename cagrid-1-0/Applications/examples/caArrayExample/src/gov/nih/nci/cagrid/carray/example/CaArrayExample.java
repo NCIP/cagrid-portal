@@ -40,6 +40,9 @@ public class CaArrayExample
 		for (EndpointReferenceType epr : dclient.getAllServices(false)) {
 			System.out.println(epr);
 		}
+		
+		EndpointReferenceType[] eprs = dclient.discoverDataServicesByDomainModel("caArray");
+		System.out.println(eprs[0]);
 	}
 	
 	public static void runMetadataExample() throws InvalidResourcePropertyException, RemoteResourcePropertyRetrievalException, ResourcePropertyRetrievalException, MalformedURIException
@@ -79,8 +82,8 @@ public class CaArrayExample
 	
 	public static void main(String[] args) throws MalformedURIException, RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException, RemoteException
 	{
-		runDiscoveryExample();
-		//runMetadataExample();
-		//runInvokeExample();
+//		runDiscoveryExample();
+//		runMetadataExample();
+		runInvokeExample();
 	}
 }
