@@ -5,7 +5,6 @@
     <target name="all">
         <ant dir="TestService1" target="all"/>
         <ant dir="TestService2" target="all"/>
-        <ant dir="SecureSample" target="all"/>
         <ant dir="BasicDataService" target="all"/>
     </target>
 
