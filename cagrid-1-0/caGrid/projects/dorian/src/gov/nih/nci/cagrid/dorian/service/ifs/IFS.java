@@ -89,6 +89,12 @@ public class IFS extends LoggingObject implements Publisher {
 
 	public IFS(IdentityFederationConfiguration conf, Database db, PropertyManager properties, CertificateAuthority ca,
 		IFSDefaults defaults) throws DorianInternalFault {
+		this(conf, db, properties, ca, defaults, false);
+	}
+
+
+	public IFS(IdentityFederationConfiguration conf, Database db, PropertyManager properties, CertificateAuthority ca,
+		IFSDefaults defaults, boolean ignoreCRL) throws DorianInternalFault {
 		this.conf = conf;
 		this.ca = ca;
 		threadManager = new ThreadManager();
@@ -108,8 +114,10 @@ public class IFS extends LoggingObject implements Publisher {
 			this.administrators = this.groupManager.getGroup(ADMINISTRATORS);
 		}
 		this.hostManager = new HostCertificateManager(db, this.conf, ca, this);
-		publishCRL = true;
-		publishCRL();
+		if (!ignoreCRL) {
+			publishCRL = true;
+			publishCRL();
+		}
 	}
 
 

@@ -87,7 +87,7 @@ public class CreateHostCertificate {
 				DorianConfiguration c = (DorianConfiguration) Utils.deserializeDocument(configFile,
 					gov.nih.nci.cagrid.dorian.conf.DorianConfiguration.class);
 				c.getIdentityFederationConfiguration().getCredentialPolicy().setHostCertificateAutoApproval(true);
-				Dorian dorian = new Dorian(c, "localhost");
+				Dorian dorian = new Dorian(c, "localhost",true);
 				boolean interactive = false;
 				if (line.hasOption(INTERACTIVE_MODE_OPT)) {
 					interactive = true;

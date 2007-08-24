@@ -57,7 +57,7 @@ public class ConfigureGlobusToTrustDorian {
 				DorianConfiguration c = (DorianConfiguration) Utils.deserializeDocument(configFile,
 					gov.nih.nci.cagrid.dorian.conf.DorianConfiguration.class);
 				c.getIdentityFederationConfiguration().getCredentialPolicy().setHostCertificateAutoApproval(true);
-				Dorian dorian = new Dorian(c, "localhost");
+				Dorian dorian = new Dorian(c, "localhost", true);
 				X509Certificate cacert = dorian.getCACertificate();
 				
 				File dir = Utils.getTrustedCerificatesDirectory();

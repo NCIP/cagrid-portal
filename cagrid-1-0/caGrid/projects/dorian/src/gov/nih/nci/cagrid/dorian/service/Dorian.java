@@ -78,8 +78,11 @@ public class Dorian extends LoggingObject {
 
 	private PropertyManager properties;
 
-
 	public Dorian(DorianConfiguration conf, String serviceId) throws DorianInternalFault {
+		this(conf,serviceId,false);
+	}
+
+	public Dorian(DorianConfiguration conf, String serviceId, boolean ignoreCRL) throws DorianInternalFault {
 		try {
 
 			this.configuration = conf;
@@ -156,7 +159,7 @@ public class Dorian extends LoggingObject {
 
 			ifsConfiguration = configuration.getIdentityFederationConfiguration();
 			IFSDefaults defaults = new IFSDefaults(idp, usr);
-			this.ifs = new IFS(ifsConfiguration, db, properties, ca, defaults);
+			this.ifs = new IFS(ifsConfiguration, db, properties, ca, defaults, ignoreCRL);
 
 			if (this.properties.getVersion() != PropertyManager.CURRENT_VERSION) {
 				DorianInternalFault fault = new DorianInternalFault();
