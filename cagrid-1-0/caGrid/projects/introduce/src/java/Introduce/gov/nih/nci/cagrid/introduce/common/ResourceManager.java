@@ -28,8 +28,6 @@ import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.portal.PortalResourceManager;
 
-import sun.security.action.GetBooleanAction;
-
 
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
