@@ -48,7 +48,7 @@ import javax.swing.JScrollPane;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created May 11, 2006
- * @version $Id: ClassBrowserPanel.java,v 1.4 2007-08-24 14:14:50 dervin Exp $
+ * @version $Id: ClassBrowserPanel.java,v 1.5 2007-08-24 15:26:59 dervin Exp $
  */
 public class ClassBrowserPanel extends JPanel {
 
@@ -455,7 +455,6 @@ public class ClassBrowserPanel extends JPanel {
 			Class queryProcessorClass = CQLQueryProcessor.class;
             // search for query processor classes from additional jars list
             for (String jarName : additionalJarNames) {
-                System.out.println("Populating from jar " + jarName);
                 // creates a new loader each time to avoid having every class in the service
                 // loaded at once, clogging up the loader
                 ClassLoader loader = new URLClassLoader(urls);
@@ -474,9 +473,7 @@ public class ClassBrowserPanel extends JPanel {
                             // theres a lot of these...
                         }
                         if (loadedClass != null) {
-                            System.out.println("Looking at class " + loadedClass.getName());
                             if (queryProcessorClass.isAssignableFrom(loadedClass)) {
-                                System.out.println("It's a query processor");
                                 foundClassNames.add(name);
                             }
                         }
