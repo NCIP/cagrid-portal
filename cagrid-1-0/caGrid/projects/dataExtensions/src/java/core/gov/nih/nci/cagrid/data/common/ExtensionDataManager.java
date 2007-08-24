@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.common;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.auditing.DataServiceAuditors;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
@@ -21,7 +22,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 10:04:04 AM
- * @version $Id: ExtensionDataManager.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: ExtensionDataManager.java,v 1.2 2007-08-24 14:15:02 dervin Exp $ 
  */
 public class ExtensionDataManager {
     
@@ -480,6 +481,36 @@ public class ExtensionDataManager {
     public String getServiceStyle() throws Exception {
         Data data = getExtensionData();
         return data.getServiceFeatures().getServiceStyle();
+    }
+    
+    
+    /**
+     * Gets the data service auditors configuration
+     * 
+     * @return
+     *      The service auditors configuration
+     * @throws Exception
+     */
+    public DataServiceAuditors getAuditorsConfiguration() throws Exception {
+        Data data = getExtensionData();
+        if (data.getDataServiceAuditors() == null) {
+            data.setDataServiceAuditors(new DataServiceAuditors());
+            saveExtensionData(data);
+        }
+        return data.getDataServiceAuditors();
+    }
+    
+    
+    /**
+     * Stores the data service auditors configuration
+     * 
+     * @param auditors
+     * @throws Exception
+     */
+    public void storeAuditorsConfiguration(DataServiceAuditors auditors) throws Exception {
+        Data data = getExtensionData();
+        data.setDataServiceAuditors(auditors);
+        saveExtensionData(data);
     }
     
     

@@ -37,7 +37,7 @@ import org.apache.log4j.Logger;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created May 11, 2006
- * @version $Id: DataServiceCodegenPreProcessor.java,v 1.2 2007-08-07 15:11:09 dervin Exp $
+ * @version $Id: DataServiceCodegenPreProcessor.java,v 1.3 2007-08-24 14:14:50 dervin Exp $
  */
 public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProcessor {
 
@@ -126,8 +126,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		String localDomainModelFilename = getDestinationDomainModelFilename(info);
 
 		// find the service's etc directory, where the domain model goes
-		String domainModelFile = info.getIntroduceServiceProperties().getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+		String domainModelFile = info.getBaseDirectory().getAbsolutePath()
 			+ File.separator + "etc" + File.separator + localDomainModelFilename;
 
 		// get the caDSR information

@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
@@ -20,7 +19,6 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -50,7 +48,7 @@ import javax.swing.JScrollPane;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created May 11, 2006
- * @version $Id: ClassBrowserPanel.java,v 1.3 2007-08-06 14:04:08 dervin Exp $
+ * @version $Id: ClassBrowserPanel.java,v 1.4 2007-08-24 14:14:50 dervin Exp $
  */
 public class ClassBrowserPanel extends JPanel {
 
@@ -141,12 +139,12 @@ public class ClassBrowserPanel extends JPanel {
 	
 	private void addJars(String[] jarFiles) {
 		// only bother adding the jar file to the list if it's not in there yet
-        List<String> uniqueJars = new ArrayList();
+        Set<String> uniqueJars = new HashSet();
         Collections.addAll(uniqueJars, getAdditionalJars());
         for (String jarFile : jarFiles) {
             String shortJarName = (new File(jarFile)).getName();
             if (!uniqueJars.contains(shortJarName)) {
-                copyJarToService(jarFile, shortJarName);
+                copyJarToService(jarFile);
                 uniqueJars.add(shortJarName);
             }
         }
@@ -299,8 +297,8 @@ public class ClassBrowserPanel extends JPanel {
 
 
 	private void deleteAdditionalJar(String shortJarName) {
-		String libDir = serviceInfo.getIntroduceServiceProperties().getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
+		String libDir = serviceInfo.getBaseDirectory().getAbsolutePath()
+            + File.separator + "lib";
 		File jarFile = new File(libDir + File.separator + shortJarName);
 		jarFile.delete();
 	}
@@ -429,12 +427,12 @@ public class ClassBrowserPanel extends JPanel {
 	}
 	
 
-	private synchronized void copyJarToService(final String jarFile, final String shortJarName) {
-		String libDir = serviceInfo.getIntroduceServiceProperties().getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
+	private synchronized void copyJarToService(final String jarFile) {
+		String libDir = serviceInfo.getBaseDirectory().getAbsolutePath()
+            + File.separator + "lib";
 		try {
 			File inJarFile = new File(jarFile);
-			File outJarFile = new File(libDir + File.separator + shortJarName);
+			File outJarFile = new File(libDir + File.separator + inJarFile.getName());
 			Utils.copyFile(inJarFile, outJarFile);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -447,7 +445,7 @@ public class ClassBrowserPanel extends JPanel {
         SortedSet<String> foundClassNames = new TreeSet();
 		String libDir = serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "lib";
 		String[] additionalJarNames = getAdditionalJars();
-		try {
+        try {
             // get URLs for all jar files in the service's lib dir
             File[] libFiles = (new File(libDir)).listFiles(new FileFilters.JarFileFilter());
             URL[] urls = new URL[libFiles.length];
@@ -457,6 +455,7 @@ public class ClassBrowserPanel extends JPanel {
 			Class queryProcessorClass = CQLQueryProcessor.class;
             // search for query processor classes from additional jars list
             for (String jarName : additionalJarNames) {
+                System.out.println("Populating from jar " + jarName);
                 // creates a new loader each time to avoid having every class in the service
                 // loaded at once, clogging up the loader
                 ClassLoader loader = new URLClassLoader(urls);
@@ -475,15 +474,16 @@ public class ClassBrowserPanel extends JPanel {
                             // theres a lot of these...
                         }
                         if (loadedClass != null) {
+                            System.out.println("Looking at class " + loadedClass.getName());
                             if (queryProcessorClass.isAssignableFrom(loadedClass)) {
+                                System.out.println("It's a query processor");
                                 foundClassNames.add(name);
                             }
                         }
-                    }
-                    // allow the created class loader to be reclaimed by GC
-                    loader = null;
-                    
+                    }                    
                 }
+                // allow the created class loader to be reclaimed by GC
+                loader = null;
                 jarFile.close();
             }
             // potentially populate the class drop down

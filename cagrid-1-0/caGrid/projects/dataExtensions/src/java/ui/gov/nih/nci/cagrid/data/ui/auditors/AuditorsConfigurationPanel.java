@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.auditing.AuditorConfiguration;
 import gov.nih.nci.cagrid.data.auditing.AuditorConfigurationConfigurationProperties;
 import gov.nih.nci.cagrid.data.auditing.ConfigurationProperty;
@@ -13,13 +12,11 @@ import gov.nih.nci.cagrid.data.auditing.MonitoredEvents;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
 import gov.nih.nci.cagrid.data.service.auditing.DataServiceAuditor;
 import gov.nih.nci.cagrid.data.ui.DataServiceModificationSubPanel;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -36,10 +33,10 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:40:27 AM
- * @version $Id: AuditorsConfigurationPanel.java,v 1.2 2007-08-21 21:02:11 dervin Exp $ 
+ * @version $Id: AuditorsConfigurationPanel.java,v 1.3 2007-08-24 14:14:50 dervin Exp $ 
  */
 public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel {
-
+    
     private AuditorsTable auditorsTable = null;
     private JScrollPane auditorsTableScrollPane = null;
     private AuditorSelectionPanel auditorSelectionPanel = null;
@@ -51,7 +48,7 @@ public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel 
     
     
     public void updateDisplayedConfiguration() throws Exception {
-        AuditorConfiguration[] configs = getAuditorsDescription().getAuditorConfiguration();
+        AuditorConfiguration[] configs = getExtensionDataManager().getAuditorsConfiguration().getAuditorConfiguration();
         if (configs != null) {
             for (AuditorConfiguration config : configs) {
                 if (!getAuditorsTable().isAuditorDisplayed(
@@ -88,14 +85,15 @@ public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel 
             auditorsTable = new AuditorsTable();
             auditorsTable.addAuditorChangeListener(new AuditorChangeListener() {
                 public void auditorConfigureButtonClicked(String className, String instanceName) {
-                    new AuditorConfigurationDialog(getServiceInfo(), className, instanceName);
+                    new AuditorConfigurationDialog(
+                        getExtensionDataManager(), getServiceInfo(), className, instanceName);
                 }
                 
                 
                 public void auditorRemoveButtonClicked(String className, String instanceName) {
                     // remove the auditor from the configuration file
                     try {
-                        DataServiceAuditors auditors = getAuditorsDescription();
+                        DataServiceAuditors auditors = getExtensionDataManager().getAuditorsConfiguration();
                         List<AuditorConfiguration> keptConfigurations = 
                             new ArrayList(auditors.getAuditorConfiguration().length - 1);
                         for (AuditorConfiguration config : auditors.getAuditorConfiguration()) {
@@ -107,7 +105,7 @@ public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel 
                         AuditorConfiguration[] config = new AuditorConfiguration[keptConfigurations.size()];
                         keptConfigurations.toArray(config);
                         auditors.setAuditorConfiguration(config);
-                        storeAuditorsDescription(auditors);
+                        getExtensionDataManager().storeAuditorsConfiguration(auditors);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         ErrorDialog.showErrorDialog("Error removing auditor", ex.getMessage(), ex);
@@ -154,45 +152,6 @@ public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel 
     }
     
     
-    private DataServiceAuditors getAuditorsDescription() throws Exception {
-        // first, locate the data service auditors file
-        String filename = null;
-        if (CommonTools.servicePropertyExists(getServiceInfo().getServiceDescriptor(), 
-            DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY)) {
-            filename = getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator 
-                + "etc" + File.separator + CommonTools.getServicePropertyValue(
-                    getServiceInfo().getServiceDescriptor(),
-                    DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY);
-        } else {
-            // no property defined, add it and store the default filename
-            CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(),
-                DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY, 
-                DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_NAME, true);
-            filename = getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator 
-                + "etc" + File.separator + CommonTools.getServicePropertyValue(
-                    getServiceInfo().getServiceDescriptor(),
-                    DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY);
-            // create the document, since it doesn't exist
-            DataServiceAuditors tmpAuditors = new DataServiceAuditors();
-            Utils.serializeDocument(filename, tmpAuditors, 
-                DataServiceConstants.DATA_SERVICE_AUDITORS_QNAME);
-        }
-        // deserialize that document
-        DataServiceAuditors auditorsConfig = (DataServiceAuditors) Utils.deserializeDocument(
-            filename, DataServiceAuditors.class);
-        return auditorsConfig;
-    }
-    
-    
-    private void storeAuditorsDescription(DataServiceAuditors auditors) throws Exception {
-        String filename = getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator 
-            + "etc" + File.separator + CommonTools.getServicePropertyValue(
-                getServiceInfo().getServiceDescriptor(),
-                DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY);
-        Utils.serializeDocument(filename, auditors, DataServiceConstants.DATA_SERVICE_AUDITORS_QNAME);
-    }
-    
-    
     private boolean auditorExists(DataServiceAuditors auditors, String className, String instanceName) {
         if (auditors.getAuditorConfiguration() != null) {
             for (AuditorConfiguration config : auditors.getAuditorConfiguration()) {
@@ -209,7 +168,7 @@ public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel 
     private void addAuditor(DataServiceAuditor auditor, String className, String instanceName) {
         // add the auditor to the auditors description
         try {
-            DataServiceAuditors auditorsDescription = getAuditorsDescription();
+            DataServiceAuditors auditorsDescription = getExtensionDataManager().getAuditorsConfiguration();
             if (!auditorExists(auditorsDescription, className, instanceName)) {
                 AuditorConfiguration auditorConfig = new AuditorConfiguration();
                 auditorConfig.setClassName(className);
@@ -238,7 +197,7 @@ public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel 
                 }
                 auditorConfig.setMonitoredEvents(new MonitoredEvents());
                 // store it back to the file
-                storeAuditorsDescription(auditorsDescription);
+                getExtensionDataManager().storeAuditorsConfiguration(auditorsDescription);
 
                 // add the auditor to the GUI
                 getAuditorsTable().addAuditor(className, instanceName);

@@ -1,14 +1,21 @@
 package gov.nih.nci.cagrid.data.ui.auditors;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.auditing.DataServiceAuditors;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceDeploymentUIPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.File;
+import java.io.FileWriter;
 
 /** 
  *  AuditorDeploymentConfigPanel
@@ -17,17 +24,23 @@ import java.awt.GridBagLayout;
  * @author David Ervin
  * 
  * @created May 24, 2007 1:34:32 PM
- * @version $Id: AuditorDeploymentConfigPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: AuditorDeploymentConfigPanel.java,v 1.2 2007-08-24 14:14:50 dervin Exp $ 
  */
 public class AuditorDeploymentConfigPanel extends ServiceDeploymentUIPanel {
     
     private AuditorsConfigurationPanel auditorsConfigPanel = null;
-    private ExtensionDataManager extensionDataManager = null;
+    private ExtensionDataManager customExtensionDataManager = null;
     
     public AuditorDeploymentConfigPanel(ServiceExtensionDescriptionType desc, ServiceInformation info) {
         super(desc, info);
         ExtensionTypeExtensionData extensionData = getExtensionTypeExtensionData();
-        extensionDataManager = new ExtensionDataManager(extensionData);
+        // custom extension data manager writes to filesystem every time a save is made
+        customExtensionDataManager = new ExtensionDataManager(extensionData) {
+            public void storeAuditorsConfiguration(DataServiceAuditors auditors) throws Exception {
+                super.storeAuditorsConfiguration(auditors);
+                writeAuditorsConfiguration(auditors);
+            }
+        };
         initialize();
     }
     
@@ -57,8 +70,34 @@ public class AuditorDeploymentConfigPanel extends ServiceDeploymentUIPanel {
     
     private AuditorsConfigurationPanel getAuditorsConfigPanel() {
         if (auditorsConfigPanel == null) {
-            auditorsConfigPanel = new AuditorsConfigurationPanel(getServiceInfo(), extensionDataManager);
+            auditorsConfigPanel = new AuditorsConfigurationPanel(
+                getServiceInfo(), customExtensionDataManager);
         }
         return auditorsConfigPanel;
+    }
+    
+    
+    private void writeAuditorsConfiguration(DataServiceAuditors auditors) throws Exception {
+        if (CommonTools.servicePropertyExists(
+            getServiceInfo().getServiceDescriptor(), 
+            DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY)) {
+            try {
+                // get the name of the auditor config file
+                String filename = CommonTools.getServicePropertyValue(
+                    getServiceInfo().getServiceDescriptor(), 
+                    DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY);
+                File outFile = new File(getServiceInfo().getBaseDirectory().getAbsolutePath() 
+                    + File.separator + "etc" + File.separator + filename);
+                FileWriter writer = new FileWriter(outFile);
+                Utils.serializeObject(auditors, 
+                    DataServiceConstants.DATA_SERVICE_AUDITORS_QNAME, writer);
+                writer.flush();
+                writer.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                throw new CodegenExtensionException(
+                    "Error writing auditor configuration: " + ex.getMessage(), ex);
+            }
+        }
     }
 }

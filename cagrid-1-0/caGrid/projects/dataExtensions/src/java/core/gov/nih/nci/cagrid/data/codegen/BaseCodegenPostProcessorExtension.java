@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
@@ -22,6 +23,7 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,14 +40,25 @@ import org.apache.log4j.Logger;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 16, 2006 
- * @version $Id: BaseCodegenPostProcessorExtension.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: BaseCodegenPostProcessorExtension.java,v 1.2 2007-08-24 14:14:50 dervin Exp $ 
  */
 public abstract class BaseCodegenPostProcessorExtension implements CodegenExtensionPostProcessor {
 	private static final Logger logger = Logger.getLogger(DataServiceOperationProviderCodegenPostProcessor.class);
+    
+    public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
+        throws CodegenExtensionException {
+        modifyEclipseClasspath(desc, info);
+        generateClassToQnameMapping(getExtensionData(desc, info), info);
+        writeOutAuditorConfiguration(getExtensionData(desc, info), info);
+        performCodegenProcess(desc, info);
+    }
+    
+    
+    protected abstract void performCodegenProcess(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException;
+    
 
 	protected void modifyEclipseClasspath(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
-		String serviceDir = info.getIntroduceServiceProperties().getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
+		String serviceDir = info.getBaseDirectory().getAbsolutePath();
 		// get the eclipse classpath document
 		File classpathFile = new File(serviceDir + File.separator + ".classpath");
 		if (classpathFile.exists()) {
@@ -160,7 +173,48 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
             Utils.serializeDocument(mappingFilename, mappings, DataServiceConstants.MAPPING_QNAME);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			throw new CodegenExtensionException("Error generating class to QName mapping", ex);
+			throw new CodegenExtensionException(
+                "Error generating class to QName mapping: " + ex.getMessage(), ex);
 		}		
 	}
+    
+    
+    protected void writeOutAuditorConfiguration(Data extData, ServiceInformation serviceInfo) throws CodegenExtensionException {
+        if (CommonTools.servicePropertyExists(
+            serviceInfo.getServiceDescriptor(), 
+            DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY)) {
+            try {
+                // get the name of the auditor config file
+                String filename = CommonTools.getServicePropertyValue(
+                    serviceInfo.getServiceDescriptor(), 
+                    DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY);
+                if (extData.getDataServiceAuditors() != null) {
+                    File outFile = new File(serviceInfo.getBaseDirectory().getAbsolutePath() 
+                        + File.separator + "etc" + File.separator + filename);
+                    FileWriter writer = new FileWriter(outFile);
+                    Utils.serializeObject(extData.getDataServiceAuditors(), 
+                        DataServiceConstants.DATA_SERVICE_AUDITORS_QNAME, writer);
+                    writer.flush();
+                    writer.close();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                throw new CodegenExtensionException(
+                    "Error writing auditor configuration: " + ex.getMessage(), ex);
+            }
+        }
+    }
+    
+    
+    protected Data getExtensionData(ServiceExtensionDescriptionType desc, ServiceInformation info) 
+        throws CodegenExtensionException {
+        ExtensionTypeExtensionData extData = ExtensionTools.getExtensionData(desc, info);
+        Data data = null;
+        try {
+            data = ExtensionDataUtils.getExtensionData(extData);
+        } catch (Exception ex) {
+            throw new CodegenExtensionException("Error getting extension data: " + ex.getMessage(), ex);
+        }       
+        return data;
+    }
 }

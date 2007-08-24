@@ -1,16 +1,14 @@
 package gov.nih.nci.cagrid.data.ui.auditors;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.auditing.AuditorConfiguration;
 import gov.nih.nci.cagrid.data.auditing.AuditorConfigurationConfigurationProperties;
 import gov.nih.nci.cagrid.data.auditing.ConfigurationProperty;
 import gov.nih.nci.cagrid.data.auditing.DataServiceAuditors;
 import gov.nih.nci.cagrid.data.auditing.MonitoredEvents;
+import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
 import gov.nih.nci.cagrid.data.service.auditing.DataServiceAuditor;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.awt.GridBagConstraints;
@@ -37,13 +35,16 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Jun 26, 2007 11:41:25 AM
- * @version $Id: AuditorConfigurationDialog.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: AuditorConfigurationDialog.java,v 1.2 2007-08-24 14:14:50 dervin Exp $ 
  */
 public class AuditorConfigurationDialog extends JDialog {
 
+    private ExtensionDataManager dataManager;
     private ServiceInformation serviceInfo;
+    
     private String auditorClass;
     private String auditorInstance;
+    
     private JLabel classNameLabel = null;
     private JLabel instanceNameLabel = null;
     private JTextField classNameTextField = null;
@@ -55,10 +56,11 @@ public class AuditorConfigurationDialog extends JDialog {
     private JButton doneButton = null;
     private JPanel mainPanel = null;
     
-    public AuditorConfigurationDialog(ServiceInformation serviceInfo, 
+    public AuditorConfigurationDialog(ExtensionDataManager dataManager, ServiceInformation serviceInfo, 
         String auditorClass, String auditorInstance) {
         super(PortalResourceManager.getInstance().getGridPortal(), 
             "Auditor instance configuration", true);
+        this.dataManager = dataManager;
         this.serviceInfo = serviceInfo;
         this.auditorClass = auditorClass;
         this.auditorInstance = auditorInstance;
@@ -182,10 +184,10 @@ public class AuditorConfigurationDialog extends JDialog {
                 public void propertyValueEdited(String key, String newValue) {
                     // store the property
                     try {
-                        DataServiceAuditors auditors = getAuditorsDescription();
+                        DataServiceAuditors auditors = dataManager.getAuditorsConfiguration();
                         for (AuditorConfiguration config : auditors.getAuditorConfiguration()) {
                             if (config.getClassName().equals(auditorClass)
-                                && config.getInstanceName().equals(auditorClass)) {
+                                && config.getInstanceName().equals(auditorInstance)) {
                                 AuditorConfigurationConfigurationProperties props =
                                     config.getConfigurationProperties();
                                 for (ConfigurationProperty prop : props.getProperty()) {
@@ -197,7 +199,7 @@ public class AuditorConfigurationDialog extends JDialog {
                                 break;
                             }
                         }
-                        storeAuditorsDescription(auditors);
+                        dataManager.storeAuditorsConfiguration(auditors);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         ErrorDialog.showErrorDialog(
@@ -207,45 +209,6 @@ public class AuditorConfigurationDialog extends JDialog {
             });
         }
         return propertiesTable;
-    }
-    
-    
-    private DataServiceAuditors getAuditorsDescription() throws Exception {
-        // first, locate the data service auditors file
-        String filename = null;
-        if (CommonTools.servicePropertyExists(serviceInfo.getServiceDescriptor(), 
-            DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY)) {
-            filename = serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator 
-                + "etc" + File.separator + CommonTools.getServicePropertyValue(
-                    serviceInfo.getServiceDescriptor(),
-                    DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY);
-        } else {
-            // no property defined, add it and store the default filename
-            CommonTools.setServiceProperty(serviceInfo.getServiceDescriptor(),
-                DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY, 
-                DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_NAME, true);
-            filename = serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator 
-                + "etc" + File.separator + CommonTools.getServicePropertyValue(
-                    serviceInfo.getServiceDescriptor(),
-                    DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY);
-            // create the document, since it doesn't exist
-            DataServiceAuditors tmpAuditors = new DataServiceAuditors();
-            Utils.serializeDocument(filename, tmpAuditors, 
-                DataServiceConstants.DATA_SERVICE_AUDITORS_QNAME);
-        }
-        // deserialize that document
-        DataServiceAuditors auditorsConfig = (DataServiceAuditors) Utils.deserializeDocument(
-            filename, DataServiceAuditors.class);
-        return auditorsConfig;
-    }
-    
-    
-    private void storeAuditorsDescription(DataServiceAuditors auditors) throws Exception {
-        String filename = serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator 
-            + "etc" + File.separator + CommonTools.getServicePropertyValue(
-                serviceInfo.getServiceDescriptor(),
-                DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY);
-        Utils.serializeDocument(filename, auditors, DataServiceConstants.DATA_SERVICE_AUDITORS_QNAME);
     }
 
 
@@ -333,7 +296,7 @@ public class AuditorConfigurationDialog extends JDialog {
             // dig up the properties for this auditor and put them in
             // the auditor configuration table
             Properties auditorDefaultProps = auditor.getDefaultConfigurationProperties();
-            DataServiceAuditors auditors = getAuditorsDescription();
+            DataServiceAuditors auditors = dataManager.getAuditorsConfiguration();
             AuditorConfigurationConfigurationProperties configProps = null;
             MonitoredEvents monitoredEvents = null;
             for (AuditorConfiguration config : auditors.getAuditorConfiguration()) {
@@ -370,7 +333,7 @@ public class AuditorConfigurationDialog extends JDialog {
             monitoredEventsPanel.addMonitoredEventsChangeListener(new MonitoredEventsChangeListener() {
                 public void monitoredEventsChanged() {
                     try {
-                        DataServiceAuditors auditors = getAuditorsDescription();
+                        DataServiceAuditors auditors = dataManager.getAuditorsConfiguration();
                         AuditorConfiguration selectedAuditor = null;
                         for (AuditorConfiguration config : auditors.getAuditorConfiguration()) {
                             if (config.getClassName().equals(auditorClass)
@@ -381,7 +344,7 @@ public class AuditorConfigurationDialog extends JDialog {
                         }
                         selectedAuditor.setMonitoredEvents(
                             getMonitoredEventsPanel().getMonitoredEvents());
-                        storeAuditorsDescription(auditors);
+                        dataManager.storeAuditorsConfiguration(auditors);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         ErrorDialog.showErrorDialog("Error storing monitored events", ex.getMessage(), ex);

@@ -1,15 +1,12 @@
 package gov.nih.nci.cagrid.data.codegen;
 
-import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.style.ServiceStyleContainer;
 import gov.nih.nci.cagrid.data.style.ServiceStyleLoader;
 import gov.nih.nci.cagrid.data.style.StyleCodegenPostProcessor;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 
 
 /**
@@ -18,11 +15,11 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Mar 29, 2006
- * @version $Id: DataServiceOperationProviderCodegenPostProcessor.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: DataServiceOperationProviderCodegenPostProcessor.java,v 1.2 2007-08-24 14:14:50 dervin Exp $
  */
 public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodegenPostProcessorExtension {
 
-	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
+	public void performCodegenProcess(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
 		// add the necessary jars to the eclipse .classpath
 		modifyEclipseClasspath(desc, info);
@@ -69,18 +66,5 @@ public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodege
                 }
             }            
 		}
-	}
-	
-	
-	private Data getExtensionData(ServiceExtensionDescriptionType desc, ServiceInformation info) 
-		throws CodegenExtensionException {
-		ExtensionTypeExtensionData extData = ExtensionTools.getExtensionData(desc, info);
-		Data data = null;
-		try {
-			data = ExtensionDataUtils.getExtensionData(extData);
-		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error getting extension data: " + ex.getMessage(), ex);
-		}		
-		return data;
 	}
 }

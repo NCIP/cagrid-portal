@@ -14,7 +14,6 @@ import gov.nih.nci.cagrid.data.ui.browser.ClassBrowserPanel;
 import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionEvent;
 import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionListener;
 import gov.nih.nci.cagrid.data.ui.table.QueryProcessorParametersTable;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -42,7 +41,7 @@ import javax.swing.JScrollPane;
  * @author David Ervin
  * 
  * @created Jun 27, 2007 8:58:22 AM
- * @version $Id: QueryProcessorConfigPanel.java,v 1.3 2007-08-21 21:02:11 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigPanel.java,v 1.4 2007-08-24 14:14:50 dervin Exp $ 
  */
 public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     
@@ -331,8 +330,7 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     
     
     private String[] getJarFilenames() {
-        String libDir = getServiceInfo().getIntroduceServiceProperties().getProperty(
-            IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+        String libDir = getServiceInfo().getBaseDirectory().getAbsolutePath()
             + File.separator + "lib";
         String[] qpJarNames = getClassBrowserPanel().getAdditionalJars();
         if (qpJarNames != null) {
