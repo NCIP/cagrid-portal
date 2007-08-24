@@ -28,6 +28,8 @@ import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.portal.PortalResourceManager;
 
+import sun.security.action.GetBooleanAction;
+
 
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
@@ -311,12 +313,11 @@ public class ResourceManager {
 
         ZipUtilities.unzip(cachedFile, new File(baseDir));
     }
-
-
-    public static synchronized void restoreLatest(String currentId, String serviceName, String baseDir)
-        throws FileNotFoundException, IOException, Exception {
-
-        File introduceCache = new File(getResourcePath());
+    
+    
+    public static String[] getBackups(String serviceName){
+    	
+    	File introduceCache = new File(getResourcePath());
         final String finalServiceName = serviceName;
         FilenameFilter f = new FilenameFilter() {
             public boolean accept(File dir, String name) {
@@ -325,6 +326,16 @@ public class ResourceManager {
         };
 
         String[] cacheFiles = introduceCache.list(f);
+        
+        return cacheFiles;
+    }
+
+
+    public static synchronized void restoreLatest(String currentId, String serviceName, String baseDir)
+        throws FileNotFoundException, IOException, Exception {
+    	File introduceCache = new File(getResourcePath());
+        String[] cacheFiles = getBackups(serviceName);
+        
         long thisTime = Long.parseLong(currentId);
         long lastTime = 0;
         for (int i = 0; i < cacheFiles.length; i++) {
