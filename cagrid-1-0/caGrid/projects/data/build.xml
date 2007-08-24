@@ -544,6 +544,29 @@
 			</classpath>
 		</java>
 	</target>
+	
+	
+	<target name="invokeDataService" description="Invokes a remote caGrid Data Service">
+		<property name="service.url" value="http://localhost:8080/wsrf/services/cagrid/DataService"/>
+		<property name="service.cql" value="cqlQuery.xml"/>				
+		<java fork="true" classname="gov.nih.nci.cagrid.data.utilities.invoker.DataServiceInvoker">
+			<arg line="${service.url} ${service.cql}"/>
+			<classpath>
+				<fileset dir="${build.jars.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
 
 
 	<!-- build and jar everything -->
