@@ -78,7 +78,7 @@
     </operation>
   </portType>
 <plnk:partnerLinkType name="Test1PartnerLinkType">
-   <plnk:role name="data">
+   <plnk:role name="test1">
          <plnk:portType name="tns:WorkflowTestService1PortType"/>
     </plnk:role>
     </plnk:partnerLinkType>
