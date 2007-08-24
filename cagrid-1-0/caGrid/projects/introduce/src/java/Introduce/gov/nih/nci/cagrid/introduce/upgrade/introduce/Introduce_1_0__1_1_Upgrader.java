@@ -5,14 +5,10 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
-import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncHelper;
-import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base.BaseResourceBaseTemplate;
@@ -30,12 +26,9 @@ import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.singleton.
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
 import gov.nih.nci.cagrid.introduce.upgrade.one.one.IntroduceUpgraderBase;
-import gov.nih.nci.cagrid.metadata.service.Service;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
@@ -490,7 +483,6 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
         };
 
         File skeletonLibDir = new File("skeleton" + File.separator + "lib");
-        File extLibDir = new File("ext" + File.separator + "lib");
         File csmLibDir = new File("ext" + File.separator + "skeleton" + File.separator + "csm" + File.separator + "lib");
         File grouperLibDir = new File("ext" + File.separator + "skeleton" + File.separator + "gridgrouper"
             + File.separator + "lib");
