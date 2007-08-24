@@ -37,5 +37,5 @@
 			<xsd:element ref="tns:AuditorConfiguration" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
-	<xsd:element name="DataServiceAuditors"/>
+	<xsd:element name="DataServiceAuditors" type="tns:DataServiceAuditors"/>
 </xsd:schema>

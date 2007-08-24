@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by David W. Ervin (The Ohio State University / Department of Biomedical Informatics) -->
-<xsd:schema xmlns:ext="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xsd:schema xmlns:ext="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension" xmlns:aud="http://gov.nih.nci.cagrid.data/Auditing" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--
+	<xsd:import namespace="http://gov.nih.nci.cagrid.data/Auditing" schemaLocation="DataServiceAuditorConfiguration.xsd"/>
+	-->
 	<xsd:element name="DataServiceExtensionData">
 		<xsd:annotation>
 			<xsd:documentation>Data the data service introduce extension needs to know about</xsd:documentation>
@@ -11,6 +14,7 @@
 			<xsd:element name="AdditionalLibraries" type="ext:AdditionalLibraries" nillable="false" minOccurs="0"/>
 			<xsd:element name="CadsrInformation" type="ext:CadsrInformation" nillable="false" minOccurs="0"/>
 			<xsd:element name="ServiceFeatures" type="ext:ServiceFeatures" nillable="false" minOccurs="0"/>
+			<xsd:element ref="aud:DataServiceAuditors" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="AdditionalLibraries">
@@ -51,8 +55,6 @@
 		<xsd:attribute name="useWsEnumeration" type="xsd:boolean" use="required"/>
 		<xsd:attribute name="useGridIdeitifiers" type="xsd:boolean" use="required"/>
 		<xsd:attribute name="useBdt" type="xsd:boolean" use="required"/>
-		<!-- remove this attribute once upgrader is working properly with service styles -->
-		<xsd:attribute name="useSdkDataSource" type="xsd:boolean" use="required"/>
 		<xsd:attribute name="serviceStyle" type="xsd:string" use="optional"/>
 	</xsd:complexType>
 	<xsd:complexType name="ClassMapping">
