@@ -50,6 +50,9 @@ public class ConvertCAFileNameToHash {
 					X509Certificate cert = CertUtil.loadCertificate("BC", f);
 					String hash = CertUtil.getHashCode(cert);
 					File dir = f.getParentFile();
+					if(dir==null){
+						dir = new File(".");
+					}
 					File hashFile = new File(dir.getAbsolutePath()
 							+ File.separator + hash + ".0");
 					CertUtil.writeCertificate(cert, hashFile);
