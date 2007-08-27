@@ -3,29 +3,44 @@
     <property environment="env" />
     <property file="${basedir}/build.properties" />
     <property file="${user.dir}/build.properties" />
+	
+	<!-- globus -->
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
+	<property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+	<property name="mapping.src" value="${basedir}/NStoPkg.properties" />
 
     <!-- Information -->
     <property name="project.version" value="1.0" />
 
+	<!-- src dirs -->
     <property name="src.dir" location="${basedir}/src/java" />
     <property name="test.src.dir" location="${basedir}/test/src/java" />
+	
+	<!-- output dirs -->
     <property name="build.dir" location="${basedir}/build" />
     <property name="build.lib.dir" location="${build.dir}/lib" />
     <property name="classes.dir" location="${build.dir}/classes" />
+	<property name="build.stubs.src" location="${build.dir}/stubs/src"/>
+	<property name="build.stubs.classes" location="${build.dir}/stubs/classes"/>
     <property name="test.classes.dir" location="${build.dir}/classes-test" />
-    <property name="jar.dir" location="${build.dir}/lib" />
+    <property name="javadoc.dir" location="${build.dir}/javadoc" />
+    <property name="jar.dir" location="${build.dir}/lib"/>
+	
+	<!-- jars -->
     <property name="project.jarfile" location="${jar.dir}/${ant.project.name}-${project.version}.jar" />
     <property name="test.project.jarfile" location="${jar.dir}/${ant.project.name}-${project.version}-test.jar" />
+	
+	<!-- lib locations -->
     <property name="lib.dir" location="${basedir}/lib" />
     <property name="test.lib.dir" location="${basedir}/test/lib" />
     <property name="ext.lib.dir" location="${basedir}/ext/lib" />
     <property name="ext.endorsed.dir" location="${basedir}/ext/endorsed/lib" />
     <property name="test.ext.lib.dir" location="${basedir}/ext/test/lib" />
     <property name="test.log.dir" value="${basedir}/test/logs" />
-    <property name="javadoc.dir" location="${build.dir}/javadoc" />
 
+	<!-- java compiler options -->
     <property name="java.debug" value="on" />
+	<property name="java.source" value="1.5"/>
 
     <!-- =============================================================== -->
     <!-- Imports                                                         -->
@@ -61,6 +76,7 @@
             <include name="**/*.jar" />
         </fileset>
         <path location="${classes.dir}" />
+		<path location="${build.stubs.classes}" />
         <fileset dir="${globus.dir}/lib">
             <include name="**/*.jar" />
         </fileset>
@@ -84,13 +100,14 @@
         </fileset>
         <path location="${test.classes.dir}" />
         <path location="${classes.dir}" />
+		<path location="${build.stubs.classes}" />
         <fileset dir="${globus.dir}/lib">
             <include name="**/*.jar" />
         </fileset>
     </path>
 
     <!-- =============================================================== -->
-    <!-- The Run Classpath                                                   -->
+    <!-- The Run Classpath                                               -->
     <!-- =============================================================== -->
     <path id="run.classpath">
         <fileset dir="${lib.dir}">
@@ -110,13 +127,65 @@
         <mkdir dir="${ext.lib.dir}" />
         <mkdir dir="${test.ext.lib.dir}" />
     </target>
+	
+	
+	<!-- =================================================================== -->
+	<!-- sets up GT4 related variables                                       -->
+	<!-- =================================================================== -->
+	<target name="setGlobus" if="env.GLOBUS_LOCATION">
+		<!-- GT4 build files and directories-->
+		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
+		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
+		<property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
+		<!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
+		<property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd -x http://schemas.xmlsoap.org/ws/2004/09/enumeration" />
+	</target>
+	
+	
+	<!-- merge namespace mappings with globus -->
+	<target name="mergeNsMappings" depends="prepare">
+		<ant antfile="${build.stubs}" target="mergePackageMapping">
+			<property name="mapping.src" location="NStoPkg.properties" />
+			<property name="mapping.dst" location="${build.dir}/NStoPkg.properties" />
+		</ant>
+	</target>
+	
+	
+	<!-- =================================================================== -->
+	<!-- Generates the stub source code                                      -->
+	<!-- =================================================================== -->
+	<target name="generateStubs" depends="prepare, setGlobus, mergeNsMappings" description="Generates Beans">
+		<mkdir dir="${build.stubs.src}"/>
+		<property name="mapping.dst" value="${build.dir}/NStoPkg.properties" />
+		<ant antfile="${ant.build.stubs}" target="mergePackageMapping" />
+		<property name="mapping.file" value="${mapping.dst}" />
+		<!-- generate stubs in general for the data service -->
+		<ant antfile="${ant.build.stubs}" target="generateStubs">
+			<property name="source.stubs.dir" location="${basedir}/schema"/>
+			<property name="wsdl.file" value="Beans.wsdl"/>
+			<property name="target.stubs.dir" location="${build.stubs.src}"/>
+		</ant>	
+	</target>	
+	
+	
+	<!-- =================================================================== -->
+	<!-- Compiles the stubs code                                             -->
+	<!-- =================================================================== -->
+	<target name="compileStubs" depends="generateStubs" description="Compiles stubs">
+		<mkdir dir="${build.stubs.classes}"/>
+		<javac srcdir="${build.stubs.src}" destdir="${build.stubs.classes}" source="${java.source}" debug="${java.debug}">
+			<classpath refid="build.classpath"/>
+		</javac>
+	</target>
+	
 
     <!-- =================================================================== -->
     <!-- Compiles the source code                                            -->
     <!-- =================================================================== -->
-    <target name="compile" depends="prepare" description="Compiles all the source files.">
+    <target name="compile" depends="prepare, compileStubs" description="Compiles all the source files.">
         <mkdir dir="${classes.dir}" />
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="${java.debug}">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="${java.debug}" source="${java.source}">
             <classpath refid="build.classpath" />
         </javac>
     </target>
@@ -126,7 +195,7 @@
     <!-- =================================================================== -->
     <target name="compile-test" depends="prepare" description="Compiles all the test source files.">
         <mkdir dir="${test.classes.dir}" />
-        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="${java.debug}">
+        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" source="${java.source}" debug="${java.debug}">
             <classpath refid="test.build.classpath" />
         </javac>
     </target>
