@@ -15,8 +15,8 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.ServiceCheckMetadataStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 import gov.nci.nih.cagrid.tests.core.util.NoAvailablePortException;
-import gov.nci.nih.cagrid.validator.steps.TestServiceMetaData;
-import gov.nci.nih.cagrid.validator.steps.TestServiceUpStep;
+import gov.nci.nih.cagrid.validator.steps.base.TestServiceMetaData;
+import gov.nci.nih.cagrid.validator.steps.base.TestServiceUpStep;
 import gov.nih.nci.cagrid.metadata.service.Service;
 import org.apache.log4j.*;
 
