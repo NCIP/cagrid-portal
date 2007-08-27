@@ -16,7 +16,7 @@
 	<xsd:complexType name="ValidationDescription">
 		<xsd:sequence>
 			<xsd:element name="ServiceDescription" type="val:ServiceDescription" minOccurs="1" maxOccurs="unbounded"/>
-			<xsd:element ref="sched:Schedule" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="sched:Schedule" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 </xsd:schema>
