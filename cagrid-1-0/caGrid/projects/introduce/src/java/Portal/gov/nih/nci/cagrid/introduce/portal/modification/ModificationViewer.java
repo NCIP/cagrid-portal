@@ -391,25 +391,19 @@ public class ModificationViewer extends GridPortalComponent {
             UpgradeManager upgrader = new UpgradeManager(this.methodsDirectory.getAbsolutePath());
 
             if (upgrader.canIntroduceBeUpgraded() || upgrader.extensionsNeedUpgraded()) {
-                String message = "This service is from an older of version of\n"
-                    + "Introduce or uses an older version of an extension.\n"
-                    + "Would you like to try to upgrade this service to work\n"
-                    + "with the current version of Introduce and installed extensions?\n"
-                    + "Yes will upgrade the service, No will close the modification viewer,\n"
-                    + "Otherwise cancel will have Introduce attempt to work with this service.";
-                String result = PromptButtonDialog
-                    .prompt(
-                        PortalResourceManager.getInstance().getGridPortal(),
-                        "Upgrade?",
-                        new String[]{
-                                "",
-                                "This service is from an older of version of Introduce or uses an older version of an extension.",
-                                "Would you like to try to upgrade this service to work with the current version of Introduce and installed extensions?\n",
-                                "",
-                                "Upgrade: Yes I would like to upgrade my service to be able to work with the currently installed tools.",
-                                "Open: Introduce will attemp to open and work with this service.  This is very dangerous.",
-                                "Close: Do nothing and close the modification viewer.", ""}, new String[]{"Upgrade",
-                                "Open", "Close"}, "Close");
+                String result = PromptButtonDialog.prompt(
+                    PortalResourceManager.getInstance().getGridPortal(),
+                    "Upgrade?",
+                    new String[]{
+                        "",
+                        "This service is from an older of version of Introduce or uses an older version of an extension.",
+                        "Would you like to try to upgrade this service to work with the current version of Introduce and installed extensions?\n",
+                        "",
+                        "Upgrade: Yes I would like to upgrade my service to be able to work with the currently installed tools.",
+                        "Open: Introduce will attempt to open and work with this service.  This is very dangerous.",
+                        "Close: Do nothing and close the modification viewer.", ""}, 
+                    new String[]{"Upgrade", "Open", "Close"}, 
+                    "Close");
                 System.out.println(result);
                 if (result != null && result.equals("Upgrade")) {
                     try {
