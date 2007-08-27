@@ -64,22 +64,22 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             // get the extension data in raw form
             Element extensionData = getExtensionDataElement();
             // update the data service libraries
-            updateLibraries();
+            updateLibraries(extensionData);
             // fix the cadsr information block
             setCadsrInformation(extensionData);
             // move the configuration for the CQL query processor into
             // the service properties and remove it from the extension data
             reconfigureCqlQueryProcessor(extensionData);
             // add selected enum iterator
-            setEnumIteratorSelection();
+            setEnumIteratorSelection(extensionData);
             // update schemas
             updateDataSchemas();
             // change the version number
             setCurrentExtensionVersion();
             // set the method documentation strings
-            setDescriptionStrings();
+            setDescriptionStrings(extensionData);
             // add new attributes to extension data's Service Features
-            updateServiceFeatures();
+            updateServiceFeatures(extensionData);
             // fix up the castor mapping location
             moveCastorMappingFile();
             // store the modified extension data back into the service model
@@ -110,12 +110,12 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
     }
 
 
-    private void updateLibraries() throws UpgradeException {
+    private void updateLibraries(Element extDataElement) throws UpgradeException {
         updateDataLibraries();
-        if (serviceIsUsingEnumeration()) {
+        if (serviceIsUsingEnumeration(extDataElement)) {
             updateEnumerationLibraries();
         }
-        if (serviceIsUsingSdkDataSource()) {
+        if (serviceIsUsingSdkDataSource(extDataElement)) {
             updateSdkQueryLibraries();
         }
     }
@@ -385,14 +385,14 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
     }
 
 
-    private void updateServiceFeatures() throws UpgradeException {
-        Element extDataElement = getExtensionDataElement();
+    private void updateServiceFeatures(Element extDataElement) throws UpgradeException {
         Element serviceFeaturesElement = extDataElement.getChild(
             "ServiceFeatures", extDataElement.getNamespace());
         // BDT feature didn't exist in 1.0, so set it to false for 1.1
         serviceFeaturesElement.setAttribute("useBdt", String.valueOf(false));
         // determine if using SDK
-        if (serviceIsUsingSdkDataSource()) {
+        if (serviceIsUsingSdkDataSource(extDataElement)) {
+            System.out.println("The data service is using SDK data source");
             // since this part of the upgrade runs AFTER upgraded the SDK libraries
             // have been updated, look for the caGrid-1.1 libs...
             FileFilter sdkLibFilter = new FileFilter() {
@@ -422,11 +422,13 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
             }
             
             String styleName = isSdk31 ? "caCORE SDK v 3.1" : "caCORE SDK v 3.2(.1)";
+            System.out.println("Set service style to " + styleName);
             serviceFeaturesElement.setAttribute("serviceStyle", styleName);
+        } else {
+            System.out.println("NO SDK SERVICE USED");
         }
         // use sdk data source attribute no longer exists
         serviceFeaturesElement.removeAttribute("useSdkDataSource");
-        setExtensionDataElement(extDataElement);
     }
 
 
@@ -504,8 +506,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
     }
 
 
-    private void setEnumIteratorSelection() throws UpgradeException {
-        if (serviceIsUsingEnumeration()) {
+    private void setEnumIteratorSelection(Element extDataElement) throws UpgradeException {
+        if (serviceIsUsingEnumeration(extDataElement)) {
             CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
                 DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY, 
                 IterImplType.CAGRID_CONCURRENT_COMPLETE.toString(), false);
@@ -565,7 +567,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
     }
 
 
-    private void setDescriptionStrings() throws UpgradeException {
+    private void setDescriptionStrings(Element extDataElement) throws UpgradeException {
         // get the query method
         MethodType queryMethod = null;
         MethodType enumerationMethod = null;
@@ -598,7 +600,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
         }
 
         // enumeration query method is optional
-        if (serviceIsUsingEnumeration()) {
+        if (serviceIsUsingEnumeration(extDataElement)) {
             if (enumerationMethod == null) {
                 throw new UpgradeException("No enumeration query method found in the data service!");
             }
@@ -620,16 +622,14 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
     }
 
 
-    private boolean serviceIsUsingEnumeration() throws UpgradeException {
-        Element extDataElement = getExtensionDataElement();
+    private boolean serviceIsUsingEnumeration(Element extDataElement) throws UpgradeException {
         Element serviceFeaturesElement = extDataElement.getChild("ServiceFeatures", extDataElement.getNamespace());
         String useEnumValue = serviceFeaturesElement.getAttributeValue("useWsEnumeration");
         return Boolean.valueOf(useEnumValue).booleanValue();
     }
 
 
-    private boolean serviceIsUsingSdkDataSource() throws UpgradeException {
-        Element extDataElement = getExtensionDataElement();
+    private boolean serviceIsUsingSdkDataSource(Element extDataElement) throws UpgradeException {
         Element serviceFeaturesElement = extDataElement.getChild("ServiceFeatures", extDataElement.getNamespace());
         String useSdkValue = serviceFeaturesElement.getAttributeValue("useSdkDataSource");
         return Boolean.valueOf(useSdkValue).booleanValue();
