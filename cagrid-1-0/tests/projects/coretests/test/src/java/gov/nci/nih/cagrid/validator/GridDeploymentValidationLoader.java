@@ -3,6 +3,8 @@ package gov.nci.nih.cagrid.validator;
 import gov.nci.nih.cagrid.validator.steps.base.DeleteTempDirStep;
 import gov.nci.nih.cagrid.validator.steps.base.TestServiceMetaData;
 import gov.nci.nih.cagrid.validator.steps.base.TestServiceUpStep;
+import gov.nci.nih.cagrid.validator.steps.gme.DomainsAndNamespacesStep;
+import gov.nci.nih.cagrid.validator.steps.gme.SchemaDownloadStep;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
@@ -30,7 +32,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 3:04:08 PM
- * @version $Id: GridDeploymentValidationLoader.java,v 1.2 2007-08-28 16:03:13 dervin Exp $ 
+ * @version $Id: GridDeploymentValidationLoader.java,v 1.3 2007-08-28 16:06:55 dervin Exp $ 
  */
 public class GridDeploymentValidationLoader {
     
@@ -93,7 +95,9 @@ public class GridDeploymentValidationLoader {
         Vector<Step> steps = new Vector();        
         // would be nice if I could use a switch here
         if (service.getServiceType().equals(ServiceType.GME)) {
-            
+            steps.add(new DomainsAndNamespacesStep(service.getServiceUrl().toString()));
+            steps.add(new SchemaDownloadStep(service.getServiceUrl().toString(), 
+                getTempDirForService(service.getServiceName())));
         }
         return steps;
     }
