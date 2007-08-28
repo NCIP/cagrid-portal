@@ -1,2 +1,0 @@
-Files /Users/joshua/dev/cagrid/cagrid_head/caGrid/projects/AntInstallerFramework/lib/antlib/README and antlib/README differ
-Only in /Users/joshua/dev/cagrid/cagrid_head/caGrid/projects/AntInstallerFramework/lib/antlib: CVS

@@ -1,1 +1,0 @@
-spring.jar: Spring 2.0.3
