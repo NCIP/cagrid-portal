@@ -7,7 +7,7 @@
 	<!-- globus -->
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 	<property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
-	<property name="mapping.src" value="${basedir}/NStoPkg.properties" />
+	<property name="mapping.src" value="${basedir}/NStoPKG.properties" />
 
     <!-- Information -->
     <property name="project.version" value="1.0" />
@@ -147,7 +147,7 @@
 	<target name="mergeNsMappings" depends="prepare">
 		<ant antfile="${build.stubs}" target="mergePackageMapping">
 			<property name="mapping.src" location="NStoPkg.properties" />
-			<property name="mapping.dst" location="${build.dir}/NStoPkg.properties" />
+			<property name="mapping.dst" location="${build.dir}/NStoPKG.properties" />
 		</ant>
 	</target>
 	
