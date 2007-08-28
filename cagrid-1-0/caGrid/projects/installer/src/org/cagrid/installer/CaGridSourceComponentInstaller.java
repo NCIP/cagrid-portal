@@ -71,8 +71,7 @@ public class CaGridSourceComponentInstaller extends
 		return new Condition() {
 			public boolean evaluate(WizardModel m) {
 				CaGridInstallerModel model = (CaGridInstallerModel) m;
-				return !model.isCaGridInstalled()
-						|| model.isTrue(Constants.INSTALL_CAGRID);
+				return model.isTrue(Constants.INSTALL_CAGRID);
 			}
 		};
 	}
