@@ -5,7 +5,6 @@ package org.cagrid.installer.steps;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashSet;
@@ -95,8 +94,12 @@ public abstract class AbstractDropDatabaseStep extends
 		String url = getJdbcUrl(model);
 		String usr = getUsername(model);
 		String pwd = getPassword(model);
-		Class.forName(driver);
-		return DriverManager.getConnection(url, usr, pwd);
+		if(InstallerUtils.isEmpty(pwd)){
+			pwd = "";
+		}
+//		Class.forName(driver);
+//		return DriverManager.getConnection(url, usr, pwd);
+		return InstallerUtils.getDatabaseConnection(driver, url, usr, pwd);
 	}
 
 	private void closeConnection(Connection conn) {

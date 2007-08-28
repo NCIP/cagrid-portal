@@ -4,14 +4,11 @@
 package org.cagrid.installer.validator;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.Statement;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.util.InstallerUtils;
 import org.pietschy.wizard.InvalidStateException;
 
@@ -64,18 +61,17 @@ public abstract class DBConnectionValidator implements Validator {
 
 		String username = (String)state.get(getUsernameProp());
 		String password = (String)state.get(getPasswordProp());
-		if(password == null || password.trim().length() == 0){
+		if(InstallerUtils.isEmpty(password)){
 			password = "";
 		}
 		String dbUrl = getJdbcUrl(state);
-		
-		Connection conn = null;
+
+		Connection conn = InstallerUtils.getDatabaseConnection(null, dbUrl, username, password);
 		try{
-			conn = DriverManager.getConnection(dbUrl, username, password);
 			Statement stmt = conn.createStatement();
 			stmt.executeQuery(getQuery());
 		}catch(Exception ex){
-			logger.error("Error connecting to " + dbUrl + ": " + ex.getMessage(), ex);
+			logger.error("Error validating connecting to " + dbUrl + ": " + ex.getMessage(), ex);
 			throw new InvalidStateException(getMessage());
 		}finally{
 			if(conn != null){
@@ -125,5 +121,7 @@ public abstract class DBConnectionValidator implements Validator {
 	public void setUsernameProp(String usernameProp) {
 		this.usernameProp = usernameProp;
 	}
+	
+	
 
 }

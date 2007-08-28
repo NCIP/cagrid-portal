@@ -19,9 +19,9 @@ import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Enumeration;
-import java.util.Map;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -41,8 +41,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.model.CaGridInstallerModel;
-import org.cagrid.installer.model.CaGridInstallerModelImpl;
-import org.cagrid.installer.steps.ConfigureServiceCertStep;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.steps.PropertyConfigurationStep;
 import org.cagrid.installer.steps.options.FilePropertyConfigurationOption;
@@ -52,6 +50,7 @@ import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
 import org.cagrid.installer.validator.KeyAccessValidator;
 import org.cagrid.installer.validator.MySqlDBConnectionValidator;
 import org.cagrid.installer.validator.PathExistsValidator;
+import org.pietschy.wizard.InvalidStateException;
 import org.w3c.dom.Node;
 
 /**
@@ -602,6 +601,77 @@ public class InstallerUtils {
 			trimmed = trimmed.trim();
 		}
 		return trimmed;
+	}
+	
+	public static Connection getDatabaseConnection(String driver, String dbUrl, String username, String password) throws InvalidStateException {
+		
+		if(driver != null){
+			try{
+				Class.forName(driver);
+			}catch(Exception ex){
+				throw new InvalidStateException("Error loading driver '" + driver + "': " + ex.getMessage(), ex);
+			}
+		}
+		
+		ConnectThread t = new ConnectThread(dbUrl, username, password);
+		t.start();
+		try{
+			t.join(Constants.CONNECT_TIMEOUT);
+		}catch(InterruptedException ex){
+			logger.warn("Connection interrupted: " + ex.getMessage(), ex);
+		}
+		
+		if(t.getEx() != null){
+			throw new InvalidStateException("Error connecting to " + dbUrl + ": " + t.getEx().getMessage(), t.getEx());
+		}
+		if(!t.isFinished()){
+			throw new InvalidStateException("Connection to " + dbUrl + " timed out.");
+		}
+		Connection conn = t.getConnection();
+		if(conn == null){
+			throw new InvalidStateException("Couldn't get connection to " + dbUrl + ". Connection is null.");
+		}
+		return conn;
+	}
+	
+	private static class ConnectThread extends Thread {
+		
+		private boolean finished;
+		private Connection conn;
+		private String dbUrl;
+		private String username;
+		private String password;
+		private Exception ex;
+		
+		ConnectThread(String dbUrl, String username, String password){
+			this.dbUrl = dbUrl;
+			this.username = username;
+			this.password = password;
+		}
+		
+		public void run(){
+			try{
+				this.conn = DriverManager.getConnection(this.dbUrl, this.username, this.password);
+				this.finished = true;
+			}catch(Exception ex){
+				this.ex = ex;
+			}
+		}
+
+		public Connection getConnection() {
+			return conn;
+		}
+
+		public Exception getEx() {
+			return ex;
+		}
+
+
+		public boolean isFinished() {
+			return finished;
+		}
+
+		
 	}
 
 }

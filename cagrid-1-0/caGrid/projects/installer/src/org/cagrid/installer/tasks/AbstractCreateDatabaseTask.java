@@ -76,7 +76,8 @@ public abstract class AbstractCreateDatabaseTask extends BasicTask {
 
 		Connection conn = null;
 		try {
-			conn = DriverManager.getConnection(mysqlDBUrl, usr, pwd);
+//			conn = DriverManager.getConnection(mysqlDBUrl, usr, pwd);
+			conn = InstallerUtils.getDatabaseConnection(null, mysqlDBUrl, usr, pwd);
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate("create database " + dbName + ";");
 		} catch (Exception ex) {
