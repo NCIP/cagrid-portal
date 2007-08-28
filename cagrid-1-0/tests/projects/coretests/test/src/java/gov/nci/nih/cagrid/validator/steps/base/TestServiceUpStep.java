@@ -3,8 +3,9 @@
  */
 package gov.nci.nih.cagrid.validator.steps.base;
 
-import java.io.DataInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,7 +27,6 @@ public class TestServiceUpStep extends Step {
 
     private String serviceURL;
     String resp = "";
-    DataInputStream input;
     String str = "";
 
 
@@ -123,8 +123,8 @@ public class TestServiceUpStep extends Step {
                 System.out.println("LastModifed: " + connection.getLastModified());
                 System.out.println("----------");
 
-                input = new DataInputStream(connection.getInputStream());
-                while (null != ((str = input.readLine()))) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                while (null != ((str = reader.readLine()))) {
                     if (str.length() > 0) {
                         str = str.trim();
                         if (!str.equals("")) {
@@ -133,7 +133,7 @@ public class TestServiceUpStep extends Step {
                         }
                     }
                 }
-                input.close();
+                reader.close();
             }
             //
         } catch (MalformedURLException mue) {

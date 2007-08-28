@@ -146,7 +146,7 @@
 	<!-- merge namespace mappings with globus -->
 	<target name="mergeNsMappings" depends="prepare">
 		<ant antfile="${build.stubs}" target="mergePackageMapping">
-			<property name="mapping.src" location="NStoPkg.properties" />
+			<property name="mapping.src" location="NStoPKG.properties" />
 			<property name="mapping.dst" location="${build.dir}/NStoPKG.properties" />
 		</ant>
 	</target>
@@ -157,7 +157,7 @@
 	<!-- =================================================================== -->
 	<target name="generateStubs" depends="prepare, setGlobus, mergeNsMappings" description="Generates Beans">
 		<mkdir dir="${build.stubs.src}"/>
-		<property name="mapping.dst" value="${build.dir}/NStoPkg.properties" />
+		<property name="mapping.dst" value="${build.dir}/NStoPKG.properties" />
 		<ant antfile="${ant.build.stubs}" target="mergePackageMapping" />
 		<property name="mapping.file" value="${mapping.dst}" />
 		<!-- generate stubs in general for the data service -->
