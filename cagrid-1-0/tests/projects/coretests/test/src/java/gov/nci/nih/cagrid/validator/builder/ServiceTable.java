@@ -19,7 +19,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:43:19 PM
- * @version $Id: ServiceTable.java,v 1.3 2007-08-29 15:38:52 dervin Exp $ 
+ * @version $Id: ServiceTable.java,v 1.4 2007-08-29 15:44:30 dervin Exp $ 
  */
 public class ServiceTable extends JTable {
     private DefaultTableModel model;
@@ -60,14 +60,14 @@ public class ServiceTable extends JTable {
     
     public void removeSelectedRows() {
         int[] selected = getSelectedRows();
-        Vector rawData = model.getDataVector();
         for (int i = 0; i < selected.length; i++) {
             int rmRow = selected[i];
-            rawData.remove(rmRow);
-            for (int j : selected) {
-                j--;
+            model.removeRow(rmRow);
+            for (int j = 0; j < selected.length; j++) {
+                selected[j]--;
             }
         }
+        
     }
     
     

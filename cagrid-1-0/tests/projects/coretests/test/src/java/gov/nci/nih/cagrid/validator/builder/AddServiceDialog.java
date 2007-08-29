@@ -3,22 +3,24 @@ package gov.nci.nih.cagrid.validator.builder;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import java.awt.Dimension;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.GridLayout;
 
 /** 
  *  AddServiceDialog
@@ -27,7 +29,7 @@ import java.awt.GridLayout;
  * @author David Ervin
  * 
  * @created Aug 29, 2007 11:03:10 AM
- * @version $Id: AddServiceDialog.java,v 1.2 2007-08-29 15:16:25 dervin Exp $ 
+ * @version $Id: AddServiceDialog.java,v 1.3 2007-08-29 15:44:30 dervin Exp $ 
  */
 public class AddServiceDialog extends JDialog {
 
@@ -140,6 +142,19 @@ public class AddServiceDialog extends JDialog {
     private JComboBox getTypeComboBox() {
         if (typeComboBox == null) {
             typeComboBox = new JComboBox();
+            Field[] fields = ServiceType.class.getFields();
+            for (Field f : fields) {
+                if (Modifier.isStatic(f.getModifiers()) && Modifier.isPublic(f.getModifiers())) {
+                    if (f.getType().equals(String.class)) {
+                        try {
+                            String val = (String) f.get(null);
+                            typeComboBox.addItem(val);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
         }
         return typeComboBox;
     }

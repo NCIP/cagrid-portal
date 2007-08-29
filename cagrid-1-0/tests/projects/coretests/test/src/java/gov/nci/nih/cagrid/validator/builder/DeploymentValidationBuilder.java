@@ -37,7 +37,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:14:58 PM
- * @version $Id: DeploymentValidationBuilder.java,v 1.3 2007-08-29 15:17:59 dervin Exp $ 
+ * @version $Id: DeploymentValidationBuilder.java,v 1.4 2007-08-29 15:44:30 dervin Exp $ 
  */
 public class DeploymentValidationBuilder extends JFrame {
     
@@ -399,7 +399,7 @@ public class DeploymentValidationBuilder extends JFrame {
     
     
     private void removeServices() {
-        
+        getServiceTable().removeSelectedRows();
     }
 
 
