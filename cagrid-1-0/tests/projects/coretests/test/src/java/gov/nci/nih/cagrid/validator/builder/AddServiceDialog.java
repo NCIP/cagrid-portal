@@ -1,6 +1,7 @@
 package gov.nci.nih.cagrid.validator.builder;
 
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
+import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -10,6 +11,10 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import org.apache.axis.types.URI;
+import org.apache.axis.types.URI.MalformedURIException;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -22,7 +27,7 @@ import java.awt.GridLayout;
  * @author David Ervin
  * 
  * @created Aug 29, 2007 11:03:10 AM
- * @version $Id: AddServiceDialog.java,v 1.1 2007-08-29 15:10:33 dervin Exp $ 
+ * @version $Id: AddServiceDialog.java,v 1.2 2007-08-29 15:16:25 dervin Exp $ 
  */
 public class AddServiceDialog extends JDialog {
 
@@ -37,27 +42,35 @@ public class AddServiceDialog extends JDialog {
     private JPanel infoPanel = null;
     private JPanel buttonPanel = null;
     private JPanel mainPanel = null;
+    private boolean canceled;
 
 
     private AddServiceDialog(JFrame owner) {
         super(owner, "Add Service", true);
+        canceled = false;
         initialize();
     }
     
     
     private void initialize() {
-        this.setSize(new Dimension(370, 141));
         this.setContentPane(getMainPanel());
-        
+        this.setSize(new Dimension(370, 141));
     }
     
     
-    private ServiceDescription getServiceDescription() {
+    private ServiceDescription getServiceDescription() throws MalformedURIException {
+        if (!canceled) {
+            ServiceDescription desc = new ServiceDescription();
+            desc.setServiceName(getNameTextField().getText());
+            desc.setServiceType(ServiceType.fromString(getTypeComboBox().getSelectedItem().toString()));
+            desc.setServiceUrl(new URI(getUrlTextField().getText()));
+            return desc;
+        }
         return null;
     }
     
     
-    public static ServiceDescription getDescription(JFrame owner) {
+    public static ServiceDescription getDescription(JFrame owner) throws MalformedURIException {
         AddServiceDialog dialog = new AddServiceDialog(owner);
         dialog.setVisible(true);
         return dialog.getServiceDescription();
@@ -156,7 +169,8 @@ public class AddServiceDialog extends JDialog {
             addButton.setText("Add");
             addButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    canceled = false;
+                    dispose();
                 }
             });
         }
@@ -175,7 +189,8 @@ public class AddServiceDialog extends JDialog {
             cancelButton.setText("Cancel");
             cancelButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    canceled = true;
+                    dispose();
                 }
             });
         }
