@@ -1,6 +1,7 @@
 package gov.nci.nih.cagrid.validator.builder;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.tests.core.beans.validation.Interval;
 import gov.nih.nci.cagrid.tests.core.beans.validation.Schedule;
 
@@ -9,9 +10,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.AbstractSpinnerModel;
 import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -19,14 +22,17 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
+import org.apache.axis.types.Time;
+
 
 /**
- * SchedulePanel Panel to handle rendering / editing of a validation schedule
+ * SchedulePanel 
+ * Panel to handle rendering / editing of a validation schedule
  * 
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:57:46 PM
- * @version $Id: SchedulePanel.java,v 1.2 2007-08-29 13:47:49 dervin Exp $
+ * @version $Id: SchedulePanel.java,v 1.3 2007-08-29 14:29:34 dervin Exp $
  */
 public class SchedulePanel extends JPanel {
 
@@ -48,6 +54,7 @@ public class SchedulePanel extends JPanel {
     private JSpinner minutesSpinner = null;
     private JSpinner secondsSpinner = null;
     private JPanel intervalPanel = null;
+    private JCheckBox startImmediatlyCheckBox = null;
 
 
     public SchedulePanel() {
@@ -59,6 +66,7 @@ public class SchedulePanel extends JPanel {
     public void setSchedule(Schedule schedule) {
         getTaskNameTextField().setText(schedule.getTaskName());
         if (schedule.getStart() != null) {
+            getStartImmediatlyCheckBox().setSelected(false);
             Calendar start = schedule.getStart().getAsCalendar();
             boolean startAM = start.get(Calendar.AM_PM) == Calendar.AM;
             int startHour = start.get(Calendar.HOUR) + 1;
@@ -66,14 +74,34 @@ public class SchedulePanel extends JPanel {
             getStartHrSpinner().setValue(Integer.valueOf(startHour));
             getStartMinSpinner().setValue(Integer.valueOf(startMin));
             getStartAPSpinner().setValue(startAM ? APSpinModel.AM : APSpinModel.PM);
-        }        
+        } else {
+            getStartImmediatlyCheckBox().setSelected(true);
+        }
         Interval interval = schedule.getInterval();
-        
+        getHoursSpinner().setValue(Integer.valueOf(interval.getHours()));
+        getMinutesSpinner().setValue(Integer.valueOf(interval.getMinutes()));
+        getSecondsSpinner().setValue(Integer.valueOf(interval.getSeconds()));
     }
     
     
     public Schedule getSchedule() {
-        return null;
+        Schedule schedule = new Schedule();
+        schedule.setTaskName(getTaskNameTextField().getText());
+        if (!getStartImmediatlyCheckBox().isSelected()) {
+            Calendar start = new GregorianCalendar();
+            boolean startAM = getStartAPSpinner().getValue().equals(APSpinModel.AM);
+            start.set(Calendar.AM_PM, startAM ? Calendar.AM : Calendar.PM);
+            // hours from 0 to 11
+            start.set(Calendar.HOUR, Integer.parseInt(getStartHrSpinner().getValue().toString()) - 1);
+            start.set(Calendar.MINUTE, Integer.parseInt(getMinutesSpinner().getValue().toString()));
+            schedule.setStart(new Time(start));
+        }
+        Interval interval = new Interval();
+        interval.setHours(Integer.parseInt(getHoursSpinner().getValue().toString()));
+        interval.setMinutes(Integer.parseInt(getMinutesSpinner().getValue().toString()));
+        interval.setSeconds(Integer.parseInt(getSecondsSpinner().getValue().toString()));
+        schedule.setInterval(interval);
+        return schedule;
     }
 
 
@@ -93,7 +121,7 @@ public class SchedulePanel extends JPanel {
         gridBagConstraints16.weightx = 1.0D;
         gridBagConstraints16.gridy = 0;
         this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(328, 145));
+        this.setSize(new Dimension(472, 168));
         this.add(getTaskPanel(), gridBagConstraints16);
         this.add(getIntervalPanel(), gridBagConstraints17);
     }
@@ -216,8 +244,11 @@ public class SchedulePanel extends JPanel {
      */
     private JPanel getTaskPanel() {
         if (taskPanel == null) {
+            GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+            gridBagConstraints18.gridx = 1;
+            gridBagConstraints18.gridy = 1;
             GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-            gridBagConstraints11.gridx = 1;
+            gridBagConstraints11.gridx = 2;
             gridBagConstraints11.anchor = GridBagConstraints.WEST;
             gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints11.gridy = 1;
@@ -231,6 +262,7 @@ public class SchedulePanel extends JPanel {
             gridBagConstraints1.gridy = 0;
             gridBagConstraints1.weightx = 1.0;
             gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints1.gridwidth = 2;
             gridBagConstraints1.gridx = 1;
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
@@ -246,6 +278,7 @@ public class SchedulePanel extends JPanel {
             taskPanel.add(getTaskNameTextField(), gridBagConstraints1);
             taskPanel.add(getStartTimeLabel(), gridBagConstraints2);
             taskPanel.add(getStartSpinnerPanel(), gridBagConstraints11);
+            taskPanel.add(getStartImmediatlyCheckBox(), gridBagConstraints18);
         }
         return taskPanel;
     }
@@ -363,6 +396,27 @@ public class SchedulePanel extends JPanel {
             intervalPanel.add(getMinutesSpinner(), gridBagConstraints15);
         }
         return intervalPanel;
+    }
+
+
+    /**
+     * This method initializes startImmediatlyCheckBox	
+     * 	
+     * @return javax.swing.JCheckBox	
+     */
+    private JCheckBox getStartImmediatlyCheckBox() {
+        if (startImmediatlyCheckBox == null) {
+            startImmediatlyCheckBox = new JCheckBox();
+            startImmediatlyCheckBox.setText("Start Immediately");
+            startImmediatlyCheckBox.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    PortalUtils.setContainerEnabled(
+                        getStartSpinnerPanel(), !getStartImmediatlyCheckBox().isSelected());
+                }
+            });
+            startImmediatlyCheckBox.setSelected(true);
+        }
+        return startImmediatlyCheckBox;
     }
     
     
