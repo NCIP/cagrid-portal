@@ -3,6 +3,7 @@ package gov.nci.nih.cagrid.validator.steps.gme;
 import java.util.List;
 
 import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.Namespace;
 import org.projectmobius.gme.XMLDataModelService;
 
 /** 
@@ -12,7 +13,7 @@ import org.projectmobius.gme.XMLDataModelService;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 4:17:32 PM
- * @version $Id: DomainsAndNamespacesStep.java,v 1.1 2007-08-28 14:03:14 dervin Exp $ 
+ * @version $Id: DomainsAndNamespacesStep.java,v 1.2 2007-08-29 18:41:18 dervin Exp $ 
  */
 public class DomainsAndNamespacesStep extends BaseGmeTestStep {
 
@@ -37,10 +38,10 @@ public class DomainsAndNamespacesStep extends BaseGmeTestStep {
         for (String domain : namespaceDomains) {
             // TODO: could validate the domains here
             System.out.println("GME has domain for " + domain);
-            List<String> namespaces = null;
+            List<Namespace> namespaces = null;
             try {
                 namespaces = gmeClient.getSchemaListForNamespaceDomain(domain);
-                for (String ns : namespaces) {
+                for (Namespace ns : namespaces) {
                     System.out.println("Domain contains schema " + ns);
                 }
             } catch (MobiusException ex) {

@@ -17,7 +17,7 @@ import org.projectmobius.gme.XMLDataModelService;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 4:37:36 PM
- * @version $Id: SchemaDownloadStep.java,v 1.1 2007-08-28 14:03:14 dervin Exp $ 
+ * @version $Id: SchemaDownloadStep.java,v 1.2 2007-08-29 18:41:17 dervin Exp $ 
  */
 public class SchemaDownloadStep extends BaseGmeTestStep {
     
@@ -34,20 +34,19 @@ public class SchemaDownloadStep extends BaseGmeTestStep {
         
         List<String> domains = gmeHandle.getNamespaceDomainList();
         for (String domain : domains) {
-            List<String> namespaces = gmeHandle.getSchemaListForNamespaceDomain(domain);
-            for (String namespace : namespaces) {
+            List<Namespace> namespaces = gmeHandle.getSchemaListForNamespaceDomain(domain);
+            for (Namespace namespace : namespaces) {
                 File tempSchemaDir = new File(tempDir.getAbsolutePath() + File.separator + "Schemas_" + System.currentTimeMillis());
                 tempSchemaDir.mkdirs();
-                Namespace schemaNamespace = new Namespace(namespace);
-                List<Namespace> cachedSchemas = gmeHandle.cacheSchema(schemaNamespace, tempSchemaDir);
+                List<Namespace> cachedSchemas = gmeHandle.cacheSchema(namespace, tempSchemaDir);
                 // verify each schema was cached correctly
                 for (Namespace cached : cachedSchemas) {
                     ImportInfo ii = new ImportInfo(cached);
                     File schemaFile = new File(tempSchemaDir.getAbsolutePath() + File.separator + ii.getFileName());
-                    assertTrue("Could not find schea file " + schemaFile.getName(), schemaFile.exists());
+                    assertTrue("Could not find schema file " + schemaFile.getName(), schemaFile.exists());
                     String targetNamespace = CommonTools.getTargetNamespace(schemaFile);
-                    assertNotNull(targetNamespace);
-                    assertEquals(cached, targetNamespace);
+                    assertNotNull("Target namespace of schema was null", targetNamespace);
+                    assertEquals(cached.getRaw(), targetNamespace);
                 }
             }
         }
