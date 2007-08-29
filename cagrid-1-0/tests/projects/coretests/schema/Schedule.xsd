@@ -4,9 +4,9 @@
 		<xsd:annotation>
 			<xsd:documentation>How often a task should be executed</xsd:documentation>
 		</xsd:annotation>
-		<xsd:attribute name="hours" type="xsd:integer" use="required"/>
-		<xsd:attribute name="minutes" type="xsd:integer" use="required"/>
-		<xsd:attribute name="seconds" type="xsd:integer" use="required"/>
+		<xsd:attribute name="hours" type="xsd:int" use="required"/>
+		<xsd:attribute name="minutes" type="xsd:int" use="required"/>
+		<xsd:attribute name="seconds" type="xsd:int" use="required"/>
 	</xsd:complexType>
 	<xsd:element name="Schedule" type="sched:Schedule"/>
 	<xsd:complexType name="Schedule">
@@ -17,6 +17,6 @@
 			<xsd:element name="Interval" type="sched:Interval"/>
 		</xsd:sequence>
 		<xsd:attribute name="taskName" type="xsd:string" use="required"/>
-		<xsd:attribute name="start" type="xsd:dateTime" use="optional"/>
+		<xsd:attribute name="start" type="xsd:time" use="optional"/>
 	</xsd:complexType>
 </xsd:schema>

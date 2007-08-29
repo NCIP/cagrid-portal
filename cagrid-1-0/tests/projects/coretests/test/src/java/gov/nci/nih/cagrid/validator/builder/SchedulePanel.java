@@ -1,6 +1,7 @@
 package gov.nci.nih.cagrid.validator.builder;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.tests.core.beans.validation.Interval;
 import gov.nih.nci.cagrid.tests.core.beans.validation.Schedule;
 
 import java.awt.Dimension;
@@ -25,7 +26,7 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:57:46 PM
- * @version $Id: SchedulePanel.java,v 1.1 2007-08-28 20:38:55 dervin Exp $
+ * @version $Id: SchedulePanel.java,v 1.2 2007-08-29 13:47:49 dervin Exp $
  */
 public class SchedulePanel extends JPanel {
 
@@ -57,8 +58,8 @@ public class SchedulePanel extends JPanel {
     
     public void setSchedule(Schedule schedule) {
         getTaskNameTextField().setText(schedule.getTaskName());
-        Calendar start = schedule.getStart();
-        if (start != null) {
+        if (schedule.getStart() != null) {
+            Calendar start = schedule.getStart().getAsCalendar();
             boolean startAM = start.get(Calendar.AM_PM) == Calendar.AM;
             int startHour = start.get(Calendar.HOUR) + 1;
             int startMin = start.get(Calendar.MINUTE);
@@ -66,6 +67,7 @@ public class SchedulePanel extends JPanel {
             getStartMinSpinner().setValue(Integer.valueOf(startMin));
             getStartAPSpinner().setValue(startAM ? APSpinModel.AM : APSpinModel.PM);
         }        
+        Interval interval = schedule.getInterval();
         
     }
     
