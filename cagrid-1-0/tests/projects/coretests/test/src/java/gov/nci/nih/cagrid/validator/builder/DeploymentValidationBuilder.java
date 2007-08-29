@@ -1,14 +1,19 @@
 package gov.nci.nih.cagrid.validator.builder;
 
+import gov.nci.nih.cagrid.validator.GridDeploymentValidationLoader;
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
+import gov.nih.nci.cagrid.tests.core.beans.validation.Schedule;
+import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
+import gov.nih.nci.cagrid.tests.core.beans.validation.ValidationDescription;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
+import java.io.FileWriter;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -17,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
@@ -29,7 +35,7 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:14:58 PM
- * @version $Id: DeploymentValidationBuilder.java,v 1.1 2007-08-28 20:38:55 dervin Exp $ 
+ * @version $Id: DeploymentValidationBuilder.java,v 1.2 2007-08-29 14:59:45 dervin Exp $ 
  */
 public class DeploymentValidationBuilder extends JFrame {
     
@@ -113,7 +119,8 @@ public class DeploymentValidationBuilder extends JFrame {
                     chooser.setFileFilter(new FileFilters.XMLFileFilter());
                     int choice = chooser.showOpenDialog(DeploymentValidationBuilder.this);
                     if (choice == JFileChooser.APPROVE_OPTION) {
-                        
+                        currentDeploymentDescriptionFile = chooser.getSelectedFile();
+                        loadCurrentFile();
                     }
                 }
             });
@@ -133,7 +140,12 @@ public class DeploymentValidationBuilder extends JFrame {
             fileSaveMenuItem.setText("Save");
             fileSaveMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    if (currentDeploymentDescriptionFile != null) {
+                        saveCurrentFile();
+                    } else {
+                        // punt to the save as action
+                        getFileSaveAsMenuItem().doClick();
+                    }
                 }
             });
         }
@@ -152,7 +164,13 @@ public class DeploymentValidationBuilder extends JFrame {
             fileSaveAsMenuItem.setText("Save As...");
             fileSaveAsMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    JFileChooser chooser = new JFileChooser(currentDeploymentDescriptionFile);
+                    chooser.setFileFilter(new FileFilters.XMLFileFilter());
+                    int choice = chooser.showSaveDialog(DeploymentValidationBuilder.this);
+                    if (choice == JFileChooser.APPROVE_OPTION) {
+                        currentDeploymentDescriptionFile = chooser.getSelectedFile();
+                        saveCurrentFile();
+                    }
                 }
             });
         }
@@ -171,7 +189,7 @@ public class DeploymentValidationBuilder extends JFrame {
             fileExitMenuItem.setText("Exit");
             fileExitMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    dispose();
                 }
             });
         }
@@ -195,7 +213,9 @@ public class DeploymentValidationBuilder extends JFrame {
     private JScrollPane getServiceTableScrollPane() {
         if (serviceTableScrollPane == null) {
             serviceTableScrollPane = new JScrollPane();
-            serviceTableScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Tested Services", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+            serviceTableScrollPane.setBorder(BorderFactory.createTitledBorder(
+                null, "Tested Services", TitledBorder.DEFAULT_JUSTIFICATION, 
+                TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             serviceTableScrollPane.setViewportView(getServiceTable());
         }
         return serviceTableScrollPane;
@@ -304,6 +324,61 @@ public class DeploymentValidationBuilder extends JFrame {
             schedulePanel = new SchedulePanel();
         }
         return schedulePanel;
+    }
+    
+    
+    // ------------
+    // Helpers
+    // ------------
+    
+    
+    private void saveCurrentFile() {
+        ValidationDescription description = new ValidationDescription();
+        
+        Schedule schedule = getSchedulePanel().getSchedule();
+        try {
+            ServiceDescription[] descriptions = getServiceTable().getServiceDescriptions();
+            description.setSchedule(schedule);
+            if (descriptions.length != 0) {
+                description.setServiceDescription(descriptions);
+            } else {
+                description.setServiceDescription(null);
+            }
+            
+            FileWriter writer = new FileWriter(currentDeploymentDescriptionFile);
+            Utils.serializeObject(description, GridDeploymentValidationLoader.VALIDATION_DESCRIPTION_QNAME, writer);
+            writer.flush();
+            writer.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            String[] message = {
+                "An error occured saving the deployment description:",
+                ex.getMessage()
+            };
+            JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
+    private void loadCurrentFile() {
+        try {
+            ValidationDescription description = (ValidationDescription) Utils.deserializeDocument(
+                currentDeploymentDescriptionFile.getAbsolutePath(), ValidationDescription.class);
+            getSchedulePanel().setSchedule(description.getSchedule());
+            getServiceTable().clearTable();
+            if (description.getServiceDescription() != null) {
+                for (ServiceDescription des : description.getServiceDescription()) {
+                    getServiceTable().addService(des);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            String[] message = {
+                "An error occured loading the deployment description:",
+                ex.getMessage()
+            };
+            JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 
