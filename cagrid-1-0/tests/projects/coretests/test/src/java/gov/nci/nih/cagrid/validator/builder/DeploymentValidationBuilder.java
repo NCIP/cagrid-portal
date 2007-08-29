@@ -28,6 +28,8 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
+import org.apache.axis.types.URI.MalformedURIException;
+
 /** 
  *  DeploymentValidationBuilder
  *  Utility to build a grid deployment validation test
@@ -35,7 +37,7 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:14:58 PM
- * @version $Id: DeploymentValidationBuilder.java,v 1.2 2007-08-29 14:59:45 dervin Exp $ 
+ * @version $Id: DeploymentValidationBuilder.java,v 1.3 2007-08-29 15:17:59 dervin Exp $ 
  */
 public class DeploymentValidationBuilder extends JFrame {
     
@@ -257,7 +259,7 @@ public class DeploymentValidationBuilder extends JFrame {
             addServicesButton.setText("Add Service");
             addServicesButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    addService();
                 }
             });
         }
@@ -276,7 +278,7 @@ public class DeploymentValidationBuilder extends JFrame {
             removeServicesButton.setText("Remove Selected");
             removeServicesButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    removeServices();
                 }
             });
         }
@@ -379,6 +381,25 @@ public class DeploymentValidationBuilder extends JFrame {
             };
             JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    
+    private void addService() {
+        try {
+            ServiceDescription desc = AddServiceDialog.getDescription(this);
+            if (desc != null) {
+                getServiceTable().addService(desc);
+            }
+        } catch (MalformedURIException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "The specified URL does not appear to be valid", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
+    private void removeServices() {
+        
     }
 
 
