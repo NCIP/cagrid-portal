@@ -1,12 +1,16 @@
 package gov.nci.nih.cagrid.validator.builder;
 
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
+import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
 
 import java.util.Vector;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+
+import org.apache.axis.types.URI;
+import org.apache.axis.types.URI.MalformedURIException;
 
 /** 
  *  ServiceTable
@@ -15,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:43:19 PM
- * @version $Id: ServiceTable.java,v 1.1 2007-08-28 20:38:55 dervin Exp $ 
+ * @version $Id: ServiceTable.java,v 1.2 2007-08-29 14:59:37 dervin Exp $ 
  */
 public class ServiceTable extends JTable {
     private DefaultTableModel model;
@@ -33,10 +37,38 @@ public class ServiceTable extends JTable {
     }
     
     
+    public void clearTable() {
+        while (getRowCount() != 0) {
+            model.removeRow(0);
+        }
+    }
+    
+    
+    public boolean isCellEditable(int row, int col) {
+        return col == 2;
+    }
+    
+    
     public void addService(final ServiceDescription service) {
         Vector row = new Vector(3);
         row.add(service.getServiceName());
         row.add(service.getServiceType().toString());
         row.add(service.getServiceUrl().toString());
+    }
+    
+    
+    public ServiceDescription[] getServiceDescriptions() throws MalformedURIException {
+        ServiceDescription[] descriptions = new ServiceDescription[getRowCount()];
+        for (int i = 0; i < getRowCount(); i++) {
+            String name = getValueAt(i, 0).toString();
+            String type = getValueAt(i, 1).toString();
+            String url = getValueAt(i, 2).toString();
+            
+            ServiceDescription desc = new ServiceDescription();
+            desc.setServiceName(name);
+            desc.setServiceType(ServiceType.fromString(type));
+            desc.setServiceUrl(new URI(url));
+        }
+        return descriptions;
     }
 }
