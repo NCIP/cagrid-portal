@@ -32,7 +32,7 @@ import org.apache.axis.types.Time;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:57:46 PM
- * @version $Id: SchedulePanel.java,v 1.3 2007-08-29 14:29:34 dervin Exp $
+ * @version $Id: SchedulePanel.java,v 1.4 2007-08-29 14:33:14 dervin Exp $
  */
 public class SchedulePanel extends JPanel {
 
@@ -54,7 +54,7 @@ public class SchedulePanel extends JPanel {
     private JSpinner minutesSpinner = null;
     private JSpinner secondsSpinner = null;
     private JPanel intervalPanel = null;
-    private JCheckBox startImmediatlyCheckBox = null;
+    private JCheckBox startImmediatelyCheckBox = null;
 
 
     public SchedulePanel() {
@@ -66,7 +66,7 @@ public class SchedulePanel extends JPanel {
     public void setSchedule(Schedule schedule) {
         getTaskNameTextField().setText(schedule.getTaskName());
         if (schedule.getStart() != null) {
-            getStartImmediatlyCheckBox().setSelected(false);
+            getStartImmediatelyCheckBox().setSelected(false);
             Calendar start = schedule.getStart().getAsCalendar();
             boolean startAM = start.get(Calendar.AM_PM) == Calendar.AM;
             int startHour = start.get(Calendar.HOUR) + 1;
@@ -75,7 +75,7 @@ public class SchedulePanel extends JPanel {
             getStartMinSpinner().setValue(Integer.valueOf(startMin));
             getStartAPSpinner().setValue(startAM ? APSpinModel.AM : APSpinModel.PM);
         } else {
-            getStartImmediatlyCheckBox().setSelected(true);
+            getStartImmediatelyCheckBox().setSelected(true);
         }
         Interval interval = schedule.getInterval();
         getHoursSpinner().setValue(Integer.valueOf(interval.getHours()));
@@ -87,7 +87,7 @@ public class SchedulePanel extends JPanel {
     public Schedule getSchedule() {
         Schedule schedule = new Schedule();
         schedule.setTaskName(getTaskNameTextField().getText());
-        if (!getStartImmediatlyCheckBox().isSelected()) {
+        if (!getStartImmediatelyCheckBox().isSelected()) {
             Calendar start = new GregorianCalendar();
             boolean startAM = getStartAPSpinner().getValue().equals(APSpinModel.AM);
             start.set(Calendar.AM_PM, startAM ? Calendar.AM : Calendar.PM);
@@ -278,7 +278,7 @@ public class SchedulePanel extends JPanel {
             taskPanel.add(getTaskNameTextField(), gridBagConstraints1);
             taskPanel.add(getStartTimeLabel(), gridBagConstraints2);
             taskPanel.add(getStartSpinnerPanel(), gridBagConstraints11);
-            taskPanel.add(getStartImmediatlyCheckBox(), gridBagConstraints18);
+            taskPanel.add(getStartImmediatelyCheckBox(), gridBagConstraints18);
         }
         return taskPanel;
     }
@@ -404,19 +404,19 @@ public class SchedulePanel extends JPanel {
      * 	
      * @return javax.swing.JCheckBox	
      */
-    private JCheckBox getStartImmediatlyCheckBox() {
-        if (startImmediatlyCheckBox == null) {
-            startImmediatlyCheckBox = new JCheckBox();
-            startImmediatlyCheckBox.setText("Start Immediately");
-            startImmediatlyCheckBox.addItemListener(new java.awt.event.ItemListener() {
+    private JCheckBox getStartImmediatelyCheckBox() {
+        if (startImmediatelyCheckBox == null) {
+            startImmediatelyCheckBox = new JCheckBox();
+            startImmediatelyCheckBox.setText("Start Immediately");
+            startImmediatelyCheckBox.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
                     PortalUtils.setContainerEnabled(
-                        getStartSpinnerPanel(), !getStartImmediatlyCheckBox().isSelected());
+                        getStartSpinnerPanel(), !getStartImmediatelyCheckBox().isSelected());
                 }
             });
-            startImmediatlyCheckBox.setSelected(true);
+            startImmediatelyCheckBox.setSelected(true);
         }
-        return startImmediatlyCheckBox;
+        return startImmediatelyCheckBox;
     }
     
     
