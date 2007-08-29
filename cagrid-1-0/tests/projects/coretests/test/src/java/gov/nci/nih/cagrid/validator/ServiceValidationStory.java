@@ -12,23 +12,20 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 10:33:18 AM
- * @version $Id: ServiceValidationStory.java,v 1.1 2007-08-28 14:40:56 dervin Exp $ 
+ * @version $Id: ServiceValidationStory.java,v 1.2 2007-08-29 18:42:42 dervin Exp $ 
  */
-public class ServiceValidationStory extends Story {
+public abstract class ServiceValidationStory extends Story {
     
     private String name;
     private String description;
     private Vector<Step> setUpSteps;
-    private Vector<Step> testSteps;
     private Vector<Step> tearDownSteps;
 
     public ServiceValidationStory(String name, String desc, 
-        Vector<Step> setUp, Vector<Step> testSteps, Vector<Step> tearDown) {
-        super();
+        final Vector<Step> setUp, final Vector<Step> tearDown) {
         this.name = name;
-        this.description = desc;
+        this.description = desc;        
         this.setUpSteps = setUp;
-        this.testSteps = testSteps;
         this.tearDownSteps = tearDown;
     }
     
@@ -50,11 +47,6 @@ public class ServiceValidationStory extends Story {
             }
         }
         return true;
-    }
-
-
-    protected Vector steps() {
-        return testSteps;
     }
     
     

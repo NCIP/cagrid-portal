@@ -32,7 +32,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 3:04:08 PM
- * @version $Id: GridDeploymentValidationLoader.java,v 1.3 2007-08-28 16:06:55 dervin Exp $ 
+ * @version $Id: GridDeploymentValidationLoader.java,v 1.4 2007-08-29 18:42:42 dervin Exp $ 
  */
 public class GridDeploymentValidationLoader {
     
@@ -74,11 +74,20 @@ public class GridDeploymentValidationLoader {
             + " @ " + service.getServiceUrl().toString();
         
         Vector<Step> setUp = createSetupStepsForService(service);
-        Vector<Step> tests = createStepsForServiceType(service);
+        final Vector<Step> tests = createStepsForServiceType(service);
         Vector<Step> tearDown = createTearDownStepsForService(service);
         
-        ServiceValidationStory serviceStory = new ServiceValidationStory(testName, testDescription,
-            setUp, tests, tearDown);
+        ServiceValidationStory serviceStory = new ServiceValidationStory(
+            testName, testDescription, setUp, tearDown) {
+            // Haste Story's constructor calls steps() right away, and stores
+            // the result internally, and iterates over THAT vector when running
+            // steps.  Hence, passing the vector to a constructor of the ServiceValidationStory,
+            // storing it in an instance variable, and returning it when steps() is called
+            // DOESN'T WORK.
+            public Vector steps() {
+                return tests;
+            }
+        };
         return serviceStory;
     }
     
@@ -95,9 +104,12 @@ public class GridDeploymentValidationLoader {
         Vector<Step> steps = new Vector();        
         // would be nice if I could use a switch here
         if (service.getServiceType().equals(ServiceType.GME)) {
+            System.out.println("Adding GME steps");
             steps.add(new DomainsAndNamespacesStep(service.getServiceUrl().toString()));
-            steps.add(new SchemaDownloadStep(service.getServiceUrl().toString(), 
-                getTempDirForService(service.getServiceName())));
+            File tempDir = getTempDirForService(service.getServiceName());
+            System.out.println("Temporary dir = " + tempDir.getAbsolutePath());
+            steps.add(new SchemaDownloadStep(
+                service.getServiceUrl().toString(), tempDir));
         }
         return steps;
     }
@@ -120,6 +132,7 @@ public class GridDeploymentValidationLoader {
             File serviceTemp = new File(tempDir.getAbsolutePath() + File.separator + serviceName);
             serviceTemp.mkdirs();
             tempDirsForServices.put(serviceName, serviceTemp);
+            dir = serviceTemp;
         }
         return dir;
     }
