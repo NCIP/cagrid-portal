@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import javax.xml.namespace.QName;
 
@@ -39,35 +38,26 @@ import javax.xml.namespace.QName;
 public class BDTCreationExtensionPostProcessor implements CreationExtensionPostProcessor {
     public static final String WS_ENUM_EXTENSION_NAME = "cagrid_wsEnum";
 
-	private ServiceInformation info;
-	private Properties serviceProperties;
-
-
+	
 	public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo)
 		throws CreationExtensionException {
 
-		ServiceDescription serviceDescription = serviceInfo.getServiceDescriptor();
-		serviceProperties = serviceInfo.getIntroduceServiceProperties();
-
-		info = new ServiceInformation(serviceDescription, serviceProperties, new File(serviceProperties
-			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)));
-
-		// apply BDT service requirements to it
+        // apply BDT service requirements to it
 		try {
 			System.out.println("Adding BDT service components to template");
-			makeBDTService(serviceDescription, serviceProperties);
-			addResourceImplStub(serviceDescription, serviceProperties);
+			makeBDTService(serviceInfo);
+			addResourceImplStub(serviceInfo);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new CreationExtensionException(
 				"Error adding BDT service components to template! " + ex.getMessage(), ex);
 		}
         // add the ws-enumeration
-        installWsEnumExtension();        
+        installWsEnumExtension(serviceInfo);        
 		// add the proper deployment metadata
 		try {
 			System.out.println("Modifying metadata");
-			modifyServiceProperties(serviceDescription);
+			modifyServiceProperties(serviceInfo);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new CreationExtensionException(
@@ -76,8 +66,8 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 	}
 
 
-	private void makeBDTService(ServiceDescription description, Properties props) throws Exception {
-		String schemaDir = getServiceSchemaDir(props);
+	private void makeBDTService(ServiceInformation info) throws Exception {
+		String schemaDir = getServiceSchemaDir(info);
 		File schemaDirFile = new File(schemaDir);
 		System.out.println("Copying schemas to " + schemaDir);
 		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "bdt"
@@ -100,10 +90,10 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		}
 
 		// copy libraries for data services into the new bdt lib directory
-		copyLibraries(props);
+		copyLibraries(info);
 		// namespaces
 		System.out.println("Modifying namespace definitions");
-		NamespacesType namespaces = description.getNamespaces();
+		NamespacesType namespaces = info.getServiceDescriptor().getNamespaces();
 		if (namespaces == null) {
 			namespaces = new NamespacesType();
 		}
@@ -151,9 +141,9 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		NamespaceType[] nsArray = new NamespaceType[bdtNamespaces.size()];
 		bdtNamespaces.toArray(nsArray);
 		namespaces.setNamespace(nsArray);
-		description.setNamespaces(namespaces);
+		info.getServiceDescriptor().setNamespaces(namespaces);
 
-		ServiceType mainService = description.getServices().getService(0);
+		ServiceType mainService = info.getServices().getService(0);
 
 		// add the bdt subservice
 		ServiceDescription desc = (ServiceDescription) Utils.deserializeDocument(extensionDir + File.separator
@@ -205,18 +195,18 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			}
 		}
 
-		ServiceType[] services = description.getServices().getService();
+		ServiceType[] services = info.getServices().getService();
         services = (ServiceType[]) Utils.appendToArray(services, bdtService);
-		description.getServices().setService(services);
+		info.getServices().setService(services);
 	}
 
 
-	private void addResourceImplStub(ServiceDescription desc, Properties props) throws Exception {
+	private void addResourceImplStub(ServiceInformation info) throws Exception {
 		BDTResourceTemplate resourceTemplate = new BDTResourceTemplate();
 		String resourceS = resourceTemplate.generate(
             new SpecificServiceInformation(info, info.getServices().getService(0)));
-		File resourceF = new File(props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-			+ File.separator + "src" + File.separator + CommonTools.getPackageDir(desc.getServices().getService(0))
+		File resourceF = new File(info.getBaseDirectory().getAbsolutePath()
+			+ File.separator + "src" + File.separator + CommonTools.getPackageDir(info.getServices().getService(0))
 			+ File.separator + "service" + File.separator + "BDTResource.java");
 		FileWriter resourceFW = new FileWriter(resourceF);
 		resourceFW.write(resourceS);
@@ -224,16 +214,16 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 	}
 
 
-	private void addServiceMetadata(ServiceDescription desc) throws CreationExtensionException {
+	private void addServiceMetadata(ServiceInformation info) throws CreationExtensionException {
 		ResourcePropertyType serviceMetadata = new ResourcePropertyType();
 		serviceMetadata.setPopulateFromFile(true); // no metadata file yet...
 		serviceMetadata.setRegister(true);
 		serviceMetadata.setFileLocation("./BulkDataHandler-metadata.xml");
 		serviceMetadata.setQName(BDTServiceConstants.METADATA_QNAME);
-		ResourcePropertiesListType propsList = desc.getServices().getService(0).getResourcePropertiesList();
+		ResourcePropertiesListType propsList = info.getServices().getService(0).getResourcePropertiesList();
 		if (propsList == null) {
 			propsList = new ResourcePropertiesListType();
-			desc.getServices().getService(0).setResourcePropertiesList(propsList);
+			info.getServices().getService(0).setResourcePropertiesList(propsList);
 		}
 		ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
 		if ((metadataArray == null) || (metadataArray.length == 0)) {
@@ -244,10 +234,10 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		propsList.setResourceProperty(metadataArray);
 
 		try {
-            File baseBdtMetadata = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "bdt" + File.separator
+            File baseBdtMetadata = new File(ExtensionsLoader.getInstance().getExtensionsDir() 
+                + File.separator + "bdt" + File.separator
                 + "etc" + File.separator + "BulkDataHandler-metadata.xml");
-            File serviceBdtMetadata = new File(serviceProperties.getProperty(
-                IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+            File serviceBdtMetadata = new File(info.getBaseDirectory().getAbsolutePath()
                 + File.separator + "etc" + File.separator + "BulkDataHandler-metadata.xml");
 			Utils.copyFile(baseBdtMetadata, serviceBdtMetadata);
 		} catch (IOException ex) {
@@ -257,8 +247,8 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 	}
 
 
-	private boolean serviceMetadataExists(ServiceDescription desc) {
-		ResourcePropertiesListType propsList = desc.getServices().getService(0).getResourcePropertiesList();
+	private boolean serviceMetadataExists(ServiceInformation info) {
+		ResourcePropertiesListType propsList = info.getServices().getService(0).getResourcePropertiesList();
 		if (propsList == null) {
 			return false;
 		}
@@ -275,14 +265,14 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 	}
 
 
-	private String getServiceSchemaDir(Properties props) {
-		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "schema"
-			+ File.separator + props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+	private String getServiceSchemaDir(ServiceInformation info) {
+		return info.getBaseDirectory().getAbsolutePath() + File.separator + "schema"
+			+ File.separator + info.getServices().getService(0).getName();
 	}
 
 
-	private String getServiceLibDir(Properties props) {
-		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
+	private String getServiceLibDir(ServiceInformation info) {
+		return info.getBaseDirectory().getAbsolutePath() + File.separator + "lib";
 	}
 
 
@@ -296,8 +286,8 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 	}
 
 
-	private void copyLibraries(Properties props) throws Exception {
-		String toDir = getServiceLibDir(props);
+	private void copyLibraries(ServiceInformation info) throws Exception {
+		String toDir = getServiceLibDir(info);
 		File directory = new File(toDir);
 		if (!directory.exists()) {
 			directory.mkdirs();
@@ -319,18 +309,18 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 				Utils.copyFile(libs[i], outFile);
 			}
 		}
-		modifyClasspathFile(copiedLibs, props);
+		modifyClasspathFile(copiedLibs, info);
 	}
     
     
-    private void installWsEnumExtension() throws CreationExtensionException {
+    private void installWsEnumExtension(ServiceInformation info) throws CreationExtensionException {
         // verify the ws-enum extension is installed
         if (!wsEnumExtensionInstalled()) {
             throw new CreationExtensionException("The required extension " + WS_ENUM_EXTENSION_NAME
                 + " was not found to be installed.  Please install it and try creating your service again");
         }
 
-        if (!wsEnumExtensionUsed()) {
+        if (!wsEnumExtensionUsed(info)) {
             System.out.println("Adding the WS-Enumeration extension to the service");
             // add the ws Enumeration extension
             ExtensionTools.addExtensionToService(info, WS_ENUM_EXTENSION_NAME);
@@ -350,7 +340,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
     }
 
 
-    private boolean wsEnumExtensionUsed() {
+    private boolean wsEnumExtensionUsed(ServiceInformation info) {
         ServiceDescription desc = info.getServiceDescriptor();
         if ((desc.getExtensions() != null) && (desc.getExtensions().getExtension() != null)) {
             for (int i = 0; i < desc.getExtensions().getExtension().length; i++) {
@@ -363,16 +353,16 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
     }
 
 
-	private void modifyClasspathFile(File[] libs, Properties props) throws Exception {
-		File classpathFile = new File(props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+	private void modifyClasspathFile(File[] libs, ServiceInformation info) throws Exception {
+		File classpathFile = new File(info.getBaseDirectory().getAbsolutePath()
 			+ File.separator + ".classpath");
 		ExtensionUtilities.syncEclipseClasspath(classpathFile, libs);
 	}
 
 
-	private void modifyServiceProperties(ServiceDescription desc) throws Exception {
-		if (!serviceMetadataExists(desc)) {
-			addServiceMetadata(desc);
+	private void modifyServiceProperties(ServiceInformation info) throws Exception {
+		if (!serviceMetadataExists(info)) {
+			addServiceMetadata(info);
 		}
 	}
 }
