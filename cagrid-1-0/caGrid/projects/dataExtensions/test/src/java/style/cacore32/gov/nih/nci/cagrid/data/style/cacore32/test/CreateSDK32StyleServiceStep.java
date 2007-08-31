@@ -23,7 +23,7 @@ import java.io.InputStream;
  * @author David Ervin
  * 
  * @created Jul 18, 2007 2:53:54 PM
- * @version $Id: CreateSDK32StyleServiceStep.java,v 1.2 2007-08-15 18:33:44 dervin Exp $ 
+ * @version $Id: CreateSDK32StyleServiceStep.java,v 1.3 2007-08-31 15:49:15 dervin Exp $ 
  */
 public class CreateSDK32StyleServiceStep extends CreationStep {
 
@@ -40,7 +40,7 @@ public class CreateSDK32StyleServiceStep extends CreationStep {
      */
     protected void postSkeletonCreation() throws Throwable {
         setServiceStyle();
-        extractCastorMappingFile();
+        extractCastorMappingFiles();
     }
     
     
@@ -56,14 +56,19 @@ public class CreateSDK32StyleServiceStep extends CreationStep {
     }
     
     
-    private void extractCastorMappingFile() throws Throwable {
+    private void extractCastorMappingFiles() throws Throwable {
         ServiceInformation info = new ServiceInformation(new File(serviceInfo.getDir()));
-        String mappingFileName = CastorMappingUtil.getCustomCastorMappingFileName(info);
+        String marshallingMapping = CastorMappingUtil.getMarshallingCastorMappingFileName(info);
+        String unmarshallingMapping = CastorMappingUtil.getUnmarshallingCastorMappingFileName(info);
         // copy the resource xml-mapping.xml file to the castor mapping location
         InputStream inStream = getClass().getResourceAsStream("resources/xml-mapping.xml");
         assertNotNull("Original xml-mapping.xml file could not be loaded", inStream);
         StringBuffer contents = Utils.inputStreamToStringBuffer(inStream);
-        Utils.stringBufferToFile(contents, mappingFileName);
+        Utils.stringBufferToFile(contents, marshallingMapping);
+        // again for unmarshalling
+        Utils.stringBufferToFile(contents, unmarshallingMapping);
+
+        inStream.close();
     }
     
     
