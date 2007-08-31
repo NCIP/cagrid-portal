@@ -14,6 +14,6 @@ public class SDK32DeserializerFactory extends BaseDeserializerFactory {
 
 	public SDK32DeserializerFactory(Class javaType, QName xmlType) {
 		super(SDK32Deserializer.class, xmlType, javaType);
-		LOG.debug("Initializing SDK321DeserializerFactory for class:" + javaType + " and QName:" + xmlType);
+		LOG.debug("Initializing SDK32DeserializerFactory for class:" + javaType + " and QName:" + xmlType);
 	}
 }

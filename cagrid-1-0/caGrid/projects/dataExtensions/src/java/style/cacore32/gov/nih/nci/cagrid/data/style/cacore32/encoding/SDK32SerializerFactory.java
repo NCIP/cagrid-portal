@@ -14,6 +14,6 @@ public class SDK32SerializerFactory extends BaseSerializerFactory {
 
 	public SDK32SerializerFactory(Class javaType, QName xmlType) {
 		super(SDK32Serializer.class, xmlType, javaType);
-		LOG.debug("Initializing SDK321SerializerFactory for class:" + javaType + " and QName:" + xmlType);
+		LOG.debug("Initializing SDK32SerializerFactory for class:" + javaType + " and QName:" + xmlType);
 	}
 }
