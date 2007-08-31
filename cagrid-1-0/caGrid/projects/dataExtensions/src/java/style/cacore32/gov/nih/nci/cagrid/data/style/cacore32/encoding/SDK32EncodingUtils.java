@@ -20,7 +20,8 @@ import org.xml.sax.InputSource;
 public class SDK32EncodingUtils {
 	public static final String CASTOR_MAPPING_DTD = "mapping.dtd";
 	public static final String CASTOR_MAPPING_DTD_ENTITY = "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN";
-	public static final String DEFAULT_XML_MAPPING = "/xml-mapping.xml";
+	public static final String DEFAULT_MARSHALLER_MAPPING = "/xml-mapping.xml";
+    public static final String DEFAULT_UNMARSHALLER_MAPPING = "/unmarshaller-xml-mapping.xml";
 	public static final String CASTOR_MARSHALLER_PROPERTY = "castorMarshallerMapping";
     public static final String CASTOR_UNMARSHALLER_PROPERTY = "castorUnmarshallerMapping";
     
@@ -53,16 +54,18 @@ public class SDK32EncodingUtils {
 			}
 		};
 
-		// extract mapping file from message context, such that multiple
-		// services can use this code using different mappings.
-		String mappingLocation = DEFAULT_XML_MAPPING;
+        // determine the mapping location, starting with a default based on the property
+		String mappingLocation = mappingProperty.equals(CASTOR_MARSHALLER_PROPERTY) 
+            ? DEFAULT_MARSHALLER_MAPPING : DEFAULT_UNMARSHALLER_MAPPING;
 		if (context != null) {
 			String prop = (String) context.getProperty(mappingProperty);
 			if (prop != null && !prop.trim().equals("")) {
+                // the property exists in the message context, use the property value
 				mappingLocation = prop;
 				LOG.debug("Loading castor mapping from message context property[" + mappingProperty + "]");
 			} else {
 				try {
+                    // attempt to find the property in the wsdd global configuration
 					prop = (String) context.getAxisEngine().getConfig().getGlobalOptions().get(mappingProperty);
 				} catch (Exception e) {
 					LOG.debug("Error reading global configuration:" + e.getMessage(), e);
@@ -72,11 +75,11 @@ public class SDK32EncodingUtils {
 					LOG.debug("Loading castor mapping from globalConfiguration property[" + mappingProperty + "]");
 				} else {
 					LOG.debug("Unable to locate castor mapping property[" + mappingProperty
-						+ "], using default mapping location:" + DEFAULT_XML_MAPPING);
+						+ "], using default mapping location:" + DEFAULT_MARSHALLER_MAPPING);
 				}
 			}
 		} else {
-			LOG.debug("Unable to determine message context, using default mapping location:" + DEFAULT_XML_MAPPING);
+			LOG.debug("Unable to determine message context, using default mapping location:" + DEFAULT_MARSHALLER_MAPPING);
 		}
 
         // locate the bytes of the mapping file
