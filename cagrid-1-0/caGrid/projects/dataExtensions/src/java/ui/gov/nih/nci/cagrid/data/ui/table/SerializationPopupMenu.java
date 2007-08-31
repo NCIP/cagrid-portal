@@ -19,11 +19,17 @@ import javax.swing.JPopupMenu;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 6, 2006 
- * @version $Id: SerializationPopupMenu.java,v 1.2 2007-07-27 01:56:19 dervin Exp $ 
+ * @version $Id: SerializationPopupMenu.java,v 1.3 2007-08-31 16:06:42 dervin Exp $ 
  */
 public class SerializationPopupMenu extends JPopupMenu {
-	private JCheckBoxMenuItem defaultCheckItem = null;
+    
+    // from SDK32 style
+	public static final String SDK32_DESERIALIZER_FACTORY = "gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory";
+    public static final String SDK32_SERIALIZER_FACTORY = "gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory";
+    
+    private JCheckBoxMenuItem defaultCheckItem = null;
 	private JCheckBoxMenuItem sdkCheckItem = null;
+    private JCheckBoxMenuItem sdk32CheckItem = null;
 	private JCheckBoxMenuItem customCheckItem = null;
 	private ButtonGroup checkItemGroup = null;	
 	private ClassElementSerializationTable classConfigTable = null;
@@ -33,6 +39,7 @@ public class SerializationPopupMenu extends JPopupMenu {
 		this.classConfigTable = typesTable;
 		add(getDefaultCheckItem());
 		add(getSdkCheckItem());
+        add(getSdk32CheckItem());
 		addSeparator();
 		add(getCustomCheckItem());
 	}
@@ -44,6 +51,8 @@ public class SerializationPopupMenu extends JPopupMenu {
 			getButtonGroup().setSelected(getDefaultCheckItem().getModel(), true);
 		} else if (isSdkSerialization()) {
 			getButtonGroup().setSelected(getSdkCheckItem().getModel(), true);
+        } else if (isSdk32Serialization()) {
+            getButtonGroup().setSelected(getSdk32CheckItem().getModel(), true);
 		} else {
 			getButtonGroup().setSelected(getCustomCheckItem().getModel(), true);
 		}
@@ -64,6 +73,21 @@ public class SerializationPopupMenu extends JPopupMenu {
 		}
 		return true;
 	}
+    
+    
+    private boolean isSdk32Serialization() {
+        int[] selectedRows = classConfigTable.getSelectedRows();
+        for (int i = 0; i < selectedRows.length; i++) {
+            String ser = (String) classConfigTable.getValueAt(selectedRows[i], 4);
+            String des = (String) classConfigTable.getValueAt(selectedRows[i], 5);
+            if (!(ser != null && des != null && 
+                ser.equals(SDK32_SERIALIZER_FACTORY) 
+                && des.equals(SDK32_DESERIALIZER_FACTORY))) {
+                return false;
+            }
+        }
+        return true;
+    }
 	
 	
 	private boolean isDefaultSerialization() {
@@ -118,6 +142,25 @@ public class SerializationPopupMenu extends JPopupMenu {
 		}
 		return sdkCheckItem;
 	}
+    
+    
+    private JCheckBoxMenuItem getSdk32CheckItem() {
+        if (sdk32CheckItem == null) {
+            sdk32CheckItem = new JCheckBoxMenuItem("SDK 3.2(.1) Serialization");
+            sdk32CheckItem.addItemListener(new ItemListener() {
+                public void itemStateChanged(ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        int[] selectedRows = classConfigTable.getSelectedRows();
+                        for (int i = 0; i < selectedRows.length; i++) {
+                            classConfigTable.setValueAt(SDK32_SERIALIZER_FACTORY, selectedRows[i], 4);
+                            classConfigTable.setValueAt(SDK32_DESERIALIZER_FACTORY, selectedRows[i], 5);
+                        }
+                    }
+                }
+            });
+        }
+        return sdk32CheckItem;
+    }
 	
 	
 	private JCheckBoxMenuItem getCustomCheckItem() {
@@ -153,6 +196,7 @@ public class SerializationPopupMenu extends JPopupMenu {
 			checkItemGroup = new ButtonGroup();
 			checkItemGroup.add(getDefaultCheckItem());
 			checkItemGroup.add(getSdkCheckItem());
+            checkItemGroup.add(getSdk32CheckItem());
 			checkItemGroup.add(getCustomCheckItem());
 			checkItemGroup.setSelected(getDefaultCheckItem().getModel(), true);
 		}
