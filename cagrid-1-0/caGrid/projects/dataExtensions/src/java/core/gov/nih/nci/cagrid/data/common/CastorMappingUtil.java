@@ -17,9 +17,11 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 26, 2006 
- * @version $Id: CastorMappingUtil.java,v 1.2 2007-08-15 18:10:21 dervin Exp $ 
+ * @version $Id: CastorMappingUtil.java,v 1.3 2007-08-31 15:47:23 dervin Exp $ 
  */
 public class CastorMappingUtil {
+    public static final String CASTOR_MARSHALLING_MAPPING_FILE = "xml-mapping.xml";
+    public static final String CASTOR_UNMARSHALLING_MAPPING_FILE = "unmarshaller-xml-mapping.xml";
 
 	/**
 	 * Edits a castor mapping XML file to change the namespace of all classes in a package
@@ -99,4 +101,38 @@ public class CastorMappingUtil {
 			+ "-" + DataServiceConstants.CACORE_CASTOR_MAPPING_FILE;
 		return mappingName;
 	}
+    
+    
+    public static String getMarshallingCastorMappingFileName(ServiceInformation serviceInfo) {
+        String mappingOut = serviceInfo.getBaseDirectory().getAbsolutePath() 
+            + File.separator + "src" + File.separator 
+            + getMarshallingCastorMappingName(serviceInfo);
+        return mappingOut;
+    }
+    
+    
+    public static String getMarshallingCastorMappingName(ServiceInformation serviceInfo) {
+        String mappingName = serviceInfo.getServices().getService(0)
+            .getPackageName().replace('.', '/')
+            + '/' + serviceInfo.getServices().getService(0).getName() 
+            + "-" + CASTOR_MARSHALLING_MAPPING_FILE;
+        return mappingName;
+    }
+    
+    
+    public static String getUnmarshallingCastorMappingFileName(ServiceInformation serviceInfo) {
+        String mappingOut = serviceInfo.getBaseDirectory().getAbsolutePath() 
+            + File.separator + "src" + File.separator 
+            + getUnmarshallingCastorMappingName(serviceInfo);
+        return mappingOut;
+    }
+    
+    
+    public static String getUnmarshallingCastorMappingName(ServiceInformation serviceInfo) {
+        String mappingName = serviceInfo.getServices().getService(0)
+            .getPackageName().replace('.', '/')
+            + '/' + serviceInfo.getServices().getService(0).getName() 
+            + "-" + CASTOR_UNMARSHALLING_MAPPING_FILE;
+        return mappingName;
+    }
 }
