@@ -50,9 +50,12 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 26, 2006
- * @version $Id: SchemaTypesPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: SchemaTypesPanel.java,v 1.2 2007-08-31 15:48:43 dervin Exp $
  */
 public class SchemaTypesPanel extends AbstractWizardPanel {
+    
+    public static final String TYPE_SERIALIZER_CLASS_PROPERTY = "serializerClassName";
+    public static final String TYPE_DESERIALIZER_CLASS_PROPERTY = "deserializerClassName"; 
 
     private JLabel gmeUrlLabel = null;
     private JTextField gmeUrlTextField = null;
@@ -238,7 +241,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
      */
     private PackageSchemasTable getPackageNamespaceTable() {
         if (this.packageNamespaceTable == null) {
-            this.packageNamespaceTable = new PackageSchemasTable();
+            this.packageNamespaceTable = new PackageSchemasTable(getBitBucket());
             this.packageNamespaceTable.getModel().addTableModelListener(new TableModelListener() {
                 public void tableChanged(TableModelEvent e) {
                     if (e.getType() == TableModelEvent.UPDATE) {
@@ -325,6 +328,20 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
                 IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
         // have the GME cache the schema and its imports locally
         List cachedNamespaces = gme.cacheSchema(ns, schemaDir);
+        
+        // determine the serializer and deserialzier to use for the beans
+        String serializerClass = null;
+        if (getBitBucket().containsKey(TYPE_SERIALIZER_CLASS_PROPERTY)) {
+            serializerClass = (String) getBitBucket().get(TYPE_SERIALIZER_CLASS_PROPERTY);
+        } else {
+            serializerClass = DataServiceConstants.SDK_SERIALIZER;
+        }
+        String deserializerClass = null;
+        if (getBitBucket().containsKey(TYPE_DESERIALIZER_CLASS_PROPERTY)) {
+            deserializerClass = (String) getBitBucket().get(TYPE_DESERIALIZER_CLASS_PROPERTY);
+        } else {
+            deserializerClass = DataServiceConstants.SDK_DESERIALIZER;
+        }
         // create namespace types and add them to the service
         Iterator nsIter = cachedNamespaces.iterator();
         while (nsIter.hasNext()) {
@@ -341,8 +358,8 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
                 // types
                 for (int i = 0; nsType.getSchemaElement() != null && i < nsType.getSchemaElement().length; i++) {
                     SchemaElementType type = nsType.getSchemaElement(i);
-                    type.setSerializer(DataServiceConstants.SDK_SERIALIZER);
-                    type.setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
+                    type.setSerializer(serializerClass);
+                    type.setDeserializer(deserializerClass);
                     type.setClassName(type.getType());
                 }
                 CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);

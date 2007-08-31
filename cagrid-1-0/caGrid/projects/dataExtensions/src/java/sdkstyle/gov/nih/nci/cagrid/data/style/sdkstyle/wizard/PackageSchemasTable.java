@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -36,7 +37,7 @@ import javax.swing.table.TableCellEditor;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 26, 2006 
- * @version $Id: PackageSchemasTable.java,v 1.2 2007-08-21 21:02:11 dervin Exp $ 
+ * @version $Id: PackageSchemasTable.java,v 1.3 2007-08-31 15:48:43 dervin Exp $ 
  */
 public class PackageSchemasTable extends JTable {
 
@@ -48,11 +49,14 @@ public class PackageSchemasTable extends JTable {
     public static final String STATUS_GME_DOMAIN_NOT_FOUND = "No Domain";
     public static final String STATUS_GME_NAMESPACE_NOT_FOUND = "No Namespace";
     public static final String STATUS_NEVER_TRIED = "Unknown";
+    
+    private Map wizardProperties = null;
 
-    public PackageSchemasTable() {
+    public PackageSchemasTable(Map wizardProperties) {
         setModel(new PackageSchemasTableModel());
         setDefaultRenderer(Object.class, new PackageSchemasTableRenderer());
         setDefaultEditor(Object.class, new PackageSchemasTableEditor());
+        this.wizardProperties = wizardProperties;
     }
 
 
@@ -140,12 +144,25 @@ public class PackageSchemasTable extends JTable {
                 setValueAt(STATUS_SCHEMA_FOUND, dataRow, 2);
                 // set the package name
                 resolved[0].setPackageName(pack.getName());
+                // determine the serializer and deserialzier to use for the beans
+                String serializerClass = null;
+                if (wizardProperties.containsKey(SchemaTypesPanel.TYPE_SERIALIZER_CLASS_PROPERTY)) {
+                    serializerClass = (String) wizardProperties.get(SchemaTypesPanel.TYPE_SERIALIZER_CLASS_PROPERTY);
+                } else {
+                    serializerClass = DataServiceConstants.SDK_SERIALIZER;
+                }
+                String deserializerClass = null;
+                if (wizardProperties.containsKey(SchemaTypesPanel.TYPE_DESERIALIZER_CLASS_PROPERTY)) {
+                    deserializerClass = (String) wizardProperties.get(SchemaTypesPanel.TYPE_DESERIALIZER_CLASS_PROPERTY);
+                } else {
+                    deserializerClass = DataServiceConstants.SDK_DESERIALIZER;
+                }
                 // set the serializers / deserializers for the FIRST namespace type's schema elements
                 SchemaElementType[] types = resolved[0].getSchemaElement();
                 for (int i = 0; types != null && i < types.length; i++) {
                     types[i].setClassName(types[i].getType());
-                    types[i].setSerializer(DataServiceConstants.SDK_SERIALIZER);
-                    types[i].setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
+                    types[i].setSerializer(serializerClass);
+                    types[i].setDeserializer(deserializerClass);
                 }
                 // add all the resolved namespace types to the service
                 for (int i = 0; i < resolved.length; i++) {
