@@ -101,7 +101,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="lib" path="/caGrid-1.0-portal2/lib/spring/spring.jar"/>
-	<classpathentry kind="lib" path="/caGrid-1.0-portal2/common/build/cagrid-portal2-common.jar"/>
 	<classpathentry kind="lib" path="/caGrid-1.0-portal2/lib/hibernate/annotations/hibernate-commons-annotations.jar"/>
 	<classpathentry kind="lib" path="/caGrid-1.0-portal2/lib/hibernate/annotations/hibernate-annotations.jar"/>
 	<classpathentry kind="lib" path="/caGrid-1.0-portal2/lib/hibernate/annotations/ejb3-persistence.jar"/>
@@ -135,5 +134,6 @@
 	<classpathentry kind="lib" path="/caGrid-1.0-portal2/lib/aspectj/aspectjrt.jar"/>
 	<classpathentry kind="lib" path="/caGrid-1.0-portal2/lib/aspectj/aspectjweaver.jar"/>
 	<classpathentry kind="lib" path="/caGrid-1.0-portal2/lib/mysql/mysql-connector-java-3.1.11.jar"/>
+	<classpathentry kind="lib" path="/caGrid-1.0-portal2/common/build/caGrid-1.1-portal2-common.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

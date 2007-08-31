@@ -40,6 +40,7 @@ public class PortalUserDaoTest extends AbstractDaoTest {
 				.getBean("portalUserDao");
 		GridPortalUserDao gridPortalUserDao = (GridPortalUserDao) getApplicationContext()
 				.getBean("gridPortalUserDao");
+		
 		List<PortalUser> allUsers = portalUserDao.getAll();
 		assertTrue("Should have retrieved 2 users. Got " + allUsers.size(),
 				allUsers.size() == 2);
@@ -54,12 +55,15 @@ public class PortalUserDaoTest extends AbstractDaoTest {
 		}
 		assertNotNull("PortalUser not found in collection", portalUser);
 		assertNotNull("GridPortalUser not found in collection", gridPortalUser);
+		
 		List<GridPortalUser> gridUsers = gridPortalUserDao.getAll();
 		assertTrue("Should have retrieved 1 GridPortalUser. Got "
 				+ gridUsers.size(), gridUsers.size() == 1);
+		
 		GridPortalUser gridPortalUser2 = gridUsers.get(0);
 		assertEquals("GridPortalUser objects are not the same", gridPortalUser
 				.getId(), gridPortalUser2.getId());
+		
 		Set<String> expectedRoles = new HashSet<String>();
 		expectedRoles.add("one");
 		expectedRoles.add("two");
@@ -67,12 +71,14 @@ public class PortalUserDaoTest extends AbstractDaoTest {
 			expectedRoles.remove(role.getName());
 		}
 		assertTrue("PortalUser missing roles", expectedRoles.size() == 0);
+		
 		expectedRoles.add("three");
 		expectedRoles.add("four");
 		for (Role role : gridPortalUser.getRoles()) {
 			expectedRoles.remove(role.getName());
 		}
 		assertTrue("GridPortalUser missing roles", expectedRoles.size() == 0);
+		
 		Role newRole = new Role();
 		newRole.setName("five");
 		roleDao.save(newRole);
@@ -87,6 +93,7 @@ public class PortalUserDaoTest extends AbstractDaoTest {
 		}
 		assertTrue("GridPortalUser missing roles (2)",
 				expectedRoles.size() == 0);
+		
 		GridPortalUser newGridUser = new GridPortalUser();
 		newGridUser.setUsername("yadda");
 		newGridUser.setPassword("dadda");

@@ -40,10 +40,10 @@ public class WebAuthnSvcTest extends TestCase {
 
 	public void testGetGridPortalUserInfo() {
 		WebAuthnSvc svc = (WebAuthnSvc) this.ctx.getBean("webAuthnSvc");
-		String idpUrl = "https://cbiovdev5034.nci.nih.gov:8443/wsrf/services/cagrid/Dorian";
+		String idpUrl = "https://cbiovdev5035.nci.nih.gov:8443/wsrf/services/cagrid/Dorian";
 		BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
-		bac.setUserId("manager");
-		bac.setPassword("manager");
+		bac.setUserId("grid_mgr");
+		bac.setPassword("Gr!d_mgr123");
 		Credential cred = new Credential();
 		cred.setBasicAuthenticationCredential(bac);
 		String loginKey = null;

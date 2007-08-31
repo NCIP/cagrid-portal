@@ -1,8 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<ADDRESSES ID="-1" TYPE="0"/>
-	<ADDRESSES ID="-2" TYPE="1"/>
-	<ADDRESSES ID="-3" TYPE="2"/>/>
 	<PERSONS ID="-1" PERSON_TYPE="PortalUser"/>
 	<PERSONS ID="-2" PERSON_TYPE="GridPortalUser"/>
 	<ROLES ID="-1" NAME="one"/>

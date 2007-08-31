@@ -98,13 +98,14 @@ public class WebAuthnSvcClient extends ServiceSecurityClient implements WebAuthn
 			  WebAuthnSvcClient client = new WebAuthnSvcClient(args[1]);
 			  Credential credential = new Credential();
 			  BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
-			  bac.setUserId("manager");
-			  bac.setPassword("manager");
+			  bac.setUserId("grid_mgr");
+			  bac.setPassword("Gr!d_mgr123");
 			  credential.setBasicAuthenticationCredential(bac);
-			  String idpUrl = "https://cbiovdev5034.nci.nih.gov:8443/wsrf/services/cagrid/Dorian";
+			  String idpUrl = "https://cbiovdev5035.nci.nih.gov:8443/wsrf/services/cagrid/Dorian";
 			  String loginKey = client.createLoginKeyForGridUser(idpUrl, credential);
 			  UserInfoType userInfo = client.getUserInfo(loginKey);
 			  System.out.println("SAML: " + userInfo.getSaml().getXml());
+			  
 			} else {
 				usage();
 				System.exit(1);

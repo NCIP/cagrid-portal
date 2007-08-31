@@ -60,6 +60,10 @@ public abstract class AbstractDao<T extends DomainObject> extends HibernateDaoSu
     	getHibernateTemplate().saveOrUpdate(domainObject);
     }
     
+//    public void update(T domainObject){
+//    	getHibernateTemplate().update(domainObject);
+//    }
+    
     public void delete(T domainObject){
     	getHibernateTemplate().delete(domainObject);
     }

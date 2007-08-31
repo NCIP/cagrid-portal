@@ -13,6 +13,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import junit.framework.TestResult;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dbunit.DBTestCase;
@@ -34,11 +36,15 @@ import org.springframework.web.context.request.WebRequest;
  * 
  */
 public abstract class AbstractDaoTest extends DBTestCase {
-	
+
 	protected final Log logger = LogFactory.getLog(getClass());
-    protected WebRequest webRequest = new StubWebRequest();
-    private boolean shouldFlush = true;
+
+	protected WebRequest webRequest = new StubWebRequest();
+
+	private boolean shouldFlush = true;
+
 	private ApplicationContext ctx;
+
 	private String dataFilePrefix;
 
 	/**
@@ -88,7 +94,7 @@ public abstract class AbstractDaoTest extends DBTestCase {
 	private void init() {
 
 		this.dataFilePrefix = System.getProperty("data.file.prefix", "");
-		
+
 		Properties props = new Properties();
 		try {
 			props.load(Thread.currentThread().getContextClassLoader()
@@ -118,12 +124,12 @@ public abstract class AbstractDaoTest extends DBTestCase {
 
 		this.ctx = new ClassPathXmlApplicationContext(getConfigLocations());
 	}
-	
-	protected String getDataSetFileName(String path){
+
+	protected String getDataSetFileName(String path) {
 		return this.dataFilePrefix + path;
 	}
-	
-	public void setUp() throws Exception{
+
+	public void setUp() throws Exception {
 		try {
 			HibernateTransactionManager txMgr = (HibernateTransactionManager) this.ctx
 					.getBean("transactionManager");
@@ -142,8 +148,8 @@ public abstract class AbstractDaoTest extends DBTestCase {
 		}
 		super.setUp();
 	}
-	
-	public void tearDown() throws Exception{
+
+	public void tearDown() throws Exception {
 		super.tearDown();
 		try {
 			endSession();
@@ -162,70 +168,69 @@ public abstract class AbstractDaoTest extends DBTestCase {
 					ex);
 		}
 	}
-	
 
-    private void beginSession() {
-        for (OpenSessionInViewInterceptor interceptor : interceptors()) {
-            interceptor.preHandle(webRequest);
-        }
-    }
+	private void beginSession() {
+		for (OpenSessionInViewInterceptor interceptor : interceptors()) {
+			interceptor.preHandle(webRequest);
+		}
+	}
 
-    private void endSession() {
-        for (OpenSessionInViewInterceptor interceptor : reverseInterceptors()) {
-            if (shouldFlush) {
-                interceptor.postHandle(webRequest, null);
-            }
-            interceptor.afterCompletion(webRequest, null);
-        }
-    }
+	private void endSession() {
+		for (OpenSessionInViewInterceptor interceptor : reverseInterceptors()) {
+			if (shouldFlush) {
+				interceptor.postHandle(webRequest, null);
+			}
+			interceptor.afterCompletion(webRequest, null);
+		}
+	}
 
-    protected void interruptSession() {
-        endSession();
-        beginSession();
-    }
+	protected void interruptSession() {
+		endSession();
+		beginSession();
+	}
 
-    private List<OpenSessionInViewInterceptor> interceptors() {
-        return Arrays.asList(
-            (OpenSessionInViewInterceptor) getApplicationContext().getBean("openSessionInViewInterceptor")
-        );
-    }
+	private List<OpenSessionInViewInterceptor> interceptors() {
+		return Arrays
+				.asList((OpenSessionInViewInterceptor) getApplicationContext()
+						.getBean("openSessionInViewInterceptor"));
+	}
 
-    private List<OpenSessionInViewInterceptor> reverseInterceptors() {
-        List<OpenSessionInViewInterceptor> interceptors = interceptors();
-        Collections.reverse(interceptors);
-        return interceptors;
-    }
-    
-    private static class StubWebRequest implements WebRequest {
-        public String getParameter(String paramName) {
-            return null;
-        }
+	private List<OpenSessionInViewInterceptor> reverseInterceptors() {
+		List<OpenSessionInViewInterceptor> interceptors = interceptors();
+		Collections.reverse(interceptors);
+		return interceptors;
+	}
 
-        public String[] getParameterValues(String paramName) {
-            return null;
-        }
+	private static class StubWebRequest implements WebRequest {
+		public String getParameter(String paramName) {
+			return null;
+		}
 
+		public String[] getParameterValues(String paramName) {
+			return null;
+		}
 
-        public Object getAttribute(String name, int scope) {
-            return null;
-        }
+		public Object getAttribute(String name, int scope) {
+			return null;
+		}
 
-        public void setAttribute(String name, Object value, int scope) {
-        }
+		public void setAttribute(String name, Object value, int scope) {
+		}
 
-        public void removeAttribute(String name, int scope) {
-        }
+		public void removeAttribute(String name, int scope) {
+		}
 
-        public void registerDestructionCallback(String name, Runnable callback, int scope) {
-        }
+		public void registerDestructionCallback(String name, Runnable callback,
+				int scope) {
+		}
 
-        public String getSessionId() {
-            return null;
-        }
+		public String getSessionId() {
+			return null;
+		}
 
-        public Object getSessionMutex() {
-            return null;
-        }
+		public Object getSessionMutex() {
+			return null;
+		}
 
 		public Locale getLocale() {
 			return null;
@@ -259,6 +264,6 @@ public abstract class AbstractDaoTest extends DBTestCase {
 			// TODO Auto-generated method stub
 			return false;
 		}
-    }
-	
+	}
+
 }

@@ -16,12 +16,13 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 	</bean>
 
 	<util:map id="idpUrls">
-		<entry key="NCICB DEV Dorian IdP" value="https://cbiovdev5034.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
+		<entry key="NCICB DEV Dorian IdP" value="https://cbiovdev5035.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
+		<entry key="NCICB DEV AuthnSvc IdP" value="https://cbiovdev5038.nci.nih.gov:8443/wsrf/services/cagrid/AuthenticationService"/>
 	</util:map>
 	
 
 	<bean id="webAuthnSvcClient" class="gov.nih.nci.cagrid.portal2.webauthn.client.WebAuthnSvcClient">
-		<constructor-arg value="http://localhost:8081/wsrf/services/cagrid/WebAuthnSvc"/>
+		<constructor-arg value="http://localhost:8080/wsrf/services/cagrid/WebAuthnSvc"/>
 	</bean>
 
 
