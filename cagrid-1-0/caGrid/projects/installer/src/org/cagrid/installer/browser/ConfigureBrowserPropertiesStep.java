@@ -56,7 +56,7 @@ public class ConfigureBrowserPropertiesStep extends
 						this.model
 								.getProperty(
 										Constants.BROWSER_CONTEXT_NAME,
-										"cagrid-portal"),
+										"cagrid-browser"),
 						true));
 		getOptions()
 				.add(
