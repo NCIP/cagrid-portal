@@ -39,6 +39,9 @@ import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
 import java.awt.Dimension;
 import java.net.URI;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import java.awt.Insets;
 
 public class ModifyService extends JDialog {
 
@@ -50,7 +53,7 @@ public class ModifyService extends JDialog {
 
 	private JButton doneButton = null;
 
-	private JPanel contentPanel = null;
+	private JPanel contentPanel = null;  //  @jve:decl-index=0:visual-constraint="335,10"
 
 	private JLabel serviceNameLabel = null;
 
@@ -81,6 +84,12 @@ public class ModifyService extends JDialog {
 	private static final String SERVICE_PACKAGE = "Service package name";
 	
 	private boolean wasClosed = false;
+
+	private JLabel descriptionLabel = null;
+
+	private JScrollPane textBoxPane = null;
+
+	private JTextPane jTextPane = null;
 
 	/**
 	 * This method initializes
@@ -390,6 +399,7 @@ public class ModifyService extends JDialog {
 					service.getService().setResourceFrameworkType(
 							(String) resourceFrameworkTypeComboBox
 									.getSelectedItem());
+					service.getService().setDescription(getJTextPane().getText());
 					try {
 						service.getService().setServiceSecurity(
 								getSecurityPanel().getServiceSecurity(true));
@@ -412,6 +422,22 @@ public class ModifyService extends JDialog {
 	 */
 	private JPanel getContentPanel() {
 		if (contentPanel == null) {
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.fill = GridBagConstraints.BOTH;
+			gridBagConstraints14.gridy = 4;
+			gridBagConstraints14.weightx = 1.0;
+			gridBagConstraints14.weighty = 1.0;
+			gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints14.gridheight = 3;
+			gridBagConstraints14.gridx = 1;
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints13.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints13.gridwidth = 3;
+			gridBagConstraints13.gridy = 4;
+			descriptionLabel = new JLabel();
+			descriptionLabel.setText("Service Context Description");
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints8.gridy = 2;
@@ -466,6 +492,7 @@ public class ModifyService extends JDialog {
 			serviceNameLabel.setText("Service Name");
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
+			contentPanel.setSize(new Dimension(314, 162));
 			contentPanel.add(serviceNameLabel, gridBagConstraints3);
 			contentPanel.add(getServiceNameTextField(), gridBagConstraints4);
 			contentPanel.add(resourceFrameworkTypeLabel, gridBagConstraints5);
@@ -476,6 +503,8 @@ public class ModifyService extends JDialog {
 			contentPanel.add(servicePackageNameLabel, gridBagConstraints7);
 			contentPanel.add(getServicePackageNameTextField(),
 					gridBagConstraints8);
+			contentPanel.add(descriptionLabel, gridBagConstraints13);
+			contentPanel.add(getTextBoxPane(), gridBagConstraints14);
 		}
 		return contentPanel;
 	}
@@ -570,5 +599,36 @@ public class ModifyService extends JDialog {
 					.getServiceDescriptor(), service.getService());
 		}
 		return securityPanel;
+	}
+
+	/**
+	 * This method initializes textBoxPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getTextBoxPane() {
+		if (textBoxPane == null) {
+			textBoxPane = new JScrollPane();
+			textBoxPane.setViewportView(getJTextPane());
+			textBoxPane.setPreferredSize(new Dimension(300, 50));
+			
+			
+		}
+		return textBoxPane;
+	}
+
+	/**
+	 * This method initializes jTextPane	
+	 * 	
+	 * @return javax.swing.JTextPane	
+	 */
+	private JTextPane getJTextPane() {
+		if (jTextPane == null) {
+			jTextPane = new JTextPane();
+			if(service.getService().getDescription()!=null){
+				jTextPane.setText(service.getService().getDescription());
+			}
+		}
+		return jTextPane;
 	}
 } // @jve:decl-index=0:visual-constraint="10,10"
