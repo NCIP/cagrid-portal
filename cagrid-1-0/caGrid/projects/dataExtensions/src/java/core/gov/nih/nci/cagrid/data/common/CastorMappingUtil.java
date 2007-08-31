@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.io.File;
 import java.util.Iterator;
+import java.util.List;
 
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -17,7 +18,7 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 26, 2006 
- * @version $Id: CastorMappingUtil.java,v 1.3 2007-08-31 15:47:23 dervin Exp $ 
+ * @version $Id: CastorMappingUtil.java,v 1.4 2007-08-31 18:50:29 dervin Exp $ 
  */
 public class CastorMappingUtil {
     public static final String CASTOR_MARSHALLING_MAPPING_FILE = "xml-mapping.xml";
@@ -84,6 +85,40 @@ public class CastorMappingUtil {
 		}
 		return XMLUtilities.elementToString(mappingRoot);
 	}
+    
+    
+    /**
+     * Walks through a castor mapping text document and removes all
+     * bindings to associations, so that serialization only converts
+     * the top level object of an object tree to XML
+     * 
+     * @param mappingText
+     *      The text of the original castor mapping
+     * @return
+     *      The edited text of the castor mapping
+     */
+    public static String removeAssociationMappings(String mappingText) throws Exception {
+        Element mappingRoot = XMLUtilities.stringToDocument(mappingText).getRootElement();
+        // <mapping>
+        List classElements = mappingRoot.getChildren("class", mappingRoot.getNamespace());
+        Iterator classElemIter = classElements.iterator();
+        while (classElemIter.hasNext()) {
+            Element classElement = (Element) classElemIter.next(); // <class>
+            List fieldElements = classElement.getChildren("field", classElement.getNamespace());
+            Iterator fieldElemIter = fieldElements.iterator();
+            while (fieldElemIter.hasNext()) {
+                Element fieldElement = (Element) fieldElemIter.next();
+                Element bindElement = fieldElement.getChild("bind-xml", fieldElement.getNamespace());
+                String nodeType = bindElement.getAttributeValue("node");
+                // remove non-atttibutes
+                if (!nodeType.equals("attribute")) {
+                    fieldElemIter.remove();
+                }
+            }
+        }
+        String rawXml = XMLUtilities.elementToString(mappingRoot);
+        return XMLUtilities.formatXML(rawXml);
+    }
 	
 	
 	public static String getCustomCastorMappingFileName(ServiceInformation serviceInfo) {
