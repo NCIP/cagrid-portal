@@ -738,7 +738,7 @@
 
 		<if>
 			<equals arg1="${authn.svc.overwrite.jaas}"
-				arg2="${authn.svc.overwrite.jaas.yes}" trim="true" />
+				arg2="authn.svc.overwrite.jaas.yes" trim="true" />
 			<then>
 				<delete file="${jaas.config.path}" />
 			</then>
@@ -748,7 +748,7 @@
 			<equals arg1="${authn.svc.cred.provider.type}"
 				arg2="authn.svc.cred.provider.type.ldap" trim="true" />
 			<then>
-				<concat destfile="${jaas.config.path}">
+				<concat destfile="${jaas.config.path}" append="true">
 					<![CDATA[
 ${authn.svc.csm.ctx}{
 	gov.nih.nci.security.authentication.loginmodules.LDAPLoginModule
@@ -763,7 +763,7 @@ ${authn.svc.csm.ctx}{
 				</concat>
 			</then>
 			<else>
-				<concat destfile="${jaas.config.path}">
+				<concat destfile="${jaas.config.path}" append="true">
 					<![CDATA[
 ${authn.svc.csm.ctx}{ 
     gov.nih.nci.security.authentication.loginmodules.RDBMSLoginModule required 
