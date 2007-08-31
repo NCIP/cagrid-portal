@@ -28,7 +28,7 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Jul 10, 2007 2:24:14 PM
- * @version $Id: PostCodegenHelper.java,v 1.2 2007-08-15 18:33:44 dervin Exp $
+ * @version $Id: PostCodegenHelper.java,v 1.3 2007-08-31 15:48:14 dervin Exp $
  */
 public class PostCodegenHelper implements StyleCodegenPostProcessor {
 
@@ -75,8 +75,8 @@ public class PostCodegenHelper implements StyleCodegenPostProcessor {
                         packages[i].getMappedNamespace());
                 }
             } catch (Exception ex) {
-                throw new CodegenExtensionException("Error changing namespaces in castor mapping: " + ex.getMessage(),
-                    ex);
+                throw new CodegenExtensionException("Error changing namespaces in castor mapping: " 
+                    + ex.getMessage(), ex);
             }
         }
         // write the mapping back out to disk
@@ -109,7 +109,7 @@ public class PostCodegenHelper implements StyleCodegenPostProcessor {
                 + " not found!");
         }
 
-        // edit the client file
+        // edit the client-config.wsdd file
         try {
             WsddUtil.setGlobalClientParameter(clientConfigFile.getAbsolutePath(),
                 DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, CastorMappingUtil.getCustomCastorMappingName(info));
@@ -117,7 +117,7 @@ public class PostCodegenHelper implements StyleCodegenPostProcessor {
             throw new CodegenExtensionException("Error setting castor mapping parameter in client-config.wsdd: "
                 + ex.getMessage(), ex);
         }
-        // edit the server file
+        // edit the server-config.wsdd file
         try {
             WsddUtil.setServiceParameter(serverConfigFile.getAbsolutePath(),
                 info.getServices().getService(0).getName(), DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER,

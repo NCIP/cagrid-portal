@@ -57,14 +57,18 @@ public class WsddUtil {
 	public static void setServiceParameter(String serverWsddFile, String serviceName, String key, String value) throws Exception {
 		Element wsddRoot = XMLUtilities.fileNameToDocument(serverWsddFile).getRootElement();
 		Iterator serviceElemIter = wsddRoot.getChildren("service", wsddRoot.getNamespace()).iterator();
-		while (serviceElemIter.hasNext()) {
+        boolean found = false;
+		while (serviceElemIter.hasNext() && !found) {
 			Element serviceElement = (Element) serviceElemIter.next();
 			String name = serviceElement.getAttributeValue("name");
 			if (name.endsWith("/" + serviceName)) {
 				setParameter(serviceElement, key, value);
-				break;
+				found = true;
 			}
 		}
+        if (!found) {
+            throw new Exception("Service " + serviceName + " was not found for adding wsdd parameter!");
+        }
 		String editedWsdd = XMLUtilities.elementToString(wsddRoot);
 		FileWriter writer = new FileWriter(serverWsddFile);
 		writer.write(editedWsdd);
