@@ -773,6 +773,31 @@ public class CommonTools {
     }
 
 
+    public static void addServicePropety(ServiceDescription introService, ServicePropertiesProperty property) {
+        ServicePropertiesProperty[] propertiesArray = null;
+        int length = 0;
+        if ((introService.getServiceProperties() != null)
+            && (introService.getServiceProperties().getProperty() != null)) {
+            length = introService.getServiceProperties().getProperty().length + 1;
+        } else {
+            length = 1;
+        }
+        propertiesArray = new ServicePropertiesProperty[length];
+        if (length > 1) {
+            System.arraycopy(introService.getServiceProperties().getProperty(), 0, propertiesArray, 0, length - 1);
+        }
+        propertiesArray[length - 1] = property;
+        ServiceProperties properties = null;
+        if (introService.getServiceProperties() == null) {
+            properties = new ServiceProperties();
+            introService.setServiceProperties(properties);
+        } else {
+            properties = introService.getServiceProperties();
+        }
+        properties.setProperty(propertiesArray);
+    }
+
+
     /**
      * Adds a resource property to a service
      * 
@@ -1265,7 +1290,8 @@ public class CommonTools {
     public static String getIntroduceVersion() {
         return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_VERSION_PROPERTY);
     }
-    
+
+
     public static String getIntroducePatchVersion() {
         return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_PATCH_VERSION_PROPERTY);
     }
