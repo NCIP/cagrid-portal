@@ -349,10 +349,21 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
             if (features.getServiceStyle() != null) {
                 try {
                     ServiceStyleContainer styleContainer = ServiceStyleLoader.getStyle(features.getServiceStyle());
+                    // copy libraries from the style into the service's lib directory
+                    File[] styleLibs = styleContainer.getStyleLibraries();
+                    File serviceLibDir = new File(info.getBaseDirectory().getAbsolutePath() 
+                        + File.separator + "lib");
+                    for (File lib : styleLibs) {
+                        Utils.copyFile(lib, new File(serviceLibDir.getAbsolutePath() 
+                            + File.separator + lib.getName()));
+                    }
                     StyleCreationPostProcessor processor = styleContainer.loadCreationPostProcessor();
                     if (processor != null) {
                         processor.creationPostProcessStyle(extensionDesc, info);
                     }
+                    // sync up the eclipse .classpath file
+                    ExtensionUtilities.resyncWithLibDir(
+                        new File(info.getBaseDirectory().getAbsolutePath() + File.separator + ".classpath"));
                 } catch (Exception ex) {
                     throw new CreationExtensionException("Error executing style creation post processor: "
                         + ex.getMessage(), ex);
