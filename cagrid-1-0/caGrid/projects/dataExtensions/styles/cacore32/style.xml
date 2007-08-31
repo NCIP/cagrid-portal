@@ -10,6 +10,7 @@
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.data.style.sdkstyle.wizard.DomainModelPanel"/>
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.data.style.sdkstyle.wizard.SchemaTypesPanel"/>
 	</CreationWizardPanels>
-	<CodegenHelpers postCodegenClassname="gov.nih.nci.cagrid.data.style.sdkstyle.helpers.PostCodegenHelper"/>
+	<CreationHelper postCreationClassname="gov.nih.nci.cagrid.data.style.cacore32.helpers.SDK32PostCreationProcessor"/>
+	<CodegenHelpers postCodegenClassname="gov.nih.nci.cagrid.data.style.cacore32.helpers.SDK32PostCodegenHelper"/>
 	<ModificationUiPanel classname="gov.nih.nci.cagrid.data.style.cacore32.modification.CaCoreVersionPanel"/>
 </DataServiceStyle>
