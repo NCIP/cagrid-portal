@@ -66,6 +66,7 @@
 
 			<fileset dir="${env.GLOBUS_LOCATION}/lib">
 				<patternset refid="globus.jars" />
+				<patternset refid="crypto.jars" />
 			</fileset>
 
 		</copy>
