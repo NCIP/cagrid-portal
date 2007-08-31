@@ -75,11 +75,11 @@ public class SDK32EncodingUtils {
 					LOG.debug("Loading castor mapping from globalConfiguration property[" + mappingProperty + "]");
 				} else {
 					LOG.debug("Unable to locate castor mapping property[" + mappingProperty
-						+ "], using default mapping location:" + DEFAULT_MARSHALLER_MAPPING);
+						+ "], using default mapping location:" + mappingLocation);
 				}
 			}
 		} else {
-			LOG.debug("Unable to determine message context, using default mapping location:" + DEFAULT_MARSHALLER_MAPPING);
+			LOG.debug("Unable to determine message context, using default mapping location:" + mappingLocation);
 		}
 
         // locate the bytes of the mapping file
