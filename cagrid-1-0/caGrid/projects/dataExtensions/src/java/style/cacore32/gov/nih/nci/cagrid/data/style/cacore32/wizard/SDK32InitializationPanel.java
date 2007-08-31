@@ -6,7 +6,10 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory;
+import gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory;
 import gov.nih.nci.cagrid.data.style.sdkstyle.wizard.CoreDsIntroPanel;
+import gov.nih.nci.cagrid.data.style.sdkstyle.wizard.SchemaTypesPanel;
 import gov.nih.nci.cagrid.data.ui.wizard.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -25,7 +28,7 @@ import java.util.Set;
  * @author David Ervin
  * 
  * @created Jul 12, 2007 3:37:04 PM
- * @version $Id: SDK32InitializationPanel.java,v 1.1 2007-07-13 15:24:43 dervin Exp $ 
+ * @version $Id: SDK32InitializationPanel.java,v 1.2 2007-08-31 15:50:47 dervin Exp $ 
  */
 public class SDK32InitializationPanel extends CoreDsIntroPanel {
     
@@ -87,6 +90,11 @@ public class SDK32InitializationPanel extends CoreDsIntroPanel {
             // add the query processor class name as a service property
             CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
                 DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, qpClassName, false);
+            // set the serializer and deserializer properties
+            getBitBucket().put(SchemaTypesPanel.TYPE_SERIALIZER_CLASS_PROPERTY, 
+                SDK32SerializerFactory.class.getName());
+            getBitBucket().put(SchemaTypesPanel.TYPE_DESERIALIZER_CLASS_PROPERTY,
+                SDK32DeserializerFactory.class.getName());
         }
     }
 }

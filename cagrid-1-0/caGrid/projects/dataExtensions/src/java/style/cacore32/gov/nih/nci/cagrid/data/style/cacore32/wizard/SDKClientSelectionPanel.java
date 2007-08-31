@@ -54,7 +54,7 @@ import javax.swing.ScrollPaneConstants;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.5 2007-08-21 21:02:11 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.6 2007-08-31 15:50:47 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String[] LOCAL_CLIENT_REQUIRED_FILES = new String[] {
@@ -543,15 +543,18 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                     // add the new client jar to the .classpath file
                     ExtensionUtilities.syncEclipseClasspath(classpathFile, new File[] {copyOfClient});
 
-                    // copy the castor mapping file
+                    // copy the castor mapping files
                     JarFile jar = new JarFile(copyOfClient);
-                    StringBuffer mappingFile = JarUtilities.getFileContents(
-                        jar, DataServiceConstants.CACORE_CASTOR_MAPPING_FILE);
+                    StringBuffer marshallingMappingFile = JarUtilities.getFileContents(
+                        jar, CastorMappingUtil.CASTOR_MARSHALLING_MAPPING_FILE);
+                    StringBuffer unmarshallingMappingFile = JarUtilities.getFileContents(
+                        jar, CastorMappingUtil.CASTOR_UNMARSHALLING_MAPPING_FILE);
                     jar.close();
-                    // copy the mapping file to the service's source dir + base package name
-                    String mappingOut = CastorMappingUtil.getCustomCastorMappingFileName(getServiceInformation());
-                    Utils.stringBufferToFile(mappingFile, mappingOut);
-
+                    // copy the mapping files to the service's source dir + base package name
+                    String marshallOut = CastorMappingUtil.getMarshallingCastorMappingFileName(getServiceInformation());
+                    String unmarshallOut = CastorMappingUtil.getUnmarshallingCastorMappingFileName(getServiceInformation());
+                    Utils.stringBufferToFile(marshallingMappingFile, marshallOut);
+                    Utils.stringBufferToFile(unmarshallingMappingFile, unmarshallOut);
                     // get a list of the rest of the jars in the client lib dir
                     // and set them as jars the client depends on
                     File[] extraLibraries = new File(clientLibDir).listFiles(new FileFilter() {
@@ -621,10 +624,11 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     
     private boolean isValidClientJar(File jarFile) throws IOException {
         JarFile jar = new JarFile(jarFile);
-        // verify the file is a client.jar with a castor mapping file
-        JarEntry mappingEntry = jar.getJarEntry(DataServiceConstants.CACORE_CASTOR_MAPPING_FILE);
+        // verify the file is a client.jar with castor mapping files
+        JarEntry mappingEntry = jar.getJarEntry(CastorMappingUtil.CASTOR_MARSHALLING_MAPPING_FILE);
+        JarEntry unmarshallEntry = jar.getJarEntry(CastorMappingUtil.CASTOR_UNMARSHALLING_MAPPING_FILE);
         // all versions, local and remote client jars need this xml mapping file
-        if (mappingEntry == null) {
+        if (mappingEntry == null || unmarshallEntry == null) {
             jar.close();
             return false;
         }
