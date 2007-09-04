@@ -136,7 +136,7 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
                     installed = true;
                 }
             } else {
-                if (ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion().equals(
+                if (ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion()!=null && ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion().equals(
                     extension.getVersion())) {
                     installed = true;
                 }
