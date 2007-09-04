@@ -16,6 +16,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -34,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 27, 2006
- * @version $Id: SchemaResolutionDialog.java,v 1.2 2007-08-21 21:02:11 dervin Exp $
+ * @version $Id: SchemaResolutionDialog.java,v 1.3 2007-09-04 20:55:36 dervin Exp $
  */
 public class SchemaResolutionDialog extends JDialog {
 
@@ -192,21 +195,42 @@ public class SchemaResolutionDialog extends JDialog {
             if (discoveryTypes != null) {
                 Iterator discoIter = discoveryTypes.iterator();
                 while (discoIter.hasNext()) {
-                    DiscoveryExtensionDescriptionType dd = (DiscoveryExtensionDescriptionType) discoIter.next();
-                    try {
-                        NamespaceTypeDiscoveryComponent comp = ExtensionTools.getNamespaceTypeDiscoveryComponent(
-                            dd.getName(), this.serviceInfo.getNamespaces());
-                        if (comp != null) {
-                            this.discoveryTabbedPane.addTab(dd.getDisplayName(), comp);
+                    final DiscoveryExtensionDescriptionType dd = (DiscoveryExtensionDescriptionType) discoIter.next();
+                    Runnable componentLoader = new Runnable() {
+                        public void run() {
+                            int myId = getNamespaceDiscoveryProgressBar()
+                                .startEvent("Loading " + dd.getDisplayName());
+                            try {
+                                NamespaceTypeDiscoveryComponent comp = ExtensionTools.getNamespaceTypeDiscoveryComponent(
+                                    dd.getName(), serviceInfo.getNamespaces());
+                                if (comp != null) {
+                                    insertAndSortTab(comp, dd.getDisplayName());
+                                    getNamespaceDiscoveryProgressBar().stopEvent(myId, dd.getDisplayName() + " complete");
+                                }
+                            } catch (Exception ex) {
+                                getNamespaceDiscoveryProgressBar().stopEvent(myId, ex.getMessage());
+                                ex.printStackTrace();
+                                ErrorDialog.showErrorDialog("Error adding type discovery component to dialog", ex);
+                            }
                         }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error adding type discovery component to dialog", ex);
-                    }
+                    };
+                    SwingUtilities.invokeLater(componentLoader);
                 }
             }
         }
         return this.discoveryTabbedPane;
+    }
+    
+    
+    private void insertAndSortTab(NamespaceTypeDiscoveryComponent component, String displayName) {
+        List<String> titles = new ArrayList();
+        for (int i = 0; i < getDiscoveryTabbedPane().getTabCount(); i++) {
+            titles.add(getDiscoveryTabbedPane().getTitleAt(i).toLowerCase());
+        }
+        titles.add(displayName.toLowerCase());
+        Collections.sort(titles);
+        int insertIndex = titles.indexOf(displayName.toLowerCase());
+        getDiscoveryTabbedPane().insertTab(displayName, null, component, null, insertIndex);
     }
     
     
