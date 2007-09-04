@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.common;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
@@ -18,11 +19,13 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 26, 2006 
- * @version $Id: CastorMappingUtil.java,v 1.4 2007-08-31 18:50:29 dervin Exp $ 
+ * @version $Id: CastorMappingUtil.java,v 1.5 2007-09-04 16:22:28 dervin Exp $ 
  */
 public class CastorMappingUtil {
     public static final String CASTOR_MARSHALLING_MAPPING_FILE = "xml-mapping.xml";
+    public static final String EDITED_CASTOR_MARSHALLING_MAPPING_FILE = "edited-" + CASTOR_MARSHALLING_MAPPING_FILE;
     public static final String CASTOR_UNMARSHALLING_MAPPING_FILE = "unmarshaller-xml-mapping.xml";
+    public static final String EDITED_CASTOR_UNMARSHALLING_MAPPING_FILE = "edited-" + CASTOR_UNMARSHALLING_MAPPING_FILE;
 
 	/**
 	 * Edits a castor mapping XML file to change the namespace of all classes in a package
@@ -133,7 +136,7 @@ public class CastorMappingUtil {
 		String mappingName = serviceInfo.getServices().getService(0)
 				.getPackageName().replace('.', '/')
 			+ '/' + serviceInfo.getServices().getService(0).getName() 
-			+ "-" + DataServiceConstants.CACORE_CASTOR_MAPPING_FILE;
+			+ '-' + DataServiceConstants.CACORE_CASTOR_MAPPING_FILE;
 		return mappingName;
 	}
     
@@ -150,7 +153,7 @@ public class CastorMappingUtil {
         String mappingName = serviceInfo.getServices().getService(0)
             .getPackageName().replace('.', '/')
             + '/' + serviceInfo.getServices().getService(0).getName() 
-            + "-" + CASTOR_MARSHALLING_MAPPING_FILE;
+            + '-' + CASTOR_MARSHALLING_MAPPING_FILE;
         return mappingName;
     }
     
@@ -167,7 +170,66 @@ public class CastorMappingUtil {
         String mappingName = serviceInfo.getServices().getService(0)
             .getPackageName().replace('.', '/')
             + '/' + serviceInfo.getServices().getService(0).getName() 
-            + "-" + CASTOR_UNMARSHALLING_MAPPING_FILE;
+            + '-' + CASTOR_UNMARSHALLING_MAPPING_FILE;
         return mappingName;
+    }
+    
+    
+    /**
+     * Gets the fully qualified file name of the edited marshalling castor mapping file
+     * 
+     * @param serviceInfo
+     * @return
+     *      The fully qualified file name
+     */
+    public static String getEditedMarshallingCastorMappingFileName(ServiceInformation serviceInfo) {
+        String mappingOut = serviceInfo.getBaseDirectory().getAbsolutePath() 
+            + File.separator + "src" + File.separator 
+            + getEditedMarshallingCastorMappingName(serviceInfo);
+        return mappingOut;
+    }
+    
+    
+    public static String getEditedMarshallingCastorMappingName(ServiceInformation serviceInfo) {
+        String mappingName = serviceInfo.getServices().getService(0)
+            .getPackageName().replace('.', '/')
+            + '/' + serviceInfo.getServices().getService(0).getName()
+            + '-' + EDITED_CASTOR_MARSHALLING_MAPPING_FILE;
+        return mappingName;
+    }
+    
+    
+    /**
+     * Gets the fully qualified file name of the edited unmarshalling castor mapping file
+     * 
+     * @param serviceInfo
+     * @return
+     *      The fully qualified file name
+     */
+    public static String getEditedUnmarshallingCastorMappingFileName(ServiceInformation serviceInfo) {
+        String mappingOut = serviceInfo.getBaseDirectory().getAbsolutePath() 
+            + File.separator + "src" + File.separator 
+            + getEditedUnmarshallingCastorMappingName(serviceInfo);
+        return mappingOut;
+    }
+    
+    
+    public static String getEditedUnmarshallingCastorMappingName(ServiceInformation serviceInfo) {
+        String mappingName = serviceInfo.getServices().getService(0)
+            .getPackageName().replace('.', '/')
+            + '/' + serviceInfo.getServices().getService(0).getName()
+            + '-' + EDITED_CASTOR_UNMARSHALLING_MAPPING_FILE;
+        return mappingName;
+    }
+    
+    
+    public static void main(String[] args) {
+        try {
+            String castorMapping = Utils.fileToStringBuffer(new File("RemoteSDK321-unmarshaller-xml-mapping.xml")).toString();
+            String edited = removeAssociationMappings(castorMapping);
+            System.out.println(edited);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
