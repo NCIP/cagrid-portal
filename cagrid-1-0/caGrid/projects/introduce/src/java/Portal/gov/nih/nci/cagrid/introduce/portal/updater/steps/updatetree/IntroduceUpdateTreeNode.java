@@ -103,7 +103,7 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
                 ExtensionType extension = extensionVersions[j];
                 if (extension.getCompatibleIntroduceVersions() != null) {
                     if (isCompatibleExtension(extension.getCompatibleIntroduceVersions())
-                        && (isExtensionInstalled(extension) || isExtensionNewer(extension))) {
+                        && (!isExtensionInstalled(extension) || isExtensionNewer(extension))) {
                         ExtensionUpdateTreeNode node = null;
                         if (extension.getVersion() != null) {
                             node = new ExtensionUpdateTreeNode(extension.getDisplayName() + " ("
