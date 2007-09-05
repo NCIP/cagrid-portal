@@ -29,7 +29,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Aug 29, 2007 11:03:10 AM
- * @version $Id: AddServiceDialog.java,v 1.3 2007-08-29 15:44:30 dervin Exp $ 
+ * @version $Id: AddServiceDialog.java,v 1.4 2007-09-05 17:01:35 dervin Exp $ 
  */
 public class AddServiceDialog extends JDialog {
 
@@ -64,7 +64,7 @@ public class AddServiceDialog extends JDialog {
         if (!canceled) {
             ServiceDescription desc = new ServiceDescription();
             desc.setServiceName(getNameTextField().getText());
-            desc.setServiceType(ServiceType.fromString(getTypeComboBox().getSelectedItem().toString()));
+            desc.setServiceType(getTypeComboBox().getSelectedItem().toString());
             desc.setServiceUrl(new URI(getUrlTextField().getText()));
             return desc;
         }

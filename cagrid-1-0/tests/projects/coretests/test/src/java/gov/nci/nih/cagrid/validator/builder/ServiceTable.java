@@ -1,7 +1,6 @@
 package gov.nci.nih.cagrid.validator.builder;
 
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
-import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
 
 import java.util.Vector;
 
@@ -19,7 +18,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:43:19 PM
- * @version $Id: ServiceTable.java,v 1.5 2007-08-29 17:16:21 dervin Exp $ 
+ * @version $Id: ServiceTable.java,v 1.6 2007-09-05 17:01:35 dervin Exp $ 
  */
 public class ServiceTable extends JTable {
     private DefaultTableModel model;
@@ -80,7 +79,7 @@ public class ServiceTable extends JTable {
             
             ServiceDescription desc = new ServiceDescription();
             desc.setServiceName(name);
-            desc.setServiceType(ServiceType.fromString(type));
+            desc.setServiceType(type);
             desc.setServiceUrl(new URI(url));
             descriptions[i] = desc;
         }

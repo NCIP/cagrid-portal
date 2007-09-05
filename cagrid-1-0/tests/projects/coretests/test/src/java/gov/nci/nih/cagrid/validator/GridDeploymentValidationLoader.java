@@ -1,18 +1,19 @@
 package gov.nci.nih.cagrid.validator;
 
+import gov.nci.nih.cagrid.validator.steps.AbstractBaseServiceTestStep;
 import gov.nci.nih.cagrid.validator.steps.base.DeleteTempDirStep;
 import gov.nci.nih.cagrid.validator.steps.base.TestServiceMetaData;
 import gov.nci.nih.cagrid.validator.steps.base.TestServiceUpStep;
-import gov.nci.nih.cagrid.validator.steps.gme.DomainsAndNamespacesStep;
-import gov.nci.nih.cagrid.validator.steps.gme.SchemaDownloadStep;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
+import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceTestStep;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ValidationDescription;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +33,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 3:04:08 PM
- * @version $Id: GridDeploymentValidationLoader.java,v 1.4 2007-08-29 18:42:42 dervin Exp $ 
+ * @version $Id: GridDeploymentValidationLoader.java,v 1.5 2007-09-05 17:01:35 dervin Exp $ 
  */
 public class GridDeploymentValidationLoader {
     
@@ -52,7 +53,7 @@ public class GridDeploymentValidationLoader {
         
         final List<Story> serviceStories = new ArrayList(desc.getServiceDescription().length);
         for (ServiceDescription service : desc.getServiceDescription()) {
-            Story serviceStory = createStoryForService(service);
+            Story serviceStory = createStoryForService(service, desc);
             serviceStories.add(serviceStory);
         }
         
@@ -68,13 +69,13 @@ public class GridDeploymentValidationLoader {
     }
     
     
-    private static Story createStoryForService(final ServiceDescription service) throws Exception {
+    private static Story createStoryForService(final ServiceDescription service, final ValidationDescription desc) throws Exception {
         String testName = service.getServiceName() + " validation tests";
         String testDescription = "Tests for " + service.getServiceName() 
             + " @ " + service.getServiceUrl().toString();
         
         Vector<Step> setUp = createSetupStepsForService(service);
-        final Vector<Step> tests = createStepsForServiceType(service);
+        final Vector<Step> tests = createStepsForServiceType(service, desc);
         Vector<Step> tearDown = createTearDownStepsForService(service);
         
         ServiceValidationStory serviceStory = new ServiceValidationStory(
@@ -100,16 +101,44 @@ public class GridDeploymentValidationLoader {
     }
     
     
-    private static Vector<Step> createStepsForServiceType(ServiceDescription service) {
-        Vector<Step> steps = new Vector();        
-        // would be nice if I could use a switch here
-        if (service.getServiceType().equals(ServiceType.GME)) {
-            System.out.println("Adding GME steps");
-            steps.add(new DomainsAndNamespacesStep(service.getServiceUrl().toString()));
-            File tempDir = getTempDirForService(service.getServiceName());
-            System.out.println("Temporary dir = " + tempDir.getAbsolutePath());
-            steps.add(new SchemaDownloadStep(
-                service.getServiceUrl().toString(), tempDir));
+    private static Vector<Step> createStepsForServiceType(ServiceDescription service, ValidationDescription desc) 
+        throws ValidationLoadingException {
+        Vector<Step> steps = new Vector();
+        Class[] constructorArgTypes = new Class[] {String.class, File.class};
+        String serviceTypeName = service.getServiceType();
+        for (ServiceType type : desc.getServiceType()) {
+            if (type.getTypeName().equals(serviceTypeName)) {
+                for (ServiceTestStep testStep : type.getTestStep()) {
+                    String classname = testStep.getClassname();
+                    Class stepClass = null;
+                    try {
+                        stepClass = Class.forName(classname);
+                    } catch (ClassNotFoundException ex) {
+                        throw new ValidationLoadingException(
+                            "Could not service type " + serviceTypeName + " test class " 
+                            + classname + ": " + ex.getMessage(), ex);
+                    }
+                    if (!AbstractBaseServiceTestStep.class.isAssignableFrom(stepClass)) {
+                        throw new ValidationLoadingException(
+                            "The service type " + serviceTypeName + " test class " +
+                            classname + " does not extend " + AbstractBaseServiceTestStep.class.getName());
+                    }
+                    Object[] constructorArgs = {
+                        service.getServiceUrl(),
+                        getTempDirForService(service.getServiceName())
+                    };
+                    try {
+                        Constructor stepConstructor = stepClass.getConstructor(constructorArgTypes);
+                        AbstractBaseServiceTestStep step = (AbstractBaseServiceTestStep) 
+                            stepConstructor.newInstance(constructorArgs);
+                        steps.add(step);
+                    } catch (Exception ex) {
+                        throw new ValidationLoadingException(
+                            "Service type " + serviceTypeName + " test class " + classname 
+                            + " could not be created: " + ex.getMessage(), ex);
+                    }
+                }
+            }
         }
         return steps;
     }
