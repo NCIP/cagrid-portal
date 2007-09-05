@@ -67,7 +67,7 @@
         </cobertura-report>
     </target>
 
-    <target name="testReport" depends="test" description="Runs the tests and generates a test  report.">
+    <target name="testReport" depends="test" description="Runs the tests and generates a test report.">
 
         <mkdir dir="${junit.results.dir}/report" />
         <junitreport todir="${junit.results.dir}">
