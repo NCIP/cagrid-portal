@@ -21,7 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
-import java.awt.BorderLayout;
 
 /** 
  *  ServiceTypePanel
@@ -30,7 +29,7 @@ import java.awt.BorderLayout;
  * @author David Ervin
  * 
  * @created Sep 5, 2007 12:25:19 PM
- * @version $Id: ServiceTypePanel.java,v 1.1 2007-09-05 17:00:33 dervin Exp $ 
+ * @version $Id: ServiceTypePanel.java,v 1.2 2007-09-05 17:12:41 dervin Exp $ 
  */
 public class ServiceTypePanel extends JPanel {
 
@@ -51,11 +50,12 @@ public class ServiceTypePanel extends JPanel {
     private JButton removeStepButton = null;
     private JButton moveStepUpButton = null;
     private JButton moveStepDownButton = null;
-    private JPanel stepInputPanel = null;
+    private JPanel stepInputPanel = null;  //  @jve:decl-index=0:visual-constraint="608,236"
     private JPanel stepButtonsPanel = null;
     private JPanel stepOrderButtonPanel = null;
-    private JPanel typesPanel = null;
-    private JPanel stepsPanel = null;
+    private JPanel stepsPanel = null;  //  @jve:decl-index=0:visual-constraint="395,85"
+    private JPanel listContainerPanel = null;
+    private JPanel inputContainerPanel = null;
 
 
     public ServiceTypePanel() {
@@ -65,12 +65,20 @@ public class ServiceTypePanel extends JPanel {
     
     
     private void initialize() {
-        GridLayout gridLayout3 = new GridLayout();
-        gridLayout3.setRows(1);
-        this.setLayout(gridLayout3);
-        this.setSize(new Dimension(680, 251));
-        this.add(getTypesPanel(), null);
-        this.add(getStepsPanel(), null);
+        GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+        gridBagConstraints9.gridx = 0;
+        gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints9.gridy = 1;
+        GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+        gridBagConstraints8.gridx = 0;
+        gridBagConstraints8.fill = GridBagConstraints.BOTH;
+        gridBagConstraints8.weightx = 1.0D;
+        gridBagConstraints8.weighty = 1.0D;
+        gridBagConstraints8.gridy = 0;
+        this.setLayout(new GridBagLayout());
+        this.setSize(new Dimension(695, 265));
+        this.add(getListContainerPanel(), gridBagConstraints8);
+        this.add(getInputContainerPanel(), gridBagConstraints9);
         
     }
     
@@ -464,34 +472,66 @@ public class ServiceTypePanel extends JPanel {
 
 
     /**
-     * This method initializes typesPanel	
-     * 	
-     * @return javax.swing.JPanel	
-     */
-    private JPanel getTypesPanel() {
-        if (typesPanel == null) {
-            typesPanel = new JPanel();
-            typesPanel.setLayout(new BorderLayout());
-            typesPanel.add(getTypeInputPanel(), BorderLayout.SOUTH);
-            typesPanel.add(getTypesScrollPane(), BorderLayout.CENTER);
-        }
-        return typesPanel;
-    }
-
-
-    /**
      * This method initializes stepsPanel	
      * 	
      * @return javax.swing.JPanel	
      */
     private JPanel getStepsPanel() {
         if (stepsPanel == null) {
+            GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+            gridBagConstraints7.gridx = 1;
+            gridBagConstraints7.fill = GridBagConstraints.VERTICAL;
+            gridBagConstraints7.gridy = 0;
+            GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+            gridBagConstraints6.fill = GridBagConstraints.BOTH;
+            gridBagConstraints6.gridy = 0;
+            gridBagConstraints6.weightx = 1.0D;
+            gridBagConstraints6.weighty = 1.0;
+            gridBagConstraints6.gridx = 0;
             stepsPanel = new JPanel();
-            stepsPanel.setLayout(new BorderLayout());
-            stepsPanel.add(getStepInputPanel(), BorderLayout.SOUTH);
-            stepsPanel.add(getStepOrderButtonPanel(), BorderLayout.EAST);
-            stepsPanel.add(getStepsScrollPane(), BorderLayout.CENTER);
+            stepsPanel.setLayout(new GridBagLayout());
+            stepsPanel.add(getStepsScrollPane(), gridBagConstraints6);
+            stepsPanel.add(getStepOrderButtonPanel(), gridBagConstraints7);
         }
         return stepsPanel;
     }
-}
+
+
+    /**
+     * This method initializes listContainerPanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getListContainerPanel() {
+        if (listContainerPanel == null) {
+            GridLayout gridLayout3 = new GridLayout();
+            gridLayout3.setColumns(2);
+            gridLayout3.setHgap(4);
+            listContainerPanel = new JPanel();
+            listContainerPanel.setLayout(gridLayout3);
+            listContainerPanel.add(getTypesScrollPane(), null);
+            listContainerPanel.add(getStepsPanel(), null);
+        }
+        return listContainerPanel;
+    }
+
+
+    /**
+     * This method initializes inputContainerPanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getInputContainerPanel() {
+        if (inputContainerPanel == null) {
+            GridLayout gridLayout4 = new GridLayout();
+            gridLayout4.setRows(1);
+            gridLayout4.setHgap(4);
+            gridLayout4.setColumns(2);
+            inputContainerPanel = new JPanel();
+            inputContainerPanel.setLayout(gridLayout4);
+            inputContainerPanel.add(getTypeInputPanel(), null);
+            inputContainerPanel.add(getStepInputPanel(), null);
+        }
+        return inputContainerPanel;
+    }
+}  //  @jve:decl-index=0:visual-constraint="13,9"
