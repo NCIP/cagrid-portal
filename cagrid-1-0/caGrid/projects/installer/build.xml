@@ -69,7 +69,8 @@
 		
 		<copy todir="build/classes" overwrite="true">
 			<fileset dir="src">
-				<include name="images/installer.gif"/>
+				<include name="images/**"/>
+				<include name="resources/**"/>
 				<include name="*.properties"/>
 				<include name="*.txt"/>
 				<exclude name="download.properties"/>
@@ -78,7 +79,7 @@
 		
 		<jar destfile="${build.jars}/${project.jar.prefix}.jar"
 			basedir="${build.classes}"
-			includes="org/cagrid/**/*.class **/*.properties **/*.txt images/**"
+			includes="org/cagrid/**/*.class **/*.properties **/*.txt images/** resources/**"
 			manifest="manifest.txt"/>
 	</target>
 
