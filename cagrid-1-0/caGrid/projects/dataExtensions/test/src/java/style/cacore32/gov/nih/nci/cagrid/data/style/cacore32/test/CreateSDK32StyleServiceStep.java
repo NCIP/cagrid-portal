@@ -23,7 +23,7 @@ import java.io.InputStream;
  * @author David Ervin
  * 
  * @created Jul 18, 2007 2:53:54 PM
- * @version $Id: CreateSDK32StyleServiceStep.java,v 1.3 2007-08-31 15:49:15 dervin Exp $ 
+ * @version $Id: CreateSDK32StyleServiceStep.java,v 1.4 2007-09-05 14:31:33 dervin Exp $ 
  */
 public class CreateSDK32StyleServiceStep extends CreationStep {
 
@@ -64,11 +64,13 @@ public class CreateSDK32StyleServiceStep extends CreationStep {
         InputStream inStream = getClass().getResourceAsStream("resources/xml-mapping.xml");
         assertNotNull("Original xml-mapping.xml file could not be loaded", inStream);
         StringBuffer contents = Utils.inputStreamToStringBuffer(inStream);
+        inStream.close();
         Utils.stringBufferToFile(contents, marshallingMapping);
         // again for unmarshalling
-        Utils.stringBufferToFile(contents, unmarshallingMapping);
-
+        inStream = getClass().getResourceAsStream("resources/unmarshaller-xml-mapping.xml");
+        contents = Utils.inputStreamToStringBuffer(inStream);
         inStream.close();
+        Utils.stringBufferToFile(contents, unmarshallingMapping);
     }
     
     
