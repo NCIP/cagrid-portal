@@ -60,7 +60,7 @@ public abstract class AbstractDownloadedComponentInstaller implements
 						.getMessage("downloading." + getComponentId()
 								+ ".title"), "", getComponentId()
 						+ ".download.url",
-						getComponentId() + ".temp.file.name",
+						getComponentId() + ".temp.file.name", getComponentId() + ".md5.checksum",
 						Constants.CONNECT_TIMEOUT),
 
 				getShouldInstallCondition()));

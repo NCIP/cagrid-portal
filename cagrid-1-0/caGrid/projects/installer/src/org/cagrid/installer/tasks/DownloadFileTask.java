@@ -4,6 +4,7 @@
 package org.cagrid.installer.tasks;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +19,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
+import org.cagrid.installer.util.InstallerUtils;
+import org.cagrid.installer.util.MD5Checksum;
+import org.pietschy.wizard.InvalidStateException;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -29,9 +33,15 @@ public class DownloadFileTask extends BasicTask {
 
 	private static final int LOGAFTER_SIZE = BUFFER_SIZE * 1000;
 
+	private static final int NUM_ATTEMPTS = 2;
+	
+	private static final Log logger = LogFactory.getLog(DownloadFileTask.class);
+
 	private String fromUrlProp;
 
 	private String toFileProp;
+	
+	private String checksumProp;
 
 	// Max time to wait for connection
 	private long connectTimeout;
@@ -41,10 +51,11 @@ public class DownloadFileTask extends BasicTask {
 	 * @param description
 	 */
 	public DownloadFileTask(String name, String description,
-			String fromUrlProp, String toFileProp, long timeout) {
+			String fromUrlProp, String toFileProp, String checksumProp, long timeout) {
 		super(name, description);
 		this.fromUrlProp = fromUrlProp;
 		this.toFileProp = toFileProp;
+		this.checksumProp = checksumProp;
 		this.connectTimeout = timeout;
 	}
 
@@ -58,8 +69,39 @@ public class DownloadFileTask extends BasicTask {
 		} catch (MalformedURLException ex) {
 			throw new RuntimeException("Bad URL: '" + fromUrl + "'", ex);
 		}
+		
+		String toFile = model.getProperty(Constants.TEMP_DIR_PATH) + "/"
+		+ model.getProperty(this.toFileProp);
+		
+		String expectedChecksum = model.getProperty(this.checksumProp);
+		if(InstallerUtils.isEmpty(expectedChecksum)){
+			throw new InvalidStateException("No checksum specified for '" + fromUrl + "'");
+		}
 
-		ConnectThread t = new ConnectThread(url);
+		String checksum = null;
+		for(int i = 0; i < NUM_ATTEMPTS; i++){
+			try{
+				download(url, new File(toFile));
+				checksum = MD5Checksum.getChecksum(toFile);
+				if(expectedChecksum.equals(checksum)){
+					break;
+				}else{
+					logger.warn("Downloaded file '" + toFile + "' is corrupted.");
+				}
+			}catch(Exception ex){
+				logger.warn("Failed attempt (" + (i + 1) + ") to download '" + fromUrl + "': " + ex.getMessage(), ex); 
+			}
+		}
+		if(!expectedChecksum.equals(checksum)){
+			throw new InvalidStateException("Could not download '" + fromUrl + "'. See logs for details.");
+		}
+		
+		return null;
+	}
+
+	private void download(URL fromUrl, File toFile) throws Exception {
+
+		ConnectThread t = new ConnectThread(fromUrl);
 		t.start();
 		try {
 			t.join(this.connectTimeout);
@@ -77,8 +119,7 @@ public class DownloadFileTask extends BasicTask {
 		}
 		InputStream inputStream = t.getIn();
 
-		String toFile = model.getProperty(Constants.TEMP_DIR_PATH) + "/"
-				+ model.getProperty(this.toFileProp);
+		
 		BufferedOutputStream out = new BufferedOutputStream(
 				new FileOutputStream(toFile));
 		byte[] buffer = new byte[BUFFER_SIZE];
@@ -104,8 +145,7 @@ public class DownloadFileTask extends BasicTask {
 		out.flush();
 		out.close();
 		inputStream.close();
-
-		return null;
+		
 	}
 
 	private class ConnectThread extends Thread {
