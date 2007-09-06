@@ -87,7 +87,6 @@ public class AntTask extends BasicTask {
 				this.environment.put("JAVA_HOME", InstallerUtils.getJavaHomePath());
 			}
 			Map<String, String> myEnv = new HashMap<String, String>(env);
-			// myEnv.put("ANT_ARGS", "-v");
 			String[] envp = new String[myEnv.size()];
 			int i = 0;
 			for (String key : myEnv.keySet()) {
@@ -96,7 +95,6 @@ public class AntTask extends BasicTask {
 
 			runAnt(model, baseDir, buildFilePath, this.target,
 					this.systemProperties, envp, propsFile.getAbsolutePath());
-			// propsFile.delete();
 		} catch (Exception ex) {
 			throw new RuntimeException("Error encountered: " + ex.getMessage(),
 					ex);
@@ -109,7 +107,7 @@ public class AntTask extends BasicTask {
 			String propertiesFile) throws IOException, InterruptedException {
 
 		// Check it tools.jar is available
-		File toolsJar = new File(System.getProperty("java.home")
+		File toolsJar = new File(this.environment.get("JAVA_HOME")
 				+ "/lib/tools.jar");
 		if (!toolsJar.exists()) {
 			logger.info("tools.jar not found at '" + toolsJar.getAbsolutePath()
@@ -162,6 +160,8 @@ public class AntTask extends BasicTask {
 			cmd.add("-propertyfile");
 			cmd.add(propertiesFile);
 		}
+		
+		//cmd.add("-v");
 
 		// add target
 		if (target != null) {
@@ -172,7 +172,7 @@ public class AntTask extends BasicTask {
 		for (String s : cmd) {
 			sb.append(s).append(" ");
 		}
-		logger.debug("########## Executing: " + sb);
+		logger.info("Executing: " + sb);
 
 		// run ant
 		Process p = Runtime.getRuntime().exec(cmd.toArray(new String[0]), envp,
@@ -184,14 +184,16 @@ public class AntTask extends BasicTask {
 		new IOThread(p.getErrorStream(), System.err, stderr).start();
 
 		// wait and return
-		int result = p.waitFor();
+		int code = p.waitFor();
 		if (stdout.indexOf("BUILD FAILED") != -1
 				|| stderr.indexOf("BUILD FAILED") != -1
 				|| stdout.indexOf("Build failed") != -1
 				|| stderr.indexOf("Build failed") != -1) {
-			// System.err.println(stderr);
-			System.out.println(stdout);
-			System.out.println(stderr);
+			
+			logger.debug("Code: " + code);
+			logger.debug("STDOUT: " + stdout);
+			logger.debug("STDERR: " + stderr);
+			
 			throw new IOException("ant command '" + target + "' failed");
 		}
 	}
