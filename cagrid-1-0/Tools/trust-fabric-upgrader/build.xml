@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<project name="caGrid 1.0 to caGrid 1.1 Trust Fabric Upgrader" basedir=".">
+	<property environment="env" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	
+	<target name="upgradeTrustFabric" depends="upgradeDistribution,upgradeTomcatDeployment,upgradeGlobusDeployment">
+		
+	</target>
+		
+	<target name="upgradeDistribution">
+		<input message="Please enter the location of you caGrid Distribution:" addproperty="cagrid.location" />
+		<property name="sync.description" value="${cagrid.location}/projects/syncgts/etc/sync-description.xml"/>
+		<property name="certificates.dir" value="${cagrid.location}/projects/syncgts/resources/certificates"/>
+		<condition property="not.found">
+			<or>
+				<not>
+					<available file="${sync.description}"/>
+				</not>
+				<not>
+					<available file="${certificates.dir}"/>
+				</not>		
+			</or>
+		</condition>
+		<fail message="The caGrid location specified is not valid!!!" if="not.found" />
+		<echo message="caGrid Location: ${cagrid.location}" />	
+		<copy  file="sync-description.xml" tofile="${sync.description}"/>
+		<delete>
+			<fileset dir="${certificates.dir}" includes="**/*"/>
+		</delete>
+		<copy todir="${certificates.dir}">
+			<fileset dir="certificates">
+				<include name="**"/>
+			</fileset>
+		</copy>
+		
+	</target>
+	
+	<target name="upgradeTomcatDeployment" depends="setTomcat">
+		<condition property="tomcat.not.found">
+			<or>
+				<not>
+					<isset property="tomcat.location" />
+				</not>
+				<equals arg1="${tomcat.location}" arg2="" />
+			</or>
+		</condition>
+		<echo message="Tomcat Not Found: ${tomcat.not.found}" />
+		<echo message="Tomcat: ${tomcat.location}" />
+		<antcall target="isSyncGTSDeployedToTomcat" inheritall="true"/>
+	</target>
+	
+	<target name="isSyncGTSDeployedToTomcat" unless="tomcat.not.found">
+		<property name="tomcat.sync.description" value="${tomcat.location}/webapps/wsrf/WEB-INF/etc/cagrid_SyncGTS/sync-description.xml"/>
+		<condition property="syncgts.tomcat.not.found">
+				<not>
+					<available file="${tomcat.sync.description}"/>
+				</not>
+		</condition>
+		<echo message="Sync GTS Deployed (Tomcat): ${syncgts.tomcat.not.found}" />
+		<echo message="Sync Description: ${tomcat.sync.description}" />
+		<antcall target="copyFilesTomcat" inheritall="true"/>	
+	</target>
+	
+	<target name="copyFilesTomcat" unless="syncgts.tomcat.not.found">
+		<copy  file="sync-description.xml" tofile="${tomcat.sync.description}"/>
+		<antcall target="copyCertificatesToGlobusTrustedCertificatesDirectory" inheritall="true"/>	
+	</target>
+	
+	
+	
+	<target name="upgradeGlobusDeployment" depends="setGlobus">
+		<condition property="globus.not.found">
+			<or>
+				<not>
+					<isset property="globus.location" />
+				</not>
+				<equals arg1="${globus.location}" arg2="" />
+			</or>
+		</condition>
+		<fail message="Globus is not installed" if="globus.not.found" />
+		<echo message="Globus: ${globus.location}" />
+		<antcall target="isSyncGTSDeployedToGlobus" inheritall="true"/>
+	</target>
+	
+	<target name="isSyncGTSDeployedToGlobus" unless="globus.not.found">
+		<property name="globus.sync.description" value="${globus.location}/etc/cagrid_SyncGTS/sync-description.xml"/>
+		<condition property="syncgts.globus.not.found">
+			<not>
+				<available file="${globus.sync.description}"/>
+			</not>
+		</condition>
+		<echo message="Sync GTS Deployed (Tomcat): ${syncgts.globus.not.found}" />
+		<echo message="Sync Description: ${globus.sync.description}" />
+		<antcall target="copyFilesGlobus" inheritall="true"/>	
+	</target>
+	
+	<target name="copyFilesGlobus" unless="syncgts.globus.not.found">
+		<copy  file="sync-description.xml" tofile="${globus.sync.description}"/>
+		<antcall target="copyCertificatesToGlobusTrustedCertificatesDirectory" inheritall="true"/>	
+	</target>
+	
+	
+	<target name="copyCertificatesToGlobusTrustedCertificatesDirectory">
+		<property name="trusted.certificates.directory" value="${user.home}/.globus/certificates"/>
+		<mkdir dir="${trusted.certificates.directory}"/>
+		<copy todir="${trusted.certificates.directory}">
+			<fileset dir="certificates">
+				<include name="**"/>
+			</fileset>
+		</copy>
+	</target>
+	
+
+	
+              <target name="setGlobus" if="env.GLOBUS_LOCATION">
+		<property name="globus.location" value="${env.GLOBUS_LOCATION}" />
+              </target>
+	
+	
+	<target name="setTomcat" if="env.CATALINA_HOME">
+		<property name="tomcat.location" value="${env.CATALINA_HOME}" />
+	</target>
+	
+</project>
