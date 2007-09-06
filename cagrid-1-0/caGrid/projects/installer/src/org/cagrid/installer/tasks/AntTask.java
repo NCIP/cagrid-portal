@@ -101,6 +101,17 @@ public class AntTask extends BasicTask {
 		}
 		return null;
 	}
+	
+	private String createClasspath(String ... elements){
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < elements.length; i++){
+			sb.append(elements[i]);
+			if(i + 1 < elements.length){
+				sb.append(InstallerUtils.isWindows() ? ";" : ":");
+			}
+		}
+		return sb.toString();
+	}
 
 	protected void runAnt(CaGridInstallerModel model, File dir, String buildFile,
 			String target, Properties sysProps, String[] envp,
@@ -125,13 +136,11 @@ public class AntTask extends BasicTask {
 		}
 		cmd.add(InstallerUtils.getJavaHomePath() + "/bin/" + java);
 		cmd.add("-classpath");
-		if (InstallerUtils.isWindows()) {
-			cmd.add(toolsJar.getAbsolutePath() + ";" + antHome
-					+ "/lib/ant-launcher.jar");
-		} else {
-			cmd.add(toolsJar.getAbsolutePath() + ":" + antHome
-					+ "/lib/ant-launcher.jar");
-		}
+		String cp = createClasspath(toolsJar.getAbsolutePath(), antHome
+				+ "/lib/ant-launcher.jar", new File("./caGrid-"
+				+ Constants.CAGRID_VERSION + "-installer.jar")
+				.getAbsolutePath());
+		cmd.add(cp);
 
 		cmd.add("-Dant.home=" + antHome);
 
