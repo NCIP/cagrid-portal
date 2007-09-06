@@ -521,6 +521,9 @@
 		<property name="web.xml.file"
 			value="${tomcat.home}/webapps/wsrf/WEB-INF/web.xml" />
 		<xmltask source="${web.xml.file}" dest="${web.xml.file}">
+			
+			<xmlcatalog refid="installer.catalog"/>
+			
 			<remove
 				path="/web-app/servlet[servlet-name='WSRFServlet']/init-param[param-name='defaultProtocol']" />
 			<remove
