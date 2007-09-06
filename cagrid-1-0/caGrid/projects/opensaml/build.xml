@@ -101,8 +101,8 @@
                 <filter token="end JDK5" value="${endjdk5.token}"/>
             </filterset>
         </copy>
-		<javac srcdir="${src}/${javaversion}" destdir="${build}" includes="**/*.java" fork="yes" source="${javaversion}">
-			<compilerarg line="-J-Djava.endorsed.dirs=${endorsed}" />
+		<javac srcdir="${src}/${javaversion}" destdir="${build}" includes="**/*.java" fork="no" source="${javaversion}">
+			<compilerarg line="-endorseddirs ${endorsed}" />
 			<classpath refid="build.path" />
 		</javac>
 		<copy todir="${build}/schemas">
