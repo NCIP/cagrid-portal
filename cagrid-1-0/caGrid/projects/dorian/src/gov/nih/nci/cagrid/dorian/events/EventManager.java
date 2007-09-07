@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.events;
 
+import java.lang.reflect.Constructor;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,6 +35,48 @@ public class EventManager {
 		Iterator<EventHandler> itr = s.iterator();
 		while (itr.hasNext()) {
 			itr.next().handleEvent(e);
+		}
+	}
+
+
+	public void registerEventHandlingPolicy(EventHandlingPolicy policy) throws InvalidHandlerException {
+		if (policy != null) {
+			EventHandlers eh = policy.getEventHandlers();
+			if (eh != null) {
+				EventHandlerDescription[] handlers = eh.getEventHandlerDescription();
+				if (handlers != null) {
+					Class[] types = new Class[1];
+					types[0] = EventHandlerConfiguration.class;
+					EventHandler handler = null;
+					for (int i = 0; i < handlers.length; i++) {
+						try {
+							Constructor c = Class.forName(handlers[i].getClassName()).getConstructor(types);
+							handler = (EventHandler) c.newInstance(new Object[]{handlers[i]
+								.getEventHandlerConfiguration()});
+
+						} catch (Exception e) {
+							throw new InvalidHandlerException("Could not create an instance of the "
+								+ handlers[i].getName() + " event handler.", e);
+						}
+						registerHandler(handlers[i].getName(), handler);
+					}
+
+				}
+			}
+			EventMappings em = policy.getEventMappings();
+			if (em != null) {
+				EventToHandlersMapping[] mappings = em.getEventToHandlersMapping();
+				if (mappings != null) {
+					for (int i = 0; i < mappings.length; i++) {
+						String[] handlers = mappings[i].getHandlerName();
+						if (handlers != null) {
+							for (int j = 0; j < handlers.length; j++) {
+								this.registerEventWithHandler(mappings[i].getEventName(), handlers[j]);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 

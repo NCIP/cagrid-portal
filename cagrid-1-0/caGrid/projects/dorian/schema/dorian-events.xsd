@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://cagrid.nci.nih.gov/dorian/events"
+	attributeFormDefault="qualified" elementFormDefault="qualified"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:event="http://cagrid.nci.nih.gov/dorian/events">
+
+
+	<xs:element name="EventHandlingPolicy"
+		type="event:EventHandlingPolicy" />
+	<xs:complexType name="EventHandlingPolicy">
+		<xs:sequence>
+			<xs:element name="EventHandlers" type="event:EventHandlers"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="EventMappings" type="event:EventMappings"
+				minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="EventHandlers">
+		<xs:sequence>
+			<xs:element name="EventHandlerDescription"
+				type="event:EventHandlerDescription" minOccurs="1"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="EventHandlerDescription">
+		<xs:sequence>
+			<xs:element name="EventHandlerConfiguration"
+				type="event:EventHandlerConfiguration" minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="className" type="xs:string" use="required" />
+	</xs:complexType>
+
+
+	<xs:complexType name="EventHandlerConfiguration">
+		<xs:sequence>
+			<xs:element name="Property" type="event:Property"
+				minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="EventMappings">
+		<xs:sequence>
+			<xs:element name="EventToHandlersMapping"
+				type="event:EventToHandlersMapping" minOccurs="1"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="EventToHandlersMapping">
+		<xs:sequence>
+			<xs:element name="HandlerName" type="xs:string"
+				minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="eventName" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="Property">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="value" type="xs:string" use="required" />
+	</xs:complexType>
+</xs:schema>

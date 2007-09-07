@@ -122,6 +122,7 @@ public class TestEventManager extends TestCase implements SubjectResolver {
 
 
 		public TestEventHandler() {
+			super(null);
 			eventsRecord = new HashSet<String>();
 		}
 
