@@ -95,6 +95,7 @@ public class AntTask extends BasicTask {
 
 			runAnt(model, baseDir, buildFilePath, this.target,
 					this.systemProperties, envp, propsFile.getAbsolutePath());
+			// propsFile.delete();
 		} catch (Exception ex) {
 			throw new RuntimeException("Error encountered: " + ex.getMessage(),
 					ex);
@@ -136,10 +137,15 @@ public class AntTask extends BasicTask {
 		}
 		cmd.add(InstallerUtils.getJavaHomePath() + "/bin/" + java);
 		cmd.add("-classpath");
+		
+//		String cp = createClasspath(toolsJar.getAbsolutePath(), antHome
+//				+ "/lib/ant-launcher.jar", new File("./caGrid-"
+//				+ Constants.CAGRID_VERSION + "-installer.jar")
+//				.getAbsolutePath());
+		
 		String cp = createClasspath(toolsJar.getAbsolutePath(), antHome
-				+ "/lib/ant-launcher.jar", new File("./caGrid-"
-				+ Constants.CAGRID_VERSION + "-installer.jar")
-				.getAbsolutePath());
+				+ "/lib/ant-launcher.jar");
+		
 		cmd.add(cp);
 
 		cmd.add("-Dant.home=" + antHome);
@@ -169,8 +175,6 @@ public class AntTask extends BasicTask {
 			cmd.add("-propertyfile");
 			cmd.add(propertiesFile);
 		}
-		
-		//cmd.add("-v");
 
 		// add target
 		if (target != null) {
@@ -181,7 +185,7 @@ public class AntTask extends BasicTask {
 		for (String s : cmd) {
 			sb.append(s).append(" ");
 		}
-		logger.info("Executing: " + sb);
+		logger.info("Executing Ant: " + sb);
 
 		// run ant
 		Process p = Runtime.getRuntime().exec(cmd.toArray(new String[0]), envp,
@@ -199,9 +203,9 @@ public class AntTask extends BasicTask {
 				|| stdout.indexOf("Build failed") != -1
 				|| stderr.indexOf("Build failed") != -1) {
 			
-			logger.debug("Code: " + code);
-			logger.debug("STDOUT: " + stdout);
-			logger.debug("STDERR: " + stderr);
+			logger.info("Code: " + code);
+			logger.info("STDOUT: " + stdout);
+			logger.info("STDERR: " + stderr);
 			
 			throw new IOException("ant command '" + target + "' failed");
 		}

@@ -24,10 +24,10 @@
 	</taskdef>
 	
 	<xmlcatalog id="installer.catalog">
-			<dtd 
-				publicId="-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-				location="resources/web-app_2_3.dtd"/>
-		</xmlcatalog>
+		<dtd 
+			publicId="-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+			location="./resources/web-app_2_3.dtd"/>
+	</xmlcatalog>
 
 	<target name="copy-selected-services">
 

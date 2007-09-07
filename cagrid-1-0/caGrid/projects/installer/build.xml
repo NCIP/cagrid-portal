@@ -17,9 +17,9 @@
 		value="${cagrid.master.jar.prefix}${ant.project.name}" />
 	
 	
-	<property name="download.properties.url" value="http://192.168.0.190:8080/downloads/cagrid.installer.properties"/>
-	<property name="cagrid.download.url" value="http://192.168.0.190:8080/downloads/${cagrid.master.jar.prefix}src.zip"/>
-	<property name="browser.download.url" value="http://192.168.0.190:8080/downloads/caGrid-1.1-browser.zip"/>
+	<property name="download.properties.url" value="http://localhost:8080/downloads/cagrid.installer.properties"/>
+	<property name="cagrid.download.url" value="http://localhost:8080/downloads/${cagrid.master.jar.prefix}src.zip"/>
+	<property name="browser.download.url" value="http://localhost:8080/downloads/caGrid-1.1-browser.zip"/>
 	
 
 	<path id="build.classpath">
@@ -70,7 +70,9 @@
 		<copy todir="build/classes" overwrite="true">
 			<fileset dir="src">
 				<include name="images/**"/>
+				<!--
 				<include name="resources/**"/>
+				-->
 				<include name="*.properties"/>
 				<include name="*.txt"/>
 				<exclude name="download.properties"/>
@@ -79,16 +81,19 @@
 		
 		<jar destfile="${build.jars}/${project.jar.prefix}.jar"
 			basedir="${build.classes}"
-			includes="org/cagrid/**/*.class **/*.properties **/*.txt images/** resources/**"
+			includes="org/cagrid/**/*.class **/*.properties **/*.txt images/**"
 			manifest="manifest.txt"/>
 	</target>
 
 	<target name="all" depends="clean,compile,jar"></target>
 	
+
+	
 	<target name="dist-installer" depends="jar" description="Generates an installer release.">
 
 		<mkdir dir="build/installer/lib"/>
 		<mkdir dir="build/installer/scripts"/>
+		<mkdir dir="build/installer/resources"/>
 		
 		<copy todir="build/installer" file="${build.jars}/${project.jar.prefix}.jar" overwrite="true"/>
 		
@@ -114,6 +119,11 @@
 		</copy>
 		
 		<copy file="scripts/build.xml" todir="build/installer/scripts"/>
+		<copy todir="build/installer/resources">
+			<fileset dir="src/resources">
+				<include name="**"/>			
+			</fileset>
+		</copy>
 		
 		<zip destfile="build/${project.jar.prefix}.zip" basedir="build/installer"/>
 		
