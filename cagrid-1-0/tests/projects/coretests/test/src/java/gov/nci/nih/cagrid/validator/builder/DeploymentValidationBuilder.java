@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.tests.core.beans.validation.Schedule;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
+import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ValidationDescription;
 
 import java.awt.Dimension;
@@ -37,7 +38,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:14:58 PM
- * @version $Id: DeploymentValidationBuilder.java,v 1.5 2007-09-07 14:20:59 dervin Exp $ 
+ * @version $Id: DeploymentValidationBuilder.java,v 1.6 2007-09-07 15:50:05 dervin Exp $ 
  */
 public class DeploymentValidationBuilder extends JFrame {
     // -XX:MaxPermSize=256m
@@ -352,10 +353,11 @@ public class DeploymentValidationBuilder extends JFrame {
     
     
     private void saveCurrentFile() {
-        ValidationDescription description = new ValidationDescription();
-        
-        Schedule schedule = getSchedulePanel().getSchedule();
         try {
+            ValidationDescription description = new ValidationDescription();
+            
+            Schedule schedule = getSchedulePanel().getSchedule();
+            
             ServiceDescription[] descriptions = getServiceTable().getServiceDescriptions();
             description.setSchedule(schedule);
             if (descriptions.length != 0) {
@@ -363,6 +365,9 @@ public class DeploymentValidationBuilder extends JFrame {
             } else {
                 description.setServiceDescription(null);
             }
+            
+            ServiceType[] types = getServiceTypePanel().getServiceTypes();
+            description.setServiceType(types);
             
             FileWriter writer = new FileWriter(currentDeploymentDescriptionFile);
             Utils.serializeObject(description, GridDeploymentValidationLoader.VALIDATION_DESCRIPTION_QNAME, writer);
@@ -390,6 +395,10 @@ public class DeploymentValidationBuilder extends JFrame {
                     getServiceTable().addService(des);
                 }
             }
+            ServiceType[] types = description.getServiceType();
+            if (types != null) {
+                getServiceTypePanel().setServiceTypes(types);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             String[] message = {
@@ -403,7 +412,15 @@ public class DeploymentValidationBuilder extends JFrame {
     
     private void addService() {
         try {
-            ServiceDescription desc = AddServiceDialog.getDescription(this);
+            ServiceType[] types = getServiceTypePanel().getServiceTypes();
+            String[] typeNames = null;
+            if (types != null) { 
+                typeNames = new String[types.length];
+                for (int i = 0; i < types.length; i++) {
+                    typeNames[i] = types[i].getTypeName();
+                }
+            }
+            ServiceDescription desc = AddServiceDialog.getDescription(this, typeNames);
             if (desc != null) {
                 getServiceTable().addService(desc);
             }
