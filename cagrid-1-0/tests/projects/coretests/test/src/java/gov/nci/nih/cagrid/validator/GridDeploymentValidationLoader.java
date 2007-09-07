@@ -33,7 +33,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 3:04:08 PM
- * @version $Id: GridDeploymentValidationLoader.java,v 1.5 2007-09-05 17:01:35 dervin Exp $ 
+ * @version $Id: GridDeploymentValidationLoader.java,v 1.6 2007-09-07 17:25:08 dervin Exp $ 
  */
 public class GridDeploymentValidationLoader {
     
@@ -124,7 +124,7 @@ public class GridDeploymentValidationLoader {
                             classname + " does not extend " + AbstractBaseServiceTestStep.class.getName());
                     }
                     Object[] constructorArgs = {
-                        service.getServiceUrl(),
+                        service.getServiceUrl().toString(),
                         getTempDirForService(service.getServiceName())
                     };
                     try {
