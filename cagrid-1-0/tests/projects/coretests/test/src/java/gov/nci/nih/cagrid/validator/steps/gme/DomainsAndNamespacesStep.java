@@ -1,5 +1,6 @@
 package gov.nci.nih.cagrid.validator.steps.gme;
 
+import java.io.File;
 import java.util.List;
 
 import org.projectmobius.common.MobiusException;
@@ -13,12 +14,12 @@ import org.projectmobius.gme.XMLDataModelService;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 4:17:32 PM
- * @version $Id: DomainsAndNamespacesStep.java,v 1.2 2007-08-29 18:41:18 dervin Exp $ 
+ * @version $Id: DomainsAndNamespacesStep.java,v 1.3 2007-09-07 14:19:35 dervin Exp $ 
  */
 public class DomainsAndNamespacesStep extends BaseGmeTestStep {
 
-    public DomainsAndNamespacesStep(String serviceUrl) {
-        super(serviceUrl);
+    public DomainsAndNamespacesStep(String serviceUrl, File tempDir) {
+        super(serviceUrl, tempDir);
     }
 
 

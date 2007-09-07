@@ -17,15 +17,12 @@ import org.projectmobius.gme.XMLDataModelService;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 4:37:36 PM
- * @version $Id: SchemaDownloadStep.java,v 1.2 2007-08-29 18:41:17 dervin Exp $ 
+ * @version $Id: SchemaDownloadStep.java,v 1.3 2007-09-07 14:19:35 dervin Exp $ 
  */
 public class SchemaDownloadStep extends BaseGmeTestStep {
     
-    private File tempDir;
-
-    public SchemaDownloadStep(String serviceUrl, File tempDir) {
-        super(serviceUrl);
-        this.tempDir = tempDir;
+     public SchemaDownloadStep(String serviceUrl, File tempDir) {
+        super(serviceUrl, tempDir);
     }
 
 
@@ -36,14 +33,18 @@ public class SchemaDownloadStep extends BaseGmeTestStep {
         for (String domain : domains) {
             List<Namespace> namespaces = gmeHandle.getSchemaListForNamespaceDomain(domain);
             for (Namespace namespace : namespaces) {
-                File tempSchemaDir = new File(tempDir.getAbsolutePath() + File.separator + "Schemas_" + System.currentTimeMillis());
+                File tempSchemaDir = new File(getTempDir().getAbsolutePath() 
+                    + File.separator + "Schemas_" + System.currentTimeMillis());
                 tempSchemaDir.mkdirs();
-                List<Namespace> cachedSchemas = gmeHandle.cacheSchema(namespace, tempSchemaDir);
+                List<Namespace> cachedSchemas = gmeHandle.cacheSchema(
+                    namespace, tempSchemaDir);
                 // verify each schema was cached correctly
                 for (Namespace cached : cachedSchemas) {
                     ImportInfo ii = new ImportInfo(cached);
-                    File schemaFile = new File(tempSchemaDir.getAbsolutePath() + File.separator + ii.getFileName());
-                    assertTrue("Could not find schema file " + schemaFile.getName(), schemaFile.exists());
+                    File schemaFile = new File(tempSchemaDir.getAbsolutePath() 
+                        + File.separator + ii.getFileName());
+                    assertTrue("Could not find schema file " + schemaFile.getName(), 
+                        schemaFile.exists());
                     String targetNamespace = CommonTools.getTargetNamespace(schemaFile);
                     assertNotNull("Target namespace of schema was null", targetNamespace);
                     assertEquals(cached.getRaw(), targetNamespace);
