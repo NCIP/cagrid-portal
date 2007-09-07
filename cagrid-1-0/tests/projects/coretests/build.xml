@@ -14,6 +14,7 @@
 
 	<!-- src dirs -->
     <property name="src.dir" location="${basedir}/src/java" />
+	<property name="resources.dir" location="${basedir}/src/resources"/>
     <property name="test.src.dir" location="${basedir}/test/src/java" />
 	
 	<!-- output dirs -->
@@ -28,6 +29,7 @@
 	
 	<!-- jars -->
     <property name="project.jarfile" location="${jar.dir}/${ant.project.name}-${project.version}.jar" />
+	<property name="project.stubs.jarfile" location="${jar.dir}/${ant.project.name}-stubs-${project.version}.jar"/>
     <property name="test.project.jarfile" location="${jar.dir}/${ant.project.name}-${project.version}-test.jar" />
 	
 	<!-- lib locations -->
@@ -224,7 +226,22 @@
             <fileset dir="${src.dir}">
                 <include name="**/*.java" />
             </fileset>
+			<fileset dir="${resources.dir}">
+				<include name="**/*/"/>
+			</fileset>
         </jar>
+    	<jar jarfile="${project.stubs.jarfile}">
+			<manifest>
+	        	<attribute name="Built-By" value="${user.name}" />
+	            <attribute name="Main-Class" value="${main.class}" />
+			</manifest>
+			<fileset dir="${build.stubs.classes}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${build.stubs.src}">
+				<include name="**/*.java"/>
+			</fileset>
+		</jar>
         <jar jarfile="${test.project.jarfile}">
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
@@ -254,6 +271,28 @@
             <tag name="created" scope="all" description="Creation Date:" />
         </javadoc>
     </target>
+	
+	<!-- ============================================================== -->
+	<!-- Runs the deployment validation builder tool                    -->
+	<!-- ============================================================== -->
+	<target name="buildDeploymentValidation" depends="jar" description="Runs the deployment validation builder tool">
+		<java classname="gov.nci.nih.cagrid.validator.builder.DeploymentValidationBuilder" fork="true">
+			<classpath refid="build.classpath"/>
+			<classpath refid="test.classpath"/>
+			<classpath>
+				<fileset dir="${jar.dir}">
+			    	<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+			<classpath>
+				<fileset dir="${build.lib.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+			<!-- required for searching through large numbers of classes for test steps -->
+			<jvmarg line="-XX:MaxPermSize=256m"/>
+		</java>
+	</target>
 
     <!-- ============================================================== -->
     <!-- Builds from scratch                                            -->
