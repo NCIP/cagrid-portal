@@ -37,9 +37,10 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:14:58 PM
- * @version $Id: DeploymentValidationBuilder.java,v 1.4 2007-08-29 15:44:30 dervin Exp $ 
+ * @version $Id: DeploymentValidationBuilder.java,v 1.5 2007-09-07 14:20:59 dervin Exp $ 
  */
 public class DeploymentValidationBuilder extends JFrame {
+    // -XX:MaxPermSize=256m
     
     private JMenuBar mainMenuBar = null;
     private JMenu fileMenu = null;
@@ -54,6 +55,7 @@ public class DeploymentValidationBuilder extends JFrame {
     private JButton removeServicesButton = null;
     private JPanel mainPanel = null;
     private SchedulePanel schedulePanel = null;
+    private ServiceTypePanel serviceTypePanel = null;
     
     private File currentDeploymentDescriptionFile = null;
 
@@ -68,7 +70,7 @@ public class DeploymentValidationBuilder extends JFrame {
         this.setContentPane(getMainPanel());
         this.setJMenuBar(getMainMenuBar());
         this.pack();
-        this.setSize(new Dimension(525, 375));
+        this.setSize(new Dimension(625, 450));
         setVisible(true);
     }
     
@@ -293,6 +295,13 @@ public class DeploymentValidationBuilder extends JFrame {
      */
     private JPanel getMainPanel() {
         if (mainPanel == null) {
+            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+            gridBagConstraints5.gridx = 0;
+            gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints5.weightx = 1.0D;
+            gridBagConstraints5.weighty = 1.0D;
+            gridBagConstraints5.gridy = 3;
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.gridx = 0;
             gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
@@ -316,6 +325,7 @@ public class DeploymentValidationBuilder extends JFrame {
             mainPanel.add(getServiceTableScrollPane(), gridBagConstraints2);
             mainPanel.add(getButtonPanel(), gridBagConstraints3);
             mainPanel.add(getSchedulePanel(), gridBagConstraints4);
+            mainPanel.add(getServiceTypePanel(), gridBagConstraints5);
         }
         return mainPanel;
     }
@@ -328,6 +338,13 @@ public class DeploymentValidationBuilder extends JFrame {
         return schedulePanel;
     }
     
+    
+    private ServiceTypePanel getServiceTypePanel() {
+        if (serviceTypePanel == null) {
+            serviceTypePanel = new ServiceTypePanel();
+        }
+        return serviceTypePanel;
+    }
     
     // ------------
     // Helpers

@@ -1,26 +1,51 @@
 package gov.nci.nih.cagrid.validator.builder;
 
+import gov.nci.nih.cagrid.validator.steps.AbstractBaseServiceTestStep;
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceTestStep;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
 
-import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.File;
+import java.io.FileFilter;
+import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /** 
  *  ServiceTypePanel
@@ -29,9 +54,14 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created Sep 5, 2007 12:25:19 PM
- * @version $Id: ServiceTypePanel.java,v 1.2 2007-09-05 17:12:41 dervin Exp $ 
+ * @version $Id: ServiceTypePanel.java,v 1.3 2007-09-07 14:20:59 dervin Exp $ 
  */
 public class ServiceTypePanel extends JPanel {
+    public static final String JAVA_CLASS_PATH = "java.class.path";
+    public static final String SUN_BOOT_CLASS_PATH = "sun.boot.class.path";
+    public static final String JAR_EXTENSION = ".jar";
+    public static final String CLASS_EXTSNSION = ".class";
+    public static final String CLASS_FIELDS_PREFIX = "class$";
 
     private JList typesList = null;
     private JList stepsList = null;
@@ -50,10 +80,10 @@ public class ServiceTypePanel extends JPanel {
     private JButton removeStepButton = null;
     private JButton moveStepUpButton = null;
     private JButton moveStepDownButton = null;
-    private JPanel stepInputPanel = null;  //  @jve:decl-index=0:visual-constraint="608,236"
+    private JPanel stepInputPanel = null;
     private JPanel stepButtonsPanel = null;
     private JPanel stepOrderButtonPanel = null;
-    private JPanel stepsPanel = null;  //  @jve:decl-index=0:visual-constraint="395,85"
+    private JPanel stepsPanel = null;
     private JPanel listContainerPanel = null;
     private JPanel inputContainerPanel = null;
 
@@ -84,12 +114,17 @@ public class ServiceTypePanel extends JPanel {
     
     
     public ServiceType[] getServiceTypes() {
-        return null;
+        ServiceType[] types = new ServiceType[getTypesList().getModel().getSize()];
+        for (int i = 0; i < getTypesList().getModel().getSize(); i++) {
+            types[i] = (ServiceType) getTypesList().getModel().getElementAt(i);
+        }
+        return types;
     }
     
     
     public void setServiceTypes(ServiceType[] types) {
-        // TODO: populate fields
+        getTypesList().setListData(types);
+        ((DefaultListModel) getStepsList().getModel()).removeAllElements();
     }
 
 
@@ -102,6 +137,30 @@ public class ServiceTypePanel extends JPanel {
         if (typesList == null) {
             typesList = new JList();
             typesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            // set up a renderer to allow storing ServiceTypes directly in the JList
+            typesList.setCellRenderer(new DefaultListCellRenderer() {
+                public Component getListCellRendererComponent(
+                    JList list, Object value, 
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                    super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                    if (value instanceof ServiceType) {
+                        setText(((ServiceType) value).getTypeName());
+                    }
+                    return this;
+                }
+            });
+            // selection listener updates the steps list
+            typesList.addListSelectionListener(new ListSelectionListener() {
+                public void valueChanged(ListSelectionEvent e) {
+                    ServiceType selected = (ServiceType) getTypesList().getSelectedValue();
+                    if (selected != null && selected.getTestStep() != null) {
+                        getStepsList().setListData(selected.getTestStep());
+                    } else {
+                        ((DefaultListModel) getStepsList().getModel()).removeAllElements();
+                    }
+                }
+            });
+            typesList.setModel(new DefaultListModel());
         }
         return typesList;
     }
@@ -116,6 +175,19 @@ public class ServiceTypePanel extends JPanel {
         if (stepsList == null) {
             stepsList = new JList();
             stepsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            // set up a renderer to allow storing TestSteps directly in the JList
+            stepsList.setCellRenderer(new DefaultListCellRenderer() {
+                public Component getListCellRendererComponent(
+                    JList list, Object value, 
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                    super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                    if (value instanceof ServiceTestStep) {
+                        setText(((ServiceTestStep) value).getClassname());
+                    }
+                    return this;
+                }
+            });
+            stepsList.setModel(new DefaultListModel());
         }
         return stepsList;
     }
@@ -129,7 +201,9 @@ public class ServiceTypePanel extends JPanel {
     private JScrollPane getTypesScrollPane() {
         if (typesScrollPane == null) {
             typesScrollPane = new JScrollPane();
-            typesScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Service Types", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+            typesScrollPane.setBorder(BorderFactory.createTitledBorder(
+                null, "Service Types", TitledBorder.DEFAULT_JUSTIFICATION, 
+                TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             typesScrollPane.setViewportView(getTypesList());
         }
         return typesScrollPane;
@@ -144,7 +218,9 @@ public class ServiceTypePanel extends JPanel {
     private JScrollPane getStepsScrollPane() {
         if (stepsScrollPane == null) {
             stepsScrollPane = new JScrollPane();
-            stepsScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Test Steps", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+            stepsScrollPane.setBorder(BorderFactory.createTitledBorder(
+                null, "Test Steps", TitledBorder.DEFAULT_JUSTIFICATION, 
+                TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             stepsScrollPane.setViewportView(getStepsList());
         }
         return stepsScrollPane;
@@ -162,7 +238,26 @@ public class ServiceTypePanel extends JPanel {
             addTypeButton.setText("Add Type");
             addTypeButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    String typeName = getTypeNameTextField().getText().trim();
+                    // validate the type name
+                    if (typeName.length() == 0) {
+                        JOptionPane.showMessageDialog(ServiceTypePanel.this, "Please specify a type name");
+                    } else {
+                        boolean nameOk = true;
+                        for (int i = 0; nameOk && i < getTypesList().getModel().getSize(); i++) {
+                            ServiceType type = (ServiceType) getTypesList().getModel().getElementAt(i);
+                            if (type.getTypeName().equals(typeName)) {
+                                JOptionPane.showMessageDialog(
+                                    ServiceTypePanel.this, "The type name " + typeName + " is already in use.");
+                                nameOk = false;
+                            }
+                        }
+                        if (nameOk) {
+                            ServiceType newType = new ServiceType();
+                            newType.setTypeName(typeName);
+                            ((DefaultListModel) getTypesList().getModel()).addElement(newType);
+                        }
+                    }
                 }
             });
         }
@@ -208,7 +303,13 @@ public class ServiceTypePanel extends JPanel {
             removeTypeButton.setText("Remove Type");
             removeTypeButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    int selection = getTypesList().getSelectedIndex();
+                    if (selection == -1) {
+                        JOptionPane.showMessageDialog(
+                            ServiceTypePanel.this, "Please select a service type to remove");
+                    } else {
+                        ((DefaultListModel) getTypesList().getModel()).removeElementAt(selection);
+                    }
                 }
             });
         }
@@ -307,7 +408,7 @@ public class ServiceTypePanel extends JPanel {
             discoverStepsButton.setText("Discover...");
             discoverStepsButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    discoverStepClasses();
                 }
             });
         }
@@ -326,7 +427,25 @@ public class ServiceTypePanel extends JPanel {
             addStepButton.setText("Add Step");
             addStepButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    if (getStepClassnameComboBox().getSelectedItem() == null) {
+                        JOptionPane.showMessageDialog(ServiceTypePanel.this, "Please select a step");
+                    } else if (getTypesList().getSelectedValue() == null) {
+                        JOptionPane.showMessageDialog(ServiceTypePanel.this, "Please select a service type to add test steps to");
+                    } else {
+                        String classname = String.valueOf(getStepClassnameComboBox().getSelectedItem());
+                        ServiceTestStep step = new ServiceTestStep();
+                        step.setClassname(classname);
+                        ServiceType type = (ServiceType) getTypesList().getSelectedValue();
+                        ServiceTestStep[] steps = null;
+                        if (type.getTestStep() != null) {
+                            steps = (ServiceTestStep[]) Utils.appendToArray(
+                                type.getTestStep(), step);
+                        } else {
+                            steps = new ServiceTestStep[] {step};
+                        }
+                        type.setTestStep(steps);
+                        getStepsList().setListData(steps);
+                    }
                 }
             });
         }
@@ -345,7 +464,23 @@ public class ServiceTypePanel extends JPanel {
             removeStepButton.setText("Remove Step");
             removeStepButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    if (getStepsList().getSelectedValue() == null) {
+                        JOptionPane.showMessageDialog(ServiceTypePanel.this, "Please select a step to remove");
+                    } else {
+                        String stepClassname = ((ServiceTestStep) getStepsList().getSelectedValue()).getClassname();
+                        ServiceType selectedType = (ServiceType) getTypesList().getSelectedValue();
+                        ServiceTestStep removeStep = null;
+                        for (ServiceTestStep step : selectedType.getTestStep()) {
+                            if (step.getClassname().equals(stepClassname)) {
+                                removeStep = step;
+                                break;
+                            }
+                        }
+                        ServiceTestStep[] cleanedSteps = (ServiceTestStep[]) 
+                            Utils.removeFromArray(selectedType.getTestStep(), removeStep);
+                        selectedType.setTestStep(cleanedSteps);
+                        getStepsList().setListData(cleanedSteps);
+                    }
                 }
             });
         }
@@ -361,10 +496,22 @@ public class ServiceTypePanel extends JPanel {
     private JButton getMoveStepUpButton() {
         if (moveStepUpButton == null) {
             moveStepUpButton = new JButton();
-            moveStepUpButton.setIcon(IntroduceLookAndFeel.getUpIcon());
+            moveStepUpButton.setIcon(getUpIcon());
+            // moveStepUpButton.setText("Up");
+            moveStepUpButton.setToolTipText("Move selected step up");
             moveStepUpButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    int selected = getStepsList().getSelectedIndex();
+                    if (selected > 0) { // avoids non-selection and top of list
+                        // swap the selected item with the one "above" it
+                        ServiceType service = (ServiceType) getTypesList().getSelectedValue();
+                        ServiceTestStep previousStep = service.getTestStep(selected - 1);
+                        ServiceTestStep selectedStep = service.getTestStep(selected);
+                        service.setTestStep(selected - 1, selectedStep);
+                        service.setTestStep(selected, previousStep);
+                        // update the list UI
+                        getStepsList().setListData(service.getTestStep());
+                    }
                 }
             });
         }
@@ -380,10 +527,22 @@ public class ServiceTypePanel extends JPanel {
     private JButton getMoveStepDownButton() {
         if (moveStepDownButton == null) {
             moveStepDownButton = new JButton();
-            moveStepDownButton.setIcon(IntroduceLookAndFeel.getDownIcon());
+            moveStepDownButton.setIcon(getDownIcon());
+            // moveStepDownButton.setText("Down");
+            moveStepDownButton.setToolTipText("Move selected step down");
             moveStepDownButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    int selected = getStepsList().getSelectedIndex();
+                    if (selected != -1 && selected < getStepsList().getModel().getSize() - 1) {
+                        // swap the selected item with the one "below" it
+                        ServiceType service = (ServiceType) getTypesList().getSelectedValue();
+                        ServiceTestStep nextStep = service.getTestStep(selected + 1);
+                        ServiceTestStep selectedStep = service.getTestStep(selected);
+                        service.setTestStep(selected + 1, selectedStep);
+                        service.setTestStep(selected, nextStep);
+                        // update the UI
+                        getStepsList().setListData(service.getTestStep());
+                    }
                 }
             });
         }
@@ -534,4 +693,136 @@ public class ServiceTypePanel extends JPanel {
         }
         return inputContainerPanel;
     }
-}  //  @jve:decl-index=0:visual-constraint="13,9"
+    
+    
+    private void discoverStepClasses() {
+        BusyDialogRunnable discoverThread = new BusyDialogRunnable(
+            (JFrame) SwingUtilities.getWindowAncestor(ServiceTypePanel.this), "Discovering Types") {
+            public void process() {
+                setProgressText("Starting discovery");
+                Class baseClass = AbstractBaseServiceTestStep.class;
+                List<String> subs = new ArrayList();
+                String classPath = System.getProperty(JAVA_CLASS_PATH);
+                String[] pathElements = classPath.split(File.pathSeparator);
+                URL[] pathUrls = new URL[pathElements.length];
+                try {
+                    for (int i = 0; i < pathElements.length; i++) {
+                        pathUrls[i] = new File(pathElements[i]).toURL();
+                    }
+                } catch (MalformedURLException ex) {
+                    ex.printStackTrace();
+                    setErrorMessage("Error converting path to URL: " + ex.getMessage());
+                }
+                StringTokenizer pathTokenizer 
+                    = new StringTokenizer(classPath, File.pathSeparator);
+                while (pathTokenizer.hasMoreTokens()) {
+                    // create a class loader with the URLs
+                    ClassLoader loader = new URLClassLoader(pathUrls);
+                    // locate class names in the path element
+                    File path = new File(pathTokenizer.nextToken());
+                    setProgressText("Examining " + path.getAbsolutePath());
+                    List<String> classNames = null;
+                    if (!path.exists() && path.canRead()) {
+                        continue;
+                    }
+                    if (path.getName().toLowerCase().indexOf(JAR_EXTENSION) != -1) {
+                        classNames = getJarClassNames(path);
+                    } else if (path.isDirectory()) {
+                        classNames = getDirectoryClassNames(path);
+                    } else {
+                        System.err.println(path.getAbsolutePath() 
+                            + " is not a directory or jar file!");
+                        continue;
+                    }
+                    for (String className : classNames) {
+                        if (!className.contains("$") 
+                            && !className.startsWith("java.") && !className.startsWith("javax.")) {
+                            Class candidate = null;
+                            try {
+                                candidate = loader.loadClass(className);
+                            } catch (Throwable th) {
+                                // th.printStackTrace();
+                            }
+                            if (candidate != null) {
+                                if (!Modifier.isAbstract(candidate.getModifiers()) && baseClass.isAssignableFrom(candidate)) {
+                                    System.out.println("Keeping class " + className);
+                                    subs.add(candidate.getName());
+                                }
+                            }
+                        }
+                    }
+                    loader = null;
+                    System.runFinalization();
+                    System.gc();
+                }
+                Collections.sort(subs);
+                for (String name : subs) {
+                    getStepClassnameComboBox().addItem(name);   
+                }
+            }
+        };
+        Thread th = new Thread(discoverThread);
+        th.start();
+    }
+    
+    
+    /**
+     * Gets a list of class names found by browsing through a Jar file
+     * for class files
+     * @param jarFile
+     * @return
+     *      A List of all class names in the jar
+     */
+    private List<String> getJarClassNames(File jarFile) {
+        List<String> classNames = new ArrayList();
+        try {
+            JarFile jar = new JarFile(jarFile);
+            Enumeration entries = jar.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = (JarEntry) entries.nextElement();
+                String entryName = entry.getName();
+                if (entryName.toLowerCase().endsWith(CLASS_EXTSNSION)) {
+                    classNames.add(entryName.substring(0, entryName.length() - CLASS_EXTSNSION.length())
+                        .replace('/', '.'));
+                }
+            }
+            jar.close();
+        } catch (Throwable th) {
+        }
+        return classNames;
+    }
+    
+    
+    /**
+     * Gets class names from the given directory of .class files
+     * @param directory
+     * @return
+     *      A List of Class names
+     */
+    private List<String> getDirectoryClassNames(File directory) {
+        List<File> classFiles = Utils.recursiveListFiles(directory, new FileFilter() {
+            public boolean accept(File pathname) {
+                return pathname.getName().toLowerCase().endsWith(CLASS_EXTSNSION);
+            }
+        });
+        List classNames = new ArrayList(classFiles.size());
+        int baseDirNameLength = directory.getAbsolutePath().length() + 1;
+        for (File classFile : classFiles) {
+            String rawName = classFile.getAbsolutePath();
+            rawName = rawName.substring(baseDirNameLength);
+            classNames.add(rawName.substring(0, rawName.length() - CLASS_EXTSNSION.length())
+                .replace('/', '.'));
+        }
+        return classNames;
+    }
+    
+    
+    public Icon getUpIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/go-up.png"));
+    }
+
+
+    public Icon getDownIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/go-down.png"));
+    }
+}
