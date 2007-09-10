@@ -87,6 +87,7 @@ public class AntTask extends BasicTask {
 				this.environment.put("JAVA_HOME", InstallerUtils.getJavaHomePath());
 			}
 			Map<String, String> myEnv = new HashMap<String, String>(env);
+			// myEnv.put("ANT_ARGS", "-v");
 			String[] envp = new String[myEnv.size()];
 			int i = 0;
 			for (String key : myEnv.keySet()) {
@@ -198,7 +199,8 @@ public class AntTask extends BasicTask {
 
 		// wait and return
 		int code = p.waitFor();
-		if (stdout.indexOf("BUILD FAILED") != -1
+		if (code != 0 ||
+				stdout.indexOf("BUILD FAILED") != -1
 				|| stderr.indexOf("BUILD FAILED") != -1
 				|| stdout.indexOf("Build failed") != -1
 				|| stderr.indexOf("Build failed") != -1) {

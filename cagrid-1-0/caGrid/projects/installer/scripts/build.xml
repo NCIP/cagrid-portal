@@ -27,6 +27,12 @@
 		<dtd 
 			publicId="-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 			location="./resources/web-app_2_3.dtd"/>
+		<dtd 
+			publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+			location="./resources/web-facesconfig_1_1.dtd"/>
+		<dtd 
+			publicId="-//SPRING//DTD BEAN//EN"
+			location="./resources/spring-beans.dtd"/>
 	</xmlcatalog>
 
 	<target name="copy-selected-services">
@@ -62,6 +68,9 @@
 		<property name="config.file"
 			value="${service.dest.dir}/dorian/etc/dorian-conf.xml" />
 		<xmltask source="${config.file}" dest="${config.file}">
+			
+			<xmlcatalog refid="installer.catalog"/>
+			
 			<replace
 				path="/*[local-name()='DorianConfiguration']/*[local-name()='DorianInternalId']">
 				<![CDATA[
@@ -883,6 +892,9 @@ ${authn.svc.csm.ctx}{
 
 		<xmltask source="${config.file}" dest="${config.file}"
 			preservetype="true">
+			
+			<xmlcatalog refid="installer.catalog"/>
+			
 			<remove
 				path="/beans/bean[@id='initBean']/property[@name='indexSet']/set/value" />
 		</xmltask>
@@ -892,6 +904,9 @@ ${authn.svc.csm.ctx}{
 
 				<xmltask source="${config.file}" dest="${config.file}"
 					preservetype="true">
+					
+					<xmlcatalog refid="installer.catalog"/>
+					
 					<insert
 						path="/beans/bean[@id='initBean']/property[@name='indexSet']/set">
 						<![CDATA[
@@ -910,6 +925,9 @@ ${authn.svc.csm.ctx}{
 
 		<xmltask source="${config.file}" dest="${config.file}"
 			preservetype="true">
+			
+			<xmlcatalog refid="installer.catalog"/>
+			
 			<remove path="/beans/bean[@id='syncGTSInitBean']" />
 			<remove path="/beans/bean[@id='syncMethodInvokingTask']" />
 			<remove path="/beans/bean[@id='syncGTSTask']" />
@@ -1032,6 +1050,8 @@ ${authn.svc.csm.ctx}{
 		<xmltask source="${config.file}" dest="${config.file}"
 			preservetype="true">
 			
+			<xmlcatalog refid="installer.catalog"/>
+			
 			<replace path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and contains(text(),'loginBean')]]/*[local-name()='managed-property' and ./*[local-name()='property-name' and contains(text(),'idpUrl1')]]/*[local-name()='value']/text()" withText="${browser.idp.url1}"/>
 			<replace path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and contains(text(),'loginBean')]]/*[local-name()='managed-property' and ./*[local-name()='property-name' and contains(text(),'idpUrl2')]]/*[local-name()='value']/text()" withText="${browser.idp.url2}"/>
 			<replace path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and contains(text(),'loginBean')]]/*[local-name()='managed-property' and ./*[local-name()='property-name' and contains(text(),'ifsUrl')]]/*[local-name()='value']/text()" withText="${browser.ifs.url}"/>
@@ -1055,6 +1075,8 @@ ${authn.svc.csm.ctx}{
 
 				<xmltask source="${config.file}" dest="${config.file}"
 					preservetype="true">
+					
+					<xmlcatalog refid="installer.catalog"/>
 
 					<insert
 						path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and text()='discoveryBean']]/*[local-name()='managed-property' and ./*[local-name()='property-name' and text()='indexServiceUrls']]/*[local-name()='list-entries']">
@@ -1111,6 +1133,9 @@ ${authn.svc.csm.ctx}{
 
 		<xmltask source="${config.file}" dest="${config.file}"
 			preservetype="true">
+			
+			<xmlcatalog refid="installer.catalog"/>
+			
 			<remove path="/web-app/security-constraint" />
 			<remove path="/web-app/login-config" />
 			<remove path="/web-app/security-role" />
