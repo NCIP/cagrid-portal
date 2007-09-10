@@ -71,10 +71,14 @@ public class AntTask extends BasicTask {
 			File baseDir = buildFile.getParentFile();
 			Map<String, String> env = new HashMap<String, String>(System
 					.getenv());
-			// env.putAll(this.environment);
+
 			if(this.environment == null){
 				this.environment = new HashMap<String,String>();
 			}
+			if(!this.environment.containsKey("JAVA_HOME")){
+				this.environment.put("JAVA_HOME", InstallerUtils.getJavaHomePath());
+			}
+			
 			for (Iterator i = this.environment.entrySet().iterator(); i
 					.hasNext();) {
 				Entry entry = (Entry) i.next();
@@ -83,11 +87,8 @@ public class AntTask extends BasicTask {
 					env.put((String) entry.getKey(), (String) entry.getValue());
 				}
 			}
-			if(!this.environment.containsKey("JAVA_HOME")){
-				this.environment.put("JAVA_HOME", InstallerUtils.getJavaHomePath());
-			}
+			
 			Map<String, String> myEnv = new HashMap<String, String>(env);
-			// myEnv.put("ANT_ARGS", "-v");
 			String[] envp = new String[myEnv.size()];
 			int i = 0;
 			for (String key : myEnv.keySet()) {
@@ -96,7 +97,7 @@ public class AntTask extends BasicTask {
 
 			runAnt(model, baseDir, buildFilePath, this.target,
 					this.systemProperties, envp, propsFile.getAbsolutePath());
-			// propsFile.delete();
+
 		} catch (Exception ex) {
 			throw new RuntimeException("Error encountered: " + ex.getMessage(),
 					ex);
@@ -139,11 +140,7 @@ public class AntTask extends BasicTask {
 		cmd.add(InstallerUtils.getJavaHomePath() + "/bin/" + java);
 		cmd.add("-classpath");
 		
-//		String cp = createClasspath(toolsJar.getAbsolutePath(), antHome
-//				+ "/lib/ant-launcher.jar", new File("./caGrid-"
-//				+ Constants.CAGRID_VERSION + "-installer.jar")
-//				.getAbsolutePath());
-		
+
 		String cp = createClasspath(toolsJar.getAbsolutePath(), antHome
 				+ "/lib/ant-launcher.jar");
 		

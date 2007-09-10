@@ -69,8 +69,6 @@
 			value="${service.dest.dir}/dorian/etc/dorian-conf.xml" />
 		<xmltask source="${config.file}" dest="${config.file}">
 			
-			<xmlcatalog refid="installer.catalog"/>
-			
 			<replace
 				path="/*[local-name()='DorianConfiguration']/*[local-name()='DorianInternalId']">
 				<![CDATA[

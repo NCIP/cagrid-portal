@@ -8,6 +8,7 @@ import javax.swing.Icon;
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.steps.PropertyConfigurationStep;
+import org.cagrid.installer.steps.options.PasswordPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
 import org.pietschy.wizard.WizardModel;
 
@@ -56,7 +57,7 @@ public class ConfigureBPELAdminSecurityStep extends PropertyConfigurationStep {
 										""), true));
 		
 		getOptions().add(
-				new TextPropertyConfigurationOption(
+				new PasswordPropertyConfigurationOption(
 						Constants.BPEL_ADMIN_PASSWORD, model
 								.getMessage(Constants.BPEL_ADMIN_PASSWORD), model
 								.getProperty(Constants.BPEL_ADMIN_PASSWORD,
