@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.dorian.events;
 
+import gov.nih.nci.cagrid.common.Utils;
+
 import java.lang.reflect.Constructor;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,20 +47,21 @@ public class EventManager {
 			if (eh != null) {
 				EventHandlerDescription[] handlers = eh.getEventHandlerDescription();
 				if (handlers != null) {
-					Class[] types = new Class[1];
-					types[0] = EventHandlerConfiguration.class;
+					Class[] types = new Class[2];
+					types[0] = String.class;
+					types[1] = EventHandlerConfiguration.class;
 					EventHandler handler = null;
 					for (int i = 0; i < handlers.length; i++) {
 						try {
 							Constructor c = Class.forName(handlers[i].getClassName()).getConstructor(types);
-							handler = (EventHandler) c.newInstance(new Object[]{handlers[i]
-								.getEventHandlerConfiguration()});
+							handler = (EventHandler) c.newInstance(new Object[]{handlers[i].getName(),
+									handlers[i].getEventHandlerConfiguration()});
 
 						} catch (Exception e) {
 							throw new InvalidHandlerException("Could not create an instance of the "
 								+ handlers[i].getName() + " event handler.", e);
 						}
-						registerHandler(handlers[i].getName(), handler);
+						registerHandler(handler);
 					}
 
 				}
@@ -84,7 +87,7 @@ public class EventManager {
 	public void registerEventWithHandler(String eventName, String handlerName) throws InvalidHandlerException {
 		if (!handlers.containsKey(handlerName)) {
 			throw new InvalidHandlerException("Cannot register the event " + eventName + " with the handler "
-				+ handlerName + ", no such handler is registerd.");
+				+ handlerName + ", no such handler is registered.");
 		}
 		Set set = events.get(eventName);
 		if (set == null) {
@@ -93,6 +96,16 @@ public class EventManager {
 		}
 		if (!set.contains(handlerName)) {
 			set.add(handlerName);
+		}
+	}
+
+
+	protected EventHandler getHandler(String name) throws InvalidHandlerException {
+
+		if (!handlers.containsKey(name)) {
+			throw new InvalidHandlerException("Cannot get the handler " + name + ", no such handler is registered.");
+		} else {
+			return this.handlers.get(name);
 		}
 	}
 
@@ -111,12 +124,16 @@ public class EventManager {
 	}
 
 
-	public void registerHandler(String name, EventHandler handler) throws InvalidHandlerException {
-		if (!handlers.containsKey(name)) {
+	public void registerHandler(EventHandler handler) throws InvalidHandlerException {
+		if (Utils.clean(handler.getName()) == null) {
+			throw new InvalidHandlerException("Invalid name provided for handler.");
+		}
+
+		if (!handlers.containsKey(handler.getName())) {
 			handler.setSubjectResolver(resolver);
-			handlers.put(name, handler);
+			handlers.put(handler.getName(), handler);
 		} else {
-			throw new InvalidHandlerException("The handler " + name + " is already registered.");
+			throw new InvalidHandlerException("The handler " + handler.getName() + " is already registered.");
 		}
 	}
 

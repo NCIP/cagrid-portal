@@ -10,8 +10,11 @@ public abstract class EventHandler {
 
 	private Map<String, String> properties;
 
+	private String name;
 
-	public EventHandler(EventHandlerConfiguration conf) {
+
+	public EventHandler(String name, EventHandlerConfiguration conf) {
+		this.name = name;
 		properties = new HashMap<String, String>();
 		if (conf != null) {
 			Property[] props = conf.getProperty();
@@ -21,6 +24,11 @@ public abstract class EventHandler {
 				}
 			}
 		}
+	}
+
+
+	public String getName() {
+		return name;
 	}
 
 
