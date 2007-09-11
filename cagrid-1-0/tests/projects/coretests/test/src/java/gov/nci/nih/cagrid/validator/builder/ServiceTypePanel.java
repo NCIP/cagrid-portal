@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceTestStep;
+import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceTestStepConfigurationProperty;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
 
 import java.awt.Component;
@@ -23,7 +24,11 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -54,7 +59,7 @@ import javax.swing.event.ListSelectionListener;
  * @author David Ervin
  * 
  * @created Sep 5, 2007 12:25:19 PM
- * @version $Id: ServiceTypePanel.java,v 1.3 2007-09-07 14:20:59 dervin Exp $ 
+ * @version $Id: ServiceTypePanel.java,v 1.4 2007-09-11 14:54:24 dervin Exp $ 
  */
 public class ServiceTypePanel extends JPanel {
     public static final String JAVA_CLASS_PATH = "java.class.path";
@@ -86,6 +91,7 @@ public class ServiceTypePanel extends JPanel {
     private JPanel stepsPanel = null;
     private JPanel listContainerPanel = null;
     private JPanel inputContainerPanel = null;
+    private JButton configureStepButton = null;
 
 
     public ServiceTypePanel() {
@@ -618,12 +624,13 @@ public class ServiceTypePanel extends JPanel {
     private JPanel getStepOrderButtonPanel() {
         if (stepOrderButtonPanel == null) {
             GridLayout gridLayout2 = new GridLayout();
-            gridLayout2.setRows(2);
+            gridLayout2.setRows(3);
             gridLayout2.setVgap(4);
             gridLayout2.setColumns(1);
             stepOrderButtonPanel = new JPanel();
             stepOrderButtonPanel.setLayout(gridLayout2);
             stepOrderButtonPanel.add(getMoveStepUpButton(), null);
+            stepOrderButtonPanel.add(getConfigureStepButton(), null);
             stepOrderButtonPanel.add(getMoveStepDownButton(), null);
         }
         return stepOrderButtonPanel;
@@ -692,6 +699,31 @@ public class ServiceTypePanel extends JPanel {
             inputContainerPanel.add(getStepInputPanel(), null);
         }
         return inputContainerPanel;
+    }
+    
+    
+    /**
+     * This method initializes configureStepButton  
+     *  
+     * @return javax.swing.JButton  
+     */
+    private JButton getConfigureStepButton() {
+        if (configureStepButton == null) {
+            configureStepButton = new JButton();
+            configureStepButton.setIcon(getEditIcon());
+            configureStepButton.setToolTipText("Configure Step");
+            configureStepButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    ServiceTestStep selectedStep = (ServiceTestStep) getStepsList().getSelectedValue();
+                    if (selectedStep == null) {
+                        JOptionPane.showMessageDialog(ServiceTypePanel.this, "Please select a step");
+                    } else {
+                        configureStep(selectedStep);
+                    }
+                }
+            });
+        }
+        return configureStepButton;
     }
     
     
@@ -817,6 +849,57 @@ public class ServiceTypePanel extends JPanel {
     }
     
     
+    private void configureStep(ServiceTestStep step) {
+        String stepClassname = step.getClassname();
+        try {
+            Class stepClass = Class.forName(stepClassname);
+            AbstractBaseServiceTestStep stepInstance = (AbstractBaseServiceTestStep) stepClass.newInstance();
+            Set<String> requiredParameters = stepInstance.getRequiredConfigurationProperties();
+            ServiceTestStepConfigurationProperty[] currentConfigProperties = step.getConfigurationProperty();
+            if (currentConfigProperties == null) {
+                currentConfigProperties = new ServiceTestStepConfigurationProperty[0];
+            }
+            // ensure all the required parameters are represented in the configuration
+            Map<String, ServiceTestStepConfigurationProperty> byKey = new HashMap();
+            for (ServiceTestStepConfigurationProperty prop : currentConfigProperties) {
+                if (requiredParameters.contains(prop.getKey())) {
+                    byKey.put(prop.getKey(), prop);
+                }
+            }
+            for (String key : requiredParameters) {
+                if (!byKey.keySet().contains(key)) {
+                    ServiceTestStepConfigurationProperty prop = new ServiceTestStepConfigurationProperty();
+                    prop.setKey(key);
+                    byKey.put(key, prop);
+                }
+            }
+            // build a properties instance with the current step's configuration
+            Properties currentConfiguration = new Properties();
+            for (ServiceTestStepConfigurationProperty prop : byKey.values()) {
+                String value = "";
+                if (prop.getValue() != null) {
+                    value = prop.getValue();
+                }
+                currentConfiguration.setProperty(prop.getKey(), value);
+            }
+            // fire up the dialog
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(ServiceTypePanel.this);
+            Properties editedConfiguration = StepConfigurationDialog.configureStep(parentFrame, currentConfiguration);
+            ServiceTestStepConfigurationProperty[] editedProperties = new ServiceTestStepConfigurationProperty[editedConfiguration.size()];
+            String[] editedKeys = editedConfiguration.keySet().toArray(new String[0]);
+            for (int i = 0; i < editedKeys.length; i++) {
+                editedProperties[i] = new ServiceTestStepConfigurationProperty();
+                editedProperties[i].setKey(editedKeys[i]);
+                editedProperties[i].setValue(editedConfiguration.getProperty(editedKeys[i]));
+            }
+            step.setConfigurationProperty(editedProperties);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(ServiceTypePanel.this, "Error initializing step configuration: " + ex.getMessage());
+        }
+    }
+    
+    
     public Icon getUpIcon() {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/go-up.png"));
     }
@@ -824,5 +907,10 @@ public class ServiceTypePanel extends JPanel {
 
     public Icon getDownIcon() {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/go-down.png"));
+    }
+    
+    
+    public Icon getEditIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/modify.png"));
     }
 }

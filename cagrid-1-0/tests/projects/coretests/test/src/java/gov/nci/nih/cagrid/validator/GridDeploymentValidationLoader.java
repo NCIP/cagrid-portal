@@ -7,6 +7,7 @@ import gov.nci.nih.cagrid.validator.steps.base.TestServiceUpStep;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceTestStep;
+import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceTestStepConfigurationProperty;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ValidationDescription;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Vector;
 
 import javax.xml.namespace.QName;
@@ -33,7 +35,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 3:04:08 PM
- * @version $Id: GridDeploymentValidationLoader.java,v 1.6 2007-09-07 17:25:08 dervin Exp $ 
+ * @version $Id: GridDeploymentValidationLoader.java,v 1.7 2007-09-11 14:54:24 dervin Exp $ 
  */
 public class GridDeploymentValidationLoader {
     
@@ -104,12 +106,13 @@ public class GridDeploymentValidationLoader {
     private static Vector<Step> createStepsForServiceType(ServiceDescription service, ValidationDescription desc) 
         throws ValidationLoadingException {
         Vector<Step> steps = new Vector();
-        Class[] constructorArgTypes = new Class[] {String.class, File.class};
+        Class[] constructorArgTypes = new Class[] {String.class, File.class, Properties.class};
         String serviceTypeName = service.getServiceType();
         for (ServiceType type : desc.getServiceType()) {
             if (type.getTypeName().equals(serviceTypeName)) {
                 for (ServiceTestStep testStep : type.getTestStep()) {
                     String classname = testStep.getClassname();
+                    // find the test step class
                     Class stepClass = null;
                     try {
                         stepClass = Class.forName(classname);
@@ -118,14 +121,28 @@ public class GridDeploymentValidationLoader {
                             "Could not service type " + serviceTypeName + " test class " 
                             + classname + ": " + ex.getMessage(), ex);
                     }
+                    // verify its inheritance
                     if (!AbstractBaseServiceTestStep.class.isAssignableFrom(stepClass)) {
                         throw new ValidationLoadingException(
                             "The service type " + serviceTypeName + " test class " +
                             classname + " does not extend " + AbstractBaseServiceTestStep.class.getName());
                     }
+                    // produce the configuration properties for the step
+                    Properties configuration = new Properties();
+                    if (testStep.getConfigurationProperty() != null) {
+                        for (ServiceTestStepConfigurationProperty prop : testStep.getConfigurationProperty()) {
+                            String value = "";
+                            if (prop.getValue() != null) {
+                                value = prop.getValue();
+                            }
+                            configuration.setProperty(prop.getKey(), value);
+                        }
+                    }
+                    // call the constructor
                     Object[] constructorArgs = {
                         service.getServiceUrl().toString(),
-                        getTempDirForService(service.getServiceName())
+                        getTempDirForService(service.getServiceName()),
+                        configuration
                     };
                     try {
                         Constructor stepConstructor = stepClass.getConstructor(constructorArgTypes);
