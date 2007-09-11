@@ -4,7 +4,10 @@
 package org.cagrid.installer;
 
 import java.util.Map;
+import java.util.MissingResourceException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.steps.PropertyConfigurationStep;
@@ -28,6 +31,8 @@ import org.pietschy.wizard.models.Condition;
  */
 public class CaGridSourceComponentInstaller extends
 		AbstractDownloadedComponentInstaller {
+	
+	private static final Log logger = LogFactory.getLog(CaGridSourceComponentInstaller.class);
 
 	/**
 	 * 
@@ -142,8 +147,14 @@ public class CaGridSourceComponentInstaller extends
 						.getMessage("select.target.grid.desc"));
 		LabelValuePair[] targetGridPairs = new LabelValuePair[targetGrids.length];
 		for (int i = 0; i < targetGrids.length; i++) {
-			targetGridPairs[i] = new LabelValuePair(model
-					.getMessage("target.grid." + targetGrids[i] + ".label"),
+			String targetGridLabel = targetGrids[i];
+			try{
+				targetGridLabel = model
+				.getMessage("target.grid." + targetGrids[i] + ".label"); 
+			}catch(MissingResourceException ex){
+				logger.warn("Couldn't find label for target grid '" + targetGrids[i] + "'.");
+			}
+			targetGridPairs[i] = new LabelValuePair(targetGridLabel,
 					targetGrids[i]);
 		}
 		selectTargetGridStep.getOptions().add(
