@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.dorian.client.DorianClient;
 
 import java.io.File;
 import java.rmi.RemoteException;
+import java.util.Properties;
 
 import org.apache.axis.types.URI.MalformedURIException;
 
@@ -16,15 +17,15 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 4:04:29 PM
- * @version $Id: BaseDorianTestStep.java,v 1.1 2007-09-10 15:00:31 dervin Exp $
+ * @version $Id: BaseDorianTestStep.java,v 1.2 2007-09-11 14:53:56 dervin Exp $
  */
 public abstract class BaseDorianTestStep extends AbstractBaseServiceTestStep {
     
     private DorianClient dorianClient = null;
 
     
-    public BaseDorianTestStep(String serviceURL, File tempDir) {
-        super(serviceURL, tempDir);
+    public BaseDorianTestStep(String serviceURL, File tempDir, Properties configuration) {
+        super(serviceURL, tempDir, configuration);
     }
 
 

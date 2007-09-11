@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 
 import java.io.File;
 import java.rmi.RemoteException;
+import java.util.Properties;
 
 import org.apache.axis.types.URI.MalformedURIException;
 
@@ -15,14 +16,20 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Sep 10, 2007 10:53:52 AM
- * @version $Id: BaseCadsrTestStep.java,v 1.1 2007-09-10 14:57:05 dervin Exp $ 
+ * @version $Id: BaseCadsrTestStep.java,v 1.2 2007-09-11 14:53:56 dervin Exp $ 
  */
 public abstract class BaseCadsrTestStep extends AbstractBaseServiceTestStep {
     
     private CaDSRServiceClient cadsrClient = null;
+    
+    
+    public BaseCadsrTestStep() {
+        super();
+    }
+    
 
-    public BaseCadsrTestStep(String serviceUrl, File tempDir) {
-        super(serviceUrl, tempDir);
+    public BaseCadsrTestStep(String serviceUrl, File tempDir, Properties configuration) {
+        super(serviceUrl, tempDir, configuration);
     }
 
 

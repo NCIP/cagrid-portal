@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
 import java.util.List;
+import java.util.Properties;
 
 import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.Namespace;
@@ -17,12 +18,12 @@ import org.projectmobius.gme.XMLDataModelService;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 4:37:36 PM
- * @version $Id: SchemaDownloadStep.java,v 1.3 2007-09-07 14:19:35 dervin Exp $ 
+ * @version $Id: SchemaDownloadStep.java,v 1.4 2007-09-11 14:53:56 dervin Exp $ 
  */
 public class SchemaDownloadStep extends BaseGmeTestStep {
     
-     public SchemaDownloadStep(String serviceUrl, File tempDir) {
-        super(serviceUrl, tempDir);
+     public SchemaDownloadStep(String serviceUrl, File tempDir, Properties configuration) {
+        super(serviceUrl, tempDir, configuration);
     }
 
 
