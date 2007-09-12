@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.dorian.service.ca;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
-import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
@@ -277,21 +277,42 @@ public class CredentialsManager extends LoggingObject {
 
 
 	private synchronized void buildDatabase() throws DorianInternalFault {
-		if (!dbBuilt) {
-			if (!this.db.tableExists(CREDENTIALS_TABLE)) {
-				String users = "CREATE TABLE " + CREDENTIALS_TABLE + " (" + "ALIAS VARCHAR(255) NOT NULL PRIMARY KEY,"
-					+ " SERIAL_NUMBER BIGINT NOT NULL," + "CERTIFICATE TEXT NOT NULL," + "PRIVATE_KEY TEXT NOT NULL,"
-					+ "INDEX document_index (ALIAS));";
-				db.update(users);
+		try {
+			if (!dbBuilt) {
+				if (!this.db.tableExists(CREDENTIALS_TABLE)) {
+					String users = "CREATE TABLE " + CREDENTIALS_TABLE + " ("
+						+ "ALIAS VARCHAR(255) NOT NULL PRIMARY KEY," + " SERIAL_NUMBER BIGINT NOT NULL,"
+						+ "CERTIFICATE TEXT NOT NULL," + "PRIVATE_KEY TEXT NOT NULL,"
+						+ "INDEX document_index (ALIAS));";
+					db.update(users);
+				}
+				this.dbBuilt = true;
 			}
-			this.dbBuilt = true;
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected database error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
 		}
 	}
 
 
 	public void clearDatabase() throws DorianInternalFault {
 		buildDatabase();
-		db.update("delete from " + CREDENTIALS_TABLE);
+		try {
+			db.update("delete from " + CREDENTIALS_TABLE);
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected database error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 }

@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.dorian.service.upgrader;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
-import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.PropertyManager;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class Upgrader {
 	public Upgrader(DorianConfiguration conf) throws Exception {
 		this.conf = conf;
 		this.log = LogFactory.getLog(this.getClass().getName());
-		Database db = new Database(conf.getDatabase(), conf.getDorianInternalId());
+		Database db = new Database(conf.getDatabaseConfiguration(), conf.getDorianInternalId());
 		db.createDatabaseIfNeeded();
 		this.properties = new PropertyManager(db);
 		buildUpgraders();

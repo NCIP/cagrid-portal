@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.CertificateAuthorityType;
@@ -88,7 +89,7 @@ public class Dorian extends LoggingObject {
 			this.configuration = conf;
 			UserManager.ADMIN_USER_ID = IDP_ADMIN_USER_ID;
 			UserManager.ADMIN_PASSWORD = IDP_ADMIN_PASSWORD;
-			this.db = new Database(conf.getDatabase(), getConfiguration().getDorianInternalId());
+			this.db = new Database(conf.getDatabaseConfiguration(), getConfiguration().getDorianInternalId());
 			this.db.createDatabaseIfNeeded();
 			this.properties = new PropertyManager(this.db);
 

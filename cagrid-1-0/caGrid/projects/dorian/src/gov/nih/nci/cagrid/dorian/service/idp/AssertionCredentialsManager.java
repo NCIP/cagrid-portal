@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
-import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.WrappedKey;
 import gov.nih.nci.cagrid.dorian.service.ca.WrappingCertificateAuthority;
@@ -115,7 +115,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 	public synchronized void storeCredentials(X509Certificate cert, PrivateKey key) throws Exception {
 		this.buildDatabase();
 		Connection c = null;
-		
+
 		try {
 			if (!hasAssertingCredentials()) {
 				if (ca instanceof WrappingCertificateAuthority) {
@@ -313,7 +313,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 			c = db.getConnection();
 			PreparedStatement s = c
 				.prepareStatement("select CERTIFICATE from " + CREDENTIALS_TABLE + " where ALIAS= ?");
-			s.setString(1,  CERT_DN);
+			s.setString(1, CERT_DN);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				String certStr = rs.getString("CERTIFICATE");
@@ -416,7 +416,17 @@ public class AssertionCredentialsManager extends LoggingObject {
 
 	public void clearDatabase() throws DorianInternalFault {
 		this.buildDatabase();
-		db.update("delete from " + CREDENTIALS_TABLE);
+		try {
+			db.update("delete from " + CREDENTIALS_TABLE);
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected database error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 }

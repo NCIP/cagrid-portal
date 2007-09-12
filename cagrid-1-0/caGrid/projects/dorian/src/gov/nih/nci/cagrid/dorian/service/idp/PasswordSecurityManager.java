@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.PasswordSecurityPolicy;
 import gov.nih.nci.cagrid.dorian.idp.bean.PasswordSecurity;
 import gov.nih.nci.cagrid.dorian.idp.bean.PasswordStatus;
-import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 
 import java.sql.Connection;
@@ -22,7 +22,6 @@ public class PasswordSecurityManager extends LoggingObject {
 	private static final String CONSECUTIVE_INVALID_LOGINS = "CONSECUTIVE_INVALID_LOGINS";
 	private static final String LOCK_OUT_EXPIRATION = "LOCK_OUT_EXPIRATION";
 	private static final String TOTAL_INVALID_LOGINS = "TOTAL_INVALID_LOGINS";
-	
 
 	private Database db;
 
@@ -237,20 +236,40 @@ public class PasswordSecurityManager extends LoggingObject {
 
 	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
-			if (!this.db.tableExists(TABLE)) {
-				String table = "CREATE TABLE " + TABLE + " (" + UID + " VARCHAR(255) NOT NULL PRIMARY KEY,"
-					+ CONSECUTIVE_INVALID_LOGINS + " BIGINT NOT NULL," + TOTAL_INVALID_LOGINS + " BIGINT NOT NULL,"
-					+ LOCK_OUT_EXPIRATION + " BIGINT NOT NULL," + "INDEX document_index (UID));";
-				db.update(table);
+			try {
+				if (!this.db.tableExists(TABLE)) {
+					String table = "CREATE TABLE " + TABLE + " (" + UID + " VARCHAR(255) NOT NULL PRIMARY KEY,"
+						+ CONSECUTIVE_INVALID_LOGINS + " BIGINT NOT NULL," + TOTAL_INVALID_LOGINS + " BIGINT NOT NULL,"
+						+ LOCK_OUT_EXPIRATION + " BIGINT NOT NULL," + "INDEX document_index (UID));";
+					db.update(table);
 
+				}
+				this.dbBuilt = true;
+			} catch (Exception e) {
+				logError(e.getMessage(), e);
+				DorianInternalFault fault = new DorianInternalFault();
+				fault.setFaultString("An unexpected database error occurred.");
+				FaultHelper helper = new FaultHelper(fault);
+				helper.addFaultCause(e);
+				fault = (DorianInternalFault) helper.getFault();
+				throw fault;
 			}
-			this.dbBuilt = true;
 		}
 	}
 
 
 	public void clearDatabase() throws DorianInternalFault {
 		this.buildDatabase();
-		db.update("drop TABLE " + TABLE);
+		try {
+			db.update("drop TABLE " + TABLE);
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected database error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 }

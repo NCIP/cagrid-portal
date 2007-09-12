@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.database.Database;
+import gov.nih.nci.cagrid.database.DatabaseException;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
@@ -11,7 +13,6 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.PropertyManager;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityFault;
@@ -438,8 +439,7 @@ public class UserManager extends LoggingObject {
 	}
 
 
-	public synchronized IFSUser addUser(TrustedIdP idp, IFSUser user) throws DorianInternalFault,
-		InvalidUserFault {
+	public synchronized IFSUser addUser(TrustedIdP idp, IFSUser user) throws DorianInternalFault, InvalidUserFault {
 		this.buildDatabase();
 		if (!determineIfUserExists(user.getIdPId(), user.getUID())) {
 			X509Certificate cert = createUserCredentials(idp, user.getUID());
@@ -730,7 +730,17 @@ public class UserManager extends LoggingObject {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
-		db.update("DROP TABLE IF EXISTS " + USERS_TABLE);
+		try {
+			db.update("DROP TABLE IF EXISTS " + USERS_TABLE);
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected database error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
 		this.tm.clearDatabase();
 		this.dbBuilt = false;
 	}
@@ -738,50 +748,61 @@ public class UserManager extends LoggingObject {
 
 	public void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
-			if (!this.db.tableExists(USERS_TABLE)) {
-				String users = "CREATE TABLE " + USERS_TABLE + " (" + "IDP_ID INT NOT NULL,"
-					+ "UID VARCHAR(255) NOT NULL," + "FIRST_NAME VARCHAR(255) NOT NULL,"
-					+ "LAST_NAME VARCHAR(255) NOT NULL," + "GID VARCHAR(255) NOT NULL,"
-					+ "STATUS VARCHAR(50) NOT NULL," + "EMAIL VARCHAR(255) NOT NULL, " + "INDEX document_index (UID));";
-				db.update(users);
-				properties.setCurrentVersion();
-				try {
+			try {
+				if (!this.db.tableExists(USERS_TABLE)) {
+					String users = "CREATE TABLE " + USERS_TABLE + " (" + "IDP_ID INT NOT NULL,"
+						+ "UID VARCHAR(255) NOT NULL," + "FIRST_NAME VARCHAR(255) NOT NULL,"
+						+ "LAST_NAME VARCHAR(255) NOT NULL," + "GID VARCHAR(255) NOT NULL,"
+						+ "STATUS VARCHAR(50) NOT NULL," + "EMAIL VARCHAR(255) NOT NULL, "
+						+ "INDEX document_index (UID));";
+					db.update(users);
+					properties.setCurrentVersion();
+					try {
 
-					if (defaults.getDefaultIdP() != null) {
-						TrustedIdP idp = tm.addTrustedIdP(defaults.getDefaultIdP());
-						IFSUser usr = defaults.getDefaultUser();
-						if (usr != null) {
-							usr.setIdPId(idp.getId());
-							this.addUser(idp, usr);
-							usr.setUserStatus(IFSUserStatus.Active);
-							this.updateUser(usr);
+						if (defaults.getDefaultIdP() != null) {
+							TrustedIdP idp = tm.addTrustedIdP(defaults.getDefaultIdP());
+							IFSUser usr = defaults.getDefaultUser();
+							if (usr != null) {
+								usr.setIdPId(idp.getId());
+								this.addUser(idp, usr);
+								usr.setUserStatus(IFSUserStatus.Active);
+								this.updateUser(usr);
+							} else {
+								DorianInternalFault fault = new DorianInternalFault();
+								fault
+									.setFaultString("Unexpected error initializing the User Manager, No initial IFS user specified.");
+								throw fault;
+							}
 						} else {
 							DorianInternalFault fault = new DorianInternalFault();
 							fault
-								.setFaultString("Unexpected error initializing the User Manager, No initial IFS user specified.");
+								.setFaultString("Unexpected error initializing the User Manager, No initial trusted IdP specified.");
 							throw fault;
 						}
-					} else {
+
+					} catch (DorianInternalFault e) {
+						throw e;
+
+					} catch (Exception e) {
 						DorianInternalFault fault = new DorianInternalFault();
-						fault
-							.setFaultString("Unexpected error initializing the User Manager, No initial trusted IdP specified.");
+						fault.setFaultString("Unexpected error initializing the User Manager.");
+						FaultHelper helper = new FaultHelper(fault);
+						helper.addDescription(Utils.getExceptionMessage(e));
+						helper.addFaultCause(e);
+						fault = (DorianInternalFault) helper.getFault();
 						throw fault;
+
 					}
 
-				} catch (DorianInternalFault e) {
-					throw e;
-
-				} catch (Exception e) {
-					DorianInternalFault fault = new DorianInternalFault();
-					fault.setFaultString("Unexpected error initializing the User Manager.");
-					FaultHelper helper = new FaultHelper(fault);
-					helper.addDescription(Utils.getExceptionMessage(e));
-					helper.addFaultCause(e);
-					fault = (DorianInternalFault) helper.getFault();
-					throw fault;
-
 				}
-
+			} catch (DatabaseException e) {
+				logError(e.getMessage(), e);
+				DorianInternalFault fault = new DorianInternalFault();
+				fault.setFaultString("An unexpected database error occurred.");
+				FaultHelper helper = new FaultHelper(fault);
+				helper.addFaultCause(e);
+				fault = (DorianInternalFault) helper.getFault();
+				throw fault;
 			}
 			this.dbBuilt = true;
 		}

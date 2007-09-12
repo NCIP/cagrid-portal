@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.dorian.test;
 
+import gov.nih.nci.cagrid.database.Database;
+import gov.nih.nci.cagrid.database.DatabaseConfiguration;
 import gov.nih.nci.cagrid.dorian.conf.AccountPolicies;
 import gov.nih.nci.cagrid.dorian.conf.AccountPolicy;
 import gov.nih.nci.cagrid.dorian.conf.CertificateAuthorityType;
@@ -7,7 +9,6 @@ import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
 import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.DBCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.EracomCertificateAuthority;
@@ -48,9 +49,9 @@ public class Utils {
 		if (db == null) {
 			InputStream resource = TestCase.class
 					.getResourceAsStream(Constants.DB_CONFIG);
-			gov.nih.nci.cagrid.dorian.conf.Database conf = (gov.nih.nci.cagrid.dorian.conf.Database) gov.nih.nci.cagrid.common.Utils
+			DatabaseConfiguration conf = (DatabaseConfiguration) gov.nih.nci.cagrid.common.Utils
 					.deserializeObject(new InputStreamReader(resource),
-							gov.nih.nci.cagrid.dorian.conf.Database.class);
+						DatabaseConfiguration.class);
 			db = new Database(conf, DB);
 			db.createDatabaseIfNeeded();
 		}

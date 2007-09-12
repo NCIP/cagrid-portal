@@ -44,7 +44,7 @@
 
 	<!-- At parse time we clean out the custom ant task build, to be sure it gets built at parse time -->
 	<delete failonerror="false" dir="${anttask.classes.dir}" />
-    
+
 
 	<!-- =============================================================== -->
 	<!-- Bootstrap the build by setting up the structure and building    -->
@@ -65,6 +65,21 @@
 			<artifact refid="test.coverage.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- SERVICE TOOLS                                                   -->
+	<!-- =============================================================== -->
+	<target name="build-service-tools" depends="prepare" description="Builds Service Tools">
+		<resolveDependencies extdir="${projects.dir}/service-tools/ext">
+			<artifact refid="cagrid.properties" />
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.test.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/service-tools" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
@@ -243,7 +258,7 @@
 			<artifact refid="introduce.jars" />
 			<artifact refid="ws.enum.jars" />
 			<artifact refid="ws.enum.schemas" />
-		    <artifact refid="caCORE.jars" />
+			<artifact refid="caCORE.jars" />
 			<artifact refid="validation.jars" />
 		</resolveDependencies>
 		<resolveDependencies targetdir="${projects.dir}/cabigextensions/extensions/sdk_discovery">
@@ -398,7 +413,7 @@
 	<target name="build-dorian" depends="configure-dorian" description="Builds the dorian project">
 		<resolveDependencies extdir="${projects.dir}/dorian/ext">
 			<artifact refid="cagrid.properties" />
-			<artifact refid="core.jars" />
+			<artifact refid="service.tools.jars" />
 			<artifact refid="grape.jars" />
 			<artifact refid="mds.jars" />
 			<artifact refid="common.test.jars" />
@@ -418,6 +433,9 @@
 		<delete dir="${projects.dir}/dorian/schema/Dorian/xsd" />
 		<resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
 			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
+			<artifact refid="service.tools.schemas" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -513,7 +531,7 @@
 	<!-- Sync GTS                                                        -->
 	<!-- =============================================================== -->
 	<target name="configure-syncgts" depends="prepare">
-	    <delete dir="${projects.dir}/syncgts/ext/resources/certificates" />
+		<delete dir="${projects.dir}/syncgts/ext/resources/certificates" />
 		<resolveDependencies extdir="${projects.dir}/syncgts/ext">
 			<artifact refid="service_urls.properties" />
 			<artifact refid="gts.sync.description" />
@@ -605,7 +623,7 @@
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
-    
+
 	<!-- =============================================================== -->
 	<!-- SERVICE SECURITY PROVIDER:                                      -->
 	<!-- =============================================================== -->
@@ -660,7 +678,7 @@
 			<artifact refid="wizard.jars" />
 		</resolveDependencies>
 
-        <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
+		<ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
@@ -682,7 +700,7 @@
 			<artifact refid="graph.jars" />
 			<artifact refid="security.metadata.schemas" />
 			<artifact refid="introduce.core.test.jars" />
-			<artifact refid="introduce.jars"/>
+			<artifact refid="introduce.jars" />
 			<artifact refid="ws.enum.jars" />
 			<artifact refid="ws.enum.schemas" />
 			<artifact refid="bdt.jars" />
@@ -690,8 +708,8 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	
-	
+
+
 	<!-- =============================================================== -->
 	<!-- CAGRID DataServiceExtensions:                                   -->
 	<!-- =============================================================== -->
@@ -721,8 +739,8 @@
 			<artifact refid="validation.jars" />
 			<artifact refid="ws.enum.jars" />
 			<artifact refid="bdt.jars" />
-			<artifact refid="data.jars"/>
-			<artifact refid="data.schemas"/>
+			<artifact refid="data.jars" />
+			<artifact refid="data.schemas" />
 		</resolveDependencies>
 		<!-- query processor jars required by the styles -->
 		<resolveDependencies extdir="${projects.dir}/dataExtensions/extension/sdk31">
@@ -781,7 +799,7 @@
 		<ant dir="${projects.dir}/ws-transfer" inheritAll="false" antfile="build.xml" target="deploy" />
 	</target>
 
-    
+
 	<!-- =============================================================== -->
 	<!-- CAGRID SDK Data Service Query Processor:                        -->
 	<!-- =============================================================== -->
@@ -955,8 +973,8 @@
 			</sequential>
 		</for>
 	</target>
-	
-	
+
+
 	<!-- ============================================================== -->
 	<!-- Cleans up generated stuff                                      -->
 	<!-- ============================================================== -->
@@ -969,9 +987,9 @@
 
 		<for list="${projects.list}" parallel="true" param="project.name" trim="true">
 			<sequential>
-				<echo message="Cleaning project @{project.name}." /> 
+				<echo message="Cleaning project @{project.name}." />
 				<delete dir="${projects.dir}/@{project.name}/ext" />
-				<ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />			    
+				<ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />
 			</sequential>
 		</for>
 	</target>
@@ -990,13 +1008,13 @@
 	<target name="all" depends="prepare, clean" description="Builds the entire application">
 		<for list="${projects.list}" parallel="false" param="project.name" trim="true">
 			<sequential>
-			    <stopwatch name="@{project.name}"/> 
+				<stopwatch name="@{project.name}" />
 				<echo message="=====================================================================================" />
 				<echo message="Building project @{project.name}." />
 				<echo message="=====================================================================================" />
 				<runtarget target="build-@{project.name}" />
 				<echo message="Built project @{project.name}." />
-			    <stopwatch name="@{project.name}" action="total"/> 
+				<stopwatch name="@{project.name}" action="total" />
 			</sequential>
 		</for>
 		<runtarget target="installIntroduceExtensions" />

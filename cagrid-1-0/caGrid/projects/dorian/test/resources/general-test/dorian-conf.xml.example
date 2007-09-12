@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DorianConfiguration xmlns="http://cagrid.nci.nih.gov/dorian/conf"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:dorian="http://cagrid.nci.nih.gov/dorian/conf">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <DorianInternalId>test_dorian</DorianInternalId>
-    <database>
+   <DatabaseConfiguration>
         <host>localhost</host>
         <port>3306</port>
         <username>root</username>
         <password></password>
-    </database>
+    </DatabaseConfiguration>
     <IdentityProviderConfiguration>
         <IdentityProviderName>Dorian IdP</IdentityProviderName>
         <UIDLength min="4" max="15"/>

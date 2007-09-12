@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.bean.X509Certificate;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.CredentialPolicy;
@@ -11,7 +12,6 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate;
 import gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey;
-import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateRequestFault;

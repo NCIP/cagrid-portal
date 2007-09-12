@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.dorian.events;
+package gov.nih.nci.cagrid.events;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -186,15 +186,8 @@
 	<target name="postStubs">
 		<!-- DORIAN CONFIGURATION SCHEMA -->
 		<ant antfile="${build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}" />
+			<property name="source.stubs.dir" location="${schema.dest}/Dorian" />
 			<property name="wsdl.file" value="DorianConfiguration.wsdl" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
-			<property name="ns.excludes" value="${GT4.ns.excludes}" />
-		</ant>
-		<!-- DORIAN EVENTS SCHEMA -->
-		<ant antfile="${build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}" />
-			<property name="wsdl.file" value="DorianEvents.wsdl" />
 			<property name="target.stubs.dir" location="${stubs.src}" />
 			<property name="ns.excludes" value="${GT4.ns.excludes}" />
 		</ant>

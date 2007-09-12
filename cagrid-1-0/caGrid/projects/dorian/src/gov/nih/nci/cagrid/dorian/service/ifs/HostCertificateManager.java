@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.bean.X509Certificate;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.PreparedStatementBuilder;
@@ -13,7 +14,6 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate;
 import gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey;
-import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault;
@@ -732,12 +732,25 @@ public class HostCertificateManager extends LoggingObject {
 
 	public void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
-			if (!this.db.tableExists(TABLE)) {
-				String certificates = "CREATE TABLE " + TABLE + " (" + ID + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-					+ SERIAL + " BIGINT," + HOST + " VARCHAR(255) NOT NULL," + SUBJECT + " VARCHAR(255)," + STATUS
-					+ " VARCHAR(15) NOT NULL," + OWNER + " VARCHAR(255) NOT NULL," + EXPIRATION + " BIGINT,"
-					+ CERTIFICATE + " TEXT," + PUBLIC_KEY + " TEXT NOT NULL, " + "INDEX document_index (ID));";
-				db.update(certificates);
+			try {
+				if (!this.db.tableExists(TABLE)) {
+
+					String certificates = "CREATE TABLE " + TABLE + " (" + ID
+						+ " INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + SERIAL + " BIGINT," + HOST
+						+ " VARCHAR(255) NOT NULL," + SUBJECT + " VARCHAR(255)," + STATUS + " VARCHAR(15) NOT NULL,"
+						+ OWNER + " VARCHAR(255) NOT NULL," + EXPIRATION + " BIGINT," + CERTIFICATE + " TEXT,"
+						+ PUBLIC_KEY + " TEXT NOT NULL, " + "INDEX document_index (ID));";
+					db.update(certificates);
+
+				}
+			} catch (Exception e) {
+				logError(e.getMessage(), e);
+				DorianInternalFault fault = new DorianInternalFault();
+				fault.setFaultString("An unexpected database error occurred.");
+				FaultHelper helper = new FaultHelper(fault);
+				helper.addFaultCause(e);
+				fault = (DorianInternalFault) helper.getFault();
+				throw fault;
 			}
 			this.dbBuilt = true;
 		}
@@ -746,7 +759,17 @@ public class HostCertificateManager extends LoggingObject {
 
 	public void clearDatabase() throws DorianInternalFault {
 		buildDatabase();
-		db.update("delete from " + TABLE);
+		try {
+			db.update("delete from " + TABLE);
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected database error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 }

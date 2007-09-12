@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
@@ -9,7 +10,6 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault;
@@ -87,29 +87,51 @@ public class TrustedIdPManager extends LoggingObject {
 
 	public void clearDatabase() throws DorianInternalFault {
 		buildDatabase();
-		db.update("DROP TABLE IF EXISTS " + TRUST_MANAGER_TABLE);
-		db.update("DROP TABLE IF EXISTS " + AUTH_METHODS_TABLE);
-		dbBuilt = false;
+		try {
+			db.update("DROP TABLE IF EXISTS " + TRUST_MANAGER_TABLE);
+			db.update("DROP TABLE IF EXISTS " + AUTH_METHODS_TABLE);
+			dbBuilt = false;
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected database error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 
 	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
-			if (!this.db.tableExists(TRUST_MANAGER_TABLE)) {
-				String trust = "CREATE TABLE " + TRUST_MANAGER_TABLE + " ("
-					+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + "NAME VARCHAR(255) NOT NULL,"
-					+ "IDP_SUBJECT VARCHAR(255) NOT NULL," + "STATUS VARCHAR(50) NOT NULL,"
-					+ "POLICY_CLASS VARCHAR(255) NOT NULL," + "IDP_CERTIFICATE TEXT NOT NULL,"
-					+ "USER_ID_ATT_NS TEXT NOT NULL," + "USER_ID_ATT_NAME TEXT NOT NULL,"
-					+ "FIRST_NAME_ATT_NS TEXT NOT NULL," + "FIRST_NAME_ATT_NAME TEXT NOT NULL,"
-					+ "LAST_NAME_ATT_NS TEXT NOT NULL," + "LAST_NAME_ATT_NAME TEXT NOT NULL,"
-					+ "EMAIL_ATT_NS TEXT NOT NULL," + "EMAIL_ATT_NAME TEXT NOT NULL," + "INDEX document_index (NAME));";
-				db.update(trust);
+			try {
+				if (!this.db.tableExists(TRUST_MANAGER_TABLE)) {
+					String trust = "CREATE TABLE " + TRUST_MANAGER_TABLE + " ("
+						+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + "NAME VARCHAR(255) NOT NULL,"
+						+ "IDP_SUBJECT VARCHAR(255) NOT NULL," + "STATUS VARCHAR(50) NOT NULL,"
+						+ "POLICY_CLASS VARCHAR(255) NOT NULL," + "IDP_CERTIFICATE TEXT NOT NULL,"
+						+ "USER_ID_ATT_NS TEXT NOT NULL," + "USER_ID_ATT_NAME TEXT NOT NULL,"
+						+ "FIRST_NAME_ATT_NS TEXT NOT NULL," + "FIRST_NAME_ATT_NAME TEXT NOT NULL,"
+						+ "LAST_NAME_ATT_NS TEXT NOT NULL," + "LAST_NAME_ATT_NAME TEXT NOT NULL,"
+						+ "EMAIL_ATT_NS TEXT NOT NULL," + "EMAIL_ATT_NAME TEXT NOT NULL,"
+						+ "INDEX document_index (NAME));";
+					db.update(trust);
 
-				String methods = "CREATE TABLE " + AUTH_METHODS_TABLE + " ("
-					+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + "IDP_ID INT NOT NULL,"
-					+ "METHOD VARCHAR(255) NOT NULL," + "INDEX document_index (ID));";
-				db.update(methods);
+					String methods = "CREATE TABLE " + AUTH_METHODS_TABLE + " ("
+						+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + "IDP_ID INT NOT NULL,"
+						+ "METHOD VARCHAR(255) NOT NULL," + "INDEX document_index (ID));";
+					db.update(methods);
+				}
+
+			} catch (Exception e) {
+				logError(e.getMessage(), e);
+				DorianInternalFault fault = new DorianInternalFault();
+				fault.setFaultString("An unexpected database error occurred.");
+				FaultHelper helper = new FaultHelper(fault);
+				helper.addFaultCause(e);
+				fault = (DorianInternalFault) helper.getFault();
+				throw fault;
 			}
 			dbBuilt = true;
 		}
@@ -213,7 +235,8 @@ public class TrustedIdPManager extends LoggingObject {
 		}
 		String policy = curr.getUserPolicyClass();
 
-		if ((Utils.clean(idp.getUserPolicyClass()) != null) && (!idp.getUserPolicyClass().equals(curr.getUserPolicyClass()))) {
+		if ((Utils.clean(idp.getUserPolicyClass()) != null)
+			&& (!idp.getUserPolicyClass().equals(curr.getUserPolicyClass()))) {
 			needsUpdate = true;
 			policy = validateAndGetPolicy(idp.getUserPolicyClass()).getClassName();
 		}
@@ -225,7 +248,8 @@ public class TrustedIdPManager extends LoggingObject {
 		X509Certificate currcert = validateAndGetCertificate(curr);
 		String certSubject = currcert.getSubjectDN().getName();
 		String certEncoded = curr.getIdPCertificate();
-		if ((Utils.clean(idp.getIdPCertificate()) != null) && (!idp.getIdPCertificate().equals(curr.getIdPCertificate()))) {
+		if ((Utils.clean(idp.getIdPCertificate()) != null)
+			&& (!idp.getIdPCertificate().equals(curr.getIdPCertificate()))) {
 			if (!isCertificateUnique(idp.getIdPCertificate())) {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 				fault.setFaultString("Cannot update the Trusted IdP, " + idp.getName()
@@ -929,8 +953,18 @@ public class TrustedIdPManager extends LoggingObject {
 
 	public synchronized void removeAllTrustedIdPs() throws DorianInternalFault {
 		buildDatabase();
-		db.update("delete from " + TRUST_MANAGER_TABLE);
-		db.update("delete from " + AUTH_METHODS_TABLE);
+		try {
+			db.update("delete from " + TRUST_MANAGER_TABLE);
+			db.update("delete from " + AUTH_METHODS_TABLE);
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected database error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 }

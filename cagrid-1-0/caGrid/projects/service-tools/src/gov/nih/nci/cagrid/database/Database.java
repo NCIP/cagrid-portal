@@ -1,8 +1,4 @@
-package gov.nih.nci.cagrid.dorian.service;
-
-import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.dorian.common.LoggingObject;
-import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
+package gov.nih.nci.cagrid.database;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -12,28 +8,33 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.6 2007-04-27 19:55:17 langella Exp $
+ * @version $Id: Database.java,v 1.1 2007-09-12 19:52:28 langella Exp $
  */
-public class Database extends LoggingObject {
+public class Database {
 
 	private BasicDataSource root;
 
-	private BasicDataSource dorian = null;
+	private BasicDataSource coreDB = null;
 
 	private String database;
 
 	private boolean dbBuilt = false;
 
-	private gov.nih.nci.cagrid.dorian.conf.Database conf;
+	private DatabaseConfiguration conf;
+
+	private Log log;
 
 
-	public Database(gov.nih.nci.cagrid.dorian.conf.Database conf, String database) throws Exception {
+	public Database(DatabaseConfiguration conf, String database) throws DatabaseException {
+		log = LogFactory.getLog(this.getClass().getName());
 		this.database = database;
 		this.conf = conf;
 		String driver = "com.mysql.jdbc.Driver";
@@ -49,7 +50,7 @@ public class Database extends LoggingObject {
 	}
 
 
-	private void update(BasicDataSource source, String sql) throws DorianInternalFault {
+	private void update(BasicDataSource source, String sql) throws DatabaseException {
 		Connection c = null;
 		Statement s = null;
 		try {
@@ -60,13 +61,8 @@ public class Database extends LoggingObject {
 
 		} catch (SQLException e) {
 			String err = "Unexpected Database Error: " + e.getMessage();
-			logError(e.getMessage(), e);
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString(err);
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
+			log.error(err, e);
+			throw new DatabaseException(err, e);
 		} finally {
 			try {
 				s.close();
@@ -80,7 +76,7 @@ public class Database extends LoggingObject {
 	}
 
 
-	public void createDatabaseIfNeeded() throws DorianInternalFault {
+	public void createDatabaseIfNeeded() throws DatabaseException {
 
 		try {
 			if (!dbBuilt) {
@@ -90,63 +86,53 @@ public class Database extends LoggingObject {
 					// COLLATE ascii_bin");
 					update(this.root, "create database " + database);
 				}
-				if (dorian == null) {
+				if (coreDB == null) {
 					String driver = "com.mysql.jdbc.Driver";
 					String dbURL = "jdbc:mysql://" + conf.getHost() + ":" + conf.getPort() + "/" + database;
-					dorian = new BasicDataSource();
-					dorian.setDriverClassName(driver);
-					dorian.setUsername(conf.getUsername());
-					dorian.setPassword(conf.getPassword());
-					dorian.setUrl(dbURL);
-					dorian.setValidationQuery("select 1");
-					dorian.setTestOnBorrow(true);
+					coreDB = new BasicDataSource();
+					coreDB.setDriverClassName(driver);
+					coreDB.setUsername(conf.getUsername());
+					coreDB.setPassword(conf.getPassword());
+					coreDB.setUrl(dbURL);
+					coreDB.setValidationQuery("select 1");
+					coreDB.setTestOnBorrow(true);
 				}
 				dbBuilt = true;
 			}
 		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("An error occured while trying to create the Dorian database (" + database + ")");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
+			log.error(e.getMessage(), e);
+			throw new DatabaseException(e.getMessage(), e);
 		}
 
 	}
 
 
-	public void destroyDatabase() throws DorianInternalFault {
+	public void destroyDatabase() throws DatabaseException {
 		try {
 			if (databaseExists(database)) {
 				update(this.root, "drop database if exists " + database);
 			}
-			if (dorian != null) {
-				dorian.close();
+			if (coreDB != null) {
+				coreDB.close();
 			}
 			if (root != null) {
 				root.close();
 			}
-			dorian = null;
+			coreDB = null;
 			dbBuilt = false;
 		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("An error occured while trying to destroy the Dorian database (" + database + ")");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
+			log.error(e.getMessage(), e);
+			throw new DatabaseException(e.getMessage(), e);
 		}
 	}
 
 
-	public boolean tableExists(String tableName) throws DorianInternalFault {
+	public boolean tableExists(String tableName) throws DatabaseException {
 		Connection c = null;
 		PreparedStatement stmt = null;
 		ResultSet results = null;
 		try {
-			c = this.dorian.getConnection();
+			c = this.coreDB.getConnection();
 			stmt = c.prepareStatement("SELECT COUNT(*) FROM " + tableName + " WHERE 1 = 2");
 			results = stmt.executeQuery();
 			return true; // if table does exist, no rows will ever be
@@ -155,12 +141,8 @@ public class Database extends LoggingObject {
 			return false; // if table does not exist, an exception will be
 			// thrown
 		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Unexpected Database Error " + e.getMessage());
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			throw (DorianInternalFault) helper.getFault();
+			log.error(e.getMessage(), e);
+			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			try {
 				if (results != null) {
@@ -173,7 +155,7 @@ public class Database extends LoggingObject {
 				log.error(ex.getMessage(), ex);
 			}
 			try {
-				this.dorian.close();
+				this.coreDB.close();
 			} catch (Exception ex) {
 				log.error(ex.getMessage(), ex);
 			}
@@ -182,12 +164,12 @@ public class Database extends LoggingObject {
 	}
 
 
-	public void update(String sql) throws DorianInternalFault {
-		update(dorian, sql);
+	public void update(String sql) throws DatabaseException {
+		update(coreDB, sql);
 	}
 
 
-	public long getLastAutoId(Connection connection) throws DorianInternalFault {
+	public long getLastAutoId(Connection connection) throws DatabaseException {
 		long id = -1;
 		StringBuffer query = new StringBuffer();
 		query.append("select LAST_INSERT_ID()");
@@ -203,13 +185,8 @@ public class Database extends LoggingObject {
 			}
 		} catch (SQLException e) {
 			String err = "Unexpected Database Error: " + e.getMessage();
-			logError(e.getMessage(), e);
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString(err);
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
+			log.error(e.getMessage(), e);
+			throw new DatabaseException(err, e);
 		} finally {
 			try {
 				rs.close();
@@ -225,7 +202,7 @@ public class Database extends LoggingObject {
 	}
 
 
-	private long insertGetId(BasicDataSource source, String sql) throws DorianInternalFault {
+	private long insertGetId(BasicDataSource source, String sql) throws DatabaseException {
 		long id = -2;
 		Connection c = null;
 		Statement s = null;
@@ -238,13 +215,8 @@ public class Database extends LoggingObject {
 				s.close();
 			} catch (SQLException e) {
 				String err = "Unexpected Database Error: " + e.getMessage();
-				logError(e.getMessage(), e);
-				DorianInternalFault fault = new DorianInternalFault();
-				fault.setFaultString(err);
-				FaultHelper helper = new FaultHelper(fault);
-				helper.addFaultCause(e);
-				fault = (DorianInternalFault) helper.getFault();
-				throw fault;
+				log.error(err, e);
+				throw new DatabaseException(err, e);
 			} finally {
 				try {
 					s.close();
@@ -260,8 +232,8 @@ public class Database extends LoggingObject {
 	}
 
 
-	public long insertGetId(String sql) throws DorianInternalFault {
-		return insertGetId(dorian, sql);
+	public long insertGetId(String sql) throws DatabaseException {
+		return insertGetId(coreDB, sql);
 	}
 
 
@@ -273,10 +245,10 @@ public class Database extends LoggingObject {
 	}
 
 
-	public Connection getConnection() throws DorianInternalFault {
+	public Connection getConnection() throws DatabaseException {
 		Connection c = null;
 		try {
-			c = this.dorian.getConnection();
+			c = this.coreDB.getConnection();
 			return c;
 		} catch (Exception e) {
 			try {
@@ -284,22 +256,17 @@ public class Database extends LoggingObject {
 			} catch (Exception ex) {
 			}
 			String err = "Unexpected Database Error: " + e.getMessage();
-			logError(e.getMessage(), e);
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString(err);
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
+			log.error(err, e);
+			throw new DatabaseException(err, e);
 		}
 	}
 
 
-	private boolean databaseExists(String db) throws DorianInternalFault {
+	private boolean databaseExists(String db) throws DatabaseException {
 		boolean exists = false;
 		Connection c = null;
 		ResultSet dbs = null;
-		if (dorian == root) {
+		if (coreDB == root) {
 			return true;
 		}
 		try {
@@ -314,13 +281,8 @@ public class Database extends LoggingObject {
 			}
 			dbs.close();
 		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Unexpected Database Error");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
+			log.error(e.getMessage(), e);
+			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			try {
 				dbs.close();
@@ -336,7 +298,7 @@ public class Database extends LoggingObject {
 
 
 	public int getUsedConnectionCount() {
-		return this.dorian.getNumActive();
+		return this.coreDB.getNumActive();
 	}
 
 

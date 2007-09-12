@@ -2,8 +2,8 @@ package gov.nih.nci.cagrid.dorian.service.tools;
 
 import gov.nih.nci.cagrid.common.IOUtils;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
-import gov.nih.nci.cagrid.dorian.service.Database;
 import gov.nih.nci.cagrid.dorian.service.ca.DBCertificateAuthority;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
@@ -95,7 +95,7 @@ public class CreateCACertificate {
 				String configFile = line.getOptionValue(CONFIG_FILE_OPT);
 				DorianConfiguration c = (DorianConfiguration) Utils.deserializeDocument(configFile,
 					gov.nih.nci.cagrid.dorian.conf.DorianConfiguration.class);
-				Database db = new Database(c.getDatabase(), c
+				Database db = new Database(c.getDatabaseConfiguration(), c
 						.getDorianInternalId());
 				db.createDatabaseIfNeeded();
 				DBCertificateAuthority ca = new DBCertificateAuthority(db, c.getDorianCAConfiguration());

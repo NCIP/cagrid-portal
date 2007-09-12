@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.dorian.service.Database;
+import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 
 import java.sql.Connection;
@@ -250,25 +250,46 @@ public class GroupManager {
 
 	public void clearDatabase() throws DorianInternalFault {
 		buildDatabase();
-		db.update("DROP TABLE IF EXISTS " + GROUPS_TABLE);
-		db.update("DROP TABLE IF EXISTS " + MEMBERS_TABLE);
-		dbBuilt = false;
+		try {
+			db.update("DROP TABLE IF EXISTS " + GROUPS_TABLE);
+			db.update("DROP TABLE IF EXISTS " + MEMBERS_TABLE);
+			dbBuilt = false;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("An unexpected database error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 
 	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
-			if (!this.db.tableExists(GROUPS_TABLE)) {
-				String groups = "CREATE TABLE " + GROUPS_TABLE + " (" + GROUP_ID_FIELD
-					+ " INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + GROUP_NAME_FIELD + " VARCHAR(255) NOT NULL" + ");";
-				db.update(groups);
+			try {
+				if (!this.db.tableExists(GROUPS_TABLE)) {
+					String groups = "CREATE TABLE " + GROUPS_TABLE + " (" + GROUP_ID_FIELD
+						+ " INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + GROUP_NAME_FIELD + " VARCHAR(255) NOT NULL"
+						+ ");";
+					db.update(groups);
+				}
+				if (!this.db.tableExists(MEMBERS_TABLE)) {
+					String members = "CREATE TABLE " + MEMBERS_TABLE + " (" + MEMBERS_GROUP_FIELD + " INT NOT NULL,"
+						+ MEMBERS_ID_FIELD + " VARCHAR(255) NOT NULL" + ");";
+					db.update(members);
+				}
+				dbBuilt = true;
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				DorianInternalFault fault = new DorianInternalFault();
+				fault.setFaultString("An unexpected database error occurred.");
+				FaultHelper helper = new FaultHelper(fault);
+				helper.addFaultCause(e);
+				fault = (DorianInternalFault) helper.getFault();
+				throw fault;
 			}
-			if (!this.db.tableExists(MEMBERS_TABLE)) {
-				String members = "CREATE TABLE " + MEMBERS_TABLE + " (" + MEMBERS_GROUP_FIELD + " INT NOT NULL,"
-					+ MEMBERS_ID_FIELD + " VARCHAR(255) NOT NULL" + ");";
-				db.update(members);
-			}
-			dbBuilt = true;
 		}
 	}
 }

@@ -1,6 +1,6 @@
-package gov.nih.nci.cagrid.dorian.events;
+package gov.nih.nci.cagrid.events;
 
-import gov.nih.nci.cagrid.dorian.service.Database;
+import gov.nih.nci.cagrid.database.Database;
 
 
 public class EventAuditor extends EventHandler {
