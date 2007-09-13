@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Date;
 
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.database.DatabaseConfiguration;
@@ -31,12 +30,12 @@ public class EventAuditor extends EventHandler {
 	private final static String OCCURRED_AT = "OCCURRED_AT";
 	private final static String MESSAGE = "MESSAGE";
 
-	private final static String DB_NAME_PROPERTY = "db-name";
-	private final static String DB_TABLE_PROPERTY = "db-table";
-	private final static String DB_HOST_PROPERTY = "db-host";
-	private final static String DB_PORT_PROPERTY = "db-port";
-	private final static String DB_USERNAME_PROPERTY = "db-username";
-	private final static String DB_PASSWORD_PROPERTY = "db-password";
+	public final static String DB_NAME_PROPERTY = "db-name";
+	public final static String DB_TABLE_PROPERTY = "db-table";
+	public final static String DB_HOST_PROPERTY = "db-host";
+	public final static String DB_PORT_PROPERTY = "db-port";
+	public final static String DB_USERNAME_PROPERTY = "db-username";
+	public final static String DB_PASSWORD_PROPERTY = "db-password";
 
 	private String table;
 
@@ -50,9 +49,9 @@ public class EventAuditor extends EventHandler {
 			dc.setUsername(this.getPropertyValue(DB_USERNAME_PROPERTY));
 			dc.setPassword(this.getPropertyValue(DB_PASSWORD_PROPERTY));
 			this.db = new Database(dc, this.getPropertyValue(DB_NAME_PROPERTY));
+			db.createDatabaseIfNeeded();
 			this.table = this.getPropertyValue(DB_TABLE_PROPERTY);
 		} catch (Exception e) {
-			getLog().error(e.getMessage(), e);
 			throw new EventHandlerInitializationException("Error initializing the event handler, " + name + ": "
 				+ e.getMessage(), e);
 		}
@@ -97,7 +96,7 @@ public class EventAuditor extends EventHandler {
 				event.setTargetId(rs.getString(TARGET_ID));
 				event.setReportingPartyId(rs.getString(REPORTING_PARTY_ID));
 				event.setEventType(rs.getString(EVENT_TYPE));
-				event.setOccurredAt(new Date(rs.getLong(OCCURRED_AT)));
+				event.setOccurredAt(rs.getLong(OCCURRED_AT));
 				event.setMessage(rs.getString(MESSAGE));
 			}
 			rs.close();
@@ -145,7 +144,7 @@ public class EventAuditor extends EventHandler {
 				throw new EventHandlingException("Could not audit event, no event message was specified.");
 			}
 
-			if (event.getOccurredAt() == null) {
+			if (event.getOccurredAt() <= 0) {
 				throw new EventHandlingException("Could not audit event, no occurred at date was specified.");
 			}
 
@@ -156,7 +155,7 @@ public class EventAuditor extends EventHandler {
 			s.setString(1, event.getTargetId());
 			s.setString(2, event.getReportingPartyId());
 			s.setString(3, event.getEventType());
-			s.setLong(4, event.getOccurredAt().getTime());
+			s.setLong(4, event.getOccurredAt());
 			s.setString(5, event.getMessage());
 			s.execute();
 			event.setEventId(db.getLastAutoId(c));
@@ -182,7 +181,7 @@ public class EventAuditor extends EventHandler {
 
 	private void buildDatabase() throws DatabaseException {
 		if (!dbBuilt) {
-			if (!this.db.tableExists(getName())) {
+			if (!this.db.tableExists(table)) {
 				String trust = "CREATE TABLE " + this.table + " (" + EVENT_ID
 					+ " INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + TARGET_ID + " VARCHAR(255) NOT NULL,"
 					+ REPORTING_PARTY_ID + " VARCHAR(255) NOT NULL," + EVENT_TYPE + " VARCHAR(50) NOT NULL,"

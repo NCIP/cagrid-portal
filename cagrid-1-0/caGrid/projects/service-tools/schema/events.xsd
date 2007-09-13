@@ -5,6 +5,26 @@
 	xmlns:event="http://cagrid.org/tools/events">
 
 
+<xs:element name="Event"
+		type="event:Event" />
+	<xs:complexType name="Event">
+		<xs:sequence>
+		<xs:element name="eventId" type="xs:long"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="targetId" type="xs:string"
+				minOccurs="1" maxOccurs="1" />
+				<xs:element name="reportingPartyId" type="xs:string"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="eventType" type="xs:string"
+				minOccurs="1" maxOccurs="1" />
+				<xs:element name="occurredAt" type="xs:long"
+				minOccurs="1" maxOccurs="1" />
+				<xs:element name="message" type="xs:string"
+				minOccurs="1" maxOccurs="1" />
+				
+		</xs:sequence>
+	</xs:complexType>
+
 	<xs:element name="EventHandlingPolicy"
 		type="event:EventHandlingPolicy" />
 	<xs:complexType name="EventHandlingPolicy">
@@ -27,7 +47,7 @@
 	<xs:complexType name="EventHandlerDescription">
 		<xs:sequence>
 			<xs:element name="EventHandlerConfiguration"
-				type="event:EventHandlerConfiguration" minOccurs="1" maxOccurs="1" />
+				type="event:EventHandlerConfiguration" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="className" type="xs:string" use="required" />

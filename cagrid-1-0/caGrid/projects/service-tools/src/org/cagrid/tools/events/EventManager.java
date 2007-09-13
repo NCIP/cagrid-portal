@@ -43,7 +43,7 @@ public class EventManager {
 			e.setReportingPartyId(reportingPartyId);
 			e.setEventType(eventType);
 			e.setMessage(message);
-			e.setOccurredAt(new Date());
+			e.setOccurredAt(new Date().getTime());
 			Set<EventHandler> s = getHandlers(eventType);
 			Iterator<EventHandler> itr = s.iterator();
 			while (itr.hasNext()) {

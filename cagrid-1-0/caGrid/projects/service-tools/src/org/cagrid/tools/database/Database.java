@@ -268,7 +268,7 @@ public class Database {
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {
-					exists = false;
+					exists = true;
 				}
 			}
 			rs.close();
