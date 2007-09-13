@@ -643,18 +643,36 @@
 		<property name="secdesc.file"
 			value="${globus.home}/etc/globus_wsrf_core/server-config.wsdd" />
 
-		<remove
-			path="/*[local-name()='deployment']/*[local-name()='globalConfiguration']/*[local-name()='parameter' and @name='logicalHost']" />
-		<remove
-			path="/*[local-name()='deployment']/*[local-name()='globalConfiguration']/*[local-name()='parameter' and @name='publishHostName']" />
-		<insert
-			path="/*[local-name()='deployment']/*[local-name()='globalConfiguration']">
+		<xmltask source="${secdesc.file}" dest="${secdesc.file}">
+			<remove
+				path="/*[local-name()='deployment']/*[local-name()='globalConfiguration']/*[local-name()='parameter' and @name='logicalHost']" />
+			<remove
+				path="/*[local-name()='deployment']/*[local-name()='globalConfiguration']/*[local-name()='parameter' and @name='publishHostName']" />
+			<insert
+				path="/*[local-name()='deployment']/*[local-name()='globalConfiguration']">
 			<![CDATA[
 <parameter xmlns="http://xml.apache.org/axis/wsdd/" name="logicalHost" value="${service.hostname}"/>
 <parameter xmlns="http://xml.apache.org/axis/wsdd/" name="publishHostName" value="true"/>
 			]]>
-		</insert>
-
+			</insert>
+		</xmltask>
+		<if>
+			<equals arg1="${use.secure.container}" arg2="true"
+				trim="true" />
+			<then>
+				<xmltask source="${secdesc.file}"
+					dest="${secdesc.file}">
+					<remove
+						path="/*[local-name()='deployment']/*[local-name()='globalConfiguration']/*[local-name()='parameter' and @name='containerSecDesc']" />
+					<insert
+						path="/*[local-name()='deployment']/*[local-name()='globalConfiguration']">
+						<![CDATA[
+<parameter xmlns="http://xml.apache.org/axis/wsdd/" name="containerSecDesc" value="${globus.home}/etc/globus_wsrf_core/global_security_descriptor.xml"/>
+			]]>
+					</insert>
+				</xmltask>
+			</then>
+		</if>		
 	</target>
 
 	<target name="configure-security-descriptor">
