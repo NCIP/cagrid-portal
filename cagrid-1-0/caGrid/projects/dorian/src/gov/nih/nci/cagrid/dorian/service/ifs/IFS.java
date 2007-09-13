@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.ThreadManager;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
@@ -53,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bouncycastle.asn1.x509.CRLReason;
+import org.cagrid.tools.database.Database;
 
 
 /**

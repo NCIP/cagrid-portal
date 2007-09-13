@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
 import gov.nih.nci.cagrid.dorian.conf.CredentialPolicy;
@@ -28,6 +27,8 @@ import java.security.cert.X509Certificate;
 import java.util.Map;
 
 import junit.framework.TestCase;
+
+import org.cagrid.tools.database.Database;
 
 
 /**

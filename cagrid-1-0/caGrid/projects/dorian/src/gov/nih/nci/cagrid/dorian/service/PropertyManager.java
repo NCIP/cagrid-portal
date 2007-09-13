@@ -1,9 +1,10 @@
 package gov.nih.nci.cagrid.dorian.service;
 
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.bean.Metadata;
 import gov.nih.nci.cagrid.dorian.conf.CertificateAuthorityType;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
+
+import org.cagrid.tools.database.Database;
 
 
 /**

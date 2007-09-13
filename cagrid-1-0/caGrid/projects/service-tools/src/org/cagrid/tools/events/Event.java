@@ -1,14 +1,30 @@
-package gov.nih.nci.cagrid.events;
+package org.cagrid.tools.events;
 
 import java.util.Date;
 
-
+/**
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A href="mailto:ervin@bmi.osu.edu">David Ervin</A>
+ */
 public class Event {
+	private long eventId;
 	private String targetId;
 	private String reportingPartyId;
 	private String eventType;
 	private String message;
 	private Date occurredAt;
+
+
+	public long getEventId() {
+		return eventId;
+	}
+
+
+	public void setEventId(long eventId) {
+		this.eventId = eventId;
+	}
 
 
 	public String getTargetId() {

@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ca;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.conf.AutoCreate;
 import gov.nih.nci.cagrid.dorian.conf.CertificateAuthorityType;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
@@ -34,6 +33,7 @@ import java.util.GregorianCalendar;
 import junit.framework.TestCase;
 
 import org.bouncycastle.asn1.x509.X509Name;
+import org.cagrid.tools.database.Database;
 import org.globus.gsi.GlobusCredential;
 
 

@@ -1,13 +1,14 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.conf.LockoutTime;
 import gov.nih.nci.cagrid.dorian.conf.PasswordSecurityPolicy;
 import gov.nih.nci.cagrid.dorian.idp.bean.PasswordSecurity;
 import gov.nih.nci.cagrid.dorian.idp.bean.PasswordStatus;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import junit.framework.TestCase;
+
+import org.cagrid.tools.database.Database;
 
 
 public class TestPasswordSecurityManager extends TestCase {

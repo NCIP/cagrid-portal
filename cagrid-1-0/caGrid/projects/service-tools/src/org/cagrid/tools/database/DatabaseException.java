@@ -1,10 +1,10 @@
-package gov.nih.nci.cagrid.database;
+package org.cagrid.tools.database;
 
 /**
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: DatabaseException.java,v 1.1 2007-09-12 19:52:28 langella Exp $
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A href="mailto:ervin@bmi.osu.edu">David Ervin</A>
  */
 public class DatabaseException extends Exception {
 

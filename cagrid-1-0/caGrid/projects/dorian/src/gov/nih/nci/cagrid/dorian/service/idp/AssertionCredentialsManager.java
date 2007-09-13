@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
@@ -34,6 +33,7 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.xml.security.signature.XMLSignature;
+import org.cagrid.tools.database.Database;
 
 
 /**

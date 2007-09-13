@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.events;
+package org.cagrid.tools.events;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 
@@ -12,8 +12,7 @@ import junit.framework.TestCase;
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
- *          Exp $
+ * @author <A href="mailto:ervin@bmi.osu.edu">David Ervin</A>
  */
 public class TestEventManager extends TestCase implements SubjectResolver {
 
@@ -129,8 +128,8 @@ public class TestEventManager extends TestCase implements SubjectResolver {
 
 			em.registerEventHandlingPolicy(policy);
 
-			SimpleEventHandler h1 = (SimpleEventHandler)em.getHandler(d1.getName());
-			SimpleEventHandler h2 = (SimpleEventHandler)em.getHandler(d2.getName());
+			SimpleEventHandler h1 = (SimpleEventHandler) em.getHandler(d1.getName());
+			SimpleEventHandler h2 = (SimpleEventHandler) em.getHandler(d2.getName());
 
 			Set s1 = em.getHandlers(e1);
 			assertEquals(1, s1.size());
@@ -225,6 +224,4 @@ public class TestEventManager extends TestCase implements SubjectResolver {
 		return conf;
 	}
 
-
-	
 }

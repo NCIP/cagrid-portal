@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DatabaseConfiguration xmlns="http://cagrid.nci.nih.gov/database"
+<DatabaseConfiguration xmlns="http://cagrid.org/tools/database"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <host>localhost</host>
         <port>3306</port>

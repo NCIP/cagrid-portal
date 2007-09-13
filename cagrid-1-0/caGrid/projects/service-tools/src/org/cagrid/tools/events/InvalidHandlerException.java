@@ -1,5 +1,11 @@
-package gov.nih.nci.cagrid.events;
+package org.cagrid.tools.events;
 
+/**
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A href="mailto:ervin@bmi.osu.edu">David Ervin</A>
+ */
 public class InvalidHandlerException extends Exception {
 
 	public InvalidHandlerException() {

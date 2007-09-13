@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.tools;
 
 import gov.nih.nci.cagrid.common.IOUtils;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
 import gov.nih.nci.cagrid.dorian.service.ca.DBCertificateAuthority;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
@@ -19,6 +18,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.cagrid.tools.database.Database;
 
 
 /**

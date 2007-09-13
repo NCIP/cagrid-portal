@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.conf.Length;
@@ -32,6 +31,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
+import org.cagrid.tools.database.Database;
 
 
 /**

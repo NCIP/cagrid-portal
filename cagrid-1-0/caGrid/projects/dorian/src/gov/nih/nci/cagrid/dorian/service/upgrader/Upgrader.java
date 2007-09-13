@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.upgrader;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
 import gov.nih.nci.cagrid.dorian.service.PropertyManager;
 
@@ -19,6 +18,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.tools.database.Database;
 
 
 public class Upgrader {

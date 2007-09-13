@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.dorian.test;
 
-import gov.nih.nci.cagrid.database.Database;
+import org.cagrid.tools.database.Database;
 
 public class Nuker {
 

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.database;
+package org.cagrid.tools.database;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -13,10 +13,10 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.1 2007-09-12 19:52:28 langella Exp $
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A href="mailto:ervin@bmi.osu.edu">David Ervin</A>
  */
 public class Database {
 
@@ -229,6 +229,58 @@ public class Database {
 			}
 		}
 		return id;
+	}
+
+
+	public boolean exists(String table, String field, String value) throws DatabaseException {
+		boolean exists = false;
+		Connection c = null;
+		try {
+			c = getConnection();
+			Statement s = c.createStatement();
+			ResultSet rs = s.executeQuery("select count(*) from " + table + " where " + field + "='" + value + "'");
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				if (count > 0) {
+					exists = false;
+				}
+			}
+			rs.close();
+			s.close();
+
+		} catch (Exception e) {
+			throw new DatabaseException("An unexpected database error occurred.", e);
+		} finally {
+			releaseConnection(c);
+		}
+
+		return exists;
+	}
+
+
+	public boolean exists(String table, String field, long value) throws DatabaseException {
+		boolean exists = false;
+		Connection c = null;
+		try {
+			c = getConnection();
+			Statement s = c.createStatement();
+			ResultSet rs = s.executeQuery("select count(*) from " + table + " where " + field + "=" + value);
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				if (count > 0) {
+					exists = false;
+				}
+			}
+			rs.close();
+			s.close();
+
+		} catch (Exception e) {
+			throw new DatabaseException("An unexpected database error occurred.", e);
+		} finally {
+			releaseConnection(c);
+		}
+
+		return exists;
 	}
 
 

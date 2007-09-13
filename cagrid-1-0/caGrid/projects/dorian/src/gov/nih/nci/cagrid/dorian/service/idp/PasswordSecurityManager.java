@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.PasswordSecurityPolicy;
 import gov.nih.nci.cagrid.dorian.idp.bean.PasswordSecurity;
@@ -13,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import org.cagrid.tools.database.Database;
 
 
 public class PasswordSecurityManager extends LoggingObject {

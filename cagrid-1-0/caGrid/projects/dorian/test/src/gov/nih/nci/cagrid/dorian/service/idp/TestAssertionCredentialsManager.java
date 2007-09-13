@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
 import gov.nih.nci.cagrid.dorian.conf.AssertingCredentials;
@@ -28,6 +27,8 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import junit.framework.TestCase;
+
+import org.cagrid.tools.database.Database;
 
 
 /**

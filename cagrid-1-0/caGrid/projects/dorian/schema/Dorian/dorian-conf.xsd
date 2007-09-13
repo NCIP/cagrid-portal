@@ -3,7 +3,7 @@
 	attributeFormDefault="qualified" elementFormDefault="qualified"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:dorian="http://cagrid.nci.nih.gov/dorian/conf"
-	xmlns:db="http://cagrid.nci.nih.gov/database">
+	xmlns:db="http://cagrid.org/tools/database">
 	<xs:element name="DorianConfiguration"
 		type="dorian:DorianConfiguration" />
 	<xs:complexType name="DorianConfiguration">

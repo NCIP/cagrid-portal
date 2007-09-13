@@ -1,11 +1,12 @@
 package gov.nih.nci.cagrid.dorian.common;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.bean.Metadata;
 import gov.nih.nci.cagrid.dorian.service.MetadataManager;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import junit.framework.TestCase;
+
+import org.cagrid.tools.database.Database;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

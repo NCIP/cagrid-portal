@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.events;
+package org.cagrid.tools.events;
 
 import gov.nih.nci.cagrid.common.Utils;
 
@@ -10,15 +10,25 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
+/**
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A href="mailto:ervin@bmi.osu.edu">David Ervin</A>
+ */
 public class EventManager {
 
 	private Map<String, EventHandler> handlers;
 	private Map<String, Set<String>> events;
 	private SubjectResolver resolver;
+	private Log log;
 
 
 	public EventManager(SubjectResolver resolver) {
+		this.log = LogFactory.getLog(this.getClass().getName());
 		this.resolver = resolver;
 		handlers = new HashMap<String, EventHandler>();
 		events = new HashMap<String, Set<String>>();
@@ -26,17 +36,21 @@ public class EventManager {
 
 
 	public void logEvent(String targetId, String reportingPartyId, String eventType, String message) {
-		// TODO: Thread this out.
-		Event e = new Event();
-		e.setTargetId(targetId);
-		e.setReportingPartyId(reportingPartyId);
-		e.setEventType(eventType);
-		e.setMessage(message);
-		e.setOccurredAt(new Date());
-		Set<EventHandler> s = getHandlers(eventType);
-		Iterator<EventHandler> itr = s.iterator();
-		while (itr.hasNext()) {
-			itr.next().handleEvent(e);
+		try {
+			// TODO: Thread this out.
+			Event e = new Event();
+			e.setTargetId(targetId);
+			e.setReportingPartyId(reportingPartyId);
+			e.setEventType(eventType);
+			e.setMessage(message);
+			e.setOccurredAt(new Date());
+			Set<EventHandler> s = getHandlers(eventType);
+			Iterator<EventHandler> itr = s.iterator();
+			while (itr.hasNext()) {
+				itr.next().handleEvent(e);
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 		}
 	}
 

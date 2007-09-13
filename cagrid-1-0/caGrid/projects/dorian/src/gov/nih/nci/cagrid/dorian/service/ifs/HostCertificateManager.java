@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.database.Database;
 import gov.nih.nci.cagrid.dorian.bean.X509Certificate;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.PreparedStatementBuilder;
@@ -30,6 +29,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import org.cagrid.tools.database.Database;
 
 
 public class HostCertificateManager extends LoggingObject {

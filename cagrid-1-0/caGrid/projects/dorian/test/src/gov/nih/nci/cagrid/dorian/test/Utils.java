@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.dorian.test;
 
-import gov.nih.nci.cagrid.database.Database;
-import gov.nih.nci.cagrid.database.DatabaseConfiguration;
 import gov.nih.nci.cagrid.dorian.conf.AccountPolicies;
 import gov.nih.nci.cagrid.dorian.conf.AccountPolicy;
 import gov.nih.nci.cagrid.dorian.conf.CertificateAuthorityType;
@@ -27,6 +25,9 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 
 import junit.framework.TestCase;
+
+import org.cagrid.tools.database.Database;
+import org.cagrid.tools.database.DatabaseConfiguration;
 
 public class Utils {
 

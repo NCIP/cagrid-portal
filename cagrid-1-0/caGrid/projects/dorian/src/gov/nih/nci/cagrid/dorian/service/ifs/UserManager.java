@@ -2,8 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.database.Database;
-import gov.nih.nci.cagrid.database.DatabaseException;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
@@ -36,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.bouncycastle.asn1.x509.CRLReason;
+import org.cagrid.tools.database.Database;
+import org.cagrid.tools.database.DatabaseException;
 
 
 /**
