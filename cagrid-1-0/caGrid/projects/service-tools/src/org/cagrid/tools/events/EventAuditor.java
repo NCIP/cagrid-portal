@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.common.Utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Date;
 
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.database.DatabaseConfiguration;
@@ -68,13 +70,46 @@ public class EventAuditor extends EventHandler {
 		try {
 			insertEvent(event);
 		} catch (DatabaseException e) {
+			getLog().error(e.getMessage(), e);
 			throw new EventHandlingException("An unexpected database error occurred.", e);
 		}
 	}
 
 
-	public boolean eventtExists(long eventId) throws DatabaseException {
+	public boolean eventExists(long eventId) throws DatabaseException {
 		return db.exists(table, EVENT_ID, eventId);
+	}
+
+
+	public Event getEvent(long eventId) throws DatabaseException {
+		Event event = null;
+		buildDatabase();
+		Connection c = null;
+
+		try {
+			c = db.getConnection();
+			PreparedStatement s = c.prepareStatement("select * from " + table + " WHERE " + EVENT_ID + "= ?");
+			s.setLong(1, eventId);
+			ResultSet rs = s.executeQuery();
+			if (rs.next()) {
+				event = new Event();
+				event.setEventId(rs.getLong(EVENT_ID));
+				event.setTargetId(rs.getString(TARGET_ID));
+				event.setReportingPartyId(rs.getString(REPORTING_PARTY_ID));
+				event.setEventType(rs.getString(EVENT_TYPE));
+				event.setOccurredAt(new Date(rs.getLong(OCCURRED_AT)));
+				event.setMessage(rs.getString(MESSAGE));
+			}
+			rs.close();
+			s.close();
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new DatabaseException("An unexpected database error occurred.", e);
+		} finally {
+			db.releaseConnection(c);
+		}
+
+		return event;
 	}
 
 
@@ -83,6 +118,7 @@ public class EventAuditor extends EventHandler {
 		try {
 			db.update("delete from " + this.table + " where " + EVENT_ID + "=" + eventId);
 		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
 			throw new DatabaseException("An unexpected database error occurred.", e);
 		}
 	}
