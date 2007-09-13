@@ -21,7 +21,7 @@ import org.globus.wsrf.utils.io.IndexedObjectFileUtils;
  * @author David Ervin
  * 
  * @created Apr 30, 2007 12:18:15 PM
- * @version $Id: EnumIteratorFactory.java,v 1.1 2007-05-16 15:00:57 dervin Exp $ 
+ * @version $Id: EnumIteratorFactory.java,v 1.2 2007-09-13 18:05:20 dervin Exp $ 
  */
 public class EnumIteratorFactory {
 
@@ -145,7 +145,7 @@ public class EnumIteratorFactory {
             case CAGRID_THREADED_COMPLETE:
                 PersistantSDKObjectIterator.createIterator(objectIter, objectQName, wsddInput, tempFilename);
             case CAGRID_CONCURRENT_COMPLETE:
-                PersistantSDKObjectIterator.createIterator(objectIter, objectQName, wsddInput, tempFilename);
+                ConcurrenPersistantObjectEnumIterator.createIterator(objectIter, objectQName, wsddInput, tempFilename);
         }
         throw new EnumIteratorInitializationException("Unknown enum iter implementation: " + iterType.toString());
     }
