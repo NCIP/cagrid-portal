@@ -27,7 +27,6 @@
 	<import file="dev-build.xml" />
 
 	<!-- Jars -->
-	<!-- Jars -->
 	<property name="jar.prefix" value="${service.name}" />
 	<property name="common.jar.name" value="${jar.prefix}-common.jar" />
 	<property name="client.jar.name" value="${jar.prefix}-client.jar" />
@@ -276,7 +275,7 @@
 	<target name="compileTests" depends="compile">
 		<runtarget target="preCompileTests" />
 		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
-		<runtarget target="postCompileStubs" />
+		<runtarget target="postCompileTests" />
 	</target>
 
 
