@@ -17,7 +17,7 @@
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.Address" />
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.Person" />
 		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.CaGridParticipant" />
+			class="gov.nih.nci.cagrid.portal2.domain.Participant" />
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.PortalUser" />
 		<mapping
 			class="gov.nih.nci.cagrid.portal2.domain.GridPortalUser" />
@@ -26,7 +26,11 @@
 		<mapping
 			class="gov.nih.nci.cagrid.portal2.domain.GridDataService" />
 		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.IndexService" />
+		<mapping
 			class="gov.nih.nci.cagrid.portal2.domain.ServiceAnnotation" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.Workspace" />
 
 
 		<mapping
@@ -64,6 +68,8 @@
 			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.Service" />
 		<mapping
 			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.ServiceContext" />
+<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.StatusChange" />			
 			
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.DomainModel" />
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLAssociation" />

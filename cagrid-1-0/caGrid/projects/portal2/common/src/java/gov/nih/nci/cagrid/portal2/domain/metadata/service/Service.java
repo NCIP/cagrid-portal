@@ -85,7 +85,7 @@ public class Service extends AbstractDomainObject {
 		this.description = description;
 	}
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "svc_pocs", 
 			joinColumns = @JoinColumn(name = "svc_id"), 

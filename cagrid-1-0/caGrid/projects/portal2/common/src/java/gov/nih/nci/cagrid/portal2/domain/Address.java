@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.portal2.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -81,6 +82,19 @@ public class Address extends AbstractDomainObject {
 		this.street2 = street2;
 	}
 	
+	@Transient
+	public Geocode getGeocode(){
+		Geocode geocode = null;
+		if(getLatitude() != null && getLongitude() != null){
+			geocode = new Geocode(getLatitude(), getLongitude());
+		}
+		return geocode;
+	}
 	
+	public void setGeocode(Geocode geocode){
+		setLatitude(geocode.getLatitude());
+		setLongitude(geocode.getLongitude());
+	}
+
 
 }

@@ -63,6 +63,16 @@
 	<classpathentry kind="lib" path="services/webauthn/build/lib/caGrid-1.1-WebAuthnSvc-stubs.jar"/>
 	<classpathentry kind="lib" path="services/webauthn/build/lib/caGrid-1.1-WebAuthnSvc-common.jar"/>
 	<classpathentry kind="lib" path="services/webauthn/build/lib/caGrid-1.1-WebAuthnSvc-client.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-commons/commons-lang.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-syncgts-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-syncgts-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-syncgts-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gts-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gts-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gts-client.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-scratchpad-2.5.1-final-20040804.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-contrib-2.5.1-final-20040804.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/puretls.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jgss.jar"/>

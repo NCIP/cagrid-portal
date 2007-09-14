@@ -4,13 +4,13 @@
 package gov.nih.nci.cagrid.portal2.dao;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.portal2.aggr.regsvc.ServiceMetadataBuilder;
 import gov.nih.nci.cagrid.portal2.domain.GridService;
 import gov.nih.nci.cagrid.portal2.domain.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.portal2.domain.metadata.service.InputParameter;
 import gov.nih.nci.cagrid.portal2.domain.metadata.service.Operation;
 import gov.nih.nci.cagrid.portal2.domain.metadata.service.Service;
 import gov.nih.nci.cagrid.portal2.domain.metadata.service.ServiceContext;
-import gov.nih.nci.cagrid.portal2.util.ServiceMetadataBuilder;
 
 import java.io.File;
 import java.io.FileReader;

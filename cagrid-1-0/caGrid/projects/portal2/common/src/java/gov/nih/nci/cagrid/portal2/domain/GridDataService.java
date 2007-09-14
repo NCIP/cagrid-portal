@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
  *
  */
 @Entity
-@DiscriminatorValue("GridService")
+@DiscriminatorValue("GridDataService")
 public class GridDataService extends GridService {
 
 	private DomainModel domainModel;

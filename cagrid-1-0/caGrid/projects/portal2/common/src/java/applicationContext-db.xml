@@ -40,7 +40,7 @@
 				<value>gov.nih.nci.cagrid.portal2.domain.Address</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.Person</value>
 				<value>
-					gov.nih.nci.cagrid.portal2.domain.CaGridParticipant
+					gov.nih.nci.cagrid.portal2.domain.Participant
 				</value>
 				<value>
 					gov.nih.nci.cagrid.portal2.domain.PortalUser
@@ -48,11 +48,15 @@
 				<value>
 					gov.nih.nci.cagrid.portal2.domain.GridPortalUser
 				</value>
+				<value>
+					gov.nih.nci.cagrid.portal2.domain.Workspace
+				</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.Role</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.GridService</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.GridDataService</value>
+				<value>gov.nih.nci.cagrid.portal2.domain.IndexService</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.ServiceAnnotation</value>
-				
+				<value>gov.nih.nci.cagrid.portal2.domain.StatusChange</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.ServiceMetadata</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.Enumeration</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.PointOfContact</value>
@@ -83,7 +87,7 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
-	<tx:annotation-driven transaction-manager="transactionManager" />
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
 <!-- 
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
@@ -125,19 +129,25 @@
 		class="gov.nih.nci.cagrid.portal2.dao.PortalUserDao" />
 	<bean id="gridPortalUserDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.GridPortalUserDao" />
-	<bean id="caGridParticipantDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.CaGridParticipantDao" />
+	<bean id="participantDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal2.dao.ParticipantDao" />
 	<bean id="roleDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.RoleDao" />
 	
 	<bean id="gridServiceDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.GridServiceDao" />
+		
+	<bean id="indexServiceDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal2.dao.IndexServiceDao" />
 
 	<bean id="pointOfContactDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.PointOfContactDao" />
 		
 	<bean id="serviceMetadataDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.ServiceMetadataDao" />
+		
+	<bean id="workspaceDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal2.dao.WorkspaceDao" />		
 
 
 	<bean id="openSessionInViewInterceptor"

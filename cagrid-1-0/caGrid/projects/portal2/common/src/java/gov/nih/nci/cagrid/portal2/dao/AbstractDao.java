@@ -3,11 +3,12 @@
  */
 package gov.nih.nci.cagrid.portal2.dao;
 
-import gov.nih.nci.cagrid.portal2.dao.exception.NonUniqueResultException;
 import gov.nih.nci.cagrid.portal2.domain.DomainObject;
 
 import java.sql.SQLException;
 import java.util.List;
+
+import javax.persistence.NonUniqueResultException;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;

@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -46,7 +47,7 @@ public class ResearchCenter extends AbstractDomainObject {
 	private String homepageUrl;
 	private Address address;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "addr_id")
 	public Address getAddress() {
 		return address;
@@ -89,7 +90,7 @@ public class ResearchCenter extends AbstractDomainObject {
 		this.imageUrl = imageUrl;
 	}
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "res_ctr_pocs", 
 			joinColumns = @JoinColumn(name = "res_ctr_id"), 

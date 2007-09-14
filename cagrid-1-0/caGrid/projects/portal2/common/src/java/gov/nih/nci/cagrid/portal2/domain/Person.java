@@ -29,9 +29,6 @@ import org.hibernate.annotations.Parameter;
 @Entity
 @Table(name = "persons")
 @GenericGenerator(name = "id-generator", strategy = "native", parameters = { @Parameter(name = "sequence", value = "seq_persons") })
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "person_type", discriminatorType = DiscriminatorType.STRING)
-@DiscriminatorValue("Person")
 public class Person extends AbstractDomainObject {
 
 	private String firstName;

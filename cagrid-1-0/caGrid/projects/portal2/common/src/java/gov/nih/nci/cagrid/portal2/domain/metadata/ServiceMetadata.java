@@ -53,7 +53,7 @@ public class ServiceMetadata extends AbstractDomainObject {
 		this.serviceDescription = serviceDescription;
 	}
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name = "service_id")
 	public GridService getService() {
 		return service;

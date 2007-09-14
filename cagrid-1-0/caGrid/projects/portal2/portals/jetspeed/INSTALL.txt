@@ -87,6 +87,7 @@ Install Jetspeed 2.1
  
  	maven -DartifactId=maven-jetspeed2-plugin -DgroupId=org.apache.portals.jetspeed-2 -Dversion=2.1 plugin:download
  	maven j2:portal.genapp
+ 	  - or j2:portal.genapp.minimal
  	
  - From ${org.apache.jetspeed.portal.home}, run:
  
@@ -94,6 +95,7 @@ Install Jetspeed 2.1
  	mkdir logs
  	touch logs/apacheds.xml
  	maven j2:quickStart
+ 	  - or j2:minStart
 
 Install caGrid customizations
  - From portal2/portals/jetspeed
