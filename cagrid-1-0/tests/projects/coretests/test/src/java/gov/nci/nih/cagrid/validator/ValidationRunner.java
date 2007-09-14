@@ -23,9 +23,11 @@ import com.atomicobject.haste.framework.StoryBook;
  * @author David Ervin
  * 
  * @created Aug 29, 2007 1:17:37 PM
- * @version $Id: ValidationRunner.java,v 1.2 2007-09-07 20:46:28 dervin Exp $ 
+ * @version $Id: ValidationRunner.java,v 1.3 2007-09-14 16:12:03 dervin Exp $ 
  */
 public class ValidationRunner {
+    
+    public static final String VALIDATION_DESCRIPTION_PROPERTY = "validation.desc";
 
     private ValidationPackage pack;
 
@@ -93,7 +95,16 @@ public class ValidationRunner {
 
     public static void main(String[] args) {
         try {
-            FileInputStream in = new FileInputStream(args[0]);
+            FileInputStream in = null;
+            if (args.length == 1) {
+                in = new FileInputStream(args[0]);
+            } else {
+                String valFileName = System.getProperty(VALIDATION_DESCRIPTION_PROPERTY);
+                if (valFileName == null) {
+                    throw new IllegalArgumentException("No validation description file could be found");
+                }
+                in = new FileInputStream(valFileName);
+            }
             ValidationPackage pack = GridDeploymentValidationLoader.loadValidationPackage(in);
             in.close();
             ValidationRunner runner = new ValidationRunner(pack);
