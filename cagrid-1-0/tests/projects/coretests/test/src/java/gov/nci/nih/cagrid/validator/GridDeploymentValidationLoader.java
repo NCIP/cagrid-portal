@@ -35,7 +35,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 3:04:08 PM
- * @version $Id: GridDeploymentValidationLoader.java,v 1.7 2007-09-11 14:54:24 dervin Exp $ 
+ * @version $Id: GridDeploymentValidationLoader.java,v 1.8 2007-09-17 17:34:51 dervin Exp $ 
  */
 public class GridDeploymentValidationLoader {
     
@@ -53,6 +53,11 @@ public class GridDeploymentValidationLoader {
             Utils.deserializeObject(descReader, ValidationDescription.class);
         descReader.close();
         
+        return createValidationPackage(desc);
+    }
+    
+    
+    public static ValidationPackage createValidationPackage(ValidationDescription desc) throws Exception {
         final List<Story> serviceStories = new ArrayList(desc.getServiceDescription().length);
         for (ServiceDescription service : desc.getServiceDescription()) {
             Story serviceStory = createStoryForService(service, desc);
