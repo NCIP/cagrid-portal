@@ -1,6 +1,7 @@
 package gov.nci.nih.cagrid.validator.builder;
 
 import gov.nci.nih.cagrid.validator.GridDeploymentValidationLoader;
+import gov.nci.nih.cagrid.validator.ValidationPackage;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
@@ -13,6 +14,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 
@@ -29,7 +32,11 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
+import junit.swingui.TestRunner;
+
 import org.apache.axis.types.URI.MalformedURIException;
+
+import com.atomicobject.haste.framework.StoryBook;
 
 /** 
  *  DeploymentValidationBuilder
@@ -38,17 +45,19 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:14:58 PM
- * @version $Id: DeploymentValidationBuilder.java,v 1.6 2007-09-07 15:50:05 dervin Exp $ 
+ * @version $Id: DeploymentValidationBuilder.java,v 1.7 2007-09-17 17:35:14 dervin Exp $ 
  */
 public class DeploymentValidationBuilder extends JFrame {
     // -XX:MaxPermSize=256m
     
     private JMenuBar mainMenuBar = null;
     private JMenu fileMenu = null;
+    private JMenu testMenu = null;
     private JMenuItem fileLoadMenuItem = null;
     private JMenuItem fileSaveMenuItem = null;
     private JMenuItem fileSaveAsMenuItem = null;
     private JMenuItem fileExitMenuItem = null;
+    private JMenuItem testNowMenuItem = null;
     private ServiceTable serviceTable = null;
     private JScrollPane serviceTableScrollPane = null;
     private JPanel buttonPanel = null;
@@ -85,6 +94,7 @@ public class DeploymentValidationBuilder extends JFrame {
         if (mainMenuBar == null) {
             mainMenuBar = new JMenuBar();
             mainMenuBar.add(getFileMenu());
+            mainMenuBar.add(getTestMenu());
         }
         return mainMenuBar;
     }
@@ -199,6 +209,41 @@ public class DeploymentValidationBuilder extends JFrame {
             });
         }
         return fileExitMenuItem;
+    }
+    
+    
+    private JMenu getTestMenu() {
+        if (testMenu == null) {
+            testMenu = new JMenu();
+            testMenu.setText("Test");
+            testMenu.add(getTestNowMenuItem());
+        }
+        return testMenu;
+    }
+    
+    
+    private JMenuItem getTestNowMenuItem() {
+        if (testNowMenuItem == null) {
+            testNowMenuItem = new JMenuItem();
+            testNowMenuItem.setText("Test Now");
+            testNowMenuItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ValidationPackage testPackage = null;
+                    try {
+                        ValidationDescription description = createValidationDescription();
+                        testPackage = GridDeploymentValidationLoader.createValidationPackage(description);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(
+                            DeploymentValidationBuilder.this, "Error preparing tests: " + ex.getMessage());
+                    }
+                    
+                    UsefulTestRunner runner = new UsefulTestRunner(testPackage.getValidationStoryBook());
+                    runner.go();
+                }
+            });
+        }
+        return testNowMenuItem;
     }
     
     
@@ -352,22 +397,29 @@ public class DeploymentValidationBuilder extends JFrame {
     // ------------
     
     
+    private ValidationDescription createValidationDescription() throws MalformedURIException {
+        ValidationDescription description = new ValidationDescription();
+        
+        Schedule schedule = getSchedulePanel().getSchedule();
+        
+        ServiceDescription[] descriptions = getServiceTable().getServiceDescriptions();
+        description.setSchedule(schedule);
+        if (descriptions.length != 0) {
+            description.setServiceDescription(descriptions);
+        } else {
+            description.setServiceDescription(null);
+        }
+        
+        ServiceType[] types = getServiceTypePanel().getServiceTypes();
+        description.setServiceType(types);
+        
+        return description;
+    }
+    
+    
     private void saveCurrentFile() {
         try {
-            ValidationDescription description = new ValidationDescription();
-            
-            Schedule schedule = getSchedulePanel().getSchedule();
-            
-            ServiceDescription[] descriptions = getServiceTable().getServiceDescriptions();
-            description.setSchedule(schedule);
-            if (descriptions.length != 0) {
-                description.setServiceDescription(descriptions);
-            } else {
-                description.setServiceDescription(null);
-            }
-            
-            ServiceType[] types = getServiceTypePanel().getServiceTypes();
-            description.setServiceType(types);
+            ValidationDescription description = createValidationDescription();
             
             FileWriter writer = new FileWriter(currentDeploymentDescriptionFile);
             Utils.serializeObject(description, GridDeploymentValidationLoader.VALIDATION_DESCRIPTION_QNAME, writer);
@@ -445,5 +497,28 @@ public class DeploymentValidationBuilder extends JFrame {
         }
         JFrame frame = new DeploymentValidationBuilder();
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+    
+    
+    private static class UsefulTestRunner extends TestRunner {
+        
+        StoryBook storyBook = null;
+        
+        public UsefulTestRunner(StoryBook tests) {
+            super();
+            this.storyBook = tests;
+        }
+        
+        
+        public void go() {
+            String suiteName = storyBook.getName();
+            fFrame = createUI(suiteName);
+            fFrame.pack();
+            
+            setSuite(suiteName);
+            runTest(storyBook);
+            
+            fFrame.setVisible(true);
+        }
     }
 }
