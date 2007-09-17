@@ -224,6 +224,7 @@
 			<artifact refid="syncgts.client.jars" />
 			<artifact refid="security.metadata.jars" />
 			<artifact refid="ws.enum.jars" />
+			<artifact refid="jdom.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/portal2" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
