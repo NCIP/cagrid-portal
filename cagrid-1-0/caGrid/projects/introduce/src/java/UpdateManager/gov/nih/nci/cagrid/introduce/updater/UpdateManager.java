@@ -45,7 +45,7 @@ public class UpdateManager {
         if (introduceTypes != null) {
             for (int i = 0; i < introduceTypes.length; i++) {
                 IntroduceType update = introduceTypes[i];
-                if (!update.getIsInstalled()) {
+                if (!update.getIsInstalled().booleanValue()) {
                     // if it is an introduce update i need to delete all files
                     // and directories before unzipping
                     File baseDir = new File(".");
