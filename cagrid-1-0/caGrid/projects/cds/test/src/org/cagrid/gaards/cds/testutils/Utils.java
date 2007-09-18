@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 
 import junit.framework.TestCase;
 
+import org.cagrid.gaards.cds.conf.CDSConfiguration;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.database.DatabaseConfiguration;
 
@@ -16,9 +17,17 @@ public class Utils {
 	private static Database db = null;
 
 
+	public static CDSConfiguration getConfiguration() throws Exception {
+		InputStream resource = TestCase.class.getResourceAsStream(Constants.CDS_CONF);
+		CDSConfiguration conf = (CDSConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
+			new InputStreamReader(resource), CDSConfiguration.class);
+		return conf;
+	}
+
+
 	public static Database getDB() throws Exception {
 		if (db == null) {
-			InputStream resource = TestCase.class.getResourceAsStream(Constants.DB_CONFIG);
+			InputStream resource = TestCase.class.getResourceAsStream(Constants.DB_CONF);
 			DatabaseConfiguration conf = (DatabaseConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
 				new InputStreamReader(resource), DatabaseConfiguration.class);
 			db = new Database(conf, DB);

@@ -97,7 +97,7 @@ public class DelegatedCredentialManager {
 				String trust = "CREATE TABLE " + TABLE + " (" + DELEGATION_ID
 					+ " INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + GRID_IDENTITY + " VARCHAR(255) NOT NULL,"
 					+ POLICY_TYPE + " VARCHAR(255) NOT NULL," + STATUS + " VARCHAR(50) NOT NULL," + EXPIRATION
-					+ " BIGINT NOT NULL" + "INDEX document_index (" + DELEGATION_ID + "));";
+					+ " BIGINT NOT NULL, INDEX document_index (" + DELEGATION_ID + "));";
 				db.update(trust);
 			}
 			dbBuilt = true;

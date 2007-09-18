@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDSConfiguration xmlns="http://gaards.cagrid.org/cds/conf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <CDSInternalId>test_cds</CDSInternalId>
+   <DatabaseConfiguration>
+        <host>localhost</host>
+        <port>3306</port>
+        <username>root</username>
+        <password></password>
+    </DatabaseConfiguration>
+    <PolicyHandlers>
+    	<PolicyHandlerDescription className="org.cagrid.gaards.cds.service.IdentityPolicyHandler" policyClassName="org.cagrid.gaards.cds.common.IdentityDelegationPolicy"/>
+    </PolicyHandlers>
+</CDSConfiguration>
+
+
