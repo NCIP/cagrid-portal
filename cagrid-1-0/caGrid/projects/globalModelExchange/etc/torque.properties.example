@@ -1,0 +1,13 @@
+torque.database.default = schemaStore
+torque.database.schemaStore.adapter = mysql
+
+#Using commons-dbcp
+torque.dsfactory.schemaStore.factory = org.apache.torque.dsfactory.SharedPoolDataSourceFactory
+torque.dsfactory.schemaStore.connection.driver = org.gjt.mm.mysql.Driver
+torque.dsfactory.schemaStore.connection.url = jdbc:mysql://localhost:3306/schemaStore
+torque.dsfactory.schemaStore.connection.user = root
+torque.dsfactory.schemaStore.connection.password =
+
+torque.dsfactory.schemaStore.pool.maxActive=20
+torque.dsfactory.schemaStore.pool.testOnBorrow=true
+torque.dsfactory.schemaStore.pool.validationQuery=SELECT 1
