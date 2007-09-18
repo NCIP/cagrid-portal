@@ -480,7 +480,7 @@
 				<artifact refid="advertisement.jars" />
 				<artifact refid="jdom.jars" />
 			</resolveDependencies>
-			<delete dir="${projects.dir}/grid-delegation-service/schema/Dorian/xsd" />
+			<delete dir="${projects.dir}/cds/schema/CredentialDelegationService/xsd" />
 			<resolveDependencies extdir="${projects.dir}/cds/schema/CredentialDelegationService">
 				<artifact refid="metadata.schemas" />
 			</resolveDependencies>
