@@ -3,14 +3,14 @@
  */
 package gov.nih.nci.cagrid.portal2.domain.metadata.common;
 
+import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -21,8 +21,6 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
-import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -47,7 +45,7 @@ public class UMLAttribute extends AbstractDomainObject {
 	public void setDataTypeName(String dataTypeName) {
 		this.dataTypeName = dataTypeName;
 	}
-	
+
 	@Column(length = 4000)
 	public String getDescription() {
 		return description;
@@ -55,6 +53,7 @@ public class UMLAttribute extends AbstractDomainObject {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
 	public String getName() {
 		return name;
 	}
@@ -84,7 +83,7 @@ public class UMLAttribute extends AbstractDomainObject {
 	public void setUmlClass(UMLClass umlClass) {
 		this.umlClass = umlClass;
 	}
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "val_dom_id")
 	public ValueDomain getValueDomain() {

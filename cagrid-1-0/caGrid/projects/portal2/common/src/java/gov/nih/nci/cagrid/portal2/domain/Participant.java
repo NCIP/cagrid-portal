@@ -24,6 +24,7 @@ import org.hibernate.annotations.Parameter;
 @Entity
 @Table(name = "participants")
 @GenericGenerator(name = "id-generator", strategy = "native", parameters = { @Parameter(name = "sequence", value = "seq_participants") })
+
 public class Participant extends AbstractDomainObject {
 
 	private List<Workspace> workspaces = new ArrayList<Workspace>();
@@ -43,6 +44,7 @@ public class Participant extends AbstractDomainObject {
 	private String homepageUrl;
 	
 
+
 	@ManyToOne
 	@JoinColumn(name = "address_id")
 	public Address getAddress() {
@@ -53,6 +55,7 @@ public class Participant extends AbstractDomainObject {
 		this.address = address;
 	}
 
+
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -60,6 +63,7 @@ public class Participant extends AbstractDomainObject {
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
+
 
 	public String getHomepageUrl() {
 		return homepageUrl;
@@ -69,6 +73,7 @@ public class Participant extends AbstractDomainObject {
 		this.homepageUrl = homepageUrl;
 	}
 
+
 	public String getInstitution() {
 		return institution;
 	}
@@ -76,6 +81,7 @@ public class Participant extends AbstractDomainObject {
 	public void setInstitution(String institution) {
 		this.institution = institution;
 	}
+
 
 	public String getName() {
 		return name;
@@ -94,6 +100,7 @@ public class Participant extends AbstractDomainObject {
 		this.status = status;
 	}
 
+
 	@ManyToMany(mappedBy = "participants")
 	public List<Workspace> getWorkspaces() {
 		return workspaces;
@@ -102,6 +109,7 @@ public class Participant extends AbstractDomainObject {
 	public void setWorkspaces(List<Workspace> workspaces) {
 		this.workspaces = workspaces;
 	}
+
 
 	public String getPhone() {
 		return phone;

@@ -3,12 +3,9 @@
  */
 package gov.nih.nci.cagrid.portal2.domain.metadata.service;
 
-import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
-
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 /**
@@ -23,7 +20,7 @@ public class InputParameter extends AbstractParameter {
 	private String name;
 	private boolean isRequired;
 	private Operation operation;
-	
+
 	@ManyToOne
 	public Operation getOperation() {
 		return operation;
@@ -40,6 +37,7 @@ public class InputParameter extends AbstractParameter {
 	public void setRequired(boolean isRequired) {
 		this.isRequired = isRequired;
 	}
+	
 	public String getName() {
 		return name;
 	}

@@ -32,8 +32,8 @@
 	</path>
 
 	<path id="test.cp">
-		<pathelement location="${classes.dir}" />
-		<path refid="cp" />
+
+		<path refid="run.cp" />
 		<fileset dir="${test.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -126,10 +126,13 @@
 					<include name="**/ServiceMetadataAggregatorTest.java" />
 
 					<exclude name="**/ServiceMetadataDaoTest.java" />
-					-->
+
 
 					<include name="**/GridServiceDaoTest.java" />
-
+					-->
+					
+					
+					
 					<exclude name="**/Abstract*.java" />
 				</fileset>
 			</batchtest>
@@ -138,7 +141,7 @@
 	</target>
 
 	<target name="run" depends="compile-test">
-		<java classname="test.CheckInheritence" classpathref="test.cp" />
+		<java classname="test.TestHibernateSearch" classpathref="test.cp" />
 	</target>
 
 	<target name="jar" depends="compile">
@@ -177,6 +180,10 @@
 		<java classname="gov.nih.nci.cagrid.portal2.util.RunGeocode" classpathref="run.cp" fork="true" />
 	</target>
 
+	<target name="run-text" depends="jar">
+		<java classname="gov.nih.nci.cagrid.portal2.util.RunTextIndex" classpathref="run.cp" fork="true" />
+	</target>
+
 	<target name="kill-svc-meta" depends="jar">
 		<java classname="gov.nih.nci.cagrid.portal2.util.KillServiceMetadata" classpathref="run.cp" />
 	</target>
@@ -186,8 +193,8 @@
 	</target>
 
 	<target name="load-workspaces" depends="jar">
-		<java classname="gov.nih.nci.cagrid.portal2.util.WorkspacesLoader" classpathref="run.cp" fork="true" >
-			<arg value="db/caBIG_Workspaces_participants.xls"/>
+		<java classname="gov.nih.nci.cagrid.portal2.util.WorkspacesLoader" classpathref="run.cp" fork="true">
+			<arg value="db/caBIG_Workspaces_participants.xls" />
 		</java>
 	</target>
 

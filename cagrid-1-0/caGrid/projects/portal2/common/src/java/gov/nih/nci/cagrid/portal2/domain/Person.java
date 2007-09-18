@@ -6,16 +6,10 @@ package gov.nih.nci.cagrid.portal2.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -57,6 +51,7 @@ public class Person extends AbstractDomainObject {
 		this.addresses = addresses;
 	}
 
+
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -64,6 +59,7 @@ public class Person extends AbstractDomainObject {
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
+
 
 	public String getFirstName() {
 		return firstName;
@@ -73,6 +69,7 @@ public class Person extends AbstractDomainObject {
 		this.firstName = firstName;
 	}
 
+
 	public String getLastName() {
 		return lastName;
 	}
@@ -80,6 +77,7 @@ public class Person extends AbstractDomainObject {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 
 	public String getPhoneNumber() {
 		return phoneNumber;

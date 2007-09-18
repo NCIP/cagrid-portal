@@ -37,24 +37,32 @@ public class Workspace extends AbstractDomainObject {
 	public Workspace() {
 
 	}
+	
+
 	public String getAbbreviation() {
 		return abbreviation;
 	}
 	public void setAbbreviation(String abbreviation) {
 		this.abbreviation = abbreviation;
 	}
+	
+
 	public String getDescription() {
 		return description;
 	}
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+
 	public String getHomepageUrl() {
 		return homepageUrl;
 	}
 	public void setHomepageUrl(String homepageUrl) {
 		this.homepageUrl = homepageUrl;
 	}
+	
+
 	public String getName() {
 		return name;
 	}
@@ -71,7 +79,7 @@ public class Workspace extends AbstractDomainObject {
 				@JoinColumn(name = "participant_id"), 
 			uniqueConstraints = 
 				@UniqueConstraint(columnNames = 
-					{"workspace_id", "participant_id" }))	
+					{"workspace_id", "participant_id" }))
 	public List<Participant> getParticipants() {
 		return participants;
 	}

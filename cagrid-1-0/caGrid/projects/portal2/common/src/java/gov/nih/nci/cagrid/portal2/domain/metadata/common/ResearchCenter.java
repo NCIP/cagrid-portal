@@ -3,6 +3,10 @@
  */
 package gov.nih.nci.cagrid.portal2.domain.metadata.common;
 
+import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
+import gov.nih.nci.cagrid.portal2.domain.Address;
+import gov.nih.nci.cagrid.portal2.domain.metadata.ServiceMetadata;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +23,6 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
-import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
-import gov.nih.nci.cagrid.portal2.domain.Address;
-import gov.nih.nci.cagrid.portal2.domain.metadata.ServiceMetadata;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>

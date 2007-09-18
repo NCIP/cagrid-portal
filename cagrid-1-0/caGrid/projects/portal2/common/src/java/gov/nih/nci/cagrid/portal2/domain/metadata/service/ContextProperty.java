@@ -3,6 +3,8 @@
  */
 package gov.nih.nci.cagrid.portal2.domain.metadata.service;
 
+import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -10,8 +12,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
-import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -29,7 +29,7 @@ public class ContextProperty extends AbstractDomainObject {
 	private String name;
 	private String description;
 	private ServiceContext serviceContext;
-	
+
 	@ManyToOne
 	public ServiceContext getServiceContext() {
 		return serviceContext;
@@ -37,6 +37,7 @@ public class ContextProperty extends AbstractDomainObject {
 	public void setServiceContext(ServiceContext serviceContext) {
 		this.serviceContext = serviceContext;
 	}
+	
 	@Column(length = 4000)
 	public String getDescription() {
 		return description;
@@ -44,6 +45,7 @@ public class ContextProperty extends AbstractDomainObject {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
 	public String getName() {
 		return name;
 	}

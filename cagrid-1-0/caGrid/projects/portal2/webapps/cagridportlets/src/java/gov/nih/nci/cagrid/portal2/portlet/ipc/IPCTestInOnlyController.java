@@ -53,6 +53,7 @@ public class IPCTestInOnlyController implements Controller {
 	 */
 	public ModelAndView handleRenderRequest(RenderRequest request,
 			RenderResponse response) throws Exception {
+
 		MessageHelper.loadPrefs(request);
 		MessageHelper helper = new MessageHelper(request);
 		String input1 = helper.getAsString(getInput1Name());

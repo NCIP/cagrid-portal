@@ -3,25 +3,22 @@
  */
 package gov.nih.nci.cagrid.portal2.domain.metadata.common;
 
+import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
-import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -36,7 +33,8 @@ public class Enumeration extends AbstractDomainObject {
 	private List<SemanticMetadata> semanticMetadata = new ArrayList<SemanticMetadata>();
 	private String valueMeaning;
 	private ValueDomain valueDomain;
-	
+
+
 	public String getPermissibleValue() {
 		return permissibleValue;
 	}
@@ -66,6 +64,7 @@ public class Enumeration extends AbstractDomainObject {
 	public void setValueDomain(ValueDomain valueDomain) {
 		this.valueDomain = valueDomain;
 	}
+	
 	public String getValueMeaning() {
 		return valueMeaning;
 	}

@@ -27,7 +27,7 @@ public class ServiceAnnotation extends AbstractDomainObject {
 	private String type;
 	private String value;
 	private GridService service;
-	
+
 	@ManyToOne
 	@JoinColumn(name="service_id")
 	public GridService getService() {
@@ -42,6 +42,7 @@ public class ServiceAnnotation extends AbstractDomainObject {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
 	public String getValue() {
 		return value;
 	}

@@ -7,6 +7,9 @@ lib/hibernate/annotations/*.jar
 lib/hibernate/core/*.jar
  - From Hibernate 3.2.3 core release
  
+lib/hiberante/search/*.jar
+ - From Hibernate 3.0.0.CR1
+ 
 lib/hsqldb/*.jar
  - From HSQLDB 1.8.0.7 release
  

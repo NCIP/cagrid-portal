@@ -8,6 +8,28 @@
 
 
 	<portlet>
+		<description>caGrid Map Portlet</description>
+		<portlet-name>gmap</portlet-name>
+		<display-name>caGrid Map Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/gmap-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Map Portlet</title>
+			<short-title>caGrid Map Portlet</short-title>
+			<keywords>cagrid,map,discovery</keywords>
+		</portlet-info>
+	</portlet>
+
+	<portlet>
 		<portlet-name>participantsadmin</portlet-name>
 		<display-name>caGrid Participants</display-name>
 		<portlet-class>

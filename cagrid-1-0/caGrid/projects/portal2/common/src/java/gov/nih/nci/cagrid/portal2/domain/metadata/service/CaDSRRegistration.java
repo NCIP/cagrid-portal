@@ -3,14 +3,14 @@
  */
 package gov.nih.nci.cagrid.portal2.domain.metadata.service;
 
+import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
-import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -28,7 +28,7 @@ public class CaDSRRegistration extends AbstractDomainObject {
 	private String registrationStatus;
 	private String workflowStatus;
 	private Service service;
-	
+
 	public String getRegistrationStatus() {
 		return registrationStatus;
 	}
@@ -43,6 +43,7 @@ public class CaDSRRegistration extends AbstractDomainObject {
 	public void setService(Service service) {
 		this.service = service;
 	}
+	
 	public String getWorkflowStatus() {
 		return workflowStatus;
 	}

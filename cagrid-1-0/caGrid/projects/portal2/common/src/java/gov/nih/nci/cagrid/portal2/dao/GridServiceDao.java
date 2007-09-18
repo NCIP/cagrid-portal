@@ -116,4 +116,18 @@ public class GridServiceDao extends AbstractDao<GridService> {
 		});
 	}
 
+	public List<GridService> getAllDataServices() {
+		List<GridService> services = new ArrayList<GridService>();
+		List l = getHibernateTemplate().find("from GridDataService");
+		services.addAll(l);
+		return services;
+	}
+	
+	public List<GridService> getAllAnalyticalServices(){
+		List<GridService> services = new ArrayList<GridService>();
+		List l = getHibernateTemplate().find("from GridService gs where gs.class = GridService");
+		services.addAll(l);
+		return services;
+	}
+
 }

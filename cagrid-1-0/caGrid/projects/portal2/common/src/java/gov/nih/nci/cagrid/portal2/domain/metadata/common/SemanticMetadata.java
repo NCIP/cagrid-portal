@@ -30,7 +30,7 @@ public class SemanticMetadata extends AbstractDomainObject {
 	private String conceptDefinition;
 	private Integer orderLevel;
 	private String conceptCode;
-	
+
 	@Column(name = "sm_ccode")
 	public String getConceptCode() {
 		return conceptCode;

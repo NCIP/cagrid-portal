@@ -6,7 +6,6 @@ package gov.nih.nci.cagrid.portal2.domain.metadata.common;
 import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
 import gov.nih.nci.cagrid.portal2.domain.Person;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;

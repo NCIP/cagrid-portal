@@ -3,6 +3,8 @@
  */
 package gov.nih.nci.cagrid.portal2.domain.metadata.common;
 
+import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,23 +13,18 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
-import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -65,12 +62,14 @@ public class UMLClass extends AbstractDomainObject {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
 	public String getPackageName() {
 		return packageName;
 	}
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
 	}
+	
 	public String getProjectName() {
 		return projectName;
 	}
@@ -106,6 +105,7 @@ public class UMLClass extends AbstractDomainObject {
 	public void setUmlAttributeCollection(List<UMLAttribute> umlAttributeCollection) {
 		this.umlAttributeCollection = umlAttributeCollection;
 	}
+	
 	public String getCadsrId() {
 		return cadsrId;
 	}

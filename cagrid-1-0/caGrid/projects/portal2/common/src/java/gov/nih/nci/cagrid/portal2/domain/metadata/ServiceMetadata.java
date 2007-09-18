@@ -11,7 +11,6 @@ import gov.nih.nci.cagrid.portal2.domain.metadata.service.Service;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 

@@ -3,13 +3,13 @@
  */
 package gov.nih.nci.cagrid.portal2.domain.metadata.common;
 
+import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -19,8 +19,6 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
-import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -35,7 +33,7 @@ public class ValueDomain extends AbstractDomainObject {
 	private String longName;
 	private List<SemanticMetadata> semanticMetadata = new ArrayList<SemanticMetadata>();
 	private String unitOfMeasure;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "valueDomain")
 	public List<Enumeration> getEnumerationCollection() {
 		return enumerationCollection;
@@ -43,6 +41,8 @@ public class ValueDomain extends AbstractDomainObject {
 	public void setEnumerationCollection(List<Enumeration> enumerationCollection) {
 		this.enumerationCollection = enumerationCollection;
 	}
+	
+
 	public String getLongName() {
 		return longName;
 	}

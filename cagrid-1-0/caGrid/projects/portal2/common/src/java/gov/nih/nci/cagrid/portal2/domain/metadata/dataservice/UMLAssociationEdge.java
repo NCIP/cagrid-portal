@@ -32,7 +32,7 @@ public class UMLAssociationEdge extends AbstractDomainObject {
 	private String role;
 	private UMLClass type;
 	private UMLAssociation association;
-	
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "assoc_id")
 	public UMLAssociation getAssociation() {

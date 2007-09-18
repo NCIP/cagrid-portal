@@ -49,6 +49,7 @@ public class DomainModel extends AbstractDomainObject {
 		this.classes = classes;
 	}
 	
+
 	@Column(length = 4000)
 	public String getProjectDescription() {
 		return projectDescription;
@@ -56,12 +57,16 @@ public class DomainModel extends AbstractDomainObject {
 	public void setProjectDescription(String projectDescription) {
 		this.projectDescription = projectDescription;
 	}
+	
+
 	public String getProjectLongName() {
 		return projectLongName;
 	}
 	public void setProjectLongName(String projectLongName) {
 		this.projectLongName = projectLongName;
 	}
+	
+
 	public String getProjectShortName() {
 		return projectShortName;
 	}

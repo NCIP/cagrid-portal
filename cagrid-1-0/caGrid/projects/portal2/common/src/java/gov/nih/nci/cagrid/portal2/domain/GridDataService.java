@@ -20,6 +20,7 @@ public class GridDataService extends GridService {
 
 	private DomainModel domainModel;
 	
+
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "service")
 	public DomainModel getDomainModel() {
 		return domainModel;

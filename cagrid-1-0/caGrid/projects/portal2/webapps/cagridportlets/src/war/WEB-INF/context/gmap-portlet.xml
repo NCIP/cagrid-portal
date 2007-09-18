@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+	<bean id="viewController"
+		class="gov.nih.nci.cagrid.portal2.portlet.map.MapViewController">
+		
+		<property name="viewName" value="view" />
+		<property name="gridServiceDao" ref="gridServiceDao"/>
+		<property name="participantDao" ref="participantDao"/>
+		
+	</bean>
+	
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+
+		<property name="interceptors">
+			<list>
+				<ref bean="parameterMappingInterceptor" />
+				<ref bean="openSessionInViewInterceptor" />
+			</list>
+		</property>
+
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="viewController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/gmap/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>		
+
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate" />
+		
+	<bean id="mapBean" class="gov.nih.nci.cagrid.portal2.portlet.map.MapBean" scope="prototype">
+
+		<property name="baseUrl" value="http://maps.google.com/maps?file=api&amp;v=2&amp;key="/>	
+		<property name="apiKey" value="ABQIAAAA8g3SgjzSraL7VirbuaelwhTh_sjBSLCHIDZfjzu1cFb3Pz7MrRRwzQ8piYVd7Rd_4Qqv-e2zrwSHpg"/>
+		<property name="centerLatitude" value="40"/>
+		<property name="centerLongitude" value="-95"/>
+		<property name="zoomLevel" value="4"/>
+	
+	</bean>
+
+</beans>

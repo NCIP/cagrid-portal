@@ -4,10 +4,8 @@
 package gov.nih.nci.cagrid.portal2.domain;
 
 import gov.nih.nci.cagrid.portal2.domain.metadata.ServiceMetadata;
-import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.DomainModel;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,7 +15,6 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -44,6 +41,7 @@ import org.hibernate.annotations.Parameter;
 @DiscriminatorColumn(name = "service_type", discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("GridService")
 @ForceDiscriminator
+
 public class GridService extends AbstractDomainObject {
 	
 	private List<IndexService> indexServices = new ArrayList<IndexService>();
@@ -53,7 +51,7 @@ public class GridService extends AbstractDomainObject {
 	private String metadataHash;
 	private List<StatusChange> statusHistory = new ArrayList<StatusChange>();
 	
-	
+
 	@OneToMany(mappedBy="service", cascade = CascadeType.ALL)
 	public List<ServiceAnnotation> getAnnotations() {
 		return annotations;
@@ -62,6 +60,7 @@ public class GridService extends AbstractDomainObject {
 		this.annotations = annotations;
 	}
 	
+
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "service")
 	public ServiceMetadata getServiceMetadata() {
 		return serviceMetadata;
@@ -70,6 +69,7 @@ public class GridService extends AbstractDomainObject {
 		this.serviceMetadata = serviceMetadata;
 	}
 	
+
 	public String getUrl() {
 		return url;
 	}
