@@ -461,10 +461,9 @@
 	
 	
 	    <!-- =============================================================== -->
-		<!-- Credential Delegation Service:                                        -->
+		<!-- Credential Delegation Service:                                  -->
 		<!-- =============================================================== -->
-
-		<target name="build-cds" description="Builds the Grid Delegation Service project">
+		<target name="build-cds" depends="prepare" description="Builds the Grid Delegation Service project">
 			<resolveDependencies extdir="${projects.dir}/cds/ext">
 				<artifact refid="cagrid.properties" />
 				<artifact refid="service.tools.jars" />
