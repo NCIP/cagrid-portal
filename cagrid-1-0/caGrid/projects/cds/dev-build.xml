@@ -5,14 +5,18 @@
 	<!-- build process without having to edit the master build.xml      -->
 	<!-- file. DO NOT REMOVE ANY TARGETS                                -->
 	<!-- ============================================================== -->
-
-
+	
+	
 	<!-- ============================================================== -->
 	<!-- Place any other properties you will need here                  -->
 	<!-- ============================================================== -->
 
 	<property name="ext.lib.dir" value="ext/lib" />
+	<property name="ext.test.lib" value="ext/test/lib" />
+	
+	<!--need to import the test build-->
 
+	<import file="test/test.xml" />
 
 	<!-- ============================================================== -->
 	<!-- Create any extended Classpaths here                            -->
@@ -30,8 +34,12 @@
 		<path id="test.build.extended.classpath">
 		</path>
 		<path id="test.run.extended.classpath">
+			<fileset dir="${ext.test.lib}">
+							<include name="*.jar" />
+						</fileset>
 		</path>
 		<path id="run.extended.classpath">
+			<pathelement location="${test.dir}/resources" />
 		</path>
 	</target>
 
@@ -171,23 +179,6 @@
 	</target>
 
 
-	<!-- ============================================================== -->
-	<!-- Call any tests.                                                -->
-	<!-- ============================================================== -->
-	<target name="test" depends="checkGlobus" description="Runs the service's tests.">
-		<echo message="Test results dir: ${junit.results.dir}" />
-		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" showoutput="true">
-			<classpath refid="test.run.classpath" />
-			<formatter type="xml" />
-			<batchtest fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/Test*.java" />
-					<include name="**/*TestCase.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-	</target>
 
 
 </project>
