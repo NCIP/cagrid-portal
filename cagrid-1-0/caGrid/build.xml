@@ -458,6 +458,37 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/security-ui" inheritAll="false" antfile="build.xml" target="all" />
     </target>
+	
+	
+	    <!-- =============================================================== -->
+		<!-- Credential Delegation Service:                                        -->
+		<!-- =============================================================== -->
+
+		<target name="build-cds" description="Builds the Grid Delegation Service project">
+			<resolveDependencies extdir="${projects.dir}/cds/ext">
+				<artifact refid="cagrid.properties" />
+				<artifact refid="service.tools.jars" />
+				<artifact refid="grape.jars" />
+				<artifact refid="mds.jars" />
+				<artifact refid="common.test.jars" />
+				<artifact refid="test.coverage.jars" />
+				<artifact refid="core.test.jars" />
+				<artifact refid="gridca.jars" />
+				<artifact refid="servicesecurity.jars" />
+				<artifact refid="security.metadata.jars" />
+				<artifact refid="common.metadata.jars" />
+				<artifact refid="advertisement.jars" />
+				<artifact refid="jdom.jars" />
+			</resolveDependencies>
+			<delete dir="${projects.dir}/grid-delegation-service/schema/Dorian/xsd" />
+			<resolveDependencies extdir="${projects.dir}/cds/schema/CredentialDelegationService">
+				<artifact refid="metadata.schemas" />
+			</resolveDependencies>
+			<resolveDependencies extdir="${projects.dir}/cds/schema/CredentialDelegationService">
+				<artifact refid="service.tools.schemas" />
+			</resolveDependencies>
+			<ant dir="${projects.dir}/cds" inheritAll="false" antfile="build.xml" target="all" />
+		</target>
 
     <!-- =============================================================== -->
     <!-- Build Grid Grouper:                                             -->

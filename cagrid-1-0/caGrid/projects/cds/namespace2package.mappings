@@ -1,0 +1,11 @@
+http\://cds.gaards.cagrid.org/CredentialDelegationService=org.cagrid.gaards.cds.stubs
+http\://cds.gaards.cagrid.org/CredentialDelegationService/bindings=org.cagrid.gaards.cds.stubs.bindings
+http\://cds.gaards.cagrid.org/CredentialDelegationService/service=org.cagrid.gaards.cds.stubs.service
+http\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=gov.nih.nci.cagrid.introduce.security.stubs
+
+http\://gaards.cagrid.org/cds=org.cagrid.gaards.cds.common
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security
+http\://cds.gaards.cagrid.org/CredentialDelegationService/types=org.cagrid.gaards.cds.stubs.types
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common
