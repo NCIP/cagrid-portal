@@ -30,12 +30,6 @@
     <!-- ============================================================================ -->
     <target name="test" depends="checkGlobus,set-unit-test-defaults">
         <echo message="Test results dir: ${junit.results.dir}" />
-        <!-- Clean out old logs first -->
-        <delete failonerror="false">
-            <fileset dir="${junit.results.dir}">
-                <include name="*" />
-            </fileset>
-        </delete>
         <mkdir dir="${junit.results.dir}" />
 
 
