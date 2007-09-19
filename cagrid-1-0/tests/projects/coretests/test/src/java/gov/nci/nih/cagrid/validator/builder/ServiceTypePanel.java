@@ -59,7 +59,7 @@ import javax.swing.event.ListSelectionListener;
  * @author David Ervin
  * 
  * @created Sep 5, 2007 12:25:19 PM
- * @version $Id: ServiceTypePanel.java,v 1.4 2007-09-11 14:54:24 dervin Exp $ 
+ * @version $Id: ServiceTypePanel.java,v 1.5 2007-09-19 18:08:11 dervin Exp $ 
  */
 public class ServiceTypePanel extends JPanel {
     public static final String JAVA_CLASS_PATH = "java.class.path";
@@ -788,6 +788,7 @@ public class ServiceTypePanel extends JPanel {
                     System.gc();
                 }
                 Collections.sort(subs);
+                getStepClassnameComboBox().removeAllItems();
                 for (String name : subs) {
                     getStepClassnameComboBox().addItem(name);   
                 }
