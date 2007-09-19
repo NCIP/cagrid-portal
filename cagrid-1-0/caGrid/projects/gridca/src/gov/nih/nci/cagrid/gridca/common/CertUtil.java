@@ -28,6 +28,7 @@ import java.util.Date;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERInputStream;
 import org.bouncycastle.asn1.DERObjectIdentifier;
+import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.CRLNumber;
@@ -245,8 +246,9 @@ public class CertUtil {
 			new ByteArrayInputStream(cacert.getPublicKey().getEncoded())).readObject());
 		certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false, new AuthorityKeyIdentifier(apki));
 		if (policyId != null) {
-			certGen.addExtension(X509Extensions.CertificatePolicies, false, new PolicyInformation(
-				new DERObjectIdentifier(policyId)));
+			PolicyInformation pi = new PolicyInformation(new DERObjectIdentifier(policyId));
+			DERSequence seq = new DERSequence(pi);
+			certGen.addExtension(X509Extensions.CertificatePolicies.getId(), false, seq);
 		}
 
 		X509Certificate issuedCert = certGen.generateX509Certificate(signerKey, provider);
