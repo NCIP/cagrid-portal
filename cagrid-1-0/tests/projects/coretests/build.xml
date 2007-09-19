@@ -275,7 +275,7 @@
 	<!-- ============================================================== -->
 	<!-- Runs the deployment validation builder tool                    -->
 	<!-- ============================================================== -->
-	<target name="buildDeploymentValidation" depends="jar" description="Runs the deployment validation builder tool">
+	<target name="buildDeploymentValidation" description="Runs the deployment validation builder tool">
 		<java classname="gov.nci.nih.cagrid.validator.builder.DeploymentValidationBuilder" fork="true">
 			<classpath refid="build.classpath"/>
 			<classpath refid="test.classpath"/>
@@ -291,6 +291,27 @@
 			</classpath>
 			<!-- required for searching through large numbers of classes for test steps -->
 			<jvmarg line="-XX:MaxPermSize=256m"/>
+		</java>
+	</target>
+	
+	
+	<!-- ============================================================== -->
+	<!-- Runs a deployment validation builder tool                      -->
+	<!-- ============================================================== -->
+	<target name="runValidation" description="Runs a grid deployment validation package.  Use -Dvalidation.desc to specify the description file">
+		<java classname="gov.nci.nih.cagrid.validator.ValidationRunner" fork="true">
+			<classpath refid="build.classpath"/>
+			<classpath refid="test.classpath"/>
+			<classpath>
+				<fileset dir="${jar.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+			<classpath>
+				<fileset dir="${build.lib.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
 		</java>
 	</target>
 
