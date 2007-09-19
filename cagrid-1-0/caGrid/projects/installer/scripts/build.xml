@@ -556,7 +556,7 @@
 		<xmltask source="${tomcat.home}/conf/server.xml"
 			dest="${tomcat.home}/conf/server.xml">
 			<remove
-				path="/Server/Service[@name='Catalina']/Connector[@port='${tomcat.old.https.port}']" />
+				path="/Server/Service[@name='Catalina']/Connector[@scheme='https']" />
 			<insert path="/Server/Service[@name='Catalina']">
 				<![CDATA[
 				<Connector
