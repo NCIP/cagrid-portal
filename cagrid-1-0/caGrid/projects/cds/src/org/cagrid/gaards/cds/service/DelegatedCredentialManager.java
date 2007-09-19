@@ -15,6 +15,7 @@ import org.cagrid.gaards.cds.conf.PolicyHandlerConfiguration;
 import org.cagrid.gaards.cds.conf.PolicyHandlerDescription;
 import org.cagrid.gaards.cds.conf.PolicyHandlers;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
+import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.database.DatabaseException;
 import org.cagrid.tools.events.EventManager;
@@ -71,7 +72,14 @@ public class DelegatedCredentialManager {
 	}
 
 
-	public void delegateCredential(String callerGridIdentity, DelegationPolicy policy) {
+	public void delegateCredential(String callerGridIdentity, DelegationPolicy policy) throws CDSInternalFault,
+		InvalidPolicyFault {
+		String policyType = policy.getClass().getName();
+		if (!this.handlers.containsKey(policyType)) {
+			InvalidPolicyFault f = new InvalidPolicyFault();
+			f.setFaultString("The policy " + policyType + " is not a supported policy.");
+			throw f;
+		}
 
 	}
 
