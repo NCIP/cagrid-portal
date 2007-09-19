@@ -8,6 +8,7 @@ import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERObject;
 import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.globus.gsi.CertUtil;
 import org.globus.gsi.bc.BouncyCastleUtil;
@@ -34,6 +35,7 @@ public class CertificateExtensionsUtil {
 	public static final String policyMappingsOID = "2.5.29.33";
 	public static final String authorityKeyIdentifierOID = "2.5.29.35";
 	public static final String policyConstraintsOID = "2.5.29.36";
+	public static final String certificatePolicies = "2.5.29.32";
 
 
 	public static String getExtentionName(String oid) {
@@ -41,6 +43,8 @@ public class CertificateExtensionsUtil {
 			return "SubjectKeyIdentifier";
 		} else if (oid.equals(keyUsageOID)) {
 			return "KeyUsage";
+		}else if (oid.equals(certificatePolicies)) {
+			return "CertificatePolicies";
 		} else if (oid.equals(privateKeyUsageOID)) {
 			return "PrivateKeyUsage";
 		} else if (oid.equals(subjectAlternativeNameOID)) {
@@ -162,6 +166,8 @@ public class CertificateExtensionsUtil {
 				}
 
 				return sb.toString();
+			}else if (oid.equals(certificatePolicies)) {
+				return "*** DISPLAY NOT SUPPORTED ***";
 			} else if (oid.equals(privateKeyUsageOID)) {
 				return "*** DISPLAY NOT SUPPORTED ***";
 			} else if (oid.equals(subjectAlternativeNameOID)) {
