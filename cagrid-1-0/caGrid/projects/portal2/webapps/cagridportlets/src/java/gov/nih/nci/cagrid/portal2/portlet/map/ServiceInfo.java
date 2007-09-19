@@ -14,6 +14,7 @@ public class ServiceInfo {
 	private String name;
 	private String center;
 	private String status;	
+	private String url;
 	
 	/**
 	 * @param service 
@@ -22,7 +23,8 @@ public class ServiceInfo {
 	public ServiceInfo(GridService service) {
 		setName(service.getServiceMetadata().getServiceDescription().getName());
 		setCenter(service.getServiceMetadata().getHostingResearchCenter().getDisplayName());
-		setStatus(service.getCurrentStatus().toString());		
+		setStatus(service.getCurrentStatus().toString());
+		setUrl(service.getUrl());
 	}
 	
 	public ServiceInfo(){
@@ -51,6 +53,14 @@ public class ServiceInfo {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}	
 	
 }

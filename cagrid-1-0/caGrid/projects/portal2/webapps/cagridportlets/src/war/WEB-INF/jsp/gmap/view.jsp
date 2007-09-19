@@ -10,7 +10,7 @@
 		<form:option value="analyticalServices">--Analytical Services</form:option>
 		<form:option value="participants">All Participants</form:option>
 		<form:option value="CTMS">--Clinical Trials Management Systems</form:option>
-		<form:option value="ICR">--Integrative Cancert Research</form:option>
+		<form:option value="ICR">--Integrative Cancer Research</form:option>
 		<form:option value="IMAGING">--In Vivo Imaging</form:option>
 		<form:option value="TBPT">--Tissue Banks and Pathology Tools</form:option>
 		<form:option value="ARCH">--Architecture</form:option>
@@ -104,7 +104,8 @@
 								
 								<c:forEach items="${svcNode.serviceInfos}" var="svcInfo">
 								
-									"<b><c:out value="${svcInfo.name}"/></b><br/>" +
+									"<a href=\"<portlet:actionURL><portlet:param name="action" value="selectService"/><portlet:param name="sgs_url"><jsp:attribute name="value"><c:out value="${svcInfo.url}"/></jsp:attribute></portlet:param></portlet:actionURL>\" " +
+                      			   	"alt=\"View Service Details\"><c:out value="${svcInfo.name}"/></a><br/>" +
 									"Hosting Center: <c:out value="${svcInfo.center}"/><br/>" +
 									"Status: <c:out value="${svcInfo.status}"/><br/><hr/>" +
 									

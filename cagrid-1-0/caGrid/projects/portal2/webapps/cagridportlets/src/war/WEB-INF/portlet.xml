@@ -6,6 +6,27 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd
 	                             http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
 
+	<portlet>
+		<description>My Test Portlet</description>
+		<portlet-name>mytest</portlet-name>
+		<display-name>My Test Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/test-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>My Test Portlet</title>
+			<short-title>My Test Portlet</short-title>
+			<keywords>test</keywords>
+		</portlet-info>
+	</portlet>
 
 	<portlet>
 		<description>caGrid Map Portlet</description>

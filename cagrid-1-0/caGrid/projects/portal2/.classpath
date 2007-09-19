@@ -75,6 +75,7 @@
 	<classpathentry kind="lib" path="lib/poi/poi-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate/search/lucene-core-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate/search/hibernate-search.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-taglib/standard.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/puretls.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jgss.jar"/>
