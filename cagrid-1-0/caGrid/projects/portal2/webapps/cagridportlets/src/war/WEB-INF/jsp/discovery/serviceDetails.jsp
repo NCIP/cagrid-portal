@@ -20,6 +20,8 @@
     // ]]>
 </script>
 
+<c:set var="detailsDivId"><portlet:namespace />-details</c:set>
+
 <style type="text/css">
 <!--
 .exp_node{
@@ -33,17 +35,34 @@
 	list-style-image: none;
 	list-style-type: circle;
 }
+#<c:out value="${detailsDivId}"/>{
+	width: 100%; 
+	height: 200px; 
+	overflow: auto;
+}
 -->
 </style>
 
+<div id="<c:out value="${detailsDivId}"/>">
 <portlet:actionURL var="action"/>
 
-<form:form action="${action}">
+<form:form name="selectGridServiceForm" action="${action}">
 	<c:if test="${empty gridServiceUrl}">Enter a </c:if>Grid Service URL:
 	<input name="gridServiceUrl" type="text" value="<c:out value="${gridServiceUrl}"/>"/>
 	<input type="submit" value="Show"/>
 </form:form>
 
+<c:choose>
+<c:when test="${!empty gridServiceUrl && maximize}">
+	<script type="text/javascript">
+	// <![CDATA[
+	
+	document.selectGridServiceForm.submit();
+	
+	// ]]>
+	</script>
+</c:when>
+<c:otherwise>
 <c:choose>
 	<c:when test="${!empty gridServiceUrl and empty gridService}">
 		No grid service found for <c:out value="${gridServiceUrl}"/>
@@ -256,3 +275,7 @@
 No service is currently selected.
 	</c:otherwise>
 </c:choose>
+</c:otherwise>
+</c:choose>
+
+</div>

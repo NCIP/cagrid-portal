@@ -4,6 +4,7 @@
 <beans>
 
 	<bean id="selectServiceController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.SelectGridServiceController">
+		<property name="gridServiceDao" ref="gridServiceDao"/>
 		<property name="successAction" value="listServices"/>
 	</bean>
 

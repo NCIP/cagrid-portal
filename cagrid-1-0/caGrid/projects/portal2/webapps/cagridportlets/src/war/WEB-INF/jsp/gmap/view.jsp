@@ -5,20 +5,8 @@
 <form:form action="${action}" commandName="mapBean">
 	<form:select onchange="submit()" path="category">
 		<form:option value="all">All Services and Participants</form:option>
-		<form:option value="services">All Services</form:option>
-		<form:option value="dataServices">--Data Services</form:option>
-		<form:option value="analyticalServices">--Analytical Services</form:option>
-		<form:option value="participants">All Participants</form:option>
-		<form:option value="CTMS">--Clinical Trials Management Systems</form:option>
-		<form:option value="ICR">--Integrative Cancer Research</form:option>
-		<form:option value="IMAGING">--In Vivo Imaging</form:option>
-		<form:option value="TBPT">--Tissue Banks and Pathology Tools</form:option>
-		<form:option value="ARCH">--Architecture</form:option>
-		<form:option value="VCDE">--Vocabulary and Common Data Elements</form:option>
-		<form:option value="DSIC">--Data Sharing and Intellectual Capitol</form:option>
-		<form:option value="TRAINING">--Documentation and Training</form:option>
-		<form:option value="SP">--Strategic Planning</form:option>
-	</form:select>	
+		<%@ include file="/WEB-INF/jsp/include/categories_options.jsp" %>
+	</form:select>
 </form:form>
 
 <script
@@ -32,8 +20,8 @@
     border: 4px solid #5C5C5C;
     margin-left: auto;
     margin-right: auto;
-    width: 700px;
-    height: 400px;
+    width: 95%;
+    height: 300px;
 }
 -->
 </style>
@@ -104,7 +92,7 @@
 								
 								<c:forEach items="${svcNode.serviceInfos}" var="svcInfo">
 								
-									"<a href=\"<portlet:actionURL><portlet:param name="action" value="selectService"/><portlet:param name="sgs_url"><jsp:attribute name="value"><c:out value="${svcInfo.url}"/></jsp:attribute></portlet:param></portlet:actionURL>\" " +
+									"<a href=\"<portlet:actionURL><portlet:param name="category" value="${mapBean.category}"/><portlet:param name="action" value="selectService"/><portlet:param name="sgs_url"><jsp:attribute name="value"><c:out value="${svcInfo.url}"/></jsp:attribute></portlet:param></portlet:actionURL>\" " +
                       			   	"alt=\"View Service Details\"><c:out value="${svcInfo.name}"/></a><br/>" +
 									"Hosting Center: <c:out value="${svcInfo.center}"/><br/>" +
 									"Status: <c:out value="${svcInfo.status}"/><br/><hr/>" +
