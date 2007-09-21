@@ -105,7 +105,7 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient imp
 
 	}
 
-  public void delegateCredential(org.cagrid.gaards.cds.common.DelegationPolicy policy) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+  public void delegateCredential(org.cagrid.gaards.cds.common.DelegationPolicy policy) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"delegateCredential");
     org.cagrid.gaards.cds.stubs.DelegateCredentialRequest params = new org.cagrid.gaards.cds.stubs.DelegateCredentialRequest();

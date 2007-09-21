@@ -20,7 +20,6 @@ import org.cagrid.tools.database.Database;
 import org.cagrid.tools.database.DatabaseException;
 import org.cagrid.tools.events.EventManager;
 
-
 public class DelegatedCredentialManager {
 
 	private final static String TABLE = "delegated_credentials";
@@ -37,9 +36,8 @@ public class DelegatedCredentialManager {
 	private Map<String, PolicyHandler> handlers;
 	private Log log;
 
-
-	public DelegatedCredentialManager(CDSConfiguration conf, EventManager eventManager, Database db)
-		throws CDSInternalFault {
+	public DelegatedCredentialManager(CDSConfiguration conf,
+			EventManager eventManager, Database db) throws CDSInternalFault {
 		this.db = db;
 		this.conf = conf;
 		this.log = LogFactory.getLog(this.getClass().getName());
@@ -51,16 +49,23 @@ public class DelegatedCredentialManager {
 			if (list != null) {
 				for (int i = 0; i < list.length; i++) {
 					try {
-						Class[] types = new Class[]{PolicyHandlerConfiguration.class, Database.class};
-						Constructor c = Class.forName(list[i].getClassName()).getConstructor(types);
-						Object[] objs = new Object[]{list[i].getPolicyHandlerConfiguration(), db};
-						PolicyHandler handler = (PolicyHandler) c.newInstance(objs);
-						this.handlers.put(list[i].getPolicyClassName(), handler);
+						Class[] types = new Class[] {
+								PolicyHandlerConfiguration.class,
+								Database.class };
+						Constructor c = Class.forName(list[i].getClassName())
+								.getConstructor(types);
+						Object[] objs = new Object[] {
+								list[i].getPolicyHandlerConfiguration(), db };
+						PolicyHandler handler = (PolicyHandler) c
+								.newInstance(objs);
+						this.handlers
+								.put(list[i].getPolicyClassName(), handler);
 					} catch (Exception e) {
 						log.error(e.getMessage(), e);
 						CDSInternalFault f = new CDSInternalFault();
-						f.setFaultString("Error loading the handler " + list[i].getClassName() + " for the policy "
-							+ list[i].getPolicyClassName() + ".");
+						f.setFaultString("Error loading the handler "
+								+ list[i].getClassName() + " for the policy "
+								+ list[i].getPolicyClassName() + ".");
 						FaultHelper helper = new FaultHelper(f);
 						helper.addFaultCause(e);
 						f = (CDSInternalFault) helper.getFault();
@@ -71,18 +76,27 @@ public class DelegatedCredentialManager {
 		}
 	}
 
-
-	public void delegateCredential(String callerGridIdentity, DelegationPolicy policy) throws CDSInternalFault,
-		InvalidPolicyFault {
+	public void delegateCredential(String callerGridIdentity,
+			DelegationPolicy policy) throws CDSInternalFault,
+			InvalidPolicyFault {
 		String policyType = policy.getClass().getName();
 		if (!this.handlers.containsKey(policyType)) {
 			InvalidPolicyFault f = new InvalidPolicyFault();
-			f.setFaultString("The policy " + policyType + " is not a supported policy.");
+			f.setFaultString("The policy " + policyType
+					+ " is not a supported policy.");
+			throw f;
+		}
+
+		if ((policy.getKeyLength() < conf.getProxyPolicy().getKeyLength()
+				.getMin())
+				|| (policy.getKeyLength() > conf.getProxyPolicy()
+						.getKeyLength().getMax())) {
+			InvalidPolicyFault f = new InvalidPolicyFault();
+			f.setFaultString("Invalid key length specified.");
 			throw f;
 		}
 
 	}
-
 
 	public void clearDatabase() throws DatabaseException {
 		buildDatabase();
@@ -98,14 +112,16 @@ public class DelegatedCredentialManager {
 		dbBuilt = false;
 	}
 
-
 	private void buildDatabase() throws DatabaseException {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(TABLE)) {
 				String trust = "CREATE TABLE " + TABLE + " (" + DELEGATION_ID
-					+ " INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + GRID_IDENTITY + " VARCHAR(255) NOT NULL,"
-					+ POLICY_TYPE + " VARCHAR(255) NOT NULL," + STATUS + " VARCHAR(50) NOT NULL," + EXPIRATION
-					+ " BIGINT NOT NULL, INDEX document_index (" + DELEGATION_ID + "));";
+						+ " BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+						+ GRID_IDENTITY + " VARCHAR(255) NOT NULL,"
+						+ POLICY_TYPE + " VARCHAR(255) NOT NULL," + STATUS
+						+ " VARCHAR(50) NOT NULL," + EXPIRATION
+						+ " BIGINT NOT NULL, INDEX document_index ("
+						+ DELEGATION_ID + "));";
 				db.update(trust);
 			}
 			dbBuilt = true;

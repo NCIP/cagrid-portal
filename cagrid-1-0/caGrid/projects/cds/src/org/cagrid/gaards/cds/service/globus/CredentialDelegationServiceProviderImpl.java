@@ -26,7 +26,7 @@ public class CredentialDelegationServiceProviderImpl{
 	}
 	
 
-    public org.cagrid.gaards.cds.stubs.DelegateCredentialResponse delegateCredential(org.cagrid.gaards.cds.stubs.DelegateCredentialRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    public org.cagrid.gaards.cds.stubs.DelegateCredentialResponse delegateCredential(org.cagrid.gaards.cds.stubs.DelegateCredentialRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault {
     org.cagrid.gaards.cds.stubs.DelegateCredentialResponse boxedResult = new org.cagrid.gaards.cds.stubs.DelegateCredentialResponse();
     impl.delegateCredential(params.getPolicy().getDelegationPolicy());
     return boxedResult;

@@ -60,6 +60,7 @@
    <ns2:SchemaElement type="CDSInternalFault" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="InvalidPolicyFault" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="PermissionDeniedFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DelegationFault" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/security/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -92,27 +93,28 @@
       <ns4:Exception description="" name="CDSInternalFault" qname="ns7:CDSInternalFault" xmlns:ns7="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
       <ns4:Exception description="" name="InvalidPolicyFault" qname="ns8:InvalidPolicyFault" xmlns:ns8="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
       <ns4:Exception description="" name="PermissionDeniedFault" qname="ns9:PermissionDeniedFault" xmlns:ns9="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
+      <ns4:Exception description="" name="DelegationFault" qname="ns10:DelegationFault" xmlns:ns10="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
      </ns4:Exceptions>
     </ns4:Method>
    </ns4:Methods>
-   <ns10:ResourcePropertiesList xsi:type="ns10:ResourcePropertiesListType" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns10:ResourceProperty qName="ns11:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns10:ResourcePropertyType" xmlns:ns11="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns10:ResourcePropertiesList>
-   <ns12:ServiceSecurity xsi:type="ns12:ServiceSecurity" xmlns:ns12="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns12:SecuritySetting xsi:type="ns12:SecuritySetting">Custom</ns12:SecuritySetting>
-    <ns12:TransportLevelSecurity xsi:type="ns12:TransportLevelSecurity">
-     <ns12:CommunicationMethod xsi:type="ns12:CommunicationMethod">Privacy</ns12:CommunicationMethod>
-    </ns12:TransportLevelSecurity>
-    <ns12:RunAsMode xsi:type="ns12:RunAsMode">System</ns12:RunAsMode>
-    <ns12:AnonymousClients xsi:type="ns12:AnonymousCommunication">No</ns12:AnonymousClients>
-    <ns12:ServiceAuthorization xsi:type="ns12:ServiceAuthorization">
-     <ns12:NoAuthorization xsi:type="ns12:NoAuthorization"/>
-    </ns12:ServiceAuthorization>
-   </ns12:ServiceSecurity>
+   <ns11:ResourcePropertiesList xsi:type="ns11:ResourcePropertiesListType" xmlns:ns11="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns11:ResourceProperty qName="ns12:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns11:ResourcePropertyType" xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns11:ResourcePropertiesList>
+   <ns13:ServiceSecurity xsi:type="ns13:ServiceSecurity" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns13:SecuritySetting xsi:type="ns13:SecuritySetting">Custom</ns13:SecuritySetting>
+    <ns13:TransportLevelSecurity xsi:type="ns13:TransportLevelSecurity">
+     <ns13:CommunicationMethod xsi:type="ns13:CommunicationMethod">Privacy</ns13:CommunicationMethod>
+    </ns13:TransportLevelSecurity>
+    <ns13:RunAsMode xsi:type="ns13:RunAsMode">System</ns13:RunAsMode>
+    <ns13:AnonymousClients xsi:type="ns13:AnonymousCommunication">No</ns13:AnonymousClients>
+    <ns13:ServiceAuthorization xsi:type="ns13:ServiceAuthorization">
+     <ns13:NoAuthorization xsi:type="ns13:NoAuthorization"/>
+    </ns13:ServiceAuthorization>
+   </ns13:ServiceSecurity>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
   </ns3:Service>
  </ns3:Services>
- <ns13:Extensions xsi:type="ns13:ExtensionsType" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns13:Extension name="cagrid_metadata" version="1.1" xsi:type="ns13:ExtensionType"/>
- </ns13:Extensions>
+ <ns14:Extensions xsi:type="ns14:ExtensionsType" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns14:Extension name="cagrid_metadata" version="1.1" xsi:type="ns14:ExtensionType"/>
+ </ns14:Extensions>
 </ns1:ServiceDescription>

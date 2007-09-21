@@ -20,6 +20,7 @@
         <ns2:Fault description="" name="CDSInternalFault"/>
         <ns2:Fault description="" name="InvalidPolicyFault"/>
         <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="" name="DelegationFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
      </ns2:operationCollection>

@@ -8,6 +8,9 @@
         <username>root</username>
         <password></password>
     </DatabaseConfiguration>
+    <ProxyPolicy>
+    	<KeyLength min="1024" max="2056"/>
+    </ProxyPolicy>
     <PolicyHandlers>
     	<PolicyHandlerDescription className="org.cagrid.gaards.cds.service.IdentityPolicyHandler" policyClassName="org.cagrid.gaards.cds.common.IdentityDelegationPolicy"/>
     </PolicyHandlers>

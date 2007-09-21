@@ -11,8 +11,19 @@
 				minOccurs="1" maxOccurs="1" />
 			<xs:element name="DatabaseConfiguration"
 				type="db:DatabaseConfiguration" minOccurs="1" maxOccurs="1" />
+			<xs:element name="ProxyPolicy" type="cds:ProxyPolicy"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="KeyManagerDescription" type="cds:KeyManagerDescription"
+				minOccurs="1" maxOccurs="1" />
 			<xs:element name="PolicyHandlers" type="cds:PolicyHandlers"
 				minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ProxyPolicy">
+		<xs:sequence>
+			<xs:element name="KeyLength" type="cds:Length" minOccurs="1"
+				maxOccurs="1" />
 		</xs:sequence>
 	</xs:complexType>
 
@@ -22,6 +33,14 @@
 				type="cds:PolicyHandlerDescription" minOccurs="0"
 				maxOccurs="unbounded" />
 		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="KeyManagerDescription">
+		<xs:sequence>
+			<xs:element name="Property" type="cds:Property"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="className" type="xs:string" use="required" />
 	</xs:complexType>
 
 
@@ -40,6 +59,11 @@
 			<xs:element name="Property" type="cds:Property"
 				minOccurs="1" maxOccurs="unbounded" />
 		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="Length">
+		<xs:attribute name="min" type="xs:int" use="required" />
+		<xs:attribute name="max" type="xs:int" use="required" />
 	</xs:complexType>
 
 	<xs:complexType name="Property">
