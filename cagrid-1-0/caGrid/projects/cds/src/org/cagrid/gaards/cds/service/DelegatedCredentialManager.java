@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.conf.CDSConfiguration;
+import org.cagrid.gaards.cds.conf.KeyManagerDescription;
 import org.cagrid.gaards.cds.conf.PolicyHandlerConfiguration;
 import org.cagrid.gaards.cds.conf.PolicyHandlerDescription;
 import org.cagrid.gaards.cds.conf.PolicyHandlers;
@@ -35,6 +36,7 @@ public class DelegatedCredentialManager {
 	private EventManager eventManager;
 	private Map<String, PolicyHandler> handlers;
 	private Log log;
+	private KeyManager keyManager;
 
 	public DelegatedCredentialManager(CDSConfiguration conf,
 			EventManager eventManager, Database db) throws CDSInternalFault {
@@ -44,6 +46,23 @@ public class DelegatedCredentialManager {
 		this.eventManager = eventManager;
 		this.handlers = new HashMap<String, PolicyHandler>();
 		PolicyHandlers ph = this.conf.getPolicyHandlers();
+		KeyManagerDescription des = conf.getKeyManagerDescription();
+		try {
+			Class kmc = Class.forName(des.getClassName());
+			Constructor con = kmc.getConstructor(new Class[] {
+					KeyManagerDescription.class, Database.class });
+			this.keyManager = (KeyManager) con.newInstance(new Object[] { des,
+					this.db });
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			CDSInternalFault f = new CDSInternalFault();
+			f.setFaultString("Error instantiating the key manager "
+					+ des.getClassName() + ".");
+			FaultHelper helper = new FaultHelper(f);
+			helper.addFaultCause(e);
+			f = (CDSInternalFault) helper.getFault();
+			throw f;
+		}
 		if (ph != null) {
 			PolicyHandlerDescription[] list = ph.getPolicyHandlerDescription();
 			if (list != null) {
