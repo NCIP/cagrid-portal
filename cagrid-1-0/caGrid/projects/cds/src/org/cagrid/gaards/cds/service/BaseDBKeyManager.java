@@ -311,10 +311,10 @@ public abstract class BaseDBKeyManager extends KeyManager {
 							+ " VARCHAR(255) NOT NULL PRIMARY KEY,"
 							+ PUBLIC_KEY + " TEXT NOT NULL," + PRIVATE_KEY
 							+ " BLOB NOT NULL," + IV + " BLOB," + CERTIFICATE
-							+ " TEXT, INDEX document_index (" + ALIAS
-							+ "));";
+							+ " TEXT, INDEX document_index (" + ALIAS + "));";
 					getDB().update(trust);
 				}
+				dbBuilt = true;
 			} catch (Exception e) {
 				getLog().error(e.getMessage(), e);
 				CDSInternalFault f = new CDSInternalFault();
@@ -325,7 +325,6 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				throw f;
 			}
 
-			dbBuilt = true;
 		}
 	}
 }

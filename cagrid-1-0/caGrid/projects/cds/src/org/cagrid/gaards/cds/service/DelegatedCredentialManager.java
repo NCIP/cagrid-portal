@@ -18,7 +18,6 @@ import org.cagrid.gaards.cds.conf.PolicyHandlers;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.tools.database.Database;
-import org.cagrid.tools.database.DatabaseException;
 import org.cagrid.tools.events.EventManager;
 
 public class DelegatedCredentialManager {
@@ -98,6 +97,7 @@ public class DelegatedCredentialManager {
 	public void delegateCredential(String callerGridIdentity,
 			DelegationPolicy policy) throws CDSInternalFault,
 			InvalidPolicyFault {
+		this.buildDatabase();
 		String policyType = policy.getClass().getName();
 		if (!this.handlers.containsKey(policyType)) {
 			InvalidPolicyFault f = new InvalidPolicyFault();
@@ -117,7 +117,7 @@ public class DelegatedCredentialManager {
 
 	}
 
-	public void clearDatabase() throws DatabaseException {
+	public void clearDatabase() throws CDSInternalFault {
 		buildDatabase();
 		try {
 			Iterator<PolicyHandler> itr = this.handlers.values().iterator();
@@ -127,23 +127,49 @@ public class DelegatedCredentialManager {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
-		db.update("DELETE FROM " + TABLE);
+
+		this.keyManager.deleteAll();
+		try {
+			db.update("DELETE FROM " + TABLE);
+
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			CDSInternalFault f = new CDSInternalFault();
+			f.setFaultString("Unexpected Database Error.");
+			FaultHelper helper = new FaultHelper(f);
+			helper.addFaultCause(e);
+			f = (CDSInternalFault) helper.getFault();
+			throw f;
+		}
 		dbBuilt = false;
+
 	}
 
-	private void buildDatabase() throws DatabaseException {
+	private void buildDatabase() throws CDSInternalFault {
 		if (!dbBuilt) {
-			if (!this.db.tableExists(TABLE)) {
-				String trust = "CREATE TABLE " + TABLE + " (" + DELEGATION_ID
-						+ " BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-						+ GRID_IDENTITY + " VARCHAR(255) NOT NULL,"
-						+ POLICY_TYPE + " VARCHAR(255) NOT NULL," + STATUS
-						+ " VARCHAR(50) NOT NULL," + EXPIRATION
-						+ " BIGINT NOT NULL, INDEX document_index ("
-						+ DELEGATION_ID + "));";
-				db.update(trust);
+			try {
+				if (!this.db.tableExists(TABLE)) {
+					String trust = "CREATE TABLE " + TABLE + " ("
+							+ DELEGATION_ID
+							+ " BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+							+ GRID_IDENTITY + " VARCHAR(255) NOT NULL,"
+							+ POLICY_TYPE + " VARCHAR(255) NOT NULL," + STATUS
+							+ " VARCHAR(50) NOT NULL," + EXPIRATION
+							+ " BIGINT NOT NULL, INDEX document_index ("
+							+ DELEGATION_ID + "));";
+					db.update(trust);
+				}
+
+				dbBuilt = true;
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				CDSInternalFault f = new CDSInternalFault();
+				f.setFaultString("Unexpected Database Error.");
+				FaultHelper helper = new FaultHelper(f);
+				helper.addFaultCause(e);
+				f = (CDSInternalFault) helper.getFault();
+				throw f;
 			}
-			dbBuilt = true;
 		}
 	}
 
