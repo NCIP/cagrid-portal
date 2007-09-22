@@ -104,7 +104,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				helper.addFaultCause(e);
 				f = (CDSInternalFault) helper.getFault();
 				throw f;
-			}finally {
+			} finally {
 				getDB().releaseConnection(c);
 			}
 		}
@@ -138,7 +138,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				helper.addFaultCause(e);
 				f = (CDSInternalFault) helper.getFault();
 				throw f;
-			}finally {
+			} finally {
 				getDB().releaseConnection(c);
 			}
 		}
@@ -174,7 +174,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				helper.addFaultCause(e);
 				f = (CDSInternalFault) helper.getFault();
 				throw f;
-			}finally {
+			} finally {
 				getDB().releaseConnection(c);
 			}
 		}
@@ -210,7 +210,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				helper.addFaultCause(e);
 				f = (CDSInternalFault) helper.getFault();
 				throw f;
-			}finally {
+			} finally {
 				getDB().releaseConnection(c);
 			}
 		} else {
@@ -250,7 +250,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				helper.addFaultCause(e);
 				f = (CDSInternalFault) helper.getFault();
 				throw f;
-			}finally {
+			} finally {
 				getDB().releaseConnection(c);
 			}
 		} else {
@@ -282,7 +282,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 			helper.addFaultCause(e);
 			f = (CDSInternalFault) helper.getFault();
 			throw f;
-		}finally {
+		} finally {
 			getDB().releaseConnection(c);
 		}
 	}
@@ -310,8 +310,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 					String trust = "CREATE TABLE " + TABLE + " (" + ALIAS
 							+ " VARCHAR(255) NOT NULL PRIMARY KEY,"
 							+ PUBLIC_KEY + " TEXT NOT NULL," + PRIVATE_KEY
-							+ " BLOB NOT NULL," + IV + " BLOB,"
-							+ CERTIFICATE
+							+ " BLOB NOT NULL," + IV + " BLOB," + CERTIFICATE
 							+ " VARCHAR(50), INDEX document_index (" + ALIAS
 							+ "));";
 					getDB().update(trust);

@@ -36,8 +36,10 @@ public class KeyManagerTest extends TestCase {
 				assertFalse(km.exists(alias));
 				KeyPair pair = km.createAndStoreKeyPair(alias, 1024);
 				assertTrue(km.exists(alias));
+				assertEquals(pair.getPublic(), km.getPublicKey(alias));
+				assertEquals(pair.getPrivate(), km.getPrivateKey(alias));
 			}
-			
+
 			for (int i = 0; i < size; i++) {
 				String alias = String.valueOf(i);
 				assertTrue(km.exists(alias));
