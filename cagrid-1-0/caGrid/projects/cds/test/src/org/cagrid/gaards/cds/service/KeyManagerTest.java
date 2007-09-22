@@ -1,6 +1,7 @@
 package org.cagrid.gaards.cds.service;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.lang.reflect.Constructor;
 import java.security.KeyPair;
@@ -10,6 +11,7 @@ import junit.framework.TestCase;
 
 import org.cagrid.gaards.cds.conf.CDSConfiguration;
 import org.cagrid.gaards.cds.conf.KeyManagerDescription;
+import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.testutils.CA;
 import org.cagrid.gaards.cds.testutils.Utils;
 import org.cagrid.tools.database.Database;
@@ -41,7 +43,8 @@ public class KeyManagerTest extends TestCase {
 				assertTrue(km.exists(alias));
 				assertEquals(pair.getPublic(), km.getPublicKey(alias));
 				assertEquals(pair.getPrivate(), km.getPrivateKey(alias));
-				X509Certificate cert = ca.createIdentityCertificate(km.getPublicKey(alias), alias);
+				X509Certificate cert = ca.createIdentityCertificate(km
+						.getPublicKey(alias), alias);
 				km.storeCertificate(alias, cert);
 				assertEquals(cert, km.getCertificate(alias));
 			}
@@ -52,6 +55,43 @@ public class KeyManagerTest extends TestCase {
 				km.delete(alias);
 				assertFalse(km.exists(alias));
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} finally {
+			try {
+				km.deleteAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void testKeyManagerBadCertificate() {
+		KeyManager km = null;
+		try {
+			km = getKeyManager();
+
+			String alias = "1";
+			assertFalse(km.exists(alias));
+			KeyPair pair = km.createAndStoreKeyPair(alias, 1024);
+			assertTrue(km.exists(alias));
+			assertEquals(pair.getPublic(), km.getPublicKey(alias));
+			assertEquals(pair.getPrivate(), km.getPrivateKey(alias));
+
+			try {
+				X509Certificate cert = ca.createIdentityCertificate(KeyUtil
+						.generateRSAKeyPair1024().getPublic(), alias);
+				km.storeCertificate(alias, cert);
+				fail("Should not be able to store an invalid certificate!!!");
+			} catch (DelegationFault f) {
+
+			}
+			X509Certificate cert = ca.createIdentityCertificate(km
+					.getPublicKey(alias), alias);
+			km.storeCertificate(alias, cert);
+			assertEquals(cert, km.getCertificate(alias));
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
