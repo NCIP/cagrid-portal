@@ -11,6 +11,9 @@
     <ProxyPolicy>
     	<KeyLength min="1024" max="2056"/>
     </ProxyPolicy>
+    <KeyManagerDescription className="org.cagrid.gaards.cds.service.DBKeyManager">
+    	<Property name="key-encryption-password" value="password"/>
+    </KeyManagerDescription>
     <PolicyHandlers>
     	<PolicyHandlerDescription className="org.cagrid.gaards.cds.service.IdentityPolicyHandler" policyClassName="org.cagrid.gaards.cds.common.IdentityDelegationPolicy"/>
     </PolicyHandlers>
