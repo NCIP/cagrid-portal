@@ -108,7 +108,7 @@ public class DelegatedCredentialManager {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
-		db.update("DROP TABLE IF EXISTS " + TABLE);
+		db.update("DELETE FROM " + TABLE);
 		dbBuilt = false;
 	}
 
