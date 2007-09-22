@@ -4,17 +4,20 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 
 import java.lang.reflect.Constructor;
 import java.security.KeyPair;
+import java.security.cert.X509Certificate;
 
 import junit.framework.TestCase;
 
 import org.cagrid.gaards.cds.conf.CDSConfiguration;
 import org.cagrid.gaards.cds.conf.KeyManagerDescription;
+import org.cagrid.gaards.cds.testutils.CA;
 import org.cagrid.gaards.cds.testutils.Utils;
 import org.cagrid.tools.database.Database;
 
 public class KeyManagerTest extends TestCase {
 
 	private Database db;
+	private CA ca;
 
 	public void testKeyManagerCreateDestroy() {
 		try {
@@ -38,6 +41,9 @@ public class KeyManagerTest extends TestCase {
 				assertTrue(km.exists(alias));
 				assertEquals(pair.getPublic(), km.getPublicKey(alias));
 				assertEquals(pair.getPrivate(), km.getPrivateKey(alias));
+				X509Certificate cert = ca.createIdentityCertificate(km.getPublicKey(alias), alias);
+				km.storeCertificate(alias, cert);
+				assertEquals(cert, km.getCertificate(alias));
 			}
 
 			for (int i = 0; i < size; i++) {
@@ -76,6 +82,7 @@ public class KeyManagerTest extends TestCase {
 		super.setUp();
 		try {
 			db = Utils.getDB();
+			ca = new CA();
 			assertEquals(0, db.getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

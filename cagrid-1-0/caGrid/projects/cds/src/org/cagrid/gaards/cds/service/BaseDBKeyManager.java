@@ -311,7 +311,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 							+ " VARCHAR(255) NOT NULL PRIMARY KEY,"
 							+ PUBLIC_KEY + " TEXT NOT NULL," + PRIVATE_KEY
 							+ " BLOB NOT NULL," + IV + " BLOB," + CERTIFICATE
-							+ " VARCHAR(50), INDEX document_index (" + ALIAS
+							+ " TEXT, INDEX document_index (" + ALIAS
 							+ "));";
 					getDB().update(trust);
 				}
