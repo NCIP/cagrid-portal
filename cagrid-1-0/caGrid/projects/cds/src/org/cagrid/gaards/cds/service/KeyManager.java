@@ -1,5 +1,6 @@
 package org.cagrid.gaards.cds.service;
 
+import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
@@ -34,7 +35,7 @@ public abstract class KeyManager {
 		}
 	}
 
-	public abstract void createAndStoreKeyPair(String alias, int keyLength)
+	public abstract KeyPair createAndStoreKeyPair(String alias, int keyLength)
 			throws CDSInternalFault;
 
 	public abstract PublicKey getPublicKey(String alias)

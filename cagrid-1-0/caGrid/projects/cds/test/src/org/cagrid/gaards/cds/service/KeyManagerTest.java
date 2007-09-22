@@ -1,20 +1,20 @@
 package org.cagrid.gaards.cds.service;
 
-import java.lang.reflect.Constructor;
-
 import gov.nih.nci.cagrid.common.FaultUtil;
+
+import java.lang.reflect.Constructor;
+import java.security.KeyPair;
+
 import junit.framework.TestCase;
 
 import org.cagrid.gaards.cds.conf.CDSConfiguration;
 import org.cagrid.gaards.cds.conf.KeyManagerDescription;
 import org.cagrid.gaards.cds.testutils.Utils;
 import org.cagrid.tools.database.Database;
-import org.cagrid.tools.events.EventManager;
 
 public class KeyManagerTest extends TestCase {
 
 	private Database db;
-	private EventManager em;
 
 	public void testKeyManagerCreateDestroy() {
 		try {
@@ -23,6 +23,36 @@ public class KeyManagerTest extends TestCase {
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
+		}
+	}
+
+	public void testKeyManager() {
+		KeyManager km = null;
+		try {
+			km = getKeyManager();
+			int size = 3;
+			for (int i = 0; i < size; i++) {
+				String alias = String.valueOf(i);
+				assertFalse(km.exists(alias));
+				KeyPair pair = km.createAndStoreKeyPair(alias, 1024);
+				assertTrue(km.exists(alias));
+			}
+			
+			for (int i = 0; i < size; i++) {
+				String alias = String.valueOf(i);
+				assertTrue(km.exists(alias));
+				km.delete(alias);
+				assertFalse(km.exists(alias));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} finally {
+			try {
+				km.deleteAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -44,7 +74,6 @@ public class KeyManagerTest extends TestCase {
 		super.setUp();
 		try {
 			db = Utils.getDB();
-			em = new EventManager(null);
 			assertEquals(0, db.getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

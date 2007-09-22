@@ -55,13 +55,14 @@ public abstract class BaseDBKeyManager extends KeyManager {
 	public abstract PrivateKey unwrapPrivateKey(WrappedKey wrappedKey)
 			throws CDSInternalFault;
 
-	public void createAndStoreKeyPair(String alias, int keyLength)
+	public KeyPair createAndStoreKeyPair(String alias, int keyLength)
 			throws CDSInternalFault {
 		try {
 			KeyPair pair = KeyUtil.generateRSAKeyPair(PROVIDER, keyLength);
 			String publicKey = KeyUtil.writePublicKey(pair.getPublic());
 			WrappedKey privateKey = wrapPrivateKey(pair.getPrivate());
 			insertKeypair(alias, publicKey, privateKey);
+			return pair;
 		} catch (CDSInternalFault f) {
 			throw f;
 		} catch (Exception e) {
@@ -309,7 +310,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 					String trust = "CREATE TABLE " + TABLE + " (" + ALIAS
 							+ " VARCHAR(255) NOT NULL PRIMARY KEY,"
 							+ PUBLIC_KEY + " TEXT NOT NULL," + PRIVATE_KEY
-							+ " BLOB NOT NULL," + IV + " BLOB NOT NULL,"
+							+ " BLOB NOT NULL," + IV + " BLOB,"
 							+ CERTIFICATE
 							+ " VARCHAR(50), INDEX document_index (" + ALIAS
 							+ "));";
