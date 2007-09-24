@@ -45,7 +45,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:14:58 PM
- * @version $Id: DeploymentValidationBuilder.java,v 1.7 2007-09-17 17:35:14 dervin Exp $ 
+ * @version $Id: DeploymentValidationBuilder.java,v 1.8 2007-09-24 17:31:00 dervin Exp $ 
  */
 public class DeploymentValidationBuilder extends JFrame {
     // -XX:MaxPermSize=256m
@@ -130,7 +130,8 @@ public class DeploymentValidationBuilder extends JFrame {
             fileLoadMenuItem.setText("Load");
             fileLoadMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    JFileChooser chooser = new JFileChooser(currentDeploymentDescriptionFile);
+                    JFileChooser chooser = new JFileChooser(currentDeploymentDescriptionFile == null 
+                        ? new File("./") : currentDeploymentDescriptionFile);
                     chooser.setFileFilter(new FileFilters.XMLFileFilter());
                     int choice = chooser.showOpenDialog(DeploymentValidationBuilder.this);
                     if (choice == JFileChooser.APPROVE_OPTION) {
@@ -237,7 +238,6 @@ public class DeploymentValidationBuilder extends JFrame {
                         JOptionPane.showMessageDialog(
                             DeploymentValidationBuilder.this, "Error preparing tests: " + ex.getMessage());
                     }
-                    
                     UsefulTestRunner runner = new UsefulTestRunner(testPackage.getValidationStoryBook());
                     runner.go();
                 }
