@@ -178,6 +178,9 @@ public class LoginBean {
 			setRegistrationFailureMessage(AppUtils
 					.getMessage(REGISTRATION_FAILURE_BAD_IDP_URL));
 			logger.error(getRegistrationFailureMessage(), ex);
+		} catch (InvalidUserPropertyFault ex){
+			setRegistrationFailureMessage(ex.getFaultString());
+			logger.error(ex.getFaultString(), ex);
 		} catch (RemoteException ex) {
 			setRegistrationFailureMessage(AppUtils
 					.getMessage(REGISTRATION_FAILURE_IDP_ERROR));
