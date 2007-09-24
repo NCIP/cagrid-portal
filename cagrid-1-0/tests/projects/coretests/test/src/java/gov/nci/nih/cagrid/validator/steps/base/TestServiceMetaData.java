@@ -49,7 +49,7 @@ public class TestServiceMetaData extends Step {
                 + serviceMetaData.getHostingResearchCenter().getResearchCenter().getDisplayName());
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Error getting resource property. Please check the URL " + serviceURL + " you entered.");
+            fail("Error getting resource property from " + serviceURL + " : " + e.getMessage());
         }
     }
 }
