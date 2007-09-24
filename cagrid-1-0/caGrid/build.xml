@@ -407,7 +407,6 @@
     <target name="configure-dorian" depends="prepare">
         <resolveDependencies extdir="${projects.dir}/dorian/ext">
             <artifact refid="service_urls.properties" />
-            <artifact refid="dorian.ui.conf" />
         </resolveDependencies>
         <ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="configure" />
     </target>
@@ -415,7 +414,6 @@
         <resolveDependencies extdir="${projects.dir}/dorian/ext">
             <artifact refid="cagrid.properties" />
             <artifact refid="service.tools.jars" />
-            <artifact refid="grape.jars" />
             <artifact refid="mds.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
@@ -468,7 +466,6 @@
 			<resolveDependencies extdir="${projects.dir}/cds/ext">
 				<artifact refid="cagrid.properties" />
 				<artifact refid="service.tools.jars" />
-				<artifact refid="grape.jars" />
 				<artifact refid="mds.jars" />
 				<artifact refid="common.test.jars" />
 				<artifact refid="test.coverage.jars" />
@@ -496,7 +493,6 @@
     <target name="configure-gridgrouper" depends="prepare">
         <resolveDependencies extdir="${projects.dir}/gridgrouper/ext">
             <artifact refid="service_urls.properties" />
-            <artifact refid="gridgrouper.ui.conf" />
         </resolveDependencies>
         <ant dir="${projects.dir}/gridgrouper" inheritAll="false" antfile="build.xml" target="configure" />
     </target>
@@ -504,7 +500,6 @@
         <resolveDependencies extdir="${projects.dir}/gridgrouper/ext">
             <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
-            <artifact refid="grape.jars" />
             <artifact refid="mds.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="core.test.jars" />
@@ -530,7 +525,6 @@
     <target name="configure-gts" depends="prepare">
         <resolveDependencies extdir="${projects.dir}/gts/ext">
             <artifact refid="service_urls.properties" />
-            <artifact refid="gts.ui.conf" />
         </resolveDependencies>
         <ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="configure" />
     </target>
@@ -538,7 +532,6 @@
         <resolveDependencies extdir="${projects.dir}/gts/ext">
             <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
-            <artifact refid="grape.jars" />
             <artifact refid="mds.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />

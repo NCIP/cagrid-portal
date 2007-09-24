@@ -45,6 +45,8 @@ public class DelegatedCredentialManager {
 		this.eventManager = eventManager;
 		this.handlers = new HashMap<String, PolicyHandler>();
 		PolicyHandlers ph = this.conf.getPolicyHandlers();
+		
+		//TODO: LOCK TO SINGLE KEY MANAGER
 		KeyManagerDescription des = conf.getKeyManagerDescription();
 		try {
 			Class kmc = Class.forName(des.getClassName());
@@ -114,6 +116,8 @@ public class DelegatedCredentialManager {
 			f.setFaultString("Invalid key length specified.");
 			throw f;
 		}
+		
+		
 
 	}
 
