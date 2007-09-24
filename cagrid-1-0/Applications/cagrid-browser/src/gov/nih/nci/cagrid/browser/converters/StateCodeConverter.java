@@ -55,6 +55,9 @@ public class StateCodeConverter implements Converter {
 						+ "' to StateCode: " + ex.getMessage(), ex);
 			}
 		}
+		if("Outside_US".equals(s)){
+			s = "";
+		}
 
 		return s;
 	}
