@@ -151,7 +151,6 @@ GSBT - Globus Service Build Tools
 	<target name="jar" depends="compile, compileTests">
 		<jar jarfile="${build.lib.dir}/${jar.name}" basedir="${build.dest}">
 			<include name="**/gridca/**" />
-			<fileset dir="resources/ui/gridca" />
 		</jar>
 	</target>
 

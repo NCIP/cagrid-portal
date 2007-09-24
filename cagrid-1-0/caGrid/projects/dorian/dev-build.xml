@@ -19,7 +19,6 @@
 	<!--need to preset these for the testing build-->
 	<property name="test.log.dir" value="test/logs" />
 	<property name="build.dir" location="build" />
-	<property name="ui.jar.name" value="${jar.prefix}-ui.jar" />
 
 
 	<!--need to import the test build-->
@@ -38,7 +37,6 @@
 				<exclude name="${common.jar.name}" />
 				<exclude name="${client.jar.name}" />
 				<exclude name="${service.jar.name}" />
-				<exclude name="${ui.jar.name}" />
 			</fileset>
 			<path refid="base.extended.classpath" />
 		</path>
@@ -133,11 +131,7 @@
 		<jar jarfile="${build.lib.dir}/${client.jar.name}" basedir="${build.dest}">
 			<include name="**/client/**" />
 		</jar>
-		<!-- Post Introduce Edit-->
-		<jar jarfile="${build.lib.dir}/${ui.jar.name}" basedir="${build.dest}">
-			<fileset dir="${build.dest}" includes="**/ui/**" />
-			<fileset dir="resources/ui/dorian" />
-		</jar>
+
 
 		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
 			<include name="**/service/**" />
@@ -341,18 +335,7 @@
 	</target>
 
 
-	<!-- Post Introduce Edit-->
-	<target name="ui" description="Run the dorian ui" depends="init">
-		<java classname="org.cagrid.grape.GridApplication" fork="yes" failonerror="true">
-			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
-			<arg value="etc/dorian-ui.xml" />
-			<classpath refid="service.run.classpath" />
-			<classpath>
-				<pathelement location="resources/ui/dorian" />
-				<pathelement location="ext/resources/portal/common" />
-			</classpath>
-		</java>
-	</target>
+
 
 	<target name="createProxy" description="Create a Grid User Proxy." depends="init">
 

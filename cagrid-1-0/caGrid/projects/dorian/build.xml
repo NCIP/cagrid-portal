@@ -27,7 +27,6 @@
     <import file="dev-build.xml" />
 
     <!-- Jars -->
-    <!-- Jars -->
 	<property name="jar.prefix" value="${service.name}" />
     <property name="common.jar.name" value="${jar.prefix}-common.jar" />
     <property name="client.jar.name" value="${jar.prefix}-client.jar" />

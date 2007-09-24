@@ -15,7 +15,7 @@
     </target>
 
     <target name="security" description="Run the Security Administrative GUI">
-        <ant dir="${basedir}/projects/security-ui" antfile="build.xml" target="ui" inheritall="false" />
+        <ant dir="${basedir}/projects/gaards-ui" antfile="build.xml" target="ui" inheritall="false" />
     </target>
 
     <target name="syncWithTrustFabric" description="Syncs With Trust Fabric">

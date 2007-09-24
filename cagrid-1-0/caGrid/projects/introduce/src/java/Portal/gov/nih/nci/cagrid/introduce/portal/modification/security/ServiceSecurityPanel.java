@@ -5,10 +5,7 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.ui.CertificatePanel;
-import gov.nih.nci.cagrid.gridca.ui.ProxyPanel;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
-import gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor.GridGrouperExpressionEditor;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.GridMapAuthorization;
@@ -43,6 +40,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 
+import org.cagrid.gaards.ui.common.CertificatePanel;
+import org.cagrid.gaards.ui.common.ProxyPanel;
+import org.cagrid.gaards.ui.gridgrouper.expressioneditor.GridGrouperExpressionEditor;
 import org.projectmobius.portal.PortalResourceManager;
 
 

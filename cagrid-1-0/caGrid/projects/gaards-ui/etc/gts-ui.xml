@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://www.cagrid.org/1/grape"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.cagrid.org/1/grape file:/C:/projects/cagrid-1-0/caGrid/projects/grape/schema/grape.xsd">
+    <name>Grid Trust Fabric</name>
+    <icon>/caGrid-icon-22x22.gif</icon>
+    <ApplicationLogo>/caGrid.gif</ApplicationLogo>
+    <AboutHTML><![CDATA[<html><h2>Grid Trust Service (GTS)</h2>The Grid Trust Service (GTS) is a grid-wide mechanism for maintaining and<BR>provisioning a federated trust fabric consisting of trusted certificate authorities,<BR> such that grid services may make authentication decisions against the most<BR>up to date information.  The GTS was developed as part of the caGrid project to<BR>meet the needs of the caBIG community.  For more information on the GTS or<BR>caGrid please visit us at:<BR> <A HREF="http://www.cagrid.org">http://www.cagrid.org</a></html>]]></AboutHTML>
+   <dimensions>
+        <width>850</width>
+        <height>700</height>
+    </dimensions>
+    <menus>
+        <menu>
+            <title>Trust Fabric Administration</title>
+            <description>tools</description>
+            <showIcons>true</showIcons>
+            <components>
+                <component>
+                    <title>Certificate Authorities</title>
+                    <description>Administrate the ceritficate authorites that are trusted in the trust fabric.</description>
+                    <classname>org.cagrid.gaards.ui.gts.TrustedAuthoritiesWindow</classname>
+                    <icon>/key.png</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                </component>
+                <component>
+                    <title>Levels of Assurance</title>
+                    <description>Administrate the levels of assurance for the trust fabric.</description>
+                    <classname>org.cagrid.gaards.ui.gts.TrustLevelManagerWindow</classname>
+                    <icon>/trust_level.png</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                </component>
+                <component>
+                    <title>Trust Federation</title>
+                    <description>Administrate the GTS federation.</description>
+                    <classname>org.cagrid.gaards.ui.gts.AuthorityManagerWindow</classname>
+                    <icon>/plugin.png</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                </component>
+                <component>
+                    <title>Permissions</title>
+                    <description>Grant and Revoke rights to users for administrating the trust fabric.</description>
+                    <classname>org.cagrid.gaards.ui.gts.PermissionManagerWindow</classname>
+                    <icon>/shield.png</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                </component>
+            </components>
+        </menu>
+    </menus>
+
+    <configuration>
+        <ConfigurationDescriptors>
+            <ConfigurationDescriptor>
+                <DisplayName>Grid Trust Fabric</DisplayName>
+                <SystemName>gts</SystemName>
+                <ModelClassname>org.cagrid.grape.configuration.GeneralConfiguration</ModelClassname>
+                <qname>
+                    <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
+                    <name>GeneralConfiguration</name>
+                </qname>
+                <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
+                <DefaultFile>ext/resources/gts-ui-configuration.xml</DefaultFile>
+            </ConfigurationDescriptor>
+        </ConfigurationDescriptors>
+    </configuration>
+</application>

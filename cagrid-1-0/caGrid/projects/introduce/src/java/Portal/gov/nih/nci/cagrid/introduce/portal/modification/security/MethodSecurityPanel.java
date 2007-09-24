@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
-import gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor.GridGrouperExpressionEditor;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
@@ -36,6 +35,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
+
+import org.cagrid.gaards.ui.gridgrouper.expressioneditor.GridGrouperExpressionEditor;
 
 
 /**

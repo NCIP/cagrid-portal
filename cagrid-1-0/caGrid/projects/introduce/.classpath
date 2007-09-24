@@ -112,7 +112,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-ui.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-security.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-client.jar"/>
@@ -121,5 +120,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/validation-2.0.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gaards-ui.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

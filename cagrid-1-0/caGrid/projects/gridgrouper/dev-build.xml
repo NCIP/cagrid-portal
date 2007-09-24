@@ -19,7 +19,6 @@
 	<property name="build.dest" location="${build.dir}/classes" />
 	<property name="test.dir" value="test" />
 
-	<property name="ui.jar.name" value="${jar.prefix}-ui.jar" />
 	<property name="resources.jar.name" value="${jar.prefix}-resources.jar" />
 
 	<property name="conf.dir" value="resources/conf" />
@@ -48,7 +47,6 @@
 				<exclude name="${client.jar.name}" />
 				<exclude name="${service.jar.name}" />
 				<exclude name="${resources.jar.name}" />
-				<exclude name="${ui.jar.name}" />
 				<exclude name="commons-collections-3.0.jar" />
 			</fileset>
 			<path refid="base.extended.classpath" />
@@ -206,11 +204,7 @@
 		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
 			<include name="**/service/**" />
 		</jar>
-
-		<jar jarfile="${build.lib.dir}/${ui.jar.name}" basedir="${build.dest}">
-			<fileset dir="${build.dest}" includes="**/ui/**" />
-			<fileset dir="resources/ui/gridgrouper" />
-		</jar>
+		
 		<jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
 			<include name="**/*" />
 			<exclude name="**/client/**" />
@@ -408,15 +402,6 @@
 		<java fork="true" classpathref="service.run.classpath" classname="edu.internet2.middleware.grouper.RegistryInstall" failonerror="true" />
 	</target>
 
-	<target name="ui" description="Run the Grid Grouper Admin UI" depends="checkGlobus">
-		<java classname="org.cagrid.grape.GridApplication" fork="yes" failonerror="true">
-			<arg value="etc/gridgrouper-ui.xml" />
-			<classpath refid="run.classpath" />
-			<classpath>
-				<pathelement location="resources/ui/gridgrouper" />
-			</classpath>
-		</java>
-	</target>
 
 	<target name="addAdmin" description="Add administrator to grid grouper" depends="checkGlobus">
 		<input message="Please enter the grid identity:" addproperty="gridId.input" />

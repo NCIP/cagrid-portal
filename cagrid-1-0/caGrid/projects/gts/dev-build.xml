@@ -22,7 +22,6 @@
 
 	<property name="common.jar.name" value="${jar.prefix}-common.jar" />
 	<property name="client.jar.name" value="${jar.prefix}-client.jar" />
-	<property name="ui.jar.name" value="${jar.prefix}-ui.jar" />
 	<property name="service.jar.name" value="${jar.prefix}-service.jar" />
 	<property name="stubs.jar.name" value="${jar.prefix}-stubs.jar" />
 
@@ -47,7 +46,6 @@
 				<exclude name="${common.jar.name}" />
 				<exclude name="${client.jar.name}" />
 				<exclude name="${service.jar.name}" />
-				<exclude name="${ui.jar.name}" />
 			</fileset>
 			<path refid="base.extended.classpath" />
 		</path>
@@ -198,10 +196,6 @@
 		</jar>
 		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
 			<include name="**/service/**" />
-		</jar>
-		<jar jarfile="${build.lib.dir}/${ui.jar.name}" basedir="${build.dest}">
-			<include name="**/ui/**" />
-			<fileset dir="resources/ui/gts" />
 		</jar>
 		<jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
 			<include name="**/*.xml" />
@@ -359,16 +353,6 @@
 		</copy>
 	</target>
 
-	<!-- Post Introduce Edit-->
-	<target name="ui" description="Run the GTS UI" depends="checkGlobus">
-		<java classname="org.cagrid.grape.GridApplication" fork="yes" failonerror="true">
-			<arg value="etc/gts-ui.xml" />
-			<classpath refid="run.classpath" />
-			<classpath>
-				<pathelement location="resources/ui/gts" />
-			</classpath>
-		</java>
-	</target>
 	
 	<target name="generateCA" description="Generates a certificate authority." depends="checkGlobus">
 			<input message="Please enter the DN for the new CA (ex. O=xyz,OU=abc,CN=My CA):" addproperty="dn.input" />

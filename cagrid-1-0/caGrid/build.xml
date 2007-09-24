@@ -441,22 +441,23 @@
         <ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
-    <target name="configure-security-ui" depends="prepare">
-        <resolveDependencies extdir="${projects.dir}/security-ui/ext">
+    <target name="configure-gaards-ui" depends="prepare">
+        <resolveDependencies extdir="${projects.dir}/gaards-ui/ext">
             <artifact refid="dorian.ui.conf" />
             <artifact refid="gts.ui.conf" />
             <artifact refid="gridgrouper.ui.conf" />
         </resolveDependencies>
     </target>
-    <target name="build-security-ui" depends="configure-security-ui" description="Builds the Security UI project">
-        <resolveDependencies extdir="${projects.dir}/security-ui/ext">
-            <artifact refid="dorian.ui.jars" />
+    <target name="build-gaards-ui" depends="configure-gaards-ui" description="Builds the Security UI project">
+        <resolveDependencies extdir="${projects.dir}/gaards-ui/ext">
+        	<artifact refid="cagrid.properties" />
+            <artifact refid="dorian.client.jars" />
             <artifact refid="grape.jars" />
             <artifact refid="dorian.endorsed" />
-            <artifact refid="gts.ui.jars" />
-            <artifact refid="gridgrouper.ui.jars" />
+            <artifact refid="gts.client.jars" />
+            <artifact refid="gridgrouper.client.jars" />
         </resolveDependencies>
-        <ant dir="${projects.dir}/security-ui" inheritAll="false" antfile="build.xml" target="all" />
+        <ant dir="${projects.dir}/gaards-ui" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 	
 	
@@ -650,8 +651,8 @@
             <artifact refid="gridca.jars" />
             <artifact refid="security.metadata.jars" />
             <artifact refid="servicesecurity.jars" />
-            <artifact refid="gridgrouper.ui.jars" />
             <artifact refid="validation.jars" />
+        	<artifact refid="introduce.gridgrouper.jars" />
         </resolveDependencies>
 
         <delete>
