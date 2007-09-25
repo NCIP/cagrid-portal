@@ -35,7 +35,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 3:04:08 PM
- * @version $Id: GridDeploymentValidationLoader.java,v 1.8 2007-09-17 17:34:51 dervin Exp $ 
+ * @version $Id: GridDeploymentValidationLoader.java,v 1.9 2007-09-25 19:43:46 dervin Exp $ 
  */
 public class GridDeploymentValidationLoader {
     
@@ -115,52 +115,68 @@ public class GridDeploymentValidationLoader {
         String serviceTypeName = service.getServiceType();
         for (ServiceType type : desc.getServiceType()) {
             if (type.getTypeName().equals(serviceTypeName)) {
-                for (ServiceTestStep testStep : type.getTestStep()) {
-                    String classname = testStep.getClassname();
-                    // find the test step class
-                    Class stepClass = null;
-                    try {
-                        stepClass = Class.forName(classname);
-                    } catch (ClassNotFoundException ex) {
-                        throw new ValidationLoadingException(
-                            "Could not service type " + serviceTypeName + " test class " 
-                            + classname + ": " + ex.getMessage(), ex);
-                    }
-                    // verify its inheritance
-                    if (!AbstractBaseServiceTestStep.class.isAssignableFrom(stepClass)) {
-                        throw new ValidationLoadingException(
-                            "The service type " + serviceTypeName + " test class " +
-                            classname + " does not extend " + AbstractBaseServiceTestStep.class.getName());
-                    }
-                    // produce the configuration properties for the step
-                    Properties configuration = new Properties();
-                    if (testStep.getConfigurationProperty() != null) {
-                        for (ServiceTestStepConfigurationProperty prop : testStep.getConfigurationProperty()) {
-                            String value = "";
-                            if (prop.getValue() != null) {
-                                value = prop.getValue();
-                            }
-                            configuration.setProperty(prop.getKey(), value);
+                if (type.getTestStep() != null) {
+                    for (ServiceTestStep testStep : type.getTestStep()) {
+                        String classname = testStep.getClassname();
+                        // find the test step class
+                        Class stepClass = null;
+                        try {
+                            stepClass = Class.forName(classname);
+                        } catch (ClassNotFoundException ex) {
+                            throw new ValidationLoadingException(
+                                "Could not service type " + serviceTypeName + " test class " 
+                                + classname + ": " + ex.getMessage(), ex);
                         }
-                    }
-                    // call the constructor
-                    Object[] constructorArgs = {
-                        service.getServiceUrl().toString(),
-                        getTempDirForService(service.getServiceName()),
-                        configuration
-                    };
-                    try {
-                        Constructor stepConstructor = stepClass.getConstructor(constructorArgTypes);
-                        AbstractBaseServiceTestStep step = (AbstractBaseServiceTestStep) 
+                        // verify its inheritance
+                        if (!AbstractBaseServiceTestStep.class.isAssignableFrom(stepClass)) {
+                            throw new ValidationLoadingException(
+                                "The service type " + serviceTypeName + " test class " +
+                                classname + " does not extend " + AbstractBaseServiceTestStep.class.getName());
+                        }
+                        // produce the configuration properties for the step
+                        Properties configuration = new Properties();
+                        if (testStep.getConfigurationProperty() != null) {
+                            for (ServiceTestStepConfigurationProperty prop : testStep.getConfigurationProperty()) {
+                                String value = "";
+                                if (prop.getValue() != null) {
+                                    value = prop.getValue();
+                                }
+                                configuration.setProperty(prop.getKey(), value);
+                            }
+                        }
+                        // call the constructor
+                        Object[] constructorArgs = {
+                            service.getServiceUrl().toString(),
+                            getTempDirForService(service.getServiceName()),
+                            configuration
+                        };
+                        try {
+                            Constructor stepConstructor = stepClass.getConstructor(constructorArgTypes);
+                            AbstractBaseServiceTestStep step = (AbstractBaseServiceTestStep) 
                             stepConstructor.newInstance(constructorArgs);
-                        steps.add(step);
-                    } catch (Exception ex) {
-                        throw new ValidationLoadingException(
-                            "Service type " + serviceTypeName + " test class " + classname 
-                            + " could not be created: " + ex.getMessage(), ex);
+                            steps.add(step);
+                        } catch (Exception ex) {
+                            throw new ValidationLoadingException(
+                                "Service type " + serviceTypeName + " test class " + classname 
+                                + " could not be created: " + ex.getMessage(), ex);
+                        }
                     }
                 }
             }
+        }
+        // Haste Story dies if you have no steps
+        if (steps.size() == 0) {
+            steps.add(new Step() {
+                
+                public String getName() {
+                    return "Dummy Step";
+                }
+                
+                
+                public void runStep() throws Throwable {
+                    System.out.println("No steps defined for this service type");
+                }
+            });
         }
         return steps;
     }
