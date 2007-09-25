@@ -63,7 +63,7 @@ import org.apache.axis.message.addressing.EndpointReference;
  * @author David Ervin
  * 
  * @created Mar 30, 2007 3:46:34 PM
- * @version $Id: VisualQueryBuilder.java,v 1.4 2007-06-06 17:53:28 dervin Exp $ 
+ * @version $Id: VisualQueryBuilder.java,v 1.5 2007-09-25 18:45:51 dervin Exp $ 
  */
 public class VisualQueryBuilder extends JFrame {
     
@@ -111,10 +111,10 @@ public class VisualQueryBuilder extends JFrame {
 
 
     private void initialize() {
-        this.setSize(new Dimension(571, 307));
         this.setContentPane(getMainSplitPane());
-        this.setSize(new Dimension(421, 251));
         this.setJMenuBar(getMainMenuBar());
+        this.pack();
+        this.setSize(new Dimension(600, 450));
     }
     
     
@@ -299,7 +299,8 @@ public class VisualQueryBuilder extends JFrame {
             loadModelFromFileMenuItem.setText("Load From File");
             loadModelFromFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    JFileChooser chooser = new JFileChooser(lastSelectedModelFilename);
+                    JFileChooser chooser = new JFileChooser(lastSelectedModelFilename == null 
+                        ? new File("./").getAbsolutePath() : lastSelectedModelFilename);
                     chooser.setFileFilter(FileFilters.XML_FILTER);
                     int choice = chooser.showOpenDialog(VisualQueryBuilder.this);
                     if (choice == JFileChooser.APPROVE_OPTION) {
