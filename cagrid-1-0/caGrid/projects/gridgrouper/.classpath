@@ -75,8 +75,6 @@
 	<classpathentry kind="lib" path="lib/grouper.jar" sourcepath="/Grouper"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridca.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-security.jar"/>

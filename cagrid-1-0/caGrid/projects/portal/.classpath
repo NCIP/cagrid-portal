@@ -81,20 +81,12 @@
 	<classpathentry kind="lib" path="lib/myfaces/tomahawk.jar"/>
 	<classpathentry kind="lib" path="lib/nocopy/servlet-api.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="lib/nocopy/jsp-api.jar"/>
 	<classpathentry kind="lib" path="lib/poi/poi-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="lib" path="lib/poi/poi-contrib-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="lib" path="lib/poi/poi-scratchpad-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-discovery.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridca.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gts-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gts-common.jar"/>
@@ -105,7 +97,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-syncgts-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-syncgts-common.jar"/>
