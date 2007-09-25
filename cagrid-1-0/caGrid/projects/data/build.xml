@@ -546,6 +546,29 @@
 	</target>
 	
 	
+	<!-- runs the query building tool -->
+	<target name="vizQuery" depends="all" description="Runs the Visual Query builder tool">
+		<java fork="true" classname="gov.nih.nci.cagrid.data.utilities.vizquery.VisualQueryBuilder">
+			<classpath>
+				<fileset dir="${build.jars.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<pathelement location="ext/resources/portal/introduce" />
+				<pathelement location="ext/resources/portal/common" />
+			</classpath>
+		</java>
+	</target>
+	
+	
 	<target name="invokeDataService" description="Invokes a remote caGrid Data Service">
 		<property name="service.url" value="http://localhost:8080/wsrf/services/cagrid/DataService"/>
 		<property name="service.cql" value="cqlQuery.xml"/>				
