@@ -42,7 +42,7 @@ import org.tigris.gef.event.GraphSelectionListener;
  * @author David Ervin
  * 
  * @created Mar 30, 2007 10:23:05 AM
- * @version $Id: DomainModelVisualizationPanel.java,v 1.3 2007-09-25 18:42:44 dervin Exp $ 
+ * @version $Id: DomainModelVisualizationPanel.java,v 1.4 2007-09-25 18:44:23 dervin Exp $ 
  */
 public class DomainModelVisualizationPanel extends JPanel {
 
@@ -115,6 +115,7 @@ public class DomainModelVisualizationPanel extends JPanel {
             // scroll to center the graph class
             getUmlDiagram().getViewer().setViewPosition(scrollLocation);
             getUmlDiagram().getViewer().select(graphClass);
+            getUmlDiagram().getViewer().highlightClass(graphClass);
         } else {
             System.out.println("Class " + name + " not found");
         }
