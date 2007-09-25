@@ -14,8 +14,11 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationTargetUMLAssociatio
 import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLClassReference;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Point;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
@@ -23,8 +26,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.tigris.gef.event.GraphSelectionEvent;
 import org.tigris.gef.event.GraphSelectionListener;
@@ -36,7 +42,7 @@ import org.tigris.gef.event.GraphSelectionListener;
  * @author David Ervin
  * 
  * @created Mar 30, 2007 10:23:05 AM
- * @version $Id: DomainModelVisualizationPanel.java,v 1.2 2007-05-31 17:36:13 dervin Exp $ 
+ * @version $Id: DomainModelVisualizationPanel.java,v 1.3 2007-09-25 18:42:44 dervin Exp $ 
  */
 public class DomainModelVisualizationPanel extends JPanel {
 
@@ -44,18 +50,34 @@ public class DomainModelVisualizationPanel extends JPanel {
     private Map<gov.nih.nci.cagrid.graph.uml.UMLClass, UMLClass> graphClassToUML;
     
     private UMLDiagram umlDiagram = null;
+    private JLabel findClassLabel = null;
+    private JTextField findClassTextField = null;
+    private JButton findClassButton = null;
+    private JPanel findClassPanel = null;  //  @jve:decl-index=0:visual-constraint="81,314"
     
     public DomainModelVisualizationPanel() {
         modelListeners = new LinkedList<ModelSelectionListener>();
         graphClassToUML = new HashMap<gov.nih.nci.cagrid.graph.uml.UMLClass, UMLClass>();
+        initialize();
+    }
+    
+    
+    private void initialize() {
         setLayout(new GridBagLayout());
-        GridBagConstraints cons = new GridBagConstraints();
-        cons.gridx = 0;
-        cons.gridy = 0;
-        cons.fill = GridBagConstraints.BOTH;
-        cons.weightx = 1.0D;
-        cons.weighty = 1.0D;
-        add(getUmlDiagram(), cons);
+        this.setSize(new Dimension(500, 207));
+        GridBagConstraints cons1 = new GridBagConstraints();
+        cons1.gridx = 0;
+        cons1.gridy = 0;
+        cons1.fill = GridBagConstraints.BOTH;
+        cons1.weightx = 1.0D;
+        cons1.weighty = 1.0D;
+        GridBagConstraints cons2 = new GridBagConstraints();
+        cons2.gridx = 0;
+        cons2.gridy = 1;
+        cons2.fill = GridBagConstraints.HORIZONTAL;
+        cons2.weightx = 1.0D;
+        add(getUmlDiagram(), cons1);
+        add(getFindClassPanel(), cons2);
     }
     
     
@@ -66,6 +88,36 @@ public class DomainModelVisualizationPanel extends JPanel {
     
     public boolean removeModelSelectionListener(ModelSelectionListener listener) {
         return modelListeners.remove(listener);
+    }
+    
+    
+    public void selectClass(String name) {
+        Map<UMLClass, gov.nih.nci.cagrid.graph.uml.UMLClass> reverse = new HashMap();
+        for (gov.nih.nci.cagrid.graph.uml.UMLClass gClass : graphClassToUML.keySet()) {
+            reverse.put(graphClassToUML.get(gClass), gClass);
+        }
+        gov.nih.nci.cagrid.graph.uml.UMLClass graphClass = null;
+        for (UMLClass clazz : reverse.keySet()) {
+            if (clazz.getClassName().equals(name)) {
+                graphClass = reverse.get(clazz);
+            }
+        }
+        if (graphClass != null) {
+            // find the center of the viewport
+            Dimension viewSize = getUmlDiagram().getViewer().getSize();
+            Dimension classSize = graphClass.getSize();
+            Point classLocation = graphClass.getLocation();
+            Point scrollLocation = new Point();
+            scrollLocation.x = Math.max(0, 
+                classLocation.x - (viewSize.width / 2) + (classSize.width / 2));
+            scrollLocation.y = Math.max(0, 
+                classLocation.y - (viewSize.height / 2) + (classSize.height / 2));
+            // scroll to center the graph class
+            getUmlDiagram().getViewer().setViewPosition(scrollLocation);
+            getUmlDiagram().getViewer().select(graphClass);
+        } else {
+            System.out.println("Class " + name + " not found");
+        }
     }
     
     
@@ -238,6 +290,86 @@ public class DomainModelVisualizationPanel extends JPanel {
     }
     
     
+    /**
+     * This method initializes findClassLabel	
+     * 	
+     * @return javax.swing.JLabel	
+     */
+    private JLabel getFindClassLabel() {
+        if (findClassLabel == null) {
+            findClassLabel = new JLabel();
+            findClassLabel.setText("Find Class:");
+        }
+        return findClassLabel;
+    }
+
+
+    /**
+     * This method initializes findClassTextField	
+     * 	
+     * @return javax.swing.JTextField	
+     */
+    private JTextField getFindClassTextField() {
+        if (findClassTextField == null) {
+            findClassTextField = new JTextField();
+        }
+        return findClassTextField;
+    }
+
+
+    /**
+     * This method initializes findClassButton	
+     * 	
+     * @return javax.swing.JButton	
+     */
+    private JButton getFindClassButton() {
+        if (findClassButton == null) {
+            findClassButton = new JButton();
+            findClassButton.setText("Find");
+            findClassButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String className = getFindClassTextField().getText();
+                    selectClass(className);
+                }
+            });
+        }
+        return findClassButton;
+    }
+
+
+    /**
+     * This method initializes findClassPanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getFindClassPanel() {
+        if (findClassPanel == null) {
+            GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+            gridBagConstraints2.gridx = 2;
+            gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints2.gridy = 0;
+            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+            gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints1.gridy = 0;
+            gridBagConstraints1.weightx = 1.0;
+            gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints1.gridx = 1;
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.gridy = 0;
+            findClassPanel = new JPanel();
+            findClassPanel.setLayout(new GridBagLayout());
+            findClassPanel.setSize(new Dimension(321, 46));
+            findClassPanel.add(getFindClassLabel(), gridBagConstraints);
+            findClassPanel.add(getFindClassTextField(), gridBagConstraints1);
+            findClassPanel.add(getFindClassButton(), gridBagConstraints2);
+        }
+        return findClassPanel;
+    }
+
+
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setSize(500,500);
@@ -256,4 +388,4 @@ public class DomainModelVisualizationPanel extends JPanel {
         }
         frame.setVisible(true);
     }
-}
+}  //  @jve:decl-index=0:visual-constraint="10,10"
