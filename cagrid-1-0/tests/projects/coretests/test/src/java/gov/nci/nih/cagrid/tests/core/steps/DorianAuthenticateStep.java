@@ -9,8 +9,6 @@ import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.dorian.client.IdPUserClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.gridca.ui.ProxyManager; // import
-// gov.nih.nci.cagrid.gridca.portal.ProxyManager;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import org.globus.gsi.GlobusCredential;
@@ -63,7 +61,7 @@ public class DorianAuthenticateStep extends Step {
 
         IFSUserClient c2 = new IFSUserClient(this.serviceURL);
         this.credential = c2.createProxy(this.saml, new ProxyLifetime(this.hours, 0, 0), 2);
-        ProxyManager.getInstance().addProxy(this.credential);
+        //ProxyManager.getInstance().addProxy(this.credential);
         ProxyUtil.saveProxyAsDefault(this.credential);
     }
 
