@@ -3,18 +3,15 @@ package gov.nci.nih.cagrid.validator.steps.cadsr;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
-import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.File;
-import java.io.StringReader;
-import java.util.ArrayList;
+import java.io.FileInputStream;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
 import org.jdom.Element;
-import org.projectmobius.common.XMLUtilities;
+import org.jdom.input.SAXBuilder;
 
 /** 
  *  ProjectListTestStep
@@ -23,10 +20,10 @@ import org.projectmobius.common.XMLUtilities;
  * @author David Ervin
  * 
  * @created Sep 11, 2007 10:21:40 AM
- * @version $Id: ProjectListStep.java,v 1.1 2007-09-11 18:25:46 dervin Exp $ 
+ * @version $Id: ProjectListStep.java,v 1.2 2007-09-25 19:45:19 dervin Exp $ 
  */
 public class ProjectListStep extends BaseCadsrTestStep {
-    public static final String GOLD_RESULTS_FILE = "goldResultsFile";
+    public static final String EXPECTED_PROJECTS_FILE = "expectedProjectsFile";
     
     public ProjectListStep() {
         super();
@@ -39,36 +36,46 @@ public class ProjectListStep extends BaseCadsrTestStep {
 
 
     public void runStep() throws Throwable {
-        Project[] goldProjects = getGoldProjects();
+        Element goldProjects = getGoldProjects();
+        // <GoldProjects>
         // list out all projects
         Project[] projects = getCadsrClient().findAllProjects();
         // start comparing each project with the expected ones
-        for (Project goldProj : goldProjects) {
-            Project foundProject = getMatchingProject(projects, goldProj);
-            assertNotNull("Project " + goldProj.getShortName() + " " + goldProj.getVersion() + " not found", foundProject);
+        Iterator projectElemIter = goldProjects.getChildren("Project", goldProjects.getNamespace()).iterator();
+        // <Project name="foo" version="x.y">
+        while (projectElemIter.hasNext()) {
+            Element projectElement = (Element) projectElemIter.next();
+            String projectShortName = projectElement.getAttributeValue("name");
+            String projectVersion = projectElement.getAttributeValue("version");
+            Project foundProject = getMatchingProject(projects, projectShortName, projectVersion);
+            assertNotNull("Project " + projectShortName + " ver " + projectVersion + " not found", foundProject);
             // make sure all packages exist
             UMLPackageMetadata[] packages = getCadsrClient().findPackagesInProject(foundProject);
-            Iterator packageIter = goldProj.getUMLPackageMetadataCollection().iterator();
-            while (packageIter.hasNext()) {
-                UMLPackageMetadata goldPack = (UMLPackageMetadata) packageIter.next();
-                UMLPackageMetadata foundPack = getMatchingPackage(packages, goldPack);
-                assertNotNull("Package " + goldPack.getName() + " not found", foundPack);
+            Iterator packageElemIter = projectElement.getChildren("Package", projectElement.getNamespace()).iterator();
+            // <Package name="foo">
+            while (packageElemIter.hasNext()) {
+                Element packageElement = (Element) packageElemIter.next();
+                String packageName = packageElement.getAttributeValue("name");
+                UMLPackageMetadata foundPack = getMatchingPackage(packages, packageName);
+                assertNotNull("Package " + packageName + " not found", foundPack);
                 // make sure all classes exist
                 UMLClassMetadata[] classes = getCadsrClient().findClassesInPackage(foundProject, foundPack.getName());
-                Iterator classIter = goldPack.getUMLClassMetadataCollection().iterator();
-                while (classIter.hasNext()) {
-                    UMLClassMetadata goldClass = (UMLClassMetadata) classIter.next();
-                    UMLClassMetadata foundClass = getMatchingClass(classes, goldClass);
-                    assertNotNull("Class " + goldClass.getFullyQualifiedName() + " not found", foundClass);
+                Iterator classElemIter = packageElement.getChildren("Class", packageElement.getNamespace()).iterator();
+                // <Class name="foo">
+                while (classElemIter.hasNext()) {
+                    Element classElement = (Element) classElemIter.next();
+                    String className = classElement.getAttributeValue("name");
+                    UMLClassMetadata foundClass = getMatchingClass(classes, className);
+                    assertNotNull("Class " + className + " not found", foundClass);
                 }
             }
         }
     }
     
     
-    private Project getMatchingProject(Project[] projects, Project proj) {
+    private Project getMatchingProject(Project[] projects, String shortName, String version) {
         for (Project p : projects) {
-            if (p.getShortName().equals(proj.getShortName()) && p.getVersion().equals(proj.getVersion())) {
+            if (p.getShortName().equals(shortName) && p.getVersion().equals(version)) {
                 return p;
             }
         }
@@ -76,9 +83,9 @@ public class ProjectListStep extends BaseCadsrTestStep {
     }
     
     
-    private UMLPackageMetadata getMatchingPackage(UMLPackageMetadata[] packages, UMLPackageMetadata pack) {
+    private UMLPackageMetadata getMatchingPackage(UMLPackageMetadata[] packages, String packName) {
         for (UMLPackageMetadata p : packages) {
-            if (p.getName().equals(pack.getName())) {
+            if (p.getName().equals(packName)) {
                 return p;
             }
         }
@@ -86,9 +93,9 @@ public class ProjectListStep extends BaseCadsrTestStep {
     }
     
     
-    private UMLClassMetadata getMatchingClass(UMLClassMetadata[] classes, UMLClassMetadata clazz) {
+    private UMLClassMetadata getMatchingClass(UMLClassMetadata[] classes, String className) {
         for (UMLClassMetadata m : classes) {
-            if (m.getFullyQualifiedName().equals(clazz.getFullyQualifiedName())) {
+            if (m.getName().equals(className)) {
                 return m;
             }
         }
@@ -96,32 +103,30 @@ public class ProjectListStep extends BaseCadsrTestStep {
     }
     
     
-    private Project[] getGoldProjects() {
-        String goldFilename = getConfiguration().getProperty(GOLD_RESULTS_FILE);
-        Project[] projects = null;
+    private Element getGoldProjects() {
+        String goldFilename = getConfiguration().getProperty(EXPECTED_PROJECTS_FILE);
+        File goldFile = new File(goldFilename);
+        if (!goldFile.exists() && goldFile.canRead()) {
+            fail("Could not read file " + goldFilename);
+        }
+        Element root = null;
         try {
-            List<Project> projList = new ArrayList();
-            Element topLevelElement = XMLUtilities.fileNameToDocument(goldFilename).getRootElement();
-            Iterator projElementIter = topLevelElement.getChildren().iterator();
-            while (projElementIter.hasNext()) {
-                Element projectElement = (Element) projElementIter.next();
-                String xmlText = XMLUtilities.elementToString(projectElement);
-                StringReader reader = new StringReader(xmlText);
-                Project proj = (Project) Utils.deserializeObject(reader, Project.class);
-                projList.add(proj);
-            }
-            projects = projList.toArray(new Project[0]);
+            FileInputStream fis = new FileInputStream(goldFile);
+            SAXBuilder builder = new SAXBuilder(false);
+            root = builder.build(fis).getRootElement();
+            fis.close();
+            return root;
         } catch (Exception ex) {
             ex.printStackTrace();
-            fail("Error loading gold projects file: " + ex.getMessage());
+            fail("Error reading gold project file: " + ex.getMessage());
         }
-        return projects;
+        return root;
     }
     
     
     public Set<String> getRequiredConfigurationProperties() {
         Set<String> props = super.getRequiredConfigurationProperties();
-        props.add(GOLD_RESULTS_FILE);
+        props.add(EXPECTED_PROJECTS_FILE);
         return props;
     }
 }
