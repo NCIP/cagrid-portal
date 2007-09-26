@@ -1,0 +1,129 @@
+<project>
+
+	<property name="portlets.dir" value="portlets" />
+	<property name="portlets.lib.dir" value="${portlets.dir}/lib" />
+	<property name="portlets.build.dir" value="${portlets.dir}/build" />
+	<property name="portlets.build.war.dir"
+		value="${portlets.build.dir}/war" />
+	<property name="portlets.classes.dir"
+		value="${portlets.build.war.dir}/WEB-INF/classes" />
+	<property name="portlets.src.java.dir"
+		value="${portlets.dir}/src/java" />
+	<property name="portlets.src.war.dir"
+		value="${portlets.dir}/src/war" />
+
+	<property name="portlets.test.dir" value="portlets/test" />
+	<property name="portlets.test.lib.dir"
+		value="${portlets.test.dir}/lib" />
+	<property name="portlets.test.build.dir"
+		value="${portlets.test.dir}/build" />
+	<property name="portlets.test.classes.dir"
+		value="${portlets.test.build.dir}/classes" />
+	<property name="portlets.test.src.java.dir"
+		value="${portlets.test.dir}/src/java" />
+		
+	<property name="portlets.context.name" value="cagridportlets"/>
+
+
+
+	<property name="portlets.debug" value="true" />
+
+	<path id="portlets.compile.cp">
+		<path refid="aggr.compile.cp" />
+		<pathelement location="${aggr.classes.dir}" />
+		<fileset dir="${portlets.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="portlets:compile" depends="aggr:compile">
+		<mkdir dir="${portlets.classes.dir}" />
+		<javac srcdir="${portlets.src.java.dir}"
+			destdir="${portlets.classes.dir}" debug="${portlets.debug}">
+			<classpath refid="portlets.compile.cp" />
+		</javac>
+	</target>
+
+	<target name="portlets:build-war-dir" depends="portlets:compile">
+	
+		<mkdir dir="${portlets.build.war.dir}/WEB-INF/lib" />
+		<copy todir="${portlets.build.war.dir}/WEB-INF/lib"
+			overwrite="true" flatten="true">
+			
+			<fileset dir="${globus.home}/lib">
+				<patternset refid="globus.jars"/>
+				<patternset refid="globus.crypto.jars"/>
+			</fileset>
+			
+			<fileset dir="${db.lib.dir}">
+				<patternset refid="db.compile.jars" />
+				<patternset refid="db.run.jars" />
+			</fileset>
+			<fileset dir="${aggr.lib.dir}">
+				<include name="cagrid/*.jar" />
+			</fileset>
+			<fileset dir="${portlets.lib.dir}">
+				<include name="jstl.jar" />
+				<include name="portlet-messaging-2.4.jar" />
+				<include name="spring-portlet.jar" />
+				<include name="standard.jar" />
+			</fileset>
+			
+		</copy>
+
+		<mkdir dir="${portlets.build.war.dir}/WEB-INF/classes" />
+		<copy todir="${portlets.build.war.dir}/WEB-INF/classes"
+			overwrite="true">
+			
+			<fileset dir="${db.classes.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+			
+			<fileset dir="${aggr.classes.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+			
+			<fileset dir="${db.dir}/etc">
+				<include name="*.properties" />
+				<include name="*.xml" />
+				<exclude name="*.hibernate.properties" />
+			</fileset>
+			<fileset dir="${aggr.dir}/etc">
+				<include name="*.properties" />
+				<include name="*.xml" />
+				<exclude name="applicationContext-workspaces.xml"/>
+				<include name="*.wsdd" />
+				<exclude name="*.sync-description.xml"/>
+				<exclude name="*.hibernate.properties" />
+			</fileset>
+
+		</copy>
+		
+		<copy file="${db.dir}/etc/${db.profile}.hibernate.properties"
+			tofile="${portlets.classes.dir}/hibernate.properties"
+			overwrite="true" />
+			
+		<copy file="${aggr.dir}/etc/${target.grid}.sync-description.xml"
+			tofile="${portlets.classes.dir}/sync-description.xml"
+			overwrite="true" />			
+
+
+		<copy todir="${portlets.build.war.dir}"
+			overwrite="true">
+			<fileset dir="${portlets.src.war.dir}" />
+		</copy>
+
+	</target>
+
+
+	<target name="portlets:war" depends="portlets:build-war-dir">
+		<jar destfile="${portlets.build.dir}/${portlets.context.name}.war"
+			basedir="${portlets.build.war.dir}"/>
+	</target>
+
+	<target name="portlets:clean">
+		<delete dir="${portlets.build.dir}" />
+		<delete dir="${portlets.test.build.dir}" />
+	</target>
+
+</project>

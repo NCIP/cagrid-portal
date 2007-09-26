@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+
+		<!-- Database connection settings -->
+		<property name="connection.driver_class">@DB_DRIVER@</property>
+		<property name="connection.url">@DB_URL@</property>
+		<property name="connection.username">@DB_USERNAME@</property>
+		<property name="connection.password">@DB_PASSWORD@</property>
+		<property name="dialect">@DB_DIALECT@</property>
+
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.Address" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.Person" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.Participant" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.Participation" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.PortalUser" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.GridPortalUser" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.Role" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.GridService" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.GridDataService" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.IndexService" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.ServiceAnnotation" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.Workspace" />
+
+
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.ServiceMetadata" />
+
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.Enumeration" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.PointOfContact" />
+
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.ResearchCenter" />
+
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.SemanticMetadata" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLAttribute" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLClass" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.ValueDomain" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.CaDSRRegistration" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.ContextProperty" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.Fault" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.InputParameter" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.Operation" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.Output" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.Service" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.ServiceContext" />
+<mapping
+			class="gov.nih.nci.cagrid.portal2.domain.StatusChange" />			
+			
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.DomainModel" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLAssociation" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLAssociationEdge" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass" />
+
+	</session-factory>
+
+</hibernate-configuration>

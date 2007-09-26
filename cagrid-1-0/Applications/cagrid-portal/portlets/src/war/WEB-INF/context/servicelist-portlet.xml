@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+
+	<bean id="selectServiceController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.SelectGridServiceController">
+		<property name="gridServiceDao" ref="gridServiceDao"/>
+		<property name="successAction" value="listServices"/>
+	</bean>
+
+	<bean id="listServicesController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.ListServicesController">
+		<property name="gridServiceDao" ref="gridServiceDao"/>
+		<property name="defaultRange" value="10"/>
+		<property name="listView" value="serviceList"/>
+	</bean>
+
+
+	<bean id="portletModeParameterHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+		
+		<property name="order" value="1" />
+		
+		<property name="interceptors">
+			<list>
+				<ref bean="parameterMappingInterceptor" />
+				<ref bean="openSessionInViewInterceptor" />
+			</list>
+		</property>
+		
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="view">
+					<map>
+						<entry key="selectService"
+							value-ref="selectServiceController" />
+						<entry key="listServices"
+							value-ref="listServicesController" />
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+
+		<property name="order" value="2" />
+		
+		<property name="interceptors">
+			<list>
+				<ref bean="parameterMappingInterceptor" />
+				<ref bean="openSessionInViewInterceptor" />
+			</list>
+		</property>
+
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="listServicesController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/discovery/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>	
+
+	<!-- Exception Handler -->
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate" />
+
+</beans>

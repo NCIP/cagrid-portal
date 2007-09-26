@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page id="/login.psml" hidden="false">
+    <security-constraints>
+        <security-constraints-ref>public-view</security-constraints-ref>
+    </security-constraints>
+    <title>Login</title>
+    <short-title>Login</short-title>
+    <defaults layout-decorator="tigris"/>
+    
+        <fragment id="login-1" type="layout" name="jetspeed-layouts::VelocityTwoColumns">
+            <fragment id="login-1-1" type="portlet"
+                name="j2-admin::LoginPortlet" decorator="gray-gradient">
+                <property name="row" value="0"/>
+                <property name="column" value="0"/>
+            </fragment>
+            <fragment id="login-1-2" type="portlet"
+                name="j2-admin::ForgottenPasswordPortlet" decorator="gray-gradient">
+                <property name="row" value="0"/>
+                <property name="column" value="1"/>
+            </fragment>
+        </fragment>
+</page>

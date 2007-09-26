@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export MAVEN_HOME=@MAVEN_HOME@
+sh $MAVEN_HOME/bin/install_repo.sh @USER_HOME@/.maven/repository

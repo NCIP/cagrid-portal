@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+
+	<bean id="textIndexer"
+		class="gov.nih.nci.cagrid.portal2.util.TextIndexer">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="queries">
+			<util:list>
+				<value>from GridService</value>
+				<value>from Workspace</value>
+				<value>from Person</value>
+				<value>from SemanticMetadata</value>
+				<value>from Address</value>
+			</util:list>
+		</property>
+	</bean>
+
+	<bean id="indexAll"
+		class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+		<property name="targetObject" ref="textIndexer" />
+		<property name="targetMethod" value="indexAll" />
+	</bean>
+
+	<bean id="indexAllTask"
+		class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<property name="delay" value="3000" />
+		<property name="period" value="60000" />
+		<property name="timerTask" ref="indexAll" />
+	</bean>
+
+	<bean id="textTimerFactory"
+		class="org.springframework.scheduling.timer.TimerFactoryBean">
+
+		<property name="scheduledTimerTasks">
+			<list>
+				<ref bean="indexAllTask" />
+			</list>
+		</property>
+	</bean>
+
+</beans>

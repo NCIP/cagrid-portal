@@ -1,0 +1,12 @@
+#!/bin/bash
+
+export MAVEN_HOME=@MAVEN_HOME@
+
+chmod u+x $MAVEN_HOME/bin/*.sh
+$MAVEN_HOME/bin/maven -DartifactId=maven-jetspeed2-plugin -DgroupId=org.apache.portals.jetspeed-2 -Dversion=2.1 plugin:download
+$MAVEN_HOME/bin/maven j2:portal.genapp.minimal
+cd @PORTAL_HOME@
+$MAVEN_HOME/bin/maven war:install
+mkdir logs
+touch logs/apacheds.xml
+$MAVEN_HOME/bin/maven j2:minStart

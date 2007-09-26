@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+	<bean id="viewNameParam" class="java.lang.String">
+		<constructor-arg value="jsp"/>
+	</bean>
+	<bean id="viewNameDefault" class="java.lang.String">
+		<constructor-arg value="no-content"/>
+	</bean>
+
+	<bean id="contentHelpController"
+		class="org.springframework.web.portlet.mvc.ParameterizableViewController">
+		<property name="viewName" value="/WEB-INF/jsp/content/help.jsp" />
+	</bean>
+	
+	<bean id="contentControllerTemplate" abstract="true">
+		<property name="viewNameParam" ref="viewNameParam"/>
+		<property name="viewNameDefault" ref="viewNameDefault"/>
+	</bean>
+
+	<bean id="contentEditController" parent="contentControllerTemplate"
+		class="gov.nih.nci.cagrid.portal2.portlet.content.ContentEditController"/>
+
+	<bean id="contentViewController" parent="contentControllerTemplate"
+		class="gov.nih.nci.cagrid.portal2.portlet.content.ContentViewController"/>
+
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="contentViewController" />
+				</entry>
+				<entry key="edit">
+					<ref bean="contentEditController" />
+				</entry>
+				<entry key="help">
+					<ref bean="contentHelpController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/content/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>		
+
+	<!-- Exception Handler -->
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate" />
+
+</beans>

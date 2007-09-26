@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+	<bean id="viewController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.QueryController">
+		
+		<property name="viewName" value="view" />
+		<property name="commandName" value="queryBean"/>
+		<property name="gridServiceDao" ref="gridServiceDao"/>
+		
+	</bean>
+		
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="viewController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/query/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>		
+
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate" />
+		
+	<bean id="queryBeanPrototype" class="gov.nih.nci.cagrid.portal2.portlet.query.QueryBean"/>
+	<!-- 
+	<bean id="queryBeanPrototype" class="gov.nih.nci.cagrid.portal2.portlet.query.QueryBean">
+	
+		<property name="url" value="http://cagrid-portal.nci.nih.gov:8080/wsrf/services/cagrid/CaBIOSvc"/>
+		<property name="query">
+			<value>
+<![CDATA[
+<CQLQuery xmlns='http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery'>
+	<Target name='gov.nih.nci.cabio.domain.Gene'>
+		<Attribute 
+			name='fullName' value='BRCA%' 
+			predicate='LIKE'/>
+	</Target>
+</CQLQuery>
+]]>
+			</value>
+		</property>
+	</bean>
+	 -->
+
+
+</beans>

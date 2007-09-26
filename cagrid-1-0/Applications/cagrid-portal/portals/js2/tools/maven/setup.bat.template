@@ -1,0 +1,7 @@
+set MAVEN_HOME=@MAVEN_HOME@
+
+%MAVEN_HOME%\bin\maven -DartifactId=maven-jetspeed2-plugin -DgroupId=org.apache.portals.jetspeed-2 -Dversion=2.1.2 plugin:download
+%MAVEN_HOME%\bin\maven j2:portal.genapp.minimal
+cd @PORTAL_HOME@
+%MAVEN_HOME%\bin\maven war:install
+%MAVEN_HOME%\bin\maven j2:minStart

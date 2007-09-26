@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page id="/login.psml" hidden="false">
+    <security-constraints>
+        <security-constraints-ref>public-view</security-constraints-ref>
+    </security-constraints>
+    <title>Directory</title>
+    <short-title>Directory</short-title>
+    <defaults layout-decorator="tigris"/>
+    
+        <fragment id="directory-1" type="layout" name="jetspeed-layouts::VelocityOneColumn">
+            <fragment id="directory-1-1" type="portlet"
+                name="cagridportlets::directory" decorator="gray-gradient">
+                <property name="row" value="0"/>
+                <property name="column" value="0"/>
+            </fragment>
+        </fragment>
+</page>
