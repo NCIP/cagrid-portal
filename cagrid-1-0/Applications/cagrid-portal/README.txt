@@ -2,6 +2,10 @@
 # Installation #
 ################
 
+0. Synchronize with NCICB production trust fabric
+   - Either the caGrid distribution to do this: http://www.cagrid.org/mwiki/index.php?title=GTS:1.1:Administrators_Guide:SyncGTS:Command_Line_Approach
+   - Or, just copy aggr/certificates/nci_prod/* to ~/.globus/certificates/
+
 1. Configure DB profiles:
  - DB profile configurations are under db/etc directory. Configure the "default" and "test"
    profiles.
