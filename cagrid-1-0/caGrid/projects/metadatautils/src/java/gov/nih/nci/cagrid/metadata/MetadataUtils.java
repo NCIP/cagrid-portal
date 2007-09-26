@@ -56,7 +56,6 @@ public class MetadataUtils {
 
         DomainModel result;
         try {
-            System.out.println(XmlUtils.toString(resourceProperty));
             result = deserializeDomainModel(new StringReader(XmlUtils.toString(resourceProperty)));
         } catch (Exception e) {
             throw new ResourcePropertyRetrievalException("Unable to deserailize DomainModel: " + e.getMessage(), e);
