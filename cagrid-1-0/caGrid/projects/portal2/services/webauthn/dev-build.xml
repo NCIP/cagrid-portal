@@ -176,7 +176,7 @@
 	<!-- Post Clean Target                                              -->
 	<!-- ============================================================== -->
 	<target name="postClean">
-		 <delete file="${ext.lib.dir}" />
+		 <delete dir="${ext.lib.dir}" />
 	</target>
 
 

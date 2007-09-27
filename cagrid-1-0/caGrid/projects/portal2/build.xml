@@ -17,6 +17,7 @@
 	<target name="clean">
 		<ant dir="common" target="clean"/>
 		<ant dir="webapps/cagridportlets" target="clean"/>
+		<ant dir="services/webauthn" target="clean"/>
 		<ant dir="portals/jetspeed" target="clean"/>	
 	</target>
 	
