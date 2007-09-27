@@ -157,14 +157,27 @@
 
 			<os family="windows" />
 			<then>
-				<copy file="${portals.js2.dir}/tools/maven/setup.bat.template" tofile="${portals.js2.dir}/tools/maven/setup.bat">
-					<filterset>
-						<filter token="MAVEN_HOME" value="${portals.js2.maven.home}" />
-						<filter token="PORTAL_HOME" value="${portals.js2.custom.portal.home}" />
-					</filterset>
-				</copy>
-
-				<exec executable="${portals.js2.dir}/tools/maven/setup.bat" />
+				
+				<exec executable="${portals.js2.maven.home}/maven">
+					<arg value="-DartifactId=maven-jetspeed2-plugin"/>
+					<arg value="-DgroupId=org.apache.portals.jetspeed-2"/>
+					<arg value="-Dversion=2.1 plugin:download"/>
+				</exec>
+				
+				<exec executable="${portals.js2.maven.home}/maven">
+					<arg value="j2:portal.genapp.minimal"/>
+				</exec>
+				
+				<exec executable="${portals.js2.maven.home}/maven"
+						dir="${portals.js2.custom.portal.home}">
+					<arg value="war:install"/>
+				</exec>
+				
+				<exec executable="${portals.js2.maven.home}/maven"
+						dir="${portals.js2.custom.portal.home}">
+					<arg value="j2:minStart"/>
+				</exec>
+				
 			</then>
 			<else>
 
