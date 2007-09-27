@@ -158,23 +158,31 @@
 			<os family="windows" />
 			<then>
 				
-				<exec executable="${portals.js2.maven.home}/maven">
+				<exec executable="cmd.exe">
+					<arg value="/c"/>
+					<arg value="${portals.js2.maven.home}/maven"/>
 					<arg value="-DartifactId=maven-jetspeed2-plugin"/>
 					<arg value="-DgroupId=org.apache.portals.jetspeed-2"/>
 					<arg value="-Dversion=2.1 plugin:download"/>
 				</exec>
 				
-				<exec executable="${portals.js2.maven.home}/maven">
+				<exec executable="cmd.exe">
+					<arg value="/c"/>
+					<arg value="${portals.js2.maven.home}/maven"/>
 					<arg value="j2:portal.genapp.minimal"/>
 				</exec>
 				
-				<exec executable="${portals.js2.maven.home}/maven"
+				<exec executable="cmd.exe"
 						dir="${portals.js2.custom.portal.home}">
+					<arg value="/c"/>
+					<arg value="${portals.js2.maven.home}/maven"/>
 					<arg value="war:install"/>
 				</exec>
 				
-				<exec executable="${portals.js2.maven.home}/maven"
+				<exec executable="cmd.exe"
 						dir="${portals.js2.custom.portal.home}">
+					<arg value="/c"/>
+					<arg value="${portals.js2.maven.home}/maven"/>
 					<arg value="j2:minStart"/>
 				</exec>
 				
