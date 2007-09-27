@@ -150,7 +150,7 @@
 			<entry key="org.apache.jetspeed.production.database.password" value="${portals.js2.db.password}" />
 			<entry key="org.apache.jetspeed.production.database.driver" value="${portals.js2.db.driver}" />
 			<entry key="org.apache.jetspeed.production.jdbc.drivers.path" value="${portals.js2.db.driver.path}" />
-			<entry key="maven.repo.path" value="http://www.bluesunrise.com/maven/, http://www.ibiblio.org/maven/, http://dist.codehaus.org/, http://cvs.apache.org/repository, http://repo1.maven.org/maven" />
+			<entry key="maven.repo.remote" value="http://www.bluesunrise.com/maven/, http://www.ibiblio.org/maven/, http://dist.codehaus.org/, http://cvs.apache.org/repository, http://repo1.maven.org/maven" />
 		</propertyfile>
 
 		<if>
