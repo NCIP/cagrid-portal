@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -49,6 +50,7 @@ public class Workspace extends AbstractDomainObject {
 	}
 	
 
+	@Column(length = 4000)
 	public String getDescription() {
 		return description;
 	}
