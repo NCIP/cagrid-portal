@@ -51,6 +51,7 @@ import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.apache.axis.message.addressing.Address;
@@ -63,7 +64,7 @@ import org.apache.axis.message.addressing.EndpointReference;
  * @author David Ervin
  * 
  * @created Mar 30, 2007 3:46:34 PM
- * @version $Id: VisualQueryBuilder.java,v 1.5 2007-09-25 18:45:51 dervin Exp $ 
+ * @version $Id: VisualQueryBuilder.java,v 1.6 2007-09-28 20:11:33 dervin Exp $ 
  */
 public class VisualQueryBuilder extends JFrame {
     
@@ -164,65 +165,7 @@ public class VisualQueryBuilder extends JFrame {
             cqlQueryTree.setQuery(new CQLQuery());
             cqlQueryTree.addTreeSelectionListener(new TreeSelectionListener() {
                 public void valueChanged(TreeSelectionEvent e) {
-                    if (e.isAddedPath()) {
-                        // selection made
-                        TreePath selectionPath = e.getPath();
-                        if (selectionPath.getLastPathComponent() instanceof IconTreeNode) {
-                            IconTreeNode node = (IconTreeNode) selectionPath.getLastPathComponent();
-                            if (node instanceof QueryTreeNode) {
-                                // root of the query
-                                disableQueryMenuItems();
-                                if (((QueryTreeNode) node).getQuery().getTarget() == null) {
-                                    setMenuItemEnabled(getSetTargetMenuItem(), true);
-                                }
-                            } else if (node instanceof TargetTreeNode) {
-                                // query target selected
-                                // disable most of the query building toolbar
-                                disableQueryMenuItems();
-                                // can always remove stuff
-                                setMenuItemEnabled(getQueryRemoveMenu(), true);
-                                // if target has no children, it can be added to
-                                Object target = ((TargetTreeNode) node).getTarget();
-                                if (target.getAssociation() == null
-                                    && target.getGroup() == null
-                                    && target.getAttribute() == null) {
-                                    setMenuItemEnabled(getQueryAddMenu(), true);
-                                }
-                            } else if (node instanceof GroupTreeNode) {
-                                // group selected
-                                // disable most of the query building toolbar
-                                disableQueryMenuItems();
-                                // can always remove stuff
-                                setMenuItemEnabled(getQueryRemoveMenu(), true);
-                                // groups can always be added to
-                                setMenuItemEnabled(getQueryAddMenu(), true);
-                                // enable choice items
-                                setMenuItemEnabled(getSetGroupLogicMenuItem(), true);
-                            } else if (node instanceof AssociationTreeNode) {
-                                // association selected
-                                // disable most of the query building toolbar
-                                disableQueryMenuItems();
-                                // can always remove stuff
-                                setMenuItemEnabled(getQueryRemoveMenu(), true);
-                                // see what (if any) further restrictions exist on the association
-                                Association association = ((AssociationTreeNode) node).getAssociation();
-                                if (association.getAssociation() == null 
-                                    && association.getGroup() == null
-                                    && association.getAttribute() == null) {
-                                    // can add to the association
-                                    setMenuItemEnabled(getQueryAddMenu(), true);
-                                }
-                            } else if (node instanceof AttributeTreeNode) {
-                                // attribute selected
-                                // disable everything in the query builing toolbar
-                                disableQueryMenuItems();
-                                // can always remove stuff
-                                setMenuItemEnabled(getQueryRemoveMenu(), true);
-                                // enable a few choice items
-                                setMenuItemEnabled(getSetAttributeValueMenuItem(), true);
-                            }
-                        }
-                    }
+                    handleTreeSelection(e);
                 }
             });
         }
@@ -792,7 +735,58 @@ public class VisualQueryBuilder extends JFrame {
             removeCurrentItemMenuItem.setText("Current Item");
             removeCurrentItemMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    TreeNode selectedNode = (TreeNode) getCqlQueryTree().getSelectionPath().getLastPathComponent();
+                    TreeNode parentNode = selectedNode.getParent();
+                    if (selectedNode instanceof TargetTreeNode) {
+                        // same as clicking clear
+                        getClearQueryMenuItem().doClick();
+                    } else if (selectedNode instanceof AttributeTreeNode) {
+                        AttributeTreeNode node = (AttributeTreeNode) selectedNode;
+                        Attribute removeMe = node.getAttribute();
+                        if (parentNode instanceof AssociationTreeNode) {
+                            AssociationTreeNode assocNode = (AssociationTreeNode) parentNode;
+                            assocNode.getAssociation().setAttribute(null);
+                        } else if (parentNode instanceof TargetTreeNode) {
+                            TargetTreeNode targetNode = (TargetTreeNode) parentNode;
+                            targetNode.getTarget().setAttribute(null);
+                        } else if (parentNode instanceof GroupTreeNode) {
+                            GroupTreeNode groupNode = (GroupTreeNode) parentNode;
+                            Attribute[] attributes = groupNode.getGroup().getAttribute();
+                            attributes = (Attribute[]) Utils.removeFromArray(attributes, removeMe);
+                            groupNode.getGroup().setAttribute(attributes);
+                        }
+                    } else if (selectedNode instanceof AssociationTreeNode) {
+                        AssociationTreeNode node = (AssociationTreeNode) selectedNode;
+                        Association removeMe = node.getAssociation();
+                        if (parentNode instanceof AssociationTreeNode) {
+                            AssociationTreeNode assocNode = (AssociationTreeNode) parentNode;
+                            assocNode.getAssociation().setAssociation(null);
+                        } else if (parentNode instanceof TargetTreeNode) {
+                            TargetTreeNode targetNode = (TargetTreeNode) parentNode;
+                            targetNode.getTarget().setAssociation(null);
+                        } else if (parentNode instanceof GroupTreeNode) {
+                            GroupTreeNode groupNode = (GroupTreeNode) parentNode;
+                            Association[] associations = groupNode.getGroup().getAssociation();
+                            associations = (Association[]) Utils.removeFromArray(associations, removeMe);
+                            groupNode.getGroup().setAssociation(associations);
+                        }
+                    } else if (selectedNode instanceof GroupTreeNode) {
+                        GroupTreeNode node = (GroupTreeNode) selectedNode;
+                        Group removeMe = node.getGroup();
+                        if (parentNode instanceof AssociationTreeNode) {
+                            AssociationTreeNode assocNode = (AssociationTreeNode) parentNode;
+                            assocNode.getAssociation().setGroup(null);
+                        } else if (parentNode instanceof TargetTreeNode) {
+                            TargetTreeNode targetNode = (TargetTreeNode) parentNode;
+                            targetNode.getTarget().setGroup(null);
+                        } else if (parentNode instanceof GroupTreeNode) {
+                            GroupTreeNode groupNode = (GroupTreeNode) parentNode;
+                            Group[] groups = groupNode.getGroup().getGroup();
+                            groups = (Group[]) Utils.removeFromArray(groups, removeMe);
+                            groupNode.getGroup().setGroup(groups);
+                        }
+                    }
+                    ((RebuildableTreeNode) parentNode).rebuild();
                 }
             });
         }
@@ -859,6 +853,59 @@ public class VisualQueryBuilder extends JFrame {
                 menu.getItem(itemIndex).setEnabled(false);
             }
             menu.setEnabled(false);
+        }
+        // should always be able to clear
+        setMenuItemEnabled(getClearQueryMenuItem(), true);
+    }
+    
+    
+    private void handleTreeSelection(TreeSelectionEvent e) {
+        if (e.isAddedPath()) {
+            // selection made
+            // start by disabling all query menu items
+            disableQueryMenuItems();
+            TreePath selectionPath = e.getPath();
+            if (selectionPath.getLastPathComponent() instanceof IconTreeNode) {
+                IconTreeNode node = (IconTreeNode) selectionPath.getLastPathComponent();
+                // enable remove current item if != query root
+                setMenuItemEnabled(getRemoveCurrentItemMenuItem(), 
+                    node != getCqlQueryTree().getQueryTreeNode());
+                if (node instanceof QueryTreeNode) {
+                    // root of the query
+                    if (((QueryTreeNode) node).getQuery().getTarget() == null) {
+                        setMenuItemEnabled(getSetTargetMenuItem(), true);
+                    }
+                } else if (node instanceof TargetTreeNode) {
+                    // query target selected
+                    // if target has no children, it can be added to
+                    Object target = ((TargetTreeNode) node).getTarget();
+                    if (target.getAssociation() == null
+                        && target.getGroup() == null
+                        && target.getAttribute() == null) {
+                        setMenuItemEnabled(getQueryAddMenu(), true);
+                    }
+                } else if (node instanceof GroupTreeNode) {
+                    // group selected
+                    // groups can always be added to
+                    setMenuItemEnabled(getQueryAddMenu(), true);
+                    // enable choice items
+                    setMenuItemEnabled(getSetGroupLogicMenuItem(), true);
+                } else if (node instanceof AssociationTreeNode) {
+                    // association selected
+                    // see what (if any) further restrictions exist on the association
+                    Association association = ((AssociationTreeNode) node).getAssociation();
+                    if (association.getAssociation() == null 
+                        && association.getGroup() == null
+                        && association.getAttribute() == null) {
+                        // can add to the association
+                        setMenuItemEnabled(getQueryAddMenu(), true);
+                    }
+                } else if (node instanceof AttributeTreeNode) {
+                    // attribute selected
+                    // enable a few choice items
+                    setMenuItemEnabled(getSetAttributeValueMenuItem(), true);
+                }
+            }
         }
     }
 
