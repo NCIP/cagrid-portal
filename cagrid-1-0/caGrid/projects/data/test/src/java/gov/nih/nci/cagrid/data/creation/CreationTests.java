@@ -7,6 +7,7 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+import com.atomicobject.haste.framework.Step;
 import com.atomicobject.haste.framework.Story;
 
 /** 
@@ -20,10 +21,16 @@ import com.atomicobject.haste.framework.Story;
  */
 public class CreationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
+    
 	public static final String SERVICE_NAME = "TestDataService";
-	public static final String SERVICE_DIR = (new File("..")).getAbsolutePath() + File.separator + "data" + File.separator + "test" + File.separator + "TestDataService";
+	public static final String SERVICE_DIR = (new File("..")).getAbsolutePath() + File.separator + "data" + File.separator + "test" + File.separator + SERVICE_NAME;
 	public static final String PACKAGE_NAME = "gov.nih.nci.cagrid.testds";
 	public static final String SERVICE_NAMESPACE = "http://" + PACKAGE_NAME + "/" + SERVICE_NAME;
+    
+    public static final String PLAIN_SERVICE_NAME = "PlainTestDataService";
+    public static final String PLAIN_SERVICE_DIR = (new File("..")).getAbsolutePath() + File.separator + "data" + File.separator + "test" + File.separator + PLAIN_SERVICE_NAME;
+    public static final String PLAIN_PACKAGE_NAME = "gov.nih.nci.cagrid.plainds";
+    public static final String PLAIN_SERVICE_NAMESPACE = "http://" + PLAIN_PACKAGE_NAME + "/" + PLAIN_SERVICE_NAME;
     
     public String getName() {
         return "Data Service Creation Tests";
@@ -37,11 +44,15 @@ public class CreationTests extends Story {
 
 	protected Vector steps() {
         DataTestCaseInfo info = new TestDataServiceInfo();
-		Vector steps = new Vector();
-		// delete any existing service
+        DataTestCaseInfo plainInfo = new PlainDataServiceInfo();
+        
+		Vector<Step> steps = new Vector<Step>();
+		// delete any existing service dirs
 		steps.add(new DeleteOldServiceStep(info));
-		// create a new enumeration supporting data service
+        steps.add(new DeleteOldServiceStep(plainInfo));
+		// create a new data service
 		steps.add(new CreationStep(info, getIntroduceBaseDir()));
+        steps.add(new CreationStep(plainInfo, getIntroduceBaseDir()));
 		return steps;
 	}
 	
@@ -92,4 +103,27 @@ public class CreationTests extends Story {
 	        return PACKAGE_NAME;
 	    }
 	}
+    
+    
+    public static class PlainDataServiceInfo extends DataTestCaseInfo {
+        public String getName() {
+            return PLAIN_SERVICE_NAME;
+        }
+
+
+        public String getDir() {
+            return PLAIN_SERVICE_DIR;
+        }
+
+
+        public String getNamespace() {
+            return PLAIN_SERVICE_NAMESPACE;
+        }
+
+
+        public String getPackageName() {
+            return PLAIN_PACKAGE_NAME;
+        }
+        
+    }
 }
