@@ -35,9 +35,9 @@ import com.atomicobject.haste.framework.Step;
  *          Exp $
  */
 public class EnumerationSystemTests extends BaseSystemTest {
-
-	private static GlobusHelper globusHelper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
-		IntroduceTestConstants.TEST_PORT + 2);
+    private static int TEST_PORT = IntroduceTestConstants.TEST_PORT + 502;
+	private static GlobusHelper globusHelper = new GlobusHelper(
+        false, new File(IntroduceTestConstants.TEST_TEMP), TEST_PORT);
 
 
 	public EnumerationSystemTests() {
@@ -82,7 +82,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 		steps.add(new StartGlobusStep(globusHelper));
 		// 8) test data service
 		steps.add(new InvokeEnumerationDataServiceStep("localhost", 
-            IntroduceTestConstants.TEST_PORT + 2, info.getName()));
+            TEST_PORT, info.getName()));
 
 		return steps;
 	}

@@ -32,11 +32,12 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:19:42 PM
- * @version $Id: BDTDataServiceSystemTests.java,v 1.4 2007-06-12 16:13:40 dervin Exp $ 
+ * @version $Id: BDTDataServiceSystemTests.java,v 1.5 2007-09-28 20:06:52 dervin Exp $ 
  */
 public class BDTDataServiceSystemTests extends BaseSystemTest {
-	private static GlobusHelper globusHelper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
-		IntroduceTestConstants.TEST_PORT + 10);
+    private static int TEST_PORT = IntroduceTestConstants.TEST_PORT + 501;
+	private static GlobusHelper globusHelper = new GlobusHelper(
+        false, new File(IntroduceTestConstants.TEST_TEMP), TEST_PORT);
 	
 	public String getDescription() {
 		return "System tests for BDT Data Service";
@@ -81,7 +82,7 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 		// 7) start globus
 		steps.add(new StartGlobusStep(globusHelper));
 		// 8) test bdt data service
-		steps.add(new InvokeBDTDataServiceStep("localhost", IntroduceTestConstants.TEST_PORT + 10,
+		steps.add(new InvokeBDTDataServiceStep("localhost", TEST_PORT,
 			BDTDataServiceCreationTests.SERVICE_NAME));
 		return steps;
 	}

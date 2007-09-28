@@ -21,11 +21,12 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.16 2007-06-12 16:13:40 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.17 2007-09-28 20:06:52 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
-    private static GlobusHelper globusHelper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
-        IntroduceTestConstants.TEST_PORT + 1);
+    private static int TEST_PORT = IntroduceTestConstants.TEST_PORT + 500;
+    private static GlobusHelper globusHelper = new GlobusHelper(
+        false, new File(IntroduceTestConstants.TEST_TEMP), TEST_PORT);
     
     private static File auditorLogFile = new File("./dataServiceAuditing.log").getAbsoluteFile();
 
@@ -73,7 +74,7 @@ public class SystemTests extends BaseSystemTest {
         // 8) start globus
         steps.add(new StartGlobusStep(globusHelper));
         // 9) test data service
-        steps.add(new InvokeDataServiceStep("localhost", IntroduceTestConstants.TEST_PORT + 1, info.getName()));
+        steps.add(new InvokeDataServiceStep("localhost", TEST_PORT, info.getName()));
         // 10) verify the audit log
         steps.add(new VerifyAuditLogStep(auditorLogFile.getAbsolutePath()));
         return steps;
@@ -100,13 +101,6 @@ public class SystemTests extends BaseSystemTest {
         if (auditorLogFile.exists()) {
             auditorLogFile.delete();
         }
-    }
-
-
-    // used to make sure that if we are going to use a junit testsuite to
-    // test this that the test suite will not error out
-    // looking for a single test......
-    public void testDummy() throws Throwable {
     }
 
 
