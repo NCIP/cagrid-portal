@@ -89,7 +89,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
             // add the data namespaces
             addDataServiceNamespaces(serviceInfo);
             // edit service properties
-            modifyServiceProperties(serviceInfo.getServiceDescriptor());
+            modifyServiceProperties(serviceInfo);
             // add the query method
             addQueryMethod(mainService);
             // features and service style
@@ -287,10 +287,14 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
     }
 
 
-    private void modifyServiceProperties(ServiceDescription desc) throws CreationExtensionException {
+    private void modifyServiceProperties(ServiceInformation info) throws CreationExtensionException {
+        ServiceDescription desc = info.getServiceDescriptor();
         // does the query processor class property exist?
         if (!CommonTools.servicePropertyExists(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
-            CommonTools.setServiceProperty(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, "", false);
+            // set the service property to the stub query processor class name
+            String stubQpClassname = ExtensionDataUtils.getQueryProcessorStubClassName(info);
+            CommonTools.setServiceProperty(desc, 
+                DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, stubQpClassname, false);
         } else {
             try {
                 String value = CommonTools.getServicePropertyValue(desc,
