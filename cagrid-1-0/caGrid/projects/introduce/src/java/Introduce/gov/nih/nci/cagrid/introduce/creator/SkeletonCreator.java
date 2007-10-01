@@ -6,7 +6,10 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
+import gov.nih.nci.cagrid.introduce.beans.service.Main;
+import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.beans.service.Singleton;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
@@ -59,7 +62,9 @@ public class SkeletonCreator extends Task {
         serviceType.setName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
         serviceType.setNamespace(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
         serviceType.setPackageName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE));
-        serviceType.setResourceFrameworkType(IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
+        serviceType.setResourceFrameworkOptions(new ResourceFrameworkOptions());
+        serviceType.getResourceFrameworkOptions().setMain(new Main());
+        serviceType.getResourceFrameworkOptions().setSingleton(new Singleton());
 
         // add new service to the services
         // add new method to array in bean

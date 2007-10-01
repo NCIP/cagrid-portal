@@ -13,6 +13,8 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
+import gov.nih.nci.cagrid.introduce.beans.service.Custom;
+import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
@@ -152,7 +154,8 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		bdtService.setName(mainService.getName() + bdtService.getName());
 		bdtService.setNamespace(mainService.getNamespace() + "BDT");
 		bdtService.setPackageName(mainService.getPackageName() + ".bdt");
-		bdtService.setResourceFrameworkType(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE);
+		bdtService.setResourceFrameworkOptions(new ResourceFrameworkOptions());
+		bdtService.getResourceFrameworkOptions().setCustom(new Custom());
 		MethodType[] methods = bdtService.getMethods().getMethod();
 		for (int i = 0; i < methods.length; i++) {
 			MethodType method = methods[i];

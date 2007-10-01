@@ -12,7 +12,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 %>
 package <%=info.getService().getPackageName()%>.service;
 
-<%if(!info.getService().getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)){%>
+<%if(info.getService().getResourceFrameworkOptions().getCustom()==null){%>
 import <%=info.getService().getPackageName()%>.service.globus.resource.<%=info.getService().getName()%>Resource;
 <%}%>
 import <%=baseService.getPackageName()%>.service.ServiceConfiguration;
@@ -51,7 +51,7 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 	}
 	
 	<%
-	if(!info.getService().getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)){
+	if(info.getService().getResourceFrameworkOptions().getCustom()==null){
 	%>
 	public <%=info.getService().getPackageName()%>.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("home");
@@ -66,7 +66,7 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 	for(int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++){
 	  ServiceType tserv = info.getServices().getService(serviceI);
 	  if(!tserv.getName().equals(info.getService().getName())){
-	   if(!tserv.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)){
+	   if(tserv.getResourceFrameworkOptions().getCustom()==null){
 	%>
 	public <%=tserv.getPackageName()%>.service.globus.resource.BaseResourceHome get<%=tserv.getName()%>ResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("<%=CommonTools.lowerCaseFirstCharacter(tserv.getName())%>Home");
@@ -104,7 +104,7 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 		return resourceHome;
 	}
 	
-	<%if(info.getService().getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE) && metadataList!=null && metadataList.getResourceProperty()!=null){
+	<%if(info.getService().getResourceFrameworkOptions().getMain()!=null && metadataList!=null && metadataList.getResourceProperty()!=null){
 		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
 			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
 			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(info.getNamespaces(),metadata.getQName());
@@ -127,7 +127,7 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 	<%	}
 	}%>	
 	
-	<%if(info.getService().getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)){%>
+	<%if(info.getService().getResourceFrameworkOptions().getMain()!=null){%>
 	protected Object getMetadata(QName metadataQName) {
 		<%=serviceName%>Resource serviceBaseResource = null;
 		try {

@@ -21,28 +21,27 @@ import org.apache.log4j.Logger;
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.Parameter;
 
-/** 
- *  SyncHelper
- *  Static helper methods for source synchronization operations
+
+/**
+ * SyncHelper Static helper methods for source synchronization operations
  * 
  * @author David Ervin
- * 
  * @created Apr 4, 2007 1:32:03 PM
- * @version $Id: SyncHelper.java,v 1.3 2007-06-21 14:56:52 dervin Exp $ 
+ * @version $Id: SyncHelper.java,v 1.4 2007-10-01 17:04:49 hastings Exp $
  */
 public class SyncHelper {
     private static final Logger logger = Logger.getLogger(SyncHelper.class);
-    
+
+
     /**
      * Creates the string of exceptions thrown by a method
      * 
      * @param method
-     *      The method
+     *            The method
      * @param serviceInfo
-     *      The service information
-     * @return
-     *      A string containing exceptions thrown by the method,
-     *      delimited by commans
+     *            The service information
+     * @return A string containing exceptions thrown by the method, delimited by
+     *         commans
      */
     public static String createExceptions(MethodType method, ServiceInformation serviceInfo) {
         StringBuffer exceptions = new StringBuffer();
@@ -57,10 +56,10 @@ public class SyncHelper {
                 MethodTypeExceptionsException fault = exceptionsEl.getException(i);
                 SchemaInformation info = CommonTools
                     .getSchemaInformation(serviceInfo.getNamespaces(), fault.getQname());
-                String ex = info.getType().getPackageName() + "."
-                    + CommonTools.upperCaseFirstCharacter(
-                        info.getType().getClassName() != null ? 
-                            info.getType().getClassName() : info.getType().getType());
+                String ex = info.getType().getPackageName()
+                    + "."
+                    + CommonTools.upperCaseFirstCharacter(info.getType().getClassName() != null ? info.getType()
+                        .getClassName() : info.getType().getType());
                 exceptions.append(ex);
                 if (i < exceptionsEl.getException().length - 1) {
                     exceptions.append(", ");
@@ -72,17 +71,16 @@ public class SyncHelper {
         }
         return exceptions.toString();
     }
-    
-    
+
+
     /**
      * Creates a method signature which returns an unboxed type
      * 
      * @param method
-     *      The method to create a Java signature for
+     *            The method to create a Java signature for
      * @param serviceInfo
-     *      The service information
-     * @return
-     *      The Java method signature of the method
+     *            The service information
+     * @return The Java method signature of the method
      */
     public static String createUnBoxedSignatureStringFromMethod(MethodType method, ServiceInformation serviceInfo) {
         StringBuffer methodString = new StringBuffer();
@@ -93,11 +91,10 @@ public class SyncHelper {
             && returnTypeEl.getQName().getLocalPart().equals("void")) {
             returnType = "void";
         } else {
-            SchemaInformation info = CommonTools.getSchemaInformation(
-                serviceInfo.getNamespaces(), returnTypeEl.getQName());
+            SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), returnTypeEl
+                .getQName());
             returnType = info.getType().getClassName();
-            if ((info.getType().getPackageName() != null) 
-                && (info.getType().getPackageName().length() > 0)) {
+            if ((info.getType().getPackageName() != null) && (info.getType().getPackageName().length() > 0)) {
                 returnType = info.getType().getPackageName() + "." + returnType;
             }
             if (returnTypeEl.isIsArray()) {
@@ -107,8 +104,8 @@ public class SyncHelper {
         methodString.append("public ").append(returnType).append(" ").append(methodName).append("(");
         if ((method.getInputs() != null) && (method.getInputs().getInput() != null)) {
             for (int j = 0; j < method.getInputs().getInput().length; j++) {
-                SchemaInformation info = CommonTools.getSchemaInformation(
-                    serviceInfo.getNamespaces(), method.getInputs().getInput(j).getQName());
+                SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), method
+                    .getInputs().getInput(j).getQName());
                 String packageName = info.getType().getPackageName();
                 String classType = null;
                 if ((packageName != null) && (packageName.length() > 0)) {
@@ -136,18 +133,15 @@ public class SyncHelper {
      * Builds a list of client handle classnames for a service
      * 
      * @param serviceInfo
-     *      The service information
-     * @return
-     *      A List of Strings of java client class names
+     *            The service information
+     * @return A List of Strings of java client class names
      */
     public static List buildServicesClientHandleClassNameList(ServiceInformation serviceInfo) {
         List list = new ArrayList();
-        if (serviceInfo.getServices() != null 
-            && serviceInfo.getServices().getService() != null) {
+        if (serviceInfo.getServices() != null && serviceInfo.getServices().getService() != null) {
             for (int i = 0; i < serviceInfo.getServices().getService().length; i++) {
                 ServiceType thisservice = serviceInfo.getServices().getService(i);
-                list.add(thisservice.getPackageName() 
-                    + ".client." + thisservice.getName() + "Client");
+                list.add(thisservice.getPackageName() + ".client." + thisservice.getName() + "Client");
             }
         }
         return list;
@@ -158,14 +152,12 @@ public class SyncHelper {
      * Creates a method signature which returns an unboxed type
      * 
      * @param method
-     *      The method to create a Java signature for
+     *            The method to create a Java signature for
      * @param serviceInfo
-     *      The service information
-     * @return
-     *      The Java method signature of the method
+     *            The service information
+     * @return The Java method signature of the method
      */
-    public static String createUnBoxedSignatureStringFromMethod(
-        JavaMethod method, ServiceInformation serviceInfo) {
+    public static String createUnBoxedSignatureStringFromMethod(JavaMethod method, ServiceInformation serviceInfo) {
         StringBuffer methodString = new StringBuffer();
         String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
         String returnType = "";
@@ -186,8 +178,7 @@ public class SyncHelper {
         for (int j = 0; j < inputs.length; j++) {
             String classType = null;
             if (inputs[j].getType().getPackageName().length() > 0) {
-                classType = inputs[j].getType().getPackageName() 
-                    + "." + inputs[j].getType().getClassName();
+                classType = inputs[j].getType().getPackageName() + "." + inputs[j].getType().getClassName();
             } else {
                 classType = inputs[j].getType().getClassName();
             }
@@ -203,24 +194,21 @@ public class SyncHelper {
         methodString.append(")");
         return methodString.toString();
     }
-    
-    
+
+
     /**
      * Creates JavaDoc for a method
      * 
      * @param method
-     *      The method
-     * @return
-     *      The javadoc block for the given method
+     *            The method
+     * @return The javadoc block for the given method
      */
     public static String createJavaDoc(MethodType method) {
-        if ((method.getDescription() != null) 
-            && !method.getDescription().trim().equals("")) {
+        if ((method.getDescription() != null) && !method.getDescription().trim().equals("")) {
             StringBuffer javaDoc = new StringBuffer();
             javaDoc.append(SyncSource.TAB).append("/**\n");
             if (method.getDescription() != null) {
-                javaDoc.append(SyncSource.TAB).append(" * ")
-                    .append(method.getDescription()).append("\n");
+                javaDoc.append(SyncSource.TAB).append(" * ").append(method.getDescription()).append("\n");
                 javaDoc.append(SyncSource.TAB).append(" *\n");
             }
             if ((method.getInputs() != null) && (method.getInputs().getInput() != null)
@@ -230,26 +218,24 @@ public class SyncHelper {
                         .append(method.getInputs().getInput(i).getName()).append("\n");
                     if ((method.getInputs().getInput(i).getDescription() != null)
                         && (method.getInputs().getInput(i).getDescription().length() > 0)) {
-                        javaDoc.append(SyncSource.TAB).append(" *\t")
-                            .append(method.getInputs().getInput(i).getDescription())
-                            .append("\n");
+                        javaDoc.append(SyncSource.TAB).append(" *\t").append(
+                            method.getInputs().getInput(i).getDescription()).append("\n");
                     }
                 }
             }
             if ((method.getOutput() != null) && (method.getOutput().getDescription() != null)
                 && (method.getOutput().getDescription().length() > 0)) {
-                javaDoc.append(SyncSource.TAB).append(" * @return ")
-                    .append(method.getOutput().getDescription()).append("\n");
+                javaDoc.append(SyncSource.TAB).append(" * @return ").append(method.getOutput().getDescription())
+                    .append("\n");
             }
             if ((method.getExceptions() != null) && (method.getExceptions().getException() != null)
                 && (method.getExceptions().getException().length > 0)) {
                 for (int i = 0; i < method.getExceptions().getException().length; i++) {
-                    javaDoc.append(SyncSource.TAB).append(" * @throws ")
-                        .append(method.getExceptions().getException(i).getName()).append("\n");
+                    javaDoc.append(SyncSource.TAB).append(" * @throws ").append(
+                        method.getExceptions().getException(i).getName()).append("\n");
                     if (method.getExceptions().getException(i).getDescription() != null) {
-                        javaDoc.append(SyncSource.TAB).append(" *\t")
-                            .append(method.getExceptions().getException(i).getDescription())
-                            .append("\n");
+                        javaDoc.append(SyncSource.TAB).append(" *\t").append(
+                            method.getExceptions().getException(i).getDescription()).append("\n");
                     }
                 }
             }
@@ -259,25 +245,23 @@ public class SyncHelper {
             return "";
         }
     }
-    
-    
+
+
     /**
      * Creates the string of exceptions thrown by a method on the client side
      * 
      * @param method
-     *      The method
+     *            The method
      * @param serviceInfo
-     *      The service information
-     * @return
-     *      A comma delimited string of exceptions 
+     *            The service information
+     * @return A comma delimited string of exceptions
      */
     public static String createClientExceptions(MethodType method, ServiceInformation serviceInfo) {
         StringBuffer exceptions = new StringBuffer();
         exceptions.append("RemoteException");
         // process the faults for this method...
         MethodTypeExceptions exceptionsEl = method.getExceptions();
-        if ((method.getOutput().getIsClientHandle() != null) 
-            && method.getOutput().getIsClientHandle().booleanValue()) {
+        if ((method.getOutput().getIsClientHandle() != null) && method.getOutput().getIsClientHandle().booleanValue()) {
             exceptions.append(", org.apache.axis.types.URI.MalformedURIException");
         }
         if ((exceptionsEl != null) && (exceptionsEl.getException() != null)) {
@@ -288,10 +272,10 @@ public class SyncHelper {
                 MethodTypeExceptionsException fault = exceptionsEl.getException(i);
                 SchemaInformation info = CommonTools
                     .getSchemaInformation(serviceInfo.getNamespaces(), fault.getQname());
-                String ex = info.getType().getPackageName() + "."
-                    + CommonTools.upperCaseFirstCharacter(
-                        info.getType().getClassName() != null ? 
-                            info.getType().getClassName() : info.getType().getType());
+                String ex = info.getType().getPackageName()
+                    + "."
+                    + CommonTools.upperCaseFirstCharacter(info.getType().getClassName() != null ? info.getType()
+                        .getClassName() : info.getType().getType());
                 exceptions.append(ex);
                 if (i < exceptionsEl.getException().length - 1) {
                     exceptions.append(", ");
@@ -305,17 +289,16 @@ public class SyncHelper {
         return exceptions.toString();
     }
 
-    
+
     /**
-     * Creates the method signature for the client side which
-     * returns an unboxed data type
+     * Creates the method signature for the client side which returns an unboxed
+     * data type
      * 
      * @param method
-     *      The method
+     *            The method
      * @param serviceInfo
-     *      The service information
-     * @return
-     *      The unboxed method signature
+     *            The service information
+     * @return The unboxed method signature
      */
     public static String createClientUnBoxedSignatureStringFromMethod(MethodType method, ServiceInformation serviceInfo) {
         StringBuffer methodString = new StringBuffer();
@@ -326,13 +309,11 @@ public class SyncHelper {
             && returnTypeEl.getQName().getLocalPart().equals("void")) {
             returnType = "void";
         } else {
-            SchemaInformation info = CommonTools.getSchemaInformation(
-                serviceInfo.getNamespaces(), returnTypeEl.getQName());
+            SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), returnTypeEl
+                .getQName());
             returnType = info.getType().getClassName();
-            if ((info.getType().getPackageName() != null) 
-                && (info.getType().getPackageName().length() > 0)) {
-                if ((returnTypeEl.getIsClientHandle() != null) 
-                    && returnTypeEl.getIsClientHandle().booleanValue()) {
+            if ((info.getType().getPackageName() != null) && (info.getType().getPackageName().length() > 0)) {
+                if ((returnTypeEl.getIsClientHandle() != null) && returnTypeEl.getIsClientHandle().booleanValue()) {
                     returnType = returnTypeEl.getClientHandleClass();
                 } else {
                     returnType = info.getType().getPackageName() + "." + returnType;
@@ -347,8 +328,8 @@ public class SyncHelper {
 
         if ((method.getInputs() != null) && (method.getInputs().getInput() != null)) {
             for (int j = 0; j < method.getInputs().getInput().length; j++) {
-                SchemaInformation info = CommonTools.getSchemaInformation(
-                    serviceInfo.getNamespaces(), method.getInputs().getInput(j).getQName());
+                SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), method
+                    .getInputs().getInput(j).getQName());
                 String packageName = info.getType().getPackageName();
                 String classType = null;
                 if ((packageName != null) && (packageName.length() > 0)) {
@@ -370,16 +351,15 @@ public class SyncHelper {
 
         return methodString.toString();
     }
-    
-    
+
+
     /**
-     * Creates the method signature for the client side which
-     * returns an unboxed data type
+     * Creates the method signature for the client side which returns an unboxed
+     * data type
      * 
      * @param method
-     *      The method
-     * @return
-     *      The unboxed method signature
+     *            The method
+     * @return The unboxed method signature
      */
     public static String createClientUnBoxedSignatureStringFromMethod(JavaMethod method) {
         StringBuffer methodString = new StringBuffer();
@@ -413,15 +393,14 @@ public class SyncHelper {
         methodString.append(")");
         return methodString.toString();
     }
-    
-    
+
+
     /**
      * Creates a method signature which returnes the boxed data type
      * 
      * @param method
-     *      The method
-     * @return
-     *      The method signature which returns a boxed data type
+     *            The method
+     * @return The method signature which returns a boxed data type
      */
     public static String createBoxedSignatureStringFromMethod(MethodType method) {
         StringBuffer methodString = new StringBuffer();
@@ -429,8 +408,8 @@ public class SyncHelper {
         String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
 
         if (method.getOutputMessageClass() != null) {
-            methodString.append("public ").append(method.getOutputMessageClass())
-                .append(" ").append(methodName).append("(");
+            methodString.append("public ").append(method.getOutputMessageClass()).append(" ").append(methodName)
+                .append("(");
         } else {
             methodString.append("public void ").append(methodName).append("(");
         }
@@ -442,55 +421,57 @@ public class SyncHelper {
         methodString.append(")");
         return methodString.toString();
     }
-    
-    
+
+
     /**
      * Creates a method signature which returnes the boxed data type
      * 
      * @param method
-     *      The method
-     * @return
-     *      The method signature which returns a boxed data type
+     *            The method
+     * @return The method signature which returns a boxed data type
      */
     public static String createBoxedSignatureStringFromMethod(JavaMethod method) {
         StringBuffer methodString = new StringBuffer();
 
         String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
 
-        methodString.append("public ").append(method.getType().getPackageName())
-            .append(".").append(method.getType().getClassName()).append(" ")
-            .append(methodName).append("(");
+        if (method.getType().getPackageName() != null && method.getType().getPackageName().length() > 0) {
+            methodString.append("public ").append(method.getType().getPackageName()).append(".").append(
+                method.getType().getClassName()).append(" ").append(methodName).append("(");
+        } else {
+            methodString.append("public ").append(
+                method.getType().getClassName()).append(" ").append(methodName).append("(");
+        }
 
-        methodString.append(method.getParams()[0].getType().getPackageName()).append(".")
-            .append(method.getParams()[0].getType().getClassName()).append(" params");
+        methodString.append(method.getParams()[0].getType().getPackageName()).append(".").append(
+            method.getParams()[0].getType().getClassName()).append(" params");
 
         methodString.append(")");
         return methodString.toString();
     }
-    
-    
+
+
     /**
-     * Removes all cases of more than two consecutive new lines 
-     * from a string, replacing with just two
+     * Removes all cases of more than two consecutive new lines from a string,
+     * replacing with just two
+     * 
      * @param string
-     *      The string to clean up
-     * @return
-     *      The cleaned string
+     *            The string to clean up
+     * @return The cleaned string
      */
     public static String removeMultiNewLines(String string) {
         return string.replaceAll("\n\n(\n)+", "\n\n");
     }
-    
-    
+
+
     /**
      * Locates the matching closing bracket in a block of java code
      * 
      * @param sb
-     *      The code to be searched
+     *            The code to be searched
      * @param startingIndex
-     *      The index to begin searching
-     * @return
-     *      The index of the matching bracket, or -1 if none is found
+     *            The index to begin searching
+     * @return The index of the matching bracket, or -1 if none is found
      */
     public static int bracketMatch(StringBuffer sb, int startingIndex) {
         // logger.debug("Starting to look for brackets on this string:");
@@ -524,17 +505,16 @@ public class SyncHelper {
             return -1;
         }
     }
-    
-    
+
+
     /**
      * Locates the end of a method signature
      * 
      * @param sb
-     *      The block of Java code to be searched
+     *            The block of Java code to be searched
      * @param startingIndex
-     *      The starting index of the search
-     * @return
-     *      The index of the end of the method signature
+     *            The starting index of the search
+     * @return The index of the end of the method signature
      */
     public static int endOfSignature(StringBuffer sb, int startingIndex) {
         if (startingIndex < 0) {
@@ -549,11 +529,10 @@ public class SyncHelper {
      * Locates the start of a JavaDoc block
      * 
      * @param sb
-     *      The block of java code to be searched
+     *            The block of java code to be searched
      * @param startOfMethod
-     *      The starting index of the method
-     * @return
-     *      The starting index of the method's javadoc block
+     *            The starting index of the method
+     * @return The starting index of the method's javadoc block
      */
     public static int startOfJavaDoc(StringBuffer sb, int startOfMethod) {
         BufferedReader br = new BufferedReader(new StringReader(sb.toString()));

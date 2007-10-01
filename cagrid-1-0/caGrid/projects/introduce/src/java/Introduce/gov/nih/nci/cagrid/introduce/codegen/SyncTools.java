@@ -680,7 +680,7 @@ public class SyncTools {
                     jndiConfigT.generate(new SpecificServiceInformation(info, newService))).getRootElement();
                 serverConfigJNDIDoc.getRootElement().addContent(0, newServiceJNDIElement.detach());
 
-                if (newService.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
+                if (newService.getResourceFrameworkOptions().getLifetime()!=null) {
                     addLifetimeResource(newService, info);
                 }
 

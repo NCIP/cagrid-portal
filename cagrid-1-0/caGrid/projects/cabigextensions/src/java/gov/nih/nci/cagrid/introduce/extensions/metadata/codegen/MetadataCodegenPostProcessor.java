@@ -155,7 +155,7 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
             newServContexts[i] = currContext;
 
             // use the main service to set some higher level items
-            if (serv.getResourceFrameworkType().equals(MAIN_RF_TYPE)) {
+            if (serv.getResourceFrameworkOptions().getMain()!=null) {
                 service.setName(serv.getName());
                 // set a version
                 if (service.getVersion() == null || service.getVersion().trim().equals("")) {
@@ -217,7 +217,7 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
             // find the main service
             for (int i = 0; i < services.getService().length; i++) {
                 ServiceType serv = services.getService(i);
-                if (serv.getResourceFrameworkType().equals(MAIN_RF_TYPE)) {
+                if (serv.getResourceFrameworkOptions().getMain()!=null) {
                     mainService = serv;
                     break;
                 }

@@ -4,6 +4,9 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
+import gov.nih.nci.cagrid.introduce.beans.service.Identifiable;
+import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
+import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -68,7 +71,9 @@ public class ServicesPopUpMenu extends JPopupMenu {
         ServiceType service = new ServiceType();
         service.setMethods(new MethodsType());
         service.setResourcePropertiesList(new ResourcePropertiesListType());
-        service.setResourceFrameworkType(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE);
+        service.setResourceFrameworkOptions(new ResourceFrameworkOptions());
+        service.getResourceFrameworkOptions().setLifetime(new Lifetime());
+        service.getResourceFrameworkOptions().setIdentifiable(new Identifiable());
         // service.setServiceSecurity(new ServiceSecurity());
         service.setMethods(new MethodsType());
 

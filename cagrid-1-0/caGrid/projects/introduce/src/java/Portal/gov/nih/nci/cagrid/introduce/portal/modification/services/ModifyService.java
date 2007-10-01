@@ -3,7 +3,13 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.service.Custom;
+import gov.nih.nci.cagrid.introduce.beans.service.Identifiable;
+import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
+import gov.nih.nci.cagrid.introduce.beans.service.Main;
+import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.beans.service.Singleton;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IconFeedbackPanel;
@@ -133,21 +139,21 @@ public class ModifyService extends JDialog {
 					service.getServices().getService(0).getPackageName()
 							+ ".context");
 		}
-		if (service.getService().getResourceFrameworkType() != null
-				&& !service.getService().getResourceFrameworkType().equals(
-						IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
-			getResourceFrameworkTypeComboBox().setSelectedItem(
-					service.getService().getResourceFrameworkType());
-		} else if (service.getService().getResourceFrameworkType() != null
-				&& service.getService().getResourceFrameworkType().equals(
-						IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
-			getResourceFrameworkTypeComboBox().addItem(
-					IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
-			getResourceFrameworkTypeComboBox().setSelectedItem(
-					IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
-		} else {
-			getResourceFrameworkTypeComboBox().setSelectedIndex(-1);
-		}
+//		if (service.getService().getResourceFrameworkType() != null
+//				&& !service.getService().getResourceFrameworkType().equals(
+//						IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
+//			getResourceFrameworkTypeComboBox().setSelectedItem(
+//					service.getService().getResourceFrameworkType());
+//		} else if (service.getService().getResourceFrameworkType() != null
+//				&& service.getService().getResourceFrameworkType().equals(
+//						IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
+//			getResourceFrameworkTypeComboBox().addItem(
+//					IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
+//			getResourceFrameworkTypeComboBox().setSelectedItem(
+//					IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
+//		} else {
+//			getResourceFrameworkTypeComboBox().setSelectedIndex(-1);
+//		}
 	}
 	
 	public boolean wasClosed(){
@@ -396,9 +402,29 @@ public class ModifyService extends JDialog {
 							namespaceTextField.getText());
 					service.getService().setPackageName(
 							servicePackageNameTextField.getText());
-					service.getService().setResourceFrameworkType(
-							(String) resourceFrameworkTypeComboBox
-									.getSelectedItem());
+					service.getService().setResourceFrameworkOptions(new ResourceFrameworkOptions());
+					
+					if (((String) resourceFrameworkTypeComboBox
+                        .getSelectedItem()).equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
+					    service.getService().getResourceFrameworkOptions().setIdentifiable(new Identifiable());
+			        } else if (((String) resourceFrameworkTypeComboBox
+                        .getSelectedItem()).equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
+                        service.getService().getResourceFrameworkOptions().setLifetime(new Lifetime());
+                        service.getService().getResourceFrameworkOptions().setIdentifiable(new Identifiable());
+                    } else if (((String) resourceFrameworkTypeComboBox
+                        .getSelectedItem()).equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
+			            service.getService().getResourceFrameworkOptions().setMain(new Main());
+			            service.getService().getResourceFrameworkOptions().setSingleton(new Singleton());
+			        } else if (((String) resourceFrameworkTypeComboBox
+                        .getSelectedItem()).equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
+			            service.getService().getResourceFrameworkOptions().setSingleton(new Singleton());
+
+			        } else if (((String) resourceFrameworkTypeComboBox
+                        .getSelectedItem()).equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)) {
+                        service.getService().getResourceFrameworkOptions().setCustom(new Custom());
+
+                    }
+					
 					service.getService().setDescription(getJTextPane().getText());
 					try {
 						service.getService().setServiceSecurity(

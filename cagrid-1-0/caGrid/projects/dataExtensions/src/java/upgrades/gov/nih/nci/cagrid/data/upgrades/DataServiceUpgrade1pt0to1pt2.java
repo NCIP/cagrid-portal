@@ -48,11 +48,11 @@ import org.jdom.JDOMException;
  * @version $Id: DataServiceUpgrade1pt0to1pt1.java,v 1.1 2007/02/19 21:52:52
  *          dervin Exp $
  */
-public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
+public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
 
-    public DataServiceUpgrade1pt0to1pt1(ExtensionType extensionType, ServiceInformation serviceInformation,
+    public DataServiceUpgrade1pt0to1pt2(ExtensionType extensionType, ServiceInformation serviceInformation,
         String servicePath, String fromVersion, String toVersion) {
-        super("DataServiceUpgrade1pt0to1pt1", extensionType, serviceInformation,
+        super("DataServiceUpgrade1pt0to1pt2", extensionType, serviceInformation,
             servicePath, fromVersion, toVersion);
     }
 
@@ -96,16 +96,16 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
     private void validateUpgrade() throws UpgradeException {
         if (!((getFromVersion() == null) || getFromVersion().equals("1.0"))) {
             throw new UpgradeException(getClass().getName() 
-                + " upgrades FROM 1.0 TO 1.1, found FROM = " + getFromVersion());
+                + " upgrades FROM 1.0 TO 1.2, found FROM = " + getFromVersion());
         }
         if (!getToVersion().equals("1.1")) {
             throw new UpgradeException(getClass().getName() 
-                + " upgrades FROM 1.0 TO 1.1, found TO = " + getToVersion());
+                + " upgrades FROM 1.0 TO 1.2, found TO = " + getToVersion());
         }
         String currentVersion = getExtensionType().getVersion();
         if (!((currentVersion == null) || currentVersion.equals("1.0"))) {
             throw new UpgradeException(getClass().getName() 
-                + " upgrades FROM 1.0 TO 1.1, current version found is " + currentVersion);
+                + " upgrades FROM 1.0 TO 1.2, current version found is " + currentVersion);
         }
     }
 

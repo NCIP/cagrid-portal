@@ -3,8 +3,13 @@ package gov.nih.nci.cagrid.introduce.test.steps;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.service.Identifiable;
+import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
+import gov.nih.nci.cagrid.introduce.beans.service.Main;
+import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
+import gov.nih.nci.cagrid.introduce.beans.service.Singleton;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
@@ -12,56 +17,69 @@ import java.io.File;
 
 
 public class AddServiceStep extends BaseStep {
-	private TestCaseInfo tci;
-
-	public AddServiceStep(TestCaseInfo tci, boolean build) throws Exception {
-		super(tci.getDir(),build);
-		this.tci = tci;
-	}
+    private TestCaseInfo tci;
 
 
-	public void runStep() throws Throwable {
-		System.out.println("Adding a service.");
+    public AddServiceStep(TestCaseInfo tci, boolean build) throws Exception {
+        super(tci.getDir(), build);
+        this.tci = tci;
+    }
 
-		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getBaseDir() + File.separator
-			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
-		ServicesType servicesType = introService.getServices();
 
-		ServiceType service = new ServiceType();
-		service.setName(tci.getName());
-		service.setNamespace(tci.getNamespace());
-		service.setPackageName(tci.getPackageName());
-		service.setResourceFrameworkType(tci.getResourceFrameworkType());
+    public void runStep() throws Throwable {
+        System.out.println("Adding a service.");
 
-		// add new service to array in bean
-		// this seems to be a wierd way be adding things....
-		ServiceType[] newMethods;
-		int newLength = 0;
-		if (servicesType!=null && servicesType.getService() != null) {
-			newLength = servicesType.getService().length + 1;
-			newMethods = new ServiceType[newLength];
-			System.arraycopy(servicesType.getService(), 0, newMethods, 0, servicesType.getService().length);
-		} else {
-			newLength = 1;
-			newMethods = new ServiceType[newLength];
-		}
-		ServicesType newservicesType = new ServicesType();
-		newMethods[newLength - 1] = service;
-		newservicesType.setService(newMethods);
-		introService.setServices(newservicesType);
+        ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getBaseDir() + File.separator
+            + tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
+        ServicesType servicesType = introService.getServices();
 
-		Utils.serializeDocument(getBaseDir() + File.separator + tci.getDir() + File.separator + "introduce.xml",
-			introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+        ServiceType service = new ServiceType();
+        service.setName(tci.getName());
+        service.setNamespace(tci.getNamespace());
+        service.setPackageName(tci.getPackageName());
+        service.setResourceFrameworkOptions(new ResourceFrameworkOptions());
+        if (tci.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
+            service.getResourceFrameworkOptions().setIdentifiable(new Identifiable());
+        } else if (tci.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
+            service.getResourceFrameworkOptions().setLifetime(new Lifetime());
+            service.getResourceFrameworkOptions().setIdentifiable(new Identifiable());
+        } else if (tci.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
+            service.getResourceFrameworkOptions().setMain(new Main());
+            service.getResourceFrameworkOptions().setSingleton(new Singleton());
+        } else if (tci.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
+            service.getResourceFrameworkOptions().setSingleton(new Singleton());
 
-		try {
-			SyncTools sync = new SyncTools(new File(getBaseDir() + File.separator + tci.getDir()));
-			sync.sync();
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-	
-		buildStep();
-	}
+        }
+
+        // add new service to array in bean
+        // this seems to be a wierd way be adding things....
+        ServiceType[] newMethods;
+        int newLength = 0;
+        if (servicesType != null && servicesType.getService() != null) {
+            newLength = servicesType.getService().length + 1;
+            newMethods = new ServiceType[newLength];
+            System.arraycopy(servicesType.getService(), 0, newMethods, 0, servicesType.getService().length);
+        } else {
+            newLength = 1;
+            newMethods = new ServiceType[newLength];
+        }
+        ServicesType newservicesType = new ServicesType();
+        newMethods[newLength - 1] = service;
+        newservicesType.setService(newMethods);
+        introService.setServices(newservicesType);
+
+        Utils.serializeDocument(getBaseDir() + File.separator + tci.getDir() + File.separator + "introduce.xml",
+            introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+
+        try {
+            SyncTools sync = new SyncTools(new File(getBaseDir() + File.separator + tci.getDir()));
+            sync.sync();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+        buildStep();
+    }
 
 }

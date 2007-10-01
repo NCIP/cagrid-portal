@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.upgrades.from1pt0.enumeration;
+package gov.nih.nci.cagrid.data.upgrades.from1pt0.sdk;
 
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.DeleteOldServiceStep;
@@ -17,35 +17,35 @@ import junit.textui.TestRunner;
 import com.atomicobject.haste.framework.Story;
 
 /** 
- *  UpgradeEnumerationTo1pt1Tests
- *  Tests to upgrade a data service with enumeration from 1.0 to 1.1
+ *  UpgradeSDKTo1pt1Tests
+ *  Tests to upgrade a data service backed by caCORE SDK 3.1 from 1.0 to 1.1
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeEnumerationTo1pt1Tests.java,v 1.1 2007-06-12 16:59:36 dervin Exp $ 
+ * @version $Id: UpgradeSDKTo1pt2Tests.java,v 1.1 2007-10-01 17:04:49 hastings Exp $ 
  */
-public class UpgradeEnumerationTo1pt1Tests extends Story {
+public class UpgradeSDKTo1pt2Tests extends Story {
 	public static final String TEST_DIR = "../data/test";
-    public static final String SERVICE_ZIP_NAME = "DataServiceWithEnumeration_1-0.zip";
+    public static final String SERVICE_ZIP_NAME = "DataServiceBackedBySDK_1-0.zip";
     
-	public static final String SERVICE_DIR = TEST_DIR + File.separator + "DataServiceWithEnumeration";
-    public static final String SERVICE_NAME = "DataServiceWithEnumeration";
-    public static final String SERVICE_PACKAGE = "gov.nih.nci.cagrid.test.dswenum";
-    public static final String SERVICE_NAMESPACE = "http://dswenum.test.cagrid.nci.nih.gov/DataServiceWithEnumeration";
+	public static final String SERVICE_DIR = TEST_DIR + File.separator + "DataServiceBackedBySDK";
+    public static final String SERVICE_NAME = "DataServiceBackedBySDK";
+    public static final String SERVICE_PACKAGE = "gov.nih.nci.cagrid.test.sdkds";
+    public static final String SERVICE_NAMESPACE = "http://sdkds.test.cagrid.nci.nih.gov/DataServiceBackedBySDK";
     
 	
 	public String getDescription() {
-		return "Tests upgrade of a data service with WS-Enumeration from version 1.0 to 1.1";
+		return "Tests upgrade of a data service backed by the SDK from version 1.0 to 1.2";
 	}
     
     
     public String getName() {
-        return "Data Service with WS-Enumeration from 1_0 to 1_1 Upgrade Tests";
+        return "Data Service backed by the SDK from 1_0 to 1_2 Upgrade Tests";
     }
 	
 
 	protected Vector steps() {
-        TestCaseInfo info = new UpgradeEnumeration1pt0to1pt1TestServiceInfo();
+        TestCaseInfo info = new UpgradeSDK1pt0to1pt1TestServiceInfo();
 		Vector steps = new Vector();
 		// steps to unpack and upgrade the old service
 		steps.add(new DeleteOldServiceStep(info));
@@ -66,14 +66,14 @@ public class UpgradeEnumerationTo1pt1Tests extends Story {
 
 	public static void main(String[] args) {
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(UpgradeEnumerationTo1pt1Tests.class));
+		TestResult result = runner.doRun(new TestSuite(UpgradeSDKTo1pt2Tests.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 	
 	
-	public static class UpgradeEnumeration1pt0to1pt1TestServiceInfo extends DataTestCaseInfo {
+	public static class UpgradeSDK1pt0to1pt1TestServiceInfo extends DataTestCaseInfo {
 	    public String getDir() {
-	        return UpgradeEnumerationTo1pt1Tests.SERVICE_DIR;
+	        return UpgradeSDKTo1pt2Tests.SERVICE_DIR;
 	    }
 
 

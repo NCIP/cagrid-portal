@@ -10,6 +10,8 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.service.Custom;
+import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
@@ -88,7 +90,8 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
         enumServiceContext.setName(WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME);
         enumServiceContext.setPackageName(WsEnumConstants.CAGRID_ENUMERATION_SERVICE_PACKAGE);
         enumServiceContext.setNamespace(WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAMESPACE);
-        enumServiceContext.setResourceFrameworkType(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE);
+        enumServiceContext.setResourceFrameworkOptions(new ResourceFrameworkOptions());
+        enumServiceContext.getResourceFrameworkOptions().setCustom(new Custom());
         CommonTools.addService(info.getServices(), enumServiceContext);
     }
 

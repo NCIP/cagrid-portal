@@ -77,7 +77,7 @@ public class IntroduceConstants {
     public static final QName INTRODUCE_SKELETON_QNAME = new QName("gme://gov.nih.nci.cagrid/1/Introduce",
         "ServiceDescription");
 
-    // resource types
+    // resource options
     public static final String INTRODUCE_SINGLETON_RESOURCE = "singleton";
 
     public static final String INTRODUCE_MAIN_RESOURCE = "main";
@@ -87,6 +87,8 @@ public class IntroduceConstants {
     public static final String INTRODUCE_LIFETIME_RESOURCE = "lifetime";
 
     public static final String INTRODUCE_CUSTOM_RESOURCE = "custom";
+    
+    public static final String INTRODUCE_IDENTIFIABLE_RESOURCE = "identifiable";
 
     // deployment properties
     public static final String DEPLOY_PROPERTIES_FILE = "deploy.properties";

@@ -11,7 +11,7 @@ import gov.nih.nci.cagrid.data.system.RebuildServiceStep;
 import gov.nih.nci.cagrid.data.system.SetQueryProcessorStep;
 import gov.nih.nci.cagrid.data.system.StartGlobusStep;
 import gov.nih.nci.cagrid.data.system.StopGlobusStep;
-import gov.nih.nci.cagrid.data.upgrades.from1pt0.UpgradeTo1pt1Tests;
+import gov.nih.nci.cagrid.data.upgrades.from1pt0.UpgradeTo1pt2Tests;
 import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
 import gov.nih.nci.cagrid.introduce.test.util.GlobusHelper;
 
@@ -27,7 +27,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.6 2007-06-12 16:13:40 dervin Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.7 2007-10-01 17:04:49 hastings Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -53,7 +53,7 @@ public class UpgradedServiceSystemTest extends Story {
 
 
 	protected Vector steps() {
-        DataTestCaseInfo info = new UpgradeTo1pt1Tests.Upgrade1pt0to1pt1TestServiceInfo();
+        DataTestCaseInfo info = new UpgradeTo1pt2Tests.Upgrade1pt0to1pt1TestServiceInfo();
 		Vector steps = new Vector();
 		// steps to invoke the upgraded service 
 		// by the data service creation tests

@@ -12,7 +12,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
    	} 
 %><service xmlns="http://wsrf.globus.org/jndi/config" name="SERVICE-INSTANCE-PREFIX/<%=serviceName%>">
 		<%
-		if(service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)){
+		if(service.getResourceFrameworkOptions().getCustom()!=null){
 		%>
 		<!-- THIS SERVICE HAS BEEN SET TO HAVE A CUSTOM RESOURCE
 		     PLEASE BE SURE TO ADD IN THE RESOURCE FOR THE SERVICE
@@ -27,7 +27,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
          		 <value>org.globus.wsrf.jndi.BeanFactory</value>
         	</parameter>
         	<%
-        	if(service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE) || service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)){
+        	if(service.getResourceFrameworkOptions().getSingleton()==null){
         	%>
         	<parameter>
           		 <name>resourceClass</name>

@@ -26,7 +26,7 @@ public class IntroduceUpgradeManager {
 
     private static String getUpgradeVersion(String oldVersion) {
         if (oldVersion.equals("1.0")) {
-            return "1.1";
+            return "1.2";
         }
 
         return null;
@@ -34,16 +34,16 @@ public class IntroduceUpgradeManager {
 
 
     private static String getIntroduceUpgradeClass(String version) {
-        if (version.equals("1.1")) {
-            return "gov.nih.nci.cagrid.introduce.upgrade.introduce.Introduce_1_0__1_1_Upgrader";
+        if (version.equals("1.2")) {
+            return "gov.nih.nci.cagrid.introduce.upgrade.introduce.Introduce_1_0__1_2_Upgrader";
         }
         return null;
     }
 
 
     private static String getModelUpgradeClass(String version) {
-        if (version.equals("1.1")) {
-            return "gov.nih.nci.cagrid.introduce.upgrade.model.Model_1_0__1_1_Upgrader";
+        if (version.equals("1.2")) {
+            return "gov.nih.nci.cagrid.introduce.upgrade.model.Model_1_0__1_2_Upgrader";
         }
         return null;
     }

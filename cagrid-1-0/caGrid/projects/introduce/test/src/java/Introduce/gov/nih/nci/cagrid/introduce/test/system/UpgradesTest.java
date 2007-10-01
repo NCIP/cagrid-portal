@@ -80,7 +80,7 @@ public class UpgradesTest extends Story {
 
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(this.tci1);
         try {
-            step1.runStep();
+           step1.runStep();
         } catch (Throwable e) {
 
             e.printStackTrace();

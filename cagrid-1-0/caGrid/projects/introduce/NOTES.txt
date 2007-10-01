@@ -24,6 +24,16 @@ componentized resource building by selecting features or interfaces to implement
 new extensions architecture to support callbacks for different areas of editing.
 
 
+====================================================================================================
+
+1.1 bugs fixed in head that need to be rolled into 1.1 branch for patches:
+
+synchelper 438 needs to support package name being empty
+syncmethods needs to support finding upper case methods for addition and removal.  currently it just compares to the method
+name entered which may be upper case, however, no upper case code is written so it needs to lowecase the first letter
+of the method in the introduce.xml when it compares it to the list of methods.
+
+
 ==============================================================================================================================
 
 To Do:  

@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.codegen.services.methods;
 
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
@@ -123,13 +124,13 @@ public class SyncMethods extends SyncTool {
 				boolean found = false;
 				for (int i = 0; i < methods.length; i++) {
 					String methodName = methods[i].getName();
-					if (mel.getName().equals(methodName)) {
+					if (CommonTools.lowerCaseFirstCharacter(mel.getName()).equals(methodName)) {
 						found = true;
 						// get the impl method as well....
 						JavaMethod implMethod = null;
 						for (int j = 0; j < implMethods.length; j++) {
 							String implMethodName = implMethods[j].getName();
-							if (mel.getName().equals(implMethodName)) {
+							if (CommonTools.lowerCaseFirstCharacter(mel.getName()).equals(implMethodName)) {
 								implMethod = implMethods[j];
 
 								break;
@@ -139,7 +140,7 @@ public class SyncMethods extends SyncTool {
 						break;
 					}
 				}
-				if (!found) {
+				if (!found && !CommonTools.lowerCaseFirstCharacter(mel.getName()).equals(IntroduceConstants.SERVICE_SECURITY_METADATA_METHOD)) {
 					logger.debug("Found a method for addition: " + mel.getName());
 					this.additions.add(mel);
 				}
@@ -153,7 +154,7 @@ public class SyncMethods extends SyncTool {
 			if (service.getMethods().getMethod() != null) {
 				for (int methodIndex = 0; methodIndex < service.getMethods().getMethod().length; methodIndex++) {
 					MethodType mel = service.getMethods().getMethod(methodIndex);
-					if (mel.getName().equals(methodName)) {
+					if (CommonTools.lowerCaseFirstCharacter(mel.getName()).equals(methodName)) {
 						found = true;
 						break;
 					}
