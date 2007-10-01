@@ -38,22 +38,30 @@ public class DelegatedCredentialManager {
 	private KeyManager keyManager;
 
 	public DelegatedCredentialManager(CDSConfiguration conf,
-			EventManager eventManager, Database db) throws CDSInternalFault {
+			PropertyManager properties, EventManager eventManager, Database db)
+			throws CDSInternalFault {
 		this.db = db;
 		this.conf = conf;
 		this.log = LogFactory.getLog(this.getClass().getName());
 		this.eventManager = eventManager;
 		this.handlers = new HashMap<String, PolicyHandler>();
 		PolicyHandlers ph = this.conf.getPolicyHandlers();
-		
-		//TODO: LOCK TO SINGLE KEY MANAGER
 		KeyManagerDescription des = conf.getKeyManagerDescription();
+		String currentKeyManager = properties.getKeyManager();
+		if ((currentKeyManager != null)
+				&& (!currentKeyManager.equals(des.getClassName()))) {
+			CDSInternalFault f = new CDSInternalFault();
+			f.setFaultString("The key manager cannot be changed from "
+					+ currentKeyManager + " to " + des.getClassName() + ".");
+			throw f;
+		}
 		try {
 			Class kmc = Class.forName(des.getClassName());
 			Constructor con = kmc.getConstructor(new Class[] {
 					KeyManagerDescription.class, Database.class });
 			this.keyManager = (KeyManager) con.newInstance(new Object[] { des,
 					this.db });
+			properties.setKeyManager(des.getClassName());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			CDSInternalFault f = new CDSInternalFault();
@@ -116,8 +124,6 @@ public class DelegatedCredentialManager {
 			f.setFaultString("Invalid key length specified.");
 			throw f;
 		}
-		
-		
 
 	}
 
