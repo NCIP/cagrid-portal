@@ -24,26 +24,21 @@ public class IntroduceUpgradeManager {
     }
 
 
-    private static String getUpgradeVersion(String oldVersion) {
+    private static String getIntroduceUpgradeClass(String oldVersion) {
         if (oldVersion.equals("1.0")) {
-            return "1.2";
-        }
-
-        return null;
-    }
-
-
-    private static String getIntroduceUpgradeClass(String version) {
-        if (version.equals("1.2")) {
             return "gov.nih.nci.cagrid.introduce.upgrade.introduce.Introduce_1_0__1_2_Upgrader";
+        } else if (oldVersion.equals("1.1")) {
+            return "gov.nih.nci.cagrid.introduce.upgrade.introduce.Introduce_1_1__1_2_Upgrader";
         }
         return null;
     }
 
 
-    private static String getModelUpgradeClass(String version) {
-        if (version.equals("1.2")) {
+    private static String getModelUpgradeClass(String oldVersion) {
+        if (oldVersion.equals("1.0")) {
             return "gov.nih.nci.cagrid.introduce.upgrade.model.Model_1_0__1_2_Upgrader";
+        } else if (oldVersion.equals("1.1")) {
+            return "gov.nih.nci.cagrid.introduce.upgrade.model.Model_1_1__1_2_Upgrader";
         }
         return null;
     }
@@ -65,7 +60,7 @@ public class IntroduceUpgradeManager {
 
 
     protected boolean canBeUpgraded(String version) {
-        if ((getUpgradeVersion(version) != null) && (getIntroduceUpgradeClass(getUpgradeVersion(version)) != null)) {
+        if (getIntroduceUpgradeClass(version) != null) {
             return true;
         } else {
             return false;
@@ -88,20 +83,11 @@ public class IntroduceUpgradeManager {
                 String vers = UpgradeUtilities.getCurrentServiceVersion(pathToService + File.separator
                     + IntroduceConstants.INTRODUCE_XML_FILE);
 
-                while (canBeUpgraded(vers)) {
-                    String newVersion = getUpgradeVersion(vers);
-                    if (newVersion == null) {
-                        System.out.println("The service"
-                            + " is upgradeable however no upgrade version from the version " + vers
-                            + " could be found.");
-                        break;
-                    }
-
-                    String className = getModelUpgradeClass(newVersion);
+                    String className = getModelUpgradeClass(vers);
                     if (className == null) {
                         System.out.println("The model" + " is upgradeable however no upgrade class from the version "
                             + vers + " could be found.");
-                        break;
+                        return;
                     }
 
                     IntroduceUpgradeStatus iStatus = new IntroduceUpgradeStatus();
@@ -116,11 +102,11 @@ public class IntroduceUpgradeManager {
 
                     ServiceInformation serviceInfo = new ServiceInformation(new File(pathToService));
 
-                    className = getIntroduceUpgradeClass(newVersion);
+                    className = getIntroduceUpgradeClass(vers);
                     if (className == null) {
                         System.out.println("The service" + " is upgradeable however no upgrade class from the version "
                             + vers + " could be found.");
-                        break;
+                        return;
                     }
 
                     // upgrade the introduce service
@@ -130,8 +116,6 @@ public class IntroduceUpgradeManager {
                     IntroduceUpgraderI upgrader = (IntroduceUpgraderI) con.newInstance(new Object[]{iStatus,
                             serviceInfo, pathToService});
                     upgrader.execute();
-
-                    vers = newVersion;
 
                     eUpgrader = new ExtensionsUpgradeManager(serviceInfo, pathToService);
 
@@ -155,7 +139,6 @@ public class IntroduceUpgradeManager {
                         throw new Exception("Unable to resync the eclipse .classpath file:", e);
                     }
 
-                }
 
             } else {
                 throw new Exception("ERROR: The service"

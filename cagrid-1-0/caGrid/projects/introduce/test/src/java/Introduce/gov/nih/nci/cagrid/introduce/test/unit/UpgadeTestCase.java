@@ -46,11 +46,11 @@ public class UpgadeTestCase extends TestCase {
         assertTrue(um.canIntroduceBeUpgraded());
     }
     
-    public void testNotUpgradable11() {
+    public void testUpgradable11() {
 
         UpgradeManager um = new UpgradeManager("test" + File.separator + "resources" + File.separator + "gold"
             + File.separator + "11");
-        assertFalse(um.canIntroduceBeUpgraded());
+        assertTrue(um.canIntroduceBeUpgraded());
     }
     
 
