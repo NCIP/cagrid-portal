@@ -38,6 +38,8 @@ of the method in the introduce.xml when it compares it to the list of methods.
 
 To Do:  
 
+software update does not seem to be showing if soemthing is already installed
+
 make sure that the validators on package names show error if invalid and warn if just bad practice
 
 invalid introduce xml threw null pointer stop refreshing screen with no error.....

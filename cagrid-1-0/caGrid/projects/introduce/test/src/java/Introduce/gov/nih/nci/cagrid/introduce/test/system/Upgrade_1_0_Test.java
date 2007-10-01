@@ -24,13 +24,13 @@ import junit.textui.TestRunner;
 import com.atomicobject.haste.framework.Story;
 
 
-public class UpgradesTest extends Story {
+public class Upgrade_1_0_Test extends Story {
     private TestCaseInfo tci1;
 
     private GlobusHelper helper;
 
 
-    public UpgradesTest() {
+    public Upgrade_1_0_Test() {
         this.setName("Introduce Upgrades System Test");
     }
     
@@ -54,7 +54,7 @@ public class UpgradesTest extends Story {
         try {
             steps.add(new CreateGlobusStep(this.helper));
             steps.add(new UnzipOldServiceStep("." + File.separator + "test" + File.separator + "resources"
-                + File.separator + "serviceVersions" + File.separator + "IntroduceTest.zip", this.tci1));
+                + File.separator + "serviceVersions" + File.separator + "IntroduceTestService-1_0.zip", this.tci1));
             steps.add(new UpgradesStep(this.tci1, true));
             steps.add(new DeployGlobusServiceStep(this.helper, this.tci1));
             steps.add(new StartGlobusStep(this.helper));
@@ -124,7 +124,7 @@ public class UpgradesTest extends Story {
      */
     public static void main(String args[]) {
         TestRunner runner = new TestRunner();
-        TestResult result = runner.doRun(new TestSuite(UpgradesTest.class));
+        TestResult result = runner.doRun(new TestSuite(Upgrade_1_0_Test.class));
         System.exit(result.errorCount() + result.failureCount());
     }
 
