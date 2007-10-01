@@ -12,9 +12,11 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.conf.CDSConfiguration;
 import org.cagrid.gaards.cds.conf.KeyManagerDescription;
+import org.cagrid.gaards.cds.conf.PermittedKeyLengths;
 import org.cagrid.gaards.cds.conf.PolicyHandlerConfiguration;
 import org.cagrid.gaards.cds.conf.PolicyHandlerDescription;
 import org.cagrid.gaards.cds.conf.PolicyHandlers;
+import org.cagrid.gaards.cds.conf.ProxyPolicy;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.tools.database.Database;
@@ -116,10 +118,24 @@ public class DelegatedCredentialManager {
 			throw f;
 		}
 
-		if ((policy.getKeyLength() < conf.getProxyPolicy().getKeyLength()
-				.getMin())
-				|| (policy.getKeyLength() > conf.getProxyPolicy()
-						.getKeyLength().getMax())) {
+		boolean validKeyLength = false;
+		ProxyPolicy pp = conf.getProxyPolicy();
+		if (pp != null) {
+			PermittedKeyLengths lengths = pp.getPermittedKeyLengths();
+			if (lengths != null) {
+				int[] list = lengths.getKeyLength();
+				if (list != null) {
+					for (int i = 0; i < list.length; i++) {
+						if (list[i] == policy.getKeyLength()) {
+							validKeyLength = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		if (!validKeyLength) {
 			InvalidPolicyFault f = new InvalidPolicyFault();
 			f.setFaultString("Invalid key length specified.");
 			throw f;

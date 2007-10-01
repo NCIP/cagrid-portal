@@ -9,7 +9,10 @@
         <password></password>
     </DatabaseConfiguration>
     <ProxyPolicy>
-    	<KeyLength min="1024" max="2056"/>
+    	<PermittedKeyLengths>
+    		<KeyLength>1025</KeyLength>
+    		<KeyLength>2056</KeyLength>
+    	</PermittedKeyLengths>
     </ProxyPolicy>
     <KeyManagerDescription className="org.cagrid.gaards.cds.service.DBKeyManager">
     	<Property name="key-encryption-password" value="password"/>
