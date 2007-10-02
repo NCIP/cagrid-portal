@@ -77,6 +77,10 @@ public class CaGridAuthenticationManager implements AuthenticationManager {
 			GlobusCredential proxy = dorian.createProxy(saml, lifetime,
 					DEFAULT_DELEGATION_PATH_LENGTH);
 			System.out.println("SUCCESSFUL");
+			
+			//TODO: Validate Proxy against Trust Fabric
+			
+			
 			System.out.println();
 			System.out.println("Grid Proxy Certificate Summary");
 			System.out.println("==============================");

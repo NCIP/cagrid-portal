@@ -1,0 +1,6 @@
+To Do
+-----
+
+1) Create a deploy target that deploys the war and copies endorsed files to Tomcat.
+2) Add SyncGTS to the AuthenticationManager
+3) Validate Proxy against Trust fabric
