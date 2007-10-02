@@ -903,6 +903,28 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/sdkQuery32" inheritall="false" antfile="build.xml" target="all" />
     </target>
+	
+	<!-- =============================================================== -->
+	<!-- CAGRID SDK 4.0 Data Service Query Processor:                    -->
+	<!-- =============================================================== -->
+	<target name="build-sdkQuery4" depends="prepare" description="Builds caGrid SDK 4.0 Query Processor and Data Service Style">
+		<resolveDependencies extdir="${projects.dir}/sdkQuery4/ext">
+			<artifact refid="cagrid.properties"/>
+			<artifact refid="core.jars"/>
+			<artifact refid="data.jars"/>
+		    <artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars"/>
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="data.cql.testing.docs"/>
+		</resolveDependencies>
+		<resolveDependencies targetdir="${projects.dir}/sdkQuery4/ext/lib/sdk/remote-client">
+			<artifact refid="caCORE.4.0.remote-client.package"/>
+		</resolveDependencies>
+		<resolveDependencies targetdir="${projects.dir}/sdkQuery4/ext/lib/sdk/local-client">
+			<artifact refid="caCORE.4.0.local-client.package"/>
+		</resolveDependencies>
+		<ant dir="${projects.dir}/sdkQuery4" inheritall="false" antfile="build.xml" target="all"/>
+	</target>
 
     <!-- =============================================================== -->
     <!-- Federated Query Processor:                                      -->

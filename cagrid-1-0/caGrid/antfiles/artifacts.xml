@@ -53,6 +53,16 @@
 				<include name="*.zip" />
 			</fileset>
 		</artifact>
+		<artifact track="main" type="resources" id="caCORE.4.0.remote-client.package">
+			<fileset dir="${share.dir}/lib/caCORE40/remote-client/">
+				<include name="RemoteClient.zip"/>
+			</fileset>
+		</artifact>
+		<artifact track="main" type="resources" id="caCORE.4.0.local-client.package">
+			<fileset dir="${share.dir}/lib/caCORE40/local-client/">
+				<include name="LocalClient.zip"/>
+			</fileset>
+		</artifact>
 		<artifact track="main" type="jars" id="jet.jars">
 			<fileset dir="${share.dir}/lib/jet">
 				<include name="*.jar" />
