@@ -47,7 +47,7 @@ public class SAMLConfig {
 
 		properties = new Properties();
 		try {
-			loadProperties(this.getClass().getResourceAsStream("/conf/opensaml.properties"));
+			loadProperties(this.getClass().getResourceAsStream("/conf/cagrid.opensaml.properties"));
 		} catch (IOException e) {
 			log.warn("Unable to load default library properties.");
 		}
