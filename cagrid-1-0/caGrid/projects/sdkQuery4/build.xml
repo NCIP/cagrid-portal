@@ -51,7 +51,9 @@
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
 	<property name="test.project.jar" location="${build.jars.dir}/${project.jar.prefix}tests.jar" />
+	<!--
 	<import file="test\test.xml" />
+	-->
 	
 	<!-- =============================================================== -->
 	<!-- The Test Classpath                                              -->
@@ -79,6 +81,7 @@
 	<!-- creates output directories -->
     <target name="init">
         <mkdir dir="${build.dir}" />
+		<mkdir dir="${build.jars.dir}"/>
     	<mkdir dir="${build.style.dest}"/>
     	<mkdir dir="${build.processor.dest}"/>
     	<mkdir dir="${test.classes.dir}"/>
