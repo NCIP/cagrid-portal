@@ -52,6 +52,7 @@ TODO:
 	-- Dependent on having 'a way' to create Grid FTP urls / resources
 40[D]: Upgrade tests for an SDK-backed data service
 41[D]: Upgrade tests for an Enumeration data service
+42[ ]: Refactor utilities, common, tools
 
 I = In Progress
 D = Done
