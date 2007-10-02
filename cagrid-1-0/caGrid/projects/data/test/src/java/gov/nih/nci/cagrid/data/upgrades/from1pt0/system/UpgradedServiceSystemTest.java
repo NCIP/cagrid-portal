@@ -27,7 +27,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.7 2007-10-01 17:04:49 hastings Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.8 2007-10-02 14:39:10 hastings Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -37,7 +37,7 @@ public class UpgradedServiceSystemTest extends Story {
 			new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT + 5);
     
     public String getName() {
-        return "Data Service 1_0 to 1_1 Upgraded System Tests";
+        return "Data Service 1_0 to 1_2 Upgraded System Tests";
     }
     
 	
