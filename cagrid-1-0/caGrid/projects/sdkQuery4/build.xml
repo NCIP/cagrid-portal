@@ -40,8 +40,11 @@
 	<!-- libraries -->
 	<property name="lib.dir" location="${basedir}/lib"/>
 	<property name="ext.lib.dir" location="${basedir}/ext/lib"/>
-	<property name="ext.client.lib.dir" location="${basedir}/ext/lib/sdkClient"/>
-	<property name="ext.thickclient.lib.dir" location="${basedir}/ext/lib/sdkThickClient"/>
+	<property name="ext.sdk.dir" location="${basedir}/ext/lib/sdk"/>
+	<property name="ext.remote-client.dir" location="${ext.sdk.dir}/remote-client"/>
+	<property name="ext.local-client.dir" location="${ext.sdk.dir}/local-client"/>
+	<property name="ext.remote-client.lib.dir" location="${ext.remote-client.dir}/lib"/>
+	<property name="ext.local-client.lib.dir" location="${ext.local-client.dir}/lib"/>
 	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib"/>
 	
 	<!-- testing stuff -->
@@ -51,9 +54,7 @@
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
 	<property name="test.project.jar" location="${build.jars.dir}/${project.jar.prefix}tests.jar" />
-	<!--
 	<import file="test\test.xml" />
-	-->
 	
 	<!-- =============================================================== -->
 	<!-- The Test Classpath                                              -->
@@ -76,10 +77,16 @@
 		</fileset>
 		<pathelement location="${build.dest}"/>
 	</path>
+	
+	
+	<target name="unpackSdkClients">
+		<unzip src="${ext.remote-client.dir}/RemoteClient.zip" dest="${ext.remote-client.dir}"/>
+		<unzip src="${ext.local-client.dir}/LocalClient.zip" dest="${ext.local-client.dir}"/>
+	</target>
 
 	
 	<!-- creates output directories -->
-    <target name="init">
+    <target name="init" depends="unpackSdkClients">
         <mkdir dir="${build.dir}" />
 		<mkdir dir="${build.jars.dir}"/>
     	<mkdir dir="${build.style.dest}"/>
@@ -99,7 +106,7 @@
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
-				<fileset dir="${ext.client.lib.dir}">
+				<fileset dir="${ext.remote-client.lib.dir}">
 					<include name="**/*.jar"/>
 				</fileset>
 				<fileset dir="${ext.authz.lib.dir}">
@@ -124,7 +131,7 @@
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
-				<fileset dir="${ext.client.lib.dir}">
+				<fileset dir="${ext.remote-client.lib.dir}">
 					<include name="**/*.jar"/>
 				</fileset>
 				<fileset dir="${ext.authz.lib.dir}">
@@ -151,7 +158,7 @@
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
-				<fileset dir="${ext.client.lib.dir}">
+				<fileset dir="${ext.remote-client.lib.dir}">
 					<include name="**/*.jar"/>
 				</fileset>
 				<fileset dir="${ext.test.lib.dir}">
