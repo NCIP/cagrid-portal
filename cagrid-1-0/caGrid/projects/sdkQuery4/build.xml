@@ -109,9 +109,6 @@
 				<fileset dir="${ext.remote-client.lib.dir}">
 					<include name="**/*.jar"/>
 				</fileset>
-				<fileset dir="${ext.authz.lib.dir}">
-					<include name="**/*.jar"/>
-				</fileset>
 				<fileset dir="${globus.dir}/lib">
 			    	<include name="*.jar" />
 				</fileset>
@@ -132,9 +129,6 @@
 					<include name="*.jar"/>
 				</fileset>
 				<fileset dir="${ext.remote-client.lib.dir}">
-					<include name="**/*.jar"/>
-				</fileset>
-				<fileset dir="${ext.authz.lib.dir}">
 					<include name="**/*.jar"/>
 				</fileset>
 				<fileset dir="${globus.dir}/lib">
