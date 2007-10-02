@@ -448,7 +448,7 @@
     </target>
     <target name="build-gaards-ui" depends="configure-gaards-ui" description="Builds the Security UI project">
         <resolveDependencies extdir="${projects.dir}/gaards-ui/ext">
-        	<artifact refid="cagrid.properties" />
+            <artifact refid="cagrid.properties" />
             <artifact refid="dorian.client.jars" />
             <artifact refid="grape.jars" />
             <artifact refid="dorian.endorsed" />
@@ -457,35 +457,35 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/gaards-ui" inheritAll="false" antfile="build.xml" target="all" />
     </target>
-	
-	
-	    <!-- =============================================================== -->
-		<!-- Credential Delegation Service:                                  -->
-		<!-- =============================================================== -->
-		<target name="build-cds" depends="prepare" description="Builds the Grid Delegation Service project">
-			<resolveDependencies extdir="${projects.dir}/cds/ext">
-				<artifact refid="cagrid.properties" />
-				<artifact refid="service.tools.jars" />
-				<artifact refid="mds.jars" />
-				<artifact refid="common.test.jars" />
-				<artifact refid="test.coverage.jars" />
-				<artifact refid="core.test.jars" />
-				<artifact refid="gridca.jars" />
-				<artifact refid="servicesecurity.jars" />
-				<artifact refid="security.metadata.jars" />
-				<artifact refid="common.metadata.jars" />
-				<artifact refid="advertisement.jars" />
-				<artifact refid="jdom.jars" />
-			</resolveDependencies>
-			<delete dir="${projects.dir}/cds/schema/CredentialDelegationService/xsd" />
-			<resolveDependencies extdir="${projects.dir}/cds/schema/CredentialDelegationService">
-				<artifact refid="metadata.schemas" />
-			</resolveDependencies>
-			<resolveDependencies extdir="${projects.dir}/cds/schema/CredentialDelegationService">
-				<artifact refid="service.tools.schemas" />
-			</resolveDependencies>
-			<ant dir="${projects.dir}/cds" inheritAll="false" antfile="build.xml" target="all" />
-		</target>
+
+
+    <!-- =============================================================== -->
+    <!-- Credential Delegation Service:                                  -->
+    <!-- =============================================================== -->
+    <target name="build-cds" depends="prepare" description="Builds the Grid Delegation Service project">
+        <resolveDependencies extdir="${projects.dir}/cds/ext">
+            <artifact refid="cagrid.properties" />
+            <artifact refid="service.tools.jars" />
+            <artifact refid="mds.jars" />
+            <artifact refid="common.test.jars" />
+            <artifact refid="test.coverage.jars" />
+            <artifact refid="core.test.jars" />
+            <artifact refid="gridca.jars" />
+            <artifact refid="servicesecurity.jars" />
+            <artifact refid="security.metadata.jars" />
+            <artifact refid="common.metadata.jars" />
+            <artifact refid="advertisement.jars" />
+            <artifact refid="jdom.jars" />
+        </resolveDependencies>
+        <delete dir="${projects.dir}/cds/schema/CredentialDelegationService/xsd" />
+        <resolveDependencies extdir="${projects.dir}/cds/schema/CredentialDelegationService">
+            <artifact refid="metadata.schemas" />
+        </resolveDependencies>
+        <resolveDependencies extdir="${projects.dir}/cds/schema/CredentialDelegationService">
+            <artifact refid="service.tools.schemas" />
+        </resolveDependencies>
+        <ant dir="${projects.dir}/cds" inheritAll="false" antfile="build.xml" target="all" />
+    </target>
 
     <!-- =============================================================== -->
     <!-- Build Grid Grouper:                                             -->
@@ -645,7 +645,7 @@
             <artifact refid="security.metadata.jars" />
             <artifact refid="servicesecurity.jars" />
             <artifact refid="validation.jars" />
-        	<artifact refid="introduce.gridgrouper.jars" />
+            <artifact refid="introduce.gridgrouper.jars" />
         </resolveDependencies>
 
         <delete>
@@ -903,28 +903,28 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/sdkQuery32" inheritall="false" antfile="build.xml" target="all" />
     </target>
-	
-	<!-- =============================================================== -->
-	<!-- CAGRID SDK 4.0 Data Service Query Processor:                    -->
-	<!-- =============================================================== -->
-	<target name="build-sdkQuery4" depends="prepare" description="Builds caGrid SDK 4.0 Query Processor and Data Service Style">
-		<resolveDependencies extdir="${projects.dir}/sdkQuery4/ext">
-			<artifact refid="cagrid.properties"/>
-			<artifact refid="core.jars"/>
-			<artifact refid="data.jars"/>
-		    <artifact refid="core.test.jars" />
-			<artifact refid="common.test.jars"/>
-			<artifact refid="test.coverage.jars" />
-			<artifact refid="data.cql.testing.docs"/>
-		</resolveDependencies>
-		<resolveDependencies targetdir="${projects.dir}/sdkQuery4/ext/lib/sdk/remote-client">
-			<artifact refid="caCORE.4.0.remote-client.package"/>
-		</resolveDependencies>
-		<resolveDependencies targetdir="${projects.dir}/sdkQuery4/ext/lib/sdk/local-client">
-			<artifact refid="caCORE.4.0.local-client.package"/>
-		</resolveDependencies>
-		<ant dir="${projects.dir}/sdkQuery4" inheritall="false" antfile="build.xml" target="all"/>
-	</target>
+
+    <!-- =============================================================== -->
+    <!-- CAGRID SDK 4.0 Data Service Query Processor:                    -->
+    <!-- =============================================================== -->
+    <target name="build-sdkQuery4" depends="prepare" description="Builds caGrid SDK 4.0 Query Processor and Data Service Style">
+        <resolveDependencies extdir="${projects.dir}/sdkQuery4/ext">
+            <artifact refid="cagrid.properties" />
+            <artifact refid="core.jars" />
+            <artifact refid="data.jars" />
+            <artifact refid="core.test.jars" />
+            <artifact refid="common.test.jars" />
+            <artifact refid="test.coverage.jars" />
+            <artifact refid="data.cql.testing.docs" />
+        </resolveDependencies>
+        <resolveDependencies targetdir="${projects.dir}/sdkQuery4/ext/lib/sdk/remote-client">
+            <artifact refid="caCORE.4.0.remote-client.package" />
+        </resolveDependencies>
+        <resolveDependencies targetdir="${projects.dir}/sdkQuery4/ext/lib/sdk/local-client">
+            <artifact refid="caCORE.4.0.local-client.package" />
+        </resolveDependencies>
+        <ant dir="${projects.dir}/sdkQuery4" inheritall="false" antfile="build.xml" target="all" />
+    </target>
 
     <!-- =============================================================== -->
     <!-- Federated Query Processor:                                      -->
@@ -1034,6 +1034,21 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/wizard" inheritAll="false" antfile="build.xml" target="all" />
     </target>
+
+
+    <!-- =============================================================== -->
+    <!-- WEBSSO:                                                         -->
+    <!-- =============================================================== -->
+    <target name="build-websso" depends="prepare" description="Builds the Web SSO server">
+        <resolveDependencies extdir="${projects.dir}/websso/ext">
+            <artifact refid="cagrid.properties" />
+            <artifact refid="dorian.client.jars" />
+            <!-- TODO: add CDS artificat-->
+        </resolveDependencies>
+        <ant dir="${projects.dir}/websso" inheritAll="false" antfile="build.xml" target="all" />
+    </target>
+
+
 
     <!-- ============================================================== -->
     <!-- Installs the Introduce Extensions                              -->
