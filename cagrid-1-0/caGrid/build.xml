@@ -1043,6 +1043,7 @@
         <resolveDependencies extdir="${projects.dir}/websso/ext">
             <artifact refid="cagrid.properties" />
             <artifact refid="dorian.client.jars" />
+            <artifact refid="dorian.endorsed" />
             <!-- TODO: add CDS artificat-->
         </resolveDependencies>
         <ant dir="${projects.dir}/websso" inheritAll="false" antfile="build.xml" target="all" />
