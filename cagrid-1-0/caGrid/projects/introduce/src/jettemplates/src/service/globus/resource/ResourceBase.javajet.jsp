@@ -36,6 +36,7 @@ import org.globus.mds.aggregator.types.GetMultipleResourcePropertiesPollType;
 import org.globus.mds.servicegroup.client.ServiceGroupRegistrationParameters;
 import org.globus.wsrf.Constants;
 import org.globus.wsrf.RemoveCallback;
+import org.globus.wsrf.PersistantCallback;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceContextException;
 import org.globus.wsrf.ResourceIdentifier;
@@ -82,6 +83,9 @@ if(arguments.getService().getResourceFrameworkOptions().getIdentifiable()!=null)
                                                   <%
 if(arguments.getService().getResourceFrameworkOptions().getLifetime()!=null){
 %>ResourceLifetime,
+                                                  <%
+if(arguments.getService().getResourceFrameworkOptions().getPersistant()!=null){
+%>PersistantCallback,
 
 <%} %>                                                  Initializable {
 
