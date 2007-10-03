@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <project name="Introduce Developer Modified Build File" basedir=".">
 
+    <property name="ext.lib" value="${basedir}/ext/lib" />
     <property name="ext.lib.dir" value="ext/lib" />
     <property file="ext/resources/cagrid.properties" />
     <property name="service.jar.name" value="${cagrid.master.jar.prefix}${service.name}-service.jar" />
@@ -174,7 +175,6 @@
 	<!-- Post Jar Build Target                                          -->
 	<!-- ============================================================== -->
 	<target name="postJar">
-
 	</target>
 
 	<!-- ============================================================== -->
@@ -233,11 +233,27 @@
      <target name="deployGlobusHandler" depends="handlerjar" description="This is used to overwrite activebpels' client-config.wsdd with our client-config and deploys the globus authz handler jar and cog-axis.jar into $CATALINA_HOME/shared/lib so workflows invoking secure services work">
         <copy overwrite="true" todir="${tomcat.dir}/shared/lib/" file="${build.lib.dir}/globus-authz.jar" />
         <copy overwrite="true" todir="${tomcat.dir}/shared/classes" file="etc/ae-client-config.wsdd" />
+        <copy overwrite="true" todir="${tomcat.dir}/bpr/" file="etc/aeEngineConfig.xml" />
         <copy overwrite="true" todir="${tomcat.dir}/shared/lib" file="${ext.globus.dir}/lib/cog-axis.jar" />
+        <copy overwrite="true" todir="${tomcat.dir}/shared/lib" file="${ext.globus.dir}/lib/cog-jglobus.jar" />
     </target>
 
     <target name="handlerjar" depends="compile">
         <jar destfile="${build.lib.dir}/globus-authz.jar" basedir="${build.dest}" includes="**/SimpleGlobusAuthorizationHandler.class" />
+    </target>
+
+    <target name="runTests" depends="checkGlobus" description="Runs the service's tests.">
+        <echo message="Test results dir: ${junit.results.dir}" />
+        <mkdir dir="${junit.results.dir}" />
+        <junit dir="${basedir}" printsummary="yes" showoutput="true">
+            <classpath refid="test.run.classpath" />
+            <formatter type="xml" />
+            <batchtest fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/PackageTests.java" />
+                </fileset>
+            </batchtest>
+        </junit>
     </target>
 
 

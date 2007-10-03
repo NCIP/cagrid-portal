@@ -3,7 +3,9 @@ package gov.nih.nci.cagrid.workflow.tests;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.Properties;
 
 import javax.xml.namespace.QName;
 import gov.nih.nci.cagrid.common.Utils;
@@ -34,12 +36,21 @@ public class BasicTests extends GridTestCase {
 	private static WorkflowServiceImplClient serviceClient = null;
 	private static EndpointReferenceType epr = null;
 	
+	private  Properties props = new Properties();
+	
 	
 	public BasicTests(String name) {
 		super(name);
+		setup();
 	}
 	
 	private void setup() {
+		try {
+	        this.props.load(new FileInputStream("test.properties"));
+	        this.url= this.props.getProperty("WORKFLOW_ENDPOINT");
+	    } catch (IOException e) {
+	    	System.err.println("Cannot read test props");
+	    }
 	// setup stuff if tests get executed in parallel	
 	}
 	
@@ -47,7 +58,7 @@ public class BasicTests extends GridTestCase {
 		assertTrue(TEST_CONTAINER != null);
 		FileWriter writer = null;
 		this.factoryClient = new WorkflowFactoryServiceClient(url);
-		WMSInputType input = createInput(null, "Test.bpel");
+		WMSInputType input = createInput(null, "Test1.bpel");
 		WMSOutputType output = this.factoryClient.createWorkflow(input);
 		this.epr = output.getWorkflowEPR();
 		assertTrue(epr != null);
@@ -119,7 +130,7 @@ public class BasicTests extends GridTestCase {
 		this.factoryClient = new WorkflowFactoryServiceClient(url);
 		Calendar termTime = Calendar.getInstance();
 		termTime.add(Calendar.SECOND, 30);
-		WMSInputType input = createInput(termTime, "Test.bpel");
+		WMSInputType input = createInput(termTime, "Test1.bpel");
 		WMSOutputType output = this.factoryClient.createWorkflow(input);
 		this.epr = output.getWorkflowEPR();
 		assertTrue(epr != null);
@@ -140,18 +151,18 @@ public class BasicTests extends GridTestCase {
 		System.out.println(status.getValue());
 		assertTrue(status !=null);
 	}
-	public  static WMSInputType createInput(Calendar terminationTime, 
+	public  WMSInputType createInput(Calendar terminationTime, 
 			String bpelFile) throws Exception {
 		WMSInputType input = new WMSInputType();
 		input.setTerminationTime(terminationTime);
 		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
 		input.setBpelDoc(bpelProcess);
-		input.setWorkflowName("Test");
+		input.setWorkflowName("Test1");
 		WSDLReferences[] wsdlRefArray = new WSDLReferences[1];
 		wsdlRefArray[0] = new WSDLReferences();
-		wsdlRefArray[0].setServiceUrl(new URI("http://Test1"));
-		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/simple.wsdl");
-		wsdlRefArray[0].setWsdlNamespace(new URI("http://Test1"));
+		wsdlRefArray[0].setServiceUrl(new URI(this.props.getProperty("SERVICE1_ENDPOINT")));
+		wsdlRefArray[0].setWsdlLocation(this.props.getProperty("SERVICE1_WSDL"));
+		wsdlRefArray[0].setWsdlNamespace(new URI(this.props.getProperty("SERVICE1_NAMESPACE")));
 
 		input.setWsdlReferences(wsdlRefArray);
 		return input;

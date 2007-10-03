@@ -1,12 +1,12 @@
 <!-- active bpel client configuration  -->
 
 <deployment 
-	name="ActiveBpel.net"
-	targetNameSpace="http://www.activebpel.org/client"
+    name="ActiveBpel.net"
+    targetNameSpace="http://www.activebpel.org/client"
         xmlns:jbnet="http://www.activebpel.org/client"
-	xmlns:jmx="http://net.jboss.org/jmx"
-	xmlns="http://xml.apache.org/axis/wsdd/"
-	xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+    xmlns:jmx="http://net.jboss.org/jmx"
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
 
  <!-- =================== -->
  <!-- Some type mappings. -->
@@ -204,49 +204,21 @@
               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
               
               
-	<transport name="http" pivot="java:org.activebpel.rt.axis.bpel.handlers.AeHTTPSender" />
-	<transport name="https" pivot="java:org.globus.axis.transport.HTTPSSender"/>
-	<transport name="local" pivot="java:org.apache.axis.transport.local.LocalSender"/>
+    <transport name="http" pivot="java:org.activebpel.rt.axis.bpel.handlers.AeHTTPSender" />
+    <transport name="https" pivot="java:org.globus.axis.transport.HTTPSSender"/>
+    <transport name="local" pivot="java:org.apache.axis.transport.local.LocalSender"/>
 
  <globalConfiguration>
    <parameter name="disablePrettyXML" value="true"/>
    <requestFlow>
-    <handler type="java:org.globus.wsrf.handlers.AddressingHandler"/>
        <handler type="java:gov.nih.nci.cagrid.workflow.handlers.SimpleGlobusAuthorizationHandler"/>
-   <handler type="java:org.globus.wsrf.impl.security.authorization.ClientPropertiesHandler"/>
-   <handler type="java:org.globus.wsrf.impl.security.authentication.ClientPropertiesHandler"/>
-   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
-    <parameter name="className" value="org.globus.wsrf.impl.security.authentication.securemsg.X509EncryptHandler"/>
-   </handler>
-   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
-    <parameter name="className" value="org.globus.wsrf.impl.security.authentication.securemsg.X509SignHandler"/>
-   </handler>
-   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
-    <parameter name="className" value="org.globus.wsrf.impl.security.authentication.UsernameHandler"/>
-   </handler>
-   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
-    <parameter name="authService" value="auto"/>
-    <parameter name="className" value="org.globus.wsrf.impl.security.authentication.secureconv.SecContextHandler"/>
-   </handler>
-   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
-    <parameter name="className" value="org.globus.wsrf.impl.security.authentication.secureconv.GSSHandler"/>
-   </handler>
-   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
-    <parameter name="className" value="org.globus.wsrf.impl.security.authorization.TrustedTargetHandler"/>
-   </handler>
-   <handler type="java:org.globus.wsrf.handlers.MessageLoggingHandler"/>
-
     </requestFlow>
    <responseFlow>
-    <handler type="java:org.globus.wsrf.handlers.AddressingHandler"/>
-   <handler type="java:org.globus.wsrf.handlers.MessageLoggingHandler"/>
-   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
-    <parameter name="className" value="org.globus.wsrf.impl.security.authentication.wssec.WSSecurityClientHandler"/>
-   </handler>
+      <handler type="java:org.activebpel.rt.axis.bpel.handlers.AeXPathReceiveHandler"/>
+       <handler type="java:gov.nih.nci.cagrid.workflow.handlers.SimpleGlobusAuthorizationHandler"/>
 
-  	  <handler type="java:org.activebpel.rt.axis.bpel.handlers.AeXPathReceiveHandler"/>
-
-  	</responseFlow>  
+    </responseFlow>  
  </globalConfiguration>
 
 </deployment>
+

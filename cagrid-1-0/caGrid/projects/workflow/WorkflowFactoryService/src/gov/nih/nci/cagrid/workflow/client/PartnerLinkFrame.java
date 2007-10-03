@@ -24,6 +24,7 @@ import org.apache.axis.types.URI;
 import org.cagrid.grape.utils.ErrorDialog;
 
 import java.awt.ComponentOrientation;
+import java.util.Vector;
 
 /**
  * @author madduri
@@ -53,7 +54,9 @@ public class PartnerLinkFrame extends JFrame {
 
 	private JButton jButton = null;
 
-	private WSDLReferences wsdlReference = null;  //  @jve:decl-index=0:
+	private JButton jButton1 = null;
+	
+	private Vector wsdlReferences = null;
 	/**
 	 * @throws HeadlessException
 	 */
@@ -160,34 +163,75 @@ public class PartnerLinkFrame extends JFrame {
 			jButton.setText("Add");
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					System.out.println("adding PLT"); // TODO Auto-generated Event stub actionPerformed()
 					
 					try {
+						WSDLReferences wsdlReference = new WSDLReferences();
 						wsdlReference.setPartnerLinkType((String)getJComboBox().getSelectedItem());
 						wsdlReference.setServiceUrl(new URI(getServiceEndpointTF().getText()));
 						wsdlReference.setWsdlNamespace(new URI(getNamespaceTF().getText()));
 						wsdlReference.setWsdlLocation(getWsdlLocationTF().getText());
+						wsdlReferences.add(wsdlReference);
+						getServiceEndpointTF().setText("");
+						getNamespaceTF().setText("");
+						getWsdlLocationTF().setText("");
 					} catch (Exception e1) {
 						ErrorDialog.showError("Invalid Endpoint", e1);
 					}
 					
 					
-					dispose();
+					
 				}
 			});
 		}
 		return jButton;
 	}
+	
+	public Vector getWSDLReferences() {
+		System.out.println("size: " + this.wsdlReferences.size());
+		for (int i=0;i<this.wsdlReferences.size();i++) {
+			WSDLReferences ref = (WSDLReferences) this.wsdlReferences.elementAt(i);
+			
+			System.out.println(" " + ref.getPartnerLinkType()
+					+ " " + ref.getWsdlLocation().toString()
+					+ " " + ref.getServiceUrl().toString());
+		}
+		return this.wsdlReferences;
+	}
 
-	public WSDLReferences getWSDLReference() {
+	/*public WSDLReferences getWSDLReference() {
 		if (this.wsdlReference != null) {
+			System.out.println(" " + this.wsdlReference.getPartnerLinkType()
+					+ " " + this.wsdlReference.getWsdlLocation().toString()
+					+ " " + this.wsdlReference.getServiceUrl().toString());
 			return this.wsdlReference;
 		} else {
 			ErrorDialog.showError("Invalid PartnerLink");
 			dispose();
 			return null;
 		}
+	}*/
+	
+	/**
+	 * This method initializes jButton1	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButton1() {
+		if (jButton1 == null) {
+			jButton1 = new JButton();
+			jButton1.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+			jButton1.setText("Close");
+			jButton1.setPreferredSize(new Dimension(100, 25));
+			jButton1.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dispose();
+				}
+			});
+		}
+		return jButton1;
 	}
+
 	/**
 	 * @param args
 	 */
@@ -211,7 +255,8 @@ public class PartnerLinkFrame extends JFrame {
 		this.setSize(400, 196);
 		this.setContentPane(getJContentPane());
 		this.setTitle("PartnerLinkFrame");
-		this.wsdlReference = new WSDLReferences();
+		//this.wsdlReference = new WSDLReferences();
+		this.wsdlReferences = new Vector();
 	}
 
 	/**
@@ -221,8 +266,13 @@ public class PartnerLinkFrame extends JFrame {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.anchor = GridBagConstraints.EAST;
+			gridBagConstraints12.gridx = 1;
+			gridBagConstraints12.gridy = 4;
 			GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
 			gridBagConstraints41.gridx = 1;
+			gridBagConstraints41.anchor = GridBagConstraints.WEST;
 			gridBagConstraints41.gridy = 4;
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 			gridBagConstraints31.fill = GridBagConstraints.VERTICAL;
@@ -280,6 +330,7 @@ public class PartnerLinkFrame extends JFrame {
 			jContentPane.add(jLabel1, gridBagConstraints21);
 			jContentPane.add(getNamespaceTF(), gridBagConstraints31);
 			jContentPane.add(getJButton(), gridBagConstraints41);
+			jContentPane.add(getJButton1(), gridBagConstraints12);
 		}
 		return jContentPane;
 	}

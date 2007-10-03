@@ -16,10 +16,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
@@ -46,6 +45,7 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	
 	private String abAdminRoot = 
 		"http://localhost:8080/active-bpel/services/";
+	
 	private String abAdminUrl = abAdminRoot + "BpelEngineAdmin";
 	
 	private RemoteDebugSoapBindingStub mRemote = null;
@@ -68,12 +68,16 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	
 	public ActiveBPELAdapter(String abAdminUrl)  {
 		if (abAdminUrl != null) {
+			this.abAdminRoot = abAdminUrl;
 			this.abAdminUrl = abAdminUrl + "BpelEngineAdmin";
 		}
 		BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
 		try {
+			logger.debug("abAdminUrl: " + this.abAdminUrl);
 			URL url = new URL(this.abAdminUrl);
 			this.mRemote = (RemoteDebugSoapBindingStub) locator.getAeActiveWebflowAdminPort(url);
+			this.mRemote._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, 
+					org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -110,6 +114,7 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	private  WorkflowStatusType invokeProcess( 
 			String partnerLinkName, StartInputType startInput) throws Exception {
 		String serviceUrl = this.abAdminRoot + partnerLinkName;
+		System.out.println("Starting service: " + serviceUrl);
 		SOAPEnvelope env = new SOAPEnvelope();
 		env.getBody().addChildElement(
 				new SOAPBodyElement(startInput.getInputArgs().get_any()[0]));
@@ -119,7 +124,8 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		AddressingHeaders headers = new AddressingHeaders();
 		headers.setTo(new To(serviceUrl));
 		call.setProperty(Constants.ENV_ADDRESSING_REQUEST_HEADERS, headers);
-		
+		call.setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, 
+				org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
 		SOAPEnvelope res = call.invoke(env);
 		System.out.println("Result " + res.getAsString());
 	    this.workflowStatus = WorkflowStatusType.Active;
@@ -128,7 +134,7 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		//output.setOutputType(outputType);
 		this.processId = getProcessId();
 		this.processLogFileLocation = System.getProperty("user.home") + File.separator 
-			+ "AeBPELEngine" + File.separator + "process-logs" 
+			+ "AeBpelEngine" + File.separator + "process-logs" 
 			+ File.separator + this.processId + ".log";
 		return this.workflowStatus;
 	}
@@ -355,7 +361,12 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		} catch (IOException ex) {
 			throw  new WorkflowExceptionType();
 		}
-		return (WorkflowStatusEventType[]) processStates.values().toArray();
+		ArrayList temp = new ArrayList(this.processStates.values());
+		System.out.println("EVENTS:" + temp.size());
+		WorkflowStatusEventType returnThis[] = 
+			(WorkflowStatusEventType[]) temp.toArray(new WorkflowStatusEventType[temp.size()]);
+		return returnThis;
+		//return (WorkflowStatusEventType[]) processStates.values().toArray();
 
 	}
 	
