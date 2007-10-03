@@ -96,5 +96,9 @@
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/sdk/remote-client/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/sdk/remote-client/lib/sdk-client-framework.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dataExtensions-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dataExtensions-sdkstyle.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dataExtensions-ui.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dataExtensions-upgrades.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
