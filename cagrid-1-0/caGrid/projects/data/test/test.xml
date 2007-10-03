@@ -59,7 +59,7 @@
 
 
     <!-- tests everything but system -->
-    <target name="test" depends="instrument, testCore, testCreation, testEnumerationCreation, testBdtCreation, testUpgradeFrom1pt0to1pt1" description="Runs all non-system tests." />
+    <target name="test" depends="instrument, testCore, testCreation, testEnumerationCreation, testBdtCreation, testUpgradeFrom1pt0" description="Runs all non-system tests." />
 
 
     <!-- tests data service core components -->
@@ -168,7 +168,7 @@
 
 
     <!-- tests overall system -->
-    <target name="systemTest" depends="setGlobus, prepareClasspaths, testBasicSystem, testEnumerationSystem, testBdtSystem, testUpgradedFrom1pt0to1pt1System" description="Runs system tests (deploy, invoke, etc)" />
+    <target name="systemTest" depends="setGlobus, prepareClasspaths, testBasicSystem, testEnumerationSystem, testBdtSystem, testUpgradedFrom1pt0System" description="Runs system tests (deploy, invoke, etc)" />
 
 
     <!-- system tests against the basic data service -->
@@ -216,8 +216,8 @@
     </target>
 
 
-    <!-- tests upgrading a 1.0 service to 1.1 -->
-    <target name="testUpgradeFrom1pt0to1pt1" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to 1.1" unless="upgrade.1pt0.to.1pt1.completed">
+    <!-- tests upgrading a 1.0 service to current -->
+    <target name="testUpgradeFrom1pt0" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to the current version" unless="upgrade.1pt0.completed">
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
@@ -236,17 +236,17 @@
             <test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
             <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
                 <fileset dir="${test.src.dir}">
-                    <include name="**/Upgrade*To1pt1Tests.java" />
+                    <include name="**/Upgrade*To1pt2Tests.java" />
                 </fileset>
             </batchtest>
         </junit>
-        <fail message="Upgrade 1.0 to 1.1 tests failed!" if="test.failed" />
-        <property name="upgrade.1pt0.to.1pt1.completed" value="true" />
+        <fail message="Upgrade 1.0 tests failed!" if="test.failed" />
+        <property name="upgrade.1pt0.completed" value="true" />
     </target>
 
 
-    <!-- system tests against the service upgraded from 1.0 to 1.1 -->
-    <target name="testUpgradedFrom1pt0to1pt1System" depends="setGlobus, testUpgradeFrom1pt0to1pt1" description="Performs system tests on the upgraded (1.0 to 1.1) service">
+    <!-- system tests against the service upgraded from 1.0 to current -->
+    <target name="testUpgradedFrom1pt0System" depends="setGlobus, testUpgradeFrom1pt0" description="Performs system tests on the upgraded (1.0 to current) service">
         <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
