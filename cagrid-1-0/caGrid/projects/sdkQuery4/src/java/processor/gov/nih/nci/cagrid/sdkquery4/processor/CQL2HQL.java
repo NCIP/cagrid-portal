@@ -24,11 +24,12 @@ import java.util.Map;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2HQL.java,v 1.1 2007-10-02 19:05:27 dervin Exp $ 
+ * @version $Id: CQL2HQL.java,v 1.2 2007-10-03 18:06:16 dervin Exp $ 
  */
 public class CQL2HQL {
 	
-	private static Map predicateValues = null;
+    // maps a CQL predicate to its HQL string representation 
+	private static Map<Predicate, String> predicateValues = null;
 	
 	/**
 	 * Converts CQL to HQL suitable for use with Hibernate v3.2.0ga 
@@ -310,7 +311,7 @@ public class CQL2HQL {
 	 */
 	private static String convertPredicate(Predicate p) {
 		if (predicateValues == null) {
-			predicateValues = new HashMap();
+			predicateValues = new HashMap<Predicate, String>();
 			predicateValues.put(Predicate.EQUAL_TO, "=");
 			predicateValues.put(Predicate.GREATER_THAN, ">");
 			predicateValues.put(Predicate.GREATER_THAN_EQUAL_TO, ">=");
@@ -321,7 +322,7 @@ public class CQL2HQL {
 			predicateValues.put(Predicate.IS_NOT_NULL, "is not null");
 			predicateValues.put(Predicate.IS_NULL, "is null");
 		}
-		return (String) predicateValues.get(p);
+		return predicateValues.get(p);
 	}
 	
 	
