@@ -19,10 +19,10 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTo1pt2Tests.java,v 1.1 2007-10-01 17:04:49 hastings Exp $ 
+ * @version $Id: UpgradeTo1pt2Tests.java,v 1.2 2007-10-03 14:05:40 dervin Exp $ 
  */
 public class UpgradeTo1pt2Tests extends Story {
-	public static final String TEST_DIR = "../data/test";
+    public static final String TEST_DIR = ".." + File.separator + "data" + File.separator + "test";
     public static final String SERVICE_ZIP_NAME = "BasicDataService_1-0.zip";
     
 	public static final String SERVICE_DIR = TEST_DIR + File.separator + "BasicDataService";
