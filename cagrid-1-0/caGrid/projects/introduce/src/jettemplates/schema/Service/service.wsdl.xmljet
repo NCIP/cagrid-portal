@@ -43,6 +43,8 @@
         location="../wsrf/properties/WS-ResourceProperties.wsdl"/>
     <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
         location="../wsrf/faults/WS-BaseFaults.wsdl"/>
+    <import namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"
+        location="../wsrf/notification/WS-BaseN.wsdl"/>
 <%
 	imiterator = imprefixmap.keySet().iterator();
 		while(imiterator.hasNext()){

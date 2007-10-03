@@ -10,7 +10,11 @@
 %>
 package <%=arguments.getService().getPackageName()%>.service.globus.resource;
 
+import org.globus.wsrf.InvalidResourceKeyException;
+import org.globus.wsrf.NoSuchResourceException;
 import org.globus.wsrf.ResourceException;
+import org.globus.wsrf.ResourceKey;
+
 
 /** 
  * The implementation of this <%=arguments.getService().getName()%>Resource type.
@@ -27,5 +31,15 @@ public class <%=arguments.getService().getName()%>Resource extends BaseResourceB
     public void remove() throws ResourceException {
 		// TODO Implement me
 	}
+	
+	public void load(ResourceKey arg0) throws ResourceException, NoSuchResourceException, InvalidResourceKeyException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void store() throws ResourceException {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

@@ -54,13 +54,15 @@
 
 	<xs:complexType name="ResourceFrameworkOptions">
 		<xs:sequence>
-			<xs:element ref="Main" minOccurs="0" maxOccurs="1"/>
-			<xs:element ref="Custom" minOccurs="0" maxOccurs="1"/>
-			<xs:element ref="Singleton" minOccurs="0" maxOccurs="1"/>
-			<xs:element ref="Lifetime" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="Main" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="Custom" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="Singleton" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="Lifetime" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="Identifiable" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="Persistant" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="Notification" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="Secure" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="RemoveCallback" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
 	</xs:complexType>
 
@@ -68,7 +70,7 @@
 	<xs:complexType name="Singleton"></xs:complexType>
 	<xs:element name="Lifetime" type="Lifetime"></xs:element>
 	<xs:complexType name="Lifetime"></xs:complexType>
-    <xs:element name="Identifiable" type="Identifiable"></xs:element>
+	<xs:element name="Identifiable" type="Identifiable"></xs:element>
 	<xs:complexType name="Identifiable"></xs:complexType>
 	<xs:element name="Main" type="Main"></xs:element>
 	<xs:complexType name="Main"></xs:complexType>
@@ -78,5 +80,9 @@
 	<xs:complexType name="Persistant"></xs:complexType>
 	<xs:element name="Notification" type="Notification"></xs:element>
 	<xs:complexType name="Notification"></xs:complexType>
+	<xs:element name="Secure" type="Secure"></xs:element>
+	<xs:complexType name="Secure"></xs:complexType>
+	<xs:element name="RemoveCallback" type="RemoveCallback"></xs:element>
+	<xs:complexType name="RemoveCallback"></xs:complexType>
 
 </xs:schema>

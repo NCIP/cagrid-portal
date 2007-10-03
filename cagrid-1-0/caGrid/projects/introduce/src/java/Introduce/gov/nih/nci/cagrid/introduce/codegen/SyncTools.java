@@ -683,6 +683,9 @@ public class SyncTools {
                 if (newService.getResourceFrameworkOptions().getLifetime()!=null) {
                     addLifetimeResource(newService, info);
                 }
+                if(newService.getResourceFrameworkOptions().getNotification()!=null){
+                    addSubscribeResource(newService, info);
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -705,6 +708,33 @@ public class SyncTools {
             e.printStackTrace();
         }
     }
+    
+    
+    private void addSubscribeResource(ServiceType service, ServiceInformation info){
+        MethodType subscribeMethod = new MethodType();
+        subscribeMethod.setName("Subscribe");
+        subscribeMethod.setOutput(new MethodTypeOutput());
+        subscribeMethod.getOutput().setIsArray(false);
+        subscribeMethod.getOutput().setQName(new QName("", "void"));
+        
+        MethodTypeImportInformation ii = new MethodTypeImportInformation();
+        ii.setFromIntroduce(false);
+        ii.setInputMessage(new QName("http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl","SubscribeRequest"));
+        ii.setOutputMessage(new QName("http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl","SubscribeResponse"));
+        ii.setNamespace("http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl");
+        ii.setPackageName("org.oasis.wsn");
+        ii.setPortTypeName("NotificationProducer");
+        ii.setWsdlFile("../wsrf/notification/WS-BaseN.wsdl");
+        subscribeMethod.setImportInformation(ii);
+        subscribeMethod.setIsImported(true);
+        
+        MethodTypeProviderInformation pi = new MethodTypeProviderInformation();
+        pi.setProviderClass("SubscribeProvider");
+        subscribeMethod.setProviderInformation(pi);
+        subscribeMethod.setIsProvided(true);
+        
+        CommonTools.addMethod(service, subscribeMethod);
+    }
 
 
     private void addLifetimeResource(ServiceType service, ServiceInformation info) {
@@ -717,7 +747,7 @@ public class SyncTools {
         destroyOutput.setQName(new QName("", "void"));
         destroyMethod.setOutput(destroyOutput);
         MethodTypeImportInformation ii = new MethodTypeImportInformation();
-        ii.setFromIntroduce(new Boolean(false));
+        ii.setFromIntroduce(false);
         ii.setInputMessage(new QName(
             "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl", "DestroyRequest"));
         ii.setOutputMessage(new QName(

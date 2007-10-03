@@ -6,10 +6,11 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.Custom;
 import gov.nih.nci.cagrid.introduce.beans.service.Identifiable;
 import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
-import gov.nih.nci.cagrid.introduce.beans.service.Main;
 import gov.nih.nci.cagrid.introduce.beans.service.Notification;
 import gov.nih.nci.cagrid.introduce.beans.service.Persistant;
+import gov.nih.nci.cagrid.introduce.beans.service.RemoveCallback;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
+import gov.nih.nci.cagrid.introduce.beans.service.Secure;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.Singleton;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -18,21 +19,27 @@ import gov.nih.nci.cagrid.introduce.portal.common.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URI;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -45,13 +52,6 @@ import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
-import java.awt.Dimension;
-import java.net.URI;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import java.awt.Insets;
-import javax.swing.JCheckBox;
-import javax.swing.SwingConstants;
 
 public class ModifyService extends JDialog {
 
@@ -108,6 +108,10 @@ public class ModifyService extends JDialog {
 	private JCheckBox notificationResource = null;
 
 	private JCheckBox customResource = null;
+
+	private JCheckBox secureResource = null;
+
+	private JCheckBox removeCallbackResource = null;
 
 	/**
 	 * This method initializes
@@ -441,6 +445,12 @@ public class ModifyService extends JDialog {
 							service.getService().getResourceFrameworkOptions()
 									.setNotification(new Notification());
 						}
+						if(getSecureResource().isSelected()){
+							service.getService().getResourceFrameworkOptions().setSecure(new Secure());
+						}
+						if(getRemoveCallbackResource().isSelected()){
+							service.getService().getResourceFrameworkOptions().setRemoveCallback(new RemoveCallback());
+						}
 					}
 
 					service.getService().setDescription(
@@ -654,37 +664,42 @@ public class ModifyService extends JDialog {
 	 */
 	private JPanel getResourceOptionsPanel() {
 		if (resourceOptionsPanel == null) {
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.gridx = 0;
+			gridBagConstraints20.gridy = 4;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 1;
+			gridBagConstraints6.anchor = GridBagConstraints.NORTHWEST;
+			gridBagConstraints6.gridy = 3;
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.gridx = 0;
 			gridBagConstraints19.anchor = GridBagConstraints.NORTHWEST;
-			gridBagConstraints19.gridy = 2;
+			gridBagConstraints19.gridy = 0;
 			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.gridx = 0;
+			gridBagConstraints18.gridx = 1;
 			gridBagConstraints18.anchor = GridBagConstraints.NORTHWEST;
-			gridBagConstraints18.gridy = 4;
+			gridBagConstraints18.gridy = 2;
 			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
 			gridBagConstraints17.gridx = 0;
 			gridBagConstraints17.anchor = GridBagConstraints.NORTHWEST;
 			gridBagConstraints17.gridy = 3;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.gridx = 0;
+			gridBagConstraints16.gridx = 1;
 			gridBagConstraints16.anchor = GridBagConstraints.NORTHWEST;
 			gridBagConstraints16.gridy = 0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 0;
 			gridBagConstraints5.anchor = GridBagConstraints.NORTHWEST;
-			gridBagConstraints5.gridy = 1;
+			gridBagConstraints5.gridy = 2;
 			resourceOptionsPanel = new JPanel();
 			resourceOptionsPanel.setLayout(new GridBagLayout());
-			resourceOptionsPanel
-					.add(getLifetimeResource(), gridBagConstraints5);
-			resourceOptionsPanel.add(getSingletomResource(),
-					gridBagConstraints16);
-			resourceOptionsPanel.add(getPersistantResource(),
-					gridBagConstraints17);
-			resourceOptionsPanel.add(getNotificationResource(),
-					gridBagConstraints18);
+			resourceOptionsPanel.add(getLifetimeResource(), gridBagConstraints5);
+			resourceOptionsPanel.add(getSingletomResource(), gridBagConstraints16);
+			resourceOptionsPanel.add(getPersistantResource(), gridBagConstraints17);
+			resourceOptionsPanel.add(getNotificationResource(), gridBagConstraints18);
 			resourceOptionsPanel.add(getCustomResource(), gridBagConstraints19);
+			resourceOptionsPanel.add(getSecureResource(), gridBagConstraints6);
+			resourceOptionsPanel.add(getRemoveCallbackResource(), gridBagConstraints20);
 		}
 		return resourceOptionsPanel;
 	}
@@ -698,6 +713,9 @@ public class ModifyService extends JDialog {
 		if (lifetimeResource == null) {
 			lifetimeResource = new JCheckBox();
 			lifetimeResource.setText("lifetime");
+			if(service.getService().getResourceFrameworkOptions().getLifetime()!=null){
+				lifetimeResource.setSelected(true);
+			}
 			lifetimeResource.setHorizontalAlignment(SwingConstants.LEADING);
 			lifetimeResource.setHorizontalTextPosition(SwingConstants.TRAILING);
 			lifetimeResource
@@ -719,6 +737,9 @@ public class ModifyService extends JDialog {
 		if (singletomResource == null) {
 			singletomResource = new JCheckBox();
 			singletomResource.setText("singleton");
+			if(service.getService().getResourceFrameworkOptions().getSingleton()!=null){
+				singletomResource.setSelected(true);
+			}
 			singletomResource.setHorizontalAlignment(SwingConstants.LEADING);
 			singletomResource
 					.addActionListener(new java.awt.event.ActionListener() {
@@ -739,6 +760,9 @@ public class ModifyService extends JDialog {
 		if (persistantResource == null) {
 			persistantResource = new JCheckBox();
 			persistantResource.setText("persistant");
+			if(service.getService().getResourceFrameworkOptions().getPersistant()!=null){
+				persistantResource.setSelected(true);
+			}
 			persistantResource
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -758,6 +782,9 @@ public class ModifyService extends JDialog {
 		if (notificationResource == null) {
 			notificationResource = new JCheckBox();
 			notificationResource.setText("notification");
+			if(service.getService().getResourceFrameworkOptions().getNotification()!=null){
+				notificationResource.setSelected(true);
+			}
 			notificationResource
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -777,6 +804,9 @@ public class ModifyService extends JDialog {
 		if (customResource == null) {
 			customResource = new JCheckBox();
 			customResource.setText("custom");
+			if(service.getService().getResourceFrameworkOptions().getCustom()!=null){
+				customResource.setSelected(true);
+			}
 			customResource
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -793,6 +823,8 @@ public class ModifyService extends JDialog {
 		getPersistantResource().setEnabled(true);
 		getNotificationResource().setEnabled(true);
 		getCustomResource().setEnabled(true);
+		getSecureResource().setEnabled(true);
+		getRemoveCallbackResource().setEnabled(true);
 
 		if (getSingletomResource().isSelected()) {
 			getLifetimeResource().setSelected(false);
@@ -813,7 +845,53 @@ public class ModifyService extends JDialog {
 			getPersistantResource().setEnabled(false);
 			getNotificationResource().setSelected(false);
 			getNotificationResource().setEnabled(false);
+			getSecureResource().setEnabled(false);
+			getSecureResource().setSelected(false);
+			getRemoveCallbackResource().setEnabled(false);
+			getRemoveCallbackResource().setSelected(false);
 		}
 
+	}
+
+	/**
+	 * This method initializes secureResource	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getSecureResource() {
+		if (secureResource == null) {
+			secureResource = new JCheckBox();
+			secureResource.setText("secure");
+			if(service.getService().getResourceFrameworkOptions().getSecure()!=null){
+				secureResource.setSelected(true);
+			}
+			secureResource.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					checkResourcePropertyOptions();
+				}
+			});
+		}
+		return secureResource;
+	}
+
+	/**
+	 * This method initializes removeCallbackResource	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getRemoveCallbackResource() {
+		if (removeCallbackResource == null) {
+			removeCallbackResource = new JCheckBox();
+			removeCallbackResource.setText("remove callback");
+			if(service.getService().getResourceFrameworkOptions().getRemoveCallback()!=null){
+				removeCallbackResource.setSelected(true);
+			}
+			removeCallbackResource.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					checkResourcePropertyOptions();
+				}
+			});
+		}
+		return removeCallbackResource;
 	}
 } // @jve:decl-index=0:visual-constraint="10,10"

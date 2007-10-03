@@ -42,24 +42,32 @@ public class Model_1_1__1_2_Upgrader extends ModelUpgraderBase {
                 .getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Services"));
             Element custom = new Element("Custom", Namespace
                 .getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Services"));
+            Element secure = new Element("Secure", Namespace
+                .getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Services"));
+            Element remove = new Element("RemoveCallback", Namespace
+                .getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Services"));
 
             if (resourceFrameworkType.equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
-                resourceFrameworkOptions.addContent(singleton);
                 resourceFrameworkOptions.addContent(main);
-                
-            } else if (resourceFrameworkType.equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
-
                 resourceFrameworkOptions.addContent(singleton);
+                resourceFrameworkOptions.addContent(secure);
+                resourceFrameworkOptions.addContent(remove);
+            } else if (resourceFrameworkType.equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)) {
+                resourceFrameworkOptions.addContent(custom);
+            } else if (resourceFrameworkType.equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
+                resourceFrameworkOptions.addContent(singleton);
+                resourceFrameworkOptions.addContent(secure);
+                resourceFrameworkOptions.addContent(remove);
             } else if (resourceFrameworkType.equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
                 resourceFrameworkOptions.addContent(identifiable);
-
+                resourceFrameworkOptions.addContent(secure);
+                resourceFrameworkOptions.addContent(remove);
             } else if (resourceFrameworkType.equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
                 resourceFrameworkOptions.addContent(lifetime);
                 resourceFrameworkOptions.addContent(identifiable);
-                
-            } else if (resourceFrameworkType.equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)) {
-                resourceFrameworkOptions.addContent(custom);
-            }
+                resourceFrameworkOptions.addContent(secure);
+                resourceFrameworkOptions.addContent(remove);
+            } 
 
             service.addContent(resourceFrameworkOptions);
             service.removeAttribute("resourceFrameworkType");
