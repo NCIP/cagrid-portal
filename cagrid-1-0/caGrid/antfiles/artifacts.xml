@@ -468,6 +468,14 @@
 				<include name="**/*.xml" />
 			</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="data.extensions.jars">
+			<generatingantcall target="build-dataExtensions"/>
+			<fileset dir="${projects.dir}/dataExtensions/build/lib">
+			    <include name="*.jar"/>
+				<exclude name="*-tests.jar"/>
+				<exclude name="*-style-*.jar"/>
+			</fileset>
+		</artifact>
 		<artifact track="main" type="jars" id="sdk.query.jars">
 			<generatingantcall target="build-sdkQuery" />
 			<fileset dir="${projects.dir}/sdkQuery/build/lib">
