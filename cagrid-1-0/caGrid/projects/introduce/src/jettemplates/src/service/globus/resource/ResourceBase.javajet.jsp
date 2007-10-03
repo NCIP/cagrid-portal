@@ -223,12 +223,26 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 %>
 		// these are the RPs necessary for resource lifetime management
 		ResourceProperty prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.TERMINATION_TIME, this);
-		this.propSet.add(prop); 
+		this.propSet.add(prop);
+
+<%    
+    if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
+        stringBuffer.append("\t\tprop = new ResourcePropertyTopic(prop);\n");
+		stringBuffer.append("\t\tthis.topicList.addTopic((Topic) prop);\n");
+    }
+%>
 		
 		// this property exposes the currenttime, as
 		// believed by the local system
 		prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.CURRENT_TIME, this);
 		this.propSet.add(prop);
+
+<%    
+    if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
+        stringBuffer.append("\t\tprop = new ResourcePropertyTopic(prop);\n");
+		stringBuffer.append("\t\tthis.topicList.addTopic((Topic) prop);\n");
+    }
+%>
 <%} %>
 
 
