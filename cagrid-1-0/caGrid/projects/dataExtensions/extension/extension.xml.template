@@ -12,6 +12,6 @@
 		</ns1:Properties>
 	</ns1:ServiceExtensionDescription>
 	<ns1:UpgradesDescription>
-		<ns1:UpgradeDescription upgradeClass="gov.nih.nci.cagrid.data.upgrades.DataServiceUpgrade1pt0to1pt1" toVersion="1.1"/>
+		<ns1:UpgradeDescription upgradeClass="gov.nih.nci.cagrid.data.upgrades.DataServiceUpgrade1pt0to1pt2" toVersion="1.1"/>
 	</ns1:UpgradesDescription>
 </ns1:ExtensionDescription>
