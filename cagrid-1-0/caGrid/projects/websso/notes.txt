@@ -4,3 +4,6 @@ To Do
 1) Create a deploy target that deploys the war and copies endorsed files to Tomcat.
 2) Add SyncGTS to the AuthenticationManager
 3) Validate Proxy against Trust fabric
+4) Properly handle exceptions in the Authentication Manager
+5) Overload client HTTPS Handler to validate against trust fabric and do identity authorization.
+6) Look into single log out.
