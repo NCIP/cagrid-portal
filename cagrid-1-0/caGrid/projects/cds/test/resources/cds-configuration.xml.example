@@ -12,7 +12,7 @@
 	<!-- ADD POLICY HANDLER BEANS HERE -->
 
 	<bean id="identityPolicyHandler"
-		class="org.cagrid.gaards.cds.service.IdentityPolicyHandler">
+		class="org.cagrid.gaards.cds.service.policy.IdentityPolicyHandler">
 		<constructor-arg index="0" ref="database" />
 	</bean>
 	

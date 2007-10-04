@@ -4,6 +4,7 @@
    <ns2:SchemaElement type="DelegationPolicy" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GroupDelegationPolicy" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="IdentityDelegationPolicy" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DelegationIdentifier" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="X509Certificate" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="PublicKey" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
@@ -87,6 +88,7 @@
     <ns4:Method description="Allows a party to initate the delegation of their credential such that other parties may access their credential to act on their behalf." isImported="false" isProvided="false" name="delegateCredential" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns6:DelegationPolicy" description="" isArray="false" name="policy" xmlns:ns6="http://gaards.cagrid.org/cds"/>
+      <ns4:Input qName="xsd:int" description="" isArray="false" name="keyLength" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
      <ns4:Output qName="void" description="" isArray="false"/>
      <ns4:Exceptions>

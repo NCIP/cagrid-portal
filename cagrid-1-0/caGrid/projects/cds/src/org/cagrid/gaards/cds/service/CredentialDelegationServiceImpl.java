@@ -13,7 +13,7 @@ public class CredentialDelegationServiceImpl extends CredentialDelegationService
 		super();
 	}
 
-  public void delegateCredential(org.cagrid.gaards.cds.common.DelegationPolicy policy) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault {
+  public void delegateCredential(org.cagrid.gaards.cds.common.DelegationPolicy policy,int keyLength) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault {
 		System.out.println("*****************************************");
 		System.out.println("*****************************************");
 		System.out.println("*****************************************");

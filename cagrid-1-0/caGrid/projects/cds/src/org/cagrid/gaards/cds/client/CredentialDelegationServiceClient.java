@@ -98,20 +98,21 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient imp
 			GroupDelegationPolicy policy = new GroupDelegationPolicy();
 			policy.setGridGrouperServiceURI("fasjlk");
 			policy.setGroupId("fsha");
-			client.delegateCredential(policy);
+			client.delegateCredential(policy,1024);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
 
-  public void delegateCredential(org.cagrid.gaards.cds.common.DelegationPolicy policy) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault {
+  public void delegateCredential(org.cagrid.gaards.cds.common.DelegationPolicy policy,int keyLength) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"delegateCredential");
     org.cagrid.gaards.cds.stubs.DelegateCredentialRequest params = new org.cagrid.gaards.cds.stubs.DelegateCredentialRequest();
     org.cagrid.gaards.cds.stubs.DelegateCredentialRequestPolicy policyContainer = new org.cagrid.gaards.cds.stubs.DelegateCredentialRequestPolicy();
     policyContainer.setDelegationPolicy(policy);
     params.setPolicy(policyContainer);
+    params.setKeyLength(keyLength);
     org.cagrid.gaards.cds.stubs.DelegateCredentialResponse boxedResult = portType.delegateCredential(params);
     }
   }

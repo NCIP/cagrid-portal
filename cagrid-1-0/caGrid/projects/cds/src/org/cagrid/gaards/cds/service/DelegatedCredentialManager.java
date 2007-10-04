@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
+import org.cagrid.gaards.cds.service.policy.PolicyHandler;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.tools.database.Database;
@@ -55,7 +56,7 @@ public class DelegatedCredentialManager {
 	}
 
 	public void delegateCredential(String callerGridIdentity,
-			DelegationPolicy policy) throws CDSInternalFault,
+			DelegationPolicy policy, int keyLength) throws CDSInternalFault,
 			InvalidPolicyFault {
 		this.buildDatabase();
 		PolicyHandler handler = null;
@@ -82,7 +83,7 @@ public class DelegatedCredentialManager {
 			throw f;
 		}
 
-		if (!this.proxyPolicy.isKeySizeSupported(policy.getKeyLength())) {
+		if (!this.proxyPolicy.isKeySizeSupported(keyLength)) {
 			InvalidPolicyFault f = new InvalidPolicyFault();
 			f.setFaultString("Invalid key length specified.");
 			throw f;
@@ -98,6 +99,7 @@ public class DelegatedCredentialManager {
 					+ STATUS + "= ?");
 			s.setString(1, callerGridIdentity);
 			s.setString(2, policy.getClass().getName());
+			//TODO: ADD Initial Status here
 			s.setString(3, "");
 			s.execute();
 			s.close();
@@ -133,7 +135,7 @@ public class DelegatedCredentialManager {
 
 		// Create and Store Key Pair.
 		KeyPair keys = this.keyManager.createAndStoreKeyPair(String
-				.valueOf(delegationId), policy.getKeyLength());
+				.valueOf(delegationId), keyLength);
 
 		// Store Policy
 

@@ -15,6 +15,7 @@
       <ns2:Operation description="" name="delegateCredential">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns5:DelegationPolicy" dimensionality="1" index="0" isArray="false" isRequired="false" name="policy" xmlns:ns5="http://gaards.cagrid.org/cds"/>
+        <ns2:InputParameter qName="xsd:int" dimensionality="1" index="1" isArray="false" isRequired="false" name="keyLength" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="" name="CDSInternalFault"/>

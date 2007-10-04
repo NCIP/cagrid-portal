@@ -19,7 +19,7 @@ import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.tools.database.Database;
 
-public abstract class BaseDBKeyManager implements KeyManager {
+public abstract class AbstractDBKeyManager implements KeyManager {
 
 	private final static String PROVIDER = "BC";
 	private final static String TABLE = "key_manager";
@@ -34,7 +34,7 @@ public abstract class BaseDBKeyManager implements KeyManager {
 	private Database db;
 	private Log log;
 
-	public BaseDBKeyManager(Database db) {
+	public AbstractDBKeyManager(Database db) {
 		this.log = LogFactory.getLog(this.getClass().getName());
 		this.db = db;
 		SecurityUtil.init();
@@ -312,12 +312,12 @@ public abstract class BaseDBKeyManager implements KeyManager {
 		if (!dbBuilt) {
 			try {
 				if (!this.db.tableExists(TABLE)) {
-					String trust = "CREATE TABLE " + TABLE + " (" + ALIAS
+					String table = "CREATE TABLE " + TABLE + " (" + ALIAS
 							+ " VARCHAR(255) NOT NULL PRIMARY KEY,"
 							+ PUBLIC_KEY + " TEXT NOT NULL," + PRIVATE_KEY
 							+ " BLOB NOT NULL," + IV + " BLOB," + CERTIFICATE
 							+ " TEXT, INDEX document_index (" + ALIAS + "));";
-					this.db.update(trust);
+					this.db.update(table);
 				}
 				dbBuilt = true;
 			} catch (Exception e) {

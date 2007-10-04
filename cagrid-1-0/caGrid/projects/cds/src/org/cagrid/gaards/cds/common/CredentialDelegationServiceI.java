@@ -16,6 +16,7 @@ public interface CredentialDelegationServiceI {
    * Allows a party to initate the delegation of their credential such that other parties may access their credential to act on their behalf.
    *
    * @param policy
+   * @param keyLength
    * @throws CDSInternalFault
    *	
    * @throws InvalidPolicyFault
@@ -25,7 +26,7 @@ public interface CredentialDelegationServiceI {
    * @throws DelegationFault
    *	
    */
-  public void delegateCredential(org.cagrid.gaards.cds.common.DelegationPolicy policy) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault ;
+  public void delegateCredential(org.cagrid.gaards.cds.common.DelegationPolicy policy,int keyLength) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault ;
 
 }
 

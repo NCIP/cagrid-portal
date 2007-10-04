@@ -9,7 +9,7 @@ import java.security.PrivateKey;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.tools.database.Database;
 
-public class DBKeyManager extends BaseDBKeyManager {
+public class DBKeyManager extends AbstractDBKeyManager {
 
 	private String keyEncryptionPassword;
 

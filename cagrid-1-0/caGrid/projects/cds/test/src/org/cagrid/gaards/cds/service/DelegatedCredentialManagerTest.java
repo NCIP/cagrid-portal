@@ -12,9 +12,11 @@ import junit.framework.TestCase;
 
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
+import org.cagrid.gaards.cds.service.policy.PolicyHandler;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
+import org.cagrid.gaards.cds.testutils.Constants;
 import org.cagrid.gaards.cds.testutils.Utils;
 
 public class DelegatedCredentialManagerTest extends TestCase {
@@ -63,7 +65,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			dcm = Utils.getDelegatedCredentialManager();
 			try {
 				dcm.delegateCredential("some user",
-						new InvalidDelegationPolicy());
+						new InvalidDelegationPolicy(),Constants.KEY_LENGTH);
 				fail("Should not be able to delegate a credential with an invalid delegation policy.");
 			} catch (InvalidPolicyFault e) {
 
@@ -85,10 +87,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			dcm = Utils.getDelegatedCredentialManager();
 
 			IdentityDelegationPolicy policy = new IdentityDelegationPolicy();
-			policy.setKeyLength(1);
-
 			try {
-				dcm.delegateCredential("some user", policy);
+				dcm.delegateCredential("some user", policy,1);
 				fail("Should not be able to delegate a credential with an invalid Key Length.");
 			} catch (InvalidPolicyFault e) {
 
