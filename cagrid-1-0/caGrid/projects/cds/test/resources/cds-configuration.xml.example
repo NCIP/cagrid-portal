@@ -9,6 +9,13 @@
 		<constructor-arg index="4" value="${gaards.cds.name}" />
 	</bean>
 
+	<!-- ADD POLICY HANDLER BEANS HERE -->
+
+	<bean id="identityPolicyHandler"
+		class="org.cagrid.gaards.cds.service.IdentityPolicyHandler">
+		<constructor-arg index="0" ref="database" />
+	</bean>
+
 	<bean id="propertyManager"
 		class="org.cagrid.gaards.cds.service.PropertyManager">
 		<constructor-arg index="0" ref="database" />
@@ -38,10 +45,7 @@
 		<constructor-arg index="2" ref="keyManager" />
 		<constructor-arg index="3">
 			<list>
-				<bean
-					class="org.cagrid.gaards.cds.service.IdentityPolicyHandler">
-					<constructor-arg index="0" ref="database" />
-				</bean>
+				<ref bean="identityPolicyHandler"/>
 			</list>
 		</constructor-arg>
 		<constructor-arg index="4" ref="proxyPolicy" />
