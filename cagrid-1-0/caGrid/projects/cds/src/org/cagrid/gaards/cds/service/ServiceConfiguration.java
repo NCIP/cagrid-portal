@@ -19,6 +19,7 @@ import org.globus.wsrf.Constants;
  */
 public class ServiceConfiguration {
 
+
 	public static ServiceConfiguration  configuration = null;
 
 	public static ServiceConfiguration getConfiguration() throws Exception {

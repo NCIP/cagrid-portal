@@ -2,7 +2,6 @@ package org.cagrid.gaards.cds.testutils;
 
 import org.cagrid.tools.database.Database;
 
-
 public class Nuker {
 
 	/**
@@ -10,10 +9,12 @@ public class Nuker {
 	 */
 	public static void main(String[] args) {
 		try {
-			Database db = Utils.getDB();
-			System.out.println("Destroying database........ " + db.getDatabaseName());
+			Database db = Utils.getDatabase();
+			System.out.println("Destroying database........ "
+					+ db.getDatabaseName());
 			db.destroyDatabase();
-			System.out.println("The database " + db.getDatabaseName() + " was successfully destroyed!!!");
+			System.out.println("The database " + db.getDatabaseName()
+					+ " was successfully destroyed!!!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

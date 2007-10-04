@@ -1,36 +1,53 @@
 package org.cagrid.gaards.cds.testutils;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import junit.framework.TestCase;
-
-import org.cagrid.gaards.cds.conf.CDSConfiguration;
+import org.cagrid.gaards.cds.service.ConfigurationConstants;
+import org.cagrid.gaards.cds.service.DelegatedCredentialManager;
+import org.cagrid.gaards.cds.service.KeyManager;
+import org.cagrid.gaards.cds.service.PropertyManager;
 import org.cagrid.tools.database.Database;
-import org.cagrid.tools.database.DatabaseConfiguration;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
 
 public class Utils {
 
-	private static final String DB = "test_cds";
+	private static XmlBeanFactory factory;
 
-	private static Database db = null;
-
-	public static CDSConfiguration getConfiguration() throws Exception {
-		InputStream resource = TestCase.class
-				.getResourceAsStream(Constants.CDS_CONF);
-		CDSConfiguration conf = (CDSConfiguration) gov.nih.nci.cagrid.common.Utils
-				.deserializeObject(new InputStreamReader(resource),
-						CDSConfiguration.class);
-		return conf;
-	}
-
-	public static Database getDB() throws Exception {
-		if (db == null) {
-			DatabaseConfiguration conf = getConfiguration()
-					.getDatabaseConfiguration();
-			db = new Database(conf, DB);
-			db.createDatabaseIfNeeded();
+	public static XmlBeanFactory loadConfiguration() throws Exception {
+		if (factory == null) {
+			ClassPathResource cpr = new ClassPathResource(
+					Constants.CDS_CONFIGURATION);
+			factory = new XmlBeanFactory(cpr);
+			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
+			cfg.setLocation(new ClassPathResource(Constants.CDS_PROPERTIES));
+			cfg.postProcessBeanFactory(factory);
 		}
-		return db;
+		return factory;
 	}
+
+	public static DelegatedCredentialManager getDelegatedCredentialManager()
+			throws Exception {
+		XmlBeanFactory factory = loadConfiguration();
+		return (DelegatedCredentialManager) factory
+				.getBean(ConfigurationConstants.DELEGATED_CREDENTIAL_MANAGER_CONFIGURATION_BEAN);
+	}
+
+	public static KeyManager getKeyManager() throws Exception {
+		XmlBeanFactory factory = loadConfiguration();
+		return (KeyManager) factory
+				.getBean(ConfigurationConstants.KEY_MANAGER_CONFIGURATION_BEAN);
+	}
+
+	public static Database getDatabase() throws Exception {
+		XmlBeanFactory factory = loadConfiguration();
+		return (Database) factory
+				.getBean(ConfigurationConstants.DATABASE_CONFIGURATION_BEAN);
+	}
+
+	public static PropertyManager getPropertyManager() throws Exception {
+		XmlBeanFactory factory = loadConfiguration();
+		return (PropertyManager) factory
+				.getBean(ConfigurationConstants.PROPERTY_MANAGER_CONFIGURATION_BEAN);
+	}
+
 }
