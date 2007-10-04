@@ -4,6 +4,7 @@ import org.cagrid.gaards.cds.service.ConfigurationConstants;
 import org.cagrid.gaards.cds.service.DelegatedCredentialManager;
 import org.cagrid.gaards.cds.service.KeyManager;
 import org.cagrid.gaards.cds.service.PropertyManager;
+import org.cagrid.gaards.cds.service.policy.IdentityPolicyHandler;
 import org.cagrid.tools.database.Database;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
@@ -33,6 +34,13 @@ public class Utils {
 		XmlBeanFactory factory = loadConfiguration();
 		return (KeyManager) factory
 				.getBean(ConfigurationConstants.KEY_MANAGER_CONFIGURATION_BEAN);
+	}
+
+	public static IdentityPolicyHandler getIdentityPolicyHandler()
+			throws Exception {
+		XmlBeanFactory factory = loadConfiguration();
+		return (IdentityPolicyHandler) factory
+				.getBean(ConfigurationConstants.IDENTITY_POLICY_HANDLER);
 	}
 
 	public static Database getDatabase() throws Exception {

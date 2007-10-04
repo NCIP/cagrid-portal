@@ -1,9 +1,12 @@
 package org.cagrid.gaards.cds.service.policy;
 
+import gov.nih.nci.cagrid.common.FaultHelper;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
-import gov.nih.nci.cagrid.common.FaultHelper;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,7 +34,7 @@ public class IdentityPolicyHandler implements PolicyHandler {
 		this.db = db;
 	}
 
-	public void deletePolicy(DelegationIdentifier id) throws CDSInternalFault {
+	public void removePolicy(DelegationIdentifier id) throws CDSInternalFault {
 		buildDatabase();
 		Connection c = null;
 		try {
@@ -56,13 +59,78 @@ public class IdentityPolicyHandler implements PolicyHandler {
 
 	public DelegationPolicy getPolicy(DelegationIdentifier id)
 			throws CDSInternalFault, InvalidPolicyFault {
-		return null;
+		if (policyExists(id)) {
+			List<String> parties = new ArrayList<String>();
+			Connection c = null;
+			try {
+				c = this.db.getConnection();
+				PreparedStatement s = c.prepareStatement("select "
+						+ GRID_IDENTITY + " from " + TABLE + " WHERE "
+						+ DELEGATION_ID + "= ? ");
+				s.setLong(1, id.getDelegationId());
+				ResultSet rs = s.executeQuery();
+				while (rs.next()) {
+					parties.add(rs.getString(1));
+				}
+				rs.close();
+				s.close();
+				IdentityDelegationPolicy policy = new IdentityDelegationPolicy();
+				AllowedParties ap = new AllowedParties();
+				String[] identities = new String[parties.size()];
+				ap.setGridIdentity(parties.toArray(identities));
+				policy.setAllowedParties(ap);
+				return policy;
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				CDSInternalFault f = new CDSInternalFault();
+				f.setFaultString("Unexpected Database Error.");
+				FaultHelper helper = new FaultHelper(f);
+				helper.addFaultCause(e);
+				f = (CDSInternalFault) helper.getFault();
+				throw f;
+			} finally {
+				this.db.releaseConnection(c);
+			}
+		} else {
+			InvalidPolicyFault f = new InvalidPolicyFault();
+			f.setFaultString("The request policy does not exist.");
+			throw f;
+
+		}
 	}
 
 	public boolean isAuthorized(DelegationIdentifier id, String gridIdentity)
 			throws CDSInternalFault {
-		// TODO Auto-generated method stub
-		return false;
+		boolean isAuthorized = false;
+		Connection c = null;
+		try {
+			c = this.db.getConnection();
+			PreparedStatement s = c.prepareStatement("select count(*) "
+					+ " from " + TABLE + " WHERE " + DELEGATION_ID + "= ? AND"
+					+ GRID_IDENTITY + "= ?");
+			s.setLong(1, id.getDelegationId());
+			s.setString(2, gridIdentity);
+			ResultSet rs = s.executeQuery();
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				if (count > 0) {
+					isAuthorized = true;
+				}
+			}
+			rs.close();
+			s.close();
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			CDSInternalFault f = new CDSInternalFault();
+			f.setFaultString("Unexpected Database Error.");
+			FaultHelper helper = new FaultHelper(f);
+			helper.addFaultCause(e);
+			f = (CDSInternalFault) helper.getFault();
+			throw f;
+		} finally {
+			this.db.releaseConnection(c);
+		}
+		return isAuthorized;
 	}
 
 	public void storePolicy(DelegationIdentifier id, DelegationPolicy pol)
@@ -94,7 +162,7 @@ public class IdentityPolicyHandler implements PolicyHandler {
 
 			if (ap != null) {
 				String[] parties = ap.getGridIdentity();
-				if (parties == null) {
+				if (parties != null) {
 					for (int i = 0; i < parties.length; i++) {
 						PreparedStatement s = c.prepareStatement("INSERT INTO "
 								+ TABLE + " SET " + DELEGATION_ID + "= ?, "
@@ -110,7 +178,7 @@ public class IdentityPolicyHandler implements PolicyHandler {
 
 		} catch (Exception e) {
 			try {
-				this.deletePolicy(id);
+				this.removePolicy(id);
 			} catch (Exception ex) {
 
 			}
@@ -157,7 +225,7 @@ public class IdentityPolicyHandler implements PolicyHandler {
 		}
 	}
 
-	private boolean policyExists(DelegationIdentifier id)
+	public boolean policyExists(DelegationIdentifier id)
 			throws CDSInternalFault {
 		buildDatabase();
 		try {

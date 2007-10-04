@@ -13,7 +13,7 @@ public interface PolicyHandler {
 	public void storePolicy(DelegationIdentifier id, DelegationPolicy policy)
 			throws CDSInternalFault, InvalidPolicyFault;
 
-	public void deletePolicy(DelegationIdentifier id) throws CDSInternalFault;
+	public void removePolicy(DelegationIdentifier id) throws CDSInternalFault;
 
 	public DelegationPolicy getPolicy(DelegationIdentifier id)
 			throws CDSInternalFault, InvalidPolicyFault;

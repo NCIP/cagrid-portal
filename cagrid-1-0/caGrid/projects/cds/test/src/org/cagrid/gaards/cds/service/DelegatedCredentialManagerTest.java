@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import junit.framework.TestCase;
 
-import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
 import org.cagrid.gaards.cds.service.policy.PolicyHandler;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
@@ -153,7 +152,4 @@ public class DelegatedCredentialManagerTest extends TestCase {
 
 	}
 
-	public class InvalidDelegationPolicy extends DelegationPolicy {
-
-	}
 }
