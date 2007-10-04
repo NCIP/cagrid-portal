@@ -7,3 +7,4 @@ To Do
 4) Properly handle exceptions in the Authentication Manager
 5) Overload client HTTPS Handler to validate against trust fabric and do identity authorization.
 6) Look into single log out.
+7) Add Attributes (First Name, Last Name, Email) to be returned.  Test on Client side.
