@@ -97,6 +97,8 @@ public class PropertyManager {
 
 	public void clearAllProperties() throws CDSInternalFault {
 		try {
+			this.version.setValue(null);
+			this.keyManager.setValue(null);
 			this.manager.clearDatabase();
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

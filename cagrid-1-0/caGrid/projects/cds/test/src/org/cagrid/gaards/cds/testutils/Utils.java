@@ -11,17 +11,14 @@ import org.springframework.core.io.ClassPathResource;
 
 public class Utils {
 
-	private static XmlBeanFactory factory;
-
 	public static XmlBeanFactory loadConfiguration() throws Exception {
-		if (factory == null) {
-			ClassPathResource cpr = new ClassPathResource(
-					Constants.CDS_CONFIGURATION);
-			factory = new XmlBeanFactory(cpr);
-			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
-			cfg.setLocation(new ClassPathResource(Constants.CDS_PROPERTIES));
-			cfg.postProcessBeanFactory(factory);
-		}
+
+		ClassPathResource cpr = new ClassPathResource(
+				Constants.CDS_CONFIGURATION);
+		XmlBeanFactory factory = new XmlBeanFactory(cpr);
+		PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
+		cfg.setLocation(new ClassPathResource(Constants.CDS_PROPERTIES));
+		cfg.postProcessBeanFactory(factory);
 		return factory;
 	}
 

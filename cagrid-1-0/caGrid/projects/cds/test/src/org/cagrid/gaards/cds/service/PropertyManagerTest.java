@@ -14,6 +14,7 @@ public class PropertyManagerTest extends TestCase {
 			pm.clearAllProperties();
 			pm = Utils.getPropertyManager();
 			assertEquals(PropertyManager.CURRENT_VERSION, pm.getVersion());
+			assertNull(pm.getKeyManager());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());

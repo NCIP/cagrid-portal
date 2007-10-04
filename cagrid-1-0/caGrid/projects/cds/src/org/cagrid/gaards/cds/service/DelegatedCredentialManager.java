@@ -29,6 +29,7 @@ public class DelegatedCredentialManager {
 	private Log log;
 	private KeyManager keyManager;
 	private ProxyPolicy proxyPolicy;
+	private PropertyManager properties;
 
 	public DelegatedCredentialManager(Database db, PropertyManager properties,
 			KeyManager keyManager, List<PolicyHandler> policyHandlers,
@@ -37,6 +38,7 @@ public class DelegatedCredentialManager {
 		this.log = LogFactory.getLog(this.getClass().getName());
 		this.handlers = policyHandlers;
 		this.proxyPolicy = proxyPolicy;
+		this.properties = properties;
 		String currentKeyManager = properties.getKeyManager();
 		if ((currentKeyManager != null)
 				&& (!currentKeyManager.equals(keyManager.getClass().getName()))) {
@@ -47,7 +49,7 @@ public class DelegatedCredentialManager {
 			throw f;
 		}
 		this.keyManager = keyManager;
-		if(currentKeyManager==null){
+		if (currentKeyManager == null) {
 			properties.setKeyManager(this.keyManager.getClass().getName());
 		}
 	}
@@ -170,7 +172,14 @@ public class DelegatedCredentialManager {
 			log.error(e.getMessage(), e);
 		}
 
-		this.keyManager.deleteAll();
+	
+
+		try {
+			this.keyManager.deleteAll();
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+
 		try {
 			db.update("DELETE FROM " + TABLE);
 
