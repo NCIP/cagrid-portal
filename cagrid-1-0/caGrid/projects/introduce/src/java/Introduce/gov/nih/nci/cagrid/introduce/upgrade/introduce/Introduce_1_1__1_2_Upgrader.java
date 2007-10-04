@@ -1,15 +1,12 @@
 package gov.nih.nci.cagrid.introduce.upgrade.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncHelper;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceBaseTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceHomeTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.SingletonResourceHomeTemplate;
@@ -21,14 +18,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Namespace;
-import org.projectmobius.common.XMLUtilities;
 
 
 public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
@@ -55,12 +44,11 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
                     + File.separator + "resource" + File.separator + "BaseResource.java");
                 oldbaseResourceF.delete();
 
-                ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+                ServiceConstantsTemplate resourceContanstsT = new ServiceConstantsTemplate();
                 String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
                     getServiceInformation(), service));
                 File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "ResourceConstants.java");
+                    + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + File.separator + service.getName() + "Constants.java");
 
                 FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
                 resourceContanstsFW.write(resourceContanstsS);

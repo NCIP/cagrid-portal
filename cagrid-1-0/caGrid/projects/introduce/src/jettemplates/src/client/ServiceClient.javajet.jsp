@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.client" class="ServiceClientTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.common.*"%>
+<%@ page package="gov.nih.nci.cagrid.introduce.templates.client" class="ServiceClientTemplate" import="gov.nih.nci.cagrid.introduce.*,gov.nih.nci.cagrid.introduce.common.*"%>
 <% gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation) argument; 
    String mainServiceName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.service.name");
    String serviceName = info.getService().getName();

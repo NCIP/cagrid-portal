@@ -1,12 +1,13 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.client.ClientConfigTemplate;
+import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
+import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceITemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplTemplate;
@@ -15,7 +16,6 @@ import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfiguratio
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceProviderImplTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceBaseTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceHomeTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.SingletonResourceHomeTemplate;
@@ -63,6 +63,15 @@ public class SkeletonSourceCreator {
         FileWriter clientFW = new FileWriter(clientF);
         clientFW.write(clientS);
         clientFW.close();
+        
+        ServiceClientBaseTemplate clientBaseT = new ServiceClientBaseTemplate();
+        String clientBaseS = clientBaseT.generate(new SpecificServiceInformation(info, service));
+        File clientBaseF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
+            + File.separator + "client" + File.separator + service.getName() + "ClientBase.java");
+
+        FileWriter clientBaseFW = new FileWriter(clientBaseF);
+        clientBaseFW.write(clientBaseS);
+        clientBaseFW.close();
 
         ClientConfigTemplate clientConfigT = new ClientConfigTemplate();
         String clientConfigS = clientConfigT.generate(new SpecificServiceInformation(info, service));
@@ -142,11 +151,10 @@ public class SkeletonSourceCreator {
             metadataConfigurationFW.write(metadataConfigurationS);
             metadataConfigurationFW.close();
 
-            ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+            ServiceConstantsTemplate resourceContanstsT = new ServiceConstantsTemplate();
             String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(info, service));
             File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-                + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                + File.separator + "resource" + File.separator + "ResourceConstants.java");
+                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName() + "Constants.java");
 
             FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
             resourceContanstsFW.write(resourceContanstsS);

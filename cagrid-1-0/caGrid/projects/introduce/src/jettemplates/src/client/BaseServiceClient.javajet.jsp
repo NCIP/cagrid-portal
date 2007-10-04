@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.client" class="ServiceClientTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.common.*"%>
+<%@ page package="gov.nih.nci.cagrid.introduce.templates.client" class="ServiceClientTemplate" import="gov.nih.nci.cagrid.introduce.*,gov.nih.nci.cagrid.introduce.common.*"%>
 <% gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation) argument; 
    String mainServiceName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.service.name");
    String serviceName = info.getService().getName();
@@ -47,48 +47,48 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * 
  * @created by Introduce Toolkit version <%=CommonTools.getIntroduceVersion()%>
  */
-public class <%=info.getService().getName()%>Client extends <%=info.getService().getName()%>ClientBase implements <%=serviceName%>I {	
+public class <%=info.getService().getName()%>ClientBase extends ServiceSecurityClient {	
+	protected <%=info.getService().getName()%>PortType portType;
+	protected Object portTypeMutex;
 
-	public <%=info.getService().getName()%>Client(String url) throws MalformedURIException, RemoteException {
-		this(url,null);	
-	}
-
-	public <%=info.getService().getName()%>Client(String url, GlobusCredential proxy) throws MalformedURIException, RemoteException {
+	public <%=info.getService().getName()%>ClientBase(String url, GlobusCredential proxy) throws MalformedURIException, RemoteException {
 	   	super(url,proxy);
+	   	initialize();
 	}
 	
-	public <%=info.getService().getName()%>Client(EndpointReferenceType epr) throws MalformedURIException, RemoteException {
-	   	this(epr,null);
-	}
-	
-	public <%=info.getService().getName()%>Client(EndpointReferenceType epr, GlobusCredential proxy) throws MalformedURIException, RemoteException {
+	public <%=info.getService().getName()%>ClientBase(EndpointReferenceType epr, GlobusCredential proxy) throws MalformedURIException, RemoteException {
 	   	super(epr,proxy);
+		initialize();
+	}
+	
+	private void initialize() throws RemoteException {
+	    this.portTypeMutex = new Object();
+		this.portType = createPortType();
 	}
 
-	public static void usage(){
-		System.out.println(<%=info.getService().getName()%>Client.class.getName() + " -url <service url>");
+	private <%=info.getService().getName()%>PortType createPortType() throws RemoteException {
+
+		<%=modifiedServiceName%>ServiceAddressingLocator locator = new <%=modifiedServiceName%>ServiceAddressingLocator();
+		// attempt to load our context sensitive wsdd file
+		InputStream resourceAsStream = getClass().getResourceAsStream("client-config.wsdd");
+		if (resourceAsStream != null) {
+			// we found it, so tell axis to configure an engine to use it
+			EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
+			// set the engine of the locator
+			locator.setEngine(new AxisClient(engineConfig));
+		}
+		<%=info.getService().getName()%>PortType port = null;
+		try {
+			port = locator.get<%=info.getService().getName()%>PortTypePort(getEndpointReference());
+		} catch (Exception e) {
+			throw new RemoteException("Unable to locate portType:" + e.getMessage(), e);
+		}
+
+		return port;
 	}
 	
-	public static void main(String [] args){
-	    System.out.println("Running the Grid Service Client");
-		try{
-		if(!(args.length < 2)){
-			if(args[0].equals("-url")){
-			  <%=info.getService().getName()%>Client client = new <%=info.getService().getName()%>Client(args[1]);
-			  // place client calls here if you want to use this main as a
-			  // test....
-			} else {
-				usage();
-				System.exit(1);
-			}
-		} else {
-			usage();
-			System.exit(1);
-		}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+	public GetResourcePropertyResponse getResourceProperty(QName resourcePropertyQName) throws RemoteException {
+		return portType.getResourceProperty(resourcePropertyQName);
 	}
 
 

@@ -15,6 +15,8 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.advertisement.AdvertisementClient;
 import gov.nih.nci.cagrid.advertisement.exceptions.UnregistrationException;
 
+import <%=arguments.getService().getPackageName()%>.common.<%=arguments.getService().getName()%>Constants;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -209,7 +211,7 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 		this.desc = null;
 <%} %>
 
-		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERTY_SET);
+		this.propSet = new SimpleResourcePropertySet(<%=arguments.getService().getName()%>Constants.RESOURCE_PROPERTY_SET);
 		
 <%    
     if(arguments.getService().getResourceFrameworkOptions().getMain()!=null){
@@ -256,7 +258,7 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(arguments.getNamespaces(),metadata.getQName());
 			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);
 		  if(!name.equals("terminationTime") && !name.equals("currentTime")){	
-			stringBuffer.append("\t\tthis."+name+"RP = new SimpleResourceProperty(ResourceConstants."+name.toUpperCase()+"_Value_RP);\n");
+			stringBuffer.append("\t\tthis."+name+"RP = new SimpleResourceProperty(" + arguments.getService().getName() +"Constants."+name.toUpperCase()+"_Value_RP);\n");
 			stringBuffer.append("\t\tthis."+name+"RP.add(this."+name+"Value);\n");
 			stringBuffer.append("\t\tthis.propSet.add(this."+name+"RP);\n");
 			if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){

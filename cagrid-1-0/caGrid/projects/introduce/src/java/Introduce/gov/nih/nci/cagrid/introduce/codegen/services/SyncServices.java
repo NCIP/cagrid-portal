@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.codegen.services.security.SyncSecurity;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplBaseTemplate;
 
 import java.io.BufferedReader;
@@ -44,6 +45,16 @@ public class SyncServices extends SyncTool {
                 try {
                     SpecificServiceInformation ssi = new SpecificServiceInformation(getServiceInformation(), service);
 
+                    // regenerate the services client layer "ClientBase"
+                    ServiceClientBaseTemplate clientBaseT = new ServiceClientBaseTemplate();
+                    String clientBaseS = clientBaseT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+                    File clientBaseF = new File(getBaseDirectory() + File.separator + "src" + File.separator + CommonTools.getPackageDir(service)
+                        + File.separator + "client" + File.separator + service.getName() + "ClientBase.java");
+
+                    FileWriter clientBaseFW = new FileWriter(clientBaseF);
+                    clientBaseFW.write(clientBaseS);
+                    clientBaseFW.close();
+                    
                     // regenerate the services globus layer "ImplBase"
                     ServiceImplBaseTemplate implBaseT = new ServiceImplBaseTemplate();
                     String implBaseS = implBaseT.generate(new SpecificServiceInformation(getServiceInformation(), ssi

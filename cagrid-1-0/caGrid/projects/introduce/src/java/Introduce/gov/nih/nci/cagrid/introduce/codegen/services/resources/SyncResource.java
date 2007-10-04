@@ -1,16 +1,15 @@
 package gov.nih.nci.cagrid.introduce.codegen.services.resources;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceBaseTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -71,12 +70,11 @@ public class SyncResource extends SyncTool {
                 metadataConfigurationFW.write(metadataConfigurationS);
                 metadataConfigurationFW.close();
 
-                ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+                ServiceConstantsTemplate resourceContanstsT = new ServiceConstantsTemplate();
                 String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
                     getServiceInformation(), service));
                 File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "ResourceConstants.java");
+                    + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName() +"Constants.java");
 
                 FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
                 resourceContanstsFW.write(resourceContanstsS);

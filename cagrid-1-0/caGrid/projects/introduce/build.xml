@@ -151,14 +151,15 @@
         <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/schema/Service/service.wsdl.xmljet" />
         <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/schema/Service/service.xsd.xmljet" />
         <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client/ServiceClient.javajet" />
-        <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client/client-config.wsdd.xmljet" />
+    	<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client/BaseServiceClient.javajet" />
+    	<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client/client-config.wsdd.xmljet" />
         <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/common/ServiceI.javajet" />
+    	<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/common/ServiceConstants.javajet" />
         <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceImplBase.javajet" />
         <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceImpl.javajet" />
         <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceConfiguration.javajet" />
         <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/ServiceProviderImpl.javajet" />
         <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/ServiceAuthorization.javajet" />
-        <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/ResourceConstants.javajet" />
         <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/ResourceCreator.javajet" />
     	<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/ResourceHome.javajet" />
     	<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/SingletonResourceHome.javajet" />

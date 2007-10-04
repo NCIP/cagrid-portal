@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource" class="ResourceConstantsTemplate" imports="gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.common.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.common" class="ServiceConstantsTemplate" imports="gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.common.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*" %>
 <%  gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation) argument; 
   	Properties properties = arguments.getIntroduceServiceProperties();
 	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
@@ -9,12 +9,12 @@
    		modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
 	}
 %>
-package <%=arguments.getService().getPackageName()%>.service.globus.resource;
+package <%=arguments.getService().getPackageName()%>.common;
 
 import javax.xml.namespace.QName;
 
 
-public interface ResourceConstants {
+public interface <%=arguments.getService().getName()%>Constants {
 	public static final String SERVICE_NS = "<%=namespaceDomain%>";
 	public static final QName RESOURCE_KEY = new QName(SERVICE_NS, "<%=serviceName%>Key");
 	public static final QName RESOURCE_PROPERTY_SET = new QName(SERVICE_NS, "<%=serviceName%>ResourceProperties");
