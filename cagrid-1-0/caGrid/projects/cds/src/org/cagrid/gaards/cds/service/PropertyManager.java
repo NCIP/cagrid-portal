@@ -27,6 +27,7 @@ public class PropertyManager {
 
 	public PropertyManager(Database db) throws CDSInternalFault {
 		try {
+			db.createDatabaseIfNeeded();
 			this.manager = new MetadataManager(db, TABLE);
 			this.log = LogFactory.getLog(this.getClass().getName());
 			version = manager.get(VERSION_PROPERTY);

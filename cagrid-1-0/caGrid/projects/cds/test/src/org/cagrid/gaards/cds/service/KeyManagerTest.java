@@ -3,23 +3,17 @@ package org.cagrid.gaards.cds.service;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
-import java.lang.reflect.Constructor;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 
 import junit.framework.TestCase;
 
-import org.cagrid.gaards.cds.conf.CDSConfiguration;
-import org.cagrid.gaards.cds.conf.KeyManagerDescription;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.testutils.CA;
 import org.cagrid.gaards.cds.testutils.Utils;
-import org.cagrid.tools.database.Database;
 
 public class KeyManagerTest extends TestCase {
-
-	private Database db;
 	private CA ca;
 
 	public void testKeyManagerCreateDestroy() {
@@ -172,25 +166,13 @@ public class KeyManagerTest extends TestCase {
 	}
 
 	private KeyManager getKeyManager() throws Exception {
-		CDSConfiguration conf = Utils.getConfiguration();
-		KeyManagerDescription des = conf.getKeyManagerDescription();
-		if (des == null) {
-			fail("Not KeyManager description found.");
-		}
-		Class kmc = Class.forName(des.getClassName());
-		Constructor c = kmc.getConstructor(new Class[] {
-				KeyManagerDescription.class, Database.class });
-		KeyManager km = (KeyManager) c.newInstance(new Object[] { des,
-				Utils.getDB() });
-		return km;
+		return Utils.getKeyManager();
 	}
 
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			db = Utils.getDB();
 			ca = new CA();
-			assertEquals(0, db.getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -199,11 +181,5 @@ public class KeyManagerTest extends TestCase {
 
 	protected void tearDown() throws Exception {
 		super.setUp();
-		try {
-			assertEquals(0, db.getUsedConnectionCount());
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			assertTrue(false);
-		}
 	}
 }

@@ -11,7 +11,6 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -28,29 +27,53 @@ public class Database {
 
 	private boolean dbBuilt = false;
 
-	private DatabaseConfiguration conf;
+	// private DatabaseConfiguration conf;
 
 	private Log log;
 
+	private String dbHost;
+	private int dbPort;
+	private String dbUser;
+	private String dbPassword;
+	private String driver;
 
-	public Database(DatabaseConfiguration conf, String database) throws DatabaseException {
+	public Database(DatabaseConfiguration conf, String database)
+			throws DatabaseException {
+		this(conf.getHost(), conf.getPort(), conf.getUsername(), conf
+				.getPassword(), database);
+	}
+
+	public Database(String host, int port, String user, String password,
+			String database) throws DatabaseException {
 		log = LogFactory.getLog(this.getClass().getName());
 		this.database = database;
-		this.conf = conf;
-		String driver = "com.mysql.jdbc.Driver";
-		String dbURL = "jdbc:mysql://" + conf.getHost() + ":" + conf.getPort() + "/";
+		this.dbHost = host;
+		this.dbPort = port;
+		this.dbUser = user;
+		this.dbPassword = password;
+		this.driver = "com.mysql.jdbc.Driver";
+		String dbURL = "jdbc:mysql://" + host + ":" + port + "/";
 		root = new BasicDataSource();
 		root.setDriverClassName(driver);
-		root.setUsername(conf.getUsername());
-		root.setPassword(conf.getPassword());
+		root.setUsername(user);
+		root.setPassword(password);
 		root.setUrl(dbURL);
 		root.setValidationQuery("select 1");
 		root.setTestOnBorrow(true);
+		String coreDBURL = "jdbc:mysql://" + this.dbHost + ":" + this.dbPort
+				+ "/" + database;
+		coreDB = new BasicDataSource();
+		coreDB.setDriverClassName(driver);
+		coreDB.setUsername(dbUser);
+		coreDB.setPassword(dbPassword);
+		coreDB.setUrl(coreDBURL);
+		coreDB.setValidationQuery("select 1");
+		coreDB.setTestOnBorrow(true);
 
 	}
 
-
-	private void update(BasicDataSource source, String sql) throws DatabaseException {
+	private void update(BasicDataSource source, String sql)
+			throws DatabaseException {
 		Connection c = null;
 		Statement s = null;
 		try {
@@ -75,27 +98,14 @@ public class Database {
 		}
 	}
 
-
 	public void createDatabaseIfNeeded() throws DatabaseException {
 
 		try {
 			if (!dbBuilt) {
 				if (!databaseExists(database)) {
-
 					// Query.update(this.root, "create database " + database+ "
 					// COLLATE ascii_bin");
 					update(this.root, "create database " + database);
-				}
-				if (coreDB == null) {
-					String driver = "com.mysql.jdbc.Driver";
-					String dbURL = "jdbc:mysql://" + conf.getHost() + ":" + conf.getPort() + "/" + database;
-					coreDB = new BasicDataSource();
-					coreDB.setDriverClassName(driver);
-					coreDB.setUsername(conf.getUsername());
-					coreDB.setPassword(conf.getPassword());
-					coreDB.setUrl(dbURL);
-					coreDB.setValidationQuery("select 1");
-					coreDB.setTestOnBorrow(true);
 				}
 				dbBuilt = true;
 			}
@@ -105,7 +115,6 @@ public class Database {
 		}
 
 	}
-
 
 	public void destroyDatabase() throws DatabaseException {
 		try {
@@ -126,14 +135,14 @@ public class Database {
 		}
 	}
 
-
 	public boolean tableExists(String tableName) throws DatabaseException {
 		Connection c = null;
 		PreparedStatement stmt = null;
 		ResultSet results = null;
 		try {
 			c = this.coreDB.getConnection();
-			stmt = c.prepareStatement("SELECT COUNT(*) FROM " + tableName + " WHERE 1 = 2");
+			stmt = c.prepareStatement("SELECT COUNT(*) FROM " + tableName
+					+ " WHERE 1 = 2");
 			results = stmt.executeQuery();
 			return true; // if table does exist, no rows will ever be
 			// returned
@@ -163,11 +172,9 @@ public class Database {
 		}
 	}
 
-
 	public void update(String sql) throws DatabaseException {
 		update(coreDB, sql);
 	}
-
 
 	public long getLastAutoId(Connection connection) throws DatabaseException {
 		long id = -1;
@@ -201,8 +208,8 @@ public class Database {
 		return id;
 	}
 
-
-	private long insertGetId(BasicDataSource source, String sql) throws DatabaseException {
+	private long insertGetId(BasicDataSource source, String sql)
+			throws DatabaseException {
 		long id = -2;
 		Connection c = null;
 		Statement s = null;
@@ -231,14 +238,15 @@ public class Database {
 		return id;
 	}
 
-
-	public boolean exists(String table, String field, String value) throws DatabaseException {
+	public boolean exists(String table, String field, String value)
+			throws DatabaseException {
 		boolean exists = false;
 		Connection c = null;
 		try {
 			c = getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select count(*) from " + table + " where " + field + "='" + value + "'");
+			ResultSet rs = s.executeQuery("select count(*) from " + table
+					+ " where " + field + "='" + value + "'");
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {
@@ -249,7 +257,8 @@ public class Database {
 			s.close();
 
 		} catch (Exception e) {
-			throw new DatabaseException("An unexpected database error occurred.", e);
+			throw new DatabaseException(
+					"An unexpected database error occurred.", e);
 		} finally {
 			releaseConnection(c);
 		}
@@ -257,14 +266,15 @@ public class Database {
 		return exists;
 	}
 
-
-	public boolean exists(String table, String field, long value) throws DatabaseException {
+	public boolean exists(String table, String field, long value)
+			throws DatabaseException {
 		boolean exists = false;
 		Connection c = null;
 		try {
 			c = getConnection();
 			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select count(*) from " + table + " where " + field + "=" + value);
+			ResultSet rs = s.executeQuery("select count(*) from " + table
+					+ " where " + field + "=" + value);
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {
@@ -275,19 +285,18 @@ public class Database {
 			s.close();
 
 		} catch (Exception e) {
-			throw new DatabaseException("An unexpected database error occurred.", e);
+			throw new DatabaseException(
+					"An unexpected database error occurred.", e);
 		} finally {
 			releaseConnection(c);
 		}
 
 		return exists;
 	}
-
 
 	public long insertGetId(String sql) throws DatabaseException {
 		return insertGetId(coreDB, sql);
 	}
-
 
 	public void releaseConnection(Connection c) {
 		try {
@@ -295,7 +304,6 @@ public class Database {
 		} catch (Exception e) {
 		}
 	}
-
 
 	public Connection getConnection() throws DatabaseException {
 		Connection c = null;
@@ -312,7 +320,6 @@ public class Database {
 			throw new DatabaseException(err, e);
 		}
 	}
-
 
 	private boolean databaseExists(String db) throws DatabaseException {
 		boolean exists = false;
@@ -348,16 +355,13 @@ public class Database {
 		return exists;
 	}
 
-
 	public int getUsedConnectionCount() {
 		return this.coreDB.getNumActive();
 	}
 
-
 	public int getRootUsedConnectionCount() {
 		return this.root.getNumActive();
 	}
-
 
 	public String getDatabaseName() {
 		return database;

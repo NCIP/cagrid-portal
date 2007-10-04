@@ -13,12 +13,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import org.cagrid.gaards.cds.conf.KeyManagerDescription;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.tools.database.Database;
 
-public abstract class BaseDBKeyManager extends KeyManager {
+public abstract class BaseDBKeyManager implements KeyManager {
 
 	private final static String PROVIDER = "BC";
 	private final static String TABLE = "key_manager";
@@ -30,16 +31,20 @@ public abstract class BaseDBKeyManager extends KeyManager {
 
 	private boolean dbBuilt = false;
 
-	public BaseDBKeyManager(KeyManagerDescription conf, Database db) {
-		super(conf, db);
+	private Database db;
+	private Log log;
+
+	public BaseDBKeyManager(Database db) {
+		this.log = LogFactory.getLog(this.getClass().getName());
+		this.db = db;
 		SecurityUtil.init();
 	}
 
 	public boolean exists(String alias) throws CDSInternalFault {
 		try {
-			return getDB().exists(TABLE, ALIAS, alias);
+			return db.exists(TABLE, ALIAS, alias);
 		} catch (Exception e) {
-			getLog().error(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			CDSInternalFault f = new CDSInternalFault();
 			f.setFaultString("Unexpected Database Error.");
 			FaultHelper helper = new FaultHelper(f);
@@ -66,7 +71,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 		} catch (CDSInternalFault f) {
 			throw f;
 		} catch (Exception e) {
-			getLog().error(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			CDSInternalFault f = new CDSInternalFault();
 			f.setFaultString("Unexpected Database Error.");
 			FaultHelper helper = new FaultHelper(f);
@@ -84,7 +89,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 
 			Connection c = null;
 			try {
-				c = getDB().getConnection();
+				c = db.getConnection();
 				PreparedStatement s = c.prepareStatement("select "
 						+ CERTIFICATE + " from " + TABLE + " WHERE " + ALIAS
 						+ "= ?");
@@ -97,7 +102,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				rs.close();
 				s.close();
 			} catch (Exception e) {
-				getLog().error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 				CDSInternalFault f = new CDSInternalFault();
 				f.setFaultString("Unexpected Database Error.");
 				FaultHelper helper = new FaultHelper(f);
@@ -105,7 +110,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				f = (CDSInternalFault) helper.getFault();
 				throw f;
 			} finally {
-				getDB().releaseConnection(c);
+				this.db.releaseConnection(c);
 			}
 		}
 		return cert;
@@ -119,7 +124,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 
 			Connection c = null;
 			try {
-				c = getDB().getConnection();
+				c = this.db.getConnection();
 				PreparedStatement s = c.prepareStatement("select " + PUBLIC_KEY
 						+ " from " + TABLE + " WHERE " + ALIAS + "= ?");
 
@@ -131,7 +136,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				rs.close();
 				s.close();
 			} catch (Exception e) {
-				getLog().error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 				CDSInternalFault f = new CDSInternalFault();
 				f.setFaultString("Unexpected Database Error.");
 				FaultHelper helper = new FaultHelper(f);
@@ -139,7 +144,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				f = (CDSInternalFault) helper.getFault();
 				throw f;
 			} finally {
-				getDB().releaseConnection(c);
+				this.db.releaseConnection(c);
 			}
 		}
 		return key;
@@ -152,7 +157,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 
 			Connection c = null;
 			try {
-				c = getDB().getConnection();
+				c = this.db.getConnection();
 				PreparedStatement s = c.prepareStatement("select "
 						+ PRIVATE_KEY + "," + IV + " from " + TABLE + " WHERE "
 						+ ALIAS + "= ?");
@@ -167,7 +172,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				rs.close();
 				s.close();
 			} catch (Exception e) {
-				getLog().error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 				CDSInternalFault f = new CDSInternalFault();
 				f.setFaultString("Unexpected Database Error.");
 				FaultHelper helper = new FaultHelper(f);
@@ -175,7 +180,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				f = (CDSInternalFault) helper.getFault();
 				throw f;
 			} finally {
-				getDB().releaseConnection(c);
+				this.db.releaseConnection(c);
 			}
 		}
 		return key;
@@ -194,7 +199,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 			}
 			Connection c = null;
 			try {
-				c = getDB().getConnection();
+				c = this.db.getConnection();
 				PreparedStatement s = c.prepareStatement("UPDATE " + TABLE
 						+ " SET " + CERTIFICATE + "= ? WHERE " + ALIAS + "= ?");
 
@@ -203,7 +208,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				s.execute();
 				s.close();
 			} catch (Exception e) {
-				getLog().error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 				CDSInternalFault f = new CDSInternalFault();
 				f.setFaultString("Unexpected Database Error.");
 				FaultHelper helper = new FaultHelper(f);
@@ -211,7 +216,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				f = (CDSInternalFault) helper.getFault();
 				throw f;
 			} finally {
-				getDB().releaseConnection(c);
+				this.db.releaseConnection(c);
 			}
 		} else {
 			CDSInternalFault f = new CDSInternalFault();
@@ -230,7 +235,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 		if (!exists(alias)) {
 			Connection c = null;
 			try {
-				c = getDB().getConnection();
+				c = this.db.getConnection();
 				PreparedStatement s = c.prepareStatement("INSERT INTO " + TABLE
 						+ " SET " + ALIAS + "= ?, " + PUBLIC_KEY + "= ?, "
 						+ PRIVATE_KEY + "= ?, " + IV + "= ?, " + CERTIFICATE
@@ -243,7 +248,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				s.execute();
 				s.close();
 			} catch (Exception e) {
-				getLog().error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 				CDSInternalFault f = new CDSInternalFault();
 				f.setFaultString("Unexpected Database Error.");
 				FaultHelper helper = new FaultHelper(f);
@@ -251,7 +256,7 @@ public abstract class BaseDBKeyManager extends KeyManager {
 				f = (CDSInternalFault) helper.getFault();
 				throw f;
 			} finally {
-				getDB().releaseConnection(c);
+				this.db.releaseConnection(c);
 			}
 		} else {
 			CDSInternalFault f = new CDSInternalFault();
@@ -268,14 +273,14 @@ public abstract class BaseDBKeyManager extends KeyManager {
 		buildDatabase();
 		Connection c = null;
 		try {
-			c = getDB().getConnection();
+			c = this.db.getConnection();
 			PreparedStatement s = c.prepareStatement("DELETE FROM " + TABLE
 					+ "  WHERE " + ALIAS + "= ?");
 			s.setString(1, alias);
 			s.execute();
 			s.close();
 		} catch (Exception e) {
-			getLog().error(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			CDSInternalFault f = new CDSInternalFault();
 			f.setFaultString("Unexpected Database Error.");
 			FaultHelper helper = new FaultHelper(f);
@@ -283,17 +288,17 @@ public abstract class BaseDBKeyManager extends KeyManager {
 			f = (CDSInternalFault) helper.getFault();
 			throw f;
 		} finally {
-			getDB().releaseConnection(c);
+			this.db.releaseConnection(c);
 		}
 	}
 
 	public void deleteAll() throws CDSInternalFault {
 		buildDatabase();
 		try {
-			getDB().update("DELETE FROM " + TABLE);
+			this.db.update("DELETE FROM " + TABLE);
 			dbBuilt = false;
 		} catch (Exception e) {
-			getLog().error(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			CDSInternalFault f = new CDSInternalFault();
 			f.setFaultString("Unexpected Database Error.");
 			FaultHelper helper = new FaultHelper(f);
@@ -306,17 +311,17 @@ public abstract class BaseDBKeyManager extends KeyManager {
 	private void buildDatabase() throws CDSInternalFault {
 		if (!dbBuilt) {
 			try {
-				if (!this.getDB().tableExists(TABLE)) {
+				if (!this.db.tableExists(TABLE)) {
 					String trust = "CREATE TABLE " + TABLE + " (" + ALIAS
 							+ " VARCHAR(255) NOT NULL PRIMARY KEY,"
 							+ PUBLIC_KEY + " TEXT NOT NULL," + PRIVATE_KEY
 							+ " BLOB NOT NULL," + IV + " BLOB," + CERTIFICATE
 							+ " TEXT, INDEX document_index (" + ALIAS + "));";
-					getDB().update(trust);
+					this.db.update(trust);
 				}
 				dbBuilt = true;
 			} catch (Exception e) {
-				getLog().error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 				CDSInternalFault f = new CDSInternalFault();
 				f.setFaultString("Unexpected Database Error.");
 				FaultHelper helper = new FaultHelper(f);
@@ -327,4 +332,13 @@ public abstract class BaseDBKeyManager extends KeyManager {
 
 		}
 	}
+
+	protected Database getDB() {
+		return db;
+	}
+
+	protected Log getLog() {
+		return log;
+	}
+
 }

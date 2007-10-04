@@ -70,13 +70,6 @@
 	<!-- Post Stubs Build Target                                        -->
 	<!-- ============================================================== -->
 	<target name="postStubs">
-		<!-- CDS CONFIGURATION SCHEMA -->
-		<ant antfile="${build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}/CredentialDelegationService" />
-			<property name="wsdl.file" value="CDSConfiguration.wsdl" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
-			<property name="ns.excludes" value="${GT4.ns.excludes}" />
-		</ant>
 
 	</target>
 
