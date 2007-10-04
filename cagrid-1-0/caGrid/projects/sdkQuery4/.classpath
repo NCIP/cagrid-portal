@@ -100,5 +100,8 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dataExtensions-sdkstyle.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dataExtensions-ui.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dataExtensions-upgrades.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-portal.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-updater.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
