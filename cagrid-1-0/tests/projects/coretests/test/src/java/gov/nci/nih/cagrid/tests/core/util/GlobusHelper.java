@@ -47,6 +47,7 @@ public class GlobusHelper {
     private File tmpGlobusLocation;
     private Process globusProcess;
     private Throwable isGlobusRunningException;
+	private List<String> vmargs;
 
 
     public GlobusHelper() {
@@ -81,6 +82,21 @@ public class GlobusHelper {
         this.portPrefs = portPreference;
     }
 
+    /**
+     * 
+     * @param secure whether or not container is secure
+     * @param tmpDir the directory where the container resides
+     * @param portPreference the globus port for the container
+     * @param vmargsParam java arguments for the vm. These are added to the java command BEFORE the class. As such, these should be VM arguments. e.g., -Xmx512m.
+     * Note that globus arguments are specified in this constructor and with setters on this class, and are different from these arugments.
+     */
+    public GlobusHelper(boolean secure, File tmpDir, PortPreference portPreference, List<String> vmargsParam) {
+        super();
+        this.secure = secure;
+        this.tmpDir = tmpDir;
+        this.portPrefs = portPreference;
+        this.vmargs = vmargsParam;
+    }
 
     public synchronized void createTempGlobus() throws IOException {
         // get globus location
@@ -225,7 +241,6 @@ public class GlobusHelper {
         throw new IOException("could not start Globus");
     }
 
-
     private synchronized Process runGlobusCommand(String clName, List<String> options) throws IOException {
         // create globus startup params
         // %_RUNJAVA% -Dlog4j.configuration=container-log4j.properties
@@ -253,6 +268,9 @@ public class GlobusHelper {
         cmd.add("-Dlog4j.configuration=container-log4j.properties");
         cmd.add("-DGLOBUS_LOCATION=" + this.tmpGlobusLocation);
         cmd.add("-Djava.endorsed.dirs=" + this.tmpGlobusLocation + File.separator + "endorsed");
+        if (this.vmargs != null) {
+        	cmd.addAll(this.vmargs);
+        }
         cmd.add("-classpath");
         cmd.add(classpath);
         cmd.add("org.globus.bootstrap.Bootstrap");
