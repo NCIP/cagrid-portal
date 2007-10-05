@@ -232,6 +232,9 @@
 	</target>
 	
 	
+	<!-- allows style to be installed by top-level build -->
+	<target name="installIntroduceExtensions" depends="installServiceStyle"/>
+	
 	<!-- removes all build output -->
     <target name="clean">
         <delete dir="${build.dir}" />
