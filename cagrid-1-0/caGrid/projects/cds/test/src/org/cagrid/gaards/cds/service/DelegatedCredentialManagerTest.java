@@ -105,7 +105,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-
+		Utils.getDatabase().createDatabaseIfNeeded();
 	}
 
 	protected void tearDown() throws Exception {

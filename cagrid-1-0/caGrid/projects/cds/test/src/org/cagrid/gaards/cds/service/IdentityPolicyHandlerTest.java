@@ -12,6 +12,8 @@ import org.cagrid.gaards.cds.testutils.Utils;
 
 public class IdentityPolicyHandlerTest extends TestCase {
 
+	private static String GRID_IDENTITY = "/C=US/O=abc/OU=xyz/OU=caGrid/CN=jdoe";
+
 	public void testCreateDestroy() {
 		IdentityPolicyHandler handler = null;
 		try {
@@ -145,5 +147,73 @@ public class IdentityPolicyHandlerTest extends TestCase {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void testStoreGetAndRemovePolicy() {
+		IdentityPolicyHandler handler = null;
+		try {
+			int count = 3;
+			handler = Utils.getIdentityPolicyHandler();
+			for (int i = 1; i <= count; i++) {
+				DelegationIdentifier id = new DelegationIdentifier();
+				id.setDelegationId(i);
+				assertFalse(handler.policyExists(id));
+				IdentityDelegationPolicy policy = new IdentityDelegationPolicy();
+				AllowedParties ap = new AllowedParties();
+				String[] parties = new String[i];
+				for (int j = 0; j < i; j++) {
+					parties[j] = GRID_IDENTITY + j;
+				}
+				ap.setGridIdentity(parties);
+				policy.setAllowedParties(ap);
+				handler.storePolicy(id, policy);
+				assertTrue(handler.policyExists(id));
+				assertEquals(policy, handler.getPolicy(id));
+			}
+
+			// Check Authorization
+			for (int i = 1; i <= count; i++) {
+				DelegationIdentifier id = new DelegationIdentifier();
+				id.setDelegationId(i);
+				for (int j = 0; j < count; j++) {
+					String gridIdentity = GRID_IDENTITY + j;
+					if (j < i) {
+						assertTrue(handler.isAuthorized(id, gridIdentity));
+					} else {
+						assertFalse(handler.isAuthorized(id, gridIdentity));
+					}
+				}
+			}
+
+			// Check Delete
+
+			for (int i = 1; i <= count; i++) {
+				DelegationIdentifier id = new DelegationIdentifier();
+				id.setDelegationId(i);
+				assertTrue(handler.policyExists(id));
+				handler.removePolicy(id);
+				assertFalse(handler.policyExists(id));
+				for (int j = 0; j < count; j++) {
+					String gridIdentity = GRID_IDENTITY + j;
+					assertFalse(handler.isAuthorized(id, gridIdentity));
+				}
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				handler.removeAllStoredPolicies();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	protected void setUp() throws Exception {
+		super.setUp();
+		Utils.getDatabase().createDatabaseIfNeeded();
 	}
 }

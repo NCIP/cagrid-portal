@@ -26,4 +26,9 @@ public class PropertyManagerTest extends TestCase {
 			}
 		}
 	}
+	
+	protected void setUp() throws Exception {
+		super.setUp();
+		Utils.getDatabase().createDatabaseIfNeeded();
+	}
 }

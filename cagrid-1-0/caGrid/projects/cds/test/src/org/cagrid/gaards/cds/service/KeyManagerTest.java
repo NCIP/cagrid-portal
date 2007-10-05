@@ -177,6 +177,7 @@ public class KeyManagerTest extends TestCase {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
+		Utils.getDatabase().createDatabaseIfNeeded();
 	}
 
 	protected void tearDown() throws Exception {

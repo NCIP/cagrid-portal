@@ -106,7 +106,7 @@ public class IdentityPolicyHandler implements PolicyHandler {
 		try {
 			c = this.db.getConnection();
 			PreparedStatement s = c.prepareStatement("select count(*) "
-					+ " from " + TABLE + " WHERE " + DELEGATION_ID + "= ? AND"
+					+ " from " + TABLE + " WHERE " + DELEGATION_ID + "= ? AND "
 					+ GRID_IDENTITY + "= ?");
 			s.setLong(1, id.getDelegationId());
 			s.setString(2, gridIdentity);
@@ -246,7 +246,7 @@ public class IdentityPolicyHandler implements PolicyHandler {
 			try {
 				if (!this.db.tableExists(TABLE)) {
 					String table = "CREATE TABLE " + TABLE + " ("
-							+ DELEGATION_ID + " BIGINT NOT NULL PRIMARY KEY,"
+							+ DELEGATION_ID + " BIGINT NOT NULL,"
 							+ GRID_IDENTITY
 							+ " VARCHAR(255) NOT NULL, INDEX document_index ("
 							+ DELEGATION_ID + "));";
