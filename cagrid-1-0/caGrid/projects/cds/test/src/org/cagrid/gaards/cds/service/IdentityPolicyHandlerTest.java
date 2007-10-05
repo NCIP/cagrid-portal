@@ -123,7 +123,7 @@ public class IdentityPolicyHandlerTest extends TestCase {
 			IdentityDelegationPolicy policy = new IdentityDelegationPolicy();
 			AllowedParties ap = new AllowedParties();
 			ap
-					.setGridIdentity(new String[] { "/C=US/O=abc/OU=xyz/OU=caGrid/CN=jdoe" });
+					.setGridIdentity(new String[] { GRID_IDENTITY });
 			policy.setAllowedParties(ap);
 			handler.storePolicy(id, policy);
 			assertTrue(handler.policyExists(id));
