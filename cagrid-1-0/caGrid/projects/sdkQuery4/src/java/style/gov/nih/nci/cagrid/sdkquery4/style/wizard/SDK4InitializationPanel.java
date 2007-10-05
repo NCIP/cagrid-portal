@@ -25,7 +25,7 @@ import java.util.Set;
  * @author David Ervin
  * 
  * @created Oct 5, 2007 2:08:34 PM
- * @version $Id: SDK4InitializationPanel.java,v 1.1 2007-10-05 18:32:27 dervin Exp $ 
+ * @version $Id: SDK4InitializationPanel.java,v 1.2 2007-10-05 19:41:22 dervin Exp $ 
  */
 public class SDK4InitializationPanel extends CoreDsIntroPanel {
     
@@ -43,7 +43,7 @@ public class SDK4InitializationPanel extends CoreDsIntroPanel {
         
         // add the libraries to the service's additional libs list
         File styleLibDir = new File(ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath()
-            + File.separator + "data" + File.separator + "styles" + File.separator + "sdk4" + File.separator + "lib");
+            + File.separator + "data" + File.separator + "styles" + File.separator + "cacore4" + File.separator + "lib");
         try {
             Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
             AdditionalLibraries libs = data.getAdditionalLibraries();

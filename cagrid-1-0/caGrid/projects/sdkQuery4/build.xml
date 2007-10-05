@@ -59,7 +59,7 @@
 	<!-- style related stuff -->
 	<property name="introduce.extensions.dir" location="../introduce/extensions" />
 	<property name="style.document" location="${basedir}/style/style.xml"/>
-	<property name="style.dest.dir" location="${introduce.extensions.dir}/data/styles/sdk4"/>
+	<property name="style.dest.dir" location="${introduce.extensions.dir}/data/styles/cacore4"/>
 	
 	<!-- =============================================================== -->
 	<!-- The Test Classpath                                              -->
