@@ -32,26 +32,30 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * 
  * @created by Introduce Toolkit version 1.1
  */
-public class CredentialDelegationServiceClient extends ServiceSecurityClient implements CredentialDelegationServiceI {
+public class CredentialDelegationServiceClient extends ServiceSecurityClient
+		implements CredentialDelegationServiceI {
 	protected CredentialDelegationServicePortType portType;
 	private Object portTypeMutex;
 
-	public CredentialDelegationServiceClient(String url) throws MalformedURIException, RemoteException {
+	public CredentialDelegationServiceClient(String url)
+			throws MalformedURIException, RemoteException {
 		this(url, null);
 	}
 
-	public CredentialDelegationServiceClient(String url, GlobusCredential proxy) throws MalformedURIException,
-		RemoteException {
+	public CredentialDelegationServiceClient(String url, GlobusCredential proxy)
+			throws MalformedURIException, RemoteException {
 		super(url, proxy);
 		initialize();
 	}
 
-	public CredentialDelegationServiceClient(EndpointReferenceType epr) throws MalformedURIException, RemoteException {
+	public CredentialDelegationServiceClient(EndpointReferenceType epr)
+			throws MalformedURIException, RemoteException {
 		this(epr, null);
 	}
 
-	public CredentialDelegationServiceClient(EndpointReferenceType epr, GlobusCredential proxy)
-		throws MalformedURIException, RemoteException {
+	public CredentialDelegationServiceClient(EndpointReferenceType epr,
+			GlobusCredential proxy) throws MalformedURIException,
+			RemoteException {
 		super(epr, proxy);
 		initialize();
 	}
@@ -61,59 +65,78 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient imp
 		this.portType = createPortType();
 	}
 
-	private CredentialDelegationServicePortType createPortType() throws RemoteException {
+	private CredentialDelegationServicePortType createPortType()
+			throws RemoteException {
 
 		CredentialDelegationServiceAddressingLocator locator = new CredentialDelegationServiceAddressingLocator();
 		// attempt to load our context sensitive wsdd file
-		InputStream resourceAsStream = getClass().getResourceAsStream("client-config.wsdd");
+		InputStream resourceAsStream = getClass().getResourceAsStream(
+				"client-config.wsdd");
 		if (resourceAsStream != null) {
 			// we found it, so tell axis to configure an engine to use it
-			EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
+			EngineConfiguration engineConfig = new FileProvider(
+					resourceAsStream);
 			// set the engine of the locator
 			locator.setEngine(new AxisClient(engineConfig));
 		}
 		CredentialDelegationServicePortType port = null;
 		try {
-			port = locator.getCredentialDelegationServicePortTypePort(getEndpointReference());
+			port = locator
+					.getCredentialDelegationServicePortTypePort(getEndpointReference());
 		} catch (Exception e) {
-			throw new RemoteException("Unable to locate portType:" + e.getMessage(), e);
+			throw new RemoteException("Unable to locate portType:"
+					+ e.getMessage(), e);
 		}
 
 		return port;
 	}
 
-	public GetResourcePropertyResponse getResourceProperty(QName resourcePropertyQName) throws RemoteException {
+	public GetResourcePropertyResponse getResourceProperty(
+			QName resourcePropertyQName) throws RemoteException {
 		return portType.getResourceProperty(resourcePropertyQName);
 	}
 
 	public static void usage() {
-		System.out.println(CredentialDelegationServiceClient.class.getName() + " -url <service url>");
+		System.out.println(CredentialDelegationServiceClient.class.getName()
+				+ " -url <service url>");
 	}
 
 	public static void main(String[] args) {
 		System.out.println("Running the Grid Service Client");
 		try {
 			CredentialDelegationServiceClient client = new CredentialDelegationServiceClient(
-				"https://localhost:8443/wsrf/services/cagrid/CredentialDelegationService");
+					"https://localhost:8443/wsrf/services/cagrid/CredentialDelegationService");
 			GroupDelegationPolicy policy = new GroupDelegationPolicy();
 			policy.setGridGrouperServiceURI("fasjlk");
 			policy.setGroupId("fsha");
-			client.delegateCredential(policy,1024);
+			client.initiateDelegation(policy, 1024);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
 
-  public void delegateCredential(org.cagrid.gaards.cds.common.DelegationPolicy policy,int keyLength) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault {
+  public void approveDelegation(org.cagrid.gaards.cds.common.DelegationSigningResponse delegationSigningResponse) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"delegateCredential");
-    org.cagrid.gaards.cds.stubs.DelegateCredentialRequest params = new org.cagrid.gaards.cds.stubs.DelegateCredentialRequest();
-    org.cagrid.gaards.cds.stubs.DelegateCredentialRequestPolicy policyContainer = new org.cagrid.gaards.cds.stubs.DelegateCredentialRequestPolicy();
+      configureStubSecurity((Stub)portType,"approveDelegation");
+    org.cagrid.gaards.cds.stubs.ApproveDelegationRequest params = new org.cagrid.gaards.cds.stubs.ApproveDelegationRequest();
+    org.cagrid.gaards.cds.stubs.ApproveDelegationRequestDelegationSigningResponse delegationSigningResponseContainer = new org.cagrid.gaards.cds.stubs.ApproveDelegationRequestDelegationSigningResponse();
+    delegationSigningResponseContainer.setDelegationSigningResponse(delegationSigningResponse);
+    params.setDelegationSigningResponse(delegationSigningResponseContainer);
+    org.cagrid.gaards.cds.stubs.ApproveDelegationResponse boxedResult = portType.approveDelegation(params);
+    }
+  }
+
+  public org.cagrid.gaards.cds.common.DelegationSigningRequest initiateDelegation(org.cagrid.gaards.cds.common.DelegationPolicy policy,int keyLength) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"initiateDelegation");
+    org.cagrid.gaards.cds.stubs.InitiateDelegationRequest params = new org.cagrid.gaards.cds.stubs.InitiateDelegationRequest();
+    org.cagrid.gaards.cds.stubs.InitiateDelegationRequestPolicy policyContainer = new org.cagrid.gaards.cds.stubs.InitiateDelegationRequestPolicy();
     policyContainer.setDelegationPolicy(policy);
     params.setPolicy(policyContainer);
     params.setKeyLength(keyLength);
-    org.cagrid.gaards.cds.stubs.DelegateCredentialResponse boxedResult = portType.delegateCredential(params);
+    org.cagrid.gaards.cds.stubs.InitiateDelegationResponse boxedResult = portType.initiateDelegation(params);
+    return boxedResult.getDelegationSigningRequest();
     }
   }
 

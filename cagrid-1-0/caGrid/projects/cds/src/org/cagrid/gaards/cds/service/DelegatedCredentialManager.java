@@ -1,19 +1,25 @@
 package org.cagrid.gaards.cds.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.security.KeyPair;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
+import org.cagrid.gaards.cds.common.DelegationSigningRequest;
+import org.cagrid.gaards.cds.common.DelegationStatus;
+import org.cagrid.gaards.cds.common.PublicKey;
 import org.cagrid.gaards.cds.service.policy.PolicyHandler;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
+import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.tools.database.Database;
 
@@ -25,6 +31,8 @@ public class DelegatedCredentialManager {
 	private final static String STATUS = "STATUS";
 	private final static String POLICY_TYPE = "POLICY_TYPE";
 	private final static String EXPIRATION = "EXPIRATION";
+	private final static String DATE_INITIATED = "DATE_INITIATED";
+	private final static String DATE_APPROVED = "DATE_APPROVED";
 
 	private Database db;
 	private boolean dbBuilt = false;
@@ -85,13 +93,13 @@ public class DelegatedCredentialManager {
 		return handler;
 	}
 
-	public void delegateCredential(String callerGridIdentity,
-			DelegationPolicy policy, int keyLength) throws CDSInternalFault,
+	public DelegationSigningRequest initiateDelegation(String callerGridIdentity,
+			DelegationPolicy policy, int keyLength) throws CDSInternalFault,DelegationFault,
 			InvalidPolicyFault {
 		this.buildDatabase();
 		PolicyHandler handler = this.findHandler(policy.getClass().getName());
 		if (!this.proxyPolicy.isKeySizeSupported(keyLength)) {
-			InvalidPolicyFault f = new InvalidPolicyFault();
+			DelegationFault f = new DelegationFault();
 			f.setFaultString("Invalid key length specified.");
 			throw f;
 		}
@@ -100,14 +108,13 @@ public class DelegatedCredentialManager {
 		long delegationId = -1;
 		try {
 			c = this.db.getConnection();
-
 			PreparedStatement s = c.prepareStatement("INSERT INTO " + TABLE
 					+ " SET " + GRID_IDENTITY + "= ?, " + POLICY_TYPE + "= ?, "
-					+ STATUS + "= ?");
+					+ STATUS + "= ?," + DATE_INITIATED + "=?");
 			s.setString(1, callerGridIdentity);
 			s.setString(2, policy.getClass().getName());
-			// TODO: ADD Initial Status here
-			s.setString(3, "");
+			s.setString(3, DelegationStatus.Pending.getValue());
+			s.setLong(4, new Date().getTime());
 			s.execute();
 			s.close();
 			delegationId = db.getLastAutoId(c);
@@ -117,6 +124,12 @@ public class DelegatedCredentialManager {
 			KeyPair keys = this.keyManager.createAndStoreKeyPair(String
 					.valueOf(delegationId), keyLength);
 			handler.storePolicy(id, policy);
+			DelegationSigningRequest req = new DelegationSigningRequest();
+			req.setDelegationIdentifier(id);
+			PublicKey publicKey = new PublicKey();
+			publicKey.setKeyAsString(KeyUtil.writePublicKey(keys.getPublic()));
+			req.setPublicKey(publicKey);
+			return req;
 		} catch (CDSInternalFault e) {
 			try {
 				this.delete(delegationId);
@@ -181,16 +194,18 @@ public class DelegatedCredentialManager {
 		buildDatabase();
 		Connection c = null;
 		try {
-			this.keyManager.delete(String.valueOf(delegationId));
-			DelegationIdentifier id = new DelegationIdentifier();
-			id.setDelegationId(delegationId);
-			findHandler(getPolicyType(delegationId)).removePolicy(id);
+			String policyType = getPolicyType(delegationId);
+			PolicyHandler handler = findHandler(policyType);
 			c = db.getConnection();
 			PreparedStatement s = c.prepareStatement("DELETE FROM " + TABLE
 					+ "  WHERE " + DELEGATION_ID + "= ?");
 			s.setLong(1, delegationId);
 			s.execute();
 			s.close();
+			this.keyManager.delete(String.valueOf(delegationId));
+			DelegationIdentifier id = new DelegationIdentifier();
+			id.setDelegationId(delegationId);
+			handler.removePolicy(id);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			CDSInternalFault f = new CDSInternalFault();
@@ -245,9 +260,10 @@ public class DelegatedCredentialManager {
 							+ " BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 							+ GRID_IDENTITY + " VARCHAR(255) NOT NULL,"
 							+ POLICY_TYPE + " VARCHAR(255) NOT NULL," + STATUS
-							+ " VARCHAR(50) NOT NULL," + EXPIRATION
-							+ " BIGINT, INDEX document_index (" + DELEGATION_ID
-							+ "));";
+							+ " VARCHAR(50) NOT NULL," + DATE_INITIATED
+							+ " BIGINT," + DATE_APPROVED + " BIGINT,"
+							+ EXPIRATION + " BIGINT, INDEX document_index ("
+							+ DELEGATION_ID + "));";
 					db.update(trust);
 				}
 
