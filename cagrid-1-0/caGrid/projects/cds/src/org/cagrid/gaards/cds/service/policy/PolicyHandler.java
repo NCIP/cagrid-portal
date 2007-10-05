@@ -7,8 +7,8 @@ import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 
 public interface PolicyHandler {
 	public void removeAllStoredPolicies() throws CDSInternalFault;
-
-	public boolean isSupported(DelegationPolicy policy);
+	
+	public boolean isSupported(String policyClassName);
 
 	public void storePolicy(DelegationIdentifier id, DelegationPolicy policy)
 			throws CDSInternalFault, InvalidPolicyFault;

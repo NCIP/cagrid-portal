@@ -136,7 +136,7 @@ public class IdentityPolicyHandler implements PolicyHandler {
 	public void storePolicy(DelegationIdentifier id, DelegationPolicy pol)
 			throws CDSInternalFault, InvalidPolicyFault {
 		this.buildDatabase();
-		if (!isSupported(pol)) {
+		if (!isSupported(pol.getClass().getName())) {
 			InvalidPolicyFault f = new InvalidPolicyFault();
 			f.setFaultString("The policy handler " + getClass().getName()
 					+ " does not support the policy "
@@ -217,8 +217,8 @@ public class IdentityPolicyHandler implements PolicyHandler {
 
 	}
 
-	public boolean isSupported(DelegationPolicy policy) {
-		if (policy instanceof IdentityDelegationPolicy) {
+	public boolean isSupported(String policyClassName) {
+		if (policyClassName.equals(IdentityDelegationPolicy.class.getName())) {
 			return true;
 		} else {
 			return false;
