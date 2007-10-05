@@ -63,7 +63,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		try {
 			dcm = Utils.getDelegatedCredentialManager();
 			try {
-				dcm.delegateCredential("some user",
+				dcm.initiateDelegation("some user",
 						new InvalidDelegationPolicy(),Constants.KEY_LENGTH);
 				fail("Should not be able to delegate a credential with an invalid delegation policy.");
 			} catch (InvalidPolicyFault e) {
@@ -87,9 +87,9 @@ public class DelegatedCredentialManagerTest extends TestCase {
 
 			IdentityDelegationPolicy policy = new IdentityDelegationPolicy();
 			try {
-				dcm.delegateCredential("some user", policy,1);
+				dcm.initiateDelegation("some user", policy,1);
 				fail("Should not be able to delegate a credential with an invalid Key Length.");
-			} catch (InvalidPolicyFault e) {
+			} catch (DelegationFault e) {
 
 			}
 		} catch (Exception e) {

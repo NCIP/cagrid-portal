@@ -93,9 +93,9 @@ public class DelegatedCredentialManager {
 		return handler;
 	}
 
-	public DelegationSigningRequest initiateDelegation(String callerGridIdentity,
-			DelegationPolicy policy, int keyLength) throws CDSInternalFault,DelegationFault,
-			InvalidPolicyFault {
+	public DelegationSigningRequest initiateDelegation(
+			String callerGridIdentity, DelegationPolicy policy, int keyLength)
+			throws CDSInternalFault, DelegationFault, InvalidPolicyFault {
 		this.buildDatabase();
 		PolicyHandler handler = this.findHandler(policy.getClass().getName());
 		if (!this.proxyPolicy.isKeySizeSupported(keyLength)) {
