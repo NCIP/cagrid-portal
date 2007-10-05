@@ -19,12 +19,12 @@ public interface KeyManager {
 	public abstract PrivateKey getPrivateKey(String alias)
 			throws CDSInternalFault;
 
-	public abstract X509Certificate getCertificate(String alias)
+	public abstract X509Certificate[] getCertificates(String alias)
 			throws CDSInternalFault;
 
 	public abstract boolean exists(String alias) throws CDSInternalFault;
 
-	public abstract void storeCertificate(String alias, X509Certificate cert)
+	public abstract void storeCertificates(String alias, X509Certificate[] cert)
 			throws CDSInternalFault, DelegationFault;
 
 	public abstract void delete(String alias) throws CDSInternalFault;

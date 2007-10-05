@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
+import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationSigningRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningResponse;
 import org.cagrid.gaards.cds.common.DelegationStatus;
@@ -113,11 +114,14 @@ public class DelegatedCredentialManager {
 			c = this.db.getConnection();
 			PreparedStatement s = c.prepareStatement("INSERT INTO " + TABLE
 					+ " SET " + GRID_IDENTITY + "= ?, " + POLICY_TYPE + "= ?, "
-					+ STATUS + "= ?," + DATE_INITIATED + "=?");
+					+ STATUS + "= ?," + DATE_INITIATED + "=?," + DATE_APPROVED
+					+ "=?," + EXPIRATION + "=?");
 			s.setString(1, callerGridIdentity);
 			s.setString(2, policy.getClass().getName());
 			s.setString(3, DelegationStatus.Pending.getValue());
 			s.setLong(4, new Date().getTime());
+			s.setLong(5, 0);
+			s.setLong(6, 0);
 			s.execute();
 			s.close();
 			delegationId = db.getLastAutoId(c);
@@ -163,6 +167,13 @@ public class DelegatedCredentialManager {
 		} finally {
 			db.releaseConnection(c);
 		}
+	}
+
+	public DelegationRecord getDelegationRecord(DelegationIdentifier id)
+			throws CDSInternalFault, DelegationFault {
+		DelegationRecord r = new DelegationRecord();
+
+		return r;
 	}
 
 	public void approveDelegation(String callerGridIdentity,

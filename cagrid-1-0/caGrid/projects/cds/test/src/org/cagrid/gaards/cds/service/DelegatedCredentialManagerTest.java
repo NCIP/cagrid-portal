@@ -64,7 +64,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			dcm = Utils.getDelegatedCredentialManager();
 			try {
 				dcm.initiateDelegation("some user",
-						new InvalidDelegationPolicy(),Constants.KEY_LENGTH);
+						new InvalidDelegationPolicy(), Constants.KEY_LENGTH);
 				fail("Should not be able to delegate a credential with an invalid delegation policy.");
 			} catch (InvalidPolicyFault e) {
 
@@ -87,7 +87,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 
 			IdentityDelegationPolicy policy = new IdentityDelegationPolicy();
 			try {
-				dcm.initiateDelegation("some user", policy,1);
+				dcm.initiateDelegation("some user", policy, 1);
 				fail("Should not be able to delegate a credential with an invalid Key Length.");
 			} catch (DelegationFault e) {
 
@@ -121,7 +121,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 		public void delete(String alias) throws CDSInternalFault {
-			
+
 		}
 
 		public void deleteAll() throws CDSInternalFault {
@@ -132,7 +132,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			return false;
 		}
 
-		public X509Certificate getCertificate(String alias)
+		public X509Certificate[] getCertificates(String alias)
 				throws CDSInternalFault {
 			return null;
 		}
@@ -145,7 +145,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			return null;
 		}
 
-		public void storeCertificate(String alias, X509Certificate cert)
+		public void storeCertificates(String alias, X509Certificate[] cert)
 				throws CDSInternalFault, DelegationFault {
 
 		}

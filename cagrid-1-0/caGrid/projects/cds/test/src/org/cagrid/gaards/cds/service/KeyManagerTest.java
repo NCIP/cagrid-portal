@@ -38,11 +38,14 @@ public class KeyManagerTest extends TestCase {
 				assertTrue(km.exists(alias));
 				assertEquals(pair.getPublic(), km.getPublicKey(alias));
 				assertEquals(pair.getPrivate(), km.getPrivateKey(alias));
-				assertNull(km.getCertificate(alias));
+				assertNull(km.getCertificates(alias));
 				X509Certificate cert = ca.createIdentityCertificate(km
 						.getPublicKey(alias), alias);
-				km.storeCertificate(alias, cert);
-				assertEquals(cert, km.getCertificate(alias));
+				X509Certificate[] certs = new X509Certificate[] { cert,
+						ca.getCertificate() };
+				km.storeCertificates(alias, certs);
+				X509Certificate[] certs2 = km.getCertificates(alias);
+				validateCertificateChain(certs, certs2);
 			}
 
 			for (int i = 0; i < size; i++) {
@@ -52,7 +55,7 @@ public class KeyManagerTest extends TestCase {
 				assertFalse(km.exists(alias));
 				assertNull(km.getPublicKey(alias));
 				assertNull(km.getPrivateKey(alias));
-				assertNull(km.getCertificate(alias));
+				assertNull(km.getCertificates(alias));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,22 +80,25 @@ public class KeyManagerTest extends TestCase {
 			assertTrue(km.exists(alias));
 			assertEquals(pair.getPublic(), km.getPublicKey(alias));
 			assertEquals(pair.getPrivate(), km.getPrivateKey(alias));
-			assertNull(km.getCertificate(alias));
+			assertNull(km.getCertificates(alias));
 
 			try {
 				X509Certificate cert = ca.createIdentityCertificate(KeyUtil
 						.generateRSAKeyPair1024().getPublic(), alias);
-				km.storeCertificate(alias, cert);
+				X509Certificate[] certs = new X509Certificate[] { cert,
+						ca.getCertificate() };
+				km.storeCertificates(alias, certs);
 				fail("Should not be able to store an invalid certificate!!!");
 			} catch (DelegationFault f) {
 
 			}
-			assertNull(km.getCertificate(alias));
+			assertNull(km.getCertificates(alias));
 			X509Certificate cert = ca.createIdentityCertificate(km
 					.getPublicKey(alias), alias);
-			km.storeCertificate(alias, cert);
-			assertEquals(cert, km.getCertificate(alias));
-
+			X509Certificate[] certs = new X509Certificate[] { cert,
+					ca.getCertificate() };
+			km.storeCertificates(alias, certs);
+			validateCertificateChain(certs, km.getCertificates(alias));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -116,7 +122,7 @@ public class KeyManagerTest extends TestCase {
 			assertTrue(km.exists(alias));
 			assertEquals(pair.getPublic(), km.getPublicKey(alias));
 			assertEquals(pair.getPrivate(), km.getPrivateKey(alias));
-			assertNull(km.getCertificate(alias));
+			assertNull(km.getCertificates(alias));
 
 			try {
 				km.createAndStoreKeyPair(alias, 1024);
@@ -135,7 +141,7 @@ public class KeyManagerTest extends TestCase {
 			}
 		}
 	}
-	
+
 	public void testKeyManagerInvalidAlias() {
 		KeyManager km = null;
 		try {
@@ -152,7 +158,7 @@ public class KeyManagerTest extends TestCase {
 			assertFalse(km.exists(invalidAlias));
 			assertNull(km.getPublicKey(invalidAlias));
 			assertNull(km.getPrivateKey(invalidAlias));
-			assertNull(km.getCertificate(invalidAlias));
+			assertNull(km.getCertificates(invalidAlias));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -182,5 +188,20 @@ public class KeyManagerTest extends TestCase {
 
 	protected void tearDown() throws Exception {
 		super.setUp();
+	}
+
+	private void validateCertificateChain(X509Certificate[] chain1,
+			X509Certificate[] chain2) {
+		assertNotNull(chain1);
+		assertNotNull(chain2);
+		assertEquals(chain1.length, chain2.length);
+		for (int i = 0; i < chain1.length; i++) {
+			assertEquals(chain1[i].getSerialNumber(), chain2[i]
+					.getSerialNumber());
+			assertEquals(chain1[i].getSubjectDN().getName(), chain2[i]
+					.getSubjectDN().getName());
+			assertEquals(chain1[i].getIssuerDN().getName(), chain2[i]
+					.getIssuerDN().getName());
+		}
 	}
 }
