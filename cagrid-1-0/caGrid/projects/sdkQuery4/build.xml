@@ -56,6 +56,11 @@
 	<property name="test.project.jar" location="${build.jars.dir}/${project.jar.prefix}tests.jar" />
 	<import file="test\test.xml" />
 	
+	<!-- style related stuff -->
+	<property name="introduce.extensions.dir" location="../introduce/extensions" />
+	<property name="style.document" location="${basedir}/style/style.xml"/>
+	<property name="style.dest.dir" location="${introduce.extensions.dir}/data/styles/sdk4"/>
+	
 	<!-- =============================================================== -->
 	<!-- The Test Classpath                                              -->
 	<!-- =============================================================== -->
@@ -200,6 +205,30 @@
 				<include name="**/*.class"/>
 			</fileset>
 		</jar>
+	</target>
+	
+	
+	<!-- installs the service style -->
+	<target name="installServiceStyle" description="Installs the SDK 4 data service style">
+		<echo message="Installing Data Service Style SDK4." />
+		<!-- some properties for the install -->
+		<!-- make requisite directories -->
+		<delete dir="${style.dest.dir}"/>
+		<mkdir dir="${style.dest.dir}"/>
+		<mkdir dir="${style.dest.dir}/lib"/>
+		<!-- copy in the style.xml file -->
+		<copy file="${style.document}" todir="${style.dest.dir}"/>
+		<!-- copy in the style's jar file -->
+		<copy todir="${style.dest.dir}/lib">
+			<!-- the style itself and query processor -->
+			<fileset dir="${build.jars.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<!-- copy the SDK common style jar file -->
+			<fileset dir="${ext.lib.dir}">
+				<include name="*sdkstyle.jar"/>
+			</fileset>
+		</copy>
 	</target>
 	
 	
