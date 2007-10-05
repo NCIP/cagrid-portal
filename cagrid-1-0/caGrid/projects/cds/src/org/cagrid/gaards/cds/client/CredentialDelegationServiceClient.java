@@ -116,17 +116,6 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
 
 	}
 
-  public void approveDelegation(org.cagrid.gaards.cds.common.DelegationSigningResponse delegationSigningResponse) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"approveDelegation");
-    org.cagrid.gaards.cds.stubs.ApproveDelegationRequest params = new org.cagrid.gaards.cds.stubs.ApproveDelegationRequest();
-    org.cagrid.gaards.cds.stubs.ApproveDelegationRequestDelegationSigningResponse delegationSigningResponseContainer = new org.cagrid.gaards.cds.stubs.ApproveDelegationRequestDelegationSigningResponse();
-    delegationSigningResponseContainer.setDelegationSigningResponse(delegationSigningResponse);
-    params.setDelegationSigningResponse(delegationSigningResponseContainer);
-    org.cagrid.gaards.cds.stubs.ApproveDelegationResponse boxedResult = portType.approveDelegation(params);
-    }
-  }
-
   public org.cagrid.gaards.cds.common.DelegationSigningRequest initiateDelegation(org.cagrid.gaards.cds.common.DelegationPolicy policy,int keyLength) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"initiateDelegation");
@@ -137,6 +126,17 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
     params.setKeyLength(keyLength);
     org.cagrid.gaards.cds.stubs.InitiateDelegationResponse boxedResult = portType.initiateDelegation(params);
     return boxedResult.getDelegationSigningRequest();
+    }
+  }
+
+  public void approveDelegation(org.cagrid.gaards.cds.common.DelegationSigningResponse delegationSigningResponse) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"approveDelegation");
+    org.cagrid.gaards.cds.stubs.ApproveDelegationRequest params = new org.cagrid.gaards.cds.stubs.ApproveDelegationRequest();
+    org.cagrid.gaards.cds.stubs.ApproveDelegationRequestDelegationSigningResponse delegationSigningResponseContainer = new org.cagrid.gaards.cds.stubs.ApproveDelegationRequestDelegationSigningResponse();
+    delegationSigningResponseContainer.setDelegationSigningResponse(delegationSigningResponse);
+    params.setDelegationSigningResponse(delegationSigningResponseContainer);
+    org.cagrid.gaards.cds.stubs.ApproveDelegationResponse boxedResult = portType.approveDelegation(params);
     }
   }
 

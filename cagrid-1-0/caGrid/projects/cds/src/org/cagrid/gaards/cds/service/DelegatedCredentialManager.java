@@ -3,6 +3,7 @@ package org.cagrid.gaards.cds.service;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
+import java.rmi.RemoteException;
 import java.security.KeyPair;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,12 +16,14 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationSigningRequest;
+import org.cagrid.gaards.cds.common.DelegationSigningResponse;
 import org.cagrid.gaards.cds.common.DelegationStatus;
 import org.cagrid.gaards.cds.common.PublicKey;
 import org.cagrid.gaards.cds.service.policy.PolicyHandler;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
+import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.tools.database.Database;
 
 public class DelegatedCredentialManager {
@@ -160,6 +163,12 @@ public class DelegatedCredentialManager {
 		} finally {
 			db.releaseConnection(c);
 		}
+	}
+
+	public void approveDelegation(String callerGridIdentity,
+			DelegationSigningResponse res) throws CDSInternalFault,
+			DelegationFault, PermissionDeniedFault {
+
 	}
 
 	private String getPolicyType(long delegationId) throws CDSInternalFault {

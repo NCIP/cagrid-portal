@@ -13,19 +13,6 @@ import java.rmi.RemoteException;
 public interface CredentialDelegationServiceI {
 
   /**
-   * Allows the party whom initiated the delegation to approve the delegation.
-   *
-   * @param delegationSigningResponse
-   * @throws CDSInternalFault
-   *	
-   * @throws DelegationFault
-   *	
-   * @throws PermissionDeniedFault
-   *	
-   */
-  public void approveDelegation(org.cagrid.gaards.cds.common.DelegationSigningResponse delegationSigningResponse) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
-
-  /**
    * Allows a party to initate the delegation of their credential such that other parties may access their credential to act on their behalf.
    *
    * @param policy
@@ -40,6 +27,19 @@ public interface CredentialDelegationServiceI {
    *	
    */
   public org.cagrid.gaards.cds.common.DelegationSigningRequest initiateDelegation(org.cagrid.gaards.cds.common.DelegationPolicy policy,int keyLength) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
+
+  /**
+   * Allows the party whom initiated the delegation to approve the delegation.
+   *
+   * @param delegationSigningResponse
+   * @throws CDSInternalFault
+   *	
+   * @throws DelegationFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
+  public void approveDelegation(org.cagrid.gaards.cds.common.DelegationSigningResponse delegationSigningResponse) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
 
 }
 

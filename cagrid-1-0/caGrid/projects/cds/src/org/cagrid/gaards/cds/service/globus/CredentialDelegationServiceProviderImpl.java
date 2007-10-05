@@ -26,15 +26,15 @@ public class CredentialDelegationServiceProviderImpl{
 	}
 	
 
-    public org.cagrid.gaards.cds.stubs.ApproveDelegationResponse approveDelegation(org.cagrid.gaards.cds.stubs.ApproveDelegationRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
-    org.cagrid.gaards.cds.stubs.ApproveDelegationResponse boxedResult = new org.cagrid.gaards.cds.stubs.ApproveDelegationResponse();
-    impl.approveDelegation(params.getDelegationSigningResponse().getDelegationSigningResponse());
-    return boxedResult;
-  }
-
     public org.cagrid.gaards.cds.stubs.InitiateDelegationResponse initiateDelegation(org.cagrid.gaards.cds.stubs.InitiateDelegationRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     org.cagrid.gaards.cds.stubs.InitiateDelegationResponse boxedResult = new org.cagrid.gaards.cds.stubs.InitiateDelegationResponse();
     boxedResult.setDelegationSigningRequest(impl.initiateDelegation(params.getPolicy().getDelegationPolicy(),params.getKeyLength()));
+    return boxedResult;
+  }
+
+    public org.cagrid.gaards.cds.stubs.ApproveDelegationResponse approveDelegation(org.cagrid.gaards.cds.stubs.ApproveDelegationRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    org.cagrid.gaards.cds.stubs.ApproveDelegationResponse boxedResult = new org.cagrid.gaards.cds.stubs.ApproveDelegationResponse();
+    impl.approveDelegation(params.getDelegationSigningResponse().getDelegationSigningResponse());
     return boxedResult;
   }
 
