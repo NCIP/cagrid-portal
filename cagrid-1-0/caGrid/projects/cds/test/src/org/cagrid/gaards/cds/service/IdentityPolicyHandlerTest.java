@@ -148,6 +148,34 @@ public class IdentityPolicyHandlerTest extends TestCase {
 			}
 		}
 	}
+	
+	public void testGetInvalidPolicy() {
+		IdentityPolicyHandler handler = null;
+		try {
+			handler = Utils.getIdentityPolicyHandler();
+			DelegationIdentifier id = new DelegationIdentifier();
+			id.setDelegationId(1);
+			try {
+				handler.getPolicy(id);
+				fail("Should not be able to get a policy that does not exists.");
+			} catch (InvalidPolicyFault e) {
+				String s = e.getFaultString();
+				String expected = "The requested policy does not exist.";
+				if (s.indexOf(expected) == -1) {
+					fail("Should not be able to get a policy that does not exists.");
+				}
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				handler.removeAllStoredPolicies();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public void testStoreGetAndRemovePolicy() {
 		IdentityPolicyHandler handler = null;

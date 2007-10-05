@@ -93,7 +93,7 @@ public class IdentityPolicyHandler implements PolicyHandler {
 			}
 		} else {
 			InvalidPolicyFault f = new InvalidPolicyFault();
-			f.setFaultString("The request policy does not exist.");
+			f.setFaultString("The requested policy does not exist.");
 			throw f;
 
 		}
