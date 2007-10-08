@@ -32,8 +32,13 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.oasis.wsrf.properties.GetResourcePropertyResponse;
 
 import org.globus.gsi.GlobusCredential;
+
 import org.globus.wsrf.NotifyCallback;
+import org.globus.wsrf.NotificationConsumerManager;
 import org.globus.wsrf.container.ContainerException;
+
+import org.oasis.wsrf.lifetime.ImmediateResourceTermination;
+import org.oasis.wsrf.lifetime.WSResourceLifetimeServiceAddressingLocator;
 
 import <%=info.getService().getPackageName()%>.stubs.<%=serviceName%>PortType;
 import <%=info.getService().getPackageName()%>.stubs.service.<%=modifiedServiceName%>ServiceAddressingLocator;
@@ -55,6 +60,8 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 public abstract class <%=info.getService().getName()%>ClientBase extends ServiceSecurityClient <% if(info.getService().getResourceFrameworkOptions().getNotification()!=null){ %>implements NotifyCallback <% } %>{	
 	protected <%=info.getService().getName()%>PortType portType;
 	protected Object portTypeMutex;
+    protected NotificationConsumerManager consumer = null;
+    protected EndpointReferenceType consumerEPR = null;
 
 	public <%=info.getService().getName()%>ClientBase(String url, GlobusCredential proxy) throws MalformedURIException, RemoteException {
 	   	super(url,proxy);
@@ -125,19 +132,24 @@ public abstract class <%=info.getService().getName()%>ClientBase extends Service
 <%
     if(info.getService().getResourceFrameworkOptions().getNotification()!=null){
 %>
+    public void unSubscribe(EndpointReferenceType subscriptionEPR) throws Exception {
+        WSResourceLifetimeServiceAddressingLocator locator = new WSResourceLifetimeServiceAddressingLocator();
+        ImmediateResourceTermination port = locator.getImmediateResourceTerminationPort(subscriptionEPR);
+        port.destroy(new org.oasis.wsrf.lifetime.Destroy());
+    }
+
+
     public org.oasis.wsn.SubscribeResponse subscribe(QName qname) throws RemoteException, ContainerException, MalformedURIException {
         synchronized (portTypeMutex) {
             configureStubSecurity((Stub) portType, "subscribe");
-            // first set up a NotificationConsumer endpoint
-            org.globus.wsrf.NotificationConsumerManager consumer = null;
 
-            // Create client side notification consumer
-            consumer = org.globus.wsrf.NotificationConsumerManager.getInstance();
-            consumer.startListening();
-            
-            EndpointReferenceType consumerEPR =
-                consumer.createNotificationConsumer(this);
-            
+            if (consumer == null) {
+                // Create client side notification consumer
+                consumer = org.globus.wsrf.NotificationConsumerManager.getInstance();
+                consumer.startListening();
+                consumerEPR = consumer.createNotificationConsumer(this);
+            }
+
             org.oasis.wsn.Subscribe params = new org.oasis.wsn.Subscribe();
             params.setUseNotify(Boolean.TRUE);
             params.setConsumerReference(consumerEPR);
@@ -146,7 +158,7 @@ public abstract class <%=info.getService().getName()%>ClientBase extends Service
             topicExpression.setValue(qname);
             params.setTopicExpression(topicExpression);
             return portType.subscribe(params);
-        }
+       }
     }
 
 
