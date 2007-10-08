@@ -68,6 +68,7 @@ import org.globus.wsrf.TopicListAccessor;
 
 import org.globus.wsrf.impl.ResourcePropertyTopic;
 import org.globus.wsrf.impl.SimpleTopicList;
+import org.oasis.wsrf.lifetime.TerminationNotification;
 
 
 /** 
@@ -214,6 +215,12 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 		this.propSet = new SimpleResourcePropertySet(<%=arguments.getService().getName()%>Constants.RESOURCE_PROPERTY_SET);
 		
 <%    
+    if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
+%>
+		this.topicList = new SimpleTopicList(this);
+<%} %>
+		
+<%    
     if(arguments.getService().getResourceFrameworkOptions().getMain()!=null){
 %>
 		// this loads the metadata from XML files if this is the main service
@@ -225,26 +232,24 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 %>
 		// these are the RPs necessary for resource lifetime management
 		ResourceProperty prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.TERMINATION_TIME, this);
-		this.propSet.add(prop);
-
 <%    
     if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
         stringBuffer.append("\t\tprop = new ResourcePropertyTopic(prop);\n");
 		stringBuffer.append("\t\tthis.topicList.addTopic((Topic) prop);\n");
     }
 %>
+		this.propSet.add(prop);
 		
 		// this property exposes the currenttime, as
 		// believed by the local system
 		prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.CURRENT_TIME, this);
-		this.propSet.add(prop);
-
 <%    
     if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
         stringBuffer.append("\t\tprop = new ResourcePropertyTopic(prop);\n");
 		stringBuffer.append("\t\tthis.topicList.addTopic((Topic) prop);\n");
     }
 %>
+		this.propSet.add(prop);
 <%} %>
 
 
@@ -281,6 +286,24 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 	 * @see org.globus.wsrf.ResourceLifetime#setTerminationTime(java.util.Calendar)
 	 */
 	public void setTerminationTime(Calendar time) {
+<%    
+    if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
+%>	
+		Topic terminationTopic = ((Topic)getResourcePropertySet().get(HelloWorldContextConstants.TERMINATIONTIME_Value_RP));
+        if (terminationTopic != null) {
+            TerminationNotification terminationNotification =
+                new TerminationNotification();
+            terminationNotification.setTerminationTime(time);
+            try {
+                terminationTopic.notify(terminationNotification);
+            } catch(Exception e) {
+                logger.error("Unable to send terminationTime notification", e);
+            }
+        }
+<%    
+    }
+%>	
+        
 		this.terminationTime = time;
 	}
 

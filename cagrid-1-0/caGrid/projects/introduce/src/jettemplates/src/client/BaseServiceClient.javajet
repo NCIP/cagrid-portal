@@ -19,6 +19,9 @@ import java.rmi.RemoteException;
 
 import javax.xml.namespace.QName;
 
+import java.util.Calendar;
+import java.util.List;
+
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
 import org.apache.axis.client.Stub;
@@ -29,6 +32,8 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.oasis.wsrf.properties.GetResourcePropertyResponse;
 
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.NotifyCallback;
+import org.globus.wsrf.container.ContainerException;
 
 import <%=info.getService().getPackageName()%>.stubs.<%=serviceName%>PortType;
 import <%=info.getService().getPackageName()%>.stubs.service.<%=modifiedServiceName%>ServiceAddressingLocator;
@@ -47,7 +52,7 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * 
  * @created by Introduce Toolkit version <%=CommonTools.getIntroduceVersion()%>
  */
-public class <%=info.getService().getName()%>ClientBase extends ServiceSecurityClient {	
+public abstract class <%=info.getService().getName()%>ClientBase extends ServiceSecurityClient <% if(info.getService().getResourceFrameworkOptions().getNotification()!=null){ %>implements NotifyCallback <% } %>{	
 	protected <%=info.getService().getName()%>PortType portType;
 	protected Object portTypeMutex;
 
@@ -90,6 +95,69 @@ public class <%=info.getService().getName()%>ClientBase extends ServiceSecurityC
 	public GetResourcePropertyResponse getResourceProperty(QName resourcePropertyQName) throws RemoteException {
 		return portType.getResourceProperty(resourcePropertyQName);
 	}
+	
+<%
+    if(info.getService().getResourceFrameworkOptions().getNotification()!=null){
+%>
+	public org.oasis.wsrf.lifetime.DestroyResponse destroy() throws RemoteException {
+        synchronized (portTypeMutex) {
+            org.oasis.wsrf.lifetime.Destroy params = new org.oasis.wsrf.lifetime.Destroy();
+            configureStubSecurity((Stub) portType, "destroy");
+            return portType.destroy(params);
+        }
+    }
 
+
+    public org.oasis.wsrf.lifetime.SetTerminationTimeResponse setTerminationTime(Calendar terminationTime)
+        throws RemoteException {
+        synchronized (portTypeMutex) {
+            configureStubSecurity((Stub) portType, "setTerminationTime");
+            org.oasis.wsrf.lifetime.SetTerminationTime params = new org.oasis.wsrf.lifetime.SetTerminationTime(
+                terminationTime);
+            return portType.setTerminationTime(params);
+
+        }
+    }
+<%
+    }
+%>
+    
+<%
+    if(info.getService().getResourceFrameworkOptions().getNotification()!=null){
+%>
+    public org.oasis.wsn.SubscribeResponse subscribe(QName qname) throws RemoteException, ContainerException, MalformedURIException {
+        synchronized (portTypeMutex) {
+            configureStubSecurity((Stub) portType, "subscribe");
+            // first set up a NotificationConsumer endpoint
+            org.globus.wsrf.NotificationConsumerManager consumer = null;
+
+            // Create client side notification consumer
+            consumer = org.globus.wsrf.NotificationConsumerManager.getInstance();
+            consumer.startListening();
+            
+            EndpointReferenceType consumerEPR =
+                consumer.createNotificationConsumer(this);
+            
+            org.oasis.wsn.Subscribe params = new org.oasis.wsn.Subscribe();
+            params.setUseNotify(Boolean.TRUE);
+            params.setConsumerReference(consumerEPR);
+            org.oasis.wsn.TopicExpressionType topicExpression = new org.oasis.wsn.TopicExpressionType();
+            topicExpression.setDialect(org.globus.wsrf.WSNConstants.SIMPLE_TOPIC_DIALECT);
+            topicExpression.setValue(qname);
+            params.setTopicExpression(topicExpression);
+            return portType.subscribe(params);
+        }
+    }
+
+
+    public void deliver(List topicPath, EndpointReferenceType producer, Object message) {
+        org.oasis.wsrf.properties.ResourcePropertyValueChangeNotificationType changeMessage = ((org.globus.wsrf.core.notification.ResourcePropertyValueChangeNotificationElementType) message)
+            .getResourcePropertyValueChangeNotification();
+
+        if (changeMessage != null) {
+            System.out.println("Got notification with value: " + changeMessage.getNewValue().get_any()[0].getValue());
+        }
+    }
+<%}%>
 
 }
