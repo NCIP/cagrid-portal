@@ -1,6 +1,5 @@
 package org.cagrid.gaards.cds.service;
 
-import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.security.KeyPair;
@@ -59,9 +58,7 @@ public class DelegatedCredentialManager {
 		String currentKeyManager = properties.getKeyManager();
 		if ((currentKeyManager != null)
 				&& (!currentKeyManager.equals(keyManager.getClass().getName()))) {
-			CDSInternalFault f = new CDSInternalFault();
-			f.setFaultString(Errors.KEY_MANAGER_CHANGED);
-			throw f;
+			throw Errors.getInternalFault(Errors.KEY_MANAGER_CHANGED);
 		}
 		this.keyManager = keyManager;
 		if (currentKeyManager == null) {
@@ -101,9 +98,8 @@ public class DelegatedCredentialManager {
 		this.buildDatabase();
 		PolicyHandler handler = this.findHandler(policy.getClass().getName());
 		if (!this.proxyPolicy.isKeySizeSupported(keyLength)) {
-			DelegationFault f = new DelegationFault();
-			f.setFaultString(Errors.INVALID_KEY_LENGTH_SPECIFIED);
-			throw f;
+			throw Errors
+					.getDelegationFault(Errors.INVALID_KEY_LENGTH_SPECIFIED);
 		}
 
 		Connection c = null;
@@ -212,13 +208,8 @@ public class DelegatedCredentialManager {
 						.toCertificateChain(certs));
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
-				CDSInternalFault f = new CDSInternalFault();
-				f
-						.setFaultString(Errors.UNEXPECTED_ERROR_LOADING_CERTIFICATE_CHAIN);
-				FaultHelper helper = new FaultHelper(f);
-				helper.addFaultCause(e);
-				f = (CDSInternalFault) helper.getFault();
-				throw f;
+				throw Errors.getInternalFault(
+						Errors.UNEXPECTED_ERROR_LOADING_CERTIFICATE_CHAIN, e);
 			}
 			try {
 				PolicyHandler handler = this.findHandler(getPolicyType(id
@@ -226,20 +217,14 @@ public class DelegatedCredentialManager {
 				r.setDelegationPolicy(handler.getPolicy(id));
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
-				CDSInternalFault f = new CDSInternalFault();
-				f
-						.setFaultString(Errors.UNEXPECTED_ERROR_LOADING_DELEGATION_POLICY);
-				FaultHelper helper = new FaultHelper(f);
-				helper.addFaultCause(e);
-				f = (CDSInternalFault) helper.getFault();
-				throw f;
+				throw Errors.getInternalFault(
+						Errors.UNEXPECTED_ERROR_LOADING_DELEGATION_POLICY, e);
 			}
 
 			return r;
 		} else {
-			DelegationFault f = new DelegationFault();
-			f.setFaultString(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
-			throw f;
+			throw Errors
+					.getDelegationFault(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
 		}
 	}
 
@@ -250,54 +235,44 @@ public class DelegatedCredentialManager {
 		if (this.delegationExists(id)) {
 			DelegationRecord r = getDelegationRecord(id);
 			if (!r.getGridIdentity().equals(callerGridIdentity)) {
-				DelegationFault f = new DelegationFault();
-				f
-						.setFaultString(Errors.INITIATOR_DOES_NOT_MATCH_APPROVER);
-				throw f;
+				throw Errors
+						.getDelegationFault(Errors.INITIATOR_DOES_NOT_MATCH_APPROVER);
 			}
 			CertificateChain chain = res.getCertificateChain();
 			if (chain == null) {
-				DelegationFault f = new DelegationFault();
-				f
-						.setFaultString(Errors.CERTIFICATE_CHAIN_NOT_SPECIFIED);
-				throw f;
+				throw Errors
+						.getDelegationFault(Errors.CERTIFICATE_CHAIN_NOT_SPECIFIED);
 			}
 			X509Certificate[] certs = null;
 			try {
 				certs = Utils.toCertificateArray(chain);
 
 			} catch (Exception e) {
-				CDSInternalFault f = new CDSInternalFault();
-				f
-						.setFaultString(Errors.UNEXPECTED_ERROR_LOADING_CERTIFICATE_CHAIN);
+				log.error(e.getMessage(), e);
+				throw Errors.getInternalFault(
+						Errors.UNEXPECTED_ERROR_LOADING_CERTIFICATE_CHAIN, e);
 			}
 
 			if (certs.length < 2) {
-				DelegationFault f = new DelegationFault();
-				f
-						.setFaultString(Errors.INSUFFICIENT_CERTIFICATE_CHAIN_SPECIFIED);
-				throw f;
+				throw Errors
+						.getDelegationFault(Errors.INSUFFICIENT_CERTIFICATE_CHAIN_SPECIFIED);
 			}
-			
-			//TODO: Check public key
-			
+
+			// TODO: Check public key
+
 			PrivateKey pkey = this.keyManager.getPrivateKey(String.valueOf(id
 					.getDelegationId()));
 			GlobusCredential cred = new GlobusCredential(pkey, certs);
 			if (!cred.getIdentity().equals(r.getGridIdentity())) {
-				DelegationFault f = new DelegationFault();
-				f
-						.setFaultString(Errors.IDENTITY_DOES_NOT_MATCH_INITIATOR);
-				throw f;
+				throw Errors
+						.getDelegationFault(Errors.IDENTITY_DOES_NOT_MATCH_INITIATOR);
 			}
-			
-			
-			//TODO: Check delegation path length
+
+			// TODO: Check delegation path length
 
 		} else {
-			DelegationFault f = new DelegationFault();
-			f.setFaultString(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
-			throw f;
+			throw Errors
+					.getDelegationFault(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
 		}
 
 	}

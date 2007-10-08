@@ -3,6 +3,7 @@ package org.cagrid.gaards.cds.service;
 import gov.nih.nci.cagrid.common.FaultHelper;
 
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
+import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 
 public class Errors {
 
@@ -18,15 +19,29 @@ public class Errors {
 	public static String CERTIFICATE_CHAIN_NOT_SPECIFIED = "No certificate chain specified.";
 	public static String INSUFFICIENT_CERTIFICATE_CHAIN_SPECIFIED = "Insufficient certificate chain specified.";
 	public static String IDENTITY_DOES_NOT_MATCH_INITIATOR = "The identity of the delegated credentials does not match the identity of the initiator.";
-	
-	
-	
+
 	public static CDSInternalFault getDatabaseFault(Exception e) {
+		return getInternalFault(UNEXPECTED_DATABASE_ERROR, e);
+	}
+
+	public static CDSInternalFault getInternalFault(String error) {
 		CDSInternalFault f = new CDSInternalFault();
-		f.setFaultString(Errors.UNEXPECTED_DATABASE_ERROR);
+		f.setFaultString(error);
+		return f;
+	}
+
+	public static CDSInternalFault getInternalFault(String error, Exception e) {
+		CDSInternalFault f = new CDSInternalFault();
+		f.setFaultString(error);
 		FaultHelper helper = new FaultHelper(f);
 		helper.addFaultCause(e);
 		f = (CDSInternalFault) helper.getFault();
+		return f;
+	}
+
+	public static DelegationFault getDelegationFault(String error) {
+		DelegationFault f = new DelegationFault();
+		f.setFaultString(error);
 		return f;
 	}
 
