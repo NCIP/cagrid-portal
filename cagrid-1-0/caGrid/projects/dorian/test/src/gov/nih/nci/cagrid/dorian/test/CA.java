@@ -34,7 +34,7 @@ public class CA {
 	public static final String SIGNATURE_ALGORITHM = "MD5WithRSAEncryption";
 	// public static final Provider PROVIDER = new ERACOMProvider();
 	// public static final String SIGNATURE_ALGORITHM = "MD5WithRSA";
-	public static final String PASSWORD = "caGrid@bmi";
+	public static final String PASSWORD = "password";
 	public final static String DEFAULT_CA_DN = "O=Organization ABC,OU=Unit XYZ,CN=Certificate Authority";
 
 	private KeyStore keyStore;
