@@ -12,8 +12,11 @@ import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bouncycastle.asn1.x509.X509Name;
+import org.globus.gsi.GlobusCredential;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -27,8 +30,10 @@ public class CA {
 	private PrivateKey key;
 	public static final Provider PROVIDER = new org.bouncycastle.jce.provider.BouncyCastleProvider();
 	public static final String SIGNATURE_ALGORITHM = "MD5WithRSAEncryption";
-	public static final String PASSWORD = "caGrid@bmi";
+	public static final String PASSWORD = "password";
 	public final static String DEFAULT_CA_DN = "O=Organization ABC,OU=Unit XYZ,CN=Certificate Authority";
+
+	private Map<String, GlobusCredential> creds = new HashMap<String, GlobusCredential>();
 
 	public CA() throws Exception {
 		this(DEFAULT_CA_DN);
@@ -44,25 +49,33 @@ public class CA {
 		this.key = pair.getPrivate();
 		cert = CertUtil.generateCACertificate(PROVIDER.getName(), new X509Name(
 				dn), now, expires, pair, SIGNATURE_ALGORITHM);
+		this.creds = new HashMap<String, GlobusCredential>();
 
 	}
 
 	public X509Certificate getCertificate() {
 		return cert;
 	}
-
-	public X509Certificate createIdentityCertificate(PublicKey key, String id)
-			throws Exception {
+	
+	public GlobusCredential createCredential(String id) throws Exception{
+		KeyPair pair = KeyUtil.generateRSAKeyPair(Constants.KEY_LENGTH);
+		return createCredential(pair.getPublic(),pair.getPrivate(),id);
+	}
+	
+	public GlobusCredential createCredential(PublicKey publicKey, PrivateKey privateKey, String id) throws Exception{
 		String dn = getCertificate().getSubjectDN().getName();
 		int index = dn.indexOf("CN=");
 		dn = dn.substring(0, index + 3) + id;
 		Date now = new Date();
 		Date end = getCertificate().getNotAfter();
 		X509Certificate cert = CertUtil.generateCertificate(PROVIDER.getName(),
-				new X509Name(dn), now, end, key, getCertificate(),
+				new X509Name(dn), now, end, publicKey, getCertificate(),
 				getPrivateKey(), SIGNATURE_ALGORITHM, null);
-		return cert;
+		GlobusCredential cred = new GlobusCredential(privateKey,new X509Certificate[]{cert});
+		this.creds.put(id, cred);
+		return cred;
 	}
+
 
 	public PrivateKey getPrivateKey() {
 		return key;

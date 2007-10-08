@@ -3,7 +3,6 @@ package org.cagrid.gaards.cds.service;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.security.KeyPair;
-import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,7 +27,6 @@ import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.tools.database.Database;
-import org.globus.gsi.GlobusCredential;
 import org.globus.gsi.bc.BouncyCastleUtil;
 
 public class DelegatedCredentialManager {

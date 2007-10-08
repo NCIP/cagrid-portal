@@ -1,7 +1,6 @@
 package org.cagrid.gaards.cds.service;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
