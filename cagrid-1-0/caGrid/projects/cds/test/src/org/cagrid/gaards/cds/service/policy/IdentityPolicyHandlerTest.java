@@ -1,4 +1,4 @@
-package org.cagrid.gaards.cds.service;
+package org.cagrid.gaards.cds.service.policy;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import junit.framework.TestCase;
@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 import org.cagrid.gaards.cds.common.AllowedParties;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
+import org.cagrid.gaards.cds.service.InvalidDelegationPolicy;
 import org.cagrid.gaards.cds.service.policy.IdentityPolicyHandler;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.gaards.cds.testutils.Utils;

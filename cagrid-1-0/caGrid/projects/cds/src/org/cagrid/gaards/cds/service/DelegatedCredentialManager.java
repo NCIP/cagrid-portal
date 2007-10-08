@@ -3,8 +3,8 @@ package org.cagrid.gaards.cds.service;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
-import java.rmi.RemoteException;
 import java.security.KeyPair;
+import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,7 +44,7 @@ public class DelegatedCredentialManager {
 	private Log log;
 	private KeyManager keyManager;
 	private ProxyPolicy proxyPolicy;
-	private PropertyManager properties;
+
 
 	public DelegatedCredentialManager(Database db, PropertyManager properties,
 			KeyManager keyManager, List<PolicyHandler> policyHandlers,
@@ -53,7 +53,6 @@ public class DelegatedCredentialManager {
 		this.log = LogFactory.getLog(this.getClass().getName());
 		this.handlers = policyHandlers;
 		this.proxyPolicy = proxyPolicy;
-		this.properties = properties;
 		String currentKeyManager = properties.getKeyManager();
 		if ((currentKeyManager != null)
 				&& (!currentKeyManager.equals(keyManager.getClass().getName()))) {
@@ -97,7 +96,7 @@ public class DelegatedCredentialManager {
 		return handler;
 	}
 
-	public DelegationSigningRequest initiateDelegation(
+	public synchronized DelegationSigningRequest initiateDelegation(
 			String callerGridIdentity, DelegationPolicy policy, int keyLength)
 			throws CDSInternalFault, DelegationFault, InvalidPolicyFault {
 		this.buildDatabase();
@@ -169,14 +168,97 @@ public class DelegatedCredentialManager {
 		}
 	}
 
-	public DelegationRecord getDelegationRecord(DelegationIdentifier id)
-			throws CDSInternalFault, DelegationFault {
-		DelegationRecord r = new DelegationRecord();
-
-		return r;
+	public boolean delegationExists(DelegationIdentifier id)
+			throws CDSInternalFault {
+		try {
+			return db.exists(TABLE, DELEGATION_ID, id.getDelegationId());
+		} catch (Exception e) {
+			CDSInternalFault f = new CDSInternalFault();
+			f.setFaultString("Unexpected Database Error.");
+			FaultHelper helper = new FaultHelper(f);
+			helper.addFaultCause(e);
+			f = (CDSInternalFault) helper.getFault();
+			throw f;
+		}
 	}
 
-	public void approveDelegation(String callerGridIdentity,
+	public DelegationRecord getDelegationRecord(DelegationIdentifier id)
+			throws CDSInternalFault, DelegationFault {
+
+		if (delegationExists(id)) {
+			DelegationRecord r = new DelegationRecord();
+			r.setDelegationIdentifier(id);
+			Connection c = null;
+			try {
+				c = this.db.getConnection();
+				PreparedStatement s = c.prepareStatement("select * from "
+						+ TABLE + " WHERE " + DELEGATION_ID + "= ?");
+				s.setLong(1, id.getDelegationId());
+				ResultSet rs = s.executeQuery();
+				if (rs.next()) {
+					r.setDateApproved(rs.getLong(DATE_APPROVED));
+					r.setDateInitiated(rs.getLong(DATE_INITIATED));
+					r.setDelegationStatus(DelegationStatus.fromValue(rs
+							.getString(STATUS)));
+					r.setExpiration(rs.getLong(EXPIRATION));
+					r.setGridIdentity(rs.getString(GRID_IDENTITY));
+				}
+				rs.close();
+				s.close();
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				CDSInternalFault f = new CDSInternalFault();
+				f.setFaultString("Unexpected Database Error.");
+				FaultHelper helper = new FaultHelper(f);
+				helper.addFaultCause(e);
+				f = (CDSInternalFault) helper.getFault();
+				throw f;
+			} finally {
+				this.db.releaseConnection(c);
+			}
+
+			try {
+				X509Certificate[] certs = this.keyManager
+						.getCertificates(String.valueOf(id.getDelegationId()));
+				r.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+						.toCertificateChain(certs));
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				CDSInternalFault f = new CDSInternalFault();
+				f
+						.setFaultString("An unexpected error occurred in loading the certificate chain for "
+								+ id.getDelegationId() + ".");
+				FaultHelper helper = new FaultHelper(f);
+				helper.addFaultCause(e);
+				f = (CDSInternalFault) helper.getFault();
+				throw f;
+			}
+			try {
+				PolicyHandler handler = this.findHandler(getPolicyType(id
+						.getDelegationId()));
+				r.setDelegationPolicy(handler.getPolicy(id));
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				CDSInternalFault f = new CDSInternalFault();
+				f
+						.setFaultString("An unexpected error occurred in loading the delegation policy for "
+								+ id.getDelegationId() + ".");
+				FaultHelper helper = new FaultHelper(f);
+				helper.addFaultCause(e);
+				f = (CDSInternalFault) helper.getFault();
+				throw f;
+			}
+
+			return r;
+		} else {
+			CDSInternalFault f = new CDSInternalFault();
+			f.setFaultString("The delegation record for the id "
+					+ id.getDelegationId() + " does not exist.");
+			throw f;
+		}
+	}
+
+	public synchronized void approveDelegation(String callerGridIdentity,
 			DelegationSigningResponse res) throws CDSInternalFault,
 			DelegationFault, PermissionDeniedFault {
 
@@ -210,7 +292,12 @@ public class DelegatedCredentialManager {
 		return policyType;
 	}
 
-	public void delete(long delegationId) throws CDSInternalFault {
+	public synchronized void delete(DelegationIdentifier id)
+			throws CDSInternalFault {
+		this.delete(id.getDelegationId());
+	}
+
+	public synchronized void delete(long delegationId) throws CDSInternalFault {
 		buildDatabase();
 		Connection c = null;
 		try {

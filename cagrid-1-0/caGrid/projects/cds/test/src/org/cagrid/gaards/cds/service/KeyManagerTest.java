@@ -196,12 +196,7 @@ public class KeyManagerTest extends TestCase {
 		assertNotNull(chain2);
 		assertEquals(chain1.length, chain2.length);
 		for (int i = 0; i < chain1.length; i++) {
-			assertEquals(chain1[i].getSerialNumber(), chain2[i]
-					.getSerialNumber());
-			assertEquals(chain1[i].getSubjectDN().getName(), chain2[i]
-					.getSubjectDN().getName());
-			assertEquals(chain1[i].getIssuerDN().getName(), chain2[i]
-					.getIssuerDN().getName());
+			assertEquals(chain1[i], chain2[i]);
 		}
 	}
 }

@@ -4,22 +4,22 @@ import java.util.Set;
 
 public class ProxyPolicy {
 
-	private Set<Integer> supportedKeySizes;
+	private Set<String> supportedKeySizes;
 
 	public ProxyPolicy() {
 
 	}
 
-	public Set<Integer> getSupportedKeySizes() {
+	public Set<String> getSupportedKeySizes() {
 		return supportedKeySizes;
 	}
 
-	public void setSupportedKeySizes(Set<Integer> keySizes) {
+	public void setSupportedKeySizes(Set<String> keySizes) {
 		this.supportedKeySizes = keySizes;
 	}
 
 	public boolean isKeySizeSupported(int keySize) {
-		if (this.supportedKeySizes.contains(new Integer(keySize))) {
+		if (this.supportedKeySizes.contains(String.valueOf(keySize))) {
 			return true;
 		} else {
 			return false;
