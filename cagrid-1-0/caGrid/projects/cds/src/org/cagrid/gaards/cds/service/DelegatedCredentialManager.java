@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.security.KeyPair;
+import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
@@ -20,12 +22,14 @@ import org.cagrid.gaards.cds.common.DelegationSigningRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningResponse;
 import org.cagrid.gaards.cds.common.DelegationStatus;
 import org.cagrid.gaards.cds.common.PublicKey;
+import org.cagrid.gaards.cds.common.Utils;
 import org.cagrid.gaards.cds.service.policy.PolicyHandler;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.tools.database.Database;
+import org.globus.gsi.GlobusCredential;
 
 public class DelegatedCredentialManager {
 
@@ -45,7 +49,6 @@ public class DelegatedCredentialManager {
 	private KeyManager keyManager;
 	private ProxyPolicy proxyPolicy;
 
-
 	public DelegatedCredentialManager(Database db, PropertyManager properties,
 			KeyManager keyManager, List<PolicyHandler> policyHandlers,
 			ProxyPolicy proxyPolicy) throws CDSInternalFault {
@@ -57,9 +60,7 @@ public class DelegatedCredentialManager {
 		if ((currentKeyManager != null)
 				&& (!currentKeyManager.equals(keyManager.getClass().getName()))) {
 			CDSInternalFault f = new CDSInternalFault();
-			f.setFaultString("The key manager cannot be changed from "
-					+ currentKeyManager + " to "
-					+ keyManager.getClass().getName() + ".");
+			f.setFaultString(Errors.KEY_MANAGER_CHANGED);
 			throw f;
 		}
 		this.keyManager = keyManager;
@@ -79,18 +80,16 @@ public class DelegatedCredentialManager {
 					handlerFound = true;
 				} else {
 					InvalidPolicyFault f = new InvalidPolicyFault();
-					f
-							.setFaultString("Multiple handlers found for handling the policy, "
-									+ policyClassName
-									+ ", cannot decide which handler to employ.");
+					f.setFaultString(Errors.MULTIPLE_HANDLERS_FOUND_FOR_POLICY
+							+ policyClassName
+							+ ", cannot decide which handler to employ.");
 					throw f;
 				}
 			}
 		}
 		if (!handlerFound) {
 			InvalidPolicyFault f = new InvalidPolicyFault();
-			f.setFaultString("The policy " + policyClassName
-					+ " is not a supported policy.");
+			f.setFaultString(Errors.DELEGATION_POLICY_NOT_SUPPORTED);
 			throw f;
 		}
 		return handler;
@@ -103,7 +102,7 @@ public class DelegatedCredentialManager {
 		PolicyHandler handler = this.findHandler(policy.getClass().getName());
 		if (!this.proxyPolicy.isKeySizeSupported(keyLength)) {
 			DelegationFault f = new DelegationFault();
-			f.setFaultString("Invalid key length specified.");
+			f.setFaultString(Errors.INVALID_KEY_LENGTH_SPECIFIED);
 			throw f;
 		}
 
@@ -157,12 +156,7 @@ public class DelegatedCredentialManager {
 			} catch (Exception ex) {
 				log.error(ex.getMessage(), ex);
 			}
-			CDSInternalFault f = new CDSInternalFault();
-			f.setFaultString("Unexpected Database Error.");
-			FaultHelper helper = new FaultHelper(f);
-			helper.addFaultCause(e);
-			f = (CDSInternalFault) helper.getFault();
-			throw f;
+			throw Errors.getDatabaseFault(e);
 		} finally {
 			db.releaseConnection(c);
 		}
@@ -171,14 +165,13 @@ public class DelegatedCredentialManager {
 	public boolean delegationExists(DelegationIdentifier id)
 			throws CDSInternalFault {
 		try {
-			return db.exists(TABLE, DELEGATION_ID, id.getDelegationId());
+			if (id == null) {
+				return false;
+			} else {
+				return db.exists(TABLE, DELEGATION_ID, id.getDelegationId());
+			}
 		} catch (Exception e) {
-			CDSInternalFault f = new CDSInternalFault();
-			f.setFaultString("Unexpected Database Error.");
-			FaultHelper helper = new FaultHelper(f);
-			helper.addFaultCause(e);
-			f = (CDSInternalFault) helper.getFault();
-			throw f;
+			throw Errors.getDatabaseFault(e);
 		}
 	}
 
@@ -207,12 +200,7 @@ public class DelegatedCredentialManager {
 				s.close();
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
-				CDSInternalFault f = new CDSInternalFault();
-				f.setFaultString("Unexpected Database Error.");
-				FaultHelper helper = new FaultHelper(f);
-				helper.addFaultCause(e);
-				f = (CDSInternalFault) helper.getFault();
-				throw f;
+				throw Errors.getDatabaseFault(e);
 			} finally {
 				this.db.releaseConnection(c);
 			}
@@ -226,8 +214,7 @@ public class DelegatedCredentialManager {
 				log.error(e.getMessage(), e);
 				CDSInternalFault f = new CDSInternalFault();
 				f
-						.setFaultString("An unexpected error occurred in loading the certificate chain for "
-								+ id.getDelegationId() + ".");
+						.setFaultString(Errors.UNEXPECTED_ERROR_LOADING_CERTIFICATE_CHAIN);
 				FaultHelper helper = new FaultHelper(f);
 				helper.addFaultCause(e);
 				f = (CDSInternalFault) helper.getFault();
@@ -241,8 +228,7 @@ public class DelegatedCredentialManager {
 				log.error(e.getMessage(), e);
 				CDSInternalFault f = new CDSInternalFault();
 				f
-						.setFaultString("An unexpected error occurred in loading the delegation policy for "
-								+ id.getDelegationId() + ".");
+						.setFaultString(Errors.UNEXPECTED_ERROR_LOADING_DELEGATION_POLICY);
 				FaultHelper helper = new FaultHelper(f);
 				helper.addFaultCause(e);
 				f = (CDSInternalFault) helper.getFault();
@@ -251,9 +237,8 @@ public class DelegatedCredentialManager {
 
 			return r;
 		} else {
-			CDSInternalFault f = new CDSInternalFault();
-			f.setFaultString("The delegation record for the id "
-					+ id.getDelegationId() + " does not exist.");
+			DelegationFault f = new DelegationFault();
+			f.setFaultString(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
 			throw f;
 		}
 	}
@@ -261,6 +246,59 @@ public class DelegatedCredentialManager {
 	public synchronized void approveDelegation(String callerGridIdentity,
 			DelegationSigningResponse res) throws CDSInternalFault,
 			DelegationFault, PermissionDeniedFault {
+		DelegationIdentifier id = res.getDelegationIdentifier();
+		if (this.delegationExists(id)) {
+			DelegationRecord r = getDelegationRecord(id);
+			if (!r.getGridIdentity().equals(callerGridIdentity)) {
+				DelegationFault f = new DelegationFault();
+				f
+						.setFaultString(Errors.INITIATOR_DOES_NOT_MATCH_APPROVER);
+				throw f;
+			}
+			CertificateChain chain = res.getCertificateChain();
+			if (chain == null) {
+				DelegationFault f = new DelegationFault();
+				f
+						.setFaultString(Errors.CERTIFICATE_CHAIN_NOT_SPECIFIED);
+				throw f;
+			}
+			X509Certificate[] certs = null;
+			try {
+				certs = Utils.toCertificateArray(chain);
+
+			} catch (Exception e) {
+				CDSInternalFault f = new CDSInternalFault();
+				f
+						.setFaultString(Errors.UNEXPECTED_ERROR_LOADING_CERTIFICATE_CHAIN);
+			}
+
+			if (certs.length < 2) {
+				DelegationFault f = new DelegationFault();
+				f
+						.setFaultString(Errors.INSUFFICIENT_CERTIFICATE_CHAIN_SPECIFIED);
+				throw f;
+			}
+			
+			//TODO: Check public key
+			
+			PrivateKey pkey = this.keyManager.getPrivateKey(String.valueOf(id
+					.getDelegationId()));
+			GlobusCredential cred = new GlobusCredential(pkey, certs);
+			if (!cred.getIdentity().equals(r.getGridIdentity())) {
+				DelegationFault f = new DelegationFault();
+				f
+						.setFaultString(Errors.IDENTITY_DOES_NOT_MATCH_INITIATOR);
+				throw f;
+			}
+			
+			
+			//TODO: Check delegation path length
+
+		} else {
+			DelegationFault f = new DelegationFault();
+			f.setFaultString(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
+			throw f;
+		}
 
 	}
 
@@ -280,12 +318,7 @@ public class DelegatedCredentialManager {
 			s.close();
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			CDSInternalFault f = new CDSInternalFault();
-			f.setFaultString("Unexpected Database Error.");
-			FaultHelper helper = new FaultHelper(f);
-			helper.addFaultCause(e);
-			f = (CDSInternalFault) helper.getFault();
-			throw f;
+			throw Errors.getDatabaseFault(e);
 		} finally {
 			this.db.releaseConnection(c);
 		}
@@ -315,12 +348,7 @@ public class DelegatedCredentialManager {
 			handler.removePolicy(id);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			CDSInternalFault f = new CDSInternalFault();
-			f.setFaultString("Unexpected Database Error.");
-			FaultHelper helper = new FaultHelper(f);
-			helper.addFaultCause(e);
-			f = (CDSInternalFault) helper.getFault();
-			throw f;
+			throw Errors.getDatabaseFault(e);
 		} finally {
 			db.releaseConnection(c);
 		}
@@ -347,12 +375,7 @@ public class DelegatedCredentialManager {
 
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			CDSInternalFault f = new CDSInternalFault();
-			f.setFaultString("Unexpected Database Error.");
-			FaultHelper helper = new FaultHelper(f);
-			helper.addFaultCause(e);
-			f = (CDSInternalFault) helper.getFault();
-			throw f;
+			throw Errors.getDatabaseFault(e);
 		}
 		dbBuilt = false;
 
@@ -377,12 +400,7 @@ public class DelegatedCredentialManager {
 				dbBuilt = true;
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
-				CDSInternalFault f = new CDSInternalFault();
-				f.setFaultString("Unexpected Database Error.");
-				FaultHelper helper = new FaultHelper(f);
-				helper.addFaultCause(e);
-				f = (CDSInternalFault) helper.getFault();
-				throw f;
+				throw Errors.getDatabaseFault(e);
 			}
 		}
 	}

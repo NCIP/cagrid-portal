@@ -51,8 +51,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 						new ArrayList<PolicyHandler>(), new ProxyPolicy());
 				fail("Should not be able to change Key Manager.");
 			} catch (CDSInternalFault e) {
-				if (e.getFaultString().indexOf(
-						"The key manager cannot be changed") == -1) {
+				if (e.getFaultString().indexOf(Errors.KEY_MANAGER_CHANGED) == -1) {
 					fail("Should not be able to change Key Manager.");
 				}
 			}
