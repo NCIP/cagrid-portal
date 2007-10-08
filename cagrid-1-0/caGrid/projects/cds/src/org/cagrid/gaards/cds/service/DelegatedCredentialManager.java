@@ -29,6 +29,7 @@ import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.tools.database.Database;
 import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.bc.BouncyCastleUtil;
 
 public class DelegatedCredentialManager {
 
@@ -234,6 +235,9 @@ public class DelegatedCredentialManager {
 		DelegationIdentifier id = res.getDelegationIdentifier();
 		if (this.delegationExists(id)) {
 			DelegationRecord r = getDelegationRecord(id);
+
+			// Check to make sure that the entity that initiated the delegation
+			// is the same entity that is approving it.
 			if (!r.getGridIdentity().equals(callerGridIdentity)) {
 				throw Errors
 						.getDelegationFault(Errors.INITIATOR_DOES_NOT_MATCH_APPROVER);
@@ -260,15 +264,31 @@ public class DelegatedCredentialManager {
 
 			// TODO: Check public key
 
-			PrivateKey pkey = this.keyManager.getPrivateKey(String.valueOf(id
-					.getDelegationId()));
-			GlobusCredential cred = new GlobusCredential(pkey, certs);
-			if (!cred.getIdentity().equals(r.getGridIdentity())) {
+			// Check to make sure the Identity of the proxy cert matches the
+			// Identity of the initiator.
+
+			try {
+				if (!BouncyCastleUtil.getIdentity(certs).equals(
+						r.getGridIdentity())) {
+					throw Errors
+							.getDelegationFault(Errors.IDENTITY_DOES_NOT_MATCH_INITIATOR);
+				}
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
 				throw Errors
-						.getDelegationFault(Errors.IDENTITY_DOES_NOT_MATCH_INITIATOR);
+						.getInternalFault(
+								Errors.UNEXPECTED_ERROR_EXTRACTING_IDENTITY_FROM_CERTIFICATE_CHAIN,
+								e);
 			}
 
+			// TODO: Verify the signatures of the chain.
+
+			// TODO: Check the Expiration, need to look at all certs in the
+			// chain.
+
 			// TODO: Check delegation path length
+			
+			//TODO: Check to make sure the approval is within the allowed time buffer.
 
 		} else {
 			throw Errors

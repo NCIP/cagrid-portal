@@ -9,6 +9,7 @@ public class Errors {
 
 	public static String UNEXPECTED_DATABASE_ERROR = "An unexpected database error occurred.";
 	public static String UNEXPECTED_ERROR_LOADING_CERTIFICATE_CHAIN = "An unexpected error occurred in loading the certificate chain.";
+	public static String UNEXPECTED_ERROR_EXTRACTING_IDENTITY_FROM_CERTIFICATE_CHAIN = "An unexpected error occurred in extracting the grid identity from the certificate chain.";
 	public static String UNEXPECTED_ERROR_LOADING_DELEGATION_POLICY = "An unexpected error occurred in loading the delegation policy.";
 	public static String DELEGATION_RECORD_DOES_NOT_EXIST = "The delegation record does not exist.";
 	public static String KEY_MANAGER_CHANGED = "The key manager cannot be changed.";

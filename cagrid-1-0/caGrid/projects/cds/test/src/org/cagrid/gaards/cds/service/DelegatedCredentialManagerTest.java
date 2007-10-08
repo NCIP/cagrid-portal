@@ -16,18 +16,22 @@ import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationSigningRequest;
+import org.cagrid.gaards.cds.common.DelegationSigningResponse;
 import org.cagrid.gaards.cds.common.DelegationStatus;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
 import org.cagrid.gaards.cds.service.policy.PolicyHandler;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
+import org.cagrid.gaards.cds.testutils.CA;
 import org.cagrid.gaards.cds.testutils.Constants;
 import org.cagrid.gaards.cds.testutils.Utils;
 
 public class DelegatedCredentialManagerTest extends TestCase {
 
 	private static String GRID_IDENTITY = "/C=US/O=abc/OU=xyz/OU=caGrid/CN=user";
+
+	private CA ca;
 
 	public void testDelegatedCredentialCreateDestroy() {
 		try {
@@ -93,13 +97,46 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		try {
 			dcm = Utils.getDelegatedCredentialManager();
 
-			IdentityDelegationPolicy policy = new IdentityDelegationPolicy();
+			IdentityDelegationPolicy policy = getSimplePolicy();
 			try {
 				dcm.initiateDelegation("some user", policy, 1);
 				fail("Should not be able to delegate a credential with an invalid Key Length.");
 			} catch (DelegationFault e) {
-
+				if (e.getFaultString().indexOf(Errors.INVALID_KEY_LENGTH_SPECIFIED) == -1) {
+					fail("Should not be able to delegate a credential with an invalid Key Length.");
+				}
 			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	public void testDelegateCredentialInitiatorDoesNotMatchApprover() {
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+
+			IdentityDelegationPolicy policy = getSimplePolicy();
+			String alias = "some user";
+			DelegationSigningRequest req= dcm.initiateDelegation(alias, policy, Constants.KEY_LENGTH);
+			try{
+				DelegationSigningResponse res = new DelegationSigningResponse();
+				res.setDelegationIdentifier(req.getDelegationIdentifier());
+				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils.toCertificateChain(ca.createCredential(alias).getCertificateChain()));
+				dcm.approveDelegation("some other user", res);
+				fail("Should not be able to approve delegation.");
+			} catch (DelegationFault e) {
+				if (e.getFaultString().indexOf(Errors.INITIATOR_DOES_NOT_MATCH_APPROVER) == -1) {
+					fail("Should not be able to approve delegation.");
+				}
+			}
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -146,6 +183,14 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			}
 		}
 	}
+	
+	protected IdentityDelegationPolicy getSimplePolicy(){
+		IdentityDelegationPolicy policy = new IdentityDelegationPolicy();
+		AllowedParties ap = new AllowedParties();
+		ap.setGridIdentity(new String[]{GRID_IDENTITY});
+		policy.setAllowedParties(ap);
+		return policy;
+	}
 
 	protected DelegationIdentifier delegateAndValidate(
 			DelegatedCredentialManager dcm, String gridIdentity,
@@ -171,6 +216,12 @@ public class DelegatedCredentialManagerTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		Utils.getDatabase().createDatabaseIfNeeded();
+		try {
+			this.ca = new CA();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 	}
 
 	protected void tearDown() throws Exception {
