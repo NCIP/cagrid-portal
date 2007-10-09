@@ -1,6 +1,7 @@
 package org.cagrid.gaards.cds.service;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -26,6 +27,7 @@ import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.gaards.cds.testutils.CA;
 import org.cagrid.gaards.cds.testutils.Constants;
 import org.cagrid.gaards.cds.testutils.Utils;
+import org.globus.gsi.GlobusCredential;
 
 public class DelegatedCredentialManagerTest extends TestCase {
 
@@ -102,7 +104,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				dcm.initiateDelegation("some user", policy, 1);
 				fail("Should not be able to delegate a credential with an invalid Key Length.");
 			} catch (DelegationFault e) {
-				if (e.getFaultString().indexOf(Errors.INVALID_KEY_LENGTH_SPECIFIED) == -1) {
+				if (e.getFaultString().indexOf(
+						Errors.INVALID_KEY_LENGTH_SPECIFIED) == -1) {
 					fail("Should not be able to delegate a credential with an invalid Key Length.");
 				}
 			}
@@ -124,15 +127,19 @@ public class DelegatedCredentialManagerTest extends TestCase {
 
 			IdentityDelegationPolicy policy = getSimplePolicy();
 			String alias = "some user";
-			DelegationSigningRequest req= dcm.initiateDelegation(alias, policy, Constants.KEY_LENGTH);
-			try{
+			DelegationSigningRequest req = dcm.initiateDelegation(alias,
+					policy, Constants.KEY_LENGTH);
+			try {
 				DelegationSigningResponse res = new DelegationSigningResponse();
 				res.setDelegationIdentifier(req.getDelegationIdentifier());
-				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils.toCertificateChain(ca.createCredential(alias).getCertificateChain()));
+				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+						.toCertificateChain(ca.createProxy(alias, 0)
+								.getCertificateChain()));
 				dcm.approveDelegation("some other user", res);
 				fail("Should not be able to approve delegation.");
 			} catch (DelegationFault e) {
-				if (e.getFaultString().indexOf(Errors.INITIATOR_DOES_NOT_MATCH_APPROVER) == -1) {
+				if (e.getFaultString().indexOf(
+						Errors.INITIATOR_DOES_NOT_MATCH_APPROVER) == -1) {
 					fail("Should not be able to approve delegation.");
 				}
 			}
@@ -183,11 +190,180 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			}
 		}
 	}
+
+	public void testDelegateCredentialNoCertificateChain() {
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			IdentityDelegationPolicy policy = getSimplePolicy();
+			String alias = "some user";
+			DelegationSigningRequest req = dcm.initiateDelegation(alias,
+					policy, Constants.KEY_LENGTH);
+			try {
+				DelegationSigningResponse res = new DelegationSigningResponse();
+				res.setDelegationIdentifier(req.getDelegationIdentifier());
+				res.setCertificateChain(null);
+				dcm.approveDelegation(alias, res);
+				fail("Should not be able to approve delegation.");
+			} catch (DelegationFault e) {
+				if (e.getFaultString().indexOf(
+						Errors.CERTIFICATE_CHAIN_NOT_SPECIFIED) == -1) {
+					fail("Should not be able to approve delegation.");
+				}
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	public void testDelegateCredentialInsufficientCertificateChain() {
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			IdentityDelegationPolicy policy = getSimplePolicy();
+			String alias = "some user";
+			DelegationSigningRequest req = dcm.initiateDelegation(alias,
+					policy, Constants.KEY_LENGTH);
+			try {
+				GlobusCredential cred = ca.createCredential(alias);
+				DelegationSigningResponse res = new DelegationSigningResponse();
+				res.setDelegationIdentifier(req.getDelegationIdentifier());
+				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+						.toCertificateChain(cred.getCertificateChain()));
+				dcm.approveDelegation(alias, res);
+				fail("Should not be able to approve delegation.");
+			} catch (DelegationFault e) {
+				if (e.getFaultString().indexOf(
+						Errors.INSUFFICIENT_CERTIFICATE_CHAIN_SPECIFIED) == -1) {
+					fail("Should not be able to approve delegation.");
+				}
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	public void testDelegateCredentialMismatchingPublicKeys() {
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			IdentityDelegationPolicy policy = getSimplePolicy();
+			String alias = "some user";
+			DelegationSigningRequest req = dcm.initiateDelegation(alias,
+					policy, Constants.KEY_LENGTH);
+			try {
+				GlobusCredential cred = ca.createProxy(alias, 1);
+				DelegationSigningResponse res = new DelegationSigningResponse();
+				res.setDelegationIdentifier(req.getDelegationIdentifier());
+				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+						.toCertificateChain(cred.getCertificateChain()));
+				dcm.approveDelegation(alias, res);
+				fail("Should not be able to approve delegation.");
+			} catch (DelegationFault e) {
+				if (e.getFaultString()
+						.indexOf(Errors.PUBLIC_KEY_DOES_NOT_MATCH) == -1) {
+					fail("Should not be able to approve delegation.");
+				}
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+	}
 	
-	protected IdentityDelegationPolicy getSimplePolicy(){
+	public void testDelegateCredentialInvalidProxyIdentity() {
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			IdentityDelegationPolicy policy = getSimplePolicy();
+			String alias = "some user";
+			DelegationSigningRequest req = dcm.initiateDelegation(alias,
+					policy, Constants.KEY_LENGTH);
+			try {
+				PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey().getKeyAsString());
+				X509Certificate[] certs = ca.createProxyCertifcates(alias+"2",publicKey, 1);
+				DelegationSigningResponse res = new DelegationSigningResponse();
+				res.setDelegationIdentifier(req.getDelegationIdentifier());
+				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+						.toCertificateChain(certs));
+				dcm.approveDelegation(alias, res);
+				fail("Should not be able to approve delegation.");
+			} catch (DelegationFault e) {
+				if (e.getFaultString()
+						.indexOf(Errors.IDENTITY_DOES_NOT_MATCH_INITIATOR) == -1) {
+					fail("Should not be able to approve delegation.");
+				}
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public void testDelegateCredentialInvalidProxyChain() {
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			IdentityDelegationPolicy policy = getSimplePolicy();
+			String alias = "some user";
+			DelegationSigningRequest req = dcm.initiateDelegation(alias,
+					policy, Constants.KEY_LENGTH);
+			try {
+				PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey().getKeyAsString());
+				X509Certificate[] certs = ca.createProxyCertifcates(alias,publicKey, 1);
+				X509Certificate[] certs2 = ca.createProxyCertifcates(alias+2,publicKey, 1);
+				certs[1] = certs2[1];
+				DelegationSigningResponse res = new DelegationSigningResponse();
+				res.setDelegationIdentifier(req.getDelegationIdentifier());
+				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+						.toCertificateChain(certs));
+				dcm.approveDelegation(alias, res);
+				fail("Should not be able to approve delegation.");
+			} catch (DelegationFault e) {
+				if (e.getFaultString()
+						.indexOf(Errors.INVALID_CERTIFICATE_CHAIN) == -1) {
+					fail("Should not be able to approve delegation.");
+				}
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	protected IdentityDelegationPolicy getSimplePolicy() {
 		IdentityDelegationPolicy policy = new IdentityDelegationPolicy();
 		AllowedParties ap = new AllowedParties();
-		ap.setGridIdentity(new String[]{GRID_IDENTITY});
+		ap.setGridIdentity(new String[] { GRID_IDENTITY });
 		policy.setAllowedParties(ap);
 		return policy;
 	}

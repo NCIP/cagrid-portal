@@ -3,6 +3,7 @@ package org.cagrid.gaards.cds.service;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.security.KeyPair;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -260,7 +261,35 @@ public class DelegatedCredentialManager {
 						.getDelegationFault(Errors.INSUFFICIENT_CERTIFICATE_CHAIN_SPECIFIED);
 			}
 
-			// TODO: Check public key
+			// Check that the public keys match.
+			java.security.PublicKey publicKey = this.keyManager
+					.getPublicKey(String.valueOf(id.getDelegationId()));
+			if (!certs[0].getPublicKey().equals(publicKey)) {
+				throw Errors
+						.getDelegationFault(Errors.PUBLIC_KEY_DOES_NOT_MATCH);
+			}
+
+			// TODO: Verify the signatures of the chain.
+
+			// TODO: Check the Expiration, need to look at all certs in the
+			// chain.
+
+			for (int i = 0; i < certs.length; i++) {
+				if (i > 0) {
+					try {
+						certs[i - 1].verify(certs[i].getPublicKey());
+					} catch (Exception e) {
+						throw Errors
+								.getDelegationFault(Errors.INVALID_CERTIFICATE_CHAIN);
+					}
+				}
+				try {
+					certs[i].checkValidity();
+				} catch (Exception e) {
+					throw Errors
+							.getDelegationFault(Errors.INVALID_CERTIFICATE_CHAIN);
+				}
+			}
 
 			// Check to make sure the Identity of the proxy cert matches the
 			// Identity of the initiator.
@@ -271,7 +300,7 @@ public class DelegatedCredentialManager {
 					throw Errors
 							.getDelegationFault(Errors.IDENTITY_DOES_NOT_MATCH_INITIATOR);
 				}
-			} catch (Exception e) {
+			} catch (CertificateException e) {
 				log.error(e.getMessage(), e);
 				throw Errors
 						.getInternalFault(
@@ -279,14 +308,10 @@ public class DelegatedCredentialManager {
 								e);
 			}
 
-			// TODO: Verify the signatures of the chain.
-
-			// TODO: Check the Expiration, need to look at all certs in the
-			// chain.
-
 			// TODO: Check delegation path length
-			
-			//TODO: Check to make sure the approval is within the allowed time buffer.
+
+			// TODO: Check to make sure the approval is within the allowed time
+			// buffer.
 
 		} else {
 			throw Errors

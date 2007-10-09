@@ -2,6 +2,7 @@ package org.cagrid.gaards.cds.testutils;
 
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
+import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -56,26 +57,65 @@ public class CA {
 	public X509Certificate getCertificate() {
 		return cert;
 	}
-	
-	public GlobusCredential createCredential(String id) throws Exception{
+
+	public GlobusCredential createProxy(String alias, int pathLength)
+			throws Exception {
 		KeyPair pair = KeyUtil.generateRSAKeyPair(Constants.KEY_LENGTH);
-		return createCredential(pair.getPublic(),pair.getPrivate(),id);
+		return createProxy(alias, pair.getPublic(), pair.getPrivate(),
+				pathLength);
 	}
-	
-	public GlobusCredential createCredential(PublicKey publicKey, PrivateKey privateKey, String id) throws Exception{
+
+	public GlobusCredential createProxy(String alias, PublicKey publicKey,
+			PrivateKey privateKey, int pathLength) throws Exception {
+		GlobusCredential cred = null;
+		if (this.creds.containsKey(alias)) {
+			cred = this.creds.get(alias);
+		} else {
+			cred = createCredential(alias);
+		}
+		X509Certificate[] certs = ProxyCreator
+				.createImpersonationProxyCertificate(
+						cred.getCertificateChain(), cred.getPrivateKey(),
+						publicKey, 12, 0, 0, pathLength);
+		return new GlobusCredential(privateKey, certs);
+	}
+
+	public X509Certificate[] createProxyCertifcates(String alias,
+			PublicKey publicKey, int pathLength)
+			throws Exception {
+		GlobusCredential cred = null;
+		if (this.creds.containsKey(alias)) {
+			cred = this.creds.get(alias);
+		} else {
+			cred = createCredential(alias);
+		}
+		X509Certificate[] certs = ProxyCreator
+				.createImpersonationProxyCertificate(
+						cred.getCertificateChain(), cred.getPrivateKey(),
+						publicKey, 12, 0, 0, pathLength);
+		return certs;
+	}
+
+	public GlobusCredential createCredential(String alias) throws Exception {
+		KeyPair pair = KeyUtil.generateRSAKeyPair(Constants.KEY_LENGTH);
+		return createCredential(alias, pair.getPublic(), pair.getPrivate());
+	}
+
+	public GlobusCredential createCredential(String alias, PublicKey publicKey,
+			PrivateKey privateKey) throws Exception {
 		String dn = getCertificate().getSubjectDN().getName();
 		int index = dn.indexOf("CN=");
-		dn = dn.substring(0, index + 3) + id;
+		dn = dn.substring(0, index + 3) + alias;
 		Date now = new Date();
 		Date end = getCertificate().getNotAfter();
 		X509Certificate cert = CertUtil.generateCertificate(PROVIDER.getName(),
 				new X509Name(dn), now, end, publicKey, getCertificate(),
 				getPrivateKey(), SIGNATURE_ALGORITHM, null);
-		GlobusCredential cred = new GlobusCredential(privateKey,new X509Certificate[]{cert});
-		this.creds.put(id, cred);
+		GlobusCredential cred = new GlobusCredential(privateKey,
+				new X509Certificate[] { cert });
+		this.creds.put(alias, cred);
 		return cred;
 	}
-
 
 	public PrivateKey getPrivateKey() {
 		return key;

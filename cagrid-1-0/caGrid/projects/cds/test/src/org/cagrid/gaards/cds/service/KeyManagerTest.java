@@ -38,8 +38,8 @@ public class KeyManagerTest extends TestCase {
 				assertEquals(pair.getPublic(), km.getPublicKey(alias));
 				assertEquals(pair.getPrivate(), km.getPrivateKey(alias));
 				assertNull(km.getCertificates(alias));
-				X509Certificate cert = ca.createCredential(km
-						.getPublicKey(alias),km.getPrivateKey(alias), alias).getIdentityCertificate();
+				X509Certificate cert = ca.createCredential(alias,km
+						.getPublicKey(alias),km.getPrivateKey(alias)).getIdentityCertificate();
 				X509Certificate[] certs = new X509Certificate[] { cert,
 						ca.getCertificate() };
 				km.storeCertificates(alias, certs);
@@ -91,8 +91,8 @@ public class KeyManagerTest extends TestCase {
 
 			}
 			assertNull(km.getCertificates(alias));
-			X509Certificate cert =ca.createCredential(km
-					.getPublicKey(alias),km.getPrivateKey(alias), alias).getIdentityCertificate();
+			X509Certificate cert =ca.createCredential(alias,km
+					.getPublicKey(alias),km.getPrivateKey(alias)).getIdentityCertificate();
 			X509Certificate[] certs = new X509Certificate[] { cert,
 					ca.getCertificate() };
 			km.storeCertificates(alias, certs);
