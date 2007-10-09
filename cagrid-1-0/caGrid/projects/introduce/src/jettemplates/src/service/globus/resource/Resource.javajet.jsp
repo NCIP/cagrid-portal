@@ -23,23 +23,40 @@ import org.globus.wsrf.ResourceKey;
  * 
  */
 public class <%=arguments.getService().getName()%>Resource extends BaseResourceBase {
-
-   	/**
-	* This is the callback to destroy this resource. If anything needs to be cleaned up
-	* when this resource is destroyed it should be done here.
-	*/
+<%
+    if(arguments.getService().getResourceFrameworkOptions().getLifetime()!=null){
+%>
+    /**
+     * This is the callback to destroy this resource. If anything needs to be
+     * cleaned up when this resource is destroyed it should be done here.
+     */
     public void remove() throws ResourceException {
-		// TODO Implement me
-	}
-	
-	public void load(ResourceKey arg0) throws ResourceException, NoSuchResourceException, InvalidResourceKeyException {
-        // TODO Auto-generated method stub
-        
+        super.remove();
+        // TODO Implement me
     }
 
-    public void store() throws ResourceException {
-        // TODO Auto-generated method stub
-        
+<%
     }
+    if(arguments.getService().getResourceFrameworkOptions().getPersistant()!=null){
+%>
+    /**
+     * All resource proprety values will be loaded, if anything else needs loaded
+     * implement that here
+     */
+    public void load(ResourceKey key) throws ResourceException, NoSuchResourceException, InvalidResourceKeyException {
+        super.load(key);
+
+    }
+
+
+    /**
+     * All resource property values will be stored, if anything else needs stored
+     * implement that here
+     */
+    public void store() throws ResourceException {
+        super.store();
+
+    }
+<%} %>
 
 }

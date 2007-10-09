@@ -1,12 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.service.Identifiable;
 import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
-import gov.nih.nci.cagrid.introduce.beans.service.RemoveCallback;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.Secure;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -77,7 +74,6 @@ public class ServicesPopUpMenu extends JPopupMenu {
         service.getResourceFrameworkOptions().setLifetime(new Lifetime());
         service.getResourceFrameworkOptions().setIdentifiable(new Identifiable());
         service.getResourceFrameworkOptions().setSecure(new Secure());
-        service.getResourceFrameworkOptions().setRemoveCallback(new RemoveCallback());
         
         // service.setServiceSecurity(new ServiceSecurity());
         service.setMethods(new MethodsType());

@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.introduce.beans.service.Identifiable;
 import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
 import gov.nih.nci.cagrid.introduce.beans.service.Notification;
 import gov.nih.nci.cagrid.introduce.beans.service.Persistant;
-import gov.nih.nci.cagrid.introduce.beans.service.RemoveCallback;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.Secure;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -110,8 +109,6 @@ public class ModifyService extends JDialog {
 	private JCheckBox customResource = null;
 
 	private JCheckBox secureResource = null;
-
-	private JCheckBox removeCallbackResource = null;
 
 	/**
 	 * This method initializes
@@ -448,9 +445,6 @@ public class ModifyService extends JDialog {
 						if(getSecureResource().isSelected()){
 							service.getService().getResourceFrameworkOptions().setSecure(new Secure());
 						}
-						if(getRemoveCallbackResource().isSelected()){
-							service.getService().getResourceFrameworkOptions().setRemoveCallback(new RemoveCallback());
-						}
 					}
 
 					service.getService().setDescription(
@@ -664,9 +658,6 @@ public class ModifyService extends JDialog {
 	 */
 	private JPanel getResourceOptionsPanel() {
 		if (resourceOptionsPanel == null) {
-			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
-			gridBagConstraints20.gridx = 0;
-			gridBagConstraints20.gridy = 4;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.gridx = 1;
 			gridBagConstraints6.anchor = GridBagConstraints.NORTHWEST;
@@ -699,7 +690,6 @@ public class ModifyService extends JDialog {
 			resourceOptionsPanel.add(getNotificationResource(), gridBagConstraints18);
 			resourceOptionsPanel.add(getCustomResource(), gridBagConstraints19);
 			resourceOptionsPanel.add(getSecureResource(), gridBagConstraints6);
-			resourceOptionsPanel.add(getRemoveCallbackResource(), gridBagConstraints20);
 		}
 		return resourceOptionsPanel;
 	}
@@ -824,7 +814,6 @@ public class ModifyService extends JDialog {
 		getNotificationResource().setEnabled(true);
 		getCustomResource().setEnabled(true);
 		getSecureResource().setEnabled(true);
-		getRemoveCallbackResource().setEnabled(true);
 
 		if (getSingletomResource().isSelected()) {
 			getLifetimeResource().setSelected(false);
@@ -847,8 +836,6 @@ public class ModifyService extends JDialog {
 			getNotificationResource().setEnabled(false);
 			getSecureResource().setEnabled(false);
 			getSecureResource().setSelected(false);
-			getRemoveCallbackResource().setEnabled(false);
-			getRemoveCallbackResource().setSelected(false);
 		}
 
 	}
@@ -872,26 +859,5 @@ public class ModifyService extends JDialog {
 			});
 		}
 		return secureResource;
-	}
-
-	/**
-	 * This method initializes removeCallbackResource	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getRemoveCallbackResource() {
-		if (removeCallbackResource == null) {
-			removeCallbackResource = new JCheckBox();
-			removeCallbackResource.setText("remove callback");
-			if(service.getService().getResourceFrameworkOptions().getRemoveCallback()!=null){
-				removeCallbackResource.setSelected(true);
-			}
-			removeCallbackResource.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					checkResourcePropertyOptions();
-				}
-			});
-		}
-		return removeCallbackResource;
 	}
 } // @jve:decl-index=0:visual-constraint="10,10"

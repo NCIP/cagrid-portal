@@ -6,10 +6,15 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
+import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
 import gov.nih.nci.cagrid.introduce.beans.service.Main;
+import gov.nih.nci.cagrid.introduce.beans.service.Notification;
+import gov.nih.nci.cagrid.introduce.beans.service.Persistant;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.Singleton;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
@@ -65,6 +70,9 @@ public class SkeletonCreator extends Task {
         serviceType.setResourceFrameworkOptions(new ResourceFrameworkOptions());
         serviceType.getResourceFrameworkOptions().setMain(new Main());
         serviceType.getResourceFrameworkOptions().setSingleton(new Singleton());
+        serviceType.getResourceFrameworkOptions().setLifetime(new Lifetime());
+        serviceType.getResourceFrameworkOptions().setNotification(new Notification());
+        serviceType.getResourceFrameworkOptions().setPersistant(new Persistant());
 
         // add new service to the services
         // add new method to array in bean
@@ -126,6 +134,7 @@ public class SkeletonCreator extends Task {
         baseDirectory.mkdirs();
 
         ServiceInformation info = new ServiceInformation(introService, properties, baseDirectory);
+
         SkeletonBaseCreator sbc = new SkeletonBaseCreator();
         SkeletonSourceCreator ssc = new SkeletonSourceCreator();
         SkeletonSchemaCreator sscc = new SkeletonSchemaCreator();
@@ -133,6 +142,10 @@ public class SkeletonCreator extends Task {
         SkeletonDocsCreator sdc = new SkeletonDocsCreator();
         SkeletonSecurityOperationProviderCreator ssopc = new SkeletonSecurityOperationProviderCreator();
 
+        // add lifetime and subscription capability to the main service...
+        CommonTools.addLifetimeResource(info.getServices().getService(0), info);
+        CommonTools.addSubscribeResource(info.getServices().getService(0), info);
+        
         // Generate the source
         try {
             if (info.getServices() != null && info.getServices().getService() != null) {
@@ -140,10 +153,10 @@ public class SkeletonCreator extends Task {
                     ssc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
                     sscc.createSkeleton(baseDirectory, info, info.getServices().getService(i));
                     ssopc.createSkeleton(new SpecificServiceInformation(info, info.getServices().getService(i)));
-                    sec.createSkeleton(info,info.getServices().getService(i));
+                    sec.createSkeleton(info, info.getServices().getService(i));
                 }
             }
-           
+
             sdc.createSkeleton(info);
             sbc.createSkeleton(info);
         } catch (Exception e) {

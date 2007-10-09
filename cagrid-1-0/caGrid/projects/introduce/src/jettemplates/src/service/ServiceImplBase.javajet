@@ -108,7 +108,8 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
 			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
 			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(info.getNamespaces(),metadata.getQName());
-			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);		
+			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);	
+			if(!name.equals("terminationTime") && !name.equals("currentTime")) {	
 	%>
 	
 	
@@ -125,7 +126,7 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 	}
 
 	<%	}
-	}%>	
+	}}%>	
 	
 	<%if(info.getService().getResourceFrameworkOptions().getMain()!=null){%>
 	protected Object getMetadata(QName metadataQName) {

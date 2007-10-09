@@ -36,8 +36,11 @@ import org.globus.mds.aggregator.types.AggregatorConfig;
 import org.globus.mds.aggregator.types.AggregatorContent;
 import org.globus.mds.aggregator.types.GetMultipleResourcePropertiesPollType;
 import org.globus.mds.servicegroup.client.ServiceGroupRegistrationParameters;
+import org.globus.wsrf.InvalidResourceKeyException;
+import org.globus.wsrf.NoSuchResourceException;
 import org.globus.wsrf.Constants;
 import org.globus.wsrf.Resource;
+import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.RemoveCallback;
 import org.globus.wsrf.PersistenceCallback;
 import org.globus.wsrf.ResourceContext;
@@ -114,7 +117,7 @@ if(arguments.getService().getResourceFrameworkOptions().getSecure()!=null){
 <% 
 }
 
-if(arguments.getService().getResourceFrameworkOptions().getRemoveCallback()!=null){
+if(arguments.getService().getResourceFrameworkOptions().getLifetime()!=null){
 %>                                                  RemoveCallback,
 
 <%} 
@@ -289,7 +292,7 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 <%    
     if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
 %>	
-		Topic terminationTopic = ((Topic)getResourcePropertySet().get(HelloWorldContextConstants.TERMINATIONTIME_Value_RP));
+		Topic terminationTopic = ((Topic)getResourcePropertySet().get(<%=arguments.getService().getName() %>Constants.TERMINATIONTIME_Value_RP));
         if (terminationTopic != null) {
             TerminationNotification terminationNotification =
                 new TerminationNotification();
@@ -660,6 +663,30 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 %>
     public TopicList getTopicList() {
         return this.topicList;
+    }
+<%}%>
+
+<%
+    if(arguments.getService().getResourceFrameworkOptions().getLifetime()!=null){
+%>
+    public void remove() throws ResourceException {
+
+
+    }
+<%}%>
+
+<%
+    if(arguments.getService().getResourceFrameworkOptions().getPersistant()!=null){
+%>
+    public void load(ResourceKey arg0) throws ResourceException, NoSuchResourceException, InvalidResourceKeyException {
+       
+
+    }
+
+
+    public void store() throws ResourceException {
+        
+
     }
 <%}%>
 	
