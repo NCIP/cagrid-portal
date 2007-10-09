@@ -40,6 +40,7 @@ import org.globus.gsi.CertificateRevocationLists;
 import org.globus.gsi.GlobusCredential;
 import org.globus.gsi.TrustedCertificates;
 import org.globus.gsi.proxy.ProxyPathValidator;
+import org.globus.gsi.proxy.ProxyPathValidatorException;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.encoding.ObjectSerializer;
@@ -76,12 +77,12 @@ public class Utils {
 	}
 
 	public static void validateGlobusCredential(GlobusCredential cred)
-			throws Exception {
+			throws ProxyPathValidatorException {
 		validateCertificateChain(cred.getCertificateChain());
 	}
 
 	public static void validateCertificateChain(X509Certificate[] chain)
-			throws Exception {
+			throws ProxyPathValidatorException {
 		ProxyPathValidator validator = new ProxyPathValidator();
 		validator.validate(chain, TrustedCertificates
 				.getDefaultTrustedCertificates().getCertificates(),
