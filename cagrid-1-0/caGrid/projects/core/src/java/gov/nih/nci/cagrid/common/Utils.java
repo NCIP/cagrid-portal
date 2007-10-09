@@ -17,6 +17,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Array;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -35,25 +36,28 @@ import org.apache.axis.message.MessageElement;
 import org.apache.axis.server.AxisServer;
 import org.apache.axis.utils.XMLUtils;
 import org.globus.common.CoGProperties;
+import org.globus.gsi.CertificateRevocationLists;
+import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.TrustedCertificates;
+import org.globus.gsi.proxy.ProxyPathValidator;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.encoding.ObjectSerializer;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-
 public class Utils {
 
 	public static File getCaGridUserHome() {
 		String userHome = System.getProperty("user.home");
 		File userHomeF = new File(userHome);
-		File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".cagrid");
+		File caGridCache = new File(userHomeF.getAbsolutePath()
+				+ File.separator + ".cagrid");
 		if (!caGridCache.exists()) {
 			caGridCache.mkdirs();
 		}
 		return caGridCache;
 	}
-
 
 	public static File getTrustedCerificatesDirectory() {
 		String caDir = CoGProperties.getDefault().getCaCertLocations();
@@ -62,8 +66,8 @@ public class Utils {
 		} else {
 			String userHome = System.getProperty("user.home");
 			File userHomeF = new File(userHome);
-			File dir = new File(userHomeF.getAbsolutePath() + File.separator + ".globus" + File.separator
-				+ "certificates");
+			File dir = new File(userHomeF.getAbsolutePath() + File.separator
+					+ ".globus" + File.separator + "certificates");
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
@@ -71,40 +75,56 @@ public class Utils {
 		}
 	}
 
+	public static void validateGlobusCredential(GlobusCredential cred)
+			throws Exception {
+		validateCertificateChain(cred.getCertificateChain());
+	}
+
+	public static void validateCertificateChain(X509Certificate[] chain)
+			throws Exception {
+		ProxyPathValidator validator = new ProxyPathValidator();
+		validator.validate(chain, TrustedCertificates
+				.getDefaultTrustedCertificates().getCertificates(),
+				CertificateRevocationLists
+						.getDefaultCertificateRevocationLists());
+
+	}
 
 	public static String getExceptionMessage(Throwable e) {
 		String mess = e.getMessage();
 		if (e instanceof AxisFault) {
 			AxisFault af = (AxisFault) e;
 			if ((af.getFaultCode() != null)
-				&& (af.getFaultCode().toString()
-					.equals("{http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}General"))) {
+					&& (af.getFaultCode().toString()
+							.equals("{http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}General"))) {
 				System.out.println(af.getFaultString());
 				if ((af.getFaultString() != null)
-					&& (af.getFaultString().equals("javax.xml.rpc.soap.SOAPFaultException"))) {
+						&& (af.getFaultString()
+								.equals("javax.xml.rpc.soap.SOAPFaultException"))) {
 					mess = "An error occurred establishing a secure communication channel.  The "
-						+ "problem may be that the client's credentials are NOT trusted by the server.";
+							+ "problem may be that the client's credentials are NOT trusted by the server.";
 				} else {
 
 					mess = af.getFaultString();
 				}
 
-			} else if ((af.getFaultString() != null) && (af.getFaultString().equals("java.io.EOFException"))) {
-				mess = "An error occurred in communicating with the service.  If using "
-					+ "credentials to authenticate to the service, the problem may be "
-					+ "that the credentials being used are not trusted by the server.";
 			} else if ((af.getFaultString() != null)
-				&& (af.getFaultString().equals("java.net.SocketException: Connection reset"))) {
+					&& (af.getFaultString().equals("java.io.EOFException"))) {
 				mess = "An error occurred in communicating with the service.  If using "
-					+ "credentials to authenticate to the service, the problem may be "
-					+ "that the credentials being used are not trusted by the server.";
+						+ "credentials to authenticate to the service, the problem may be "
+						+ "that the credentials being used are not trusted by the server.";
+			} else if ((af.getFaultString() != null)
+					&& (af.getFaultString()
+							.equals("java.net.SocketException: Connection reset"))) {
+				mess = "An error occurred in communicating with the service.  If using "
+						+ "credentials to authenticate to the service, the problem may be "
+						+ "that the credentials being used are not trusted by the server.";
 			} else {
 				mess = af.getFaultString();
 			}
 		}
 		return simplifyErrorMessage(mess);
 	}
-
 
 	public static String simplifyErrorMessage(String m) {
 		if ((m == null) || (m.equalsIgnoreCase("null"))) {
@@ -117,17 +137,17 @@ public class Utils {
 		return m;
 	}
 
-
-	public static Object deserializeDocument(String fileName, Class objectType) throws Exception {
+	public static Object deserializeDocument(String fileName, Class objectType)
+			throws Exception {
 		InputStream inputStream = null;
 
 		inputStream = new FileInputStream(fileName);
 		org.w3c.dom.Document doc = XMLUtils.newDocument(inputStream);
-		Object obj = ObjectDeserializer.toObject(doc.getDocumentElement(), objectType);
+		Object obj = ObjectDeserializer.toObject(doc.getDocumentElement(),
+				objectType);
 		inputStream.close();
 		return obj;
 	}
-
 
 	public static void copyFile(File in, File out) throws IOException {
 		// avoids copying a file to itself
@@ -137,8 +157,10 @@ public class Utils {
 		// ensure the output file location exists
 		out.getCanonicalFile().getParentFile().mkdirs();
 
-		BufferedInputStream fis = new BufferedInputStream(new FileInputStream(in));
-		BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(out));
+		BufferedInputStream fis = new BufferedInputStream(new FileInputStream(
+				in));
+		BufferedOutputStream fos = new BufferedOutputStream(
+				new FileOutputStream(out));
 
 		// a temporary buffer to read into
 		byte[] tmpBuffer = new byte[8192];
@@ -154,10 +176,10 @@ public class Utils {
 		fos.close();
 	}
 
-
 	// Copies all files under srcDir to dstDir.
 	// If dstDir does not exist, it will be created.
-	public static void copyDirectory(File srcDir, File dstDir) throws IOException {
+	public static void copyDirectory(File srcDir, File dstDir)
+			throws IOException {
 		if (srcDir.isDirectory()) {
 			if (!dstDir.exists()) {
 				dstDir.mkdir();
@@ -165,13 +187,13 @@ public class Utils {
 
 			String[] children = srcDir.list();
 			for (int i = 0; i < children.length; i++) {
-				copyDirectory(new File(srcDir, children[i]), new File(dstDir, children[i]));
+				copyDirectory(new File(srcDir, children[i]), new File(dstDir,
+						children[i]));
 			}
 		} else {
 			copyFile(srcDir, dstDir);
 		}
 	}
-
 
 	public static boolean deleteDir(File dir) {
 		if (dir.isDirectory()) {
@@ -179,14 +201,14 @@ public class Utils {
 			for (int i = 0; i < children.length; i++) {
 				boolean success = deleteDir(new File(dir, children[i]));
 				if (!success) {
-					System.err.println("could not remove directory: " + dir.getAbsolutePath());
+					System.err.println("could not remove directory: "
+							+ dir.getAbsolutePath());
 					return false;
 				}
 			}
 		}
 		return dir.delete();
 	}
-
 
 	/**
 	 * Merges the two arrays (not necessarily creating a new array). If both are
@@ -195,20 +217,23 @@ public class Utils {
 	 * @throws ArrayStoreException
 	 *             uses System.arrarycopy and has same contract
 	 */
-	public static java.lang.Object concatenateArrays(Class resultClass, java.lang.Object arr1, java.lang.Object arr2)
-		throws ArrayStoreException {
+	public static java.lang.Object concatenateArrays(Class resultClass,
+			java.lang.Object arr1, java.lang.Object arr2)
+			throws ArrayStoreException {
 		if (arr1 == null) {
 			return arr2;
 		} else if (arr2 == null) {
 			return arr1;
 		}
-		java.lang.Object newArray = Array.newInstance(resultClass, Array.getLength(arr1) + Array.getLength(arr2));
+		java.lang.Object newArray = Array.newInstance(resultClass, Array
+				.getLength(arr1)
+				+ Array.getLength(arr2));
 		System.arraycopy(arr1, 0, newArray, 0, Array.getLength(arr1));
-		System.arraycopy(arr2, 0, newArray, Array.getLength(arr1), Array.getLength(arr2));
+		System.arraycopy(arr2, 0, newArray, Array.getLength(arr1), Array
+				.getLength(arr2));
 
 		return newArray;
 	}
-
 
 	/**
 	 * Appends to an array
@@ -219,14 +244,15 @@ public class Utils {
 	 *            The object to append to the array
 	 * @return An array with the new item appended
 	 */
-	public static java.lang.Object appendToArray(java.lang.Object array, java.lang.Object appendix) {
+	public static java.lang.Object appendToArray(java.lang.Object array,
+			java.lang.Object appendix) {
 		Class arrayType = array.getClass().getComponentType();
-		java.lang.Object newArray = Array.newInstance(arrayType, Array.getLength(array) + 1);
+		java.lang.Object newArray = Array.newInstance(arrayType, Array
+				.getLength(array) + 1);
 		System.arraycopy(array, 0, newArray, 0, Array.getLength(array));
 		Array.set(newArray, Array.getLength(newArray) - 1, appendix);
 		return newArray;
 	}
-
 
 	/**
 	 * Removed an object from an array.
@@ -235,7 +261,8 @@ public class Utils {
 	 * @param removal
 	 * @return An array with the item removed
 	 */
-	public static java.lang.Object removeFromArray(java.lang.Object array, java.lang.Object removal) {
+	public static java.lang.Object removeFromArray(java.lang.Object array,
+			java.lang.Object removal) {
 		Class arrayType = array.getClass().getComponentType();
 		int length = Array.getLength(array);
 		List temp = new ArrayList(length - 1);
@@ -249,7 +276,6 @@ public class Utils {
 		System.arraycopy(temp.toArray(), 0, newArray, 0, temp.size());
 		return newArray;
 	}
-
 
 	public static StringBuffer fileToStringBuffer(File file) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(file));
@@ -266,8 +292,8 @@ public class Utils {
 		return sb;
 	}
 
-
-	public static StringBuffer inputStreamToStringBuffer(InputStream stream) throws IOException {
+	public static StringBuffer inputStreamToStringBuffer(InputStream stream)
+			throws IOException {
 		InputStreamReader reader = new InputStreamReader(stream);
 		StringBuffer str = new StringBuffer();
 		char[] buff = new char[8192];
@@ -278,7 +304,6 @@ public class Utils {
 		reader.close();
 		return str;
 	}
-
 
 	/**
 	 * Serialize an Object to XML
@@ -294,9 +319,11 @@ public class Utils {
 	 *            A stream containing the WSDD configuration
 	 * @throws Exception
 	 */
-	public static void serializeObject(Object obj, QName qname, Writer writer, InputStream wsdd) throws Exception {
+	public static void serializeObject(Object obj, QName qname, Writer writer,
+			InputStream wsdd) throws Exception {
 		// derive a message element for the object
-		MessageElement element = (MessageElement) ObjectSerializer.toSOAPElement(obj, qname);
+		MessageElement element = (MessageElement) ObjectSerializer
+				.toSOAPElement(obj, qname);
 		// configure the axis engine to use the supplied wsdd file
 		EngineConfiguration engineConfig = new FileProvider(wsdd);
 		AxisEngine axisClient = new AxisServer(engineConfig);
@@ -305,11 +332,13 @@ public class Utils {
 		messageContext.setProperty(AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
 		// the following two properties prevent xsd types from appearing in
 		// every single element in the serialized XML
-		messageContext.setProperty(AxisEngine.PROP_EMIT_ALL_TYPES, Boolean.FALSE);
+		messageContext.setProperty(AxisEngine.PROP_EMIT_ALL_TYPES,
+				Boolean.FALSE);
 		messageContext.setProperty(AxisEngine.PROP_SEND_XSI, Boolean.FALSE);
 
 		// create a serialization context to use the new message context
-		SerializationContext serializationContext = new SerializationContext(writer, messageContext);
+		SerializationContext serializationContext = new SerializationContext(
+				writer, messageContext);
 		serializationContext.setPretty(true);
 
 		// output the message element through the serialization context
@@ -319,21 +348,24 @@ public class Utils {
 		writer.flush();
 	}
 
-
-	public static void serializeObject(Object obj, QName qname, Writer writer) throws Exception {
+	public static void serializeObject(Object obj, QName qname, Writer writer)
+			throws Exception {
 		// derive a message element for the object
-		MessageElement element = (MessageElement) ObjectSerializer.toSOAPElement(obj, qname);
+		MessageElement element = (MessageElement) ObjectSerializer
+				.toSOAPElement(obj, qname);
 		// create a message context
 		MessageContext messageContext = new MessageContext(new AxisServer());
 		messageContext.setEncodingStyle("");
 		messageContext.setProperty(AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
 		// the following two properties prevent xsd types from appearing in
 		// every single element in the serialized XML
-		messageContext.setProperty(AxisEngine.PROP_EMIT_ALL_TYPES, Boolean.FALSE);
+		messageContext.setProperty(AxisEngine.PROP_EMIT_ALL_TYPES,
+				Boolean.FALSE);
 		messageContext.setProperty(AxisEngine.PROP_SEND_XSI, Boolean.FALSE);
 
 		// create a serialization context to use the new message context
-		SerializationContext serializationContext = new SerializationContext(writer, messageContext);
+		SerializationContext serializationContext = new SerializationContext(
+				writer, messageContext);
 		serializationContext.setPretty(true);
 
 		// output the message element through the serialization context
@@ -342,7 +374,6 @@ public class Utils {
 		// writer.close();
 		writer.flush();
 	}
-
 
 	/**
 	 * Deserializes XML into an object
@@ -357,29 +388,30 @@ public class Utils {
 	 * @throws SAXException
 	 * @throws DeserializationException
 	 */
-	public static Object deserializeObject(Reader xmlReader, Class clazz, InputStream wsdd) throws SAXException,
-		DeserializationException {
+	public static Object deserializeObject(Reader xmlReader, Class clazz,
+			InputStream wsdd) throws SAXException, DeserializationException {
 		// input source for the xml
 		InputSource xmlSource = new InputSource(xmlReader);
 
 		return ConfigurableObjectDeserializer.toObject(xmlSource, clazz, wsdd);
 	}
 
-
-	public static Object deserializeObject(Reader xmlReader, Class clazz) throws Exception {
-		org.w3c.dom.Document doc = XMLUtils.newDocument(new InputSource(xmlReader));
-		Object obj = ObjectDeserializer.toObject(doc.getDocumentElement(), clazz);
+	public static Object deserializeObject(Reader xmlReader, Class clazz)
+			throws Exception {
+		org.w3c.dom.Document doc = XMLUtils.newDocument(new InputSource(
+				xmlReader));
+		Object obj = ObjectDeserializer.toObject(doc.getDocumentElement(),
+				clazz);
 		return obj;
 	}
 
-
-	public static void serializeDocument(String fileName, Object object, QName qname) throws Exception {
+	public static void serializeDocument(String fileName, Object object,
+			QName qname) throws Exception {
 		FileWriter fw = null;
 		fw = new FileWriter(fileName);
 		ObjectSerializer.serialize(fw, object, qname);
 		fw.close();
 	}
-
 
 	public static String clean(String s) {
 		if ((s == null) || (s.trim().length() == 0)) {
@@ -389,13 +421,12 @@ public class Utils {
 		}
 	}
 
-
-	public static void stringBufferToFile(StringBuffer string, String fileName) throws IOException {
+	public static void stringBufferToFile(StringBuffer string, String fileName)
+			throws IOException {
 		FileWriter fw = new FileWriter(new File(fileName));
 		fw.write(string.toString());
 		fw.close();
 	}
-
 
 	public static boolean equals(Object o1, Object o2) {
 		if (o1 == null) {
@@ -403,7 +434,6 @@ public class Utils {
 		}
 		return o1.equals(o2);
 	}
-
 
 	/**
 	 * Gets the QName that Axis has registered for the given java class
@@ -413,9 +443,9 @@ public class Utils {
 	 *         mappings
 	 */
 	public static QName getRegisteredQName(Class clazz) {
-		return MessageContext.getCurrentContext().getTypeMapping().getTypeQName(clazz);
+		return MessageContext.getCurrentContext().getTypeMapping()
+				.getTypeQName(clazz);
 	}
-
 
 	/**
 	 * Gets the Class that Axis has registerd for the given QName
@@ -425,9 +455,9 @@ public class Utils {
 	 *         type mappings
 	 */
 	public static Class getRegisteredClass(QName qname) {
-		return MessageContext.getCurrentContext().getTypeMapping().getClassForQName(qname);
+		return MessageContext.getCurrentContext().getTypeMapping()
+				.getClassForQName(qname);
 	}
-
 
 	public static List recursiveListFiles(File baseDir, final FileFilter filter) {
 		FileFilter dirFilter = new FileFilter() {
@@ -447,7 +477,6 @@ public class Utils {
 		return files;
 	}
 
-
 	/**
 	 * Gets a relative path from the source file to the destination
 	 * 
@@ -458,7 +487,8 @@ public class Utils {
 	 * @return The relative path from the source file's directory to the
 	 *         destination file
 	 */
-	public static String getRelativePath(File source, File destination) throws IOException {
+	public static String getRelativePath(File source, File destination)
+			throws IOException {
 		String sourceDir = null;
 		String destDir = null;
 		if (source.isDirectory()) {
@@ -475,7 +505,8 @@ public class Utils {
 		// find the overlap in the source and dest paths
 		String overlap = findOverlap(sourceDir, destDir);
 		if (overlap.endsWith(File.separator)) {
-			overlap = overlap.substring(0, overlap.length() - File.separator.length() - 1);
+			overlap = overlap.substring(0, overlap.length()
+					- File.separator.length() - 1);
 		}
 		int overlapDirs = countChars(overlap, File.separatorChar);
 		if (overlapDirs == 0) {
@@ -484,9 +515,11 @@ public class Utils {
 		}
 		// difference is the number of path elements to back up before moving
 		// down the tree
-		int parentDirsNeeded = countChars(sourceDir, File.separatorChar) - overlapDirs;
+		int parentDirsNeeded = countChars(sourceDir, File.separatorChar)
+				- overlapDirs;
 		// difference is the number of path elements above the file to keep
-		int parentDirsKept = countChars(destDir, File.separatorChar) - overlapDirs;
+		int parentDirsKept = countChars(destDir, File.separatorChar)
+				- overlapDirs;
 
 		// build the path
 		StringBuffer relPath = new StringBuffer();
@@ -509,7 +542,6 @@ public class Utils {
 		return relPath.toString();
 	}
 
-
 	private static String findOverlap(String s1, String s2) {
 		// TODO: More efficient would be some kind of binary search, divide and
 		// conquer
@@ -527,7 +559,6 @@ public class Utils {
 		return overlap.toString();
 	}
 
-
 	private static int countChars(String s, char c) {
 		int count = 0;
 		int index = -1;
@@ -537,10 +568,11 @@ public class Utils {
 		return count;
 	}
 
-
 	public static Object cloneBean(Object bean, QName qname) throws Exception {
 		StringWriter writer = new StringWriter();
 		serializeObject(bean, qname, writer);
-		return deserializeObject(new StringReader(writer.getBuffer().toString()), bean.getClass());
+		return deserializeObject(
+				new StringReader(writer.getBuffer().toString()), bean
+						.getClass());
 	}
 }

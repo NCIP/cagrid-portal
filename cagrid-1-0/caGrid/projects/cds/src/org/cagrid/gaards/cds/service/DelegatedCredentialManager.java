@@ -274,10 +274,7 @@ public class DelegatedCredentialManager {
 						.getDelegationFault(Errors.PUBLIC_KEY_DOES_NOT_MATCH);
 			}
 
-			// TODO: Verify the signatures of the chain.
-
-			// TODO: Check the Expiration, need to look at all certs in the
-			// chain.
+		
 			try {
 				ProxyPathValidator validator = new ProxyPathValidator();
 				validator.validate(certs, TrustedCertificates

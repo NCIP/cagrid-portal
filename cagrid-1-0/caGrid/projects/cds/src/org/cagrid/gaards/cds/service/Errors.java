@@ -25,7 +25,7 @@ public class Errors {
 	public static String UNEXPECTED_ERROR_DETERMINING_DELEGATION_PATH_LENGTH = "An unexpected error occurred determining the delegation path length.";
 	public static String CERTIFICATE_CHAIN_DOES_NOT_CONTAIN_PROXY = "The certificate chain provided does not begin with a proxy ceritficate.";
 	public static String INSUFFICIENT_DELEGATION_PATH_LENGTH = "The delegation path allowed in the delegated credential is not sufficient.";
-	
+
 	public static CDSInternalFault getDatabaseFault(Exception e) {
 		return getInternalFault(UNEXPECTED_DATABASE_ERROR, e);
 	}
