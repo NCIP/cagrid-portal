@@ -21,8 +21,10 @@ public class Errors {
 	public static String INSUFFICIENT_CERTIFICATE_CHAIN_SPECIFIED = "Insufficient certificate chain specified.";
 	public static String IDENTITY_DOES_NOT_MATCH_INITIATOR = "The identity of the delegated credentials does not match the identity of the initiator.";
 	public static String PUBLIC_KEY_DOES_NOT_MATCH = "The public key generated for the delegation does not match the public key supplied in the certificate.";
-	public static String INVALID_CERTIFICATE_CHAIN = "The certificate chain provided is not valid.";
-	
+	public static String INVALID_CERTIFICATE_CHAIN = "The certificate chain provided is not valid or is not trusted.";
+	public static String UNEXPECTED_ERROR_DETERMINING_DELEGATION_PATH_LENGTH = "An unexpected error occurred determining the delegation path length.";
+	public static String CERTIFICATE_CHAIN_DOES_NOT_CONTAIN_PROXY = "The certificate chain provided does not begin with a proxy ceritficate.";
+	public static String INSUFFICIENT_DELEGATION_PATH_LENGTH = "The delegation path allowed in the delegated credential is not sufficient.";
 	
 	public static CDSInternalFault getDatabaseFault(Exception e) {
 		return getInternalFault(UNEXPECTED_DATABASE_ERROR, e);

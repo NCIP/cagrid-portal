@@ -1,8 +1,10 @@
 package org.cagrid.gaards.cds.service;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
+import java.io.File;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -34,6 +36,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 	private static String GRID_IDENTITY = "/C=US/O=abc/OU=xyz/OU=caGrid/CN=user";
 
 	private CA ca;
+	
+	private File caCert;
 
 	public void testDelegatedCredentialCreateDestroy() {
 		try {
@@ -197,13 +201,14 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			dcm = Utils.getDelegatedCredentialManager();
 			IdentityDelegationPolicy policy = getSimplePolicy();
 			String alias = "some user";
-			DelegationSigningRequest req = dcm.initiateDelegation(alias,
+			GlobusCredential cred = ca.createCredential(alias);
+			DelegationSigningRequest req = dcm.initiateDelegation(cred.getIdentity(),
 					policy, Constants.KEY_LENGTH);
 			try {
 				DelegationSigningResponse res = new DelegationSigningResponse();
 				res.setDelegationIdentifier(req.getDelegationIdentifier());
 				res.setCertificateChain(null);
-				dcm.approveDelegation(alias, res);
+				dcm.approveDelegation(cred.getIdentity(), res);
 				fail("Should not be able to approve delegation.");
 			} catch (DelegationFault e) {
 				if (e.getFaultString().indexOf(
@@ -229,15 +234,16 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			dcm = Utils.getDelegatedCredentialManager();
 			IdentityDelegationPolicy policy = getSimplePolicy();
 			String alias = "some user";
-			DelegationSigningRequest req = dcm.initiateDelegation(alias,
+			GlobusCredential cred = ca.createCredential(alias);
+			DelegationSigningRequest req = dcm.initiateDelegation(cred.getIdentity(),
 					policy, Constants.KEY_LENGTH);
 			try {
-				GlobusCredential cred = ca.createCredential(alias);
+				
 				DelegationSigningResponse res = new DelegationSigningResponse();
 				res.setDelegationIdentifier(req.getDelegationIdentifier());
 				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
 						.toCertificateChain(cred.getCertificateChain()));
-				dcm.approveDelegation(alias, res);
+				dcm.approveDelegation(cred.getIdentity(), res);
 				fail("Should not be able to approve delegation.");
 			} catch (DelegationFault e) {
 				if (e.getFaultString().indexOf(
@@ -263,15 +269,16 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			dcm = Utils.getDelegatedCredentialManager();
 			IdentityDelegationPolicy policy = getSimplePolicy();
 			String alias = "some user";
-			DelegationSigningRequest req = dcm.initiateDelegation(alias,
+			GlobusCredential cred = ca.createCredential(alias);
+			DelegationSigningRequest req = dcm.initiateDelegation(cred.getIdentity(),
 					policy, Constants.KEY_LENGTH);
 			try {
-				GlobusCredential cred = ca.createProxy(alias, 1);
+				GlobusCredential proxy = ca.createProxy(alias, 1);
 				DelegationSigningResponse res = new DelegationSigningResponse();
 				res.setDelegationIdentifier(req.getDelegationIdentifier());
 				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
-						.toCertificateChain(cred.getCertificateChain()));
-				dcm.approveDelegation(alias, res);
+						.toCertificateChain(proxy.getCertificateChain()));
+				dcm.approveDelegation(cred.getIdentity(), res);
 				fail("Should not be able to approve delegation.");
 			} catch (DelegationFault e) {
 				if (e.getFaultString()
@@ -296,7 +303,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			dcm = Utils.getDelegatedCredentialManager();
 			IdentityDelegationPolicy policy = getSimplePolicy();
 			String alias = "some user";
-			DelegationSigningRequest req = dcm.initiateDelegation(alias,
+			GlobusCredential cred = ca.createCredential(alias);
+			DelegationSigningRequest req = dcm.initiateDelegation(cred.getIdentity(),
 					policy, Constants.KEY_LENGTH);
 			try {
 				PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey().getKeyAsString());
@@ -305,7 +313,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				res.setDelegationIdentifier(req.getDelegationIdentifier());
 				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
 						.toCertificateChain(certs));
-				dcm.approveDelegation(alias, res);
+				dcm.approveDelegation(cred.getIdentity(), res);
 				fail("Should not be able to approve delegation.");
 			} catch (DelegationFault e) {
 				if (e.getFaultString()
@@ -330,7 +338,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			dcm = Utils.getDelegatedCredentialManager();
 			IdentityDelegationPolicy policy = getSimplePolicy();
 			String alias = "some user";
-			DelegationSigningRequest req = dcm.initiateDelegation(alias,
+			GlobusCredential cred = ca.createCredential(alias);
+			DelegationSigningRequest req = dcm.initiateDelegation(cred.getIdentity(),
 					policy, Constants.KEY_LENGTH);
 			try {
 				PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey().getKeyAsString());
@@ -341,11 +350,46 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				res.setDelegationIdentifier(req.getDelegationIdentifier());
 				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
 						.toCertificateChain(certs));
-				dcm.approveDelegation(alias, res);
+				dcm.approveDelegation(cred.getIdentity(), res);
 				fail("Should not be able to approve delegation.");
 			} catch (DelegationFault e) {
 				if (e.getFaultString()
 						.indexOf(Errors.INVALID_CERTIFICATE_CHAIN) == -1) {
+					fail("Should not be able to approve delegation.");
+				}
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public void testDelegateCredentialInsufficientDelegationPathLength() {
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			IdentityDelegationPolicy policy = getSimplePolicy();
+			String alias = "some user";
+			GlobusCredential cred = ca.createCredential(alias);
+			DelegationSigningRequest req = dcm.initiateDelegation(cred.getIdentity(),
+					policy, Constants.KEY_LENGTH);
+			try {
+				PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey().getKeyAsString());
+				X509Certificate[] certs = ca.createProxyCertifcates(alias,publicKey, 0);
+				DelegationSigningResponse res = new DelegationSigningResponse();
+				res.setDelegationIdentifier(req.getDelegationIdentifier());
+				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+						.toCertificateChain(certs));
+				dcm.approveDelegation(cred.getIdentity(), res);
+				fail("Should not be able to approve delegation.");
+			} catch (DelegationFault e) {
+				if (e.getFaultString()
+						.indexOf(Errors.INSUFFICIENT_DELEGATION_PATH_LENGTH) == -1) {
 					fail("Should not be able to approve delegation.");
 				}
 			}
@@ -394,6 +438,10 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		Utils.getDatabase().createDatabaseIfNeeded();
 		try {
 			this.ca = new CA();
+			File f = gov.nih.nci.cagrid.common.Utils.getTrustedCerificatesDirectory();
+			f.mkdirs();
+			caCert = new File(f.getAbsoluteFile()+File.separator+"cds-test-ca.0");
+			CertUtil.writeCertificate(this.ca.getCertificate(),caCert);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -402,7 +450,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 
 	protected void tearDown() throws Exception {
 		super.setUp();
-
+		caCert.delete();
 	}
 
 	public class InvalidKeyManager implements KeyManager {

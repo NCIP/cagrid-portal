@@ -1,5 +1,6 @@
 package org.cagrid.gaards.cds.service;
 
+import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.security.KeyPair;
@@ -28,7 +29,11 @@ import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.tools.database.Database;
+import org.globus.gsi.CertUtil;
+import org.globus.gsi.CertificateRevocationLists;
+import org.globus.gsi.TrustedCertificates;
 import org.globus.gsi.bc.BouncyCastleUtil;
+import org.globus.gsi.proxy.ProxyPathValidator;
 
 public class DelegatedCredentialManager {
 
@@ -273,22 +278,16 @@ public class DelegatedCredentialManager {
 
 			// TODO: Check the Expiration, need to look at all certs in the
 			// chain.
+			try {
+				ProxyPathValidator validator = new ProxyPathValidator();
+				validator.validate(certs, TrustedCertificates
+						.getDefaultTrustedCertificates().getCertificates(),
+						CertificateRevocationLists
+								.getDefaultCertificateRevocationLists());
 
-			for (int i = 0; i < certs.length; i++) {
-				if (i > 0) {
-					try {
-						certs[i - 1].verify(certs[i].getPublicKey());
-					} catch (Exception e) {
-						throw Errors
-								.getDelegationFault(Errors.INVALID_CERTIFICATE_CHAIN);
-					}
-				}
-				try {
-					certs[i].checkValidity();
-				} catch (Exception e) {
-					throw Errors
-							.getDelegationFault(Errors.INVALID_CERTIFICATE_CHAIN);
-				}
+			} catch (Exception e) {
+				throw Errors
+						.getDelegationFault(Errors.INVALID_CERTIFICATE_CHAIN);
 			}
 
 			// Check to make sure the Identity of the proxy cert matches the
@@ -308,7 +307,34 @@ public class DelegatedCredentialManager {
 								e);
 			}
 
-			// TODO: Check delegation path length
+			// Check delegation path length
+			try {
+				if (CertUtil.isProxy(BouncyCastleUtil
+						.getCertificateType(certs[0]))) {
+					int delegationPathLength = CertificateExtensionsUtil
+							.getDelegationPathLength(certs[0]);
+					// Need to look at the delegationPathLength to make sure
+					// that it as least one.
+					System.out.println(certs[0].getSubjectDN().getName()+"-"+delegationPathLength);
+					if (delegationPathLength < 1) {
+						throw Errors
+								.getDelegationFault(Errors.INSUFFICIENT_DELEGATION_PATH_LENGTH);
+					}
+				} else {
+					throw Errors
+							.getDelegationFault(Errors.CERTIFICATE_CHAIN_DOES_NOT_CONTAIN_PROXY);
+				}
+			} catch (CDSInternalFault e) {
+				throw e;
+			}catch (DelegationFault e) {
+				throw e;
+			}catch (Exception e) {
+				log.error(e.getMessage(), e);
+				throw Errors
+						.getInternalFault(
+								Errors.UNEXPECTED_ERROR_DETERMINING_DELEGATION_PATH_LENGTH,
+								e);
+			}
 
 			// TODO: Check to make sure the approval is within the allowed time
 			// buffer.
