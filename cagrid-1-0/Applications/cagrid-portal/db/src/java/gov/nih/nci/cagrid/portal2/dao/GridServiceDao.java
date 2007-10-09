@@ -57,18 +57,16 @@ public class GridServiceDao extends AbstractDao<GridService> {
 								.list();
 					}
 				});
-		logger.debug("Retreived " + services.size()
-				+ " GridService objects for '" + indexServiceUrl + "'.");
 
 		return services;
 	}
 
 	public GridService getByUrl(String url) {
 		GridService svc = null;
-		logger.debug("quering");
+
 		List svcs = getHibernateTemplate().find(
 				"from GridService where url = '" + url + "'");
-		logger.debug("got services");
+
 		if (svcs.size() > 1) {
 			throw new NonUniqueResultException("Found " + svcs.size()
 					+ " GridService objects for url '" + url + "'");

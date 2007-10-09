@@ -42,7 +42,6 @@ public class SelectGridServiceController extends AbstractController {
 	public void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
 
-		
 		Integer sgsId = null;
 		String sgsUrl = request.getParameter("sgs_url");
 		if (!PortalUtils.isEmpty(sgsUrl)) {
@@ -77,26 +76,14 @@ public class SelectGridServiceController extends AbstractController {
 		logger.debug("Publishing selectedGridServiceId: " + sgsId);
 		helper.send("selectedGridServiceId", sgsId);
 
-		String portletsToMaximize = request.getPreferences().getValue(
-				"portletsToMaximize", null);
-		helper.send("maximizedPortlets", portletsToMaximize);
+		logger.debug("setting action to " + getSuccessAction());
+		response.setRenderParameter("action", getSuccessAction());
 
-		String redirect = request.getParameter("redirectUrl");
-		if (redirect != null) {
-			
-			logger.debug("redirecting to: " + redirect);
-			response.sendRedirect(redirect);
-			
-		} else {
-
-			logger.debug("setting action to " + getSuccessAction());
-			response.setRenderParameter("action", getSuccessAction());
-
-			String category = request.getParameter("category");
-			if (!PortalUtils.isEmpty(category)) {
-				response.setRenderParameter("category", category);
-			}
+		String category = request.getParameter("category");
+		if (!PortalUtils.isEmpty(category)) {
+			response.setRenderParameter("category", category);
 		}
+
 	}
 
 	public String getInstanceID(PortletRequest request) {

@@ -21,8 +21,6 @@
 		<mapping
 			class="gov.nih.nci.cagrid.portal2.domain.Participation" />
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.PortalUser" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.GridPortalUser" />
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.Role" />
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.GridService" />
 		<mapping
@@ -33,6 +31,13 @@
 			class="gov.nih.nci.cagrid.portal2.domain.ServiceAnnotation" />
 		<mapping
 			class="gov.nih.nci.cagrid.portal2.domain.Workspace" />
+			
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQuery" />			
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.dataservice.DCQLQuery" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.dataservice.DCQLQueryInstance" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.dataservice.Query" />
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.dataservice.QueryInstance" />
 
 
 		<mapping

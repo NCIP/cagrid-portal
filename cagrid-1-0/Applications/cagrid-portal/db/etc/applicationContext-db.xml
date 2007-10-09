@@ -49,9 +49,6 @@
 					gov.nih.nci.cagrid.portal2.domain.PortalUser
 				</value>
 				<value>
-					gov.nih.nci.cagrid.portal2.domain.GridPortalUser
-				</value>
-				<value>
 					gov.nih.nci.cagrid.portal2.domain.Workspace
 				</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.Role</value>
@@ -60,6 +57,14 @@
 				<value>gov.nih.nci.cagrid.portal2.domain.IndexService</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.ServiceAnnotation</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.StatusChange</value>
+				
+				<value>gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQuery</value>
+		        <value>gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance</value>
+				<value>gov.nih.nci.cagrid.portal2.domain.dataservice.DCQLQuery</value>
+				<value>gov.nih.nci.cagrid.portal2.domain.dataservice.DCQLQueryInstance</value>
+				<value>gov.nih.nci.cagrid.portal2.domain.dataservice.Query</value>
+				<value>gov.nih.nci.cagrid.portal2.domain.dataservice.QueryInstance</value>
+				
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.ServiceMetadata</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.Enumeration</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.PointOfContact</value>
@@ -130,8 +135,7 @@
 		class="gov.nih.nci.cagrid.portal2.dao.PersonDao" />
 	<bean id="portalUserDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.PortalUserDao" />
-	<bean id="gridPortalUserDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.GridPortalUserDao" />
+
 	<bean id="participantDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.ParticipantDao" />
 	<bean id="roleDao" parent="daoTemplate"
@@ -151,6 +155,12 @@
 		
 	<bean id="workspaceDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.WorkspaceDao" />		
+		
+	<bean id="cqlQueryDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal2.dao.CQLQueryDao" />
+		
+	<bean id="cqlQueryInstanceDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal2.dao.CQLQueryInstanceDao" />
 
 
 	<bean id="openSessionInViewInterceptor"

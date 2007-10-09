@@ -13,14 +13,19 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
 	<util:set id="defaultIndexServiceUrls">
-		<!-- 
+
 		<value>http://cbiovdev5012.nci.nih.gov:8080/wsrf/services/DefaultIndexService</value>
-		 -->
+		<!-- 
 		<value>http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService</value>
+		 -->
 	</util:set>
 
 	<bean id="defaultTimeout" class="java.lang.Long">
-		<constructor-arg value="5000"/>
+		<constructor-arg value="10000"/>
+	</bean>
+	
+	<bean id="defaultPeriod" class="java.lang.Long">
+		<constructor-arg value="900000"/>
 	</bean>
 	
 	<bean id="metadataListenerTemplate" abstract="true">

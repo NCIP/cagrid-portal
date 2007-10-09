@@ -47,7 +47,7 @@ public class ParticipantMapNode {
 		return participants;
 	}
 
-	public void setParticipants(List<Participant> participans) {
+	public void setParticipants(List<Participant> participants) {
 		this.participants = participants;
 	}
 

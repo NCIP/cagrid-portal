@@ -57,7 +57,7 @@ public class ViewServiceDetailsController extends AbstractController {
 		if (selectedGridServiceId != null) {
 
 			setSelectedGridServiceId(request, selectedGridServiceId);
-			response.setWindowState(WindowState.MAXIMIZED);
+			
 
 		}
 
@@ -89,16 +89,6 @@ public class ViewServiceDetailsController extends AbstractController {
 					.getParameter("gridServiceUrl"));
 		}
 		
-		//See if we need to maximize this window
-		if(isMaximize(request)){
-			clearMaximize(request);
-			logger.debug("Setting maximize to true");
-			mav.addObject("maximize", true);
-		}else{
-			logger.debug("Setting maximize to false");
-			mav.addObject("maximize", false);
-		}
-		
 		if (gridService != null) {
 			mav.addObject("gridService", gridService);
 			mav.addObject("gridServiceUrl", gridService.getUrl());
@@ -108,54 +98,6 @@ public class ViewServiceDetailsController extends AbstractController {
 		return mav;
 	}
 	
-	private void clearMaximize(RenderRequest request) {
-		PortletSession portletSession = request.getPortletSession(true);
-		String id = getInstanceID(request);
-		String msgSessionId = MessageHelper.getSessionID(request);
-		MessageHelper.loadPrefs(request, id, msgSessionId);
-		MessageHelper helper = new MessageHelper(portletSession, id,
-				msgSessionId);
-
-		StringBuilder sb = new StringBuilder();
-		String portletName = request.getPreferences().getValue("portletName", null);
-		String maximizedPortlets = (String) helper.get("maximizedPortlets");
-		if(!PortalUtils.isEmpty(maximizedPortlets)){
-			String[] names = maximizedPortlets.split(",");
-			for(int i = 0; i < names.length; i++){
-				String name = names[i];
-				if(!name.trim().equals(portletName.trim())){
-					sb.append(name);
-					if(i + 1 < names.length){
-						sb.append(",");
-					}
-				}
-			}
-		}
-		
-		helper.send("maximizedPortlets", sb.toString());
-	}
-
-	private boolean isMaximize(RenderRequest request) {
-		PortletSession portletSession = request.getPortletSession(true);
-		String id = getInstanceID(request);
-		String msgSessionId = MessageHelper.getSessionID(request);
-		MessageHelper.loadPrefs(request, id, msgSessionId);
-		MessageHelper helper = new MessageHelper(portletSession, id,
-				msgSessionId);
-
-		String portletName = request.getPreferences().getValue("portletName", null);
-		String maximizedPortlets = (String) helper.get("maximizedPortlets");
-		if(!PortalUtils.isEmpty(maximizedPortlets)){
-			for(String name : maximizedPortlets.split(",")){
-				if(name.trim().equals(portletName.trim())){
-					return true;
-				}
-			}
-		}
-		
-		return false;
-	}
-
 	private void setSelectedGridServiceId(PortletRequest request, Integer sgsId){
 		PortletSession portletSession = request.getPortletSession(true);
 		String id = getInstanceID(request);

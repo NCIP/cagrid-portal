@@ -45,8 +45,8 @@
 
 	<bean id="checkForMetadataChangesTask"
 		class="org.springframework.scheduling.timer.ScheduledTimerTask">
-		<property name="delay" value="3000" />
-		<property name="period" value="60000" />
+		<property name="delay" value="12000" />
+		<property name="period" ref="defaultPeriod" />
 		<property name="timerTask" ref="checkForMetadataChanges" />
 	</bean>
 

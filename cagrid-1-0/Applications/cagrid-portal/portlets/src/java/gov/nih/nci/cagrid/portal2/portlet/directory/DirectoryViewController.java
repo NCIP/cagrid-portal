@@ -3,6 +3,7 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.directory;
 
+import gov.nih.nci.cagrid.portal2.portlet.util.PortletUtils;
 import gov.nih.nci.cagrid.portal2.portlet.util.Scroller;
 import gov.nih.nci.cagrid.portal2.util.PortalUtils;
 
@@ -38,21 +39,7 @@ public class DirectoryViewController extends AbstractController {
 			DirectoryBean directory = getDirectoryBean(request);
 
 			Scroller scroller = directory.getScroller();
-			String scrollOp = request.getParameter("scrollOp");
-			logger.debug("scrollOp = '" + scrollOp + "'");
-			if (!PortalUtils.isEmpty(scrollOp)) {
-				if ("first".equals(scrollOp)) {
-					scroller.first();
-				} else if ("previous".equals(scrollOp)) {
-					scroller.previous();
-				} else if ("next".equals(scrollOp)) {
-					scroller.next();
-				} else if ("last".equals(scrollOp)) {
-					scroller.last();
-				} else {
-					logger.warn("Invalid scroll operation: '" + scrollOp + "'");
-				}
-			}
+			PortletUtils.doScrollOp(request, scroller);
 		} catch (Exception ex) {
 			String msg = "Error handling action request: " + ex.getMessage();
 			logger.error(msg, ex);

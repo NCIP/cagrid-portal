@@ -32,11 +32,9 @@
     <!-- Sync every 10 minutes -->
     <bean id="syncGTSTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
         <property name="delay">
-            <value>3000</value>
+            <value>1000</value>
         </property>
-        <property name="period">
-            <value>60000</value>
-        </property>
+        <property name="period" ref="defaultPeriod"/>
         <property name="timerTask">
             <ref bean="syncMethodInvokingTask"/>
         </property>

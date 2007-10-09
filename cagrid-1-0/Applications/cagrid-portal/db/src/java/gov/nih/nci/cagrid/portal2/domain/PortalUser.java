@@ -3,22 +3,18 @@
  */
 package gov.nih.nci.cagrid.portal2.domain;
 
+import gov.nih.nci.cagrid.portal2.domain.dataservice.QueryInstance;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -30,45 +26,16 @@ import org.hibernate.annotations.Parameter;
 @Entity
 @Table(name = "portal_users")
 @GenericGenerator(name = "id-generator", strategy = "native", parameters = { @Parameter(name = "sequence", value = "seq_portal_users") })
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
-@DiscriminatorValue("PortalUser")
 public class PortalUser extends AbstractDomainObject {
 
-	private String username;
-
-	private String password;
-
-	private List<Role> roles = new ArrayList<Role>();
-
 	private Person person;
+	
+	private String portalId;
+	
+	private String gridCredential;
+	
+	private List<QueryInstance> queryInstances = new ArrayList<QueryInstance>();
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	@ManyToMany
-	@JoinTable(name = "portaluser_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = @UniqueConstraint(columnNames = {
-			"user_id", "role_id" }))
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
 
 	@ManyToOne
 	@JoinColumn(name = "person_id")
@@ -78,6 +45,33 @@ public class PortalUser extends AbstractDomainObject {
 
 	public void setPerson(Person person) {
 		this.person = person;
+	}
+
+	@Transient
+	public String getGridCredential() {
+		return gridCredential;
+	}
+
+	public void setGridCredential(String gridCredential) {
+		this.gridCredential = gridCredential;
+	}
+
+	public String getPortalId() {
+		return portalId;
+	}
+
+	public void setPortalId(String portalId) {
+		this.portalId = portalId;
+	}
+
+	@OneToMany(mappedBy = "portalUser")
+	@OrderBy("startTime")
+	public List<QueryInstance> getQueryInstances() {
+		return queryInstances;
+	}
+
+	public void setQueryInstances(List<QueryInstance> queryInstances) {
+		this.queryInstances = queryInstances;
 	}
 
 }

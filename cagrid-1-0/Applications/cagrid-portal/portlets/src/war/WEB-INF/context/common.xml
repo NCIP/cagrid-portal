@@ -1,7 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-<beans>
+	<bean id="cqlQueryService" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryService">
+		<property name="portalUserDao" ref="portalUserDao"/>
+		<property name="gridServiceDao" ref="gridServiceDao"/>
+		<property name="cqlQueryDao" ref="cqlQueryDao"/>
+		<property name="cqlQueryInstanceDao" ref="cqlQueryInstanceDao"/>
+		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
+	</bean>
+
+	<bean id="cqlQueryInstanceExecutorPrototype" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.DefaultCQLQueryInstanceExecutor" scope="prototype">
+		<property name="executorService" ref="executorService"/>
+		<property name="cqlQueryInstanceListener">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.query.cql.DefaultCQLQueryInstanceListener">
+				<property name="cqlQueryInstanceDao" ref="cqlQueryInstanceDao"/>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="executorService" class="gov.nih.nci.cagrid.portal2.portlet.util.DelegatingExecutorService">
+	
+		<property name="executorService">
+			<bean class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
+				<constructor-arg value="20"/>
+			</bean>
+		</property>
+	
+	</bean>
+	
+	<bean id="sharedApplicationModel" class="gov.nih.nci.cagrid.portal2.portlet.SessionBasedSharedApplicationModel" scope="globalSession">
+		<aop:scoped-proxy proxy-target-class="true"/>
+	</bean>
+	
+	<bean id="treeFacade" class="gov.nih.nci.cagrid.portal2.portlet.tree.TreeFacade" scope="globalSession">
+		<aop:scoped-proxy proxy-target-class="true"/>
+		<property name="renderer">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.tree.ServletRenderer">
+				<property name="servletUrl" value="/WEB-INF/jsp/tree/tree_node.jsp" />
+				<property name="requestAttribute" value="node" />
+			</bean>
+		</property>
+	</bean>
 
 	
 	<!-- Message source for this context, loaded from localized "messages_xx" files -->
@@ -30,9 +80,14 @@
 			<value>FLUSH_AUTO</value>
 		</property>
 	</bean>
+	
+	<bean id="portalUserInterceptor" class="gov.nih.nci.cagrid.portal2.portlet.PortalUserInterceptor">
+		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
+		<property name="portalUserAttributeName" value="cagrid.portal.user"/>
+	</bean>
 
 	<!-- Abstract Default ExceptionHandler -->
-	<bean id="defaultExceptionHandlerTemplate" class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver" abstract="true">
+	<bean id="defaultExceptionHandlerTemplate" class="gov.nih.nci.cagrid.portal2.portlet.util.DefaultExceptionResolver" abstract="true">
 		<property name="defaultErrorView" value="error"/>
 		<property name="exceptionMappings">
 			<props>
@@ -41,5 +96,11 @@
 			</props>
 		</property>  
 	</bean>
+	
+	<util:list id="commonInterceptors">
+		<ref bean="parameterMappingInterceptor" />
+		<ref bean="openSessionInViewInterceptor" />
+		<ref bean="portalUserInterceptor" />	
+	</util:list>
 
 </beans>
