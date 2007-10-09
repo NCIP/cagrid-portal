@@ -1,0 +1,32 @@
+<!DOCTYPE dwr PUBLIC
+    "-//GetAhead Limited//DTD Direct Web Remoting 1.0//EN"
+    "http://www.getahead.ltd.uk/dwr/dwr10.dtd">
+
+<dwr>
+  <allow>
+    <create creator="new" javascript="Greet">
+      <param name="class" value="test.Greet"/>
+    </create>
+    
+	<create creator="new" javascript="JavaChat">
+        <param name="class" value="test.JavaChat"/>
+    </create>
+    
+    <convert converter="bean" match="test.Message"/>
+    
+    <create creator="spring" javascript="QueryHistoryFacade">
+    	<param name="beanName" value="cqlQueryHistoryFacade"/>
+    </create>
+    
+    <convert converter="enum" match="gov.nih.nci.cagrid.portal2.domain.dataservice.QueryInstanceState"/>
+    
+    <convert converter="bean" match="gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance">
+    	<param name="include" value="id, finishTime, startTime, state"/>
+    </convert>
+    
+    <create creator="spring" javascript="TreeFacade">
+    	<param name="beanName" value="treeFacade"/>
+    </create>
+    
+  </allow>
+</dwr>

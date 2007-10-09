@@ -35,6 +35,7 @@
 		<param-value>
 			classpath*:applicationContext-*.xml
 			/WEB-INF/context/common.xml
+			/WEB-INF/context/facades.xml
 		</param-value>
 	</context-param>
 
@@ -70,6 +71,37 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	
+	<servlet>
+		<servlet-name>dwr-invoker</servlet-name>
+		<servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+    		<param-name>activeReverseAjaxEnabled</param-name>
+    		<param-value>true</param-value>
+  		</init-param>
+		<init-param>
+  			<param-name>org.directwebremoting.extend.ServerLoadMonitor</param-name>
+  			<param-value>org.directwebremoting.impl.PollingServerLoadMonitor</param-value>
+		</init-param>
+		<init-param>
+  			<param-name>disconnectedTime</param-name>
+  			<param-value>5000</param-value>
+		</init-param>
+  		
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>dwr-invoker</servlet-name>
+		<url-pattern>/dwr/*</url-pattern>
+	</servlet-mapping>	
     
    <!--
      - The ViewRendererServlet acts as a bridge from Portlet requests to Servlet requests.
@@ -85,5 +117,7 @@
   	  <servlet-name>view-servlet</servlet-name>
   	  <url-pattern>/WEB-INF/servlet/view</url-pattern>
    </servlet-mapping>
+   
+   
 
 </web-app>

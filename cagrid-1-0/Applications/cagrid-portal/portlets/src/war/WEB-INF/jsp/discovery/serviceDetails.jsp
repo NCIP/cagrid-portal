@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
+
 <script src="<c:url value="/js/scriptaculous/prototype.js"/>"
 	type="text/javascript"></script>
 <script src="<c:url value="/js/scriptaculous/scriptaculous.js"/>"
@@ -37,8 +38,8 @@
 }
 #<c:out value="${detailsDivId}"/>{
 	width: 100%; 
-	height: 200px; 
-	overflow: auto;
+	/*height: 200px; 
+	overflow: auto;*/
 }
 -->
 </style>
@@ -52,17 +53,7 @@
 	<input type="submit" value="Show"/>
 </form:form>
 
-<c:choose>
-<c:when test="${!empty gridServiceUrl && maximize}">
-	<script type="text/javascript">
-	// <![CDATA[
-	
-	document.selectGridServiceForm.submit();
-	
-	// ]]>
-	</script>
-</c:when>
-<c:otherwise>
+
 <c:choose>
 	<c:when test="${!empty gridServiceUrl and empty gridService}">
 		No grid service found for <c:out value="${gridServiceUrl}"/>
@@ -274,8 +265,6 @@
 	<c:otherwise>
 No service is currently selected.
 	</c:otherwise>
-</c:choose>
-</c:otherwise>
 </c:choose>
 
 </div>

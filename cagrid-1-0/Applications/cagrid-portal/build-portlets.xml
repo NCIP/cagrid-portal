@@ -63,6 +63,7 @@
 				<include name="cagrid/*.jar" />
 			</fileset>
 			<fileset dir="${portlets.lib.dir}">
+				<include name="dwr.jar"/>
 				<include name="jstl.jar" />
 				<include name="portlet-messaging-2.4.jar" />
 				<include name="spring-portlet.jar" />
@@ -70,6 +71,8 @@
 			</fileset>
 			
 		</copy>
+		
+		<copy file="${db.jdbc.driver.jar}" todir="${portlets.build.war.dir}/WEB-INF/lib"/>
 
 		<mkdir dir="${portlets.build.war.dir}/WEB-INF/classes" />
 		<copy todir="${portlets.build.war.dir}/WEB-INF/classes"

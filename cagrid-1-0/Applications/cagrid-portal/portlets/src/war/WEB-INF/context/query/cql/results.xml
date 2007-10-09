@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+	<import resource="common.xml"/>
+
+	<bean id="viewController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.cql.ViewCQLQueryInstanceResultsController">
+		
+		<property name="viewName" value="results" />
+		<property name="commandName" value="resultsCommand" />
+		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
+		<property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>
+		
+	</bean>
+	
+
+		
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		
+		<property name="interceptors" ref="commonInterceptors"/>
+
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="viewController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+		
+</beans>

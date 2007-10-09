@@ -122,6 +122,11 @@
 			<classpath refid="db.compile.cp" />
 		</javac>
 	</target>
+	
+	<target name="db:jar" depends="db:compile">
+		<jar basedir="${db.classes.dir}" destfile="${db.build.dir}/cagrid-portal-db.jar"
+			includes="**/*.class"/>
+	</target>
 
 	<target name="db:compile-test">
 		<mkdir dir="${db.test.classes.dir}" />

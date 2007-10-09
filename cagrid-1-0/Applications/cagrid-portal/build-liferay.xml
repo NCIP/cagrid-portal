@@ -1,0 +1,108 @@
+<project>
+
+	<property name="liferay.dir" value="portals/liferay" />
+	<property name="liferay.lib.dir" value="${liferay.dir}/lib" />
+	<property name="liferay.build.dir" value="${liferay.dir}/build" />
+	<property name="liferay.classes.dir" value="${liferay.build.dir}/classes" />
+	<property name="liferay.src.java.dir" value="${liferay.dir}/src/java" />
+	<property name="liferay.src.war.dir" value="${liferay.dir}/src/war" />
+
+	<property name="liferay.test.dir" value="${liferay.dir}/test" />
+	<property name="liferay.test.lib.dir" value="${liferay.test.dir}/lib" />
+	<property name="liferay.test.build.dir" value="${liferay.test.dir}/build" />
+	<property name="liferay.test.classes.dir"
+		value="${liferay.test.build.dir}/classes" />
+	<property name="liferay.test.src.java.dir"
+		value="${liferay.test.dir}/src/java" />	
+	
+	<property name="liferay.tomcat.home" value="${user.home}/packages/tomcat/liferay/tomcat-5.5.23"/>
+	
+	<property name="liferay.debug" value="true"/>
+	
+	<path id="liferay.compile.cp">
+		<path refid="db.compile.cp"/>
+		<pathelement location="${db.classes.dir}"/>
+		<fileset dir="${liferay.lib.dir}">
+			<include name="portal-impl.jar"/>
+			<include name="portal-kernel.jar"/>
+			<include name="portal-service.jar"/>
+		</fileset>
+		<fileset dir="${aggr.lib.dir}">
+			<include name="cagrid/cog-jglobus.jar"/>
+		</fileset>
+		<fileset dir="${portlets.lib.dir}">
+			<include name="servlet-api.jar"/>
+		</fileset>
+	</path>
+	
+	<target name="liferay:compile" depends="db:compile">
+		<mkdir dir="${liferay.classes.dir}" />
+		<javac srcdir="${liferay.src.java.dir}" destdir="${liferay.classes.dir}"
+			debug="${liferay.debug}">
+			<classpath refid="liferay.compile.cp" />
+		</javac>	
+	</target>
+	
+	<target name="liferay:jar" depends="liferay:compile">
+		<jar basedir="${liferay.classes.dir}" destfile="${liferay.build.dir}/cagrid-portal-liferay.jar"/>
+	</target>
+	
+	<target name="liferay:jar-resources">
+	
+		<mkdir dir="${liferay.build.dir}/resources"/>
+		
+		<copy file="${db.dir}/etc/${db.profile}.hibernate.properties" tofile="${liferay.build.dir}/resources/hibernate.properties"/>
+		
+		<copy todir="${liferay.build.dir}/resources">
+			<fileset dir="${db.dir}/etc">
+				<include name="*.properties" />
+				<include name="*.xml" />
+				<exclude name="*.hibernate.properties" />
+			</fileset>
+			<fileset dir="${liferay.dir}/etc">
+				<include name="proxy.txt" />
+				<include name="*.xml" />
+			</fileset>		
+		</copy>
+	
+		<jar basedir="${liferay.build.dir}/resources" destfile="${liferay.build.dir}/cagrid-portal-liferay-resources.jar"/>
+		
+	</target>
+	
+	<target name="liferay:deploy" depends="db:jar, liferay:jar, liferay:jar-resources">
+		
+		<copy todir="${liferay.tomcat.home}/webapps/ROOT/WEB-INF/lib" overwrite="true" flatten="true">
+		
+			<fileset dir="${db.build.dir}">
+				<include name="cagrid-portal-db.jar"/>
+			</fileset>
+		
+			<fileset dir="${liferay.build.dir}">
+				<include name="cagrid-portal-liferay.jar"/>
+				<include name="cagrid-portal-liferay-resources.jar"/>
+			</fileset>
+			
+			<fileset dir="${db.lib.dir}">
+				<include name="hibernate/annotations/*.jar"/>
+				<include name="spring/spring-aspects.jar"/>
+			</fileset>
+			
+			<fileset dir="${aggr.lib.dir}">
+				<include name="cagrid/cog-jglobus.jar"/>
+			</fileset>
+			
+			<fileset dir="${globus.home}/lib">
+				<include name="jce-jdk13-125.jar"/>
+			</fileset>
+			
+		</copy>
+		
+		<copy file="${liferay.src.war.dir}/WEB-INF/classes/portal-ext.properties" todir="${liferay.tomcat.home}/webapps/ROOT/WEB-INF/classes" overwrite="true"/>
+		
+	</target>
+	
+	<target name="liferay:clean">
+		<delete dir="${liferay.build.dir}"/>
+	</target>
+	
+</project>

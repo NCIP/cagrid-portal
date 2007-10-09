@@ -22,7 +22,7 @@
 				<td class="dataCellText">
 					<c:choose>
 						<c:when test="${directoryBean.category == 'dataServices' && !empty service.domainModel}">
-							<a href="<portlet:actionURL><portlet:param name="action" value="selectService"/><portlet:param name="redirectUrl" value="/cagridportal/portal/tools.psml"/><portlet:param name="sgs_url" value="${service.url}"/><portlet:param name="portletsToMaximize" value="dataservice"/></portlet:actionURL>"
+							<a href="<portlet:actionURL><portlet:param name="action" value="selectService"/><portlet:param name="sgs_url" value="${service.url}"/></portlet:actionURL>"
 								alt="Query this data service"
 							>
 								<c:out value="${service.url}"/>
@@ -40,7 +40,7 @@
 			</tr>
 			<tr class="dataRowDark">
 				<td class="dataCellTextBold"></td>
-				<td class="dataCellText"><a href="<portlet:actionURL><portlet:param name="action" value="selectService"/><portlet:param name="redirectUrl" value="/cagridportal/portal/default-page.psml"/><portlet:param name="sgs_url" value="${service.url}"/></portlet:actionURL>">
+				<td class="dataCellText"><a href="<portlet:actionURL><portlet:param name="action" value="selectService"/><portlet:param name="sgs_url" value="${service.url}"/></portlet:actionURL>">
 					<span
 					onmouseover="changeMenuStyle(this,'txtHighlightOn'),showCursor()"
 					onmouseout="changeMenuStyle(this,'txtHighlight'),hideCursor()"

@@ -7,6 +7,124 @@
 	                             http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
 
 
+
+	<portlet>
+		<description>jpchat</description>
+		<portlet-name>jpchat</portlet-name>
+		<display-name>jpchat</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/jpchat-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>jpchat</title>
+			<short-title>jpchat</short-title>
+			<keywords>jpchat</keywords>
+		</portlet-info>
+		
+	</portlet>
+	
+
+	<portlet>
+		<description>ajaxtest</description>
+		<portlet-name>ajaxtest</portlet-name>
+		<display-name>ajaxtest</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/ajaxtest-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>ajaxtest</title>
+			<short-title>ajaxtest</short-title>
+			<keywords>ajaxtest</keywords>
+		</portlet-info>
+		
+	</portlet>
+
+	<portlet>
+		<description>caGrid CQL Query Results Portlet</description>
+		<portlet-name>cqlqueryresults</portlet-name>
+		<display-name>caGrid CQL Query History Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/query/cql/results.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid CQL Query Results Portlet</title>
+			<short-title>caGrid CQL Query Results Portlet</short-title>
+			<keywords>cql,query,results</keywords>
+		</portlet-info>
+		
+	</portlet>
+
+	<portlet>
+		<description>caGrid CQL Query History Portlet</description>
+		<portlet-name>cqlqueryhistory</portlet-name>
+		<display-name>caGrid CQL Query History Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/query/cql/history.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid CQL Query History Portlet</title>
+			<short-title>caGrid CQL Query History Portlet</short-title>
+			<keywords>cql,query,history</keywords>
+		</portlet-info>
+		
+	</portlet>
+
+	<portlet>
+		<description>caGrid CQL Query Portlet</description>
+		<portlet-name>cqlquery</portlet-name>
+		<display-name>caGrid CQL Query Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/query/cql/query.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid CQL Query Portlet</title>
+			<short-title>caGrid CQL Query Portlet</short-title>
+			<keywords>cql,query</keywords>
+		</portlet-info>
+		
+	</portlet>
+
+
 	<portlet>
 		<description>caGrid Query Portlet</description>
 		<portlet-name>query</portlet-name>

@@ -173,5 +173,9 @@
 			<arg value="${aggr.dir}/etc/caBIG_Workspaces_participants.xls" />
 		</java>
 	</target>	
+	
+	<target name="aggr:run-test" depends="aggr:prepare-run-cp">
+		<java classname="test.TestCreateCqlQueryInstance" classpathref="aggr.run.cp" />
+	</target>
 
 </project>

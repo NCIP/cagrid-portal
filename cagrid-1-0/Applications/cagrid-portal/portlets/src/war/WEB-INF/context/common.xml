@@ -43,15 +43,7 @@
 		<aop:scoped-proxy proxy-target-class="true"/>
 	</bean>
 	
-	<bean id="treeFacade" class="gov.nih.nci.cagrid.portal2.portlet.tree.TreeFacade" scope="globalSession">
-		<aop:scoped-proxy proxy-target-class="true"/>
-		<property name="renderer">
-			<bean class="gov.nih.nci.cagrid.portal2.portlet.tree.ServletRenderer">
-				<property name="servletUrl" value="/WEB-INF/jsp/tree/tree_node.jsp" />
-				<property name="requestAttribute" value="node" />
-			</bean>
-		</property>
-	</bean>
+	
 
 	
 	<!-- Message source for this context, loaded from localized "messages_xx" files -->

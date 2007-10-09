@@ -5,6 +5,8 @@
 	<classpathentry kind="src" path="aggr/src/java"/>
 	<classpathentry kind="src" path="aggr/test/src/java"/>
 	<classpathentry kind="src" path="portlets/src/java"/>
+	<classpathentry kind="src" path="portlets/test/src/java"/>
+	<classpathentry kind="src" path="portals/liferay/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="db/lib/spring/spring.jar"/>
 	<classpathentry kind="lib" path="db/lib/hibernate/core/commons-logging-1.0.4.jar"/>
@@ -73,6 +75,10 @@
 	<classpathentry kind="lib" path="portlets/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="portlets/lib/portlet.jar"/>
 	<classpathentry kind="lib" path="portlets/lib/portlet-messaging-2.4.jar"/>
+	<classpathentry kind="lib" path="portals/liferay/lib/portal-impl.jar"/>
+	<classpathentry kind="lib" path="portals/liferay/lib/portal-kernel.jar"/>
+	<classpathentry kind="lib" path="portals/liferay/lib/portal-service.jar"/>
+	<classpathentry kind="lib" path="portlets/lib/dwr.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/puretls.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jgss.jar"/>
