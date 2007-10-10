@@ -2,6 +2,7 @@
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./credential-delegation-service.xsd" namespace="http://gaards.cagrid.org/cds" packageName="org.cagrid.gaards.cds.common" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="DelegationRecord" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DelegationRequest" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DelegationSigningRequest" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DelegationSigningResponse" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DelegationPolicy" xsi:type="ns2:SchemaElementType"/>
@@ -90,8 +91,7 @@
     </ns4:Method>
     <ns4:Method description="Allows a party to initate the delegation of their credential such that other parties may access their credential to act on their behalf." isImported="false" isProvided="false" name="initiateDelegation" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns6:DelegationPolicy" description="" isArray="false" name="policy" xmlns:ns6="http://gaards.cagrid.org/cds"/>
-      <ns4:Input qName="xsd:int" description="" isArray="false" name="keyLength" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+      <ns4:Input qName="ns6:DelegationRequest" description="" isArray="false" name="req" xmlns:ns6="http://gaards.cagrid.org/cds"/>
      </ns4:Inputs>
      <ns4:Output qName="ns7:DelegationSigningRequest" description="" isArray="false" xmlns:ns7="http://gaards.cagrid.org/cds"/>
      <ns4:Exceptions>

@@ -18,6 +18,7 @@ import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
+import org.cagrid.gaards.cds.common.DelegationRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningResponse;
 import org.cagrid.gaards.cds.common.DelegationStatus;
@@ -43,6 +44,7 @@ public class DelegatedCredentialManager {
 	private final static String STATUS = "STATUS";
 	private final static String POLICY_TYPE = "POLICY_TYPE";
 	private final static String EXPIRATION = "EXPIRATION";
+	private final static String DELEGATION_PATH_LENGTH = "DELEGATION_PATH_LENGTH";
 	private final static String DATE_INITIATED = "DATE_INITIATED";
 	private final static String DATE_APPROVED = "DATE_APPROVED";
 
@@ -98,13 +100,21 @@ public class DelegatedCredentialManager {
 	}
 
 	public synchronized DelegationSigningRequest initiateDelegation(
-			String callerGridIdentity, DelegationPolicy policy, int keyLength)
+			String callerGridIdentity, DelegationRequest request)
 			throws CDSInternalFault, DelegationFault, InvalidPolicyFault {
 		this.buildDatabase();
+		DelegationPolicy policy = request.getDelegationPolicy();
 		PolicyHandler handler = this.findHandler(policy.getClass().getName());
-		if (!this.proxyPolicy.isKeySizeSupported(keyLength)) {
+		if (!this.proxyPolicy.isKeySizeSupported(request.getKeyLength())) {
 			throw Errors
 					.getDelegationFault(Errors.INVALID_KEY_LENGTH_SPECIFIED);
+		}
+
+		if ((request.getDelegationPathLength() < 0)
+				|| (this.proxyPolicy.getMaxDelegationPathLength() < request
+						.getDelegationPathLength())) {
+			throw Errors
+					.getDelegationFault(Errors.INVALID_DELEGATION_PATH_LENGTH_SPECIFIED);
 		}
 
 		Connection c = null;
@@ -114,13 +124,15 @@ public class DelegatedCredentialManager {
 			PreparedStatement s = c.prepareStatement("INSERT INTO " + TABLE
 					+ " SET " + GRID_IDENTITY + "= ?, " + POLICY_TYPE + "= ?, "
 					+ STATUS + "= ?," + DATE_INITIATED + "=?," + DATE_APPROVED
-					+ "=?," + EXPIRATION + "=?");
+					+ "=?," + EXPIRATION + "=?," + DELEGATION_PATH_LENGTH
+					+ "=?");
 			s.setString(1, callerGridIdentity);
 			s.setString(2, policy.getClass().getName());
 			s.setString(3, DelegationStatus.Pending.getValue());
 			s.setLong(4, new Date().getTime());
 			s.setLong(5, 0);
 			s.setLong(6, 0);
+			s.setInt(7, request.getDelegationPathLength());
 			s.execute();
 			s.close();
 			delegationId = db.getLastAutoId(c);
@@ -128,7 +140,7 @@ public class DelegatedCredentialManager {
 			id.setDelegationId(delegationId);
 			// Create and Store Key Pair.
 			KeyPair keys = this.keyManager.createAndStoreKeyPair(String
-					.valueOf(delegationId), keyLength);
+					.valueOf(delegationId), request.getKeyLength());
 			handler.storePolicy(id, policy);
 			DelegationSigningRequest req = new DelegationSigningRequest();
 			req.setDelegationIdentifier(id);
@@ -274,7 +286,6 @@ public class DelegatedCredentialManager {
 						.getDelegationFault(Errors.PUBLIC_KEY_DOES_NOT_MATCH);
 			}
 
-		
 			try {
 				ProxyPathValidator validator = new ProxyPathValidator();
 				validator.validate(certs, TrustedCertificates
@@ -312,7 +323,8 @@ public class DelegatedCredentialManager {
 							.getDelegationPathLength(certs[0]);
 					// Need to look at the delegationPathLength to make sure
 					// that it as least one.
-					System.out.println(certs[0].getSubjectDN().getName()+"-"+delegationPathLength);
+					System.out.println(certs[0].getSubjectDN().getName() + "-"
+							+ delegationPathLength);
 					if (delegationPathLength < 1) {
 						throw Errors
 								.getDelegationFault(Errors.INSUFFICIENT_DELEGATION_PATH_LENGTH);
@@ -323,9 +335,9 @@ public class DelegatedCredentialManager {
 				}
 			} catch (CDSInternalFault e) {
 				throw e;
-			}catch (DelegationFault e) {
+			} catch (DelegationFault e) {
 				throw e;
-			}catch (Exception e) {
+			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 				throw Errors
 						.getInternalFault(
@@ -433,8 +445,9 @@ public class DelegatedCredentialManager {
 							+ POLICY_TYPE + " VARCHAR(255) NOT NULL," + STATUS
 							+ " VARCHAR(50) NOT NULL," + DATE_INITIATED
 							+ " BIGINT," + DATE_APPROVED + " BIGINT,"
-							+ EXPIRATION + " BIGINT, INDEX document_index ("
-							+ DELEGATION_ID + "));";
+							+ DELEGATION_PATH_LENGTH + " INT," + EXPIRATION
+							+ " BIGINT, INDEX document_index (" + DELEGATION_ID
+							+ "));";
 					db.update(trust);
 				}
 
