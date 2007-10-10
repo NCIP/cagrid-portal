@@ -15,6 +15,7 @@ public class Errors {
 	public static String KEY_MANAGER_CHANGED = "The key manager cannot be changed.";
 	public static String DELEGATION_POLICY_NOT_SUPPORTED = "The delegation policy specified is not supported.";
 	public static String INVALID_KEY_LENGTH_SPECIFIED = "Invalid key length specified.";
+	public static String INVALID_DELEGATION_PATH_LENGTH_SPECIFIED = "The delegation path length specified was either less than 0 or has exceeded the maximum delegation path length allowed by the service.";
 	public static String MULTIPLE_HANDLERS_FOUND_FOR_POLICY = "Multiple handlers found for handling the policy, ";
 	public static String INITIATOR_DOES_NOT_MATCH_APPROVER = "The approver must be the same entity as the initiator.";
 	public static String CERTIFICATE_CHAIN_NOT_SPECIFIED = "No certificate chain specified.";

@@ -321,11 +321,9 @@ public class DelegatedCredentialManager {
 						.getCertificateType(certs[0]))) {
 					int delegationPathLength = CertificateExtensionsUtil
 							.getDelegationPathLength(certs[0]);
-					// Need to look at the delegationPathLength to make sure
-					// that it as least one.
-					System.out.println(certs[0].getSubjectDN().getName() + "-"
-							+ delegationPathLength);
-					if (delegationPathLength < 1) {
+				
+					if ((delegationPathLength+1) > this.proxyPolicy
+									.getMaxDelegationPathLength()) {
 						throw Errors
 								.getDelegationFault(Errors.INSUFFICIENT_DELEGATION_PATH_LENGTH);
 					}

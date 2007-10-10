@@ -5,6 +5,7 @@ import java.util.Set;
 public class ProxyPolicy {
 
 	private Set<String> supportedKeySizes;
+	private int maxDelegationPathLength;
 
 	public ProxyPolicy() {
 
@@ -24,5 +25,13 @@ public class ProxyPolicy {
 		} else {
 			return false;
 		}
+	}
+
+	public int getMaxDelegationPathLength() {
+		return maxDelegationPathLength;
+	}
+
+	public void setMaxDelegationPathLength(int maxDelegationPathLength) {
+		this.maxDelegationPathLength = maxDelegationPathLength;
 	}
 }

@@ -1,6 +1,7 @@
 #General Configuration
 
 gaards.cds.name=test_cds
+gaards.cds.max.delegation.path.length=0
 
 # Database Configuration
 

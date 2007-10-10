@@ -33,6 +33,7 @@
 
 	<bean id="proxyPolicy"
 		class="org.cagrid.gaards.cds.service.ProxyPolicy">
+		<property name="maxDelegationPathLength" value="${gaards.cds.max.delegation.path.length}"/>
 		<property name="supportedKeySizes">
 			<set>
 				<value>1024</value>
