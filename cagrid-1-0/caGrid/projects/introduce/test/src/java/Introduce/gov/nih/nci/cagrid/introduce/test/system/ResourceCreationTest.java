@@ -31,9 +31,9 @@ public class ResourceCreationTest extends Story {
     private TestCaseInfo tci1;
 
     private TestCaseInfo tci2;
-    
+
     private TestCaseInfo tci3;
-    
+
     private TestCaseInfo tci4;
 
     private GlobusHelper helper;
@@ -42,17 +42,17 @@ public class ResourceCreationTest extends Story {
     public ResourceCreationTest() {
         this.setName("Introduce Resource Creation System Test");
     }
-    
-    
+
+
     public String getName() {
         return "Introduce Resource Creation System Test";
     }
-    
-    
+
+
     public String getDescription() {
         return "Testing the Introduce code generation tools";
     }
-    
+
 
     protected Vector steps() {
         tci1 = new TestCaseInfo1();

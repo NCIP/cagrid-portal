@@ -29,7 +29,7 @@ public interface <%=arguments.getService().getName()%>Constants {
 			stringBuffer.append("\tpublic static final QName ");
 			stringBuffer.append(CommonTools.getResourcePropertyVariableName(metadataList, i).toUpperCase());
 			stringBuffer.append("_Value_RP = new QName(\"");
-			stringBuffer.append(metadata.getQName().getNamespaceURI()+"\", \""+metadata.getQName().getLocalPart()+"\");\n");
+			stringBuffer.append(metadata.getQName().getNamespaceURI()+"\", \"" + metadata.getQName().getLocalPart()+"\");\n");
 		}
 	}
 %>	

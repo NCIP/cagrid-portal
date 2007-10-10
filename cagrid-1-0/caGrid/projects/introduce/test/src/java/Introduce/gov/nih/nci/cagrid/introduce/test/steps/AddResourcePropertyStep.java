@@ -50,7 +50,7 @@ public class AddResourcePropertyStep extends BaseStep {
 		ResourcePropertiesListType rplist = new ResourcePropertiesListType();
 		newMetadatas[newLength - 1] = metadata;
 		rplist.setResourceProperty(newMetadatas);
-		introService.getServices().getService(0).setResourcePropertiesList(rplist);
+		CommonTools.getService(introService.getServices(),tci.getName()).setResourcePropertiesList(rplist);
 
 		Utils.serializeDocument(getBaseDir() + File.separator + tci.getDir() + File.separator + "introduce.xml",
 			introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);

@@ -145,7 +145,7 @@ public class SkeletonCreator extends Task {
         // add lifetime and subscription capability to the main service...
         CommonTools.addLifetimeResource(info.getServices().getService(0), info);
         CommonTools.addSubscribeResource(info.getServices().getService(0), info);
-        
+
         // Generate the source
         try {
             if (info.getServices() != null && info.getServices().getService() != null) {
@@ -167,8 +167,7 @@ public class SkeletonCreator extends Task {
         }
 
         try {
-            Utils.serializeDocument(baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
-                introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+            info.persistInformation();
         } catch (Exception e) {
             BuildException be = new BuildException(e.getMessage());
             be.setStackTrace(e.getStackTrace());

@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.service.Identifiable;
 import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
 import gov.nih.nci.cagrid.introduce.beans.service.Main;
+import gov.nih.nci.cagrid.introduce.beans.service.Persistant;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
@@ -46,6 +47,8 @@ public class AddServiceStep extends BaseStep {
         } else if (tci.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
             service.getResourceFrameworkOptions().setMain(new Main());
             service.getResourceFrameworkOptions().setSingleton(new Singleton());
+            service.getResourceFrameworkOptions().setLifetime(new Lifetime());
+            service.getResourceFrameworkOptions().setPersistant(new Persistant());
         } else if (tci.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
             service.getResourceFrameworkOptions().setSingleton(new Singleton());
 
