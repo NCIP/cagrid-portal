@@ -16,13 +16,13 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Jul 18, 2007 2:35:15 PM
- * @version $Id: SDK32StyleCreationStory.java,v 1.2 2007-09-05 14:31:33 dervin Exp $ 
+ * @version $Id: SDK32StyleCreationStory.java,v 1.3 2007-10-11 20:52:25 dervin Exp $ 
  */
 public class SDK32StyleCreationStory extends Story {
     public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
 
     public SDK32StyleCreationStory() {
-        setName("Data Service Creation with caCORE 3.2 / 3.2.1 Style");
+        setName("Data Service Creation with caCORE 3_2 / 3_2_1 Style");
     }
 
 
@@ -32,7 +32,7 @@ public class SDK32StyleCreationStory extends Story {
     
     
     public String getName() {
-        return "Data Service Creation with caCORE 3.2 / 3.2.1 Style";
+        return "Data Service Creation with caCORE 3_2 / 3_2_1 Style";
     }
     
     
