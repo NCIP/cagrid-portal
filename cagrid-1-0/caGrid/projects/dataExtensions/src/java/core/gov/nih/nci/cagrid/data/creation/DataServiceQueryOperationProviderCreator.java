@@ -69,6 +69,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 
     public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo)
         throws CreationExtensionException {
+        // check the naming of the service for problems
+        checkServiceNaming(serviceInfo);
         // only need to run if the query operation does not exist
         if (!queryOperationCreated(serviceInfo)) {
             ServiceType mainService = serviceInfo.getServices().getService(0);
@@ -94,6 +96,23 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
             addQueryMethod(mainService);
             // features and service style
             processFeatures(serviceInfo, mainService, desc);
+        }
+    }
+    
+    
+    private void checkServiceNaming(ServiceInformation serviceInfo) throws CreationExtensionException {
+        ServiceType mainService = serviceInfo.getServices().getService(0);
+        if (DataServiceConstants.DATA_SERVICE_SERVICE_NAME.equals(mainService.getName())) {
+            throw new CreationExtensionException(
+                "The data service infrastructure already makes use of the Service Name " + DataServiceConstants.DATA_SERVICE_SERVICE_NAME);
+        }
+        if (DataServiceConstants.DATA_SERVICE_PACKAGE.equals(mainService.getPackageName())) {
+            throw new CreationExtensionException(
+                "The data service infrastructure already makes use of the package name " + DataServiceConstants.DATA_SERVICE_PACKAGE);
+        }
+        if (DataServiceConstants.DATA_SERVICE_NAMESPACE.equals(mainService.getNamespace())) {
+            throw new CreationExtensionException(
+                "The data service infrastructure already makes use of the namespace " + DataServiceConstants.DATA_SERVICE_NAMESPACE);
         }
     }
 
