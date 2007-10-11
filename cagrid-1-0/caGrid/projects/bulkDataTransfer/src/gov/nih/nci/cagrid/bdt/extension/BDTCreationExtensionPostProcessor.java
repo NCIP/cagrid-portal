@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.bdt.extension;
 import gov.nih.nci.cagrid.bdt.service.BDTServiceConstants;
 import gov.nih.nci.cagrid.bdt.templates.BDTResourceTemplate;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -43,6 +42,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 	
 	public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo)
 		throws CreationExtensionException {
+        checkServiceNaming(serviceInfo);
 
         // apply BDT service requirements to it
 		try {
@@ -67,7 +67,24 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		}
 	}
 
+    
+    private void checkServiceNaming(ServiceInformation serviceInfo) throws CreationExtensionException {
+        ServiceType mainService = serviceInfo.getServices().getService(0);
+        if (BDTServiceConstants.BDT_SERVICE_NAME.equals(mainService.getName())) {
+            throw new CreationExtensionException(
+                "The BDT infrastructure already makes use of the Service Name " + BDTServiceConstants.BDT_SERVICE_NAME);
+        }
+        if (BDTServiceConstants.BDT_SERVICE_PACKAGE.equals(mainService.getPackageName())) {
+            throw new CreationExtensionException(
+                "The BDT infrastructure already makes use of the package name " + BDTServiceConstants.BDT_SERVICE_PACKAGE);
+        }
+        if (BDTServiceConstants.BDT_SERVICE_NAMESPACE.equals(mainService.getNamespace())) {
+            throw new CreationExtensionException(
+                "The BDT infrastructure already makes use of the namespace " + BDTServiceConstants.BDT_SERVICE_NAMESPACE);
+        }
+    }
 
+    
 	private void makeBDTService(ServiceInformation info) throws Exception {
 		String schemaDir = getServiceSchemaDir(info);
 		File schemaDirFile = new File(schemaDir);
