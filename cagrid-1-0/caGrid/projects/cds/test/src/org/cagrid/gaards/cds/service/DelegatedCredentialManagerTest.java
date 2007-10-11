@@ -437,6 +437,45 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			}
 		}
 	}
+	
+	public void testDelegateCredentialApprovalBufferExpired() {
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			DelegatedCredentialManager.DELEGATION_BUFFER_SECONDS=1;
+			String alias = "some user";
+			GlobusCredential cred = ca.createCredential(alias);
+			DelegationSigningRequest req = dcm.initiateDelegation(cred
+					.getIdentity(), getSimpleDelegationRequest());
+			try {
+				PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
+						.getKeyAsString());
+				X509Certificate[] certs = ca.createProxyCertifcates(alias,
+						publicKey, 1);
+				DelegationSigningResponse res = new DelegationSigningResponse();
+				res.setDelegationIdentifier(req.getDelegationIdentifier());
+				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+						.toCertificateChain(certs));
+				Thread.currentThread().sleep(((DelegatedCredentialManager.DELEGATION_BUFFER_SECONDS*1000)+100));
+				dcm.approveDelegation(cred.getIdentity(), res);
+				fail("Should not be able to approve delegation.");
+			} catch (DelegationFault e) {
+				if (!e.getFaultString().equals(
+						Errors.DELEGATION_APPROVAL_BUFFER_EXPIRED)) {
+					fail("Should not be able to approve delegation.");
+				}
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			DelegatedCredentialManager.DELEGATION_BUFFER_SECONDS=120;
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+	}
 
 	protected DelegationRequest getSimpleDelegationRequest() {
 		DelegationRequest req = new DelegationRequest();
@@ -471,6 +510,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		assertEquals(0, r.getExpiration());
 		assertEquals(DelegationStatus.Pending, r.getDelegationStatus());
 		assertTrue((0 < r.getDateInitiated()));
+		assertEquals(request.getDelegationPathLength(), r.getDelegationPathLength());
 		assertEquals(policy, r.getDelegationPolicy());
 		assertNotNull(r.getCertificateChain());
 		assertNull(r.getCertificateChain().getX509Certificate());

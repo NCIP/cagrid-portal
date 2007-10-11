@@ -9,7 +9,9 @@ import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -38,6 +40,7 @@ import org.globus.gsi.proxy.ProxyPathValidator;
 
 public class DelegatedCredentialManager {
 
+	public static int DELEGATION_BUFFER_SECONDS = 120;
 	private final static String TABLE = "delegated_credentials";
 	private final static String DELEGATION_ID = "DELEGATION_ID";
 	private final static String GRID_IDENTITY = "GRID_IDENTITY";
@@ -208,6 +211,7 @@ public class DelegatedCredentialManager {
 							.getString(STATUS)));
 					r.setExpiration(rs.getLong(EXPIRATION));
 					r.setGridIdentity(rs.getString(GRID_IDENTITY));
+					r.setDelegationPathLength(rs.getInt(DELEGATION_PATH_LENGTH));
 				}
 				rs.close();
 				s.close();
@@ -321,9 +325,8 @@ public class DelegatedCredentialManager {
 						.getCertificateType(certs[0]))) {
 					int delegationPathLength = CertificateExtensionsUtil
 							.getDelegationPathLength(certs[0]);
-				
-					if ((delegationPathLength+1) > this.proxyPolicy
-									.getMaxDelegationPathLength()) {
+					int maxLength = delegationPathLength-1;
+					if (maxLength < r.getDelegationPathLength()) {
 						throw Errors
 								.getDelegationFault(Errors.INSUFFICIENT_DELEGATION_PATH_LENGTH);
 					}
@@ -345,7 +348,14 @@ public class DelegatedCredentialManager {
 
 			// TODO: Check to make sure the approval is within the allowed time
 			// buffer.
-
+			Calendar c = new GregorianCalendar();
+			c.setTimeInMillis(r.getDateInitiated());
+			c.add(Calendar.SECOND, DELEGATION_BUFFER_SECONDS);
+			Date d = new Date();
+			if (d.after(c.getTime())) {
+				throw Errors
+						.getDelegationFault(Errors.DELEGATION_APPROVAL_BUFFER_EXPIRED);
+			}
 		} else {
 			throw Errors
 					.getDelegationFault(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
