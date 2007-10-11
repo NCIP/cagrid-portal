@@ -92,7 +92,7 @@
     <!-- tests creation of a basic data service -->
     <target name="testCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests" unless="base.service.created">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <jvmarg value="-Dbuild.dir=${test.classes.dir}" />
@@ -118,7 +118,7 @@
     <!-- tests creation of an enumeration supporting data service -->
     <target name="testEnumerationCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="enumeration.service.created">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <jvmarg value="-Dbuild.dir=${test.classes.dir}" />
@@ -144,7 +144,7 @@
     <!-- tests creation of a BDT data service -->
     <target name="testBdtCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="bdt.service.created">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <jvmarg value="-Dbuild.dir=${test.classes.dir}" />
@@ -173,7 +173,7 @@
 
     <!-- system tests against the basic data service -->
     <target name="testBasicSystem" depends="setGlobus, prepareClasspaths, testCreation" description="Runs the service creation and then system tests">
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
@@ -196,7 +196,7 @@
 
     <!-- system tests against the enumeration data service -->
     <target name="testEnumerationSystem" depends="setGlobus, testEnumerationCreation" description="Tests the enumeration data service system">
-        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
@@ -219,7 +219,7 @@
     <!-- tests upgrading a 1.0 service to current -->
     <target name="testUpgradeFrom1pt0" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to the current version" unless="upgrade.1pt0.completed">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
             <classpath refid="all.test.classpath" />
@@ -247,7 +247,7 @@
 
     <!-- system tests against the service upgraded from 1.0 to current -->
     <target name="testUpgradedFrom1pt0System" depends="setGlobus, testUpgradeFrom1pt0" description="Performs system tests on the upgraded (1.0 to current) service">
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
@@ -269,7 +269,7 @@
 
     <!-- system tests for the BDT data service -->
     <target name="testBdtSystem" depends="setGlobus, testBdtCreation" description="Tests invocation of the BDT data service">
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
