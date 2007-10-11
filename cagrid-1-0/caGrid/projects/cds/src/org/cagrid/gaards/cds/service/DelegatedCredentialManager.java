@@ -211,7 +211,9 @@ public class DelegatedCredentialManager {
 							.getString(STATUS)));
 					r.setExpiration(rs.getLong(EXPIRATION));
 					r.setGridIdentity(rs.getString(GRID_IDENTITY));
-					r.setDelegationPathLength(rs.getInt(DELEGATION_PATH_LENGTH));
+					r
+							.setDelegationPathLength(rs
+									.getInt(DELEGATION_PATH_LENGTH));
 				}
 				rs.close();
 				s.close();
@@ -325,7 +327,7 @@ public class DelegatedCredentialManager {
 						.getCertificateType(certs[0]))) {
 					int delegationPathLength = CertificateExtensionsUtil
 							.getDelegationPathLength(certs[0]);
-					int maxLength = delegationPathLength-1;
+					int maxLength = delegationPathLength - 1;
 					if (maxLength < r.getDelegationPathLength()) {
 						throw Errors
 								.getDelegationFault(Errors.INSUFFICIENT_DELEGATION_PATH_LENGTH);
@@ -346,8 +348,6 @@ public class DelegatedCredentialManager {
 								e);
 			}
 
-			// TODO: Check to make sure the approval is within the allowed time
-			// buffer.
 			Calendar c = new GregorianCalendar();
 			c.setTimeInMillis(r.getDateInitiated());
 			c.add(Calendar.SECOND, DELEGATION_BUFFER_SECONDS);
@@ -356,6 +356,28 @@ public class DelegatedCredentialManager {
 				throw Errors
 						.getDelegationFault(Errors.DELEGATION_APPROVAL_BUFFER_EXPIRED);
 			}
+
+			this.keyManager.storeCertificates(String.valueOf(id
+					.getDelegationId()), certs);
+			Connection conn = null;
+			try {
+				Date now = new Date();
+				conn = this.db.getConnection();
+				PreparedStatement s = conn.prepareStatement("update " + TABLE
+						+ " SET " + STATUS + "=?,"+ EXPIRATION + "=?," + DATE_APPROVED + "=?"
+						+ " WHERE " + DELEGATION_ID + "= ?");
+				s.setString(1, DelegationStatus.Approved.getValue());
+				s.setLong(2, certs[0].getNotAfter().getTime());
+				s.setLong(3, now.getTime());
+				s.setLong(4, id.getDelegationId());
+				s.executeUpdate();
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				throw Errors.getDatabaseFault(e);
+			} finally {
+				this.db.releaseConnection(conn);
+			}
+
 		} else {
 			throw Errors
 					.getDelegationFault(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
