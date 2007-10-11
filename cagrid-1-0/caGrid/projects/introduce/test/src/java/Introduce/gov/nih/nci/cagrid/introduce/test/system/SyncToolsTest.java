@@ -103,7 +103,8 @@ public class SyncToolsTest extends Story {
             steps
                 .add(new AddComplexMethodWithFaulsAndArraysStep(tci1, "newComplexMethodWithFaultStepsAndArrays", true));
             steps.add(new AddMetadatatWithLoadFromFileStep(tci1, true));
-            steps.add(new RemoveAllMetadataStep(tci1, true));
+            //can't do now because main has required resource properties...
+            //steps.add(new RemoveAllMetadataStep(tci1, true));
             steps.add(new RemoveAllServicePropertiesStep(tci1, true));
         } catch (Exception e) {
             e.printStackTrace();
