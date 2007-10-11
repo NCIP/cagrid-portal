@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.extensions.wsenum.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
@@ -49,6 +48,9 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 
     public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation info)
         throws CreationExtensionException {
+        
+        checkServiceNaming(info);
+        
         try {
             if (!enumerationServiceContextExists(info)) {
                 // execute steps to add ws-enumeration to the grid service
@@ -67,6 +69,23 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
             ex.printStackTrace(System.out);
             System.out.flush();
             throw new CreationExtensionException(ex);
+        }
+    }
+    
+    
+    private void checkServiceNaming(ServiceInformation serviceInfo) throws CreationExtensionException {
+        ServiceType mainService = serviceInfo.getServices().getService(0);
+        if (WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME.equals(mainService.getName())) {
+            throw new CreationExtensionException(
+                "The caGrid WS-Enumeration infrastructure already makes use of the Service Name " + WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAME);
+        }
+        if (WsEnumConstants.CAGRID_ENUMERATION_SERVICE_PACKAGE.equals(mainService.getPackageName())) {
+            throw new CreationExtensionException(
+                "The caGrid WS-Enumeration infrastructure already makes use of the package name " + WsEnumConstants.CAGRID_ENUMERATION_SERVICE_PACKAGE);
+        }
+        if (WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAMESPACE.equals(mainService.getNamespace())) {
+            throw new CreationExtensionException(
+                "The caGrid WS-Enumeration infrastructure already makes use of the namespace " + WsEnumConstants.CAGRID_ENUMERATION_SERVICE_NAMESPACE);
         }
     }
     
