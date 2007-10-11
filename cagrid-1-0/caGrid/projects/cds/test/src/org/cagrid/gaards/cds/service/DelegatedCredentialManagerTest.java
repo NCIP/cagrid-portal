@@ -439,12 +439,12 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			}
 		}
 	}
-	
+
 	public void testDelegateCredentialApprovalBufferExpired() {
 		DelegatedCredentialManager dcm = null;
 		try {
 			dcm = Utils.getDelegatedCredentialManager();
-			DelegatedCredentialManager.DELEGATION_BUFFER_SECONDS=1;
+			DelegatedCredentialManager.DELEGATION_BUFFER_SECONDS = 1;
 			String alias = "some user";
 			GlobusCredential cred = ca.createCredential(alias);
 			DelegationSigningRequest req = dcm.initiateDelegation(cred
@@ -458,7 +458,10 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				res.setDelegationIdentifier(req.getDelegationIdentifier());
 				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
 						.toCertificateChain(certs));
-				Thread.currentThread().sleep(((DelegatedCredentialManager.DELEGATION_BUFFER_SECONDS*1000)+100));
+				Thread
+						.currentThread()
+						.sleep(
+								((DelegatedCredentialManager.DELEGATION_BUFFER_SECONDS * 1000) + 100));
 				dcm.approveDelegation(cred.getIdentity(), res);
 				fail("Should not be able to approve delegation.");
 			} catch (DelegationFault e) {
@@ -471,7 +474,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
 		} finally {
-			DelegatedCredentialManager.DELEGATION_BUFFER_SECONDS=120;
+			DelegatedCredentialManager.DELEGATION_BUFFER_SECONDS = 120;
 			try {
 				dcm.clearDatabase();
 			} catch (Exception e) {
@@ -512,30 +515,35 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		assertEquals(0, r.getExpiration());
 		assertEquals(DelegationStatus.Pending, r.getDelegationStatus());
 		assertTrue((0 < r.getDateInitiated()));
-		assertEquals(request.getDelegationPathLength(), r.getDelegationPathLength());
+		assertEquals(request.getDelegationPathLength(), r
+				.getDelegationPathLength());
 		assertEquals(policy, r.getDelegationPolicy());
 		assertNotNull(r.getCertificateChain());
 		assertNull(r.getCertificateChain().getX509Certificate());
-		PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey().getKeyAsString());
-		X509Certificate[] proxy = this.ca.createProxyCertifcates(alias, publicKey, 1);
+		PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
+				.getKeyAsString());
+		X509Certificate[] proxy = this.ca.createProxyCertifcates(alias,
+				publicKey, 1);
 		assertNotNull(proxy);
 		DelegationSigningResponse res = new DelegationSigningResponse();
 		res.setDelegationIdentifier(id);
-		res.setCertificateChain(org.cagrid.gaards.cds.common.Utils.toCertificateChain(proxy));
-		dcm.approveDelegation(gridIdentity, res);	
-		
+		res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+				.toCertificateChain(proxy));
+		dcm.approveDelegation(gridIdentity, res);
+
 		DelegationRecord r2 = dcm.getDelegationRecord(id);
 		assertEquals(gridIdentity, r2.getGridIdentity());
-		assertTrue(0<r2.getDateApproved());
-		assertTrue(0<r2.getExpiration());
+		assertTrue(0 < r2.getDateApproved());
+		assertTrue(0 < r2.getExpiration());
 		assertEquals(DelegationStatus.Approved, r2.getDelegationStatus());
-		assertEquals(r.getDateInitiated(),r2.getDateInitiated());
+		assertEquals(r.getDateInitiated(), r2.getDateInitiated());
 		assertEquals(r.getDelegationPathLength(), r2.getDelegationPathLength());
 		assertEquals(policy, r2.getDelegationPolicy());
-		X509Certificate[] chain = org.cagrid.gaards.cds.common.Utils.toCertificateArray(r2.getCertificateChain());
+		X509Certificate[] chain = org.cagrid.gaards.cds.common.Utils
+				.toCertificateArray(r2.getCertificateChain());
 		assertNotNull(chain);
 		assertEquals(proxy.length, chain.length);
-		for(int i=0; i<proxy.length; i++){
+		for (int i = 0; i < proxy.length; i++) {
 			assertEquals(proxy[i], chain[i]);
 		}
 		return id;
