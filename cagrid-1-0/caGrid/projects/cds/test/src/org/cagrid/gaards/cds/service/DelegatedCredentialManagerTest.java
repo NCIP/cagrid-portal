@@ -538,7 +538,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
-	
+
 	public void testGetDelegatedCredentialUnAuthorizedUser() {
 
 		DelegatedCredentialManager dcm = null;
@@ -548,12 +548,13 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			GlobusCredential cred = ca.createCredential(alias);
 			String gridIdentity = cred.getIdentity();
 			IdentityDelegationPolicy policy = getSimplePolicy();
-			DelegationIdentifier id = this.delegateAndValidate(dcm, alias, gridIdentity, policy);
+			DelegationIdentifier id = this.delegateAndValidate(dcm, alias,
+					gridIdentity, policy);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			org.cagrid.gaards.cds.common.PublicKey publicKey = new org.cagrid.gaards.cds.common.PublicKey();
 			publicKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
 			try {
-				dcm.getDelegatedCredential(GRID_IDENTITY+2, id, publicKey);
+				dcm.getDelegatedCredential(GRID_IDENTITY + 2, id, publicKey);
 			} catch (PermissionDeniedFault e) {
 				if (!e.getFaultString().equals(
 						Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL)) {
@@ -572,7 +573,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
-	
+
 	public void testGetDelegatedCredentialExpiredSigningCredential() {
 
 		DelegatedCredentialManager dcm = null;
@@ -587,9 +588,9 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			DelegationIdentifier id = req.getDelegationIdentifier();
 			PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
 					.getKeyAsString());
-			int seconds=2;
+			int seconds = 2;
 			X509Certificate[] proxy = this.ca.createProxyCertifcates(alias,
-					publicKey, 1,0,0,seconds);
+					publicKey, 1, 0, 0, seconds);
 			DelegationSigningResponse res = new DelegationSigningResponse();
 			res.setDelegationIdentifier(id);
 			res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
@@ -598,7 +599,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			org.cagrid.gaards.cds.common.PublicKey pKey = new org.cagrid.gaards.cds.common.PublicKey();
 			pKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
-			Thread.sleep(((seconds*1000)+100));
+			Thread.sleep(((seconds * 1000) + 100));
 			try {
 				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
 			} catch (DelegationFault e) {
@@ -619,8 +620,6 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
-
-
 
 	protected DelegationRequest getSimpleDelegationRequest() {
 		DelegationRequest req = new DelegationRequest();
