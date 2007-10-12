@@ -414,21 +414,31 @@ public class DelegatedCredentialManager {
 	}
 
 	public void updateDelegatedCredentialStatus(DelegationIdentifier id,
-			DelegationStatus status) throws CDSInternalFault {
-		Connection conn = null;
-		try {
-			conn = this.db.getConnection();
-			PreparedStatement s = conn.prepareStatement("update " + TABLE
-					+ " SET " + STATUS + "=?" + " WHERE " + DELEGATION_ID
-					+ "= ?");
-			s.setString(1, status.getValue());
-			s.setLong(2, id.getDelegationId());
-			s.executeUpdate();
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw Errors.getDatabaseFault(e);
-		} finally {
-			this.db.releaseConnection(conn);
+			DelegationStatus status) throws CDSInternalFault, DelegationFault {
+		if (this.delegationExists(id)) {
+			if (status.equals(DelegationStatus.Pending)) {
+				throw Errors
+						.getDelegationFault(Errors.CANNOT_CHANGE_STATUS_TO_PENDING);
+			}
+			Connection conn = null;
+			try {
+				conn = this.db.getConnection();
+				PreparedStatement s = conn.prepareStatement("update " + TABLE
+						+ " SET " + STATUS + "=?" + " WHERE " + DELEGATION_ID
+						+ "= ?");
+				s.setString(1, status.getValue());
+				s.setLong(2, id.getDelegationId());
+				s.executeUpdate();
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				throw Errors.getDatabaseFault(e);
+			} finally {
+				this.db.releaseConnection(conn);
+			}
+
+		} else {
+			throw Errors
+					.getDelegationFault(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
 		}
 
 	}
