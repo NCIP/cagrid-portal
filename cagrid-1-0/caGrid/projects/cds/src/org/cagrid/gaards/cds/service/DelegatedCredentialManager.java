@@ -423,16 +423,17 @@ public class DelegatedCredentialManager {
 				throw Errors.getInternalFault(Errors.POLICY_HANDLER_NOT_FOUND,
 						e);
 			}
+			if (!handler.isAuthorized(id, gridIdentity)) {
+				throw Errors
+						.getPermissionDeniedFault(Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL);
+			}
 			Date now = new Date();
 			Date expiration = new Date(r.getExpiration());
 			if (now.after(expiration)) {
 				throw Errors
 						.getDelegationFault(Errors.SIGNING_CREDENTIAL_EXPIRED);
 			}
-			if (!handler.isAuthorized(id, gridIdentity)) {
-				throw Errors
-						.getPermissionDeniedFault(Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL);
-			}
+			
 			X509Certificate[] certs = null;
 			try {
 				certs = Utils.toCertificateArray(r.getCertificateChain());

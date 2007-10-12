@@ -28,6 +28,7 @@ import org.cagrid.gaards.cds.service.policy.PolicyHandler;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
+import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.cds.testutils.CA;
 import org.cagrid.gaards.cds.testutils.Constants;
 import org.cagrid.gaards.cds.testutils.Utils;
@@ -522,6 +523,40 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			} catch (DelegationFault e) {
 				if (!e.getFaultString().equals(
 						Errors.DELEGATION_RECORD_DOES_NOT_EXIST)) {
+					fail("Should not be able get delegated credential.");
+				}
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+
+	}
+	
+	public void testGetDelegatedCredentialUnAuthorizedUser() {
+
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			String alias = "jdoe";
+			GlobusCredential cred = ca.createCredential(alias);
+			String gridIdentity = cred.getIdentity();
+			IdentityDelegationPolicy policy = getSimplePolicy();
+			DelegationIdentifier id = this.delegateAndValidate(dcm, alias, gridIdentity, policy);
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			org.cagrid.gaards.cds.common.PublicKey publicKey = new org.cagrid.gaards.cds.common.PublicKey();
+			publicKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
+			try {
+				dcm.getDelegatedCredential(GRID_IDENTITY+2, id, publicKey);
+			} catch (PermissionDeniedFault e) {
+				if (!e.getFaultString().equals(
+						Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL)) {
 					fail("Should not be able get delegated credential.");
 				}
 			}
