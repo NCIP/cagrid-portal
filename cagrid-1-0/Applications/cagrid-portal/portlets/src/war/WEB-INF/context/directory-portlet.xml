@@ -5,17 +5,20 @@
 	<bean id="viewController"
 		class="gov.nih.nci.cagrid.portal2.portlet.directory.DirectoryViewController">
 		<property name="viewName" value="view" />
+		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
 	</bean>
 	
 	<bean id="changeController" class="gov.nih.nci.cagrid.portal2.portlet.directory.DirectoryChangeController">
 		<property name="gridServiceDao" ref="gridServiceDao"/>
 		<property name="participantDao" ref="participantDao"/>
 		<property name="successAction" value="view"/>
+		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
 	</bean>
 	
 	<bean id="selectServiceController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.SelectGridServiceController">
 		<property name="gridServiceDao" ref="gridServiceDao"/>
 		<property name="successAction" value="view"/>
+		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
 	</bean>	
 	
 	<bean id="portletModeParameterHandlerMapping"
@@ -94,13 +97,6 @@
 	<bean id="defaultExceptionHandler"
 		parent="defaultExceptionHandlerTemplate" />
 		
-	<bean id="directoryBeanPrototype" class="gov.nih.nci.cagrid.portal2.portlet.directory.DirectoryBean" scope="prototype">
-		<property name="scroller">
-			<bean class="gov.nih.nci.cagrid.portal2.portlet.util.Scroller">
-				<property name="pageSize" value="10"/>
-			</bean>
-		</property>
-		<property name="hibernateTemplate" ref="hibernateTemplate"/>
-	</bean>
+	
 
 </beans>

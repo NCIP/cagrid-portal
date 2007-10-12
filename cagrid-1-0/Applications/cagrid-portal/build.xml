@@ -6,11 +6,11 @@
 	<property name="ant.home" value="${env.ANT_HOME}" />
 	<property name="tools.ant.lib" value="tools/ant/lib"/>
 	
-	<!-- 
+
 	<property name="target.grid" value="nci_prod"/>
-	 -->
+	<!-- 	 
 	<property name="target.grid" value="nci_dev"/>
-	
+-->	
 	<path id="xmltaskdef.cp">
 		<pathelement location="${tools.ant.lib}/xmltask-v1.14.jar"/>
 	</path>

@@ -4,7 +4,9 @@
 package gov.nih.nci.cagrid.portal2.portlet.discovery;
 
 import gov.nih.nci.cagrid.portal2.dao.GridServiceDao;
+import gov.nih.nci.cagrid.portal2.domain.GridDataService;
 import gov.nih.nci.cagrid.portal2.domain.GridService;
+import gov.nih.nci.cagrid.portal2.portlet.SharedApplicationModel;
 import gov.nih.nci.cagrid.portal2.util.PortalUtils;
 
 import javax.portlet.ActionRequest;
@@ -28,6 +30,8 @@ public class SelectGridServiceController extends AbstractController {
 			.getLog(SelectGridServiceController.class);
 
 	private GridServiceDao gridServiceDao;
+	
+	private SharedApplicationModel sharedApplicationModel;
 
 	private String successAction;
 
@@ -75,6 +79,11 @@ public class SelectGridServiceController extends AbstractController {
 
 		logger.debug("Publishing selectedGridServiceId: " + sgsId);
 		helper.send("selectedGridServiceId", sgsId);
+		
+		GridService service = getGridServiceDao().getById(sgsId);
+		if(service instanceof GridDataService){
+			getSharedApplicationModel().setSelectedGridDataServiceId(sgsId);
+		}
 
 		logger.debug("setting action to " + getSuccessAction());
 		response.setRenderParameter("action", getSuccessAction());
@@ -96,6 +105,15 @@ public class SelectGridServiceController extends AbstractController {
 
 	public void setGridServiceDao(GridServiceDao gridServiceDao) {
 		this.gridServiceDao = gridServiceDao;
+	}
+
+	public SharedApplicationModel getSharedApplicationModel() {
+		return sharedApplicationModel;
+	}
+
+	public void setSharedApplicationModel(
+			SharedApplicationModel sharedApplicationModel) {
+		this.sharedApplicationModel = sharedApplicationModel;
 	}
 
 }

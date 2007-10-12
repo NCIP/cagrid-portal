@@ -31,4 +31,23 @@
 		</property>
 	</bean>
 	
+	<bean id="serviceMetadataTreeNodeListener" class="gov.nih.nci.cagrid.portal2.portlet.tree.ServiceMetadataTreeNodeListener">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+
+	<bean id="serviceDetailsTreeFacade" class="gov.nih.nci.cagrid.portal2.portlet.tree.TreeFacade" scope="globalSession">
+		<aop:scoped-proxy proxy-target-class="true"/>
+		<property name="renderer">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.tree.ServletRenderer">
+				<property name="servletUrl" value="/WEB-INF/jsp/discovery/serviceDetailsNode.jsp" />
+				<property name="requestAttribute" value="node" />
+			</bean>
+		</property>
+		<property name="listeners">
+			<list>
+				<ref bean="serviceMetadataTreeNodeListener"/>
+			</list>
+		</property>		
+	</bean>	
+	
 </beans>

@@ -3,6 +3,9 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.tree;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
@@ -34,7 +37,7 @@ public class ServletRenderer implements TreeNodeRenderer {
 	 * 
 	 * @see test.TreeNodeRenderer#render(test.TreeNode)
 	 */
-	public String render(TreeNode node) {
+	public String render(TreeNode node, Map<String, Object> params) {
 		
 		logger.debug("Rendering " + node.getPath());
 
@@ -43,6 +46,9 @@ public class ServletRenderer implements TreeNodeRenderer {
 		WebContext webContext = WebContextFactory.get();
 		HttpServletRequest request = webContext.getHttpServletRequest();
 		request.setAttribute(getRequestAttribute(), node);
+		for(Entry<String,Object> entry : params.entrySet()){
+			request.setAttribute(entry.getKey(), entry.getValue());
+		}
 		try {
 			out =  webContext.forwardToString(getServletUrl());
 		} catch (Exception ex) {

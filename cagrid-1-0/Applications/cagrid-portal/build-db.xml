@@ -186,6 +186,30 @@
 		</sql>
 
 	</target>
+	
+	
+	<target name="db:prepare-run-cp" depends="db:compile">
+		<copy todir="${db.classes.dir}" overwrite="true">
+			<fileset dir="${db.dir}/etc">
+				<include name="*.properties" />
+				<include name="*.xml" />
+				<exclude name="*.hibernate.properties" />
+			</fileset>
+		</copy>
+		<copy file="${db.dir}/etc/default.hibernate.properties"
+			tofile="${db.classes.dir}/hibernate.properties"
+			overwrite="true" />
+	</target>
+	
+	<target name="db:run" depends="db:prepare-run-cp">
+		<java classname="test.TestSearch">
+			<classpath refid="db.run.cp"/>
+			<classpath>
+				<pathelement location="${db.classes.dir}"/>
+				<pathelement location="${db.test.dir}"/>
+			</classpath>
+		</java>
+	</target>
 
 
 	<target name="db:clean">

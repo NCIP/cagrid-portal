@@ -11,7 +11,7 @@
 		<property name="commandName" value="cqlQueryCommand"/>
 		<property name="gridServiceDao" ref="gridServiceDao"/>
 		<property name="cqlQueryService" ref="cqlQueryService"/>
-		
+		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
 	</bean>
 	
 

@@ -21,7 +21,7 @@
 				<td class="dataCellTextBold">URL</td>
 				<td class="dataCellText">
 					<c:choose>
-						<c:when test="${directoryBean.category == 'dataServices' && !empty service.domainModel}">
+						<c:when test="${service.class.simpleName == 'GridDataService' && !empty service.domainModel}">
 							<a href="<portlet:actionURL><portlet:param name="action" value="selectService"/><portlet:param name="sgs_url" value="${service.url}"/></portlet:actionURL>"
 								alt="Query this data service"
 							>

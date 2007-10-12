@@ -3,6 +3,7 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.directory;
 
+import gov.nih.nci.cagrid.portal2.portlet.SharedApplicationModel;
 import gov.nih.nci.cagrid.portal2.portlet.util.PortletUtils;
 import gov.nih.nci.cagrid.portal2.portlet.util.Scroller;
 import gov.nih.nci.cagrid.portal2.util.PortalUtils;
@@ -23,6 +24,7 @@ import org.springframework.web.portlet.mvc.AbstractController;
 public class DirectoryViewController extends AbstractController {
 
 	private String viewName;
+	private SharedApplicationModel sharedApplicationModel;
 
 	/**
 	 * 
@@ -49,14 +51,19 @@ public class DirectoryViewController extends AbstractController {
 
 	private DirectoryBean getDirectoryBean(PortletRequest request) {
 
-		DirectoryBean directory = (DirectoryBean) request.getPortletSession()
-				.getAttribute("directoryBean");
+		// DirectoryBean directory = (DirectoryBean) request.getPortletSession()
+		// .getAttribute("directoryBean");
+		// if (directory == null) {
+		// logger.debug("Putting new directoryBean in session");
+		// directory = (DirectoryBean) getApplicationContext().getBean(
+		// "directoryBeanPrototype");
+		// request.getPortletSession()
+		// .setAttribute("directoryBean", directory);
+		// }
+		DirectoryBean directory = getSharedApplicationModel()
+				.getSelectedDirectoryBean();
 		if (directory == null) {
-			logger.debug("Putting new directoryBean in session");
-			directory = (DirectoryBean) getApplicationContext().getBean(
-					"directoryBeanPrototype");
-			request.getPortletSession()
-					.setAttribute("directoryBean", directory);
+			 directory = (DirectoryBean) getApplicationContext().getBean("directoryBeanPrototype");
 		}
 		return directory;
 	}
@@ -68,8 +75,12 @@ public class DirectoryViewController extends AbstractController {
 		logger.debug("render request");
 		try {
 			DirectoryBean directory = getDirectoryBean(request);
-			directory.refresh();
-			mav.addObject("directoryBean", directory);
+			if (directory != null) {
+				directory.refresh();
+				mav.addObject("directoryBean", directory);
+			}
+			mav.addObject("searchHistory", getSharedApplicationModel()
+					.getDiscoveryResults());
 		} catch (Exception ex) {
 			String msg = "Error handling render request: " + ex.getMessage();
 			logger.error(msg, ex);
@@ -84,6 +95,15 @@ public class DirectoryViewController extends AbstractController {
 
 	public void setViewName(String viewName) {
 		this.viewName = viewName;
+	}
+
+	public SharedApplicationModel getSharedApplicationModel() {
+		return sharedApplicationModel;
+	}
+
+	public void setSharedApplicationModel(
+			SharedApplicationModel sharedApplicationModel) {
+		this.sharedApplicationModel = sharedApplicationModel;
 	}
 
 }

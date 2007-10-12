@@ -18,6 +18,8 @@ public class TreeNode<T> {
 	private static final Log logger = LogFactory.getLog(TreeNode.class);
 	
 	private String name;
+	
+	private String label;
 
 	private NodeState state = NodeState.CLOSED;
 
@@ -47,17 +49,11 @@ public class TreeNode<T> {
 	 * @return
 	 */
 	public TreeNode find(String path) {
-
 		TreeNode node = null;
 		String myPath = getPath();
-		
-		logger.debug("Comparing '" + path + "' with '" + myPath + "'");
-		
 		if (path.equals(myPath)) {
 			node = this;
-
 		} else if(path.startsWith(myPath)) {
-			
 			for (TreeNode n : getChildren()) {
 				node = n.find(path);
 				if(node != null){
@@ -116,6 +112,14 @@ public class TreeNode<T> {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 

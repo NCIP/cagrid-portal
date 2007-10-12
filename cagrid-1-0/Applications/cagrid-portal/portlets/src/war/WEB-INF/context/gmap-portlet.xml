@@ -14,6 +14,7 @@
 	<bean id="selectServiceController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.SelectGridServiceController">
 		<property name="gridServiceDao" ref="gridServiceDao"/>
 		<property name="successAction" value="view"/>
+		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
 	</bean>
 	
 	<bean id="portletModeParameterHandlerMapping"

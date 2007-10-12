@@ -35,7 +35,7 @@ No results to display.
 	
 		<div id="<portlet:namespace/>cqlQueryResults">
 		
-			<ul>
+			<ul class="tabs">
                 <li><a href="#<portlet:namespace/>resultsTable"><span>Tablular</span></a></li>
                 <li><a href="#<portlet:namespace/>resultsXml"><span>XML</span></a></li>
             </ul>
@@ -43,7 +43,7 @@ No results to display.
 	
 		<span class="scrollerStyle2">
 			Displaying <c:out value="${scroller.index + 1}"/> to <c:out value="${scroller.endIndex}"/></span> of <c:out value="${fn:length(scroller.objects)}"/> results.
-		</p>
+		
 		<br/>		
 		<c:set var="scroller" value="${scroller}"/>
 		<%@ include file="/WEB-INF/jsp/include/scroll_controls.jsp" %>

@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.portal2.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal2.domain.GridDataService;
 import gov.nih.nci.cagrid.portal2.portlet.PortletConstants;
+import gov.nih.nci.cagrid.portal2.portlet.SharedApplicationModel;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -35,6 +36,7 @@ public class CQLQueryController extends AbstractController {
 	
 	private GridServiceDao gridServiceDao;
 	private CQLQueryService cqlQueryService;
+	private SharedApplicationModel sharedApplicationModel;
 
 	/**
 	 * 
@@ -133,6 +135,16 @@ public class CQLQueryController extends AbstractController {
 		ModelAndView mav = new ModelAndView(getViewName());
 
 		CQLQueryCommand command = getCommand(request);
+		
+		Integer id = getSharedApplicationModel().getSelectedGridDataServiceId();
+		if(id != null){
+			GridDataService svc = (GridDataService) getGridServiceDao().getById(id);
+			if(!svc.getUrl().equals(command.getDataServiceUrl())){
+				command.clear();
+				command.setDataServiceUrl(svc.getUrl());
+			}
+		}
+		
 		mav.addObject(getCommandName(), command);
 
 		return mav;
@@ -187,6 +199,15 @@ public class CQLQueryController extends AbstractController {
 
 	public void setCqlQueryService(CQLQueryService cqlQueryService) {
 		this.cqlQueryService = cqlQueryService;
+	}
+
+	public SharedApplicationModel getSharedApplicationModel() {
+		return sharedApplicationModel;
+	}
+
+	public void setSharedApplicationModel(
+			SharedApplicationModel sharedApplicationModel) {
+		this.sharedApplicationModel = sharedApplicationModel;
 	}
 
 	

@@ -2,7 +2,7 @@
 <%@ taglib prefix="m" tagdir="/WEB-INF/tags"%>
 
 <script type='text/javascript'
-	src='<c:url value="/dwr/interface/TreeFacade.js"/>'></script>
+	src='<c:url value="/dwr/interface/ServiceDetailsTreeFacade.js"/>'></script>
 <script type='text/javascript' src='<c:url value="/dwr/engine.js"/>'></script>
 <script type='text/javascript' src='<c:url value="/dwr/util.js"/>'></script>
 
@@ -18,11 +18,14 @@
     	var div = document.getElementById(divId);
 
     	if(div.style.display == "none"){
-			TreeFacade.openNode(id, { prefix: prefix },
+    		var wasEmpty = jQuery.trim(DWRUtil.getValue(divId)).length == 0;
+			ServiceDetailsTreeFacade.openNode(id, { prefix: prefix, render: wasEmpty },
 			{
 				callback:function(html){
-					div.style.display = "";				
-					DWRUtil.setValue(divId, html, {escapeHtml:false});
+					div.style.display = "";
+					if(wasEmpty){				
+						DWRUtil.setValue(divId, html, {escapeHtml:false});
+					}
 					node.className = "coll_node";
 				},
 				errorHandler:function(errorString, exception){
@@ -31,16 +34,14 @@
 			});
 
     	}else{
-    		TreeFacade.closeNode(id, { prefix: prefix },
+    		ServiceDetailsTreeFacade.closeNode(id, { prefix: prefix },
 			{
-				callback:function(html){
-					div.style.display = "none";
-					node.className = "exp_node";					
-				},
 				errorHandler:function(errorString, exception){
 					alert("Error closing node: " + errorString);
 				}
-			});     	
+			});
+			div.style.display = "none";
+			node.className = "exp_node";
     	}
     }
 
@@ -70,17 +71,28 @@
 -->
 </style>
 <p />
+<portlet:actionURL var="action"/>
+
+<form:form name="selectGridServiceForm" action="${action}">
+	<c:if test="${empty gridServiceUrl}">Enter a </c:if>Grid Service URL:
+	<input name="gridServiceUrl" type="text" value="<c:out value="${gridServiceUrl}"/>"/>
+	<input type="submit" value="Show"/>
+</form:form>
+
+
+<c:choose>
+	<c:when test="${!empty gridServiceUrl and empty rootNode}">
+No grid service found for <c:out value="${gridServiceUrl}"/>
+	</c:when>
+	<c:when test="${!empty rootNode}">
 
 <c:set var="prefix"><portlet:namespace/></c:set>
-<m:tree node="${rootNode}" prefix="${prefix}">
-	<jsp:attribute name="contentFragment">
-		<b>Content of <c:out value="${currNode.name}" />:</b><c:out value="${currNode.content.text}" /><br />
-
-		
-
-	</jsp:attribute>
-	<jsp:attribute name="nodeFragment">
-		Node: <c:out value="${currChildNode.name}" />
-	</jsp:attribute>
-</m:tree>
+<c:set var="node" value="${rootNode}"/>
+<%@ include file="/WEB-INF/jsp/discovery/serviceDetails_frag.jsp"%>
+	
+	</c:when>
+	<c:otherwise>
+No service is currently selected.	
+	</c:otherwise>
+</c:choose>
 

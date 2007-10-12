@@ -3,8 +3,14 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.discovery;
 
+import java.util.HashMap;
+
 import gov.nih.nci.cagrid.portal2.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal2.domain.GridService;
+import gov.nih.nci.cagrid.portal2.domain.metadata.common.ResearchCenter;
+import gov.nih.nci.cagrid.portal2.portlet.tree.ServiceMetadataTreeNodeListener;
+import gov.nih.nci.cagrid.portal2.portlet.tree.TreeFacade;
+import gov.nih.nci.cagrid.portal2.portlet.tree.TreeNode;
 import gov.nih.nci.cagrid.portal2.util.PortalUtils;
 
 import javax.portlet.ActionRequest;
@@ -35,6 +41,10 @@ public class ViewServiceDetailsController extends AbstractController {
 	private GridServiceDao gridServiceDao;
 
 	private String successView;
+	
+	private TreeFacade treeFacade;
+	
+	private ServiceMetadataTreeNodeListener serviceMetadataTreeNodeListener;
 
 	public void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
@@ -90,7 +100,20 @@ public class ViewServiceDetailsController extends AbstractController {
 		}
 		
 		if (gridService != null) {
-			mav.addObject("gridService", gridService);
+			TreeNode rootNode = getTreeFacade().getRootNode();
+			if(rootNode == null){
+				logger.debug("Creating new tree for gridService:" + gridService.getId());
+				rootNode = createRootNode(gridService);
+				
+			}
+			GridService s = (GridService)rootNode.getContent();
+			if(!s.getId().equals(gridService.getId())){
+				logger.debug("Changing tree from gridService:" + s.getId() + " to gridService:" + gridService.getId());
+				rootNode = createRootNode(gridService);
+			}
+			getTreeFacade().setRootNode(rootNode);
+			mav.addObject("rootNode", rootNode);
+			//mav.addObject("gridService", gridService);
 			mav.addObject("gridServiceUrl", gridService.getUrl());
 		} else {
 			logger.debug("No grid service found");
@@ -98,6 +121,15 @@ public class ViewServiceDetailsController extends AbstractController {
 		return mav;
 	}
 	
+	private TreeNode createRootNode(GridService gridService) {
+		TreeNode rootNode = new TreeNode(null, "gridService");
+		rootNode.setContent(gridService);
+		
+		getServiceMetadataTreeNodeListener().handleGridServiceNode(rootNode, new HashMap(), gridService);
+		
+		return rootNode;
+	}
+
 	private void setSelectedGridServiceId(PortletRequest request, Integer sgsId){
 		PortletSession portletSession = request.getPortletSession(true);
 		String id = getInstanceID(request);
@@ -148,6 +180,23 @@ public class ViewServiceDetailsController extends AbstractController {
 
 	public void setGridServiceDao(GridServiceDao gridServiceDao) {
 		this.gridServiceDao = gridServiceDao;
+	}
+
+	public TreeFacade getTreeFacade() {
+		return treeFacade;
+	}
+
+	public void setTreeFacade(TreeFacade treeFacade) {
+		this.treeFacade = treeFacade;
+	}
+
+	public ServiceMetadataTreeNodeListener getServiceMetadataTreeNodeListener() {
+		return serviceMetadataTreeNodeListener;
+	}
+
+	public void setServiceMetadataTreeNodeListener(
+			ServiceMetadataTreeNodeListener serviceMetadataTreeNodeListener) {
+		this.serviceMetadataTreeNodeListener = serviceMetadataTreeNodeListener;
 	}
 
 }

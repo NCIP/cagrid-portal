@@ -54,7 +54,6 @@ public class ServiceDiscoveryController extends AbstractController {
 
 		MessageHelper.loadPrefs(request);
 		MessageHelper helper = new MessageHelper(request);
-		logger.debug("############## Sending list of " + gridServiceIds.size() + " gridServiceIds. #############");
 		helper.send("gridServiceIds", gridServiceIds);
 		
 		logger.debug("setting action to " + getSuccessAction());

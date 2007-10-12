@@ -2,10 +2,17 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 
 <beans>
-
+	<!-- 
 	<bean id="searchController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.ServiceDiscoveryController">
 		<property name="successAction" value="view"/>
 		<property name="gridServiceDao" ref="gridServiceDao"/>
+	</bean>
+ 	-->	
+	
+	<bean id="searchController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.KeywordDiscoveryController">
+		<property name="successAction" value="view"/>
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
 	</bean>
 	
 	<bean id="viewController"

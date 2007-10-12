@@ -94,5 +94,14 @@
 		<ref bean="openSessionInViewInterceptor" />
 		<ref bean="portalUserInterceptor" />	
 	</util:list>
+	
+	<bean id="directoryBeanPrototype" class="gov.nih.nci.cagrid.portal2.portlet.directory.DirectoryBean" scope="prototype">
+		<property name="scroller">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.util.Scroller">
+				<property name="pageSize" value="10"/>
+			</bean>
+		</property>
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
 
 </beans>

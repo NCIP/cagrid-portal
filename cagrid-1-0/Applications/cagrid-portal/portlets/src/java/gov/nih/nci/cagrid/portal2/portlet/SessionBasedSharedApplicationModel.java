@@ -5,6 +5,8 @@ package gov.nih.nci.cagrid.portal2.portlet;
 
 import gov.nih.nci.cagrid.portal2.domain.PortalUser;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
+import gov.nih.nci.cagrid.portal2.portlet.directory.DirectoryBean;
+import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryResultsBean;
 import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryInstanceExecutor;
 
 import java.util.ArrayList;
@@ -31,6 +33,9 @@ public class SessionBasedSharedApplicationModel implements
 	private ApplicationContext applicationContext;
 	private PortalUser portalUser;
 	private Integer selectedCqlQueryInstanceId;
+	private List<DiscoveryResultsBean> discoveryResults = new ArrayList<DiscoveryResultsBean>();
+	private DirectoryBean selectedDirectoryBean;
+	private Integer selectedGridDataServiceId;
 
 	/**
 	 * 
@@ -103,6 +108,45 @@ public class SessionBasedSharedApplicationModel implements
 
 	public void setSelectedCqlQueryInstanceId(Integer id) {
 		this.selectedCqlQueryInstanceId = id;
+	}
+
+	public void addDiscoveryResults(DiscoveryResultsBean res) {
+		getDiscoveryResults().add(res);
+	}
+
+	public List<DiscoveryResultsBean> getDiscoveryResults() {
+		return discoveryResults;
+	}
+
+	public void setDiscoveryResults(List<DiscoveryResultsBean> discoveryResults) {
+		this.discoveryResults = discoveryResults;
+	}
+
+	public DirectoryBean getSelectedDirectoryBean() {
+		return selectedDirectoryBean;
+	}
+
+	public void setSelectedDirectoryBean(DirectoryBean selectedDirectoryBean) {
+		this.selectedDirectoryBean = selectedDirectoryBean;
+	}
+
+	public DiscoveryResultsBean getDiscoveryResultsBean(String resultsId) {
+		DiscoveryResultsBean bean = null;
+		for(DiscoveryResultsBean b : getDiscoveryResults()){
+			if(b.getId().equals(resultsId)){
+				bean = b;
+				break;
+			}
+		}
+		return bean;
+	}
+
+	public Integer getSelectedGridDataServiceId() {
+		return selectedGridDataServiceId;
+	}
+
+	public void setSelectedGridDataServiceId(Integer id) {
+		this.selectedGridDataServiceId = id;
 	}
 
 }

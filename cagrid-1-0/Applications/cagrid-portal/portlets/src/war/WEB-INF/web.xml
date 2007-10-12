@@ -102,6 +102,19 @@
 		<servlet-name>dwr-invoker</servlet-name>
 		<url-pattern>/dwr/*</url-pattern>
 	</servlet-mapping>	
+	
+	<servlet>
+		<servlet-name>tree</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>tree</servlet-name>
+		<url-pattern>/tree/*</url-pattern>
+	</servlet-mapping>
     
    <!--
      - The ViewRendererServlet acts as a bridge from Portlet requests to Servlet requests.

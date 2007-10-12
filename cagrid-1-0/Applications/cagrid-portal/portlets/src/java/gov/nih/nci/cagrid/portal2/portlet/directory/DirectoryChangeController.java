@@ -6,6 +6,9 @@ package gov.nih.nci.cagrid.portal2.portlet.directory;
 import gov.nih.nci.cagrid.portal2.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal2.dao.ParticipantDao;
 import gov.nih.nci.cagrid.portal2.domain.Participant;
+import gov.nih.nci.cagrid.portal2.portlet.SharedApplicationModel;
+import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryResultsBean;
+import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryType;
 import gov.nih.nci.cagrid.portal2.util.PortalUtils;
 
 import java.util.Iterator;
@@ -30,6 +33,8 @@ public class DirectoryChangeController extends AbstractController {
 	private GridServiceDao gridServiceDao;
 
 	private ParticipantDao participantDao;
+	
+	private SharedApplicationModel sharedApplicationModel;
 
 	/**
 	 * 
@@ -51,31 +56,37 @@ public class DirectoryChangeController extends AbstractController {
 
 			DirectoryBean directory = (DirectoryBean) getApplicationContext()
 					.getBean("directoryBeanPrototype");
-			request.getPortletSession()
-					.setAttribute("directoryBean", directory);
 			String type = null;
 			List objects = null;
-			if ("services".equals(category)) {
-				type = "services";
+			if(category.startsWith("search:")){
+				String resultsId = category.substring(category.indexOf(":") + 1);
+				DiscoveryResultsBean results = getSharedApplicationModel().getDiscoveryResultsBean(resultsId);
+				if(results == null){
+					throw new Exception("No results found for '" + category + "'");
+				}
+				type = results.getType().toString();
+				objects = results.getObjects();
+			}else if ("services".equals(category)) {
+				type = DiscoveryType.SERVICE.toString();
 				objects = getGridServiceDao().getAll();
 			} else if ("dataServices".equals(category)) {
-				type = "services";
+				type = DiscoveryType.SERVICE.toString();
 				objects = getGridServiceDao().getAllDataServices();
 			} else if ("analyticalServices".equals(category)) {
-				type = "services";
+				type = DiscoveryType.SERVICE.toString();
 				objects = getGridServiceDao().getAllAnalyticalServices();
 			} else if ("participants".equals(category)) {
-				type = "participants";
+				type = DiscoveryType.PARTICIPANT.toString();
 				objects = getParticipantDao().getAll();
 			} else {
-				type = "participants";
+				type = DiscoveryType.PARTICIPANT.toString();
 				objects = getParticipantDao().getByWorkspaceAbbreviation(
 						category);
 			}
 			
 			//HACK: Initialize associations so that directory view works outside
 			//of current session.
-			if("participants".equals(type)){
+			if(DiscoveryType.PARTICIPANT.toString().equals(type)){
 				for(Iterator i = objects.iterator(); i.hasNext();){
 					Participant p = (Participant)i.next();
 					p.getParticipation();
@@ -85,6 +96,7 @@ public class DirectoryChangeController extends AbstractController {
 			directory.setType(type);
 			directory.setCategory(category);
 			directory.getScroller().setObjects(objects);
+			getSharedApplicationModel().setSelectedDirectoryBean(directory);
 
 		} catch (Exception ex) {
 			String msg = "Error populating scroller: " + ex.getMessage();
@@ -122,6 +134,15 @@ public class DirectoryChangeController extends AbstractController {
 
 	public void setSuccessAction(String successAction) {
 		this.successAction = successAction;
+	}
+
+	public SharedApplicationModel getSharedApplicationModel() {
+		return sharedApplicationModel;
+	}
+
+	public void setSharedApplicationModel(
+			SharedApplicationModel sharedApplicationState) {
+		this.sharedApplicationModel = sharedApplicationState;
 	}
 
 }

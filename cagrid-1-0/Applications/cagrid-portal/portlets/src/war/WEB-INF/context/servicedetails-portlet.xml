@@ -4,8 +4,10 @@
 <beans>
 
 	<bean id="viewDetailsController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.ViewServiceDetailsController">
-		<property name="successView" value="serviceDetails"/>
+		<property name="successView" value="serviceDetailsTree"/>
 		<property name="gridServiceDao" ref="gridServiceDao"/>
+		<property name="treeFacade" ref="serviceDetailsTreeFacade"/>
+		<property name="serviceMetadataTreeNodeListener" ref="serviceMetadataTreeNodeListener"/>
 	</bean>
 
 	<bean id="portletModeHandlerMapping"

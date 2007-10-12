@@ -3,11 +3,12 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.tree;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractController;
+import org.springframework.web.portlet.ModelAndView;
+import org.springframework.web.portlet.mvc.AbstractController;
+
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -45,8 +46,8 @@ public class TreeController extends AbstractController {
 	 * @see org.springframework.web.servlet.mvc.AbstractController#handleRequestInternal(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	protected ModelAndView handleRequestInternal(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
+			RenderResponse response) throws Exception {
 		
 		ModelAndView mav = new ModelAndView(getViewName());
 		getTreeFacade().setRootNode(rootNode);

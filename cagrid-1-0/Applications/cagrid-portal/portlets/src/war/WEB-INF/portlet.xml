@@ -9,6 +9,29 @@
 
 
 	<portlet>
+		<description>jptree</description>
+		<portlet-name>jptree</portlet-name>
+		<display-name>jptree</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/jptree-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>jptree</title>
+			<short-title>jptree</short-title>
+			<keywords>jptree</keywords>
+		</portlet-info>
+		
+	</portlet>
+
+	<portlet>
 		<description>jpchat</description>
 		<portlet-name>jpchat</portlet-name>
 		<display-name>jpchat</display-name>
