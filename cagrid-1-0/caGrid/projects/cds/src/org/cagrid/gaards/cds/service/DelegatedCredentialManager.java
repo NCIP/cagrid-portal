@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
 import java.security.KeyPair;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPublicKey;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -484,8 +485,15 @@ public class DelegatedCredentialManager {
 			}
 
 			try {
+
 				java.security.PublicKey pkey = KeyUtil.loadPublicKey(publicKey
 						.getKeyAsString());
+				int length = ((RSAPublicKey) pkey).getModulus().bitLength();
+				if (!this.proxyPolicy.isKeySizeSupported(length)) {
+					throw Errors
+							.getDelegationFault(Errors.INVALID_KEY_LENGTH_SPECIFIED);
+				}
+
 				int hours = 0;
 				int minutes = 0;
 				int seconds = 0;
@@ -515,16 +523,15 @@ public class DelegatedCredentialManager {
 					seconds = r.getDelegatedProxyLifetime().getSeconds();
 				}
 
-				// TODO: Look at public key size
 				X509Certificate[] proxy = ProxyCreator
 						.createImpersonationProxyCertificate(certs,
 								this.keyManager.getPrivateKey(String.valueOf(id
 										.getDelegationId())), pkey, hours,
 								minutes, seconds, r.getDelegationPathLength());
 				return Utils.toCertificateChain(proxy);
-			} catch(DelegationFault f){
+			} catch (DelegationFault f) {
 				throw f;
-			}catch (Exception e) {
+			} catch (Exception e) {
 				throw Errors.getInternalFault(
 						Errors.UNEXPECTED_ERROR_CREATING_PROXY, e);
 			}

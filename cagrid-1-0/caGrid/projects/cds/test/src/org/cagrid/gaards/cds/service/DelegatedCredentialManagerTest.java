@@ -768,6 +768,54 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
+	
+	public void testGetDelegatedCredentialInvalidKeyLength() {
+
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			String alias = "jdoe";
+			GlobusCredential cred = ca.createCredential(alias);
+			String gridIdentity = cred.getIdentity();
+			DelegationRequest request = getSimpleDelegationRequest();
+			DelegationSigningRequest req = dcm.initiateDelegation(gridIdentity,
+					request);
+			DelegationIdentifier id = req.getDelegationIdentifier();
+
+			KeyPair pair = KeyUtil.generateRSAKeyPair512();
+			org.cagrid.gaards.cds.common.PublicKey pKey = new org.cagrid.gaards.cds.common.PublicKey();
+			pKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
+
+			PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
+					.getKeyAsString());
+			X509Certificate[] proxy = this.ca.createProxyCertifcates(alias,
+					publicKey, 1);
+			DelegationSigningResponse res = new DelegationSigningResponse();
+			res.setDelegationIdentifier(id);
+			res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+					.toCertificateChain(proxy));
+			dcm.approveDelegation(gridIdentity, res);
+			try {
+				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
+				fail("Should not be able get delegated credential.");
+			} catch (DelegationFault e) {
+				if (!e.getFaultString().equals(
+						Errors.INVALID_KEY_LENGTH_SPECIFIED)) {
+					fail("Should not be able get delegated credential.");
+				}
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+
+	}
 
 	public void testGetDelegatedCredentialShorterThanNormalProxy() {
 
