@@ -279,12 +279,12 @@ public class DelegatedCredentialManager {
 		DelegationIdentifier id = res.getDelegationIdentifier();
 		if (this.delegationExists(id)) {
 			DelegationRecord r = getDelegationRecord(id);
-			
-			if(!r.getDelegationStatus().equals(DelegationStatus.Pending)){
+
+			if (!r.getDelegationStatus().equals(DelegationStatus.Pending)) {
 				throw Errors
-				.getDelegationFault(Errors.CANNOT_APPROVE_INVALID_STATUS);
+						.getDelegationFault(Errors.CANNOT_APPROVE_INVALID_STATUS);
 			}
-			
+
 			Calendar c = new GregorianCalendar();
 			c.setTimeInMillis(r.getDateInitiated());
 			c.add(Calendar.SECOND, DELEGATION_BUFFER_SECONDS);
@@ -384,8 +384,6 @@ public class DelegatedCredentialManager {
 								e);
 			}
 
-			
-
 			this.keyManager.storeCertificates(String.valueOf(id
 					.getDelegationId()), certs);
 			Connection conn = null;
@@ -415,11 +413,37 @@ public class DelegatedCredentialManager {
 
 	}
 
+	public void updateDelegatedCredentialStatus(DelegationIdentifier id,
+			DelegationStatus status) throws CDSInternalFault {
+		Connection conn = null;
+		try {
+			conn = this.db.getConnection();
+			PreparedStatement s = conn.prepareStatement("update " + TABLE
+					+ " SET " + STATUS + "=?" + " WHERE " + DELEGATION_ID
+					+ "= ?");
+			s.setString(1, status.getValue());
+			s.setLong(2, id.getDelegationId());
+			s.executeUpdate();
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw Errors.getDatabaseFault(e);
+		} finally {
+			this.db.releaseConnection(conn);
+		}
+
+	}
+
 	public CertificateChain getDelegatedCredential(String gridIdentity,
 			DelegationIdentifier id, PublicKey publicKey)
 			throws CDSInternalFault, DelegationFault, PermissionDeniedFault {
 		if (delegationExists(id)) {
 			DelegationRecord r = this.getDelegationRecord(id);
+
+			if (!r.getDelegationStatus().equals(DelegationStatus.Approved)) {
+				throw Errors
+						.getDelegationFault(Errors.CANNOT_GET_INVALID_STATUS);
+			}
+
 			PolicyHandler handler = null;
 			try {
 				handler = this.findHandler(r.getDelegationPolicy().getClass()
@@ -438,7 +462,7 @@ public class DelegatedCredentialManager {
 				throw Errors
 						.getDelegationFault(Errors.SIGNING_CREDENTIAL_EXPIRED);
 			}
-			
+
 			X509Certificate[] certs = null;
 			try {
 				certs = Utils.toCertificateArray(r.getCertificateChain());

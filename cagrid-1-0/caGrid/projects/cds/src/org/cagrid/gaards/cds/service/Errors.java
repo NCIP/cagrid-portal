@@ -35,6 +35,7 @@ public class Errors {
 	public static String PROXY_LIFETIME_NOT_SPECIFIED = "No lifetime specified for delegated proxies.";
 	public static String SIGNING_CREDENTIAL_ABOUT_EXPIRE = "Cannot issue delegated credential, the lifetime of the signing credential is about to expire.";
 	public static String CANNOT_APPROVE_INVALID_STATUS = "Cannot approve delegation, only delegated credentials with a \"Pending\" status may be approved.";
+	public static String CANNOT_GET_INVALID_STATUS = "Cannot get delegated credential, the signing credential has not been approved or has been suspended.";
 	
 	public static CDSInternalFault getDatabaseFault(Exception e) {
 		return getInternalFault(UNEXPECTED_DATABASE_ERROR, e);

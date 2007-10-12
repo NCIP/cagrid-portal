@@ -649,6 +649,67 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
+	
+	public void testGetDelegatedCredentialInvalidStatus() {
+
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			String alias = "jdoe";
+			GlobusCredential cred = ca.createCredential(alias);
+			String gridIdentity = cred.getIdentity();
+			DelegationRequest request = getSimpleDelegationRequest();
+			DelegationSigningRequest req = dcm.initiateDelegation(gridIdentity,
+					request);
+			DelegationIdentifier id = req.getDelegationIdentifier();
+			
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			org.cagrid.gaards.cds.common.PublicKey pKey = new org.cagrid.gaards.cds.common.PublicKey();
+			pKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
+			
+			try {
+				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
+			} catch (DelegationFault e) {
+				if (!e.getFaultString().equals(
+						Errors.CANNOT_GET_INVALID_STATUS)) {
+					fail("Should not be able get delegated credential.");
+				}
+			}
+			
+			
+			PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
+					.getKeyAsString());
+			X509Certificate[] proxy = this.ca.createProxyCertifcates(alias,
+					publicKey, 1);
+			DelegationSigningResponse res = new DelegationSigningResponse();
+			res.setDelegationIdentifier(id);
+			res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+					.toCertificateChain(proxy));
+			dcm.approveDelegation(gridIdentity, res);
+			dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
+			dcm.updateDelegatedCredentialStatus(id, DelegationStatus.Suspended);
+			try {
+				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
+			} catch (DelegationFault e) {
+				if (!e.getFaultString().equals(
+						Errors.CANNOT_GET_INVALID_STATUS)) {
+					fail("Should not be able get delegated credential.");
+				}
+			}
+			dcm.updateDelegatedCredentialStatus(id, DelegationStatus.Approved);
+			dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+
+	}
 
 	protected DelegationRequest getSimpleDelegationRequest() {
 		DelegationRequest req = new DelegationRequest();
