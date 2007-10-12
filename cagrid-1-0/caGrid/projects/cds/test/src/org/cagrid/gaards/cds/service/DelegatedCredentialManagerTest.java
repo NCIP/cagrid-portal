@@ -15,6 +15,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.cagrid.gaards.cds.common.AllowedParties;
+import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
@@ -32,7 +33,10 @@ import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.cds.testutils.CA;
 import org.cagrid.gaards.cds.testutils.Constants;
 import org.cagrid.gaards.cds.testutils.Utils;
+import org.globus.gsi.CertificateRevocationLists;
 import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.TrustedCertificates;
+import org.globus.gsi.proxy.ProxyPathValidator;
 
 public class DelegatedCredentialManagerTest extends TestCase {
 
@@ -41,6 +45,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 	private CA ca;
 
 	private File caCert;
+	
+	private int DEFAULT_PROXY_LIFETIME_SECONDS = 300;
 
 	public void testDelegatedCredentialCreateDestroy() {
 		try {
@@ -745,8 +751,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
 				fail("Should not be able get delegated credential.");
 			} catch (DelegationFault e) {
-				if (!e.getFaultString()
-						.equals(Errors.SIGNING_CREDENTIAL_ABOUT_EXPIRE)) {
+				if (!e.getFaultString().equals(
+						Errors.SIGNING_CREDENTIAL_ABOUT_EXPIRE)) {
 					fail("Should not be able get delegated credential.");
 				}
 			}
@@ -763,6 +769,90 @@ public class DelegatedCredentialManagerTest extends TestCase {
 
 	}
 
+	public void testGetDelegatedCredentialShorterThanNormalProxy() {
+
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			String alias = "jdoe";
+			GlobusCredential cred = ca.createCredential(alias);
+			String gridIdentity = cred.getIdentity();
+			int hours = 0;
+			int minutes = 0;
+			int seconds = 120;
+			DelegatedCredential dc = this.delegateAndValidate(dcm, alias,
+					gridIdentity, null, hours, minutes, seconds);
+			GlobusCredential delegatedProxy = getDelegatedCredentialAndValidate(
+					dcm, GRID_IDENTITY, dc.getDelegationIdentifier(), dc
+							.getSigningResponse().getCertificateChain());
+			assertTrue((delegatedProxy.getTimeLeft() <= seconds));
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public void testGetDelegatedCredential() {
+
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			String alias = "jdoe";
+			GlobusCredential cred = ca.createCredential(alias);
+			String gridIdentity = cred.getIdentity();
+			int hours = 12;
+			int minutes = 0;
+			int seconds = 0;
+			DelegatedCredential dc = this.delegateAndValidate(dcm, alias,
+					gridIdentity, null, hours, minutes, seconds);
+			GlobusCredential delegatedProxy = getDelegatedCredentialAndValidate(
+					dcm, GRID_IDENTITY, dc.getDelegationIdentifier(), dc
+							.getSigningResponse().getCertificateChain());
+			assertTrue((delegatedProxy.getTimeLeft() <= DEFAULT_PROXY_LIFETIME_SECONDS));
+			assertTrue((delegatedProxy.getTimeLeft() >  (DEFAULT_PROXY_LIFETIME_SECONDS-60)));
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+
+	}
+
+	private GlobusCredential getDelegatedCredentialAndValidate(
+			DelegatedCredentialManager dcm, String gridIdentity,
+			DelegationIdentifier id, CertificateChain chain) throws Exception {
+		X509Certificate[] signingChain = org.cagrid.gaards.cds.common.Utils
+				.toCertificateArray(chain);
+		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+		org.cagrid.gaards.cds.common.PublicKey pKey = new org.cagrid.gaards.cds.common.PublicKey();
+		pKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
+		X509Certificate[] delegatedProxy = org.cagrid.gaards.cds.common.Utils
+				.toCertificateArray(dcm.getDelegatedCredential(GRID_IDENTITY,
+						id, pKey));
+		assertNotNull(delegatedProxy);
+		assertEquals(delegatedProxy.length, (signingChain.length + 1));
+		for (int i = 0; i < signingChain.length; i++) {
+			assertEquals(signingChain[i], delegatedProxy[i + 1]);
+		}
+		
+		ProxyPathValidator validator = new ProxyPathValidator();
+		validator.validate(delegatedProxy, TrustedCertificates
+				.getDefaultTrustedCertificates().getCertificates(),
+				CertificateRevocationLists
+						.getDefaultCertificateRevocationLists());
+
+		return new GlobusCredential(pair.getPrivate(), delegatedProxy);
+	}
+
 	protected DelegationRequest getSimpleDelegationRequest() {
 		DelegationRequest req = new DelegationRequest();
 		req.setDelegationPolicy(getSimplePolicy());
@@ -770,8 +860,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		req.setDelegationPathLength(Constants.DELEGATION_PATH_LENGTH);
 		ProxyLifetime lifetime = new ProxyLifetime();
 		lifetime.setHours(0);
-		lifetime.setMinutes(30);
-		lifetime.setSeconds(0);
+		lifetime.setMinutes(0);
+		lifetime.setSeconds(DEFAULT_PROXY_LIFETIME_SECONDS);
 		req.setDelegatedProxyLifetime(lifetime);
 		return req;
 	}
@@ -787,6 +877,13 @@ public class DelegatedCredentialManagerTest extends TestCase {
 	protected DelegatedCredential delegateAndValidate(
 			DelegatedCredentialManager dcm, String alias, String gridIdentity,
 			DelegationPolicy policy) throws Exception {
+		return delegateAndValidate(dcm, alias, gridIdentity, policy, 12, 0, 0);
+	}
+
+	protected DelegatedCredential delegateAndValidate(
+			DelegatedCredentialManager dcm, String alias, String gridIdentity,
+			DelegationPolicy policy, int hours, int minutes, int seconds)
+			throws Exception {
 		DelegationRequest request = getSimpleDelegationRequest();
 		if (policy != null) {
 			request.setDelegationPolicy(policy);
@@ -811,7 +908,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
 				.getKeyAsString());
 		X509Certificate[] proxy = this.ca.createProxyCertifcates(alias,
-				publicKey, 1);
+				publicKey, 1, hours, minutes, seconds);
 		assertNotNull(proxy);
 		DelegationSigningResponse res = new DelegationSigningResponse();
 		res.setDelegationIdentifier(id);
