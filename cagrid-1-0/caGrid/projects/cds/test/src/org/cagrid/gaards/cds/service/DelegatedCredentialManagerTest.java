@@ -34,6 +34,8 @@ import org.cagrid.gaards.cds.testutils.Constants;
 import org.cagrid.gaards.cds.testutils.Utils;
 import org.globus.gsi.GlobusCredential;
 
+import sun.awt.windows.ThemeReader;
+
 public class DelegatedCredentialManagerTest extends TestCase {
 
 	private static String GRID_IDENTITY = "/C=US/O=abc/OU=xyz/OU=caGrid/CN=user";
@@ -557,6 +559,53 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			} catch (PermissionDeniedFault e) {
 				if (!e.getFaultString().equals(
 						Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL)) {
+					fail("Should not be able get delegated credential.");
+				}
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+
+	}
+	
+	public void testGetDelegatedCredentialExpiredSigningCredential() {
+
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			String alias = "jdoe";
+			GlobusCredential cred = ca.createCredential(alias);
+			String gridIdentity = cred.getIdentity();
+			DelegationRequest request = getSimpleDelegationRequest();
+			DelegationSigningRequest req = dcm.initiateDelegation(gridIdentity,
+					request);
+			DelegationIdentifier id = req.getDelegationIdentifier();
+			PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
+					.getKeyAsString());
+			int seconds=2;
+			X509Certificate[] proxy = this.ca.createProxyCertifcates(alias,
+					publicKey, 1,0,0,seconds);
+			DelegationSigningResponse res = new DelegationSigningResponse();
+			res.setDelegationIdentifier(id);
+			res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+					.toCertificateChain(proxy));
+			dcm.approveDelegation(gridIdentity, res);
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			org.cagrid.gaards.cds.common.PublicKey pKey = new org.cagrid.gaards.cds.common.PublicKey();
+			pKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
+			Thread.sleep(((seconds*1000)+100));
+			try {
+				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
+			} catch (DelegationFault e) {
+				if (!e.getFaultString().equals(
+						Errors.SIGNING_CREDENTIAL_EXPIRED)) {
 					fail("Should not be able get delegated credential.");
 				}
 			}
