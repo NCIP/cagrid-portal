@@ -56,7 +56,7 @@ public class DelegatedCredentialManager {
 	private final static String PROXY_LIFETIME_MINUTES = "PROXY_LIFETIME_MINUTES";
 	private final static String PROXY_LIFETIME_SECONDS = "PROXY_LIFETIME_SECONDS";
 
-	private final static int PROXY_EXPIRATION_BUFFER_SECONDS = 5;
+	public final static int PROXY_EXPIRATION_BUFFER_SECONDS = 5;
 
 	private Database db;
 	private boolean dbBuilt = false;
@@ -522,7 +522,9 @@ public class DelegatedCredentialManager {
 										.getDelegationId())), pkey, hours,
 								minutes, seconds, r.getDelegationPathLength());
 				return Utils.toCertificateChain(proxy);
-			} catch (Exception e) {
+			} catch(DelegationFault f){
+				throw f;
+			}catch (Exception e) {
 				throw Errors.getInternalFault(
 						Errors.UNEXPECTED_ERROR_CREATING_PROXY, e);
 			}

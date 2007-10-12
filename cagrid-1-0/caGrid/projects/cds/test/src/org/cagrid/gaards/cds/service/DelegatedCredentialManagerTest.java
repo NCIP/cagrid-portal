@@ -230,7 +230,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 					.getIdentity(), null);
 			try {
 				dcm.approveDelegation(cred.getIdentity(), dc
-				.getSigningResponse());
+						.getSigningResponse());
 			} catch (DelegationFault e) {
 				if (!e.getFaultString().equals(
 						Errors.CANNOT_APPROVE_INVALID_STATUS)) {
@@ -549,6 +549,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			id.setDelegationId(2);
 			try {
 				dcm.getDelegatedCredential(GRID_IDENTITY, id, publicKey);
+				fail("Should not be able get delegated credential.");
 			} catch (DelegationFault e) {
 				if (!e.getFaultString().equals(
 						Errors.DELEGATION_RECORD_DOES_NOT_EXIST)) {
@@ -584,6 +585,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			publicKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
 			try {
 				dcm.getDelegatedCredential(GRID_IDENTITY + 2, id, publicKey);
+				fail("Should not be able get delegated credential.");
 			} catch (PermissionDeniedFault e) {
 				if (!e.getFaultString().equals(
 						Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL)) {
@@ -631,6 +633,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			Thread.sleep(((seconds * 1000) + 100));
 			try {
 				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
+				fail("Should not be able get delegated credential.");
 			} catch (DelegationFault e) {
 				if (!e.getFaultString().equals(
 						Errors.SIGNING_CREDENTIAL_EXPIRED)) {
@@ -649,7 +652,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
-	
+
 	public void testGetDelegatedCredentialInvalidStatus() {
 
 		DelegatedCredentialManager dcm = null;
@@ -662,21 +665,20 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			DelegationSigningRequest req = dcm.initiateDelegation(gridIdentity,
 					request);
 			DelegationIdentifier id = req.getDelegationIdentifier();
-			
+
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			org.cagrid.gaards.cds.common.PublicKey pKey = new org.cagrid.gaards.cds.common.PublicKey();
 			pKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
-			
+
 			try {
 				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
 			} catch (DelegationFault e) {
-				if (!e.getFaultString().equals(
-						Errors.CANNOT_GET_INVALID_STATUS)) {
+				if (!e.getFaultString()
+						.equals(Errors.CANNOT_GET_INVALID_STATUS)) {
 					fail("Should not be able get delegated credential.");
 				}
 			}
-			
-			
+
 			PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
 					.getKeyAsString());
 			X509Certificate[] proxy = this.ca.createProxyCertifcates(alias,
@@ -690,14 +692,64 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			dcm.updateDelegatedCredentialStatus(id, DelegationStatus.Suspended);
 			try {
 				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
+				fail("Should not be able get delegated credential.");
 			} catch (DelegationFault e) {
-				if (!e.getFaultString().equals(
-						Errors.CANNOT_GET_INVALID_STATUS)) {
+				if (!e.getFaultString()
+						.equals(Errors.CANNOT_GET_INVALID_STATUS)) {
 					fail("Should not be able get delegated credential.");
 				}
 			}
 			dcm.updateDelegatedCredentialStatus(id, DelegationStatus.Approved);
 			dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+
+	}
+
+	public void testGetDelegatedCredentialSignatureCredentialAboutToExpire() {
+
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			String alias = "jdoe";
+			GlobusCredential cred = ca.createCredential(alias);
+			String gridIdentity = cred.getIdentity();
+			DelegationRequest request = getSimpleDelegationRequest();
+			DelegationSigningRequest req = dcm.initiateDelegation(gridIdentity,
+					request);
+			DelegationIdentifier id = req.getDelegationIdentifier();
+
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			org.cagrid.gaards.cds.common.PublicKey pKey = new org.cagrid.gaards.cds.common.PublicKey();
+			pKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
+
+			PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
+					.getKeyAsString());
+			X509Certificate[] proxy = this.ca.createProxyCertifcates(alias,
+					publicKey, 1, 0, 0,
+					DelegatedCredentialManager.PROXY_EXPIRATION_BUFFER_SECONDS);
+			DelegationSigningResponse res = new DelegationSigningResponse();
+			res.setDelegationIdentifier(id);
+			res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+					.toCertificateChain(proxy));
+			dcm.approveDelegation(gridIdentity, res);
+			try {
+				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
+				fail("Should not be able get delegated credential.");
+			} catch (DelegationFault e) {
+				if (!e.getFaultString()
+						.equals(Errors.SIGNING_CREDENTIAL_ABOUT_EXPIRE)) {
+					fail("Should not be able get delegated credential.");
+				}
+			}
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
