@@ -280,6 +280,11 @@ public class DelegatedCredentialManager {
 		if (this.delegationExists(id)) {
 			DelegationRecord r = getDelegationRecord(id);
 			
+			if(!r.getDelegationStatus().equals(DelegationStatus.Pending)){
+				throw Errors
+				.getDelegationFault(Errors.CANNOT_APPROVE_INVALID_STATUS);
+			}
+			
 			Calendar c = new GregorianCalendar();
 			c.setTimeInMillis(r.getDateInitiated());
 			c.add(Calendar.SECOND, DELEGATION_BUFFER_SECONDS);

@@ -220,6 +220,34 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 	}
 
+	public void testDelegateCredentialApproveWithInvalidStatus() {
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			String alias = "jdoe";
+			GlobusCredential cred = ca.createCredential(alias);
+			DelegatedCredential dc = delegateAndValidate(dcm, alias, cred
+					.getIdentity(), null);
+			try {
+				dcm.approveDelegation(cred.getIdentity(), dc
+				.getSigningResponse());
+			} catch (DelegationFault e) {
+				if (!e.getFaultString().equals(
+						Errors.CANNOT_APPROVE_INVALID_STATUS)) {
+					fail("Should not be able to approve delegation.");
+				}
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+	}
+
 	public void testDelegateCredentialsWithIdentityDelegationPolicy() {
 		DelegatedCredentialManager dcm = null;
 		try {
@@ -239,7 +267,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				AllowedParties ap = new AllowedParties();
 				ap.setGridIdentity(users);
 				policy.setAllowedParties(ap);
-				list.add(delegateAndValidate(dcm, alias, gridIdentity, policy));
+				list.add(delegateAndValidate(dcm, alias, gridIdentity, policy)
+						.getDelegationIdentifier());
 			}
 			for (int i = 0; i < list.size(); i++) {
 				DelegationIdentifier id = list.get(i);
@@ -549,7 +578,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			String gridIdentity = cred.getIdentity();
 			IdentityDelegationPolicy policy = getSimplePolicy();
 			DelegationIdentifier id = this.delegateAndValidate(dcm, alias,
-					gridIdentity, policy);
+					gridIdentity, policy).getDelegationIdentifier();
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			org.cagrid.gaards.cds.common.PublicKey publicKey = new org.cagrid.gaards.cds.common.PublicKey();
 			publicKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
@@ -642,11 +671,13 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		return policy;
 	}
 
-	protected DelegationIdentifier delegateAndValidate(
+	protected DelegatedCredential delegateAndValidate(
 			DelegatedCredentialManager dcm, String alias, String gridIdentity,
 			DelegationPolicy policy) throws Exception {
 		DelegationRequest request = getSimpleDelegationRequest();
-		request.setDelegationPolicy(policy);
+		if (policy != null) {
+			request.setDelegationPolicy(policy);
+		}
 		DelegationSigningRequest req = dcm.initiateDelegation(gridIdentity,
 				request);
 		DelegationIdentifier id = req.getDelegationIdentifier();
@@ -661,7 +692,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		assertTrue((0 < r.getDateInitiated()));
 		assertEquals(request.getDelegationPathLength(), r
 				.getDelegationPathLength());
-		assertEquals(policy, r.getDelegationPolicy());
+		assertEquals(request.getDelegationPolicy(), r.getDelegationPolicy());
 		assertNotNull(r.getCertificateChain());
 		assertNull(r.getCertificateChain().getX509Certificate());
 		PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
@@ -683,7 +714,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		assertEquals(DelegationStatus.Approved, r2.getDelegationStatus());
 		assertEquals(r.getDateInitiated(), r2.getDateInitiated());
 		assertEquals(r.getDelegationPathLength(), r2.getDelegationPathLength());
-		assertEquals(policy, r2.getDelegationPolicy());
+		assertEquals(request.getDelegationPolicy(), r2.getDelegationPolicy());
 		X509Certificate[] chain = org.cagrid.gaards.cds.common.Utils
 				.toCertificateArray(r2.getCertificateChain());
 		assertNotNull(chain);
@@ -691,7 +722,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		for (int i = 0; i < proxy.length; i++) {
 			assertEquals(proxy[i], chain[i]);
 		}
-		return id;
+		return new DelegatedCredential(req, res);
 	}
 
 	protected void setUp() throws Exception {
