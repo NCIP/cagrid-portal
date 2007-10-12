@@ -3,8 +3,20 @@ package org.cagrid.gaards.cds.common;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 import java.security.cert.X509Certificate;
+import java.util.Date;
 
 public class Utils {
+
+	public static Date getEarliestExpiration(X509Certificate[] certs) {
+		Date earliestTime = null;
+		for (int i = 0; i < certs.length; i++) {
+			Date time = certs[i].getNotAfter();
+			if (earliestTime == null || time.before(earliestTime)) {
+				earliestTime = time;
+			}
+		}
+		return earliestTime;
+	}
 
 	public static org.cagrid.gaards.cds.common.X509Certificate convertCertificate(
 			X509Certificate cert) throws Exception {

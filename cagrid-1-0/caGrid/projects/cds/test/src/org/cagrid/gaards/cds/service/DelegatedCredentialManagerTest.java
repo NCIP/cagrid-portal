@@ -23,6 +23,7 @@ import org.cagrid.gaards.cds.common.DelegationSigningRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningResponse;
 import org.cagrid.gaards.cds.common.DelegationStatus;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
+import org.cagrid.gaards.cds.common.ProxyLifetime;
 import org.cagrid.gaards.cds.service.policy.PolicyHandler;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
@@ -90,6 +91,32 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				fail("Should not be able to delegate a credential with an invalid delegation policy.");
 			} catch (InvalidPolicyFault e) {
 
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	public void testDelegateCredentialInvalidProxyLifetime() {
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			try {
+				DelegationRequest req = getSimpleDelegationRequest();
+				req.setDelegatedProxyLifetime(null);
+				dcm.initiateDelegation("some user", req);
+				fail("Should not be able to delegate a credential without a delegate proxy lifetime specified.");
+			} catch (DelegationFault e) {
+				if (!e.getFaultString().equals(
+						Errors.PROXY_LIFETIME_NOT_SPECIFIED)) {
+					fail("Should not be able to delegate a credential without a delegate proxy lifetime specified.");
+				}
 			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -459,9 +486,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
 						.toCertificateChain(certs));
 				Thread
-						.currentThread()
-						.sleep(
-								((DelegatedCredentialManager.DELEGATION_BUFFER_SECONDS * 1000) + 100));
+						.sleep(((DelegatedCredentialManager.DELEGATION_BUFFER_SECONDS * 1000) + 100));
 				dcm.approveDelegation(cred.getIdentity(), res);
 				fail("Should not be able to approve delegation.");
 			} catch (DelegationFault e) {
@@ -482,11 +507,49 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 	}
 
+	public void testGetNonExistingDelegatedCredential() {
+
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			org.cagrid.gaards.cds.common.PublicKey publicKey = new org.cagrid.gaards.cds.common.PublicKey();
+			publicKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
+			DelegationIdentifier id = new DelegationIdentifier();
+			id.setDelegationId(2);
+			try {
+				dcm.getDelegatedCredential(GRID_IDENTITY, id, publicKey);
+			} catch (DelegationFault e) {
+				if (!e.getFaultString().equals(
+						Errors.DELEGATION_RECORD_DOES_NOT_EXIST)) {
+					fail("Should not be able get delegated credential.");
+				}
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+
+	}
+
+
+
 	protected DelegationRequest getSimpleDelegationRequest() {
 		DelegationRequest req = new DelegationRequest();
 		req.setDelegationPolicy(getSimplePolicy());
 		req.setKeyLength(Constants.KEY_LENGTH);
 		req.setDelegationPathLength(Constants.DELEGATION_PATH_LENGTH);
+		ProxyLifetime lifetime = new ProxyLifetime();
+		lifetime.setHours(0);
+		lifetime.setMinutes(30);
+		lifetime.setSeconds(0);
+		req.setDelegatedProxyLifetime(lifetime);
 		return req;
 	}
 
@@ -534,7 +597,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		DelegationRecord r2 = dcm.getDelegationRecord(id);
 		assertEquals(gridIdentity, r2.getGridIdentity());
 		assertTrue(0 < r2.getDateApproved());
-		assertTrue(0 < r2.getExpiration());
+		assertEquals(org.cagrid.gaards.cds.common.Utils.getEarliestExpiration(
+				proxy).getTime(), r2.getExpiration());
 		assertEquals(DelegationStatus.Approved, r2.getDelegationStatus());
 		assertEquals(r.getDateInitiated(), r2.getDateInitiated());
 		assertEquals(r.getDelegationPathLength(), r2.getDelegationPathLength());

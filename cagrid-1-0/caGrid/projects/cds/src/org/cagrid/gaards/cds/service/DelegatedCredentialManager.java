@@ -2,6 +2,7 @@ package org.cagrid.gaards.cds.service;
 
 import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
+import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
 
 import java.security.KeyPair;
 import java.security.cert.CertificateException;
@@ -24,6 +25,7 @@ import org.cagrid.gaards.cds.common.DelegationRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningResponse;
 import org.cagrid.gaards.cds.common.DelegationStatus;
+import org.cagrid.gaards.cds.common.ProxyLifetime;
 import org.cagrid.gaards.cds.common.PublicKey;
 import org.cagrid.gaards.cds.common.Utils;
 import org.cagrid.gaards.cds.service.policy.PolicyHandler;
@@ -50,6 +52,11 @@ public class DelegatedCredentialManager {
 	private final static String DELEGATION_PATH_LENGTH = "DELEGATION_PATH_LENGTH";
 	private final static String DATE_INITIATED = "DATE_INITIATED";
 	private final static String DATE_APPROVED = "DATE_APPROVED";
+	private final static String PROXY_LIFETIME_HOURS = "PROXY_LIFETIME_HOURS";
+	private final static String PROXY_LIFETIME_MINUTES = "PROXY_LIFETIME_MINUTES";
+	private final static String PROXY_LIFETIME_SECONDS = "PROXY_LIFETIME_SECONDS";
+
+	private final static int PROXY_EXPIRATION_BUFFER_SECONDS = 5;
 
 	private Database db;
 	private boolean dbBuilt = false;
@@ -113,6 +120,11 @@ public class DelegatedCredentialManager {
 					.getDelegationFault(Errors.INVALID_KEY_LENGTH_SPECIFIED);
 		}
 
+		if (request.getDelegatedProxyLifetime() == null) {
+			throw Errors
+					.getDelegationFault(Errors.PROXY_LIFETIME_NOT_SPECIFIED);
+		}
+
 		if ((request.getDelegationPathLength() < 0)
 				|| (this.proxyPolicy.getMaxDelegationPathLength() < request
 						.getDelegationPathLength())) {
@@ -128,6 +140,8 @@ public class DelegatedCredentialManager {
 					+ " SET " + GRID_IDENTITY + "= ?, " + POLICY_TYPE + "= ?, "
 					+ STATUS + "= ?," + DATE_INITIATED + "=?," + DATE_APPROVED
 					+ "=?," + EXPIRATION + "=?," + DELEGATION_PATH_LENGTH
+					+ "=?," + PROXY_LIFETIME_HOURS + "=?,"
+					+ PROXY_LIFETIME_MINUTES + "=?," + PROXY_LIFETIME_SECONDS
 					+ "=?");
 			s.setString(1, callerGridIdentity);
 			s.setString(2, policy.getClass().getName());
@@ -136,6 +150,9 @@ public class DelegatedCredentialManager {
 			s.setLong(5, 0);
 			s.setLong(6, 0);
 			s.setInt(7, request.getDelegationPathLength());
+			s.setInt(8, request.getDelegatedProxyLifetime().getHours());
+			s.setInt(9, request.getDelegatedProxyLifetime().getMinutes());
+			s.setInt(10, request.getDelegatedProxyLifetime().getSeconds());
 			s.execute();
 			s.close();
 			delegationId = db.getLastAutoId(c);
@@ -214,6 +231,11 @@ public class DelegatedCredentialManager {
 					r
 							.setDelegationPathLength(rs
 									.getInt(DELEGATION_PATH_LENGTH));
+					ProxyLifetime lifetime = new ProxyLifetime();
+					lifetime.setHours(rs.getInt(PROXY_LIFETIME_HOURS));
+					lifetime.setMinutes(rs.getInt(PROXY_LIFETIME_MINUTES));
+					lifetime.setSeconds(rs.getInt(PROXY_LIFETIME_SECONDS));
+					r.setDelegatedProxyLifetime(lifetime);
 				}
 				rs.close();
 				s.close();
@@ -257,6 +279,15 @@ public class DelegatedCredentialManager {
 		DelegationIdentifier id = res.getDelegationIdentifier();
 		if (this.delegationExists(id)) {
 			DelegationRecord r = getDelegationRecord(id);
+			
+			Calendar c = new GregorianCalendar();
+			c.setTimeInMillis(r.getDateInitiated());
+			c.add(Calendar.SECOND, DELEGATION_BUFFER_SECONDS);
+			Date d = new Date();
+			if (d.after(c.getTime())) {
+				throw Errors
+						.getDelegationFault(Errors.DELEGATION_APPROVAL_BUFFER_EXPIRED);
+			}
 
 			// Check to make sure that the entity that initiated the delegation
 			// is the same entity that is approving it.
@@ -300,8 +331,8 @@ public class DelegatedCredentialManager {
 								.getDefaultCertificateRevocationLists());
 
 			} catch (Exception e) {
-				throw Errors
-						.getDelegationFault(Errors.INVALID_CERTIFICATE_CHAIN);
+				throw Errors.getDelegationFault(
+						Errors.INVALID_CERTIFICATE_CHAIN, e);
 			}
 
 			// Check to make sure the Identity of the proxy cert matches the
@@ -348,14 +379,7 @@ public class DelegatedCredentialManager {
 								e);
 			}
 
-			Calendar c = new GregorianCalendar();
-			c.setTimeInMillis(r.getDateInitiated());
-			c.add(Calendar.SECOND, DELEGATION_BUFFER_SECONDS);
-			Date d = new Date();
-			if (d.after(c.getTime())) {
-				throw Errors
-						.getDelegationFault(Errors.DELEGATION_APPROVAL_BUFFER_EXPIRED);
-			}
+			
 
 			this.keyManager.storeCertificates(String.valueOf(id
 					.getDelegationId()), certs);
@@ -364,10 +388,11 @@ public class DelegatedCredentialManager {
 				Date now = new Date();
 				conn = this.db.getConnection();
 				PreparedStatement s = conn.prepareStatement("update " + TABLE
-						+ " SET " + STATUS + "=?,"+ EXPIRATION + "=?," + DATE_APPROVED + "=?"
-						+ " WHERE " + DELEGATION_ID + "= ?");
+						+ " SET " + STATUS + "=?," + EXPIRATION + "=?,"
+						+ DATE_APPROVED + "=?" + " WHERE " + DELEGATION_ID
+						+ "= ?");
 				s.setString(1, DelegationStatus.Approved.getValue());
-				s.setLong(2, certs[0].getNotAfter().getTime());
+				s.setLong(2, Utils.getEarliestExpiration(certs).getTime());
 				s.setLong(3, now.getTime());
 				s.setLong(4, id.getDelegationId());
 				s.executeUpdate();
@@ -383,6 +408,89 @@ public class DelegatedCredentialManager {
 					.getDelegationFault(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
 		}
 
+	}
+
+	public CertificateChain getDelegatedCredential(String gridIdentity,
+			DelegationIdentifier id, PublicKey publicKey)
+			throws CDSInternalFault, DelegationFault, PermissionDeniedFault {
+		if (delegationExists(id)) {
+			DelegationRecord r = this.getDelegationRecord(id);
+			PolicyHandler handler = null;
+			try {
+				handler = this.findHandler(r.getDelegationPolicy().getClass()
+						.getName());
+			} catch (Exception e) {
+				throw Errors.getInternalFault(Errors.POLICY_HANDLER_NOT_FOUND,
+						e);
+			}
+			Date now = new Date();
+			Date expiration = new Date(r.getExpiration());
+			if (now.after(expiration)) {
+				throw Errors
+						.getDelegationFault(Errors.SIGNING_CREDENTIAL_EXPIRED);
+			}
+			if (!handler.isAuthorized(id, gridIdentity)) {
+				throw Errors
+						.getPermissionDeniedFault(Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL);
+			}
+			X509Certificate[] certs = null;
+			try {
+				certs = Utils.toCertificateArray(r.getCertificateChain());
+
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				throw Errors.getInternalFault(
+						Errors.UNEXPECTED_ERROR_LOADING_CERTIFICATE_CHAIN, e);
+			}
+
+			try {
+				java.security.PublicKey pkey = KeyUtil.loadPublicKey(publicKey
+						.getKeyAsString());
+				int hours = 0;
+				int minutes = 0;
+				int seconds = 0;
+				Calendar c = new GregorianCalendar();
+				c.add(Calendar.HOUR_OF_DAY, r.getDelegatedProxyLifetime()
+						.getHours());
+				c.add(Calendar.MINUTE, r.getDelegatedProxyLifetime()
+						.getMinutes());
+				c.add(Calendar.SECOND, r.getDelegatedProxyLifetime()
+						.getSeconds()
+						+ PROXY_EXPIRATION_BUFFER_SECONDS);
+
+				if (c.getTime().after(certs[0].getNotAfter())) {
+					Calendar expires = new GregorianCalendar();
+					expires.setTimeInMillis(certs[0].getNotAfter().getTime());
+					long diff = (certs[0].getNotAfter().getTime() - System
+							.currentTimeMillis()) / 1000;
+					if (diff > PROXY_EXPIRATION_BUFFER_SECONDS) {
+						seconds = (int) diff - PROXY_EXPIRATION_BUFFER_SECONDS;
+					} else {
+						throw Errors
+								.getDelegationFault(Errors.SIGNING_CREDENTIAL_ABOUT_EXPIRE);
+					}
+				} else {
+					hours = r.getDelegatedProxyLifetime().getHours();
+					minutes = r.getDelegatedProxyLifetime().getMinutes();
+					seconds = r.getDelegatedProxyLifetime().getSeconds();
+				}
+
+				// TODO: Look at public key size
+				X509Certificate[] proxy = ProxyCreator
+						.createImpersonationProxyCertificate(certs,
+								this.keyManager.getPrivateKey(String.valueOf(id
+										.getDelegationId())), pkey, hours,
+								minutes, seconds, r.getDelegationPathLength());
+				return Utils.toCertificateChain(proxy);
+			} catch (Exception e) {
+				throw Errors.getInternalFault(
+						Errors.UNEXPECTED_ERROR_CREATING_PROXY, e);
+			}
+
+		} else {
+			throw Errors
+					.getDelegationFault(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
+		}
 	}
 
 	private String getPolicyType(long delegationId) throws CDSInternalFault {
@@ -475,7 +583,10 @@ public class DelegatedCredentialManager {
 							+ POLICY_TYPE + " VARCHAR(255) NOT NULL," + STATUS
 							+ " VARCHAR(50) NOT NULL," + DATE_INITIATED
 							+ " BIGINT," + DATE_APPROVED + " BIGINT,"
-							+ DELEGATION_PATH_LENGTH + " INT," + EXPIRATION
+							+ DELEGATION_PATH_LENGTH + " INT,"
+							+ PROXY_LIFETIME_HOURS + " INT,"
+							+ PROXY_LIFETIME_MINUTES + " INT,"
+							+ PROXY_LIFETIME_SECONDS + " INT," + EXPIRATION
 							+ " BIGINT, INDEX document_index (" + DELEGATION_ID
 							+ "));";
 					db.update(trust);

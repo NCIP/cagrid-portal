@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
+import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 
 public class Errors {
 
@@ -27,7 +28,13 @@ public class Errors {
 	public static String CERTIFICATE_CHAIN_DOES_NOT_CONTAIN_PROXY = "The certificate chain provided does not begin with a proxy ceritficate.";
 	public static String INSUFFICIENT_DELEGATION_PATH_LENGTH = "The delegation path allowed in the delegated credential is not sufficient.";
 	public static String DELEGATION_APPROVAL_BUFFER_EXPIRED = "The time buffer allowed to approve the delegation has expired, the delegation can no longer be approved.";
-
+	public static String POLICY_HANDLER_NOT_FOUND = "Policy handler could not be found.";
+	public static String SIGNING_CREDENTIAL_EXPIRED = "Cannot obtain a delegated credential, the signing credential has expired.";
+	public static String PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL = "You do not have permission to obtain a delegated credential.";
+	public static String UNEXPECTED_ERROR_CREATING_PROXY = "An unexpected error occurred creating the proxy.";
+	public static String PROXY_LIFETIME_NOT_SPECIFIED = "No lifetime specified for delegated proxies.";
+	public static String SIGNING_CREDENTIAL_ABOUT_EXPIRE = "Cannot issue delegated credential, the lifetime of the signing credential is about to expire.";
+	
 	public static CDSInternalFault getDatabaseFault(Exception e) {
 		return getInternalFault(UNEXPECTED_DATABASE_ERROR, e);
 	}
@@ -49,6 +56,21 @@ public class Errors {
 
 	public static DelegationFault getDelegationFault(String error) {
 		DelegationFault f = new DelegationFault();
+		f.setFaultString(error);
+		return f;
+	}
+	
+	public static DelegationFault getDelegationFault(String error, Exception e) {
+		DelegationFault f = new DelegationFault();
+		f.setFaultString(error);
+		FaultHelper helper = new FaultHelper(f);
+		helper.addFaultCause(e);
+		f = (DelegationFault) helper.getFault();
+		return f;
+	}
+	
+	public static PermissionDeniedFault getPermissionDeniedFault(String error) {
+		PermissionDeniedFault f = new PermissionDeniedFault();
 		f.setFaultString(error);
 		return f;
 	}
