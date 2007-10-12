@@ -81,8 +81,13 @@ public class CA {
 	}
 
 	public X509Certificate[] createProxyCertifcates(String alias,
-			PublicKey publicKey, int pathLength)
-			throws Exception {
+			PublicKey publicKey, int pathLength) throws Exception {
+		return createProxyCertifcates(alias, publicKey, pathLength, 12, 0, 0);
+	}
+
+	public X509Certificate[] createProxyCertifcates(String alias,
+			PublicKey publicKey, int pathLength, int hours, int minutes,
+			int seconds) throws Exception {
 		GlobusCredential cred = null;
 		if (this.creds.containsKey(alias)) {
 			cred = this.creds.get(alias);
@@ -92,7 +97,7 @@ public class CA {
 		X509Certificate[] certs = ProxyCreator
 				.createImpersonationProxyCertificate(
 						cred.getCertificateChain(), cred.getPrivateKey(),
-						publicKey, 12, 0, 0, pathLength);
+						publicKey, hours, minutes, seconds, pathLength);
 		return certs;
 	}
 

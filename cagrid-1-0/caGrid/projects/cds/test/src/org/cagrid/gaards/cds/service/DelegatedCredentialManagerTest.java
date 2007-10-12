@@ -34,8 +34,6 @@ import org.cagrid.gaards.cds.testutils.Constants;
 import org.cagrid.gaards.cds.testutils.Utils;
 import org.globus.gsi.GlobusCredential;
 
-import sun.awt.windows.ThemeReader;
-
 public class DelegatedCredentialManagerTest extends TestCase {
 
 	private static String GRID_IDENTITY = "/C=US/O=abc/OU=xyz/OU=caGrid/CN=user";
