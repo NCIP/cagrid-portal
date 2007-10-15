@@ -1,4 +1,4 @@
-<project name="build-caGrid-1.0-system" default="all" basedir="checkout/caGrid-1.0-system">
+<project name="caGrid-1.0-system" default="all" basedir="checkout/caGrid-1.0-system">
 
     <target name="prepare">
         <mkdir dir="cagrid-1-0" />
@@ -17,13 +17,14 @@
         <ant antfile="build.xml" dir="cagrid-1-0/tests" target="all" />
     </target>
 
-  
+
     <target name="test" depends="build">
         <ant antfile="build.xml" dir="cagrid-1-0/tests" target="test">
             <property name="dont.instrument" value="true" />
+            <property name="dart.buildname" value="${ant.project.name}-${os.name}-${os.arch}-${os.version}--JDK-${java.version}" />
         </ant>
     </target>
-    
+
 
     <target name="just-test">
         <ant antfile="build.xml" dir="cagrid-1-0/tests" target="test">
@@ -33,6 +34,6 @@
 
 
     <target name="all" depends="test" />
-    
-    
+
+
 </project>
