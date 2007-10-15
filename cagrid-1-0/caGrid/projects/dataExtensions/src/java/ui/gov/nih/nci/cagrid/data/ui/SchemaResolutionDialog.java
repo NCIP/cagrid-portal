@@ -37,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 27, 2006
- * @version $Id: SchemaResolutionDialog.java,v 1.3 2007-09-04 20:55:36 dervin Exp $
+ * @version $Id: SchemaResolutionDialog.java,v 1.4 2007-10-15 15:17:19 dervin Exp $
  */
 public class SchemaResolutionDialog extends JDialog {
 
@@ -66,9 +66,9 @@ public class SchemaResolutionDialog extends JDialog {
      * Resolves schemas for the given cadsr package
      * 
      * @param info
-     * @return null if an error occurs resolving schemas an empty array (length ==
-     *         0) if user cancels the dialog array of NamespaceType (length !=
-     *         0) if resolution was successful
+     * @return null if an error occurs resolving schemas an empty array 
+     *      (length == 0) if user cancels the dialog array of NamespaceType 
+     *      (length != 0) if resolution was successful
      */
     public static NamespaceType[] resolveSchemas(ServiceInformation info) {
         SchemaResolutionDialog dialog = new SchemaResolutionDialog(info);
@@ -196,7 +196,7 @@ public class SchemaResolutionDialog extends JDialog {
                 Iterator discoIter = discoveryTypes.iterator();
                 while (discoIter.hasNext()) {
                     final DiscoveryExtensionDescriptionType dd = (DiscoveryExtensionDescriptionType) discoIter.next();
-                    Runnable componentLoader = new Runnable() {
+                    Thread componentLoader = new Thread() {
                         public void run() {
                             int myId = getNamespaceDiscoveryProgressBar()
                                 .startEvent("Loading " + dd.getDisplayName());
@@ -214,7 +214,7 @@ public class SchemaResolutionDialog extends JDialog {
                             }
                         }
                     };
-                    SwingUtilities.invokeLater(componentLoader);
+                    componentLoader.start();
                 }
             }
         }
@@ -222,15 +222,19 @@ public class SchemaResolutionDialog extends JDialog {
     }
     
     
-    private void insertAndSortTab(NamespaceTypeDiscoveryComponent component, String displayName) {
+    private synchronized void insertAndSortTab(final NamespaceTypeDiscoveryComponent component, final String displayName) {
         List<String> titles = new ArrayList();
         for (int i = 0; i < getDiscoveryTabbedPane().getTabCount(); i++) {
             titles.add(getDiscoveryTabbedPane().getTitleAt(i).toLowerCase());
         }
         titles.add(displayName.toLowerCase());
         Collections.sort(titles);
-        int insertIndex = titles.indexOf(displayName.toLowerCase());
-        getDiscoveryTabbedPane().insertTab(displayName, null, component, null, insertIndex);
+        final int insertIndex = titles.indexOf(displayName.toLowerCase());
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                getDiscoveryTabbedPane().insertTab(displayName, null, component, null, insertIndex);
+            }
+        });
     }
     
     
