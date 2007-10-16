@@ -41,15 +41,21 @@ public class AbstractDomainObject implements DomainObject {
 	}
 
 	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this);
+		return toString().hashCode();
 	}
 
 	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj);
+		boolean eq = false;
+		if(obj != null){
+			if(obj.getClass().getName().equals(getClass().getName())){
+				eq = ((AbstractDomainObject)obj).hashCode() == hashCode();
+			}
+		}
+		return eq;
 	}
 
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
+		return getClass().getName() + ":" + getId();
 	}
 
 }

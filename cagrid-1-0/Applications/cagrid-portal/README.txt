@@ -36,12 +36,20 @@
 7. Run: ant aggr:load-workspaces
    - NOTE: you'll see lots of warnings and error messages. Unless you see a stacktrace,
            it worked.
-   		
-8. If you don't have Maven1 installed, run: ant js2:install-maven
+ 
+8. Run: ant liferay:install-liferay
 
-9. Run: ant js2:deploy-portlets
- - NOTE: If you have just installed Maven, this will take while because Maven needs to download
-         all the dependencies. But future runs of this target will be fast.
+9. Create liferay database:
+
+	create database lportal2 character set utf8;
+	grant all privileges on lportal2.* to 'lportal2'@'%' identified by 'lportal2';
+   	flush privileges;
+   		
+#8. If you don't have Maven1 installed, run: ant js2:install-maven
+#
+#9. Run: ant js2:deploy-portlets
+# - NOTE: If you have just installed Maven, this will take while because Maven needs to download
+#         all the dependencies. But future runs of this target will be fast.
          
 ###########
 # Running #

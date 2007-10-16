@@ -5,7 +5,6 @@
 	<classpathentry kind="src" path="aggr/src/java"/>
 	<classpathentry kind="src" path="aggr/test/src/java"/>
 	<classpathentry kind="src" path="portlets/src/java"/>
-	<classpathentry kind="src" path="portlets/test/src/java"/>
 	<classpathentry kind="src" path="portals/liferay/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="db/lib/spring/spring.jar"/>
