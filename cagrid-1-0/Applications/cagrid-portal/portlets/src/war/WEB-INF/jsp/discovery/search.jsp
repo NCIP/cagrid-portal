@@ -1,9 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 
-<style type="text/css">
-<%@ include file="/css/light.tabs.css" %>
-</style>
-
 <script type="text/javascript">
 	//<![CDATA[
 	
