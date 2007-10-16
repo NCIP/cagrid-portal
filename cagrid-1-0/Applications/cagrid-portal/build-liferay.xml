@@ -139,8 +139,15 @@
 	<target name="liferay:configure-jboss-classpath">
 		<property name="config.file" value="${liferay.jboss.home}/server/default/conf/jboss-service.xml"/>
 		<xmltask source="${config.file}" dest="${config.file}">
-			<attr path="/server/classpath[1]" attr="codebase" value="${jboss.server.lib.url:lib}/ext"/>
-		</xmltask>	
+			<remove path="/server/classpath"/>
+			<insert path="/server/mbean[1]" position="before">
+				<![CDATA[
+	<classpath archives="*" codebase="${jboss.server.lib.url:lib}/ext"/>
+	<classpath archives="*" codebase="${jboss.server.lib.url:lib}"/>				
+				]]>
+			</insert>
+		</xmltask>
+			
 	</target>
 	
 	<target name="liferay:configure-jboss-root">
