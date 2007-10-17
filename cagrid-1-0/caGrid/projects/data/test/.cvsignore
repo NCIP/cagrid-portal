@@ -6,3 +6,4 @@ BasicDataService
 TestBDTDataService
 DataServiceWithEnumeration
 DataServiceBackedBySDK
+PlainTestDataService
