@@ -14,7 +14,10 @@ import gov.nih.nci.cagrid.data.system.StartGlobusStep;
 import gov.nih.nci.cagrid.data.system.StopGlobusStep;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
-import gov.nih.nci.cagrid.introduce.test.util.GlobusHelper;
+import gov.nih.nci.cagrid.introduce.tests.deployment.PortPreference;
+import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerFactory;
+import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerType;
 
 import java.io.File;
 import java.util.Vector;
@@ -32,12 +35,24 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:19:42 PM
- * @version $Id: BDTDataServiceSystemTests.java,v 1.5 2007-09-28 20:06:52 dervin Exp $ 
+ * @version $Id: BDTDataServiceSystemTests.java,v 1.6 2007-10-18 18:57:44 dervin Exp $ 
  */
 public class BDTDataServiceSystemTests extends BaseSystemTest {
-    private static int TEST_PORT = IntroduceTestConstants.TEST_PORT + 501;
-	private static GlobusHelper globusHelper = new GlobusHelper(
-        false, new File(IntroduceTestConstants.TEST_TEMP), TEST_PORT);
+    
+    private static ServiceContainer container = null;
+    
+    static {
+        try {
+            PortPreference ports = new PortPreference(
+                Integer.valueOf(IntroduceTestConstants.TEST_PORT + 601), 
+                Integer.valueOf(IntroduceTestConstants.TEST_PORT + 1101), null);
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER, null, ports);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+    }
+    
 	
 	public String getDescription() {
 		return "System tests for BDT Data Service";
@@ -50,8 +65,6 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 	
 	
 	protected boolean storySetUp() {
-		// make sure globus isn't running
-		assertFalse("Globus should NOT be running yet", globusHelper.isGlobusRunning());
 		// verify the BDT service has been built
 		File serviceDir = new File(BDTDataServiceCreationTests.SERVICE_DIR);
 		assertTrue("BDT Data Service directory NOT FOUND", serviceDir.exists());
@@ -59,13 +72,22 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 			+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE);
 		assertTrue("BDT Data Service directory does not appear to be an Introduce service", 
 			serviceModel.exists());
+        
+        // unpack the container
+        Step unpack = new CreateCleanGlobusStep(container);
+        try {
+            unpack.runStep();
+        } catch (Throwable th) {
+            th.printStackTrace();
+            return false;
+        }
 		return true;
 	}
 
 
 	protected Vector steps() {
         DataTestCaseInfo info = new BDTDataServiceCreationTests.TestBDTDataServiceInfo();
-		Vector steps = new Vector();
+		Vector<Step> steps = new Vector<Step>();
 		// assumes the BDT service has been created already
 		// 1) Add the bookstore schema to the data service
 		steps.add(new AddBookstoreStep(info));
@@ -75,30 +97,28 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 		steps.add(new EnableValidationStep(BDTDataServiceCreationTests.SERVICE_DIR));
 		// 4) Rebuild the service to pick up the bookstore beans
 		steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
-		// 5) set up a clean, temporary Globus
-		steps.add(new CreateCleanGlobusStep(globusHelper));
-		// 6) deploy data service
-		steps.add(new DeployDataServiceStep(globusHelper, BDTDataServiceCreationTests.SERVICE_DIR));
-		// 7) start globus
-		steps.add(new StartGlobusStep(globusHelper));
-		// 8) test bdt data service
-		steps.add(new InvokeBDTDataServiceStep("localhost", TEST_PORT,
-			BDTDataServiceCreationTests.SERVICE_NAME));
+		// 5) deploy data service
+		steps.add(new DeployDataServiceStep(container, BDTDataServiceCreationTests.SERVICE_DIR));
+		// 6) start the container
+		steps.add(new StartGlobusStep(container));
+		// 7) test bdt data service
+		steps.add(new InvokeBDTDataServiceStep("localhost", 
+            BDTDataServiceCreationTests.SERVICE_NAME, container.getProperties().getPortPreference()));
 		return steps;
 	}
 	
 	
 	protected void storyTearDown() throws Throwable {
 		super.storyTearDown();
-		// 9) stop globus
-		Step stopStep = new StopGlobusStep(globusHelper);
+		// 8) stop globus
+		Step stopStep = new StopGlobusStep(container);
 		try {
 			stopStep.runStep();
 		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
 		// 10) throw away globus
-		Step destroyStep = new DestroyTempGlobusStep(globusHelper);
+		Step destroyStep = new DestroyTempGlobusStep(container);
 		try {
 			destroyStep.runStep();
 		} catch (Throwable ex) {

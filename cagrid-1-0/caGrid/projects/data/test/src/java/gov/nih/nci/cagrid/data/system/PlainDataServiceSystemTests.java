@@ -2,10 +2,10 @@ package gov.nih.nci.cagrid.data.system;
 
 import gov.nih.nci.cagrid.data.creation.CreationTests;
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
-import gov.nih.nci.cagrid.introduce.test.util.GlobusHelper;
+import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerFactory;
+import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerType;
 
-import java.io.File;
 import java.util.Vector;
 
 import com.atomicobject.haste.framework.Step;
@@ -18,12 +18,20 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Sep 28, 2007 12:22:29 PM
- * @version $Id: PlainDataServiceSystemTests.java,v 1.1 2007-09-28 20:09:52 dervin Exp $ 
+ * @version $Id: PlainDataServiceSystemTests.java,v 1.2 2007-10-18 18:57:44 dervin Exp $ 
  */
 public class PlainDataServiceSystemTests extends BaseSystemTest {
-    private static int TEST_PORT = IntroduceTestConstants.TEST_PORT + 510;
-    private static GlobusHelper globusHelper = new GlobusHelper(
-        false, new File(IntroduceTestConstants.TEST_TEMP), TEST_PORT);
+    
+    private static ServiceContainer container = null;
+    
+    static {
+        try {
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+    }
     
     
     public PlainDataServiceSystemTests() {
@@ -43,7 +51,14 @@ public class PlainDataServiceSystemTests extends BaseSystemTest {
     
     
     protected boolean storySetUp() {
-        assertFalse("Globus should NOT be running yet", globusHelper.isGlobusRunning());
+        // 1) set up a clean, temporary Globus
+        Step step = new CreateCleanGlobusStep(container);
+        try {
+            step.runStep();
+        } catch (Throwable th) {
+            th.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -53,29 +68,26 @@ public class PlainDataServiceSystemTests extends BaseSystemTest {
         Vector<Step> steps = new Vector<Step>();
         // data service presumed to have been created
         // by the data service creation tests
-        // 1) Rebuild the service
+        // 2) Rebuild the service
         steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
-        // 2) set up a clean, temporary Globus
-        steps.add(new CreateCleanGlobusStep(globusHelper));
         // 3) deploy data service
-        steps.add(new DeployDataServiceStep(globusHelper, info.getDir()));
-        // 4) start globus
-        steps.add(new StartGlobusStep(globusHelper));
+        steps.add(new DeployDataServiceStep(container, info.getDir()));
+        // 4) start the container
+        steps.add(new StartGlobusStep(container));
         return steps;
     }
     
     
     protected void storyTearDown() throws Throwable {
-        super.storyTearDown();
         // 5) stop globus
-        Step stopStep = new StopGlobusStep(globusHelper);
+        Step stopStep = new StopGlobusStep(container);
         try {
             stopStep.runStep();
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
         // 6) throw away globus
-        Step destroyStep = new DestroyTempGlobusStep(globusHelper);
+        Step destroyStep = new DestroyTempGlobusStep(container);
         try {
             destroyStep.runStep();
         } catch (Throwable ex) {

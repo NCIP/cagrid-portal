@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.data.bdt.client.BDTDataServiceClient;
 import gov.nih.nci.cagrid.data.system.enumeration.InvokeEnumerationDataServiceStep;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
+import gov.nih.nci.cagrid.introduce.tests.deployment.NoAvailablePortException;
+import gov.nih.nci.cagrid.introduce.tests.deployment.PortPreference;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -38,20 +40,19 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:37:02 PM
- * @version $Id: InvokeBDTDataServiceStep.java,v 1.5 2007-05-09 15:49:12 dervin Exp $ 
+ * @version $Id: InvokeBDTDataServiceStep.java,v 1.6 2007-10-18 18:57:44 dervin Exp $ 
  */
 public class InvokeBDTDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
 	
 	private String hostName;
-	private int port;
 	private String serviceName;
+    private PortPreference portPreference;	
 	
-	
-	public InvokeBDTDataServiceStep(String hostName, int port, String serviceName) {
+	public InvokeBDTDataServiceStep(String hostName, String serviceName, PortPreference port) {
 		this.hostName = hostName;
-		this.port = port;
 		this.serviceName = serviceName;
+        this.portPreference = port;
 	}
 	
 
@@ -182,7 +183,7 @@ public class InvokeBDTDataServiceStep extends Step {
     }
 	
 	
-	private String getServiceUrl() {
-		return "http://" + hostName + ":" + port + URL_PART + serviceName;
+	private String getServiceUrl() throws NoAvailablePortException {
+		return "http://" + hostName + ":" + portPreference.getPort() + URL_PART + serviceName;
 	}
 }

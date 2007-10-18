@@ -13,9 +13,11 @@ import gov.nih.nci.cagrid.data.system.StartGlobusStep;
 import gov.nih.nci.cagrid.data.system.StopGlobusStep;
 import gov.nih.nci.cagrid.data.upgrades.from1pt0.UpgradeTo1pt2Tests;
 import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
-import gov.nih.nci.cagrid.introduce.test.util.GlobusHelper;
+import gov.nih.nci.cagrid.introduce.tests.deployment.PortPreference;
+import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerFactory;
+import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerType;
 
-import java.io.File;
 import java.util.Vector;
 
 import com.atomicobject.haste.framework.Step;
@@ -27,14 +29,24 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.8 2007-10-02 14:39:10 hastings Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.9 2007-10-18 18:57:44 dervin Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
     
-	private static GlobusHelper globusHelper = 
-		new GlobusHelper(false, 
-			new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT + 5);
+    private static ServiceContainer container = null;
+    
+    static {
+        try {
+            PortPreference ports = new PortPreference(
+                Integer.valueOf(IntroduceTestConstants.TEST_PORT + 701), 
+                Integer.valueOf(IntroduceTestConstants.TEST_PORT + 1301), null);
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER, null, ports);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+    }
     
     public String getName() {
         return "Data Service 1_0 to 1_2 Upgraded System Tests";
@@ -42,7 +54,14 @@ public class UpgradedServiceSystemTest extends Story {
     
 	
 	protected boolean storySetUp() {
-		assertFalse("Globus should NOT be running yet", globusHelper.isGlobusRunning());
+		// unpack container
+        Step unpack = new CreateCleanGlobusStep(container);
+        try {
+            unpack.runStep();
+        } catch (Throwable th) {
+            th.printStackTrace();
+            return false;
+        }
 		return true;
 	}
 
@@ -67,30 +86,28 @@ public class UpgradedServiceSystemTest extends Story {
 		steps.add(new EnableValidationStep(info.getDir()));
 		// 5) Rebuild the service to pick up the bookstore beans
 		steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
-		// 6) set up a clean, temporary Globus
-		steps.add(new CreateCleanGlobusStep(globusHelper));
-		// 7) deploy data service
-		steps.add(new DeployDataServiceStep(globusHelper, info.getDir()));
-		// 8) start globus
-		steps.add(new StartGlobusStep(globusHelper));
-		// 9) test data service
+		// 6) deploy data service
+		steps.add(new DeployDataServiceStep(container, info.getDir()));
+		// 7) start globus
+		steps.add(new StartGlobusStep(container));
+		// 8) test data service
 		steps.add(new InvokeDataServiceStep(
-			"localhost", IntroduceTestConstants.TEST_PORT + 5, info.getName()));
+			"localhost", info.getName(), container.getProperties().getPortPreference()));
 		return steps;
 	}
 	
 	
 	protected void storyTearDown() throws Throwable {
 		super.storyTearDown();
-		// 10) stop globus
-		Step stopStep = new StopGlobusStep(globusHelper);
+        // 10) stop globus
+		Step stopStep = new StopGlobusStep(container);
 		try {
 			stopStep.runStep();
 		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
 		// 11) throw away globus
-		Step destroyStep = new DestroyTempGlobusStep(globusHelper);
+		Step destroyStep = new DestroyTempGlobusStep(container);
 		try {
 			destroyStep.runStep();
 		} catch (Throwable ex) {

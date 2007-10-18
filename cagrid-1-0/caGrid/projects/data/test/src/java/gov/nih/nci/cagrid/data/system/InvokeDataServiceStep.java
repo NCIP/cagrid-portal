@@ -12,6 +12,8 @@ import gov.nih.nci.cagrid.data.client.DataServiceClient;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
+import gov.nih.nci.cagrid.introduce.tests.deployment.NoAvailablePortException;
+import gov.nih.nci.cagrid.introduce.tests.deployment.PortPreference;
 
 import java.util.Iterator;
 
@@ -26,16 +28,16 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: InvokeDataServiceStep.java,v 1.3 2007-03-13 19:34:15 dervin Exp $ 
+ * @version $Id: InvokeDataServiceStep.java,v 1.4 2007-10-18 18:57:44 dervin Exp $ 
  */
 public class InvokeDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
 	
 	private String hostName;
-	private int port;
 	private String serviceName;
+    private PortPreference port;
 	
-	public InvokeDataServiceStep(String hostName, int port, String serviceName) {
+	public InvokeDataServiceStep(String hostName, String serviceName, PortPreference port) {
 		this.hostName = hostName;
 		this.port = port;
 		this.serviceName = serviceName;
@@ -142,7 +144,7 @@ public class InvokeDataServiceStep extends Step {
 	}
 	
 	
-	private String getServiceUrl() {
-		return "http://" + hostName + ":" + port + URL_PART + serviceName; 
+	private String getServiceUrl() throws NoAvailablePortException {
+		return "http://" + hostName + ":" + port.getPort().intValue() + URL_PART + serviceName; 
 	}
 }

@@ -13,9 +13,11 @@ import gov.nih.nci.cagrid.data.system.SetQueryProcessorStep;
 import gov.nih.nci.cagrid.data.system.StartGlobusStep;
 import gov.nih.nci.cagrid.data.system.StopGlobusStep;
 import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
-import gov.nih.nci.cagrid.introduce.test.util.GlobusHelper;
+import gov.nih.nci.cagrid.introduce.tests.deployment.PortPreference;
+import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerFactory;
+import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerType;
 
-import java.io.File;
 import java.util.Vector;
 
 import junit.framework.TestResult;
@@ -35,13 +37,23 @@ import com.atomicobject.haste.framework.Step;
  *          Exp $
  */
 public class EnumerationSystemTests extends BaseSystemTest {
-    private static int TEST_PORT = IntroduceTestConstants.TEST_PORT + 502;
-	private static GlobusHelper globusHelper = new GlobusHelper(
-        false, new File(IntroduceTestConstants.TEST_TEMP), TEST_PORT);
-
+    
+    private static ServiceContainer container = null;
+    
+    static {
+        try {
+            PortPreference ports = new PortPreference(
+                Integer.valueOf(IntroduceTestConstants.TEST_PORT + 701), 
+                Integer.valueOf(IntroduceTestConstants.TEST_PORT + 1201), null);
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER, null, ports);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+    }
 
 	public EnumerationSystemTests() {
-		this.setName("Data Service System Tests");
+		this.setName("Enumeration Data Service System Tests");
 	}
     
     
@@ -56,7 +68,14 @@ public class EnumerationSystemTests extends BaseSystemTest {
 
 
 	protected boolean storySetUp() {
-		assertFalse("Globus should NOT be running yet", globusHelper.isGlobusRunning());
+		// unpack the service container
+        Step unpack = new CreateCleanGlobusStep(container);
+        try {
+            unpack.runStep();
+        } catch (Throwable th) {
+            th.printStackTrace();
+            return false;
+        }
 		return true;
 	}
 
@@ -74,16 +93,13 @@ public class EnumerationSystemTests extends BaseSystemTest {
 		steps.add(new EnableValidationStep(info.getDir()));
 		// 4) Rebuild the service to pick up the bookstore beans
 		steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
-		// 5) set up a clean, temporary Globus
-		steps.add(new CreateCleanGlobusStep(globusHelper));
-		// 6) deploy data service
-		steps.add(new DeployDataServiceStep(globusHelper, info.getDir()));
-		// 7) start globus
-		steps.add(new StartGlobusStep(globusHelper));
-		// 8) test data service
-		steps.add(new InvokeEnumerationDataServiceStep("localhost", 
-            TEST_PORT, info.getName()));
-
+		// 5) deploy data service
+		steps.add(new DeployDataServiceStep(container, info.getDir()));
+		// 6) start container
+		steps.add(new StartGlobusStep(container));
+		// 7) test data service
+		steps.add(new InvokeEnumerationDataServiceStep("localhost", info.getName(), 
+            container.getProperties().getPortPreference()));
 		return steps;
 	}
 
@@ -91,14 +107,14 @@ public class EnumerationSystemTests extends BaseSystemTest {
 	protected void storyTearDown() throws Throwable {
 		super.storyTearDown();
 		// 9) stop globus
-		Step stopStep = new StopGlobusStep(globusHelper);
+		Step stopStep = new StopGlobusStep(container);
 		try {
 			stopStep.runStep();
 		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
 		// 10) throw away globus
-		Step destroyStep = new DestroyTempGlobusStep(globusHelper);
+		Step destroyStep = new DestroyTempGlobusStep(container);
 		try {
 			destroyStep.runStep();
 		} catch (Throwable ex) {

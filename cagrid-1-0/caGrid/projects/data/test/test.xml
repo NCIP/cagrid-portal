@@ -167,10 +167,9 @@
     </target>
 
 
-    <!-- tests overall system -->
+    <!-- tests overall system  -->
     <target name="systemTest" depends="setGlobus, prepareClasspaths, testBasicSystem, testEnumerationSystem, testBdtSystem, testUpgradedFrom1pt0System" description="Runs system tests (deploy, invoke, etc)" />
-
-
+	
     <!-- system tests against the basic data service -->
     <target name="testBasicSystem" depends="setGlobus, prepareClasspaths, testCreation" description="Runs the service creation and then system tests">
         <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
@@ -219,7 +218,7 @@
     <!-- tests upgrading a 1.0 service to current -->
     <target name="testUpgradeFrom1pt0" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to the current version" unless="upgrade.1pt0.completed">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" >
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
             <classpath refid="all.test.classpath" />
