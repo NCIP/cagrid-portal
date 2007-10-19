@@ -5,7 +5,9 @@ package gov.nih.nci.cagrid.portal2.domain.metadata.dataservice;
 
 import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -26,8 +28,8 @@ import org.hibernate.annotations.Parameter;
 public class UMLAssociation extends AbstractDomainObject {
 	
 	private boolean bidirectional;
-	private UMLAssociationEdge source;
-	private UMLAssociationEdge target;
+	private SourceUMLAssociationEdge source;
+	private TargetUMLAssociationEdge target;
 	
 	public boolean isBidirectional() {
 		return bidirectional;
@@ -36,19 +38,21 @@ public class UMLAssociation extends AbstractDomainObject {
 		this.bidirectional = bidirectional;
 	}
 	
-	@OneToOne(mappedBy = "association")
-	public UMLAssociationEdge getSource() {
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "source_id")
+	public SourceUMLAssociationEdge getSource() {
 		return source;
 	}
-	public void setSource(UMLAssociationEdge source) {
+	public void setSource(SourceUMLAssociationEdge source) {
 		this.source = source;
 	}
 	
-	@OneToOne(mappedBy = "association")
-	public UMLAssociationEdge getTarget() {
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "target_id")
+	public TargetUMLAssociationEdge getTarget() {
 		return target;
 	}
-	public void setTarget(UMLAssociationEdge target) {
+	public void setTarget(TargetUMLAssociationEdge target) {
 		this.target = target;
 	}
 	

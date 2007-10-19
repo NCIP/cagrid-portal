@@ -4,15 +4,6 @@
 
 <dwr>
   <allow>
-    <create creator="new" javascript="Greet">
-      <param name="class" value="test.Greet"/>
-    </create>
-    
-	<create creator="new" javascript="JavaChat">
-        <param name="class" value="test.JavaChat"/>
-    </create>
-    
-    <convert converter="bean" match="test.Message"/>
     
     <create creator="spring" javascript="QueryHistoryFacade">
     	<param name="beanName" value="cqlQueryHistoryFacade"/>
@@ -30,6 +21,14 @@
     
     <create creator="spring" javascript="ServiceDetailsTreeFacade">
     	<param name="beanName" value="serviceDetailsTreeFacade"/>
+    </create>
+    
+    <create creator="spring" javascript="UMLClassTreeFacade">
+    	<param name="beanName" value="umlClassTreeFacade"/>
+    </create>
+    
+    <create creator="spring" javascript="CQLQueryTreeFacade">
+    	<param name="beanName" value="cqlQueryTreeFacade"/>
     </create>
     
   </allow>

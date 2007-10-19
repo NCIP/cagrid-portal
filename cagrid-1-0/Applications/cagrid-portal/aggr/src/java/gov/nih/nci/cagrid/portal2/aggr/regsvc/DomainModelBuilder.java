@@ -12,6 +12,8 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLClassReference;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLGeneralization;
 import gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.SourceUMLAssociationEdge;
+import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.TargetUMLAssociationEdge;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLAssociation;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass;
@@ -47,8 +49,8 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 
 					String targetRefId = null;
 					String sourceRefId = null;
-					UMLAssociationEdge sourceEdgeOut = null;
-					UMLAssociationEdge targetEdgeOut = null;
+					SourceUMLAssociationEdge sourceEdgeOut = null;
+					TargetUMLAssociationEdge targetEdgeOut = null;
 
 					UMLAssociationSourceUMLAssociationEdge srcEdgeContainer = umlAssocIn
 							.getSourceUMLAssociationEdge();
@@ -57,8 +59,8 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 							sourceRefId = srcEdgeContainer
 									.getUMLAssociationEdge()
 									.getUMLClassReference().getRefid();
-							sourceEdgeOut = buildUMLAssociationEdge(srcEdgeContainer
-									.getUMLAssociationEdge());
+							sourceEdgeOut = (SourceUMLAssociationEdge) buildUMLAssociationEdge(srcEdgeContainer
+									.getUMLAssociationEdge(), true);
 						}
 					}
 					UMLAssociationTargetUMLAssociationEdge targetEdgeContainer = umlAssocIn
@@ -68,8 +70,8 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 							targetRefId = targetEdgeContainer
 									.getUMLAssociationEdge()
 									.getUMLClassReference().getRefid();
-							targetEdgeOut = buildUMLAssociationEdge(targetEdgeContainer
-									.getUMLAssociationEdge());
+							targetEdgeOut = (TargetUMLAssociationEdge) buildUMLAssociationEdge(targetEdgeContainer
+									.getUMLAssociationEdge(), false);
 						}
 					}
 
@@ -139,6 +141,9 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 					UMLClass umlClassOut = umlClasses.get(umlClassId);
 					List<UMLAssociationEdge> assocs = assocMap.get(umlClassId);
 					if (assocs != null) {
+						
+						
+						
 						umlClassOut.getAssociations().addAll(assocs);
 						for(UMLAssociationEdge edge : assocs){
 							edge.setType(umlClassOut);
@@ -160,12 +165,54 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 							umlClassOut.setSuperClass(superClass);
 						}
 					}
+
 					umlClassOut = (UMLClass) handlePersist(umlClassOut);
+					
+					
+					
 					umlClassOut.setModel(modelOut);
 					modelOut.getClasses().add(umlClassOut);
 				}
 
 			}
+		}
+		
+		//Remove duplicate associations
+		for(UMLClass umlClass : modelOut.getClasses()){
+			Map<String, SourceUMLAssociationEdge> dedupped = new HashMap<String, SourceUMLAssociationEdge>();
+			for(UMLAssociationEdge edge : umlClass.getAssociations()){
+				if(edge instanceof SourceUMLAssociationEdge){
+					SourceUMLAssociationEdge source = (SourceUMLAssociationEdge)edge;
+					TargetUMLAssociationEdge target = source.getAssociation().getTarget();
+					UMLClass targetType = target.getType();
+					String targetTypeClassName = targetType.getPackageName() + "." + targetType.getClassName();
+					SourceUMLAssociationEdge aSource = dedupped.get(target.getRole());
+					if(aSource != null){
+						//Prefer the more general
+						TargetUMLAssociationEdge aTarget = aSource.getAssociation().getTarget();
+						UMLClass aTargetType = aTarget.getType();
+						UMLClass aTargetTypeSuper = aTargetType.getSuperClass();
+						if(aTargetTypeSuper == null){
+							//Then this is the most general
+							//Keep this one
+						}else{
+							search: while(aTargetTypeSuper != null){
+								String aTargetTypeSuperClassName = aTargetTypeSuper.getPackageName() + "." + aTargetTypeSuper.getClassName();
+								if(targetTypeClassName.equals(aTargetTypeSuperClassName)){
+									dedupped.put(target.getRole(), source);
+									break search;
+								}
+								aTargetTypeSuper = aTargetTypeSuper.getSuperClass();
+							}
+							
+						}
+					}
+				}
+			}
+			List<UMLAssociationEdge> deduppedList = new ArrayList<UMLAssociationEdge>();
+			deduppedList.addAll(dedupped.values());
+			umlClass.setAssociations(deduppedList);
+			handlePersist(umlClass);
 		}
 
 		// Persist the model
@@ -184,6 +231,9 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 			edges = new ArrayList<UMLAssociationEdge>();
 			assocMap.put(refId, edges);
 		}
+		
+		//Ensure that only the most general type is used as the type
+		//of a target
 		edges.add(edgeOut);
 	}
 
@@ -195,8 +245,13 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 	}
 
 	private UMLAssociationEdge buildUMLAssociationEdge(
-			gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdge edgeIn) {
-		UMLAssociationEdge edgeOut = new UMLAssociationEdge();
+			gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdge edgeIn, boolean isSource) {
+		UMLAssociationEdge edgeOut = null;
+		if(isSource){
+			edgeOut = new SourceUMLAssociationEdge();
+		}else{
+			edgeOut = new TargetUMLAssociationEdge();
+		}
 		edgeOut.setMaxCardinality(edgeIn.getMaxCardinality());
 		edgeOut.setMinCardinality(edgeIn.getMinCardinality());
 		edgeOut.setRole(edgeIn.getRoleName());

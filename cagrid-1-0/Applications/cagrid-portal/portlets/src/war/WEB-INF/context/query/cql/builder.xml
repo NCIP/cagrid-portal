@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+	<import resource="common.xml"/>
+
+	<bean id="viewUMLClassController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.cql.ViewUMLClassController">
+		
+		<property name="successView" value="builder" />
+		<property name="umlClassTreeFacade" ref="umlClassTreeFacade"/>
+		<property name="umlClassTreeNodeListener" ref="umlClassTreeNodeListener"/>
+		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		
+	</bean>
+	
+	<bean id="viewCQLQueryController" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.ViewCQLQueryController">
+		<!-- 
+			Checks SharedApplicationModel for workingCQLQuery object. If it's there, it puts this
+			into the ModelAndView. Otherwise, it will check for the selectedUmlClass. If that is there,
+			it will create a workingCQLQuery, set it in the SharedApplicationModel and the ModelAndView.
+			
+			This should only handler render requests. It will always forward to the CQLQuery view. From
+			that view, one can:
+			  - selectCriterion: Go to the UMLClass view and select an attribute to edit.
+			      ==> sends render request to viewUMLClassController
+			           - operation parameter set to "selectCriterion"
+			  - editCriterion: Go to the EditCriterion view and provide values for an existing criterion.
+			      ==> sends render request to editCriterionController
+			           - operation parameter set to "editCriterion"
+			  - editQueryModifiers: Go to the EditQueryModifiers view and edit the query modifiers.
+			      ==> sends render request to editQueryModifiersController
+			           - operation parameter set to "editQueryModifiers"
+			  - buildCQLQuery: Construct CQLQuery object and set it on the SharedApplicationModel
+			      ==> sends action request to buildCQLQueryController
+			            - operation parameter set to "buildCQLQuery"
+			            - The buildCQLQueryController will set operation render parameter to "viewCQLQuery"
+			              so that this (viewCQLQueryController) handles render phase of request.
+		 -->
+		 
+		 <property name="viewName" value="cqlQueryTree"/>
+		 <property name="cqlQueryTreeFacade" ref="cqlQueryTreeFacade"/>
+		 <property name="cqlQueryTreeNodeListener" ref="cqlQueryTreeNodeListener"/>
+		 <property name="sharedApplicationModel" ref="sharedApplicationModel"/>
+		 	
+	</bean>
+	
+	<bean id="editCriterionController" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.EditCriterionController">
+	
+		<!-- 
+			Implements
+			  - showForm
+			     - Uses the 'path' parameter to determine which UMLAttribute from the
+			       UMLClassTreeFacade's tree has been selected.
+			     - Creates a CriteriaBean object for this, puts it in the session, and
+			       includes it and the path in the ModelAndView
+			  - processFormSubmission
+			     - uses the path paramter to add the CriteriaBean to the CQLQueryTreeFacades's tree
+			     - sets the 'operation' render parameter to 'viewCQLQuery' so that render phase will
+			       be handled by the viewCQLQueyController
+			       
+			From the formView, one can
+			  - updateCriterion: 
+			     - an action URL that causes processFormSubmission to be invoked
+			     - operation parameter set to 'updateCriterion'
+			  - viewCQLQuery:
+			     - this basically cancels the update
+			     - a render URL with operation set to 'viewCQLQuery' passes control to viewCQLQueryController
+		-->
+		<property name="commandName" value="criterionBean"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlets.query.cql.CriterionBean"/>
+		<property name="sessionForm" value="true"/>
+		<property name="formView" value="editCriterion"/>
+		<property name="successOperation" value="viewCQLQuery"/>
+		<property name="umlClassTreeFacade" ref="umlClassTreeFacade"/>
+		<property name="cqlQueryTreeFacade" ref="cqlQueryTreeFacade"/>
+		
+		<property name="predicates">
+			<list>
+				<value>EQUAL_TO</value>
+				<value>GREATER_THAN</value>
+				<value>GREATER_THAN_EQUAL_TO</value>
+				<value>IS_NOT_NULL</value>
+				<value>IS_NULL</value>
+				<value>LESS_THAN</value>
+				<value>LESS_THAN_EQUAL_TO</value>
+				<value>LIKE</value>
+				<value>NOT_EQUAL_TO</value>
+			</list>
+		</property>
+	
+	</bean>
+	
+	<bean id="portletModeParameterHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+		
+		<property name="order" value="1" />
+		<property name="interceptors" ref="commonInterceptors"/>
+		<property name="parameterName" value="operation"/>
+		
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="view">
+					<map>
+						<entry key="viewCQLQuery"
+							value-ref="viewCQLQueryController" />
+						<!-- 
+						<entry key="editQueryModifiers"
+							value-ref="editQueryModifiersController" />
+							-->
+						<entry key="editCriterion"
+							value-ref="editCriterionController" />
+							
+						<entry key="selectCriterion"
+							value-ref="viewUMLClassController" />
+							<!-- 
+
+						<entry key="buildCQLQuery"
+							value-ref="buildCQLQueryController" />
+						 -->
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>
+		
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		
+		<property name="order" value="2" />
+		<property name="interceptors" ref="commonInterceptors"/>
+
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="viewCQLQueryController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+		
+</beans>

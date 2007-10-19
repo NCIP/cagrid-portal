@@ -83,7 +83,8 @@
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.ServiceContext</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.DomainModel</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLAssociation</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLAssociationEdge</value>
+				<value>gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.SourceUMLAssociationEdge</value>
+				<value>gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.TargetUMLAssociationEdge</value>
 				<value>gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass</value>
 				
 			</list>

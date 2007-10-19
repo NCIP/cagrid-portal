@@ -9,16 +9,43 @@
 		<property name="treeFacade" ref="serviceDetailsTreeFacade"/>
 		<property name="serviceMetadataTreeNodeListener" ref="serviceMetadataTreeNodeListener"/>
 	</bean>
+	
+	
+	<bean id="selectUMLClassController" class="gov.nih.nci.cagrid.portal2.portlet.discovery.SelectUMLClassController">
+		<property name="successAction" value="view"/>
+		<property name="treeFacade" ref="serviceDetailsTreeFacade"/>
+		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
+	</bean>
+	
+
+	<bean id="portletModeParameterHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+		
+		<property name="order" value="1" />
+		<property name="parameterName" value="operation"/>
+		<property name="interceptors" ref="commonInterceptors"/>
+		
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="view">
+					<map>
+						<entry key="selectUMLClass"
+							value-ref="selectUMLClassController" />
+						<entry key="view"
+							value-ref="viewDetailsController" />
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
 
 	<bean id="portletModeHandlerMapping"
 		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		
+		<property name="order" value="2"/>
 
-		<property name="interceptors">
-			<list>
-				<ref bean="parameterMappingInterceptor" />
-				<ref bean="openSessionInViewInterceptor" />
-			</list>
-		</property>
+		<property name="interceptors" ref="commonInterceptors"/>
 
 		<property name="portletModeMap">
 			<map>
@@ -28,6 +55,8 @@
 			</map>
 		</property>
 	</bean>
+	
+	
 	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>

@@ -7,11 +7,33 @@
 	                             http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
 
 
+	<portlet>
+		<description>caGrid CQL Query Builder Portlet</description>
+		<portlet-name>cqlquerybuilder</portlet-name>
+		<display-name>caGrid CQL Query Builder Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/query/cql/builder.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid CQL Query Builder Portlet</title>
+			<short-title>caGrid CQL Query Builder Portlet</short-title>
+			<keywords>cql,query,builder</keywords>
+		</portlet-info>
+		
+	</portlet>
 
 	<portlet>
 		<description>caGrid CQL Query Results Portlet</description>
 		<portlet-name>cqlqueryresults</portlet-name>
-		<display-name>caGrid CQL Query History Portlet</display-name>
+		<display-name>caGrid CQL Query Results Portlet</display-name>
 		<portlet-class>
 			org.springframework.web.portlet.DispatcherPortlet
 		</portlet-class>

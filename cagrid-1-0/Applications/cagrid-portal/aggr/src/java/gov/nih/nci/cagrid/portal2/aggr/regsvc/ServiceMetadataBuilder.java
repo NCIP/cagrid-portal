@@ -300,6 +300,7 @@ public class ServiceMetadataBuilder {
 		umlAttrOut.setDataTypeName(umlAttrIn.getDataTypeName());
 		umlAttrOut.setDescription(umlAttrIn.getDescription());
 		umlAttrOut.setVersion(umlAttrIn.getVersion());
+		umlAttrOut.setName(umlAttrIn.getName());
 
 		return (UMLAttribute) handlePersist(umlAttrOut);
 	}

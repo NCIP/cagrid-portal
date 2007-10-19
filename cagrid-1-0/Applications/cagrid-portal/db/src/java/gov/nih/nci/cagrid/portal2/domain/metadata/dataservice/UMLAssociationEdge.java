@@ -6,11 +6,17 @@ package gov.nih.nci.cagrid.portal2.domain.metadata.dataservice;
 import gov.nih.nci.cagrid.portal2.domain.AbstractDomainObject;
 
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ForceDiscriminator;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -25,22 +31,16 @@ import org.hibernate.annotations.Parameter;
         @Parameter(name="sequence", value="seq_uml_edges")
     }
 )
-public class UMLAssociationEdge extends AbstractDomainObject {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "edge_type", discriminatorType = DiscriminatorType.STRING)
+@ForceDiscriminator
+public abstract class UMLAssociationEdge extends AbstractDomainObject {
 
 	private int minCardinality;
 	private int maxCardinality;
 	private String role;
 	private UMLClass type;
-	private UMLAssociation association;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "assoc_id")
-	public UMLAssociation getAssociation() {
-		return association;
-	}
-	public void setAssociation(UMLAssociation association) {
-		this.association = association;
-	}
 	public String getRole() {
 		return role;
 	}

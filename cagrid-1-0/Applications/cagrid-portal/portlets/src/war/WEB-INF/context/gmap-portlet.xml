@@ -76,8 +76,11 @@
 		
 	<bean id="mapBean" class="gov.nih.nci.cagrid.portal2.portlet.map.MapBean" scope="prototype">
 
-		<property name="baseUrl" value="http://maps.google.com/maps?file=api&amp;v=2&amp;key="/>	
+		<property name="baseUrl" value="http://maps.google.com/maps?file=api&amp;v=2&amp;key="/>
+		<!-- 
 		<property name="apiKey" value="ABQIAAAA8g3SgjzSraL7VirbuaelwhTh_sjBSLCHIDZfjzu1cFb3Pz7MrRRwzQ8piYVd7Rd_4Qqv-e2zrwSHpg"/>
+		-->
+		<property name="apiKey" value="ABQIAAAA8g3SgjzSraL7VirbuaelwhSZhAwg1T6Cj9L6Y1CRi3YIYx6IHhQlLsIR2usu8NKDKCmrdAcVRkqh8w"/>
 		<property name="centerLatitude" value="40"/>
 		<property name="centerLongitude" value="-95"/>
 		<property name="zoomLevel" value="4"/>

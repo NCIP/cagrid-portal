@@ -17,19 +17,25 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
     	</property>
     </bean>
     
-    <bean name="/gridService" class="org.springframework.web.portlet.mvc.ParameterizableViewController">
-          <property name="viewName" value="gridService"/>
+    <bean name="/discovery/serviceDetailsNode" class="gov.nih.nci.cagrid.portal2.portlet.tree.TreeNodeDomainObjectSessionViewController">
+          <property name="viewName" value="discovery/serviceDetailsNode"/>
+          <property name="treeFacade" ref="serviceDetailsTreeFacade"/>
+		  <property name="pathParamName" value="path"/>
+		  <property name="hibernateTemplate" ref="hibernateTemplate"/>
     </bean>
     
-    <bean name="/gridDataService" class="org.springframework.web.portlet.mvc.ParameterizableViewController">
-          <property name="viewName" value="gridDataService"/>
+    <bean name="/cqlquery/umlClassNode" class="gov.nih.nci.cagrid.portal2.portlet.tree.TreeNodeDomainObjectSessionViewController">
+          <property name="viewName" value="cqlquery/umlClassNode"/>
+          <property name="treeFacade" ref="umlClassTreeFacade"/>
+		  <property name="pathParamName" value="path"/>
+		  <property name="hibernateTemplate" ref="hibernateTemplate"/>
     </bean>
-
+    
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/tree/" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
 

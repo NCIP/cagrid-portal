@@ -8,6 +8,14 @@
 
 <script type="text/javascript">
 	//<![CDATA[
+	
+	function <portlet:namespace/>selectUMLClass(path){
+		//alert("Selecting '" + path + "' for query.");
+		var form = document.<portlet:namespace/>selectUMLClassForm;
+		form.selectedUMLClassPath.value = path;
+		form.submit();
+	}
+	
     function <portlet:namespace/>toggleDiv(id){
     
     	var prefix = "<portlet:namespace/>";
@@ -19,7 +27,12 @@
 
     	if(div.style.display == "none"){
     		var wasEmpty = jQuery.trim(DWRUtil.getValue(divId)).length == 0;
-			ServiceDetailsTreeFacade.openNode(id, { prefix: prefix, render: wasEmpty },
+			ServiceDetailsTreeFacade.openNode(id, 
+			{ 
+				prefix: prefix, 
+			 	render: wasEmpty, 
+			 	path: id 
+			},
 			{
 				callback:function(html){
 					div.style.display = "";
@@ -72,13 +85,17 @@
 </style>
 <p />
 <portlet:actionURL var="action"/>
-
-<form:form name="selectGridServiceForm" action="${action}">
+<c:set var="selectGridServiceFormName"><portlet:namespace/>selectGridServiceForm</c:set>
+<form:form name="${selectGridServiceFormName}" action="${action}">
 	<c:if test="${empty gridServiceUrl}">Enter a </c:if>Grid Service URL:
 	<input name="gridServiceUrl" type="text" value="<c:out value="${gridServiceUrl}"/>"/>
 	<input type="submit" value="Show"/>
 </form:form>
-
+<c:set var="selectUMLClassFormName"><portlet:namespace/>selectUMLClassForm</c:set>
+<form:form name="${selectUMLClassFormName}" action="${action}">
+	<input type="hidden" name="selectedUMLClassPath" value=""/>
+	<input type="hidden" name="operation" value="selectUMLClass"/>
+</form:form>
 
 <c:choose>
 	<c:when test="${!empty gridServiceUrl and empty rootNode}">
