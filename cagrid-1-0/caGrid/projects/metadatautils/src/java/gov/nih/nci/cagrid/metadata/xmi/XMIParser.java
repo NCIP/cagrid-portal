@@ -23,7 +23,7 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:19:59 AM
-  * @version $Id: XMIParser.java,v 1.1 2007-10-22 14:24:20 dervin Exp $
+  * @version $Id: XMIParser.java,v 1.2 2007-10-22 14:46:20 dervin Exp $
  */
 public class XMIParser {
     DomainModel model;
@@ -35,6 +35,7 @@ public class XMIParser {
     float attributeVersion = 1.0f;
     boolean debug = false;
 
+    // maps XMI data types to Java type class names
     static final Hashtable<String, String> DATATYPE_MAP = new Hashtable<String, String>();
     {
         DATATYPE_MAP.put("Date", "java.util.Date");

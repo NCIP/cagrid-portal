@@ -23,29 +23,61 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+  *  XMIHandler
+  *  SAX handler for XMI -> Domain MOdel
+  * 
+  * @author Patrick McConnell
+  * @author David Ervin
+  * 
+  * @created Oct 22, 2007 10:26:25 AM
+  * @version $Id: XMIHandler.java,v 1.2 2007-10-22 14:46:20 dervin Exp $
+ */
 class XMIHandler extends DefaultHandler {
     /**
-     * Comment for <code>parser</code>
+     * Comment for <code>XMI_UML_TAGGED_VALUE_VALUE</code>
      */
+    public static final String XMI_UML_TAGGED_VALUE_VALUE = "value";
+
+    /**
+     * Comment for <code>XMI_UML_TAGGED_VALUE_MODEL_ELEMENT</code>
+     */
+    public static final String XMI_UML_TAGGED_VALUE_MODEL_ELEMENT = "modelElement";
+
+    /**
+     * Comment for <code>XMI_UML_TAGGED_VALUE_TAG</code>
+     */
+    public static final String XMI_UML_TAGGED_VALUE_TAG = "tag";
+
+    /**
+     * Comment for <code>XMI_UML_TAGGED_VALUE</code>
+     */
+    public static final String XMI_UML_TAGGED_VALUE = "UML:TaggedValue";
+
+    // parser contains configuration options and information for the handler
     private final XMIParser parser;
 
     private StringBuffer chars = new StringBuffer();
 
-    private ArrayList<UMLClass> clList = new ArrayList<UMLClass>();
-    private ArrayList<UMLAttribute> attList = new ArrayList<UMLAttribute>();
-    private ArrayList<UMLAssociation> assList = new ArrayList<UMLAssociation>();
+    // lists of domain model components
+    private ArrayList<UMLClass> classList = new ArrayList<UMLClass>();
+    private ArrayList<UMLAttribute> attribList = new ArrayList<UMLAttribute>();
+    private ArrayList<UMLAssociation> assocList = new ArrayList<UMLAssociation>();
     private ArrayList<UMLGeneralization> genList = new ArrayList<UMLGeneralization>();
 
-    private Hashtable<String, UMLClass> clTable = new Hashtable<String, UMLClass>();
-    private Hashtable<String, UMLAttribute> attTable = new Hashtable<String, UMLAttribute>();
-    private Hashtable<String, ArrayList<SemanticMetadata>> smTable = new Hashtable<String, ArrayList<SemanticMetadata>>();
+    // maps from XMI name to domain model component
+    private Hashtable<String, UMLClass> classTable = new Hashtable<String, UMLClass>();
+    private Hashtable<String, UMLAttribute> attribTable = new Hashtable<String, UMLAttribute>();
+    private Hashtable<String, ArrayList<SemanticMetadata>> smTable = 
+        new Hashtable<String, ArrayList<SemanticMetadata>>();
     private Hashtable<String, String> typeTable = new Hashtable<String, String>();
 
+    // state variables
     private UMLAssociationEdge edge;
     private boolean sourceNavigable = false;
     private boolean targetNavigable = false;
     private String pkg = "";
-
+    
 
     public XMIHandler(XMIParser parser) {
         super();
@@ -61,18 +93,18 @@ class XMIHandler extends DefaultHandler {
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if (qName.equals("UML:Package")) {
+        if (qName.equals(XMIConstants.XMI_UML_PACKAGE)) {
             int index = pkg.lastIndexOf('.');
             if (index == -1)
                 pkg = "";
             else
                 pkg = pkg.substring(0, index);
-        } else if (qName.equals("UML:Class")) {
-            UMLClass cl = clList.get(clList.size() - 1);
-            cl.setUmlAttributeCollection(new UMLClassUmlAttributeCollection(attList.toArray(new UMLAttribute[0])));
-            attList.clear();
-        } else if (qName.equals("UML:Association")) {
-            UMLAssociation assoc = assList.get(assList.size() - 1);
+        } else if (qName.equals(XMIConstants.XMI_UML_CLASS)) {
+            UMLClass cl = classList.get(classList.size() - 1);
+            cl.setUmlAttributeCollection(new UMLClassUmlAttributeCollection(attribList.toArray(new UMLAttribute[0])));
+            attribList.clear();
+        } else if (qName.equals(XMIConstants.XMI_UML_ASSOCIATION)) {
+            UMLAssociation assoc = assocList.get(assocList.size() - 1);
             if (sourceNavigable && !targetNavigable) {
                 UMLAssociationEdge assocEdge = assoc.getSourceUMLAssociationEdge().getUMLAssociationEdge();
                 assoc.getSourceUMLAssociationEdge().setUMLAssociationEdge(
@@ -90,36 +122,37 @@ class XMIHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         chars.delete(0, chars.length());
 
-        if (qName.equals("UML:Package")) {
-            String name = atts.getValue("name");
-            if (!name.equals("Logical View") && !name.equals("Logical Model")) {
+        if (qName.equals(XMIConstants.XMI_UML_PACKAGE)) {
+            String name = atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE);
+            if (!name.equals(XMIConstants.XMI_LOGICAL_VIEW) && !name.equals(XMIConstants.XMI_LOGICAL_MODEL)) {
                 if (!pkg.equals(""))
                     pkg += ".";
-                pkg += atts.getValue("name");
+                pkg += atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE);
             }
-        } else if (qName.equals("UML:Class")) {
+        } else if (qName.equals(XMIConstants.XMI_UML_CLASS)) {
             UMLClass cl = new UMLClass();
-            cl.setClassName(atts.getValue("name"));
-            cl.setId(atts.getValue("xmi.id"));
+            cl.setClassName(atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE));
+            cl.setId(atts.getValue(XMIConstants.XMI_ID_ATTRIBUTE));
             cl.setPackageName(pkg);
             cl.setProjectName(this.parser.projectShortName);
             cl.setProjectVersion(this.parser.projectVersion);
-            clList.add(cl);
-            clTable.put(cl.getId(), cl);
-        } else if (qName.equals("UML:Attribute")) {
+            classList.add(cl);
+            classTable.put(cl.getId(), cl);
+        } else if (qName.equals(XMIConstants.XMI_UML_ATTRIBUTE)) {
             UMLAttribute att = new UMLAttribute();
-            att.setName(atts.getValue("name"));
-            att.setPublicID(atts.getValue("xmi.id").hashCode());
+            att.setName(atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE));
+            att.setPublicID(atts.getValue(XMIConstants.XMI_ID_ATTRIBUTE).hashCode());
             att.setVersion(this.parser.attributeVersion);
-            attList.add(att);
-            attTable.put(String.valueOf(att.getPublicID()), att);
-        } else if (qName.equals("UML:Association")) {
+            attribList.add(att);
+            attribTable.put(String.valueOf(att.getPublicID()), att);
+        } else if (qName.equals(XMIConstants.XMI_UML_ASSOCIATION)) {
             UMLAssociation ass = new UMLAssociation();
-            assList.add(ass);
-        } else if (qName.equals("UML:AssociationEnd")) {
-            UMLAssociation ass = assList.get(assList.size() - 1);
-            String type = atts.getValue("type");
-            boolean isNavigable = "true".equals(atts.getValue("isNavigable"));
+            assocList.add(ass);
+        } else if (qName.equals(XMIConstants.XMI_UML_ASSOCIATION_END)) {
+            UMLAssociation ass = assocList.get(assocList.size() - 1);
+            // TODO: something with type?
+            String type = atts.getValue(XMIConstants.XMI_TYPE_ATTRIBUTE);
+            boolean isNavigable = "true".equals(atts.getValue(XMIConstants.XMI_UML_ASSOCIATION_IS_NAVIGABLE));
 
             edge = new UMLAssociationEdge();
             if (ass.getSourceUMLAssociationEdge() == null) {
@@ -129,36 +162,38 @@ class XMIHandler extends DefaultHandler {
                 ass.setTargetUMLAssociationEdge(new UMLAssociationTargetUMLAssociationEdge(edge));
                 targetNavigable = isNavigable;
             }
-            edge.setRoleName(atts.getValue("name"));
-            edge.setUMLClassReference(new UMLClassReference(atts.getValue("type")));
-        } else if (qName.equals("UML:MultiplicityRange") && edge != null) {
-            edge.setMinCardinality(Integer.parseInt(atts.getValue("lower")));
-            edge.setMaxCardinality(Integer.parseInt(atts.getValue("upper")));
-        } else if (qName.equals("UML:Generalization")) {
+            edge.setRoleName(atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE));
+            edge.setUMLClassReference(new UMLClassReference(atts.getValue(XMIConstants.XMI_TYPE_ATTRIBUTE)));
+        } else if (qName.equals(XMIConstants.XMI_UML_MULTIPLICITY_RANGE) && edge != null) {
+            edge.setMinCardinality(Integer.parseInt(atts.getValue(XMIConstants.XMI_UML_MULTIPLICITY_LOWER)));
+            edge.setMaxCardinality(Integer.parseInt(atts.getValue(XMIConstants.XMI_UML_MULTIPLICITY_UPPER)));
+        } else if (qName.equals(XMIConstants.XMI_UML_GENERALIZATION)) {
             UMLGeneralization gen = new UMLGeneralization();
-            gen.setSubClassReference(new UMLClassReference(atts.getValue("child")));
-            gen.setSuperClassReference(new UMLClassReference(atts.getValue("parent")));
+            gen.setSubClassReference(new UMLClassReference(atts.getValue(XMIConstants.XMI_UML_GENERALIZATION_CHILD)));
+            gen.setSuperClassReference(new UMLClassReference(atts.getValue(XMIConstants.XMI_UML_GENERALIZATION_PARENT)));
             genList.add(gen);
-        } else if (qName.equals("UML:TaggedValue")) {
-            String tag = atts.getValue("tag");
-            String modelElement = atts.getValue("modelElement");
-            String value = atts.getValue("value");
+        } else if (qName.equals(XMI_UML_TAGGED_VALUE)) {
+            String tag = atts.getValue(XMI_UML_TAGGED_VALUE_TAG);
+            String modelElement = atts.getValue(XMI_UML_TAGGED_VALUE_MODEL_ELEMENT);
+            String value = atts.getValue(XMI_UML_TAGGED_VALUE_VALUE);
 
-            if (this.parser.debug)
+            if (this.parser.debug) {
                 System.out.print(tag + " on " + modelElement);
+            }
             if (tag.startsWith("Property")) {
                 modelElement = String.valueOf(modelElement.hashCode());
                 if (this.parser.debug)
                     System.out.print(" (" + modelElement + ")");
             }
-            if (this.parser.debug)
+            if (this.parser.debug) {
                 System.out.println(" = " + value);
+            }
 
             if (tag.equals("description")) {
-                if (clTable.containsKey(modelElement)) {
-                    clTable.get(modelElement).setDescription(value);
-                } else if (attTable.containsKey(modelElement)) {
-                    attTable.get(modelElement).setDescription(value);
+                if (classTable.containsKey(modelElement)) {
+                    classTable.get(modelElement).setDescription(value);
+                } else if (attribTable.containsKey(modelElement)) {
+                    attribTable.get(modelElement).setDescription(value);
                 }
             } else if (tag.startsWith("ObjectClassConceptCode")
                 || tag.startsWith("ObjectClassQualifierConceptCode") || tag.startsWith("PropertyConceptCode")
@@ -180,9 +215,9 @@ class XMIHandler extends DefaultHandler {
                 addSemanticMetadata(tag, modelElement, value);
             }
         } else if (qName.equals("UML:DataType")) {
-            typeTable.put(atts.getValue("xmi.id"), atts.getValue("name"));
+            typeTable.put(atts.getValue(XMIConstants.XMI_ID_ATTRIBUTE), atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE));
         } else if (qName.equals("Foundation.Core.Classifier")) {
-            attList.get(attList.size() - 1).setDataTypeName(atts.getValue("xmi.idref"));
+            attribList.get(attribList.size() - 1).setDataTypeName(atts.getValue("xmi.idref"));
         }
     }
 
@@ -200,10 +235,10 @@ class XMIHandler extends DefaultHandler {
         this.parser.model.setProjectVersion(this.parser.projectVersion);
         this.parser.model.setProjectDescription(this.parser.projectDescription);
 
-        gov.nih.nci.cagrid.metadata.dataservice.UMLClass[] dataClasses = new gov.nih.nci.cagrid.metadata.dataservice.UMLClass[clList
+        gov.nih.nci.cagrid.metadata.dataservice.UMLClass[] dataClasses = new gov.nih.nci.cagrid.metadata.dataservice.UMLClass[classList
             .size()];
         int i = 0;
-        for (UMLClass commonClass : clList) {
+        for (UMLClass commonClass : classList) {
             gov.nih.nci.cagrid.metadata.dataservice.UMLClass dataClass = new gov.nih.nci.cagrid.metadata.dataservice.UMLClass();
             dataClass.setClassName(commonClass.getClassName());
             dataClass.setDescription(commonClass.getDescription());
@@ -218,7 +253,7 @@ class XMIHandler extends DefaultHandler {
             dataClasses[i++] = dataClass;
         }
         this.parser.model.setExposedUMLClassCollection(new DomainModelExposedUMLClassCollection(dataClasses));
-        this.parser.model.setExposedUMLAssociationCollection(new DomainModelExposedUMLAssociationCollection(assList
+        this.parser.model.setExposedUMLAssociationCollection(new DomainModelExposedUMLAssociationCollection(assocList
             .toArray(new UMLAssociation[0])));
         this.parser.model.setUmlGeneralizationCollection(new DomainModelUmlGeneralizationCollection(genList
             .toArray(new UMLGeneralization[0])));
@@ -261,25 +296,25 @@ class XMIHandler extends DefaultHandler {
 
     private void applySemanticMetadata() {
         for (String id : smTable.keySet()) {
-            if (clTable.containsKey(id)) {
-                clTable.get(id).setSemanticMetadata(smTable.get(id).toArray(new SemanticMetadata[0]));
-            } else if (attTable.containsKey(id)) {
-                attTable.get(id).setSemanticMetadata(smTable.get(id).toArray(new SemanticMetadata[0]));
+            if (classTable.containsKey(id)) {
+                classTable.get(id).setSemanticMetadata(smTable.get(id).toArray(new SemanticMetadata[0]));
+            } else if (attribTable.containsKey(id)) {
+                attribTable.get(id).setSemanticMetadata(smTable.get(id).toArray(new SemanticMetadata[0]));
             }
         }
     }
 
 
     private void applyDataTypes() {
-        for (String id : attTable.keySet()) {
-            UMLAttribute att = attTable.get(id);
+        for (String id : attribTable.keySet()) {
+            UMLAttribute att = attribTable.get(id);
             String typeRef = att.getDataTypeName();
 
             String dataType = null;
 
             // check for class
             if (dataType == null) {
-                UMLClass typeCl = clTable.get(typeRef);
+                UMLClass typeCl = classTable.get(typeRef);
                 if (typeCl != null)
                     dataType = typeCl.getClassName();
             }
@@ -308,8 +343,8 @@ class XMIHandler extends DefaultHandler {
         }
 
         // flatten each cl
-        for (String clId : clTable.keySet()) {
-            UMLClass cl = clTable.get(clId);
+        for (String clId : classTable.keySet()) {
+            UMLClass cl = classTable.get(clId);
             ArrayList<UMLAttribute> flatAttributes = flattenAttributes(parentTable, clId);
             cl.getUmlAttributeCollection().setUMLAttribute(flatAttributes.toArray(new UMLAttribute[0]));
         }
@@ -322,7 +357,7 @@ class XMIHandler extends DefaultHandler {
         ArrayList<UMLAttribute> flat = new ArrayList<UMLAttribute>();
 
         // my atts
-        UMLClass cl = clTable.get(clId);
+        UMLClass cl = classTable.get(clId);
         for (UMLAttribute att : cl.getUmlAttributeCollection().getUMLAttribute()) {
             flat.add(att);
         }
@@ -340,29 +375,29 @@ class XMIHandler extends DefaultHandler {
         HashSet<String> filterSet = new HashSet<String>();
         // filter primtives
         if (this.parser.filterPrimitiveClasses) {
-            for (UMLClass cl : clList) {
+            for (UMLClass cl : classList) {
                 if (cl.getPackageName().startsWith("java"))
                     filterSet.add(cl.getId());
             }
         }
         // filter root class
-        for (UMLClass cl : clList) {
+        for (UMLClass cl : classList) {
             if (cl.getPackageName().equals(""))
                 filterSet.add(cl.getId());
         }
 
         // filter classes
-        ArrayList<UMLClass> filteredClasses = new ArrayList<UMLClass>(this.clList.size());
-        for (UMLClass cl : this.clList) {
+        ArrayList<UMLClass> filteredClasses = new ArrayList<UMLClass>(this.classList.size());
+        for (UMLClass cl : this.classList) {
             if (!filterSet.contains(cl.getId())) {
                 filteredClasses.add(cl);
             }
         }
-        this.clList = filteredClasses;
+        this.classList = filteredClasses;
 
         // filter assocations
-        ArrayList<UMLAssociation> filteredAssociations = new ArrayList<UMLAssociation>(this.assList.size());
-        for (UMLAssociation ass : this.assList) {
+        ArrayList<UMLAssociation> filteredAssociations = new ArrayList<UMLAssociation>(this.assocList.size());
+        for (UMLAssociation ass : this.assocList) {
             if (!filterSet.contains(ass.getSourceUMLAssociationEdge().getUMLAssociationEdge()
                 .getUMLClassReference().getRefid())
                 && !filterSet.contains(ass.getTargetUMLAssociationEdge().getUMLAssociationEdge()
@@ -370,7 +405,7 @@ class XMIHandler extends DefaultHandler {
                 filteredAssociations.add(ass);
             }
         }
-        this.assList = filteredAssociations;
+        this.assocList = filteredAssociations;
 
         // filter generalizations
         ArrayList<UMLGeneralization> filteredGeneralizations = new ArrayList<UMLGeneralization>(this.genList.size());
