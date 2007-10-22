@@ -7,7 +7,7 @@ package gov.nih.nci.cagrid.metadata.xmi;
  * @author David Ervin
  * 
  * @created Oct 22, 2007 10:28:52 AM
- * @version $Id: XMIConstants.java,v 1.2 2007-10-22 15:27:18 dervin Exp $ 
+ * @version $Id: XMIConstants.java,v 1.3 2007-10-22 15:31:14 dervin Exp $ 
  */
 public class XMIConstants {
     // common? constants
@@ -67,13 +67,15 @@ public class XMIConstants {
     public static final String XMI_TAG_PROPERTY_CONCEPT_DEFINITION_SOURCE = "PropertyConceptDefinitionSource";
     public static final String XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_DEFINITION = "PropertyQualifierConceptDefinition";
     public static final String XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_DEFINITION_SOURCE = "PropertyQualifierConceptDefinitionSource";
+    public static final String XMI_TAG_CONCEPT_CODE = "ConceptCode";
+    public static final String XMI_TAG_PREFERRED_NAME = "PreferredName";
+    public static final String XMI_TAG_CONCEPT_DEFINITION = "ConceptDefinition"; 
     
     // data type constants
     public static final String XMI_UML_DATA_TYPE = "UML:DataType";
     
     // ?
-    public static final String XMI_FOUNDATION_CORE_CLASSIFIER = "Foundation.Core.Classifier"; 
-
+    public static final String XMI_FOUNDATION_CORE_CLASSIFIER = "Foundation.Core.Classifier";
 
     private XMIConstants() {
         // no instantiation

@@ -32,7 +32,7 @@ import org.xml.sax.helpers.DefaultHandler;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: XMIHandler.java,v 1.3 2007-10-22 15:27:18 dervin Exp $
+  * @version $Id: XMIHandler.java,v 1.4 2007-10-22 15:31:14 dervin Exp $
  */
 class XMIHandler extends DefaultHandler {
     private static final Logger LOG = Logger.getLogger(XMIHandler.class);   
@@ -215,8 +215,9 @@ class XMIHandler extends DefaultHandler {
         this.parser.model.setProjectVersion(this.parser.projectVersion);
         this.parser.model.setProjectDescription(this.parser.projectDescription);
 
-        gov.nih.nci.cagrid.metadata.dataservice.UMLClass[] dataClasses = new gov.nih.nci.cagrid.metadata.dataservice.UMLClass[classList
-            .size()];
+        // convert base UML classes to data UML classes
+        gov.nih.nci.cagrid.metadata.dataservice.UMLClass[] dataClasses = 
+            new gov.nih.nci.cagrid.metadata.dataservice.UMLClass[classList.size()];
         int i = 0;
         for (UMLClass commonClass : classList) {
             gov.nih.nci.cagrid.metadata.dataservice.UMLClass dataClass = new gov.nih.nci.cagrid.metadata.dataservice.UMLClass();
@@ -228,22 +229,22 @@ class XMIHandler extends DefaultHandler {
             dataClass.setProjectVersion(commonClass.getProjectVersion());
             dataClass.setSemanticMetadata(commonClass.getSemanticMetadata());
             dataClass.setUmlAttributeCollection(commonClass.getUmlAttributeCollection());
-            dataClass.setAllowableAsTarget(true); // NEW attribute for
-                                                    // data classes
+            dataClass.setAllowableAsTarget(true); // NEW attribute for data classes
             dataClasses[i++] = dataClass;
         }
         this.parser.model.setExposedUMLClassCollection(new DomainModelExposedUMLClassCollection(dataClasses));
-        this.parser.model.setExposedUMLAssociationCollection(new DomainModelExposedUMLAssociationCollection(assocList
-            .toArray(new UMLAssociation[0])));
-        this.parser.model.setUmlGeneralizationCollection(new DomainModelUmlGeneralizationCollection(genList
-            .toArray(new UMLGeneralization[0])));
+        this.parser.model.setExposedUMLAssociationCollection(
+            new DomainModelExposedUMLAssociationCollection(assocList.toArray(new UMLAssociation[0])));
+        this.parser.model.setUmlGeneralizationCollection(
+            new DomainModelUmlGeneralizationCollection(genList.toArray(new UMLGeneralization[0])));
     }
 
 
     private int getSemanticMetadataOrder(String tag) {
         char c = tag.charAt(tag.length() - 1);
-        if (Character.isDigit(c))
+        if (Character.isDigit(c)) {
             return Integer.parseInt(String.valueOf(c));
+        }
         return 0;
     }
 
@@ -252,8 +253,9 @@ class XMIHandler extends DefaultHandler {
         int order = getSemanticMetadataOrder(tag);
 
         ArrayList<SemanticMetadata> smList = smTable.get(modelElement);
-        if (smList == null)
+        if (smList == null) {
             smTable.put(modelElement, smList = new ArrayList<SemanticMetadata>(9));
+        }
 
         int size = smList.size();
         if (size <= order) {
@@ -263,12 +265,12 @@ class XMIHandler extends DefaultHandler {
         }
 
         SemanticMetadata sm = smList.get(order);
-        if (tag.indexOf("ConceptCode") != -1) {
+        if (tag.indexOf(XMIConstants.XMI_TAG_CONCEPT_CODE) != -1) {
             sm.setOrder(Integer.valueOf(order));
             sm.setConceptCode(value);
-        } else if (tag.indexOf("PreferredName") != -1) {
+        } else if (tag.indexOf(XMIConstants.XMI_TAG_PREFERRED_NAME) != -1) {
             sm.setConceptName(value);
-        } else if (tag.indexOf("ConceptDefinition") != -1) {
+        } else if (tag.indexOf(XMIConstants.XMI_TAG_CONCEPT_DEFINITION) != -1) {
             sm.setConceptDefinition(value);
         }
     }
@@ -356,14 +358,16 @@ class XMIHandler extends DefaultHandler {
         // filter primtives
         if (this.parser.filterPrimitiveClasses) {
             for (UMLClass cl : classList) {
-                if (cl.getPackageName().startsWith("java"))
+                if (cl.getPackageName().startsWith("java")) {
                     filterSet.add(cl.getId());
+                }
             }
         }
         // filter root class
         for (UMLClass cl : classList) {
-            if (cl.getPackageName().equals(""))
+            if (cl.getPackageName().equals("")) {
                 filterSet.add(cl.getId());
+            }
         }
 
         // filter classes
@@ -377,18 +381,19 @@ class XMIHandler extends DefaultHandler {
 
         // filter assocations
         ArrayList<UMLAssociation> filteredAssociations = new ArrayList<UMLAssociation>(this.assocList.size());
-        for (UMLAssociation ass : this.assocList) {
-            if (!filterSet.contains(ass.getSourceUMLAssociationEdge().getUMLAssociationEdge()
+        for (UMLAssociation assoc : this.assocList) {
+            if (!filterSet.contains(assoc.getSourceUMLAssociationEdge().getUMLAssociationEdge()
                 .getUMLClassReference().getRefid())
-                && !filterSet.contains(ass.getTargetUMLAssociationEdge().getUMLAssociationEdge()
+                && !filterSet.contains(assoc.getTargetUMLAssociationEdge().getUMLAssociationEdge()
                     .getUMLClassReference().getRefid())) {
-                filteredAssociations.add(ass);
+                filteredAssociations.add(assoc);
             }
         }
         this.assocList = filteredAssociations;
 
         // filter generalizations
-        ArrayList<UMLGeneralization> filteredGeneralizations = new ArrayList<UMLGeneralization>(this.genList.size());
+        ArrayList<UMLGeneralization> filteredGeneralizations = 
+            new ArrayList<UMLGeneralization>(this.genList.size());
         for (UMLGeneralization gen : this.genList) {
             if (!filterSet.contains(gen.getSubClassReference().getRefid())
                 && !filterSet.contains(gen.getSuperClassReference().getRefid())) {
