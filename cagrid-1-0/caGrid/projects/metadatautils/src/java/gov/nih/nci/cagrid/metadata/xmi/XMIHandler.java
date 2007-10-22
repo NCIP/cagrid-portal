@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 
+import org.apache.log4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -31,29 +32,11 @@ import org.xml.sax.helpers.DefaultHandler;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: XMIHandler.java,v 1.2 2007-10-22 14:46:20 dervin Exp $
+  * @version $Id: XMIHandler.java,v 1.3 2007-10-22 15:27:18 dervin Exp $
  */
 class XMIHandler extends DefaultHandler {
-    /**
-     * Comment for <code>XMI_UML_TAGGED_VALUE_VALUE</code>
-     */
-    public static final String XMI_UML_TAGGED_VALUE_VALUE = "value";
-
-    /**
-     * Comment for <code>XMI_UML_TAGGED_VALUE_MODEL_ELEMENT</code>
-     */
-    public static final String XMI_UML_TAGGED_VALUE_MODEL_ELEMENT = "modelElement";
-
-    /**
-     * Comment for <code>XMI_UML_TAGGED_VALUE_TAG</code>
-     */
-    public static final String XMI_UML_TAGGED_VALUE_TAG = "tag";
-
-    /**
-     * Comment for <code>XMI_UML_TAGGED_VALUE</code>
-     */
-    public static final String XMI_UML_TAGGED_VALUE = "UML:TaggedValue";
-
+    private static final Logger LOG = Logger.getLogger(XMIHandler.class);   
+    
     // parser contains configuration options and information for the handler
     private final XMIParser parser;
 
@@ -172,52 +155,49 @@ class XMIHandler extends DefaultHandler {
             gen.setSubClassReference(new UMLClassReference(atts.getValue(XMIConstants.XMI_UML_GENERALIZATION_CHILD)));
             gen.setSuperClassReference(new UMLClassReference(atts.getValue(XMIConstants.XMI_UML_GENERALIZATION_PARENT)));
             genList.add(gen);
-        } else if (qName.equals(XMI_UML_TAGGED_VALUE)) {
-            String tag = atts.getValue(XMI_UML_TAGGED_VALUE_TAG);
-            String modelElement = atts.getValue(XMI_UML_TAGGED_VALUE_MODEL_ELEMENT);
-            String value = atts.getValue(XMI_UML_TAGGED_VALUE_VALUE);
+        } else if (qName.equals(XMIConstants.XMI_UML_TAGGED_VALUE)) {
+            String tag = atts.getValue(XMIConstants.XMI_UML_TAGGED_VALUE_TAG);
+            String modelElement = atts.getValue(XMIConstants.XMI_UML_TAGGED_VALUE_MODEL_ELEMENT);
+            String value = atts.getValue(XMIConstants.XMI_UML_TAGGED_VALUE_VALUE);
 
-            if (this.parser.debug) {
-                System.out.print(tag + " on " + modelElement);
-            }
-            if (tag.startsWith("Property")) {
+            LOG.debug(tag + " on " + modelElement);            
+            if (tag.startsWith(XMIConstants.XMI_TAG_PROPERTY)) {
                 modelElement = String.valueOf(modelElement.hashCode());
-                if (this.parser.debug)
-                    System.out.print(" (" + modelElement + ")");
+                LOG.debug(" (" + modelElement + ")");
             }
-            if (this.parser.debug) {
-                System.out.println(" = " + value);
-            }
+            LOG.debug(" = " + value);
 
-            if (tag.equals("description")) {
+            if (tag.equals(XMIConstants.XMI_TAG_DESCRIPTION)) {
                 if (classTable.containsKey(modelElement)) {
                     classTable.get(modelElement).setDescription(value);
                 } else if (attribTable.containsKey(modelElement)) {
                     attribTable.get(modelElement).setDescription(value);
                 }
-            } else if (tag.startsWith("ObjectClassConceptCode")
-                || tag.startsWith("ObjectClassQualifierConceptCode") || tag.startsWith("PropertyConceptCode")
-                || tag.startsWith("PropertyQualifierConceptCode")) {
+            } else if (tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_CODE)
+                || tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_CODE) 
+                || tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_CONCEPT_CODE)
+                || tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_CODE)) {
                 addSemanticMetadata(tag, modelElement, value);
-            } else if (tag.startsWith("ObjectClassConceptPreferredName")
-                || tag.startsWith("ObjectClassQualifierConceptPreferredName")
-                || tag.startsWith("PropertyConceptPreferredName")
-                || tag.startsWith("PropertyQualifierConceptPreferredName")) {
+            } else if (tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_PREFERRED_NAME)
+                || tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_PREFERRED_NAME)
+                || tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_CONCEPT_PREFERRED_NAME)
+                || tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_PREFERRED_NAME)) {
                 addSemanticMetadata(tag, modelElement, value);
-            } else if ((tag.startsWith("ObjectClassConceptDefinition") && !tag
-                .startsWith("ObjectClassConceptDefinitionSource"))
-                || (tag.startsWith("ObjectClassQualifierConceptDefinition") && !tag
-                    .startsWith("ObjectClassQualifierConceptDefinitionSource"))
-                || (tag.startsWith("PropertyConceptDefinition") && !tag
-                    .startsWith("PropertyConceptDefinitionSource"))
-                || (tag.startsWith("PropertyQualifierConceptDefinition") && !tag
-                    .startsWith("PropertyQualifierConceptDefinitionSource"))) {
+            } else if ((tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_DEFINITION) 
+                    && !tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_DEFINITION_SOURCE))
+                || (tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_DEFINITION) 
+                    && !tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_DEFINITION_SOURCE))
+                || (tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_CONCEPT_DEFINITION) 
+                    && !tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_CONCEPT_DEFINITION_SOURCE))
+                || (tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_DEFINITION) 
+                    && !tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_DEFINITION_SOURCE))) {
                 addSemanticMetadata(tag, modelElement, value);
             }
-        } else if (qName.equals("UML:DataType")) {
-            typeTable.put(atts.getValue(XMIConstants.XMI_ID_ATTRIBUTE), atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE));
-        } else if (qName.equals("Foundation.Core.Classifier")) {
-            attribList.get(attribList.size() - 1).setDataTypeName(atts.getValue("xmi.idref"));
+        } else if (qName.equals(XMIConstants.XMI_UML_DATA_TYPE)) {
+            typeTable.put(atts.getValue(XMIConstants.XMI_ID_ATTRIBUTE), 
+                atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE));
+        } else if (qName.equals(XMIConstants.XMI_FOUNDATION_CORE_CLASSIFIER)) {
+            attribList.get(attribList.size() - 1).setDataTypeName(atts.getValue(XMIConstants.XMI_IDREF));
         }
     }
 
