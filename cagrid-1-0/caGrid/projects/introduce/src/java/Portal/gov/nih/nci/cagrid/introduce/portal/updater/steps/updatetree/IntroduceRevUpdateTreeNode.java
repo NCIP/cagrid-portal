@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree;
 
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceRevType;
-import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
 
 import javax.swing.JCheckBox;
