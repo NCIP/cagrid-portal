@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.types;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.portal.common.IconFeedbackPanel;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
