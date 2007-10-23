@@ -16,8 +16,10 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLClassReference;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLGeneralization;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.Attributes;
@@ -32,7 +34,7 @@ import org.xml.sax.helpers.DefaultHandler;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: XMIHandler.java,v 1.5 2007-10-22 20:42:09 dervin Exp $
+  * @version $Id: XMIHandler.java,v 1.6 2007-10-23 13:52:33 dervin Exp $
  */
 class XMIHandler extends DefaultHandler {
     private static final Logger LOG = Logger.getLogger(XMIHandler.class);   
@@ -40,31 +42,40 @@ class XMIHandler extends DefaultHandler {
     // parser contains configuration options and information for the handler
     private final XMIParser parser;
 
-    private StringBuffer chars = new StringBuffer();
+    private StringBuffer chars;
 
     // lists of domain model components
-    private ArrayList<UMLClass> classList = new ArrayList<UMLClass>();
-    private ArrayList<UMLAttribute> attribList = new ArrayList<UMLAttribute>();
-    private ArrayList<UMLAssociation> assocList = new ArrayList<UMLAssociation>();
-    private ArrayList<UMLGeneralization> genList = new ArrayList<UMLGeneralization>();
+    private List<UMLClass> classList;
+    private List<UMLAttribute> attribList;
+    private List<UMLAssociation> assocList;
+    private List<UMLGeneralization> genList;
 
     // maps from XMI name to domain model component
-    private Hashtable<String, UMLClass> classTable = new Hashtable<String, UMLClass>();
-    private Hashtable<String, UMLAttribute> attribTable = new Hashtable<String, UMLAttribute>();
-    private Hashtable<String, ArrayList<SemanticMetadata>> smTable = 
-        new Hashtable<String, ArrayList<SemanticMetadata>>();
-    private Hashtable<String, String> typeTable = new Hashtable<String, String>();
+    private Map<String, UMLClass> classTable; // class ID to class instance
+    private Map<String, UMLAttribute> attribTable; //attribute ID to attribute instance
+    private Map<String, List<SemanticMetadata>> smTable; // element ID to semantic metadata list
+    private Map<String, String> typeTable; // type ID to type name
 
     // state variables
     private UMLAssociationEdge edge;
     private boolean sourceNavigable = false;
     private boolean targetNavigable = false;
-    private String pkg = "";
-    
+    private String pkg = "";    
 
     public XMIHandler(XMIParser parser) {
         super();
         this.parser = parser;
+        this.chars = new StringBuffer();
+        // initialize lists
+        this.classList = new ArrayList<UMLClass>();
+        this.attribList = new ArrayList<UMLAttribute>();
+        this.assocList = new ArrayList<UMLAssociation>();
+        this.genList = new ArrayList<UMLGeneralization>();
+        // initialize tables
+        this.classTable = new HashMap<String, UMLClass>();
+        this.attribTable = new HashMap<String, UMLAttribute>();
+        this.smTable = new HashMap<String, List<SemanticMetadata>>();
+        this.typeTable = new HashMap<String, String>();
     }
 
 
@@ -85,7 +96,8 @@ class XMIHandler extends DefaultHandler {
             }
         } else if (qName.equals(XMIConstants.XMI_UML_CLASS)) {
             UMLClass cl = classList.get(classList.size() - 1);
-            cl.setUmlAttributeCollection(new UMLClassUmlAttributeCollection(attribList.toArray(new UMLAttribute[0])));
+            cl.setUmlAttributeCollection(new UMLClassUmlAttributeCollection(
+                attribList.toArray(new UMLAttribute[0])));
             attribList.clear();
         } else if (qName.equals(XMIConstants.XMI_UML_ASSOCIATION)) {
             UMLAssociation assoc = assocList.get(assocList.size() - 1);
@@ -205,17 +217,17 @@ class XMIHandler extends DefaultHandler {
     
     private void handleAssociationEnd(Attributes atts) {
         // get the most recently found association
-        UMLAssociation ass = assocList.get(assocList.size() - 1);
+        UMLAssociation assoc = assocList.get(assocList.size() - 1);
         // TODO: something with type?
         String type = atts.getValue(XMIConstants.XMI_TYPE_ATTRIBUTE);
         boolean isNavigable = "true".equals(atts.getValue(XMIConstants.XMI_UML_ASSOCIATION_IS_NAVIGABLE));
 
         edge = new UMLAssociationEdge();
-        if (ass.getSourceUMLAssociationEdge() == null) {
-            ass.setSourceUMLAssociationEdge(new UMLAssociationSourceUMLAssociationEdge(edge));
+        if (assoc.getSourceUMLAssociationEdge() == null) {
+            assoc.setSourceUMLAssociationEdge(new UMLAssociationSourceUMLAssociationEdge(edge));
             sourceNavigable = isNavigable;
         } else {
-            ass.setTargetUMLAssociationEdge(new UMLAssociationTargetUMLAssociationEdge(edge));
+            assoc.setTargetUMLAssociationEdge(new UMLAssociationTargetUMLAssociationEdge(edge));
             targetNavigable = isNavigable;
         }
         edge.setRoleName(atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE));
@@ -315,7 +327,7 @@ class XMIHandler extends DefaultHandler {
     private void addSemanticMetadata(String tag, String modelElement, String value) {
         int order = getSemanticMetadataOrder(tag);
 
-        ArrayList<SemanticMetadata> smList = smTable.get(modelElement);
+        List<SemanticMetadata> smList = smTable.get(modelElement);
         if (smList == null) {
             smTable.put(modelElement, smList = new ArrayList<SemanticMetadata>(9));
         }
@@ -384,7 +396,7 @@ class XMIHandler extends DefaultHandler {
 
     private void flattenAttributes() {
         // build parent table
-        Hashtable<String, String> parentTable = new Hashtable<String, String>();
+        Map<String, String> parentTable = new HashMap<String, String>();
         for (UMLGeneralization gen : genList) {
             parentTable.put(gen.getSubClassReference().getRefid(), 
                 gen.getSuperClassReference().getRefid());
@@ -393,7 +405,7 @@ class XMIHandler extends DefaultHandler {
         // flatten each cl
         for (String clId : classTable.keySet()) {
             UMLClass cl = classTable.get(clId);
-            ArrayList<UMLAttribute> flatAttributes = 
+            List<UMLAttribute> flatAttributes = 
                 flattenAttributes(parentTable, clId);
             cl.getUmlAttributeCollection().setUMLAttribute(
                 flatAttributes.toArray(new UMLAttribute[0]));
@@ -401,11 +413,12 @@ class XMIHandler extends DefaultHandler {
     }
 
 
-    private ArrayList<UMLAttribute> flattenAttributes(
-        Hashtable<String, String> parentTable, String clId) {
-        if (clId == null)
+    private List<UMLAttribute> flattenAttributes(
+        Map<String, String> parentTable, String clId) {
+        if (clId == null) {
             return new ArrayList<UMLAttribute>(0);
-        ArrayList<UMLAttribute> flat = new ArrayList<UMLAttribute>();
+        }
+        List<UMLAttribute> flat = new ArrayList<UMLAttribute>();
 
         // my atts
         UMLClass cl = classTable.get(clId);
@@ -440,7 +453,7 @@ class XMIHandler extends DefaultHandler {
         }
 
         // filter classes
-        ArrayList<UMLClass> filteredClasses = new ArrayList<UMLClass>(this.classList.size());
+        List<UMLClass> filteredClasses = new ArrayList<UMLClass>(this.classList.size());
         for (UMLClass cl : this.classList) {
             if (!filterSet.contains(cl.getId())) {
                 filteredClasses.add(cl);
@@ -449,7 +462,7 @@ class XMIHandler extends DefaultHandler {
         this.classList = filteredClasses;
 
         // filter assocations
-        ArrayList<UMLAssociation> filteredAssociations = 
+        List<UMLAssociation> filteredAssociations = 
             new ArrayList<UMLAssociation>(this.assocList.size());
         for (UMLAssociation assoc : this.assocList) {
             if (!filterSet.contains(assoc.getSourceUMLAssociationEdge()
@@ -462,7 +475,7 @@ class XMIHandler extends DefaultHandler {
         this.assocList = filteredAssociations;
 
         // filter generalizations
-        ArrayList<UMLGeneralization> filteredGeneralizations = 
+        List<UMLGeneralization> filteredGeneralizations = 
             new ArrayList<UMLGeneralization>(this.genList.size());
         for (UMLGeneralization gen : this.genList) {
             if (!filterSet.contains(gen.getSubClassReference().getRefid())
