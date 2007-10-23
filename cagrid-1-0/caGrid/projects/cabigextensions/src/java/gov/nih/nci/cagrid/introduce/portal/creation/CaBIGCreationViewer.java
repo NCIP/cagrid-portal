@@ -6,11 +6,12 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extensions.metadata.constants.MetadataConstants;
-import gov.nih.nci.cagrid.introduce.extensions.sdk.discovery.IconFeedbackPanel;
+import gov.nih.nci.cagrid.introduce.portal.common.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
@@ -40,8 +41,6 @@ import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
-
-import java.awt.Insets;
 
 
 /**

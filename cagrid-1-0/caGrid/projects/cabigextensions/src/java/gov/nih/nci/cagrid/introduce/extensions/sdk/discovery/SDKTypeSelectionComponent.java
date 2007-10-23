@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.portal.common.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.BorderLayout;
