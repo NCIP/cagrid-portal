@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.ui.NamespaceUtils;
+import gov.nih.nci.cagrid.data.ui.domain.DomainModelFromXmiDialog;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
@@ -34,6 +35,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +49,7 @@ import java.util.Vector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -56,6 +59,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 /** 
  *  DomainModelPanel
  *  Panel to allow selection / generation of a domain model for the service
@@ -63,7 +68,7 @@ import javax.swing.ListSelectionModel;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: DomainModelPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: DomainModelPanel.java,v 1.2 2007-10-23 20:11:15 dervin Exp $ 
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 	
@@ -84,8 +89,8 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	private JButton removePackageButton = null;
 	private JPanel packageButtonsPanel = null;
 	private JPanel caDsrPanel = null;
-	
-	public DomainModelPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
+
+    public DomainModelPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
 		super(extensionDescription, info);
 		initialize();
 	}
@@ -316,22 +321,81 @@ public class DomainModelPanel extends AbstractWizardPanel {
 		if (browseButton == null) {
 			browseButton = new JButton();
 			browseButton.setText("Browse");
+            browseButton.setToolTipText("Browse for Domain Model or an XMI to convert");
 			browseButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String selectedFilename = null;
-					try {
-						selectedFilename = ResourceManager.promptFile(DomainModelPanel.this, null, FileFilters.XML_FILTER);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-						ErrorDialog.showErrorDialog("Error getting filename", ex);
-					}
-					getFileTextField().setText(selectedFilename == null ? "" : selectedFilename);
-					setSelectedDomainModelFilename(selectedFilename);
+                    selectDomainModelFile();
 				}
 			});
 		}
 		return browseButton;
 	}
+    
+    
+    private void selectDomainModelFile() {
+        String selectedFilename = null;
+        String mostRecentFilename = null;
+        try {
+            mostRecentFilename = ResourceManager.getStateProperty(ResourceManager.LAST_FILE);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            ErrorDialog.showErrorDialog("Error determining most recently selected file", ex);
+        }
+        JFileChooser chooser = new JFileChooser(mostRecentFilename);
+        chooser.addChoosableFileFilter(FileFilters.XML_FILTER);
+        chooser.addChoosableFileFilter(FileFilters.XMI_FILTER);
+        chooser.setFileFilter(FileFilters.XML_FILTER);
+        chooser.setAcceptAllFileFilterUsed(false);
+        int choice = chooser.showOpenDialog(DomainModelPanel.this);
+        if (choice == JFileChooser.APPROVE_OPTION) { // selection made
+            selectedFilename = chooser.getSelectedFile().getAbsolutePath();
+            try {
+                ResourceManager.setStateProperty(ResourceManager.LAST_FILE, selectedFilename);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                ErrorDialog.showErrorDialog("Error storing most recently selected file", ex);
+            }
+
+            // if user selected an XMI file, there is more processing to be done
+            if (chooser.getFileFilter() == FileFilters.XMI_FILTER) {
+                DomainModel model = DomainModelFromXmiDialog.createDomainModel(
+                    PortalResourceManager.getInstance().getGridPortal(), selectedFilename);
+                if (model != null) {
+                    String trimmedFileName = new File(selectedFilename).getName();
+                    trimmedFileName = trimmedFileName.substring(0, trimmedFileName.length() - 4);
+                    File convertedModelFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
+                        + File.separator + "etc" + File.separator + trimmedFileName + ".xml");
+                    try {
+                        FileWriter modelWriter = new FileWriter(convertedModelFile);
+                        MetadataUtils.serializeDomainModel(model, modelWriter);
+                        modelWriter.flush();
+                        modelWriter.close();
+                        String[] message = {
+                            "The selected XMI file " + selectedFilename,
+                            "has been converted to a caGrid Domain Model and stored",
+                            "as " + convertedModelFile.getName()
+                        };
+                        PortalUtils.showMessage(message);
+                        getFileTextField().setText(convertedModelFile.getAbsolutePath());
+                        setSelectedDomainModelFilename(convertedModelFile.getAbsolutePath());
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        ErrorDialog.showErrorDialog("Error storing converted domain model", ex.getMessage(), ex);
+                    }
+                } else {
+                    ErrorDialog.showErrorDialog("Domain model was not generated");
+                }
+            } else {
+                // use the model as-is
+                getFileTextField().setText(selectedFilename);
+                setSelectedDomainModelFilename(selectedFilename);
+            }
+        } else {
+            // no selection, clear out model file name
+            getFileTextField().setText("");
+            setSelectedDomainModelFilename(null); // TODO: is this right?
+        }
+    }
 	
 	
 	private void setSelectedDomainModelFilename(String filename) {
