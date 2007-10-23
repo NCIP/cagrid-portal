@@ -45,7 +45,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Oct 23, 2007 11:05:04 AM
- * @version $Id: DomainModelFromXmiDialog.java,v 1.1 2007-10-23 17:42:20 dervin Exp $ 
+ * @version $Id: DomainModelFromXmiDialog.java,v 1.2 2007-10-23 19:14:17 dervin Exp $ 
  */
 public class DomainModelFromXmiDialog extends JDialog {
     // keys for validation messages
@@ -71,12 +71,14 @@ public class DomainModelFromXmiDialog extends JDialog {
     private JPanel buttonPanel = null;
     
     private boolean canceled;
+    private String suppliedXmiFilename = null;
     private ValidationResultModel validationModel = null;
     private DocumentChangeAdapter documentChangeListener = null;
     
-    private DomainModelFromXmiDialog(JFrame parent) {
+    private DomainModelFromXmiDialog(JFrame parent, String xmiFilename) {
         super(parent, "Generate Domain Model", true);
         canceled = true;
+        suppliedXmiFilename = xmiFilename;
         validationModel = new DefaultValidationResultModel();
         documentChangeListener = new DocumentChangeAdapter() {
             public void documentEdited(DocumentEvent e) {
@@ -98,7 +100,12 @@ public class DomainModelFromXmiDialog extends JDialog {
     
     
     public static DomainModel createDomainModel(JFrame parent) {
-        DomainModelFromXmiDialog dialog = new DomainModelFromXmiDialog(parent);
+        return createDomainModel(parent, null);
+    }
+    
+    
+    public static DomainModel createDomainModel(JFrame parent, String xmiFilename) {
+        DomainModelFromXmiDialog dialog = new DomainModelFromXmiDialog(parent, xmiFilename);
         if (!dialog.canceled) {
             File xmiFile = new File(dialog.getXmiFileTextField().getText());
             String shortName = dialog.getProjectShortNameTextField().getText();
@@ -117,7 +124,7 @@ public class DomainModelFromXmiDialog extends JDialog {
             
             DomainModel model = null;
             try {
-                parser.parse(xmiFile);
+                model = parser.parse(xmiFile);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 ErrorDialog.showErrorDialog("Error parsing XMI to domain model", ex.getMessage(), ex);
@@ -199,6 +206,10 @@ public class DomainModelFromXmiDialog extends JDialog {
             xmiFileTextField = new JTextField();
             xmiFileTextField.setEditable(false);
             xmiFileTextField.addFocusListener(new FocusChangeHandler());
+            if (suppliedXmiFilename != null) {
+                xmiFileTextField.setText(suppliedXmiFilename);
+                getXmiBrowseButton().setEnabled(false);
+            }
         }
         return xmiFileTextField;
     }
