@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.metadata.xmi;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Hashtable;
 
 import javax.xml.namespace.QName;
@@ -23,7 +25,7 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:19:59 AM
-  * @version $Id: XMIParser.java,v 1.2 2007-10-22 14:46:20 dervin Exp $
+  * @version $Id: XMIParser.java,v 1.3 2007-10-23 21:01:13 dervin Exp $
  */
 public class XMIParser {
     DomainModel model;
@@ -56,12 +58,20 @@ public class XMIParser {
         this.projectShortName = projectShortName;
         this.projectVersion = projectVersion;
     }
+    
+    
+    public DomainModel parse(InputStream xmiStream) throws SAXException, IOException, ParserConfigurationException {
+        SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+        XMIHandler handler = new XMIHandler(this);
+        parser.parse(xmiStream, handler);
+        return model;
+    }
 
 
     public DomainModel parse(File file) throws SAXException, IOException, ParserConfigurationException {
-        SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
-        XMIHandler handler = new XMIHandler(this);
-        parser.parse(file, handler);
+        FileInputStream fis = new FileInputStream(file);
+        parse(fis);
+        fis.close();
         return model;
     }
 
