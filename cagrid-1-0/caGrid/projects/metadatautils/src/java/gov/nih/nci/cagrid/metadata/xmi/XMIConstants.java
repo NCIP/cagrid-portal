@@ -7,7 +7,7 @@ package gov.nih.nci.cagrid.metadata.xmi;
  * @author David Ervin
  * 
  * @created Oct 22, 2007 10:28:52 AM
- * @version $Id: XMIConstants.java,v 1.3 2007-10-22 15:31:14 dervin Exp $ 
+ * @version $Id: XMIConstants.java,v 1.4 2007-10-23 14:14:41 dervin Exp $ 
  */
 public class XMIConstants {
     // common? constants
@@ -28,6 +28,7 @@ public class XMIConstants {
     public static final String XMI_UML_PACKAGE = "UML:Package";    
     public static final String XMI_LOGICAL_MODEL = "Logical Model";
     public static final String XMI_LOGICAL_VIEW = "Logical View";
+    public static final String XMI_DATA_MODEL = "Data Model";
     
     // attribute constants
     public static final String XMI_UML_ATTRIBUTE = "UML:Attribute";

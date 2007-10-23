@@ -34,7 +34,7 @@ import org.xml.sax.helpers.DefaultHandler;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: XMIHandler.java,v 1.6 2007-10-23 13:52:33 dervin Exp $
+  * @version $Id: XMIHandler.java,v 1.7 2007-10-23 14:14:41 dervin Exp $
  */
 class XMIHandler extends DefaultHandler {
     private static final Logger LOG = Logger.getLogger(XMIHandler.class);   
@@ -260,7 +260,8 @@ class XMIHandler extends DefaultHandler {
     private void handlePackage(Attributes atts) {
         String name = atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE);
         if (!name.equals(XMIConstants.XMI_LOGICAL_VIEW) 
-            && !name.equals(XMIConstants.XMI_LOGICAL_MODEL)) {
+            && !name.equals(XMIConstants.XMI_LOGICAL_MODEL)
+            && !name.equals(XMIConstants.XMI_DATA_MODEL)) {
             if (!pkg.equals("")) {
                 pkg += ".";
             }
