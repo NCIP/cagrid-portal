@@ -55,5 +55,6 @@
 	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
+	<classpathentry kind="lib" path="ext/lib/validation-2.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
