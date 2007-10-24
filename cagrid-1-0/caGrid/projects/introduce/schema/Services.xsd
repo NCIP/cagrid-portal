@@ -62,6 +62,7 @@
 			<xs:element ref="Persistant" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="Notification" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="Secure" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="ResourcePropertyManagement" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
 	</xs:complexType>
 
@@ -81,5 +82,7 @@
 	<xs:complexType name="Notification"></xs:complexType>
 	<xs:element name="Secure" type="Secure"></xs:element>
 	<xs:complexType name="Secure"></xs:complexType>
-
+	<xs:element name="ResourcePropertyManagement" type="ResourcePropertyManagement"></xs:element>
+	<xs:complexType name="ResourcePropertyManagement"></xs:complexType>
+	
 </xs:schema>

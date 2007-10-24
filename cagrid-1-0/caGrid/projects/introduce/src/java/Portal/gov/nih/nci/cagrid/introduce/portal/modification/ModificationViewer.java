@@ -1561,9 +1561,10 @@ public class ModificationViewer extends GridPortalComponent {
                         // save the metadata and methods and then call the
                         // resync and build
                         setProgressText("writting service document");
-                        Utils.serializeDocument(ModificationViewer.this.methodsDirectory.getAbsolutePath()
-                            + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ModificationViewer.this.info
-                            .getServiceDescriptor(), IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+                        ModificationViewer.this.info.persistInformation();
+//                        Utils.serializeDocument(ModificationViewer.this.methodsDirectory.getAbsolutePath()
+//                            + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ModificationViewer.this.info
+//                            .getServiceDescriptor(), IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
                         try {
                             // call the sync tools

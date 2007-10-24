@@ -16,7 +16,7 @@ import javax.xml.namespace.QName;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin </A>
  */
-public class IntroduceConstants {
+public abstract class IntroduceConstants {
 
     // introduce specific constants
     public static final String INTRODUCE_VERSION_PROPERTY = "introduce.version";

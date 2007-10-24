@@ -2,7 +2,10 @@ package gov.nih.nci.cagrid.introduce.upgrade.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
+import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ProviderUtils;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
@@ -18,6 +21,15 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
+
+import org.apache.ws.jaxme.js.JavaMethod;
+import org.apache.ws.jaxme.js.JavaQName;
+import org.apache.ws.jaxme.js.JavaQNameImpl;
+import org.apache.ws.jaxme.js.JavaSource;
+import org.apache.ws.jaxme.js.JavaSourceFactory;
+import org.apache.ws.jaxme.js.util.JavaParser;
+import org.projectmobius.tools.common.viewer.RegistryBrowser.RemoveRegistryAction;
 
 
 public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
@@ -30,6 +42,20 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
 
     protected void upgrade() throws Exception {
         
+        // need to replace the build.xml
+        Utils.copyFile(new File(getServicePath() + File.separator + "build.xml"), new File(getServicePath()
+            + File.separator + "build.xml.OLD"));
+        Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build.xml"), new File(
+            getServicePath() + File.separator + "build.xml"));
+        Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build-stubs.xml"), new File(
+            getServicePath() + File.separator + "build-stubs.xml"));
+        getStatus().addDescriptionLine("replaced build.xml with new version");
+        getStatus().addDescriptionLine("added build-stubs.xml");
+
+      //clean the config
+        removeResourcePropertyProvidersFromConfig();
+        //remove rp methods
+        removeGetResourcePropertyMethods();
 
         // foreach service need to replace the resource files.....
         File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
@@ -215,6 +241,61 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
                         "Error copying library (" + gridCSMLibs[i] + ") to service: " + ex.getMessage(), ex);
                 }
             }
+        }
+
+    }
+    
+    private void removeResourcePropertyProvidersFromConfig() throws Exception {
+        for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
+            ServiceType service = getServiceInformation().getServices().getService(i);
+            ProviderUtils.removeProviderFromServiceConfig(service, "GetRPProvider", getServiceInformation());  
+            ProviderUtils.removeProviderFromServiceConfig(service, "GetMRPProvider", getServiceInformation());
+            ProviderUtils.removeProviderFromServiceConfig(service, "QueryRPProvider", getServiceInformation());
+        }
+    }
+
+    
+
+    private void removeGetResourcePropertyMethods() throws Exception {
+        // foreach service need to replace the resource files.....
+        File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
+        for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
+            ServiceType service = getServiceInformation().getServices().getService(i);
+            SyncSource syncsource = new SyncSource(getServiceInformation().getBaseDirectory(), getServiceInformation(),
+                service);
+
+            JavaSourceFactory jsf;
+            JavaParser jp;
+
+            jsf = new JavaSourceFactory();
+            jp = new JavaParser(jsf);
+
+            String serviceClient = getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
+                + "src" + File.separator + CommonTools.getPackageDir(service) + File.separator + "client"
+                + File.separator + service.getName() + "Client.java";
+
+            try {
+                jp.parse(new File(serviceClient));
+
+            } catch (Exception e) {
+                throw new SynchronizationException("Error parsing service interface:" + e.getMessage(), e);
+            }
+            Iterator it = jsf.getJavaSources();
+            JavaSource source = (JavaSource) it.next();
+            source.setForcingFullyQualifiedName(true);
+
+            JavaMethod[] methods = source.getMethods();
+            int j = 0;
+            for (j = 0; j < methods.length; j++) {
+                if (methods[j].getName().equals("getResourceProperty")) {
+                    break;
+                }
+            } 
+            
+            JavaQName qname = JavaQNameImpl.getInstance("GetResourcePropertyResponse");
+          
+            methods[j].setType(qname);
+            syncsource.removeClientImpl(methods[j]);
         }
 
     }

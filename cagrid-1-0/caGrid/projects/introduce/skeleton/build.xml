@@ -102,7 +102,7 @@
 	<target name="setGlobus" if="env.GLOBUS_LOCATION">
 		<!-- GT4 build files and directories-->
 		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
-		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+		<property name="build.stubs" location="build-stubs.xml" />
 		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
 		<property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
 		<!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->

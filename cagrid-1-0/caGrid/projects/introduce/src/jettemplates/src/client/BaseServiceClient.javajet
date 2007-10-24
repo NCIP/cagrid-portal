@@ -29,8 +29,6 @@ import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
 
-import org.oasis.wsrf.properties.GetResourcePropertyResponse;
-
 import org.globus.gsi.GlobusCredential;
 
 import org.globus.wsrf.NotifyCallback;
@@ -97,10 +95,6 @@ public abstract class <%=info.getService().getName()%>ClientBase extends Service
 		}
 
 		return port;
-	}
-	
-	public GetResourcePropertyResponse getResourceProperty(QName resourcePropertyQName) throws RemoteException {
-		return portType.getResourceProperty(resourcePropertyQName);
 	}
 	
 <%

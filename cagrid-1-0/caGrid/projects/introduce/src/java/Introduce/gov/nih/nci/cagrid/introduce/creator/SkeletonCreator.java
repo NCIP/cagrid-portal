@@ -13,7 +13,9 @@ import gov.nih.nci.cagrid.introduce.beans.service.Persistant;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.Singleton;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ProviderUtils;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
@@ -69,9 +71,7 @@ public class SkeletonCreator extends Task {
         serviceType.setResourceFrameworkOptions(new ResourceFrameworkOptions());
         serviceType.getResourceFrameworkOptions().setMain(new Main());
         serviceType.getResourceFrameworkOptions().setSingleton(new Singleton());
-        serviceType.getResourceFrameworkOptions().setLifetime(new Lifetime());
-        serviceType.getResourceFrameworkOptions().setNotification(new Notification());
-        serviceType.getResourceFrameworkOptions().setPersistant(new Persistant());
+
 
         // add new service to the services
         // add new method to array in bean
@@ -141,9 +141,10 @@ public class SkeletonCreator extends Task {
         SkeletonDocsCreator sdc = new SkeletonDocsCreator();
         SkeletonSecurityOperationProviderCreator ssopc = new SkeletonSecurityOperationProviderCreator();
 
-        // add lifetime and subscription capability to the main service...
-        CommonTools.addLifetimeResource(info.getServices().getService(0), info);
-        CommonTools.addSubscribeResource(info.getServices().getService(0), info);
+        // add basic resource property access methods......
+        //ProviderUtils.addGetResourcePropertyResourceProvider(info.getServices().getService(0), info);
+        //ProviderUtils.addGetMultipeResourcePropertiesResourceProvider(info.getServices().getService(0), info);
+        //ProviderUtils.addQueryResourcePropertiesResourceProvider(info.getServices().getService(0), info);
         
         // Generate the source
         try {

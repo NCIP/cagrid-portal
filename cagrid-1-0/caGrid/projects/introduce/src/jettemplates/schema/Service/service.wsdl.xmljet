@@ -283,40 +283,5 @@ if(methods!=null && methods.getMethod()!=null){
   }
 }
 %>
-        <operation name="GetResourceProperty">
-            <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"
-                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>
-            <output name="GetResourcePropertyResponse" message="wsrpw:GetResourcePropertyResponse"
-                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourcePropertyResponse"/>
-            <fault name="InvalidResourcePropertyQNameFault"
-                message="wsrpw:InvalidResourcePropertyQNameFault"/>
-            <fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
-        </operation>
-        <operation name="GetMultipleResourceProperties">
-            <input name="GetMultipleResourcePropertiesRequest"
-                message="wsrpw:GetMultipleResourcePropertiesRequest"
-                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
-            <output name="GetMultipleResourcePropertiesResponse"
-                message="wsrpw:GetMultipleResourcePropertiesResponse"
-                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
-            <fault name="InvalidResourcePropertyQNameFault"
-                message="wsrpw:InvalidResourcePropertyQNameFault"/>
-            <fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
-        </operation>
-        <operation name="QueryResourceProperties">
-            <input name="QueryResourcePropertiesRequest"
-                message="wsrpw:QueryResourcePropertiesRequest"
-                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties"/>
-            <output name="QueryResourcePropertiesResponse"
-                message="wsrpw:QueryResourcePropertiesResponse"
-                wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourcePropertiesResponse"/>
-            <fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
-            <fault name="InvalidResourcePropertyQNameFault"
-                message="wsrpw:InvalidResourcePropertyQNameFault"/>
-            <fault name="UnknownQueryExpressionDialectFault"
-                message="wsrpw:UnknownQueryExpressionDialectFault"/>
-            <fault name="InvalidQueryExpressionFault" message="wsrpw:InvalidQueryExpressionFault"/>
-            <fault name="QueryEvaluationErrorFault" message="wsrpw:QueryEvaluationErrorFault"/>
-        </operation>
     </portType>
 </definitions>

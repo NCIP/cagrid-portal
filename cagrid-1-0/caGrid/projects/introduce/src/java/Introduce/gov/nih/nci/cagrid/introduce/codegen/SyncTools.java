@@ -6,9 +6,13 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.base.SyncBase;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
@@ -18,6 +22,8 @@ import gov.nih.nci.cagrid.introduce.codegen.serializers.SyncSerialization;
 import gov.nih.nci.cagrid.introduce.codegen.services.SyncServices;
 import gov.nih.nci.cagrid.introduce.codegen.utils.SyncUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ProviderUtils;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
@@ -36,6 +42,7 @@ import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceXSDTemplate;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -391,6 +398,12 @@ public class SyncTools {
 
         table = null;
         System.gc();
+        
+        
+        //make a copy of the model to compate with next time
+        Utils.copyFile(new File(baseDirectory.getAbsolutePath() + File.separator
+            + IntroduceConstants.INTRODUCE_XML_FILE), new File(baseDirectory.getAbsolutePath() + File.separator
+            + IntroduceConstants.INTRODUCE_XML_FILE + ".prev"));
     }
 
 
@@ -674,12 +687,19 @@ public class SyncTools {
                     jndiConfigT.generate(new SpecificServiceInformation(info, newService))).getRootElement();
                 serverConfigJNDIDoc.getRootElement().addContent(0, newServiceJNDIElement.detach());
 
+                
+                //we now need to process the resource framework options and add what
+                //ever providers need to be added
                 if (newService.getResourceFrameworkOptions().getLifetime()!=null) {
-                    CommonTools.addLifetimeResource(newService, info);
+                    ProviderUtils.addLifetimeResourceProvider(newService, info);
                 }
                 if(newService.getResourceFrameworkOptions().getNotification()!=null){
-                    CommonTools.addSubscribeResource(newService, info);
+                    ProviderUtils.addSubscribeResourceProvider(newService, info);
                 }
+                if(newService.getResourceFrameworkOptions().getResourcePropertyManagement()!=null){
+                    ProviderUtils.addResourcePropertiesManagementResourceFrameworkOption(newService, info);
+                }
+               
 
             } catch (Exception e) {
                 e.printStackTrace();
