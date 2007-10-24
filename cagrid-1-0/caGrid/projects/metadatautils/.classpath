@@ -68,5 +68,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-data.jar"/>
+	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
