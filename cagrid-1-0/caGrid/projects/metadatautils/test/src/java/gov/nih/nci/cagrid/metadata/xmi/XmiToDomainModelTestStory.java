@@ -16,7 +16,7 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Oct 24, 2007 11:48:02 AM
- * @version $Id: XmiToDomainModelTestStory.java,v 1.1 2007-10-24 16:43:23 dervin Exp $ 
+ * @version $Id: XmiToDomainModelTestStory.java,v 1.2 2007-10-24 20:22:24 dervin Exp $ 
  */
 public class XmiToDomainModelTestStory extends Story {
     public static final String MODEL_ZIP_FILE = "test/resources/models.zip";
@@ -41,7 +41,7 @@ public class XmiToDomainModelTestStory extends Story {
         Vector<Step> steps = new Vector<Step>();
         steps.add(new UnzipModelsStep(MODEL_ZIP_FILE, MODEL_UNPACK_DIR));
         steps.add(new ModelConversionStep(MODEL_UNPACK_DIR));
-        // steps.add(new ModelComparisonStep(MODEL_UNPACK_DIR));
+        steps.add(new ModelComparisonStep(MODEL_UNPACK_DIR));
         steps.add(new DeleteModelTempStep(MODEL_UNPACK_DIR));
         return steps;
     }
