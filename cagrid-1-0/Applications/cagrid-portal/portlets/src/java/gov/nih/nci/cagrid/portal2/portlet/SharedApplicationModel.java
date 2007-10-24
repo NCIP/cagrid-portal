@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal2.portlet.directory.DirectoryBean;
 import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryResultsBean;
+import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryCommand;
 
 import java.util.List;
 
@@ -36,4 +37,7 @@ public interface SharedApplicationModel {
 	Integer getSelectedGridDataServiceId();
 	void setSelectedUMLClass(UMLClass klass);
 	UMLClass getSelectedUMLClass();
+	
+	void setWorkingCqlQuery(CQLQueryCommand workingCqlQuery);
+	CQLQueryCommand getWorkingCqlQuery();
 }

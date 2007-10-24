@@ -58,7 +58,7 @@ public class ViewUMLClassController extends AbstractController {
 			}
 			
 			TreeNode rootNode = getUmlClassTreeFacade().getRootNode();
-			if(rootNode == null || !umlClass.getId().equals(((UMLClass)rootNode.getContent()).getId())){
+			if(rootNode == null || !umlClass.getId().equals(((UMLClassBean)rootNode.getContent()).getUmlClass().getId())){
 				logger.debug("Creating new tree for UMLClass:" + umlClass.getId());
 				rootNode = createNode(umlClass);
 			}

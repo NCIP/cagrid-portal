@@ -155,5 +155,17 @@ public class PortletUtils {
 			}
 		}
 	}
+	
+	public static String[] parsePath(String path) {
+		String[] parts = null;
+		int idx = path.indexOf("/");
+		if (idx == -1) {
+			parts = new String[] { path };
+		} else {
+			parts = new String[] { path.substring(0, idx),
+					path.substring(idx + 1) };
+		}
+		return parts;
+	}
 
 }

@@ -40,7 +40,6 @@
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-ServiceSecurityProvider-common.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-ServiceSecurityProvider-client.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-opensaml-1.1.jar"/>
-	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-metadata-security.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-metadata-data.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-metadata-common.jar"/>
@@ -78,6 +77,7 @@
 	<classpathentry kind="lib" path="portals/liferay/lib/portal-kernel.jar"/>
 	<classpathentry kind="lib" path="portals/liferay/lib/portal-service.jar"/>
 	<classpathentry kind="lib" path="portlets/lib/dwr.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-metadataUtils.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/puretls.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jgss.jar"/>

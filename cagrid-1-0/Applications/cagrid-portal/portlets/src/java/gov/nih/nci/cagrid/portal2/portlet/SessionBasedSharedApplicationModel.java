@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal2.portlet.directory.DirectoryBean;
 import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryResultsBean;
+import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryCommand;
 import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryInstanceExecutor;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class SessionBasedSharedApplicationModel implements
 	private DirectoryBean selectedDirectoryBean;
 	private Integer selectedGridDataServiceId;
 	private UMLClass selectedUMLClass;
+	private CQLQueryCommand workingCqlQuery;
 
 	/**
 	 * 
@@ -157,6 +159,14 @@ public class SessionBasedSharedApplicationModel implements
 
 	public void setSelectedUMLClass(UMLClass selectedUMLClass) {
 		this.selectedUMLClass = selectedUMLClass;
+	}
+
+	public CQLQueryCommand getWorkingCqlQuery() {
+		return workingCqlQuery;
+	}
+
+	public void setWorkingCqlQuery(CQLQueryCommand workingCqlQuery) {
+		this.workingCqlQuery = workingCqlQuery;
 	}
 
 }

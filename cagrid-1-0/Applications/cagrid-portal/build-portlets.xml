@@ -128,5 +128,17 @@
 		<delete dir="${portlets.build.dir}" />
 		<delete dir="${portlets.test.build.dir}" />
 	</target>
+	
+	<target name="portlets:run-test" depends="portlets:build-war-dir">
+		<java classname="test.TestCriteriaBean">
+			<classpath>
+				<pathelement location="${portlets.build.war.dir}/WEB-INF/classes"/>
+				<fileset dir="${portlets.build.war.dir}/WEB-INF/lib">
+					<include name="*.jar"/>
+				</fileset>
+				<pathelement location="portlets/test/etc"/>
+			</classpath>
+		</java>
+	</target>	
 
 </project>

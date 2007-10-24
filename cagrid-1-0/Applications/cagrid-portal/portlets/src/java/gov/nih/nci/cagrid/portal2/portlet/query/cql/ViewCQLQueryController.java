@@ -63,7 +63,9 @@ public class ViewCQLQueryController extends AbstractController {
 	private TreeNode createNode(UMLClass umlClass) {
 		TreeNode rootNode = new TreeNode(null, "UMLClass:" + umlClass.getId());
 		rootNode.setLabel(umlClass.getClassName());
-		rootNode.setContent(new CQLQueryBean(umlClass));
+		CQLQueryBean bean = (CQLQueryBean) getApplicationContext().getBean("cqlQueryBeanPrototype");
+		bean.setUmlClass(umlClass);
+		rootNode.setContent(bean);
 		getCqlQueryTreeNodeListener().onOpen(rootNode, new HashMap());
 		return rootNode;
 	}

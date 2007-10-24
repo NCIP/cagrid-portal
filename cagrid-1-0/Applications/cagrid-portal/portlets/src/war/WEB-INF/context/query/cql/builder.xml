@@ -46,6 +46,14 @@
 		 	
 	</bean>
 	
+	<bean id="criteriaBeanPrototype" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.CriteriaBean" scope="prototype">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	
+	<bean id="cqlQueryBeanPrototype" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryBean" scope="prototype">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	
 	<bean id="editCriterionController" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.EditCriterionController">
 	
 		<!-- 
@@ -69,12 +77,13 @@
 			     - a render URL with operation set to 'viewCQLQuery' passes control to viewCQLQueryController
 		-->
 		<property name="commandName" value="criterionBean"/>
-		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlets.query.cql.CriterionBean"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.query.cql.CriterionBean"/>
 		<property name="sessionForm" value="true"/>
 		<property name="formView" value="editCriterion"/>
 		<property name="successOperation" value="viewCQLQuery"/>
 		<property name="umlClassTreeFacade" ref="umlClassTreeFacade"/>
 		<property name="cqlQueryTreeFacade" ref="cqlQueryTreeFacade"/>
+		<property name="cqlQueryTreeNodeListener" ref="cqlQueryTreeNodeListener"/>
 		
 		<property name="predicates">
 			<list>
@@ -92,6 +101,21 @@
 	
 	</bean>
 	
+	<bean id="buildCQLQueryController" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.BuildCQLQueryController">
+		<property name="cqlQueryTreeFacade" ref="cqlQueryTreeFacade"/>
+		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
+		<property name="successOperation" value="viewCQLQuery"/>
+		<property name="gridDataServiceDao" ref="gridDataServiceDao"/>
+	</bean>
+	
+	<bean id="editQueryModifierController" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.EditQueryModifierController" autowire="byName">
+		<property name="commandName" value="editQueryModifierCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.query.cql.EditQueryModifierCommand"/>
+		<property name="sessionForm" value="true"/>
+		<property name="formView" value="editQueryModifier"/>
+		<property name="successOperation" value="viewCQLQuery"/>
+	</bean>	
+	
 	<bean id="portletModeParameterHandlerMapping"
 		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
 		
@@ -105,20 +129,19 @@
 					<map>
 						<entry key="viewCQLQuery"
 							value-ref="viewCQLQueryController" />
-						<!-- 
-						<entry key="editQueryModifiers"
-							value-ref="editQueryModifiersController" />
-							-->
+
+						<entry key="editQueryModifier"
+							value-ref="editQueryModifierController" />
+
 						<entry key="editCriterion"
 							value-ref="editCriterionController" />
 							
 						<entry key="selectCriterion"
 							value-ref="viewUMLClassController" />
-							<!-- 
 
 						<entry key="buildCQLQuery"
 							value-ref="buildCQLQueryController" />
-						 -->
+
 					</map>
 				</entry>
 			</map>

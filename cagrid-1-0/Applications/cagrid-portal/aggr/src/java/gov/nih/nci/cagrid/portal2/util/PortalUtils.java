@@ -129,9 +129,13 @@ public class PortalUtils {
 	}
 	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
-		System.out.println(createHash("Howdy!"));
+//		System.out.println(createHash("Howdy!"));
+		Metadata m = getMetadata("http://caintegrator-stage.nci.nih.gov/wsrf/services/cagrid/CgomCgems", 10000);
+		StringWriter w = new StringWriter();
+		MetadataUtils.serializeDomainModel(m.dmodel, w);
+		System.out.println(w.getBuffer());
 
 	}
 

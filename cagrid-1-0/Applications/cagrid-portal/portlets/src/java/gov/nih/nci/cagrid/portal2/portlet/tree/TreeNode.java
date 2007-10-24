@@ -123,4 +123,13 @@ public class TreeNode<T> {
 	}
 
 
+	public String toString(){
+		return getPath();
+	}
+	public boolean equals(Object o){
+		return o instanceof TreeNode && ((TreeNode)o).toString().equals(toString());
+	}
+	public int hash(){
+		return toString().hashCode();
+	}
 }

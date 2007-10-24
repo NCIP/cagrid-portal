@@ -158,11 +158,13 @@ public class CQLQueryController extends AbstractController {
 	}
 
 	private CQLQueryCommand getCommand(PortletRequest request) {
-		CQLQueryCommand command = (CQLQueryCommand) request.getPortletSession()
-				.getAttribute(getCommandName());
+//		CQLQueryCommand command = (CQLQueryCommand) request.getPortletSession()
+//				.getAttribute(getCommandName());
+		CQLQueryCommand command = getSharedApplicationModel().getWorkingCqlQuery();
 		if (command == null) {
 			command = new CQLQueryCommand();
-			request.getPortletSession().setAttribute(getCommandName(), command);
+//			request.getPortletSession().setAttribute(getCommandName(), command);
+			getSharedApplicationModel().setWorkingCqlQuery(command);
 		}
 		return command;
 	}

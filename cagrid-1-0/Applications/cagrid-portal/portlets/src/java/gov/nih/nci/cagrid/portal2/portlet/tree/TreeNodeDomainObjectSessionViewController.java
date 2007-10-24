@@ -30,6 +30,7 @@ public class TreeNodeDomainObjectSessionViewController extends
 	private TreeFacade treeFacade;
 	private String pathParamName;
 	private HibernateTemplate hibernateTemplate;
+	private TreeNodeDomainObjectRetriever domainObjectRetriever = new DefaultTreeNodeDomainObjectRetriever();
 
 	/**
 	 * 
@@ -55,13 +56,11 @@ public class TreeNodeDomainObjectSessionViewController extends
 				logger.debug("No node found for path " + path);
 			}else{
 				
-				Object obj = node.getContent();
-				if(obj == null){
-					logger.debug("No content found in node " + path);					
-				}else if(!(obj instanceof DomainObject)){
-					logger.debug(obj.getClass().getName() + " is not instance of DomainObject");
+				DomainObject domainObject = getDomainObjectRetriever().retrieve(node);
+				if(domainObject == null){
+					logger.debug("No DomainObject instance found in " + path);
 				}else{
-					DomainObject domainObject = (DomainObject)obj;
+					
 					logger.debug("refreshing " + domainObject.getClass().getName() + ":" + domainObject.getId());
 					node.setContent(getHibernateTemplate().get(
 							domainObject.getClass(), domainObject.getId()));
@@ -95,6 +94,15 @@ public class TreeNodeDomainObjectSessionViewController extends
 
 	public void setTreeFacade(TreeFacade treeFacade) {
 		this.treeFacade = treeFacade;
+	}
+
+	public TreeNodeDomainObjectRetriever getDomainObjectRetriever() {
+		return domainObjectRetriever;
+	}
+
+	public void setDomainObjectRetriever(
+			TreeNodeDomainObjectRetriever domainObjectRetriever) {
+		this.domainObjectRetriever = domainObjectRetriever;
 	}
 
 }

@@ -19,15 +19,12 @@ public class OpenSessionInViewInterceptor extends
 	private static Log logger = LogFactory.getLog(OpenSessionInViewInterceptor.class);
 	
 	public void afterCompletion(WebRequest request, Exception ex) throws DataAccessException {
-		logger.debug("################ afterCompletion ###############");
 		super.afterCompletion(request, ex);
 	}
 	public void postHandle(WebRequest request, ModelMap model) throws DataAccessException {
-		logger.debug("################ postHandle ###############");
 		super.postHandle(request, model);
 	}
 	public void preHandle(WebRequest request) throws DataAccessException {
-		logger.debug("################ preHandle ###############");
 		super.preHandle(request);
 	}
 }

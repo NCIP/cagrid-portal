@@ -3,10 +3,13 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.query.cql;
 
-import java.util.Map;
-
 import gov.nih.nci.cagrid.portal2.portlet.tree.TreeNode;
 import gov.nih.nci.cagrid.portal2.portlet.tree.TreeNodeListener;
+
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -14,6 +17,8 @@ import gov.nih.nci.cagrid.portal2.portlet.tree.TreeNodeListener;
  */
 public class CQLQueryTreeNodeListener implements TreeNodeListener {
 
+	private static final Log logger = LogFactory.getLog(CQLQueryTreeNodeListener.class);
+	
 	/**
 	 * 
 	 */
@@ -50,8 +55,15 @@ public class CQLQueryTreeNodeListener implements TreeNodeListener {
 		for(AssociationBean assoc : parent.getAssociations()){
 			CriteriaBean child = assoc.getCriteriaBean();
 			TreeNode childNode = new TreeNode(node, assoc.getRoleName());
-			childNode.setLabel(assoc.getRoleName());
-			node.getChildren().add(childNode);
+			int idx = node.getChildren().indexOf(childNode);
+			if(idx == -1){
+				logger.debug("Adding new child " + childNode.getPath());
+				childNode.setLabel(assoc.getRoleName());
+				node.getChildren().add(childNode);	
+			}else{
+				logger.debug("Updating existing child " + childNode.getPath());
+				childNode = (TreeNode) node.getChildren().get(idx);
+			}
 			childNode.setContent(child);
 		}
 	}

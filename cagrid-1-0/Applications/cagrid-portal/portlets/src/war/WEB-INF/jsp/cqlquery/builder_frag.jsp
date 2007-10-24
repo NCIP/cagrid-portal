@@ -12,11 +12,9 @@
 				<ul>
 					<c:forEach var="att" items="${currNode.content.attributes}">
 						<li>
-							<portlet:renderURL var="editCriterionUrl">
-								<portlet:param name="operation" value="editCriterion"/>
-								<portlet:param name="path"><c:out value="${currNode.path}"/>.<c:out value="${att.name}"/></portlet:param>
-							</portlet:renderURL>
-							<a href="<c:out value="${editCriterionUrl}"/>"><c:out value="${att.name}"/></a>
+							<c:set var="thePath"><c:out value="${currNode.path}"/>/<c:out value="${att.name}"/></c:set>
+							<c:set var="thePathEncoded" value="${fn:replace(fn:replace(thePath, '/', '%2f'), ':', '%3a')}"/>
+							<a href="<c:out value="${fn:replace(editCriterionUrl, 'ATT_PATH', thePathEncoded)}"/>"><c:out value="${att.name}"/></a>
 						</li>
 					</c:forEach>
 				</ul>

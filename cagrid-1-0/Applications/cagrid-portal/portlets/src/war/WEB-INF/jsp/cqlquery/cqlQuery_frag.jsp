@@ -7,8 +7,9 @@
 	<jsp:attribute name="contentFragment">
 		<c:choose>
 			<c:when test="${!empty currNode.content}">
-				Querying: <c:out value="${currNode.content.umlClass.className}"/><br/>
+				
 				<c:if test="${fn:startsWith(currNode.name, 'UMLClass:')}">
+					Querying: <c:out value="${currNode.content.umlClass.className}"/><br/>
 					<c:set var="cqlQueryBean" value="${currNode.content}"/>
 					<%@ include file="/WEB-INF/jsp/cqlquery/cqlQueryRoot_frag.jsp"%>
 				</c:if>

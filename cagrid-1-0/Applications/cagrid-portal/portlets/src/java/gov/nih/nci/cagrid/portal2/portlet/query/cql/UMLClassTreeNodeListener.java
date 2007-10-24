@@ -3,7 +3,6 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.query.cql;
 
-import gov.nih.nci.cagrid.portal2.domain.DomainObject;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.SourceUMLAssociationEdge;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.TargetUMLAssociationEdge;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLAssociation;

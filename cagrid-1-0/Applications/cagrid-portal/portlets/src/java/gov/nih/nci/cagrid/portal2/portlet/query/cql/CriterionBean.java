@@ -7,10 +7,10 @@ import gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLAttribute;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
+ * 
  */
 public class CriterionBean {
-	
+
 	private UMLAttribute umlAttribute;
 	private String predicate;
 	private String value;
@@ -46,4 +46,24 @@ public class CriterionBean {
 		this.value = value;
 	}
 
+	public boolean equals(Object o) {
+		boolean eq = false;
+		if (o instanceof CriterionBean) {
+			CriterionBean b = (CriterionBean) o;
+			eq = b.toString().equals(toString());
+		}
+		return eq;
+	}
+	public String toString(){
+		String attName = null;
+		int attId = -1;
+		if(getUmlAttribute() != null){
+			attName = getUmlAttribute().getName();
+			attId = getUmlAttribute().getId();
+		}
+		return "[" + attName + ":" + attId + "][" + getPredicate() + "][" + getValue() + "]"; 
+	}
+	public int hash(){
+		return toString().hashCode();
+	}
 }
