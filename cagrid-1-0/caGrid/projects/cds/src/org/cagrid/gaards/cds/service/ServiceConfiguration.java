@@ -41,6 +41,30 @@ public class ServiceConfiguration {
 	}
 	
 	
+	private String cdsConfiguration;
+	
+	private String cdsProperties;
+	
+
+	
+	public String getCdsConfiguration() {
+		return ContainerConfig.getBaseDirectory() + File.separator + cdsConfiguration;
+	}
+	
+	
+	public void setCdsConfiguration(String cdsConfiguration) {
+		this.cdsConfiguration = cdsConfiguration;
+	}
+
+	
+	public String getCdsProperties() {
+		return ContainerConfig.getBaseDirectory() + File.separator + cdsProperties;
+	}
+	
+	
+	public void setCdsProperties(String cdsProperties) {
+		this.cdsProperties = cdsProperties;
+	}
 
 	
 }

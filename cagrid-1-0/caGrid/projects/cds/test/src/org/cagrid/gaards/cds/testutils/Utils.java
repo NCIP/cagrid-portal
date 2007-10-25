@@ -1,5 +1,6 @@
 package org.cagrid.gaards.cds.testutils;
 
+import org.cagrid.gaards.cds.service.CDS;
 import org.cagrid.gaards.cds.service.ConfigurationConstants;
 import org.cagrid.gaards.cds.service.DelegatedCredentialManager;
 import org.cagrid.gaards.cds.service.KeyManager;
@@ -21,6 +22,12 @@ public class Utils {
 		cfg.setLocation(new ClassPathResource(Constants.CDS_PROPERTIES));
 		cfg.postProcessBeanFactory(factory);
 		return factory;
+	}
+
+	public static CDS getCDS() throws Exception {
+		XmlBeanFactory factory = loadConfiguration();
+		return (CDS) factory
+				.getBean(ConfigurationConstants.CDS_BEAN);
 	}
 
 	public static DelegatedCredentialManager getDelegatedCredentialManager()

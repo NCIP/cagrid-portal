@@ -274,9 +274,9 @@ public class DelegatedCredentialManager {
 		}
 	}
 
-	public synchronized void approveDelegation(String callerGridIdentity,
-			DelegationSigningResponse res) throws CDSInternalFault,
-			DelegationFault, PermissionDeniedFault {
+	public synchronized DelegationIdentifier approveDelegation(
+			String callerGridIdentity, DelegationSigningResponse res)
+			throws CDSInternalFault, DelegationFault, PermissionDeniedFault {
 		DelegationIdentifier id = res.getDelegationIdentifier();
 		if (this.delegationExists(id)) {
 			DelegationRecord r = getDelegationRecord(id);
@@ -406,7 +406,7 @@ public class DelegatedCredentialManager {
 			} finally {
 				this.db.releaseConnection(conn);
 			}
-
+			return id;
 		} else {
 			throw Errors
 					.getDelegationFault(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
