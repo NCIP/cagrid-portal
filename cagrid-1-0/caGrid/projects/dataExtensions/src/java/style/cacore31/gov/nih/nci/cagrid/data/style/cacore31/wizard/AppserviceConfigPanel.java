@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.style.cacore31.wizard;
 
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
+import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.style.sdkstyle.wizard.AppserviceConfigCompletionListener;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
@@ -13,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -26,6 +28,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 
+import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.message.SimpleValidationMessage;
+import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.util.ValidationUtils;
+import com.jgoodies.validation.view.ValidationComponentUtils;
+
 
 /** 
  *  AppserviceConfigPanel
@@ -35,9 +45,12 @@ import javax.swing.event.DocumentEvent;
  * @author David Ervin
  * 
  * @created Mar 23, 2007 3:35:47 PM
- * @version $Id: AppserviceConfigPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: AppserviceConfigPanel.java,v 1.2 2007-10-25 17:42:49 dervin Exp $ 
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
+    // keys for validation components
+    public static final String KEY_APPSERVICE_URL = "Application service URL";
+    public static final String KEY_CSM_CONTEXT = "CSM context name";
 
     public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
     public static final String CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
@@ -52,12 +65,21 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
     private JTextField csmContextTextField = null;
     private JButton copyUrlButton = null;
     private JPanel optionsPanel = null;
+    private IconFeedbackPanel validationPanel = null;
     
     private List<AppserviceConfigCompletionListener> completionListeners;
+    private ValidationResultModel validationModel;
+    private DocumentChangeAdapter documentChangeListener;
     
     public AppserviceConfigPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
         this.completionListeners = new ArrayList<AppserviceConfigCompletionListener>();
+        this.validationModel = new DefaultValidationResultModel();
+        this.documentChangeListener = new DocumentChangeAdapter() {
+            public void documentEdited(DocumentEvent e) {
+                validateInput();
+            }
+        };
         initialize();
     }
     
@@ -65,47 +87,59 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
     private void initialize() {
         // initialize values for each of the fields
         initializeValues();
-        // set up the interface layout
-        GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-        gridBagConstraints21.gridx = 0;
-        gridBagConstraints21.gridwidth = 3;
-        gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints21.gridy = 0;
-        GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-        gridBagConstraints11.gridx = 2;
-        gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints11.gridy = 2;
-        GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-        gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints3.gridy = 2;
-        gridBagConstraints3.weightx = 1.0;
-        gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints3.gridx = 1;
-        GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-        gridBagConstraints2.gridx = 0;
-        gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints2.gridy = 2;
-        GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-        gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints1.gridy = 1;
-        gridBagConstraints1.weightx = 1.0;
-        gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints1.gridwidth = 2;
-        gridBagConstraints1.gridx = 1;
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.gridy = 1;
-        this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(399, 95));
-        this.add(getUrlLabel(), gridBagConstraints);
-        this.add(getUrlTextField(), gridBagConstraints1);
-        this.add(getCsmContextLabel(), gridBagConstraints2);
-        this.add(getCsmContextTextField(), gridBagConstraints3);
-        this.add(getCopyUrlButton(), gridBagConstraints11);
-        this.add(getOptionsPanel(), gridBagConstraints21);
+        this.setLayout(new GridLayout());
+        this.add(getValidationPanel());
+        // set up for validation
+        configureValidation();
+    }
+    
+    
+    private IconFeedbackPanel getValidationPanel() {
+        if (validationPanel == null) {
+            JPanel holder = new JPanel();
+            // set up the interface layout
+            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+            gridBagConstraints21.gridx = 0;
+            gridBagConstraints21.gridwidth = 3;
+            gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints21.gridy = 0;
+            GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+            gridBagConstraints11.gridx = 2;
+            gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints11.gridy = 2;
+            GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+            gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints3.gridy = 2;
+            gridBagConstraints3.weightx = 1.0;
+            gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints3.gridx = 1;
+            GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+            gridBagConstraints2.gridx = 0;
+            gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints2.gridy = 2;
+            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+            gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints1.gridy = 1;
+            gridBagConstraints1.weightx = 1.0;
+            gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints1.gridwidth = 2;
+            gridBagConstraints1.gridx = 1;
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.gridy = 1;
+            holder.setLayout(new GridBagLayout());
+            holder.add(getUrlLabel(), gridBagConstraints);
+            holder.add(getUrlTextField(), gridBagConstraints1);
+            holder.add(getCsmContextLabel(), gridBagConstraints2);
+            holder.add(getCsmContextTextField(), gridBagConstraints3);
+            holder.add(getCopyUrlButton(), gridBagConstraints11);
+            holder.add(getOptionsPanel(), gridBagConstraints21);
+            validationPanel = new IconFeedbackPanel(validationModel, holder);
+        }
+        return validationPanel;
     }
 
 
@@ -198,6 +232,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                     }
                 }
             });
+            urlTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return urlTextField;
     }
@@ -252,6 +287,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                         ErrorDialog.showErrorDialog("Error storing use CSM property: " 
                             + ex.getMessage(), ex);
                     }
+                    validateInput();
                 }
             });
         }
@@ -293,6 +329,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                     }
                 }
             });
+            csmContextTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return csmContextTextField;
     }
@@ -311,6 +348,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     String url = getUrlTextField().getText();
                     getCsmContextTextField().setText(url);
+                    validateInput();
                 }
             });
         }
@@ -354,6 +392,11 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
     }
     
     
+    // --------------------
+    // Completion listeners
+    // --------------------
+    
+    
     public void addCompletionListener(AppserviceConfigCompletionListener listener) {
         completionListeners.add(listener);
     }
@@ -368,5 +411,46 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
         for (AppserviceConfigCompletionListener listener : completionListeners) {
             listener.completionStatusChanged(complete);
         }
+    }
+    
+    
+    // ------------------
+    // Validation helpers
+    // ------------------
+    
+    
+    private void configureValidation() {
+        ValidationComponentUtils.setMessageKey(getUrlTextField(), KEY_APPSERVICE_URL);
+        ValidationComponentUtils.setMessageKey(getCsmContextTextField(), KEY_CSM_CONTEXT);
+        
+        validateInput();
+        updateComponentTreeSeverity();
+    }
+    
+    
+    private void validateInput() {
+        ValidationResult result = new ValidationResult();
+        
+        if (ValidationUtils.isBlank(getUrlTextField().getText())) {
+            result.add(new SimpleValidationMessage(
+                KEY_APPSERVICE_URL + " should not be blank", Severity.WARNING, KEY_APPSERVICE_URL));
+        }
+        if (getUseCsmCheckBox().isSelected() 
+            && ValidationUtils.isBlank(getCsmContextTextField().getText())) {
+            result.add(new SimpleValidationMessage(
+                KEY_CSM_CONTEXT + " must not be blank", Severity.ERROR, KEY_CSM_CONTEXT));
+        }
+    
+        validationModel.setResult(result);
+        
+        updateComponentTreeSeverity();
+        // update next button enabled
+        setNextEnabled(!validationModel.hasErrors());
+    }
+    
+    
+    private void updateComponentTreeSeverity() {
+        ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
+        ValidationComponentUtils.updateComponentTreeSeverityBackground(this, validationModel.getResult());
     }
 }
