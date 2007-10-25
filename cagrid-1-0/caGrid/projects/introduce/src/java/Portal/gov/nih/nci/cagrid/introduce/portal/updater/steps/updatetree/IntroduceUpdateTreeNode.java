@@ -5,8 +5,9 @@ import gov.nih.nci.cagrid.introduce.beans.software.IntroduceRevType;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools;
 
 import java.awt.Font;
 import java.util.StringTokenizer;
@@ -75,7 +76,7 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
                         latestRev = tryRev;
                     }
                 }
-                int currentRev = Integer.parseInt(CommonTools.getIntroducePatchVersion());
+                int currentRev = Integer.parseInt(IntroduceEnginePropertiesManager.getIntroducePatchVersion());
 
                 if (currentRev < latestRev.getPatchVersion()) {
                     IntroduceRevUpdateTreeNode revNode = new IntroduceRevUpdateTreeNode(

@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
@@ -23,7 +24,7 @@ import com.atomicobject.haste.framework.Step;
  * Step to create a BDT service using the Introduce engine
  * 
  * @created Aug 22, 2006
- * @version $Id: CreationStep.java,v 1.9 2007-06-25 19:06:17 dervin Exp $
+ * @version $Id: CreationStep.java,v 1.10 2007-10-25 16:48:28 hastings Exp $
  */
 public class CreationStep extends Step {
     private static final String BDT_START_RETURNS_CLIENT = "bdtStartReturnsClient";
@@ -40,7 +41,7 @@ public class CreationStep extends Step {
 
     public void runStep() throws Throwable {
         System.out.println("Creating service...");
-        String cmd = CommonTools.getAntSkeletonCreationCommand(introduceDir, CreationTest.SERVICE_NAME,
+        String cmd = AntTools.getAntSkeletonCreationCommand(introduceDir, CreationTest.SERVICE_NAME,
             CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, "bdt");
         Process p = CommonTools.createAndOutputProcess(cmd);
         new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
@@ -51,7 +52,7 @@ public class CreationStep extends Step {
         addBdtMethods();
 
         System.out.println("Invoking post creation processes...");
-        cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, CreationTest.SERVICE_NAME,
+        cmd = AntTools.getAntSkeletonPostCreationCommand(introduceDir, CreationTest.SERVICE_NAME,
             CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, "bdt");
         p = CommonTools.createAndOutputProcess(cmd);
         new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
@@ -60,7 +61,7 @@ public class CreationStep extends Step {
         assertTrue("Service post creation process failed", p.exitValue() == 0);
 
         System.out.println("Building created service...");
-        cmd = CommonTools.getAntAllCommand(CreationTest.SERVICE_DIR);
+        cmd = AntTools.getAntAllCommand(CreationTest.SERVICE_DIR);
         p = CommonTools.createAndOutputProcess(cmd);
         new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
         new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();

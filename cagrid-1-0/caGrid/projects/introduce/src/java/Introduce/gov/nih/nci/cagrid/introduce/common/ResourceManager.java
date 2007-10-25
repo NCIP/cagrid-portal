@@ -59,7 +59,7 @@ public class ResourceManager {
         String userHome = System.getProperty("user.home");
         File userHomeF = new File(userHome);
         File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".introduce_"
-            + CommonTools.getIntroduceVersion().replace(".", "_"));
+            + IntroduceEnginePropertiesManager.getIntroduceVersion().replace(".", "_"));
         if (!caGridCache.exists()) {
             caGridCache.mkdirs();
         }

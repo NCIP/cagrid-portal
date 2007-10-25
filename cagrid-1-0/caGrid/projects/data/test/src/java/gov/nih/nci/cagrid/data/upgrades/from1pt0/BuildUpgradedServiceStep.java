@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.upgrades.from1pt0;
 
+import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
@@ -12,7 +13,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: BuildUpgradedServiceStep.java,v 1.3 2007-04-16 13:36:12 dervin Exp $ 
+ * @version $Id: BuildUpgradedServiceStep.java,v 1.4 2007-10-25 16:48:29 hastings Exp $ 
  */
 public class BuildUpgradedServiceStep extends Step {
 	
@@ -31,7 +32,7 @@ public class BuildUpgradedServiceStep extends Step {
 	
 	
 	private void cleanService() throws Exception {
-		String cmd = CommonTools.getAntCommand("clean", new File(serviceDir).getAbsolutePath());
+		String cmd = AntTools.getAntCommand("clean", new File(serviceDir).getAbsolutePath());
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		assertTrue("Call to '" + cmd + "' failed", p.exitValue() == 0);
@@ -40,7 +41,7 @@ public class BuildUpgradedServiceStep extends Step {
 	
 	private void invokeBuildProcess() throws Exception {
 		System.out.println("Building created service...");
-		String cmd = CommonTools.getAntAllCommand(serviceDir);
+		String cmd = AntTools.getAntAllCommand(serviceDir);
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		assertTrue("Call to '" + cmd + "' failed", p.exitValue() == 0);	

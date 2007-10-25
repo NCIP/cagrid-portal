@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
@@ -35,7 +36,7 @@ public class CreationStep extends Step {
 	public void runStep() throws Throwable {
 		System.out.println("Creating service...");
 
-		String cmd = CommonTools.getAntSkeletonCreationCommand(introduceDir, serviceInfo.getName(), 
+		String cmd = AntTools.getAntSkeletonCreationCommand(introduceDir, serviceInfo.getName(), 
 			serviceInfo.getDir(), serviceInfo.getPackageName(), serviceInfo.getNamespace(), serviceInfo.getExtensions());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process createSkeletonProcess = CommonTools.createAndOutputProcess(cmd);
@@ -49,7 +50,7 @@ public class CreationStep extends Step {
         postSkeletonCreation();
 		
 		System.out.println("Invoking post creation processes...");
-		cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, serviceInfo.getName(),
+		cmd = AntTools.getAntSkeletonPostCreationCommand(introduceDir, serviceInfo.getName(),
 			serviceInfo.getDir(), serviceInfo.getPackageName(), serviceInfo.getNamespace(), getServiceExtensions());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process postCreateProcess = CommonTools.createAndOutputProcess(cmd);
@@ -63,7 +64,7 @@ public class CreationStep extends Step {
         postSkeletonPostCreation();
 
 		System.out.println("Building created service...");
-		cmd = CommonTools.getAntAllCommand(serviceInfo.getDir());
+		cmd = AntTools.getAntAllCommand(serviceInfo.getDir());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process antAllProcess = CommonTools.createAndOutputProcess(cmd);
         new StreamGobbler(antAllProcess.getInputStream(), 

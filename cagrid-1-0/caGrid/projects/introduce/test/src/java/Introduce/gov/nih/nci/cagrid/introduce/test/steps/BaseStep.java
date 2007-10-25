@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.test.steps;
 
+import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
@@ -35,7 +36,7 @@ public abstract class BaseStep extends Step {
 
 	public void buildStep() throws Throwable {
 		if (build) {
-			String cmd = CommonTools
+			String cmd = AntTools
 				.getAntAllCommand(new File(baseDir + File.separator + serviceDir).getAbsolutePath());
 
 			Process p = CommonTools.createAndOutputProcess(cmd);

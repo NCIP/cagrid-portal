@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
@@ -19,7 +20,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: RebuildServiceStep.java,v 1.8 2007-06-21 16:21:15 dervin Exp $ 
+ * @version $Id: RebuildServiceStep.java,v 1.9 2007-10-25 16:48:29 hastings Exp $ 
  */
 public class RebuildServiceStep extends Step {
 	
@@ -37,7 +38,7 @@ public class RebuildServiceStep extends Step {
 		System.out.println("Running step: " + getClass().getName());
 		
 		System.out.println("Invoking post creation processes...");
-		String cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, 
+		String cmd = AntTools.getAntSkeletonPostCreationCommand(introduceDir, 
             serviceInfo.getName(), serviceInfo.getDir(), serviceInfo.getPackageName(), 
             serviceInfo.getNamespace(), getServiceExtensions());
         System.out.println("Invoking ant:");
@@ -49,7 +50,7 @@ public class RebuildServiceStep extends Step {
 		assertTrue("Service post creation process failed", p.exitValue() == 0);
 
 		System.out.println("Building created service...");
-		cmd = CommonTools.getAntAllCommand(serviceInfo.getDir());
+		cmd = AntTools.getAntAllCommand(serviceInfo.getDir());
         System.out.println("Invoking ant:");
         System.out.println(cmd);
 		p = CommonTools.createAndOutputProcess(cmd);

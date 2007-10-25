@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.statistics;
 
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -21,7 +22,7 @@ public class StatisticsServer {
 
 
 	public StatisticsServer() {
-		this.port = CommonTools.getStatisticPort();
+		this.port = IntroduceEnginePropertiesManager.getStatisticPort();
 	}
 
 

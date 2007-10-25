@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.extensions.sdk.discovery;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
+import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
@@ -228,7 +229,7 @@ public class SDKExecutor {
     private static void invokeAnt(String targets, File sdkDirectory) throws SDKExecutionException {
         Process p;
         try {
-            String cmd = CommonTools.getAntCommand(targets, sdkDirectory.getPath());
+            String cmd = AntTools.getAntCommand(targets, sdkDirectory.getPath());
             LOG.debug("Running ant command:" + cmd);
             p = CommonTools.createAndOutputProcess(cmd);
             p.waitFor();

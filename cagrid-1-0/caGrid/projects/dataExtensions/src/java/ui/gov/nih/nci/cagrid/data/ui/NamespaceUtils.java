@@ -32,7 +32,7 @@ import org.projectmobius.protocol.gme.SchemaNode;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Jul 21, 2006
- * @version $Id: NamespaceUtils.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: NamespaceUtils.java,v 1.2 2007-10-25 16:48:28 hastings Exp $
  */
 public class NamespaceUtils {
 
@@ -141,7 +141,7 @@ public class NamespaceUtils {
             nsType.setLocation("./" + ii.getFileName());
 
             // popualte the schema elements
-            gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(nsType, XMLUtilities
+            gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools.setSchemaElements(nsType, XMLUtilities
                 .stringToDocument(schemaContents));
             // write the schema and its imports to the filesystem
             gmeHandle.cacheSchema(namespace, schemaDir);

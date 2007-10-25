@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
-import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.GridBagConstraints;

@@ -6,13 +6,9 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.base.SyncBase;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
@@ -21,9 +17,10 @@ import gov.nih.nci.cagrid.introduce.codegen.properties.SyncProperties;
 import gov.nih.nci.cagrid.introduce.codegen.serializers.SyncSerialization;
 import gov.nih.nci.cagrid.introduce.codegen.services.SyncServices;
 import gov.nih.nci.cagrid.introduce.codegen.utils.SyncUtils;
+import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.ProviderUtils;
-import gov.nih.nci.cagrid.introduce.common.ResourceManager;
+import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
+import gov.nih.nci.cagrid.introduce.common.ProviderTools;
 import gov.nih.nci.cagrid.introduce.common.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
@@ -42,7 +39,6 @@ import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceXSDTemplate;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -240,9 +236,9 @@ public class SyncTools {
         ServiceInformation info = new ServiceInformation(this.baseDirectory);
 
         if ((info.getServiceDescriptor().getIntroduceVersion() == null)
-            || !info.getServiceDescriptor().getIntroduceVersion().equals(CommonTools.getIntroduceVersion())) {
+            || !info.getServiceDescriptor().getIntroduceVersion().equals(IntroduceEnginePropertiesManager.getIntroduceVersion())) {
             throw new Exception("Introduce version in project (" + info.getServiceDescriptor().getIntroduceVersion()
-                + ") does not match version provided by Introduce Toolkit ( " + CommonTools.getIntroduceVersion()
+                + ") does not match version provided by Introduce Toolkit ( " + IntroduceEnginePropertiesManager.getIntroduceVersion()
                 + " )");
         }
 
@@ -691,13 +687,13 @@ public class SyncTools {
                 //we now need to process the resource framework options and add what
                 //ever providers need to be added
                 if (newService.getResourceFrameworkOptions().getLifetime()!=null) {
-                    ProviderUtils.addLifetimeResourceProvider(newService, info);
+                    ProviderTools.addLifetimeResourceProvider(newService, info);
                 }
                 if(newService.getResourceFrameworkOptions().getNotification()!=null){
-                    ProviderUtils.addSubscribeResourceProvider(newService, info);
+                    ProviderTools.addSubscribeResourceProvider(newService, info);
                 }
                 if(newService.getResourceFrameworkOptions().getResourcePropertyManagement()!=null){
-                    ProviderUtils.addResourcePropertiesManagementResourceFrameworkOption(newService, info);
+                    ProviderTools.addResourcePropertiesManagementResourceFrameworkOption(newService, info);
                 }
                
 
@@ -820,7 +816,7 @@ public class SyncTools {
 
 
     private void mergeNamespaces() throws Exception {
-        String cmd = CommonTools.getAntMergeCommand(this.baseDirectory.getAbsolutePath());
+        String cmd = AntTools.getAntMergeCommand(this.baseDirectory.getAbsolutePath());
         Process p = CommonTools.createAndOutputProcess(cmd);
         p.waitFor();
         if (p.exitValue() != 0) {

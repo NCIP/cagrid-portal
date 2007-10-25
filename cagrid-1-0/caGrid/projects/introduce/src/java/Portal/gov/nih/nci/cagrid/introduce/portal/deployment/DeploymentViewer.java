@@ -7,7 +7,9 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
+import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
@@ -229,7 +231,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
                         .getServiceExtension(element.getName());
                     if (edesc != null) {
                         try {
-                            ServiceDeploymentUIPanel depPanel = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
+                            ServiceDeploymentUIPanel depPanel = gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools
                                 .getServiceDeploymentUIPanel(element.getName(), info);
                             if (depPanel != null) {
                                 mainPanel.addTab(edesc.getDisplayName(), depPanel);
@@ -286,7 +288,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
                         PortalResourceManager.getInstance().getGridPortal(), "Deployment") {
 
                         public void process() {
-                            StatisticsClient.sendDeployedServiceStat(CommonTools.getIntroduceVersion(), 
+                            StatisticsClient.sendDeployedServiceStat(IntroduceEnginePropertiesManager.getIntroduceVersion(), 
                                 info.getServiceDescriptor().getServices().getService(0).getName(), 
                                 info.getServices().getService(0).getNamespace(), 
                                 (String) getDeploymentTypeSelector().getSelectedItem());
@@ -349,11 +351,11 @@ public class DeploymentViewer extends GridPortalBaseFrame {
                             try {
                                 String cmd = "";
                                 if (((String) getDeploymentTypeSelector().getSelectedItem()).equals(GLOBUS)) {
-                                    cmd = CommonTools.getAntDeployGlobusCommand(serviceDirectory.getAbsolutePath());
+                                    cmd = AntTools.getAntDeployGlobusCommand(serviceDirectory.getAbsolutePath());
                                 } else if (((String) getDeploymentTypeSelector().getSelectedItem()).equals(TOMCAT)) {
-                                    cmd = CommonTools.getAntDeployTomcatCommand(serviceDirectory.getAbsolutePath());
+                                    cmd = AntTools.getAntDeployTomcatCommand(serviceDirectory.getAbsolutePath());
                                 } else {
-                                    cmd = CommonTools.getAntDeployJBossCommand(serviceDirectory.getAbsolutePath());
+                                    cmd = AntTools.getAntDeployJBossCommand(serviceDirectory.getAbsolutePath());
                                 }
                                 Process p = CommonTools.createAndOutputProcess(cmd);
                                 p.waitFor();

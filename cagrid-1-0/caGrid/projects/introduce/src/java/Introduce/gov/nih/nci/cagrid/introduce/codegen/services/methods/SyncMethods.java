@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.ProviderUtils;
+import gov.nih.nci.cagrid.introduce.common.ProviderTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 
@@ -183,7 +183,7 @@ public class SyncMethods extends SyncTool {
                             .getName());
                         MethodType oldMethod = CommonTools.getMethod(oldService.getMethods(), methodName);
                         if (oldMethod.isIsProvided()) {
-                            ProviderUtils.removeProviderFromServiceConfig(service, oldMethod.getProviderInformation().getProviderClass(),
+                            ProviderTools.removeProviderFromServiceConfig(service, oldMethod.getProviderInformation().getProviderClass(),
                                 getServiceInformation());
                         }
                     } catch (Exception e) {

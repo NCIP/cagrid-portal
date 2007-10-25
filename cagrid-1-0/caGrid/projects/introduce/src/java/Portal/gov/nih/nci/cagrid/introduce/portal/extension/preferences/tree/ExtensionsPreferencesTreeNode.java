@@ -1,9 +1,13 @@
-package gov.nih.nci.cagrid.introduce.portal.preferences;
+package gov.nih.nci.cagrid.introduce.portal.extension.preferences.tree;
 
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionsPreferencesConfigurationPanel;
+import gov.nih.nci.cagrid.introduce.portal.extension.preferences.ExtensionPreferenceTool;
+import gov.nih.nci.cagrid.introduce.portal.extension.preferences.ExtensionsPreferencesConfigurationPanel;
+import gov.nih.nci.cagrid.introduce.portal.preferences.PreferenceConfigurationContainerPanel;
+import gov.nih.nci.cagrid.introduce.portal.preferences.PreferencesConfigurationPanelAdapter;
+import gov.nih.nci.cagrid.introduce.portal.preferences.PreferencesTypeTreeNode;
 
 import java.util.List;
 
@@ -28,7 +32,7 @@ public class ExtensionsPreferencesTreeNode extends PreferencesTypeTreeNode {
 		for (int i = 0; i < serviceExtensions.size(); i++) {
 			ServiceExtensionDescriptionType service = (ServiceExtensionDescriptionType) serviceExtensions.get(i);
 			try {
-				ExtensionsPreferencesConfigurationPanel panel = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
+				ExtensionsPreferencesConfigurationPanel panel = ExtensionPreferenceTool
 					.getExtensionsPreferencesConfigurationPanel(service.getName());
 				if (panel != null) {
 					ExtensionPreferencesTreeNode node = new ExtensionPreferencesTreeNode(panel, service
@@ -45,7 +49,7 @@ public class ExtensionsPreferencesTreeNode extends PreferencesTypeTreeNode {
 			DiscoveryExtensionDescriptionType discovery = (DiscoveryExtensionDescriptionType) discoveryExtensions
 				.get(i);
 			try {
-				ExtensionsPreferencesConfigurationPanel panel = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
+				ExtensionsPreferencesConfigurationPanel panel = ExtensionPreferenceTool
 					.getExtensionsPreferencesConfigurationPanel(discovery.getName());
 				if (panel != null) {
 					ExtensionPreferencesTreeNode node = new ExtensionPreferencesTreeNode(panel, discovery

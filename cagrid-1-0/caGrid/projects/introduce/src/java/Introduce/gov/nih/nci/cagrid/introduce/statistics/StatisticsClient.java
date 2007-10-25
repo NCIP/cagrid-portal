@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.statistics;
 
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -30,14 +31,14 @@ public class StatisticsClient {
 			
 			message = magicNumber + message;
 
-			if (CommonTools.getCollectStats()) {
+			if (IntroduceEnginePropertiesManager.getCollectStats()) {
 
 				// Get the internet address of the specified host
-				InetAddress address = InetAddress.getByName(CommonTools.getStatisticSite());
+				InetAddress address = InetAddress.getByName(IntroduceEnginePropertiesManager.getStatisticSite());
 
 				// Initialize a datagram packet with data and address
 				DatagramPacket packet = new DatagramPacket(message.getBytes(), message.getBytes().length, address,
-					CommonTools.getStatisticPort());
+				    IntroduceEnginePropertiesManager.getStatisticPort());
 
 				// Create a datagram socket, send the packet through it, close
 				// it.

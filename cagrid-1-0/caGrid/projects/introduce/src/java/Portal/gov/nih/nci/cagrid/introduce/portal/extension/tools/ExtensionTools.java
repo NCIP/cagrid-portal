@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.extension;
+package gov.nih.nci.cagrid.introduce.portal.extension.tools;
 
 import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
@@ -18,6 +18,13 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
+import gov.nih.nci.cagrid.introduce.portal.extension.AbstractMethodAuthorizationPanel;
+import gov.nih.nci.cagrid.introduce.portal.extension.AbstractServiceAuthorizationPanel;
+import gov.nih.nci.cagrid.introduce.portal.extension.CreationExtensionUIDialog;
+import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
+import gov.nih.nci.cagrid.introduce.portal.extension.ServiceDeploymentUIPanel;
+import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
+import gov.nih.nci.cagrid.introduce.portal.extension.preferences.ExtensionsPreferencesConfigurationPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.Frame;
@@ -124,20 +131,6 @@ public class ExtensionTools {
             Object obj = con.newInstance(new Object[]{rpData, schemaFile, schemaDir});
 
             return (ResourcePropertyEditorPanel) obj;
-        }
-        return null;
-    }
-
-
-    public static ExtensionsPreferencesConfigurationPanel getExtensionsPreferencesConfigurationPanel(
-        String extensionName) throws Exception {
-        ExtensionDescription extensionDesc = ExtensionsLoader.getInstance().getExtension(extensionName);
-        if ((extensionDesc != null) && (extensionDesc.getExtensionPreferencesPanel() != null)
-            && !extensionDesc.getExtensionPreferencesPanel().equals("")) {
-            Class c = Class.forName(extensionDesc.getExtensionPreferencesPanel());
-            Constructor con = c.getConstructor(new Class[]{ExtensionDescription.class});
-            Object obj = con.newInstance(new Object[]{extensionDesc});
-            return (ExtensionsPreferencesConfigurationPanel) obj;
         }
         return null;
     }

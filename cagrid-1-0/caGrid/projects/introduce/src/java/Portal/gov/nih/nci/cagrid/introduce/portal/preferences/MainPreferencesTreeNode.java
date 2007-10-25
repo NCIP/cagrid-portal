@@ -1,5 +1,11 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
+
+
+
+
+import gov.nih.nci.cagrid.introduce.portal.extension.preferences.tree.ExtensionsPreferencesTreeNode;
+
 import javax.swing.tree.DefaultTreeModel;
 
 

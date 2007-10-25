@@ -132,7 +132,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dorian-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dorian-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dorian-tests.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dorian-ui.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-evs-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-evs-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-evs-service.jar"/>
@@ -147,7 +146,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-tests.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-ui.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-updater.jar"/>

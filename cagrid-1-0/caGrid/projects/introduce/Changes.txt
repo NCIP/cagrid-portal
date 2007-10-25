@@ -1,4 +1,7 @@
 1.1 - 1.2
+-- added
+-- added ws-notification support as a resource framework option
+-- added support for configuring resource framework options from a list of options
 -- Fixed problems with finding first letter upper cased methods for addition and removal
 -- Fixed problems when having introduce imported methods that have no package for the return type (void)
 -- Refactored the Resource framework to be one set of templates instead of three

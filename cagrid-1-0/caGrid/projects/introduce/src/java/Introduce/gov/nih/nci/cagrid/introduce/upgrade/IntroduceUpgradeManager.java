@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.upgrade;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
@@ -48,7 +49,7 @@ public class IntroduceUpgradeManager {
         try {
             String serviceVersion = UpgradeUtilities.getCurrentServiceVersion(pathToService + File.separator
                 + IntroduceConstants.INTRODUCE_XML_FILE);
-            if ((serviceVersion == null) || !serviceVersion.equals(CommonTools.getIntroduceVersion())) {
+            if ((serviceVersion == null) || !serviceVersion.equals(IntroduceEnginePropertiesManager.getIntroduceVersion())) {
                 return true;
             }
             return false;
@@ -77,7 +78,7 @@ public class IntroduceUpgradeManager {
         if (canBeUpgraded(serviceVersion)) {
 
             // upgrade the introduce service
-            String version = CommonTools.getIntroduceVersion();
+            String version = IntroduceEnginePropertiesManager.getIntroduceVersion();
             if (version != null) {
 
                 String vers = UpgradeUtilities.getCurrentServiceVersion(pathToService + File.separator

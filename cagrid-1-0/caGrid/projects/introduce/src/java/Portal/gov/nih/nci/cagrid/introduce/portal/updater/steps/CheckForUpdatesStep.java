@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.updater.steps;
 
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree.UpdateTree;
 
 import java.awt.Dimension;
@@ -265,7 +266,7 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 	private JTextField getUpdateSiteTextField() {
 		if (updateSiteTextField == null) {
 			updateSiteTextField = new JTextField();
-			updateSiteTextField.setText(CommonTools.getIntroduceUpdateSite());
+			updateSiteTextField.setText(IntroduceEnginePropertiesManager.getIntroduceUpdateSite());
 		}
 		return updateSiteTextField;
 	}

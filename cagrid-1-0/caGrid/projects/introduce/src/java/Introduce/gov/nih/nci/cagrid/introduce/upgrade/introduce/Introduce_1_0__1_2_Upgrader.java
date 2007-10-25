@@ -8,7 +8,7 @@ import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncHelper;
 import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.ProviderUtils;
+import gov.nih.nci.cagrid.introduce.common.ProviderTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
@@ -435,9 +435,9 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
     private void removeResourcePropertyProvidersFromConfig() throws Exception {
         for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
             ServiceType service = getServiceInformation().getServices().getService(i);
-            ProviderUtils.removeProviderFromServiceConfig(service, "GetRPProvider", getServiceInformation());  
-            ProviderUtils.removeProviderFromServiceConfig(service, "GetMRPProvider", getServiceInformation());
-            ProviderUtils.removeProviderFromServiceConfig(service, "QueryRPProvider", getServiceInformation());
+            ProviderTools.removeProviderFromServiceConfig(service, "GetRPProvider", getServiceInformation());  
+            ProviderTools.removeProviderFromServiceConfig(service, "GetMRPProvider", getServiceInformation());
+            ProviderTools.removeProviderFromServiceConfig(service, "QueryRPProvider", getServiceInformation());
         }
     }
 

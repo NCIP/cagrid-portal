@@ -6,7 +6,9 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
@@ -113,10 +115,10 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 
                         setProgressText("creating service");
 
-                        StatisticsClient.sendCreatedServiceStat(CommonTools.getIntroduceVersion(), serviceName,
+                        StatisticsClient.sendCreatedServiceStat(IntroduceEnginePropertiesManager.getIntroduceVersion(), serviceName,
                             serviceNsDomain, serviceExtensions);
 
-                        String cmd = CommonTools.getAntSkeletonCreationCommand(".", serviceName, dirName, packageName,
+                        String cmd = AntTools.getAntSkeletonCreationCommand(".", serviceName, dirName, packageName,
                             serviceNsDomain, serviceExtensions);
                         Process p = CommonTools.createAndOutputProcess(cmd);
                         p.waitFor();
@@ -136,7 +138,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                         for (int i = 0; i < extensions.size(); i++) {
                             ServiceExtensionDescriptionType edt = ExtensionsLoader.getInstance()
                                 .getServiceExtensionByDisplayName((String) extensions.get(i));
-                            JDialog extDialog = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
+                            JDialog extDialog = gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools
                                 .getCreationUIDialog(PortalResourceManager.getInstance().getGridPortal(),
                                     edt.getName(), info);
                             if (extDialog != null) {
@@ -149,7 +151,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                             introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
                         setProgressText("invoking post creation processes");
-                        cmd = CommonTools.getAntSkeletonPostCreationCommand(".", serviceName, dirName, packageName,
+                        cmd = AntTools.getAntSkeletonPostCreationCommand(".", serviceName, dirName, packageName,
                             serviceNsDomain, serviceExtensions);
                         p = CommonTools.createAndOutputProcess(cmd);
                         p.waitFor();
@@ -159,7 +161,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                         }
 
                         setProgressText("Building created service...");
-                        cmd = CommonTools.getAntAllCommand(dirName);
+                        cmd = AntTools.getAntAllCommand(dirName);
                         p = CommonTools.createAndOutputProcess(cmd);
                         p.waitFor();
                         if (p.exitValue() == 0) {

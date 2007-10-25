@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
-import gov.nih.nci.cagrid.introduce.common.BasePreferenceConfigurationPanel;
 
 
 public class PreferencesConfigurationPanelAdapter extends BasePreferenceConfigurationPanel {

@@ -7,6 +7,7 @@ import gov.nci.nih.cagrid.tests.core.util.AntUtils;
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
 import gov.nci.nih.cagrid.tests.core.util.SourceUtils;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -227,6 +228,13 @@ public class ServiceCreateStep
 		Properties sysProps = new Properties();
 		sysProps.setProperty("introduce.skeleton.destination.dir", serviceDir.toString());
 		
+		//SyncTools sync = new SyncTools(introduceDir);
+		//try {
+       //     sync.sync();
+       // } catch (Exception e) {
+            // TODO Auto-generated catch block
+       //     e.printStackTrace();
+       // }
 		// invoke ant
 		AntUtils.runAnt(introduceDir, null, IntroduceServiceInfo.INTRODUCE_RESYNCSERVICE_TASK, sysProps, null);
 	}

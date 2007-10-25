@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 
 import java.awt.Font;
 import java.util.StringTokenizer;
@@ -28,9 +29,9 @@ public class MainUpdateTreeNode extends UpdateTypeTreeNode {
 			if (introduceVersions != null) {
 				for (int i = 0; i < introduceVersions.length; i++) {
 					IntroduceType introduce = introduceVersions[i];
-					if (!isOlderVersion(CommonTools.getIntroduceVersion(),
+					if (!isOlderVersion(IntroduceEnginePropertiesManager.getIntroduceVersion(),
 							introduce.getVersion())
-							&& !CommonTools.getIntroduceVersion().equals(
+							&& !IntroduceEnginePropertiesManager.getIntroduceVersion().equals(
 									introduce.getVersion())) {
 						// need to add this introduce version
 						IntroduceUpdateTreeNode introduceNode = new IntroduceUpdateTreeNode(
@@ -40,7 +41,7 @@ public class MainUpdateTreeNode extends UpdateTypeTreeNode {
 						getModel().insertNodeInto(introduceNode, this,
 								this.getChildCount());
 
-					} else if (CommonTools.getIntroduceVersion().equals(
+					} else if (IntroduceEnginePropertiesManager.getIntroduceVersion().equals(
 							introduce.getVersion())) {
 						// need to add this introduce version
 						IntroduceUpdateTreeNode introduceNode = new IntroduceUpdateTreeNode(

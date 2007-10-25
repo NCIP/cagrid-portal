@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.test.steps;
 
+import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
@@ -14,7 +15,7 @@ public class CreateSkeletonStep extends BaseStep {
 	public void runStep() throws Throwable {
 		System.out.println("Creating the service skeleton");
 
-		String cmd = CommonTools.getAntSkeletonCreationCommand(getBaseDir(),
+		String cmd = AntTools.getAntSkeletonCreationCommand(getBaseDir(),
 				tci.getName(), tci.getDir(), tci.getPackageName(), tci
 						.getNamespace(), "");
 
@@ -22,7 +23,7 @@ public class CreateSkeletonStep extends BaseStep {
 		p.waitFor();
 		assertEquals("Checking creation status", 0, p.exitValue());
 
-		cmd = CommonTools.getAntSkeletonPostCreationCommand(getBaseDir(), tci
+		cmd = AntTools.getAntSkeletonPostCreationCommand(getBaseDir(), tci
 				.getName(), tci.getDir(), tci.getPackageName(), tci
 				.getNamespace(), "");
 

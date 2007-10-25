@@ -24,7 +24,11 @@ import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 
 
-public class ProviderUtils {
+public final class ProviderTools {
+    
+    public ProviderTools(){
+        
+    }
 
     public static void addLifetimeResourceProvider(ServiceType service, ServiceInformation info) {
         // create the two lifetime methods to add

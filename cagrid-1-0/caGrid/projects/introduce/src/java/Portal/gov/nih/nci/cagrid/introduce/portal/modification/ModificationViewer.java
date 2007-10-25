@@ -27,8 +27,10 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
+import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
@@ -1058,7 +1060,7 @@ public class ModificationViewer extends GridPortalComponent {
                     try {
                         if ((extDtype.getServiceModificationUIPanel() != null)
                             && !extDtype.getServiceModificationUIPanel().equals("")) {
-                            ServiceModificationUIPanel extPanel = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
+                            ServiceModificationUIPanel extPanel = gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools
                                 .getServiceModificationUIPanel(extDtype.getName(), this.info);
                             this.extensionPanels.add(extPanel);
                             this.contentTabbedPane.addTab(extDtype.getDisplayName(), null, extPanel, null);
@@ -1451,7 +1453,7 @@ public class ModificationViewer extends GridPortalComponent {
                 for (int i = 0; i < discoveryTypes.size(); i++) {
                     DiscoveryExtensionDescriptionType dd = (DiscoveryExtensionDescriptionType) discoveryTypes.get(i);
                     try {
-                        NamespaceTypeDiscoveryComponent comp = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
+                        NamespaceTypeDiscoveryComponent comp = gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools
                             .getNamespaceTypeDiscoveryComponent(dd.getName(), this.info.getNamespaces());
                         if (comp != null) {
                             this.discoveryTabbedPane.addTab(dd.getDisplayName(), comp);
@@ -1499,7 +1501,7 @@ public class ModificationViewer extends GridPortalComponent {
                         ModificationViewer.this.info.getServices().getService(0).setDescription(
                             getDescriptionTextArea().getText());
 
-                        StatisticsClient.sendModifiedServiceStat(CommonTools.getIntroduceVersion(),
+                        StatisticsClient.sendModifiedServiceStat(IntroduceEnginePropertiesManager.getIntroduceVersion(),
                             ModificationViewer.this.info.getServices().getService(0).getName(),
                             ModificationViewer.this.info.getServices().getService(0).getNamespace());
 
@@ -1578,7 +1580,7 @@ public class ModificationViewer extends GridPortalComponent {
 
                         // build the synchronized service
                         setProgressText("rebuilding skeleton");
-                        String cmd = CommonTools.getAntCommand("clean all", ModificationViewer.this.methodsDirectory
+                        String cmd = AntTools.getAntCommand("clean all", ModificationViewer.this.methodsDirectory
                             .getAbsolutePath());
                         Process p = CommonTools.createAndOutputProcess(cmd);
                         p.waitFor();

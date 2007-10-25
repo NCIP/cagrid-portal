@@ -82,7 +82,7 @@ import org.oasis.wsrf.lifetime.TerminationNotification;
  * of these resource as well as code for registering any properties selected
  * to the index service.
  * 
- * @created by Introduce Toolkit version <%=CommonTools.getIntroduceVersion()%>
+ * @created by Introduce Toolkit version <%=IntroduceEnginePropertiesManager.getIntroduceVersion()%>
  * 
  */
 public abstract class BaseResourceBase implements ResourceProperties,

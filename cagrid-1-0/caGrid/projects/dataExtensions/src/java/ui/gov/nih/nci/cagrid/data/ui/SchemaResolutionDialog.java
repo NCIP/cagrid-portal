@@ -9,7 +9,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptio
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.GridBagConstraints;
@@ -37,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 27, 2006
- * @version $Id: SchemaResolutionDialog.java,v 1.4 2007-10-15 15:17:19 dervin Exp $
+ * @version $Id: SchemaResolutionDialog.java,v 1.5 2007-10-25 16:48:28 hastings Exp $
  */
 public class SchemaResolutionDialog extends JDialog {
 
