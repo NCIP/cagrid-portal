@@ -14,9 +14,10 @@ public class CDS {
 	private DelegatedCredentialManager dcm;
 	private PropertyManager properties;
 
-	public CDS(PropertyManager properties, DelegatedCredentialManager dcm) {
+	public CDS(PropertyManager properties, DelegatedCredentialManager dcm) throws CDSInternalFault{
 		this.dcm = dcm;
 		this.properties = properties;
+		this.properties.clearAllProperties();
 	}
 
 	public DelegationSigningRequest initiateDelegation(String callerIdentity,
