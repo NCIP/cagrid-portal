@@ -8,16 +8,18 @@ import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
+import org.cagrid.tools.database.Database;
 
 public class CDS {
 
 	private DelegatedCredentialManager dcm;
 	private PropertyManager properties;
 
-	public CDS(PropertyManager properties, DelegatedCredentialManager dcm) throws CDSInternalFault{
+	public CDS(PropertyManager properties, DelegatedCredentialManager dcm)
+			throws CDSInternalFault {
 		this.dcm = dcm;
 		this.properties = properties;
-		this.properties.clearAllProperties();
+
 	}
 
 	public DelegationSigningRequest initiateDelegation(String callerIdentity,

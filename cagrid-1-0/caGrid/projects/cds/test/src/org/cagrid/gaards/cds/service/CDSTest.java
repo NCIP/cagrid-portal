@@ -18,5 +18,9 @@ public class CDSTest extends TestCase {
 		}
 	}
 	
+	protected void setUp() throws Exception {
+		super.setUp();
+		Utils.getDatabase().createDatabaseIfNeeded();
+	}
 	
 }
