@@ -43,6 +43,8 @@
 
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
+import gov.nih.nci.cagrid.introduce.portal.preferences.base.PreferencesTypeTreeNode;
+
 import java.awt.Component;
 import java.awt.Font;
 

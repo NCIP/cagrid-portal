@@ -1,4 +1,5 @@
-package gov.nih.nci.cagrid.introduce.portal.preferences;
+package gov.nih.nci.cagrid.introduce.portal.preferences.base;
+
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;

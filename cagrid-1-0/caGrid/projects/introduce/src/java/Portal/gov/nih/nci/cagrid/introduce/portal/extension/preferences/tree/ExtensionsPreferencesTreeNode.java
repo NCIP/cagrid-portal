@@ -5,9 +5,9 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.extension.preferences.ExtensionPreferenceTool;
 import gov.nih.nci.cagrid.introduce.portal.extension.preferences.ExtensionsPreferencesConfigurationPanel;
-import gov.nih.nci.cagrid.introduce.portal.preferences.PreferenceConfigurationContainerPanel;
-import gov.nih.nci.cagrid.introduce.portal.preferences.PreferencesConfigurationPanelAdapter;
-import gov.nih.nci.cagrid.introduce.portal.preferences.PreferencesTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.preferences.base.PreferenceConfigurationContainerPanel;
+import gov.nih.nci.cagrid.introduce.portal.preferences.base.PreferencesConfigurationPanelAdapter;
+import gov.nih.nci.cagrid.introduce.portal.preferences.base.PreferencesTypeTreeNode;
 
 import java.util.List;
 

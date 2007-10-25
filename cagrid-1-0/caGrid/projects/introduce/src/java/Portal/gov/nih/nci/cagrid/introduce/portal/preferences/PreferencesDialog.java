@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.preferences;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.portal.preferences.base.PreferencesTypeTreeNode;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;

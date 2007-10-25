@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
 
+import gov.nih.nci.cagrid.introduce.portal.preferences.base.BasePreferenceConfigurationPanel;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.HashMap;
