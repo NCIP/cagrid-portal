@@ -70,15 +70,6 @@
 	<property name="test.logs.dir" location="${test.dir}/logs" />
 	<import file="test/test.xml" />
 
-	<!-- using ant contrib for contidionals, looping, and runtarget -->
-    <taskdef resource="net/sf/antcontrib/antlib.xml">
-		<classpath>
-			<fileset dir="${ext.lib.dir}">
-			    <include name="ant-contrib*.jar"/>
-			</fileset>
-		</classpath>
-	</taskdef>
-
 	<!-- =============================================================== -->
 	<!-- Classpaths                                                      -->
 	<!-- =============================================================== -->
@@ -132,6 +123,15 @@
 					<include name="codegen.jar" />
 					<include name="jdtcore.jar" />
 					<include name="jetc-task.jar" />
+				</fileset>
+			</classpath>
+		</taskdef>
+	
+		<!-- using ant contrib for contidionals, looping, and runtarget -->
+	    <taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath>
+				<fileset dir="${ext.lib.dir}">
+				    <include name="ant-contrib*.jar"/>
 				</fileset>
 			</classpath>
 		</taskdef>
