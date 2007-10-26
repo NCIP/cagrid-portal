@@ -1,46 +1,11 @@
 package gov.nih.nci.cagrid.introduce.common;
 
-import gov.nih.nci.cagrid.common.StreamGobbler;
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
-import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
-import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
-import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.xml.namespace.QName;
-
 import org.apache.log4j.Logger;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
 
 
 /**
