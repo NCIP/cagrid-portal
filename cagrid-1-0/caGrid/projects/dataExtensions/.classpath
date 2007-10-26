@@ -145,5 +145,6 @@
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
 	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.1-core-tests.jar"/>
+	<classpathentry kind="lib" path="lib/jaxmejs-0.5.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
