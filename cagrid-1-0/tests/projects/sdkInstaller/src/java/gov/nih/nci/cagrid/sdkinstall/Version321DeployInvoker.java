@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.sdkinstall;
 
 import gov.nih.nci.cagrid.common.StreamGobbler;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.sdkinstall.description.InstallationDescription;
 
 import java.io.File;
@@ -13,7 +13,7 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Jun 18, 2007 12:09:57 PM
- * @version $Id: Version321DeployInvoker.java,v 1.2 2007-06-21 16:23:18 dervin Exp $ 
+ * @version $Id: Version321DeployInvoker.java,v 1.3 2007-10-26 18:05:19 dervin Exp $ 
  */
 public class Version321DeployInvoker extends DeployInvoker {
     public static final String DEPLOY_COMMAND = "deployWS";
@@ -26,7 +26,7 @@ public class Version321DeployInvoker extends DeployInvoker {
     public void invokeDeployProcess() throws DeployInvocationException {
         String antCommand = null;
         try {
-            antCommand = CommonTools.getAntCommand(DEPLOY_COMMAND, getSdkDir().getAbsolutePath());
+            antCommand = AntTools.getAntCommand(DEPLOY_COMMAND, getSdkDir().getAbsolutePath());
         } catch (Exception ex) {
             throw new DeployInvocationException("Error generating ant command: " + ex.getMessage(), ex);
         }
