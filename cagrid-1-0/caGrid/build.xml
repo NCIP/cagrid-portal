@@ -918,6 +918,7 @@
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
             <artifact refid="introduce.jars" />
+            <artifact refid="validation.jars" />
         	<artifact refid="data.extensions.jars" />
             <artifact refid="data.cql.testing.docs" />
         </resolveDependencies>
