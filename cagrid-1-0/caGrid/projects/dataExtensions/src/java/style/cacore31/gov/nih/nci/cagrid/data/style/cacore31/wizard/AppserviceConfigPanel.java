@@ -18,6 +18,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +47,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Mar 23, 2007 3:35:47 PM
- * @version $Id: AppserviceConfigPanel.java,v 1.2 2007-10-25 17:42:49 dervin Exp $ 
+ * @version $Id: AppserviceConfigPanel.java,v 1.3 2007-10-26 15:27:03 dervin Exp $ 
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -434,6 +436,13 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
         if (ValidationUtils.isBlank(getUrlTextField().getText())) {
             result.add(new SimpleValidationMessage(
                 KEY_APPSERVICE_URL + " should not be blank", Severity.WARNING, KEY_APPSERVICE_URL));
+        } else {
+            try {
+                new URL(getUrlTextField().getText());
+            } catch (MalformedURLException ex) {
+                result.add(new SimpleValidationMessage(
+                    KEY_APPSERVICE_URL + " must contain a valid URL", Severity.ERROR, KEY_APPSERVICE_URL));
+            }
         }
         if (getUseCsmCheckBox().isSelected() 
             && ValidationUtils.isBlank(getCsmContextTextField().getText())) {
