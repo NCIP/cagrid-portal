@@ -16,8 +16,7 @@ public class DelegatedCredentialImpl extends DelegatedCredentialImplBase {
 		super();
 	}
 
-	public org.cagrid.gaards.cds.common.DelegationIdentifier getDelegatedCredential()
-			throws RemoteException {
+  public org.cagrid.gaards.cds.common.DelegationIdentifier getDelegatedCredential() throws RemoteException {
 		DelegatedCredentialResource resource = (DelegatedCredentialResource) ResourceContext
 				.getResourceContext().getResource();
 		return resource.getDelegatedCredential();

@@ -108,7 +108,7 @@
      <ns4:Inputs>
       <ns4:Input qName="ns12:DelegationSigningResponse" description="" isArray="false" name="delegationSigningResponse" xmlns:ns12="http://gaards.cagrid.org/cds"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns13:DelegatedCredentialReference" clientHandleClass="org.cagrid.gaards.cds.delegated.client.DelegatedCredentialClient" description="" isArray="false" isClientHandle="true" isCreatingResourceForClientHandle="true" resourceClientIntroduceServiceName="DelegatedCredential" xmlns:ns13="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types"/>
+     <ns4:Output qName="ns13:DelegatedCredentialReference" description="" isArray="false" xmlns:ns13="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types"/>
      <ns4:Exceptions>
       <ns4:Exception description="" name="CDSInternalFault" qname="ns14:CDSInternalFault" xmlns:ns14="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
       <ns4:Exception description="" name="DelegationFault" qname="ns15:DelegationFault" xmlns:ns15="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>

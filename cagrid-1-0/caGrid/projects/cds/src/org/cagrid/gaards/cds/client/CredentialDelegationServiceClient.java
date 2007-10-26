@@ -128,7 +128,7 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
     }
   }
 
-  public org.cagrid.gaards.cds.delegated.client.DelegatedCredentialClient approveDelegation(org.cagrid.gaards.cds.common.DelegationSigningResponse delegationSigningResponse) throws RemoteException, org.apache.axis.types.URI.MalformedURIException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+  public org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference approveDelegation(org.cagrid.gaards.cds.common.DelegationSigningResponse delegationSigningResponse) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"approveDelegation");
     org.cagrid.gaards.cds.stubs.ApproveDelegationRequest params = new org.cagrid.gaards.cds.stubs.ApproveDelegationRequest();
@@ -136,8 +136,7 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
     delegationSigningResponseContainer.setDelegationSigningResponse(delegationSigningResponse);
     params.setDelegationSigningResponse(delegationSigningResponseContainer);
     org.cagrid.gaards.cds.stubs.ApproveDelegationResponse boxedResult = portType.approveDelegation(params);
-    EndpointReferenceType ref = boxedResult.getDelegatedCredentialReference().getEndpointReference();
-    return new org.cagrid.gaards.cds.delegated.client.DelegatedCredentialClient(ref);
+    return boxedResult.getDelegatedCredentialReference();
     }
   }
 
