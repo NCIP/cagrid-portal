@@ -37,6 +37,7 @@ import java.util.StringTokenizer;
 import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
@@ -71,8 +72,8 @@ public final class CommonTools {
         final Process p;
 
         p = Runtime.getRuntime().exec(cmd);
-        StreamGobbler errGobbler = new StreamGobbler(p.getErrorStream(), "ERR", System.err);
-        StreamGobbler outGobbler = new StreamGobbler(p.getInputStream(), "OUT", System.out);
+        StreamGobbler errGobbler = new StreamGobbler(p.getErrorStream(), "ERR", logger, Priority.ERROR);
+        StreamGobbler outGobbler = new StreamGobbler(p.getInputStream(), "OUT", logger, Priority.DEBUG);
         errGobbler.start();
         outGobbler.start();
 

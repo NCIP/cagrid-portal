@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.system;
 
 import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.creation.CreationStep;
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -10,6 +11,9 @@ import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 
 import com.atomicobject.haste.framework.Step;
 
@@ -20,10 +24,13 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: RebuildServiceStep.java,v 1.9 2007-10-25 16:48:29 hastings Exp $ 
+ * @version $Id: RebuildServiceStep.java,v 1.10 2007-10-26 17:58:28 hastings Exp $ 
  */
 public class RebuildServiceStep extends Step {
 	
+    private static final Logger logger = Logger.getLogger(RebuildServiceStep.class);
+    
+    
     private DataTestCaseInfo serviceInfo;
 	private String introduceDir;
 	
@@ -44,8 +51,8 @@ public class RebuildServiceStep extends Step {
         System.out.println("Invoking ant:");
         System.out.println(cmd);
 		Process p = CommonTools.createAndOutputProcess(cmd);
-        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
-        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, logger, Priority.DEBUG).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, logger, Priority.ERROR).start();
 		p.waitFor();
 		assertTrue("Service post creation process failed", p.exitValue() == 0);
 
@@ -54,8 +61,8 @@ public class RebuildServiceStep extends Step {
         System.out.println("Invoking ant:");
         System.out.println(cmd);
 		p = CommonTools.createAndOutputProcess(cmd);
-        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
-        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, logger, Priority.DEBUG).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, logger, Priority.ERROR).start();
         p.waitFor();
 		assertTrue("Build process failed", p.exitValue() == 0);
 	}

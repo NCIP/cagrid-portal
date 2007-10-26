@@ -4,38 +4,42 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 
 
 /**
- * StreamGobbler 
- * Reads input from a stream as long as more data is available 
- * and optionally writes it out to another stream (eg System.out or System.err);
+ * StreamGobbler Reads input from a stream as long as more data is available
  * 
  * @author David Ervin
- * 
+ * @author Shannon Hastings
  * @created Jun 21, 2007 11:03:06 AM
- * @version $Id: StreamGobbler.java,v 1.2 2007-07-13 17:00:23 dervin Exp $
+ * @version $Id: StreamGobbler.java,v 1.3 2007-10-26 17:58:28 hastings Exp $
  */
 public class StreamGobbler extends Thread {
+
+    private Logger logger = null;
+    private Priority priority = null;
+
     public static final String TYPE_OUT = "OUT";
     public static final String TYPE_ERR = "ERR";
 
     private InputStream is;
     private String type;
-    private OutputStream os;
 
 
     public StreamGobbler(InputStream is, String type) {
-        this(is, type, null);
+        this.is = is;
+        this.type = type;
     }
 
 
-    public StreamGobbler(InputStream is, String type, OutputStream redirect) {
+    public StreamGobbler(InputStream is, String type, Logger logger, Priority priority) {
         this.is = is;
         this.type = type;
-        this.os = redirect;
+        this.logger = logger;
+        this.priority = priority;
     }
 
 
@@ -44,25 +48,16 @@ public class StreamGobbler extends Thread {
      */
     public void run() {
         try {
-            PrintWriter pw = null;
-            if (os != null) {
-                pw = new PrintWriter(os);
-            }
 
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
             String line = null;
             while ((line = br.readLine()) != null) {
-                if (pw != null) {
-                    pw.println(type != null ? type + "> " + line : line);
-                    if (line.length() != 0) {
-                        pw.flush();
-                    }
+                if (logger != null && priority !=null) {
+                    logger.log(priority,line);
                 }
             }
-            if (pw != null) {
-                pw.flush();
-            }
+
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

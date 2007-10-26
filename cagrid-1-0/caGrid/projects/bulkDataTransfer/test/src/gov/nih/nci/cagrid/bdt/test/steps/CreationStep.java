@@ -16,7 +16,11 @@ import java.io.File;
 
 import javax.xml.namespace.QName;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
+
 import com.atomicobject.haste.framework.Step;
+import com.sun.corba.se.internal.Interceptors.PIORB;
 
 
 /**
@@ -24,9 +28,12 @@ import com.atomicobject.haste.framework.Step;
  * Step to create a BDT service using the Introduce engine
  * 
  * @created Aug 22, 2006
- * @version $Id: CreationStep.java,v 1.10 2007-10-25 16:48:28 hastings Exp $
+ * @version $Id: CreationStep.java,v 1.11 2007-10-26 17:58:28 hastings Exp $
  */
 public class CreationStep extends Step {
+    
+    private static final Logger logger = Logger.getLogger(CreationStep.class);
+    
     private static final String BDT_START_RETURNS_CLIENT = "bdtStartReturnsClient";
     public static final String BDT_START_RETURNS_REFERENCE = "bdtStartReturnsReference";
    
@@ -44,8 +51,8 @@ public class CreationStep extends Step {
         String cmd = AntTools.getAntSkeletonCreationCommand(introduceDir, CreationTest.SERVICE_NAME,
             CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, "bdt");
         Process p = CommonTools.createAndOutputProcess(cmd);
-        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
-        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, logger,Priority.DEBUG).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, logger,Priority.ERROR).start();
         p.waitFor();
         assertTrue("Creating new bdt service failed", p.exitValue() == 0);
         
@@ -55,16 +62,16 @@ public class CreationStep extends Step {
         cmd = AntTools.getAntSkeletonPostCreationCommand(introduceDir, CreationTest.SERVICE_NAME,
             CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, "bdt");
         p = CommonTools.createAndOutputProcess(cmd);
-        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
-        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, logger,Priority.DEBUG).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, logger,Priority.ERROR).start();
         p.waitFor();
         assertTrue("Service post creation process failed", p.exitValue() == 0);
 
         System.out.println("Building created service...");
         cmd = AntTools.getAntAllCommand(CreationTest.SERVICE_DIR);
         p = CommonTools.createAndOutputProcess(cmd);
-        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
-        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, logger, Priority.DEBUG).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, logger, Priority.ERROR).start();
         p.waitFor();
         assertTrue("Build process failed", p.exitValue() == 0);
     }
