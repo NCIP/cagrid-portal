@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.style.sdkstyle.wizard.AppserviceConfigCompletionListener;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
@@ -13,12 +14,15 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -28,7 +32,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
-import java.awt.Dimension;
+
+import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.message.SimpleValidationMessage;
+import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.util.ValidationUtils;
+import com.jgoodies.validation.view.ValidationComponentUtils;
 
 
 /**
@@ -43,6 +54,9 @@ import java.awt.Dimension;
  *          Exp $
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
+    public static final String KEY_APPSERVICE_URL = "Application service url";
+    public static final String KEY_CSM_CONTEXT = "CSM context name";
+    public static final String KEY_CSM_CONFIG = "CSM configuration file name";
 
     public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
     public static final String USE_CSM_FLAG = "useCsmSecurity";
@@ -63,29 +77,50 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
     private JTextField csmConfigTextField = null;
     private JButton browseButton = null;
     private JPanel inputPanel = null;
+    private IconFeedbackPanel validationPanel = null;
 
     private List<AppserviceConfigCompletionListener> completionListeners;
-
+    private ValidationResultModel validationModel;
+    private DocumentChangeAdapter documentChangeListener;
 
     public AppserviceConfigPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
+        this.validationModel = new DefaultValidationResultModel();
+        this.documentChangeListener = new DocumentChangeAdapter() {
+            public void documentEdited(DocumentEvent e) {
+                validateInput();
+            }
+        };
         initialize();
     }
 
 
     private void initialize() {
-        GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-        gridBagConstraints9.gridx = 0;
-        gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints9.weightx = 1.0D;
-        gridBagConstraints9.gridy = 1;
-        GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-        gridBagConstraints8.gridx = 0;
-        gridBagConstraints8.gridy = 0;
-        this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(503, 108));
-        this.add(getCheckBoxPanel(), gridBagConstraints8);
-        this.add(getInputPanel(), gridBagConstraints9);
+        initializeValues();
+        this.setLayout(new GridLayout());
+        this.add(getValidationPanel());
+        configureValidation();
+    }
+    
+    
+    private IconFeedbackPanel getValidationPanel() {
+        if (validationPanel == null) {
+            JPanel holder = new JPanel();
+            GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+            gridBagConstraints9.gridx = 0;
+            gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints9.weightx = 1.0D;
+            gridBagConstraints9.gridy = 1;
+            GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+            gridBagConstraints8.gridx = 0;
+            gridBagConstraints8.gridy = 0;
+            holder.setLayout(new GridBagLayout());
+            holder.setSize(new Dimension(503, 108));
+            holder.add(getCheckBoxPanel(), gridBagConstraints8);
+            holder.add(getInputPanel(), gridBagConstraints9);
+            validationPanel = new IconFeedbackPanel(validationModel, holder);
+        }
+        return validationPanel;
     }
 
 
@@ -199,6 +234,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                         DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_CSM_FLAG, 
                         String.valueOf(getUseCsmCheckBox().isSelected()), false);
                     enableRelaventComponents();
+                    validateInput();
                 }
             });
         }
@@ -255,6 +291,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                         getUrlTextField().getText(), false);
                 }
             });
+            urlTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return urlTextField;
     }
@@ -289,6 +326,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                         getCsmContextTextField().getText(), false);
                 }
             });
+            csmContextTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return csmContextTextField;
     }
@@ -337,6 +375,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
         if (csmConfigTextField == null) {
             csmConfigTextField = new JTextField();
             csmConfigTextField.setEditable(false);
+            csmConfigTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return csmConfigTextField;
     }
@@ -457,7 +496,12 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
         }
         return inputPanel;
     }
-
+    
+    
+    // -------
+    // helpers
+    // -------
+    
 
     private void enableRelaventComponents() {
         boolean usingLocalApi = !getUrlTextField().isEnabled();
@@ -501,4 +545,59 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
             listener.completionStatusChanged(complete);
         }
     }
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+    
+    
+    // ----------
+    // validation
+    // ----------
+    
+    
+    private void configureValidation() {
+        ValidationComponentUtils.setMessageKey(getUrlTextField(), KEY_APPSERVICE_URL);
+        ValidationComponentUtils.setMessageKey(getCsmContextTextField(), KEY_CSM_CONTEXT);
+        ValidationComponentUtils.setMessageKey(getCsmConfigTextField(), KEY_CSM_CONFIG);
+        
+        validateInput();
+        updateComponentTreeSeverity();
+    }
+    
+    
+    private void validateInput() {
+        ValidationResult result = new ValidationResult();
+        
+        if (ValidationUtils.isBlank(getUrlTextField().getText())) {
+            result.add(new SimpleValidationMessage(
+                KEY_APPSERVICE_URL + " should not be blank", Severity.WARNING, KEY_APPSERVICE_URL));
+        } else {
+            try {
+                new URL(getUrlTextField().getText());
+            } catch (MalformedURLException ex) {
+                result.add(new SimpleValidationMessage(
+                    KEY_APPSERVICE_URL + " must contain a valid URL", Severity.ERROR, KEY_APPSERVICE_URL));
+            }
+        }
+        
+        if (getUseCsmCheckBox().isSelected()) { 
+            if (ValidationUtils.isBlank(getCsmContextTextField().getText())) {
+                result.add(new SimpleValidationMessage(
+                    KEY_CSM_CONTEXT + " must not be blank", Severity.ERROR, KEY_CSM_CONTEXT));
+            }
+            if (ValidationUtils.isBlank(getCsmConfigTextField().getText())) {
+                result.add(new SimpleValidationMessage(
+                    KEY_CSM_CONFIG + " must not be blank", Severity.ERROR, KEY_CSM_CONFIG));
+            }
+        }
+    
+        validationModel.setResult(result);
+        
+        updateComponentTreeSeverity();
+        // update next button enabled
+        setNextEnabled(!validationModel.hasErrors());
+    }
+    
+    
+    private void updateComponentTreeSeverity() {
+        ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
+        ValidationComponentUtils.updateComponentTreeSeverityBackground(this, validationModel.getResult());
+    }
+}
