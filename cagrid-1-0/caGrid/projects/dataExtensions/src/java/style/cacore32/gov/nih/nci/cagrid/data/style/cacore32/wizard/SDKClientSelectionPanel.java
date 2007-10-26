@@ -2,8 +2,10 @@ package gov.nih.nci.cagrid.data.style.cacore32.wizard;
 
 import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
@@ -22,6 +24,7 @@ import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.io.FileFilter;
@@ -45,6 +48,15 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.DocumentEvent;
+
+import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.message.SimpleValidationMessage;
+import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.util.ValidationUtils;
+import com.jgoodies.validation.view.ValidationComponentUtils;
 
 /** 
  *  SDKClientSelectionPanel
@@ -54,9 +66,13 @@ import javax.swing.ScrollPaneConstants;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.6 2007-08-31 15:50:47 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.7 2007-10-26 17:01:50 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
+    // keys for validation components
+    public static final String KEY_CLIENT_LIB_DIR = "Client library directory";
+    public static final String KEY_CLIENT_CONF_DIR = "Client configuration directory";
+    
     public static final String[] LOCAL_CLIENT_REQUIRED_FILES = new String[] {
         "DAOConfig.xml", "roleLookup.properties", "SDKSpringBeanConfig.xml"
     };
@@ -86,107 +102,130 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     private JLabel clientConfDirLabel = null;
     private JTextField clientConfDirTextField = null;
     private JButton clientConfDirBrowseButton = null;
+    private IconFeedbackPanel validationPanel = null;
+    
+    private ValidationResultModel validationModel = null;
+    private DocumentChangeAdapter documentChangeListener = null;
 
 
     public SDKClientSelectionPanel(
         ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
+        this.validationModel = new DefaultValidationResultModel();
+        this.documentChangeListener = new DocumentChangeAdapter() {
+            public void documentEdited(DocumentEvent e) {
+                validateInput();
+            }
+        };
         initialize();
     }
     
     
     private void initialize() {
-        GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
-        gridBagConstraints32.gridx = 2;
-        gridBagConstraints32.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints32.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints32.gridy = 3;
-        GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-        gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints21.gridy = 3;
-        gridBagConstraints21.weightx = 1.0;
-        gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints21.gridx = 1;
-        GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-        gridBagConstraints11.gridx = 0;
-        gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints11.gridy = 3;
-        GridBagConstraints gridBagConstraints81 = new GridBagConstraints();
-        gridBagConstraints81.gridx = 0;
-        gridBagConstraints81.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints81.gridwidth = 3;
-        gridBagConstraints81.gridy = 1;
-        GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-        gridBagConstraints7.gridx = 2;
-        gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints7.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints7.gridy = 5;
-        GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-        gridBagConstraints6.gridx = 2;
-        gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints6.gridy = 4;
-        GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-        gridBagConstraints5.fill = GridBagConstraints.BOTH;
-        gridBagConstraints5.gridy = 4;
-        gridBagConstraints5.weightx = 1.0;
-        gridBagConstraints5.weighty = 1.0;
-        gridBagConstraints5.gridheight = 2;
-        gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints5.gridx = 1;
-        GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-        gridBagConstraints31.gridx = 2;
-        gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints31.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints31.gridy = 2;
-        GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-        gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints4.gridy = 2;
-        gridBagConstraints4.weightx = 1.0;
-        gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints4.gridx = 1;
-        GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-        gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints3.gridy = 0;
-        gridBagConstraints3.weightx = 1.0;
-        gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints3.gridx = 1;
-        GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-        gridBagConstraints2.gridx = 0;
-        gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints2.gridheight = 2;
-        gridBagConstraints2.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints2.gridy = 4;
-        GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-        gridBagConstraints1.gridx = 0;
-        gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints1.gridy = 2;
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints.gridy = 0;
-        this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(465, 258));
-        this.add(getQpJarLabel(), gridBagConstraints);
-        this.add(getClientLibDirLabel(), gridBagConstraints1);
-        this.add(getDependsLabel(), gridBagConstraints2);
-        this.add(getQpJarTextField(), gridBagConstraints3);
-        this.add(getClientLibDirTextField(), gridBagConstraints4);
-        this.add(getClientLibBrowseButton(), gridBagConstraints31);
-        this.add(getDependsScrollPane(), gridBagConstraints5);
-        this.add(getAddDependButton(), gridBagConstraints6);
-        this.add(getRemoveDependButton(), gridBagConstraints7);
-        this.add(getApiSelectionPanel(), gridBagConstraints81);
-        this.add(getClientConfDirLabel(), gridBagConstraints11);
-        this.add(getClientConfDirTextField(), gridBagConstraints21);
-        this.add(getClientConfDirBrowseButton(), gridBagConstraints32);
+        this.setLayout(new GridLayout());
+        this.add(getValidationPanel());
+        // set up for validation
+        configureValidation();
     }
 
+    
+    private IconFeedbackPanel getValidationPanel() {
+        if (validationPanel == null) {
+            JPanel holder = new JPanel();
+            GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
+            gridBagConstraints32.gridx = 2;
+            gridBagConstraints32.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints32.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints32.gridy = 3;
+            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+            gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints21.gridy = 3;
+            gridBagConstraints21.weightx = 1.0;
+            gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints21.gridx = 1;
+            GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+            gridBagConstraints11.gridx = 0;
+            gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints11.gridy = 3;
+            GridBagConstraints gridBagConstraints81 = new GridBagConstraints();
+            gridBagConstraints81.gridx = 0;
+            gridBagConstraints81.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints81.gridwidth = 3;
+            gridBagConstraints81.gridy = 1;
+            GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+            gridBagConstraints7.gridx = 2;
+            gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints7.anchor = GridBagConstraints.NORTH;
+            gridBagConstraints7.gridy = 5;
+            GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+            gridBagConstraints6.gridx = 2;
+            gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints6.gridy = 4;
+            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+            gridBagConstraints5.fill = GridBagConstraints.BOTH;
+            gridBagConstraints5.gridy = 4;
+            gridBagConstraints5.weightx = 1.0;
+            gridBagConstraints5.weighty = 1.0;
+            gridBagConstraints5.gridheight = 2;
+            gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints5.gridx = 1;
+            GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+            gridBagConstraints31.gridx = 2;
+            gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints31.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints31.gridy = 2;
+            GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+            gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints4.gridy = 2;
+            gridBagConstraints4.weightx = 1.0;
+            gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints4.gridx = 1;
+            GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+            gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints3.gridy = 0;
+            gridBagConstraints3.weightx = 1.0;
+            gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints3.gridx = 1;
+            GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+            gridBagConstraints2.gridx = 0;
+            gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints2.gridheight = 2;
+            gridBagConstraints2.anchor = GridBagConstraints.NORTH;
+            gridBagConstraints2.gridy = 4;
+            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+            gridBagConstraints1.gridx = 0;
+            gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints1.gridy = 2;
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints.gridy = 0;
+            holder.setLayout(new GridBagLayout());
+            holder.setSize(new Dimension(465, 258));
+            holder.add(getQpJarLabel(), gridBagConstraints);
+            holder.add(getClientLibDirLabel(), gridBagConstraints1);
+            holder.add(getDependsLabel(), gridBagConstraints2);
+            holder.add(getQpJarTextField(), gridBagConstraints3);
+            holder.add(getClientLibDirTextField(), gridBagConstraints4);
+            holder.add(getClientLibBrowseButton(), gridBagConstraints31);
+            holder.add(getDependsScrollPane(), gridBagConstraints5);
+            holder.add(getAddDependButton(), gridBagConstraints6);
+            holder.add(getRemoveDependButton(), gridBagConstraints7);
+            holder.add(getApiSelectionPanel(), gridBagConstraints81);
+            holder.add(getClientConfDirLabel(), gridBagConstraints11);
+            holder.add(getClientConfDirTextField(), gridBagConstraints21);
+            holder.add(getClientConfDirBrowseButton(), gridBagConstraints32);
+            validationPanel = new IconFeedbackPanel(validationModel, holder);
+        }
+        return validationPanel;
+    }
+    
 
     public String getPanelShortName() {
         return "Client Selection";
@@ -333,6 +372,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             clientLibDirTextField.setToolTipText(
                 "The directory containing the client libraries for a caCORE SDK data source");
             clientLibDirTextField.setEditable(false);
+            clientLibDirTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return clientLibDirTextField;
     }
@@ -394,6 +434,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     selectClientLibDir();
                     updateNextEnabledState();
+                    validateInput();
                 }
             });
         }
@@ -480,6 +521,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                     getClientConfDirBrowseButton().setEnabled(localEnabled);
                     // decide if the next button should be enabled
                     updateNextEnabledState();
+                    validateInput();
                 }
             });
         }
@@ -816,6 +858,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             clientConfDirTextField.setToolTipText(
                 "The directory containing the local API configuration files");
             clientConfDirTextField.setEditable(false);
+            clientConfDirTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return clientConfDirTextField;
     }
@@ -834,6 +877,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     selectClientConfDir();
                     updateNextEnabledState();
+                    validateInput();
                 }
             });
         }
@@ -874,5 +918,47 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             ErrorDialog.showErrorDialog("Error selecting client configuration directory", 
                 ex.getMessage(), ex);
         }
+    }
+    
+    
+    //  ----------
+    // validation
+    // ----------
+    
+    
+    private void configureValidation() {
+        ValidationComponentUtils.setMessageKey(getClientLibDirTextField(), KEY_CLIENT_LIB_DIR);
+        ValidationComponentUtils.setMessageKey(getClientConfDirTextField(), KEY_CLIENT_CONF_DIR);
+        
+        validateInput();
+        updateComponentTreeSeverity();
+    }
+    
+    
+    private void validateInput() {
+        ValidationResult result = new ValidationResult();
+        
+        if (ValidationUtils.isBlank(getClientLibDirTextField().getText())) {
+            result.add(new SimpleValidationMessage(
+                KEY_CLIENT_LIB_DIR + " cannot be blank", Severity.ERROR, KEY_CLIENT_LIB_DIR));
+        }
+        if (getLocalRadioButton().isSelected()) {
+            if (ValidationUtils.isBlank(getClientConfDirTextField().getText())) {
+                result.add(new SimpleValidationMessage(
+                    KEY_CLIENT_CONF_DIR + " cannot be blank", Severity.ERROR, KEY_CLIENT_CONF_DIR));
+            }
+        }
+        
+        validationModel.setResult(result);
+        
+        updateComponentTreeSeverity();
+        // update next button enabled
+        setNextEnabled(!validationModel.hasErrors());
+    }
+    
+    
+    private void updateComponentTreeSeverity() {
+        ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
+        ValidationComponentUtils.updateComponentTreeSeverityBackground(this, validationModel.getResult());
     }
 }
