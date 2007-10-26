@@ -41,7 +41,7 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
 
 
     protected void upgrade() throws Exception {
-        
+
         // need to replace the build.xml
         Utils.copyFile(new File(getServicePath() + File.separator + "build.xml"), new File(getServicePath()
             + File.separator + "build.xml.OLD"));
@@ -52,9 +52,9 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
         getStatus().addDescriptionLine("replaced build.xml with new version");
         getStatus().addDescriptionLine("added build-stubs.xml");
 
-      //clean the config
+        // clean the config
         removeResourcePropertyProvidersFromConfig();
-        //remove rp methods
+        // remove rp methods
         removeGetResourcePropertyMethods();
 
         // foreach service need to replace the resource files.....
@@ -74,7 +74,8 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
                 String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
                     getServiceInformation(), service));
                 File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + File.separator + service.getName() + "Constants.java");
+                    + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + File.separator
+                    + service.getName() + "Constants.java");
 
                 FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
                 resourceContanstsFW.write(resourceContanstsS);
@@ -136,7 +137,6 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
         upgradeJars();
         getStatus().addDescriptionLine("updating service with the new version of the jars");
 
-     
         getStatus().setStatus(StatusBase.UPGRADE_OK);
     }
 
@@ -244,17 +244,17 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
         }
 
     }
-    
+
+
     private void removeResourcePropertyProvidersFromConfig() throws Exception {
         for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
             ServiceType service = getServiceInformation().getServices().getService(i);
-            ProviderTools.removeProviderFromServiceConfig(service, "GetRPProvider", getServiceInformation());  
+            ProviderTools.removeProviderFromServiceConfig(service, "GetRPProvider", getServiceInformation());
             ProviderTools.removeProviderFromServiceConfig(service, "GetMRPProvider", getServiceInformation());
             ProviderTools.removeProviderFromServiceConfig(service, "QueryRPProvider", getServiceInformation());
         }
     }
 
-    
 
     private void removeGetResourcePropertyMethods() throws Exception {
         // foreach service need to replace the resource files.....
@@ -286,16 +286,20 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
 
             JavaMethod[] methods = source.getMethods();
             int j = 0;
+            boolean found = false;
             for (j = 0; j < methods.length; j++) {
                 if (methods[j].getName().equals("getResourceProperty")) {
+                    found = true;
                     break;
                 }
-            } 
-            
-            JavaQName qname = JavaQNameImpl.getInstance("GetResourcePropertyResponse");
-          
-            methods[j].setType(qname);
-            syncsource.removeClientImpl(methods[j]);
+            }
+
+            if (found) {
+                JavaQName qname = JavaQNameImpl.getInstance("GetResourcePropertyResponse");
+
+                methods[j].setType(qname);
+                syncsource.removeClientImpl(methods[j]);
+            }
         }
 
     }

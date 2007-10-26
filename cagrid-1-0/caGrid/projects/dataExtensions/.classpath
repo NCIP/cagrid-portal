@@ -10,7 +10,6 @@
 	<classpathentry kind="src" path="test/src/java/style/cacore31"/>
 	<classpathentry kind="src" path="test/src/java/style/cacore32"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/jaxmejs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/acme.jar"/>
 	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-advertisement.jar"/>

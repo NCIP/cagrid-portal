@@ -113,6 +113,7 @@ public class SyncMethods extends SyncTool {
             JavaSource source = (JavaSource) it.next();
             if (source.getQName().getClassName().endsWith("I")) {
                 sourceI = source;
+                
                 sourceI.setForcingFullyQualifiedName(true);
             } else if (source.getQName().getClassName().endsWith("Impl")) {
                 sourceImpl = source;

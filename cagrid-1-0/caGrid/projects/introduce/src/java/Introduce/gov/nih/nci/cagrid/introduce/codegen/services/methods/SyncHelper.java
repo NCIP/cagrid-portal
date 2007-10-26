@@ -27,7 +27,7 @@ import org.apache.ws.jaxme.js.Parameter;
  * 
  * @author David Ervin
  * @created Apr 4, 2007 1:32:03 PM
- * @version $Id: SyncHelper.java,v 1.4 2007-10-01 17:04:49 hastings Exp $
+ * @version $Id: SyncHelper.java,v 1.5 2007-10-26 13:29:37 hastings Exp $
  */
 public class SyncHelper {
     private static final Logger logger = Logger.getLogger(SyncHelper.class);
@@ -162,12 +162,12 @@ public class SyncHelper {
         String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
         String returnType = "";
         if (buildServicesClientHandleClassNameList(serviceInfo).contains(
-            method.getType().getPackageName() + "." + method.getType().getClassName())) {
+             method.getType().getClassName())) {
             returnType += IntroduceConstants.WSADDRESSING_EPR_CLASSNAME;
         } else {
-            if (method.getType().getPackageName().length() > 0) {
-                returnType += method.getType().getPackageName() + ".";
-            }
+            //if (method.getType().getPackageName().length() > 0) {
+            //    returnType += method.getType().getPackageName() + ".";
+            //}
             returnType += method.getType().getClassName();
         }
         if (method.getType().isArray()) {
@@ -177,11 +177,11 @@ public class SyncHelper {
         Parameter[] inputs = method.getParams();
         for (int j = 0; j < inputs.length; j++) {
             String classType = null;
-            if (inputs[j].getType().getPackageName().length() > 0) {
-                classType = inputs[j].getType().getPackageName() + "." + inputs[j].getType().getClassName();
-            } else {
+            //if (inputs[j].getType().getPackageName().length() > 0) {
+            //    classType = inputs[j].getType().getPackageName() + "." + inputs[j].getType().getClassName();
+            //} else {
                 classType = inputs[j].getType().getClassName();
-            }
+            //}
             if (inputs[j].getType().isArray()) {
                 classType += "[]";
             }
@@ -365,9 +365,9 @@ public class SyncHelper {
         StringBuffer methodString = new StringBuffer();
         String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
         String returnType = "";
-        if (method.getType().getPackageName().length() > 0) {
-            returnType += method.getType().getPackageName() + ".";
-        }
+        //if (method.getType().getPackageName().length() > 0) {
+        //    returnType += method.getType().getPackageName() + ".";
+        //}
         returnType += method.getType().getClassName();
         if (method.getType().isArray()) {
             returnType += "[]";
@@ -376,11 +376,11 @@ public class SyncHelper {
         Parameter[] inputs = method.getParams();
         for (int j = 0; j < inputs.length; j++) {
             String classType = null;
-            if (inputs[j].getType().getPackageName().length() > 0) {
-                classType = inputs[j].getType().getPackageName() + "." + inputs[j].getType().getClassName();
-            } else {
+            //if (inputs[j].getType().getPackageName().length() > 0) {
+            //    classType = inputs[j].getType().getPackageName() + "." + inputs[j].getType().getClassName();
+            //} else {
                 classType = inputs[j].getType().getClassName();
-            }
+           // }
             if (inputs[j].getType().isArray()) {
                 classType += "[]";
             }
@@ -435,13 +435,13 @@ public class SyncHelper {
 
         String methodName = CommonTools.lowerCaseFirstCharacter(method.getName());
 
-        if (method.getType().getPackageName() != null && method.getType().getPackageName().length() > 0) {
-            methodString.append("public ").append(method.getType().getPackageName()).append(".").append(
-                method.getType().getClassName()).append(" ").append(methodName).append("(");
-        } else {
+        //if (method.getType().getPackageName() != null && method.getType().getPackageName().length() > 0) {
+        //    methodString.append("public ").append(method.getType().getPackageName()).append(".").append(
+        //        method.getType().getClassName()).append(" ").append(methodName).append("(");
+        //} else {
             methodString.append("public ").append(
                 method.getType().getClassName()).append(" ").append(methodName).append("(");
-        }
+       // }
 
         methodString.append(method.getParams()[0].getType().getPackageName()).append(".").append(
             method.getParams()[0].getType().getClassName()).append(" params");

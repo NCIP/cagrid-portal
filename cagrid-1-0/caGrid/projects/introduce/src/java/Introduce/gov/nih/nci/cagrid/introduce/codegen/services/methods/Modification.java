@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 
 import org.apache.ws.jaxme.js.JavaMethod;
 
-
 /**
  * Holds a modified method object and it's coresponding old
  * JavaMethod object

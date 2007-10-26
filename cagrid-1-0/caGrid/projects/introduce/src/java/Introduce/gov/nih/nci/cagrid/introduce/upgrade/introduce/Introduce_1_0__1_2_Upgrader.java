@@ -472,16 +472,20 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
 
             JavaMethod[] methods = source.getMethods();
             int j = 0;
+            boolean found = false;
             for (j = 0; j < methods.length; j++) {
                 if (methods[j].getName().equals("getResourceProperty")) {
+                    found = true;
                     break;
                 }
-            } 
-            
-            JavaQName qname = JavaQNameImpl.getInstance("GetResourcePropertyResponse");
-          
-            methods[j].setType(qname);
-            syncsource.removeClientImpl(methods[j]);
+            }
+
+            if (found) {
+                JavaQName qname = JavaQNameImpl.getInstance("GetResourcePropertyResponse");
+
+                methods[j].setType(qname);
+                syncsource.removeClientImpl(methods[j]);
+            }
         }
 
     }

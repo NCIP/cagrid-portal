@@ -49,6 +49,9 @@ public class UpgradeMetadataTo1pt1Story extends Story {
 
     @Override
     protected boolean storySetUp() throws Throwable {
+        if (TEST_DIR.exists()) {
+            TEST_DIR.delete();
+         }
         assertTrue("Old service zip does not exist.", TEST_SERVICE_ZIP.exists());
         assertTrue("Old service zip is not readable.", TEST_SERVICE_ZIP.canRead());
         return true;
@@ -59,7 +62,7 @@ public class UpgradeMetadataTo1pt1Story extends Story {
     protected void storyTearDown() throws Throwable {
         super.storyTearDown();
         if (TEST_DIR.exists()) {
-            TEST_DIR.delete();
+           // TEST_DIR.delete();
         }
     }
 
