@@ -1,5 +1,5 @@
 <!-- ======================================================================= -->
-<!-- caGrid 1.1 (2.0) Data Service Extensions / Styles build file            -->
+<!-- caGrid 1.2 Data Service Extensions / Styles build file                  -->
 <!-- ======================================================================= -->
 <project name="dataExtensions" default="all" basedir=".">
 	<!-- Environment -->
@@ -73,7 +73,9 @@
 	<!-- using ant contrib for contidionals, looping, and runtarget -->
     <taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
-	    	<pathelement location="${lib.dir}/ant-contrib.jar" />
+			<fileset dir="${ext.lib.dir}">
+			    <include name="ant-contrib*.jar"/>
+			</fileset>
 		</classpath>
 	</taskdef>
 

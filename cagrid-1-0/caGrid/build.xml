@@ -779,6 +779,7 @@
     <target name="build-dataExtensions" depends="configure-dataExtensions" description="Builds caGrid Data Services extension">
         <resolveDependencies extdir="${projects.dir}/dataExtensions/ext">
             <artifact refid="cagrid.properties" />
+			<artifact refid="ant-contrib.jars" />
             <artifact refid="jet.jars" />
             <artifact refid="core.jars" />
             <artifact refid="core.resources" />
