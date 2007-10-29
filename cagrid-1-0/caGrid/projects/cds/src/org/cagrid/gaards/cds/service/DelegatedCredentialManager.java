@@ -329,50 +329,59 @@ public class DelegatedCredentialManager {
 						.getDelegationFault(Errors.PUBLIC_KEY_DOES_NOT_MATCH);
 			}
 
-			try {
-				ProxyPathValidator validator = new ProxyPathValidator();
-				validator.validate(certs, TrustedCertificates
-						.getDefaultTrustedCertificates().getCertificates(),
-						CertificateRevocationLists
-								.getDefaultCertificateRevocationLists());
-
-			} catch (Exception e) {
-				throw Errors.getDelegationFault(
-						Errors.INVALID_CERTIFICATE_CHAIN, e);
-			}
-
-			// Check to make sure the Identity of the proxy cert matches the
-			// Identity of the initiator.
-
-			try {
-				if (!BouncyCastleUtil.getIdentity(certs).equals(
-						r.getGridIdentity())) {
-					throw Errors
-							.getDelegationFault(Errors.IDENTITY_DOES_NOT_MATCH_INITIATOR);
-				}
-			} catch (CertificateException e) {
-				log.error(e.getMessage(), e);
-				throw Errors
-						.getInternalFault(
-								Errors.UNEXPECTED_ERROR_EXTRACTING_IDENTITY_FROM_CERTIFICATE_CHAIN,
-								e);
-			}
-
 			// Check delegation path length
 			try {
 				if (CertUtil.isProxy(BouncyCastleUtil
 						.getCertificateType(certs[0]))) {
-					int delegationPathLength = CertificateExtensionsUtil
-							.getDelegationPathLength(certs[0]);
-					int maxLength = delegationPathLength - 1;
-					if (maxLength < r.getDelegationPathLength()) {
-						throw Errors
-								.getDelegationFault(Errors.INSUFFICIENT_DELEGATION_PATH_LENGTH);
+					
+					int currLength = r.getDelegationPathLength();
+					for (int i = 0; i < certs.length; i++) {
+						if (CertUtil.isProxy(BouncyCastleUtil
+								.getCertificateType(certs[i]))) {
+							int delegationPathLength = CertificateExtensionsUtil
+									.getDelegationPathLength(certs[i]);
+							int maxLength = delegationPathLength - 1;
+							if (maxLength < currLength) {
+								throw Errors
+										.getDelegationFault(Errors.INSUFFICIENT_DELEGATION_PATH_LENGTH);
+							}
+							currLength = delegationPathLength;
+						}
 					}
 				} else {
 					throw Errors
 							.getDelegationFault(Errors.CERTIFICATE_CHAIN_DOES_NOT_CONTAIN_PROXY);
 				}
+
+				try {
+					ProxyPathValidator validator = new ProxyPathValidator();
+					validator.validate(certs, TrustedCertificates
+							.getDefaultTrustedCertificates().getCertificates(),
+							CertificateRevocationLists
+									.getDefaultCertificateRevocationLists());
+
+				} catch (Exception e) {
+					throw Errors.getDelegationFault(
+							Errors.INVALID_CERTIFICATE_CHAIN, e);
+				}
+
+				// Check to make sure the Identity of the proxy cert matches the
+				// Identity of the initiator.
+
+				try {
+					if (!BouncyCastleUtil.getIdentity(certs).equals(
+							r.getGridIdentity())) {
+						throw Errors
+								.getDelegationFault(Errors.IDENTITY_DOES_NOT_MATCH_INITIATOR);
+					}
+				} catch (CertificateException e) {
+					log.error(e.getMessage(), e);
+					throw Errors
+							.getInternalFault(
+									Errors.UNEXPECTED_ERROR_EXTRACTING_IDENTITY_FROM_CERTIFICATE_CHAIN,
+									e);
+				}
+
 			} catch (CDSInternalFault e) {
 				throw e;
 			} catch (DelegationFault e) {
