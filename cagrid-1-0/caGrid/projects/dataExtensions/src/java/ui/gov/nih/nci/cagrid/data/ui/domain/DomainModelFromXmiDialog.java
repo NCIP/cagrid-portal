@@ -4,7 +4,9 @@ package gov.nih.nci.cagrid.data.ui.domain;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.xmi.XMIParser;
 
@@ -16,10 +18,12 @@ import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.filechooser.FileFilter;
 
@@ -45,7 +50,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Oct 23, 2007 11:05:04 AM
- * @version $Id: DomainModelFromXmiDialog.java,v 1.2 2007-10-23 19:14:17 dervin Exp $ 
+ * @version $Id: DomainModelFromXmiDialog.java,v 1.3 2007-10-29 14:37:12 dervin Exp $ 
  */
 public class DomainModelFromXmiDialog extends JDialog {
     // keys for validation messages
@@ -559,6 +564,41 @@ public class DomainModelFromXmiDialog extends JDialog {
 
         private void update() {
             validateInput();
+        }
+    }
+    
+    
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ex) {
+            System.err.println("Error selecting system look and feel");
+        }
+        JFileChooser xmiChooser = new JFileChooser();
+        xmiChooser.setFileFilter(FileFilters.XMI_FILTER);
+        xmiChooser.setDialogTitle("Select XMI file");
+        int choice = xmiChooser.showOpenDialog(null);
+        String xmiFilename = null;
+        DomainModel model = null;
+        if (choice == JFileChooser.APPROVE_OPTION) {
+            xmiFilename = xmiChooser.getSelectedFile().getAbsolutePath();
+            model = createDomainModel(null, xmiFilename);
+        }
+        if (model != null) {
+            JFileChooser saveChooser = new JFileChooser();
+            saveChooser.setFileFilter(FileFilters.XML_FILTER);
+            choice = saveChooser.showSaveDialog(null);
+            if (choice == JFileChooser.APPROVE_OPTION) {
+                try {
+                    FileWriter writer = new FileWriter(saveChooser.getSelectedFile());
+                    MetadataUtils.serializeDomainModel(model, writer);
+                    writer.flush();
+                    writer.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    System.exit(1);
+                }
+            }
         }
     }
 }
