@@ -1,9 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree;
 
 import gov.nih.nci.cagrid.introduce.beans.software.ExtensionType;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-
-import java.awt.Font;
 
 import javax.swing.JCheckBox;
 import javax.swing.tree.DefaultTreeModel;

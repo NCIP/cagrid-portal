@@ -4,10 +4,8 @@ import gov.nih.nci.cagrid.introduce.beans.software.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceRevType;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools;
 
 import java.awt.Font;
 import java.util.StringTokenizer;
@@ -129,21 +127,21 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
 
 
     private boolean isExtensionInstalled(ExtensionType extension) {
-        boolean installed = false;
+        boolean extensionInstalled = false;
 
         if (ExtensionsLoader.getInstance().getExtension(extension.getName()) != null) {
             if (extension.getVersion() == null) {
                 if (ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion() == null) {
-                    installed = true;
+                    extensionInstalled = true;
                 }
             } else {
                 if (ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion()!=null && ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion().equals(
                     extension.getVersion())) {
-                    installed = true;
+                    extensionInstalled = true;
                 }
             }
         }
-        return installed;
+        return extensionInstalled;
     }
 
 
