@@ -11,8 +11,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.xml.namespace.QName;
 
-import org.projectmobius.portal.PortalResourceManager;
-
 
 public class MethodsPopUpMenu extends JPopupMenu {
 

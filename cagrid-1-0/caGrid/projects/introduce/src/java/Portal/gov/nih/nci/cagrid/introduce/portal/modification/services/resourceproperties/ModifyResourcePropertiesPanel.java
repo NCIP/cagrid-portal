@@ -18,7 +18,6 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeN
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
 
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -32,7 +31,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -110,9 +108,9 @@ public class ModifyResourcePropertiesPanel extends JPanel {
     }
 
 
-    public void reInitialize(ServiceType service, NamespacesType ns) {
-        this.service = service;
-        this.properties = service.getResourcePropertiesList();
+    public void reInitialize(ServiceType initService, NamespacesType ns) {
+        this.service = initService;
+        this.properties = initService.getResourcePropertiesList();
         this.namespaces = ns;
         this.namespacesJTree.setNamespaces(ns);
         this.resourcePropertiesTable.setResourceProperties(this.properties);

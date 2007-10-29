@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -17,8 +16,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-
-import org.projectmobius.portal.PortalResourceManager;
 
 
 public class ServiceButtonPanel extends ServiceContextsOptionsPanel {

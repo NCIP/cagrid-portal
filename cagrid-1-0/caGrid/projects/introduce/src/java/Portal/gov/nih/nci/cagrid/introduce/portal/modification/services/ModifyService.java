@@ -32,7 +32,6 @@ import java.net.URI;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -40,6 +39,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -158,7 +158,7 @@ public class ModifyService extends JDialog {
      * This method initializes this
      */
     private void initialize() {
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
 
             @Override
@@ -217,7 +217,7 @@ public class ModifyService extends JDialog {
         } else {
             // make sure it is a valid namespace
             try {
-                URI namespaceURI = new URI(this.getNamespaceTextField().getText());
+                new URI(this.getNamespaceTextField().getText());
             } catch (Exception e) {
                 result.add(new SimpleValidationMessage("Invalid namespace format.", Severity.ERROR, SERVICE_NAMESPACE));
             }

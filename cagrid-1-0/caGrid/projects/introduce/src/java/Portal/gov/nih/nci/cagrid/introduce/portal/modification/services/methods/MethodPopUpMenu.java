@@ -9,8 +9,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.projectmobius.portal.PortalResourceManager;
-
 
 public class MethodPopUpMenu extends JPopupMenu {
 

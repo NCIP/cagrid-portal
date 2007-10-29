@@ -14,8 +14,6 @@ import javax.swing.JButton;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import org.projectmobius.portal.PortalResourceManager;
-
 
 public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 

@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 
 import java.awt.event.MouseAdapter;
