@@ -74,7 +74,7 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
                 IntroduceType[] introduceTypes = softwareUpdates.getIntroduce();
                 if (introduceTypes != null) {
                     for (int i = 0; i < introduceTypes.length; i++) {
-                        if (!introduceTypes[i].getIsInstalled()) {
+                        if (!introduceTypes[i].getIsInstalled().booleanValue()) {
                             URL url = null;
                             try {
                                 url = new URL(introduceTypes[i].getZipFileURL().toString());

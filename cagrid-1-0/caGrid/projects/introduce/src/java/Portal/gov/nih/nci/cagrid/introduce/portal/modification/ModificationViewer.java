@@ -127,8 +127,6 @@ public class ModificationViewer extends GridPortalComponent {
 
     private JPanel buttonPanel = null;
 
-    private JButton cancel = null;
-
     private JPanel selectPanel = null;
 
     private MethodsTable methodsTable = null;

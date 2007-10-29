@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps;
 
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree.UpdateTree;
 

@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 

@@ -12,10 +12,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.WindowConstants;
 
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -57,7 +57,7 @@ public class UpgradeStatusView extends JDialog {
         this.setTitle("Upgrade Status Report");
         this.setContentPane(getMainPanel());
         this.setModal(true);
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         PortalUtils.centerComponent(this);
     }
 
