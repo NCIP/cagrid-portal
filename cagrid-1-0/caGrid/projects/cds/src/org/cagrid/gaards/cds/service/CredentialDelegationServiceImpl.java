@@ -10,6 +10,7 @@ import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.delegated.service.DelegatedCredentialResourceHome;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
+import org.cagrid.tools.database.Database;
 import org.globus.wsrf.security.SecurityManager;
 import org.globus.wsrf.utils.AddressingUtils;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -39,6 +40,8 @@ public class CredentialDelegationServiceImpl extends
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
 			cfg.setLocation(new FileSystemResource(properties));
 			cfg.postProcessBeanFactory(factory);
+			Database db = (Database) factory.getBean(ConfigurationConstants.DATABASE_CONFIGURATION_BEAN);
+			db.createDatabaseIfNeeded();
 			cds = (CDS) factory.getBean(ConfigurationConstants.CDS_BEAN);
 
 			home = (DelegatedCredentialResourceHome) getDelegatedCredentialResourceHome();

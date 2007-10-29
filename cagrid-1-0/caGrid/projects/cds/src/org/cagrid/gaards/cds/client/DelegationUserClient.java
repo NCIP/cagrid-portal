@@ -1,6 +1,8 @@
 package org.cagrid.gaards.cds.client;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
 
@@ -9,11 +11,13 @@ import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
 import org.apache.axis.types.URI;
+import org.cagrid.gaards.cds.common.AllowedParties;
 import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningResponse;
+import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
 import org.cagrid.gaards.cds.common.Utils;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
@@ -22,12 +26,16 @@ import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.globus.gsi.GlobusCredential;
 
-public class DelegationClient {
+public class DelegationUserClient {
 
 	private GlobusCredential cred;
 	private CredentialDelegationServiceClient client;
 
-	public DelegationClient(String url, GlobusCredential cred) throws Exception {
+	public DelegationUserClient(String url) throws Exception {
+		this(url,ProxyUtil.getDefaultProxy());
+	}
+
+	public DelegationUserClient(String url, GlobusCredential cred) throws Exception {
 		this.cred = cred;
 		this.client = new CredentialDelegationServiceClient(url, cred);
 	}
@@ -82,6 +90,31 @@ public class DelegationClient {
 		res.setDelegationIdentifier(dsr.getDelegationIdentifier());
 		res.setCertificateChain(chain);
 		return client.approveDelegation(res);
+	}
+
+	public static void main(String[] args) {
+		try {
+			DelegationUserClient client = new DelegationUserClient(
+					"https://localhost:8443/wsrf/services/cagrid/CredentialDelegationService");
+			ProxyLifetime dl = new ProxyLifetime();
+			dl.setSeconds(500);
+			ProxyLifetime dcl = new ProxyLifetime();
+			dcl.setSeconds(250);
+			IdentityDelegationPolicy policy = new IdentityDelegationPolicy();
+			AllowedParties ap = new AllowedParties();
+			ap
+					.setGridIdentity(new String[] { "/O=caBIG/OU=caGrid/OU=Training/OU=Dorian/CN=langella" });
+			policy.setAllowedParties(ap);
+			DelegatedCredentialReference ref = client.delegateCredential(dl, 1, policy, dcl, 0, 1024);
+			
+			DelegatedCredentialUserClient client2 = new DelegatedCredentialUserClient(ref);
+			GlobusCredential proxy = client2.getDelegatedCredential();
+			System.out.println(proxy.getIdentity());
+			ProxyUtil.saveProxyAsDefault(proxy);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+		}
+
 	}
 
 }

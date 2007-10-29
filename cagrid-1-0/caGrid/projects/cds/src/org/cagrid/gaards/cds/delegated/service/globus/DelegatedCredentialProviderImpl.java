@@ -26,9 +26,9 @@ public class DelegatedCredentialProviderImpl{
 	}
 	
 
-    public org.cagrid.gaards.cds.delegated.stubs.GetDelegatedCredentialResponse getDelegatedCredential(org.cagrid.gaards.cds.delegated.stubs.GetDelegatedCredentialRequest params) throws RemoteException {
+    public org.cagrid.gaards.cds.delegated.stubs.GetDelegatedCredentialResponse getDelegatedCredential(org.cagrid.gaards.cds.delegated.stubs.GetDelegatedCredentialRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     org.cagrid.gaards.cds.delegated.stubs.GetDelegatedCredentialResponse boxedResult = new org.cagrid.gaards.cds.delegated.stubs.GetDelegatedCredentialResponse();
-    boxedResult.setDelegationIdentifier(impl.getDelegatedCredential());
+    boxedResult.setCertificateChain(impl.getDelegatedCredential(params.getPublicKey().getPublicKey()));
     return boxedResult;
   }
 

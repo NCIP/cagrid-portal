@@ -19,7 +19,14 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="org.cagrid.gaards.cds.delegated.service.DelegatedCredentialResourceHome" />
+    <resource name="home" type="org.cagrid.gaards.cds.delegated.service.DelegatedCredentialResourceHome">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+      </resourceParams>
+    </resource>
     <resourceLink name="serviceconfiguration" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/CredentialDelegationService/serviceconfiguration" />
     <resourceLink name="credentialDelegationServiceHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/CredentialDelegationService/home" />
   </service>

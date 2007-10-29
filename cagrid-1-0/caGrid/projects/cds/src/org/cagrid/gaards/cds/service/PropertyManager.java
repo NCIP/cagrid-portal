@@ -27,8 +27,8 @@ public class PropertyManager {
 
 	public PropertyManager(Database db) throws CDSInternalFault {
 		try {
-			this.manager = new MetadataManager(db, TABLE);
 			this.log = LogFactory.getLog(this.getClass().getName());
+			this.manager = new MetadataManager(db, TABLE);
 			version = manager.get(VERSION_PROPERTY);
 			if (version == null) {
 				version = new Metadata();
@@ -45,6 +45,18 @@ public class PropertyManager {
 						.setDescription("The key manager class used to manage keys.");
 			}
 		} catch (Exception e) {
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("********************************************");
+			System.out.println(e.getMessage());
+			System.out.println("********************************************");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			
 			log.error(e.getMessage(), e);
 			CDSInternalFault fault = new CDSInternalFault();
 			fault

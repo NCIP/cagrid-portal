@@ -16,10 +16,10 @@ public class DelegatedCredentialImpl extends DelegatedCredentialImplBase {
 		super();
 	}
 
-  public org.cagrid.gaards.cds.common.DelegationIdentifier getDelegatedCredential() throws RemoteException {
+  public org.cagrid.gaards.cds.common.CertificateChain getDelegatedCredential(org.cagrid.gaards.cds.common.PublicKey publicKey) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
 		DelegatedCredentialResource resource = (DelegatedCredentialResource) ResourceContext
 				.getResourceContext().getResource();
-		return resource.getDelegatedCredential();
+		return resource.getDelegatedCredential(publicKey);
 	}
 
 }

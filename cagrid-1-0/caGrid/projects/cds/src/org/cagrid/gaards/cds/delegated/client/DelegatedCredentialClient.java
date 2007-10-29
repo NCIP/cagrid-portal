@@ -110,12 +110,15 @@ public class DelegatedCredentialClient extends ServiceSecurityClient implements 
 		}
 	}
 
-  public org.cagrid.gaards.cds.common.DelegationIdentifier getDelegatedCredential() throws RemoteException {
+  public org.cagrid.gaards.cds.common.CertificateChain getDelegatedCredential(org.cagrid.gaards.cds.common.PublicKey publicKey) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getDelegatedCredential");
     org.cagrid.gaards.cds.delegated.stubs.GetDelegatedCredentialRequest params = new org.cagrid.gaards.cds.delegated.stubs.GetDelegatedCredentialRequest();
+    org.cagrid.gaards.cds.delegated.stubs.GetDelegatedCredentialRequestPublicKey publicKeyContainer = new org.cagrid.gaards.cds.delegated.stubs.GetDelegatedCredentialRequestPublicKey();
+    publicKeyContainer.setPublicKey(publicKey);
+    params.setPublicKey(publicKeyContainer);
     org.cagrid.gaards.cds.delegated.stubs.GetDelegatedCredentialResponse boxedResult = portType.getDelegatedCredential(params);
-    return boxedResult.getDelegationIdentifier();
+    return boxedResult.getCertificateChain();
     }
   }
 
