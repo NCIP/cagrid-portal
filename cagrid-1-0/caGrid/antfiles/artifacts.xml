@@ -55,12 +55,12 @@
 		</artifact>
 		<artifact track="main" type="resources" id="caCORE.4.0.remote-client.package">
 			<fileset dir="${share.dir}/lib/caCORE40/remote-client/">
-				<include name="RemoteClient.zip"/>
+				<include name="RemoteClient.zip" />
 			</fileset>
 		</artifact>
 		<artifact track="main" type="resources" id="caCORE.4.0.local-client.package">
 			<fileset dir="${share.dir}/lib/caCORE40/local-client/">
-				<include name="LocalClient.zip"/>
+				<include name="LocalClient.zip" />
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="jet.jars">
@@ -373,7 +373,40 @@
 			</fileset>
 		</artifact>
 
+		<artifact track="main" type="jars" id="cds.service.jars">
+			<generatingantcall target="build-cds" />
+			<fileset dir="${projects.dir}/cds/build/lib">
+				<include name="caGrid-*-cds-*stubs.jar" />
+				<include name="caGrid-*-cds-*common.jar" />
+				<include name="caGrid-*-cds-*client.jar" />
+				<include name="caGrid-*-cds-*service.jar" />
+			</fileset>
 
+			<fileset dir="${projects.dir}/cds/lib">
+				<include name="spring-beans.jar" />
+				<include name="spring-core.jar" />
+			</fileset>
+
+			<fileset dir="${projects.dir}/cds/ext/lib">
+				<include name="caGrid-*-advertisement.jar" />
+				<include name="caGrid-*-core.jar" />
+				<include name="caGrid-*-ServiceSecurityProvider-client.jar" />
+				<include name="caGrid-*-ServiceSecurityProvider-common.jar" />
+				<include name="caGrid-*-ServiceSecurityProvider-stubs.jar" />
+				<include name="caGrid-*-ServiceSecurityProvider-service.jar" />
+				<include name="caGrid-*-metadata-security.jar" />
+				<include name="caGrid-*-metadata-common.jar" />
+				<include name="caGrid-*-gridca.jar" />
+				<include name="caGrid-*-service-tools.jar" />
+				<include name="commons-dbcp-1.2.2.jar" />
+				<include name="commons-pool-1.2.jar" />
+				<include name="globus_wsrf_mds_aggregator.jar" />
+				<include name="globus_wsrf_mds_aggregator_stubs.jar" />
+				<include name="globus_wsrf_servicegroup.jar" />
+				<include name="globus_wsrf_servicegroup_stubs.jar" />
+				<include name="mysql-connector-java-3.0.16-ga-bin.jar" />
+			</fileset>
+		</artifact>
 
 		<artifact track="main" type="jars" id="gts.client.jars">
 			<generatingantcall target="build-gts" />
@@ -469,11 +502,11 @@
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="data.extensions.jars">
-			<generatingantcall target="build-dataExtensions"/>
+			<generatingantcall target="build-dataExtensions" />
 			<fileset dir="${projects.dir}/dataExtensions/build/lib">
-			    <include name="*.jar"/>
-				<exclude name="*-tests.jar"/>
-				<exclude name="*-style-*.jar"/>
+				<include name="*.jar" />
+				<exclude name="*-tests.jar" />
+				<exclude name="*-style-*.jar" />
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="sdk.query.jars">
