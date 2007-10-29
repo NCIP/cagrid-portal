@@ -21,7 +21,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Oct 24, 2007 1:27:00 PM
- * @version $Id: ModelComparisonStep.java,v 1.2 2007-10-29 15:50:03 dervin Exp $ 
+ * @version $Id: ModelComparisonStep.java,v 1.3 2007-10-29 15:57:57 dervin Exp $ 
  */
 public class ModelComparisonStep extends Step {
     
@@ -146,6 +146,18 @@ public class ModelComparisonStep extends Step {
     
     
     private void compareAttributes(UMLAttribute[] goldAttributes, UMLAttribute[] testAttributes) {
-        // TODO: implement
+        assertEquals("Mismatched number of attributes", goldAttributes.length, testAttributes.length);
+        for (UMLAttribute gold : goldAttributes) {
+            String goldString = "" + gold.getName() + ":" + gold.getDataTypeName();
+            boolean found = false;
+            for (UMLAttribute test : testAttributes) {
+                String testString = "" + test.getName() + ":" + test.getDataTypeName();
+                if (goldString.equals(testString)) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue(goldString + " attribute not found", found);
+        }
     }
 }
