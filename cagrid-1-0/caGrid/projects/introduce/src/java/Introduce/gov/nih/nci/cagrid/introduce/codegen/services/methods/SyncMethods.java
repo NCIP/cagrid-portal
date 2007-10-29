@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.introduce.codegen.services.methods;
 
-import gov.nih.nci.cagrid.common.SchemaValidationException;
-import gov.nih.nci.cagrid.common.SchemaValidator;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;

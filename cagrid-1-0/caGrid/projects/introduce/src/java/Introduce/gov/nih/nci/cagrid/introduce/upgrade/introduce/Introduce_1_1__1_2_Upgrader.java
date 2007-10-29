@@ -29,7 +29,6 @@ import org.apache.ws.jaxme.js.JavaQNameImpl;
 import org.apache.ws.jaxme.js.JavaSource;
 import org.apache.ws.jaxme.js.JavaSourceFactory;
 import org.apache.ws.jaxme.js.util.JavaParser;
-import org.projectmobius.tools.common.viewer.RegistryBrowser.RemoveRegistryAction;
 
 
 public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
@@ -195,7 +194,7 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
         };
 
         File skeletonLibDir = new File("skeleton" + File.separator + "lib");
-        File extLibDir = new File("ext" + File.separator + "lib");
+        // File extLibDir = new File("ext" + File.separator + "lib");
         File csmLibDir = new File("ext" + File.separator + "skeleton" + File.separator + "csm" + File.separator + "lib");
         File grouperLibDir = new File("ext" + File.separator + "skeleton" + File.separator + "gridgrouper"
             + File.separator + "lib");
@@ -258,7 +257,7 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
 
     private void removeGetResourcePropertyMethods() throws Exception {
         // foreach service need to replace the resource files.....
-        File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
+        // File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
         for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
             ServiceType service = getServiceInformation().getServices().getService(i);
             SyncSource syncsource = new SyncSource(getServiceInformation().getBaseDirectory(), getServiceInformation(),
