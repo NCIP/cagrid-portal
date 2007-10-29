@@ -24,7 +24,9 @@
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 
 	
-	
+    <!--import developers targets and properties (which can be overridden)-->
+    <import file="dev-build.xml" />
+
 
 	<!-- Jars -->
 	<property name="jar.prefix" value="${service.name}" />
@@ -46,8 +48,6 @@
 	<!-- Auxiliary directory where all the intermediate files will be placed -->
 	<property name="build.dir" location="build" />
 	
-	<!--import developers targets and properties (which can be overridden)-->
-	<import file="dev-build.xml" />
 
 	<!-- Directory for compiled service classes -->
 	<property name="build.dest" location="${build.dir}/classes" />
