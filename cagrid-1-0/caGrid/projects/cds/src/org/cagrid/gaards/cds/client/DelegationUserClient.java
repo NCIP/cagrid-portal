@@ -32,12 +32,31 @@ public class DelegationUserClient {
 	private CredentialDelegationServiceClient client;
 
 	public DelegationUserClient(String url) throws Exception {
-		this(url,ProxyUtil.getDefaultProxy());
+		this(url, ProxyUtil.getDefaultProxy());
 	}
 
-	public DelegationUserClient(String url, GlobusCredential cred) throws Exception {
+	public DelegationUserClient(String url, GlobusCredential cred)
+			throws Exception {
 		this.cred = cred;
 		this.client = new CredentialDelegationServiceClient(url, cred);
+	}
+
+	public DelegatedCredentialReference delegateCredential(
+			DelegationPolicy policy, ProxyLifetime delegatedCredentialsLifetime)
+			throws RemoteException, CDSInternalFault, DelegationFault,
+			PermissionDeniedFault, URI.MalformedURIException {
+		return this.delegateCredential(null, policy,
+				delegatedCredentialsLifetime);
+	}
+
+	public DelegatedCredentialReference delegateCredential(
+			ProxyLifetime delegationLifetime, DelegationPolicy policy,
+			ProxyLifetime delegatedCredentialsLifetime) throws RemoteException,
+			CDSInternalFault, DelegationFault, PermissionDeniedFault,
+			URI.MalformedURIException {
+		return this.delegateCredential(delegationLifetime, 1, policy,
+				delegatedCredentialsLifetime, 0,
+				ClientConstants.DEFAULT_KEY_SIZE);
 	}
 
 	public DelegatedCredentialReference delegateCredential(
@@ -105,9 +124,11 @@ public class DelegationUserClient {
 			ap
 					.setGridIdentity(new String[] { "/O=caBIG/OU=caGrid/OU=Training/OU=Dorian/CN=langella" });
 			policy.setAllowedParties(ap);
-			DelegatedCredentialReference ref = client.delegateCredential(dl, 1, policy, dcl, 0, 1024);
-			
-			DelegatedCredentialUserClient client2 = new DelegatedCredentialUserClient(ref);
+			DelegatedCredentialReference ref = client.delegateCredential(dl, 1,
+					policy, dcl, 0, 1024);
+
+			DelegatedCredentialUserClient client2 = new DelegatedCredentialUserClient(
+					ref);
 			GlobusCredential proxy = client2.getDelegatedCredential();
 			System.out.println(proxy.getIdentity());
 			ProxyUtil.saveProxyAsDefault(proxy);
