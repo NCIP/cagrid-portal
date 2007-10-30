@@ -178,5 +178,16 @@
 	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-tests.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-service-tools.jar"/>
+	<classpathentry kind="lib" path="ext/lib/commons-dbcp-1.2.2.jar"/>
+	<classpathentry kind="lib" path="ext/lib/commons-pool-1.2.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<classpathentry kind="lib" path="ext/lib/spring-beans.jar"/>
+	<classpathentry kind="lib" path="ext/lib/spring-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/validation-2.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

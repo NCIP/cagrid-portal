@@ -207,7 +207,7 @@ public class GridGrouperTest extends Story {
 
                 // submit and approve registration
                 steps.add(new DorianSubmitRegistrationStep(application, dorianURL));
-                steps.add(new DorianApproveRegistrationStep(application, dorianURL, auth.getCredential()));
+                steps.add(new DorianApproveRegistrationStep(application, dorianURL, auth));
             }
         } catch (Exception e) {
             throw new RuntimeException("unable add new user steps", e);

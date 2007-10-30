@@ -4,6 +4,7 @@
 package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.Constants;
+import gov.nci.nih.cagrid.tests.core.GridCredential;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.dorian.client.IdPUserClient;
@@ -22,13 +23,14 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author Patrick McConnell
  */
-public class DorianAuthenticateStep extends Step {
+public class DorianAuthenticateStep extends Step implements GridCredential{
     private String userId;
     private String password;
     private String serviceURL;
     private int hours;
     private SAMLAssertion saml;
     private GlobusCredential credential;
+    private int delegationPathLength;
 
 
     public DorianAuthenticateStep(String serviceURL) {
@@ -37,18 +39,19 @@ public class DorianAuthenticateStep extends Step {
 
 
     public DorianAuthenticateStep(String userId, String password, String serviceURL) {
-        this(userId, password, serviceURL, 12);
+        this(userId, password, serviceURL, 12,2);
     }
 
 
-    public DorianAuthenticateStep(String userId, String password, String serviceURL, int hours) {
+    public DorianAuthenticateStep(String userId, String password, String serviceURL, int hours, int delegationPathLength) {
         super();
-
         this.userId = userId;
         this.password = password;
         this.serviceURL = serviceURL;
         this.hours = hours;
+        this.delegationPathLength = delegationPathLength;
     }
+    
 
 
     @Override
@@ -60,7 +63,7 @@ public class DorianAuthenticateStep extends Step {
         this.saml = client.authenticate(authCred);
 
         IFSUserClient c2 = new IFSUserClient(this.serviceURL);
-        this.credential = c2.createProxy(this.saml, new ProxyLifetime(this.hours, 0, 0), 2);
+        this.credential = c2.createProxy(this.saml, new ProxyLifetime(this.hours, 0, 0), this.delegationPathLength);
         //ProxyManager.getInstance().addProxy(this.credential);
         ProxyUtil.saveProxyAsDefault(this.credential);
     }

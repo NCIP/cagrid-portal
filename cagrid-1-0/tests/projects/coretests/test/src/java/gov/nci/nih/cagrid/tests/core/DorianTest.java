@@ -31,7 +31,6 @@ import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Story;
 
-
 /**
  * This is an integration test that tests some of the major functionality of
  * Dorian. It syncs GTS and deploys the dorian service and an echo service to
@@ -52,137 +51,143 @@ import com.atomicobject.haste.framework.Story;
  * @author Patrick McConnell
  */
 public class DorianTest extends Story {
-    private GlobusHelper globus;
-    private File serviceDir;
-    private File caFile;
-    
+	private GlobusHelper globus;
+	private File serviceDir;
+	private File caFile;
 
+	public DorianTest() {
+		super();
+	}
 
-    public DorianTest() {
-        super();
-    }
+	@Override
+	public String getName() {
+		return "Dorian Story";
+	}
 
+	@Override
+	protected boolean storySetUp() throws Throwable {
+		return true;
+	}
 
-    @Override
-    public String getName() {
-        return "Dorian Story";
-    }
+	@Override
+	protected void storyTearDown() throws Throwable {
+		this.caFile.delete();
 
+		if (this.globus != null) {
+			this.globus.stopGlobus();
+			this.globus.cleanupTempGlobus();
+		}
+		new DorianDestroyDefaultProxyStep().runStep();
+		new DorianCleanupStep().runStep();
+	}
 
-    @Override
-    protected boolean storySetUp() throws Throwable {
-        return true;
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	protected Vector steps() {
+		this.globus = new GlobusHelper(true);
 
+		this.serviceDir = new File(System.getProperty("dorian.dir", ".."
+				+ File.separator + ".." + File.separator + ".."
+				+ File.separator + "caGrid" + File.separator + "projects"
+				+ File.separator + "dorian"));
+		this.caFile = new File(System.getProperty("user.home"), ".globus"
+				+ File.separator + "certificates" + File.separator
+				+ "DorianTest_ca.1");
 
-    @Override
-    protected void storyTearDown() throws Throwable {
-        this.caFile.delete();
+		Vector steps = new Vector();
 
-        if (this.globus != null) {
-            this.globus.stopGlobus();
-            this.globus.cleanupTempGlobus();
-        }
-        new DorianDestroyDefaultProxyStep().runStep();
-        new DorianCleanupStep().runStep();
-    }
+		String dorianURL = null;
+		try {
+			dorianURL = this.globus.getServiceEPR("cagrid/Dorian").getAddress()
+					.toString();
+		} catch (MalformedURIException e) {
+			e.printStackTrace();
+			fail("Unable to get dorian URL:" + e.getMessage());
+		}
 
+		// initialize
+		steps.add(new GlobusCreateStep(this.globus));
+		steps.add(new GlobusInstallSecurityDescriptorStep(this.globus));
+		steps.add(new GlobusDeployServiceStep(this.globus, this.serviceDir));
+		steps.add(new DorianConfigureStep(this.globus));
+		steps.add(new GlobusStartStep(this.globus));
 
-    @Override
-    @SuppressWarnings("unchecked")
-    protected Vector steps() {
-        this.globus = new GlobusHelper(true);
+		// successful authenticate
+		steps.add(new DorianAuthenticateStep("dorian",
+				Constants.DORIAN_ADMIN_PASSWORD, dorianURL));
+		steps.add(new DorianDestroyDefaultProxyStep());
 
-        this.serviceDir = new File(System.getProperty("dorian.dir", ".." + File.separator + ".." + File.separator
-            + ".." + File.separator + "caGrid" + File.separator + "projects" + File.separator + "dorian"));
-        this.caFile = new File(System.getProperty("user.home"), ".globus" + File.separator + "certificates"
-            + File.separator + "DorianTest_ca.1");
+		// failed authenticate
+		steps.add(new DorianAuthenticateFailStep("junk", "junk", dorianURL));
+		steps.add(new DorianAuthenticateFailStep("dorian", "junk", dorianURL));
+		steps
+				.add(new DorianAuthenticateFailStep("junk", "password",
+						dorianURL));
 
-        Vector steps = new Vector();
+		// add trusted ca
+		steps.add(new DorianAuthenticateStep("dorian",
+				Constants.DORIAN_ADMIN_PASSWORD, dorianURL));
+		steps.add(new DorianAddTrustedCAStep(this.caFile, dorianURL));
+		steps.add(new DorianDestroyDefaultProxyStep());
 
-        String dorianURL = null;
-        try {
-            dorianURL = this.globus.getServiceEPR("cagrid/Dorian").getAddress().toString();
-        } catch (MalformedURIException e) {
-            e.printStackTrace();
-            fail("Unable to get dorian URL:" + e.getMessage());
-        }
+		// new users
+		File[] files = new File("test", "resources" + File.separator
+				+ "userApplications").listFiles(new FileFilter() {
+			public boolean accept(File file) {
+				return file.isFile() && file.getName().endsWith(".xml");
+			}
+		});
+		for (File file : files) {
+			try {
+				Application application = (Application) Utils
+						.deserializeDocument(file.toString(), Application.class);
+				// submit registration
+				steps.add(new DorianSubmitRegistrationStep(application,
+						dorianURL));
 
-        // initialize
-        steps.add(new GlobusCreateStep(this.globus));
-        steps.add(new GlobusInstallSecurityDescriptorStep(this.globus));
-        steps.add(new GlobusDeployServiceStep(this.globus, this.serviceDir));
-        steps.add(new DorianConfigureStep(this.globus));
-        steps.add(new GlobusStartStep(this.globus));
+				// approve registration
+				DorianAuthenticateStep auth = new DorianAuthenticateStep(
+						"dorian", Constants.DORIAN_ADMIN_PASSWORD, dorianURL);
+				steps.add(auth);
+				steps.add(new DorianApproveRegistrationStep(application,
+						dorianURL, auth));
+				steps.add(new DorianDestroyDefaultProxyStep());
 
-        // successful authenticate
-        steps.add(new DorianAuthenticateStep("dorian", Constants.DORIAN_ADMIN_PASSWORD, dorianURL));
-        steps.add(new DorianDestroyDefaultProxyStep());
+				// check that we can authenticate
+				steps.add(new DorianAuthenticateStep(application.getUserId(),
+						application.getPassword(), dorianURL));
+				steps.add(new DorianAuthenticateFailStep(application
+						.getUserId(), application.getPassword().toUpperCase(),
+						dorianURL));
+				steps.add(new DorianDestroyDefaultProxyStep());
+			} catch (Exception e) {
+				throw new RuntimeException("unable add new user steps", e);
+			}
+		}
 
-        // failed authenticate
-        steps.add(new DorianAuthenticateFailStep("junk", "junk", dorianURL));
-        steps.add(new DorianAuthenticateFailStep("dorian", "junk", dorianURL));
-        steps.add(new DorianAuthenticateFailStep("junk", "password", dorianURL));
+		return steps;
+	}
 
-        // add trusted ca
-        steps.add(new DorianAuthenticateStep("dorian", Constants.DORIAN_ADMIN_PASSWORD, dorianURL));
-        steps.add(new DorianAddTrustedCAStep(this.caFile, dorianURL));
-        steps.add(new DorianDestroyDefaultProxyStep());
+	@Override
+	public String getDescription() {
+		return "DorianTest";
+	}
 
-        // new users
-        File[] files = new File("test", "resources" + File.separator + "userApplications").listFiles(new FileFilter() {
-            public boolean accept(File file) {
-                return file.isFile() && file.getName().endsWith(".xml");
-            }
-        });
-        for (File file : files) {
-            try {
-                Application application = (Application) Utils.deserializeDocument(file.toString(), Application.class);
-                // submit registration
-                steps.add(new DorianSubmitRegistrationStep(application, dorianURL));
+	/**
+	 * used to make sure that if we are going to use a junit testsuite to test
+	 * this that the test suite will not error out looking for a single
+	 * test......
+	 */
+	public void testDummy() throws Throwable {
+	}
 
-                // approve registration
-                DorianAuthenticateStep auth = new DorianAuthenticateStep("dorian", Constants.DORIAN_ADMIN_PASSWORD, dorianURL);
-                steps.add(auth);
-                steps.add(new DorianApproveRegistrationStep(application, dorianURL, auth.getCredential()));
-                steps.add(new DorianDestroyDefaultProxyStep());
-
-                // check that we can authenticate
-                steps.add(new DorianAuthenticateStep(application.getUserId(), application.getPassword(), dorianURL));
-                steps.add(new DorianAuthenticateFailStep(application.getUserId(), application.getPassword()
-                    .toUpperCase(), dorianURL));
-                steps.add(new DorianDestroyDefaultProxyStep());
-            } catch (Exception e) {
-                throw new RuntimeException("unable add new user steps", e);
-            }
-        }
-
-        return steps;
-    }
-
-
-    @Override
-    public String getDescription() {
-        return "DorianTest";
-    }
-
-
-    /**
-     * used to make sure that if we are going to use a junit testsuite to test
-     * this that the test suite will not error out looking for a single
-     * test......
-     */
-    public void testDummy() throws Throwable {
-    }
-
-
-    /**
-     * Convenience method for running all the Steps in this Story.
-     */
-    public static void main(String args[]) {
-        TestRunner runner = new TestRunner();
-        TestResult result = runner.doRun(new TestSuite(DorianTest.class));
-        System.exit(result.errorCount() + result.failureCount());
-    }
+	/**
+	 * Convenience method for running all the Steps in this Story.
+	 */
+	public static void main(String args[]) {
+		TestRunner runner = new TestRunner();
+		TestResult result = runner.doRun(new TestSuite(DorianTest.class));
+		System.exit(result.errorCount() + result.failureCount());
+	}
 
 }
