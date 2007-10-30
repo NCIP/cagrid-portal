@@ -7,6 +7,7 @@ import gov.nci.nih.cagrid.tests.core.util.AntUtils;
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
 import gov.nci.nih.cagrid.tests.core.util.SourceUtils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.io.BufferedInputStream;
@@ -208,6 +209,7 @@ public class ServiceCreateStep
 		sysProps.setProperty("introduce.skeleton.package.dir", pkg.replace('.', '/'));
 		sysProps.setProperty("introduce.skeleton.namespace.domain", namespace);
 		sysProps.setProperty("introduce.skeleton.extensions", "");
+		sysProps.setProperty("introduce.skeleton.resource.options", IntroduceConstants.INTRODUCE_MAIN_RESOURCE + "," + IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE + "," + IntroduceConstants.INTRODUCE_RESOURCEPROPETIES_RESOURCE);
 		
 		for (Object key : introduceProps.keySet()) {
 			sysProps.setProperty((String) key, introduceProps.getProperty((String) key));
