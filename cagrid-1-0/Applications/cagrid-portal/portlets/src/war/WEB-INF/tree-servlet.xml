@@ -18,7 +18,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
     </bean>
     
     <bean name="/discovery/serviceDetailsNode" class="gov.nih.nci.cagrid.portal2.portlet.tree.TreeNodeDomainObjectSessionViewController">
-          <property name="viewName" value="discovery/serviceDetailsNode"/>
+          <property name="viewName" value="disc/details/service/serviceDetailsNode"/>
           <property name="treeFacade" ref="serviceDetailsTreeFacade"/>
 		  <property name="pathParamName" value="path"/>
 		  <property name="hibernateTemplate" ref="hibernateTemplate"/>

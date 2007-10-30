@@ -59,7 +59,7 @@ public class KeywordDiscoveryController extends AbstractController {
 			throw new Exception("searchFields must be specified");
 		}
 		String discoveryTypeStr = request.getParameter("discoveryType");
-		DiscoveryResultsBean results = new DiscoveryResultsBean();
+		DiscoveryResults results = new DiscoveryResults();
 		Class klass = null;
 		DiscoveryType discoveryType = null;
 		if(DiscoveryType.SERVICE.toString().equals(discoveryTypeStr)){

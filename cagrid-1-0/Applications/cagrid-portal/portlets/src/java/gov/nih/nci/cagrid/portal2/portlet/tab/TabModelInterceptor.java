@@ -12,15 +12,14 @@ import org.springframework.web.context.request.WebRequestInterceptor;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
+ * 
  */
 public class TabModelInterceptor implements WebRequestInterceptor {
-	
-	private static final Log logger = LogFactory.getLog(TabModelInterceptor.class);
-	
-	private TabModel tabModel;
-	private String selectedPathParameterName;
-	private String tabModelRequestAttributeName;
+
+	private static final Log logger = LogFactory
+			.getLog(TabModelInterceptor.class);
+
+	private TabControlConfig tabControlConfig;
 
 	/**
 	 * 
@@ -29,57 +28,57 @@ public class TabModelInterceptor implements WebRequestInterceptor {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.springframework.web.context.request.WebRequestInterceptor#afterCompletion(org.springframework.web.context.request.WebRequest, java.lang.Exception)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.springframework.web.context.request.WebRequestInterceptor#afterCompletion(org.springframework.web.context.request.WebRequest,
+	 *      java.lang.Exception)
 	 */
 	public void afterCompletion(WebRequest arg0, Exception arg1)
 			throws Exception {
 	}
 
-	/* (non-Javadoc)
-	 * @see org.springframework.web.context.request.WebRequestInterceptor#postHandle(org.springframework.web.context.request.WebRequest, org.springframework.ui.ModelMap)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.springframework.web.context.request.WebRequestInterceptor#postHandle(org.springframework.web.context.request.WebRequest,
+	 *      org.springframework.ui.ModelMap)
 	 */
 	public void postHandle(WebRequest arg0, ModelMap arg1) throws Exception {
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.springframework.web.context.request.WebRequestInterceptor#preHandle(org.springframework.web.context.request.WebRequest)
 	 */
 	public void preHandle(WebRequest request) throws Exception {
 
-		String selectedPath = request.getParameter(getSelectedPathParameterName());
-		if(selectedPath != null){
+		String selectedPath = request.getParameter(getTabControlConfig()
+				.getSelectedPathParameterName());
+		if (selectedPath != null) {
 			logger.debug("selecting path '" + selectedPath + "'");
-			getTabModel().select(selectedPath);
+			getTabControlConfig().getTabModel().select(selectedPath);
+		} else {
+			logger.debug("No selectedPath, using default: "
+					+ getTabControlConfig().getTabModel().getCurrentPath());
 		}
-		request.setAttribute(getTabModelRequestAttributeName(), getTabModel(), WebRequest.SCOPE_REQUEST);
+		logger
+				.debug("setting tab model under '"
+						+ getTabControlConfig()
+								.getTabModelRequestAttributeName() + "'");
+		request.setAttribute(getTabControlConfig()
+				.getTabModelRequestAttributeName(), getTabControlConfig()
+				.getTabModel(), WebRequest.SCOPE_REQUEST);
+
 	}
 
-	@Required
-	public TabModel getTabModel() {
-		return tabModel;
+	public TabControlConfig getTabControlConfig() {
+		return tabControlConfig;
 	}
 
-	public void setTabModel(TabModel tabModel) {
-		this.tabModel = tabModel;
+	public void setTabControlConfig(TabControlConfig tabControlConfig) {
+		this.tabControlConfig = tabControlConfig;
 	}
-
-	@Required
-	public String getSelectedPathParameterName() {
-		return selectedPathParameterName;
-	}
-
-	public void setSelectedPathParameterName(String selectedPathParamName) {
-		this.selectedPathParameterName = selectedPathParamName;
-	}
-
-	public String getTabModelRequestAttributeName() {
-		return tabModelRequestAttributeName;
-	}
-
-	public void setTabModelRequestAttributeName(String tabModelRequestAttributeName) {
-		this.tabModelRequestAttributeName = tabModelRequestAttributeName;
-	}
-
 
 }

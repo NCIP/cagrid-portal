@@ -8,6 +8,29 @@
 
 
 	<portlet>
+		<description>caGrid Discovery Portlet</description>
+		<portlet-name>cagriddiscovery</portlet-name>
+		<display-name>caGrid Discovery Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/discovery-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Discovery Portlet</title>
+			<short-title>caGrid Discovery Portlet</short-title>
+			<keywords>cagrid,discovery</keywords>
+		</portlet-info>
+	</portlet>
+<!-- 
+
+	<portlet>
 		<description>caGrid CQL Query Builder Portlet</description>
 		<portlet-name>cqlquerybuilder</portlet-name>
 		<display-name>caGrid CQL Query Builder Portlet</display-name>
@@ -101,158 +124,6 @@
 
 
 	<portlet>
-		<description>caGrid Query Portlet</description>
-		<portlet-name>query</portlet-name>
-		<display-name>caGrid Query Portlet</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/query-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>caGrid Query Portlet</title>
-			<short-title>caGrid Query Portlet</short-title>
-			<keywords>query</keywords>
-		</portlet-info>
-		
-		<portlet-preferences>
-			<preference>
-				<name>MsgInput1Name</name>
-				<value>selectedGridServiceId</value>
-			</preference>
-			<preference>
-				<name>MsgInput1SourceName</name>
-				<value>publishedSelectedGridServiceId</value>
-			</preference>
-			<preference>
-				<name>MsgInput1SourceNamespace</name>
-				<value></value>
-			</preference>
-		</portlet-preferences>		
-		
-	</portlet>
-
-	
-	<portlet>
-		<description>caGrid Directory Portlet</description>
-		<portlet-name>directory</portlet-name>
-		<display-name>caGrid Directory Portlet</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/directory-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>caGrid Directory Portlet</title>
-			<short-title>caGrid Directory Portlet</short-title>
-			<keywords>directory</keywords>
-		</portlet-info>
-		
-		<portlet-preferences>
-			<preference>
-				<name>portletsToMaximize</name>
-				<value>servicedetails</value>
-			</preference>
-
-			<preference>
-				<name>MsgOutput1Name</name>
-				<value>selectedGridServiceId</value>
-			</preference>
-			<preference>
-				<name>MsgOutput1PublishName1</name>
-				<value>publishedSelectedGridServiceId</value>
-			</preference>
-			<preference>
-				<name>MsgOutput1PublishNamespace1</name>
-				<value></value>
-			</preference>
-			
-			<preference>
-				<name>MsgOutput2Name</name>
-				<value>maximizedPortlets</value>
-			</preference>
-			<preference>
-				<name>MsgOutput2PublishName1</name>
-				<value>publishedMaximizedPortlets</value>
-			</preference>
-			<preference>
-				<name>MsgOutput2PublishNamespace1</name>
-				<value></value>
-			</preference>		
-		</portlet-preferences>
-	</portlet>	
-
-	<portlet>
-		<description>caGrid Map Portlet</description>
-		<portlet-name>gmap</portlet-name>
-		<display-name>caGrid Map Portlet</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/gmap-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>caGrid Map Portlet</title>
-			<short-title>caGrid Map Portlet</short-title>
-			<keywords>cagrid,map,discovery</keywords>
-		</portlet-info>
-		<portlet-preferences>
-
-			<preference>
-				<name>portletsToMaximize</name>
-				<value>servicedetails</value>
-			</preference>
-
-			<preference>
-				<name>MsgOutput1Name</name>
-				<value>selectedGridServiceId</value>
-			</preference>
-			<preference>
-				<name>MsgOutput1PublishName1</name>
-				<value>publishedSelectedGridServiceId</value>
-			</preference>
-			<preference>
-				<name>MsgOutput1PublishNamespace1</name>
-				<value></value>
-			</preference>
-			
-			<preference>
-				<name>MsgOutput2Name</name>
-				<value>maximizedPortlets</value>
-			</preference>
-			<preference>
-				<name>MsgOutput2PublishName1</name>
-				<value>publishedMaximizedPortlets</value>
-			</preference>
-			<preference>
-				<name>MsgOutput2PublishNamespace1</name>
-				<value></value>
-			</preference>
-
-		</portlet-preferences>		
-	</portlet>
-
-
-
-	<portlet>
 		<description>Content introducing the caGrid Portal</description>
 		<portlet-name>WelcomeToCaGridPortal</portlet-name>
 		<display-name>Welcome to caGrid Portal</display-name>
@@ -343,176 +214,5 @@
 			</preference>
 		</portlet-preferences>
 	</portlet>
-
-	<portlet>
-		<portlet-name>servicediscovery</portlet-name>
-		<display-name>caGrid Service Discovery</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/servicediscovery-portlet.xml</value>
-		</init-param>
-		<expiration-cache>0</expiration-cache>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>caGrid Service Discovery</title>
-			<short-title>Service Discovery</short-title>
-			<keywords>cagrid,discovery,service,discovery</keywords>
-		</portlet-info>
-		<portlet-preferences>
-			<preference>
-				<name>MsgOutput1Name</name>
-				<value>gridServiceIds</value>
-			</preference>
-			<preference>
-				<name>MsgOutput1PublishName1</name>
-				<value>publishedGridServiceIds</value>
-			</preference>
-			<preference>
-				<name>MsgOutput1PublishNamespace1</name>
-				<value></value>
-			</preference>
-		</portlet-preferences>
-	</portlet>
-
-	<portlet>
-		<portlet-name>servicelist</portlet-name>
-		<display-name>caGrid Service List</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/servicelist-portlet.xml</value>
-		</init-param>
-		<expiration-cache>0</expiration-cache>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>caGrid Service List</title>
-			<short-title>Service List</short-title>
-			<keywords>cagrid,discovery,service,list</keywords>
-		</portlet-info>
-		<portlet-preferences>
-
-			<preference>
-				<name>MsgOutput1Name</name>
-				<value>selectedGridServiceId</value>
-			</preference>
-			<preference>
-				<name>MsgOutput1PublishName1</name>
-				<value>publishedSelectedGridServiceId</value>
-			</preference>
-			<preference>
-				<name>MsgOutput1PublishNamespace1</name>
-				<value></value>
-			</preference>
-			
-			<preference>
-				<name>MsgInput1Name</name>
-				<value>gridServiceIds</value>
-			</preference>
-			<preference>
-				<name>MsgInput1SourceName</name>
-				<value>publishedGridServiceIds</value>
-			</preference>
-			<preference>
-				<name>MsgInput1SourceNamespace</name>
-				<value></value>
-			</preference>			
-			
-		</portlet-preferences>
-	</portlet>
-	
-	<portlet>
-		<portlet-name>servicedetails</portlet-name>
-		<display-name>caGrid Service Details</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/servicedetails-portlet.xml</value>
-		</init-param>
-		<expiration-cache>0</expiration-cache>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>caGrid Service Details</title>
-			<short-title>Service Details</short-title>
-			<keywords>cagrid,discovery,service,details</keywords>
-		</portlet-info>
-		<portlet-preferences>
-		
-			<preference>
-				<name>portletName</name>
-				<value>servicedetails</value>
-			</preference>
-		
-		
-			<preference>
-				<name>MsgOutput1Name</name>
-				<value>selectedGridServiceId</value>
-			</preference>
-			<preference>
-				<name>MsgOutput1PublishName1</name>
-				<value>publishedSelectedGridServiceId</value>
-			</preference>
-			<preference>
-				<name>MsgOutput1PublishNamespace1</name>
-				<value></value>
-			</preference>
-			
-			<preference>
-				<name>MsgOutput2Name</name>
-				<value>maximizedPortlets</value>
-			</preference>
-			<preference>
-				<name>MsgOutput2PublishName1</name>
-				<value>publishedMaximizedPortlets</value>
-			</preference>
-			<preference>
-				<name>MsgOutput2PublishNamespace1</name>
-				<value></value>
-			</preference>
-		
-			<preference>
-				<name>MsgInput1Name</name>
-				<value>selectedGridServiceId</value>
-			</preference>
-			<preference>
-				<name>MsgInput1SourceName</name>
-				<value>publishedSelectedGridServiceId</value>
-			</preference>
-			<preference>
-				<name>MsgInput1SourceNamespace</name>
-				<value></value>
-			</preference>
-			
-			<preference>
-				<name>MsgInput2Name</name>
-				<value>maximizedPortlets</value>
-			</preference>
-			<preference>
-				<name>MsgInput2SourceName</name>
-				<value>publishedMaximizedPortlets</value>
-			</preference>
-			<preference>
-				<name>MsgInput2SourceNamespace</name>
-				<value></value>
-			</preference>
-			
-			
-		</portlet-preferences>
-	</portlet>	
-	
+	 -->
 </portlet-app>

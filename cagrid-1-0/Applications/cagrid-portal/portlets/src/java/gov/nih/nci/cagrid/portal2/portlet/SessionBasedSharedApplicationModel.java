@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.portal2.domain.PortalUser;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal2.portlet.directory.DirectoryBean;
-import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryResultsBean;
+import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryResults;
 import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryCommand;
 import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryInstanceExecutor;
 
@@ -35,11 +35,12 @@ public class SessionBasedSharedApplicationModel implements
 	private ApplicationContext applicationContext;
 	private PortalUser portalUser;
 	private Integer selectedCqlQueryInstanceId;
-	private List<DiscoveryResultsBean> discoveryResults = new ArrayList<DiscoveryResultsBean>();
+	private List<DiscoveryResults> discoveryResults = new ArrayList<DiscoveryResults>();
 	private DirectoryBean selectedDirectoryBean;
 	private Integer selectedGridDataServiceId;
 	private UMLClass selectedUMLClass;
 	private CQLQueryCommand workingCqlQuery;
+	
 
 	/**
 	 * 
@@ -114,15 +115,15 @@ public class SessionBasedSharedApplicationModel implements
 		this.selectedCqlQueryInstanceId = id;
 	}
 
-	public void addDiscoveryResults(DiscoveryResultsBean res) {
+	public void addDiscoveryResults(DiscoveryResults res) {
 		getDiscoveryResults().add(res);
 	}
 
-	public List<DiscoveryResultsBean> getDiscoveryResults() {
+	public List<DiscoveryResults> getDiscoveryResults() {
 		return discoveryResults;
 	}
 
-	public void setDiscoveryResults(List<DiscoveryResultsBean> discoveryResults) {
+	public void setDiscoveryResults(List<DiscoveryResults> discoveryResults) {
 		this.discoveryResults = discoveryResults;
 	}
 
@@ -134,9 +135,9 @@ public class SessionBasedSharedApplicationModel implements
 		this.selectedDirectoryBean = selectedDirectoryBean;
 	}
 
-	public DiscoveryResultsBean getDiscoveryResultsBean(String resultsId) {
-		DiscoveryResultsBean bean = null;
-		for(DiscoveryResultsBean b : getDiscoveryResults()){
+	public DiscoveryResults getDiscoveryResultsBean(String resultsId) {
+		DiscoveryResults bean = null;
+		for(DiscoveryResults b : getDiscoveryResults()){
 			if(b.getId().equals(resultsId)){
 				bean = b;
 				break;

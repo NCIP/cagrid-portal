@@ -8,7 +8,7 @@ import java.util.HashMap;
 import gov.nih.nci.cagrid.portal2.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal2.domain.GridService;
 import gov.nih.nci.cagrid.portal2.domain.metadata.common.ResearchCenter;
-import gov.nih.nci.cagrid.portal2.portlet.tree.ServiceMetadataTreeNodeListener;
+import gov.nih.nci.cagrid.portal2.portlet.discovery.details.ServiceMetadataTreeNodeListener;
 import gov.nih.nci.cagrid.portal2.portlet.tree.TreeFacade;
 import gov.nih.nci.cagrid.portal2.portlet.tree.TreeNode;
 import gov.nih.nci.cagrid.portal2.util.PortalUtils;

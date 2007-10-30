@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.portal2.domain.PortalUser;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal2.portlet.directory.DirectoryBean;
-import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryResultsBean;
+import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryResults;
 import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryCommand;
 
 import java.util.List;
@@ -27,11 +27,11 @@ public interface SharedApplicationModel {
 	void setSelectedCqlQueryInstanceId(Integer id);
 	Integer getSelectedCqlQueryInstanceId();
 	
-	void addDiscoveryResults(DiscoveryResultsBean res);
-	List<DiscoveryResultsBean> getDiscoveryResults();
+	void addDiscoveryResults(DiscoveryResults res);
+	List<DiscoveryResults> getDiscoveryResults();
 	void setSelectedDirectoryBean(DirectoryBean bean);
 	DirectoryBean getSelectedDirectoryBean();
-	DiscoveryResultsBean getDiscoveryResultsBean(String resultsId);
+	DiscoveryResults getDiscoveryResultsBean(String resultsId);
 	
 	void setSelectedGridDataServiceId(Integer id);
 	Integer getSelectedGridDataServiceId();
@@ -40,4 +40,5 @@ public interface SharedApplicationModel {
 	
 	void setWorkingCqlQuery(CQLQueryCommand workingCqlQuery);
 	CQLQueryCommand getWorkingCqlQuery();
+
 }

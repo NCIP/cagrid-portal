@@ -31,7 +31,7 @@
 		</property>
 	</bean>
 	
-	<bean id="serviceMetadataTreeNodeListener" class="gov.nih.nci.cagrid.portal2.portlet.tree.ServiceMetadataTreeNodeListener">
+	<bean id="serviceMetadataTreeNodeListener" class="gov.nih.nci.cagrid.portal2.portlet.discovery.details.ServiceMetadataTreeNodeListener">
 		<property name="hibernateTemplate" ref="hibernateTemplate"/>
 	</bean>
 
