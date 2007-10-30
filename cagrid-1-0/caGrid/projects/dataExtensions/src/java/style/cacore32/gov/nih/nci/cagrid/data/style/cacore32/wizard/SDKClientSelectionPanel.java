@@ -66,7 +66,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.7 2007-10-26 17:01:50 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.8 2007-10-30 14:42:34 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -644,6 +644,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                 ex.getMessage(), ex);
         }
     }
+    
     
     private File locateClientJarInDir(String dirName) {
         File libDir = new File(dirName);
