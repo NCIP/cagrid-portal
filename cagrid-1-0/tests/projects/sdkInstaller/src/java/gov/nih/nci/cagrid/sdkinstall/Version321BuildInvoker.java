@@ -13,7 +13,7 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Jun 18, 2007 10:38:41 AM
- * @version $Id: Version321BuildInvoker.java,v 1.4 2007-10-26 18:05:19 dervin Exp $ 
+ * @version $Id: Version321BuildInvoker.java,v 1.5 2007-10-30 17:33:34 hastings Exp $ 
  */
 public class Version321BuildInvoker extends BuildInvoker {
     public static final String BUILD_COMMAND = "build-system";
@@ -39,9 +39,9 @@ public class Version321BuildInvoker extends BuildInvoker {
             throw new BuildInvocationException("Error creating ant build process: " + ex.getMessage(), ex);
         }
         new StreamGobbler(proc.getInputStream(), 
-            StreamGobbler.TYPE_OUT, System.out).start();
+            StreamGobbler.TYPE_OUT).start();
         new StreamGobbler(proc.getErrorStream(), 
-            StreamGobbler.TYPE_ERR, System.err).start();
+            StreamGobbler.TYPE_ERR).start();
         int exitCode = 0;
         InterruptedException iex = null;
         try {

@@ -13,7 +13,7 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Jun 18, 2007 12:09:57 PM
- * @version $Id: Version321DeployInvoker.java,v 1.3 2007-10-26 18:05:19 dervin Exp $ 
+ * @version $Id: Version321DeployInvoker.java,v 1.4 2007-10-30 17:33:34 hastings Exp $ 
  */
 public class Version321DeployInvoker extends DeployInvoker {
     public static final String DEPLOY_COMMAND = "deployWS";
@@ -39,9 +39,9 @@ public class Version321DeployInvoker extends DeployInvoker {
             throw new DeployInvocationException("Error creating ant deployment process: " + ex.getMessage(), ex);
         }
         new StreamGobbler(proc.getInputStream(), 
-            StreamGobbler.TYPE_OUT, System.out).start();
+            StreamGobbler.TYPE_OUT).start();
         new StreamGobbler(proc.getErrorStream(), 
-            StreamGobbler.TYPE_ERR, System.err).start();
+            StreamGobbler.TYPE_ERR).start();
         int exitCode = 0;
         InterruptedException iex = null;
         try {

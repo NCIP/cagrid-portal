@@ -13,7 +13,7 @@ import java.io.IOException;
   * @author David Ervin
   * 
   * @created Jun 20, 2007 10:55:05 AM
-  * @version $Id: ProcessExecutor.java,v 1.2 2007-06-21 16:23:18 dervin Exp $
+  * @version $Id: ProcessExecutor.java,v 1.3 2007-10-30 17:33:34 hastings Exp $
  */
 public class ProcessExecutor {
     private String command;
@@ -33,9 +33,9 @@ public class ProcessExecutor {
     public void exec() throws IOException {
         process = Runtime.getRuntime().exec(command, null, workingDir);
         new StreamGobbler(process.getInputStream(), 
-            StreamGobbler.TYPE_OUT, stdOutStream).start();
+            StreamGobbler.TYPE_OUT).start();
         new StreamGobbler(process.getErrorStream(), 
-            StreamGobbler.TYPE_ERR, stdErrStream).start();
+            StreamGobbler.TYPE_ERR).start();
     }
     
     
