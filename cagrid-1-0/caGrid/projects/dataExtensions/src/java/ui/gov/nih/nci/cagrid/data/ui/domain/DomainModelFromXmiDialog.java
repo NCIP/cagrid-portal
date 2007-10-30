@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.metadata.xmi.FixXmiExecutor;
 import gov.nih.nci.cagrid.metadata.xmi.XMIParser;
 
 import java.awt.Dimension;
@@ -22,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -50,11 +52,12 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Oct 23, 2007 11:05:04 AM
- * @version $Id: DomainModelFromXmiDialog.java,v 1.3 2007-10-29 14:37:12 dervin Exp $ 
+ * @version $Id: DomainModelFromXmiDialog.java,v 1.4 2007-10-30 13:59:43 dervin Exp $ 
  */
 public class DomainModelFromXmiDialog extends JDialog {
     // keys for validation messages
     public static final String KEY_XMI_FILENAME = "XMI File Name";
+    public static final String KEY_SDK_DIR = "caCORE SDK Directory";
     public static final String KEY_PROJECT_SHORT_NAME = "Project Short Name";
     public static final String KEY_PROJECT_VERSION = "Project Version";
 
@@ -74,6 +77,9 @@ public class DomainModelFromXmiDialog extends JDialog {
     private JButton okButton = null;
     private JButton cancelButton = null;
     private JPanel buttonPanel = null;
+    private JCheckBox fixEaModelCheckBox = null;
+    private JTextField sdkDirTextField = null;
+    private JButton sdkDirBrowseButton = null;
     
     private boolean canceled;
     private String suppliedXmiFilename = null;
@@ -112,7 +118,21 @@ public class DomainModelFromXmiDialog extends JDialog {
     public static DomainModel createDomainModel(JFrame parent, String xmiFilename) {
         DomainModelFromXmiDialog dialog = new DomainModelFromXmiDialog(parent, xmiFilename);
         if (!dialog.canceled) {
-            File xmiFile = new File(dialog.getXmiFileTextField().getText());
+            File xmiFile = null;
+            if (dialog.getFixEaModelCheckBox().isSelected()) {
+                File sdkDir = new File(dialog.getSdkDirTextField().getText());
+                File rawXmiFile = new File(dialog.getXmiFileTextField().getText());
+                try {
+                    xmiFile = FixXmiExecutor.fixEaXmiModel(rawXmiFile, sdkDir);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    ErrorDialog.showErrorDialog("Error executing fix-xmi command", ex.getMessage(), ex);
+                    return null;
+                }
+            } else {
+                xmiFile = new File(dialog.getXmiFileTextField().getText()); 
+            }
+
             String shortName = dialog.getProjectShortNameTextField().getText();
             String version = dialog.getProjectVersionTextField().getText();
             
@@ -143,6 +163,7 @@ public class DomainModelFromXmiDialog extends JDialog {
     
     private void configureValidation() {
         ValidationComponentUtils.setMessageKey(getXmiFileTextField(), KEY_XMI_FILENAME);
+        ValidationComponentUtils.setMessageKey(getSdkDirTextField(), KEY_SDK_DIR);
         ValidationComponentUtils.setMessageKey(getProjectShortNameTextField(), KEY_PROJECT_SHORT_NAME);
         ValidationComponentUtils.setMessageKey(getProjectVersionTextField(), KEY_PROJECT_VERSION);
         
@@ -167,6 +188,14 @@ public class DomainModelFromXmiDialog extends JDialog {
         if (ValidationUtils.isBlank(getProjectVersionTextField().getText())) {
             result.add(new SimpleValidationMessage(
                 KEY_PROJECT_VERSION + " must not be blank", Severity.ERROR, KEY_PROJECT_VERSION));
+        }
+        
+        if (getFixEaModelCheckBox().isSelected()) {
+            if (ValidationUtils.isBlank(getSdkDirTextField().getText())) {
+                result.add(new SimpleValidationMessage(
+                    KEY_SDK_DIR + " must not be blank.\nPlease select the caCORE SDK directory", 
+                    Severity.ERROR, KEY_SDK_DIR));
+            }
         }
         
         validationModel.setResult(result);
@@ -396,13 +425,30 @@ public class DomainModelFromXmiDialog extends JDialog {
      */
     private JPanel getMainPanel() {
         if (mainPanel == null) {
+            GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+            gridBagConstraints31.gridx = 2;
+            gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints31.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints31.gridy = 1;
+            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+            gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints21.gridy = 1;
+            gridBagConstraints21.weightx = 1.0;
+            gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints21.gridx = 1;
+            GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+            gridBagConstraints12.gridx = 0;
+            gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints12.anchor = GridBagConstraints.WEST;
+            gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints12.gridy = 1;
             GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
             gridBagConstraints11.gridx = 2;
             gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints11.gridy = 5;
+            gridBagConstraints11.gridy = 6;
             GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
             gridBagConstraints10.fill = GridBagConstraints.BOTH;
-            gridBagConstraints10.gridy = 4;
+            gridBagConstraints10.gridy = 5;
             gridBagConstraints10.weightx = 1.0;
             gridBagConstraints10.weighty = 1.0;
             gridBagConstraints10.gridwidth = 2;
@@ -413,10 +459,10 @@ public class DomainModelFromXmiDialog extends JDialog {
             gridBagConstraints9.anchor = GridBagConstraints.NORTHWEST;
             gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints9.gridy = 4;
+            gridBagConstraints9.gridy = 5;
             GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
             gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints8.gridy = 3;
+            gridBagConstraints8.gridy = 4;
             gridBagConstraints8.weightx = 1.0;
             gridBagConstraints8.gridwidth = 2;
             gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
@@ -426,10 +472,10 @@ public class DomainModelFromXmiDialog extends JDialog {
             gridBagConstraints7.anchor = GridBagConstraints.WEST;
             gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints7.gridy = 3;
+            gridBagConstraints7.gridy = 4;
             GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
             gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints6.gridy = 2;
+            gridBagConstraints6.gridy = 3;
             gridBagConstraints6.weightx = 1.0;
             gridBagConstraints6.gridwidth = 2;
             gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
@@ -439,10 +485,10 @@ public class DomainModelFromXmiDialog extends JDialog {
             gridBagConstraints5.anchor = GridBagConstraints.WEST;
             gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints5.gridy = 2;
+            gridBagConstraints5.gridy = 3;
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints4.gridy = 1;
+            gridBagConstraints4.gridy = 2;
             gridBagConstraints4.weightx = 1.0;
             gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints4.gridwidth = 2;
@@ -452,7 +498,7 @@ public class DomainModelFromXmiDialog extends JDialog {
             gridBagConstraints3.anchor = GridBagConstraints.WEST;
             gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints3.gridy = 1;
+            gridBagConstraints3.gridy = 2;
             GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
             gridBagConstraints2.gridx = 2;
             gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
@@ -485,6 +531,9 @@ public class DomainModelFromXmiDialog extends JDialog {
             mainPanel.add(getProjectDescriptionLabel(), gridBagConstraints9);
             mainPanel.add(getProjectDescriptionScrollPane(), gridBagConstraints10);
             mainPanel.add(getButtonPanel(), gridBagConstraints11);
+            mainPanel.add(getFixEaModelCheckBox(), gridBagConstraints12);
+            mainPanel.add(getSdkDirTextField(), gridBagConstraints21);
+            mainPanel.add(getSdkDirBrowseButton(), gridBagConstraints31);
         }
         return mainPanel;
     }
@@ -549,6 +598,73 @@ public class DomainModelFromXmiDialog extends JDialog {
     }
     
     
+    /**
+     * This method initializes fixEaModelCheckBox   
+     *  
+     * @return javax.swing.JCheckBox    
+     */
+    private JCheckBox getFixEaModelCheckBox() {
+        if (fixEaModelCheckBox == null) {
+            fixEaModelCheckBox = new JCheckBox();
+            fixEaModelCheckBox.setText("Fix EA Model");
+            fixEaModelCheckBox.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    boolean enable = fixEaModelCheckBox.isSelected();
+                    getSdkDirTextField().setEnabled(enable);
+                    getSdkDirBrowseButton().setEnabled(enable);
+                    validateInput();
+                }
+            });
+        }
+        return fixEaModelCheckBox;
+    }
+
+
+    /**
+     * This method initializes sdkDirTextField  
+     *  
+     * @return javax.swing.JTextField   
+     */
+    private JTextField getSdkDirTextField() {
+        if (sdkDirTextField == null) {
+            sdkDirTextField = new JTextField();
+            sdkDirTextField.setEditable(false);
+            sdkDirTextField.setEnabled(getFixEaModelCheckBox().isSelected());
+            sdkDirTextField.getDocument().addDocumentListener(documentChangeListener);
+        }
+        return sdkDirTextField;
+    }
+
+
+    /**
+     * This method initializes sdkDirBrowseButton   
+     *  
+     * @return javax.swing.JButton  
+     */
+    private JButton getSdkDirBrowseButton() {
+        if (sdkDirBrowseButton == null) {
+            sdkDirBrowseButton = new JButton();
+            sdkDirBrowseButton.setText("Browse");
+            sdkDirBrowseButton.setEnabled(getFixEaModelCheckBox().isSelected());
+            sdkDirBrowseButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    JFileChooser chooser = new JFileChooser();
+                    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                    chooser.setApproveButtonText("Select");
+                    int choice = chooser.showOpenDialog(DomainModelFromXmiDialog.this);
+                    if (choice == JFileChooser.APPROVE_OPTION) {
+                        getSdkDirTextField().setText(chooser.getSelectedFile().getAbsolutePath());
+                    } else {
+                        getSdkDirTextField().setText("");
+                    }
+                    validateInput();
+                }
+            });
+        }
+        return sdkDirBrowseButton;
+    }
+    
+    
     private final class FocusChangeHandler implements FocusListener {
 
         public void focusGained(FocusEvent e) {
@@ -566,8 +682,8 @@ public class DomainModelFromXmiDialog extends JDialog {
             validateInput();
         }
     }
-    
-    
+
+
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
