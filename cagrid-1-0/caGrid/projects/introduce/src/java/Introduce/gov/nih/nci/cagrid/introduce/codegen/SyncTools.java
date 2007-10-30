@@ -160,6 +160,7 @@ public class SyncTools {
                     SymbolTable table = null;
 
                     parser.setQuiet(true);
+                    //parser.setAllWanted(true);
                     parser.setImports(true);
 
                     List excludeList = new ArrayList();

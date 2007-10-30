@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.creation;
 
 import java.io.File;
 
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
 /** 
@@ -11,7 +12,7 @@ import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
  * @author David Ervin
  * 
  * @created Jun 12, 2007 11:46:16 AM
- * @version $Id: DataTestCaseInfo.java,v 1.1 2007-06-12 16:13:40 dervin Exp $ 
+ * @version $Id: DataTestCaseInfo.java,v 1.2 2007-10-30 14:12:18 hastings Exp $ 
  */
 public abstract class DataTestCaseInfo extends TestCaseInfo {
 
@@ -21,7 +22,7 @@ public abstract class DataTestCaseInfo extends TestCaseInfo {
     
 
     public String getResourceFrameworkType() {
-        return "custom";
+        return IntroduceConstants.INTRODUCE_MAIN_RESOURCE + "," + IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE;
     }
     
     
@@ -33,4 +34,7 @@ public abstract class DataTestCaseInfo extends TestCaseInfo {
     public String getExtensions() {
         return "data";
     }
+    
+    
+    
 }

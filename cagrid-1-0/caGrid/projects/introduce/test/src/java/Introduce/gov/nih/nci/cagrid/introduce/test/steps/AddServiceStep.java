@@ -6,8 +6,11 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.service.Identifiable;
 import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
 import gov.nih.nci.cagrid.introduce.beans.service.Main;
+import gov.nih.nci.cagrid.introduce.beans.service.Notification;
 import gov.nih.nci.cagrid.introduce.beans.service.Persistant;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
+import gov.nih.nci.cagrid.introduce.beans.service.ResourcePropertyManagement;
+import gov.nih.nci.cagrid.introduce.beans.service.Secure;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.beans.service.Singleton;
@@ -15,6 +18,7 @@ import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
 import java.io.File;
+import java.util.StringTokenizer;
 
 
 public class AddServiceStep extends BaseStep {
@@ -39,19 +43,29 @@ public class AddServiceStep extends BaseStep {
         service.setNamespace(tci.getNamespace());
         service.setPackageName(tci.getPackageName());
         service.setResourceFrameworkOptions(new ResourceFrameworkOptions());
-        if (tci.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
-            service.getResourceFrameworkOptions().setIdentifiable(new Identifiable());
-        } else if (tci.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
-            service.getResourceFrameworkOptions().setLifetime(new Lifetime());
-            service.getResourceFrameworkOptions().setIdentifiable(new Identifiable());
-        } else if (tci.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
-            service.getResourceFrameworkOptions().setMain(new Main());
-            service.getResourceFrameworkOptions().setSingleton(new Singleton());
-            service.getResourceFrameworkOptions().setLifetime(new Lifetime());
-            service.getResourceFrameworkOptions().setPersistant(new Persistant());
-        } else if (tci.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
-            service.getResourceFrameworkOptions().setSingleton(new Singleton());
-
+     // for each resource propertyOption set it on the service
+        String resourceOptionsList = tci.getResourceFrameworkType();
+        StringTokenizer strtok = new StringTokenizer(resourceOptionsList, ",", false);
+        while (strtok.hasMoreElements()) {
+            String option = strtok.nextToken();
+            if (option.equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
+                service.getResourceFrameworkOptions().setMain(new Main());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
+                service.getResourceFrameworkOptions().setSingleton(new Singleton());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE)) {
+                service.getResourceFrameworkOptions().setIdentifiable(new Identifiable());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
+                service.getResourceFrameworkOptions().setLifetime(new Lifetime());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_PERSISTANT_RESOURCE)) {
+                service.getResourceFrameworkOptions().setPersistant(new Persistant());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_NOTIFICATION_RESOURCE)) {
+                service.getResourceFrameworkOptions().setNotification(new Notification());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_SECURE_RESOURCE)) {
+                service.getResourceFrameworkOptions().setSecure(new Secure());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_RESOURCEPROPETIES_RESOURCE)) {
+                service.getResourceFrameworkOptions().setResourcePropertyManagement(
+                    new ResourcePropertyManagement());
+            }
         }
 
         // add new service to array in bean

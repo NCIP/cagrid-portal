@@ -18,6 +18,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
@@ -32,18 +33,18 @@ import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 
-/** 
- *  BDTFeatureCreator
- *  Provides implementation, methods, classes, etc for BDT query
+
+/**
+ * BDTFeatureCreator Provides implementation, methods, classes, etc for BDT
+ * query
  * 
  * @author David Ervin
- * 
  * @created Apr 4, 2007 9:56:09 AM
- * @version $Id: BDTFeatureCreator.java,v 1.2 2007-07-18 14:01:47 dervin Exp $ 
+ * @version $Id: BDTFeatureCreator.java,v 1.3 2007-10-30 14:12:18 hastings Exp $
  */
 public class BDTFeatureCreator extends FeatureCreator {
 
-   public BDTFeatureCreator(ServiceInformation info, ServiceType mainService) {
+    public BDTFeatureCreator(ServiceInformation info, ServiceType mainService) {
         super(info, mainService);
     }
 
@@ -56,8 +57,8 @@ public class BDTFeatureCreator extends FeatureCreator {
         addBdtQueryMethod();
         modifyBdtMetadata();
     }
-    
-    
+
+
     private void copySchemaAndWsdl() throws CreationExtensionException {
         // the BDT Data Service wsdl
         copySchemaToService("BDTDataService.wsdl");
@@ -67,35 +68,33 @@ public class BDTFeatureCreator extends FeatureCreator {
         File bdtRefSchema = copySchemaToService("BulkDataHandlerReference.xsd");
         // the Bulk Data Transfer Service metadata schema
         File bdtMetadataSchema = copySchemaToService("BulkDataTransferServiceMetadata.xsd");
-        
+
         // create namespace type for BDT reference schema
         NamespaceType bdtRefNsType = null;
         try {
-            bdtRefNsType = CommonTools.createNamespaceType(
-                bdtRefSchema.getAbsolutePath(), bdtRefSchema.getAbsoluteFile().getParentFile());
+            bdtRefNsType = CommonTools.createNamespaceType(bdtRefSchema.getAbsolutePath(), bdtRefSchema
+                .getAbsoluteFile().getParentFile());
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new CreationExtensionException(
-                "Error creating BDT Reference namespace type: " + ex.getMessage(), ex);
+            throw new CreationExtensionException("Error creating BDT Reference namespace type: " + ex.getMessage(), ex);
         }
         // create namespace type for BDT metadata
         NamespaceType bdtMetadataNsType = null;
         try {
-            bdtMetadataNsType = CommonTools.createNamespaceType(
-                bdtMetadataSchema.getAbsolutePath(), bdtMetadataSchema.getAbsoluteFile().getParentFile());
+            bdtMetadataNsType = CommonTools.createNamespaceType(bdtMetadataSchema.getAbsolutePath(), bdtMetadataSchema
+                .getAbsoluteFile().getParentFile());
         } catch (Exception ex) {
-            throw new CreationExtensionException(
-                "Error creating BDT metadata namespace type: " + ex.getMessage(), ex);
+            throw new CreationExtensionException("Error creating BDT metadata namespace type: " + ex.getMessage(), ex);
         }
-        
+
         // add namespaces to the service information
         NamespaceType[] namespaces = getServiceInformation().getNamespaces().getNamespace();
         namespaces = (NamespaceType[]) Utils.appendToArray(namespaces, bdtRefNsType);
         namespaces = (NamespaceType[]) Utils.appendToArray(namespaces, bdtMetadataNsType);
         getServiceInformation().getNamespaces().setNamespace(namespaces);
     }
-    
-    
+
+
     private void addBdtQueryMethod() throws CreationExtensionException {
         // create the method
         MethodType bdtQueryMethod = new MethodType();
@@ -108,7 +107,7 @@ public class BDTFeatureCreator extends FeatureCreator {
         queryInputParameter.setDescription(DataServiceConstants.QUERY_METHOD_PARAMETER_DESCRIPTION);
         queryInputParameter.setIsArray(false);
         queryInputParameter.setQName(DataServiceConstants.CQL_QUERY_QNAME);
-        bdtQueryInputs.setInput(new MethodTypeInputsInput[] {queryInputParameter});
+        bdtQueryInputs.setInput(new MethodTypeInputsInput[]{queryInputParameter});
         bdtQueryMethod.setInputs(bdtQueryInputs);
         // set the output to be a BulkDataHandler reference
         MethodTypeOutput bdtQueryOutput = new MethodTypeOutput();
@@ -120,15 +119,14 @@ public class BDTFeatureCreator extends FeatureCreator {
         MethodTypeExceptions bdtQueryExceptions = new MethodTypeExceptions();
         MethodTypeExceptionsException qpException = new MethodTypeExceptionsException(
             DataServiceConstants.QUERY_PROCESSING_EXCEPTION_DESCRIPTION,
-            DataServiceConstants.QUERY_PROCESSING_EXCEPTION_NAME, 
-            DataServiceConstants.QUERY_PROCESSING_EXCEPTION_QNAME);
+            DataServiceConstants.QUERY_PROCESSING_EXCEPTION_NAME, DataServiceConstants.QUERY_PROCESSING_EXCEPTION_QNAME);
         MethodTypeExceptionsException mqException = new MethodTypeExceptionsException(
             DataServiceConstants.MALFORMED_QUERY_EXCEPTION_DESCRIPTION,
-            DataServiceConstants.MALFORMED_QUERY_EXCEPTION_NAME, 
-            DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME);
-        bdtQueryExceptions.setException(new MethodTypeExceptionsException[] {qpException, mqException});
+            DataServiceConstants.MALFORMED_QUERY_EXCEPTION_NAME, DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME);
+        bdtQueryExceptions.setException(new MethodTypeExceptionsException[]{qpException, mqException});
         bdtQueryMethod.setExceptions(bdtQueryExceptions);
-        // import information should indicate this method came from the BDT Data Service wsdl
+        // import information should indicate this method came from the BDT Data
+        // Service wsdl
         MethodTypeImportInformation bdtQueryImport = new MethodTypeImportInformation();
         bdtQueryImport.setFromIntroduce(Boolean.FALSE);
         bdtQueryImport.setWsdlFile("BDTDataService.wsdl");
@@ -142,13 +140,13 @@ public class BDTFeatureCreator extends FeatureCreator {
         bdtQueryMethod.setImportInformation(bdtQueryImport);
         // add the method to the main service
         getMainService().getMethods().setMethod(
-            (MethodType[]) Utils.appendToArray(
-                getMainService().getMethods().getMethod(), bdtQueryMethod));
+            (MethodType[]) Utils.appendToArray(getMainService().getMethods().getMethod(), bdtQueryMethod));
     }
-    
-    
+
+
     private void copyWsEnumerationLibs() throws CreationExtensionException {
-        File extensionLibDir = new File(ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath() + File.separator + "lib");
+        File extensionLibDir = new File(ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath()
+            + File.separator + "lib");
         File[] sourceLibs = extensionLibDir.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
                 String name = pathname.getName();
@@ -159,22 +157,21 @@ public class BDTFeatureCreator extends FeatureCreator {
                 return false;
             }
         });
-        File serviceLibDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-            + File.separator + "lib");
+        File serviceLibDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
+            + "lib");
         File[] outputLibs = new File[sourceLibs.length];
         try {
             for (int i = 0; i < sourceLibs.length; i++) {
-                outputLibs[i] = new File(serviceLibDir.getAbsolutePath() 
-                    + File.separator + sourceLibs[i].getName());
+                outputLibs[i] = new File(serviceLibDir.getAbsolutePath() + File.separator + sourceLibs[i].getName());
                 Utils.copyFile(sourceLibs[i], outputLibs[i]);
             }
         } catch (IOException ex) {
             throw new CreationExtensionException("Error copying WS-Enumeration library: " + ex.getMessage(), ex);
         }
-        
+
         // sync up the Eclipse classpath
-        File classpathFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-            + File.separator + ".classpath");
+        File classpathFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
+            + ".classpath");
         if (classpathFile.exists()) {
             try {
                 ExtensionUtilities.syncEclipseClasspath(classpathFile, outputLibs);
@@ -183,13 +180,13 @@ public class BDTFeatureCreator extends FeatureCreator {
             }
         }
     }
-    
-    
+
+
     private File copySchemaToService(String schemaName) throws CreationExtensionException {
-        String extensionSchemaDir = ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath() 
+        String extensionSchemaDir = ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath()
             + File.separator + "data" + File.separator + "schema" + File.separator + "Data";
-        String serviceSchemaDir = getServiceInformation().getBaseDirectory().getAbsolutePath() 
-            + File.separator + "schema" + File.separator + getMainService().getName();
+        String serviceSchemaDir = getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
+            + "schema" + File.separator + getMainService().getName();
 
         // the BDT Data Service wsdl
         File schemaIn = new File(extensionSchemaDir + File.separator + schemaName);
@@ -197,16 +194,16 @@ public class BDTFeatureCreator extends FeatureCreator {
         try {
             Utils.copyFile(schemaIn, schemaOut);
         } catch (IOException ex) {
-            throw new CreationExtensionException("Error copying required schema (" 
-                + schemaIn.getName() + "): " + ex.getMessage(), ex);
+            throw new CreationExtensionException("Error copying required schema (" + schemaIn.getName() + "): "
+                + ex.getMessage(), ex);
         }
         return schemaOut;
     }
-    
-    
+
+
     /**
-     * Verifies the BDT extension is installed and if it needs to be included
-     * in this service, adds it.
+     * Verifies the BDT extension is installed and if it needs to be included in
+     * this service, adds it.
      * 
      * @throws CreationExtensionException
      */
@@ -215,7 +212,7 @@ public class BDTFeatureCreator extends FeatureCreator {
         if (bdtDescription == null) {
             throw new CreationExtensionException("BDT Extension is not installed!");
         }
-        
+
         boolean bdtExtensionUsed = false;
         ExtensionType[] usedExtensions = getServiceInformation().getExtensions().getExtension();
         for (int i = 0; i < usedExtensions.length; i++) {
@@ -224,44 +221,60 @@ public class BDTFeatureCreator extends FeatureCreator {
                 break;
             }
         }
-        
+
         if (!bdtExtensionUsed) {
-            ExtensionType bdtExtension = new ExtensionType();
-            bdtExtension.setName(bdtDescription.getServiceExtensionDescription().getName());
-            bdtExtension.setExtensionType(bdtDescription.getExtensionType());
-            bdtExtension.setVersion(bdtDescription.getVersion());
-            ExtensionType[] moreExtensions = new ExtensionType[usedExtensions.length + 1];
-            moreExtensions[0] = bdtExtension;
-            System.arraycopy(usedExtensions, 0, moreExtensions, 1, usedExtensions.length);
-            getServiceInformation().getExtensions().setExtension(moreExtensions);
+            ExtensionTools.addExtensionToService(getServiceInformation(), "bdt");
+
         }
+        // move the BDT extension to the front!
+        ExtensionType bdtExtension = null;
+        ExtensionType[] currentExtensions = getServiceInformation().getExtensions().getExtension();
+        ExtensionType[] orderedExtensions = new ExtensionType[currentExtensions.length];
+        for (ExtensionType ext : currentExtensions) {
+            if (ext.getName().equals("bdt")) {
+                bdtExtension = ext;
+                break;
+            }
+        }
+        orderedExtensions[0] = bdtExtension;
+        int index = 1;
+        for (ExtensionType ext : currentExtensions) {
+            if (!ext.getName().equals("bdt")) {
+                orderedExtensions[index] = ext;
+                index++;
+            }
+        }
+        getServiceInformation().getExtensions().setExtension(orderedExtensions);
+       
     }
-    
-    
+
+
     private void modifyBdtMetadata() throws CreationExtensionException {
         ResourcePropertyType[] resourceProperties = getMainService().getResourcePropertiesList().getResourceProperty();
         for (ResourcePropertyType metadata : resourceProperties) {
             if (metadata.getQName().equals(BDTServiceConstants.METADATA_QNAME)) {
                 // get the filename of the metadata document
-                File metadataFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
+                File metadataFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath()
                     + File.separator + "etc" + File.separator + metadata.getFileLocation());
                 Element metadataRoot = null;
                 try {
-                    metadataRoot = XMLUtilities.fileNameToDocument(
-                        metadataFile.getAbsolutePath()).getRootElement();
+                    metadataRoot = XMLUtilities.fileNameToDocument(metadataFile.getAbsolutePath()).getRootElement();
                 } catch (MobiusException ex) {
-                    throw new CreationExtensionException(
-                        "Error loading BDT metadata for editing: " + ex.getMessage(), ex);
+                    throw new CreationExtensionException("Error loading BDT metadata for editing: " + ex.getMessage(),
+                        ex);
                 }
-                // create the enabled operations element to describe the BDT query method
+                // create the enabled operations element to describe the BDT
+                // query method
                 Element enabledOpsElement = new Element("EnabledOperations", metadataRoot.getNamespace());
                 Element enabledOpElement = new Element("EnabledOperation", metadataRoot.getNamespace());
                 enabledOpElement.setAttribute("name", DataServiceConstants.BDT_QUERY_METHOD_NAME);
                 enabledOpsElement.addContent(enabledOpElement);
                 // add the enabled operations element to the metadata
                 metadataRoot.addContent(enabledOpsElement);
-                // default metadata has an empty EnabledOperations element, which can be removed
-                Iterator enabledIter = metadataRoot.getChildren("EnabledOperations", metadataRoot.getNamespace()).iterator();
+                // default metadata has an empty EnabledOperations element,
+                // which can be removed
+                Iterator enabledIter = metadataRoot.getChildren("EnabledOperations", metadataRoot.getNamespace())
+                    .iterator();
                 while (enabledIter.hasNext()) {
                     Element enabledElement = (Element) enabledIter.next();
                     List children = enabledElement.getChildren("EnabledOperation", enabledElement.getNamespace());
@@ -281,8 +294,8 @@ public class BDTFeatureCreator extends FeatureCreator {
             }
         }
     }
-    
-    
+
+
     private void setEnumIteratorImpl() {
         CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
             DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY,

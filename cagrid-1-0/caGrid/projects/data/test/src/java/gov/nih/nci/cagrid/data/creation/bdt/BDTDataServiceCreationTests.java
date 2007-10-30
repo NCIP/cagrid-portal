@@ -19,7 +19,7 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 2:41:25 PM
- * @version $Id: BDTDataServiceCreationTests.java,v 1.5 2007-06-12 16:13:40 dervin Exp $ 
+ * @version $Id: BDTDataServiceCreationTests.java,v 1.6 2007-10-30 14:12:18 hastings Exp $ 
  */
 public class BDTDataServiceCreationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -92,11 +92,6 @@ public class BDTDataServiceCreationTests extends Story {
 
         public String getPackageName() {
             return PACKAGE_NAME;
-        }
-
-
-        public String getExtensions() {
-            return "bdt,data";
         }
     } 
 }

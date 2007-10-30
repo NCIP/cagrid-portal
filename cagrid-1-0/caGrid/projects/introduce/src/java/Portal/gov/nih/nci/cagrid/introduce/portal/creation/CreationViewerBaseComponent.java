@@ -57,7 +57,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
      *            be added
      */
     public void createService(final String dir, final String service, final String servicePackage,
-        final String serviceNamespace, final List extensions) {
+        final String serviceNamespace, final List resourceOptions, final List extensions) {
         int doIdeleteResult = JOptionPane.OK_OPTION;
         final File dirFile = new File(dir);
         if (dirFile.exists() && dirFile.list().length != 0) {
@@ -102,6 +102,14 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 
                         setProgressText("purging old archives");
                         ResourceManager.purgeArchives(serviceName);
+                        
+                        String serviceResourceOptions = "";
+                        for (int i = 0; i < resourceOptions.size(); i++) {
+                            serviceResourceOptions += (String)resourceOptions.get(i);
+                            if (i < resourceOptions.size() - 1) {
+                                serviceResourceOptions += ",";
+                            }
+                        }
 
                         String serviceExtensions = "";
                         for (int i = 0; i < extensions.size(); i++) {
@@ -119,7 +127,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
                             serviceNsDomain, serviceExtensions);
 
                         String cmd = AntTools.getAntSkeletonCreationCommand(".", serviceName, dirName, packageName,
-                            serviceNsDomain, serviceExtensions);
+                            serviceNsDomain, serviceResourceOptions, serviceExtensions);
                         Process p = CommonTools.createAndOutputProcess(cmd);
                         p.waitFor();
                         if (p.exitValue() != 0) {

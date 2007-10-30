@@ -28,7 +28,7 @@ import com.sun.corba.se.internal.Interceptors.PIORB;
  * Step to create a BDT service using the Introduce engine
  * 
  * @created Aug 22, 2006
- * @version $Id: CreationStep.java,v 1.11 2007-10-26 17:58:28 hastings Exp $
+ * @version $Id: CreationStep.java,v 1.12 2007-10-30 14:12:18 hastings Exp $
  */
 public class CreationStep extends Step {
     
@@ -49,7 +49,7 @@ public class CreationStep extends Step {
     public void runStep() throws Throwable {
         System.out.println("Creating service...");
         String cmd = AntTools.getAntSkeletonCreationCommand(introduceDir, CreationTest.SERVICE_NAME,
-            CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, "bdt");
+            CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, IntroduceConstants.INTRODUCE_MAIN_RESOURCE + "," + IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE, "bdt");
         Process p = CommonTools.createAndOutputProcess(cmd);
         new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, logger,Priority.DEBUG).start();
         new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, logger,Priority.ERROR).start();

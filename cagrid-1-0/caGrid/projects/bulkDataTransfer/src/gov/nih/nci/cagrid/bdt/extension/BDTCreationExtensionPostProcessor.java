@@ -42,6 +42,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 	
 	public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo)
 		throws CreationExtensionException {
+	    
         checkServiceNaming(serviceInfo);
 
         // apply BDT service requirements to it

@@ -32,6 +32,7 @@ import java.net.URI;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -39,7 +40,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -158,7 +158,7 @@ public class ModifyService extends JDialog {
      * This method initializes this
      */
     private void initialize() {
-        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
 
             @Override
@@ -217,7 +217,7 @@ public class ModifyService extends JDialog {
         } else {
             // make sure it is a valid namespace
             try {
-                new URI(this.getNamespaceTextField().getText());
+                URI namespaceURI = new URI(this.getNamespaceTextField().getText());
             } catch (Exception e) {
                 result.add(new SimpleValidationMessage("Invalid namespace format.", Severity.ERROR, SERVICE_NAMESPACE));
             }
@@ -669,7 +669,7 @@ public class ModifyService extends JDialog {
     private JCheckBox getLifetimeResource() {
         if (lifetimeResource == null) {
             lifetimeResource = new JCheckBox();
-            lifetimeResource.setText("lifetime");
+            lifetimeResource.setText(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE);
             if (service.getService().getResourceFrameworkOptions().getLifetime() != null) {
                 lifetimeResource.setSelected(true);
             }
@@ -697,7 +697,7 @@ public class ModifyService extends JDialog {
     private JCheckBox getSingletomResource() {
         if (singletomResource == null) {
             singletomResource = new JCheckBox();
-            singletomResource.setText("singleton");
+            singletomResource.setText(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE);
             if (service.getService().getResourceFrameworkOptions().getSingleton() != null) {
                 singletomResource.setSelected(true);
             }
@@ -724,7 +724,7 @@ public class ModifyService extends JDialog {
     private JCheckBox getPersistantResource() {
         if (persistantResource == null) {
             persistantResource = new JCheckBox();
-            persistantResource.setText("persistant");
+            persistantResource.setText(IntroduceConstants.INTRODUCE_PERSISTANT_RESOURCE);
             if (service.getService().getResourceFrameworkOptions().getPersistant() != null) {
                 persistantResource.setSelected(true);
             }
@@ -750,7 +750,7 @@ public class ModifyService extends JDialog {
     private JCheckBox getNotificationResource() {
         if (notificationResource == null) {
             notificationResource = new JCheckBox();
-            notificationResource.setText("notification");
+            notificationResource.setText(IntroduceConstants.INTRODUCE_NOTIFICATION_RESOURCE);
             if (service.getService().getResourceFrameworkOptions().getNotification() != null) {
                 notificationResource.setSelected(true);
             }
@@ -776,7 +776,7 @@ public class ModifyService extends JDialog {
     private JCheckBox getCustomResource() {
         if (customResource == null) {
             customResource = new JCheckBox();
-            customResource.setText("custom");
+            customResource.setText(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE);
             if (service.getService().getResourceFrameworkOptions().getCustom() != null) {
                 customResource.setSelected(true);
             }
@@ -839,7 +839,7 @@ public class ModifyService extends JDialog {
     private JCheckBox getSecureResource() {
         if (secureResource == null) {
             secureResource = new JCheckBox();
-            secureResource.setText("secure");
+            secureResource.setText(IntroduceConstants.INTRODUCE_SECURE_RESOURCE);
             if (service.getService().getResourceFrameworkOptions().getSecure() != null) {
                 secureResource.setSelected(true);
             }
@@ -865,7 +865,7 @@ public class ModifyService extends JDialog {
     private JCheckBox getResourceProperty() {
         if (resourceProperty == null) {
             resourceProperty = new JCheckBox();
-            resourceProperty.setText("resource property management");
+            resourceProperty.setText(IntroduceConstants.INTRODUCE_RESOURCEPROPETIES_RESOURCE);
             if (service.getService().getResourceFrameworkOptions().getResourcePropertyManagement() != null) {
                 resourceProperty.setSelected(true);
             }

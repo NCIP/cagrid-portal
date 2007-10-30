@@ -55,7 +55,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Aug 1, 2006
- * @version $Id: DataServiceCreationDialog.java,v 1.2 2007-08-21 21:02:11 dervin Exp $
+ * @version $Id: DataServiceCreationDialog.java,v 1.3 2007-10-30 14:12:18 hastings Exp $
  */
 public class DataServiceCreationDialog extends CreationExtensionUIDialog {
     // default service style is "None / Custom Data Source"
@@ -255,50 +255,6 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 
 
     private void setFeatureStatus() {
-        if (getBdtCheckBox().isSelected()) {
-            if (!bdtExtensionUsed()) {
-                // add the BDT extension
-                // TODO: get rid of this and use the extension tools to add
-                // the BDT extension in the data extension's feature creator:
-                // ExtensionTools.addExtensionToService(getServiceInfo(), BDT_EXTENSIONS_NAME);
-                ExtensionDescription desc = ExtensionsLoader.getInstance().getExtension(BDT_EXTENSIONS_NAME);
-                ExtensionType bdtExtension = new ExtensionType();
-                bdtExtension.setName(desc.getServiceExtensionDescription().getName());
-                bdtExtension.setExtensionType(desc.getExtensionType());
-                bdtExtension.setVersion(desc.getVersion());
-                // BDT extension has to run before data extension does
-                ExtensionType[] currentExtensions = getServiceInfo().getExtensions().getExtension();
-                ExtensionType[] newExtensions = new ExtensionType[currentExtensions.length + 1];
-                newExtensions[0] = bdtExtension;
-                System.arraycopy(currentExtensions, 0, newExtensions, 1, currentExtensions.length);
-                System.out.println("Service has " + newExtensions.length + " extensions:");
-                for (ExtensionType element : newExtensions) {
-                    System.out.println(element.getName());
-                }
-                getServiceInfo().getExtensions().setExtension(newExtensions);
-            } else {
-                // move the BDT extension to the front!
-                ExtensionType bdtExtension = null;
-                ExtensionType[] currentExtensions = getServiceInfo().getExtensions().getExtension();
-                ExtensionType[] orderedExtensions = new ExtensionType[currentExtensions.length];
-                for (ExtensionType ext : currentExtensions) {
-                    if (ext.getName().equals(BDT_EXTENSIONS_NAME)) {
-                        bdtExtension = ext;
-                        break;
-                    }
-                }
-                orderedExtensions[0] = bdtExtension;
-                int index = 1;
-                for (ExtensionType ext : currentExtensions) {
-                    if (!ext.getName().equals(BDT_EXTENSIONS_NAME)) {
-                        orderedExtensions[index] = ext;
-                        index++;
-                    }
-                }
-                getServiceInfo().getExtensions().setExtension(orderedExtensions);
-                System.out.println("Moved use of the BDT extension to the FRONT of extensions list");
-            }
-        }
 
         // set the selected service features
         ExtensionTypeExtensionData data = getExtensionTypeExtensionData();

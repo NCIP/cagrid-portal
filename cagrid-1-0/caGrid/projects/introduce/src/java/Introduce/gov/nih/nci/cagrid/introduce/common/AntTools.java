@@ -78,13 +78,13 @@ public class AntTools {
 
 
     public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
-        String packagename, String namespacedomain, String extensions) throws Exception {
-        return getAntSkeletonCreationCommand(buildFileDir, name, dir, packagename, namespacedomain, extensions, false);
+        String packagename, String namespacedomain, String resourceOptions, String extensions) throws Exception {
+        return getAntSkeletonCreationCommand(buildFileDir, name, dir, packagename, namespacedomain, resourceOptions, extensions, false);
     }
 
 
     public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
-        String packagename, String namespacedomain, String extensions, boolean debug) throws Exception {
+        String packagename, String namespacedomain, String resourceOptions, String extensions, boolean debug) throws Exception {
         // fix dir path if it relative......
         logger.debug("CREATION: builddir: " + buildFileDir);
         logger.debug("CREATION: destdir: " + dir);
@@ -96,7 +96,7 @@ public class AntTools {
         String cmd = " -Dintroduce.skeleton.destination.dir=" + dir + " -Dintroduce.skeleton.service.name=" + name
             + " -Dintroduce.skeleton.package=" + packagename + " -Dintroduce.skeleton.package.dir="
             + packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
-            + namespacedomain + " -Dintroduce.skeleton.extensions=" + extensions + " createService";
+            + namespacedomain + " -Dintroduce.skeleton.resource.options=" + resourceOptions + " -Dintroduce.skeleton.extensions=" + extensions + " createService";
         cmd = getAntCommandCall(buildFileDir, debug) + cmd;
         logger.debug("CREATION: cmd: " + cmd);
         return cmd;

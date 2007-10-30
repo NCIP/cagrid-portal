@@ -81,7 +81,7 @@ public class TestCaseInfo3 extends TestCaseInfo {
 	}
 	
 	public String getResourceFrameworkType() {
-		return IntroduceConstants.INTRODUCE_BASE_RESOURCE;
+		return IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE;
 	}
 
 }

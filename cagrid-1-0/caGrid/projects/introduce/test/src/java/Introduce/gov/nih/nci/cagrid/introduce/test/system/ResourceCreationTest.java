@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo2;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo3;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo4;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo5;
 import gov.nih.nci.cagrid.introduce.test.steps.AddResourcePropertyStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddServiceStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CleanupGlobusStep;
@@ -35,6 +36,8 @@ public class ResourceCreationTest extends Story {
     private TestCaseInfo tci3;
 
     private TestCaseInfo tci4;
+    
+    private TestCaseInfo tci5;
 
     private GlobusHelper helper;
 
@@ -59,6 +62,7 @@ public class ResourceCreationTest extends Story {
         tci2 = new TestCaseInfo2();
         tci3 = new TestCaseInfo3();
         tci4 = new TestCaseInfo4();
+        tci5 = new TestCaseInfo5();
         helper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT);
         Vector steps = new Vector();
 
@@ -68,10 +72,12 @@ public class ResourceCreationTest extends Story {
             steps.add(new AddServiceStep(tci2, false));
             steps.add(new AddServiceStep(tci3, false));
             steps.add(new AddServiceStep(tci4, false));
+            steps.add(new AddServiceStep(tci5, false));
             steps.add(new AddResourcePropertyStep(tci1, false));
             steps.add(new AddResourcePropertyStep(tci2, false));
             steps.add(new AddResourcePropertyStep(tci3, false));
-            steps.add(new AddResourcePropertyStep(tci4, true));
+            steps.add(new AddResourcePropertyStep(tci4, false));
+            steps.add(new AddResourcePropertyStep(tci5, true));
             steps.add(new DeployGlobusServiceStep(helper, tci1));
             steps.add(new StartGlobusStep(helper));
         } catch (Exception e) {

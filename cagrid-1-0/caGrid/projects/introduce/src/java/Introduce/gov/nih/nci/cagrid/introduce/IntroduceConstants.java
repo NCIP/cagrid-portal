@@ -58,6 +58,8 @@ public abstract class IntroduceConstants {
 
     public static final String INTRODUCE_SKELETON_EXTENSIONS = "introduce.skeleton.extensions";
 
+    public static final String INTRODUCE_SKELETON_RESOURCE_OPTIONS = "introduce.skeleton.resource.options";
+
     public static final String NAMESPACE2PACKAGE_MAPPINGS_FILE = "namespace2package.mappings";
 
     public static final String INTRODUCE_SKELETON_TIMESTAMP = "introduce.skeleton.timestamp";
@@ -82,13 +84,19 @@ public abstract class IntroduceConstants {
 
     public static final String INTRODUCE_MAIN_RESOURCE = "main";
 
-    public static final String INTRODUCE_BASE_RESOURCE = "base";
-
     public static final String INTRODUCE_LIFETIME_RESOURCE = "lifetime";
+    
+    public static final String INTRODUCE_PERSISTANT_RESOURCE = "persistant";
+    
+    public static final String INTRODUCE_NOTIFICATION_RESOURCE = "notification";
+    
+    public static final String INTRODUCE_RESOURCEPROPETIES_RESOURCE = "resourcePropertyManagement";
 
     public static final String INTRODUCE_CUSTOM_RESOURCE = "custom";
     
     public static final String INTRODUCE_IDENTIFIABLE_RESOURCE = "identifiable";
+    
+    public static final String INTRODUCE_SECURE_RESOURCE = "secure";
 
     // deployment properties
     public static final String DEPLOY_PROPERTIES_FILE = "deploy.properties";

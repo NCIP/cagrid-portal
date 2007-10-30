@@ -6,10 +6,17 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
+import gov.nih.nci.cagrid.introduce.beans.service.Identifiable;
+import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
 import gov.nih.nci.cagrid.introduce.beans.service.Main;
+import gov.nih.nci.cagrid.introduce.beans.service.Notification;
+import gov.nih.nci.cagrid.introduce.beans.service.Persistant;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
+import gov.nih.nci.cagrid.introduce.beans.service.ResourcePropertyManagement;
+import gov.nih.nci.cagrid.introduce.beans.service.Secure;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.Singleton;
+import gov.nih.nci.cagrid.introduce.common.ProviderTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
@@ -62,10 +69,32 @@ public class SkeletonCreator extends Task {
         serviceType.setName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
         serviceType.setNamespace(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
         serviceType.setPackageName(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE));
-        serviceType.setResourceFrameworkOptions(new ResourceFrameworkOptions());
-        serviceType.getResourceFrameworkOptions().setMain(new Main());
-        serviceType.getResourceFrameworkOptions().setSingleton(new Singleton());
 
+        serviceType.setResourceFrameworkOptions(new ResourceFrameworkOptions());
+        // for each resource propertyOption set it on the service
+        String resourceOptionsList = properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_RESOURCE_OPTIONS);
+        StringTokenizer strtok = new StringTokenizer(resourceOptionsList, ",", false);
+        while (strtok.hasMoreElements()) {
+            String option = strtok.nextToken();
+            if (option.equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
+                serviceType.getResourceFrameworkOptions().setMain(new Main());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
+                serviceType.getResourceFrameworkOptions().setSingleton(new Singleton());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE)) {
+                serviceType.getResourceFrameworkOptions().setIdentifiable(new Identifiable());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
+                serviceType.getResourceFrameworkOptions().setLifetime(new Lifetime());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_PERSISTANT_RESOURCE)) {
+                serviceType.getResourceFrameworkOptions().setPersistant(new Persistant());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_NOTIFICATION_RESOURCE)) {
+                serviceType.getResourceFrameworkOptions().setNotification(new Notification());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_SECURE_RESOURCE)) {
+                serviceType.getResourceFrameworkOptions().setSecure(new Secure());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_RESOURCEPROPETIES_RESOURCE)) {
+                serviceType.getResourceFrameworkOptions().setResourcePropertyManagement(
+                    new ResourcePropertyManagement());
+            }
+        }
 
         // add new service to the services
         // add new method to array in bean
@@ -98,7 +127,7 @@ public class SkeletonCreator extends Task {
         // for each extension in the properties make sure to add the xml to the
         // introduce model for them to use.....
         String extensionsList = properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS);
-        StringTokenizer strtok = new StringTokenizer(extensionsList, ",", false);
+        strtok = new StringTokenizer(extensionsList, ",", false);
         ExtensionType[] types = new ExtensionType[strtok.countTokens()];
         int count = 0;
         while (strtok.hasMoreTokens()) {
@@ -135,10 +164,17 @@ public class SkeletonCreator extends Task {
         SkeletonDocsCreator sdc = new SkeletonDocsCreator();
         SkeletonSecurityOperationProviderCreator ssopc = new SkeletonSecurityOperationProviderCreator();
 
-        // add basic resource property access methods......
-        //ProviderUtils.addGetResourcePropertyResourceProvider(info.getServices().getService(0), info);
-        //ProviderUtils.addGetMultipeResourcePropertiesResourceProvider(info.getServices().getService(0), info);
-        //ProviderUtils.addQueryResourcePropertiesResourceProvider(info.getServices().getService(0), info);
+        //add the providers that might be needed for particular resource options
+        if (serviceType.getResourceFrameworkOptions().getLifetime() != null) {
+            ProviderTools.addLifetimeResourceProvider(info.getServices().getService(0), info);
+        }
+        if (serviceType.getResourceFrameworkOptions().getResourcePropertyManagement() != null) {
+            ProviderTools
+                .addResourcePropertiesManagementResourceFrameworkOption(info.getServices().getService(0), info);
+        }
+        if (serviceType.getResourceFrameworkOptions().getNotification() != null) {
+            ProviderTools.addSubscribeResourceProvider(info.getServices().getService(0), info);
+        }
         
         // Generate the source
         try {

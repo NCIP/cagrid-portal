@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import java.io.File;
 import java.util.Properties;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -26,6 +27,8 @@ import org.apache.tools.ant.Task;
 public class SkeletonPostCreator extends Task {
 
     public SkeletonPostCreator() {
+        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+            + "log4j.properties");
     }
 
 

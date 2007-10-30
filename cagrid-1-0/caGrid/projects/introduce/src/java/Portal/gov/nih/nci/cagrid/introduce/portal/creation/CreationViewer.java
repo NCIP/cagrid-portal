@@ -19,6 +19,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -412,7 +413,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
                         extensions.add(edt.getDisplayName());
                     }
                     createService(getDir().getText(), getService().getText(), getServicePackage().getText(),
-                        getNamespaceDomain().getText(), extensions);
+                        getNamespaceDomain().getText(), Arrays.asList(new String[]{IntroduceConstants.INTRODUCE_MAIN_RESOURCE,IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE}), extensions);
 
                     try {
                         ResourceManager.setStateProperty(ResourceManager.LAST_DIRECTORY, getDir().getText());

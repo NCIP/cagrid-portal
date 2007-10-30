@@ -81,7 +81,7 @@ public class TestCaseInfoForImportService extends TestCaseInfo {
 	}
 	
 	public String getResourceFrameworkType() {
-		return IntroduceConstants.INTRODUCE_BASE_RESOURCE;
+		return IntroduceConstants.INTRODUCE_MAIN_RESOURCE + "," + IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE;
 	}
 
 }

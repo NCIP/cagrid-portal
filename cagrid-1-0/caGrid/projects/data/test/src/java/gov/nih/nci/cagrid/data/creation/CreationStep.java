@@ -44,7 +44,7 @@ public class CreationStep extends Step {
 		System.out.println("Creating service...");
 
 		String cmd = AntTools.getAntSkeletonCreationCommand(introduceDir, serviceInfo.getName(), 
-			serviceInfo.getDir(), serviceInfo.getPackageName(), serviceInfo.getNamespace(), serviceInfo.getExtensions());
+			serviceInfo.getDir(), serviceInfo.getPackageName(), serviceInfo.getNamespace(), serviceInfo.getResourceFrameworkType(), serviceInfo.getExtensions());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process createSkeletonProcess = CommonTools.createAndOutputProcess(cmd);
         new StreamGobbler(createSkeletonProcess.getInputStream(), 

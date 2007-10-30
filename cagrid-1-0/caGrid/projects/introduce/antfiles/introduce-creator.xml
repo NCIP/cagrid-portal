@@ -12,6 +12,7 @@
 	<property name="introduce.skeleton.package.dir.default" value="gov/nih/nci/cagrid"/>
 	<property name="introduce.skeleton.namespace.domain.default" value="http://cagrid.nci.nih.gov"/>
 	<property name="introduce.skeleton.extensions.default" value=""/>
+	<property name="introduce.skeleton.resource.options.default" value="main,singleton"/>
 	<!-- ============================================================== -->
 	<!-- Globus properties                                              -->
 	<!-- ============================================================== -->
@@ -108,6 +109,7 @@
 			<entry key="introduce.skeleton.namespace.domain" value="${introduce.skeleton.namespace.domain}"/>
 			<entry key="introduce.skeleton.services.list" value="${introduce.skeleton.service.name}"/>
 			<entry key="introduce.skeleton.extensions" value="${introduce.skeleton.extensions}"/>
+			<entry key="introduce.skeleton.resource.options" value="${introduce.skeleton.resource.options}"/>
 		</propertyfile>
 		<!-- call our creation ant task -->
 		<createSkeleton/>
@@ -125,8 +127,11 @@
 					<and>
 						<and>
 							<and>
-								<isset property="introduce.skeleton.service.name"/>
-								<isset property="introduce.skeleton.destination.dir"/>
+								<and>
+									<isset property="introduce.skeleton.service.name"/>
+									<isset property="introduce.skeleton.destination.dir"/>
+								</and>
+								<isset property="introduce.skeleton.resource.options"/>
 							</and>
 							<isset property="introduce.skeleton.extensions"/>
 						</and>
@@ -159,5 +164,8 @@
 		<input
 			message="Please enter any service extensions (separate by commas).    [${introduce.skeleton.extensions.default}]:"
 			addproperty="introduce.skeleton.extensions" defaultvalue="${introduce.skeleton.extensions.default}"/>
+		<input
+			message="Please enter any resource options (separate by commas).    [${introduce.skeleton.resource.options.default}]:"
+			addproperty="introduce.skeleton.resource.options" defaultvalue="${introduce.skeleton.resource.options.default}"/>
 	</target>
 </project>
