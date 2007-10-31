@@ -934,12 +934,13 @@
 	<!-- =============================================================== -->
 	<!-- Testing :                                                       -->
 	<!-- =============================================================== -->
-	<target name="build-testing" depends="prepare">
+	<target name="build-testing" depends="prepare" description="Builds the caGrid testing project">
 		<resolveDependencies extdir="${projects.dir}/testing/ext">
 			<artifact refid="cagrid.properties"/>
 			<artifact refid="core.jars"/>
 		    <artifact refid="common.test.jars" />
 		    <artifact refid="test.coverage.jars" />
+            <artifact refid="jdom.jars" />
 		</resolveDependencies>
 	</target>
 
