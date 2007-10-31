@@ -52,6 +52,10 @@ import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
+import javax.swing.BorderFactory;
+import javax.swing.border.TitledBorder;
+import java.awt.Font;
+import java.awt.Color;
 
 
 public class ModifyService extends JDialog {
@@ -113,6 +117,8 @@ public class ModifyService extends JDialog {
     private JCheckBox secureResource = null;
 
     private JCheckBox resourceProperty = null;
+
+	private JPanel infoPanel = null;
 
 
     /**
@@ -430,83 +436,32 @@ public class ModifyService extends JDialog {
      */
     private JPanel getContentPanel() {
         if (contentPanel == null) {
+            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+            gridBagConstraints21.gridx = 0;
+            gridBagConstraints21.weightx = 1.0D;
+            gridBagConstraints21.fill = GridBagConstraints.BOTH;
+            gridBagConstraints21.weighty = 1.0D;
+            gridBagConstraints21.gridy = 0;
             GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-            gridBagConstraints15.gridx = 3;
+            gridBagConstraints15.gridx = 1;
             gridBagConstraints15.fill = GridBagConstraints.BOTH;
-            gridBagConstraints15.weightx = 1.0D;
+            gridBagConstraints15.weightx = 0.0D;
             gridBagConstraints15.weighty = 0.0D;
             gridBagConstraints15.gridheight = 7;
             gridBagConstraints15.gridy = 0;
-            GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-            gridBagConstraints14.fill = GridBagConstraints.BOTH;
-            gridBagConstraints14.gridy = 4;
-            gridBagConstraints14.weightx = 1.0;
-            gridBagConstraints14.weighty = 1.0;
-            gridBagConstraints14.insets = new Insets(0, 2, 0, 2);
-            gridBagConstraints14.gridheight = 3;
-            gridBagConstraints14.gridx = 1;
-            GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-            gridBagConstraints13.gridx = 0;
-            gridBagConstraints13.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints13.insets = new Insets(0, 2, 0, 2);
-            gridBagConstraints13.gridwidth = 3;
-            gridBagConstraints13.gridy = 4;
             descriptionLabel = new JLabel();
-            descriptionLabel.setText("Service Context Description");
-            GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-            gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints8.gridy = 2;
-            gridBagConstraints8.weightx = 1.0;
-            gridBagConstraints8.insets = new Insets(0, 2, 0, 2);
-            gridBagConstraints8.weighty = 1.0D;
-            gridBagConstraints8.gridx = 1;
-            GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-            gridBagConstraints7.gridx = 0;
-            gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints7.insets = new Insets(0, 2, 0, 2);
-            gridBagConstraints7.gridy = 2;
+            descriptionLabel.setText("Description");
             servicePackageNameLabel = new JLabel();
             servicePackageNameLabel.setText("Package Name");
-            GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-            gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints10.gridy = 1;
-            gridBagConstraints10.weightx = 1.0;
-            gridBagConstraints10.insets = new Insets(0, 2, 0, 2);
-            gridBagConstraints10.weighty = 1.0D;
-            gridBagConstraints10.gridx = 1;
-            GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-            gridBagConstraints9.gridx = 0;
-            gridBagConstraints9.insets = new Insets(0, 2, 0, 2);
-            gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints9.gridy = 1;
             serviceNamespaceLabel = new JLabel();
             serviceNamespaceLabel.setText("Namespace");
-            GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-            gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints4.gridy = 0;
-            gridBagConstraints4.weightx = 1.0;
-            gridBagConstraints4.insets = new Insets(0, 2, 0, 2);
-            gridBagConstraints4.weighty = 1.0D;
-            gridBagConstraints4.gridx = 1;
-            GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-            gridBagConstraints3.insets = new Insets(0, 2, 0, 2);
-            gridBagConstraints3.gridy = 0;
-            gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints3.gridx = 0;
             serviceNameLabel = new JLabel();
             serviceNameLabel.setText("Service Name");
             contentPanel = new JPanel();
             contentPanel.setLayout(new GridBagLayout());
             contentPanel.setSize(new Dimension(494, 153));
-            contentPanel.add(serviceNameLabel, gridBagConstraints3);
-            contentPanel.add(getServiceNameTextField(), gridBagConstraints4);
-            contentPanel.add(serviceNamespaceLabel, gridBagConstraints9);
-            contentPanel.add(getNamespaceTextField(), gridBagConstraints10);
-            contentPanel.add(servicePackageNameLabel, gridBagConstraints7);
-            contentPanel.add(getServicePackageNameTextField(), gridBagConstraints8);
-            contentPanel.add(descriptionLabel, gridBagConstraints13);
-            contentPanel.add(getTextBoxPane(), gridBagConstraints14);
             contentPanel.add(getResourceOptionsPanel(), gridBagConstraints15);
+            contentPanel.add(getInfoPanel(), gridBagConstraints21);
         }
         return contentPanel;
     }
@@ -649,6 +604,7 @@ public class ModifyService extends JDialog {
             gridBagConstraints5.gridy = 2;
             resourceOptionsPanel = new JPanel();
             resourceOptionsPanel.setLayout(new GridBagLayout());
+            resourceOptionsPanel.setBorder(BorderFactory.createTitledBorder(null, "Resource Framework Options", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
             resourceOptionsPanel.add(getLifetimeResource(), gridBagConstraints5);
             resourceOptionsPanel.add(getSingletomResource(), gridBagConstraints16);
             resourceOptionsPanel.add(getPersistantResource(), gridBagConstraints17);
@@ -881,4 +837,77 @@ public class ModifyService extends JDialog {
         }
         return resourceProperty;
     }
+
+
+	/**
+	 * This method initializes infoPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getInfoPanel() {
+		if (infoPanel == null) {
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.fill = GridBagConstraints.BOTH;
+			gridBagConstraints14.gridheight = 3;
+			gridBagConstraints14.gridx = 1;
+			gridBagConstraints14.gridy = 3;
+			gridBagConstraints14.weightx = 1.0;
+			gridBagConstraints14.weighty = 1.0;
+			gridBagConstraints14.insets = new Insets(0, 2, 0, 2);
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints13.gridwidth = 3;
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.gridy = 3;
+			gridBagConstraints13.insets = new Insets(0, 2, 0, 2);
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.gridx = 1;
+			gridBagConstraints8.gridy = 2;
+			gridBagConstraints8.weightx = 1.0;
+			gridBagConstraints8.weighty = 1.0D;
+			gridBagConstraints8.insets = new Insets(0, 2, 0, 2);
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints7.gridx = 0;
+			gridBagConstraints7.gridy = 2;
+			gridBagConstraints7.insets = new Insets(0, 2, 0, 2);
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints10.gridx = 1;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.weightx = 1.0;
+			gridBagConstraints10.weighty = 1.0D;
+			gridBagConstraints10.insets = new Insets(0, 2, 0, 2);
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints9.gridx = 0;
+			gridBagConstraints9.gridy = 1;
+			gridBagConstraints9.insets = new Insets(0, 2, 0, 2);
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints4.gridx = 1;
+			gridBagConstraints4.gridy = 0;
+			gridBagConstraints4.weightx = 1.0;
+			gridBagConstraints4.weighty = 1.0D;
+			gridBagConstraints4.insets = new Insets(0, 2, 0, 2);
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.gridy = 0;
+			gridBagConstraints3.insets = new Insets(0, 2, 0, 2);
+			infoPanel = new JPanel();
+			infoPanel.setLayout(new GridBagLayout());
+			infoPanel.setBorder(BorderFactory.createTitledBorder(null, "Service Context Information", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			infoPanel.add(serviceNameLabel, gridBagConstraints3);
+			infoPanel.add(getServiceNameTextField(), gridBagConstraints4);
+			infoPanel.add(serviceNamespaceLabel, gridBagConstraints9);
+			infoPanel.add(getNamespaceTextField(), gridBagConstraints10);
+			infoPanel.add(servicePackageNameLabel, gridBagConstraints7);
+			infoPanel.add(getServicePackageNameTextField(), gridBagConstraints8);
+			infoPanel.add(descriptionLabel, gridBagConstraints13);
+			infoPanel.add(getTextBoxPane(), gridBagConstraints14);
+		}
+		return infoPanel;
+	}
 } // @jve:decl-index=0:visual-constraint="10,10"

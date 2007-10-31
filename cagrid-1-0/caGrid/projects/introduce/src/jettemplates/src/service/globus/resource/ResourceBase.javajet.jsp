@@ -277,6 +277,9 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 		  }
 		}
 		}%>	
+		
+		// register the service to the index sevice
+		refreshRegistration(true);
 
 	}
 	

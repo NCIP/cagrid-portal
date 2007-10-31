@@ -46,8 +46,8 @@ public class IndexServiceTest extends AbstractServiceTest {
     @Override
     protected void storyTearDown() throws Throwable {
         if (this.indexGlobus != null) {
-            this.indexGlobus.stopGlobus();
-            this.indexGlobus.cleanupTempGlobus();
+          this.indexGlobus.stopGlobus();
+          this.indexGlobus.cleanupTempGlobus();
         }
         super.storyTearDown();
     }
