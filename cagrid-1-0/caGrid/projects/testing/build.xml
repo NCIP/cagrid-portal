@@ -1,0 +1,228 @@
+<?xml version="1.0"?>
+<!-- ================================================================= -->
+<!-- caGrid 1.0 testing project build file                             -->
+<!-- ================================================================= -->
+
+<project name="testing" default="all" basedir=".">
+	<!-- Environment -->
+	<property environment="env" />
+	<property file="${basedir}/build.properties" />
+	<property file="${user.dir}/build.properties" />
+	<property file="${basedir}/ext/resources/cagrid.properties" />
+	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
+
+	<!-- Information -->
+	<property name="project.version" value="1.0" />
+	<property name="project.name" value="${cagrid.master.jar.prefix}${ant.project.name}" />
+	<property name="java.source" value="1.5"/>
+
+	<property name="system.src.dir" value="${basedir}/src/java/system"/>
+	<property name="core.src.dir" value="${basedir}/src/java/core"/>
+	<property name="build.dir" value="${basedir}/build" />
+	<property name="javadoc.dir" value="${build.dir}/javadoc" />
+	<property name="system.classes.dir" value="${build.dir}/system/classes" />
+	<property name="core.classes.dir" value="${build.dir}/system/core" />
+	<property name="jar.dir" value="${build.dir}/lib" />
+	<property name="system.jarfile" value="${jar.dir}/${project.name}${cagrid.master.jar.separator}system.jar" />
+	<property name="core.jarfile" value="${jar.dir}/${project.name}${cagrid.master.jar.separator}core.jar" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="ext.lib.dir" value="${basedir}/ext/lib" />
+	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
+
+	<!-- testing stuff -->
+	<property name="test.dir" location="${basedir}/test" />
+	<property name="test.src.dir" location="${test.dir}/src/java" />
+	<property name="test.classes.dir" location="${build.dir}/test/classes" />
+	<property name="test.lib.dir" location="${test.dir}/lib" />
+	<property name="test.logs.dir" location="${test.dir}/logs" />
+	<property name="test.project.jar" location="${jar.dir}/${project.name}${cagrid.master.jar.separator}tests.jar" />
+
+	<!-- no testing file yet
+	<import file="test/test.xml" />
+	-->
+
+
+	<!-- =============================================================== -->
+	<!-- The Build Classpath                                             -->
+	<!-- =============================================================== -->
+	<path id="build.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${globus.dir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+
+	<!-- =============================================================== -->
+	<!-- The Run Classpath                                                   -->
+	<!-- =============================================================== -->
+	<path id="run.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${globus.dir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+
+	<!-- =============================================================== -->
+	<!-- The Test Classpath                                              -->
+	<!-- =============================================================== -->
+	<path id="test.classpath">
+		<pathelement path="${classes.dir}" />
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${globus.dir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+
+	<!-- =============================================================== -->
+	<!-- Prepares the build directory                                    -->
+	<!-- =============================================================== -->
+	<target name="prepare">
+		<tstamp />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${system.classes.dir}"/>
+		<mkdir dir="${core.classes.dir}"/>
+		<mkdir dir="${jar.dir}"/>
+	</target>
+	
+	
+	<!-- =============================================================== -->
+	<!-- Compiles the core source code                                   -->
+	<!-- =============================================================== -->
+	<target name="compileCore" depends="prepare" description="compiles core testing code">
+		<mkdir dir="${core.classes.dir}}" />
+		<javac srcdir="${core.src.dir}" destdir="${core.classes.dir}" source="${java.source}" debug="on" deprecation="off" optimize="off">
+			<classpath refid="build.classpath" />
+		</javac>
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- Compiles the system source code                                 -->
+	<!-- =============================================================== -->
+	<target name="compileSystem" depends="prepare, compileCore" description="compiles system testing code">
+		<mkdir dir="${system.classes.dir}" />
+		<javac srcdir="${system.src.dir}" destdir="${system.classes.dir}" source="${java.source}" debug="on" deprecation="off" optimize="off">
+			<classpath refid="build.classpath" />
+			<classpath>
+				<pathelement location="${core.classes.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+	
+
+	<!-- =============================================================== -->
+	<!-- Compiles the test source code                                   -->
+	<!-- =============================================================== -->
+	<target name="compileTests" depends="prepare" description="compiles testing code">
+		<mkdir dir="${test.classes.dir}" />
+		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" source="${java.source}" debug="on" deprecation="off" optimize="off">
+			<classpath refid="test.classpath" />
+		</javac>
+	</target>
+
+
+	<!-- ============================================================== -->
+	<!-- Cleans up generated stuff                                      -->
+	<!-- ============================================================== -->
+	<target name="clean" depends="" description="Removes generated files.">
+		<delete dir="${build.dir}" />
+	</target>
+
+
+	<!-- ============================================================== -->
+	<!-- Creates the test jar files                                          -->
+	<!-- ============================================================== -->
+	<target name="jar" depends="compileCore, compileSystem" description="Builds the Jar Files">
+		<mkdir dir="${jar.dir}" />
+		<jar jarfile="${core.jarfile}">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="${main.class}" />
+			</manifest>
+			<fileset dir="${core.classes.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${core.src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+		</jar>
+		<jar jarfile="${system.jarfile}">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="${main.class}" />
+			</manifest>
+			<fileset dir="${system.classes.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${system.src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+		</jar>	
+	</target>
+	
+
+	<!-- ============================================================== -->
+	<!-- Creates the jar files                                          -->
+	<!-- ============================================================== -->
+	<target name="jarTests" depends="compileTests" description="Builds the test Jar File">
+		<mkdir dir="${jar.dir}" />
+		<jar jarfile="${test.project.jar}" basedir="${test.classes.dir}">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+			</manifest>
+		</jar>
+	</target>
+	
+
+	<!-- =================================================================== -->
+	<!-- Builds Code Docuementation                                          -->
+	<!-- =================================================================== -->
+	<target name="javadoc" depends="compileCore, compileSystem" description="Creates the API documentation">
+		<javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="${project.name} API">
+			<sourcepath>
+				<pathelement path="${core.src.dir}" />
+			</sourcepath>
+			<sourcepath>
+				<pathelement path="${system.src.dir}" />
+			</sourcepath>
+
+			<classpath>
+				<path refid="build.classpath" />
+			</classpath>
+
+			<tag name="todo" scope="all" description="To Do:" />
+			<tag name="created" scope="all" description="Created On:" />
+		</javadoc>
+	</target>
+
+
+	<!-- ============================================================== -->
+	<!-- Builds from scratch                                                -->
+	<!-- ============================================================== -->
+	<target name="all" description="Builds the entire application" depends="jar, jarTests" />
+</project>
+
