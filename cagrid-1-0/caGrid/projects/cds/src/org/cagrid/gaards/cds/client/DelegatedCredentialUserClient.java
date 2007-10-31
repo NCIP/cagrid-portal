@@ -20,7 +20,6 @@ import org.globus.gsi.GlobusCredential;
 
 public class DelegatedCredentialUserClient {
 
-	private GlobusCredential cred;
 	private org.cagrid.gaards.cds.delegated.client.DelegatedCredentialClient client;
 
 	public DelegatedCredentialUserClient(EndpointReferenceType ref)
@@ -44,7 +43,8 @@ public class DelegatedCredentialUserClient {
 				ref, cred);
 	}
 
-	public GlobusCredential getDelegatedCredential() throws RemoteException {
+	public GlobusCredential getDelegatedCredential() throws RemoteException,
+			CDSInternalFault, DelegationFault, PermissionDeniedFault {
 		return getDelegatedCredential(ClientConstants.DEFAULT_KEY_SIZE);
 	}
 
