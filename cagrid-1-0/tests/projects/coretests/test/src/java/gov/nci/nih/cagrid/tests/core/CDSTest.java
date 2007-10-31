@@ -2,6 +2,7 @@ package gov.nci.nih.cagrid.tests.core;
 
 import gov.nci.nih.cagrid.tests.core.steps.CDSCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.CDSDelegateCredentialStep;
+import gov.nci.nih.cagrid.tests.core.steps.CDSGetDelegatedCredentialFailStep;
 import gov.nci.nih.cagrid.tests.core.steps.CDSGetDelegatedCredentialStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianAddTrustedCAStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianApproveRegistrationStep;
@@ -30,6 +31,7 @@ import junit.textui.TestRunner;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
+import org.cagrid.gaards.cds.service.Errors;
 
 import com.atomicobject.haste.framework.Story;
 
@@ -152,6 +154,9 @@ public class CDSTest extends Story {
 				donatelloApp.getUserId(), donatelloApp.getPassword(), dorianURL);
 		steps.add(donatello);
 		steps.add(new DorianDestroyDefaultProxyStep());
+
+		steps.add(new CDSGetDelegatedCredentialFailStep(delegateAdmin,donatello, Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL));
+		//TODO: Test Invalidating
 		return steps;
 	}
 

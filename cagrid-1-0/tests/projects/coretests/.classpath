@@ -125,7 +125,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar" sourcepath="/caGrid-core"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-discovery.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dorian-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dorian-common.jar"/>
