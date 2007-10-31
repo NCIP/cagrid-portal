@@ -5,7 +5,6 @@ package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.DelegatedCredential;
 import gov.nci.nih.cagrid.tests.core.GridCredential;
-import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 
 import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
@@ -42,7 +41,7 @@ public class CDSGetDelegatedCredentialFailStep extends Step {
 			fail("Should not be able to get delegated credential.");
 		} catch (Exception e) {
 			String error = Utils.getExceptionMessage(e);
-			if (!error.equals(expectedError)) {
+			if (error.indexOf(expectedError)==-1) {
 				fail("Unexpected error encountered:\nEXPECTED:" + expectedError
 						+ "\n RECEIVED:" + error);
 			}

@@ -15,6 +15,8 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusInstallSecurityDescriptorStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
+import gov.nci.nih.cagrid.tests.core.steps.ProxyActiveStep;
+import gov.nci.nih.cagrid.tests.core.steps.SleepStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
@@ -35,13 +37,15 @@ import org.cagrid.gaards.cds.service.Errors;
 
 import com.atomicobject.haste.framework.Story;
 
-public class CDSTest extends Story {
+public class DelegateCredentialTest extends Story {
 	private GlobusHelper globus;
 	private File dorianServiceDir;
 	private File cdsServiceDir;
 	private File caFile;
 
-	public CDSTest() {
+	private final static int SHORT_LIFETIME_SECONDS = 30;
+
+	public DelegateCredentialTest() {
 		super();
 	}
 
@@ -77,7 +81,7 @@ public class CDSTest extends Story {
 				+ File.separator + ".." + File.separator + ".."
 				+ File.separator + "caGrid" + File.separator + "projects"
 				+ File.separator + "dorian"));
-		
+
 		this.cdsServiceDir = new File(System.getProperty("cds.dir", ".."
 				+ File.separator + ".." + File.separator + ".."
 				+ File.separator + "caGrid" + File.separator + "projects"
@@ -96,28 +100,29 @@ public class CDSTest extends Story {
 			e.printStackTrace();
 			fail("Unable to get the Dorian URL:" + e.getMessage());
 		}
-		
+
 		String cdsURL = null;
 		try {
-			cdsURL = this.globus.getServiceEPR("cagrid/CredentialDelegationService").getAddress()
+			cdsURL = this.globus.getServiceEPR(
+					"cagrid/CredentialDelegationService").getAddress()
 					.toString();
 		} catch (MalformedURIException e) {
 			e.printStackTrace();
 			fail("Unable to get the CDS URL:" + e.getMessage());
 		}
-		
 
 		// initialize
 		steps.add(new GlobusCreateStep(this.globus));
 		steps.add(new GlobusInstallSecurityDescriptorStep(this.globus));
-		steps.add(new GlobusDeployServiceStep(this.globus, this.dorianServiceDir));
+		steps.add(new GlobusDeployServiceStep(this.globus,
+				this.dorianServiceDir));
 		steps.add(new GlobusDeployServiceStep(this.globus, this.cdsServiceDir));
 		steps.add(new DorianConfigureStep(this.globus));
 		steps.add(new GlobusStartStep(this.globus));
 
 		// successful authenticate
 		DorianAuthenticateStep admin = new DorianAuthenticateStep("dorian",
-				Constants.DORIAN_ADMIN_PASSWORD, dorianURL,12,2);
+				Constants.DORIAN_ADMIN_PASSWORD, dorianURL, 12, 2);
 		steps.add(admin);
 		steps.add(new DorianAddTrustedCAStep(this.caFile, dorianURL));
 		steps.add(new DorianDestroyDefaultProxyStep());
@@ -136,27 +141,54 @@ public class CDSTest extends Story {
 				leonardoApp.getUserId(), leonardoApp.getPassword(), dorianURL);
 		steps.add(leonardo);
 		steps.add(new DorianDestroyDefaultProxyStep());
-		
+
 		List<GridCredential> allowedParties = new ArrayList<GridCredential>();
 		allowedParties.add(leonardo);
 		ProxyLifetime lifetime = new ProxyLifetime();
 		lifetime.setHours(4);
-		CDSDelegateCredentialStep delegateAdmin = new CDSDelegateCredentialStep(cdsURL,admin,allowedParties,lifetime);
+		CDSDelegateCredentialStep delegateAdmin = new CDSDelegateCredentialStep(
+				cdsURL, admin, allowedParties, lifetime);
 		steps.add(delegateAdmin);
-		
-		CDSGetDelegatedCredentialStep admin2 = new CDSGetDelegatedCredentialStep(delegateAdmin,leonardo);
+
+		CDSGetDelegatedCredentialStep admin2 = new CDSGetDelegatedCredentialStep(
+				delegateAdmin, leonardo);
 		steps.add(admin2);
-		
+
 		steps.add(new DorianApproveRegistrationStep(donatelloApp, dorianURL,
 				admin2));
-		
+
 		DorianAuthenticateStep donatello = new DorianAuthenticateStep(
 				donatelloApp.getUserId(), donatelloApp.getPassword(), dorianURL);
 		steps.add(donatello);
 		steps.add(new DorianDestroyDefaultProxyStep());
 
-		steps.add(new CDSGetDelegatedCredentialFailStep(delegateAdmin,donatello, Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL));
-		//TODO: Test Invalidating
+		steps.add(new CDSGetDelegatedCredentialFailStep(delegateAdmin,
+				donatello, Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL));
+		// TODO: Test Invalidating
+
+		ProxyLifetime delegationLifetime = new ProxyLifetime();
+		delegationLifetime.setSeconds(SHORT_LIFETIME_SECONDS);
+		ProxyLifetime delegatedCredentialsLifetime = new ProxyLifetime();
+		delegatedCredentialsLifetime.setSeconds((SHORT_LIFETIME_SECONDS / 2));
+
+		CDSDelegateCredentialStep delegateAdminShort = new CDSDelegateCredentialStep(
+				cdsURL, admin, allowedParties, delegationLifetime,
+				delegatedCredentialsLifetime);
+		steps.add(delegateAdminShort);
+
+		CDSGetDelegatedCredentialStep adminShort = new CDSGetDelegatedCredentialStep(
+				delegateAdminShort, leonardo);
+		steps.add(adminShort);
+
+		steps.add(new ProxyActiveStep(adminShort, true));
+		steps.add(new CDSGetDelegatedCredentialFailStep(delegateAdminShort,
+				donatello, Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL));
+		long sleepTime = ((SHORT_LIFETIME_SECONDS / 2)*1000) + 100;
+		steps.add(new SleepStep(sleepTime));
+		steps.add(new ProxyActiveStep(adminShort, false));
+		steps.add(new SleepStep(sleepTime));
+		steps.add(new CDSGetDelegatedCredentialFailStep(delegateAdminShort,
+				leonardo, "org.globus.wsrf.NoSuchResourceException"));
 		return steps;
 	}
 
@@ -196,7 +228,7 @@ public class CDSTest extends Story {
 	 */
 	public static void main(String args[]) {
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(CDSTest.class));
+		TestResult result = runner.doRun(new TestSuite(DelegateCredentialTest.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 
