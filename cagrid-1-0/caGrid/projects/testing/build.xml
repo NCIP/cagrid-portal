@@ -21,7 +21,7 @@
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
 	<property name="system.classes.dir" value="${build.dir}/system/classes" />
-	<property name="core.classes.dir" value="${build.dir}/system/core" />
+	<property name="core.classes.dir" value="${build.dir}/core/classes" />
 	<property name="jar.dir" value="${build.dir}/lib" />
 	<property name="system.jarfile" value="${jar.dir}/${project.name}${cagrid.master.jar.separator}system.jar" />
 	<property name="core.jarfile" value="${jar.dir}/${project.name}${cagrid.master.jar.separator}core.jar" />
@@ -113,7 +113,6 @@
 	<!-- Compiles the core source code                                   -->
 	<!-- =============================================================== -->
 	<target name="compileCore" depends="prepare" description="compiles core testing code">
-		<mkdir dir="${core.classes.dir}}" />
 		<javac srcdir="${core.src.dir}" destdir="${core.classes.dir}" source="${java.source}" debug="on" deprecation="off" optimize="off">
 			<classpath refid="build.classpath" />
 		</javac>
@@ -124,7 +123,6 @@
 	<!-- Compiles the system source code                                 -->
 	<!-- =============================================================== -->
 	<target name="compileSystem" depends="prepare, compileCore" description="compiles system testing code">
-		<mkdir dir="${system.classes.dir}" />
 		<javac srcdir="${system.src.dir}" destdir="${system.classes.dir}" source="${java.source}" debug="on" deprecation="off" optimize="off">
 			<classpath refid="build.classpath" />
 			<classpath>
