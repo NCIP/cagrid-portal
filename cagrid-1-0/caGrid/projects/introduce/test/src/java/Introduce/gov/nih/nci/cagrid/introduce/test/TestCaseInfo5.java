@@ -79,7 +79,7 @@ public class TestCaseInfo5 extends TestCaseInfo {
 	}
 
 	public String getResourceFrameworkType() {
-		return IntroduceConstants.INTRODUCE_NOTIFICATION_RESOURCE+ "," + IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE;
+		return IntroduceConstants.INTRODUCE_NOTIFICATION_RESOURCE + "," + IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE;
 	}
 
 }

@@ -98,7 +98,7 @@ public abstract class <%=info.getService().getName()%>ClientBase extends Service
 	}
 	
 <%
-    if(info.getService().getResourceFrameworkOptions().getNotification()!=null){
+    if(info.getService().getResourceFrameworkOptions().getLifetime()!=null){
 %>
 	public org.oasis.wsrf.lifetime.DestroyResponse destroy() throws RemoteException {
         synchronized (portTypeMutex) {
