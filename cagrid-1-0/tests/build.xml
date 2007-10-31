@@ -122,6 +122,7 @@
             <artifact refid="authentication.service.client.jars" />
             <artifact refid="gridgrouper.jars" />
             <artifact refid="gridgrouper.client.jars" />
+        	<artifact refid="cds.service.jars" />
             <artifact refid="evs.jars" />
             <artifact refid="fqp.jars" />
             <artifact refid="data.jars" />
