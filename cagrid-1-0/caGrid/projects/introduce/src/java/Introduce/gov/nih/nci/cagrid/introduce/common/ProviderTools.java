@@ -40,7 +40,7 @@ public final class ProviderTools {
         destroyOutput.setQName(new QName("", "void"));
         destroyMethod.setOutput(destroyOutput);
         MethodTypeImportInformation ii = new MethodTypeImportInformation();
-        ii.setFromIntroduce(false);
+        ii.setFromIntroduce(Boolean.FALSE);
         ii.setInputMessage(new QName(
             "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl", "DestroyRequest"));
         ii.setOutputMessage(new QName(
@@ -139,7 +139,7 @@ public final class ProviderTools {
         subscribeMethod.getOutput().setQName(new QName("", "void"));
 
         MethodTypeImportInformation ii = new MethodTypeImportInformation();
-        ii.setFromIntroduce(false);
+        ii.setFromIntroduce(Boolean.FALSE);
         ii.setInputMessage(new QName(
             "http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl", "SubscribeRequest"));
         ii.setOutputMessage(new QName(
@@ -173,7 +173,7 @@ public final class ProviderTools {
         rpMethod.getOutput().setQName(new QName("", "void"));
 
         MethodTypeImportInformation ii = new MethodTypeImportInformation();
-        ii.setFromIntroduce(false);
+        ii.setFromIntroduce(Boolean.FALSE);
         ii.setInputMessage(new QName(
             "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl",
             "GetResourcePropertyRequest"));
@@ -210,7 +210,7 @@ public final class ProviderTools {
         rpMethod.getOutput().setQName(new QName("", "void"));
 
         MethodTypeImportInformation ii = new MethodTypeImportInformation();
-        ii.setFromIntroduce(false);
+        ii.setFromIntroduce(Boolean.FALSE);
         ii.setInputMessage(new QName(
             "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl",
             "GetMultipleResourcePropertiesRequest"));
@@ -247,7 +247,7 @@ public final class ProviderTools {
         rpMethod.getOutput().setQName(new QName("", "void"));
 
         MethodTypeImportInformation ii = new MethodTypeImportInformation();
-        ii.setFromIntroduce(false);
+        ii.setFromIntroduce(Boolean.FALSE);
         ii.setInputMessage(new QName(
             "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl",
             "QueryResourcePropertiesRequest"));
@@ -284,7 +284,7 @@ public final class ProviderTools {
         rpMethod.getOutput().setQName(new QName("", "void"));
 
         MethodTypeImportInformation ii = new MethodTypeImportInformation();
-        ii.setFromIntroduce(false);
+        ii.setFromIntroduce(Boolean.FALSE);
         ii.setInputMessage(new QName(
             "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl",
             "SetResourcePropertiesRequest"));
