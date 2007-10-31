@@ -2,9 +2,9 @@ package gov.nih.nci.cagrid.data.system;
 
 import gov.nih.nci.cagrid.data.creation.CreationTests;
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainer;
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerFactory;
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerType;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
 
 import java.util.Vector;
 
@@ -18,7 +18,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Sep 28, 2007 12:22:29 PM
- * @version $Id: PlainDataServiceSystemTests.java,v 1.2 2007-10-18 18:57:44 dervin Exp $ 
+ * @version $Id: PlainDataServiceSystemTests.java,v 1.3 2007-10-31 19:32:05 dervin Exp $ 
  */
 public class PlainDataServiceSystemTests extends BaseSystemTest {
     
@@ -52,7 +52,7 @@ public class PlainDataServiceSystemTests extends BaseSystemTest {
     
     protected boolean storySetUp() {
         // 1) set up a clean, temporary Globus
-        Step step = new CreateCleanGlobusStep(container);
+        Step step = new CreateCleanContainerStep(container);
         try {
             step.runStep();
         } catch (Throwable th) {
@@ -73,14 +73,14 @@ public class PlainDataServiceSystemTests extends BaseSystemTest {
         // 3) deploy data service
         steps.add(new DeployDataServiceStep(container, info.getDir()));
         // 4) start the container
-        steps.add(new StartGlobusStep(container));
+        steps.add(new StartContainerStep(container));
         return steps;
     }
     
     
     protected void storyTearDown() throws Throwable {
         // 5) stop globus
-        Step stopStep = new StopGlobusStep(container);
+        Step stopStep = new StopContainerStep(container);
         try {
             stopStep.runStep();
         } catch (Throwable ex) {

@@ -2,11 +2,11 @@ package gov.nih.nci.cagrid.data.system;
 
 import gov.nih.nci.cagrid.data.creation.CreationTests;
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
-import gov.nih.nci.cagrid.introduce.tests.deployment.PortPreference;
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainer;
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerFactory;
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerType;
+import gov.nih.nci.cagrid.testing.core.TestingConstants;
+import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
 
 import java.io.File;
 import java.util.Vector;
@@ -24,7 +24,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.18 2007-10-18 18:57:44 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.19 2007-10-31 19:32:05 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     
@@ -35,8 +35,8 @@ public class SystemTests extends BaseSystemTest {
     static {
         try {
             PortPreference ports = new PortPreference(
-                Integer.valueOf(IntroduceTestConstants.TEST_PORT + 501), 
-                Integer.valueOf(IntroduceTestConstants.TEST_PORT + 1001), null);
+                Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + 501), 
+                Integer.valueOf(TestingConstants.TEST_PORT_UPPER_BOUND.intValue() + 501), null);
             container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER, null, ports);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -62,7 +62,7 @@ public class SystemTests extends BaseSystemTest {
 
     protected boolean storySetUp() {
         // 1) set up a clean, temporary Globus
-        Step step = new CreateCleanGlobusStep(container);
+        Step step = new CreateCleanContainerStep(container);
         try {
             step.runStep();
         } catch (Throwable th) {
@@ -91,7 +91,7 @@ public class SystemTests extends BaseSystemTest {
         // 7) deploy data service
         steps.add(new DeployDataServiceStep(container, info.getDir()));
         // 8) start globus
-        steps.add(new StartGlobusStep(container));
+        steps.add(new StartContainerStep(container));
         // 9) test data service
         steps.add(new InvokeDataServiceStep("localhost", info.getName(), 
             container.getProperties().getPortPreference()));
@@ -104,7 +104,7 @@ public class SystemTests extends BaseSystemTest {
     protected void storyTearDown() throws Throwable {
         super.storyTearDown();
         // 11) stop globus
-        Step stopStep = new StopGlobusStep(container);
+        Step stopStep = new StopContainerStep(container);
         try {
             stopStep.runStep();
         } catch (Throwable ex) {

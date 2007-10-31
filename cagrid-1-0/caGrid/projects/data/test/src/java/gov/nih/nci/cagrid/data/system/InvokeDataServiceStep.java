@@ -12,8 +12,8 @@ import gov.nih.nci.cagrid.data.client.DataServiceClient;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
-import gov.nih.nci.cagrid.introduce.tests.deployment.NoAvailablePortException;
-import gov.nih.nci.cagrid.introduce.tests.deployment.PortPreference;
+import gov.nih.nci.cagrid.testing.system.deployment.NoAvailablePortException;
+import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
 
 import java.util.Iterator;
 
@@ -28,7 +28,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: InvokeDataServiceStep.java,v 1.4 2007-10-18 18:57:44 dervin Exp $ 
+ * @version $Id: InvokeDataServiceStep.java,v 1.5 2007-10-31 19:32:05 dervin Exp $ 
  */
 public class InvokeDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";

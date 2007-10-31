@@ -2,21 +2,21 @@ package gov.nih.nci.cagrid.data.upgrades.from1pt0.system;
 
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
-import gov.nih.nci.cagrid.data.system.CreateCleanGlobusStep;
+import gov.nih.nci.cagrid.data.system.CreateCleanContainerStep;
 import gov.nih.nci.cagrid.data.system.DeployDataServiceStep;
 import gov.nih.nci.cagrid.data.system.DestroyTempGlobusStep;
 import gov.nih.nci.cagrid.data.system.EnableValidationStep;
 import gov.nih.nci.cagrid.data.system.InvokeDataServiceStep;
 import gov.nih.nci.cagrid.data.system.RebuildServiceStep;
 import gov.nih.nci.cagrid.data.system.SetQueryProcessorStep;
-import gov.nih.nci.cagrid.data.system.StartGlobusStep;
-import gov.nih.nci.cagrid.data.system.StopGlobusStep;
+import gov.nih.nci.cagrid.data.system.StartContainerStep;
+import gov.nih.nci.cagrid.data.system.StopContainerStep;
 import gov.nih.nci.cagrid.data.upgrades.from1pt0.UpgradeTo1pt2Tests;
-import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
-import gov.nih.nci.cagrid.introduce.tests.deployment.PortPreference;
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainer;
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerFactory;
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerType;
+import gov.nih.nci.cagrid.testing.core.TestingConstants;
+import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
 
 import java.util.Vector;
 
@@ -29,7 +29,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.9 2007-10-18 18:57:44 dervin Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.10 2007-10-31 19:32:05 dervin Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -39,8 +39,8 @@ public class UpgradedServiceSystemTest extends Story {
     static {
         try {
             PortPreference ports = new PortPreference(
-                Integer.valueOf(IntroduceTestConstants.TEST_PORT + 701), 
-                Integer.valueOf(IntroduceTestConstants.TEST_PORT + 1301), null);
+                Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + 801), 
+                Integer.valueOf(TestingConstants.TEST_PORT_UPPER_BOUND.intValue() + 801), null);
             container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER, null, ports);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -55,7 +55,7 @@ public class UpgradedServiceSystemTest extends Story {
 	
 	protected boolean storySetUp() {
 		// unpack container
-        Step unpack = new CreateCleanGlobusStep(container);
+        Step unpack = new CreateCleanContainerStep(container);
         try {
             unpack.runStep();
         } catch (Throwable th) {
@@ -89,7 +89,7 @@ public class UpgradedServiceSystemTest extends Story {
 		// 6) deploy data service
 		steps.add(new DeployDataServiceStep(container, info.getDir()));
 		// 7) start globus
-		steps.add(new StartGlobusStep(container));
+		steps.add(new StartContainerStep(container));
 		// 8) test data service
 		steps.add(new InvokeDataServiceStep(
 			"localhost", info.getName(), container.getProperties().getPortPreference()));
@@ -100,7 +100,7 @@ public class UpgradedServiceSystemTest extends Story {
 	protected void storyTearDown() throws Throwable {
 		super.storyTearDown();
         // 10) stop globus
-		Step stopStep = new StopGlobusStep(container);
+		Step stopStep = new StopContainerStep(container);
 		try {
 			stopStep.runStep();
 		} catch (Throwable ex) {

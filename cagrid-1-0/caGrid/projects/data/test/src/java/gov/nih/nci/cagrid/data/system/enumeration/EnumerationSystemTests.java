@@ -4,19 +4,19 @@ import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.enumeration.CreateEnumerationTests;
 import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
 import gov.nih.nci.cagrid.data.system.BaseSystemTest;
-import gov.nih.nci.cagrid.data.system.CreateCleanGlobusStep;
+import gov.nih.nci.cagrid.data.system.CreateCleanContainerStep;
 import gov.nih.nci.cagrid.data.system.DeployDataServiceStep;
 import gov.nih.nci.cagrid.data.system.DestroyTempGlobusStep;
 import gov.nih.nci.cagrid.data.system.EnableValidationStep;
 import gov.nih.nci.cagrid.data.system.RebuildServiceStep;
 import gov.nih.nci.cagrid.data.system.SetQueryProcessorStep;
-import gov.nih.nci.cagrid.data.system.StartGlobusStep;
-import gov.nih.nci.cagrid.data.system.StopGlobusStep;
-import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
-import gov.nih.nci.cagrid.introduce.tests.deployment.PortPreference;
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainer;
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerFactory;
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainerType;
+import gov.nih.nci.cagrid.data.system.StartContainerStep;
+import gov.nih.nci.cagrid.data.system.StopContainerStep;
+import gov.nih.nci.cagrid.testing.core.TestingConstants;
+import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
 
 import java.util.Vector;
 
@@ -43,8 +43,8 @@ public class EnumerationSystemTests extends BaseSystemTest {
     static {
         try {
             PortPreference ports = new PortPreference(
-                Integer.valueOf(IntroduceTestConstants.TEST_PORT + 701), 
-                Integer.valueOf(IntroduceTestConstants.TEST_PORT + 1201), null);
+                Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + 701), 
+                Integer.valueOf(TestingConstants.TEST_PORT_UPPER_BOUND.intValue() + 701), null);
             container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER, null, ports);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -69,7 +69,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 
 	protected boolean storySetUp() {
 		// unpack the service container
-        Step unpack = new CreateCleanGlobusStep(container);
+        Step unpack = new CreateCleanContainerStep(container);
         try {
             unpack.runStep();
         } catch (Throwable th) {
@@ -96,7 +96,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 		// 5) deploy data service
 		steps.add(new DeployDataServiceStep(container, info.getDir()));
 		// 6) start container
-		steps.add(new StartGlobusStep(container));
+		steps.add(new StartContainerStep(container));
 		// 7) test data service
 		steps.add(new InvokeEnumerationDataServiceStep("localhost", info.getName(), 
             container.getProperties().getPortPreference()));
@@ -107,7 +107,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 	protected void storyTearDown() throws Throwable {
 		super.storyTearDown();
 		// 9) stop globus
-		Step stopStep = new StopGlobusStep(container);
+		Step stopStep = new StopContainerStep(container);
 		try {
 			stopStep.runStep();
 		} catch (Throwable ex) {

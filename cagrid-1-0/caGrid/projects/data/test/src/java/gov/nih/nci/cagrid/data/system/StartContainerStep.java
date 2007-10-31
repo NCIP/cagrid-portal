@@ -1,22 +1,23 @@
 package gov.nih.nci.cagrid.data.system;
 
-import gov.nih.nci.cagrid.introduce.tests.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 
 import com.atomicobject.haste.framework.Step;
 
 /**
- * StartGlobusStep Step to start the Globus container with my data service
+ * StartContainerStep 
+ * Step to start the service container with my data service
  * deployed to it
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 8, 2006
- * @version $Id: StartGlobusStep.java,v 1.5 2007-10-18 18:57:44 dervin Exp $
+ * @version $Id: StartContainerStep.java,v 1.1 2007-10-31 19:32:05 dervin Exp $
  */
-public class StartGlobusStep extends Step {
+public class StartContainerStep extends Step {
 
 	private ServiceContainer container;
 
-	public StartGlobusStep(ServiceContainer container) {
+	public StartContainerStep(ServiceContainer container) {
 		this.container = container;
 	}
 
