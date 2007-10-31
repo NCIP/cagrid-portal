@@ -930,6 +930,18 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/sdkQuery4" inheritall="false" antfile="build.xml" target="all" />
     </target>
+	
+	<!-- =============================================================== -->
+	<!-- Testing :                                                       -->
+	<!-- =============================================================== -->
+	<target name="build-testing" depends="prepare">
+		<resolveDependencies extdir="${projects.dir}/testing/ext">
+			<artifact refid="cagrid.properties"/>
+			<artifact refid="core.jars"/>
+		    <artifact refid="common.test.jars" />
+		    <artifact refid="test.coverage.jars" />
+		</resolveDependencies>
+	</target>
 
     <!-- =============================================================== -->
     <!-- Federated Query Processor:                                      -->
