@@ -44,13 +44,5 @@ public class FaultUtil {
 		}
 		return str;
 	}
-	/*
-	 * public static String faultToString(Exception e){ StringBuffer sb = new
-	 * StringBuffer(); if (e instanceof BaseFaultType) { BaseFaultType fault =
-	 * (BaseFaultType)e; sb.append(fault.getFaultString()); StringWriter io =
-	 * new StringWriter(); FaultHelper helper = new FaultHelper(fault);
-	 * helper.printStackTrace(io); }else{ e.printStackTrace(); } return
-	 * sb.toString(); }
-	 */
 
 }
