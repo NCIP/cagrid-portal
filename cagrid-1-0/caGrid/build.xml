@@ -758,6 +758,7 @@
             <artifact refid="security.metadata.schemas" />
             <artifact refid="introduce.core.test.jars" />
             <artifact refid="introduce.jars" />
+        	<artifact refid="testing.system.jars"/>
             <artifact refid="ws.enum.jars" />
             <artifact refid="ws.enum.schemas" />
             <artifact refid="bdt.jars" />
@@ -942,6 +943,7 @@
 		    <artifact refid="test.coverage.jars" />
             <artifact refid="jdom.jars" />
 		</resolveDependencies>
+		<ant dir="${projects.dir}/testing" inheritall="false" antfile="build.xml" target="all" />
 	</target>
 
     <!-- =============================================================== -->
