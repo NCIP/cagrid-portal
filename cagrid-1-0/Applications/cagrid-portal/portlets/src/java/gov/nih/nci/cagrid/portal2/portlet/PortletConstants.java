@@ -25,5 +25,7 @@ public abstract class PortletConstants {
 
 	public static final String CQL_QUERY_INSTANCE_RETRIEVE_ERROR_MSG = "cqlQueryInstanceRetrieveError";
 
+	public static final String WRONG_SERVICE_TYPE = "wrongServiceType";
+
 	
 }

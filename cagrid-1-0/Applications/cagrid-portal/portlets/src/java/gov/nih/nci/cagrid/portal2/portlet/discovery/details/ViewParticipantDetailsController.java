@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.portal2.portlet.discovery.details;
 
 import gov.nih.nci.cagrid.portal2.dao.PointOfContactDao;
 import gov.nih.nci.cagrid.portal2.domain.metadata.common.PointOfContact;
+import gov.nih.nci.cagrid.portal2.portlet.AbstractViewObjectController;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -17,10 +18,9 @@ import org.springframework.web.portlet.ModelAndView;
  *
  */
 public class ViewParticipantDetailsController extends
-		AbstractViewDetailsController {
+		AbstractDiscoveryViewObjectController {
 	
 	private PointOfContactDao pointOfContactDao;
-	private String requestAttributeName = "poc";
 
 	/**
 	 * 
@@ -33,21 +33,12 @@ public class ViewParticipantDetailsController extends
 	 * @see gov.nih.nci.cagrid.portal2.portlet.discovery.details.AbstractViewDetailsController#doHandle(javax.portlet.RenderRequest, javax.portlet.RenderResponse, org.springframework.web.portlet.ModelAndView)
 	 */
 	@Override
-	protected void doHandle(RenderRequest request, RenderResponse reponse,
-			ModelAndView mav) {
+	protected Object getObject(RenderRequest request) {
 		PointOfContact p = getDiscoveryModel().getSelectedPointOfContact();
 		if(p != null){
-			mav.addObject(getRequestAttributeName(), getPointOfContactDao().getById(p.getId()));
+			p = getPointOfContactDao().getById(p.getId());
 		}
-	}
-
-
-	public String getRequestAttributeName() {
-		return requestAttributeName;
-	}
-
-	public void setRequestAttributeName(String requestAttributeName) {
-		this.requestAttributeName = requestAttributeName;
+		return p;
 	}
 	
 	@Required

@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.portal2.portlet.discovery.details;
 
 import gov.nih.nci.cagrid.portal2.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal2.domain.GridService;
+import gov.nih.nci.cagrid.portal2.portlet.AbstractViewObjectController;
 import gov.nih.nci.cagrid.portal2.portlet.tree.TreeFacade;
 import gov.nih.nci.cagrid.portal2.portlet.tree.TreeNode;
 
@@ -20,7 +21,7 @@ import org.springframework.web.portlet.ModelAndView;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
-public class ViewServiceDetailsController extends AbstractViewDetailsController {
+public class ViewServiceDetailsController extends AbstractDiscoveryViewObjectController {
 	
 	
 	private TreeFacade serviceDetailsTreeFacade;
@@ -36,24 +37,23 @@ public class ViewServiceDetailsController extends AbstractViewDetailsController 
 
 	}
 	
-	protected void doHandle(RenderRequest request, RenderResponse response, ModelAndView mav){
+	protected Object getObject(RenderRequest request){
 
+		TreeNode rootNode = null;
 		GridService gridService = getDiscoveryModel().getSelectedService();
 		if (gridService != null) {
 			//Associate with current session
 			gridService = getGridServiceDao().getById(gridService.getId());
-			TreeNode rootNode = getServiceDetailsTreeFacade().getRootNode();
+			rootNode = getServiceDetailsTreeFacade().getRootNode();
 			if(rootNode == null || !((GridService)rootNode.getContent()).getId().equals(gridService.getId())){
 				logger.debug("Creating new tree for gridService:" + gridService.getId());
 				rootNode = createRootNode(gridService);
-				
 			}
 			getServiceDetailsTreeFacade().setRootNode(rootNode);
-			mav.addObject("rootNode", rootNode);
 		} else {
 			logger.debug("No grid service selected.");
 		}
-
+		return rootNode;
 	}
 	
 	private TreeNode createRootNode(GridService gridService) {

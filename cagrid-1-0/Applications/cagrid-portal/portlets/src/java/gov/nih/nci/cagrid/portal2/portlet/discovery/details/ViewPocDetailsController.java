@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.portal2.portlet.discovery.details;
 
 import gov.nih.nci.cagrid.portal2.dao.ParticipantDao;
 import gov.nih.nci.cagrid.portal2.domain.Participant;
+import gov.nih.nci.cagrid.portal2.portlet.AbstractViewObjectController;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -17,10 +18,9 @@ import org.springframework.web.portlet.ModelAndView;
  *
  */
 public class ViewPocDetailsController extends
-		AbstractViewDetailsController {
+		AbstractDiscoveryViewObjectController {
 	
 	private ParticipantDao participantDao;
-	private String requestAttributeName = "participant";
 
 	/**
 	 * 
@@ -29,16 +29,13 @@ public class ViewPocDetailsController extends
 
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.cagrid.portal2.portlet.discovery.details.AbstractViewDetailsController#doHandle(javax.portlet.RenderRequest, javax.portlet.RenderResponse, org.springframework.web.portlet.ModelAndView)
-	 */
 	@Override
-	protected void doHandle(RenderRequest request, RenderResponse reponse,
-			ModelAndView mav) {
+	protected Object getObject(RenderRequest request) {
 		Participant p = getDiscoveryModel().getSelectedParticipant();
 		if(p != null){
-			mav.addObject(getRequestAttributeName(), getParticipantDao().getById(p.getId()));
+			p = getParticipantDao().getById(p.getId());
 		}
+		return p;
 	}
 
 	@Required
@@ -48,14 +45,6 @@ public class ViewPocDetailsController extends
 
 	public void setParticipantDao(ParticipantDao participantDao) {
 		this.participantDao = participantDao;
-	}
-
-	public String getRequestAttributeName() {
-		return requestAttributeName;
-	}
-
-	public void setRequestAttributeName(String requestAttributeName) {
-		this.requestAttributeName = requestAttributeName;
 	}
 
 }

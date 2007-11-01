@@ -28,6 +28,28 @@
 			<keywords>cagrid,discovery</keywords>
 		</portlet-info>
 	</portlet>
+	
+	<portlet>
+		<description>caGrid Query Portlet</description>
+		<portlet-name>cagridquery</portlet-name>
+		<display-name>caGrid Query Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/query-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Query Portlet</title>
+			<short-title>caGrid Query Portlet</short-title>
+			<keywords>cagrid,query</keywords>
+		</portlet-info>
+	</portlet>
 <!-- 
 
 	<portlet>

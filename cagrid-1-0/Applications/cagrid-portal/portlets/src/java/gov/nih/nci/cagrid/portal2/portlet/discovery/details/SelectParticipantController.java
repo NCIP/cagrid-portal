@@ -13,7 +13,7 @@ import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryModel;
  *
  */
 public class SelectParticipantController extends
-		AbstractSelectDetailsController {
+		AbstractDiscoverySelectDetailsController {
 	
 	private ParticipantDao participantDao;
 

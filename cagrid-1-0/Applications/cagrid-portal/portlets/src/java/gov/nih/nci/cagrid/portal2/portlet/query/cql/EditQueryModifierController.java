@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.portal2.portlet.query.cql;
 
 import gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass;
+import gov.nih.nci.cagrid.portal2.portlet.query.builder.EditQueryModifierCommand;
 import gov.nih.nci.cagrid.portal2.portlet.tree.TreeFacade;
 
 import java.sql.SQLException;

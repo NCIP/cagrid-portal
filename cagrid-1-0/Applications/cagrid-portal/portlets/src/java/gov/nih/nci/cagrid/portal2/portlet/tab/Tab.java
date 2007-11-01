@@ -17,6 +17,7 @@ public class Tab {
 	private String name;
 	private String label;
 	private boolean selected;
+	private boolean visible = true;
 	
 
 	/**
@@ -104,5 +105,23 @@ public class Tab {
 	
 	public String toString(){
 		return "[name=" + getName() + ", selected=" + isSelected() + "]";
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public List<Tab> getVisibleChildren() {
+		List<Tab> visibleChildren = new ArrayList<Tab>();
+		for(Tab t : getChildren()){
+			if(t.isVisible()){
+				visibleChildren.add(t);
+			}
+		}
+		return visibleChildren;
 	}
 }

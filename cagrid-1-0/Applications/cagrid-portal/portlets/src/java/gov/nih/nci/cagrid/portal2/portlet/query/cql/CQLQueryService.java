@@ -3,11 +3,6 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.query.cql;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.transaction.annotation.Transactional;
-
 import gov.nih.nci.cagrid.portal2.dao.CQLQueryDao;
 import gov.nih.nci.cagrid.portal2.dao.CQLQueryInstanceDao;
 import gov.nih.nci.cagrid.portal2.dao.GridServiceDao;
@@ -17,8 +12,13 @@ import gov.nih.nci.cagrid.portal2.domain.PortalUser;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQuery;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.QueryInstance;
-import gov.nih.nci.cagrid.portal2.portlet.SharedApplicationModel;
+import gov.nih.nci.cagrid.portal2.portlet.query.QueryModel;
 import gov.nih.nci.cagrid.portal2.util.PortalUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -30,11 +30,11 @@ public class CQLQueryService {
 
 	private GridServiceDao gridServiceDao;
 
-	private SharedApplicationModel sharedApplicationModel;
-
 	private CQLQueryDao cqlQueryDao;
 
 	private CQLQueryInstanceDao cqlQueryInstanceDao;
+	
+	private QueryModel queryModel;
 
 	/**
 	 * 
@@ -47,7 +47,9 @@ public class CQLQueryService {
 	public CQLQueryInstance submitQuery(GridDataService service,
 			final String cql) throws Exception {
 
-		PortalUser user = getSharedApplicationModel().getPortalUser();
+//		PortalUser user = getSharedApplicationModel().getPortalUser();
+		//TODO: get the portal user
+		PortalUser user = null;
 		String hash = PortalUtils.createHash(cql);
 		CQLQuery query = cqlQueryDao.getByHash(hash);
 
@@ -73,7 +75,7 @@ public class CQLQueryService {
 			user.getQueryInstances().add(inst);
 			portalUserDao.save(user);
 		}
-		getSharedApplicationModel().submitCqlQuery(inst);
+		getQueryModel().submitCqlQuery(inst);
 
 		return inst;
 	}
@@ -84,15 +86,6 @@ public class CQLQueryService {
 
 	public void setGridServiceDao(GridServiceDao gridServiceDao) {
 		this.gridServiceDao = gridServiceDao;
-	}
-
-	public SharedApplicationModel getSharedApplicationModel() {
-		return sharedApplicationModel;
-	}
-
-	public void setSharedApplicationModel(
-			SharedApplicationModel sharedApplicationModel) {
-		this.sharedApplicationModel = sharedApplicationModel;
 	}
 
 	public PortalUserDao getPortalUserDao() {
@@ -122,11 +115,13 @@ public class CQLQueryService {
 	public List<CQLQueryInstance> getSubmittedCqlQueries() {
 		
 		List<CQLQueryInstance> instances = null;
-		PortalUser user = getSharedApplicationModel().getPortalUser();
+//		PortalUser user = getSharedApplicationModel().getPortalUser();
+		//TODO: get portal user
+		PortalUser user = null;
 
 		// If no user, get query instances from shared model
 		if (user == null) {
-			instances = getSharedApplicationModel().getSubmittedCqlQueries();
+			instances = getQueryModel().getSubmittedCqlQueries();
 		} else {
 			instances = new ArrayList<CQLQueryInstance>();
 			for (QueryInstance inst : user.getQueryInstances()) {
@@ -136,6 +131,14 @@ public class CQLQueryService {
 			}
 		}
 		return instances;
+	}
+
+	public QueryModel getQueryModel() {
+		return queryModel;
+	}
+
+	public void setQueryModel(QueryModel queryModel) {
+		this.queryModel = queryModel;
 	}
 
 }

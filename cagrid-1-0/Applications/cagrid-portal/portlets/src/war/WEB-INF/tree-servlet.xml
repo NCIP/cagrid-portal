@@ -25,14 +25,14 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
     </bean>
     
     <bean name="/cqlquery/umlClassNode" class="gov.nih.nci.cagrid.portal2.portlet.tree.TreeNodeDomainObjectSessionViewController">
-          <property name="viewName" value="cqlquery/umlClassNode"/>
+          <property name="viewName" value="query/builder/umlClassNode"/>
           <property name="treeFacade" ref="umlClassTreeFacade"/>
 		  <property name="pathParamName" value="path"/>
 		  <property name="hibernateTemplate" ref="hibernateTemplate"/>
     </bean>
     
     <bean name="/cqlquery/cqlQueryNode" class="gov.nih.nci.cagrid.portal2.portlet.tree.TreeNodeDomainObjectSessionViewController">
-          <property name="viewName" value="cqlquery/cqlQueryNode"/>
+          <property name="viewName" value="query/builder/cqlQueryNode"/>
           <property name="treeFacade" ref="cqlQueryTreeFacade"/>
 		  <property name="pathParamName" value="path"/>
 		  <property name="hibernateTemplate" ref="hibernateTemplate"/>

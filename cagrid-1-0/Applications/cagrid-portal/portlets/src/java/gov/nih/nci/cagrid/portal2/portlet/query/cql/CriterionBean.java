@@ -11,6 +11,9 @@ import gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLAttribute;
  */
 public class CriterionBean {
 
+	//This is the full path, not just the umlAttribute path
+	private String path;
+	
 	private UMLAttribute umlAttribute;
 	private String predicate;
 	private String value;
@@ -65,5 +68,13 @@ public class CriterionBean {
 	}
 	public int hash(){
 		return toString().hashCode();
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 }

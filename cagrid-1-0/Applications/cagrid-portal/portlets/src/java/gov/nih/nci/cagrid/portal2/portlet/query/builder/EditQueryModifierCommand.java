@@ -1,7 +1,9 @@
 /**
  * 
  */
-package gov.nih.nci.cagrid.portal2.portlet.query.cql;
+package gov.nih.nci.cagrid.portal2.portlet.query.builder;
+
+import gov.nih.nci.cagrid.portal2.portlet.query.cql.QueryModifierType;
 
 import java.util.HashSet;
 import java.util.Set;

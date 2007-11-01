@@ -12,7 +12,7 @@ import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryModel;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
-public class SelectPocController extends AbstractSelectDetailsController {
+public class SelectPocController extends AbstractDiscoverySelectDetailsController {
 
 	private PointOfContactDao pointOfContactDao;
 	

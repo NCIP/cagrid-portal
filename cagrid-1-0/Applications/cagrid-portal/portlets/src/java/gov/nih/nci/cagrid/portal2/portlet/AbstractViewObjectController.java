@@ -1,9 +1,7 @@
 /**
  * 
  */
-package gov.nih.nci.cagrid.portal2.portlet.discovery.details;
-
-import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryModel;
+package gov.nih.nci.cagrid.portal2.portlet;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -16,28 +14,34 @@ import org.springframework.web.portlet.mvc.AbstractController;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
-public abstract class AbstractViewDetailsController extends AbstractController {
+public abstract class AbstractViewObjectController extends AbstractController {
 	
-	private DiscoveryModel discoveryModel;
 	
 	private String successViewName;
+	private String objectName;
 
 	/**
 	 * 
 	 */
-	public AbstractViewDetailsController() {
-		// TODO Auto-generated constructor stub
+	public AbstractViewObjectController() {
+
 	}
 	
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 
 		ModelAndView mav = new ModelAndView(getSuccessViewName());
-		doHandle(request, response, mav);
+		Object obj = getObject(request);
+		mav.addObject(getObjectName(), obj);
+		addData(request, mav);
 		return mav;
 	}
 	
-	protected abstract void doHandle(RenderRequest request, RenderResponse reponse, ModelAndView mav);
+	protected abstract Object getObject(RenderRequest request);
+	
+	protected void addData(RenderRequest request, ModelAndView mav){
+		
+	}
 	
 	@Required
 	public String getSuccessViewName() {
@@ -48,13 +52,14 @@ public abstract class AbstractViewDetailsController extends AbstractController {
 		this.successViewName = successView;
 	}
 	
+
 	@Required
-	public DiscoveryModel getDiscoveryModel() {
-		return discoveryModel;
+	public String getObjectName() {
+		return objectName;
 	}
 
-	public void setDiscoveryModel(DiscoveryModel discoveryModel) {
-		this.discoveryModel = discoveryModel;
+	public void setObjectName(String commandName) {
+		this.objectName = commandName;
 	}
 
 }

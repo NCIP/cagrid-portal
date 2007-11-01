@@ -152,18 +152,21 @@
 	<bean id="viewServiceDetailsController"
 		class="gov.nih.nci.cagrid.portal2.portlet.discovery.details.ViewServiceDetailsController"
 		autowire="byName">
+		<property name="objectName" value="rootNode" />
 		<property name="successViewName" value="/details/service" />
 	</bean>
 	
 	<bean id="viewParticipantDetailsController"
 		class="gov.nih.nci.cagrid.portal2.portlet.discovery.details.ViewParticipantDetailsController"
 		autowire="byName">
+		<property name="objectName" value="participant" />
 		<property name="successViewName" value="/details/participant" />
 	</bean>
 	
 	<bean id="viewPocDetailsController"
 		class="gov.nih.nci.cagrid.portal2.portlet.discovery.details.ViewPocDetailsController"
 		autowire="byName">
+		<property name="objectName" value="poc" />
 		<property name="successViewName" value="/details/poc" />
 	</bean>
 	

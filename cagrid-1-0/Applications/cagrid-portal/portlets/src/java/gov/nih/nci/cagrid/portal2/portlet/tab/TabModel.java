@@ -30,7 +30,7 @@ public class TabModel implements InitializingBean {
 		List<Tab> childTabs = getTabs();
 		while(childTabs.size() > 0){
 			rows.add(childTabs);
-			childTabs = getSelectedTab(childTabs).getChildren();
+			childTabs = getSelectedTab(childTabs).getVisibleChildren();
 		}
 		return rows;
 	}

@@ -12,7 +12,7 @@ import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryModel;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
-public class SelectServiceController extends AbstractSelectDetailsController {
+public class SelectServiceController extends AbstractDiscoverySelectDetailsController {
 
 	private GridServiceDao gridServiceDao;
 	
