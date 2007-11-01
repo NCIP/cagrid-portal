@@ -121,5 +121,8 @@
 	<classpathentry kind="lib" path="ext/lib/validation-2.0.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gaards-ui.jar"/>
 	<classpathentry kind="lib" path="lib/jaxmejs-0.5.2.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-core.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-system.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-tests.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
