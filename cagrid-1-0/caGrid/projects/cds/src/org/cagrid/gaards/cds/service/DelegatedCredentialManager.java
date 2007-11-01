@@ -11,6 +11,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -22,10 +23,12 @@ import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
+import org.cagrid.gaards.cds.common.DelegationRecordFilter;
 import org.cagrid.gaards.cds.common.DelegationRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningResponse;
 import org.cagrid.gaards.cds.common.DelegationStatus;
+import org.cagrid.gaards.cds.common.ExpirationStatus;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
 import org.cagrid.gaards.cds.common.PublicKey;
 import org.cagrid.gaards.cds.common.Utils;
@@ -333,7 +336,7 @@ public class DelegatedCredentialManager {
 			try {
 				if (CertUtil.isProxy(BouncyCastleUtil
 						.getCertificateType(certs[0]))) {
-					
+
 					int currLength = r.getDelegationPathLength();
 					for (int i = 0; i < certs.length; i++) {
 						if (CertUtil.isProxy(BouncyCastleUtil
@@ -548,6 +551,102 @@ public class DelegatedCredentialManager {
 		} else {
 			throw Errors
 					.getDelegationFault(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
+		}
+	}
+
+	public DelegationRecord[] findDelegatedCredentials(DelegationRecordFilter f)
+			throws CDSInternalFault {
+		Connection c = null;
+		try {
+			c = this.db.getConnection();
+			List<DelegationRecord> records = new ArrayList<DelegationRecord>();
+			boolean filterAdded = false;
+			StringBuffer sql = new StringBuffer();
+			sql.append("select " + DELEGATION_ID + " from " + TABLE);
+
+			if (f.getDelegationIdentifier() != null) {
+				if (!filterAdded) {
+					sql.append(" WHERE ");
+					filterAdded = true;
+				} else {
+					sql.append(" AND ");
+				}
+				sql.append(DELEGATION_ID + " = ?");
+			}
+
+			if (f.getGridIdentity() != null) {
+				if (!filterAdded) {
+					sql.append(" WHERE ");
+					filterAdded = true;
+				} else {
+					sql.append(" AND ");
+				}
+				sql.append(GRID_IDENTITY + " = ?");
+			}
+
+			if (f.getDelegationStatus() != null) {
+				if (!filterAdded) {
+					sql.append(" WHERE ");
+					filterAdded = true;
+				} else {
+					sql.append(" AND ");
+				}
+				sql.append(STATUS + " = ?");
+			}
+
+			if (f.getExpirationStatus() != null) {
+				if (!filterAdded) {
+					sql.append(" WHERE ");
+					filterAdded = true;
+				} else {
+					sql.append(" AND ");
+				}
+				if (f.getExpirationStatus().equals(ExpirationStatus.Valid)) {
+					sql.append(EXPIRATION + " > ? AND EXPIRATION>0");
+				} else {
+					sql.append(EXPIRATION + " < ? AND EXPIRATION>0");
+				}
+			}
+
+			PreparedStatement s = c.prepareStatement(sql.toString());
+			int count = 0;
+
+			if (f.getDelegationIdentifier() != null) {
+				count = count + 1;
+				s.setLong(count, f.getDelegationIdentifier().getDelegationId());
+			}
+
+			if (f.getGridIdentity() != null) {
+				count = count + 1;
+				s.setString(count, f.getGridIdentity());
+			}
+
+			if (f.getDelegationStatus() != null) {
+				count = count + 1;
+				s.setString(count, f.getDelegationStatus().getValue());
+			}
+
+			if (f.getExpirationStatus() != null) {
+				count = count + 1;
+				Date now = new Date();
+				s.setLong(count, now.getTime());
+			}
+
+			ResultSet rs = s.executeQuery();
+			while (rs.next()) {
+				DelegationIdentifier id = new DelegationIdentifier();
+				id.setDelegationId(rs.getLong(DELEGATION_ID));
+				records.add(getDelegationRecord(id));
+			}
+			rs.close();
+			s.close();
+			DelegationRecord[] array = new DelegationRecord[records.size()];
+			return records.toArray(array);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw Errors.getDatabaseFault(e);
+		} finally {
+			this.db.releaseConnection(c);
 		}
 	}
 

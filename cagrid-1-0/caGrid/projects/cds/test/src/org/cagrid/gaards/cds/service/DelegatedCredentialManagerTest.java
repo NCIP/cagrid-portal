@@ -19,10 +19,12 @@ import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
+import org.cagrid.gaards.cds.common.DelegationRecordFilter;
 import org.cagrid.gaards.cds.common.DelegationRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningResponse;
 import org.cagrid.gaards.cds.common.DelegationStatus;
+import org.cagrid.gaards.cds.common.ExpirationStatus;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
 import org.cagrid.gaards.cds.service.policy.PolicyHandler;
@@ -45,7 +47,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 	private CA ca;
 
 	private File caCert;
-	
+
 	private int DEFAULT_PROXY_LIFETIME_SECONDS = 300;
 
 	public void testDelegatedCredentialCreateDestroy() {
@@ -273,7 +275,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				AllowedParties ap = new AllowedParties();
 				ap.setGridIdentity(users);
 				policy.setAllowedParties(ap);
-				list.add(delegateAndValidate(dcm, alias, gridIdentity, policy)
+				list.add(delegateAndValidate(dcm, alias, gridIdentity, policy,i)
 						.getDelegationIdentifier());
 			}
 			for (int i = 0; i < list.size(); i++) {
@@ -637,6 +639,10 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			org.cagrid.gaards.cds.common.PublicKey pKey = new org.cagrid.gaards.cds.common.PublicKey();
 			pKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
 			Thread.sleep(((seconds * 1000) + 100));
+			DelegationRecordFilter f = new DelegationRecordFilter();
+			f.setDelegationIdentifier(id);
+			f.setExpirationStatus(ExpirationStatus.Expired);
+			validateFind(dcm, f, 1);
 			try {
 				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
 				fail("Should not be able get delegated credential.");
@@ -768,7 +774,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
-	
+
 	public void testGetDelegatedCredentialInvalidKeyLength() {
 
 		DelegatedCredentialManager dcm = null;
@@ -844,7 +850,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			}
 		}
 	}
-	
+
 	public void testGetDelegatedCredential() {
 
 		DelegatedCredentialManager dcm = null;
@@ -862,7 +868,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 					dcm, GRID_IDENTITY, dc.getDelegationIdentifier(), dc
 							.getSigningResponse().getCertificateChain());
 			assertTrue((delegatedProxy.getTimeLeft() <= DEFAULT_PROXY_LIFETIME_SECONDS));
-			assertTrue((delegatedProxy.getTimeLeft() >  (DEFAULT_PROXY_LIFETIME_SECONDS-60)));
+			assertTrue((delegatedProxy.getTimeLeft() > (DEFAULT_PROXY_LIFETIME_SECONDS - 60)));
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -891,7 +897,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		for (int i = 0; i < signingChain.length; i++) {
 			assertEquals(signingChain[i], delegatedProxy[i + 1]);
 		}
-		
+
 		ProxyPathValidator validator = new ProxyPathValidator();
 		validator.validate(delegatedProxy, TrustedCertificates
 				.getDefaultTrustedCertificates().getCertificates(),
@@ -927,17 +933,43 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			DelegationPolicy policy) throws Exception {
 		return delegateAndValidate(dcm, alias, gridIdentity, policy, 12, 0, 0);
 	}
+	
+	protected DelegatedCredential delegateAndValidate(
+			DelegatedCredentialManager dcm, String alias, String gridIdentity,
+			DelegationPolicy policy, int expected) throws Exception {
+		return delegateAndValidate(dcm, alias, gridIdentity, policy, 12, 0, 0,expected);
+	}
 
 	protected DelegatedCredential delegateAndValidate(
 			DelegatedCredentialManager dcm, String alias, String gridIdentity,
 			DelegationPolicy policy, int hours, int minutes, int seconds)
 			throws Exception {
+		return delegateAndValidate(dcm, alias, gridIdentity, policy, hours,
+				minutes, seconds, 0);
+
+	}
+
+	protected DelegatedCredential delegateAndValidate(
+			DelegatedCredentialManager dcm, String alias, String gridIdentity,
+			DelegationPolicy policy, int hours, int minutes, int seconds,
+			int delegationCount) throws Exception {
+
+		DelegationRecordFilter f = new DelegationRecordFilter();
+		
+		validateFind(dcm, f, delegationCount);
+
 		DelegationRequest request = getSimpleDelegationRequest();
 		if (policy != null) {
 			request.setDelegationPolicy(policy);
 		}
 		DelegationSigningRequest req = dcm.initiateDelegation(gridIdentity,
 				request);
+		
+		
+		
+		
+		
+		
 		DelegationIdentifier id = req.getDelegationIdentifier();
 		assertNotNull(id);
 		assertTrue(dcm.delegationExists(id));
@@ -953,6 +985,38 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		assertEquals(request.getDelegationPolicy(), r.getDelegationPolicy());
 		assertNotNull(r.getCertificateChain());
 		assertNull(r.getCertificateChain().getX509Certificate());
+		
+		//Validate Find Operation
+		
+		validateFind(dcm, f, (delegationCount+1));
+		resetFilter(f);
+		f.setDelegationIdentifier(req.getDelegationIdentifier());
+		validateFind(dcm, f, 1);
+		resetFilter(f);
+		f.setGridIdentity(gridIdentity);
+		validateFind(dcm, f, (delegationCount+1));
+		resetFilter(f);
+		f.setExpirationStatus(ExpirationStatus.Valid);
+		validateFind(dcm, f, (delegationCount));
+		resetFilter(f);
+		f.setExpirationStatus(ExpirationStatus.Expired);
+		validateFind(dcm, f, 0);
+		resetFilter(f);
+		f.setDelegationStatus(DelegationStatus.Suspended);
+		validateFind(dcm, f, 0);
+		resetFilter(f);
+		f.setDelegationStatus(DelegationStatus.Pending);
+		validateFind(dcm, f, 1);
+		resetFilter(f);
+		f.setDelegationStatus(DelegationStatus.Approved);
+		validateFind(dcm, f, delegationCount);
+		resetFilter(f);
+		f.setDelegationIdentifier(req.getDelegationIdentifier());
+		f.setGridIdentity(gridIdentity);
+		f.setDelegationStatus(DelegationStatus.Pending);
+		validateFind(dcm, f, 1);
+		
+		
 		PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
 				.getKeyAsString());
 		X509Certificate[] proxy = this.ca.createProxyCertifcates(alias,
@@ -980,7 +1044,70 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		for (int i = 0; i < proxy.length; i++) {
 			assertEquals(proxy[i], chain[i]);
 		}
+		
+		//Validate Find Operation
+		resetFilter(f);
+		validateFind(dcm, f, (delegationCount+1));
+		resetFilter(f);
+		f.setDelegationIdentifier(req.getDelegationIdentifier());
+		validateFind(dcm, f, 1);
+		resetFilter(f);
+		f.setGridIdentity(gridIdentity);
+		validateFind(dcm, f, (delegationCount+1));
+		resetFilter(f);
+		f.setExpirationStatus(ExpirationStatus.Valid);
+		validateFind(dcm, f, (delegationCount+1));
+		resetFilter(f);
+		f.setExpirationStatus(ExpirationStatus.Expired);
+		validateFind(dcm, f, 0);
+		resetFilter(f);
+		f.setDelegationStatus(DelegationStatus.Suspended);
+		validateFind(dcm, f, 0);
+		resetFilter(f);
+		f.setDelegationStatus(DelegationStatus.Pending);
+		validateFind(dcm, f, 0);
+		resetFilter(f);
+		f.setDelegationStatus(DelegationStatus.Approved);
+		validateFind(dcm, f, delegationCount+1);
+		resetFilter(f);
+		f.setDelegationIdentifier(req.getDelegationIdentifier());
+		f.setGridIdentity(gridIdentity);
+		f.setDelegationStatus(DelegationStatus.Approved);
+		validateFind(dcm, f, 1);
+
 		return new DelegatedCredential(req, res);
+	}
+
+	protected void resetFilter(DelegationRecordFilter f) throws Exception {
+		f.setDelegationIdentifier(null);
+		f.setGridIdentity(null);
+		f.setDelegationStatus(null);
+		f.setExpirationStatus(null);
+	}
+
+	protected void validateFind(DelegatedCredentialManager dcm,
+			DelegationRecordFilter f, int expectedCount) throws Exception {
+		DelegationRecord[] records = dcm.findDelegatedCredentials(f);
+		assertEquals(expectedCount, records.length);
+		if (f.getDelegationIdentifier() != null) {
+			for (int i = 0; i < records.length; i++) {
+				assertEquals(f.getDelegationIdentifier(), records[i]
+						.getDelegationIdentifier());
+			}
+		}
+
+		if (f.getGridIdentity() != null) {
+			for (int i = 0; i < records.length; i++) {
+				assertEquals(f.getGridIdentity(), records[i].getGridIdentity());
+			}
+		}
+
+		if (f.getDelegationStatus() != null) {
+			for (int i = 0; i < records.length; i++) {
+				assertEquals(f.getDelegationStatus(), records[i]
+						.getDelegationStatus());
+			}
+		}
 	}
 
 	protected void setUp() throws Exception {

@@ -2,6 +2,7 @@
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./credential-delegation-service.xsd" namespace="http://gaards.cagrid.org/cds" packageName="org.cagrid.gaards.cds.common" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="DelegationRecord" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DelegationRecordFilter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DelegationRequest" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DelegationSigningRequest" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DelegationSigningResponse" xsi:type="ns2:SchemaElementType"/>
