@@ -157,19 +157,19 @@
 				<include name="**" />
 			</fileset>
 		</artifact>
-		<artifact track="main" type="jars" id="testing.core.jars">
+		<artifact track="test" type="jars" id="testing.core.jars">
 			<generatingantcall target="build-testing" />
 			<fileset dir="${projects.dir}/testing/build/lib">
 				<include name="*core.jar"/>
 			</fileset>
 		</artifact>
-		<artifact track="main" type="jars" id="testing.system.jars">
+		<artifact track="test" type="jars" id="testing.system.jars">
 			<generatingantcall target="build-testing" />
 			<fileset dir="${projects.dir}/testing/build/lib">
 				<include name="*.jar"/>
 			</fileset>
 		</artifact>
-		<artifact track="main" type="resources" id="testing.containers">
+		<artifact track="test" type="resources" id="testing.containers">
 			<fileset dir="${projects.dir}/testing/resources/containers">
 				<include name="*.zip"/>
 			</fileset>
