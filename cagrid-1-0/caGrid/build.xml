@@ -637,6 +637,7 @@
             <artifact refid="test.coverage.jars" />
             <artifact refid="core.test.jars" />
             <artifact refid="core.resources" />
+        	<artifact refid="testing.system.jars"/>
             <artifact refid="mobius.jars" />
             <artifact refid="jdom.jars" />
             <artifact refid="jet.jars" />
