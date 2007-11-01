@@ -379,14 +379,9 @@
 	
 	<target name="xmiToDomainModel" description="Runs the XMI to Domain Model conversion GUI">
 		<java classname="gov.nih.nci.cagrid.data.ui.domain.DomainModelFromXmiDialog">
+			<classpath refid="base.classpath"/>
 			<classpath>
 				<fileset dir="${build.jars.dir}">
-					<include name="*.jar"/>
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}" >
 					<include name="*.jar"/>
 				</fileset>
 			</classpath>
