@@ -97,6 +97,18 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
 				+ " -url <service url>");
 	}
 
+  public org.cagrid.gaards.cds.common.DelegationRecord[] findDelegationRecords(org.cagrid.gaards.cds.common.DelegationRecordFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findDelegationRecords");
+    org.cagrid.gaards.cds.stubs.FindDelegationRecordsRequest params = new org.cagrid.gaards.cds.stubs.FindDelegationRecordsRequest();
+    org.cagrid.gaards.cds.stubs.FindDelegationRecordsRequestFilter filterContainer = new org.cagrid.gaards.cds.stubs.FindDelegationRecordsRequestFilter();
+    filterContainer.setDelegationRecordFilter(filter);
+    params.setFilter(filterContainer);
+    org.cagrid.gaards.cds.stubs.FindDelegationRecordsResponse boxedResult = portType.findDelegationRecords(params);
+    return boxedResult.getDelegationRecord();
+    }
+  }
+
   public org.cagrid.gaards.cds.common.DelegationSigningRequest initiateDelegation(org.cagrid.gaards.cds.common.DelegationRequest req) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"initiateDelegation");

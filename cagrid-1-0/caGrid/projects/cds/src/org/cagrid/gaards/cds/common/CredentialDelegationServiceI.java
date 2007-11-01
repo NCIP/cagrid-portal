@@ -18,6 +18,17 @@ import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 public interface CredentialDelegationServiceI {
 
   /**
+   * This method allows an entity to find delegation records meeting a specified search criteria.
+   *
+   * @param filter
+   * @throws CDSInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
+  public org.cagrid.gaards.cds.common.DelegationRecord[] findDelegationRecords(org.cagrid.gaards.cds.common.DelegationRecordFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
+
+  /**
    * Allows a party to initate the delegation of their credential such that other parties may access their credential to act on their behalf.
    *
    * @param req

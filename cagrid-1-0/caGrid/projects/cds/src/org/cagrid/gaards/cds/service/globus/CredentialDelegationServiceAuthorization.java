@@ -62,6 +62,11 @@ public class CredentialDelegationServiceAuthorization implements PDP {
 		
 		
 	}
+					
+	public static void authorizeFindDelegationRecords() throws RemoteException {
+		
+		
+	}
 	
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -89,6 +94,14 @@ public class CredentialDelegationServiceAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("approveDelegation")){
 			try{
 				authorizeApproveDelegation();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("findDelegationRecords")){
+			try{
+				authorizeFindDelegationRecords();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
