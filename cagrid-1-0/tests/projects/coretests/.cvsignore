@@ -5,3 +5,4 @@ grouper_event.log
 grouper_debug.log
 grouper_error.log
 tmp
+junit*.properties
