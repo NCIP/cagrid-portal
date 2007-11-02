@@ -7,6 +7,11 @@ import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DeployServiceStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 
 import java.io.File;
 import java.util.Vector;
@@ -24,7 +29,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.20 2007-11-02 15:25:40 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.21 2007-11-02 17:48:47 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     
@@ -62,7 +67,7 @@ public class SystemTests extends BaseSystemTest {
 
     protected boolean storySetUp() {
         // 1) set up a clean, temporary Globus
-        Step step = new CreateCleanContainerStep(container);
+        Step step = new UnpackContainerStep(container);
         try {
             step.runStep();
         } catch (Throwable th) {
@@ -89,7 +94,7 @@ public class SystemTests extends BaseSystemTest {
         // 6) Rebuild the service to pick up the bookstore beans
         steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
         // 7) deploy data service
-        steps.add(new DeployDataServiceStep(container, info.getDir()));
+        steps.add(new DeployServiceStep(container, info.getDir()));
         // 8) start globus
         steps.add(new StartContainerStep(container));
         // 9) test data service
@@ -111,7 +116,7 @@ public class SystemTests extends BaseSystemTest {
             ex.printStackTrace();
         }
         // 12) throw away globus
-        Step destroyStep = new DestroyTempContainerStep(container);
+        Step destroyStep = new DestroyContainerStep(container);
         try {
             destroyStep.runStep();
         } catch (Throwable ex) {

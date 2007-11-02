@@ -4,19 +4,19 @@ import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.enumeration.CreateEnumerationTests;
 import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
 import gov.nih.nci.cagrid.data.system.BaseSystemTest;
-import gov.nih.nci.cagrid.data.system.CreateCleanContainerStep;
-import gov.nih.nci.cagrid.data.system.DeployDataServiceStep;
-import gov.nih.nci.cagrid.data.system.DestroyTempContainerStep;
 import gov.nih.nci.cagrid.data.system.EnableValidationStep;
 import gov.nih.nci.cagrid.data.system.RebuildServiceStep;
 import gov.nih.nci.cagrid.data.system.SetQueryProcessorStep;
-import gov.nih.nci.cagrid.data.system.StartContainerStep;
-import gov.nih.nci.cagrid.data.system.StopContainerStep;
 import gov.nih.nci.cagrid.testing.core.TestingConstants;
 import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DeployServiceStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 
 import java.util.Vector;
 
@@ -69,7 +69,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 
 	protected boolean storySetUp() {
 		// unpack the service container
-        Step unpack = new CreateCleanContainerStep(container);
+        Step unpack = new UnpackContainerStep(container);
         try {
             unpack.runStep();
         } catch (Throwable th) {
@@ -94,7 +94,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 		// 4) Rebuild the service to pick up the bookstore beans
 		steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
 		// 5) deploy data service
-		steps.add(new DeployDataServiceStep(container, info.getDir()));
+		steps.add(new DeployServiceStep(container, info.getDir()));
 		// 6) start container
 		steps.add(new StartContainerStep(container));
 		// 7) test data service
@@ -114,7 +114,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 			ex.printStackTrace();
 		}
 		// 10) throw away globus
-		Step destroyStep = new DestroyTempContainerStep(container);
+		Step destroyStep = new DestroyContainerStep(container);
 		try {
 			destroyStep.runStep();
 		} catch (Throwable ex) {

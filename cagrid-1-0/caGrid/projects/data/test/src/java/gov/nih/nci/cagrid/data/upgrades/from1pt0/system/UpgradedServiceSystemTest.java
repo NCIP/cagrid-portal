@@ -2,21 +2,21 @@ package gov.nih.nci.cagrid.data.upgrades.from1pt0.system;
 
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
-import gov.nih.nci.cagrid.data.system.CreateCleanContainerStep;
-import gov.nih.nci.cagrid.data.system.DeployDataServiceStep;
-import gov.nih.nci.cagrid.data.system.DestroyTempContainerStep;
 import gov.nih.nci.cagrid.data.system.EnableValidationStep;
 import gov.nih.nci.cagrid.data.system.InvokeDataServiceStep;
 import gov.nih.nci.cagrid.data.system.RebuildServiceStep;
 import gov.nih.nci.cagrid.data.system.SetQueryProcessorStep;
-import gov.nih.nci.cagrid.data.system.StartContainerStep;
-import gov.nih.nci.cagrid.data.system.StopContainerStep;
 import gov.nih.nci.cagrid.data.upgrades.from1pt0.UpgradeTo1pt2Tests;
 import gov.nih.nci.cagrid.testing.core.TestingConstants;
 import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DeployServiceStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 
 import java.util.Vector;
 
@@ -29,7 +29,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.11 2007-11-02 15:25:40 dervin Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.12 2007-11-02 17:48:47 dervin Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -55,7 +55,7 @@ public class UpgradedServiceSystemTest extends Story {
 	
 	protected boolean storySetUp() {
 		// unpack container
-        Step unpack = new CreateCleanContainerStep(container);
+        Step unpack = new UnpackContainerStep(container);
         try {
             unpack.runStep();
         } catch (Throwable th) {
@@ -87,7 +87,7 @@ public class UpgradedServiceSystemTest extends Story {
 		// 5) Rebuild the service to pick up the bookstore beans
 		steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
 		// 6) deploy data service
-		steps.add(new DeployDataServiceStep(container, info.getDir()));
+		steps.add(new DeployServiceStep(container, info.getDir()));
 		// 7) start globus
 		steps.add(new StartContainerStep(container));
 		// 8) test data service
@@ -107,7 +107,7 @@ public class UpgradedServiceSystemTest extends Story {
 			ex.printStackTrace();
 		}
 		// 11) throw away globus
-		Step destroyStep = new DestroyTempContainerStep(container);
+		Step destroyStep = new DestroyContainerStep(container);
 		try {
 			destroyStep.runStep();
 		} catch (Throwable ex) {
