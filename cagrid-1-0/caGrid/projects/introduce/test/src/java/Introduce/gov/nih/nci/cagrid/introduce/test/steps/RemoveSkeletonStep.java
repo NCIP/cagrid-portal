@@ -12,6 +12,7 @@ public class RemoveSkeletonStep extends BaseStep {
 		super(tci.getDir(), false);
 		this.tci = tci;
 	}
+    
 
 	public void runStep() throws Throwable {
 		System.out.println("Removing the service skeleton");

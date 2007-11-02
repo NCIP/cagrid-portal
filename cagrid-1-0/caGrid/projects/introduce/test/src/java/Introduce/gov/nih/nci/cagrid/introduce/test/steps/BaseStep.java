@@ -41,8 +41,8 @@ public abstract class BaseStep extends Step {
 
 			Process p = CommonTools.createAndOutputProcess(cmd);
 			p.waitFor();
-			assertEquals("Checking build status", 0, p.exitValue());
+			assertEquals("Build process exited abnormally", 0, p.exitValue());
+            p.destroy();
 		}
 	}
-
 }

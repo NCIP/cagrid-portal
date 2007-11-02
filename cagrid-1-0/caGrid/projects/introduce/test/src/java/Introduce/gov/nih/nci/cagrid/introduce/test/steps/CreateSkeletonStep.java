@@ -11,6 +11,7 @@ public class CreateSkeletonStep extends BaseStep {
 		super(tci.getDir(), build);
 		this.tci = tci;
 	}
+    
 
 	public void runStep() throws Throwable {
 		System.out.println("Creating the service skeleton");
@@ -21,7 +22,8 @@ public class CreateSkeletonStep extends BaseStep {
 
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertEquals("Checking creation status", 0, p.exitValue());
+		assertEquals("Creation process exited abnormally", 0, p.exitValue());
+        p.destroy();
 
 		cmd = AntTools.getAntSkeletonPostCreationCommand(getBaseDir(), tci
 				.getName(), tci.getDir(), tci.getPackageName(), tci
@@ -29,9 +31,9 @@ public class CreateSkeletonStep extends BaseStep {
 
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertEquals("Checking creation status", 0, p.exitValue());
+		assertEquals("Post creation process exited abnormally", 0, p.exitValue());
+        p.destroy();
 
 		buildStep();
 	}
-
 }

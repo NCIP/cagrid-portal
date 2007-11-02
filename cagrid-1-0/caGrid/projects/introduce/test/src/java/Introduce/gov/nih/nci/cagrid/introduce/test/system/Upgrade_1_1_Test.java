@@ -1,18 +1,21 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
-import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
-import gov.nih.nci.cagrid.introduce.test.steps.CleanupGlobusStep;
-import gov.nih.nci.cagrid.introduce.test.steps.CreateGlobusStep;
-import gov.nih.nci.cagrid.introduce.test.steps.DeployGlobusServiceStep;
+import gov.nih.nci.cagrid.introduce.test.steps.CleanupContainerStep;
+import gov.nih.nci.cagrid.introduce.test.steps.CreateContainerStep;
+import gov.nih.nci.cagrid.introduce.test.steps.DeployServiceToContainerStep;
 import gov.nih.nci.cagrid.introduce.test.steps.InvokeSimpleMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.StartGlobusStep;
-import gov.nih.nci.cagrid.introduce.test.steps.StopGlobusStep;
+import gov.nih.nci.cagrid.introduce.test.steps.StartContainerStep;
+import gov.nih.nci.cagrid.introduce.test.steps.StopContainerStep;
 import gov.nih.nci.cagrid.introduce.test.steps.UnzipOldServiceStep;
 import gov.nih.nci.cagrid.introduce.test.steps.UpgradesStep;
-import gov.nih.nci.cagrid.introduce.test.util.GlobusHelper;
+import gov.nih.nci.cagrid.testing.core.TestingConstants;
+import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
 
 import java.io.File;
 import java.util.Vector;
@@ -27,8 +30,20 @@ import com.atomicobject.haste.framework.Story;
 public class Upgrade_1_1_Test extends Story {
     private TestCaseInfo tci1;
 
-    private GlobusHelper helper;
-
+    private static ServiceContainer container = null;
+    
+    static {
+        try {
+            PortPreference ports = new PortPreference(
+                Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + 1301), 
+                Integer.valueOf(TestingConstants.TEST_PORT_UPPER_BOUND.intValue() + 1301), null);
+            container = ServiceContainerFactory.createContainer(
+                ServiceContainerType.GLOBUS_CONTAINER, null, ports);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+    }
 
     public Upgrade_1_1_Test() {
         this.setName("Introduce Upgrades System Test");
@@ -47,18 +62,16 @@ public class Upgrade_1_1_Test extends Story {
 
     protected Vector steps() {
         this.tci1 = new TestCaseInfo1();
-        this.helper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
-            IntroduceTestConstants.TEST_PORT);
         Vector steps = new Vector();
 
         try {
-            steps.add(new CreateGlobusStep(this.helper));
+            steps.add(new CreateContainerStep(container));
             steps.add(new UnzipOldServiceStep("." + File.separator + "test" + File.separator + "resources"
                 + File.separator + "serviceVersions" + File.separator + "IntroduceTestService-1_1.zip", this.tci1));
             steps.add(new UpgradesStep(this.tci1, true));
-            steps.add(new DeployGlobusServiceStep(this.helper, this.tci1));
-            steps.add(new StartGlobusStep(this.helper));
-            steps.add(new InvokeSimpleMethodImplStep(this.tci1, "newMethod", false));
+            steps.add(new DeployServiceToContainerStep(container, this.tci1));
+            steps.add(new StartContainerStep(container));
+            steps.add(new InvokeSimpleMethodImplStep(container, this.tci1, "newMethod", false));
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -71,7 +84,7 @@ public class Upgrade_1_1_Test extends Story {
 
         super.storySetUp();
 
-        StopGlobusStep step2 = new StopGlobusStep(this.helper);
+        StopContainerStep step2 = new StopContainerStep(container);
         try {
             step2.runStep();
         } catch (Throwable e) {
@@ -97,13 +110,13 @@ public class Upgrade_1_1_Test extends Story {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        StopGlobusStep step2 = new StopGlobusStep(this.helper);
+        StopContainerStep step2 = new StopContainerStep(container);
         try {
             step2.runStep();
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        CleanupGlobusStep step3 = new CleanupGlobusStep(this.helper);
+        CleanupContainerStep step3 = new CleanupContainerStep(container);
         try {
             step3.runStep();
         } catch (Throwable e) {

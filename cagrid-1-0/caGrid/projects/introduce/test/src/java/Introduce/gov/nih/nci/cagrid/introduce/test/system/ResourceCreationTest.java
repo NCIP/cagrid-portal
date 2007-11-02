@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
-import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo2;
@@ -9,22 +8,26 @@ import gov.nih.nci.cagrid.introduce.test.TestCaseInfo4;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo5;
 import gov.nih.nci.cagrid.introduce.test.steps.AddResourcePropertyStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddServiceStep;
-import gov.nih.nci.cagrid.introduce.test.steps.CleanupGlobusStep;
-import gov.nih.nci.cagrid.introduce.test.steps.CreateGlobusStep;
+import gov.nih.nci.cagrid.introduce.test.steps.CleanupContainerStep;
+import gov.nih.nci.cagrid.introduce.test.steps.CreateContainerStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.DeployGlobusServiceStep;
+import gov.nih.nci.cagrid.introduce.test.steps.DeployServiceToContainerStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.StartGlobusStep;
-import gov.nih.nci.cagrid.introduce.test.steps.StopGlobusStep;
-import gov.nih.nci.cagrid.introduce.test.util.GlobusHelper;
+import gov.nih.nci.cagrid.introduce.test.steps.StartContainerStep;
+import gov.nih.nci.cagrid.introduce.test.steps.StopContainerStep;
+import gov.nih.nci.cagrid.testing.core.TestingConstants;
+import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
 
-import java.io.File;
 import java.util.Vector;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+import com.atomicobject.haste.framework.Step;
 import com.atomicobject.haste.framework.Story;
 
 
@@ -39,8 +42,20 @@ public class ResourceCreationTest extends Story {
     
     private TestCaseInfo tci5;
 
-    private GlobusHelper helper;
-
+    private static ServiceContainer container = null;
+    
+    static {
+        try {
+            PortPreference ports = new PortPreference(
+                Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + 1001), 
+                Integer.valueOf(TestingConstants.TEST_PORT_UPPER_BOUND.intValue() + 1001), null);
+            container = ServiceContainerFactory.createContainer(
+                ServiceContainerType.GLOBUS_CONTAINER, null, ports);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+    }
 
     public ResourceCreationTest() {
         this.setName("Introduce Resource Creation System Test");
@@ -63,11 +78,9 @@ public class ResourceCreationTest extends Story {
         tci3 = new TestCaseInfo3();
         tci4 = new TestCaseInfo4();
         tci5 = new TestCaseInfo5();
-        helper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT);
-        Vector steps = new Vector();
+        Vector<Step> steps = new Vector<Step>();
 
         try {
-            steps.add(new CreateGlobusStep(helper));
             steps.add(new CreateSkeletonStep(tci1, true));
             steps.add(new AddServiceStep(tci2, false));
             steps.add(new AddServiceStep(tci3, false));
@@ -78,21 +91,21 @@ public class ResourceCreationTest extends Story {
             steps.add(new AddResourcePropertyStep(tci3, false));
             steps.add(new AddResourcePropertyStep(tci4, false));
             steps.add(new AddResourcePropertyStep(tci5, true));
-            steps.add(new DeployGlobusServiceStep(helper, tci1));
-            steps.add(new StartGlobusStep(helper));
+            steps.add(new DeployServiceToContainerStep(container, tci1));
+            // TODO: do we need to deploy the other services (tci2-5)?
+            steps.add(new StartContainerStep(container));
         } catch (Exception e) {
             e.printStackTrace();
-            fail();
+            fail(e.getMessage());
         }
         return steps;
     }
 
 
     protected boolean storySetUp() throws Throwable {
-        // TODO Auto-generated method stub
         super.storySetUp();
 
-        StopGlobusStep step2 = new StopGlobusStep(helper);
+        Step step2 = new CreateContainerStep(container);
         try {
             step2.runStep();
         } catch (Throwable e) {
@@ -103,7 +116,6 @@ public class ResourceCreationTest extends Story {
         try {
             step1.runStep();
         } catch (Throwable e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return true;
@@ -116,21 +128,18 @@ public class ResourceCreationTest extends Story {
         try {
             step1.runStep();
         } catch (Throwable e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        StopGlobusStep step2 = new StopGlobusStep(helper);
+        StopContainerStep step2 = new StopContainerStep(container);
         try {
             step2.runStep();
         } catch (Throwable e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        CleanupGlobusStep step3 = new CleanupGlobusStep(helper);
+        CleanupContainerStep step3 = new CleanupContainerStep(container);
         try {
             step3.runStep();
         } catch (Throwable e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -151,5 +160,4 @@ public class ResourceCreationTest extends Story {
         TestResult result = runner.doRun(new TestSuite(ResourceCreationTest.class));
         System.exit(result.errorCount() + result.failureCount());
     }
-
 }
