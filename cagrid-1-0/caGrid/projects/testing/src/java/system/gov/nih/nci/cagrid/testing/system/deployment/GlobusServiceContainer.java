@@ -47,7 +47,7 @@ import com.counter.service.CounterServiceAddressingLocator;
  * @author David Ervin
  * 
  * @created Oct 12, 2007 12:01:17 PM
- * @version $Id: GlobusServiceContainer.java,v 1.1 2007-10-31 19:29:07 dervin Exp $ 
+ * @version $Id: GlobusServiceContainer.java,v 1.2 2007-11-02 14:46:32 dervin Exp $ 
  */
 public class GlobusServiceContainer extends ServiceContainer {
     
@@ -205,34 +205,6 @@ public class GlobusServiceContainer extends ServiceContainer {
             }
         });
         
-        
-        /*
-        FutureTask<Boolean> future = new FutureTask<Boolean>(new Callable<Boolean>() {
-            public Boolean call() {
-                System.out.println("CALLING TASK");
-                System.out.println("CALLING TASK");
-                System.out.println("CALLING TASK");
-                
-                String[] args = new String[opts.size()];
-                int index = 0;
-                for (String o : opts) {
-                    args[index++] = o;
-                }
-                
-                System.out.println("Command options:");
-                System.out.println(args);
-                
-                try {
-                    ShutdownClient.main(args);
-                    return Boolean.TRUE;
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                return Boolean.FALSE;
-            }
-        });
-        */
-
         // execute the task of waiting for completion and getting the status
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(future);
