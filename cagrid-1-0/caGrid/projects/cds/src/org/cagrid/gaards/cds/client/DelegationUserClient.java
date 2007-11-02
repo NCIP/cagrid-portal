@@ -47,7 +47,6 @@ public class DelegationUserClient {
 		this.client = new CredentialDelegationServiceClient(url, cred);
 	}
 
-	
 	/**
 	 * This method allows a user to delegated their credential to the Credential
 	 * Delegation Service
@@ -60,9 +59,9 @@ public class DelegationUserClient {
 	 *            Credential Delegation Service on you behalf.
 	 * @return A reference to the delegated credential, this reference may be
 	 *         used by entites to request a credential.
-	 * @throws RemoteException 
-	 * @throws CDSInternalFault 
-	 * @throws DelegationFault 
+	 * @throws RemoteException
+	 * @throws CDSInternalFault
+	 * @throws DelegationFault
 	 * @throws PermissionDeniedFault
 	 * @throws URI.MalformedURIException
 	 */
@@ -91,9 +90,9 @@ public class DelegationUserClient {
 	 *            Credential Delegation Service on you behalf.
 	 * @return A reference to the delegated credential, this reference may be
 	 *         used by entites to request a credential.
-	 * @throws RemoteException 
-	 * @throws CDSInternalFault 
-	 * @throws DelegationFault 
+	 * @throws RemoteException
+	 * @throws CDSInternalFault
+	 * @throws DelegationFault
 	 * @throws PermissionDeniedFault
 	 * @throws URI.MalformedURIException
 	 */
@@ -135,9 +134,9 @@ public class DelegationUserClient {
 	 *            Credential Delegation Service.
 	 * @return A reference to the delegated credential, this reference may be
 	 *         used by entites to request a credential.
-	 * @throws RemoteException 
-	 * @throws CDSInternalFault 
-	 * @throws DelegationFault 
+	 * @throws RemoteException
+	 * @throws CDSInternalFault
+	 * @throws DelegationFault
 	 * @throws PermissionDeniedFault
 	 * @throws URI.MalformedURIException
 	 */
@@ -191,6 +190,14 @@ public class DelegationUserClient {
 		res.setDelegationIdentifier(dsr.getDelegationIdentifier());
 		res.setCertificateChain(chain);
 		return client.approveDelegation(res);
+	}
+
+	public List<DelegationRecord> findMyDelegatedCredentials()
+			throws RemoteException, CDSInternalFault {
+		DelegationRecord[] records = client
+				.findMyDelegatedCredentials(new DelegationRecordFilter());
+		List<DelegationRecord> list = Arrays.asList(records);
+		return list;
 	}
 
 	public List<DelegationRecord> findMyDelegatedCredentials(
