@@ -26,9 +26,9 @@ public class CredentialDelegationServiceProviderImpl{
 	}
 	
 
-    public org.cagrid.gaards.cds.stubs.FindMyDelegationRecordsResponse findMyDelegationRecords(org.cagrid.gaards.cds.stubs.FindMyDelegationRecordsRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault {
-    org.cagrid.gaards.cds.stubs.FindMyDelegationRecordsResponse boxedResult = new org.cagrid.gaards.cds.stubs.FindMyDelegationRecordsResponse();
-    boxedResult.setDelegationRecord(impl.findMyDelegationRecords(params.getFilter().getDelegationRecordFilter()));
+    public org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsResponse findMyDelegatedCredentials(org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault {
+    org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsResponse boxedResult = new org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsResponse();
+    boxedResult.setDelegationRecord(impl.findMyDelegatedCredentials(params.getFilter().getDelegationRecordFilter()));
     return boxedResult;
   }
 

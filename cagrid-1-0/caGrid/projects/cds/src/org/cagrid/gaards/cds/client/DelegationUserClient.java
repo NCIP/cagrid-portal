@@ -1,7 +1,6 @@
 package org.cagrid.gaards.cds.client;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
@@ -9,15 +8,18 @@ import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
 import java.rmi.RemoteException;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.axis.types.URI;
-import org.cagrid.gaards.cds.common.AllowedParties;
 import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
+import org.cagrid.gaards.cds.common.DelegationRecord;
+import org.cagrid.gaards.cds.common.DelegationRecordFilter;
 import org.cagrid.gaards.cds.common.DelegationRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningResponse;
-import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
 import org.cagrid.gaards.cds.common.Utils;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
@@ -26,6 +28,10 @@ import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.globus.gsi.GlobusCredential;
 
+/**
+ * @author langella
+ * 
+ */
 public class DelegationUserClient {
 
 	private GlobusCredential cred;
@@ -41,6 +47,25 @@ public class DelegationUserClient {
 		this.client = new CredentialDelegationServiceClient(url, cred);
 	}
 
+	
+	/**
+	 * This method allows a user to delegated their credential to the Credential
+	 * Delegation Service
+	 * 
+	 * @param policy
+	 *            The policy specifying who may request this delegated
+	 *            credential from the Credential Delegation Service
+	 * @param delegatedCredentialsLifetime
+	 *            The life time of the credentials delegated to entities by the
+	 *            Credential Delegation Service on you behalf.
+	 * @return A reference to the delegated credential, this reference may be
+	 *         used by entites to request a credential.
+	 * @throws RemoteException 
+	 * @throws CDSInternalFault 
+	 * @throws DelegationFault 
+	 * @throws PermissionDeniedFault
+	 * @throws URI.MalformedURIException
+	 */
 	public DelegatedCredentialReference delegateCredential(
 			DelegationPolicy policy, ProxyLifetime delegatedCredentialsLifetime)
 			throws RemoteException, CDSInternalFault, DelegationFault,
@@ -49,6 +74,29 @@ public class DelegationUserClient {
 				delegatedCredentialsLifetime);
 	}
 
+	/**
+	 * This method allows a user to delegated their credential to the Credential
+	 * Delegation Service
+	 * 
+	 * @param delegationLifetime
+	 *            The life time of the credential being delegated to the
+	 *            Credential Delegation Service. This lifetime specifies how
+	 *            long the Credential Delegation Service may delegate this
+	 *            credential.
+	 * @param policy
+	 *            The policy specifying who may request this delegated
+	 *            credential from the Credential Delegation Service
+	 * @param delegatedCredentialsLifetime
+	 *            The life time of the credentials delegated to entities by the
+	 *            Credential Delegation Service on you behalf.
+	 * @return A reference to the delegated credential, this reference may be
+	 *         used by entites to request a credential.
+	 * @throws RemoteException 
+	 * @throws CDSInternalFault 
+	 * @throws DelegationFault 
+	 * @throws PermissionDeniedFault
+	 * @throws URI.MalformedURIException
+	 */
 	public DelegatedCredentialReference delegateCredential(
 			ProxyLifetime delegationLifetime, DelegationPolicy policy,
 			ProxyLifetime delegatedCredentialsLifetime) throws RemoteException,
@@ -59,6 +107,40 @@ public class DelegationUserClient {
 				ClientConstants.DEFAULT_KEY_SIZE);
 	}
 
+	/**
+	 * This method allows a user to delegated their credential to the Credential
+	 * Delegation Service
+	 * 
+	 * @param delegationLifetime
+	 *            The life time of the credential being delegated to the
+	 *            Credential Delegation Service. This lifetime specifies how
+	 *            long the Credential Delegation Service may delegate this
+	 *            credential.
+	 * @param delegationPathLength
+	 *            The delegation path length of the credential being delegated
+	 *            to the Credential Delegation Service.
+	 * @param policy
+	 *            The policy specifying who may request this delegated
+	 *            credential from the Credential Delegation Service
+	 * @param delegatedCredentialsLifetime
+	 *            The life time of the credentials delegated to entities by the
+	 *            Credential Delegation Service on you behalf.
+	 * @param delegatedCredentialsPathLength
+	 *            The path length of the credentials delegated to entities by
+	 *            the Credential Delegation Service on you behalf. A path length
+	 *            of 0 means that entities that can you obtain a delegated
+	 *            credential cannot further delegate it.
+	 * @param delegatedCredentialsKeyLength
+	 *            The key length of the credentials delegated to entities by the
+	 *            Credential Delegation Service.
+	 * @return A reference to the delegated credential, this reference may be
+	 *         used by entites to request a credential.
+	 * @throws RemoteException 
+	 * @throws CDSInternalFault 
+	 * @throws DelegationFault 
+	 * @throws PermissionDeniedFault
+	 * @throws URI.MalformedURIException
+	 */
 	public DelegatedCredentialReference delegateCredential(
 			ProxyLifetime delegationLifetime, int delegationPathLength,
 			DelegationPolicy policy,
@@ -111,31 +193,12 @@ public class DelegationUserClient {
 		return client.approveDelegation(res);
 	}
 
-	public static void main(String[] args) {
-		try {
-			DelegationUserClient client = new DelegationUserClient(
-					"https://localhost:8443/wsrf/services/cagrid/CredentialDelegationService");
-			ProxyLifetime dl = new ProxyLifetime();
-			dl.setSeconds(500);
-			ProxyLifetime dcl = new ProxyLifetime();
-			dcl.setSeconds(250);
-			IdentityDelegationPolicy policy = new IdentityDelegationPolicy();
-			AllowedParties ap = new AllowedParties();
-			ap
-					.setGridIdentity(new String[] { "/O=caBIG/OU=caGrid/OU=Training/OU=Dorian/CN=langella" });
-			policy.setAllowedParties(ap);
-			DelegatedCredentialReference ref = client.delegateCredential(dl, 1,
-					policy, dcl, 0, 1024);
-
-			DelegatedCredentialUserClient client2 = new DelegatedCredentialUserClient(
-					ref);
-			GlobusCredential proxy = client2.getDelegatedCredential();
-			System.out.println(proxy.getIdentity());
-			ProxyUtil.saveProxyAsDefault(proxy);
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-		}
-
+	public List<DelegationRecord> findMyDelegatedCredentials(
+			DelegationRecordFilter filter) throws RemoteException,
+			CDSInternalFault {
+		DelegationRecord[] records = client.findMyDelegatedCredentials(filter);
+		List<DelegationRecord> list = Arrays.asList(records);
+		return list;
 	}
 
 }

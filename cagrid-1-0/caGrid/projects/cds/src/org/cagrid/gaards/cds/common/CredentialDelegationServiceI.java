@@ -24,7 +24,7 @@ public interface CredentialDelegationServiceI {
    * @throws CDSInternalFault
    *	
    */
-  public org.cagrid.gaards.cds.common.DelegationRecord[] findMyDelegationRecords(org.cagrid.gaards.cds.common.DelegationRecordFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault ;
+  public org.cagrid.gaards.cds.common.DelegationRecord[] findMyDelegatedCredentials(org.cagrid.gaards.cds.common.DelegationRecordFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault ;
 
   /**
    * Allows a party to initate the delegation of their credential such that other parties may access their credential to act on their behalf.
