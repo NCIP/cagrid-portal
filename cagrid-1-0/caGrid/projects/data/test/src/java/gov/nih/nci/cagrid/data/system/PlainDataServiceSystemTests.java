@@ -18,7 +18,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Sep 28, 2007 12:22:29 PM
- * @version $Id: PlainDataServiceSystemTests.java,v 1.3 2007-10-31 19:32:05 dervin Exp $ 
+ * @version $Id: PlainDataServiceSystemTests.java,v 1.4 2007-11-02 15:25:40 dervin Exp $ 
  */
 public class PlainDataServiceSystemTests extends BaseSystemTest {
     
@@ -87,7 +87,7 @@ public class PlainDataServiceSystemTests extends BaseSystemTest {
             ex.printStackTrace();
         }
         // 6) throw away globus
-        Step destroyStep = new DestroyTempGlobusStep(container);
+        Step destroyStep = new DestroyTempContainerStep(container);
         try {
             destroyStep.runStep();
         } catch (Throwable ex) {

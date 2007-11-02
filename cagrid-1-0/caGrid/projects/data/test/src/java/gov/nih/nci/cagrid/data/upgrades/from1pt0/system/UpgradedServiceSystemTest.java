@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
 import gov.nih.nci.cagrid.data.system.CreateCleanContainerStep;
 import gov.nih.nci.cagrid.data.system.DeployDataServiceStep;
-import gov.nih.nci.cagrid.data.system.DestroyTempGlobusStep;
+import gov.nih.nci.cagrid.data.system.DestroyTempContainerStep;
 import gov.nih.nci.cagrid.data.system.EnableValidationStep;
 import gov.nih.nci.cagrid.data.system.InvokeDataServiceStep;
 import gov.nih.nci.cagrid.data.system.RebuildServiceStep;
@@ -29,7 +29,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.10 2007-10-31 19:32:05 dervin Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.11 2007-11-02 15:25:40 dervin Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -107,7 +107,7 @@ public class UpgradedServiceSystemTest extends Story {
 			ex.printStackTrace();
 		}
 		// 11) throw away globus
-		Step destroyStep = new DestroyTempGlobusStep(container);
+		Step destroyStep = new DestroyTempContainerStep(container);
 		try {
 			destroyStep.runStep();
 		} catch (Throwable ex) {

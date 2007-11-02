@@ -6,7 +6,7 @@ import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
 import gov.nih.nci.cagrid.data.system.BaseSystemTest;
 import gov.nih.nci.cagrid.data.system.CreateCleanContainerStep;
 import gov.nih.nci.cagrid.data.system.DeployDataServiceStep;
-import gov.nih.nci.cagrid.data.system.DestroyTempGlobusStep;
+import gov.nih.nci.cagrid.data.system.DestroyTempContainerStep;
 import gov.nih.nci.cagrid.data.system.EnableValidationStep;
 import gov.nih.nci.cagrid.data.system.RebuildServiceStep;
 import gov.nih.nci.cagrid.data.system.SetQueryProcessorStep;
@@ -114,7 +114,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 			ex.printStackTrace();
 		}
 		// 10) throw away globus
-		Step destroyStep = new DestroyTempGlobusStep(container);
+		Step destroyStep = new DestroyTempContainerStep(container);
 		try {
 			destroyStep.runStep();
 		} catch (Throwable ex) {

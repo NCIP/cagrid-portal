@@ -6,7 +6,7 @@ import gov.nih.nci.cagrid.data.system.AddBookstoreStep;
 import gov.nih.nci.cagrid.data.system.BaseSystemTest;
 import gov.nih.nci.cagrid.data.system.CreateCleanContainerStep;
 import gov.nih.nci.cagrid.data.system.DeployDataServiceStep;
-import gov.nih.nci.cagrid.data.system.DestroyTempGlobusStep;
+import gov.nih.nci.cagrid.data.system.DestroyTempContainerStep;
 import gov.nih.nci.cagrid.data.system.EnableValidationStep;
 import gov.nih.nci.cagrid.data.system.RebuildServiceStep;
 import gov.nih.nci.cagrid.data.system.SetQueryProcessorStep;
@@ -35,7 +35,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:19:42 PM
- * @version $Id: BDTDataServiceSystemTests.java,v 1.7 2007-10-31 19:32:05 dervin Exp $ 
+ * @version $Id: BDTDataServiceSystemTests.java,v 1.8 2007-11-02 15:25:40 dervin Exp $ 
  */
 public class BDTDataServiceSystemTests extends BaseSystemTest {
     
@@ -118,7 +118,7 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 			ex.printStackTrace();
 		}
 		// 10) throw away globus
-		Step destroyStep = new DestroyTempGlobusStep(container);
+		Step destroyStep = new DestroyTempContainerStep(container);
 		try {
 			destroyStep.runStep();
 		} catch (Throwable ex) {

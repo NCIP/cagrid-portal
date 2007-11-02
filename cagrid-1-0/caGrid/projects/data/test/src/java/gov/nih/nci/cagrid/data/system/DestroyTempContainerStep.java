@@ -10,13 +10,13 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 8, 2006
- * @version $Id: DestroyTempGlobusStep.java,v 1.6 2007-10-31 19:32:05 dervin Exp $
+ * @version $Id: DestroyTempContainerStep.java,v 1.1 2007-11-02 15:25:40 dervin Exp $
  */
-public class DestroyTempGlobusStep extends Step {
+public class DestroyTempContainerStep extends Step {
 
 	private ServiceContainer container;
 
-	public DestroyTempGlobusStep(ServiceContainer container) {
+	public DestroyTempContainerStep(ServiceContainer container) {
 		this.container = container;
 	}
 

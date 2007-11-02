@@ -24,7 +24,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.19 2007-10-31 19:32:05 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.20 2007-11-02 15:25:40 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     
@@ -111,7 +111,7 @@ public class SystemTests extends BaseSystemTest {
             ex.printStackTrace();
         }
         // 12) throw away globus
-        Step destroyStep = new DestroyTempGlobusStep(container);
+        Step destroyStep = new DestroyTempContainerStep(container);
         try {
             destroyStep.runStep();
         } catch (Throwable ex) {
