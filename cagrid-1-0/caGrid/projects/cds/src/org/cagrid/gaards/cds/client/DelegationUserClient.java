@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
 import java.rmi.RemoteException;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
