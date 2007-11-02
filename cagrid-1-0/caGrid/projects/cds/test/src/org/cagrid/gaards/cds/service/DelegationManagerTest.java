@@ -1,10 +1,11 @@
 package org.cagrid.gaards.cds.service;
 
-import java.io.File;
-
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
+
+import java.io.File;
+
 import junit.framework.TestCase;
 
 import org.cagrid.gaards.cds.common.AllowedParties;
@@ -26,7 +27,6 @@ import org.globus.gsi.GlobusCredential;
 public class DelegationManagerTest extends TestCase {
 
 	private int DEFAULT_PROXY_LIFETIME_SECONDS = 300;
-	private static String GRID_IDENTITY_PREFIX = "/C=US/O=abc/OU=xyz/OU=caGrid/CN=";
 
 	private CA ca;
 	private File caCert;
@@ -82,8 +82,7 @@ public class DelegationManagerTest extends TestCase {
 									.getPublicKey().getKeyAsString()), 2)));
 			cds.approveDelegation(donatelloCred.getIdentity(), donatelloRes);
 
-			DelegationSigningRequest donatelloReq2 = cds.initiateDelegation(
-					donatelloCred.getIdentity(),
+			cds.initiateDelegation(donatelloCred.getIdentity(),
 					getSimpleDelegationRequest(policy));
 
 			DelegationRecordFilter f = new DelegationRecordFilter();

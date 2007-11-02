@@ -1,6 +1,6 @@
 package org.cagrid.gaards.cds.testutils;
 
-import org.cagrid.gaards.cds.service.CDS;
+import org.cagrid.gaards.cds.service.DelegationManager;
 import org.cagrid.gaards.cds.service.ConfigurationConstants;
 import org.cagrid.gaards.cds.service.DelegatedCredentialManager;
 import org.cagrid.gaards.cds.service.KeyManager;
@@ -24,9 +24,9 @@ public class Utils {
 		return factory;
 	}
 
-	public static CDS getCDS() throws Exception {
+	public static DelegationManager getCDS() throws Exception {
 		XmlBeanFactory factory = loadConfiguration();
-		return (CDS) factory
+		return (DelegationManager) factory
 				.getBean(ConfigurationConstants.CDS_BEAN);
 	}
 
