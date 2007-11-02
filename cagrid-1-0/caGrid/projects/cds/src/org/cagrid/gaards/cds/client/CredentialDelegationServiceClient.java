@@ -97,14 +97,14 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
 				+ " -url <service url>");
 	}
 
-  public org.cagrid.gaards.cds.common.DelegationRecord[] findDelegationRecords(org.cagrid.gaards.cds.common.DelegationRecordFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+  public org.cagrid.gaards.cds.common.DelegationRecord[] findMyDelegationRecords(org.cagrid.gaards.cds.common.DelegationRecordFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"findDelegationRecords");
-    org.cagrid.gaards.cds.stubs.FindDelegationRecordsRequest params = new org.cagrid.gaards.cds.stubs.FindDelegationRecordsRequest();
-    org.cagrid.gaards.cds.stubs.FindDelegationRecordsRequestFilter filterContainer = new org.cagrid.gaards.cds.stubs.FindDelegationRecordsRequestFilter();
+      configureStubSecurity((Stub)portType,"findMyDelegationRecords");
+    org.cagrid.gaards.cds.stubs.FindMyDelegationRecordsRequest params = new org.cagrid.gaards.cds.stubs.FindMyDelegationRecordsRequest();
+    org.cagrid.gaards.cds.stubs.FindMyDelegationRecordsRequestFilter filterContainer = new org.cagrid.gaards.cds.stubs.FindMyDelegationRecordsRequestFilter();
     filterContainer.setDelegationRecordFilter(filter);
     params.setFilter(filterContainer);
-    org.cagrid.gaards.cds.stubs.FindDelegationRecordsResponse boxedResult = portType.findDelegationRecords(params);
+    org.cagrid.gaards.cds.stubs.FindMyDelegationRecordsResponse boxedResult = portType.findMyDelegationRecords(params);
     return boxedResult.getDelegationRecord();
     }
   }

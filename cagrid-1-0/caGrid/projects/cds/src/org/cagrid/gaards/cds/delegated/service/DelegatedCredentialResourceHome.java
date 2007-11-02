@@ -9,7 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationStatus;
-import org.cagrid.gaards.cds.service.CDS;
+import org.cagrid.gaards.cds.service.DelegationManager;
 import org.cagrid.gaards.cds.service.DelegatedCredentialManager;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
@@ -28,7 +28,7 @@ public class DelegatedCredentialResourceHome implements ResourceHome {
 	public static final QName RESOURCE_KEY = new QName(SERVICE_NS,
 			"DelegatedCredentialKey");
 
-	private CDS cds;
+	private DelegationManager cds;
 	private Log log;
 
 	public DelegatedCredentialResourceHome() {
@@ -81,11 +81,11 @@ public class DelegatedCredentialResourceHome implements ResourceHome {
 		return key;
 	}
 
-	public CDS getCDS() {
+	public DelegationManager getCDS() {
 		return cds;
 	}
 
-	public void setCDS(CDS cds) {
+	public void setCDS(DelegationManager cds) {
 		this.cds = cds;
 	}
 

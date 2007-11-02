@@ -3,7 +3,7 @@ package org.cagrid.gaards.cds.delegated.service;
 import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.PublicKey;
-import org.cagrid.gaards.cds.service.CDS;
+import org.cagrid.gaards.cds.service.DelegationManager;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
@@ -12,10 +12,10 @@ import org.globus.wsrf.security.SecurityManager;
 
 public class DelegatedCredentialResource implements Resource {
 
-	private CDS cds;
+	private DelegationManager cds;
 	private DelegationIdentifier id;
 
-	public DelegatedCredentialResource(CDS cds, DelegationIdentifier id) {
+	public DelegatedCredentialResource(DelegationManager cds, DelegationIdentifier id) {
 		this.cds = cds;
 		this.id = id;
 	}

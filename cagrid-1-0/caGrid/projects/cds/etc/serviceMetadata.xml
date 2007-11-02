@@ -35,14 +35,13 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="findDelegationRecords">
+      <ns2:Operation description="" name="findMyDelegationRecords">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns9:DelegationRecordFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="filter" xmlns:ns9="http://gaards.cagrid.org/cds"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns10:DelegationRecord" dimensionality="1" isArray="true" xmlns:ns10="http://gaards.cagrid.org/cds"/>
        <ns2:faultCollection>
         <ns2:Fault description="" name="CDSInternalFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
      </ns2:operationCollection>

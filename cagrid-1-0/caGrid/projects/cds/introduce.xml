@@ -117,72 +117,71 @@
       <ns4:Exception description="" name="PermissionDeniedFault" qname="ns16:PermissionDeniedFault" xmlns:ns16="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
      </ns4:Exceptions>
     </ns4:Method>
-    <ns4:Method description="This method allows an entity to find delegation records meeting a specified search criteria." isImported="false" isProvided="false" name="findDelegationRecords" xsi:type="ns4:MethodType">
+    <ns4:Method description="This method allows an entity to find delegation records meeting a specified search criteria." isImported="false" isProvided="false" name="findMyDelegationRecords" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns17:DelegationRecordFilter" description="" isArray="false" name="filter" xmlns:ns17="http://gaards.cagrid.org/cds"/>
      </ns4:Inputs>
      <ns4:Output qName="ns18:DelegationRecord" description="" isArray="true" xmlns:ns18="http://gaards.cagrid.org/cds"/>
      <ns4:Exceptions>
       <ns4:Exception description="" name="CDSInternalFault" qname="ns19:CDSInternalFault" xmlns:ns19="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
-      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns20:PermissionDeniedFault" xmlns:ns20="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
      </ns4:Exceptions>
     </ns4:Method>
    </ns4:Methods>
-   <ns21:ResourcePropertiesList xsi:type="ns21:ResourcePropertiesListType" xmlns:ns21="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns21:ResourceProperty qName="ns22:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns21:ResourcePropertyType" xmlns:ns22="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns21:ResourcePropertiesList>
-   <ns23:ServiceSecurity xsi:type="ns23:ServiceSecurity" xmlns:ns23="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns23:SecuritySetting xsi:type="ns23:SecuritySetting">Custom</ns23:SecuritySetting>
-    <ns23:TransportLevelSecurity xsi:type="ns23:TransportLevelSecurity">
-     <ns23:CommunicationMethod xsi:type="ns23:CommunicationMethod">Privacy</ns23:CommunicationMethod>
-    </ns23:TransportLevelSecurity>
-    <ns23:RunAsMode xsi:type="ns23:RunAsMode">System</ns23:RunAsMode>
-    <ns23:AnonymousClients xsi:type="ns23:AnonymousCommunication">No</ns23:AnonymousClients>
-    <ns23:ServiceAuthorization xsi:type="ns23:ServiceAuthorization">
-     <ns23:NoAuthorization xsi:type="ns23:NoAuthorization"/>
-    </ns23:ServiceAuthorization>
-   </ns23:ServiceSecurity>
+   <ns20:ResourcePropertiesList xsi:type="ns20:ResourcePropertiesListType" xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns20:ResourceProperty qName="ns21:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns20:ResourcePropertyType" xmlns:ns21="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns20:ResourcePropertiesList>
+   <ns22:ServiceSecurity xsi:type="ns22:ServiceSecurity" xmlns:ns22="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns22:SecuritySetting xsi:type="ns22:SecuritySetting">Custom</ns22:SecuritySetting>
+    <ns22:TransportLevelSecurity xsi:type="ns22:TransportLevelSecurity">
+     <ns22:CommunicationMethod xsi:type="ns22:CommunicationMethod">Privacy</ns22:CommunicationMethod>
+    </ns22:TransportLevelSecurity>
+    <ns22:RunAsMode xsi:type="ns22:RunAsMode">System</ns22:RunAsMode>
+    <ns22:AnonymousClients xsi:type="ns22:AnonymousCommunication">No</ns22:AnonymousClients>
+    <ns22:ServiceAuthorization xsi:type="ns22:ServiceAuthorization">
+     <ns22:NoAuthorization xsi:type="ns22:NoAuthorization"/>
+    </ns22:ServiceAuthorization>
+   </ns22:ServiceSecurity>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
   </ns3:Service>
   <ns3:Service name="DelegatedCredential" namespace="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential" packageName="org.cagrid.gaards.cds.delegated" resourceFrameworkType="custom" xsi:type="ns3:ServiceType">
-   <ns24:Methods xsi:type="ns24:MethodsType" xmlns:ns24="gme://gov.nih.nci.cagrid.introduce/1/Methods">
-    <ns24:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns24:MethodType">
-     <ns24:Output qName="ns25:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns25="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
-     <ns24:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
-     <ns24:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
-    </ns24:Method>
-    <ns24:Method description="This method allows an authorized user to get a delegated credential." isImported="false" isProvided="false" name="getDelegatedCredential" xsi:type="ns24:MethodType">
-     <ns24:Inputs>
-      <ns24:Input qName="ns26:PublicKey" description="" isArray="false" name="publicKey" xmlns:ns26="http://gaards.cagrid.org/cds"/>
-     </ns24:Inputs>
-     <ns24:Output qName="ns27:CertificateChain" description="" isArray="false" xmlns:ns27="http://gaards.cagrid.org/cds"/>
-     <ns24:Exceptions>
-      <ns24:Exception description="" name="CDSInternalFault" qname="ns28:CDSInternalFault" xmlns:ns28="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
-      <ns24:Exception description="" name="DelegationFault" qname="ns29:DelegationFault" xmlns:ns29="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
-      <ns24:Exception description="" name="PermissionDeniedFault" qname="ns30:PermissionDeniedFault" xmlns:ns30="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
-     </ns24:Exceptions>
-    </ns24:Method>
-   </ns24:Methods>
-   <ns31:ResourcePropertiesList xsi:type="ns31:ResourcePropertiesListType" xmlns:ns31="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
-   <ns32:ServiceSecurity xsi:type="ns32:ServiceSecurity" xmlns:ns32="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns32:SecuritySetting xsi:type="ns32:SecuritySetting">Custom</ns32:SecuritySetting>
-    <ns32:TransportLevelSecurity xsi:type="ns32:TransportLevelSecurity">
-     <ns32:CommunicationMethod xsi:type="ns32:CommunicationMethod">Privacy</ns32:CommunicationMethod>
-    </ns32:TransportLevelSecurity>
-    <ns32:RunAsMode xsi:type="ns32:RunAsMode">System</ns32:RunAsMode>
-    <ns32:AnonymousClients xsi:type="ns32:AnonymousCommunication">No</ns32:AnonymousClients>
-    <ns32:ServiceAuthorization xsi:type="ns32:ServiceAuthorization">
-     <ns32:NoAuthorization xsi:type="ns32:NoAuthorization"/>
-    </ns32:ServiceAuthorization>
-   </ns32:ServiceSecurity>
+   <ns23:Methods xsi:type="ns23:MethodsType" xmlns:ns23="gme://gov.nih.nci.cagrid.introduce/1/Methods">
+    <ns23:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns23:MethodType">
+     <ns23:Output qName="ns24:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+     <ns23:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
+     <ns23:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
+    </ns23:Method>
+    <ns23:Method description="This method allows an authorized user to get a delegated credential." isImported="false" isProvided="false" name="getDelegatedCredential" xsi:type="ns23:MethodType">
+     <ns23:Inputs>
+      <ns23:Input qName="ns25:PublicKey" description="" isArray="false" name="publicKey" xmlns:ns25="http://gaards.cagrid.org/cds"/>
+     </ns23:Inputs>
+     <ns23:Output qName="ns26:CertificateChain" description="" isArray="false" xmlns:ns26="http://gaards.cagrid.org/cds"/>
+     <ns23:Exceptions>
+      <ns23:Exception description="" name="CDSInternalFault" qname="ns27:CDSInternalFault" xmlns:ns27="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
+      <ns23:Exception description="" name="DelegationFault" qname="ns28:DelegationFault" xmlns:ns28="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
+      <ns23:Exception description="" name="PermissionDeniedFault" qname="ns29:PermissionDeniedFault" xmlns:ns29="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
+     </ns23:Exceptions>
+    </ns23:Method>
+   </ns23:Methods>
+   <ns30:ResourcePropertiesList xsi:type="ns30:ResourcePropertiesListType" xmlns:ns30="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns31:ServiceSecurity xsi:type="ns31:ServiceSecurity" xmlns:ns31="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns31:SecuritySetting xsi:type="ns31:SecuritySetting">Custom</ns31:SecuritySetting>
+    <ns31:TransportLevelSecurity xsi:type="ns31:TransportLevelSecurity">
+     <ns31:CommunicationMethod xsi:type="ns31:CommunicationMethod">Privacy</ns31:CommunicationMethod>
+    </ns31:TransportLevelSecurity>
+    <ns31:RunAsMode xsi:type="ns31:RunAsMode">System</ns31:RunAsMode>
+    <ns31:AnonymousClients xsi:type="ns31:AnonymousCommunication">No</ns31:AnonymousClients>
+    <ns31:ServiceAuthorization xsi:type="ns31:ServiceAuthorization">
+     <ns31:NoAuthorization xsi:type="ns31:NoAuthorization"/>
+    </ns31:ServiceAuthorization>
+   </ns31:ServiceSecurity>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Represents a Delegated Credential</ns3:description>
   </ns3:Service>
  </ns3:Services>
- <ns33:Extensions xsi:type="ns33:ExtensionsType" xmlns:ns33="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns33:Extension name="cagrid_metadata" version="1.1" xsi:type="ns33:ExtensionType"/>
- </ns33:Extensions>
- <ns34:ServiceProperties xmlns:ns34="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns34:Property description="The configuration file for the credential delegation service." isFromETC="true" key="cdsConfiguration" value="cds-configuration.xml"/>
-  <ns34:Property description="The properties file for the Credential Delegation Service." isFromETC="true" key="cdsProperties" value="cds.properties"/>
- </ns34:ServiceProperties>
+ <ns32:Extensions xsi:type="ns32:ExtensionsType" xmlns:ns32="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns32:Extension name="cagrid_metadata" version="1.1" xsi:type="ns32:ExtensionType"/>
+ </ns32:Extensions>
+ <ns33:ServiceProperties xmlns:ns33="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns33:Property description="The configuration file for the credential delegation service." isFromETC="true" key="cdsConfiguration" value="cds-configuration.xml"/>
+  <ns33:Property description="The properties file for the Credential Delegation Service." isFromETC="true" key="cdsProperties" value="cds.properties"/>
+ </ns33:ServiceProperties>
 </ns1:ServiceDescription>

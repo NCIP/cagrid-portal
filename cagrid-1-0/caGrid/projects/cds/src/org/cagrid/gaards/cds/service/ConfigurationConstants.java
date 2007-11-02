@@ -6,5 +6,5 @@ public class ConfigurationConstants {
 	public static final String KEY_MANAGER_CONFIGURATION_BEAN = "keyManager";
 	public static final String DELEGATED_CREDENTIAL_MANAGER_CONFIGURATION_BEAN = "delegatedCredentialManager";
 	public static final String IDENTITY_POLICY_HANDLER = "identityPolicyHandler";
-	public static final String CDS_BEAN = "cds";
+	public static final String CDS_BEAN = "delegationManager";
 }

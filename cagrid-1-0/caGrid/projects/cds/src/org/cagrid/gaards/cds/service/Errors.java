@@ -38,6 +38,7 @@ public class Errors {
 	public static String CANNOT_GET_INVALID_STATUS = "Cannot get delegated credential, the signing credential has not been approved or has been suspended.";
 	public static String CANNOT_CHANGE_STATUS_TO_PENDING = "Cannot change the status of the signing credential to pending.";
 	
+	
 	public static CDSInternalFault getDatabaseFault(Exception e) {
 		return getInternalFault(UNEXPECTED_DATABASE_ERROR, e);
 	}

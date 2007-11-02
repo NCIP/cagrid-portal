@@ -966,10 +966,6 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				request);
 		
 		
-		
-		
-		
-		
 		DelegationIdentifier id = req.getDelegationIdentifier();
 		assertNotNull(id);
 		assertTrue(dcm.delegationExists(id));

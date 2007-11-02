@@ -63,7 +63,7 @@ public class CredentialDelegationServiceAuthorization implements PDP {
 		
 	}
 					
-	public static void authorizeFindDelegationRecords() throws RemoteException {
+	public static void authorizeFindMyDelegationRecords() throws RemoteException {
 		
 		
 	}
@@ -99,9 +99,9 @@ public class CredentialDelegationServiceAuthorization implements PDP {
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("findDelegationRecords")){
+		} else if(operation.getLocalPart().equals("findMyDelegationRecords")){
 			try{
-				authorizeFindDelegationRecords();
+				authorizeFindMyDelegationRecords();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
