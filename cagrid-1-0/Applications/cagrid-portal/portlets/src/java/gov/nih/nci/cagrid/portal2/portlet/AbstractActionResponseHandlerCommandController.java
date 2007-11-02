@@ -19,7 +19,7 @@ import org.springframework.web.portlet.mvc.AbstractCommandController;
 public abstract class AbstractActionResponseHandlerCommandController extends
 		AbstractCommandController {
 	
-	private ActionResponseHandler actionResponseHandler;
+	private CommandActionResponseHandler actionResponseHandler;
 
 	/**
 	 * 
@@ -53,7 +53,7 @@ public abstract class AbstractActionResponseHandlerCommandController extends
 	protected void handleAction(ActionRequest request, ActionResponse response,
 			Object obj, BindException errors) throws Exception {
 		doHandleAction(request, response, obj, errors);
-		getActionResponseHandler().handle(request, response);
+		getActionResponseHandler().handle(request, response, obj, errors);
 	}
 	
 	protected abstract void doHandleAction(ActionRequest request, ActionResponse response, Object obj, BindException errors) throws Exception;
@@ -70,11 +70,11 @@ public abstract class AbstractActionResponseHandlerCommandController extends
 		throw new IllegalStateException(getClass().getName() + " does not handle render phase.");
 	}
 
-	public ActionResponseHandler getActionResponseHandler() {
+	public CommandActionResponseHandler getActionResponseHandler() {
 		return actionResponseHandler;
 	}
 
-	public void setActionResponseHandler(ActionResponseHandler actionResponseHandler) {
+	public void setActionResponseHandler(CommandActionResponseHandler actionResponseHandler) {
 		this.actionResponseHandler = actionResponseHandler;
 	}
 

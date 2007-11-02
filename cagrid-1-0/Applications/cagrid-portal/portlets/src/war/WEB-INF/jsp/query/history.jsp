@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/query/tabs.jspf" %>
 
 <script type='text/javascript' src='<c:url value="/dwr/interface/QueryHistoryFacade.js"/>'></script>
 <script type='text/javascript' src='<c:url value="/dwr/engine.js"/>'></script>
@@ -11,7 +12,7 @@
 
 		var form = document.<portlet:namespace/>HistoryOperationForm;
 		form.operation.value = operation;
-		form.selectedCqlQueryInstanceId.value = instanceId;
+		form.instanceId.value = instanceId;
 		
 		var confirmed = true;
 		if(operation == 'delete'){
@@ -120,7 +121,7 @@ No queries to display.
 <c:set var="formName"><portlet:namespace/>HistoryOperationForm</c:set>
 <form:form action="${action}" name="${formName}">
 <input type="hidden" name="operation" value=""/>
-<input type="hidden" name="selectedCqlQueryInstanceId" value=""/>
+<input type="hidden" name="instanceId" value=""/>
 </form:form>
 
 <c:forEach var="instance" items="${instances}">

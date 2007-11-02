@@ -18,6 +18,8 @@ import gov.nih.nci.cagrid.portal2.util.PortalUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -25,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 public class CQLQueryService {
+	
+	private static final Log logger = LogFactory.getLog(CQLQueryService.class);
 
 	private PortalUserDao portalUserDao;
 
@@ -47,6 +51,8 @@ public class CQLQueryService {
 	public CQLQueryInstance submitQuery(GridDataService service,
 			final String cql) throws Exception {
 
+		logger.debug("Submitted Query: "+ cql);
+		
 //		PortalUser user = getSharedApplicationModel().getPortalUser();
 		//TODO: get the portal user
 		PortalUser user = null;

@@ -156,17 +156,79 @@
 		<property name="actionResponseHandler">
 			<bean class="gov.nih.nci.cagrid.portal2.portlet.tab.TabActionResponseHandler">
 				<property name="tabControlConfig" ref="queryTabControlConfig"/>
-				<property name="newTabPath" value="/query/history"/>
+				<property name="newTabPath" value="/history"/>
 				<property name="errorTabPath" value="/query/xml"/>
 			</bean>
 		</property>	
 	</bean>
 	
-	<bean id="viewQueryHistoryController"
-		class="gov.nih.nci.cagrid.portal2.portlet.query.history.ViewQueryHistoryController"
+	<bean 
+		id="submitBuilderQueryController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.builder.SubmitBuilderQueryController"
 		autowire="byName">
-		<property name="objectName" value="cqlQueryCommand"/>
-		<property name="successViewName" value="/xml" />
+		<property name="commandName" value="cqlQueryCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryCommand"/>
+		<property name="actionResponseHandler">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.tab.TabActionResponseHandler">
+				<property name="tabControlConfig" ref="queryTabControlConfig"/>
+				<property name="newTabPath" value="/history"/>
+				<property name="errorTabPath" value="/query/builder"/>
+			</bean>
+		</property>	
+	</bean>
+	
+	<bean id="viewQueryHistoryController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.results.ViewQueryHistoryController"
+		autowire="byName">
+		<property name="objectName" value="instances"/>
+		<property name="successViewName" value="/history" />
+	</bean>
+	
+	<bean 
+		id="selectQueryInstanceController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.results.SelectQueryInstanceController"
+		autowire="byName">
+		<property name="commandName" value="selectQueryInstanceCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.query.results.SelectQueryInstanceCommand"/>
+		<property name="actionResponseHandler">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.tab.TabActionResponseHandler">
+				<property name="tabControlConfig" ref="queryTabControlConfig"/>
+				<property name="newTabPath" value="/results/tabular"/>
+			</bean>
+		</property>	
+	</bean>
+	
+	<bean id="viewQueryResultsTabularController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.results.ViewQueryResultsController"
+		autowire="byName">
+		<property name="objectName" value="resultsCommand"/>
+		<property name="successViewName" value="/results/tabular" />
+		<property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>
+		<property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
+	</bean>
+	
+	<bean id="viewQueryResultsXmlController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.results.ViewQueryResultsController"
+		autowire="byName">
+		<property name="objectName" value="resultsCommand"/>
+		<property name="successViewName" value="/results/xml" />
+		<property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>
+		<property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
+	</bean>
+	
+	<bean 
+		id="scrollQueryInstanceResultsController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.results.ScrollQueryInstanceResultsController"
+		autowire="byName">
+		<property name="commandName" value="scrollCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.util.ScrollCommand"/>
+		<property name="actionResponseHandler">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.tab.TabActionResponseHandler">
+				<property name="tabControlConfig" ref="queryTabControlConfig"/>
+				<property name="newTabPath" value="/results/tabular"/>
+			</bean>
+		</property>	
+		<property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
 	</bean>
 	
 	<bean id="tabHandlerMapping" class="gov.nih.nci.cagrid.portal2.portlet.tab.TabHandlerMapping">
@@ -190,11 +252,9 @@
 				<entry key="/query/builder/editCriterionForm" value-ref="viewCriterionController" />
 				<entry key="/query/builder/editQueryModifierForm" value-ref="viewQueryModifierController" />
 				<entry key="/query/xml" value-ref="viewCqlXmlController" />
-				<!--
-				<entry key="/history" value-ref="viewHistoryController" />
-				<entry key="/results/tabular" value-ref="viewResultsTableController" />
-				<entry key="/results/xml" value-ref="viewResultsXmlController" />
-				 -->
+				<entry key="/history" value-ref="viewQueryHistoryController" />
+				<entry key="/results/tabular" value-ref="viewQueryResultsTabularController" />
+				<entry key="/results/xml" value-ref="viewQueryResultsXmlController" />
 			</map>
 		</property>
 	</bean>
@@ -205,6 +265,7 @@
 		<property name="order" value="2" />
 		
 		<property name="parameterName" value="operation"/>
+		<property name="applyWebRequestInterceptorsToRenderPhaseOnly" value="false"/>
 		
 		<property name="interceptors">
 			<list>
@@ -223,6 +284,15 @@
 						<entry key="updateCriterion" value-ref="updateCriterionController" />
 						<entry key="updateQueryModifier" value-ref="updateQueryModifierController" />
 						<entry key="exportToXml" value-ref="exportToXmlController" />
+						<entry key="submitQuery" value-ref="submitQueryController" />
+						<entry key="submitBuilderQuery" value-ref="submitBuilderQueryController" />
+						<entry key="selectQueryInstance" value-ref="selectQueryInstanceController" />
+						<!-- 
+						<entry key="selectQueryInstanceError" value-ref="selectQueryInstanceErrorController" />
+						<entry key="cancelQueryInstance" value-ref="cancelQueryInstanceController" />
+						<entry key="deleteQueryInstance" value-ref="deleteQueryInstanceController" />
+						 -->
+						 <entry key="scrollQueryInstanceResults" value-ref="scrollQueryInstanceResultsController" />
 					</map>
 				</entry>
 			</map>
@@ -359,10 +429,6 @@
 		</property>
 	</bean>
 	
-	<bean id="queryModel" class="gov.nih.nci.cagrid.portal2.portlet.query.QueryModel" scope="session" autowire="byName">
-		<aop:scoped-proxy proxy-target-class="true"/>
-	</bean>
-	
 	<bean id="criteriaBeanPrototype" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.CriteriaBean" scope="prototype">
 		<property name="hibernateTemplate" ref="hibernateTemplate"/>
 	</bean>
@@ -374,23 +440,6 @@
 	<bean id="cqlQueryService" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryService" autowire="byName"/>
 
 
-	<bean id="cqlQueryInstanceExecutorPrototype" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.DefaultCQLQueryInstanceExecutor" scope="prototype">
-		<property name="executorService" ref="executorService"/>
-		<property name="cqlQueryInstanceListener">
-			<bean class="gov.nih.nci.cagrid.portal2.portlet.query.cql.DefaultCQLQueryInstanceListener">
-				<property name="cqlQueryInstanceDao" ref="cqlQueryInstanceDao"/>
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="executorService" class="gov.nih.nci.cagrid.portal2.portlet.util.DelegatingExecutorService">
 	
-		<property name="executorService">
-			<bean class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
-				<constructor-arg value="20"/>
-			</bean>
-		</property>
-	
-	</bean>
 	
 </beans>

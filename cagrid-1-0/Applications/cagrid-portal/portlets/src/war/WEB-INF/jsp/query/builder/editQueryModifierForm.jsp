@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/query/tabs.jspf" %>
 
 <c:set var="countOnlyInputId"><portlet:namespace/>countOnlyInput</c:set>
 <c:set var="distinctAttributeInputId"><portlet:namespace/>distinctAttributeInput</c:set>

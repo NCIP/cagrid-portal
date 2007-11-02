@@ -15,6 +15,13 @@
 		form.submit();
 	}
 	
+	function <portlet:namespace/>submitBuilderQuery(){
+		var form = document.<portlet:namespace/>criteriaBeanForm;
+		form.action = '<portlet:actionURL/>';
+		form.operation.value = 'submitBuilderQuery';
+		form.submit();
+	}
+	
 	//]]>
 </script>
 <c:set var="criteriaBeanFormName"><portlet:namespace/>criteriaBeanForm</c:set>
@@ -22,6 +29,7 @@
 	<input type="button" value="Edit Query Modifiers" onclick="<portlet:namespace/>goToPath('/query/builder/editQueryModifierForm')"/>
 	<input type="button" value="Add Criterion" onclick="<portlet:namespace/>goToPath('/query/builder/umlClass')"/>
 	<input type="button" value="Export To XML" onclick="<portlet:namespace/>exportToXml()"/>
+	<input type="button" value="Submit Query" onclick="<portlet:namespace/>submitBuilderQuery()"/>
 	<input type="hidden" name="selectedTabPath" value=""/>
 	<input type="hidden" name="operation" value=""/>
 </form:form>

@@ -70,6 +70,9 @@ public class SubmitQueryController extends AbstractQueryActionController {
 			throws Exception {
 
 		CQLQueryCommand command = (CQLQueryCommand) obj;
+		
+		getQueryModel().setWorkingQuery(command);
+		
 		logger.debug("url = " + command.getDataServiceUrl());
 		try {
 			String url = command.getDataServiceUrl().trim();
@@ -90,6 +93,7 @@ public class SubmitQueryController extends AbstractQueryActionController {
 				dataService = (GridDataService) getGridServiceDao().getByUrl(
 						command.getDataServiceUrl().trim());
 			} catch (ClassCastException ex) {
+				logger.error(ex);
 				errors.rejectValue("dataServiceUrl",
 						PortletConstants.WRONG_SERVICE_TYPE,
 						new String[] { command.getDataServiceUrl() }, command
@@ -103,6 +107,7 @@ public class SubmitQueryController extends AbstractQueryActionController {
 			}
 
 			if (!errors.hasErrors() && dataService == null) {
+				logger.error("didn't find data service");
 				errors.rejectValue("dataServiceUrl",
 						PortletConstants.NONEXSTING_DATA_SERVICE_MSG,
 						new String[] { command.getDataServiceUrl() },
@@ -123,6 +128,7 @@ public class SubmitQueryController extends AbstractQueryActionController {
 					String cql = w.toString();
 					command.setCqlQuery(cql);
 				} catch (Exception ex) {
+					logger.error(ex);
 					errors.rejectValue("cqlQuery", PortletConstants.BAD_CQL_MSG, null, "Could not parse CQL query.");
 				}
 
@@ -130,7 +136,9 @@ public class SubmitQueryController extends AbstractQueryActionController {
 					try {
 						getCqlQueryService().submitQuery(dataService,
 								command.getCqlQuery());
+						
 					} catch (Exception ex) {
+						logger.error(ex);
 						errors.reject(PortletConstants.CQL_QUERY_SUBMIT_ERROR_MSG, new String[]{ex.getMessage()}, "Error submitting CQL query.");
 					}
 				}

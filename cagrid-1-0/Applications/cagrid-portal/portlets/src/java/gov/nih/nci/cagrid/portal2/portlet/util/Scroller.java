@@ -119,5 +119,17 @@ public class Scroller<T> {
 		assertPageSize(pageSize);
 		this.pageSize = pageSize;
 	}
+	
+	public void scroll(ScrollCommand command){
+		if(ScrollOperation.FIRST.equals(command.getScrollOp())){
+			first();
+		}else if(ScrollOperation.PREVIOUS.equals(command.getScrollOp())){
+			previous();
+		}else if(ScrollOperation.NEXT.equals(command.getScrollOp())){
+			next();
+		}else if(ScrollOperation.LAST.equals(command.getScrollOp())){
+			last();
+		}
+	}
 
 }

@@ -57,7 +57,7 @@ public class ViewCQLQueryInstanceResultsController extends AbstractController
 	public void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
 
-		CQLQueryInstanceResultsCommand command = getCommand(request);
+		CQLQueryInstanceResultsBean command = getCommand(request);
 		TableScroller scroller = command.getTableScroller();
 		PortletUtils.doScrollOp(request, scroller);
 
@@ -69,7 +69,7 @@ public class ViewCQLQueryInstanceResultsController extends AbstractController
 		logger.debug("Handling render request");
 
 		ModelAndView mav = new ModelAndView(getViewName());
-		CQLQueryInstanceResultsCommand command = getCommand(request);
+		CQLQueryInstanceResultsBean command = getCommand(request);
 
 		Integer instanceId = getSharedApplicationModel()
 				.getSelectedCqlQueryInstanceId();
@@ -146,12 +146,12 @@ public class ViewCQLQueryInstanceResultsController extends AbstractController
 				Locale.getDefault());
 	}
 
-	private CQLQueryInstanceResultsCommand getCommand(PortletRequest request) {
+	private CQLQueryInstanceResultsBean getCommand(PortletRequest request) {
 
-		CQLQueryInstanceResultsCommand command = (CQLQueryInstanceResultsCommand) request
+		CQLQueryInstanceResultsBean command = (CQLQueryInstanceResultsBean) request
 				.getPortletSession().getAttribute(getCommandName());
 		if (command == null) {
-			command = new CQLQueryInstanceResultsCommand();
+			command = new CQLQueryInstanceResultsBean();
 			request.getPortletSession().setAttribute(getCommandName(), command);
 		}
 		return command;

@@ -12,7 +12,28 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
+	<bean id="queryModel" class="gov.nih.nci.cagrid.portal2.portlet.query.QueryModel" scope="globalSession" autowire="byName">
+		<aop:scoped-proxy proxy-target-class="true"/>
+	</bean>
 	
+	<bean id="cqlQueryInstanceExecutorPrototype" class="gov.nih.nci.cagrid.portal2.portlet.query.cql.DefaultCQLQueryInstanceExecutor" scope="prototype">
+		<property name="executorService" ref="executorService"/>
+		<property name="cqlQueryInstanceListener">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.query.cql.DefaultCQLQueryInstanceListener">
+				<property name="cqlQueryInstanceDao" ref="cqlQueryInstanceDao"/>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="executorService" class="gov.nih.nci.cagrid.portal2.portlet.util.DelegatingExecutorService">
+	
+		<property name="executorService">
+			<bean class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
+				<constructor-arg value="20"/>
+			</bean>
+		</property>
+	
+	</bean>
 	
 	<bean id="sharedApplicationModel" class="gov.nih.nci.cagrid.portal2.portlet.SessionBasedSharedApplicationModel" scope="globalSession">
 		<aop:scoped-proxy proxy-target-class="true"/>

@@ -15,10 +15,6 @@
     	<param name="include" value="id, finishTime, startTime, state"/>
     </convert>
     
-    <create creator="spring" javascript="TreeFacade">
-    	<param name="beanName" value="treeFacade"/>
-    </create>
-    
     <create creator="spring" javascript="ServiceDetailsTreeFacade">
     	<param name="beanName" value="serviceDetailsTreeFacade"/>
     </create>

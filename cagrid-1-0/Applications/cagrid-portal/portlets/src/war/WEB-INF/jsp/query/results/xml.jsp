@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/include.jsp" %>
 <%@ include file="/WEB-INF/jsp/query/tabs.jspf" %>
 
 <script type="text/javascript"><!--
@@ -7,11 +7,11 @@
  * a partir du fichier resize.js du projet DotClear
  * (c) 2005 Nicolas Martin & Olivier Meunier and contributors
  */
-jQuery.fn.<portlet:namespace/>cqlXmlresizehandle = function() {
+jQuery.fn.<portlet:namespace/>resultsXmlresizehandle = function() {
   return this.each(function() {
     var me = jQuery(this);
     me.after(
-      jQuery('<div class="<portlet:namespace/>cqlXmlresizehandle"></div>')
+      jQuery('<div class="<portlet:namespace/>resultsXmlresizehandle"></div>')
       .bind('mousedown', function(e) {
         var h = me.height();
         var y = e.clientY;
@@ -34,12 +34,12 @@ jQuery.fn.<portlet:namespace/>cqlXmlresizehandle = function() {
 
 
 jQuery(document).ready(function(){
-  jQuery("#<portlet:namespace/>cqlXml").<portlet:namespace/>cqlXmlresizehandle();
+  jQuery("#<portlet:namespace/>resultsXml").<portlet:namespace/>resultsXmlresizehandle();
 });
 // --></script>
 
 <style>
-.<portlet:namespace/>cqlXmlresizehandle {
+.<portlet:namespace/>resultsXmlresizehandle {
 	background:transparent url("http://www.jquery.info/images/resizer.png") no-repeat scroll 45%;
 	cursor:s-resize;
 	font-size:0.1em;
@@ -48,31 +48,28 @@ jQuery(document).ready(function(){
 }
 </style>
 
-<portlet:actionURL var="action" />
-<form:form action="${action}" commandName="cqlQueryCommand">
-	<input type="hidden" name="operation" value="submitQuery"/>
-	<form:errors path="*"/>
-	<table>
-		<tr>
-			<td>URL</td>
-			<td><form:input path="dataServiceUrl" size="100"/><br/>
-				<form:errors path="dataServiceUrl"/></td>
-		</tr>
-		<tr>
-			<td valign="top">Query</td>
-			<td>
-				<div style="width:500px;">
-				<c:set var="cqlXmlElId"><portlet:namespace/>cqlXml</c:set>
-				<form:textarea id="${cqlXmlElId}" cssStyle="width:100%; height:200px" path="cqlQuery"/>
-				</div>
-			<br/>
-			<form:errors path="cqlQuery"/>
-			</td>				
-		</tr>
-		<tr>
-			<td colspan="2">
-				<input type="submit" value="Submit Query" />
-			</td>
-		</tr>
-	</table>
-</form:form>
+<style type="text/css">
+<!--
+<%@ include file="/css/xmlverbatim.css" %>
+-->
+</style>
+<c:choose>
+<c:when test="${empty resultsCommand.instance.result}">
+No results to display.
+</c:when>
+<c:otherwise>
+<c:set var="scroller" value="${resultsCommand.tableScroller}"/>
+<c:choose>
+	<c:when test="${fn:length(scroller.page) == 0}">
+		Results are empty.
+	</c:when>
+	<c:otherwise>
+		<div style="width:500px;">
+		<div id="<portlet:namespace/>resultsXml" style="width:100%; height:200px; overflow:scroll">
+<c:out value="${resultsCommand.prettyXml}" escapeXml="false"/>
+		</div>
+		</div>
+	</c:otherwise>
+</c:choose>
+</c:otherwise>
+</c:choose>

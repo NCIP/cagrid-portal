@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.portal2.dao.CQLQueryInstanceDao;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.QueryInstanceState;
 import gov.nih.nci.cagrid.portal2.portlet.SharedApplicationModel;
+import gov.nih.nci.cagrid.portal2.portlet.query.QueryModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class CQLQueryHistoryFacade {
 	private static final Log logger = LogFactory
 			.getLog(CQLQueryHistoryFacade.class);
 
-	private SharedApplicationModel sharedApplicationModel;
+	private QueryModel queryModel;
 	private String requestAttributeName;
 	private String renderServletUrl;
 	private CQLQueryInstanceDao cqlQueryInstanceDao;
@@ -41,7 +42,7 @@ public class CQLQueryHistoryFacade {
 
 	public List<CQLQueryInstance> getActiveInstances() {
 		List<CQLQueryInstance> activeInstances = new ArrayList<CQLQueryInstance>();
-		List<CQLQueryInstance> submitted = getSharedApplicationModel()
+		List<CQLQueryInstance> submitted = getQueryModel()
 				.getSubmittedCqlQueries();
 		for (CQLQueryInstance instance : submitted) {
 			if (isActive(instance)) {
@@ -60,7 +61,7 @@ public class CQLQueryHistoryFacade {
 	public CQLQueryInstance getInstance(Integer instanceId) {
 		
 		CQLQueryInstance instance = null;
-		List<CQLQueryInstance> submitted = getSharedApplicationModel()
+		List<CQLQueryInstance> submitted = getQueryModel()
 				.getSubmittedCqlQueries();
 		
 		logger.debug("Looking for instance '" + instanceId + "'");
@@ -108,15 +109,6 @@ public class CQLQueryHistoryFacade {
 		return html;
 	}
 
-	public SharedApplicationModel getSharedApplicationModel() {
-		return sharedApplicationModel;
-	}
-
-	public void setSharedApplicationModel(
-			SharedApplicationModel sharedApplicationModel) {
-		this.sharedApplicationModel = sharedApplicationModel;
-	}
-
 	public String getRequestAttributeName() {
 		return requestAttributeName;
 	}
@@ -139,6 +131,14 @@ public class CQLQueryHistoryFacade {
 
 	public void setCqlQueryInstanceDao(CQLQueryInstanceDao cqlQueryInstanceDao) {
 		this.cqlQueryInstanceDao = cqlQueryInstanceDao;
+	}
+
+	public QueryModel getQueryModel() {
+		return queryModel;
+	}
+
+	public void setQueryModel(QueryModel queryModel) {
+		this.queryModel = queryModel;
 	}
 
 }

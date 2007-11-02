@@ -34,6 +34,7 @@ public class QueryModel implements ApplicationContextAware {
 	private CQLQueryCommand workingQuery;
 	private Map<Integer, CQLQueryInstanceExecutor> executors = new HashMap<Integer, CQLQueryInstanceExecutor>();
 	private ApplicationContext applicationContext;
+	private CQLQueryInstance selectedQueryInstance;
 	
 	/**
 	 * 
@@ -133,6 +134,25 @@ public class QueryModel implements ApplicationContextAware {
 
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;
+	}
+
+	public void selectQueryInstance(Integer instanceId) {
+		CQLQueryInstance selected = null;
+		for (CQLQueryInstance instance : getSubmittedCqlQueries()) {
+			if (instance.getId().equals(instanceId)) {
+				selected = instance;
+				break;
+			}
+		}
+		setSelectedQueryInstance(selected);
+	}
+
+	public CQLQueryInstance getSelectedQueryInstance() {
+		return selectedQueryInstance;
+	}
+
+	public void setSelectedQueryInstance(CQLQueryInstance selectedQueryInstance) {
+		this.selectedQueryInstance = selectedQueryInstance;
 	}
 
 }

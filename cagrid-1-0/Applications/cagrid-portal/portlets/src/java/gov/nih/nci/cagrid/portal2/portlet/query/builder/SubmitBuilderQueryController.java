@@ -3,7 +3,6 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.query.builder;
 
-import gov.nih.nci.cagrid.portal2.portlet.query.AbstractQueryActionController;
 import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryBean;
 import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryCommand;
 import gov.nih.nci.cagrid.portal2.portlet.tree.TreeFacade;
@@ -17,23 +16,23 @@ import org.springframework.validation.BindException;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
+ *
  */
-public class ExportToXmlController extends AbstractQueryActionController {
-
-	private TreeFacade cqlQueryTreeFacade;
+public class SubmitBuilderQueryController extends SubmitQueryController {
 	
+	private TreeFacade cqlQueryTreeFacade;
+
 	/**
 	 * 
 	 */
-	public ExportToXmlController() {
-
+	public SubmitBuilderQueryController() {
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * @param commandClass
 	 */
-	public ExportToXmlController(Class commandClass) {
+	public SubmitBuilderQueryController(Class commandClass) {
 		super(commandClass);
 
 	}
@@ -42,18 +41,11 @@ public class ExportToXmlController extends AbstractQueryActionController {
 	 * @param commandClass
 	 * @param commandName
 	 */
-	public ExportToXmlController(Class commandClass, String commandName) {
+	public SubmitBuilderQueryController(Class commandClass, String commandName) {
 		super(commandClass, commandName);
 
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.nih.nci.cagrid.portal2.portlet.AbstractActionResponseHandlerCommandController#doHandleAction(javax.portlet.ActionRequest,
-	 *      javax.portlet.ActionResponse, java.lang.Object,
-	 *      org.springframework.validation.BindException)
-	 */
+	
 	@Override
 	protected void doHandleAction(ActionRequest request,
 			ActionResponse response, Object obj, BindException errors)
@@ -61,9 +53,12 @@ public class ExportToXmlController extends AbstractQueryActionController {
 		CQLQueryCommand command = (CQLQueryCommand)obj;
 		CQLQueryBean cqlQueryBean = (CQLQueryBean)getCqlQueryTreeFacade().getRootNode().getContent();
 		command.setCqlQuery(cqlQueryBean.toXml());
-		command.setDataServiceUrl(getQueryModel().getSelectedService().getUrl());
+		command.setDataServiceUrl(getQueryModel().getSelectedService().getUrl());		
+		
+		super.doHandleAction(request, response, command, errors);
 	}
-
+	
+	@Override
 	protected Object getCommand(PortletRequest request) throws Exception {
 		CQLQueryCommand command = getQueryModel().getWorkingQuery();
 		if (command == null) {
@@ -72,7 +67,7 @@ public class ExportToXmlController extends AbstractQueryActionController {
 		}
 		return command;
 	}
-	
+
 	@Required
 	public TreeFacade getCqlQueryTreeFacade() {
 		return cqlQueryTreeFacade;

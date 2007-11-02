@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.portal2.portlet.util.TableScroller;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
-public class CQLQueryInstanceResultsCommand {
+public class CQLQueryInstanceResultsBean {
 
 	private TableScroller tableScroller;
 	private CQLQueryInstance instance;
@@ -20,7 +20,7 @@ public class CQLQueryInstanceResultsCommand {
 	/**
 	 * 
 	 */
-	public CQLQueryInstanceResultsCommand() {
+	public CQLQueryInstanceResultsBean() {
 
 	}
 
