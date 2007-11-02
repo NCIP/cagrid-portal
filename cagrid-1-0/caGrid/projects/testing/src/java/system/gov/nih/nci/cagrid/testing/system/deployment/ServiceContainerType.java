@@ -7,7 +7,7 @@ package gov.nih.nci.cagrid.testing.system.deployment;
  * @author David Ervin
  * 
  * @created Oct 16, 2007 12:01:50 PM
- * @version $Id: ServiceContainerType.java,v 1.1 2007-10-31 19:29:07 dervin Exp $ 
+ * @version $Id: ServiceContainerType.java,v 1.2 2007-11-02 14:49:00 dervin Exp $ 
  */
 public enum ServiceContainerType {
 
@@ -18,8 +18,7 @@ public enum ServiceContainerType {
             case GLOBUS_CONTAINER:
                 return "../testing/resources/containers/minimal-ws-core-enum-4.0.3.zip";
             case TOMCAT_CONTAINER:
-                // return "resources/containers/minimal-tomcat.zip";
-                break;
+                return "../testing/resources/containers/minimal-tomcat-5.0.28-with-globus-4.0.3.zip";
             case JBOSS_CONTAINER:
                 
                 break;
