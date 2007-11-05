@@ -43,7 +43,7 @@ import com.counter.service.CounterServiceAddressingLocator;
  * @author David Ervin
  * 
  * @created Oct 19, 2007 12:01:22 PM
- * @version $Id: TomcatServiceContainer.java,v 1.3 2007-11-05 15:50:42 dervin Exp $ 
+ * @version $Id: TomcatServiceContainer.java,v 1.4 2007-11-05 16:19:58 dervin Exp $ 
  */
 public class TomcatServiceContainer extends ServiceContainer {
     
@@ -67,7 +67,7 @@ public class TomcatServiceContainer extends ServiceContainer {
     }
 
 
-    protected void deploy(File serviceDir) throws ContainerException {
+    protected void deploy(File serviceDir, List<String> deployArgs) throws ContainerException {
         String antHome = System.getenv(ENV_ANT_HOME);
         if (antHome == null || antHome.equals("")) {
             throw new ContainerException(ENV_ANT_HOME + " not set");
@@ -83,6 +83,11 @@ public class TomcatServiceContainer extends ServiceContainer {
             command.add(ant.getAbsolutePath() + ".bat");
         } else {
             command.add(ant.getAbsolutePath());
+        }
+        
+        // any arguments
+        if (deployArgs != null && deployArgs.size() != 0) {
+            command.addAll(deployArgs);
         }
 
         // target to execute

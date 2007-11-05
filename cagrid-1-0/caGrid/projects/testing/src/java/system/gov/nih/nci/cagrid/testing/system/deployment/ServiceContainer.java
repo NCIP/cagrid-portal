@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.ZipUtilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
@@ -16,7 +17,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Oct 12, 2007 9:37:44 AM
- * @version $Id: ServiceContainer.java,v 1.2 2007-11-05 15:50:42 dervin Exp $ 
+ * @version $Id: ServiceContainer.java,v 1.3 2007-11-05 16:19:58 dervin Exp $ 
  */
 public abstract class ServiceContainer {
     
@@ -70,13 +71,18 @@ public abstract class ServiceContainer {
     
     
     public void deployService(File serviceDir) throws Exception {
+        deployService(serviceDir, null);
+    }
+    
+    
+    public void deployService(File serviceDir, List<String> deployArgs) throws Exception {
         if (started) {
             throw new ContainerException("Container has already been started");
         }
         if (!unpacked) {
             throw new ContainerException("Container has not been unpacked");
         }
-        deploy(serviceDir);
+        deploy(serviceDir, deployArgs);
     }
     
     
@@ -117,5 +123,5 @@ public abstract class ServiceContainer {
     protected abstract void shutdown() throws ContainerException;
     
     
-    protected abstract void deploy(File serviceDir) throws ContainerException;
+    protected abstract void deploy(File serviceDir, List<String> deployArgs) throws ContainerException;
 }
