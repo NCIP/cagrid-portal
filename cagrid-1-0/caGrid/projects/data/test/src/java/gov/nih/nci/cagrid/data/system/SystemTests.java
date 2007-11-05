@@ -2,8 +2,6 @@ package gov.nih.nci.cagrid.data.system;
 
 import gov.nih.nci.cagrid.data.creation.CreationTests;
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
-import gov.nih.nci.cagrid.testing.core.TestingConstants;
-import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
@@ -29,28 +27,17 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.21 2007-11-02 17:48:47 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.22 2007-11-05 21:33:55 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     
     private static File auditorLogFile = new File("./dataServiceAuditing.log").getAbsoluteFile();
     
-    private static ServiceContainer container = null;
-    
-    static {
-        try {
-            PortPreference ports = new PortPreference(
-                Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + 501), 
-                Integer.valueOf(TestingConstants.TEST_PORT_UPPER_BOUND.intValue() + 501), null);
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER, null, ports);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-    }
+    private ServiceContainer container;
     
     
     public SystemTests() {
+        super();
         this.setName("Data Service System Tests");
     }
     
@@ -79,6 +66,15 @@ public class SystemTests extends BaseSystemTest {
 
 
     protected Vector steps() {
+        // initialize the service container instance
+        // I can only get away with this because steps() is called on story construction
+        try {
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        
         DataTestCaseInfo info = new CreationTests.TestDataServiceInfo();
         Vector steps = new Vector();
         // data service presumed to have been created

@@ -8,8 +8,6 @@ import gov.nih.nci.cagrid.data.system.EnableValidationStep;
 import gov.nih.nci.cagrid.data.system.RebuildServiceStep;
 import gov.nih.nci.cagrid.data.system.SetQueryProcessorStep;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.testing.core.TestingConstants;
-import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
@@ -35,22 +33,14 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:19:42 PM
- * @version $Id: BDTDataServiceSystemTests.java,v 1.9 2007-11-02 17:48:47 dervin Exp $ 
+ * @version $Id: BDTDataServiceSystemTests.java,v 1.10 2007-11-05 21:33:55 dervin Exp $ 
  */
 public class BDTDataServiceSystemTests extends BaseSystemTest {
     
-    private static ServiceContainer container = null;
+    private ServiceContainer container;
     
-    static {
-        try {
-            PortPreference ports = new PortPreference(
-                Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + 601), 
-                Integer.valueOf(TestingConstants.TEST_PORT_UPPER_BOUND.intValue() + 601), null);
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER, null, ports);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
+    public BDTDataServiceSystemTests() {
+        super();
     }
     
 	
@@ -86,6 +76,13 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 
 
 	protected Vector steps() {
+        try {
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        
         DataTestCaseInfo info = new BDTDataServiceCreationTests.TestBDTDataServiceInfo();
 		Vector<Step> steps = new Vector<Step>();
 		// assumes the BDT service has been created already

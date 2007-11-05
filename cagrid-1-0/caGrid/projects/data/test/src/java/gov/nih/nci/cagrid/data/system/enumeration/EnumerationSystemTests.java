@@ -7,8 +7,6 @@ import gov.nih.nci.cagrid.data.system.BaseSystemTest;
 import gov.nih.nci.cagrid.data.system.EnableValidationStep;
 import gov.nih.nci.cagrid.data.system.RebuildServiceStep;
 import gov.nih.nci.cagrid.data.system.SetQueryProcessorStep;
-import gov.nih.nci.cagrid.testing.core.TestingConstants;
-import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
@@ -38,21 +36,10 @@ import com.atomicobject.haste.framework.Step;
  */
 public class EnumerationSystemTests extends BaseSystemTest {
     
-    private static ServiceContainer container = null;
-    
-    static {
-        try {
-            PortPreference ports = new PortPreference(
-                Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + 701), 
-                Integer.valueOf(TestingConstants.TEST_PORT_UPPER_BOUND.intValue() + 701), null);
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER, null, ports);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-    }
+    private ServiceContainer container;
 
 	public EnumerationSystemTests() {
+        super();
 		this.setName("Enumeration Data Service System Tests");
 	}
     
@@ -81,6 +68,12 @@ public class EnumerationSystemTests extends BaseSystemTest {
 
 
 	protected Vector steps() {
+        try {
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
         DataTestCaseInfo info = new CreateEnumerationTests.TestEnumerationDataServiceInfo();
 		Vector steps = new Vector();
 		// an enumeration supporting data service is presumed to have been

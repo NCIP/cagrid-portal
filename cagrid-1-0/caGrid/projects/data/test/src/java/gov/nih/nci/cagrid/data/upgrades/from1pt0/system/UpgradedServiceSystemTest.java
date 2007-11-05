@@ -7,8 +7,6 @@ import gov.nih.nci.cagrid.data.system.InvokeDataServiceStep;
 import gov.nih.nci.cagrid.data.system.RebuildServiceStep;
 import gov.nih.nci.cagrid.data.system.SetQueryProcessorStep;
 import gov.nih.nci.cagrid.data.upgrades.from1pt0.UpgradeTo1pt2Tests;
-import gov.nih.nci.cagrid.testing.core.TestingConstants;
-import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
@@ -29,24 +27,17 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.12 2007-11-02 17:48:47 dervin Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.13 2007-11-05 21:33:55 dervin Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
     
-    private static ServiceContainer container = null;
+    private ServiceContainer container;
     
-    static {
-        try {
-            PortPreference ports = new PortPreference(
-                Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + 801), 
-                Integer.valueOf(TestingConstants.TEST_PORT_UPPER_BOUND.intValue() + 801), null);
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER, null, ports);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
+    public UpgradedServiceSystemTest() {
+        super();
     }
+    
     
     public String getName() {
         return "Data Service 1_0 to 1_2 Upgraded System Tests";
@@ -72,6 +63,13 @@ public class UpgradedServiceSystemTest extends Story {
 
 
 	protected Vector steps() {
+        try {
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        
         DataTestCaseInfo info = new UpgradeTo1pt2Tests.Upgrade1pt0to1pt1TestServiceInfo();
 		Vector steps = new Vector();
 		// steps to invoke the upgraded service 

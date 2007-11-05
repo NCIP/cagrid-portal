@@ -9,10 +9,14 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:21:41 PM
- * @version $Id: BaseSystemTest.java,v 1.1 2007-03-14 18:29:17 dervin Exp $ 
+ * @version $Id: BaseSystemTest.java,v 1.2 2007-11-05 21:33:55 dervin Exp $ 
  */
 public abstract class BaseSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
+    
+    public BaseSystemTest() {
+        super();
+    }
 	
 
 	protected String getIntroduceBaseDir() {

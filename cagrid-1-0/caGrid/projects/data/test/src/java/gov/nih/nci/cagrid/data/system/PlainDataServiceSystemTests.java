@@ -23,23 +23,15 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Sep 28, 2007 12:22:29 PM
- * @version $Id: PlainDataServiceSystemTests.java,v 1.5 2007-11-02 17:48:47 dervin Exp $ 
+ * @version $Id: PlainDataServiceSystemTests.java,v 1.6 2007-11-05 21:33:55 dervin Exp $ 
  */
 public class PlainDataServiceSystemTests extends BaseSystemTest {
     
-    private static ServiceContainer container = null;
-    
-    static {
-        try {
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-    }
-    
+    // because of a Haste weirdness, can't have = null on the end here
+    private ServiceContainer container;
     
     public PlainDataServiceSystemTests() {
+        super();
         setName("Plain Data Service System Test");
     }
     
@@ -69,6 +61,13 @@ public class PlainDataServiceSystemTests extends BaseSystemTest {
 
 
     protected Vector steps() {
+        try {
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        
         DataTestCaseInfo info = new CreationTests.PlainDataServiceInfo();
         Vector<Step> steps = new Vector<Step>();
         // data service presumed to have been created
