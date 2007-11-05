@@ -22,6 +22,7 @@ public class ListBean extends AbstractDirectoryBean {
 	private String type;
 	private Scroller scroller;
 	private HibernateTemplate hibernateTemplate;
+	
 
 	/**
 	 * 

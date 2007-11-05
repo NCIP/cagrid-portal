@@ -26,6 +26,7 @@ public class TabHandlerMapping extends AbstractHandlerMapping {
 	
 	private TabControlConfig tabControlConfig;
 	private Map tabPathMappings = new HashMap();
+	private boolean useCurrentPathWhenNoPathSelected = true;
 	
 	/**
 	 * 
@@ -39,18 +40,18 @@ public class TabHandlerMapping extends AbstractHandlerMapping {
 	 */
 	@Override
 	protected Object getHandlerInternal(PortletRequest request) throws Exception {
-		
-		logger.debug("operation=" + request.getParameter("operation"));
-		
+
 		Object handler = null;
 		if(request instanceof ActionRequest){
 			logger.debug("Ignoring action request");
 			return null;
 		}
 		
-		String selectedPath = request.getParameter(getTabControlConfig().getSelectedPathParameterName());
+		
+		
+		String selectedPath = getSelectedPath(request);
 		if(selectedPath == null){
-			logger.debug("No selectedPath found under " + getTabControlConfig().getSelectedPathParameterName() + ". Ignoring request.");
+			logger.debug("ignoring");
 			return null;
 		}
 		
@@ -69,6 +70,18 @@ public class TabHandlerMapping extends AbstractHandlerMapping {
 		return handler;
 	}
 
+	protected String getSelectedPath(PortletRequest request) {
+		String selectedPath = request.getParameter(getTabControlConfig().getSelectedPathParameterName());
+		if(selectedPath == null){
+			logger.debug("No selectedPath found under " + getTabControlConfig().getSelectedPathParameterName() + ". Ignoring request.");
+			if(isUseCurrentPathWhenNoPathSelected()){
+				logger.debug("Using current path");
+				selectedPath = getTabControlConfig().getTabModel().getCurrentPath();	
+			}
+		}
+		return selectedPath;
+	}
+
 	@Required
 	public Map getTabPathMappings() {
 		return tabPathMappings;
@@ -83,6 +96,15 @@ public class TabHandlerMapping extends AbstractHandlerMapping {
 
 	public void setTabControlConfig(TabControlConfig tabControlConfig) {
 		this.tabControlConfig = tabControlConfig;
+	}
+
+	public boolean isUseCurrentPathWhenNoPathSelected() {
+		return useCurrentPathWhenNoPathSelected;
+	}
+
+	public void setUseCurrentPathWhenNoPathSelected(
+			boolean useDefaultPathWhenNoPathSelected) {
+		this.useCurrentPathWhenNoPathSelected = useDefaultPathWhenNoPathSelected;
 	}
 
 }

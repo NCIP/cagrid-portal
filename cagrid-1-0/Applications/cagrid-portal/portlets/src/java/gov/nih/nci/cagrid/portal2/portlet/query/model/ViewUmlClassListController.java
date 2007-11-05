@@ -5,8 +5,12 @@ package gov.nih.nci.cagrid.portal2.portlet.query.model;
 
 import gov.nih.nci.cagrid.portal2.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal2.domain.GridDataService;
+import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal2.portlet.AbstractViewObjectController;
 import gov.nih.nci.cagrid.portal2.portlet.query.QueryModel;
+
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.portlet.RenderRequest;
 
@@ -32,9 +36,13 @@ public class ViewUmlClassListController extends AbstractViewObjectController {
 	protected Object getObject(RenderRequest request) {
 		SelectServiceCommand command = new SelectServiceCommand();
 		if (getQueryModel().getSelectedService() != null) {
+			String url = getQueryModel().getSelectedService()
+			.getUrl();
 			command
-					.setServiceUrl(getQueryModel().getSelectedService()
-							.getUrl());
+					.setServiceUrl(url);
+			logger.debug("selected service " + url);
+		}else{
+			logger.debug("no service selected");
 		}
 		return command;
 	}
@@ -45,8 +53,13 @@ public class ViewUmlClassListController extends AbstractViewObjectController {
 			//Association with current session.
 			GridDataService selectedService = (GridDataService) getGridServiceDao()
 					.getById(getQueryModel().getSelectedService().getId());
-			mav.addObject("umlClasses", selectedService.getDomainModel()
-					.getClasses());
+			
+			//Sort by packageName.className
+			SortedMap<String,UMLClass> sorted = new TreeMap<String,UMLClass>();
+			for(UMLClass klass : selectedService.getDomainModel().getClasses()){
+				sorted.put(klass.getPackageName() + "." + klass.getClassName(), klass);
+			}
+			mav.addObject("umlClasses", sorted.values());
 		}
 	}
 

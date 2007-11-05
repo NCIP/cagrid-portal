@@ -12,6 +12,10 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
+	<bean id="interPortletMessageManager" class="gov.nih.nci.cagrid.portal2.portlet.SessionBasedInterPortletMessageManager" scope="globalSession" autowire="byName">
+		<aop:scoped-proxy proxy-target-class="true"/>
+	</bean>
+
 	<bean id="queryModel" class="gov.nih.nci.cagrid.portal2.portlet.query.QueryModel" scope="globalSession" autowire="byName">
 		<aop:scoped-proxy proxy-target-class="true"/>
 	</bean>
@@ -35,12 +39,6 @@
 	
 	</bean>
 	
-	<bean id="sharedApplicationModel" class="gov.nih.nci.cagrid.portal2.portlet.SessionBasedSharedApplicationModel" scope="globalSession">
-		<aop:scoped-proxy proxy-target-class="true"/>
-	</bean>
-	
-	
-
 	
 	<!-- Message source for this context, loaded from localized "messages_xx" files -->
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
@@ -70,7 +68,6 @@
 	</bean>
 	
 	<bean id="portalUserInterceptor" class="gov.nih.nci.cagrid.portal2.portlet.PortalUserInterceptor">
-		<property name="sharedApplicationModel" ref="sharedApplicationModel"/>
 		<property name="portalUserAttributeName" value="cagrid.portal.user"/>
 	</bean>
 
@@ -98,6 +95,72 @@
 			</bean>
 		</property>
 		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	
+	
+	
+	<bean id="defaultDirectory" class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ServiceDirectory"
+		autowire="byName">
+		<property name="id" value="services"/>
+		<property name="serviceDirectoryType" value="ALL"/>
+	</bean>
+	
+	<alias name="defaultDirectory" alias="allServicesDirectory"/>
+	
+	<bean id="allParticipantsDirectory" class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ParticipantDirectory" autowire="byName">
+		<property name="id" value="participants"/>
+		<property name="participantDirectoryType" value="ALL"/>
+	</bean>
+	
+	<util:list id="directories">
+		<ref bean="defaultDirectory"/>
+		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ServiceDirectory" autowire="byName">
+			<property name="id" value="dataServices"/>
+			<property name="serviceDirectoryType" value="DATA"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ServiceDirectory" autowire="byName">
+			<property name="id" value="analyticalServices"/>
+			<property name="serviceDirectoryType" value="ANALYTICAL"/>
+		</bean>
+		<ref bean="allParticipantsDirectory"/>
+		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+			<property name="participantDirectoryType" value="CTMS"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+			<property name="participantDirectoryType" value="ICR"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+			<property name="participantDirectoryType" value="IMAGING"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+			<property name="participantDirectoryType" value="TBPT"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+			<property name="participantDirectoryType" value="ARCH"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+			<property name="participantDirectoryType" value="VCDE"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+			<property name="participantDirectoryType" value="DSIC"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+			<property name="participantDirectoryType" value="TRAINING"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+			<property name="participantDirectoryType" value="SP"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.PointOfContactDirectory" autowire="byName"/>
+	</util:list>
+	
+	<bean id="mapBeanPrototype" class="gov.nih.nci.cagrid.portal2.portlet.discovery.map.MapBean" scope="prototype" autowire="byName">
+
+		<property name="baseUrl" value="http://maps.google.com/maps?file=api&amp;v=2&amp;key="/>
+		<property name="apiKey" value="ABQIAAAA8g3SgjzSraL7VirbuaelwhSZhAwg1T6Cj9L6Y1CRi3YIYx6IHhQlLsIR2usu8NKDKCmrdAcVRkqh8w"/>
+		<property name="centerLatitude" value="40"/>
+		<property name="centerLongitude" value="-95"/>
+		<property name="zoomLevel" value="4"/>
+	
 	</bean>
 
 </beans>

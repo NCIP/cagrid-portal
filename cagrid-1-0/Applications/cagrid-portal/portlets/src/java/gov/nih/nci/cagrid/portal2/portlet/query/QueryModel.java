@@ -14,7 +14,9 @@ import java.util.TreeMap;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.transaction.annotation.Transactional;
 
+import gov.nih.nci.cagrid.portal2.dao.UMLClassDao;
 import gov.nih.nci.cagrid.portal2.domain.GridDataService;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass;
@@ -26,6 +28,7 @@ import gov.nih.nci.cagrid.portal2.portlet.query.cql.CriterionBean;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
+@Transactional
 public class QueryModel implements ApplicationContextAware {
 
 	private GridDataService selectedService;
@@ -35,12 +38,24 @@ public class QueryModel implements ApplicationContextAware {
 	private Map<Integer, CQLQueryInstanceExecutor> executors = new HashMap<Integer, CQLQueryInstanceExecutor>();
 	private ApplicationContext applicationContext;
 	private CQLQueryInstance selectedQueryInstance;
+	private UMLClassDao umlClassDao;
+	
 	
 	/**
 	 * 
 	 */
 	public QueryModel() {
 
+	}
+	
+	public void selectUmlClassForQuery(Integer umlClassId){
+		if(getSelectedUmlClass() != null && getSelectedUmlClass().getId().equals(umlClassId)){
+			//Do nothing
+		}else{
+			UMLClass umlClass = getUmlClassDao().getById(umlClassId);
+			setSelectedUmlClass(umlClass);
+			setSelectedService(umlClass.getModel().getService());
+		}
 	}
 	
 	public void submitCqlQuery(CQLQueryInstance instance) {
@@ -153,6 +168,14 @@ public class QueryModel implements ApplicationContextAware {
 
 	public void setSelectedQueryInstance(CQLQueryInstance selectedQueryInstance) {
 		this.selectedQueryInstance = selectedQueryInstance;
+	}
+
+	public UMLClassDao getUmlClassDao() {
+		return umlClassDao;
+	}
+
+	public void setUmlClassDao(UMLClassDao umlClassDao) {
+		this.umlClassDao = umlClassDao;
 	}
 
 }

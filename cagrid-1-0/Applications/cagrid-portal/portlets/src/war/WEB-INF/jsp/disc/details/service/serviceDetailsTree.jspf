@@ -9,10 +9,9 @@
 <script type="text/javascript">
 	//<![CDATA[
 	
-	function <portlet:namespace/>selectUMLClass(path){
-		//alert("Selecting '" + path + "' for query.");
+	function <portlet:namespace/>selectUMLClass(umlClassId){
 		var form = document.<portlet:namespace/>selectUMLClassForm;
-		form.selectedUMLClassPath.value = path;
+		form.selectedId.value = umlClassId;
 		form.submit();
 	}
 	
@@ -93,8 +92,8 @@
 </form:form>
 <c:set var="selectUMLClassFormName"><portlet:namespace/>selectUMLClassForm</c:set>
 <form:form name="${selectUMLClassFormName}" action="${action}">
-	<input type="hidden" name="selectedUMLClassPath" value=""/>
-	<input type="hidden" name="operation" value="selectUMLClass"/>
+	<input type="hidden" name="selectedId" value=""/>
+	<input type="hidden" name="operation" value="selectUmlClassForQuery"/>
 </form:form>
 
 <c:choose>

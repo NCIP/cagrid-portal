@@ -5,6 +5,7 @@
 	type="text/javascript"></script>
 	
 <%@ include file="/WEB-INF/jsp/disc/tabs.jspf" %>
+<%@ include file="/WEB-INF/jsp/include/table_styles.jspf" %>
 
 <portlet:actionURL var="action"/>
 
@@ -49,7 +50,8 @@
 		</p>
 		
 		<c:set var="scroller" value="${listCommand.scroller}"/>
-		<%@ include file="/WEB-INF/jsp/include/scroll_controls.jsp" %>
+		<c:set var="scrollOperation" value="scrollDiscoveryList"/>
+		<%@ include file="/WEB-INF/jsp/include/scroll_controls.jspf" %>
 		
 		<c:choose>
 			<c:when test="${listCommand.type == 'SERVICE'}">
@@ -66,7 +68,7 @@
 			</c:otherwise>
 		</c:choose>
 		
-		<%@ include file="/WEB-INF/jsp/include/scroll_controls.jsp" %>
+		<%@ include file="/WEB-INF/jsp/include/scroll_controls.jspf" %>
 		
 	</c:otherwise>
 </c:choose>

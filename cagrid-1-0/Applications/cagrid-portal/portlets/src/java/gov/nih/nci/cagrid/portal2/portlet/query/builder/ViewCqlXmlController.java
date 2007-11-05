@@ -4,6 +4,7 @@
 package gov.nih.nci.cagrid.portal2.portlet.query.builder;
 
 import gov.nih.nci.cagrid.portal2.portlet.query.AbstractQueryRenderController;
+import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryCommand;
 
 import javax.portlet.RenderRequest;
 
@@ -25,7 +26,11 @@ public class ViewCqlXmlController extends AbstractQueryRenderController {
 	 */
 	@Override
 	protected Object getObject(RenderRequest request) {
-		return getQueryModel().getWorkingQuery();
+		CQLQueryCommand command = getQueryModel().getWorkingQuery();
+		if(command == null){
+			command = new CQLQueryCommand();
+		}
+		return command;
 	}
 
 }

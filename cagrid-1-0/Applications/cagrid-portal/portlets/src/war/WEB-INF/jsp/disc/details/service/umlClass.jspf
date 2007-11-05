@@ -2,7 +2,7 @@
 	<tbody>
 		<tr>
 			<td colspan="2">
-				<input type="button" value="Select For Query" onclick="${prefix}selectUMLClass('${currNode.path}')"/>
+				<input type="button" value="Select For Query" onclick="${prefix}selectUMLClass('${umlClass.id}')"/>
 			</td>
 		</tr>
 		<tr>

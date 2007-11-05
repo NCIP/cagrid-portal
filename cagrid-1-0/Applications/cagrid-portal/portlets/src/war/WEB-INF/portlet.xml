@@ -8,6 +8,43 @@
 
 
 	<portlet>
+		<description>caGrid Map Portlet</description>
+		<portlet-name>cagridmap</portlet-name>
+		<display-name>caGrid Map Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/map-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Map Portlet</title>
+			<short-title>caGrid Map Portlet</short-title>
+			<keywords>cagrid,map</keywords>
+		</portlet-info>
+
+		<portlet-preferences>		
+			<preference>
+             	<name>discoveryItemSelectMode</name> 
+            	<value>INTERPORTLET</value>
+         	</preference>
+         	<preference>
+            	<name>selectedDiscoveryItemOutputQueueName</name> 
+            	<value>map:selectedItem</value>
+         	</preference>
+        	<preference>
+             	<name>map:selectedItem</name>
+            	<value>disc:selectedItem</value>
+        	</preference>
+		</portlet-preferences>
+	</portlet>
+
+	<portlet>
 		<description>caGrid Discovery Portlet</description>
 		<portlet-name>cagriddiscovery</portlet-name>
 		<display-name>caGrid Discovery Portlet</display-name>
@@ -27,6 +64,33 @@
 			<short-title>caGrid Discovery Portlet</short-title>
 			<keywords>cagrid,discovery</keywords>
 		</portlet-info>
+		
+		<portlet-preferences>
+		
+			<preference>
+                <name>discoveryItemSelectMode</name> 
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedDiscoveryItemInputQueueName</name> 
+                <value>disc:selectedItem</value>
+            </preference>
+
+			<preference>
+                <name>umlClassSelectMode</name> 
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedUmlClassOutputQueueName</name> 
+                <value>disc:selectedUmlClassId</value>
+            </preference>
+            <preference>
+                <name>disc:selectedUmlClassId</name>
+                <value>query:selectedUmlClassId</value>
+            </preference>
+            
+        </portlet-preferences>
+		
 	</portlet>
 	
 	<portlet>
@@ -49,102 +113,19 @@
 			<short-title>caGrid Query Portlet</short-title>
 			<keywords>cagrid,query</keywords>
 		</portlet-info>
+		
+		<portlet-preferences>
+			<preference>
+                <name>umlClassSelectMode</name> 
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedUmlClassInputQueueName</name> 
+                <value>query:selectedUmlClassId</value>
+            </preference>
+        </portlet-preferences>
 	</portlet>
 <!-- 
-
-	<portlet>
-		<description>caGrid CQL Query Builder Portlet</description>
-		<portlet-name>cqlquerybuilder</portlet-name>
-		<display-name>caGrid CQL Query Builder Portlet</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/query/cql/builder.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>caGrid CQL Query Builder Portlet</title>
-			<short-title>caGrid CQL Query Builder Portlet</short-title>
-			<keywords>cql,query,builder</keywords>
-		</portlet-info>
-		
-	</portlet>
-
-	<portlet>
-		<description>caGrid CQL Query Results Portlet</description>
-		<portlet-name>cqlqueryresults</portlet-name>
-		<display-name>caGrid CQL Query Results Portlet</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/query/cql/results.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>caGrid CQL Query Results Portlet</title>
-			<short-title>caGrid CQL Query Results Portlet</short-title>
-			<keywords>cql,query,results</keywords>
-		</portlet-info>
-		
-	</portlet>
-
-	<portlet>
-		<description>caGrid CQL Query History Portlet</description>
-		<portlet-name>cqlqueryhistory</portlet-name>
-		<display-name>caGrid CQL Query History Portlet</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/query/cql/history.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>caGrid CQL Query History Portlet</title>
-			<short-title>caGrid CQL Query History Portlet</short-title>
-			<keywords>cql,query,history</keywords>
-		</portlet-info>
-		
-	</portlet>
-
-	<portlet>
-		<description>caGrid CQL Query Portlet</description>
-		<portlet-name>cqlquery</portlet-name>
-		<display-name>caGrid CQL Query Portlet</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/query/cql/query.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>caGrid CQL Query Portlet</title>
-			<short-title>caGrid CQL Query Portlet</short-title>
-			<keywords>cql,query</keywords>
-		</portlet-info>
-		
-	</portlet>
-
-
 	<portlet>
 		<description>Content introducing the caGrid Portal</description>
 		<portlet-name>WelcomeToCaGridPortal</portlet-name>

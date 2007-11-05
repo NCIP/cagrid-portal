@@ -6,7 +6,6 @@ package gov.nih.nci.cagrid.portal2.portlet.query.cql;
 import gov.nih.nci.cagrid.portal2.dao.CQLQueryInstanceDao;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.QueryInstanceState;
-import gov.nih.nci.cagrid.portal2.portlet.SharedApplicationModel;
 import gov.nih.nci.cagrid.portal2.portlet.query.QueryModel;
 
 import java.util.ArrayList;

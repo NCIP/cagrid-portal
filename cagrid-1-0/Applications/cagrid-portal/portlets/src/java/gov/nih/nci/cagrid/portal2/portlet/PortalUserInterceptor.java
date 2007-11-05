@@ -3,16 +3,11 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet;
 
-import gov.nih.nci.cagrid.portal2.domain.PortalUser;
-
-import javax.portlet.PortletSession;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
-import org.springframework.web.portlet.context.PortletWebRequest;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -22,7 +17,6 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 
 	private static final Log logger = LogFactory.getLog(PortalUserInterceptor.class);
 	
-	private SharedApplicationModel sharedApplicationModel;
 
 	private String portalUserAttributeName;
 
@@ -61,21 +55,21 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 	 */
 	public void preHandle(WebRequest request) throws Exception {
 
-		if (getSharedApplicationModel().getPortalUser() == null) {
-			
-			logger.debug("No PortalUser in SharedApplicationModel. Looking in session.");
-			
-			PortletWebRequest req = (PortletWebRequest) request;
-			PortalUser user = (PortalUser) req.getRequest().getPortletSession()
-					.getAttribute(getPortalUserAttributeName(),
-							PortletSession.APPLICATION_SCOPE);
-			
-			if(user != null){
-				logger.debug("Found PortalUser:" + user.getId() + " in session.");
-				getSharedApplicationModel().setPortalUser(user);
-			}
-			
-		}
+//		if (getSharedApplicationModel().getPortalUser() == null) {
+//			
+//			logger.debug("No PortalUser in SharedApplicationModel. Looking in session.");
+//			
+//			PortletWebRequest req = (PortletWebRequest) request;
+//			PortalUser user = (PortalUser) req.getRequest().getPortletSession()
+//					.getAttribute(getPortalUserAttributeName(),
+//							PortletSession.APPLICATION_SCOPE);
+//			
+//			if(user != null){
+//				logger.debug("Found PortalUser:" + user.getId() + " in session.");
+//				getSharedApplicationModel().setPortalUser(user);
+//			}
+//			
+//		}
 	}
 
 	public String getPortalUserAttributeName() {
@@ -86,13 +80,5 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 		this.portalUserAttributeName = portletUserAttributeName;
 	}
 
-	public SharedApplicationModel getSharedApplicationModel() {
-		return sharedApplicationModel;
-	}
-
-	public void setSharedApplicationModel(
-			SharedApplicationModel sharedApplicationModel) {
-		this.sharedApplicationModel = sharedApplicationModel;
-	}
 
 }

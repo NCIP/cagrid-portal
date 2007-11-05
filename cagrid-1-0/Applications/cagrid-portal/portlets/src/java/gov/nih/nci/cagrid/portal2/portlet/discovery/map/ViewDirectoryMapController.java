@@ -3,9 +3,6 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.discovery.map;
 
-import gov.nih.nci.cagrid.portal2.domain.GridService;
-import gov.nih.nci.cagrid.portal2.domain.Participant;
-import gov.nih.nci.cagrid.portal2.domain.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryResults;
 import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryType;
 import gov.nih.nci.cagrid.portal2.portlet.discovery.dir.AbstractDirectoryBean;
@@ -44,10 +41,9 @@ public class ViewDirectoryMapController extends BaseDiscoveryViewController {
 
 
 	@Override
-	protected void doHandleDirectory(RenderRequest request,
-			RenderResponse response, DiscoveryDirectory selectedDirectory,
-			AbstractDirectoryBean dirBean) throws Exception {
-		MapBean mapBean = (MapBean)dirBean;
+	protected AbstractDirectoryBean doHandleDirectory(RenderRequest request,
+			RenderResponse response, DiscoveryDirectory selectedDirectory) throws Exception {
+		MapBean mapBean = (MapBean)newDirectoryBean();
 		if(selectedDirectory.getType().equals(DiscoveryType.SERVICE)){
 			mapBean.addServices((ServiceDirectory)selectedDirectory);
 		}else if(selectedDirectory.getType().equals(DiscoveryType.PARTICIPANT)){
@@ -57,14 +53,16 @@ public class ViewDirectoryMapController extends BaseDiscoveryViewController {
 		}else{
 			throw new Exception("Unsupported directory type: " + selectedDirectory.getType());
 		}
+		return mapBean;
 	}
-
+	
 
 	@Override
-	protected void doHandleResults(RenderRequest request,
-			RenderResponse response, DiscoveryResults selectedResults,
-			AbstractDirectoryBean dirBean) throws Exception {
-		((MapBean)dirBean).addResults(selectedResults);
+	protected AbstractDirectoryBean doHandleResults(RenderRequest request,
+			RenderResponse response, DiscoveryResults selectedResults) throws Exception {
+		MapBean mapBean = (MapBean) newDirectoryBean();
+		mapBean.addResults(selectedResults);
+		return mapBean;
 	}
 
 }

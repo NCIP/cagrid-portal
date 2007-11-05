@@ -54,39 +54,40 @@ public class ViewQueryResultsController extends AbstractQueryRenderController
 		CQLQueryInstanceResultsBean command = (CQLQueryInstanceResultsBean) request
 				.getPortletSession().getAttribute(
 						getResultsBeanSessionAttributeName());
-		if (command != null
+		if (command != null && instance != null
 				&& command.getInstance().getId().equals(instance.getId())) {
 			// Don't create new one
 		} else {
 			command = new CQLQueryInstanceResultsBean();
-			String xml = instance.getResult();
-			if (xml != null) {
-				Table table = null;
-				try {
-					table = PortletUtils
-							.buildTableFromCQLResults(new ByteArrayInputStream(
-									xml.getBytes()));
-				} catch (Exception ex) {
-					throw new CaGridPortletApplicationException(
-							"Error build table from XML results: "
-									+ ex.getMessage(), ex);
+			if (instance != null) {
+				String xml = instance.getResult();
+				if (xml != null) {
+					Table table = null;
+					try {
+						table = PortletUtils
+								.buildTableFromCQLResults(new ByteArrayInputStream(
+										xml.getBytes()));
+					} catch (Exception ex) {
+						throw new CaGridPortletApplicationException(
+								"Error build table from XML results: "
+										+ ex.getMessage(), ex);
+					}
+					if (table != null) {
+						command.setTableScroller(new TableScroller(table, 10));
+					}
+					String pretty;
+					try {
+						pretty = transformXML(xml);
+					} catch (TransformerException ex) {
+						throw new CaGridPortletApplicationException(
+								"Error transforming XML results: "
+										+ ex.getMessage(), ex);
+					}
+					command.setPrettyXml(pretty);
 				}
-				if (table != null) {
-					command.setTableScroller(new TableScroller(table, 10));
-				}
-				String pretty;
-				try {
-					pretty = transformXML(xml);
-				} catch (TransformerException ex) {
-					throw new CaGridPortletApplicationException(
-							"Error transforming XML results: "
-									+ ex.getMessage(), ex);
-				}
-				command.setPrettyXml(pretty);
+				command.setInstance(instance);
 			}
-			command.setInstance(instance);
-			request
-			.getPortletSession().setAttribute(
+			request.getPortletSession().setAttribute(
 					getResultsBeanSessionAttributeName(), command);
 		}
 		return command;

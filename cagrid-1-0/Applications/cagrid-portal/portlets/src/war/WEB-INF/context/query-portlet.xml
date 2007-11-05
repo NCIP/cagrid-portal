@@ -231,38 +231,10 @@
 		<property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
 	</bean>
 	
-	<bean id="tabHandlerMapping" class="gov.nih.nci.cagrid.portal2.portlet.tab.TabHandlerMapping">
-		
-		<property name="tabControlConfig" ref="queryTabControlConfig"/>
-		
-		<property name="order" value="1" />
-		
-		<property name="interceptors">
-			<list>
-				<ref bean="parameterMappingInterceptor" />
-				<ref bean="openSessionInViewInterceptor" />
-			</list>
-		</property>
-		
-		<property name="tabPathMappings">
-			<map>
-				<entry key="/model" value-ref="viewUmlClassListController" />
-				<entry key="/query/builder/cqlQuery" value-ref="viewCqlTreeController" />
-				<entry key="/query/builder/umlClass" value-ref="viewUmlClassTreeController" />
-				<entry key="/query/builder/editCriterionForm" value-ref="viewCriterionController" />
-				<entry key="/query/builder/editQueryModifierForm" value-ref="viewQueryModifierController" />
-				<entry key="/query/xml" value-ref="viewCqlXmlController" />
-				<entry key="/history" value-ref="viewQueryHistoryController" />
-				<entry key="/results/tabular" value-ref="viewQueryResultsTabularController" />
-				<entry key="/results/xml" value-ref="viewQueryResultsXmlController" />
-			</map>
-		</property>
-	</bean>
-	
 	<bean id="portletModeParameterHandlerMapping"
 		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
 		
-		<property name="order" value="2" />
+		<property name="order" value="1" />
 		
 		<property name="parameterName" value="operation"/>
 		<property name="applyWebRequestInterceptorsToRenderPhaseOnly" value="false"/>
@@ -299,6 +271,41 @@
 		</property>
 	</bean>
 	
+	<bean id="tabHandlerMapping" class="gov.nih.nci.cagrid.portal2.portlet.query.QueryTabHandlerMapping">
+	
+		<property name="umlClassSelectedTabPath" value="/query/builder/cqlQuery"/>
+		<property name="queryModel" ref="queryModel"/>
+		<property name="interPortletMessageManager" ref="interPortletMessageManager"/>
+		
+		<property name="tabControlConfig" ref="queryTabControlConfig"/>
+		
+		<property name="order" value="2" />
+		
+		<property name="interceptors">
+			<list>
+				<ref bean="parameterMappingInterceptor" />
+				<ref bean="openSessionInViewInterceptor" />
+			</list>
+		</property>
+		
+		<property name="tabPathMappings">
+			<map>
+				<entry key="/model" value-ref="viewUmlClassListController" />
+				<entry key="/query/builder/cqlQuery" value-ref="viewCqlTreeController" />
+				<entry key="/query/builder/umlClass" value-ref="viewUmlClassTreeController" />
+				<entry key="/query/builder/editCriterionForm" value-ref="viewCriterionController" />
+				<entry key="/query/builder/editQueryModifierForm" value-ref="viewQueryModifierController" />
+				<entry key="/query/xml" value-ref="viewCqlXmlController" />
+				<entry key="/history" value-ref="viewQueryHistoryController" />
+				<entry key="/results/tabular" value-ref="viewQueryResultsTabularController" />
+				<entry key="/results/xml" value-ref="viewQueryResultsXmlController" />
+			</map>
+		</property>
+	</bean>
+	
+	
+	
+	<!-- 
 	<bean id="defaultHandlerMapping"
 		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
 		
@@ -320,6 +327,7 @@
 			</map>
 		</property>
 	</bean>
+	 -->
 	
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

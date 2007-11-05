@@ -165,6 +165,9 @@
 		
 	<bean id="cqlQueryInstanceDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal2.dao.CQLQueryInstanceDao" />
+		
+		<bean id="umlClassDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal2.dao.UMLClassDao" />
 
 
 	<bean id="openSessionInViewInterceptor"

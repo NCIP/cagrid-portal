@@ -17,6 +17,18 @@
 		autowire="byName">
 		<property name="commandName" value="listCommand"/>
 		<property name="successViewName" value="/directory/listView" />
+		<property name="listBeanSessionAttributeName" value="listBean"/>
+		
+	</bean>
+	
+	<bean 
+		id="scrollDiscoveryListController"
+		class="gov.nih.nci.cagrid.portal2.portlet.discovery.list.ScrollDiscoveryListController"
+		autowire="byName">
+		<property name="commandName" value="scrollCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.util.ScrollCommand"/>
+		<property name="listBeanSessionAttributeName" value="listBean"/>
+		<property name="actionResponseHandler" ref="discoveryTabActionResponseHandler"/>
 	</bean>
 
 	<bean 
@@ -170,10 +182,89 @@
 		<property name="successViewName" value="/details/poc" />
 	</bean>
 	
+	<bean 
+		id="selectUmlClassForQueryController"
+		class="gov.nih.nci.cagrid.portal2.portlet.discovery.details.SelectUmlClassForQueryController"
+		autowire="byName">
+		<property name="commandName" value="selectUmlClassCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.discovery.details.SelectDetailsCommand"/>
+		<property name="actionResponseHandler">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.tab.TabActionResponseHandler">
+				<property name="tabControlConfig" ref="discoveryTabControlConfig"/>
+				<property name="newTabPath" value="/details/service"/>
+			</bean>
+		</property>
+	</bean>
+	
+	
+	<bean
+	 id="portletModeParameterHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+		
+		<property name="order" value="2" />
+		
+		<property name="parameterName" value="operation"/>
+		
+		<property name="interceptors">
+			<list>
+				<ref bean="parameterMappingInterceptor" />
+				<ref bean="openSessionInViewInterceptor" />
+			</list>
+		</property>
+		
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="view">
+					<map>
+						<entry key="selectDirectoryMap" 
+							value-ref="selectDirectoryMapController" />
+							
+						<entry key="selectDirectoryList" 
+							value-ref="selectDirectoryListController" />
+							
+						<entry key="scrollDiscoveryList" 
+							value-ref="scrollDiscoveryListController" />
+							
+						<entry key="selectResultsMap" 
+							value-ref="selectResultsMapController" />
+							
+						<entry key="selectResultsList" 
+							value-ref="selectResultsListController" />
+							
+						<entry key="searchServices" 
+							value-ref="searchServicesController" />
+							
+						<entry key="searchParticipants" 
+							value-ref="searchParticipantsController" />
+							
+						<entry key="searchPocs" 
+							value-ref="searchPocsController" />
+							
+						<entry key="selectService" 
+							value-ref="selectServiceController" />
+							
+						<entry key="selectParticipant" 
+							value-ref="selectParticipantController" />
+							
+						<entry key="selectPoc" 
+							value-ref="selectPocController" />
+							
+						<entry key="selectUmlClassForQuery" value-ref="selectUmlClassForQueryController" />
+							
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>
 
-	<!-- This only acts upon render request in which there is a selectedTabPath parameter. -->
 	<bean id="tabHandlerMapping"
-		class="gov.nih.nci.cagrid.portal2.portlet.tab.TabHandlerMapping">
+		class="gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryTabHandlerMapping">
+		
+		<property name="interPortletMessageManager" ref="interPortletMessageManager"/>
+		<property name="discoveryModel" ref="discoveryModel"/>
+		<property name="serviceSelectedTabPath" value="/details/service" />
+		<property name="participantSelectedTabPath" value="/details/participant" />
+		<property name="pocSelectedTabPath" value="/details/poc" />
 		
 		<property name="tabControlConfig" ref="discoveryTabControlConfig"/>
 		
@@ -217,87 +308,6 @@
 		</property>
 	</bean>
 
-	
-	<!-- This should handle most action requests. -->
-	<bean
-	 id="portletModeParameterHandlerMapping"
-		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
-		
-		<property name="order" value="2" />
-		
-		<property name="parameterName" value="operation"/>
-		
-		<property name="interceptors">
-			<list>
-				<ref bean="parameterMappingInterceptor" />
-				<ref bean="openSessionInViewInterceptor" />
-			</list>
-		</property>
-		
-		<property name="portletModeParameterMap">
-			<map>
-				<entry key="view">
-					<map>
-						<entry key="selectDirectoryMap" 
-							value-ref="selectDirectoryMapController" />
-							
-						<entry key="selectDirectoryList" 
-							value-ref="selectDirectoryListController" />
-							
-						<entry key="selectResultsMap" 
-							value-ref="selectResultsMapController" />
-							
-						<entry key="selectResultsList" 
-							value-ref="selectResultsListController" />
-							
-						<entry key="searchServices" 
-							value-ref="searchServicesController" />
-							
-						<entry key="searchParticipants" 
-							value-ref="searchParticipantsController" />
-							
-						<entry key="searchPocs" 
-							value-ref="searchPocsController" />
-							
-						<entry key="selectService" 
-							value-ref="selectServiceController" />
-							
-						<entry key="selectParticipant" 
-							value-ref="selectParticipantController" />
-							
-						<entry key="selectPoc" 
-							value-ref="selectPocController" />
-							
-					</map>
-				</entry>
-			</map>
-		</property>
-	</bean>
-
-	
-	<!-- This handles all cases that aren't handled by previous handler mappings. -->
-	<bean id="defaultHandlerMapping"
-		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
-		
-		<property name="order" value="3" />
-
-		<property name="interceptors">
-			<list>
-				<ref bean="parameterMappingInterceptor" />
-				<ref bean="openSessionInViewInterceptor" />
-				<ref bean="discoveryTabModelInterceptor" />
-			</list>
-		</property>
-
-		<property name="portletModeMap">
-			<map>
-				<entry key="view">
-					<ref bean="viewDirectoryMapController" />
-				</entry>
-			</map>
-		</property>
-	</bean>
-
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
@@ -329,7 +339,6 @@
 		<aop:scoped-proxy proxy-target-class="true"/>
 	</bean>		
 
-	<!-- Defalt path is directory/mapView -->
 	<bean id="discoveryTabModel"
 		class="gov.nih.nci.cagrid.portal2.portlet.tab.TabModel" scope="session">
 		
@@ -414,67 +423,6 @@
 			</list>
 		</property>
 	</bean>
-	
-	
-	<bean id="mapBeanPrototype" class="gov.nih.nci.cagrid.portal2.portlet.discovery.map.MapBean" scope="prototype" autowire="byName">
-
-		<property name="baseUrl" value="http://maps.google.com/maps?file=api&amp;v=2&amp;key="/>
-		<property name="apiKey" value="ABQIAAAA8g3SgjzSraL7VirbuaelwhSZhAwg1T6Cj9L6Y1CRi3YIYx6IHhQlLsIR2usu8NKDKCmrdAcVRkqh8w"/>
-		<property name="centerLatitude" value="40"/>
-		<property name="centerLongitude" value="-95"/>
-		<property name="zoomLevel" value="4"/>
-	
-	</bean>
-	
-	<bean id="defaultDirectory" class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ServiceDirectory"
-		autowire="byName">
-		<property name="id" value="services"/>
-		<property name="serviceDirectoryType" value="ALL"/>
-	</bean>
-	
-	<util:list id="directories">
-		<ref bean="defaultDirectory"/>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ServiceDirectory" autowire="byName">
-			<property name="id" value="dataServices"/>
-			<property name="serviceDirectoryType" value="DATA"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ServiceDirectory" autowire="byName">
-			<property name="id" value="analyticalServices"/>
-			<property name="serviceDirectoryType" value="ANALYTICAL"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ParticipantDirectory" autowire="byName">
-			<property name="id" value="participants"/>
-			<property name="participantDirectoryType" value="ALL"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="CTMS"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="ICR"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="IMAGING"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="TBPT"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="ARCH"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="VCDE"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="DSIC"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="TRAINING"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="SP"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.PointOfContactDirectory" autowire="byName"/>
-	</util:list>
 
 	<bean id="listBeanPrototype" class="gov.nih.nci.cagrid.portal2.portlet.discovery.list.ListBean" scope="prototype">
 		<property name="scroller">

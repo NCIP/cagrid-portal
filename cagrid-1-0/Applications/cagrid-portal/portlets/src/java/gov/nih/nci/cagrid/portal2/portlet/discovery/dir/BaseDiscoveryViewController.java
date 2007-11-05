@@ -44,15 +44,13 @@ public abstract class BaseDiscoveryViewController extends AbstractController {
 		if(selectedResults == null && selectedDirectory == null){
 			selectedDirectory = getDiscoveryModel().getDefaultDirectory();
 		}
-		AbstractDirectoryBean dirBean = newDirectoryBean();
+		AbstractDirectoryBean dirBean = null;
 		
 		if(selectedResults != null){
-			doHandleResults(request, response, selectedResults, dirBean);
-			dirBean.setSelectedResults(selectedResults.getId());
+			dirBean = doHandleResults(request, response, selectedResults);
 		}
 		if(selectedDirectory != null){
-			doHandleDirectory(request, response, selectedDirectory, dirBean);
-			dirBean.setSelectedDirectory(selectedDirectory.getId());
+			dirBean = doHandleDirectory(request, response, selectedDirectory);
 		}
 		mav.addObject(getCommandName(), dirBean);
 		mav.addObject(getResultsAttributeName(), getDiscoveryModel().getResults());
@@ -61,8 +59,8 @@ public abstract class BaseDiscoveryViewController extends AbstractController {
 	}
 	
 	
-	protected abstract void doHandleResults(RenderRequest request, RenderResponse response, DiscoveryResults res, AbstractDirectoryBean dirBean) throws Exception;
-	protected abstract void doHandleDirectory(RenderRequest request, RenderResponse response, DiscoveryDirectory dir, AbstractDirectoryBean dirBean) throws Exception;
+	protected abstract AbstractDirectoryBean doHandleResults(RenderRequest request, RenderResponse response, DiscoveryResults res) throws Exception;
+	protected abstract AbstractDirectoryBean doHandleDirectory(RenderRequest request, RenderResponse response, DiscoveryDirectory dir) throws Exception;
 	
 	protected DiscoveryResults getSelectedResults(){
 		return getDiscoveryModel().getSelectedResults();

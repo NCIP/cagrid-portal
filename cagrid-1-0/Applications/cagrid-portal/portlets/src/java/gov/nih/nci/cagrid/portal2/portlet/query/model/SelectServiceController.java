@@ -65,15 +65,18 @@ public class SelectServiceController extends
 					new String[] { command.getServiceUrl() }, "The URL "
 							+ command.getServiceUrl()
 							+ " does not point to a data service.");
+			logger.error(ex);
 			return;
 		}
 		if (selectedService == null) {
 			errors.rejectValue("serviceUrl", "error.serviceUrl.notFound",
 					new String[] { command.getServiceUrl() },
-					"Not service found for URL " + command.getServiceUrl());
+					"No service found for URL " + command.getServiceUrl());
+			logger.error("No service found for URL " + command.getServiceUrl());
 			return;
 		}
 		if(selectedService != null){
+			logger.debug("Selecting service " + selectedService.getUrl());
 			getQueryModel().setSelectedService(selectedService);
 		}
 	}

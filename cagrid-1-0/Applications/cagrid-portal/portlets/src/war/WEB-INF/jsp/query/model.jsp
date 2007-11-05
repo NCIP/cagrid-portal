@@ -1,6 +1,9 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <%@ include file="/WEB-INF/jsp/query/tabs.jspf" %>
 
+<c:set var="resizablePrefix"><portlet:namespace/>umlClassList</c:set>
+<%@ include file="/WEB-INF/jsp/include/resizable_div.jspf" %>
+
 <portlet:actionURL var="selectServiceAction"/>
 <form:form action="${selectServiceAction}" commandName="selectServiceCommand">
 <input type="hidden" name="operation" value="selectService"/>
@@ -26,6 +29,8 @@
 		No UML classes to display.
 	</c:when>
 	<c:otherwise>
+		<div style="width:500px;">
+		<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:200px; overflow:scroll">
 		<c:forEach var="umlClass" items="${umlClasses}">
 			
 			<portlet:actionURL var="selectUmlClassAction">
@@ -37,5 +42,7 @@
 			</a>
 			<br/>
 		</c:forEach>
+		</div>
+		</div>
 	</c:otherwise>
 </c:choose>
