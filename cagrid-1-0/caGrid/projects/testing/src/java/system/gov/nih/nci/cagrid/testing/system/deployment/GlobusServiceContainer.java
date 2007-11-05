@@ -24,8 +24,6 @@ import org.apache.axis.client.Stub;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.axis.types.URI;
-import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.log4j.Logger;
 import org.globus.axis.gsi.GSIConstants;
 import org.globus.wsrf.impl.security.authorization.NoAuthorization;
@@ -47,7 +45,7 @@ import com.counter.service.CounterServiceAddressingLocator;
  * @author David Ervin
  * 
  * @created Oct 12, 2007 12:01:17 PM
- * @version $Id: GlobusServiceContainer.java,v 1.2 2007-11-02 14:46:32 dervin Exp $ 
+ * @version $Id: GlobusServiceContainer.java,v 1.3 2007-11-05 15:50:42 dervin Exp $ 
  */
 public class GlobusServiceContainer extends ServiceContainer {
     
@@ -324,22 +322,6 @@ public class GlobusServiceContainer extends ServiceContainer {
         stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
         stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization.getInstance());
         stub._setProperty(GSIConstants.GSI_AUTHORIZATION, org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
-    }
-    
-    
-    public synchronized URI getContainerBaseURI() throws MalformedURIException {
-        String url = "";
-        try {
-            if (getProperties().isSecure()) {
-                url += "https://";
-            } else {
-                url += "http://";
-            }
-            url += "localhost:" + getProperties().getPortPreference().getPort() + "/wsrf/services/";
-        } catch (NoAvailablePortException e) {
-            throw new MalformedURIException("Problem getting port:" + e.getMessage());
-        }
-        return new URI(url);
     }
     
     

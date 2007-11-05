@@ -12,14 +12,14 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Oct 16, 2007 12:09:02 PM
- * @version $Id: ServiceContainerFactory.java,v 1.1 2007-10-31 19:29:07 dervin Exp $ 
+ * @version $Id: ServiceContainerFactory.java,v 1.2 2007-11-05 15:50:42 dervin Exp $ 
  */
 public class ServiceContainerFactory {
     
     public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
     
     public static ServiceContainer createContainer(ServiceContainerType type) throws IOException {
-        PortPreference ports = PortPreference.getDefaultPortPreference();
+        PortPreference ports = PortFactory.getPort();
         return createContainer(type, null, ports);
     }
     

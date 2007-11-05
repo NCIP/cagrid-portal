@@ -6,6 +6,9 @@ import gov.nih.nci.cagrid.common.ZipUtilities;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.axis.types.URI;
+import org.apache.axis.types.URI.MalformedURIException;
+
 /** 
  *  ServiceContainer
  *  Performs operations on a service container
@@ -13,7 +16,7 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Oct 12, 2007 9:37:44 AM
- * @version $Id: ServiceContainer.java,v 1.1 2007-10-31 19:29:07 dervin Exp $ 
+ * @version $Id: ServiceContainer.java,v 1.2 2007-11-05 15:50:42 dervin Exp $ 
  */
 public abstract class ServiceContainer {
     
@@ -89,6 +92,22 @@ public abstract class ServiceContainer {
     
     public ContainerProperties getProperties() {
         return properties;
+    }
+    
+    
+    public synchronized URI getContainerBaseURI() throws MalformedURIException {
+        String url = "";
+        try {
+            if (getProperties().isSecure()) {
+                url += "https://";
+            } else {
+                url += "http://";
+            }
+            url += "localhost:" + getProperties().getPortPreference().getPort() + "/wsrf/services/";
+        } catch (NoAvailablePortException e) {
+            throw new MalformedURIException("Problem getting port:" + e.getMessage());
+        }
+        return new URI(url);
     }
     
         
