@@ -17,6 +17,7 @@
 		autowire="byName">
 		<property name="objectName" value="selectServiceCommand"/>
 		<property name="successViewName" value="/model" />
+		<property name="errorsAttributeName" value="submitServiceErrors"/>
 	</bean>
 	
 	<bean 
@@ -25,7 +26,14 @@
 		autowire="byName">
 		<property name="commandName" value="selectServiceCommand"/>
 		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.query.model.SelectServiceCommand"/>
-		<property name="actionResponseHandler" ref="queryTabActionResponseHandler"/>
+		<property name="actionResponseHandler">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.tab.TabActionResponseHandler">
+				<property name="tabControlConfig" ref="queryTabControlConfig"/>
+				<property name="newTabPath" value="/model"/>
+				<property name="errorTabPath" value="/model"/>
+				<property name="errorsAttributeName" value="submitServiceErrors"/>
+			</bean>
+		</property>
 	</bean>
 	
 	<bean 
@@ -145,6 +153,7 @@
 		autowire="byName">
 		<property name="objectName" value="cqlQueryCommand"/>
 		<property name="successViewName" value="/xml" />
+		<property name="errorsAttributeName" value="submitQueryErrors"/>
 	</bean>
 	
 	<bean 
@@ -158,6 +167,7 @@
 				<property name="tabControlConfig" ref="queryTabControlConfig"/>
 				<property name="newTabPath" value="/history"/>
 				<property name="errorTabPath" value="/query/xml"/>
+				<property name="errorsAttributeName" value="submitQueryErrors"/>
 			</bean>
 		</property>	
 	</bean>
@@ -173,6 +183,7 @@
 				<property name="tabControlConfig" ref="queryTabControlConfig"/>
 				<property name="newTabPath" value="/history"/>
 				<property name="errorTabPath" value="/query/builder"/>
+				<property name="errorsAttributeName" value="submitQueryErrors"/>
 			</bean>
 		</property>	
 	</bean>
@@ -197,6 +208,63 @@
 			</bean>
 		</property>	
 	</bean>
+	
+	<bean 
+		id="selectQueryInstanceErrorController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.results.SelectQueryInstanceController"
+		autowire="byName">
+		<property name="commandName" value="selectQueryInstanceCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.query.results.SelectQueryInstanceCommand"/>
+		<property name="actionResponseHandler">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.tab.TabActionResponseHandler">
+				<property name="tabControlConfig" ref="queryTabControlConfig"/>
+				<property name="newTabPath" value="/results/xml"/>
+			</bean>
+		</property>	
+	</bean>
+	
+	<bean 
+		id="cancelQueryInstanceController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.results.CancelQueryInstanceController"
+		autowire="byName">
+		<property name="commandName" value="selectQueryInstanceCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.query.results.SelectQueryInstanceCommand"/>
+		<property name="actionResponseHandler">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.tab.TabActionResponseHandler">
+				<property name="tabControlConfig" ref="queryTabControlConfig"/>
+				<property name="newTabPath" value="/history"/>
+			</bean>
+		</property>	
+	</bean>
+	
+	<bean 
+		id="deleteQueryInstanceController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.results.DeleteQueryInstanceController"
+		autowire="byName">
+		<property name="commandName" value="selectQueryInstanceCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.query.results.SelectQueryInstanceCommand"/>
+		<property name="actionResponseHandler">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.tab.TabActionResponseHandler">
+				<property name="tabControlConfig" ref="queryTabControlConfig"/>
+				<property name="newTabPath" value="/history"/>
+			</bean>
+		</property>	
+	</bean>
+	
+	<bean 
+		id="reloadQueryInstanceController"
+		class="gov.nih.nci.cagrid.portal2.portlet.query.results.ReloadQueryInstanceController"
+		autowire="byName">
+		<property name="commandName" value="selectQueryInstanceCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.query.results.SelectQueryInstanceCommand"/>
+		<property name="actionResponseHandler">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.tab.TabActionResponseHandler">
+				<property name="tabControlConfig" ref="queryTabControlConfig"/>
+				<property name="newTabPath" value="/query/xml"/>
+			</bean>
+		</property>	
+	</bean>
+	
 	
 	<bean id="viewQueryResultsTabularController"
 		class="gov.nih.nci.cagrid.portal2.portlet.query.results.ViewQueryResultsController"
@@ -259,23 +327,29 @@
 						<entry key="submitQuery" value-ref="submitQueryController" />
 						<entry key="submitBuilderQuery" value-ref="submitBuilderQueryController" />
 						<entry key="selectQueryInstance" value-ref="selectQueryInstanceController" />
-						<!-- 
 						<entry key="selectQueryInstanceError" value-ref="selectQueryInstanceErrorController" />
 						<entry key="cancelQueryInstance" value-ref="cancelQueryInstanceController" />
 						<entry key="deleteQueryInstance" value-ref="deleteQueryInstanceController" />
-						 -->
-						 <entry key="scrollQueryInstanceResults" value-ref="scrollQueryInstanceResultsController" />
+						<entry key="reloadQueryInstance" value-ref="reloadQueryInstanceController" />
+						<entry key="scrollQueryInstanceResults" value-ref="scrollQueryInstanceResultsController" />
 					</map>
 				</entry>
 			</map>
 		</property>
 	</bean>
 	
-	<bean id="tabHandlerMapping" class="gov.nih.nci.cagrid.portal2.portlet.query.QueryTabHandlerMapping">
+	<bean id="tabHandlerMapping" class="gov.nih.nci.cagrid.portal2.portlet.tab.SelectedPathDelegatingTabHandlerMapping">
 	
-		<property name="umlClassSelectedTabPath" value="/query/builder/cqlQuery"/>
-		<property name="queryModel" ref="queryModel"/>
-		<property name="interPortletMessageManager" ref="interPortletMessageManager"/>
+	<property name="selectedPathHandlers">
+			<list>
+				<bean class="gov.nih.nci.cagrid.portal2.portlet.query.SelectUmlClassPathHandler" autowire="byName">
+					<property name="modePreferenceName" value="umlClassSelectMode" />
+					<property name="inputQueuePreferenceName" value="selectedUmlClassInputQueueName" />
+					<property name="inputQueueNameDefaultValue" value="selectedUmlClassId" />
+					<property name="umlClassSelectedTabPath" value="/query/builder/cqlQuery"/>
+				</bean>
+			</list>
+		</property>
 		
 		<property name="tabControlConfig" ref="queryTabControlConfig"/>
 		
@@ -305,29 +379,7 @@
 	
 	
 	
-	<!-- 
-	<bean id="defaultHandlerMapping"
-		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
-		
-		<property name="order" value="3" />
 
-		<property name="interceptors">
-			<list>
-				<ref bean="parameterMappingInterceptor" />
-				<ref bean="openSessionInViewInterceptor" />
-				<ref bean="queryTabModelInterceptor" />
-			</list>
-		</property>
-
-		<property name="portletModeMap">
-			<map>
-				<entry key="view">
-					<ref bean="viewUmlClassListController" />
-				</entry>
-			</map>
-		</property>
-	</bean>
-	 -->
 	
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

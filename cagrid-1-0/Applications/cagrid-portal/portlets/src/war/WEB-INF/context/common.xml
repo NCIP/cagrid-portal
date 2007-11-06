@@ -27,6 +27,7 @@
 				<property name="cqlQueryInstanceDao" ref="cqlQueryInstanceDao"/>
 			</bean>
 		</property>
+		<property name="timeout" value="60000"/>
 	</bean>
 
 	<bean id="executorService" class="gov.nih.nci.cagrid.portal2.portlet.util.DelegatingExecutorService">
@@ -87,41 +88,36 @@
 		<ref bean="openSessionInViewInterceptor" />
 		<ref bean="portalUserInterceptor" />	
 	</util:list>
-	
-	<bean id="directoryBeanPrototype" class="gov.nih.nci.cagrid.portal2.portlet.directory.DirectoryBean" scope="prototype">
-		<property name="scroller">
-			<bean class="gov.nih.nci.cagrid.portal2.portlet.util.Scroller">
-				<property name="pageSize" value="10"/>
-			</bean>
-		</property>
-		<property name="hibernateTemplate" ref="hibernateTemplate"/>
-	</bean>
-	
-	
+
 	
 	<bean id="defaultDirectory" class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ServiceDirectory"
 		autowire="byName">
 		<property name="id" value="services"/>
 		<property name="serviceDirectoryType" value="ALL"/>
 	</bean>
-	
 	<alias name="defaultDirectory" alias="allServicesDirectory"/>
+	<alias name="defaultDirectory" alias="servicesDirectory"/>
 	
 	<bean id="allParticipantsDirectory" class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ParticipantDirectory" autowire="byName">
 		<property name="id" value="participants"/>
 		<property name="participantDirectoryType" value="ALL"/>
 	</bean>
+	<alias name="allParticipantsDirectory" alias="participantsDirectory"/>
+	
+	<bean id="dataServicesDirectory" class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ServiceDirectory" autowire="byName">
+		<property name="id" value="dataServices"/>
+		<property name="serviceDirectoryType" value="DATA"/>
+	</bean>
+	
+	<bean id="analyticalServicesDirectory" class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ServiceDirectory" autowire="byName">
+		<property name="id" value="analyticalServices"/>
+		<property name="serviceDirectoryType" value="ANALYTICAL"/>
+	</bean>
 	
 	<util:list id="directories">
 		<ref bean="defaultDirectory"/>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ServiceDirectory" autowire="byName">
-			<property name="id" value="dataServices"/>
-			<property name="serviceDirectoryType" value="DATA"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ServiceDirectory" autowire="byName">
-			<property name="id" value="analyticalServices"/>
-			<property name="serviceDirectoryType" value="ANALYTICAL"/>
-		</bean>
+		<ref bean="dataServicesDirectory"/>
+		<ref bean="analyticalServicesDirectory"/>
 		<ref bean="allParticipantsDirectory"/>
 		<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
 			<property name="participantDirectoryType" value="CTMS"/>

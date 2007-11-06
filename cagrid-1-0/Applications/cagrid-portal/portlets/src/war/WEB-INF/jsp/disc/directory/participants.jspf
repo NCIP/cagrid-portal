@@ -1,14 +1,50 @@
-<c:forEach items="${listCommand.scroller.page}" var="participant">
+
 
 	<table border="0" class="contentInnerTable">
 		<thead>
-			<tr>
-				<th class="contentTableHeader" scope="colgroup" colspan="2">
-				Participant Details</th>
+			<tr class="contentTableHeader">
+				<th>Name</th>
+				<th>Institution</th>
+				<th>Homepage</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="dataRowLight">
+			<c:forEach items="${listCommand.scroller.page}" var="participant" varStatus="rowStatus">
+				<c:choose>
+					<c:when test="${rowStatus.index % 2 == 0}">
+						<c:set var="rowClass" value="dataRowDark"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="rowClass" value="dataRowLight"/>
+					</c:otherwise>
+				</c:choose>
+			
+				<tr class="<c:out value="${rowClass}"/>">
+					<td class="dataCellText">
+						<c:out value="${participant.name}"/>
+					</td>
+					<td class="dataCellText">
+						<c:out value="${participant.institution}"/>
+					</td>
+					<td class="dataCellText">
+						<a target="_blank" href="<c:out value="${participant.homepageUrl}"/>">
+							<c:out value="${participant.homepageUrl}"/>
+						</a>
+					</td>
+					<td class="dataCellText">
+						<a alt="More Details..." href="<portlet:actionURL><portlet:param name="operation" value="selectParticipant"/><portlet:param name="selectedId" value="${participant.id}"/></portlet:actionURL>">
+							More Details...
+						</a>
+					</td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+
+	
+<%--
+<tr class="dataRowLight">
 				<td class="dataCellTextBold leftColumn">Name</td>
 				<td class="dataCellText"><c:out value="${participant.name}"/></td>
 			</tr>
@@ -49,8 +85,4 @@
 				</c:forEach>
 				</td>
 			</tr>
-		</tbody>
-	</table>
-	<br/>
-	
-</c:forEach>
+ --%>

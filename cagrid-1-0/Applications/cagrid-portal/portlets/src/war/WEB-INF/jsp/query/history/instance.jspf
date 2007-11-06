@@ -11,6 +11,7 @@
 	<c:if test="${instance.state == 'RUNNING'}">
 		<option value="cancelQueryInstance">Cancel</option>
 	</c:if>
+	<option value="reloadQueryInstance">Re-Load</option>
 	<option value="deleteQueryInstance">Delete</option>
 </select></td>
 <td><c:out value="${instance.state}" /></td>

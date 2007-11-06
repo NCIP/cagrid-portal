@@ -14,7 +14,7 @@
 		</td>
 		<td>
 			<form:input path="serviceUrl"/><br/>
-			<form:errors path="serviceUrl"/>
+			<span style="color:red"><form:errors path="serviceUrl"/></span>
 		</td>
 		<td>
 			<input type="submit" value="Select"/>

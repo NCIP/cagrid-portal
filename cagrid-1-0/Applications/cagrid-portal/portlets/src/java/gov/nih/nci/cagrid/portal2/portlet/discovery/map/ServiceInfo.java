@@ -3,6 +3,7 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.discovery.map;
 
+import gov.nih.nci.cagrid.portal2.domain.GridDataService;
 import gov.nih.nci.cagrid.portal2.domain.GridService;
 
 /**
@@ -16,6 +17,7 @@ public class ServiceInfo {
 	private String status;	
 	private String url;
 	private String id;
+	private ServiceType type;
 	
 	/**
 	 * @param service 
@@ -27,6 +29,11 @@ public class ServiceInfo {
 		setStatus(service.getCurrentStatus().toString());
 		setUrl(service.getUrl());
 		setId(String.valueOf(service.getId()));
+		if(service instanceof GridDataService){
+			setType(ServiceType.DATA);
+		}else{
+			setType(ServiceType.ANALYTICAL);
+		}
 	}
 	
 	public ServiceInfo(){
@@ -72,5 +79,17 @@ public class ServiceInfo {
 	public void setId(String id) {
 		this.id = id;
 	}	
+	
+	public static enum ServiceType{
+		DATA, ANALYTICAL;
+	}
+
+	public ServiceType getType() {
+		return type;
+	}
+
+	public void setType(ServiceType type) {
+		this.type = type;
+	}
 	
 }

@@ -2,6 +2,19 @@
 <%@ include file="/WEB-INF/jsp/query/tabs.jspf" %>
 <%@ include file="/WEB-INF/jsp/include/table_styles.jspf" %>
 <c:choose>
+<c:when test="${!empty resultsCommand.instance.error}">
+
+<c:set var="resizablePrefix"><portlet:namespace/>error</c:set>
+<%@ include file="/WEB-INF/jsp/include/resizable_div.jspf" %>
+
+		<div style="width:500px;">
+		<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:200px; overflow:scroll">
+<pre>
+<c:out value="${resultsCommand.instance.error}" escapeXml="false"/>
+</pre>
+		</div>
+		</div>
+</c:when>
 <c:when test="${empty resultsCommand.instance.result}">
 No results to display.
 </c:when>

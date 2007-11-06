@@ -3,11 +3,16 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet;
 
+import gov.nih.nci.cagrid.portal2.domain.PortalUser;
+
+import javax.portlet.PortletSession;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
+import org.springframework.web.portlet.context.PortletWebRequest;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -59,10 +64,10 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 //			
 //			logger.debug("No PortalUser in SharedApplicationModel. Looking in session.");
 //			
-//			PortletWebRequest req = (PortletWebRequest) request;
-//			PortalUser user = (PortalUser) req.getRequest().getPortletSession()
-//					.getAttribute(getPortalUserAttributeName(),
-//							PortletSession.APPLICATION_SCOPE);
+			PortletWebRequest req = (PortletWebRequest) request;
+			PortalUser user = (PortalUser) req.getRequest().getPortletSession()
+					.getAttribute(getPortalUserAttributeName(),
+							PortletSession.APPLICATION_SCOPE);
 //			
 //			if(user != null){
 //				logger.debug("Found PortalUser:" + user.getId() + " in session.");
@@ -70,6 +75,7 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 //			}
 //			
 //		}
+		
 	}
 
 	public String getPortalUserAttributeName() {

@@ -6,6 +6,7 @@ package gov.nih.nci.cagrid.portal2.portlet.discovery.search;
 import gov.nih.nci.cagrid.portal2.domain.DomainObject;
 import gov.nih.nci.cagrid.portal2.domain.GridService;
 import gov.nih.nci.cagrid.portal2.domain.Participant;
+import gov.nih.nci.cagrid.portal2.domain.Person;
 import gov.nih.nci.cagrid.portal2.domain.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.portal2.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryResults;
@@ -14,6 +15,7 @@ import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -95,6 +97,17 @@ public class KeywordSearchService {
 		for(Integer id : allIds){
 			objects.add((DomainObject)sess.get(klass, id));
 		}
+		
+		if(DiscoveryType.POC.equals(searchBean.getDiscoveryType())){
+			Set<Person> persons = new HashSet<Person>();
+			for(Iterator i = objects.iterator(); i.hasNext();){
+				PointOfContact poc = (PointOfContact)i.next();
+				persons.add(poc.getPerson());
+			}
+			objects.clear();
+			objects.addAll(persons);
+		}
+		
 		sess.close();
 		
 		DiscoveryResults results = new DiscoveryResults();

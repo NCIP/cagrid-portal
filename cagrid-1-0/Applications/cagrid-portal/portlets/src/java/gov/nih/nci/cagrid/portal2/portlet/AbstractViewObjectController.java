@@ -3,10 +3,12 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet;
 
+
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.validation.BindException;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.mvc.AbstractController;
 
@@ -19,6 +21,7 @@ public abstract class AbstractViewObjectController extends AbstractController {
 	
 	private String successViewName;
 	private String objectName;
+	private String errorsAttributeName;
 
 	/**
 	 * 
@@ -30,7 +33,16 @@ public abstract class AbstractViewObjectController extends AbstractController {
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 
-		ModelAndView mav = new ModelAndView(getSuccessViewName());
+		ModelAndView mav = null;
+		BindException errors = null;
+		if(getErrorsAttributeName() != null){
+			errors = (BindException)request.getAttribute(getErrorsAttributeName());
+		}
+		if(errors != null){
+			mav = new ModelAndView(getSuccessViewName(), errors.getModel());
+		}else{
+			mav = new ModelAndView(getSuccessViewName());
+		}
 		Object obj = getObject(request);
 		mav.addObject(getObjectName(), obj);
 		addData(request, mav);
@@ -60,6 +72,14 @@ public abstract class AbstractViewObjectController extends AbstractController {
 
 	public void setObjectName(String commandName) {
 		this.objectName = commandName;
+	}
+
+	public String getErrorsAttributeName() {
+		return errorsAttributeName;
+	}
+
+	public void setErrorsAttributeName(String errorsAttributeName) {
+		this.errorsAttributeName = errorsAttributeName;
 	}
 
 }

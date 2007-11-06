@@ -3,13 +3,17 @@
  */
 package gov.nih.nci.cagrid.portal2.domain;
 
+import gov.nih.nci.cagrid.portal2.domain.metadata.common.PointOfContact;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -34,6 +38,8 @@ public class Person extends AbstractDomainObject {
 	private String phoneNumber;
 
 	private List<Address> addresses = new ArrayList<Address>();
+	
+	private List<PointOfContact> pointOfContacts = new ArrayList<PointOfContact>();
 
 	@ManyToMany
 	@JoinTable(
@@ -85,6 +91,15 @@ public class Person extends AbstractDomainObject {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	@OneToMany(mappedBy = "person")
+	public List<PointOfContact> getPointOfContacts() {
+		return pointOfContacts;
+	}
+
+	public void setPointOfContacts(List<PointOfContact> pointOfContacts) {
+		this.pointOfContacts = pointOfContacts;
 	}
 
 }

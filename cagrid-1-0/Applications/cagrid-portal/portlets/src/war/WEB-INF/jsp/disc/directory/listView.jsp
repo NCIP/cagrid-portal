@@ -48,7 +48,7 @@
 			</c:choose>
 			Displaying <c:out value="${listCommand.scroller.index + 1}"/> to <c:out value="${listCommand.scroller.endIndex}"/></span>
 		</p>
-		
+		<br/>
 		<c:set var="scroller" value="${listCommand.scroller}"/>
 		<c:set var="scrollOperation" value="scrollDiscoveryList"/>
 		<%@ include file="/WEB-INF/jsp/include/scroll_controls.jspf" %>

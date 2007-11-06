@@ -7,9 +7,8 @@ import gov.nih.nci.cagrid.portal2.domain.Address;
 import gov.nih.nci.cagrid.portal2.domain.DomainObject;
 import gov.nih.nci.cagrid.portal2.domain.GridService;
 import gov.nih.nci.cagrid.portal2.domain.Participant;
-import gov.nih.nci.cagrid.portal2.domain.metadata.common.PointOfContact;
+import gov.nih.nci.cagrid.portal2.domain.Person;
 import gov.nih.nci.cagrid.portal2.domain.metadata.common.ResearchCenter;
-import gov.nih.nci.cagrid.portal2.domain.metadata.service.Service;
 import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryResults;
 import gov.nih.nci.cagrid.portal2.portlet.discovery.dir.AbstractDirectoryBean;
 import gov.nih.nci.cagrid.portal2.portlet.discovery.dir.ParticipantDirectory;
@@ -160,18 +159,18 @@ public class MapBean extends AbstractDirectoryBean {
 	}
 	
 	public void addPointOfContacts(PointOfContactDirectory dir){
-		List<PointOfContact> pocs = dir.getObjects();
-		for(PointOfContact poc : pocs){
+		List<Person> pocs = dir.getObjects();
+		for(Person poc : pocs){
 			addPointOfContact(poc);
 		}
 	}
 
-	public void addPointOfContact(PointOfContact poc) {
+	public void addPointOfContact(Person poc) {
 		String key = getGeoKey(poc);
 		if (key == null) {
 			logger
 					.warn("Got null key for POC "
-							+ poc.getPerson().getId() + ". Not adding to map.");
+							+ poc.getId() + ". Not adding to map.");
 		} else {
 			PointOfContactMapNode node = this.pocNodes.get(key);
 			if (node == null) {
@@ -182,9 +181,9 @@ public class MapBean extends AbstractDirectoryBean {
 		}
 	}
 	
-	private String getGeoKey(PointOfContact poc) {
+	private String getGeoKey(Person poc) {
 		String key = null;
-		List<Address> addresses = poc.getPerson().getAddresses();
+		List<Address> addresses = poc.getAddresses();
 		if(addresses.size() > 0){
 			key = getGeoKey(addresses.get(0));
 		}
@@ -242,8 +241,8 @@ public class MapBean extends AbstractDirectoryBean {
 				addParticipant((Participant)getHibernateTemplate().get(Participant.class, obj.getId()));
 			}else if(obj instanceof GridService){
 				addService((GridService)getHibernateTemplate().get(GridService.class, obj.getId()));
-			}else if(obj instanceof PointOfContact){
-				addPointOfContact((PointOfContact)getHibernateTemplate().get(PointOfContact.class, obj.getId()));
+			}else if(obj instanceof Person){
+				addPointOfContact((Person)getHibernateTemplate().get(Person.class, obj.getId()));
 			}
 		}
 	}

@@ -15,4 +15,5 @@ public interface CQLQueryInstanceListener {
 	void onComplete(CQLQueryInstance instance, String results);
 	void onCancelled(CQLQueryInstance instance, boolean cancelled);
 	void onError(CQLQueryInstance instance, Exception error);
+	void onTimeout(CQLQueryInstance instance, boolean cancelled);
 }

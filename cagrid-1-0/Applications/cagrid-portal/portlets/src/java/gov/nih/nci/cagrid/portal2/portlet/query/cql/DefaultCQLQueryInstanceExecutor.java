@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.portal2.portlet.query.cql;
 
 import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
 
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -20,6 +21,8 @@ public class DefaultCQLQueryInstanceExecutor implements CQLQueryInstanceExecutor
 	private CQLQueryInstance instance;
 	private CQLQueryInstanceListener listener;
 	private Future future;
+	private long timeout = 60000;
+	private Date endTime;
 
 	/**
 	 * 
@@ -28,22 +31,25 @@ public class DefaultCQLQueryInstanceExecutor implements CQLQueryInstanceExecutor
 
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryExecutor#cancel()
-	 */
 	public boolean cancel() {
-		boolean cancelled = false;
-		if(future == null){
-			throw new IllegalStateException("query has not been started");
-		}
-		cancelled = future.cancel(true);
+		boolean cancelled = doCancel();
 		listener.onCancelled(instance, cancelled);
 		return cancelled;
 	}
+	
+	public boolean timeout(){
+		boolean cancelled = doCancel();
+		listener.onTimeout(instance, cancelled);
+		return cancelled;
+	}
+	
+	private boolean doCancel(){
+		if(future == null){
+			throw new IllegalStateException("query has not been started");
+		}
+		return future.cancel(true);
+	}
 
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryExecutor#setCQLQuery(gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance)
-	 */
 	public void setCqlQueryInstance(CQLQueryInstance instance) {
 		this.instance = instance;
 	}
@@ -52,13 +58,12 @@ public class DefaultCQLQueryInstanceExecutor implements CQLQueryInstanceExecutor
 		this.listener = listener;
 	}	
 	
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryExecutor#start()
-	 */
 	public void start() {
 		CQLQueryTask task = new CQLQueryTask(instance, listener);
+		listener.onSheduled(instance);
 		future = getExecutorService().submit(task);
-		listener.onSheduled(instance);		
+		setEndTime(new Date(new Date().getTime() + getTimeout()));
+		
 	}
 
 	public ExecutorService getExecutorService() {
@@ -81,6 +86,35 @@ public class DefaultCQLQueryInstanceExecutor implements CQLQueryInstanceExecutor
 
 	public CQLQueryInstanceListener getCqlQueryInstanceListener() {
 		return listener;
+	}
+
+	public long getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(long timeout) {
+		this.timeout = timeout;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+	
+	private class TimeoutThread extends Thread{
+		public void run(){
+			while(new Date().before(getEndTime())){
+				try{
+					Thread.sleep(5000);
+				}catch(InterruptedException ex){
+					break;
+				}
+			}
+			timeout();
+		}
 	}
 
 }

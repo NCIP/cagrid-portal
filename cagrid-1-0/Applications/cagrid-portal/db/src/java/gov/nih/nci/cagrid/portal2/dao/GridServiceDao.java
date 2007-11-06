@@ -130,4 +130,17 @@ public class GridServiceDao extends AbstractDao<GridService> {
 		return services;
 	}
 
+	public List<GridService> getLatestServices(int latestServicesLimit) {
+		List<GridService> latest = new ArrayList<GridService>();
+		List<GridService> l = getHibernateTemplate().find(
+				"select gs from GridService gs " +
+				"join gs.statusHistory status " +
+				"group by gs.id " + 
+				"order by min(status.time) desc");
+		for(int i = 0; i < latestServicesLimit && i < l.size(); i++){
+			latest.add(l.get(i));
+		}
+		return latest;
+	}
+
 }

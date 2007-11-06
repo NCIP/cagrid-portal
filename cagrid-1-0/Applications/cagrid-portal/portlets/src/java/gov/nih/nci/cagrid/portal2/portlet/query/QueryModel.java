@@ -152,6 +152,10 @@ public class QueryModel implements ApplicationContextAware {
 	}
 
 	public void selectQueryInstance(Integer instanceId) {
+		setSelectedQueryInstance(getQueryInstance(instanceId));
+	}
+	
+	public CQLQueryInstance getQueryInstance(Integer instanceId){
 		CQLQueryInstance selected = null;
 		for (CQLQueryInstance instance : getSubmittedCqlQueries()) {
 			if (instance.getId().equals(instanceId)) {
@@ -159,7 +163,22 @@ public class QueryModel implements ApplicationContextAware {
 				break;
 			}
 		}
-		setSelectedQueryInstance(selected);
+		return selected;
+	}
+	
+	public void cancelQueryInstance(Integer instanceId){
+		CQLQueryInstanceExecutor executor = executors.get(instanceId);
+		executor.cancel();
+	}
+	
+	public CQLQueryInstance deleteQueryInstance(Integer instanceId){
+		CQLQueryInstance instance = null;
+		cancelQueryInstance(instanceId);
+		CQLQueryInstanceExecutor executor = executors.remove(instanceId);
+		if(executor != null){
+			instance = executor.getCqlQueryInstance();
+		}
+		return instance;
 	}
 
 	public CQLQueryInstance getSelectedQueryInstance() {

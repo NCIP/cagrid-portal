@@ -201,7 +201,7 @@
 	 id="portletModeParameterHandlerMapping"
 		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
 		
-		<property name="order" value="2" />
+		<property name="order" value="1" />
 		
 		<property name="parameterName" value="operation"/>
 		
@@ -258,17 +258,31 @@
 	</bean>
 
 	<bean id="tabHandlerMapping"
-		class="gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryTabHandlerMapping">
+		class="gov.nih.nci.cagrid.portal2.portlet.tab.SelectedPathDelegatingTabHandlerMapping">
 		
-		<property name="interPortletMessageManager" ref="interPortletMessageManager"/>
-		<property name="discoveryModel" ref="discoveryModel"/>
-		<property name="serviceSelectedTabPath" value="/details/service" />
-		<property name="participantSelectedTabPath" value="/details/participant" />
-		<property name="pocSelectedTabPath" value="/details/poc" />
+		
+		<property name="selectedPathHandlers">
+			<list>
+				<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.SelectDiscoveryItemPathHandler" autowire="byName">
+					<property name="modePreferenceName" value="discoveryItemSelectMode" />
+					<property name="inputQueuePreferenceName" value="selectedDiscoveryItemInputQueueName" />
+					<property name="inputQueueNameDefaultValue" value="selectedDiscoveryItem" />
+					<property name="serviceSelectedTabPath" value="/details/service" />
+					<property name="participantSelectedTabPath" value="/details/participant" />
+					<property name="pocSelectedTabPath" value="/details/poc" />		
+				</bean>
+				<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.SelectDiscoveryDirectoryPathHandler" autowire="byName">
+					<property name="modePreferenceName" value="discoveryDirectorySelectMode" />
+					<property name="inputQueuePreferenceName" value="selectedDiscoveryDirectoryInputQueueName" />
+					<property name="inputQueueNameDefaultValue" value="selectedDiscoveryDirectory" />
+					<property name="selectedTabPath" value="/directory/listView" />
+				</bean>
+			</list>
+		</property>
 		
 		<property name="tabControlConfig" ref="discoveryTabControlConfig"/>
 		
-		<property name="order" value="1" />
+		<property name="order" value="2" />
 		
 		<property name="interceptors">
 			<list>

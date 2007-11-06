@@ -19,5 +19,6 @@ public interface CQLQueryInstanceExecutor {
 	
 	void start();
 	boolean cancel();
+	boolean timeout();
 	
 }

@@ -10,6 +10,15 @@
 -->
 </style>
 <c:choose>
+<c:when test="${!empty resultsCommand.instance.error}">
+		<div style="width:500px;">
+		<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:200px; overflow:scroll">
+<pre>
+<c:out value="${resultsCommand.instance.error}" escapeXml="false"/>
+</pre>
+		</div>
+		</div>
+</c:when>
 <c:when test="${empty resultsCommand.instance.result}">
 No results to display.
 </c:when>

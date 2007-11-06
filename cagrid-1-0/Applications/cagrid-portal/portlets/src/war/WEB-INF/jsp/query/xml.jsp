@@ -12,7 +12,7 @@
 		<tr>
 			<td>URL</td>
 			<td><form:input path="dataServiceUrl" size="100"/><br/>
-				<form:errors path="dataServiceUrl"/></td>
+				<span style="color:red"><form:errors path="dataServiceUrl"/></span></td>
 		</tr>
 		<tr>
 			<td valign="top">Query</td>
@@ -21,7 +21,7 @@
 				<form:textarea id="${resizablePrefix}" cssStyle="width:100%; height:200px" path="cqlQuery"/>
 				</div>
 			<br/>
-			<form:errors path="cqlQuery"/>
+			<span style="color:red"><form:errors path="cqlQuery"/></span>
 			</td>				
 		</tr>
 		<tr>

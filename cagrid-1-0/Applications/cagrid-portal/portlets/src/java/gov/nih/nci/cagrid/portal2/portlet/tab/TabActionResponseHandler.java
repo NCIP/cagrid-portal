@@ -12,6 +12,7 @@ import javax.portlet.ActionResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 
 /**
@@ -29,6 +30,8 @@ public class TabActionResponseHandler implements ActionResponseHandler,
 	private String newTabPath;
 
 	private String errorTabPath;
+	
+	private String errorsAttributeName;
 
 	/*
 	 * (non-Javadoc)
@@ -41,8 +44,11 @@ public class TabActionResponseHandler implements ActionResponseHandler,
 	}
 
 	public void handle(ActionRequest request, ActionResponse response,
-			Object command, Errors errors) {
+			Object command, BindException errors) {
 		if (errors != null && errors.hasErrors()) {
+			if(getErrorsAttributeName() != null){
+				request.setAttribute(getErrorsAttributeName(), errors);
+			}
 			handle(request, response, getErrorTabPath());
 		} else {
 			handle(request, response);
@@ -86,6 +92,14 @@ public class TabActionResponseHandler implements ActionResponseHandler,
 
 	public void setErrorTabPath(String errorTabPath) {
 		this.errorTabPath = errorTabPath;
+	}
+
+	public String getErrorsAttributeName() {
+		return errorsAttributeName;
+	}
+
+	public void setErrorsAttributeName(String errorsAttributeName) {
+		this.errorsAttributeName = errorsAttributeName;
 	}
 
 }

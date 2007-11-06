@@ -27,7 +27,7 @@ public class PointOfContactDirectory extends DiscoveryDirectory {
 	 */
 	@Override
 	public List getObjects() {
-		return getPointOfContactDao().getAll();
+		return getPointOfContactDao().getAllPointOfContactPersons();
 	}
 
 	public PointOfContactDao getPointOfContactDao() {

@@ -8,5 +8,5 @@ package gov.nih.nci.cagrid.portal2.domain.dataservice;
  *
  */
 public enum QueryInstanceState {
-	UNSCHEDULED, SCHEDULED, RUNNING, COMPLETE, CANCELLED, ERROR;
+	UNSCHEDULED, SCHEDULED, RUNNING, COMPLETE, CANCELLED, ERROR, TIMEDOUT;
 }

@@ -1,48 +1,47 @@
-<c:forEach items="${listCommand.scroller.page}" var="service">
+
 
 	<table border="0" class="contentInnerTable">
 		<thead>
-			<tr>
-				<th class="contentTableHeader" scope="colgroup" colspan="2">
-				Service Details</th>
+			<tr class="contentTableHeader">
+				<th>Name</th>
+				<th>Type</th>
+				<th>Status</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="dataRowLight">
-				<td class="dataCellTextBold">Name</td>
-				<td class="dataCellText"><c:out value="${service.serviceMetadata.serviceDescription.name}"/></td>
-			</tr>
-			<tr class="dataRowDark">
-				<td class="dataCellTextBold">URL</td>
+			<c:forEach items="${listCommand.scroller.page}" var="service" varStatus="rowStatus">
+			
+				<c:choose>
+					<c:when test="${rowStatus.index % 2 == 0}">
+						<c:set var="rowClass" value="dataRowDark"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="rowClass" value="dataRowLight"/>
+					</c:otherwise>
+				</c:choose>
+			
+			<tr class="<c:out value="${rowClass}"/>">
+				<td class="dataCellText">
+					<c:out value="${service.serviceMetadata.serviceDescription.name}"/>
+				</td>
 				<td class="dataCellText">
 					<c:choose>
 						<c:when test="${service.class.simpleName == 'GridDataService' && !empty service.domainModel}">
-							<a href="<portlet:actionURL><portlet:param name="operation" value="selectService"/><portlet:param name="selectedId" value="${service.id}"/></portlet:actionURL>"
-								alt="Query this data service"
-							>
-								<c:out value="${service.url}"/>
-							</a>
+							DATA
 						</c:when>
 						<c:otherwise>
-							<c:out value="${service.url}"/>
+							ANALYTICAL
 						</c:otherwise>
 					</c:choose>
 				</td>
+				<td class="dataCellText"><c:out value="${service.currentStatus}"/></td>
+				<td>
+					<a alt="More Details..." href="<portlet:actionURL><portlet:param name="operation" value="selectService"/><portlet:param name="selectedId" value="${service.id}"/></portlet:actionURL>">
+						More Details...
+					</a>
+				</td>
 			</tr>
-			<tr class="dataRowLight">
-				<td class="dataCellTextBold">Description</td>
-				<td class="dataCellText"><c:out value="${service.serviceMetadata.serviceDescription.description}"/></td>
-			</tr>
-			<tr class="dataRowDark">
-				<td class="dataCellTextBold"></td>
-				<td class="dataCellText"><a href="<portlet:actionURL><portlet:param name="operation" value="selectService"/><portlet:param name="selectedId" value="${service.id}"/></portlet:actionURL>">
-					<span
-					onmouseover="changeMenuStyle(this,'txtHighlightOn'),showCursor()"
-					onmouseout="changeMenuStyle(this,'txtHighlight'),hideCursor()"
-					class="txtHighlight">More Details</span></a></td>
-			</tr>
+			</c:forEach>
 		</tbody>
 	</table>
-	<br/>
-	
-</c:forEach>

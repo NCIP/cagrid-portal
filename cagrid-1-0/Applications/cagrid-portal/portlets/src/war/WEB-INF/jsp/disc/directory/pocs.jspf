@@ -1,31 +1,37 @@
-<c:forEach items="${listCommand.scroller.page}" var="poc">
+
 
 	<table border="0" class="contentInnerTable">
 		<thead>
-			<tr>
-				<th class="contentTableHeader" scope="colgroup" colspan="2">
-				POC Details</th>
+			<tr class="contentTableHeader">
+				<th>Name</th>
+				<th>Email</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="dataRowLight">
-				<td class="dataCellTextBold leftColumn">Name</td>
-				<td class="dataCellText"><c:out value="${poc.person.firstName}"/> <c:out value="${pocs.person.lastName}"/></td>
-			</tr>
-			<tr class="dataRowDark">
-				<td class="dataCellTextBold leftColumn">Role</td>
-				<td class="dataCellText"><c:out value="${poc.role}"/></td>
-			</tr>
-			<tr class="dataRowLight">
-				<td class="dataCellTextBold leftColumn">Affiliation</td>
-				<td class="dataCellText"><c:out value="${poc.affiliation}"/></td>
-			</tr>
-			<tr class="dataRowDark">
-				<td class="dataCellTextBold leftColumn">Email</td>
-				<td class="dataCellText"><c:out value="${poc.person.emailAddress}"/></td>
-			</tr>
+			<c:forEach items="${listCommand.scroller.page}" var="poc" varStatus="rowStatus">
+			
+				<c:choose>
+					<c:when test="${rowStatus.index % 2 == 0}">
+						<c:set var="rowClass" value="dataRowDark"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="rowClass" value="dataRowLight"/>
+					</c:otherwise>
+				</c:choose>
+			
+				<tr class="<c:out value="${rowClass}"/>">
+			
+					<td class="dataCellText"><c:out value="${poc.firstName}"/> <c:out value="${poc.lastName}"/></td>
+					<td class="dataCellText"><c:out value="${poc.emailAddress}"/></td>
+					<td class="dataCellText">
+						<a alt="More Details..." href="<portlet:actionURL><portlet:param name="operation" value="selectPoc"/><portlet:param name="selectedId" value="${poc.id}"/></portlet:actionURL>">
+							More Details...		
+						</a>
+					</td>
+				</tr>
+
+			</c:forEach>
 		</tbody>
 	</table>
-	<br/>
-	
-</c:forEach>
+

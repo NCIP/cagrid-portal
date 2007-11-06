@@ -3,10 +3,10 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.discovery.details;
 
-import org.springframework.beans.factory.annotation.Required;
-
-import gov.nih.nci.cagrid.portal2.dao.PointOfContactDao;
+import gov.nih.nci.cagrid.portal2.dao.PersonDao;
 import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryModel;
+
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -14,7 +14,7 @@ import gov.nih.nci.cagrid.portal2.portlet.discovery.DiscoveryModel;
  */
 public class SelectPocController extends AbstractDiscoverySelectDetailsController {
 
-	private PointOfContactDao pointOfContactDao;
+	private PersonDao personDao;
 	
 	/**
 	 * 
@@ -37,7 +37,6 @@ public class SelectPocController extends AbstractDiscoverySelectDetailsControlle
 	 */
 	public SelectPocController(Class commandClass, String commandName) {
 
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
@@ -45,17 +44,17 @@ public class SelectPocController extends AbstractDiscoverySelectDetailsControlle
 	 */
 	@Override
 	protected void doSelect(DiscoveryModel model, Integer selectedId) {
-		model.setSelectedPointOfContact(getPointOfContactDao().getById(selectedId));
+		model.setSelectedPointOfContact(getPersonDao().getById(selectedId));
 
 	}
 
 	@Required
-	public PointOfContactDao getPointOfContactDao() {
-		return pointOfContactDao;
+	public PersonDao getPersonDao() {
+		return personDao;
 	}
 
-	public void setPointOfContactDao(PointOfContactDao pointOfContactDao) {
-		this.pointOfContactDao = pointOfContactDao;
+	public void setPersonDao(PersonDao personDao) {
+		this.personDao = personDao;
 	}
 
 }

@@ -3,12 +3,9 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.discovery;
 
-import gov.nih.nci.cagrid.portal2.dao.GridServiceDao;
-import gov.nih.nci.cagrid.portal2.dao.ParticipantDao;
-import gov.nih.nci.cagrid.portal2.dao.PointOfContactDao;
 import gov.nih.nci.cagrid.portal2.domain.GridService;
 import gov.nih.nci.cagrid.portal2.domain.Participant;
-import gov.nih.nci.cagrid.portal2.domain.metadata.common.PointOfContact;
+import gov.nih.nci.cagrid.portal2.domain.Person;
 import gov.nih.nci.cagrid.portal2.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal2.portlet.discovery.dir.DiscoveryDirectory;
 
@@ -31,7 +28,7 @@ public class DiscoveryModel {
 	private DiscoveryResults selectedResults;
 	private GridService selectedService;
 	private Participant selectedParticipant;
-	private PointOfContact selectedPointOfContact;
+	private Person selectedPointOfContact;
 
 	/**
 	 * 
@@ -140,11 +137,11 @@ public class DiscoveryModel {
 		this.selectedParticipant = selectedParticipant;
 	}
 
-	public PointOfContact getSelectedPointOfContact() {
+	public Person getSelectedPointOfContact() {
 		return selectedPointOfContact;
 	}
 
-	public void setSelectedPointOfContact(PointOfContact selectedPointOfContact) {
+	public void setSelectedPointOfContact(Person selectedPointOfContact) {
 		this.selectedPointOfContact = selectedPointOfContact;
 	}
 
