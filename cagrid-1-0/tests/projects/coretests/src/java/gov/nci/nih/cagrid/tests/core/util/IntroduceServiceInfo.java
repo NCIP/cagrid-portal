@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -39,29 +40,7 @@ public class IntroduceServiceInfo {
 		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 		ServiceXmlHandler handler = new ServiceXmlHandler();
 		parser.parse(serviceXmlDescriptor, handler);
-		this.methodNames = handler.methodNames.toArray(new String[0]);
-	}
-
-
-	private class ServiceXmlHandler extends DefaultHandler {
-		public ArrayList<String> methodNames = new ArrayList<String>();
-
-
-		@Override
-		public void startElement(String uri, String lname, String qname, Attributes atts) {
-			if (qname.endsWith("Service")) {
-				IntroduceServiceInfo.this.serviceName = atts.getValue("name");
-				IntroduceServiceInfo.this.namespace = atts.getValue("namespace");
-				IntroduceServiceInfo.this.packageName = atts.getValue("packageName");
-			} else if (qname.endsWith("Method")) {
-				if ("false".equals(atts.getValue("isProvided"))) {
-					this.methodNames.add(atts.getValue("name"));
-				}
-			} else if (qname.endsWith("TransportLevelSecurity")) {
-				IntroduceServiceInfo.this.transportSecurity = atts.getValue("xsi:type").endsWith(
-					"TransportLevelSecurity");
-			}
-		}
+		this.methodNames = handler.handledMethodNames.toArray(new String[0]);
 	}
 
 
@@ -126,4 +105,25 @@ public class IntroduceServiceInfo {
 		return this.transportSecurity;
 	}
 
+    
+    private class ServiceXmlHandler extends DefaultHandler {
+        public List<String> handledMethodNames = new ArrayList<String>();
+
+
+        @Override
+        public void startElement(String uri, String lname, String qname, Attributes atts) {
+            if (qname.endsWith("Service")) {
+                IntroduceServiceInfo.this.serviceName = atts.getValue("name");
+                IntroduceServiceInfo.this.namespace = atts.getValue("namespace");
+                IntroduceServiceInfo.this.packageName = atts.getValue("packageName");
+            } else if (qname.endsWith("Method")) {
+                if ("false".equals(atts.getValue("isProvided"))) {
+                    this.handledMethodNames.add(atts.getValue("name"));
+                }
+            } else if (qname.endsWith("TransportLevelSecurity")) {
+                IntroduceServiceInfo.this.transportSecurity = atts.getValue("xsi:type").endsWith(
+                    "TransportLevelSecurity");
+            }
+        }
+    }
 }

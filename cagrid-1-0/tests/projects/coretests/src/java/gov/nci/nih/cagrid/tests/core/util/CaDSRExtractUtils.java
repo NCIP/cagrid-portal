@@ -1,6 +1,3 @@
-/*
- * Created on Jun 12, 2006
- */
 package gov.nci.nih.cagrid.tests.core.util;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
