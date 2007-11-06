@@ -77,6 +77,9 @@
         <fileset dir="${ext.lib.dir}">
             <include name="**/*.jar" />
         </fileset>
+    	<fileset dir="${test.ext.lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
         <path location="${classes.dir}" />
 		<path location="${build.stubs.classes}" />
         <fileset dir="${globus.dir}/lib">
