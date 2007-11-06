@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.globus;
 
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -10,8 +11,6 @@ import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeD
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
-
-import org.projectmobius.common.XMLUtilities;
 
 
 /**

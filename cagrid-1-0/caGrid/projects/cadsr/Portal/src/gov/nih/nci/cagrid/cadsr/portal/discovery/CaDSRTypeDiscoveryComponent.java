@@ -12,7 +12,6 @@ import gov.nih.nci.cagrid.cadsr.portal.PackageSelectedListener;
 import gov.nih.nci.cagrid.cadsr.portal.ProjectSelectedListener;
 import gov.nih.nci.cagrid.cadsrservice.UMLAssociation;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.graph.uml.UMLClass;
 import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
@@ -30,6 +29,8 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 
 /**
@@ -198,13 +199,13 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
 
                 } catch (RemoteException e) {
                     e.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error communicating with caDSR; please check the caDSR URL!", e);
+                    CompositeErrorDialog.showErrorDialog("Error communicating with caDSR; please check the caDSR URL!", e);
                     getCaDSRPanel().getMultiEventProgressBar().stopAll(
                         "Error communicating with caDSR; please check the caDSR URL!");
                     getUMLDiagram().clear();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error processing model!", e);
+                    CompositeErrorDialog.showErrorDialog("Error processing model!", e);
                     getCaDSRPanel().getMultiEventProgressBar().stopAll("Error processing model!");
                     getUMLDiagram().clear();
                 } finally {

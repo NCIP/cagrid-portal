@@ -3,10 +3,8 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialog;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.PromptButtonDialog;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -102,8 +100,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.cagrid.grape.utils.ErrorDialog;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
@@ -118,7 +118,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  */
-public class ModificationViewer extends GridPortalComponent {
+public class ModificationViewer extends ApplicationComponent {
     private static final Logger logger = Logger.getLogger(ModificationViewer.class);
 
     private JPanel mainPanel = null;
@@ -304,8 +304,7 @@ public class ModificationViewer extends GridPortalComponent {
                 if (file.exists() && file.canRead()) {
                     try {
 
-                        BusyDialogRunnable br = new BusyDialogRunnable(PortalResourceManager.getInstance()
-                            .getGridPortal(), "Initializing Modification Viewer") {
+                        BusyDialogRunnable br = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Initializing Modification Viewer") {
                             @Override
                             public void process() {
                                 this.setProgressText("Initializing Modification Viewer");
@@ -327,13 +326,13 @@ public class ModificationViewer extends GridPortalComponent {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        ErrorDialog.showErrorDialog(e);
+                        ErrorDialog.showError(e);
                         if (ModificationViewer.this != null) {
                             ModificationViewer.this.dispose();
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(PortalResourceManager.getInstance().getGridPortal(), "Directory "
+                    JOptionPane.showMessageDialog(GridApplication.getContext().getApplication(), "Directory "
                         + ModificationViewer.this.methodsDirectory.getAbsolutePath()
                         + " does not seem to be an introduce service");
                     ModificationViewer.this.dispose();
@@ -392,7 +391,7 @@ public class ModificationViewer extends GridPortalComponent {
 
             if (upgrader.canIntroduceBeUpgraded() || upgrader.extensionsNeedUpgraded()) {
                 String result = PromptButtonDialog.prompt(
-                    PortalResourceManager.getInstance().getGridPortal(),
+                    GridApplication.getContext().getApplication(),
                     "Upgrade?",
                     new String[]{
                         "",
@@ -426,7 +425,7 @@ public class ModificationViewer extends GridPortalComponent {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        int answer = JOptionPane.showConfirmDialog(PortalResourceManager.getInstance().getGridPortal(),
+                        int answer = JOptionPane.showConfirmDialog(GridApplication.getContext().getApplication(),
                             "The service had the following fatal error during the upgrade process:\n" + e.getMessage()
                                 + "If you select OK, Introduce will roll your service back to its previous\n"
                                 + "state before the upgrade attempt", "Error upgrading service",
@@ -438,7 +437,7 @@ public class ModificationViewer extends GridPortalComponent {
                                 }
                                 upgrader.recover();
                             } catch (Exception ex) {
-                                ErrorDialog.showErrorDialog(e);
+                                ErrorDialog.showError(e);
                             }
                             ModificationViewer.this.dispose();
                             this.beenDisposed = true;
@@ -463,7 +462,7 @@ public class ModificationViewer extends GridPortalComponent {
                     this.info = new ServiceInformation(this.methodsDirectory);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ErrorDialog.showErrorDialog(e);
+                    CompositeErrorDialog.showErrorDialog(e);
                     ModificationViewer.this.dispose();
                     this.beenDisposed = true;
                 }
@@ -611,14 +610,13 @@ public class ModificationViewer extends GridPortalComponent {
                             ModificationViewer.this,
                             "Are you sure you wish to reload?\nAll current modifactions will be lost!\nThis will simply reload the modification viewer with the\nservice without saving the current changes since the last save.");
                     if (decision == JOptionPane.OK_OPTION) {
-                        BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
-                            .getGridPortal(), "Reload") {
+                        BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Reload") {
                             @Override
                             public void process() {
                                 logger.info("Reloading service");
                                 setProgressText("Reloading service");
                                 dispose();
-                                PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+                                GridApplication.getContext().getApplication().addApplicationComponent(
                                     new ModificationViewer(ModificationViewer.this.methodsDirectory));
                             }
                         };
@@ -852,7 +850,7 @@ public class ModificationViewer extends GridPortalComponent {
                     ModificationViewer.this.dirty = true;
                     int row = getMethodsTable().getSelectedRow();
                     if ((row < 0) || (row >= getMethodsTable().getRowCount())) {
-                        PortalUtils.showErrorMessage("Please select a method to remove.");
+                        ErrorDialog.showError("Please select a method to remove.");
                         return;
                     }
                     try {
@@ -904,7 +902,7 @@ public class ModificationViewer extends GridPortalComponent {
                         String method = (String) changes.get(i);
                         sb.append("    " + (i + 1) + ") " + method);
                     }
-                    PortalUtils.showMessage(sb.toString());
+                    GridApplication.getContext().showMessage(sb.toString());
                 }
             }
         }
@@ -916,12 +914,12 @@ public class ModificationViewer extends GridPortalComponent {
             this.resetMethodSecurityIfServiceSecurityChanged();
         } catch (Exception e) {
             e.printStackTrace();
-            ErrorDialog.showErrorDialog(e);
+            CompositeErrorDialog.showErrorDialog(e);
             return;
         }
         MethodType method = getMethodsTable().getSelectedMethodType();
         if (method == null) {
-            PortalUtils.showErrorMessage("Please select a method to modify.");
+            ErrorDialog.showError("Please select a method to modify.");
             return;
         }
         // TODO: check this.... setting this for now......
@@ -1004,20 +1002,18 @@ public class ModificationViewer extends GridPortalComponent {
                         .getBaseDirectory().getAbsolutePath());
                     dialog.setVisible(true);
                     if (!dialog.wasCanceled()) {
-                        BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
-                            .getGridPortal(), "Reloading") {
+                        BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Reloading") {
                             @Override
                             public void process() {
 
                                 try {
                                     setProgressText("re-initializing modification viewer");
                                     dispose();
-                                    PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+                                    GridApplication.getContext().getApplication().addApplicationComponent(
                                         new ModificationViewer(ModificationViewer.this.methodsDirectory));
                                 } catch (Exception e1) {
                                     // e1.printStackTrace();
-                                    ErrorDialog
-                                        .showErrorDialog("Unable to roll back, there may be no older versions available");
+                                    ErrorDialog.showError("Unable to roll back, there may be no older versions available");
                                     return;
                                 }
                             }
@@ -1065,7 +1061,7 @@ public class ModificationViewer extends GridPortalComponent {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        ErrorDialog.showErrorDialog("Cannot load extension: " + extDtype.getDisplayName(), e);
+                        CompositeErrorDialog.showErrorDialog("Cannot load extension: " + extDtype.getDisplayName(), e);
                     }
                 }
             }
@@ -1126,7 +1122,7 @@ public class ModificationViewer extends GridPortalComponent {
                     .getService(0));
             } catch (Exception e) {
                 e.printStackTrace();
-                ErrorDialog.showErrorDialog(e);
+                CompositeErrorDialog.showErrorDialog(e);
             }
         }
         return this.securityPanel;
@@ -1458,7 +1454,7 @@ public class ModificationViewer extends GridPortalComponent {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error loading discovery type: " + dd.getDisplayName(), e);
+                        CompositeErrorDialog.showErrorDialog("Error loading discovery type: " + dd.getDisplayName(), e);
                     }
                 }
             }
@@ -1490,7 +1486,7 @@ public class ModificationViewer extends GridPortalComponent {
                 return;
             }
 
-            BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(), "Save") {
+            BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Save") {
                 @Override
                 public void process() {
                     try {
@@ -1922,7 +1918,7 @@ public class ModificationViewer extends GridPortalComponent {
                         getServicePropertiesTable().removeSelectedRow();
                     } catch (Exception e1) {
                         e1.printStackTrace();
-                        ErrorDialog.showErrorDialog(e1);
+                        ErrorDialog.showError(e1);
                     }
                 }
             });
@@ -2317,10 +2313,11 @@ public class ModificationViewer extends GridPortalComponent {
         } else {
             String[] errorMessages = discoveryComponent.getErrorMessage();
             if (errorMessages != null && errorMessages.length > 0) {
-                ErrorDialog.showErrorDialog("Problem adding types, see details for more information.", errorMessages,
-                    discoveryComponent.getErrorCauseThrowable());
+                //TODO:FIX ME
+                //CompositeErrorDialog.showError("Problem adding types, see details for more information.", errorMessages,
+                //    discoveryComponent.getErrorCauseThrowable());
             } else {
-                ErrorDialog.showErrorDialog("Unspecified problem adding types.", discoveryComponent
+                CompositeErrorDialog.showErrorDialog("Unspecified problem adding types.", discoveryComponent
                     .getErrorCauseThrowable());
             }
         }
@@ -2348,7 +2345,7 @@ public class ModificationViewer extends GridPortalComponent {
                         getNamespaceJTree().removeSelectedNode();
                     }
                 } else {
-                    PortalUtils.showMessage("Cannot remove " + IntroduceConstants.W3CNAMESPACE);
+                    ErrorDialog.showError("Cannot remove " + IntroduceConstants.W3CNAMESPACE);
                 }
             }
         } catch (Exception ex) {

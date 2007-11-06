@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.common.ZipUtilities;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 
 import java.awt.Component;
 import java.io.File;
@@ -23,10 +23,8 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
 import org.apache.log4j.Logger;
+import org.cagrid.grape.GridApplication;
 import org.jdom.Document;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
@@ -191,7 +189,7 @@ public class ResourceManager {
     }
 
 
-    public static void setConfigFile(Document doc) throws IOException, MobiusException {
+    public static void setConfigFile(Document doc) throws IOException, Exception {
         FileWriter fw = new FileWriter(getPortalConfigFileLocation());
         fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
         fw.close();
@@ -367,7 +365,7 @@ public class ResourceManager {
 
 
     public static String promptDir(String defaultLocation) throws IOException {
-        return promptDir(PortalResourceManager.getInstance().getGridPortal(), defaultLocation);
+        return promptDir(GridApplication.getContext().getApplication(), defaultLocation);
     }
 
 
@@ -385,7 +383,7 @@ public class ResourceManager {
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setMultiSelectionEnabled(false);
-        PortalUtils.centerComponent(chooser);
+        GridApplication.getContext().centerComponent(chooser);
 
         int returnVal = chooser.showOpenDialog(owner);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -397,7 +395,7 @@ public class ResourceManager {
 
 
     public static String promptFile(String defaultLocation, FileFilter filter) throws IOException {
-        return promptFile(PortalResourceManager.getInstance().getGridPortal(), defaultLocation, filter);
+        return promptFile(GridApplication.getContext().getApplication(), defaultLocation, filter);
     }
 
 
@@ -411,7 +409,7 @@ public class ResourceManager {
 
 
     public static String[] promptMultiFiles(String defaultLocation, FileFilter filter) throws IOException {
-        return promptMultiFiles(PortalResourceManager.getInstance().getGridPortal(), defaultLocation, filter);
+        return promptMultiFiles(GridApplication.getContext().getApplication(), defaultLocation, filter);
     }
 
 
@@ -439,7 +437,7 @@ public class ResourceManager {
         chooser.setDialogTitle(title);
         chooser.setFileFilter(filter);
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        PortalUtils.centerComponent(chooser);
+        GridApplication.getContext().centerComponent(chooser);
 
         int choice = chooser.showOpenDialog(owner);
         if (choice == JFileChooser.APPROVE_OPTION) {

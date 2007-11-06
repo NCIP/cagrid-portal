@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.codegen.services.security.tools;
 
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
@@ -18,8 +19,6 @@ import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
-
-import org.projectmobius.common.XMLUtilities;
 
 
 /**

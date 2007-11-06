@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.data.ui.table;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -11,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
 
 
 /**
@@ -20,7 +18,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Jun 28, 2006
- * @version $Id: CustomSerializationDialog.java,v 1.1 2007-07-12 17:20:52 dervin Exp $
+ * @version $Id: CustomSerializationDialog.java,v 1.2 2007-11-06 15:53:40 hastings Exp $
  */
 public class CustomSerializationDialog extends JDialog {
 
@@ -36,7 +34,7 @@ public class CustomSerializationDialog extends JDialog {
 
 
     public CustomSerializationDialog() {
-        super(PortalResourceManager.getInstance().getGridPortal(), "Custom Serialization", true);
+        super(GridApplication.getContext().getApplication(), "Custom Serialization", true);
         this.initialize();
     }
 
@@ -54,7 +52,7 @@ public class CustomSerializationDialog extends JDialog {
     private void initialize() {
         this.setSize(new java.awt.Dimension(350, 112));
         this.setContentPane(getMainPanel());
-        PortalUtils.centerComponent(this);
+        GridApplication.getContext().centerDialog(this);
         setVisible(true);
     }
 

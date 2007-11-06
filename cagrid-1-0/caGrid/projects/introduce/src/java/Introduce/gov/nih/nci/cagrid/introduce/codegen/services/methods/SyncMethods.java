@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.codegen.services.methods;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -26,7 +27,6 @@ import org.apache.ws.jaxme.js.JavaSourceFactory;
 import org.apache.ws.jaxme.js.util.JavaParser;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.projectmobius.common.XMLUtilities;
 
 
 /**

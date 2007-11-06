@@ -328,7 +328,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
                 // progress.getProgress().setString("Adding results to
                 // service...");
                 results = createNamespaceTypes(schemaDestinationDir, result, copiedXSDs);
-            } catch (MobiusException e) {
+            } catch (Exception e) {
                 addError("Problem processing schemas created by SDK: " + e.getMessage());
                 setErrorCauseThrowable(e);
                 return null;
@@ -352,7 +352,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
      * @throws MobiusException
      */
     private NamespaceType[] createNamespaceTypes(File schemaDestinationDir, SDKExecutionResult result,
-        List<File> schemas) throws MobiusException {
+        List<File> schemas) throws Exception {
         List<NamespaceType> namespaceTypes = new ArrayList<NamespaceType>();
         for (File schema : schemas) {
             NamespaceType nsType = CommonTools.createNamespaceType(schema.getAbsolutePath(), schemaDestinationDir);

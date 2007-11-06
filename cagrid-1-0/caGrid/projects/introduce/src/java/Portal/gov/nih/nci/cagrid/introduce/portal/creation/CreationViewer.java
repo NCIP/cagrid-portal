@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.FocusEvent;
@@ -19,16 +20,20 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -39,11 +44,6 @@ import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
-import javax.swing.JTabbedPane;
-import javax.swing.JCheckBox;
-import javax.swing.SwingConstants;
-import javax.swing.BorderFactory;
-import javax.swing.border.TitledBorder;
 
 
 /**
@@ -67,7 +67,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 
     private JPanel inputPanel = null;
 
-    private JPanel mainPanel = null;
+    private JPanel mainPanel = null;  //  @jve:decl-index=0:visual-constraint="10,267"
 
     private JPanel buttonPanel = null;
 
@@ -145,6 +145,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
      */
     private void initialize() {
         this.setContentPane(new IconFeedbackPanel(this.validationModel, getMainPanel()));
+        this.setSize(new Dimension(676, 248));
         this.setContentPane(getMainPanel());
         this.setFrameIcon(IntroduceLookAndFeel.getCreateServiceIcon());
         this.setTitle("Create a Grid Service");
@@ -1105,4 +1106,4 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		getResourceProperty().setEnabled(true);
 
 	}
-}
+}  //  @jve:decl-index=0:visual-constraint="10,10"

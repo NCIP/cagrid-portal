@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.introduce.portal.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -23,12 +22,9 @@ import java.util.Properties;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import org.projectmobius.portal.GridPortalComponent;
-import org.projectmobius.portal.PortalResourceManager;
-
-/**
- * CreationViewerBaseComponent This is the base component for developing and
- * creation viewer. A base implementation is porvided, however, to create
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.GridApplication;
+/**implementation is porvided, however, to create
  * specific look-feel or additions one should extend this panel and add this
  * componenet to the introduce portal configuration.
  * 
@@ -37,7 +33,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @created Jul 7, 2006
  */
-public abstract class CreationViewerBaseComponent extends GridPortalComponent {
+public abstract class CreationViewerBaseComponent extends ApplicationComponent {
 
 	/**
 	 * Will call the create service engine component to create the base
@@ -88,8 +84,7 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 			CreationViewerBaseComponent.this.setVisible(false);
 			dispose();
 
-			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager
-					.getInstance().getGridPortal(), "Creating") {
+			BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Creating") {
 				@Override
 				public void process() {
 					try {
@@ -171,11 +166,10 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 									.getServiceExtensionByDisplayName(
 											(String) extensions.get(i));
 							JDialog extDialog = gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools
-									.getCreationUIDialog(PortalResourceManager
-											.getInstance().getGridPortal(), edt
+									.getCreationUIDialog(GridApplication.getContext().getApplication(), edt
 											.getName(), info);
 							if (extDialog != null) {
-								PortalUtils.centerComponent(extDialog);
+								GridApplication.getContext().centerDialog(extDialog);
 								extDialog.setVisible(true);
 							}
 						}
@@ -206,9 +200,8 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 							setProgressText("launching modification viewer");
 							ModificationViewer modViewer = new ModificationViewer(
 									new File(dirName));
-							PortalResourceManager.getInstance().getGridPortal()
-									.addGridPortalComponent(modViewer);
-							modViewer.setMaximum(true);
+							GridApplication.getContext().getApplication().addApplicationComponent(modViewer);
+							//modViewer.setMaximum(true);
 						} else {
 							setErrorMessage("Error creating new service!");
 							return;

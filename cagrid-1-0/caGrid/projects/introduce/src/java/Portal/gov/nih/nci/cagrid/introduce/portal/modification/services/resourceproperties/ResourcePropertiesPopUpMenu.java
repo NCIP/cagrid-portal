@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.event.MouseAdapter;
@@ -9,6 +8,8 @@ import java.io.File;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+
+import org.cagrid.grape.GridApplication;
 
 
 public class ResourcePropertiesPopUpMenu extends JPopupMenu {
@@ -65,7 +66,7 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
             + "etc"), new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator + "schema"
             + File.separator + node.getInfo().getServices().getService(0).getName()), true);
         comp.setSize(600, 300);
-        PortalUtils.centerComponent(comp);
+        GridApplication.getContext().centerDialog(comp);
         comp.setVisible(true);
     }
 

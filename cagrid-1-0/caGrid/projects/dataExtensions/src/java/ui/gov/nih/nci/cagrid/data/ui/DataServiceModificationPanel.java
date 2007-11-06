@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.ui;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
 import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.style.ServiceStyleContainer;
@@ -21,6 +20,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 
 /**
@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Oct 10, 2006
- * @version $Id: DataServiceModificationPanel.java,v 1.4 2007-08-21 21:02:11 dervin Exp $
+ * @version $Id: DataServiceModificationPanel.java,v 1.5 2007-11-06 15:53:41 hastings Exp $
  */
 public class DataServiceModificationPanel extends ServiceModificationUIPanel {
     
@@ -75,7 +75,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                 LOG.debug("Tab " + tabName + " updated in " + (System.currentTimeMillis() - tabStart) + " ms");
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error updating information on " 
+                CompositeErrorDialog.showErrorDialog("Error updating information on " 
                     + getMainTabbedPane().getTitleAt(
                         getMainTabbedPane().getSelectedIndex()), ex.getMessage(), ex);
             }
@@ -98,7 +98,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                         dataManager.setClassSelectedInModel(packageName, mapping.getClassName(), true);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error setting class selection state in model",
+                        CompositeErrorDialog.showErrorDialog("Error setting class selection state in model",
                             ex.getMessage(), ex);
                     }
                 }
@@ -110,7 +110,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                         dataManager.setClassSelectedInModel(packageName, className, false);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error setting class selection state in model",
+                        CompositeErrorDialog.showErrorDialog("Error setting class selection state in model",
                             ex.getMessage(), ex);
                     }
                 }
@@ -153,7 +153,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			    }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog(
+                CompositeErrorDialog.showErrorDialog(
                     "Error getting enumeration use status", ex.getMessage(), ex);
             }
 			mainTabbedPane.addTab("Details", null, getDetailConfigPanel(),
@@ -172,7 +172,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                             "but the style could not be loaded.  Please check that it is ",
                             "installed and properly configured."
                         };
-                        ErrorDialog.showErrorDialog("Service style " + styleName + " not found", message);
+                        CompositeErrorDialog.showErrorDialog("Service style " + styleName + " not found", message);
                     } else {
                         DataServiceModificationSubPanel panel = StyleUiLoader.loadModificationUiPanel(
                             styleContainer, getServiceInfo(), dataManager);
@@ -184,7 +184,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog(
+                CompositeErrorDialog.showErrorDialog(
                     "Error loading service style configuration tab", ex.getMessage(), ex);
             }
             

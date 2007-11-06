@@ -56,7 +56,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
@@ -125,5 +124,7 @@
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-core.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-system.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-tests.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

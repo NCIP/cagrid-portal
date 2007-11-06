@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.auditors;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.auditing.DataServiceAuditors;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
@@ -17,6 +16,8 @@ import java.awt.GridBagLayout;
 import java.io.File;
 import java.io.FileWriter;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 /** 
  *  AuditorDeploymentConfigPanel
  *  Panel for deployment tiem configuration of Data Service auditors
@@ -24,7 +25,7 @@ import java.io.FileWriter;
  * @author David Ervin
  * 
  * @created May 24, 2007 1:34:32 PM
- * @version $Id: AuditorDeploymentConfigPanel.java,v 1.2 2007-08-24 14:14:50 dervin Exp $ 
+ * @version $Id: AuditorDeploymentConfigPanel.java,v 1.3 2007-11-06 15:53:41 hastings Exp $ 
  */
 public class AuditorDeploymentConfigPanel extends ServiceDeploymentUIPanel {
     
@@ -62,7 +63,7 @@ public class AuditorDeploymentConfigPanel extends ServiceDeploymentUIPanel {
             getAuditorsConfigPanel().updateDisplayedConfiguration();
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error displaying auditor configuration", 
+            CompositeErrorDialog.showErrorDialog("Error displaying auditor configuration", 
                 ex.getMessage(), ex);
         }
     }

@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.data.style.cacore32.wizard;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
@@ -32,6 +31,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
+
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
@@ -175,7 +176,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error loading configuration values: " + ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error loading configuration values: " + ex.getMessage(), ex);
         }
         enableRelaventComponents();
     }
@@ -407,7 +408,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                         originalFilename = ResourceManager.promptFile(null, null);
                     } catch (IOException ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error in file selection: " + ex.getMessage(), ex);
+                        CompositeErrorDialog.showErrorDialog("Error in file selection: " + ex.getMessage(), ex);
                     }
                     if (originalFilename != null) {
                         File originalFile = new File(originalFilename);
@@ -417,7 +418,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                             Utils.copyFile(originalFile, outputFile);
                         } catch (IOException ex) {
                             ex.printStackTrace();
-                            ErrorDialog.showErrorDialog("Error copying selected file to service directory",
+                            CompositeErrorDialog.showErrorDialog("Error copying selected file to service directory",
                                 ex.getMessage(), ex);
                         }
                         getCsmConfigTextField().setText(outputFile.getName());

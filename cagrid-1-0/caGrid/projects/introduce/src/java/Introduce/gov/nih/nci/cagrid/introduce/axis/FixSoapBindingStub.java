@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.axis;
 
+import gov.nih.nci.cagrid.common.XMLUtilities;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +17,6 @@ import java.util.StringTokenizer;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.projectmobius.common.XMLUtilities;
 
 
 public class FixSoapBindingStub {

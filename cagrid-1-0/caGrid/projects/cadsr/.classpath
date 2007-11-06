@@ -62,7 +62,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius-castor-0.9.4.3-xml.jar"/>
 	<classpathentry kind="lib" path="ext/lib/nsuml-0.4.20_modified.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ocl-argo-1.1.jar"/>
@@ -97,5 +96,7 @@
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-advertisement.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-1.1-Introduce-1.1-serviceTools.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

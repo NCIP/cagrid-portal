@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.awt.Dimension;
@@ -17,11 +15,13 @@ import java.util.StringTokenizer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.projectmobius.portal.PortalResourceManager;
-import javax.swing.JLabel;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.cagrid.grape.utils.ErrorDialog;
 
 public class RestoreDialog extends JDialog {
 
@@ -67,7 +67,7 @@ public class RestoreDialog extends JDialog {
 			}
 		
 		});
-		PortalUtils.centerComponent(this);
+		GridApplication.getContext().centerDialog(this);
 
 	}
 
@@ -143,7 +143,7 @@ public class RestoreDialog extends JDialog {
 							
 							if(getBackupsComboBox().getItemCount()==0){
 								ErrorDialog
-								.showErrorDialog("No selected or available services in cache");
+								.showError("No selected or available services in cache");
 								return;
 							}
 							
@@ -153,9 +153,7 @@ public class RestoreDialog extends JDialog {
 											"Are you sure you wish to roll back?\nThis will roll back to the last save point!\nAll current modifactions will be lost!\nIf you simply wish to throw away current modifications and reopen\nthe modification viewer to start again just close the window and click Modify Service again.");
 							if (decision == JOptionPane.OK_OPTION) {
 								BusyDialogRunnable r = new BusyDialogRunnable(
-										PortalResourceManager.getInstance()
-
-										.getGridPortal(), "Roll Back") {
+								    GridApplication.getContext().getApplication(), "Roll Back") {
 									@Override
 									public void process() {
 										try {
@@ -172,7 +170,7 @@ public class RestoreDialog extends JDialog {
 											
 										} catch (Exception e1) {
 											//e1.printStackTrace();
-											ErrorDialog
+											CompositeErrorDialog
 													.showErrorDialog("Unable to roll back: " + e1.getMessage());
 											dispose();
 											return;

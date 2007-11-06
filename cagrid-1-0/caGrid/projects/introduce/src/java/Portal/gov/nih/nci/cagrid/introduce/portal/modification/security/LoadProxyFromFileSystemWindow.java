@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.introduce.beans.security.ProxyCredential;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -16,7 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.projectmobius.portal.GridPortalComponent;
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 
 /**
@@ -28,7 +27,7 @@ import org.projectmobius.portal.GridPortalComponent;
  *          Exp $
  */
 
-public class LoadProxyFromFileSystemWindow extends GridPortalComponent {
+public class LoadProxyFromFileSystemWindow extends ApplicationComponent {
 
 	private JPanel jContentPane = null;
 	private JPanel mainPanel = null;
@@ -203,14 +202,14 @@ public class LoadProxyFromFileSystemWindow extends GridPortalComponent {
 	private void setProxy() {
 		String proxyStr = this.proxy.getText().trim();
 		if (proxyStr.length() == 0) {
-			PortalUtils.showErrorMessage("You must specify a proxy!!!");
+		    CompositeErrorDialog.showErrorDialog("You must specify a proxy!!!");
 			return;
 		}
 
 		try {
 			ProxyUtil.loadProxy(proxyStr);
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage("Invalid proxy specified!!!");
+		    CompositeErrorDialog.showErrorDialog("Invalid proxy specified!!!");
 			return;
 		}
 
@@ -220,8 +219,8 @@ public class LoadProxyFromFileSystemWindow extends GridPortalComponent {
 			ProxyCredential cred = new ProxyCredential(proxyStr);
 			this.serviceSecurity.setProxy(cred);
 		} catch (Exception e) {
-			// PortalUtils.showErrorMessage(e);
-			ErrorDialog.showErrorDialog(e);
+			// PortalUtils.showErrorDialogDialog(e);
+			CompositeErrorDialog.showErrorDialog(e);
 			return;
 		}
 		dispose();

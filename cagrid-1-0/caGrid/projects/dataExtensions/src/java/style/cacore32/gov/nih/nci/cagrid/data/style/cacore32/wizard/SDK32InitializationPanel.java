@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.style.cacore32.wizard;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
@@ -21,6 +20,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 /** 
  *  SDK32InitializationPanel
  *  Panel to initialize the SDK query processor v 3.2
@@ -28,7 +29,7 @@ import java.util.Set;
  * @author David Ervin
  * 
  * @created Jul 12, 2007 3:37:04 PM
- * @version $Id: SDK32InitializationPanel.java,v 1.2 2007-08-31 15:50:47 dervin Exp $ 
+ * @version $Id: SDK32InitializationPanel.java,v 1.3 2007-11-06 15:53:43 hastings Exp $ 
  */
 public class SDK32InitializationPanel extends CoreDsIntroPanel {
     
@@ -51,7 +52,7 @@ public class SDK32InitializationPanel extends CoreDsIntroPanel {
         if (!sdkQuery.exists()) {
             String[] error = {"The SDK Query project does not exist or has not",
                     "yet been built.  Please build this project first!"};
-            ErrorDialog.showErrorDialog("SDK Query Library Not Found", error);
+            CompositeErrorDialog.showErrorDialog("SDK Query Library Not Found", error);
         } else {
             // copy the library to the service's lib dir
             File sdkQueryOut = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation()) + File.separator
@@ -60,7 +61,7 @@ public class SDK32InitializationPanel extends CoreDsIntroPanel {
                 Utils.copyFile(sdkQuery, sdkQueryOut);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error copying the required query processor library", ex);
+                CompositeErrorDialog.showErrorDialog("Error copying the required query processor library", ex);
                 return;
             }
             // add the library to the service's additional libs list
@@ -84,7 +85,7 @@ public class SDK32InitializationPanel extends CoreDsIntroPanel {
                 ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error adding the library to the service information", ex);
+                CompositeErrorDialog.showErrorDialog("Error adding the library to the service information", ex);
                 return;
             }
             // add the query processor class name as a service property

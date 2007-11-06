@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -39,7 +40,6 @@ import org.apache.log4j.Priority;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
 
 
 /**
@@ -321,7 +321,7 @@ public final class CommonTools {
      * @return The NamespaceType representation of the schema
      * @throws MobiusException
      */
-    public static NamespaceType createNamespaceType(String xsdFilename, File serviceSchemaDir) throws MobiusException {
+    public static NamespaceType createNamespaceType(String xsdFilename, File serviceSchemaDir) throws Exception {
         NamespaceType namespaceType = new NamespaceType();
         File xsdFile = new File(xsdFilename);
         String location;
@@ -329,7 +329,7 @@ public final class CommonTools {
             location = "./" + Utils.getRelativePath(serviceSchemaDir, xsdFile).replace('\\', '/');
         } catch (IOException e) {
             e.printStackTrace();
-            throw new MobiusException("Problem getting relative path of XSD.", e);
+            throw new Exception("Problem getting relative path of XSD.", e);
         }
         namespaceType.setLocation(location);
         Document schemaDoc = XMLUtilities.fileNameToDocument(xsdFilename);

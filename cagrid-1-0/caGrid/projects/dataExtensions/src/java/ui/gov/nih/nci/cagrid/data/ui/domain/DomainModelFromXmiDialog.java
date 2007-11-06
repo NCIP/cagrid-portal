@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.data.ui.domain;
 
 
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
@@ -37,6 +36,8 @@ import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.filechooser.FileFilter;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
@@ -52,7 +53,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Oct 23, 2007 11:05:04 AM
- * @version $Id: DomainModelFromXmiDialog.java,v 1.4 2007-10-30 13:59:43 dervin Exp $ 
+ * @version $Id: DomainModelFromXmiDialog.java,v 1.5 2007-11-06 15:53:41 hastings Exp $ 
  */
 public class DomainModelFromXmiDialog extends JDialog {
     // keys for validation messages
@@ -126,7 +127,7 @@ public class DomainModelFromXmiDialog extends JDialog {
                     xmiFile = FixXmiExecutor.fixEaXmiModel(rawXmiFile, sdkDir);
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error executing fix-xmi command", ex.getMessage(), ex);
+                    CompositeErrorDialog.showErrorDialog("Error executing fix-xmi command", ex.getMessage(), ex);
                     return null;
                 }
             } else {
@@ -152,7 +153,7 @@ public class DomainModelFromXmiDialog extends JDialog {
                 model = parser.parse(xmiFile);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error parsing XMI to domain model", ex.getMessage(), ex);
+                CompositeErrorDialog.showErrorDialog("Error parsing XMI to domain model", ex.getMessage(), ex);
             }
             
             return model;
@@ -276,7 +277,7 @@ public class DomainModelFromXmiDialog extends JDialog {
                         selectedFile = ResourceManager.promptFile(null, xmiFilter);
                     } catch (IOException ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error selecting XMI file", ex.getMessage(), ex);
+                        CompositeErrorDialog.showErrorDialog("Error selecting XMI file", ex.getMessage(), ex);
                     }
                     
                     getXmiFileTextField().setText(selectedFile != null ? selectedFile : "");

@@ -9,7 +9,6 @@ import gov.nih.nci.cagrid.cadsr.portal.discovery.CaDSRDiscoveryConstants;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.PromptButtonDialog;
@@ -55,7 +54,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.cagrid.grape.utils.ErrorDialog;
 
 
 /**
@@ -65,7 +66,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.6 2007-08-22 18:05:54 dervin Exp $
+ * @version $Id: DomainModelConfigPanel.java,v 1.7 2007-11-06 15:53:40 hastings Exp $
  */
 public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
@@ -117,7 +118,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error loading domain model source", 
+            CompositeErrorDialog.showErrorDialog("Error loading domain model source", 
                 ex.getMessage(), ex);
         }
         // only enabled if domain model from caDSR
@@ -139,7 +140,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error loading domain model",
+                CompositeErrorDialog.showErrorDialog("Error loading domain model",
                     ex.getMessage(), ex);
             }
         } else {
@@ -198,7 +199,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             currentlyFromCadsr = true;
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error loading cadsr domain model information", 
+            CompositeErrorDialog.showErrorDialog("Error loading cadsr domain model information", 
                 ex.getMessage(), ex);
         }
     }
@@ -259,7 +260,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 String[] message = new String[]{
                         "There was an error loading the caDSR service url from the extension data.",
                         "The URL specified in the Introduce configuration will be used."};
-                ErrorDialog.showErrorDialog("Error getting caDSR Service url", message, ex);
+                CompositeErrorDialog.showErrorDialog("Error getting caDSR Service url", message, ex);
             }
             if (cadsrUrl == null || cadsrUrl.length() == 0) {
                 // grab the default URL and store it in the extension data
@@ -268,7 +269,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                     getExtensionDataManager().storeCadsrServiceUrl(cadsrUrl);
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error storing caDSR url", ex.getMessage(), ex);
+                    CompositeErrorDialog.showErrorDialog("Error storing caDSR url", ex.getMessage(), ex);
                 }
             }
             // set the URL appropriatly in the GUI
@@ -281,7 +282,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                             getCadsrBrowserPanel().getCadsr().getText());
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing domain model source", ex.getMessage(), ex);
+                        CompositeErrorDialog.showErrorDialog("Error storing domain model source", ex.getMessage(), ex);
                     }
                 }
             });
@@ -294,7 +295,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 suppliedDomainModel = getExtensionDataManager().isSuppliedDomainModel();
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error loading domain model source", 
+                CompositeErrorDialog.showErrorDialog("Error loading domain model source", 
                     ex.getMessage(), ex);
             }
             
@@ -353,11 +354,11 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            ErrorDialog.showErrorDialog("Error loading packages from project", 
+                            CompositeErrorDialog.showErrorDialog("Error loading packages from project", 
                                 ex.getMessage(), ex);
                         }
                     } else {
-                        PortalUtils.showMessage("Please select a project");
+                        GridApplication.getContext().showMessage("Please select a project");
                     }
                 }
             });
@@ -383,16 +384,16 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                                     // add the package to the model
                                     addUmlPackageToModel(selectedProject, selectedPackage);
                                 } else {
-                                    PortalUtils.showMessage(
+                                    GridApplication.getContext().showMessage(
                                     "The selected package is already part of the domain model");
                                 }
                             } catch (Exception ex) {
                                 ex.printStackTrace();
-                                ErrorDialog.showErrorDialog("Error determining package use", ex.getMessage(), ex);
+                                CompositeErrorDialog.showErrorDialog("Error determining package use", ex.getMessage(), ex);
                             }
                         }
                     } else {
-                        PortalUtils.showMessage("Please select both a project and package");
+                        GridApplication.getContext().showMessage("Please select both a project and package");
                     }
                 }
             });
@@ -412,10 +413,10 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                     if (selectedProject != null && selectedPackage != null) {
                         boolean removed = removeUmlPackage(selectedProject, selectedPackage.getName());
                         if (!removed) {
-                            PortalUtils.showErrorMessage("The selected package was not removed");
+                            ErrorDialog.showError("The selected package was not removed");
                         }
                     } else {
-                        PortalUtils.showMessage("Please select both a project and package");
+                        GridApplication.getContext().showMessage("Please select both a project and package");
                     }
                 }
             });
@@ -460,7 +461,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                             fireClassSelected(packName, mapping, packageNamespace);
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            ErrorDialog.showErrorDialog("Error selecting class: " + ex.getMessage(), ex);
+                            CompositeErrorDialog.showErrorDialog("Error selecting class: " + ex.getMessage(), ex);
                         }
                     }
                 }
@@ -551,7 +552,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
     private void visualizeDomainModel() {
         BusyDialogRunnable modelCreationRunnable = new BusyDialogRunnable(
-            PortalResourceManager.getInstance().getGridPortal(), "Creating Domain Model") {
+            GridApplication.getContext().getApplication(), "Creating Domain Model") {
             public void process() {
                 DomainModel model = null;
                 boolean noModel = false;
@@ -562,7 +563,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                     isSupplied = getExtensionDataManager().isSuppliedDomainModel();
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error determining domain model source", 
+                    CompositeErrorDialog.showErrorDialog("Error determining domain model source", 
                         ex.getMessage(), ex);
                 }
                 // get the domain model selected
@@ -575,7 +576,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                             model = MetadataUtils.deserializeDomainModel(new FileReader(suppliedFile));
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            ErrorDialog.showErrorDialog("Error loading domain model", ex.getMessage(), ex);
+                            CompositeErrorDialog.showErrorDialog("Error loading domain model", ex.getMessage(), ex);
                         }
                     }
                 } else if (!noModel) {
@@ -586,13 +587,13 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                         model = DomainModelCreationUtil.createDomainModel(info);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error getting caDSR information", ex.getMessage(), ex);
+                        CompositeErrorDialog.showErrorDialog("Error getting caDSR information", ex.getMessage(), ex);
                     }
                 }
                 if (model != null) {
                     setProgressText("Visualizing domain model");
                     new DomainModelVisualizationDialog(
-                        PortalResourceManager.getInstance().getGridPortal(), model);
+                        GridApplication.getContext().getApplication(), model);
                 }
             }
         };
@@ -605,7 +606,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
         Set packageNames = getUmlTree().getPackagesInTree();
         if (!packageNames.contains(packageName)
             || (mostRecentProject != null && !projectEquals(proj, mostRecentProject))) {
-            PortalUtils.showMessage("The selected package is not involved in the model");
+            GridApplication.getContext().showMessage("The selected package is not involved in the model");
             return false;
         }
         // remove the package from the cadsr information
@@ -617,7 +618,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error removing cadsr package: " + ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error removing cadsr package: " + ex.getMessage(), ex);
             return false;
         }
         // clean out the UI
@@ -691,7 +692,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             installedDomainModel = model;
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error storing domain model information", 
+            CompositeErrorDialog.showErrorDialog("Error storing domain model information", 
                 ex.getMessage(), ex);
             return false;
         }
@@ -736,7 +737,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             mappedNamespace = getExtensionDataManager().getMappedNamespaceForPackage(packageName);
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error loading mapped namespace", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error loading mapped namespace", ex.getMessage(), ex);
         }
         if (mappedNamespace == null) {
             // fall back to the default mapping
@@ -752,13 +753,13 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 mappedNamespace + ".", 
                 "This namespace is not loaded into the service.",
                 "Please locate a suitable namespace."};
-            JOptionPane.showMessageDialog(PortalResourceManager.getInstance().getGridPortal(), message);
+            JOptionPane.showMessageDialog(GridApplication.getContext().getApplication(), message);
             NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(getServiceInfo());
             if (resolved == null || resolved.length == 0) {
                 // user didn't map it... show a warning
                 String[] error = {"The package " + packageName + " was not mapped to a namespace.",
                     "This can cause errors when the service builds."};
-                ErrorDialog.showErrorDialog("No namespace mapping provided", error);
+                CompositeErrorDialog.showErrorDialog("No namespace mapping provided", error);
                 return null;
             } else {
                 // add the resolved namespaces to the service
@@ -779,7 +780,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             mostRecentProject = project;
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error storing project selection", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error storing project selection", ex.getMessage(), ex);
             return false;
         }
 
@@ -798,7 +799,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             getExtensionDataManager().storeCadsrPackage(cadsrPack);
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error storing new cadsr package", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error storing new cadsr package", ex.getMessage(), ex);
             return false;
         }
 
@@ -827,7 +828,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error getting classes for package", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error getting classes for package", ex.getMessage(), ex);
         }
 
         return true;
@@ -843,7 +844,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 "To add the package you've selected, all other packages",
                 "currently in the domain model will have to be removed.", 
                 "Should this operation procede?"};
-            String choice = PromptButtonDialog.prompt(PortalResourceManager.getInstance().getGridPortal(),
+            String choice = PromptButtonDialog.prompt(GridApplication.getContext().getApplication(),
                 "Package incompatability...", message, choices, choices[1]);
             if (choice == choices[0]) {
                 // user has elected to go with this project / package
@@ -867,7 +868,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                         getUmlTree().removeUmlPackage(packageName);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error removing namespace for package", 
+                        CompositeErrorDialog.showErrorDialog("Error removing namespace for package", 
                             ex.getMessage(), ex);
                         return false;
                     }

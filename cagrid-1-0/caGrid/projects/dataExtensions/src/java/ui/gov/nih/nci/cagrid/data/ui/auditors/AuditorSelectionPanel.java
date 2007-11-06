@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.auditors;
 
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.service.auditing.DataServiceAuditor;
 
 import java.awt.Component;
@@ -24,7 +22,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 /** 
  *  AuditorSelectionPanel
@@ -33,7 +32,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created May 21, 2007 11:38:54 AM
- * @version $Id: AuditorSelectionPanel.java,v 1.2 2007-08-13 14:14:07 dervin Exp $ 
+ * @version $Id: AuditorSelectionPanel.java,v 1.3 2007-11-06 15:53:41 hastings Exp $ 
  */
 public class AuditorSelectionPanel extends JPanel {
 
@@ -229,7 +228,7 @@ public class AuditorSelectionPanel extends JPanel {
                     if (getAuditorClassComboBox().getSelectedItem() != null) {
                         fireAuditorAdded();
                     } else {
-                        PortalUtils.showMessage("Please select an auditor class first");
+                        GridApplication.getContext().showMessage("Please select an auditor class first");
                     }
                 }
             });
@@ -261,7 +260,7 @@ public class AuditorSelectionPanel extends JPanel {
 
     private void populateClassDropdown() {
         BusyDialogRunnable bdr = new BusyDialogRunnable(
-            PortalResourceManager.getInstance().getGridPortal(), "Loading Auditor Classes") {
+            GridApplication.getContext().getApplication(), "Loading Auditor Classes") {
             public void process() {
                 setProgressText("Locating classes in service's lib directory");
                 File libDir = new File(serviceBaseDir.getAbsolutePath() + File.separator + "lib");
@@ -270,7 +269,7 @@ public class AuditorSelectionPanel extends JPanel {
                     auditorClassses = AuditorsLoader.getAvailableAuditorClasses(libDir);
                 } catch (IOException ex) {
                     ex.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error loading auditor classes", ex.getMessage(), ex);
+                    CompositeErrorDialog.showErrorDialog("Error loading auditor classes", ex.getMessage(), ex);
                     setErrorMessage(ex.getMessage());
                 }
                 
@@ -297,11 +296,11 @@ public class AuditorSelectionPanel extends JPanel {
                 auditor = (DataServiceAuditor) auditorClass.newInstance();
             } catch (InstantiationException ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error instantiating selected auditor", ex.getMessage(), ex);
+                CompositeErrorDialog.showErrorDialog("Error instantiating selected auditor", ex.getMessage(), ex);
                 return;
             } catch (IllegalAccessException ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error accessing auditor's constructor", ex.getMessage(), ex);
+                CompositeErrorDialog.showErrorDialog("Error accessing auditor's constructor", ex.getMessage(), ex);
                 return;
             }
             

@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.codegen.serializers;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -21,8 +22,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.deployment.wsdd.WSDDTypeMapping;
 import org.apache.axis.encoding.SerializationContext;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
 
 
 /**
@@ -106,10 +105,10 @@ public class SyncSerialization extends SyncTool {
 
 
 	public static void editFile(File wsddFile, String replacement) throws SynchronizationException {
-		String contents = null;
+		StringBuffer contents = null;
 		try {
-			contents = XMLUtilities.fileToString(wsddFile);
-		} catch (MobiusException e) {
+			contents = Utils.fileToStringBuffer(wsddFile);
+		} catch (Exception e) {
 			throw new SynchronizationException("Unable to load file [" + wsddFile + "] contents:" + e.getMessage(), e);
 		}
 		// find where to replace, by looking for header

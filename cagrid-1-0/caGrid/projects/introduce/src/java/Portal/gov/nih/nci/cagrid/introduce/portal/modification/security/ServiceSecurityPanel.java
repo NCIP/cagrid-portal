@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
@@ -43,7 +41,8 @@ import javax.swing.JTabbedPane;
 import org.cagrid.gaards.ui.common.CertificatePanel;
 import org.cagrid.gaards.ui.common.ProxyPanel;
 import org.cagrid.gaards.ui.gridgrouper.expressioneditor.GridGrouperExpressionEditor;
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 
 /**
@@ -195,8 +194,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                 setServiceSecurity(this.service.getServiceSecurity());
             }
         } catch (Exception e) {
-            // PortalUtils.showErrorMessage(e);
-            ErrorDialog.showErrorDialog(e);
+            // PortalUtils.showErrorDialogDialog(e);
+            CompositeErrorDialog.showErrorDialog(e);
         }
     }
 
@@ -431,7 +430,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                             ((GridMapPanel) gridmapPanel).setGridMapFile(location);
                             authorizationMechanism.setSelectedItem(GRID_MAP_AUTHORIZATION);
                         } else {
-                            PortalUtils.showErrorMessage("No GridMap file specified!!!");
+                            CompositeErrorDialog.showErrorDialog("No GridMap file specified!!!");
                             authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
                         }
                     } else if (sa.getGridGrouperAuthorization() != null) {
@@ -938,11 +937,11 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
     private void loadCredentials() {
         String method = (String) credentialLoadMethod.getSelectedItem();
         if (method.equals(FILE_SYSTEM_CERT_KEY)) {
-            PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+            GridApplication.getContext().getApplication().addApplicationComponent(
                 new LoadCredentialsFromFileSystemWindow(this), 500, 200);
         }
         if (method.equals(FILE_SYSTEM_PROXY)) {
-            PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+            GridApplication.getContext().getApplication().addApplicationComponent(
                 new LoadProxyFromFileSystemWindow(this), 500, 200);
         }
 
@@ -958,7 +957,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                 proxyPanel.clearProxy();
                 proxyPanel.showProxy(ProxyUtil.loadProxy(proxyLocation));
             } catch (Exception e) {
-                PortalUtils.showErrorMessage("Invalid proxy specified!!!");
+                CompositeErrorDialog.showErrorDialog("Invalid proxy specified!!!");
             }
             syncServiceCredentials();
             synchRunAsMode();
@@ -975,9 +974,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
             try {
                 certificatePanel.setCertificate(CertUtil.loadCertificate(new File(cred.getCertificateLocation())));
             } catch (Exception e) {
-                // PortalUtils.showErrorMessage("Invalid certificate
+                // PortalUtils.showErrorDialogDialog("Invalid certificate
                 // specified!!!");
-                ErrorDialog.showErrorDialog("Invalid certificate specified!!!");
+                CompositeErrorDialog.showErrorDialog("Invalid certificate specified!!!");
             }
             syncServiceCredentials();
             synchRunAsMode();

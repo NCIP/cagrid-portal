@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.ui.auditors;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.auditing.AuditorConfiguration;
 import gov.nih.nci.cagrid.data.auditing.AuditorConfigurationConfigurationProperties;
@@ -26,7 +25,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 /** 
  *  AuditorConfigurationDialog
@@ -35,7 +35,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Jun 26, 2007 11:41:25 AM
- * @version $Id: AuditorConfigurationDialog.java,v 1.2 2007-08-24 14:14:50 dervin Exp $ 
+ * @version $Id: AuditorConfigurationDialog.java,v 1.3 2007-11-06 15:53:41 hastings Exp $ 
  */
 public class AuditorConfigurationDialog extends JDialog {
 
@@ -58,7 +58,7 @@ public class AuditorConfigurationDialog extends JDialog {
     
     public AuditorConfigurationDialog(ExtensionDataManager dataManager, ServiceInformation serviceInfo, 
         String auditorClass, String auditorInstance) {
-        super(PortalResourceManager.getInstance().getGridPortal(), 
+        super(GridApplication.getContext().getApplication(), 
             "Auditor instance configuration", true);
         this.dataManager = dataManager;
         this.serviceInfo = serviceInfo;
@@ -202,7 +202,7 @@ public class AuditorConfigurationDialog extends JDialog {
                         dataManager.storeAuditorsConfiguration(auditors);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog(
+                        CompositeErrorDialog.showErrorDialog(
                             "Error storing changed property", ex.getMessage(), ex);
                     }
                 }
@@ -317,7 +317,7 @@ public class AuditorConfigurationDialog extends JDialog {
             getMonitoredEventsPanel().setMonitoredEvents(monitoredEvents);
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog(
+            CompositeErrorDialog.showErrorDialog(
                 "Error loading properties for auditor " + auditorClass + " : " + auditorInstance, 
                 ex.getMessage(), ex);
         }
@@ -347,7 +347,7 @@ public class AuditorConfigurationDialog extends JDialog {
                         dataManager.storeAuditorsConfiguration(auditors);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing monitored events", ex.getMessage(), ex);
+                        CompositeErrorDialog.showErrorDialog("Error storing monitored events", ex.getMessage(), ex);
                     }
                 }
             });

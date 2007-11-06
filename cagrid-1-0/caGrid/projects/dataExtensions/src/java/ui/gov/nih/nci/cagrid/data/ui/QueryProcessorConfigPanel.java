@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.data.ui;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
@@ -34,6 +32,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 /** 
  *  QueryProcessorConfigPanel
  *  Panel to consolidate configuration of the Query Processor
@@ -41,7 +42,7 @@ import javax.swing.JScrollPane;
  * @author David Ervin
  * 
  * @created Jun 27, 2007 8:58:22 AM
- * @version $Id: QueryProcessorConfigPanel.java,v 1.4 2007-08-24 14:14:50 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigPanel.java,v 1.5 2007-11-06 15:53:41 hastings Exp $ 
  */
 public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     
@@ -83,7 +84,7 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
             getQpParamsTable().populateProperties();
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error updating displayed properties", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error updating displayed properties", ex.getMessage(), ex);
         }
     }
     
@@ -107,7 +108,7 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
                         saveProcessorClassName(classBrowserPanel.getSelectedClassName());
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog(
+                        CompositeErrorDialog.showErrorDialog(
                             "Error setting the query processor class: " + ex.getMessage(), ex);
                     }
                 }
@@ -121,7 +122,7 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
                         getExtensionDataManager().setAdditionalJars(additionalJars);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing additional libraries information: "
+                        CompositeErrorDialog.showErrorDialog("Error storing additional libraries information: "
                             + ex.getMessage(), ex);
                     }
                 }
@@ -250,7 +251,7 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
             } catch (Exception ex) {
                 if (!(ex instanceof ClassNotFoundException && qpClassname.equals(stubQpClassname))) {
                     ex.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error loading the query processor's configuration UI", 
+                    CompositeErrorDialog.showErrorDialog("Error loading the query processor's configuration UI", 
                         ex.getMessage(), ex);
                 }
             }
@@ -265,7 +266,7 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
                         .showConfigurationUi(uiPanel, getServiceInfo().getBaseDirectory(), currentConfig);
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error executing query processor configuration UI", 
+                    CompositeErrorDialog.showErrorDialog("Error executing query processor configuration UI", 
                         ex.getMessage(), ex);
                 }
                 if (postUiConfig != null) {
@@ -300,7 +301,7 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
                     getQpParamsTable().classChanged();
                 }
             } else {
-                PortalUtils.showMessage(new String[] {
+                GridApplication.getContext().showMessage(new String[] {
                     "The query processor " + qpClassname, "did not supply a configuration UI"});
             }
         }

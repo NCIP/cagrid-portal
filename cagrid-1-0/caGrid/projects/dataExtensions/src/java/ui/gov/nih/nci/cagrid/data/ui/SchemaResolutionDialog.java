@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.data.ui;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.ui.wizard.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
@@ -27,7 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 
 /**
@@ -37,7 +36,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 27, 2006
- * @version $Id: SchemaResolutionDialog.java,v 1.5 2007-10-25 16:48:28 hastings Exp $
+ * @version $Id: SchemaResolutionDialog.java,v 1.6 2007-11-06 15:53:41 hastings Exp $
  */
 public class SchemaResolutionDialog extends JDialog {
 
@@ -54,7 +53,7 @@ public class SchemaResolutionDialog extends JDialog {
     private NamespaceType[] resolvedSchemas;
 
     private SchemaResolutionDialog(ServiceInformation info) {
-        super(PortalResourceManager.getInstance().getGridPortal(), 
+        super(GridApplication.getContext().getApplication(), 
             "Schema Resolution", true);
         this.serviceInfo = info;
         this.resolvedSchemas = null;
@@ -80,7 +79,7 @@ public class SchemaResolutionDialog extends JDialog {
         setModal(true);
         this.setSize(new java.awt.Dimension(400, 330));
         this.setContentPane(getMainPanel());
-        PortalUtils.centerComponent(this);
+        GridApplication.getContext().centerDialog(this);
         this.setVisible(true);
     }
 
@@ -210,7 +209,7 @@ public class SchemaResolutionDialog extends JDialog {
                             } catch (Exception ex) {
                                 getNamespaceDiscoveryProgressBar().stopEvent(myId, ex.getMessage());
                                 ex.printStackTrace();
-                                ErrorDialog.showErrorDialog("Error adding type discovery component to dialog", ex);
+                                CompositeErrorDialog.showErrorDialog("Error adding type discovery component to dialog", ex);
                             }
                         }
                     };
@@ -260,7 +259,7 @@ public class SchemaResolutionDialog extends JDialog {
             NamespaceTypeDiscoveryComponent.REPLACE_POLICY,
             getNamespaceDiscoveryProgressBar());
         if (namespaces == null) {
-            ErrorDialog.showErrorDialog("Error getting types from discovery component");
+            CompositeErrorDialog.showErrorDialog("Error getting types from discovery component");
         }
         return namespaces;
     }

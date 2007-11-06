@@ -50,7 +50,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/cobertura.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/jakarta-oro-2.0.8.jar"/>
@@ -141,5 +140,7 @@
 	<classpathentry kind="lib" path="ext/lib/validation-2.0.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/caGrid-introduce"/>
 	<classpathentry kind="lib" path="ext/test/lib/jaxmejs-0.5.2.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

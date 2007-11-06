@@ -61,9 +61,11 @@
         <resolveDependencies extdir="${projects.dir}/core/ext">
             <artifact refid="cagrid.properties" />
             <artifact refid="mobius.jars" />
+        	<artifact refid="jdom.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
 		    <artifact refid="validation.jars" />
+        	
         </resolveDependencies>
         <ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
     </target>
@@ -252,6 +254,7 @@
             <artifact refid="common.metadata.jars" />
             <artifact refid="cadsr.jars" />
             <artifact refid="data.jars" />
+        	<artifact refid="grape.jars" />
             <artifact refid="data.metadata.jars" />
             <artifact refid="metadata.schemas" />
             <artifact refid="metadatautils.jars" />
@@ -302,6 +305,7 @@
             <artifact refid="metadatautils.jars" />
             <artifact refid="caCORE.jars" />
             <artifact refid="introduce.jars" />
+        	<artifact refid="grape.jars" />
             <artifact refid="advertisement.jars" />
             <artifact refid="graph.jars" />
             <artifact refid="gme.globus.client.jars" />
@@ -636,6 +640,7 @@
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
             <artifact refid="core.test.jars" />
+        	<artifact refid="grape.jars" />
             <artifact refid="core.resources" />
         	<artifact refid="testing.system.jars"/>
             <artifact refid="mobius.jars" />
@@ -756,6 +761,7 @@
             <artifact refid="metadata.schemas" />
             <artifact refid="metadatautils.jars" />
             <artifact refid="graph.jars" />
+        	<artifact refid="grape.jars" />
             <artifact refid="security.metadata.schemas" />
             <artifact refid="introduce.core.test.jars" />
             <artifact refid="introduce.jars" />
@@ -787,6 +793,7 @@
             <artifact refid="core.resources" />
             <artifact refid="core.test.jars" />
             <artifact refid="introduce.jars" />
+        	<artifact refid="grape.jars" />
             <artifact refid="gme.globus.client.jars" />
             <artifact refid="cadsr.jars" />
             <artifact refid="common.test.jars" />
@@ -888,6 +895,7 @@
     <target name="build-sdkQuery32" depends="prepare" description="Builds caGrid SDK 3.2 Query Processor">
         <resolveDependencies extdir="${projects.dir}/sdkQuery32/ext">
             <artifact refid="cagrid.properties" />
+        	<artifact refid="grape.jars" />
             <artifact refid="core.jars" />
             <artifact refid="mds.jars" />
             <artifact refid="core.test.jars" />
@@ -916,6 +924,7 @@
             <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="data.jars" />
+        	<artifact refid="grape.jars" />
             <artifact refid="core.test.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />

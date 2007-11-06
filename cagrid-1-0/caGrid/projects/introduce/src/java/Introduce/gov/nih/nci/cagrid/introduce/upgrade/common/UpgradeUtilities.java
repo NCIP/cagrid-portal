@@ -1,9 +1,10 @@
 package gov.nih.nci.cagrid.introduce.upgrade.common;
 
+import gov.nih.nci.cagrid.common.XMLUtilities;
+
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.xpath.XPath;
-import org.projectmobius.common.XMLUtilities;
 
 
 public class UpgradeUtilities {

@@ -4,7 +4,6 @@ import gov.nih.nci.cadsr.domain.Organization;
 import gov.nih.nci.cadsr.domain.Person;
 import gov.nih.nci.cagrid.common.SchemaValidationException;
 import gov.nih.nci.cagrid.common.SchemaValidator;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
@@ -43,6 +42,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+
+import org.cagrid.grape.utils.ErrorDialog;
 
 
 /**
@@ -746,7 +747,7 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
     public boolean save() {
         this.result = null;
         if (this.serviceMetadata == null) {
-            ErrorDialog.showErrorDialog("Cannot save a null ServiceMetadata instance!");
+            ErrorDialog.showError("Cannot save a null ServiceMetadata instance!");
             return false;
         }
 
@@ -779,7 +780,7 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
             MetadataUtils.serializeServiceMetadata(this.serviceMetadata, writer);
             this.result = writer.toString();
         } catch (Exception e) {
-            ErrorDialog.showErrorDialog("Problem saving ServiceMetadata instance: " + e.getMessage(), e);
+            ErrorDialog.showError("Problem saving ServiceMetadata instance: " + e.getMessage(), e);
             return false;
         }
 
@@ -790,7 +791,7 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
                 SchemaValidator validator = new SchemaValidator(getSchemaFile().getAbsolutePath());
                 validator.validate(this.result);
             } catch (SchemaValidationException e) {
-                ErrorDialog.showErrorDialog("Problem validating result:" + e.getMessage()
+                ErrorDialog.showError("Problem validating result:" + e.getMessage()
                     + " Correct the error and save again.", e);
                 return false;
             }

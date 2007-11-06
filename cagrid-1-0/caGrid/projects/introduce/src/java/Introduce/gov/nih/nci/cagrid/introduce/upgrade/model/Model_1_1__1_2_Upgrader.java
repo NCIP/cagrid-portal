@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.upgrade.model;
 
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.ModelUpgraderBase;
@@ -11,7 +12,6 @@ import java.util.List;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.projectmobius.common.XMLUtilities;
 
 
 public class Model_1_1__1_2_Upgrader extends ModelUpgraderBase {

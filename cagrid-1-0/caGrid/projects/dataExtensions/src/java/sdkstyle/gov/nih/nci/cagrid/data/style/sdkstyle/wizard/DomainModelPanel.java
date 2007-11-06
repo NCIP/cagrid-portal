@@ -6,7 +6,6 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
@@ -59,7 +58,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 /** 
  *  DomainModelPanel
@@ -68,7 +68,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: DomainModelPanel.java,v 1.2 2007-10-23 20:11:15 dervin Exp $ 
+ * @version $Id: DomainModelPanel.java,v 1.3 2007-11-06 15:53:40 hastings Exp $ 
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 	
@@ -130,7 +130,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			storeCadsrInformation(info);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error loading extension data", ex);
+			CompositeErrorDialog.showErrorDialog("Error loading extension data", ex);
 		}
 	}
 
@@ -339,7 +339,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
             mostRecentFilename = ResourceManager.getStateProperty(ResourceManager.LAST_FILE);
         } catch (IOException ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error determining most recently selected file", ex);
+            CompositeErrorDialog.showErrorDialog("Error determining most recently selected file", ex);
         }
         JFileChooser chooser = new JFileChooser(mostRecentFilename);
         chooser.addChoosableFileFilter(FileFilters.XML_FILTER);
@@ -353,13 +353,13 @@ public class DomainModelPanel extends AbstractWizardPanel {
                 ResourceManager.setStateProperty(ResourceManager.LAST_FILE, selectedFilename);
             } catch (IOException ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error storing most recently selected file", ex);
+                CompositeErrorDialog.showErrorDialog("Error storing most recently selected file", ex);
             }
 
             // if user selected an XMI file, there is more processing to be done
             if (chooser.getFileFilter() == FileFilters.XMI_FILTER) {
                 DomainModel model = DomainModelFromXmiDialog.createDomainModel(
-                    PortalResourceManager.getInstance().getGridPortal(), selectedFilename);
+                    GridApplication.getContext().getApplication(), selectedFilename);
                 if (model != null) {
                     String trimmedFileName = new File(selectedFilename).getName();
                     trimmedFileName = trimmedFileName.substring(0, trimmedFileName.length() - 4);
@@ -375,15 +375,15 @@ public class DomainModelPanel extends AbstractWizardPanel {
                             "has been converted to a caGrid Domain Model and stored",
                             "as " + convertedModelFile.getName()
                         };
-                        PortalUtils.showMessage(message);
+                        GridApplication.getContext().showMessage(message);
                         getFileTextField().setText(convertedModelFile.getAbsolutePath());
                         setSelectedDomainModelFilename(convertedModelFile.getAbsolutePath());
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing converted domain model", ex.getMessage(), ex);
+                        CompositeErrorDialog.showErrorDialog("Error storing converted domain model", ex.getMessage(), ex);
                     }
                 } else {
-                    ErrorDialog.showErrorDialog("Domain model was not generated");
+                    CompositeErrorDialog.showErrorDialog("Domain model was not generated");
                 }
             } else {
                 // use the model as-is
@@ -425,7 +425,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error copying selected file to service", ex);
+			CompositeErrorDialog.showErrorDialog("Error copying selected file to service", ex);
 		}
 	}
 
@@ -674,7 +674,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 				storeCadsrInformation(info);
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				ErrorDialog.showErrorDialog("Error storing the new package information", ex);
+				CompositeErrorDialog.showErrorDialog("Error storing the new package information", ex);
 			}
 		}
 	}
@@ -731,7 +731,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			storeCadsrInformation(information);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error removing the selected packages from the model", ex);
+			CompositeErrorDialog.showErrorDialog("Error removing the selected packages from the model", ex);
 		}
 	}
 	
@@ -743,7 +743,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			storeCadsrInformation(info);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error storing 'no domain model' flag state", ex);
+			CompositeErrorDialog.showErrorDialog("Error storing 'no domain model' flag state", ex);
 		}		
 	}
 	
@@ -810,7 +810,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 				storeCadsrInformation(info);
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				ErrorDialog.showErrorDialog("Error loading domain model information", ex);
+				CompositeErrorDialog.showErrorDialog("Error loading domain model information", ex);
 			}
 		}
 	}

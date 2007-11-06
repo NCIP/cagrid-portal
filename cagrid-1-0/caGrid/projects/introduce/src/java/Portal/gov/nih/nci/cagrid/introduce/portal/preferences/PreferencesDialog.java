@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.portal.preferences.base.PreferencesTypeTreeNode;
 
 import java.awt.CardLayout;
@@ -18,6 +17,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import org.cagrid.grape.GridApplication;
 
 
 public class PreferencesDialog extends JDialog {
@@ -58,8 +59,7 @@ public class PreferencesDialog extends JDialog {
 		this.setPreferredSize(new java.awt.Dimension(650,400));
 		this.setModal(true);
 		pack();
-		PortalUtils.centerComponent(this);
-		
+		GridApplication.getContext().centerDialog(this);
 	}
 
 

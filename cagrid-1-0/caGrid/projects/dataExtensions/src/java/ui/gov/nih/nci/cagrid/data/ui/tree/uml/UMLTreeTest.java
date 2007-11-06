@@ -4,7 +4,6 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionEvent;
 import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionListener;
 
@@ -17,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 /** 
  *  UMLTreeTest
  *  Util to test the UML Tree
@@ -24,7 +25,7 @@ import javax.swing.JScrollPane;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 5, 2006 
- * @version $Id: UMLTreeTest.java,v 1.2 2007-07-27 01:56:26 dervin Exp $ 
+ * @version $Id: UMLTreeTest.java,v 1.3 2007-11-06 15:53:42 hastings Exp $ 
  */
 public class UMLTreeTest extends JFrame {
 	private UMLProjectTree projectTree = null;
@@ -118,7 +119,7 @@ public class UMLTreeTest extends JFrame {
 						}
 					} catch (Exception ex) {
 						ex.printStackTrace();
-						ErrorDialog.showErrorDialog(ex);
+						CompositeErrorDialog.showErrorDialog(ex);
 					}
 				}
 			});

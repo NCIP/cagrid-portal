@@ -1,8 +1,6 @@
-package gov.nih.nci.cagrid.common.portal;
+package org.cagrid.grape.utils;
 
-import gov.nih.nci.cagrid.common.portal.errors.ErrorContainer;
-import gov.nih.nci.cagrid.common.portal.errors.ErrorDialogTable;
-import gov.nih.nci.cagrid.common.portal.errors.ErrorDialogTableListener;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -27,7 +25,10 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.errors.ErrorContainer;
+import org.cagrid.grape.utils.errors.ErrorDialogTable;
+import org.cagrid.grape.utils.errors.ErrorDialogTableListener;
 
 /** 
  *  PortalErrorDialog
@@ -36,13 +37,13 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 2, 2006 
- * @version $Id$ 
+ * @version $Id: CompositeErrorDialog.java,v 1.1 2007-11-06 15:53:42 hastings Exp $ 
  */
-public class ErrorDialog extends JDialog {
+public class CompositeErrorDialog extends JDialog {
 	
 	private static Frame ownerFrame = null;
 	private static Vector<ErrorContainer> errors = null;
-	private static ErrorDialog dialog = null;
+	private static CompositeErrorDialog dialog = null;
 	private static String lastFileLocation = null;
     
     private static Object errorAdditionMutex = new Object();
@@ -62,7 +63,7 @@ public class ErrorDialog extends JDialog {
 	private JPanel buttonPanel = null;
     private JSplitPane errorsSplitPane = null;
 
-	private ErrorDialog(Frame parentFrame) {
+	private CompositeErrorDialog(Frame parentFrame) {
 		super(parentFrame);
 		initialize();
 	}
@@ -82,7 +83,7 @@ public class ErrorDialog extends JDialog {
 	
 	private static Frame getOwnerFrame() {
 		if (ownerFrame == null) {
-			return PortalResourceManager.getInstance().getGridPortal();
+			return GridApplication.getContext().getApplication();
 		}
 		return ownerFrame;
 	}
@@ -98,7 +99,7 @@ public class ErrorDialog extends JDialog {
      */
 	private static void addError(final String message, final String detail, final Throwable error) {
 		if (dialog == null) {
-			dialog = new ErrorDialog(getOwnerFrame());	
+			dialog = new CompositeErrorDialog(getOwnerFrame());	
 		}
 		Runnable r = new Runnable() {
 			public void run() {
@@ -516,18 +517,18 @@ public class ErrorDialog extends JDialog {
 		frame.setTitle("HELLO THERE");
 		frame.setSize(new Dimension(400,400));
 		frame.setVisible(true);
-		ErrorDialog.setOwnerFrame(frame);
+		CompositeErrorDialog.setOwnerFrame(frame);
         String message = "";
         for (int i = 0; i < 30; i++) {
             message += "This is line " + i + "\n";
         }
-        ErrorDialog.showErrorDialog("This is an error");
-        ErrorDialog.showErrorDialog(new Exception("This is an exception with a short message"));
-        ErrorDialog.showErrorDialog(new Exception(message));
-        ErrorDialog.showErrorDialog("This is an error with a long message", message.split("\n"));
-        ErrorDialog.showErrorDialog("This is an error with a null exception", message.split("\n"), null);
-        ErrorDialog.showErrorDialog("This is an error with null message", (Exception) null);
-        ErrorDialog.showErrorDialog("This is an error with null message and exception", (String) null, null);
+        CompositeErrorDialog.showErrorDialog("This is an error");
+        CompositeErrorDialog.showErrorDialog(new Exception("This is an exception with a short message"));
+        CompositeErrorDialog.showErrorDialog(new Exception(message));
+        CompositeErrorDialog.showErrorDialog("This is an error with a long message", message.split("\n"));
+        CompositeErrorDialog.showErrorDialog("This is an error with a null exception", message.split("\n"), null);
+        CompositeErrorDialog.showErrorDialog("This is an error with null message", (Exception) null);
+        CompositeErrorDialog.showErrorDialog("This is an error with null message and exception", (String) null, null);
         
         /*
 		for (int i = 0; i < 10; i++) {

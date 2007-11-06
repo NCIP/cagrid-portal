@@ -14,7 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
 
 /** 
  *  QueryProcessorConfigurationDialog
@@ -24,7 +24,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Apr 6, 2007 1:25:32 PM
- * @version $Id: QueryProcessorConfigurationDialog.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationDialog.java,v 1.2 2007-11-06 15:53:41 hastings Exp $ 
  */
 public class QueryProcessorConfigurationDialog extends JDialog {
     private CQLQueryProcessorConfigUI configUi = null;
@@ -39,7 +39,7 @@ public class QueryProcessorConfigurationDialog extends JDialog {
 
     private QueryProcessorConfigurationDialog(
         CQLQueryProcessorConfigUI configUi, File serviceDir, Properties configProperties) {
-        super(PortalResourceManager.getInstance().getGridPortal(), 
+        super(GridApplication.getContext().getApplication(), 
             "CQL Processor Configuration", true);
         // only way to be NOT canceled is to click the done buttton
         this.canceled = true;

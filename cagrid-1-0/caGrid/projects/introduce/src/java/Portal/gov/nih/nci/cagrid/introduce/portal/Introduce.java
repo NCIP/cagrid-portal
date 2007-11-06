@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
@@ -9,9 +9,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.portal.GridPortal;
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.model.Application;
 
 
 public final class Introduce {
@@ -22,10 +21,11 @@ public final class Introduce {
     private static void showIntroduceSplash() {
         try {
             introduceSplash = new SplashScreen("/introduceSplash.png");
-            PortalUtils.centerWindowInScreen(introduceSplash);
+            // centers in screen
+            introduceSplash.setLocationRelativeTo(null);
             introduceSplash.setVisible(true);
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -39,23 +39,28 @@ public final class Introduce {
         try {
             initialize();
             showIntroduceSplash();
-            
-            GridPortal portal = null;
+
             if (confFile == null) {
                 confFile = ResourceManager.getPortalConfigFileLocation();
             }
-            portal = new GridPortal(confFile);
-            Dimension dim = PortalResourceManager.getInstance().getGridPortalConfig().getApplicationDimensions();
+
+            Application app = (Application) Utils.deserializeDocument(confFile, Application.class);
+
+            // launch the portal with the passed config
+            GridApplication applicationInstance = GridApplication.getInstance(app);
+            Dimension d = new Dimension(app.getDimensions().getWidth(), app.getDimensions().getHeight());
+
             try {
-                portal.pack();
+                applicationInstance.pack();
             } catch (Exception e) {
-                portal.setIconImage(null);
-                portal.pack();
+                applicationInstance.setIconImage(null);
+                applicationInstance.pack();
             }
-            portal.setSize(dim);
-            portal.setVisible(true);
-            portal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        } catch (MobiusException e) {
+            applicationInstance.setSize(d);
+            applicationInstance.setVisible(true);
+            applicationInstance.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -71,7 +76,8 @@ public final class Introduce {
             }
         }
     }
-    
+
+
     public static void main(String[] args) {
         if (args.length > 0) {
             showGridPortal(args[0]);

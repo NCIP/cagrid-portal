@@ -44,8 +44,6 @@ public class BusyDialog extends JDialog {
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setContentPane(getMainPanel());
         this.setSize(new java.awt.Dimension(400, 100));
-        // this.pack();
-        PortalUtils.centerComponent(this);
     }
 
 

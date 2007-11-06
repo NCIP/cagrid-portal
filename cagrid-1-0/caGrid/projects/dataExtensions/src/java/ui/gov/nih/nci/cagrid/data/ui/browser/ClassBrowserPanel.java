@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.browser;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
@@ -40,6 +39,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 
 /**
  * ClassBrowserPanel 
@@ -48,7 +49,7 @@ import javax.swing.JScrollPane;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created May 11, 2006
- * @version $Id: ClassBrowserPanel.java,v 1.5 2007-08-24 15:26:59 dervin Exp $
+ * @version $Id: ClassBrowserPanel.java,v 1.6 2007-11-06 15:53:42 hastings Exp $
  */
 public class ClassBrowserPanel extends JPanel {
 
@@ -84,7 +85,7 @@ public class ClassBrowserPanel extends JPanel {
         try {
             jarNames = extensionDataManager.getAdditionalJarNames();
         } catch (Exception ex) {
-            ErrorDialog.showErrorDialog("Error loading list of additional jars", ex);
+            CompositeErrorDialog.showErrorDialog("Error loading list of additional jars", ex);
         }
         if (jarNames != null) {
             addJars(jarNames);
@@ -101,7 +102,7 @@ public class ClassBrowserPanel extends JPanel {
                 getClassSelectionComboBox().setSelectedItem(qpClassname);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error getting query processor class name from properties",
+                CompositeErrorDialog.showErrorDialog("Error getting query processor class name from properties",
                     ex.getMessage(), ex);
             }
         }
@@ -119,7 +120,7 @@ public class ClassBrowserPanel extends JPanel {
             }
 	    } catch (Exception ex) {
 	        ex.printStackTrace();
-	        ErrorDialog.showErrorDialog("Error getting query processor classname from properties", 
+	        CompositeErrorDialog.showErrorDialog("Error getting query processor classname from properties", 
 	            ex.getMessage(), ex);
 	    }    
 	}
@@ -207,7 +208,7 @@ public class ClassBrowserPanel extends JPanel {
                 jarNames = extensionDataManager.getAdditionalJarNames();
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error loading list of additional jars", ex);
+                CompositeErrorDialog.showErrorDialog("Error loading list of additional jars", ex);
             }
 			if (jarNames != null) {
                 additionalJarsList.setListData(jarNames);
@@ -419,7 +420,7 @@ public class ClassBrowserPanel extends JPanel {
 			jarFiles = ResourceManager.promptMultiFiles(this, null, new FileFilters.JarFileFilter());
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error selecting files: " + ex.getMessage(), ex);
+			CompositeErrorDialog.showErrorDialog("Error selecting files: " + ex.getMessage(), ex);
 		}
 		if (jarFiles != null) {
 			addJars(jarFiles);
@@ -436,7 +437,7 @@ public class ClassBrowserPanel extends JPanel {
 			Utils.copyFile(inJarFile, outJarFile);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error copying the jar " + jarFile, ex);
+			CompositeErrorDialog.showErrorDialog("Error copying the jar " + jarFile, ex);
 		}
 	}
 
@@ -516,13 +517,13 @@ public class ClassBrowserPanel extends JPanel {
                      }
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error getting query processor class name from properties",
+                    CompositeErrorDialog.showErrorDialog("Error getting query processor class name from properties",
                         ex.getMessage(), ex);
                 }
             }
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error populating class names", ex.getMessage(), ex);
+			CompositeErrorDialog.showErrorDialog("Error populating class names", ex.getMessage(), ex);
 		}
 	}
 

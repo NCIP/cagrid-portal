@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.style.sdkstyle.wizard;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.ClassMapping;
@@ -30,6 +29,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 /** 
  *  PackageSchemasTable
  *  Table for showing cadsr packages and schema types mapped to them
@@ -37,7 +38,7 @@ import javax.swing.table.TableCellEditor;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 26, 2006 
- * @version $Id: PackageSchemasTable.java,v 1.3 2007-08-31 15:48:43 dervin Exp $ 
+ * @version $Id: PackageSchemasTable.java,v 1.4 2007-11-06 15:53:40 hastings Exp $ 
  */
 public class PackageSchemasTable extends JTable {
 
@@ -182,7 +183,7 @@ public class PackageSchemasTable extends JTable {
                 setValueAt(STATUS_MAPPING_ERROR, dataRow, 2);
             }
         } else {
-            ErrorDialog.showErrorDialog("Error retrieving schemas!");
+            CompositeErrorDialog.showErrorDialog("Error retrieving schemas!");
         }
     }
     

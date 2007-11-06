@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.style.sdkstyle.wizard;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -20,7 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
 
 /** 
  *  PackageSchemaMappingErrorDialog
@@ -29,7 +28,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Aug 21, 2007 2:52:51 PM
- * @version $Id: PackageSchemaMappingErrorDialog.java,v 1.2 2007-08-21 21:02:11 dervin Exp $ 
+ * @version $Id: PackageSchemaMappingErrorDialog.java,v 1.3 2007-11-06 15:53:40 hastings Exp $ 
  */
 public class PackageSchemaMappingErrorDialog extends JDialog {
     public static final String ERROR_MESSAGE = 
@@ -48,7 +47,7 @@ public class PackageSchemaMappingErrorDialog extends JDialog {
     private JPanel mainPanel = null;
     
     public PackageSchemaMappingErrorDialog(Set<String> unresolvedClasses) {
-        super(PortalResourceManager.getInstance().getGridPortal(), 
+        super(GridApplication.getContext().getApplication(), 
             "Schema Resolution Error", true);
         this.unresolvedClasses = unresolvedClasses;
         initialize();
@@ -58,7 +57,7 @@ public class PackageSchemaMappingErrorDialog extends JDialog {
     private void initialize() {
         this.setSize(new Dimension(300, 320));
         this.setContentPane(getMainPanel());
-        PortalUtils.centerComponent(this);
+        GridApplication.getContext().centerDialog(this);
         setVisible(true);
     }
 

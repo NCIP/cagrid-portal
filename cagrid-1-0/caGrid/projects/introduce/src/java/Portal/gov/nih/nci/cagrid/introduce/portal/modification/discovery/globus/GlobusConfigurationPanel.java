@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.globus;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
@@ -14,6 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.cagrid.grape.utils.ErrorDialog;
 import org.projectmobius.common.Namespace;
 
 
@@ -101,17 +101,17 @@ public class GlobusConfigurationPanel extends JPanel {
 									currentSchemaFile = CommonTools.findSchema(schemaNamespace, schemasDir);
 
 								} catch (Exception ex) {
-									PortalUtils
-										.showErrorMessage("Globus Location seems to be wrong or corrupted:  Please check setting in the Preferences Menu!");
+									ErrorDialog
+										.showError("Globus Location seems to be wrong or corrupted:  Please check setting in the Preferences Menu!");
 								}
 
 							} else {
-								PortalUtils
-									.showErrorMessage("Globus Location cannot be found:  Please check setting in the Preferences Menu!");
+							    ErrorDialog
+                                .showError("Globus Location cannot be found:  Please check setting in the Preferences Menu!");
 							}
 						} catch (Exception ex) {
-							PortalUtils
-								.showErrorMessage("Globus Location cannot be found:  Please check setting in the Preferences Menu!");
+						    ErrorDialog
+                            .showError("Globus Location cannot be found:  Please check setting in the Preferences Menu!");
 						}
 					}
 				}

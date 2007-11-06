@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.style.sdkstyle.wizard;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
@@ -35,6 +34,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceFactory;
 import org.projectmobius.common.GridServiceResolver;
@@ -50,7 +50,7 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 26, 2006
- * @version $Id: SchemaTypesPanel.java,v 1.2 2007-08-31 15:48:43 dervin Exp $
+ * @version $Id: SchemaTypesPanel.java,v 1.3 2007-11-06 15:53:40 hastings Exp $
  */
 public class SchemaTypesPanel extends AbstractWizardPanel {
     
@@ -100,7 +100,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
             setWizardComplete(allSchemasResolved());
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error populating the packages table", ex);
+            CompositeErrorDialog.showErrorDialog("Error populating the packages table", ex);
         }
     }
 
@@ -250,7 +250,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
                             storePackageMappings();
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            ErrorDialog.showErrorDialog("Error storing namespace mappings", ex);
+                            CompositeErrorDialog.showErrorDialog("Error storing namespace mappings", ex);
                         }
                     }
                 }
@@ -297,7 +297,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error retrieving schemas from the GME", ex);
+            CompositeErrorDialog.showErrorDialog("Error retrieving schemas from the GME", ex);
         }
     }
 
@@ -318,7 +318,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
     }
 
 
-    private void pullSchemas(Namespace ns, XMLDataModelService gme) throws MobiusException {
+    private void pullSchemas(Namespace ns, XMLDataModelService gme) throws Exception {
         // get the service's schema dir
         File schemaDir = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation())
             + File.separator

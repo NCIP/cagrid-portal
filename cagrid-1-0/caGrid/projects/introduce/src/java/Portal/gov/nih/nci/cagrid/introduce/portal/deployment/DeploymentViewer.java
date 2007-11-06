@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.deployment;
 
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -41,8 +40,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import org.projectmobius.portal.GridPortalBaseFrame;
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 
 /**
@@ -56,7 +55,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class DeploymentViewer extends GridPortalBaseFrame {
+public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 
     private static final String GLOBUS = "GLOBUS_LOCATION";
 
@@ -116,7 +115,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
             serviceDirectory = choiceTask.get();
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error selecting service directory", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error selecting service directory", ex.getMessage(), ex);
         }
 
         if (serviceDirectory == null) {
@@ -130,13 +129,13 @@ public class DeploymentViewer extends GridPortalBaseFrame {
                     try {
                         initialize();
                     } catch (Exception e) {
-                        ErrorDialog.showErrorDialog("Error initializing the deployment: " + e.getMessage(), e);
+                        CompositeErrorDialog.showErrorDialog("Error initializing the deployment: " + e.getMessage(), e);
                         DeploymentViewer.this.dispose();
                     }
                 }
             });
         } else {
-            ErrorDialog.showErrorDialog("Error deleting directory", "Directory " + serviceDirectory.getAbsolutePath()
+            CompositeErrorDialog.showErrorDialog("Error deleting directory", "Directory " + serviceDirectory.getAbsolutePath()
                 + " does not seem to be an introduce service");
             DeploymentViewer.this.dispose();
         }
@@ -237,7 +236,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
                                 mainPanel.addTab(edesc.getDisplayName(), depPanel);
                             }
                         } catch (Exception ex) {
-                            ErrorDialog.showErrorDialog("Error loading deployment UI for extension "
+                            CompositeErrorDialog.showErrorDialog("Error loading deployment UI for extension "
                                 + element.getName(), ex.getMessage(), ex);
                         }
                     }
@@ -285,7 +284,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
             deployButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     BusyDialogRunnable r = new BusyDialogRunnable(
-                        PortalResourceManager.getInstance().getGridPortal(), "Deployment") {
+                        GridApplication.getContext().getApplication(), "Deployment") {
 
                         public void process() {
                             StatisticsClient.sendDeployedServiceStat(IntroduceEnginePropertiesManager.getIntroduceVersion(), 

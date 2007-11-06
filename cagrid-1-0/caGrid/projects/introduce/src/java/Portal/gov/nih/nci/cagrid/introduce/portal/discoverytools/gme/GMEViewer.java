@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
@@ -27,6 +26,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import org.apache.tools.ant.filters.StringInputStream;
+import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.projectmobius.castor.xml.schema.Schema;
 import org.projectmobius.castor.xml.schema.reader.SchemaReader;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
@@ -295,7 +296,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 						}
 						uploadLocationText.setText(location);
 					} catch (Exception e1) {
-						ErrorDialog.showErrorDialog("Error selecting schema file", e1);
+						CompositeErrorDialog.showErrorDialog("Error selecting schema file", e1);
 					}
 					File file = new File(location);
 					if (file.exists() && file.canRead()) {
@@ -308,7 +309,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 							e1.printStackTrace();
 						}
 					} else {
-						ErrorDialog.showErrorDialog("Cannot read selected file or file does not exist!");
+						CompositeErrorDialog.showErrorDialog("Cannot read selected file or file does not exist!");
 						uploadLocationText.setText("");
 					}
 				}
@@ -363,7 +364,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 						SchemaReader sr = new SchemaReader(new InputSource(new StringInputStream(
 							uploadSchemaTextPane.getText())));
 						sr.setValidation(false);
-						org.projectmobius.castor.xml.schema.Schema schema = sr.read();
+						Schema schema = sr.read();
 						Namespace schemaTargetNamespace = new Namespace(schema.getTargetNamespace());
 						try {
 							handle.addNamespaceDomain(schemaTargetNamespace.getDomain());
@@ -374,7 +375,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 						JOptionPane.showMessageDialog(GMEViewer.this, "Schema was successfully uploaded.");
 					} catch (Exception e1) {
 						e1.printStackTrace();
-						ErrorDialog.showErrorDialog("Error contacting GME", "Please check the GME URL and make sure that you have " +
+						CompositeErrorDialog.showErrorDialog("Error contacting GME", "Please check the GME URL and make sure that you have " +
 							"the appropriate credentials " + "and make sure the schema is well formed!");
 					}
 					uploadLocationText.setText("");
@@ -437,7 +438,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 					try {
 						location = ResourceManager.promptDir( null);
 					} catch (Exception ex) {
-						ErrorDialog.showErrorDialog(ex);
+						CompositeErrorDialog.showErrorDialog(ex);
 					}
 					if (location != null && location.length() > 0) {
 						GridServiceResolver.getInstance().setDefaultFactory(
@@ -451,7 +452,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 							}
 						} catch (MobiusException e1) {
 							e1.printStackTrace();
-							ErrorDialog.showErrorDialog("Error contacting GME", 
+							CompositeErrorDialog.showErrorDialog("Error contacting GME", 
 							"Please check the GME URL and make sure that you have the appropriate credentials!");
 						}
 					}

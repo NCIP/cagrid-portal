@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.utilities.vizquery.attributes;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 
 import java.awt.event.ItemEvent;
@@ -12,6 +11,8 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 /** 
  *  AttributePredicateCombo
  *  Combo box to select an attribute's query predicate
@@ -19,7 +20,7 @@ import javax.swing.JComboBox;
  * @author David Ervin
  * 
  * @created Apr 6, 2007 9:34:11 AM
- * @version $Id: AttributePredicateCombo.java,v 1.1 2007-04-06 14:50:14 dervin Exp $ 
+ * @version $Id: AttributePredicateCombo.java,v 1.2 2007-11-06 15:53:43 hastings Exp $ 
  */
 public class AttributePredicateCombo extends JComboBox {
 
@@ -68,7 +69,7 @@ public class AttributePredicateCombo extends JComboBox {
                 }
             }
         } catch (IllegalAccessException ex) {
-            ErrorDialog.showErrorDialog("Error populating predicate combo: " + ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error populating predicate combo: " + ex.getMessage(), ex);
         }
     }
 }

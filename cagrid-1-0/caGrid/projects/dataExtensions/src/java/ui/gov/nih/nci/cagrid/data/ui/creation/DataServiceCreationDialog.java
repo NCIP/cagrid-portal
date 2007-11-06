@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.creation;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ServiceFeatures;
@@ -11,7 +9,6 @@ import gov.nih.nci.cagrid.data.style.ServiceStyleLoader;
 import gov.nih.nci.cagrid.data.ui.StyleUiLoader;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.data.ui.wizard.ServiceWizard;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -45,7 +42,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 
 /**
@@ -55,7 +53,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Aug 1, 2006
- * @version $Id: DataServiceCreationDialog.java,v 1.3 2007-10-30 14:12:18 hastings Exp $
+ * @version $Id: DataServiceCreationDialog.java,v 1.4 2007-11-06 15:53:43 hastings Exp $
  */
 public class DataServiceCreationDialog extends CreationExtensionUIDialog {
     // default service style is "None / Custom Data Source"
@@ -176,7 +174,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
                                 container, getExtensionDescription(), getServiceInfo());
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            ErrorDialog.showErrorDialog("Error loading wizard panels for service style " 
+                            CompositeErrorDialog.showErrorDialog("Error loading wizard panels for service style " 
                                 + container.getServiceStyle().getName(), ex.getMessage(), ex);
                         }
                         
@@ -184,13 +182,13 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
                             System.out.println("Found " + stylePanels.size() + " panels");
                             // create the style's wizard
                             ServiceWizard wiz = new ServiceWizard(
-                                PortalResourceManager.getInstance().getGridPortal(),
+                                GridApplication.getContext().getApplication(),
                                 container.getServiceStyle().getName() + " Style");
                             for (AbstractWizardPanel panel : stylePanels) {
                                 System.out.println("Adding panel " + panel.getPanelShortName());
                                 wiz.addWizardPanel(panel);
                             }
-                            PortalUtils.centerComponent(wiz);
+                            GridApplication.getContext().centerDialog(wiz);
                             wiz.showAt(wiz.getX(), wiz.getY());
                         }
                     }
@@ -277,7 +275,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
             ExtensionDataUtils.storeExtensionData(data, extData);
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error storing configuration: " + ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error storing configuration: " + ex.getMessage(), ex);
         }
     }
 
@@ -420,7 +418,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
                 styleComboBox.setSelectedItem(DEFAULT_SERVICE_STYLE);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog(
+                CompositeErrorDialog.showErrorDialog(
                     "Error loading data service styles", ex.getMessage(), ex);
             }
             // add change listener to know when a new item is selected and update

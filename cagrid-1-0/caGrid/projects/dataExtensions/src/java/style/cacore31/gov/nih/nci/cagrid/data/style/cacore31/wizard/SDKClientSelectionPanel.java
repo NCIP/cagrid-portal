@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.data.style.cacore31.wizard;
 import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
@@ -44,6 +42,10 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.cagrid.grape.utils.ErrorDialog;
+
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
@@ -60,7 +62,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.6 2007-10-25 20:45:21 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.7 2007-11-06 15:53:41 hastings Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -208,7 +210,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             getDependsList().setListData(dependJars);
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error updating UI", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error updating UI", ex.getMessage(), ex);
         }
         
         // update the availability of the next button
@@ -457,7 +459,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                         "selected version of the caCORE API.",
                         "Please choose a valid library directory file."
                     };
-                    PortalUtils.showMessage(message);
+                    GridApplication.getContext().showMessage(message);
                     ValidationResult result = new ValidationResult();
                     String packedMessage = "";
                     for (String m : message) {
@@ -470,7 +472,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error in selection of client lib dir", 
+            CompositeErrorDialog.showErrorDialog("Error in selection of client lib dir", 
                 ex.getMessage(), ex);
         }
     }
@@ -533,7 +535,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error storing jar information", ex);
+            CompositeErrorDialog.showErrorDialog("Error storing jar information", ex);
         }
     }
     
@@ -565,7 +567,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             selection = ResourceManager.promptMultiFiles(null, FileFilters.JAR_FILTER);
         } catch (IOException ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error selecting files", ex);
+            CompositeErrorDialog.showErrorDialog("Error selecting files", ex);
         }
         
         if (selection != null) {
@@ -584,7 +586,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                         allLibs.add(outFile.getName());
                     } catch (IOException ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error copying library " + inFile.getAbsolutePath(), ex);
+                        CompositeErrorDialog.showErrorDialog("Error copying library " + inFile.getAbsolutePath(), ex);
                     }                   
                 }
             }

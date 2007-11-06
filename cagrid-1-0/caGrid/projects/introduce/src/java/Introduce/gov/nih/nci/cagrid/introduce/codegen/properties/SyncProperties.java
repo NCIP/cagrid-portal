@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.codegen.properties;
 
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -20,8 +21,6 @@ import java.util.Properties;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
 
 
 /**
@@ -124,7 +123,7 @@ public class SyncProperties extends SyncTool {
 				throw new SynchronizationException(e.getMessage(), e);
 			}
 
-		} catch (MobiusException e) {
+		} catch (Exception e) {
 			throw new SynchronizationException(e.getMessage(), e);
 		}
 

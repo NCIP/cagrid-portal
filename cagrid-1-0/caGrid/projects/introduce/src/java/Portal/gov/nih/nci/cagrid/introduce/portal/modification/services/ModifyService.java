@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -29,6 +28,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URI;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -40,10 +40,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
@@ -52,10 +53,6 @@ import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
-import javax.swing.BorderFactory;
-import javax.swing.border.TitledBorder;
-import java.awt.Font;
-import java.awt.Color;
 
 
 public class ModifyService extends JDialog {
@@ -125,7 +122,7 @@ public class ModifyService extends JDialog {
      * This method initializes
      */
     public ModifyService(SpecificServiceInformation service, boolean isNew) {
-        super(PortalResourceManager.getInstance().getGridPortal());
+        super(GridApplication.getContext().getApplication());
         this.setModal(true);
         this.isNew = isNew;
         this.service = service;
@@ -186,7 +183,7 @@ public class ModifyService extends JDialog {
         initValidation();
 
         this.pack();
-        PortalUtils.centerComponent(this);
+        GridApplication.getContext().centerDialog(this);
         
         if(isNew){
             checkResourcePropertyOptions();

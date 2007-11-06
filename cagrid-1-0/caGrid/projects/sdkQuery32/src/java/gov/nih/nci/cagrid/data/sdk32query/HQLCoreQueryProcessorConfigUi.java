@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.sdk32query;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.cql.ui.CQLQueryProcessorConfigUI;
 
@@ -22,6 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 /** 
  *  HQLCoreQueryProcessorConfigUi
  *  UI for configuring the HQL implementation of CQL against
@@ -30,7 +31,7 @@ import javax.swing.SwingConstants;
  * @author David Ervin
  * 
  * @created Apr 24, 2007 12:06:11 PM
- * @version $Id: HQLCoreQueryProcessorConfigUi.java,v 1.1 2007-04-25 14:30:11 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessorConfigUi.java,v 1.2 2007-11-06 15:53:42 hastings Exp $ 
  */
 public class HQLCoreQueryProcessorConfigUi extends CQLQueryProcessorConfigUI {
     
@@ -341,7 +342,7 @@ public class HQLCoreQueryProcessorConfigUi extends CQLQueryProcessorConfigUI {
                             Utils.copyFile(originalFile, outputFile);
                         } catch (IOException ex) {
                             ex.printStackTrace();
-                            ErrorDialog.showErrorDialog("Error copying selected " +
+                            CompositeErrorDialog.showErrorDialog("Error copying selected " +
                                 "file to service directory: " + ex.getMessage(), ex);
                         }
                         getCsmConfigTextField().setText(outputFile.getName());

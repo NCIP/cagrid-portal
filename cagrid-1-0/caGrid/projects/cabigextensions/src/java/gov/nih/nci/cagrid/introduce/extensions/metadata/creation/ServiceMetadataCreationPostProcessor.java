@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
@@ -25,9 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.tools.common.viewer.XSDFileFilter;
 
 
 /**
@@ -65,7 +63,7 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
 		System.out.println("Copying schemas to " + schemaDir);
 		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator
 			+ MetadataConstants.EXTENSION_NAME + File.separator + "schema");
-		List schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, new XSDFileFilter());
+		List schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, new FileFilters.XSDFileFilter());
 		for (int i = 0; i < schemaFiles.size(); i++) {
 			File schemaFile = (File) schemaFiles.get(i);
 			String subname = schemaFile.getCanonicalPath().substring(
@@ -75,7 +73,7 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
 	}
 
 
-	private void addNamespaces(ServiceDescription description, String schemaDir) throws MobiusException {
+	private void addNamespaces(ServiceDescription description, String schemaDir) throws Exception {
 		// namespaces
 		System.out.println("Modifying namespace definitions");
 		NamespacesType namespaces = description.getNamespaces();

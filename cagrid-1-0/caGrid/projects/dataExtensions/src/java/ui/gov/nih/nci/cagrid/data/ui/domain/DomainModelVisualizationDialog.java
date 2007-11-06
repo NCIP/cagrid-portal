@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+import org.cagrid.grape.GridApplication;
+
 
 /**
  * DomainModelVisualizationDialog Dialog to visually display a Data Service's
@@ -41,7 +43,7 @@ public class DomainModelVisualizationDialog extends JDialog {
         setContentPane(getMainPanel());
         pack();
         setSize(500, 500);
-        PortalUtils.centerComponent(this);
+        GridApplication.getContext().centerDialog(this);
         setVisible(true);
     }
 

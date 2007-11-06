@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.utilities.query;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.cqlquery.Association;
@@ -73,6 +72,9 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+
+import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.cagrid.grape.utils.ErrorDialog;
 
 /** 
  *  QueryBuilder
@@ -947,7 +949,7 @@ public class QueryBuilder extends JFrame {
 					query = (CQLQuery) Utils.deserializeDocument(cqlFile.getAbsolutePath(), CQLQuery.class);
 				} catch (Exception ex) {
 					ex.printStackTrace();
-					ErrorDialog.showErrorDialog("Error loading CQL Query", ex);
+					CompositeErrorDialog.showErrorDialog("Error loading CQL Query", ex);
 					return;
 				}
 				
@@ -956,7 +958,7 @@ public class QueryBuilder extends JFrame {
 					CqlStructureValidator structureValidator = new ObjectWalkingCQLValidator();
 					structureValidator.validateCqlStructure(query);
 				} catch (MalformedQueryException ex) {
-					ErrorDialog.showErrorDialog("The specified query is not structuraly valid CQL", ex);
+				    CompositeErrorDialog.showErrorDialog("The specified query is not structuraly valid CQL", ex);
 					return;
 				}
 				
@@ -964,7 +966,7 @@ public class QueryBuilder extends JFrame {
 				try {
 					domainValidator.validateDomainModel(query, domainModel);
 				} catch (MalformedQueryException ex) {
-					ErrorDialog.showErrorDialog("Error validating query", ex);
+				    CompositeErrorDialog.showErrorDialog("Error validating query", ex);
 				}
 				
 				// set the query into the query tree
@@ -998,7 +1000,7 @@ public class QueryBuilder extends JFrame {
 				writer.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				ErrorDialog.showErrorDialog("Error saving the CQL Query to disk", ex);
+				CompositeErrorDialog.showErrorDialog("Error saving the CQL Query to disk", ex);
 			}
 		}
 	}
@@ -1017,7 +1019,7 @@ public class QueryBuilder extends JFrame {
 				tempModel = MetadataUtils.deserializeDomainModel(fileReader);
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				ErrorDialog.showErrorDialog("Error loading the domain model", ex);
+				CompositeErrorDialog.showErrorDialog("Error loading the domain model", ex);
 				return;
 			}			
 			attemptInstallDomainModel(tempModel);
@@ -1035,7 +1037,7 @@ public class QueryBuilder extends JFrame {
 				tempModel = MetadataUtils.getDomainModel(client.getEndpointReference());
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				ErrorDialog.showErrorDialog("Error retrieving domain model from service", ex);
+				CompositeErrorDialog.showErrorDialog("Error retrieving domain model from service", ex);
 				return;
 			}
 			attemptInstallDomainModel(tempModel);
@@ -1089,7 +1091,7 @@ public class QueryBuilder extends JFrame {
 					writer.close();
 				} catch (Exception ex) {
 					ex.printStackTrace();
-					ErrorDialog.showErrorDialog("Error saving domain model to disk", ex);
+					CompositeErrorDialog.showErrorDialog("Error saving domain model to disk", ex);
 				}
 			}
 		} else {

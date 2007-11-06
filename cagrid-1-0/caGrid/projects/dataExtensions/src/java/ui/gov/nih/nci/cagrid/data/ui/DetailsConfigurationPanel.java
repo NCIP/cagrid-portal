@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.ui;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
@@ -23,6 +22,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 /** 
  *  DetailsConfigurationPanel
  *  Panel for managing the fine (and largely optional) details of data service configuration
@@ -30,7 +31,7 @@ import javax.swing.event.ChangeListener;
  * @author David Ervin
  * 
  * @created Jun 27, 2007 11:05:29 AM
- * @version $Id: DetailsConfigurationPanel.java,v 1.2 2007-08-21 21:02:11 dervin Exp $ 
+ * @version $Id: DetailsConfigurationPanel.java,v 1.3 2007-11-06 15:53:41 hastings Exp $ 
  */
 public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
     
@@ -101,7 +102,7 @@ public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
                         oldElementName = currentMapping.getElementName();
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error loading old class mapping", ex.getMessage(), ex);
+                        CompositeErrorDialog.showErrorDialog("Error loading old class mapping", ex.getMessage(), ex);
                     }
 
                     // get the namespace type for the class
@@ -113,7 +114,7 @@ public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
                     if (schemaType == null && oldElementName != null && oldElementName.length() != 0) {
                         // WARNING: You've selected a non-existant element name,
                         // AND the old element name was NOT non existant as well
-                        ErrorDialog.showErrorDialog(
+                        CompositeErrorDialog.showErrorDialog(
                             "No element named " + e.getElementName() 
                             + " in namespace " + e.getNamespace());
                     }
@@ -124,7 +125,7 @@ public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
                             e.getPackageName(), e.getClassName(), e.getElementName());
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing class mapping", ex);
+                        CompositeErrorDialog.showErrorDialog("Error storing class mapping", ex);
                     }
                 }
 
@@ -153,7 +154,7 @@ public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
                             e.getPackageName(), e.getClassName(), e.isTargetable());
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing change to targetability", ex);
+                        CompositeErrorDialog.showErrorDialog("Error storing change to targetability", ex);
                     }
                 }
             });
@@ -213,7 +214,7 @@ public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
                             DataServiceConstants.VALIDATE_CQL_FLAG)));
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error getting service property value for "
+                    CompositeErrorDialog.showErrorDialog("Error getting service property value for "
                         + DataServiceConstants.VALIDATE_CQL_FLAG, ex);
                 }
             }
@@ -250,7 +251,7 @@ public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
                             DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)));
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    ErrorDialog.showErrorDialog("Error getting service property value for "
+                    CompositeErrorDialog.showErrorDialog("Error getting service property value for "
                         + DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, ex);
                 }
             }

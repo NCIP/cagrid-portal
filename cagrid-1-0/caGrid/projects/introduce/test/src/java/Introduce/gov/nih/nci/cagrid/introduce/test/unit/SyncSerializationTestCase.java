@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.test.unit;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.serializers.SyncSerialization;
 
@@ -7,8 +9,6 @@ import java.io.File;
 import java.io.FileWriter;
 
 import junit.framework.TestCase;
-
-import org.projectmobius.common.XMLUtilities;
 
 public class SyncSerializationTestCase extends TestCase {
 	private File emptyFile = null;
@@ -100,7 +100,7 @@ public class SyncSerializationTestCase extends TestCase {
 	public void assertNoReplacement(File file) {
 		try {
 			SyncSerialization.editFile(file, "");
-			String newContents = XMLUtilities.fileToString(file);
+			String newContents = Utils.fileToStringBuffer(file).toString();
 			assertEquals(NO_REPLACEMENT_GOLD, newContents);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,7 +111,7 @@ public class SyncSerializationTestCase extends TestCase {
 	public void assertReplacement(File file) {
 		try {
 			SyncSerialization.editFile(file, REPLACEMENT);
-			String newContents = XMLUtilities.fileToString(file);
+			String newContents = Utils.fileToStringBuffer(file).toString();
 			assertEquals(GOLD, newContents);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.upgrade.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -37,7 +38,6 @@ import org.apache.ws.jaxme.js.util.JavaParser;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.projectmobius.common.XMLUtilities;
 
 
 public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {

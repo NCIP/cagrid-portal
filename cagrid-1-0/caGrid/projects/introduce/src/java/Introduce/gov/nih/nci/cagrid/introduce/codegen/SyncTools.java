@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.codegen;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -65,9 +66,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.jdom.Document;
 import org.jdom.Namespace;
-import org.projectmobius.common.MalformedNamespaceException;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
 
 import com.ibm.wsdl.PartImpl;
 
@@ -405,7 +403,7 @@ public class SyncTools {
 
 
     private void populateClassnames(ServiceInformation info, MultiServiceSymbolTable table)
-        throws MalformedNamespaceException, SynchronizationException {
+        throws SynchronizationException {
 
         // table.dump(System.out);
         // get the classnames from the axis symbol table
@@ -624,7 +622,7 @@ public class SyncTools {
         Document serverConfigDoc = null;
         try {
             serverConfigDoc = XMLUtilities.fileNameToDocument(serverConfigF.getAbsolutePath());
-        } catch (MobiusException e1) {
+        } catch (Exception e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
@@ -634,7 +632,7 @@ public class SyncTools {
         Document serverConfigJNDIDoc = null;
         try {
             serverConfigJNDIDoc = XMLUtilities.fileNameToDocument(jndiConfigF.getAbsolutePath());
-        } catch (MobiusException e1) {
+        } catch (Exception e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }

@@ -28,7 +28,6 @@ import java.io.IOException;
 import javax.xml.namespace.QName;
 
 import org.globus.ws.enumeration.EnumProvider;
-import org.projectmobius.common.MobiusException;
 
 
 /**
@@ -206,7 +205,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
             ercNsType.setGenerateStubs(Boolean.FALSE);
             ercNsType.setPackageName(WsEnumConstants.ENUMERATION_RESPONSE_PACKAGE);
             CommonTools.addNamespace(info.getServiceDescriptor(), ercNsType);
-        } catch (MobiusException ex) {
+        } catch (Exception ex) {
             throw new CreationExtensionException("Error creating namespace types", ex);
         }
     }

@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.table;
 
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
@@ -22,6 +21,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.table.DefaultTableModel;
+
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 
 /**
@@ -47,7 +48,7 @@ public class QueryProcessorParametersTable extends JTable {
             populateProperties();
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error populating query processor properties", 
+            CompositeErrorDialog.showErrorDialog("Error populating query processor properties", 
                 ex.getMessage(), ex);
         }
     }
@@ -63,7 +64,7 @@ public class QueryProcessorParametersTable extends JTable {
                         storeProperties();
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing query processor properties!", 
+                        CompositeErrorDialog.showErrorDialog("Error storing query processor properties!", 
                             ex.getMessage(), ex);
                     }
                 }
@@ -127,7 +128,7 @@ public class QueryProcessorParametersTable extends JTable {
             storeProperties();
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error loading query processor", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error loading query processor", ex.getMessage(), ex);
         }
     }
 

@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.files;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
@@ -26,8 +26,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.jdom.Document;
-import org.projectmobius.common.XMLUtilities;
 
 
 public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent {
@@ -114,7 +114,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
                             getNamespaceText().setText(FileTypesSelectionComponent.this.currentNamespace);
                         }
                     } catch (Exception ex) {
-                        ErrorDialog.showErrorDialog("Please make sure the file is a valid XML Schema", ex);
+                        CompositeErrorDialog.showErrorDialog("Please make sure the file is a valid XML Schema", ex);
                     }
                 }
             });

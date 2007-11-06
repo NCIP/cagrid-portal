@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
@@ -25,7 +26,6 @@ import org.jdom.Document;
 import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.Namespace;
-import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 

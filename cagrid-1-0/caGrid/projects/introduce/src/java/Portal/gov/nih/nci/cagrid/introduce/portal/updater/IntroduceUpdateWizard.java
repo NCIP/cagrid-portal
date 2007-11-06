@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.updater;
 
+import org.cagrid.grape.GridApplication;
 import org.pietschy.wizard.Wizard;
-import org.projectmobius.portal.PortalResourceManager;
 
 public class IntroduceUpdateWizard {
 	
@@ -10,7 +10,7 @@ public class IntroduceUpdateWizard {
 		UpdateWizardModel model = new UpdateWizardModel(paths);
 		Wizard wizard = new Wizard(model);
 		wizard.setOverviewVisible(true);
-		wizard.showInDialog("Introduce Update Manager",PortalResourceManager.getInstance().getGridPortal(),true);
+		wizard.showInDialog("Introduce Update Manager",GridApplication.getContext().getApplication(),true);
 	}
 
 	public static void main(String[] args) {

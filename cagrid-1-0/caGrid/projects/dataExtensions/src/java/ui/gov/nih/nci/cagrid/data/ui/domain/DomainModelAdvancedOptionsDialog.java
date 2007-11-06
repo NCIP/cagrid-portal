@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.domain;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
@@ -35,7 +34,8 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 
 /**
@@ -45,7 +45,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author David Ervin
  * 
  * @created Jun 14, 2007 10:14:20 AM
- * @version $Id: DomainModelAdvancedOptionsDialog.java,v 1.2 2007-08-21 21:02:11 dervin Exp $
+ * @version $Id: DomainModelAdvancedOptionsDialog.java,v 1.3 2007-11-06 15:53:41 hastings Exp $
  */
 public class DomainModelAdvancedOptionsDialog extends JDialog {
     public static final String INFORMATION = 
@@ -86,7 +86,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
     
     
     public DomainModelAdvancedOptionsDialog(ServiceInformation info, ExtensionDataManager dataManager) {
-        super(PortalResourceManager.getInstance().getGridPortal(), 
+        super(GridApplication.getContext().getApplication(), 
             "Advanced Domain Model Options", true);
         this.serviceInfo = info;
         this.dataManager = dataManager;
@@ -104,7 +104,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
         loadFromExtensionData();
         this.setSize(new Dimension(450, 280));
         this.setContentPane(getMainPanel());
-        PortalUtils.centerComponent(this);
+        GridApplication.getContext().centerDialog(this);
     }
     
     
@@ -128,7 +128,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error loading state information", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error loading state information", ex.getMessage(), ex);
         }
     }
     
@@ -159,7 +159,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
                             noDomainSelected, getFromFileCheckBox().isSelected());
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing domain model source", 
+                        CompositeErrorDialog.showErrorDialog("Error storing domain model source", 
                             ex.getMessage(), ex);
                     }
                 }
@@ -194,7 +194,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
                             getNoDomainModelCheckBox().isSelected(), fromFileSelected);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing domain model source", 
+                        CompositeErrorDialog.showErrorDialog("Error storing domain model source", 
                             ex.getMessage(), ex);
                     }
                 }
@@ -391,7 +391,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
             selection = ResourceManager.promptFile(null, FileFilters.XML_FILTER);
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error selecting domain model", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error selecting domain model", ex.getMessage(), ex);
         }
         if (selection != null) {
             File inFile = new File(selection);
@@ -407,7 +407,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
                     "Domain Models must conform the the domain model schema with the ",
                     "URI: " + DataServiceConstants.DOMAIN_MODEL_QNAME.getNamespaceURI()
                 };
-                PortalUtils.showMessage(message);
+                GridApplication.getContext().showMessage(message);
                 return;
             } finally {
                 if (inFileReader != null) {
@@ -452,7 +452,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
                 Utils.copyFile(inFile, outFile);
             } catch (IOException ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error copying selected domain model file in to service", 
+                CompositeErrorDialog.showErrorDialog("Error copying selected domain model file in to service", 
                     ex.getMessage(), ex);
             }
             

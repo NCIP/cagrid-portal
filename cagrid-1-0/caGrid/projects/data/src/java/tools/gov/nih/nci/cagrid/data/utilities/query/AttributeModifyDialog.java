@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.utilities.query;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 
@@ -24,6 +23,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 /** 
  *  AttributeModifyDialog
@@ -228,7 +229,7 @@ public class AttributeModifyDialog extends JDialog {
 					}
 				}
 			} catch (Exception ex) {
-				ErrorDialog.showErrorDialog("Error populating predicate list: " + ex.getMessage(), ex);
+				CompositeErrorDialog.showErrorDialog("Error populating predicate list: " + ex.getMessage(), ex);
 			}
 			// sort the predicates
 			Collections.sort(predicates, new Comparator() {

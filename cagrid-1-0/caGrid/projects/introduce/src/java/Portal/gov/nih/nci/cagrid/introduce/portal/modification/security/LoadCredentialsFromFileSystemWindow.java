@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -17,8 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.globus.gsi.CertUtil;
-import org.projectmobius.portal.GridPortalComponent;
 
 
 /**
@@ -30,7 +29,7 @@ import org.projectmobius.portal.GridPortalComponent;
  *          Exp $
  */
 
-public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
+public class LoadCredentialsFromFileSystemWindow extends ApplicationComponent {
 
 	private JPanel jContentPane = null;
 	private JPanel mainPanel = null;
@@ -273,20 +272,20 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 	private void setCredentials() {
 		String certStr = this.certificate.getText().trim();
 		if (certStr.length() == 0) {
-			PortalUtils.showErrorMessage("You must specify a certificate!!!");
+			CompositeErrorDialog.showErrorDialog("You must specify a certificate!!!");
 			return;
 		}
 		
 		try {
 			CertUtil.loadCertificate(certStr);
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage("Invalid certificate specified!!!");
+		    CompositeErrorDialog.showErrorDialog("Invalid certificate specified!!!");
 			return;
 		}
 
 		String keyStr = this.privateKey.getText().trim();
 		if (keyStr.length() == 0) {
-			PortalUtils.showErrorMessage("You must specify a private key!!!");
+		    CompositeErrorDialog.showErrorDialog("You must specify a private key!!!");
 			return;
 		}
 
@@ -294,7 +293,7 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 		try {
 			 KeyUtil.loadPrivateKey(new File(keyStr), null);
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage("Invalid private key specified: " + e.getMessage());
+		    CompositeErrorDialog.showErrorDialog("Invalid private key specified: " + e.getMessage());
 			return;
 		}
 		X509Credential cred = new X509Credential();
@@ -303,8 +302,8 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 		try {
 			this.serviceSecurity.setCredentials(cred);
 		} catch (Exception e) {
-			// PortalUtils.showErrorMessage(e);
-			ErrorDialog.showErrorDialog(e);
+			// PortalUtils.showErrorDialogDialog(e);
+		    CompositeErrorDialog.showErrorDialog(e);
 			return;
 		}
 		dispose();

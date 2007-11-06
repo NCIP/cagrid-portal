@@ -27,7 +27,6 @@ import org.apache.axis.utils.XMLUtils;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.PanelWizardStep;
-import org.projectmobius.common.MobiusException;
 
 public class CheckForUpdatesStep extends PanelWizardStep {
 
@@ -70,7 +69,7 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 	}
 
 	protected void checkForUpdates() throws MalformedURLException, IOException,
-			MobiusException, Exception {
+			Exception {
 		URL url = null;
 		url = new URL(getUpdateSiteTextField().getText() + "/software.xml");
 		URLConnection connection = url.openConnection();
@@ -232,15 +231,11 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 								statusLabel
 										.setText("ERROR: Unable to connect or read from update site!");
 								ex.printStackTrace();
-							} catch (MobiusException ex) {
+							} catch (Exception ex) {
 								statusLabel
 										.setText("ERROR: Update site information is corupt");
 								ex.printStackTrace();
-							} catch (Exception ex) {
-								statusLabel
-										.setText("ERROR: Undetermined Exception");
-								ex.printStackTrace();
-							}
+							} 
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									getBusyProgressBar()

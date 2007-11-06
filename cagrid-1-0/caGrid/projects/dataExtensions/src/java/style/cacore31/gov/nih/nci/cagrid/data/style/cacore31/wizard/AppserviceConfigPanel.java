@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.style.cacore31.wizard;
 
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.style.sdkstyle.wizard.AppserviceConfigCompletionListener;
@@ -30,6 +29,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
@@ -47,7 +48,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Mar 23, 2007 3:35:47 PM
- * @version $Id: AppserviceConfigPanel.java,v 1.3 2007-10-26 15:27:03 dervin Exp $ 
+ * @version $Id: AppserviceConfigPanel.java,v 1.4 2007-11-06 15:53:41 hastings Exp $ 
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -195,7 +196,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
             setCsmConfigEnabled(useCsm);
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error loading configuration values: " + ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error loading configuration values: " + ex.getMessage(), ex);
         }
     }
 
@@ -229,7 +230,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                             getUrlTextField().getText(), false);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error setting the application service URL: " 
+                        CompositeErrorDialog.showErrorDialog("Error setting the application service URL: " 
                             + ex.getMessage(), ex);
                     }
                 }
@@ -257,7 +258,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                             String.valueOf(caseInsensitiveCheckBox.isSelected()), false);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error setting the case insensitive flag: "
+                        CompositeErrorDialog.showErrorDialog("Error setting the case insensitive flag: "
                             + ex.getMessage(), ex);
                     }
                 }
@@ -286,7 +287,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                             String.valueOf(useCsmCheckBox.isSelected()), false);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error storing use CSM property: " 
+                        CompositeErrorDialog.showErrorDialog("Error storing use CSM property: " 
                             + ex.getMessage(), ex);
                     }
                     validateInput();
@@ -327,7 +328,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
                             getCsmContextTextField().getText(), false);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error setting CSM context: " + ex.getMessage(), ex);
+                        CompositeErrorDialog.showErrorDialog("Error setting CSM context: " + ex.getMessage(), ex);
                     }
                 }
             });

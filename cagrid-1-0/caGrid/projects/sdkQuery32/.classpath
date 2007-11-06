@@ -79,5 +79,7 @@
 	<classpathentry kind="lib" path="ext/lib/sdkClient/spring-richclient-full-0.1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/authz/caGrid-1.1-authz-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/authz/csmapi.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

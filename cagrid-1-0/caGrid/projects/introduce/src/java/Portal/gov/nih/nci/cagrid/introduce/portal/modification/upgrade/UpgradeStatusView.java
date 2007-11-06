@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.upgrade;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.upgrade.common.UpgradeStatus;
 
 import java.awt.Dimension;
@@ -17,7 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
 
 
 public class UpgradeStatusView extends JDialog {
@@ -43,7 +42,7 @@ public class UpgradeStatusView extends JDialog {
      * This method initializes
      */
     public UpgradeStatusView(UpgradeStatus status) {
-        super(PortalResourceManager.getInstance().getGridPortal());
+        super(GridApplication.getContext().getApplication());
         this.status = status;
         initialize();
     }
@@ -58,7 +57,7 @@ public class UpgradeStatusView extends JDialog {
         this.setContentPane(getMainPanel());
         this.setModal(true);
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        PortalUtils.centerComponent(this);
+        GridApplication.getContext().centerDialog(this);
     }
 
 

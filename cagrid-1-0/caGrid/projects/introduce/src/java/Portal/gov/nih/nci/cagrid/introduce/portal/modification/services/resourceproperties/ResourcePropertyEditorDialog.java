@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
 
 import java.awt.GridBagConstraints;
@@ -13,8 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.portal.PortalResourceManager;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 
 
 public class ResourcePropertyEditorDialog extends JDialog {
@@ -28,7 +27,7 @@ public class ResourcePropertyEditorDialog extends JDialog {
 
 
 	public ResourcePropertyEditorDialog(ResourcePropertyEditorPanel component, File resourcePropertyFile) {
-		super(PortalResourceManager.getInstance().getGridPortal());
+		super(GridApplication.getContext().getApplication());
 		this.setModal(true);
 		this.component = component;
 		this.resourcePropertyFile = resourcePropertyFile;
@@ -43,7 +42,7 @@ public class ResourcePropertyEditorDialog extends JDialog {
 		this.setTitle("Resource Property Editor");
 		this.setContentPane(getMainPanel());
 		this.pack();
-		PortalUtils.centerComponent(this);
+		GridApplication.getContext().centerDialog(this);
 	}
 
 
@@ -132,7 +131,7 @@ public class ResourcePropertyEditorDialog extends JDialog {
 							fw.close();
 						} catch (Exception e1) {
 							e1.printStackTrace();
-							ErrorDialog.showErrorDialog("ERROR: Invalid XML Document", e1);
+							ErrorDialog.showError("ERROR: Invalid XML Document", e1);
 							return;
 						}
 

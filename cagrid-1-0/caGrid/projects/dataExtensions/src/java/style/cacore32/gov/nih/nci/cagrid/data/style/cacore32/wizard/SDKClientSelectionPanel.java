@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.data.style.cacore32.wizard;
 import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
@@ -50,6 +48,9 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
@@ -66,7 +67,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.8 2007-10-30 14:42:34 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.9 2007-11-06 15:53:43 hastings Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -275,7 +276,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             getDependsList().setListData(dependJars);
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error updating UI", ex);
+            CompositeErrorDialog.showErrorDialog("Error updating UI", ex);
         }
         
         // update the availability of the next button
@@ -635,12 +636,12 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                         "selected version of the caCORE API.",
                         "Please choose a valid library directory file."
                     };
-                    PortalUtils.showMessage(message);
+                    GridApplication.getContext().showMessage(message);
                 }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error in selection of client lib dir", 
+            CompositeErrorDialog.showErrorDialog("Error in selection of client lib dir", 
                 ex.getMessage(), ex);
         }
     }
@@ -736,7 +737,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error storing jar information", ex);
+            CompositeErrorDialog.showErrorDialog("Error storing jar information", ex);
         }
     }
     
@@ -768,7 +769,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             selection = ResourceManager.promptMultiFiles(null, FileFilters.JAR_FILTER);
         } catch (IOException ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error selecting files", ex);
+            CompositeErrorDialog.showErrorDialog("Error selecting files", ex);
         }
         
         if (selection != null) {
@@ -787,7 +788,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                         allLibs.add(outFile.getName());
                     } catch (IOException ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error copying library " + inFile.getAbsolutePath(), ex);
+                        CompositeErrorDialog.showErrorDialog("Error copying library " + inFile.getAbsolutePath(), ex);
                     }                   
                 }
             }
@@ -911,12 +912,12 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
                         "selected caCORE API version.  Please select a",
                         "valid configuration directory"
                     };
-                    PortalUtils.showMessage(message);
+                    GridApplication.getContext().showMessage(message);
                 }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error selecting client configuration directory", 
+            CompositeErrorDialog.showErrorDialog("Error selecting client configuration directory", 
                 ex.getMessage(), ex);
         }
     }

@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
@@ -22,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
@@ -118,7 +118,7 @@ public class GMESchemaLocatorPanel extends JPanel {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                ErrorDialog.showErrorDialog("Error contacting the GME", ex.getMessage(), ex);
+                CompositeErrorDialog.showErrorDialog("Error contacting the GME", ex.getMessage(), ex);
             }
             makeCombosEnabled(true);
         };
@@ -181,7 +181,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 	                                }
 	                            } catch (Exception ex) {
 	                                ex.printStackTrace();
-	                                ErrorDialog.showErrorDialog("Error contacting GME", ex.getMessage(), ex);
+	                                CompositeErrorDialog.showErrorDialog("Error contacting GME", ex.getMessage(), ex);
 	                            }
 	                            makeCombosEnabled(true);
 	                        }
@@ -218,7 +218,7 @@ public class GMESchemaLocatorPanel extends JPanel {
                                 }
                             } catch (MobiusException ex) {
                                 ex.printStackTrace();
-                                ErrorDialog.showErrorDialog("Error contacting GME", ex.getMessage(), ex);
+                                CompositeErrorDialog.showErrorDialog("Error contacting GME", ex.getMessage(), ex);
                             }
                         }
 					}

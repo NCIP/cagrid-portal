@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.beans.extension.ResourcePropertyEditorExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
@@ -37,7 +37,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.xml.namespace.QName;
 
-import org.projectmobius.common.XMLUtilities;
+import org.cagrid.grape.utils.ErrorDialog;
 
 
 public class ModifyResourcePropertiesPanel extends JPanel {
@@ -392,13 +392,13 @@ public class ModifyResourcePropertiesPanel extends JPanel {
                         resource = getResourcePropertiesTable().getRowData(
                             getResourcePropertiesTable().getSelectedRow());
                     } catch (Exception e1) {
-                        PortalUtils.showErrorMessage("Please select a metdata type to remove.");
+                        ErrorDialog.showError("Please select a metdata type to remove.");
                         return;
                     }
                     try {
                         getResourcePropertiesTable().removeSelectedRow();
                     } catch (Exception e1) {
-                        PortalUtils.showErrorMessage("Please select a metdata type to remove.");
+                        ErrorDialog.showError("Please select a metdata type to remove.");
                         return;
                     }
                     // remove from resource properties list
@@ -466,7 +466,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
                                 if (resourcePropertyFile != null && resourcePropertyFile.exists()) {
                                     // file has already been created
                                     System.out.println("Loading resource properties file : " + resourcePropertyFile);
-                                    rpData = XMLUtilities.fileNameToString(resourcePropertyFile.getAbsolutePath());
+                                    rpData = Utils.fileToStringBuffer(new File(resourcePropertyFile.getAbsolutePath())).toString();
                                 } else {
                                     // file has not been created yet, we will
                                     // create it, set the path to file, and then
@@ -484,7 +484,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
                                         throw new Exception("Could not create file"
                                             + resourcePropertyFile.getAbsolutePath());
                                     }
-                                    rpData = XMLUtilities.fileNameToString(resourcePropertyFile.getAbsolutePath());
+                                    rpData = Utils.fileToStringBuffer(new File(resourcePropertyFile.getAbsolutePath())).toString();
                                 }
 
                                 QName qname = type.getQName();

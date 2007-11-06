@@ -1,9 +1,7 @@
 package gov.nih.nci.cagrid.data.ui.auditors;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.auditing.AuditorConfiguration;
 import gov.nih.nci.cagrid.data.auditing.AuditorConfigurationConfigurationProperties;
 import gov.nih.nci.cagrid.data.auditing.ConfigurationProperty;
@@ -26,6 +24,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.cagrid.grape.utils.ErrorDialog;
+
 /** 
  *  AuditorsConfigurationPanel
  *  Panel for configuring data service auditors
@@ -33,7 +34,7 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:40:27 AM
- * @version $Id: AuditorsConfigurationPanel.java,v 1.3 2007-08-24 14:14:50 dervin Exp $ 
+ * @version $Id: AuditorsConfigurationPanel.java,v 1.4 2007-11-06 15:53:41 hastings Exp $ 
  */
 public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel {
     
@@ -108,7 +109,7 @@ public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel 
                         getExtensionDataManager().storeAuditorsConfiguration(auditors);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ErrorDialog.showErrorDialog("Error removing auditor", ex.getMessage(), ex);
+                        CompositeErrorDialog.showErrorDialog("Error removing auditor", ex.getMessage(), ex);
                     }
                     // remove the auditor from the UI
                     getAuditorsTable().removeAuditor(className, instanceName);                    
@@ -202,11 +203,11 @@ public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel 
                 // add the auditor to the GUI
                 getAuditorsTable().addAuditor(className, instanceName);
             } else {
-                PortalUtils.showMessage("Auditor " + className + " : " + instanceName + " already exists");
+                ErrorDialog.showError("Auditor " + className + " : " + instanceName + " already exists");
             }                       
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error adding auditor", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error adding auditor", ex.getMessage(), ex);
         }
     }
 }

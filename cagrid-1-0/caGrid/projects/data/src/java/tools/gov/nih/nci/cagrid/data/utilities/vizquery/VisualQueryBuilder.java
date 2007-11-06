@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.utilities.vizquery;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -56,6 +55,7 @@ import javax.swing.tree.TreePath;
 
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReference;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 /** 
  *  VisualQueryBuilder
@@ -64,7 +64,7 @@ import org.apache.axis.message.addressing.EndpointReference;
  * @author David Ervin
  * 
  * @created Mar 30, 2007 3:46:34 PM
- * @version $Id: VisualQueryBuilder.java,v 1.6 2007-09-28 20:11:33 dervin Exp $ 
+ * @version $Id: VisualQueryBuilder.java,v 1.7 2007-11-06 15:53:43 hastings Exp $ 
  */
 public class VisualQueryBuilder extends JFrame {
     
@@ -106,7 +106,7 @@ public class VisualQueryBuilder extends JFrame {
     
     public VisualQueryBuilder() {
         super("Visual CQL Query Builder");
-        ErrorDialog.setOwnerFrame(this);
+        CompositeErrorDialog.setOwnerFrame(this);
         initialize();
     }
 
@@ -254,7 +254,7 @@ public class VisualQueryBuilder extends JFrame {
                                 new FileReader(dmFile));
                             setCurrentModel(model);
                         } catch (Exception ex) {
-                            ErrorDialog.showErrorDialog(
+                            CompositeErrorDialog.showErrorDialog(
                                 "Error loading domain model: " + ex.getMessage(), ex);
                         }
                     }
@@ -285,7 +285,7 @@ public class VisualQueryBuilder extends JFrame {
                             DomainModel model = MetadataUtils.getDomainModel(epr);
                             setCurrentModel(model);
                         } catch (Exception ex) {
-                            ErrorDialog.showErrorDialog(
+                            CompositeErrorDialog.showErrorDialog(
                                 "Error retrieving domain model from service: " + ex.getMessage(), ex);
                         }                 
                     }

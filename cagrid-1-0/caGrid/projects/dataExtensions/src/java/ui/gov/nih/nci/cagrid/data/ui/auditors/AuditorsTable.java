@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import org.projectmobius.portal.JComponentCellEditor;
+import org.cagrid.grape.table.GrapeTableCellEditor;
 
 /** 
  *  AuditorsTable
@@ -22,7 +22,7 @@ import org.projectmobius.portal.JComponentCellEditor;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:41:23 AM
- * @version $Id: AuditorsTable.java,v 1.2 2007-08-21 21:02:11 dervin Exp $ 
+ * @version $Id: AuditorsTable.java,v 1.3 2007-11-06 15:53:41 hastings Exp $ 
  */
 public class AuditorsTable extends JTable {
     
@@ -37,7 +37,7 @@ public class AuditorsTable extends JTable {
         setModel(getAuditorsTableModel());
         // renderers and editors to handle components on the table
         setDefaultRenderer(Object.class, new AuditorsTableCellRenderer());
-        setDefaultEditor(Component.class, new JComponentCellEditor() {
+        setDefaultEditor(Component.class, new GrapeTableCellEditor() {
             public Component getTableCellEditorComponent(
                 JTable table, Object value, boolean isSelected,
                 int row, int column) {

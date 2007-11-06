@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.codegen.utils;
 
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -21,7 +22,6 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.projectmobius.common.XMLUtilities;
 
 
 /**

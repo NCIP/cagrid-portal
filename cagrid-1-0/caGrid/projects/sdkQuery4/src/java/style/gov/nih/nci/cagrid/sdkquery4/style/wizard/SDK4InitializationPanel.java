@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.sdkquery4.style.wizard;
 
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
@@ -18,6 +17,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 /** 
  *  SDK4InitializationPanel
  *  Panel to initialize the SDK 4 wizard
@@ -25,7 +26,7 @@ import java.util.Set;
  * @author David Ervin
  * 
  * @created Oct 5, 2007 2:08:34 PM
- * @version $Id: SDK4InitializationPanel.java,v 1.2 2007-10-05 19:41:22 dervin Exp $ 
+ * @version $Id: SDK4InitializationPanel.java,v 1.3 2007-11-06 15:53:43 hastings Exp $ 
  */
 public class SDK4InitializationPanel extends CoreDsIntroPanel {
     
@@ -67,7 +68,7 @@ public class SDK4InitializationPanel extends CoreDsIntroPanel {
             ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorDialog.showErrorDialog("Error adding the library to the service information", ex);
+            CompositeErrorDialog.showErrorDialog("Error adding the library to the service information", ex);
             return;
         }
         // add the query processor class name as a service property

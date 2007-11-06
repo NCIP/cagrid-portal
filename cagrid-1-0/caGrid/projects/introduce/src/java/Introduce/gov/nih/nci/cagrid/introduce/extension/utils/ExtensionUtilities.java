@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.extension.utils;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 
 import java.io.File;
@@ -15,7 +16,6 @@ import java.util.Set;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import org.projectmobius.common.XMLUtilities;
 
 /** 
  *  ExtensionUtilities
@@ -24,7 +24,7 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 7, 2006 
- * @version $Id: ExtensionUtilities.java,v 1.14 2007-08-29 21:02:57 hastings Exp $ 
+ * @version $Id: ExtensionUtilities.java,v 1.15 2007-11-06 15:53:43 hastings Exp $ 
  */
 public class ExtensionUtilities {
 	public static final String CLASSPATHENTRY_ELEMENT = "classpathentry";

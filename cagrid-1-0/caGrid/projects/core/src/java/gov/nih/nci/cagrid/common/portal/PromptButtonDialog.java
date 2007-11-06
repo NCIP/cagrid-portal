@@ -69,7 +69,6 @@ public class PromptButtonDialog extends JDialog {
     
     
     private static String displayDialog(PromptButtonDialog dialog) {
-        PortalUtils.centerComponent(dialog);
         dialog.setVisible(true);
         return dialog.getSelection();
     }

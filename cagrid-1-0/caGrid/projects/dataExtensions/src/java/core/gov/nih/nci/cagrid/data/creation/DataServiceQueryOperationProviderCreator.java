@@ -196,7 +196,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
             // caGrid metadata namespace
             cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
                 + DataServiceConstants.CAGRID_METADATA_SCHEMA, schemaDirFile);
-        } catch (MobiusException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             throw new CreationExtensionException("Error creating namespace for data service: " 
                 + ex.getMessage(), ex);

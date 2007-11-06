@@ -1,9 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.ErrorDialog;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -72,12 +71,12 @@ import javax.xml.namespace.QName;
 import org.apache.axis.utils.JavaUtils;
 import org.apache.log4j.Logger;
 import org.apache.xml.utils.DefaultErrorHandler;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.portal.PortalResourceManager;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
@@ -373,7 +372,7 @@ public class MethodViewer extends javax.swing.JDialog {
     // @jve:decl-index=0:
 
     public MethodViewer(MethodType method, SpecificServiceInformation info) {
-        super(PortalResourceManager.getInstance().getGridPortal());
+        super(GridApplication.getContext().getApplication());
         this.setModal(true);
         this.info = info;
         this.method = method;
@@ -412,7 +411,7 @@ public class MethodViewer extends javax.swing.JDialog {
         initNewFaultValidation();
         initProviderValidation();
         initImportValidation();
-        PortalUtils.centerComponent(this);
+        GridApplication.getContext().centerDialog(this);
 
     }
 
@@ -937,7 +936,7 @@ public class MethodViewer extends javax.swing.JDialog {
                                 Document remoteWsdlDoc = null;
                                 try {
                                     remoteWsdlDoc = XMLUtilities.fileNameToDocument(remoteWsdlFile);
-                                } catch (MobiusException e1) {
+                                } catch (Exception e1) {
                                     logger.error("ERROR", e1);
                                     return;
                                 }
@@ -1063,8 +1062,8 @@ public class MethodViewer extends javax.swing.JDialog {
 
                     } catch (Exception ex) {
                         logger.warn("WARNING", ex);
-                        // PortalUtils.showErrorMessage(ex);
-                        ErrorDialog.showErrorDialog(ex);
+                        // PortalUtils.showErrorDialog(ex);
+                        CompositeErrorDialog.showErrorDialog(ex);
                     }
                     if (!valid) {
                         JOptionPane.showMessageDialog(MethodViewer.this, message);
@@ -1213,7 +1212,7 @@ public class MethodViewer extends javax.swing.JDialog {
                     try {
                         getInputParamTable().removeSelectedRow();
                     } catch (Exception ex) {
-                        PortalUtils.showErrorMessage("Please select an input parameter to Remove");
+                        ErrorDialog.showError("Please select an input parameter to Remove");
                     }
                 }
             });
@@ -1414,7 +1413,7 @@ public class MethodViewer extends javax.swing.JDialog {
                     try {
                         getExceptionsTable().removeSelectedRow();
                     } catch (Exception ex) {
-                        PortalUtils.showErrorMessage("Please select an exception to Remove");
+                        ErrorDialog.showError("Please select an exception to Remove");
                     }
                 }
             });
@@ -2656,7 +2655,7 @@ public class MethodViewer extends javax.swing.JDialog {
                     // chose the introduce directory
                     JFileChooser chooser = new JFileChooser();
                     chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                    PortalUtils.centerComponent(chooser);
+                    GridApplication.getContext().centerComponent(chooser);
                     int returnVal = chooser.showOpenDialog(MethodViewer.this);
                     if (returnVal != JFileChooser.APPROVE_OPTION) {
                         return;
@@ -2799,7 +2798,7 @@ public class MethodViewer extends javax.swing.JDialog {
 
                     });
                     chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    PortalUtils.centerComponent(chooser);
+                    GridApplication.getContext().centerComponent(chooser);
                     int returnVal = chooser.showOpenDialog(MethodViewer.this);
                     if (returnVal != JFileChooser.APPROVE_OPTION) {
                         return;
@@ -2809,7 +2808,7 @@ public class MethodViewer extends javax.swing.JDialog {
                     try {
                         wsdlDoc = XMLUtilities.fileNameToDocument(chooser.getSelectedFile().getAbsolutePath());
                         currentImporWSDL = wsdlDoc;
-                    } catch (MobiusException e1) {
+                    } catch (Exception e1) {
                         logger.error("ERROR", e1);
                         return;
                     }

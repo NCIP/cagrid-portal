@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.common;
 
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
@@ -20,8 +21,6 @@ import javax.xml.namespace.QName;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
 
 
 public final class ProviderTools {
@@ -314,7 +313,7 @@ public final class ProviderTools {
 
 
     public static void removeProviderFromServiceConfig(ServiceType service, String providerClass,
-        ServiceInformation info) throws MobiusException, IOException {
+        ServiceInformation info) throws Exception, IOException {
 
         Document doc = XMLUtilities.fileNameToDocument(info.getBaseDirectory() + File.separator + "server-config.wsdd");
         List servicesEls = doc.getRootElement().getChildren("service",
