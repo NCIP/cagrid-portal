@@ -26,7 +26,7 @@
 		autowire="byName">
 		<property name="commandName" value="selectItemForDiscovery"/>
 		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.map.SelectItemCommand"/>
-		<property name="redirectUrl" value="/user/test/3"/>
+		<property name="redirectUrl" value="/web/guest/2"/>
 	</bean>
 	
 	<bean 
@@ -35,7 +35,7 @@
 		autowire="byName">
 		<property name="commandName" value="selectDirectoryForDiscovery"/>
 		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.discovery.list.ListBean"/>
-		<property name="redirectUrl" value="/user/test/3"/>
+		<property name="redirectUrl" value="/web/guest/2"/>
 	</bean>
 	
 	<bean

@@ -29,11 +29,13 @@
 			</c:otherwise>
 		</c:choose>
 
+		<div>
 		<li class="<c:out value="${nodeClass}"/>"
 			id="<c:out value="${prefix}"/><c:out value="${childNode.path}"/>Node"
 			onclick="<c:out value="${prefix}"/>toggleDiv('<c:out value="${childNode.path}"/>')">
 			<jsp:invoke fragment="nodeFragment"/>
 		</li>
+		</div>
 		
 		<c:choose>
 			<c:when test="${childNode.state == 'OPEN'}">

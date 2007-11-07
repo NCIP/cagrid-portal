@@ -73,6 +73,31 @@
 					<option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptDefinition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition</option>
 					<option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Name</option>
 				</optgroup>
+				<optgroup label="&nbsp; Domain Model">
+					<option value="domainModel.projectLongName">&nbsp;&nbsp; Project Long Name</option>
+					<option value="domainModel.projectShortName">&nbsp;&nbsp; Project Short Name</option>
+				</optgroup>
+				<optgroup label="&nbsp;&nbsp; UML Classes">
+					<option value="domainModel.classes.cadsrId">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; caDSR ID</option>
+					<option value="domainModel.classes.className">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Class Name</option>
+					<option value="domainModel.classes.packageName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Package Name</option>
+					<option value="domainModel.classes.projectName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Project Name</option>
+				</optgroup>
+				<optgroup label="&nbsp;&nbsp;&nbsp; Semantic Metadata">
+					<option value="domainModel.classes.semanticMetadata.conceptCode">&nbsp;&nbsp;&nbsp;&nbsp; Concept Code</option>
+					<option value="domainModel.classes.semanticMetadata.conceptDefinition">&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition</option>
+					<option value="domainModel.classes.semanticMetadata.conceptName">&nbsp;&nbsp;&nbsp;&nbsp; Concept Name</option>
+				</optgroup>
+				<optgroup label="&nbsp;&nbsp;&nbsp; Attributes">
+					<option value="domainModel.classes.umlAttributeCollection.name">&nbsp;&nbsp;&nbsp;&nbsp; Name</option>
+					<option value="domainModel.classes.umlAttributeCollection.description">&nbsp;&nbsp;&nbsp;&nbsp; Description</option>
+					<option value="domainModel.classes.umlAttributeCollection.dataTypeName">&nbsp;&nbsp;&nbsp;&nbsp; Data Type Name</option>
+				</optgroup>
+				<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
+					<option value="domainModel.classes.umlAttributeCollection.semanticMetadata.conceptCode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Code</option>
+					<option value="domainModel.classes.umlAttributeCollection.semanticMetadata.conceptDefinition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition</option>
+					<option value="domainModel.classes.umlAttributeCollection.semanticMetadata.conceptName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Name</option>
+				</optgroup>
 			</select>
 		</td>
 	</tr>

@@ -4,6 +4,7 @@
 package gov.nih.nci.cagrid.portal2.portlet.discovery.search;
 
 import gov.nih.nci.cagrid.portal2.domain.DomainObject;
+import gov.nih.nci.cagrid.portal2.domain.GridDataService;
 import gov.nih.nci.cagrid.portal2.domain.GridService;
 import gov.nih.nci.cagrid.portal2.domain.Participant;
 import gov.nih.nci.cagrid.portal2.domain.Person;
@@ -71,10 +72,18 @@ public class KeywordSearchService {
 		Session sess = getHibernateTemplate().getSessionFactory().openSession();
 		Set<Integer> allIds = new HashSet<Integer>();
 		for(Entry<String,String> entry : criteria.entrySet()){
-			Criteria crit = sess.createCriteria(klass);
-			crit.setProjection(Projections.id());
+			
 			String path = entry.getKey();
 			String value = entry.getValue();
+			
+			Criteria crit = null;
+			if(path.startsWith("domainModel")){
+				crit = sess.createCriteria(GridDataService.class);
+			}else{
+				crit = sess.createCriteria(klass);
+			}
+			crit.setProjection(Projections.id());
+			
 			if(path.indexOf(".") == -1){
 				crit.add(Restrictions.like(path, value));
 			}else{
