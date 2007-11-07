@@ -45,7 +45,6 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
-import org.projectmobius.common.MobiusException;
 
 
 /**

@@ -44,7 +44,6 @@ import javax.swing.event.DocumentEvent;
 
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.CompositeErrorDialog;
-import org.cagrid.grape.utils.ErrorDialog;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
@@ -62,7 +61,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.7 2007-11-06 15:53:41 hastings Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.8 2007-11-07 15:27:41 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     // keys for validation components
