@@ -2,13 +2,16 @@ package gov.nih.nci.cagrid.metadata.xmi;
 
 import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import org.jdom.Element;
+import org.jdom.filter.Filter;
 
 /** 
  *  FixXmiExecutor
@@ -17,7 +20,7 @@ import org.apache.log4j.Priority;
  * @author David Ervin
  * 
  * @created Oct 29, 2007 2:11:31 PM
- * @version $Id: FixXmiExecutor.java,v 1.2 2007-11-01 16:33:39 dervin Exp $ 
+ * @version $Id: FixXmiExecutor.java,v 1.3 2007-11-07 21:40:09 dervin Exp $ 
  */
 public class FixXmiExecutor {
     public static final Logger LOG = Logger.getLogger(FixXmiExecutor.class);
@@ -38,6 +41,11 @@ public class FixXmiExecutor {
     // the EA xmi preprocessor class
     public static final String EA_XMI_PREPROCESSOR = 
         "gov.nih.nci.codegen.core.util.EAXMIPreprocessor";
+    
+    private FixXmiExecutor() {
+        // prevent instantiation
+    }
+    
     
     /**
      * Runs the SDK's fix-xmi target against the specified model
@@ -66,10 +74,15 @@ public class FixXmiExecutor {
         // execute the command
         System.out.println("Executing " + command.toString());
         Process proc = Runtime.getRuntime().exec(command.toString());
+        /* streams to LOG
         new StreamGobbler(proc.getInputStream(), StreamGobbler.TYPE_OUT,
             LOG, Priority.DEBUG).start();
         new StreamGobbler(proc.getErrorStream(), StreamGobbler.TYPE_ERR,
             LOG, Priority.DEBUG).start();
+        */
+        // Streams to out
+        new StreamGobbler(proc.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
+        new StreamGobbler(proc.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
         System.out.println("Waiting");
         proc.waitFor();
         if (proc.exitValue() == 0) {
@@ -116,20 +129,63 @@ public class FixXmiExecutor {
     
     private static File cleanXmi(File originalXmi) throws IOException {
         System.out.println("Clean XMI");
-        File cleanedFile = null;
+        File cleanedFile = new File(originalXmi.getParentFile(), "cleaned_" + originalXmi.getName());
         StringBuffer xmiContents = Utils.fileToStringBuffer(originalXmi);
+        cleanDoctype(xmiContents);
+        cleanTaggedValues(xmiContents);
+        Utils.stringBufferToFile(xmiContents, cleanedFile.getAbsolutePath());
+        return cleanedFile;
+    }
+    
+    
+    private static void cleanDoctype(StringBuffer xmiContents) {
         int start = xmiContents.indexOf(DOCTYPE_UML_EA); 
         if (start != -1) {
             System.out.println("OFFENDING DOCTYPE ELEMENT FOUND");
             xmiContents.delete(start, start + DOCTYPE_UML_EA.length());
-            File temp = new File(originalXmi.getParentFile(), "cleaned_" + originalXmi.getName());
-            System.out.println("Saving cleaned to " + temp.getAbsolutePath());
-            Utils.stringBufferToFile(xmiContents, temp.getAbsolutePath());
-            cleanedFile = temp;
-        } else {
-            // no processing to do, return the original
-            cleanedFile = originalXmi;
         }
-        return cleanedFile;
+    }
+    
+    
+    private static void cleanTaggedValues(StringBuffer xmiContents) throws IOException {
+        // UML namespace == xmlns:UML="omg.org/UML1.3"
+        Element xmiElement = null;
+        try {
+            xmiElement = XMLUtilities.stringToDocument(xmiContents.toString()).getRootElement();
+        } catch (Exception ex) {
+            IOException ioe = new IOException(ex.getMessage());
+            ioe.initCause(ex);
+            throw ioe;
+        }
+        // iterate everything, looking for <UML:TaggedValue ../>
+        Filter taggedValueFilter = new Filter() {
+            public boolean matches(Object obj) {
+                if (obj instanceof Element) {
+                    Element elem = (Element) obj;
+                    if (elem.getName().equals("TaggedValue")) {
+                        return elem.getAttribute("value") == null;
+                    }
+                }
+                return false;
+            }
+        };
+        int removedCount = 0;
+        Iterator<Element> badTaggedValues = xmiElement.getDescendants(taggedValueFilter);
+        while (badTaggedValues.hasNext()) {
+            Element removeMe = badTaggedValues.next();
+            removeMe.detach();
+            removedCount++;
+        }
+        System.out.println("Removed " + removedCount + " TaggedValues with no 'value' attribute");
+        String cleanXmi = null;
+        try {
+            cleanXmi = XMLUtilities.formatXML(XMLUtilities.elementToString(xmiElement));
+        } catch (Exception ex) {
+            IOException ioe = new IOException(ex.getMessage());
+            ioe.initCause(ex);
+            throw ioe;
+        }
+        xmiContents.delete(0, xmiContents.length());
+        xmiContents.append(cleanXmi);
     }
 }
