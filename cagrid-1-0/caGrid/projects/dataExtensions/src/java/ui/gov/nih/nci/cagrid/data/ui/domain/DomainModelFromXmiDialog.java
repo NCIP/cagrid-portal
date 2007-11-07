@@ -4,7 +4,6 @@ package gov.nih.nci.cagrid.data.ui.domain;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
-import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.xmi.FixXmiExecutor;
@@ -19,7 +18,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -34,7 +32,6 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
-import javax.swing.filechooser.FileFilter;
 
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.model.Application;
@@ -55,7 +52,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Oct 23, 2007 11:05:04 AM
- * @version $Id: DomainModelFromXmiDialog.java,v 1.6 2007-11-07 15:27:27 dervin Exp $ 
+ * @version $Id: DomainModelFromXmiDialog.java,v 1.7 2007-11-07 21:47:43 dervin Exp $ 
  */
 public class DomainModelFromXmiDialog extends JDialog {
     // keys for validation messages
@@ -262,26 +259,16 @@ public class DomainModelFromXmiDialog extends JDialog {
             xmiBrowseButton.setText("Browse");
             xmiBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    FileFilter xmiFilter = new FileFilter() {
-                        public boolean accept(File path) {
-                            return path.isDirectory() || path.getName().toLowerCase().endsWith(".xmi");         
-                        }
-                        
-                        
-                        public String getDescription() {
-                            return "XMI Files (*.xmi)";
-                        }
-                    };
-                    
-                    String selectedFile = null;
-                    try {
-                        selectedFile = ResourceManager.promptFile(null, xmiFilter);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                        CompositeErrorDialog.showErrorDialog("Error selecting XMI file", ex.getMessage(), ex);
+                    JFileChooser chooser = new JFileChooser();
+                    chooser.setFileFilter(FileFilters.XMI_FILTER);
+                    int choice = chooser.showOpenDialog(DomainModelFromXmiDialog.this);
+                    if (choice == JFileChooser.APPROVE_OPTION) {
+                        String selectedFile = chooser.getSelectedFile().getAbsolutePath();
+                        getXmiFileTextField().setText(selectedFile);
+                    } else {
+                        getXmiFileTextField().setText(null);
                     }
                     
-                    getXmiFileTextField().setText(selectedFile != null ? selectedFile : "");
                     validateInput();
                 }
             });
@@ -702,21 +689,12 @@ public class DomainModelFromXmiDialog extends JDialog {
             System.err.println("Error creating grid application instance");
             System.exit(1);
         }
-        // choose the XMI file
-        JFileChooser xmiChooser = new JFileChooser();
-        xmiChooser.setFileFilter(FileFilters.XMI_FILTER);
-        xmiChooser.setDialogTitle("Select XMI file");
-        int choice = xmiChooser.showOpenDialog(null);
-        String xmiFilename = null;
-        DomainModel model = null;
-        if (choice == JFileChooser.APPROVE_OPTION) {
-            xmiFilename = xmiChooser.getSelectedFile().getAbsolutePath();
-            model = createDomainModel(null, xmiFilename);
-        }
+        
+        DomainModel model = createDomainModel(null);
         if (model != null) {
             JFileChooser saveChooser = new JFileChooser();
             saveChooser.setFileFilter(FileFilters.XML_FILTER);
-            choice = saveChooser.showSaveDialog(null);
+            int choice = saveChooser.showSaveDialog(null);
             if (choice == JFileChooser.APPROVE_OPTION) {
                 try {
                     FileWriter writer = new FileWriter(saveChooser.getSelectedFile());
