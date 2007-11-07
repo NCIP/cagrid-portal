@@ -28,13 +28,13 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
   *  XMIHandler
-  *  SAX handler for XMI -> Domain MOdel
+  *  SAX handler for XMI -> Domain Model
   * 
   * @author Patrick McConnell
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: XMIHandler.java,v 1.7 2007-10-23 14:14:41 dervin Exp $
+  * @version $Id: XMIHandler.java,v 1.8 2007-11-07 18:32:35 dervin Exp $
  */
 class XMIHandler extends DefaultHandler {
     private static final Logger LOG = Logger.getLogger(XMIHandler.class);   
@@ -60,7 +60,7 @@ class XMIHandler extends DefaultHandler {
     private UMLAssociationEdge edge;
     private boolean sourceNavigable = false;
     private boolean targetNavigable = false;
-    private String pkg = "";    
+    private String pkg = "";
 
     public XMIHandler(XMIParser parser) {
         super();
@@ -122,7 +122,7 @@ class XMIHandler extends DefaultHandler {
         if (qName.equals(XMIConstants.XMI_UML_PACKAGE)) {
             handlePackage(atts);
         } else if (qName.equals(XMIConstants.XMI_UML_CLASS)) {
-            handleClass(atts);            
+            handleClass(atts);
         } else if (qName.equals(XMIConstants.XMI_UML_ATTRIBUTE)) {
             handleAttribute(atts);
         } else if (qName.equals(XMIConstants.XMI_UML_ASSOCIATION)) {
@@ -140,8 +140,12 @@ class XMIHandler extends DefaultHandler {
         } else if (qName.equals(XMIConstants.XMI_UML_DATA_TYPE)) {
             handleDataType(atts);
         } else if (qName.equals(XMIConstants.XMI_FOUNDATION_CORE_CLASSIFIER)) {
-            attribList.get(attribList.size() - 1)
-                .setDataTypeName(atts.getValue(XMIConstants.XMI_IDREF));
+            if (attribList.size() == 0) {
+                LOG.info("Ignoring " + XMIConstants.XMI_FOUNDATION_CORE_CLASSIFIER);
+            } else {
+                attribList.get(attribList.size() - 1)
+                    .setDataTypeName(atts.getValue(XMIConstants.XMI_IDREF));
+            }
         }
     }
 
