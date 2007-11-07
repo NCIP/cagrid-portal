@@ -158,6 +158,7 @@
             <artifact refid="test.coverage.jars" />
             <artifact refid="common.metadata.jars" />
             <artifact refid="data.metadata.jars" />
+        	<artifact refid="jdom.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/metadatautils" inheritAll="false" antfile="build.xml" target="all" />
     </target>
