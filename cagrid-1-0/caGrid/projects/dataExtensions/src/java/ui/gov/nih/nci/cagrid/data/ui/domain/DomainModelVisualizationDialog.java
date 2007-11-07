@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.ui.domain;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.utilities.dmviz.DomainModelVisualizationPanel;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 

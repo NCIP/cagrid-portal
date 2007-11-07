@@ -36,6 +36,8 @@ import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.filechooser.FileFilter;
 
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.model.Application;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
 import com.jgoodies.validation.Severity;
@@ -53,7 +55,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Oct 23, 2007 11:05:04 AM
- * @version $Id: DomainModelFromXmiDialog.java,v 1.5 2007-11-06 15:53:41 hastings Exp $ 
+ * @version $Id: DomainModelFromXmiDialog.java,v 1.6 2007-11-07 15:27:27 dervin Exp $ 
  */
 public class DomainModelFromXmiDialog extends JDialog {
     // keys for validation messages
@@ -106,7 +108,6 @@ public class DomainModelFromXmiDialog extends JDialog {
         configureValidation();
         pack();
         setSize(500, getPreferredSize().height);
-        // PortalUtils.centerComponent(this);
         setVisible(true);
     }
     
@@ -691,6 +692,17 @@ public class DomainModelFromXmiDialog extends JDialog {
         } catch (Exception ex) {
             System.err.println("Error selecting system look and feel");
         }
+        // set up the Grid Portal application instance
+        Application app = new Application();
+        app.setName("Domain Model from XMI");
+        try {
+            GridApplication.getInstance(app);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.err.println("Error creating grid application instance");
+            System.exit(1);
+        }
+        // choose the XMI file
         JFileChooser xmiChooser = new JFileChooser();
         xmiChooser.setFileFilter(FileFilters.XMI_FILTER);
         xmiChooser.setDialogTitle("Select XMI file");
