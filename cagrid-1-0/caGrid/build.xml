@@ -159,6 +159,7 @@
             <artifact refid="common.metadata.jars" />
             <artifact refid="data.metadata.jars" />
         	<artifact refid="jdom.jars" />
+        	<artifact refid="caCORE.3.2.1.sdk" />
         </resolveDependencies>
         <ant dir="${projects.dir}/metadatautils" inheritAll="false" antfile="build.xml" target="all" />
     </target>
