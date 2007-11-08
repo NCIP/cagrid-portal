@@ -24,7 +24,7 @@ import org.jdom.filter.Filter;
  * @author David Ervin
  * 
  * @created Oct 29, 2007 2:11:31 PM
- * @version $Id: FixXmiExecutor.java,v 1.4 2007-11-08 20:28:08 dervin Exp $ 
+ * @version $Id: FixXmiExecutor.java,v 1.5 2007-11-08 21:19:59 dervin Exp $ 
  */
 public class FixXmiExecutor {
     public static final Logger LOG = Logger.getLogger(FixXmiExecutor.class);
@@ -70,7 +70,7 @@ public class FixXmiExecutor {
         command.append(getAntCall(sdkDir.getAbsolutePath())).append(" ");
         // add properties and their values
         command.append("-D").append(MODEL_DIR_PROPERTY)
-            .append("=\"").append(cleanModelFile.getAbsoluteFile().getParent()).append("\" ");
+            .append("=").append(cleanModelFile.getAbsoluteFile().getParent()).append(" ");
         command.append("-D").append(MODEL_FILENAME_PROPERTY)
             .append("=").append(cleanModelFile.getName()).append(" ");
         command.append("-D").append(FIXED_MODEL_FILENAME_PROPERTY)
