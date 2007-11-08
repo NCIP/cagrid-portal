@@ -90,7 +90,7 @@ public class RegisteredServiceMonitor extends AbstractMonitor {
 
 		logger.debug("Events to publish: " + events.size());
 		for (RegisteredServiceEvent event : events) {
-			logger.debug("Publishing event for " + event.getServiceUrl());
+//			logger.debug("Publishing event for " + event.getServiceUrl());
 			getApplicationContext().publishEvent(event);
 		}
 

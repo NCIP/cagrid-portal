@@ -50,7 +50,7 @@ public class RegisteredServiceListener extends AbstractMetadataListener {
 	 */
 	public void onApplicationEvent(ApplicationEvent e) {
 
-		logger.debug("Received event " + e.getClass().getName());
+//		logger.debug("Received event " + e.getClass().getName());
 		if (e instanceof RegisteredServiceEvent) {
 			try {
 				persistService((RegisteredServiceEvent) e);
@@ -75,27 +75,27 @@ public class RegisteredServiceListener extends AbstractMetadataListener {
 			idxSvc = getIndexServiceDao().getById(idxSvc.getId());
 		}
 
-		logger.debug("Getting grid service " + event.getServiceUrl());
+//		logger.debug("Getting grid service " + event.getServiceUrl());
 		GridService gSvc = getGridServiceDao().getByUrl(event.getServiceUrl());
-		logger.debug("...done.");
+//		logger.debug("...done.");
 		if (gSvc != null) {
 			logger.error("Already exists.");
 			throw new GridServiceExistsException(event.getServiceUrl());
 		}
 
-		logger.debug("Getting metadata...");
+//		logger.debug("Getting metadata...");
 		Metadata meta = PortalUtils.getMetadata(event.getServiceUrl(),
 				getMetadataTimeout());
-		logger.debug("...done.");
+//		logger.debug("...done.");
 		GridService service = null;
 		if (meta.dmodel != null) {
 			service = new GridDataService();
 		} else {
 			service = new GridService();
 		}
-		logger.debug("Setting metadata...");
+//		logger.debug("Setting metadata...");
 		setMetadata(service, meta);
-		logger.debug("...done");
+//		logger.debug("...done");
 
 		service.getIndexServices().add(idxSvc);
 		service.setUrl(event.getServiceUrl());
@@ -108,7 +108,7 @@ public class RegisteredServiceListener extends AbstractMetadataListener {
 		
 		idxSvc.getServices().add(service);
 
-		logger.debug("Saving grid service: " + service.getUrl());
+//		logger.debug("Saving grid service: " + service.getUrl());
 		getGridServiceDao().save(service);
 
 	}

@@ -8,9 +8,32 @@
 	                             
 	                             
 	<portlet>
-		<description>caGrid Status Summary Portlet</description>
+		<description>caGrid News Portlet</description>
+		<portlet-name>cagridnews</portlet-name>
+		<display-name>caGrid News Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/news-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>edit</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid News Portlet</title>
+			<short-title>caGrid News Portlet</short-title>
+			<keywords>cagrid,news</keywords>
+		</portlet-info>
+	</portlet>
+	                             
+	<portlet>
+		<description>caGrid  Portlet</description>
 		<portlet-name>cagridstatus</portlet-name>
-		<display-name>caGrid Status Summary Portlet</display-name>
+		<display-name>caGrid  Portlet</display-name>
 		<portlet-class>
 			org.springframework.web.portlet.DispatcherPortlet
 		</portlet-class>
@@ -23,7 +46,7 @@
 			<portlet-mode>view</portlet-mode>
 		</supports>
 		<portlet-info>
-			<title>caGrid Status Summary Portlet</title>
+			<title>caGrid  Portlet</title>
 			<short-title>caGrid  Portlet</short-title>
 			<keywords>cagrid,status</keywords>
 		</portlet-info>

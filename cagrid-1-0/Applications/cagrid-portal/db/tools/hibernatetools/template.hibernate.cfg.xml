@@ -83,6 +83,9 @@
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.SourceUMLAssociationEdge" />
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.TargetUMLAssociationEdge" />
 		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass" />
+		
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.news.NewsChannel"/>
+		<mapping class="gov.nih.nci.cagrid.portal2.domain.news.NewsItem"/>
 
 	</session-factory>
 
