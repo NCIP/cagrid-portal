@@ -7,9 +7,13 @@ import gov.nih.nci.cagrid.common.XMLUtilities;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
+import org.jasciidammit.ConfigurationException;
+import org.jasciidammit.JAsciiDammit;
 import org.jdom.Element;
 import org.jdom.filter.Filter;
 
@@ -20,10 +24,12 @@ import org.jdom.filter.Filter;
  * @author David Ervin
  * 
  * @created Oct 29, 2007 2:11:31 PM
- * @version $Id: FixXmiExecutor.java,v 1.3 2007-11-07 21:40:09 dervin Exp $ 
+ * @version $Id: FixXmiExecutor.java,v 1.4 2007-11-08 20:28:08 dervin Exp $ 
  */
 public class FixXmiExecutor {
     public static final Logger LOG = Logger.getLogger(FixXmiExecutor.class);
+    
+    public static final String ERROR_APOSTROPHE = "’";
     
     // problematic elements in the original XMI
     public static final String DOCTYPE_UML_EA = "<!DOCTYPE XMI SYSTEM \"UML_EA.dtd\">";
@@ -110,7 +116,7 @@ public class FixXmiExecutor {
             cmd.append(File.separator).append("build.xml");
         }
         // add targets
-        cmd.append(" ").append(COMPILE_GENERATOR_TASK).append(" ").append(FIX_XMI_TASK);
+        cmd.append(" ")/*.append(COMPILE_GENERATOR_TASK).append(" ")*/.append(FIX_XMI_TASK);
         return cmd.toString();
     }
     
@@ -131,10 +137,27 @@ public class FixXmiExecutor {
         System.out.println("Clean XMI");
         File cleanedFile = new File(originalXmi.getParentFile(), "cleaned_" + originalXmi.getName());
         StringBuffer xmiContents = Utils.fileToStringBuffer(originalXmi);
+        cleanSmartquotes(xmiContents);
         cleanDoctype(xmiContents);
         cleanTaggedValues(xmiContents);
         Utils.stringBufferToFile(xmiContents, cleanedFile.getAbsolutePath());
         return cleanedFile;
+    }
+    
+    
+    private static void cleanSmartquotes(StringBuffer xmiContents) throws IOException {
+        String raw = xmiContents.toString();
+        raw = raw.replace(ERROR_APOSTROPHE, "'");
+        try {
+            raw = new JAsciiDammit().translate(raw);
+            xmiContents.delete(0, xmiContents.length());
+            xmiContents.append(raw);
+        } catch (ConfigurationException ex) {
+            ex.printStackTrace();
+            IOException ioe = new IOException(ex.getMessage());
+            ioe.initCause(ex);
+            throw ioe;
+        }
     }
     
     
@@ -169,14 +192,16 @@ public class FixXmiExecutor {
                 return false;
             }
         };
-        int removedCount = 0;
         Iterator<Element> badTaggedValues = xmiElement.getDescendants(taggedValueFilter);
+        List<Element> removeElements = new LinkedList<Element>();
         while (badTaggedValues.hasNext()) {
-            Element removeMe = badTaggedValues.next();
-            removeMe.detach();
-            removedCount++;
+            removeElements.add(badTaggedValues.next());
         }
-        System.out.println("Removed " + removedCount + " TaggedValues with no 'value' attribute");
+        for (Element removeMe : removeElements) {
+            removeMe.detach();
+        }
+        
+        System.out.println("Removed " + removeElements.size() + " TaggedValues with no 'value' attribute");
         String cleanXmi = null;
         try {
             cleanXmi = XMLUtilities.formatXML(XMLUtilities.elementToString(xmiElement));
