@@ -638,6 +638,11 @@
 				<exclude name="*tests*.jar" />
 			</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="smartquote.translator.jars">
+			<fileset dir="${share.dir}/lib/smartquotes">
+			    <include name="*.jar"/>
+			</fileset>
+		</artifact>
 		<artifact track="main" type="jars" id="gme.globus.client.jars">
 			<generatingantcall target="build-gme" />
 			<fileset dir="${projects.dir}/gme/lib">
