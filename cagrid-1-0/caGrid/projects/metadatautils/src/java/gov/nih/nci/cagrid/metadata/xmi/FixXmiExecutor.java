@@ -24,7 +24,7 @@ import org.jdom.filter.Filter;
  * @author David Ervin
  * 
  * @created Oct 29, 2007 2:11:31 PM
- * @version $Id: FixXmiExecutor.java,v 1.5 2007-11-08 21:19:59 dervin Exp $ 
+ * @version $Id: FixXmiExecutor.java,v 1.6 2007-11-09 15:59:51 dervin Exp $ 
  */
 public class FixXmiExecutor {
     public static final Logger LOG = Logger.getLogger(FixXmiExecutor.class);
@@ -48,6 +48,8 @@ public class FixXmiExecutor {
     public static final String EA_XMI_PREPROCESSOR = 
         "gov.nih.nci.codegen.core.util.EAXMIPreprocessor";
     
+    private static Boolean isWindows = null;
+    
     private FixXmiExecutor() {
         // prevent instantiation
     }
@@ -69,8 +71,15 @@ public class FixXmiExecutor {
         // get the base ant command
         command.append(getAntCall(sdkDir.getAbsolutePath())).append(" ");
         // add properties and their values
-        command.append("-D").append(MODEL_DIR_PROPERTY)
-            .append("=").append(cleanModelFile.getAbsoluteFile().getParent()).append(" ");
+        command.append("-D").append(MODEL_DIR_PROPERTY).append("=");
+        if (osIsWindows()) {
+            command.append("\"");
+        }
+        command.append(cleanModelFile.getAbsoluteFile().getParent());
+        if (osIsWindows()) {
+            command.append("\"");
+        }
+        command.append(" ");
         command.append("-D").append(MODEL_FILENAME_PROPERTY)
             .append("=").append(cleanModelFile.getName()).append(" ");
         command.append("-D").append(FIXED_MODEL_FILENAME_PROPERTY)
@@ -100,9 +109,8 @@ public class FixXmiExecutor {
     
     
     private static String getAntCall(String buildFileDir) {
-        String os = System.getProperty("os.name").toLowerCase();
         StringBuilder cmd = new StringBuilder();
-        if (os.indexOf("windows") >= 0) {
+        if (osIsWindows()) {
             cmd.append("java.exe ");
             cmd.append("-classpath \"").append(getAntLauncherJarLocation(System.getProperty("java.class.path")));
             cmd.append("\" org.apache.tools.ant.launch.Launcher -buildfile \"").append(buildFileDir);
@@ -212,5 +220,14 @@ public class FixXmiExecutor {
         }
         xmiContents.delete(0, xmiContents.length());
         xmiContents.append(cleanXmi);
+    }
+    
+    
+    private static boolean osIsWindows() {
+        if (isWindows == null) {
+            String os = System.getProperty("os.name").toLowerCase();
+            isWindows = Boolean.valueOf(os.contains("windows"));
+        }
+        return isWindows.booleanValue();
     }
 }
