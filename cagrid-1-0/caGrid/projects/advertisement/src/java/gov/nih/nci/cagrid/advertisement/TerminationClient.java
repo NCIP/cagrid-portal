@@ -110,6 +110,7 @@ public class TerminationClient {
     /**
      * @param registeredEPR
      * @return
+     *      The EPR as a serialized string
      * @throws SerializationException
      */
     private static String printEPR(EndpointReferenceType epr) {
@@ -209,11 +210,11 @@ public class TerminationClient {
         }
         try {
             if (this.securityDescriptorFile != null) {
-                (port)._setProperty(org.globus.wsrf.impl.security.authentication.Constants.CLIENT_DESCRIPTOR_FILE,
+                (port)._setProperty(org.globus.wsrf.security.Constants.CLIENT_DESCRIPTOR_FILE,
                     this.securityDescriptorFile);
             } else { // default to anonymous
-                port._setProperty(org.globus.wsrf.impl.security.authentication.Constants.GSI_ANONYMOUS, Boolean.TRUE);
-                port._setProperty(org.globus.wsrf.impl.security.authentication.Constants.AUTHORIZATION,
+                port._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
+                port._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
                     org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
                 port._setProperty(org.globus.axis.gsi.GSIConstants.GSI_AUTHORIZATION,
                     org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());

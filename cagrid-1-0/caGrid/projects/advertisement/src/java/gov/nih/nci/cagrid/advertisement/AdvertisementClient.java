@@ -79,7 +79,7 @@ public class AdvertisementClient {
      * @param registrationConfig
      * @throws InvalidConfigurationException
      *             if the specific configuration is not valid
-     * @see reinitialize
+     * @see #reinitialize(ServiceGroupRegistrationParameters)
      */
     public AdvertisementClient(ServiceGroupRegistrationParameters registrationConfig)
         throws InvalidConfigurationException {
@@ -152,7 +152,7 @@ public class AdvertisementClient {
      * Returns a prinatable string representing the registration information
      * 
      * @param params
-     * @return
+     * @return The registration parameters
      */
     public static String printServiceGroupRegistrationParameters(ServiceGroupRegistrationParameters params) {
         if (params == null) {
