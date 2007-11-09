@@ -188,6 +188,13 @@
 		autowire="byName">
 		<property name="commandName" value="selectUmlClassCommand"/>
 		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.discovery.details.SelectDetailsCommand"/>
+		<property name="interPortletMessageSender">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
+				<property name="modePreferenceName" value="umlClassSelectMode" />
+				<property name="outputQueuePreferenceName" value="selectedUmlClassOutputQueueName" />
+				<property name="outputQueueNameDefaultValue" value="selectedUmlClassId" />
+			</bean>
+		</property>
 		<property name="actionResponseHandler">
 			<bean class="gov.nih.nci.cagrid.portal2.portlet.tab.TabActionResponseHandler">
 				<property name="tabControlConfig" ref="discoveryTabControlConfig"/>
@@ -264,17 +271,25 @@
 		<property name="selectedPathHandlers">
 			<list>
 				<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.SelectDiscoveryItemPathHandler" autowire="byName">
-					<property name="modePreferenceName" value="discoveryItemSelectMode" />
-					<property name="inputQueuePreferenceName" value="selectedDiscoveryItemInputQueueName" />
-					<property name="inputQueueNameDefaultValue" value="selectedDiscoveryItem" />
+					<property name="interPortletMessageReceiver">
+						<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
+							<property name="modePreferenceName" value="discoveryItemSelectMode" />
+							<property name="inputQueuePreferenceName" value="selectedDiscoveryItemInputQueueName" />
+							<property name="inputQueueNameDefaultValue" value="selectedDiscoveryItem" />
+						</bean>
+					</property>
 					<property name="serviceSelectedTabPath" value="/details/service" />
 					<property name="participantSelectedTabPath" value="/details/participant" />
 					<property name="pocSelectedTabPath" value="/details/poc" />		
 				</bean>
 				<bean class="gov.nih.nci.cagrid.portal2.portlet.discovery.SelectDiscoveryDirectoryPathHandler" autowire="byName">
-					<property name="modePreferenceName" value="discoveryDirectorySelectMode" />
-					<property name="inputQueuePreferenceName" value="selectedDiscoveryDirectoryInputQueueName" />
-					<property name="inputQueueNameDefaultValue" value="selectedDiscoveryDirectory" />
+					<property name="interPortletMessageReceiver">
+						<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
+							<property name="modePreferenceName" value="discoveryDirectorySelectMode" />
+							<property name="inputQueuePreferenceName" value="selectedDiscoveryDirectoryInputQueueName" />
+							<property name="inputQueueNameDefaultValue" value="selectedDiscoveryDirectory" />
+						</bean>
+					</property>
 					<property name="selectedTabPath" value="/directory/listView" />
 				</bean>
 			</list>

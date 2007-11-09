@@ -7,7 +7,9 @@ import java.util.List;
 
 import gov.nih.nci.cagrid.portal2.dao.news.NewsItemDao;
 import gov.nih.nci.cagrid.portal2.domain.news.NewsItem;
+import gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageReceiver;
 
+import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -24,6 +26,7 @@ public class ViewNewsController extends AbstractController {
 	private String selectedItemAttribute = ViewNewsController.class.getName() + ".selectedNewsItem";
 	private NewsItemDao newsItemDao;
 	private int newsItemsLimit = 10;
+	private InterPortletMessageReceiver interPortletMessageReceiver;
 	
 	/**
 	 * 
@@ -37,7 +40,7 @@ public class ViewNewsController extends AbstractController {
      throws Exception{
 		ModelAndView mav = new ModelAndView(getSuccessView());
 		List<NewsItem> items = getNewsItemDao().getLatestNewsItems(getNewsItemsLimit());
-		NewsItem selectedItem = (NewsItem)request.getPortletSession().getAttribute(getSelectedItemAttribute());
+		NewsItem selectedItem = getSelectedItem(request);
 		
 		//Make sure it hasn't been deleted
 		if(selectedItem != null && !items.contains(selectedItem)){
@@ -56,6 +59,14 @@ public class ViewNewsController extends AbstractController {
 		}
 		mav.addObject("items", items);
 		return mav;
+	}
+	
+	protected NewsItem getSelectedItem(PortletRequest request){
+		NewsItem selectedItem = (NewsItem) getInterPortletMessageReceiver().receive(request);
+		if(selectedItem == null){
+			selectedItem = (NewsItem)request.getPortletSession().getAttribute(getSelectedItemAttribute());
+		}
+		return selectedItem;
 	}
 
 	public String getSuccessView() {
@@ -88,6 +99,15 @@ public class ViewNewsController extends AbstractController {
 
 	public void setNewsItemsLimit(int newsItemsLimit) {
 		this.newsItemsLimit = newsItemsLimit;
+	}
+
+	public InterPortletMessageReceiver getInterPortletMessageReceiver() {
+		return interPortletMessageReceiver;
+	}
+
+	public void setInterPortletMessageReceiver(
+			InterPortletMessageReceiver interPortletMessageReceiver) {
+		this.interPortletMessageReceiver = interPortletMessageReceiver;
 	}
 
 }

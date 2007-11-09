@@ -1,41 +1,43 @@
 /**
  * 
  */
-package gov.nih.nci.cagrid.portal2.portlet.status;
+package gov.nih.nci.cagrid.portal2.portlet.news;
 
+import gov.nih.nci.cagrid.portal2.dao.news.NewsItemDao;
+import gov.nih.nci.cagrid.portal2.domain.news.NewsItem;
 import gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageSender;
-import gov.nih.nci.cagrid.portal2.portlet.discovery.dir.AbstractDirectoryBean;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.validation.BindException;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.mvc.AbstractCommandController;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
+ *
  */
-public class SelectDirectoryForDiscoveryController extends
-		AbstractCommandController {
-
-	private InterPortletMessageSender interPortletMessageSender;
+public class SelectItemForNewsController extends AbstractCommandController {
+	
 	private String redirectUrlPreferenceName;
+	private InterPortletMessageSender interPortletMessageSender;
+	private NewsItemDao newsItemDao;
 
 	/**
 	 * 
 	 */
-	public SelectDirectoryForDiscoveryController() {
+	public SelectItemForNewsController() {
 
 	}
 
 	/**
 	 * @param commandClass
 	 */
-	public SelectDirectoryForDiscoveryController(Class commandClass) {
+	public SelectItemForNewsController(Class commandClass) {
 		super(commandClass);
 
 	}
@@ -44,24 +46,20 @@ public class SelectDirectoryForDiscoveryController extends
 	 * @param commandClass
 	 * @param commandName
 	 */
-	public SelectDirectoryForDiscoveryController(Class commandClass,
-			String commandName) {
+	public SelectItemForNewsController(Class commandClass, String commandName) {
 		super(commandClass, commandName);
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.springframework.web.portlet.mvc.AbstractCommandController#handleAction(javax.portlet.ActionRequest,
-	 *      javax.portlet.ActionResponse, java.lang.Object,
-	 *      org.springframework.validation.BindException)
+	/* (non-Javadoc)
+	 * @see org.springframework.web.portlet.mvc.AbstractCommandController#handleAction(javax.portlet.ActionRequest, javax.portlet.ActionResponse, java.lang.Object, org.springframework.validation.BindException)
 	 */
 	@Override
 	protected void handleAction(ActionRequest request, ActionResponse response,
 			Object obj, BindException errors) throws Exception {
-		AbstractDirectoryBean dirBean = (AbstractDirectoryBean) obj;
-		getInterPortletMessageSender().send(request, dirBean);
+		SelectItemCommand command = (SelectItemCommand)obj;
+		NewsItem item = getNewsItemDao().getById(command.getItemId());
+		getInterPortletMessageSender().send(request, item);
 		String redirectUrl = request.getPreferences().getValue(getRedirectUrlPreferenceName(), null);
 		if(redirectUrl == null){
 			throw new Exception("No redirect URL preference provided.");
@@ -69,21 +67,17 @@ public class SelectDirectoryForDiscoveryController extends
 		response.sendRedirect(redirectUrl);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.springframework.web.portlet.mvc.AbstractCommandController#handleRender(javax.portlet.RenderRequest,
-	 *      javax.portlet.RenderResponse, java.lang.Object,
-	 *      org.springframework.validation.BindException)
+	/* (non-Javadoc)
+	 * @see org.springframework.web.portlet.mvc.AbstractCommandController#handleRender(javax.portlet.RenderRequest, javax.portlet.RenderResponse, java.lang.Object, org.springframework.validation.BindException)
 	 */
 	@Override
 	protected ModelAndView handleRender(RenderRequest arg0,
 			RenderResponse arg1, Object arg2, BindException arg3)
 			throws Exception {
-		throw new IllegalArgumentException(getClass().getName()
-				+ " doesn't handle render requests.");
+		throw new IllegalArgumentException(getClass().getName() + " doesn't handle render requests.");
 	}
 
+	@Required
 	public String getRedirectUrlPreferenceName() {
 		return redirectUrlPreferenceName;
 	}
@@ -92,6 +86,7 @@ public class SelectDirectoryForDiscoveryController extends
 		this.redirectUrlPreferenceName = redirectUrl;
 	}
 
+	@Required
 	public InterPortletMessageSender getInterPortletMessageSender() {
 		return interPortletMessageSender;
 	}
@@ -99,6 +94,15 @@ public class SelectDirectoryForDiscoveryController extends
 	public void setInterPortletMessageSender(
 			InterPortletMessageSender interPortletMessageSender) {
 		this.interPortletMessageSender = interPortletMessageSender;
+	}
+
+	@Required
+	public NewsItemDao getNewsItemDao() {
+		return newsItemDao;
+	}
+
+	public void setNewsItemDao(NewsItemDao newsItemDao) {
+		this.newsItemDao = newsItemDao;
 	}
 
 }

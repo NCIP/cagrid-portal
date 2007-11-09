@@ -18,6 +18,13 @@
 		autowire="byName">
 		<property name="successView" value="news"/>
 		<property name="selectedItemAttribute" value="selectedNewsItem"/>
+		<property name="interPortletMessageReceiver">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
+				<property name="modePreferenceName" value="newsItemSelectMode" />
+				<property name="inputQueuePreferenceName" value="selectedNewsItemInputQueueName" />
+				<property name="inputQueueNameDefaultValue" value="selectedNewsItem" />
+			</bean>
+		</property>
 	</bean>
 	
 	<bean 

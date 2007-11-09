@@ -13,25 +13,25 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
 	<bean 
-		id="viewMapController"
-		class="gov.nih.nci.cagrid.portal2.portlet.map.ViewMapController"
+		id="viewNewsSummaryController"
+		class="gov.nih.nci.cagrid.portal2.portlet.news.ViewNewsSummaryController"
 		autowire="byName">
-		<property name="objectName" value="mapBean"/>
-		<property name="successViewName" value="view"/>
+		<property name="successView" value="summary"/>
+		<property name="rssUrl" value="http://james:8080/cagridportlets/news.rss"/>
 	</bean>
 	
 	<bean 
-		id="selectItemForDiscoveryController"
-		class="gov.nih.nci.cagrid.portal2.portlet.map.SelectItemForDiscoveryController"
+		id="selectItemForNewsController"
+		class="gov.nih.nci.cagrid.portal2.portlet.news.SelectItemForNewsController"
 		autowire="byName">
-		<property name="commandName" value="selectItemForDiscovery"/>
-		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.map.SelectItemCommand"/>
-		<property name="redirectUrlPreferenceName" value="selectItemForDiscoveryRedirectUrl"/>
+		<property name="commandName" value="selectItemCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.news.SelectItemCommand"/>
+		<property name="redirectUrlPreferenceName" value="selectItemForNewsRedirectUrl"/>
 		<property name="interPortletMessageSender">
 			<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
-				<property name="modePreferenceName" value="discoveryItemSelectMode" />
-				<property name="outputQueuePreferenceName" value="selectedDiscoveryItemOutputQueueName" />
-				<property name="outputQueueNameDefaultValue" value="selectedDiscoveryItem" />
+				<property name="modePreferenceName" value="newsItemSelectMode" />
+				<property name="outputQueuePreferenceName" value="selectedNewsItemOutputQueueName" />
+				<property name="outputQueueNameDefaultValue" value="selectedNewsItem" />
 			</bean>
 		</property>
 	</bean>
@@ -46,8 +46,8 @@
 			<map>
 				<entry key="view">
 					<map>
-						<entry key="selectItemForDiscovery" 
-							value-ref="selectItemForDiscoveryController" />
+						<entry key="selectItemForNews" 
+							value-ref="selectItemForNewsController" />
 				    </map>
 				</entry>
 	 		</map>
@@ -58,7 +58,6 @@
 		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
 		
 		<property name="order" value="2" />
-		
 		<property name="interceptors">
 			<list>
 				<ref bean="openSessionInViewInterceptor" />
@@ -68,7 +67,7 @@
 		<property name="portletModeMap">
 			<map>
 				<entry key="view">
-					<ref bean="viewMapController" />
+					<ref bean="viewNewsSummaryController" />
 				</entry>
 			</map>
 		</property>
@@ -78,12 +77,14 @@
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/jsp/map/" />
+		<property name="prefix" value="/WEB-INF/jsp/news/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
 
 	<!-- Exception Handler -->
 	<bean id="defaultExceptionHandler"
 		parent="defaultExceptionHandlerTemplate" />
+
+
 		
 </beans>

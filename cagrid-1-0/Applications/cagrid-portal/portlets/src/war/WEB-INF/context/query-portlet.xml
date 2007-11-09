@@ -343,9 +343,13 @@
 	<property name="selectedPathHandlers">
 			<list>
 				<bean class="gov.nih.nci.cagrid.portal2.portlet.query.SelectUmlClassPathHandler" autowire="byName">
-					<property name="modePreferenceName" value="umlClassSelectMode" />
-					<property name="inputQueuePreferenceName" value="selectedUmlClassInputQueueName" />
-					<property name="inputQueueNameDefaultValue" value="selectedUmlClassId" />
+					<property name="interPortletMessageReceiver">
+						<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
+							<property name="modePreferenceName" value="umlClassSelectMode" />
+							<property name="inputQueuePreferenceName" value="selectedUmlClassInputQueueName" />
+							<property name="inputQueueNameDefaultValue" value="selectedUmlClassId" />
+						</bean>
+					</property>
 					<property name="umlClassSelectedTabPath" value="/query/builder/cqlQuery"/>
 				</bean>
 			</list>

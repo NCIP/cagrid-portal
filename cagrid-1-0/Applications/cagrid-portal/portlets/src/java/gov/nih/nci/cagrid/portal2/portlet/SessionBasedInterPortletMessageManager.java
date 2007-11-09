@@ -6,7 +6,6 @@ package gov.nih.nci.cagrid.portal2.portlet;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.portlet.ActionRequest;
 import javax.portlet.PortletRequest;
 
 import org.apache.commons.logging.Log;
@@ -48,7 +47,7 @@ public class SessionBasedInterPortletMessageManager implements
 	/* (non-Javadoc)
 	 * @see gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageManager#send(javax.portlet.ActionRequest, java.lang.String, java.lang.Object)
 	 */
-	public void send(ActionRequest request, String outputQueueName, Object value) {
+	public void send(PortletRequest request, String outputQueueName, Object value) {
 		logger.debug("Sending to " + outputQueueName + ": " + value);
 		String[] inputQueueNames = request.getPreferences().getValues(outputQueueName, new String[0]);
 		for(String inputQueueName : inputQueueNames){

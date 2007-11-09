@@ -1,3 +1,7 @@
+<%@ include file="/WEB-INF/jsp/include.jsp" %>
+<c:set var="resizablePrefix"><portlet:namespace/>intro</c:set>
+<%@ include file="/WEB-INF/jsp/include/resizable_div.jspf" %>
+<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:200px; overflow:scroll">
 <p>caGrid Portal provides an overview of services that are currently
 registered with the caGrid Index service. </br>
 The tool provides visusal display of services on the caGrid
@@ -71,3 +75,4 @@ components:</p>
 	</ul>
 </ul>
 </p>
+</div>

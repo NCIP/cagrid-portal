@@ -6,7 +6,72 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd
 	                             http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
 	                             
-	                             
+	
+	<portlet>
+		<description>caGrid Registration Portlet</description>
+		<portlet-name>cagridregistration</portlet-name>
+		<display-name>caGrid Registration Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/register-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Registration Portlet</title>
+			<short-title>caGrid Registration Portlet</short-title>
+			<keywords>cagrid,registration</keywords>
+		</portlet-info>
+		
+	</portlet>
+	
+	<portlet>
+		<description>caGrid News Summary Portlet</description>
+		<portlet-name>cagridnewssummary</portlet-name>
+		<display-name>caGrid News Summary Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/newssummary-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid News Summary Portlet</title>
+			<short-title>caGrid News Summary Portlet</short-title>
+			<keywords>cagrid,news</keywords>
+		</portlet-info>
+		
+		<portlet-preferences>
+			<preference>
+				<name>selectItemForNewsRedirectUrl</name>
+				<value>/web/guest/3</value>
+			</preference>
+			<preference>
+                <name>newsItemSelectMode</name> 
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedNewsItemOutputQueueName</name> 
+                <value>newssummary:selectedNewsItem</value>
+            </preference>
+            <preference>
+                <name>newssummary:selectedNewsItem</name> 
+                <value>news:selectedNewsItem</value>
+            </preference>
+		</portlet-preferences>
+		
+	</portlet>
+	                 
 	<portlet>
 		<description>caGrid News Portlet</description>
 		<portlet-name>cagridnews</portlet-name>
@@ -28,12 +93,24 @@
 			<short-title>caGrid News Portlet</short-title>
 			<keywords>cagrid,news</keywords>
 		</portlet-info>
+		
+		<portlet-preferences>
+			<preference>
+                <name>newsItemSelectMode</name> 
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedNewsItemInputQueueName</name> 
+                <value>news:selectedNewsItem</value>
+            </preference>
+		</portlet-preferences>
+		
 	</portlet>
 	                             
 	<portlet>
-		<description>caGrid  Portlet</description>
+		<description>caGrid Status Portlet</description>
 		<portlet-name>cagridstatus</portlet-name>
-		<display-name>caGrid  Portlet</display-name>
+		<display-name>caGrid Status Portlet</display-name>
 		<portlet-class>
 			org.springframework.web.portlet.DispatcherPortlet
 		</portlet-class>
@@ -46,13 +123,20 @@
 			<portlet-mode>view</portlet-mode>
 		</supports>
 		<portlet-info>
-			<title>caGrid  Portlet</title>
-			<short-title>caGrid  Portlet</short-title>
+			<title>caGrid Status Portlet</title>
+			<short-title>caGrid Status Portlet</short-title>
 			<keywords>cagrid,status</keywords>
 		</portlet-info>
 
 		<portlet-preferences>
-			
+			<preference>
+				<name>selectItemForDiscoveryRedirectUrl</name>
+				<value>/web/guest/2</value>
+			</preference>
+			<preference>
+				<name>selectDirectoryForDiscoveryRedirectUrl</name>
+				<value>/web/guest/2</value>
+			</preference>
 			<preference>
              	<name>discoveryDirectorySelectMode</name> 
             	<value>INTERPORTLET</value>
@@ -104,7 +188,11 @@
 			<keywords>cagrid,map</keywords>
 		</portlet-info>
 
-		<portlet-preferences>		
+		<portlet-preferences>
+			<preference>
+				<name>selectItemForDiscoveryRedirectUrl</name>
+				<value>/web/guest/2</value>
+			</preference>	
 			<preference>
              	<name>discoveryItemSelectMode</name> 
             	<value>INTERPORTLET</value>
@@ -210,7 +298,7 @@
             </preference>
         </portlet-preferences>
 	</portlet>
-<!-- 
+
 	<portlet>
 		<description>Content introducing the caGrid Portal</description>
 		<portlet-name>WelcomeToCaGridPortal</portlet-name>
@@ -226,7 +314,6 @@
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 			<portlet-mode>edit</portlet-mode>
-			<portlet-mode>help</portlet-mode>
 		</supports>
 		<portlet-info>
 			<title>Welcome to caGrid Portal</title>
@@ -240,7 +327,7 @@
 			</preference>
 		</portlet-preferences>
 	</portlet>
-
+<!-- 
 	<portlet>
 		<description>
 			Content describing what is new in caGrid Portal

@@ -26,7 +26,14 @@
 		autowire="byName">
 		<property name="commandName" value="selectItemForDiscovery"/>
 		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.map.SelectItemCommand"/>
-		<property name="redirectUrl" value="/web/guest/2"/>
+		<property name="redirectUrlPreferenceName" value="selectItemForDiscoveryRedirectUrl"/>
+		<property name="interPortletMessageSender">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
+				<property name="modePreferenceName" value="discoveryItemSelectMode" />
+				<property name="outputQueuePreferenceName" value="selectedDiscoveryItemOutputQueueName" />
+				<property name="outputQueueNameDefaultValue" value="selectedDiscoveryItem" />
+			</bean>
+		</property>
 	</bean>
 	
 	<bean 
@@ -35,7 +42,14 @@
 		autowire="byName">
 		<property name="commandName" value="selectDirectoryForDiscovery"/>
 		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.discovery.list.ListBean"/>
-		<property name="redirectUrl" value="/web/guest/2"/>
+		<property name="redirectUrlPreferenceName" value="selectDirectoryForDiscoveryRedirectUrl"/>
+		<property name="interPortletMessageSender">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
+				<property name="modePreferenceName" value="discoveryDirectorySelectMode" />
+				<property name="outputQueuePreferenceName" value="selectedDiscoveryDirectoryOutputQueueName" />
+				<property name="outputQueueNameDefaultValue" value="selectedDiscoveryDirectory" />
+			</bean>
+		</property>
 	</bean>
 	
 	<bean
