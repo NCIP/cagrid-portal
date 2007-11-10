@@ -2,6 +2,7 @@ package gov.nci.nih.cagrid.tests.core;
 
 import gov.nci.nih.cagrid.tests.core.steps.CDSCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.CDSDelegateCredentialStep;
+import gov.nci.nih.cagrid.tests.core.steps.CDSFindMyDelegatedCredentialsStep;
 import gov.nci.nih.cagrid.tests.core.steps.CDSGetDelegatedCredentialFailStep;
 import gov.nci.nih.cagrid.tests.core.steps.CDSGetDelegatedCredentialStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianAddTrustedCAStep;
@@ -136,6 +137,8 @@ public class DelegateCredentialTest extends Story {
 
 		steps.add(new DorianApproveRegistrationStep(leonardoApp, dorianURL,
 				admin));
+		
+		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL,admin));
 
 		DorianAuthenticateStep leonardo = new DorianAuthenticateStep(
 				leonardoApp.getUserId(), leonardoApp.getPassword(), dorianURL);
@@ -183,7 +186,7 @@ public class DelegateCredentialTest extends Story {
 		steps.add(new ProxyActiveStep(adminShort, true));
 		steps.add(new CDSGetDelegatedCredentialFailStep(delegateAdminShort,
 				donatello, Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL));
-		long sleepTime = ((SHORT_LIFETIME_SECONDS / 2)*1000) + 100;
+		long sleepTime = ((SHORT_LIFETIME_SECONDS / 2) * 1000) + 100;
 		steps.add(new SleepStep(sleepTime));
 		steps.add(new ProxyActiveStep(adminShort, false));
 		steps.add(new SleepStep(sleepTime));
@@ -228,7 +231,8 @@ public class DelegateCredentialTest extends Story {
 	 */
 	public static void main(String args[]) {
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(DelegateCredentialTest.class));
+		TestResult result = runner.doRun(new TestSuite(
+				DelegateCredentialTest.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 

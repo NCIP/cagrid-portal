@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
 import java.rmi.RemoteException;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -200,8 +201,12 @@ public class DelegationUserClient {
 			DelegationRecordFilter filter) throws RemoteException,
 			CDSInternalFault {
 		DelegationRecord[] records = client.findMyDelegatedCredentials(filter);
-		List<DelegationRecord> list = Arrays.asList(records);
-		return list;
+		if (records == null) {
+			return new ArrayList<DelegationRecord>();
+		} else {
+			List<DelegationRecord> list = Arrays.asList(records);
+			return list;
+		}
 	}
 
 }

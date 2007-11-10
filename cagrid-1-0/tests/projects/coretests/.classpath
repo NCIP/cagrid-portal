@@ -189,7 +189,5 @@
 	<classpathentry kind="lib" path="ext/lib/spring-beans.jar"/>
 	<classpathentry kind="lib" path="ext/lib/spring-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/validation-2.0.0.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-core.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-system.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

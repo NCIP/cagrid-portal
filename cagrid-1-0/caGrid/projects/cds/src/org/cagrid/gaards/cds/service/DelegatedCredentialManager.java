@@ -556,6 +556,7 @@ public class DelegatedCredentialManager {
 
 	public DelegationRecord[] findDelegatedCredentials(DelegationRecordFilter f)
 			throws CDSInternalFault {
+		this.buildDatabase();
 		Connection c = null;
 		try {
 			c = this.db.getConnection();

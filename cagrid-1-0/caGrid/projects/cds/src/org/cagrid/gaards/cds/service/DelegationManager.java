@@ -18,8 +18,8 @@ public class DelegationManager {
 	private DelegatedCredentialManager dcm;
 	private PropertyManager properties;
 
-	public DelegationManager(PropertyManager properties, DelegatedCredentialManager dcm)
-			throws CDSInternalFault {
+	public DelegationManager(PropertyManager properties,
+			DelegatedCredentialManager dcm) throws CDSInternalFault {
 		this.dcm = dcm;
 		this.properties = properties;
 
@@ -45,6 +45,9 @@ public class DelegationManager {
 
 	public DelegationRecord[] findMyDelegatedCredentials(String callerIdentity,
 			DelegationRecordFilter f) throws CDSInternalFault {
+		if (f == null) {
+			f = new DelegationRecordFilter();
+		}
 		f.setGridIdentity(callerIdentity);
 		return this.dcm.findDelegatedCredentials(f);
 	}
