@@ -13,28 +13,23 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
 	<bean 
-		id="viewMapController"
-		class="gov.nih.nci.cagrid.portal2.portlet.map.ViewMapController"
+		id="viewLoginController"
+		class="gov.nih.nci.cagrid.portal2.portlet.authn.ViewLoginController"
 		autowire="byName">
-		<property name="objectName" value="mapBean"/>
-		<property name="successViewName" value="view"/>
+		<property name="viewName" value="login"/>
+		<property name="portalUserAttributeName" ref="portalUserAttributeName"/>
 	</bean>
 	
 	<bean 
-		id="selectItemForDiscoveryController"
-		class="gov.nih.nci.cagrid.portal2.portlet.map.SelectItemForDiscoveryController"
-		autowire="byName">
-		<property name="commandName" value="selectItemForDiscovery"/>
-		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.map.SelectItemCommand"/>
-		<property name="redirectUrlPreferenceName" value="selectItemForDiscoveryRedirectUrl"/>
-		<property name="interPortletMessageSender">
-			<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
-				<property name="modePreferenceName" value="discoveryItemSelectMode" />
-				<property name="outputQueuePreferenceName" value="selectedDiscoveryItemOutputQueueName" />
-				<property name="outputQueueNameDefaultValue" value="selectedDiscoveryItem" />
-			</bean>
-		</property>
-	</bean>
+		id="loginController"
+		class="gov.nih.nci.cagrid.portal2.portlet.authn.LoginController"
+		autowire="byName"/>
+		
+	<bean 
+		id="logoutController"
+		class="gov.nih.nci.cagrid.portal2.portlet.authn.LogoutController"
+		autowire="byName"/>
+	
 	
 	<bean
 	 id="portletModeParameterHandlerMapping"
@@ -46,8 +41,10 @@
 			<map>
 				<entry key="view">
 					<map>
-						<entry key="selectItemForDiscovery" 
-							value-ref="selectItemForDiscoveryController" />
+						<entry key="login" 
+							value-ref="loginController" />
+						<entry key="logout" 
+							value-ref="logoutController" />
 				    </map>
 				</entry>
 	 		</map>
@@ -62,13 +59,14 @@
 		<property name="interceptors">
 			<list>
 				<ref bean="openSessionInViewInterceptor" />
+				<ref bean="portalUserInterceptor" />
 			</list>
 		</property>		
 		
 		<property name="portletModeMap">
 			<map>
 				<entry key="view">
-					<ref bean="viewMapController" />
+					<ref bean="viewLoginController" />
 				</entry>
 			</map>
 		</property>
@@ -78,7 +76,7 @@
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/jsp/map/" />
+		<property name="prefix" value="/WEB-INF/jsp/authn/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
 

@@ -8,6 +8,42 @@
 	                             
 	
 	<portlet>
+		<description>caGrid Login Portlet</description>
+		<portlet-name>cagridauthn</portlet-name>
+		<display-name>caGrid Login Portlet</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/authn-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>caGrid Login Portlet</title>
+			<short-title>caGrid Login Portlet</short-title>
+			<keywords>cagrid,authn</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>loginUrl</name>
+				<value>/cagridportlets/dummylogin/login?redirectUrl=http:%2f%2fjames%3a8080%2fweb%2fguest%2fhome</value>
+			</preference>
+			<preference>
+				<name>registerUrl</name>
+				<value>/web/guest/register</value>
+			</preference>
+			<preference>
+				<name>logoutUrl</name>
+				<value>/c/portal/logout</value>
+			</preference>
+		</portlet-preferences>
+	</portlet>
+	
+	<portlet>
 		<description>caGrid Registration Portlet</description>
 		<portlet-name>cagridregistration</portlet-name>
 		<display-name>caGrid Registration Portlet</display-name>

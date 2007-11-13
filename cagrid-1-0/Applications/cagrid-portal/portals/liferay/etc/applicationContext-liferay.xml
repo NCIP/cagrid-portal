@@ -16,4 +16,12 @@
 		<constructor-arg value="proxy.txt"/>
 	</bean>
 	
+	<bean id="companyWebId" class="java.lang.String">
+		<constructor-arg value="cabig.nci.nih.gov"/>
+	</bean>
+	
+	<bean id="omniUserEmail" class="java.lang.String">
+		<constructor-arg value="portaladmin@cabig.nci.nih.gov"/>
+	</bean>
+	
 </beans>

@@ -41,13 +41,15 @@ public class DummyAutoLogin implements AutoLogin {
 	 * 
 	 */
 	public DummyAutoLogin() {
-		try{
-			ApplicationContext ctx = new ClassPathXmlApplicationContext(new String[] {
-					"classpath:applicationContext-db.xml", "classpath:applicationContext-liferay.xml" });
-			setProxyPath((String)ctx.getBean("proxyPath"));
-			setPortalUserDao((PortalUserDao)ctx.getBean("portalUserDao"));
-		}catch(Exception ex){
-			throw new RuntimeException("Error loading application context: " + ex.getMessage(), ex);
+		try {
+			ApplicationContext ctx = new ClassPathXmlApplicationContext(
+					new String[] { "classpath:applicationContext-db.xml",
+							"classpath:applicationContext-liferay.xml" });
+			setProxyPath((String) ctx.getBean("proxyPath"));
+			setPortalUserDao((PortalUserDao) ctx.getBean("portalUserDao"));
+		} catch (Exception ex) {
+			throw new RuntimeException("Error loading application context: "
+					+ ex.getMessage(), ex);
 		}
 	}
 
@@ -64,23 +66,27 @@ public class DummyAutoLogin implements AutoLogin {
 			String[] credentials = null;
 			if ("true".equals(request.getParameter("doAutoLogin"))) {
 				logger.debug("Doing auto login.");
-				
+
 				Long companyId = Long.parseLong(request
 						.getParameter("companyId"));
 				Long userId = Long.parseLong(request.getParameter("userId"));
 				User user = UserLocalServiceUtil.getUserById(companyId, userId);
 
 				PortalUser portalUser = getPortalUser(user);
-				request.getSession().setAttribute(CAGRID_PORTAL_USER,
-						portalUser);
+				String userIdAttName = "CAGRIDPORTAL_ATTS_userId";
+				String proxyAttName = "CAGRIDPORTAL_ATTS_gridCredential";
+				request.setAttribute(userIdAttName, portalUser.getId());
+				request.setAttribute(proxyAttName, portalUser.getGridCredential());
 
 				credentials = new String[3];
 				credentials[0] = String.valueOf(user.getUserId());
 				credentials[1] = user.getPassword();
 				credentials[2] = Boolean.TRUE.toString();
-			}else{
+			} else {
 				logger.debug("Not doing auto login.");
 			}
+
+			logger.debug("returning: " + credentials);
 			return credentials;
 		} catch (Exception ex) {
 			logger.error("Error doing auto login: " + ex.getMessage(), ex);
@@ -108,15 +114,19 @@ public class DummyAutoLogin implements AutoLogin {
 			throw new RuntimeException("Error reading proxy: "
 					+ ex.getMessage(), ex);
 		}
+
+		logger.debug("Grid identity: " + proxy.getIdentity());
+
 		String proxyStr = null;
-		try{
+		try {
 			ByteArrayOutputStream buf = new ByteArrayOutputStream();
-            proxy.save(buf);
-            proxyStr = buf.toString();
-		}catch(Exception ex){
-			throw new RuntimeException("Error writing proxy to string: " + ex.getMessage(), ex);
+			proxy.save(buf);
+			proxyStr = buf.toString();
+		} catch (Exception ex) {
+			throw new RuntimeException("Error writing proxy to string: "
+					+ ex.getMessage(), ex);
 		}
-		
+
 		portalUser.setGridCredential(proxyStr);
 
 		return portalUser;

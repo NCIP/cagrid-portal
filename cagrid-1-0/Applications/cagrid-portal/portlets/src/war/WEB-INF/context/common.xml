@@ -68,9 +68,13 @@
 		</property>
 	</bean>
 	
-	<bean id="portalUserInterceptor" class="gov.nih.nci.cagrid.portal2.portlet.PortalUserInterceptor" autowire="byName">
-		<property name="portalUserAttributeName" value="CAGRIDPORTAL_ATTS_cagrid.portal.user"/>
+	<bean id="portalUserAttributeName" class="java.lang.String">
+		<constructor-arg value="CAGRIDPORTAL_ATTS_cagrid.portal.user"/>
 	</bean>
+	<bean id="portalUserInterceptor" class="gov.nih.nci.cagrid.portal2.portlet.PortalUserInterceptor" autowire="byName">
+		<property name="portalUserAttributeName" ref="portalUserAttributeName"/>
+	</bean>
+
 
 	<!-- Abstract Default ExceptionHandler -->
 	<bean id="defaultExceptionHandlerTemplate" class="gov.nih.nci.cagrid.portal2.portlet.util.DefaultExceptionResolver" abstract="true">

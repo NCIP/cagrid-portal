@@ -34,6 +34,8 @@ public class PortalUser extends AbstractDomainObject {
 	
 	private String gridCredential;
 	
+	private String gridIdentity;
+	
 	private List<QueryInstance> queryInstances = new ArrayList<QueryInstance>();
 
 
@@ -72,6 +74,14 @@ public class PortalUser extends AbstractDomainObject {
 
 	public void setQueryInstances(List<QueryInstance> queryInstances) {
 		this.queryInstances = queryInstances;
+	}
+
+	public String getGridIdentity() {
+		return gridIdentity;
+	}
+
+	public void setGridIdentity(String gridIdentity) {
+		this.gridIdentity = gridIdentity;
 	}
 
 }

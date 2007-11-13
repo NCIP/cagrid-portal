@@ -128,11 +128,20 @@
 		<servlet-name>rss</servlet-name>
 		<url-pattern>*.rss</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>dummylogin</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>dummylogin</servlet-name>
+		<url-pattern>/dummylogin/*</url-pattern>
+	</servlet-mapping>
     
-   <!--
-     - The ViewRendererServlet acts as a bridge from Portlet requests to Servlet requests.
-     - Thus a Spring Portlet is able to leverage Spring MVC's view rendering capabilities.
-    -->
    <servlet>
       <servlet-name>view-servlet</servlet-name>
       <servlet-class>org.springframework.web.servlet.ViewRendererServlet</servlet-class>
