@@ -19,6 +19,7 @@
 	<property name="liferay.jboss.download.url" value="http://switch.dl.sourceforge.net/sourceforge/jboss/jboss-4.0.5.GA.zip"/>
 	<property name="liferay.jboss.zip" value="${liferay.jboss.dir}/jboss-4.0.5.GA.zip"/>
 	<property name="liferay.jboss.home" value="${liferay.jboss.dir}/jboss-4.0.5.GA"/>
+	<property name="liferay.root.context.dir" value="${liferay.jboss.home}/server/default/deploy/liferay-portal.war"/>	
 	<property name="liferay.db.url" value="jdbc:mysql://localhost:3306/lportal2" />
 	<property name="liferay.db.username" value="lportal2" />
 	<property name="liferay.db.password" value="lportal2" />
@@ -50,6 +51,9 @@
 		<fileset dir="${aggr.lib.dir}">
 			<include name="cagrid/cog-jglobus.jar"/>
 		</fileset>
+		<fileset dir="${globus.home}/lib">
+			<patternset refid="globus.crypto.jars"/>
+		</fileset>		
 		<fileset dir="${portlets.lib.dir}">
 			<include name="servlet-api.jar"/>
 		</fileset>
@@ -91,10 +95,11 @@
 	
 	<target name="liferay:deploy" depends="db:jar, liferay:jar, liferay:jar-resources">
 		
-		<copy todir="${liferay.tomcat.home}/webapps/ROOT/WEB-INF/lib" overwrite="true" flatten="true">
+		<copy todir="${liferay.root.context.dir}/WEB-INF/lib" overwrite="true" flatten="true">
 		
 			<fileset dir="${db.build.dir}">
-				<include name="cagrid-portal-db.jar"/>
+				<include name="cagrid-portal-domain.jar"/>
+				<include name="cagrid-portal-dao.jar"/>
 			</fileset>
 		
 			<fileset dir="${liferay.build.dir}">
@@ -106,7 +111,10 @@
 				<include name="hibernate/annotations/*.jar"/>
 				<include name="spring/spring-aspects.jar"/>
 			</fileset>
-			
+
+		</copy>
+		
+		<copy todir="${liferay.jboss.home}/server/default/lib/ext" overwrite="true" flatten="true">
 			<fileset dir="${aggr.lib.dir}">
 				<include name="cagrid/cog-jglobus.jar"/>
 			</fileset>
@@ -115,9 +123,18 @@
 				<include name="jce-jdk13-125.jar"/>
 			</fileset>
 			
+			<fileset dir="${db.build.dir}">
+				<include name="cagrid-portal-domain.jar"/>
+			</fileset>			
+			
 		</copy>
 		
-		<copy file="${liferay.src.war.dir}/WEB-INF/classes/portal-ext.properties" todir="${liferay.tomcat.home}/webapps/ROOT/WEB-INF/classes" overwrite="true"/>
+		<copy todir="${liferay.root.context.dir}/WEB-INF/classes" overwrite="true">
+			<fileset dir="${liferay.src.war.dir}/WEB-INF/classes">
+				<include name="*.xml"/>
+				<include name="*.properties"/>
+			</fileset>
+		</copy>
 		
 	</target>
 	

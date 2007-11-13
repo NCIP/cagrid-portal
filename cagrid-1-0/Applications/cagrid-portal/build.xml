@@ -111,6 +111,7 @@
 	<import file="build-portlets.xml" />
 	<import file="build-js2.xml" />
 	<import file="build-liferay.xml" />
+	
 
 	<target name="compile">
 		<antcall target="portlets:compile"/>
@@ -130,5 +131,14 @@
 	</target>
 	
 	<target name="all" depends="clean,compile,test"/>
+	
+	<target name="quick-dist">
+		<mkdir dir="../quick-dist"/>
+		<copy todir="../quick-dist">
+			<fileset dir=".">
+				<exclude name="**/CVS/**"/>
+			</fileset>
+		</copy>
+	</target>
 
 </project>

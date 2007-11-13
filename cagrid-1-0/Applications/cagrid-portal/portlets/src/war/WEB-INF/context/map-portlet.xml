@@ -62,6 +62,7 @@
 		<property name="interceptors">
 			<list>
 				<ref bean="openSessionInViewInterceptor" />
+				<ref bean="portalUserInterceptor" />
 			</list>
 		</property>		
 		

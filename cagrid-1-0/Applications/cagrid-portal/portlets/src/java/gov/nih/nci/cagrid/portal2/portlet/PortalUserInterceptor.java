@@ -3,6 +3,7 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet;
 
+import gov.nih.nci.cagrid.portal2.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal2.domain.PortalUser;
 
 import javax.portlet.PortletSession;
@@ -20,9 +21,10 @@ import org.springframework.web.portlet.context.PortletWebRequest;
  */
 public class PortalUserInterceptor implements WebRequestInterceptor {
 
-	private static final Log logger = LogFactory.getLog(PortalUserInterceptor.class);
-	
+	private static final Log logger = LogFactory
+			.getLog(PortalUserInterceptor.class);
 
+	private PortalUserDao portalUserDao;
 	private String portalUserAttributeName;
 
 	/**
@@ -60,22 +62,25 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 	 */
 	public void preHandle(WebRequest request) throws Exception {
 
-//		if (getSharedApplicationModel().getPortalUser() == null) {
-//			
-//			logger.debug("No PortalUser in SharedApplicationModel. Looking in session.");
-//			
-			PortletWebRequest req = (PortletWebRequest) request;
-			PortalUser user = (PortalUser) req.getRequest().getPortletSession()
-					.getAttribute(getPortalUserAttributeName(),
-							PortletSession.APPLICATION_SCOPE);
-//			
-//			if(user != null){
-//				logger.debug("Found PortalUser:" + user.getId() + " in session.");
-//				getSharedApplicationModel().setPortalUser(user);
-//			}
-//			
-//		}
-		
+		PortletWebRequest req = (PortletWebRequest) request;
+
+		PortalUser portalUser = null;
+		String userIdAttName = "CAGRIDPORTAL_ATTS_userId";
+		String proxyAttName = "CAGRIDPORTAL_ATTS_gridCredential";
+		Integer userId = (Integer) req.getRequest().getAttribute(userIdAttName);
+		String gridCredential = (String) req.getRequest().getAttribute(
+				proxyAttName);
+		if (userId == null) {
+			logger.debug("Didn't find portal user ID under " + userIdAttName);
+		} else {
+			portalUser = getPortalUserDao().getById(userId);
+			logger.debug("Putting portal user " + portalUser.getId()
+					+ " in session");
+			portalUser.setGridCredential(gridCredential);
+			req.getRequest().getPortletSession().setAttribute(
+					getPortalUserAttributeName(), portalUser,
+					PortletSession.APPLICATION_SCOPE);
+		}
 	}
 
 	public String getPortalUserAttributeName() {
@@ -86,5 +91,12 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 		this.portalUserAttributeName = portletUserAttributeName;
 	}
 
+	public PortalUserDao getPortalUserDao() {
+		return portalUserDao;
+	}
+
+	public void setPortalUserDao(PortalUserDao portalUserDao) {
+		this.portalUserDao = portalUserDao;
+	}
 
 }

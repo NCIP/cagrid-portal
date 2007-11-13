@@ -44,15 +44,14 @@
 		</javac>
 	</target>
 
-	<target name="portlets:build-war-dir" depends="portlets:compile">
-	
+	<target name="portlets:build-war-dir" depends="db:jar, portlets:compile">
+
 		<mkdir dir="${portlets.build.war.dir}/WEB-INF/lib" />
 		<copy todir="${portlets.build.war.dir}/WEB-INF/lib"
 			overwrite="true" flatten="true">
 			
 			<fileset dir="${globus.home}/lib">
 				<patternset refid="globus.jars"/>
-				<patternset refid="globus.crypto.jars"/>
 			</fileset>
 			
 			<fileset dir="${db.lib.dir}">
@@ -70,6 +69,11 @@
 				<include name="standard.jar" />
 			</fileset>
 			
+			<fileset dir="${db.build.dir}">
+				<include name="cagrid-portal-domain.jar"/>
+				<include name="cagrid-portal-dao.jar"/>
+			</fileset>
+			
 		</copy>
 		
 		<copy file="${db.jdbc.driver.jar}" todir="${portlets.build.war.dir}/WEB-INF/lib"/>
@@ -77,10 +81,6 @@
 		<mkdir dir="${portlets.build.war.dir}/WEB-INF/classes" />
 		<copy todir="${portlets.build.war.dir}/WEB-INF/classes"
 			overwrite="true">
-			
-			<fileset dir="${db.classes.dir}">
-				<include name="**/*.class"/>
-			</fileset>
 			
 			<fileset dir="${aggr.classes.dir}">
 				<include name="**/*.class"/>
