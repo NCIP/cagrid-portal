@@ -1,3 +1,11 @@
+############
+# Contents #
+############
+1. Installation
+2. Running
+3. Deploying Portlets
+4. Configure the site structure
+
 ################
 # Installation #
 ################
@@ -65,9 +73,9 @@ Edit JBOSS_HOME/bin/run.sh, set the JAVA_OPTS variable as follows:
 Start JBoss by running: ./run.sh
 You may see some error message about a ClassCastException related to Log4J. You can ignore this.
 
-#############################
-# Deploy cagridportlets.war #
-#############################
+######################
+# Deploying Portlets #
+######################
 
 By default, the liferay autodeploy directory is $HOME/liferay/deploy. If you place a war file that
 contains a portlet application into that directory, it will be deployed.
@@ -82,24 +90,31 @@ You can deploy the cagridportlets.war file by typing:
 ################################
 
 The basic site structure can be configured by using one of the Liferay administrative portlets
-to import a Liferay archive (lar) file. I've created such a lar file at portals/liferay/lars/cagridportal.lar
+to import a Liferay archive (lar) files. I've created these lar files in the portals/liferay/lars/ directory.
 
 Follow these directions to import the lar file:
 
 1. Sign in:
-   - username: test@liferay.com
-   - password: test
-2. If this is the first time, agree to license.
-3. In upper right-hand corner, click drop-down list,
+   - username: portaladmin@cabig.nci.nih.gov
+   - password: p0rtal@dmin
+2. In upper right-hand corner, click drop-down list,
    then select My Places > My Community > Private Pages
-4. In Communities portlet, click "Communities I have joined" tab.
-5. Click the "Configure Pages" icon for the "Guest" community. 
+3. In Communities portlet, click "Communities I have joined" tab.
+4. Click the "Configure Pages" icon for the "Guest" community. 
    - That's the 3rd icon from the left. It looks two pieces of paper.
-6. Click on the "Import/Export" tab.
-7. Click on the "Import" sub tab.
-8. Select all of the checkboxes.
-9. Press the "Browse..." button to navigate to and select "cagridportlets.lar"
+5. Click on the "Import/Export" tab.
+6. Click on the "Import" sub tab.
+7. Select NONE of the checkboxes.
+9. Press the "Browse..." button to navigate to and select "guest-community.lar"
 10. Press "Import"
+11. From upper right-hand corner, click drop-down list,
+    then select MyPlaces > My Community. Then click on the icon to the right
+    of the "Public Pages" text.
+12. Click on the "Import/Export" tab.
+13. Click on the "Import" sub tab.
+14. Select NONE of the checkboxes.
+15. Press the "Browse..." button to navigate to and select "portaladmin-public-community.lar"
+16. Press "Import"
+17. Repeat steps 11 through 16 for the "Private Pages" and "portaladmin-private-community.lar".
 
 Then you can navigate back to My Places > Guest > Public Pages. Or you could just sign out.
- 

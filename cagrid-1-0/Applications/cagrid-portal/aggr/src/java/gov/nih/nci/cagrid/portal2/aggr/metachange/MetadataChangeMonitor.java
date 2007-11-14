@@ -51,7 +51,7 @@ public class MetadataChangeMonitor extends AbstractMonitor {
 					// This might happen if the cached service has just been deleted
 					logger
 							.warn("Could not retrieve cached metadata hash for service "
-									+ serviceUrl + ": " + ex.getMessage(), ex);
+									+ serviceUrl + ": " + ex.getMessage());
 					continue;
 				}
 
@@ -62,7 +62,7 @@ public class MetadataChangeMonitor extends AbstractMonitor {
 						.getHash(serviceUrl);
 				}catch(Exception ex){
 					// This might happen if the dynamic service is down
-					logger.warn("Could not retreive dynamic metadata hash for service " + serviceUrl + ": " + ex.getMessage(), ex);
+					logger.warn("Could not retreive dynamic metadata hash for service " + serviceUrl + ": " + ex.getMessage());
 					continue;
 				}
 				

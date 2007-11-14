@@ -1666,7 +1666,11 @@ insert into ListType (listTypeId, name, type_) values (12019, 'Intranet', 'com.l
 insert into ListType (listTypeId, name, type_) values (12020, 'Public', 'com.liferay.portal.model.Organization.website');
 
 
-insert into Counter values ('com.liferay.counter.model.Counter', 10000);
+--insert into Counter values ('com.liferay.counter.model.Counter', 10000);
+INSERT INTO `Counter` VALUES ('com.liferay.counter.model.Counter',10500);
+INSERT INTO `Counter` VALUES ('com.liferay.portal.model.Resource',300);
+INSERT INTO `Counter` VALUES ('com.liferay.portal.model.Permission',300);
+INSERT INTO `Counter` VALUES ('com.liferay.portal.model.ResourceCode',200);
 
 
 insert into Company (companyId, accountId, webId, virtualHost, mx) values (1, 7, 'cabig.nci.nih.gov', 'localhost', 'cabig.nci.nih.gov');
@@ -1684,17 +1688,52 @@ insert into Role_ (roleId, companyId, classNameId, classPK, name, description, t
 
 
 insert into Group_ (groupId, companyId, creatorUserId, classNameId, classPK, parentGroupId, liveGroupId, name, friendlyURL, active_) values (14, 1, 5, 0, 0, 0, 0, 'Guest', '/guest', 1);
+-- Guest public set
+-- NOTE: have to keep pageCount updated
 insert into LayoutSet (layoutSetId, companyId, groupId, privateLayout, logo, themeId, colorSchemeId, pageCount) values (15, 1, 14, 1, 0, 'classic', '01', 0);
 insert into LayoutSet (layoutSetId, companyId, groupId, privateLayout, logo, themeId, colorSchemeId, pageCount) values (16, 1, 14, 0, 0, 'classic', '01', 0);
 
 
 insert into Organization_ (organizationId, companyId, parentOrganizationId, name, location, recursable, regionId, countryId, statusId, comments) values (17, 1, 0, 'caBIG', 0, 1, 5, 19, 12017, '');
 
-insert into Group_ (groupId, companyId, creatorUserId, classNameId, classPK, parentGroupId, liveGroupId, name, friendlyURL, active_) values (18, 1, 5, 8, 17, 0, 0, '18', '', 1);
+insert into Group_ (groupId, companyId, creatorUserId, classNameId, classPK, parentGroupId, liveGroupId, name, friendlyURL, active_) values (18, 1, 5, 8, 17, 0, 0, 'caBIG', '/cabig', 1);
 insert into LayoutSet (layoutSetId, companyId, groupId, privateLayout, logo, themeId, colorSchemeId, pageCount) values (19, 1, 18, 1, 0, 'classic', '01', 1);
 insert into LayoutSet (layoutSetId, companyId, groupId, privateLayout, logo, themeId, colorSchemeId, pageCount) values (20, 1, 18, 0, 0, 'classic', '01', 1);
-insert into Layout (plid, groupId, companyId, privateLayout, layoutId, parentLayoutId, name, type_, typeSettings, hidden_, friendlyURL, priority) values (21, 18, 1, 0, 1, 0, '<?xml version="1.0"?>\n\n<root>\n  <name>caBIG Extranet</name>\n</root>', 'portlet', 'layout-template-id=2_columns_ii\ncolumn-1=3,\ncolumn-2=19,', 0, '', 0);
-insert into Layout (plid, groupId, companyId, privateLayout, layoutId, parentLayoutId, name, type_, typeSettings, hidden_, friendlyURL, priority) values (22, 18, 1, 1, 1, 0, '<?xml version="1.0"?>\n\n<root>\n  <name>caBIG Intranet</name>\n</root>', 'portlet', 'layout-template-id=2_columns_ii\ncolumn-1=3,\ncolumn-2=19,', 0, '', 0);
+
+--insert into Layout (plid, groupId, companyId, privateLayout, layoutId, parentLayoutId, name, type_, typeSettings, hidden_, friendlyURL, priority) 
+--values 
+--(21, 18, 1, 0, 1, 0, '<?xml version="1.0"?>\n\n<root>\n  <name>caBIG Extranet</name>\n</root>', 'portlet', 'layout-template-id=2_columns_ii\ncolumn-1=3,\ncolumn-2=19,', 0, '/extra', 0);
+
+-- caBIG Home Tab
+insert into Layout 
+(
+	plid, groupId, companyId, privateLayout, layoutId, parentLayoutId,
+    name, 
+    title, description,
+    type_,
+    typeSettings,
+    hidden_, friendlyURL, iconImage, iconImageId,
+    themeId, colorSchemeId, wapThemeId, wapColorSchemeId, css,
+    priority, dlFolderId
+)
+values
+(
+	10499,18,1,0,1,0,
+	'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<root>\n  <name>Home</name>\n</root>',
+	'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<root>\n  <title></title>\n</root>','',
+	'portlet',
+	'state-max-previous=\ncolumn-3=cagridauthn_WAR_cagridportlets,cagridstatus_WAR_cagridportlets,\ncolumn-2=WelcomeToCaGridPortal_WAR_cagridportlets,cagridmap_WAR_cagridportlets\ncolumn-1=cagridnewssummary_WAR_cagridportlets,8,\nstate-max=\nstate-min=\nlayout-template-id=3_columns',
+	0, '/home', 0,0,
+	'','','','','',
+	0,0
+);
+
+insert into Layout 
+(
+	plid, groupId, companyId, privateLayout, layoutId, parentLayoutId, name, type_, typeSettings, hidden_, friendlyURL, priority
+) values (
+	22, 18, 1, 1, 1, 0, '<?xml version="1.0"?>\n\n<root>\n  <name>caBIG Intranet</name>\n</root>', 'portlet', 'layout-template-id=2_columns_ii\ncolumn-1=3,\ncolumn-2=19,', 0, '/intra', 0
+);
 
 insert into User_ (userId, companyId, createDate, modifiedDate, defaultUser, contactId, password_, passwordEncrypted, passwordReset, screenName, emailAddress, greeting, loginDate, failedLoginAttempts, agreedToTermsOfUse, active_) values (5, 1, now(), now(), 1, 6, 'password', 0, 0, '5', 'default@cabig.nci.nih.gov', 'Welcome!', now(), 0, 1, 1);
 insert into Contact_ (contactId, companyId, userId, userName, createDate, modifiedDate, accountId, parentContactId, firstName, middleName, lastName, male, birthday) values (6, 1, 5, '', now(), now(), 7, 0, '', '', '', 1, '1970-01-01');
@@ -1705,8 +1744,57 @@ insert into Contact_ (contactId, companyId, userId, userName, createDate, modifi
 insert into Group_ (groupId, companyId, creatorUserId, classNameId, classPK, parentGroupId, liveGroupId, name, friendlyURL, active_) values (83, 1, 2, 9, 2, 0, 0, '83', '', 1);
 insert into LayoutSet (layoutSetId, companyId, groupId, privateLayout, logo, themeId, colorSchemeId, pageCount) values (84, 1, 83, 1, 0, 'classic', '01', 2);
 insert into LayoutSet (layoutSetId, companyId, groupId, privateLayout, logo, themeId, colorSchemeId, pageCount) values (85, 1, 83, 0, 0, 'classic', '01', 0);
-insert into Layout (plid, groupId, companyId, privateLayout, layoutId, parentLayoutId, name, type_, typeSettings, hidden_, friendlyURL, priority) values (86, 83, 1, 1, 1, 0, '<?xml version="1.0"?>\n\n<root>\n  <name>Home</name>\n</root>', 'portlet', 'column-1=71_INSTANCE_OY0d,82,23,61,65,\ncolumn-2=9,79,29,8,19,\nlayout-template-id=2_columns_ii\n', 0, '/home', 0);
+
+-- Portal Admin Home Tab
+insert into Layout 
+(
+	plid, groupId, companyId, privateLayout, layoutId, parentLayoutId,
+    name, 
+    title, description,
+    type_,
+    typeSettings,
+    hidden_, friendlyURL, iconImage, iconImageId,
+    themeId, colorSchemeId, wapThemeId, wapColorSchemeId, css,
+    priority, dlFolderId
+)
+values 
+(86,83,1,1,1,0,
+ '<?xml version=\"1.0\"?>\n\n<root>\n  <name>Admin</name>\n</root>',
+ '','',
+ 'portlet',
+ 'column-1=9,79,29,\nstate-max=\nlayout-template-id=1_column',
+ 0,'/admin',0,0,
+ '','','','','',
+ 0,0);
+
+-- Portal Admin Login Tab
+insert into Layout 
+(
+	plid, groupId, companyId, privateLayout, layoutId, parentLayoutId,
+    name, 
+    title, description,
+    type_,
+    typeSettings,
+    hidden_, friendlyURL, iconImage, iconImageId,
+    themeId, colorSchemeId, wapThemeId, wapColorSchemeId, css,
+    priority, dlFolderId
+)
+values
+(
+	10123,83,1,0,1,0,
+	'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<root>\n  <name>Login</name>\n</root>',
+	'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<root>\n  <title></title>\n</root>','',
+	'portlet',
+	'state-max-previous=\ncolumn-1=58,\nstate-max=\nstate-min=\nlayout-template-id=2_columns_ii',
+	0,'/login',0,0,
+	'','','','','',
+	0,0
+);
+
+-- Portal Admin Plugins Tab
 insert into Layout (plid, groupId, companyId, privateLayout, layoutId, parentLayoutId, name, type_, typeSettings, hidden_, friendlyURL, priority) values (87, 83, 1, 1, 2, 0, '<?xml version="1.0"?>\n\n<root>\n  <name>Plugins</name>\n</root>', 'portlet', 'column-1=\ncolumn-2=111,\nlayout-template-id=2_columns_ii\n', 0, '/plugins', 1);
+
+
 
 insert into Users_Groups values (2, 14);
 

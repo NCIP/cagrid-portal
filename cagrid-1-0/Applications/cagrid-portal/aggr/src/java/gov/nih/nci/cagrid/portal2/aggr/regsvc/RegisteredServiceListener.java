@@ -55,7 +55,7 @@ public class RegisteredServiceListener extends AbstractMetadataListener {
 			try {
 				persistService((RegisteredServiceEvent) e);
 			} catch (Exception ex) {
-				logger.error("Error persisting service: " + ex.getMessage(), ex);
+				logger.warn("Error persisting service: " + ex.getMessage());
 			}
 		}
 
