@@ -269,6 +269,17 @@
                 <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
                 <DefaultFile>ext/resources/gridgrouper-ui-configuration.xml</DefaultFile>
             </ConfigurationDescriptor>
+             <ConfigurationDescriptor>
+                <DisplayName>Credential Delegation Service</DisplayName>
+                <SystemName>cds</SystemName>
+                <ModelClassname>org.cagrid.grape.configuration.GeneralConfiguration</ModelClassname>
+                <qname>
+                    <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
+                    <name>GeneralConfiguration</name>
+                </qname>
+                <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
+                <DefaultFile>ext/resources/cds-ui-configuration.xml</DefaultFile>
+            </ConfigurationDescriptor>
         </ConfigurationDescriptors>
     </configuration>
 </application>
