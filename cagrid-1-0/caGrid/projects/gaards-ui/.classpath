@@ -76,5 +76,8 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-stubs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

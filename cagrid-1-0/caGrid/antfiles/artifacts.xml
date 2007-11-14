@@ -160,18 +160,18 @@
 		<artifact track="test" type="jars" id="testing.core.jars">
 			<generatingantcall target="build-testing" />
 			<fileset dir="${projects.dir}/testing/build/lib">
-				<include name="*core.jar"/>
+				<include name="*core.jar" />
 			</fileset>
 		</artifact>
 		<artifact track="test" type="jars" id="testing.system.jars">
 			<generatingantcall target="build-testing" />
 			<fileset dir="${projects.dir}/testing/build/lib">
-				<include name="*.jar"/>
+				<include name="*.jar" />
 			</fileset>
 		</artifact>
 		<artifact track="test" type="resources" id="testing.containers">
 			<fileset dir="${projects.dir}/testing/resources/containers">
-				<include name="*.zip"/>
+				<include name="*.zip" />
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="advertisement.jars">
@@ -389,6 +389,26 @@
 				<include name="*.xsd" />
 			</fileset>
 		</artifact>
+
+		<artifact track="main" type="jars" id="cds.client.jars">
+			<generatingantcall target="build-cds" />
+			<fileset dir="${projects.dir}/cds/build/lib">
+				<include name="caGrid-*-cds-*stubs.jar" />
+				<include name="caGrid-*-cds-*common.jar" />
+				<include name="caGrid-*-cds-*client.jar" />
+			</fileset>
+
+			<fileset dir="${projects.dir}/cds/ext/lib">
+				<include name="caGrid-*-ServiceSecurityProvider-client.jar" />
+				<include name="caGrid-*-ServiceSecurityProvider-common.jar" />
+				<include name="caGrid-*-ServiceSecurityProvider-stubs.jar" />
+				<include name="caGrid-*-metadata-security.jar" />
+				<include name="caGrid-*-metadata-common.jar" />
+				<include name="caGrid-*-gridca.jar" />
+				<include name="caGrid-*-core.jar" />
+			</fileset>
+		</artifact>
+
 
 		<artifact track="main" type="jars" id="cds.service.jars">
 			<generatingantcall target="build-cds" />
@@ -640,7 +660,7 @@
 		</artifact>
 		<artifact track="main" type="jars" id="smartquote.translator.jars">
 			<fileset dir="${share.dir}/lib/smartquotes">
-			    <include name="*.jar"/>
+				<include name="*.jar" />
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="gme.globus.client.jars">
@@ -788,6 +808,11 @@
 				<include name="dorian-ui-configuration.xml" />
 			</fileset>
 		</artifact>
+		<artifact track="main" type="resources" id="cds.ui.conf">
+					<fileset dir="${current.grid.dir}">
+						<include name="cds-ui-configuration.xml" />
+					</fileset>
+				</artifact>
 		<artifact track="main" type="resources" id="gridgrouper.ui.conf">
 			<fileset dir="${current.grid.dir}">
 				<include name="gridgrouper-ui-configuration.xml" />
