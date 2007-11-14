@@ -169,7 +169,7 @@
 				<property name="errorTabPath" value="/query/xml"/>
 				<property name="errorsAttributeName" value="submitQueryErrors"/>
 			</bean>
-		</property>	
+		</property>
 	</bean>
 	
 	<bean 

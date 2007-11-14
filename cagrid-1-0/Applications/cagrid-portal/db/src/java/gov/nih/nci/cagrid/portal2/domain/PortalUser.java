@@ -67,7 +67,7 @@ public class PortalUser extends AbstractDomainObject {
 	}
 
 	@OneToMany(mappedBy = "portalUser")
-	@OrderBy("startTime")
+	@OrderBy("startTime desc")
 	public List<QueryInstance> getQueryInstances() {
 		return queryInstances;
 	}

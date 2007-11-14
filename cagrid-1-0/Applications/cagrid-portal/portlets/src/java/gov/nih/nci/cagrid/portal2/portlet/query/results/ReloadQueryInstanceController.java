@@ -8,6 +8,7 @@ import javax.portlet.ActionResponse;
 
 import org.springframework.validation.BindException;
 
+import gov.nih.nci.cagrid.portal2.dao.CQLQueryInstanceDao;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal2.portlet.query.AbstractQueryActionController;
 import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryCommand;
@@ -18,6 +19,7 @@ import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryCommand;
  */
 public class ReloadQueryInstanceController extends AbstractQueryActionController {
 
+	private CQLQueryInstanceDao cqlQueryInstanceDao;
 	/**
 	 * 
 	 */
@@ -50,11 +52,19 @@ public class ReloadQueryInstanceController extends AbstractQueryActionController
 			ActionResponse response, Object obj, BindException errors)
 			throws Exception {
 		SelectQueryInstanceCommand command = (SelectQueryInstanceCommand)obj;
-		CQLQueryInstance instance = getQueryModel().getQueryInstance(command.getInstanceId());
+		CQLQueryInstance instance = getCqlQueryInstanceDao().getById(command.getInstanceId());
 		CQLQueryCommand workingQuery = new CQLQueryCommand();
 		workingQuery.setCqlQuery(instance.getQuery().getXml());
 		workingQuery.setDataServiceUrl(instance.getDataService().getUrl());
 		getQueryModel().setWorkingQuery(workingQuery);
+	}
+
+	public CQLQueryInstanceDao getCqlQueryInstanceDao() {
+		return cqlQueryInstanceDao;
+	}
+
+	public void setCqlQueryInstanceDao(CQLQueryInstanceDao cqlQueryInstanceDao) {
+		this.cqlQueryInstanceDao = cqlQueryInstanceDao;
 	}
 
 }

@@ -3,26 +3,31 @@
  */
 package gov.nih.nci.cagrid.portal2.portlet.query.builder;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.portal2.dao.CQLQueryDao;
+import gov.nih.nci.cagrid.portal2.dao.CQLQueryInstanceDao;
+import gov.nih.nci.cagrid.portal2.dao.GridServiceDao;
+import gov.nih.nci.cagrid.portal2.dao.PortalUserDao;
+import gov.nih.nci.cagrid.portal2.domain.GridDataService;
+import gov.nih.nci.cagrid.portal2.domain.PortalUser;
+import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQuery;
+import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
+import gov.nih.nci.cagrid.portal2.portlet.CaGridPortletApplicationException;
+import gov.nih.nci.cagrid.portal2.portlet.PortletConstants;
+import gov.nih.nci.cagrid.portal2.portlet.query.AbstractQueryActionController;
+import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryCommand;
+import gov.nih.nci.cagrid.portal2.util.PortalUtils;
+
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletRequest;
 
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.validation.BindException;
-
-import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.portal2.dao.GridServiceDao;
-import gov.nih.nci.cagrid.portal2.domain.GridDataService;
-import gov.nih.nci.cagrid.portal2.portlet.CaGridPortletApplicationException;
-import gov.nih.nci.cagrid.portal2.portlet.PortletConstants;
-import gov.nih.nci.cagrid.portal2.portlet.query.AbstractQueryActionController;
-import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryCommand;
-import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryService;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -31,7 +36,11 @@ import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryService;
 public class SubmitQueryController extends AbstractQueryActionController {
 
 	private GridServiceDao gridServiceDao;
-	private CQLQueryService cqlQueryService;
+
+	private PortalUserDao portalUserDao;
+	private CQLQueryDao cqlQueryDao;
+	private CQLQueryInstanceDao cqlQueryInstanceDao;
+
 
 	/**
 	 * 
@@ -70,9 +79,9 @@ public class SubmitQueryController extends AbstractQueryActionController {
 			throws Exception {
 
 		CQLQueryCommand command = (CQLQueryCommand) obj;
-		
+
 		getQueryModel().setWorkingQuery(command);
-		
+
 		logger.debug("url = " + command.getDataServiceUrl());
 		try {
 			String url = command.getDataServiceUrl().trim();
@@ -129,21 +138,56 @@ public class SubmitQueryController extends AbstractQueryActionController {
 					command.setCqlQuery(cql);
 				} catch (Exception ex) {
 					logger.error(ex);
-					errors.rejectValue("cqlQuery", PortletConstants.BAD_CQL_MSG, null, "Could not parse CQL query.");
+					errors.rejectValue("cqlQuery",
+							PortletConstants.BAD_CQL_MSG, null,
+							"Could not parse CQL query.");
 				}
 
 				if (!errors.hasErrors()) {
 					try {
-						getCqlQueryService().submitQuery(dataService,
-								command.getCqlQuery());
-						
+						submitQuery(getQueryModel().getPortalUser(), dataService, command.getCqlQuery());
 					} catch (Exception ex) {
 						logger.error(ex);
-						errors.reject(PortletConstants.CQL_QUERY_SUBMIT_ERROR_MSG, new String[]{ex.getMessage()}, "Error submitting CQL query.");
+						errors.reject(
+								PortletConstants.CQL_QUERY_SUBMIT_ERROR_MSG,
+								new String[] { ex.getMessage() },
+								"Error submitting CQL query.");
 					}
 				}
 			}
 		}
+	}
+	
+	private void submitQuery(PortalUser user, GridDataService service, String cql){
+		logger.debug("Submitted Query: "+ cql);
+		
+		String hash = PortalUtils.createHash(cql);
+		CQLQuery query = getCqlQueryDao().getByHash(hash);
+
+		if (query == null) {
+			query = new CQLQuery();
+			query.setXml(cql);
+			query.setHash(hash);
+			getCqlQueryDao().save(query);
+		}
+
+		CQLQueryInstance inst = new CQLQueryInstance();
+		inst.setDataService(service);
+		if (user != null) {
+			inst.setPortalUser(user);
+		}
+		inst.setQuery(query);
+		getCqlQueryInstanceDao().save(inst);
+
+		query.getInstances().add(inst);
+		getCqlQueryDao().save(query);
+
+		if (user != null) {
+			PortalUser p = getPortalUserDao().getById(user.getId());
+			p.getQueryInstances().add(inst);
+			getPortalUserDao().save(p);
+		}
+		getQueryModel().submitCqlQuery(inst);
 	}
 
 	@Required
@@ -155,13 +199,32 @@ public class SubmitQueryController extends AbstractQueryActionController {
 		this.gridServiceDao = gridServiceDao;
 	}
 
+
 	@Required
-	public CQLQueryService getCqlQueryService() {
-		return cqlQueryService;
+	public PortalUserDao getPortalUserDao() {
+		return portalUserDao;
 	}
 
-	public void setCqlQueryService(CQLQueryService cqlQueryService) {
-		this.cqlQueryService = cqlQueryService;
+	public void setPortalUserDao(PortalUserDao portalUserDao) {
+		this.portalUserDao = portalUserDao;
+	}
+
+	@Required
+	public CQLQueryDao getCqlQueryDao() {
+		return cqlQueryDao;
+	}
+
+	public void setCqlQueryDao(CQLQueryDao cqlQueryDao) {
+		this.cqlQueryDao = cqlQueryDao;
+	}
+
+	@Required
+	public CQLQueryInstanceDao getCqlQueryInstanceDao() {
+		return cqlQueryInstanceDao;
+	}
+
+	public void setCqlQueryInstanceDao(CQLQueryInstanceDao cqlQueryInstanceDao) {
+		this.cqlQueryInstanceDao = cqlQueryInstanceDao;
 	}
 
 }

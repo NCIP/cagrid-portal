@@ -7,7 +7,7 @@
 <portlet:actionURL var="action" />
 <form:form action="${action}" commandName="cqlQueryCommand">
 	<input type="hidden" name="operation" value="submitQuery"/>
-	<form:errors path="*"/>
+	<span style="color:red"><form:errors path="*"/></span>
 	<table>
 		<tr>
 			<td>URL</td>

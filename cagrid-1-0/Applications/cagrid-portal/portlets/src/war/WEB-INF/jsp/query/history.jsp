@@ -29,6 +29,7 @@
     
     var <portlet:namespace/>activeInstances = new Array();
 <c:forEach var="instance" items="${instances}">
+	<c:if test="${'UNSCHEDULED' eq instance.state or 'SCHEDULED' eq instance.state or 'RUNNING' eq instance.state}">
     <portlet:namespace/>activeInstances.push(
     	{
     		id: <c:out value="${instance.id}"/>,
@@ -37,6 +38,7 @@
     		state: "<c:out value="${instance.state}"/>"
     	}
     );
+    </c:if>
 </c:forEach>    
 	
     function <portlet:namespace/>checkActiveInstances(){

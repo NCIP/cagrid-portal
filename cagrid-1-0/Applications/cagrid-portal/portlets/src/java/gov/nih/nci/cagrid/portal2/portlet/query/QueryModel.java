@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import gov.nih.nci.cagrid.portal2.dao.UMLClassDao;
 import gov.nih.nci.cagrid.portal2.domain.GridDataService;
+import gov.nih.nci.cagrid.portal2.domain.PortalUser;
 import gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal2.portlet.query.cql.CQLQueryCommand;
@@ -39,6 +40,7 @@ public class QueryModel implements ApplicationContextAware {
 	private ApplicationContext applicationContext;
 	private CQLQueryInstance selectedQueryInstance;
 	private UMLClassDao umlClassDao;
+	private PortalUser portalUser;
 	
 	
 	/**
@@ -172,13 +174,9 @@ public class QueryModel implements ApplicationContextAware {
 	}
 	
 	public CQLQueryInstance deleteQueryInstance(Integer instanceId){
-		CQLQueryInstance instance = null;
 		cancelQueryInstance(instanceId);
 		CQLQueryInstanceExecutor executor = executors.remove(instanceId);
-		if(executor != null){
-			instance = executor.getCqlQueryInstance();
-		}
-		return instance;
+		return executor.getCqlQueryInstance();
 	}
 
 	public CQLQueryInstance getSelectedQueryInstance() {
@@ -195,6 +193,14 @@ public class QueryModel implements ApplicationContextAware {
 
 	public void setUmlClassDao(UMLClassDao umlClassDao) {
 		this.umlClassDao = umlClassDao;
+	}
+
+	public PortalUser getPortalUser() {
+		return portalUser;
+	}
+
+	public void setPortalUser(PortalUser portalUser) {
+		this.portalUser = portalUser;
 	}
 
 }

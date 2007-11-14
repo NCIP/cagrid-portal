@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.portal2.portlet;
 
 import gov.nih.nci.cagrid.portal2.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal2.domain.PortalUser;
+import gov.nih.nci.cagrid.portal2.portlet.query.QueryModel;
 
 import javax.portlet.PortletSession;
 
@@ -26,6 +27,7 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 
 	private PortalUserDao portalUserDao;
 	private String portalUserAttributeName;
+	private QueryModel queryModel;
 
 	/**
 	 * 
@@ -80,6 +82,7 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 			req.getRequest().getPortletSession().setAttribute(
 					getPortalUserAttributeName(), portalUser,
 					PortletSession.APPLICATION_SCOPE);
+			getQueryModel().setPortalUser(portalUser);
 		}
 	}
 
@@ -97,6 +100,14 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 
 	public void setPortalUserDao(PortalUserDao portalUserDao) {
 		this.portalUserDao = portalUserDao;
+	}
+
+	public QueryModel getQueryModel() {
+		return queryModel;
+	}
+
+	public void setQueryModel(QueryModel queryModel) {
+		this.queryModel = queryModel;
 	}
 
 }

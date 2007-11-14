@@ -64,7 +64,9 @@
 </style>
 <p />
 <portlet:actionURL var="action"/>
-
+<form:form commandName="cqlQueryCommand">
+	<span style="color:red"><form:errors path="*"/></span>
+</form:form>
 <c:choose>
 	<c:when test="${!empty rootNode}">
 

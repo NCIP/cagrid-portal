@@ -73,6 +73,10 @@ public class CQLQueryHistoryFacade {
 		}
 		
 		if(instance == null){
+			instance = getCqlQueryInstanceDao().getById(instanceId);
+		}
+		
+		if(instance == null){
 			logger.debug("...didn't find instance");
 		}else{
 			logger.debug("..found it.");
@@ -86,11 +90,15 @@ public class CQLQueryHistoryFacade {
 		String html = null;
 
 		CQLQueryInstance instance = getCqlQueryInstanceDao().getById(bean.getId());
-		
 		if(instance == null){
 			logger.debug("Didn't find instance");
 		}else{
 			logger.debug("Found instance:" + instance.getId());
+			for(CQLQueryInstance inst : getQueryModel().getSubmittedCqlQueries()){
+				if(inst.getId().equals(instance.getId())){
+					instance.setResult(inst.getResult());
+				}
+			}
 		}
 		
 		WebContext webContext = WebContextFactory.get();

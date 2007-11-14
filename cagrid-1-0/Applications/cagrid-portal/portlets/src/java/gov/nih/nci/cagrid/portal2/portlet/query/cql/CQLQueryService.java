@@ -48,14 +48,11 @@ public class CQLQueryService {
 	}
 
 	@Transactional
-	public CQLQueryInstance submitQuery(GridDataService service,
+	public CQLQueryInstance submitQuery(PortalUser user, GridDataService service,
 			final String cql) throws Exception {
 
 		logger.debug("Submitted Query: "+ cql);
 		
-//		PortalUser user = getSharedApplicationModel().getPortalUser();
-		//TODO: get the portal user
-		PortalUser user = null;
 		String hash = PortalUtils.createHash(cql);
 		CQLQuery query = cqlQueryDao.getByHash(hash);
 
@@ -78,8 +75,9 @@ public class CQLQueryService {
 		cqlQueryDao.save(query);
 
 		if (user != null) {
-			user.getQueryInstances().add(inst);
-			portalUserDao.save(user);
+			PortalUser p = getPortalUserDao().getById(user.getId());
+			p.getQueryInstances().add(inst);
+			portalUserDao.save(p);
 		}
 		getQueryModel().submitCqlQuery(inst);
 
@@ -118,19 +116,17 @@ public class CQLQueryService {
 		this.cqlQueryInstanceDao = cqlQueryInstanceDao;
 	}
 
-	public List<CQLQueryInstance> getSubmittedCqlQueries() {
+	public List<CQLQueryInstance> getSubmittedCqlQueries(PortalUser user) {
 		
 		List<CQLQueryInstance> instances = null;
-//		PortalUser user = getSharedApplicationModel().getPortalUser();
-		//TODO: get portal user
-		PortalUser user = null;
 
 		// If no user, get query instances from shared model
 		if (user == null) {
 			instances = getQueryModel().getSubmittedCqlQueries();
 		} else {
+			PortalUser p = getPortalUserDao().getById(user.getId());
 			instances = new ArrayList<CQLQueryInstance>();
-			for (QueryInstance inst : user.getQueryInstances()) {
+			for (QueryInstance inst : p.getQueryInstances()) {
 				if (inst instanceof CQLQueryInstance) {
 					instances.add((CQLQueryInstance)inst);
 				}
