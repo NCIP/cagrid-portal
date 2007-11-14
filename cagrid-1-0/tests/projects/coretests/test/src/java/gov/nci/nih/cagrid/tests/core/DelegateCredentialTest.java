@@ -33,6 +33,8 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gaards.cds.common.DelegationRecordFilter;
+import org.cagrid.gaards.cds.common.ExpirationStatus;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
 import org.cagrid.gaards.cds.service.Errors;
 
@@ -137,13 +139,15 @@ public class DelegateCredentialTest extends Story {
 
 		steps.add(new DorianApproveRegistrationStep(leonardoApp, dorianURL,
 				admin));
-		
-		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL,admin));
+
+		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin));
 
 		DorianAuthenticateStep leonardo = new DorianAuthenticateStep(
 				leonardoApp.getUserId(), leonardoApp.getPassword(), dorianURL);
 		steps.add(leonardo);
 		steps.add(new DorianDestroyDefaultProxyStep());
+
+		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, leonardo));
 
 		List<GridCredential> allowedParties = new ArrayList<GridCredential>();
 		allowedParties.add(leonardo);
@@ -152,6 +156,20 @@ public class DelegateCredentialTest extends Story {
 		CDSDelegateCredentialStep delegateAdmin = new CDSDelegateCredentialStep(
 				cdsURL, admin, allowedParties, lifetime);
 		steps.add(delegateAdmin);
+
+		DelegationRecordFilter valid = new DelegationRecordFilter();
+		valid.setExpirationStatus(ExpirationStatus.Valid);
+
+		DelegationRecordFilter expired = new DelegationRecordFilter();
+		expired.setExpirationStatus(ExpirationStatus.Expired);
+
+		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin,
+				delegateAdmin));
+		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin, valid,
+				delegateAdmin));
+		steps
+				.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin,
+						expired));
 
 		CDSGetDelegatedCredentialStep admin2 = new CDSGetDelegatedCredentialStep(
 				delegateAdmin, leonardo);
@@ -164,10 +182,9 @@ public class DelegateCredentialTest extends Story {
 				donatelloApp.getUserId(), donatelloApp.getPassword(), dorianURL);
 		steps.add(donatello);
 		steps.add(new DorianDestroyDefaultProxyStep());
-
+		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, donatello));
 		steps.add(new CDSGetDelegatedCredentialFailStep(delegateAdmin,
 				donatello, Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL));
-		// TODO: Test Invalidating
 
 		ProxyLifetime delegationLifetime = new ProxyLifetime();
 		delegationLifetime.setSeconds(SHORT_LIFETIME_SECONDS);
@@ -192,6 +209,14 @@ public class DelegateCredentialTest extends Story {
 		steps.add(new SleepStep(sleepTime));
 		steps.add(new CDSGetDelegatedCredentialFailStep(delegateAdminShort,
 				leonardo, "org.globus.wsrf.NoSuchResourceException"));
+		List<DelegationIdentifierReference> expected = new ArrayList<DelegationIdentifierReference>();
+		expected.add(delegateAdmin);
+		expected.add(delegateAdminShort);
+		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin,
+				expected));
+		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin, valid, delegateAdmin));
+		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin, expired,
+				delegateAdminShort));
 		return steps;
 	}
 

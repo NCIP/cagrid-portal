@@ -3,13 +3,13 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+import gov.nci.nih.cagrid.tests.core.DelegationIdentifierReference;
 import gov.nci.nih.cagrid.tests.core.GridCredential;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.cagrid.gaards.cds.client.DelegationUserClient;
-import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationRecordFilter;
 import org.globus.gsi.GlobusCredential;
@@ -24,27 +24,49 @@ public class CDSFindMyDelegatedCredentialsStep extends Step implements
 	private GlobusCredential proxy = null;
 	private String uri;
 	private DelegationRecordFilter filter;
-	private List<DelegationIdentifier> expected;
+	private List<DelegationIdentifierReference> expected;
 
 	public CDSFindMyDelegatedCredentialsStep(String uri,
 			GridCredential credential) {
-		this(uri, credential, null, null);
+		this(uri, credential, null, (List<DelegationIdentifierReference>) null);
 	}
 
 	public CDSFindMyDelegatedCredentialsStep(String uri,
-			GridCredential credential, List<DelegationIdentifier> expected) {
+			GridCredential credential, DelegationRecordFilter filter) {
+		this(uri, credential, filter,
+				(List<DelegationIdentifierReference>) null);
+	}
+
+	public CDSFindMyDelegatedCredentialsStep(String uri,
+			GridCredential credential,
+			List<DelegationIdentifierReference> expected) {
 		this(uri, credential, new DelegationRecordFilter(), expected);
 	}
 
 	public CDSFindMyDelegatedCredentialsStep(String uri,
+			GridCredential credential, DelegationIdentifierReference ref) {
+		this(uri, credential, new DelegationRecordFilter(), ref);
+	}
+
+	public CDSFindMyDelegatedCredentialsStep(String uri,
 			GridCredential credential, DelegationRecordFilter f,
-			List<DelegationIdentifier> expected) {
+			DelegationIdentifierReference ref) {
+		this.uri = uri;
+		this.credential = credential;
+		this.filter = f;
+		this.expected = new ArrayList<DelegationIdentifierReference>();
+		this.expected.add(ref);
+	}
+
+	public CDSFindMyDelegatedCredentialsStep(String uri,
+			GridCredential credential, DelegationRecordFilter f,
+			List<DelegationIdentifierReference> expected) {
 		this.uri = uri;
 		this.credential = credential;
 		this.filter = f;
 		this.expected = expected;
 		if (expected == null) {
-			this.expected = new ArrayList<DelegationIdentifier>();
+			this.expected = new ArrayList<DelegationIdentifierReference>();
 		}
 	}
 
@@ -55,13 +77,14 @@ public class CDSFindMyDelegatedCredentialsStep extends Step implements
 		assertNotNull(this.credential.getCredential());
 		DelegationUserClient client = new DelegationUserClient(uri,
 				this.credential.getCredential());
-		List<DelegationRecord> records = client.findMyDelegatedCredentials(filter);
+		List<DelegationRecord> records = client
+				.findMyDelegatedCredentials(filter);
 		assertEquals(expected.size(), records.size());
 		for (int i = 0; i < records.size(); i++) {
 			boolean found = false;
 			for (int j = 0; j < expected.size(); j++) {
 				if (records.get(i).getDelegationIdentifier().equals(
-						expected.get(j))) {
+						expected.get(j).getDelegationIdentifier())) {
 					found = true;
 					break;
 				}

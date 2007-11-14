@@ -4,12 +4,15 @@
 package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.DelegatedCredential;
+import gov.nci.nih.cagrid.tests.core.DelegationIdentifierReference;
 import gov.nci.nih.cagrid.tests.core.GridCredential;
 
 import java.util.List;
 
+import org.apache.axis.message.MessageElement;
 import org.cagrid.gaards.cds.client.DelegationUserClient;
 import org.cagrid.gaards.cds.common.AllowedParties;
+import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
@@ -18,7 +21,7 @@ import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 import com.atomicobject.haste.framework.Step;
 
 public class CDSDelegateCredentialStep extends Step implements
-		DelegatedCredential {
+		DelegatedCredential, DelegationIdentifierReference {
 
 	private String serviceURL;
 	private GridCredential delegator;
@@ -67,7 +70,17 @@ public class CDSDelegateCredentialStep extends Step implements
 		this.delegatedCredentialReference = client.delegateCredential(
 				this.delegationLifetime, policy,
 				this.delegatedCredentialsLifetime);
+		getDelegationIdentifier();
 
+	}
+	
+	public DelegationIdentifier getDelegationIdentifier(){
+		MessageElement e =  (MessageElement)this.delegatedCredentialReference.getEndpointReference().getProperties().get(0);
+		MessageElement c = (MessageElement)e.getChildElements().next();
+		String s = c.getValue();
+		DelegationIdentifier id = new DelegationIdentifier();
+		id.setDelegationId(Long.valueOf(s).longValue());
+		return id;
 	}
 
 	public DelegatedCredentialReference getDelegatedCredentialReference() {

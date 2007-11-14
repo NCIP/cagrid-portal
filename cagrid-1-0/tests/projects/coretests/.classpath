@@ -181,7 +181,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-stubs.jar" sourcepath="/caGrid-cds"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-service-tools.jar"/>
 	<classpathentry kind="lib" path="ext/lib/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="lib" path="ext/lib/commons-pool-1.2.jar"/>
