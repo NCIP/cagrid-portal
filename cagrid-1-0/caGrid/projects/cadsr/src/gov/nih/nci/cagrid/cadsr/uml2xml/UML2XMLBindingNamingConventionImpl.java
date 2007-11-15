@@ -16,7 +16,7 @@ public class UML2XMLBindingNamingConventionImpl implements UML2XMLBinding {
 
 	public String determineClassName(QName qname) throws CaDSRGeneralException {
 		try {
-			Namespace ns = new Namespace(qname.getNamespaceURI());
+		    new Namespace(qname.getNamespaceURI());
 		} catch (MalformedNamespaceException e) {
 			throw new CaDSRGeneralException("Namespace is not of expected format:" + e.getMessage(), e);
 		}

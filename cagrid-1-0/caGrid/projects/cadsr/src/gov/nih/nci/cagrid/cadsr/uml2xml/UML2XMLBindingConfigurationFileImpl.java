@@ -130,6 +130,7 @@ public class UML2XMLBindingConfigurationFileImpl implements UML2XMLBinding {
 	/**
 	 * @param qname
 	 * @return
+     *      The package binding for the element identified by the qname
 	 * @throws CaDSRGeneralException
 	 */
 	private UMLPackageBindingType getMappingForElement(QName qname) throws CaDSRGeneralException {

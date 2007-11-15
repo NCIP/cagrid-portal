@@ -139,6 +139,7 @@ public class ServiceMetadataAnnotator {
 	/**
 	 * @param qname
 	 * @return
+     *      The UML Class matching the QName
 	 * @throws CaDSRGeneralException
 	 */
 	protected UMLClass getUMLClassForQName(QName qname) throws CaDSRGeneralException {
@@ -175,6 +176,7 @@ public class ServiceMetadataAnnotator {
 	 * 
 	 * @param qname
 	 * @return
+     *      The UMLClassMetadata matching the qname
 	 * @throws CaDSRGeneralException
 	 */
 	protected UMLClassMetadata getUMLClassMetadataForQName(QName qname) throws CaDSRGeneralException {

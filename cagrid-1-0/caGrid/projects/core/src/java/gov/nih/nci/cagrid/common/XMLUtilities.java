@@ -19,7 +19,7 @@ import org.jdom.output.XMLOutputter;
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
  * 
  * @created May 16, 2003
- * @version $Id: XMLUtilities.java,v 1.1 2007-11-06 15:53:41 hastings Exp $
+ * @version $Id: XMLUtilities.java,v 1.2 2007-11-15 01:26:04 dervin Exp $
  */
 
 public class XMLUtilities {
@@ -41,6 +41,7 @@ public class XMLUtilities {
      * 
      * @param fileName
      * @return
+     *      A JDom document representation of the file contents
      * @throws Exception
      */
     public static Document fileNameToDocument(String fileName) throws Exception {
@@ -60,6 +61,7 @@ public class XMLUtilities {
      * 
      * @param string
      * @return
+     *      A JDom document representation of the String's contents
      * @throws Exception
      */
     public static Document stringToDocument(String string) throws Exception {
@@ -72,6 +74,7 @@ public class XMLUtilities {
      * 
      * @param stream
      * @return
+     *      A JDom document representation of the stream's contents
      * @throws Exception
      */
     public static Document streamToDocument(InputStream stream) throws Exception {
