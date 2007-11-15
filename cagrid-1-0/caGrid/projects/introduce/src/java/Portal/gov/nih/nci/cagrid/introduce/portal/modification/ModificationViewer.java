@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.BusyDialog;
-import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PromptButtonDialog;
@@ -102,6 +100,8 @@ import javax.xml.namespace.QName;
 import org.apache.log4j.Logger;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.BusyDialog;
+import org.cagrid.grape.utils.BusyDialogRunnable;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.cagrid.grape.utils.ErrorDialog;
 
@@ -304,7 +304,8 @@ public class ModificationViewer extends ApplicationComponent {
                 if (file.exists() && file.canRead()) {
                     try {
 
-                        BusyDialogRunnable br = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Initializing Modification Viewer") {
+                        BusyDialogRunnable br = new BusyDialogRunnable(GridApplication.getContext().getApplication(),
+                            "Initializing Modification Viewer") {
                             @Override
                             public void process() {
                                 this.setProgressText("Initializing Modification Viewer");
@@ -390,19 +391,19 @@ public class ModificationViewer extends ApplicationComponent {
             UpgradeManager upgrader = new UpgradeManager(this.methodsDirectory.getAbsolutePath());
 
             if (upgrader.canIntroduceBeUpgraded() || upgrader.extensionsNeedUpgraded()) {
-                String result = PromptButtonDialog.prompt(
-                    GridApplication.getContext().getApplication(),
-                    "Upgrade?",
-                    new String[]{
-                        "",
-                        "This service is from an older of version of Introduce or uses an older version of an extension.",
-                        "Would you like to try to upgrade this service to work with the current version of Introduce and installed extensions?\n",
-                        "",
-                        "Upgrade: Yes I would like to upgrade my service to be able to work with the currently installed tools.",
-                        "Open: Introduce will attempt to open and work with this service.  This is very dangerous.",
-                        "Close: Do nothing and close the modification viewer.", ""}, 
-                    new String[]{"Upgrade", "Open", "Close"}, 
-                    "Close");
+                String result = PromptButtonDialog
+                    .prompt(
+                        GridApplication.getContext().getApplication(),
+                        "Upgrade?",
+                        new String[]{
+                                "",
+                                "This service is from an older of version of Introduce or uses an older version of an extension.",
+                                "Would you like to try to upgrade this service to work with the current version of Introduce and installed extensions?\n",
+                                "",
+                                "Upgrade: Yes I would like to upgrade my service to be able to work with the currently installed tools.",
+                                "Open: Introduce will attempt to open and work with this service.  This is very dangerous.",
+                                "Close: Do nothing and close the modification viewer.", ""}, new String[]{"Upgrade",
+                                "Open", "Close"}, "Close");
                 System.out.println(result);
                 if (result != null && result.equals("Upgrade")) {
                     try {
@@ -472,6 +473,8 @@ public class ModificationViewer extends ApplicationComponent {
                 setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 
                 initServicePropertyValidation();
+
+                
             }
 
         }
@@ -610,7 +613,8 @@ public class ModificationViewer extends ApplicationComponent {
                             ModificationViewer.this,
                             "Are you sure you wish to reload?\nAll current modifactions will be lost!\nThis will simply reload the modification viewer with the\nservice without saving the current changes since the last save.");
                     if (decision == JOptionPane.OK_OPTION) {
-                        BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Reload") {
+                        BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(),
+                            "Reload") {
                             @Override
                             public void process() {
                                 logger.info("Reloading service");
@@ -1002,7 +1006,8 @@ public class ModificationViewer extends ApplicationComponent {
                         .getBaseDirectory().getAbsolutePath());
                     dialog.setVisible(true);
                     if (!dialog.wasCanceled()) {
-                        BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Reloading") {
+                        BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(),
+                            "Reloading") {
                             @Override
                             public void process() {
 
@@ -1013,7 +1018,8 @@ public class ModificationViewer extends ApplicationComponent {
                                         new ModificationViewer(ModificationViewer.this.methodsDirectory));
                                 } catch (Exception e1) {
                                     // e1.printStackTrace();
-                                    ErrorDialog.showError("Unable to roll back, there may be no older versions available");
+                                    ErrorDialog
+                                        .showError("Unable to roll back, there may be no older versions available");
                                     return;
                                 }
                             }
@@ -1495,9 +1501,10 @@ public class ModificationViewer extends ApplicationComponent {
                         ModificationViewer.this.info.getServices().getService(0).setDescription(
                             getDescriptionTextArea().getText());
 
-                        StatisticsClient.sendModifiedServiceStat(IntroduceEnginePropertiesManager.getIntroduceVersion(),
-                            ModificationViewer.this.info.getServices().getService(0).getName(),
-                            ModificationViewer.this.info.getServices().getService(0).getNamespace());
+                        StatisticsClient.sendModifiedServiceStat(
+                            IntroduceEnginePropertiesManager.getIntroduceVersion(), ModificationViewer.this.info
+                                .getServices().getService(0).getName(), ModificationViewer.this.info.getServices()
+                                .getService(0).getNamespace());
 
                         // walk the namespaces and make sure they are valid
                         setProgressText("validating namespaces");
@@ -1558,9 +1565,12 @@ public class ModificationViewer extends ApplicationComponent {
                         // resync and build
                         setProgressText("writting service document");
                         ModificationViewer.this.info.persistInformation();
-//                        Utils.serializeDocument(ModificationViewer.this.methodsDirectory.getAbsolutePath()
-//                            + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ModificationViewer.this.info
-//                            .getServiceDescriptor(), IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+                        // Utils.serializeDocument(ModificationViewer.this.methodsDirectory.getAbsolutePath()
+                        // + File.separator +
+                        // IntroduceConstants.INTRODUCE_XML_FILE,
+                        // ModificationViewer.this.info
+                        // .getServiceDescriptor(),
+                        // IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
                         try {
                             // call the sync tools
@@ -2313,9 +2323,10 @@ public class ModificationViewer extends ApplicationComponent {
         } else {
             String[] errorMessages = discoveryComponent.getErrorMessage();
             if (errorMessages != null && errorMessages.length > 0) {
-                //TODO:FIX ME
-                //CompositeErrorDialog.showError("Problem adding types, see details for more information.", errorMessages,
-                //    discoveryComponent.getErrorCauseThrowable());
+                // TODO:FIX ME
+                // CompositeErrorDialog.showError("Problem adding types, see
+                // details for more information.", errorMessages,
+                // discoveryComponent.getErrorCauseThrowable());
             } else {
                 CompositeErrorDialog.showErrorDialog("Unspecified problem adding types.", discoveryComponent
                     .getErrorCauseThrowable());

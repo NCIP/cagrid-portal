@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.cadsr.portal.discovery.CaDSRDiscoveryConstants;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
@@ -55,6 +54,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.BusyDialogRunnable;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.cagrid.grape.utils.ErrorDialog;
 
@@ -66,7 +66,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.7 2007-11-06 15:53:40 hastings Exp $
+ * @version $Id: DomainModelConfigPanel.java,v 1.8 2007-11-15 21:49:20 hastings Exp $
  */
 public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 

@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -24,6 +23,7 @@ import javax.swing.JOptionPane;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.BusyDialogRunnable;
 /**implementation is porvided, however, to create
  * specific look-feel or additions one should extend this panel and add this
  * componenet to the introduce portal configuration.
@@ -201,7 +201,6 @@ public abstract class CreationViewerBaseComponent extends ApplicationComponent {
 							ModificationViewer modViewer = new ModificationViewer(
 									new File(dirName));
 							GridApplication.getContext().getApplication().addApplicationComponent(modViewer);
-							//modViewer.setMaximum(true);
 						} else {
 							setErrorMessage("Error creating new service!");
 							return;

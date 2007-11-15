@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.ui.auditors;
 
-import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.data.service.auditing.DataServiceAuditor;
 
 import java.awt.Component;
@@ -23,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.BusyDialogRunnable;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
 /** 
@@ -32,7 +32,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created May 21, 2007 11:38:54 AM
- * @version $Id: AuditorSelectionPanel.java,v 1.3 2007-11-06 15:53:41 hastings Exp $ 
+ * @version $Id: AuditorSelectionPanel.java,v 1.4 2007-11-15 21:49:20 hastings Exp $ 
  */
 public class AuditorSelectionPanel extends JPanel {
 

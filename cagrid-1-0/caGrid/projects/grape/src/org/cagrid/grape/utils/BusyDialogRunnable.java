@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.common.portal;
+package org.cagrid.grape.utils;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;

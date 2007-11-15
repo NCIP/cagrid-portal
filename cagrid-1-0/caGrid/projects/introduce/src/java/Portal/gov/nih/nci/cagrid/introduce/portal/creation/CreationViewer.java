@@ -37,6 +37,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.cagrid.grape.GridApplication;
+
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
@@ -151,6 +153,11 @@ public class CreationViewer extends CreationViewerBaseComponent {
         this.setTitle("Create a Grid Service");
 
         initValidation();
+        
+        
+        GridApplication.getContext().centerComponent(this);
+        this.pack();
+        this.show();
     }
 
 

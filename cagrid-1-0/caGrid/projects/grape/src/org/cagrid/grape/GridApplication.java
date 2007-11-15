@@ -25,8 +25,10 @@ import org.cagrid.grape.filters.XMLFileFilter;
 import org.cagrid.grape.model.Application;
 import org.cagrid.grape.model.Component;
 import org.cagrid.grape.model.Components;
+import org.cagrid.grape.model.Dimensions;
 import org.cagrid.grape.model.Menu;
 import org.cagrid.grape.model.Menus;
+import org.cagrid.grape.model.RenderOptions;
 import org.cagrid.grape.model.Submenus;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.cagrid.grape.utils.IconUtils;
@@ -162,7 +164,6 @@ public class GridApplication extends JFrame {
 
             // launch the portal with the passed config
             GridApplication applicationInstance = GridApplication.getInstance(app);
-            Dimension d = new Dimension(app.getDimensions().getWidth(), app.getDimensions().getHeight());
 
             try {
                 applicationInstance.pack();
@@ -170,7 +171,11 @@ public class GridApplication extends JFrame {
                 applicationInstance.setIconImage(null);
                 applicationInstance.pack();
             }
-            applicationInstance.setSize(d);
+            if (app.getDimensions() != null) {
+                Dimension d = new Dimension(app.getDimensions().getWidth(), app.getDimensions().getHeight());
+                applicationInstance.setSize(d);
+            }
+
             applicationInstance.setVisible(true);
             applicationInstance.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -187,7 +192,7 @@ public class GridApplication extends JFrame {
         } catch (Exception e) {
             System.out.println("Failed to setting system look and feel.");
         }
-        
+
         // run the initializer if there is one.
         if (this.app.getInitializerClass() != null) {
             ApplicationInitializer appInit = (ApplicationInitializer) Class.forName(this.app.getInitializerClass())
@@ -433,6 +438,12 @@ public class GridApplication extends JFrame {
     }
 
 
+    public void addApplicationComponent(ApplicationComponent frame, Dimensions dim, RenderOptions options) {
+        this.lastComp = frame;
+        getMDIDesktopPane().add(frame, dim, options);
+    }
+
+
     public void addApplicationComponent(ApplicationComponent frame) {
         this.lastComp = frame;
         getMDIDesktopPane().add(frame);
@@ -547,12 +558,7 @@ public class GridApplication extends JFrame {
                 if (this.component.getIcon() != null) {
                     comp.setFrameIcon(IconUtils.loadIcon(this.component.getIcon()));
                 }
-                if (component.getDimensions() != null) {
-                    app.addApplicationComponent(comp, component.getDimensions().getWidth(), component.getDimensions()
-                        .getHeight());
-                } else {
-                    app.addApplicationComponent(comp);
-                }
+                app.addApplicationComponent(comp, component.getDimensions(), component.getRenderOptions());
             } catch (Exception e) {
                 e.printStackTrace();
             }

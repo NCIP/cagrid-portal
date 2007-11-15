@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.common.portal;
+package org.cagrid.grape.utils;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.WindowConstants;
+
+import org.cagrid.grape.GridApplication;
 
 
 public class BusyDialog extends JDialog {
@@ -44,6 +46,7 @@ public class BusyDialog extends JDialog {
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setContentPane(getMainPanel());
         this.setSize(new java.awt.Dimension(400, 100));
+        GridApplication.getContext().centerDialog(this);
     }
 
 

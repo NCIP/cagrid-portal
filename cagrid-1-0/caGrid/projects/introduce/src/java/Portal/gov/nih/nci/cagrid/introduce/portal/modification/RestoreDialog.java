@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
-import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.awt.Dimension;
@@ -20,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.BusyDialogRunnable;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.cagrid.grape.utils.ErrorDialog;
 

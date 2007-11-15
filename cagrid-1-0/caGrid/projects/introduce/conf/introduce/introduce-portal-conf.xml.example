@@ -7,9 +7,9 @@
     <ApplicationLogo>/caGrid.gif</ApplicationLogo>
     <AboutHTML><![CDATA[<html><center><h2>Introduce: Grid Service Authoring Toolkit</h2></center><center><h3>Version 1.1</h3></center><br><center><h3>This software is produced by<br>The Ohio State University<br>Department of Biomedicalinformatics (http://bmi.osu.edu)</h3></center><br><center><h3><a href="http://www.cagrid.org/mwiki/index.php?title=Introduce">http://www.cagrid.org/mwiki/index.php?title=Introduce</a></h3></center><br><h3>Authors:</h3><br><a href="mailto:hastings@bmi.osu.edu">Shannon Hastings</a><br><a href="mailto:langella@bmi.osu.edu">Stephen Langella</a><br> <a href="mailto:oster@bmi.osu.edu">Scott Oster</a><br><a href="mailto:ervin@bmi.osu.edu">David Ervin</a>]]></AboutHTML>
     <dimensions>
-        <width>1024</width>
-        <height>768</height>
-    </dimensions>b
+        <width>1280</width>
+        <height>1024</height>
+    </dimensions>
     <initializerClass>gov.nih.nci.cagrid.introduce.portal.init.IntroducePortalInitializer</initializerClass>
     <menus>
         <menu>
@@ -24,9 +24,12 @@
                     <icon>/cog_add.png</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
-                        <width>600</width>
-                        <height>350</height>
+                    	<width>600</width>
+                    	<height>300</height>
                     </dimensions>
+                    <renderOptions>
+                    	<centered>true</centered>
+                    </renderOptions>
                 </component>
                 <component>
                     <title>Create caGrid Service Skeleton</title>
@@ -35,27 +38,34 @@
                     <icon>/caGrid_small.png</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
-                        <width>700</width>
-                        <height>400</height>
+                    	<width>600</width>
+                    	<height>300</height>
                     </dimensions>
+                    <renderOptions>
+                    	<centered>true</centered>
+                    </renderOptions>
                 </component>
-                 <component>
+                <component>
                     <title>Modify Service</title>
                     <description>Modify Grid Service</description>
                     <classname>gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer</classname>
                     <icon>/cog_edit.png</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
-                        <width>800</width>
-                        <height>300</height>
+                    	<width>500</width>
+                    	<height>100</height>
                     </dimensions>
+                    <renderOptions>
+                    	<centered>true</centered>
+                    	<maximized>true</maximized>
+                    </renderOptions>
                 </component>
                    <component>
                     <title>Deploy Service</title>
                     <description>Deploy Service</description>
                     <classname>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer</classname>
                     <icon>/cog_go.png</icon>
-                    <showOnToolBar>false</showOnToolBar>
+                    <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                         <width>500</width>
                         <height>325</height>
@@ -66,7 +76,7 @@
                     <description>Browse Data Types</description>
                     <classname>gov.nih.nci.cagrid.introduce.portal.discoverytools.core.TypesToolsComponent</classname>
                     <icon>/models.png</icon>
-                    <showOnToolBar>false</showOnToolBar>
+                    <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                         <width>550</width>
                         <height>400</height>
