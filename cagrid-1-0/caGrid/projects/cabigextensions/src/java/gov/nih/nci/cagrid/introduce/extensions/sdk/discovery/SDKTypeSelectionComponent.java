@@ -370,6 +370,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
      * @param result
      * @param namespaceExistsPolicy
      * @return
+     *      A list of the schema files in the destination directory
      * @throws IOException
      */
     private List<File> copyGeneratedXSDs(File schemaDestinationDir, SDKExecutionResult result,
@@ -434,9 +435,6 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
     }
 
 
-    /**
-     * @return
-     */
     private SDKGenerationInformation updateModel() {
         this.genInfo = new SDKGenerationInformation();
         this.genInfo.setCaDSRcontext(getContextTextField().getText());
