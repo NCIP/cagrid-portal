@@ -336,7 +336,6 @@ public class DelegatedCredentialManager {
 			try {
 				if (CertUtil.isProxy(BouncyCastleUtil
 						.getCertificateType(certs[0]))) {
-
 					int currLength = r.getDelegationPathLength();
 					for (int i = 0; i < certs.length; i++) {
 						if (CertUtil.isProxy(BouncyCastleUtil

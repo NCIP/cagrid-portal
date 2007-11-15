@@ -49,6 +49,18 @@
                         <height>300</height>
                     </dimensions>
                 </component>
+                
+                <component>
+                    <title>Delegate Credential</title>
+                    <description>View the groups in which you are a member of.</description>
+                    <classname>org.cagrid.gaards.ui.cds.DelegateProxyWindow</classname>
+                    <icon>/delegate-credential.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                        <width>600</width>
+                        <height>300</height>
+                    </dimensions>
+                </component>
                    <component>
                     <title>Request Host Certificate</title>
                     <description>Allows a user to request a host ceritficate from Dorian.</description>

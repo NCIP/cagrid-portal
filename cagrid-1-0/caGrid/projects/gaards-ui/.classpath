@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="resources/images/cds"/>
 	<classpathentry kind="src" path="resources/images/gts"/>
 	<classpathentry kind="src" path="resources/images/gridgrouper"/>
 	<classpathentry kind="src" path="resources/images/common"/>
