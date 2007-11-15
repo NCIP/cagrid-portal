@@ -89,6 +89,26 @@ public class ProxyLifetimePanel extends JPanel {
 		this.add(jLabel2, gridBagConstraints4);
 	}
 
+	public void setLifetime(long lifetimeSeconds) {
+		long lhours = (lifetimeSeconds / 60) / 60;
+		long hoursInSeconds = lhours * 60 * 60;
+		long lminutes = (lifetimeSeconds - hoursInSeconds) / 60;
+		long minutesInSeconds = lminutes * 60;
+		long lseconds = lifetimeSeconds - hoursInSeconds - minutesInSeconds;
+		for (int i = 0; i <= lhours; i++) {
+			hours.addItem(new Integer(i));
+		}
+
+		for (int i = 0; i <= lminutes; i++) {
+			minutes.addItem(new Integer(i));
+		}
+
+		for (int i = 0; i <= lseconds; i++) {
+			seconds.addItem(new Integer(i));
+		}
+
+	}
+
 	/**
 	 * This method initializes hours
 	 * 
@@ -97,9 +117,6 @@ public class ProxyLifetimePanel extends JPanel {
 	private JComboBox getHours() {
 		if (hours == null) {
 			hours = new JComboBox();
-			for (int i = 0; i <= MAX_HOURS; i++) {
-				hours.addItem(new Integer(i));
-			}
 		}
 		return hours;
 	}
@@ -112,9 +129,6 @@ public class ProxyLifetimePanel extends JPanel {
 	private JComboBox getMinutes() {
 		if (minutes == null) {
 			minutes = new JComboBox();
-			for (int i = 0; i <= 59; i++) {
-				minutes.addItem(new Integer(i));
-			}
 		}
 		return minutes;
 	}
@@ -127,9 +141,6 @@ public class ProxyLifetimePanel extends JPanel {
 	private JComboBox getSeconds() {
 		if (seconds == null) {
 			seconds = new JComboBox();
-			for (int i = 0; i <= 59; i++) {
-				seconds.addItem(new Integer(i));
-			}
 		}
 		return seconds;
 	}

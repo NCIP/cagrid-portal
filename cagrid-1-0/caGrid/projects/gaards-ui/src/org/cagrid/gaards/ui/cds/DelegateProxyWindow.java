@@ -387,10 +387,12 @@ public class DelegateProxyWindow extends ApplicationComponent {
 
 	public void handleCredentialSelection() {
 		int maxPathLength = 0;
+		long lifetimeSeconds = 0;
 		try {
 			X509Certificate[] certs = getProxy().getSelectedProxy()
 					.getCertificateChain();
 			maxPathLength = getDelegationPathLength(certs[0]);
+			lifetimeSeconds = getProxy().getSelectedProxy().getTimeLeft();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -401,11 +403,15 @@ public class DelegateProxyWindow extends ApplicationComponent {
 		for (int i = 0; i <= maxPathLength; i++) {
 			delegatedCredentialPathLength.addItem(new Integer(i));
 		}
+		getDelegationLifetime().setLifetime(lifetimeSeconds);
 	}
 
 	public void handleDelegationPathLengthSelection() {
-		int maxPathLength = ((Integer) getDelegatedCredentialPathLength()
-				.getSelectedItem()).intValue() - 1;
+		int maxPathLength = 0;
+		if (getDelegatedCredentialPathLength().getSelectedItem() != null) {
+			maxPathLength = ((Integer) getDelegatedCredentialPathLength()
+					.getSelectedItem()).intValue() - 1;
+		}
 		if (maxPathLength < 0) {
 			maxPathLength = 0;
 		}
