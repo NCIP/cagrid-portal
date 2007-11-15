@@ -10,18 +10,21 @@ import java.util.GregorianCalendar;
  * @author David Ervin
  * 
  * @created Oct 16, 2007 12:01:50 PM
- * @version $Id: ServiceContainerType.java,v 1.3 2007-11-05 15:27:26 dervin Exp $ 
+ * @version $Id: ServiceContainerType.java,v 1.4 2007-11-15 00:37:13 dervin Exp $ 
  */
 public enum ServiceContainerType {
-
     GLOBUS_CONTAINER, TOMCAT_CONTAINER, JBOSS_CONTAINER;
     
+    public static final String CONTAINER_DIR_PROPERTY = "testing.containers.dir";
+    public static final String DEFAULT_CONTAINER_DIR = "../testing/resources/containers";
+    
     public String getZip() {
+        String base = getContainerBaseDir();
         switch (this) {
             case GLOBUS_CONTAINER:
-                return "../testing/resources/containers/minimal-ws-core-enum-4.0.3.zip";
+                return base + "/minimal-ws-core-enum-4.0.3.zip";
             case TOMCAT_CONTAINER:
-                return "../testing/resources/containers/minimal-tomcat-5.0.28-with-globus-4.0.3.zip";
+                return base + "/minimal-tomcat-5.0.28-with-globus-4.0.3.zip";
             case JBOSS_CONTAINER:
                 throw new AssertionError("Container type " + this + " is not yet supported");
         }
@@ -39,6 +42,15 @@ public enum ServiceContainerType {
                 return "JBoss";
         }
         throw new AssertionError("Unknown service container type: " + this);
+    }
+    
+    
+    private String getContainerBaseDir() {
+        String baseDir = System.getProperty(CONTAINER_DIR_PROPERTY);
+        if (baseDir == null) {
+            baseDir = DEFAULT_CONTAINER_DIR;
+        }
+        return baseDir;
     }
     
     
