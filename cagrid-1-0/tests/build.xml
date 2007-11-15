@@ -127,6 +127,7 @@
             <artifact refid="fqp.jars" />
             <artifact refid="data.jars" />
 	    <artifact refid="testing.system.jars"/>
+	    <artifact refid="testing.containers" />
         </resolveDependencies>
         <delete failonerror="false">
             <fileset dir="${tests.projects.dir}/coretests/test/resources/services/BasicDataService/lib">
