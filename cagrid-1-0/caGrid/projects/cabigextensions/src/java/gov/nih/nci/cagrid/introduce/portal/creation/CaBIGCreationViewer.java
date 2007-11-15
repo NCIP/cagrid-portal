@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.creation;
 
+import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -13,8 +14,6 @@ import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -173,45 +172,6 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
         validateInput();
         updateComponentTreeSeverity();
     }
-    
-    private final class TextChangeDocumentListner implements DocumentListener {
-
-		public void changedUpdate(DocumentEvent e) {
-			validateInput();
-			
-		}
-
-		public void insertUpdate(DocumentEvent e) {
-			validateInput();
-			
-		}
-
-		public void removeUpdate(DocumentEvent e) {
-			validateInput();
-			
-		}
-    	
-    }
-
-
-    private final class FocusChangeHandler implements FocusListener {
-
-        public void focusGained(FocusEvent e) {
-            update();
-
-        }
-
-
-        public void focusLost(FocusEvent e) {
-            update();
-        }
-
-
-        private void update() {
-            // updateModel();
-            validateInput();
-        }
-    }
 
 
     private void validateInput() {
@@ -249,7 +209,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
                 SERVICE_NAMESPACE));
         } else {
             try {
-                URI uri = new URI(this.getNamespaceDomain().getText());
+                new URI(this.getNamespaceDomain().getText());
             } catch (Exception e) {
                 result.add(new SimpleValidationMessage(SERVICE_NAMESPACE + " is not a well formed namespace",
                     Severity.ERROR, SERVICE_NAMESPACE));
@@ -588,7 +548,11 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
             dir = new JTextField();
             String home = System.getProperty("user.home");
             dir.setText(home + File.separator + DEFAULT_NAME);
-            dir.getDocument().addDocumentListener(new TextChangeDocumentListner());
+            dir.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    validateInput();
+                }
+            });
         }
         return dir;
     }
@@ -665,7 +629,11 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
         if (namespaceDomain == null) {
             namespaceDomain = new JTextField();
             namespaceDomain.setText(DEFAULT_NAMESPACE);
-            namespaceDomain.getDocument().addDocumentListener(new TextChangeDocumentListner());
+            namespaceDomain.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    validateInput();
+                }
+            });
         }
         return namespaceDomain;
     }
