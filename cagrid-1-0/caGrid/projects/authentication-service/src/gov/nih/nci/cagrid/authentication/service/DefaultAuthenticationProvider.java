@@ -1,12 +1,8 @@
 /**
- * $Id: DefaultAuthenticationProvider.java,v 1.1 2006-09-15 10:52:46 joshua Exp $
+ * $Id: DefaultAuthenticationProvider.java,v 1.2 2007-11-15 00:54:58 dervin Exp $
  *
  */
 package gov.nih.nci.cagrid.authentication.service;
-
-import java.rmi.RemoteException;
-
-import javax.security.auth.Subject;
 
 import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.authentication.common.AuthenticationProvider;
@@ -15,15 +11,15 @@ import gov.nih.nci.cagrid.authentication.common.InsufficientAttributeException;
 import gov.nih.nci.cagrid.authentication.common.InvalidCredentialException;
 import gov.nih.nci.cagrid.authentication.common.SAMLProvider;
 import gov.nih.nci.cagrid.authentication.common.SubjectProvider;
-import gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault;
-import gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault;
-import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
-import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+
+import java.rmi.RemoteException;
+
+import javax.security.auth.Subject;
 
 /**
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @author Joshua Phillips
  *
  */
