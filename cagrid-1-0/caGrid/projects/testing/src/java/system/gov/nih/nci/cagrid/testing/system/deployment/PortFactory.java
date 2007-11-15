@@ -2,6 +2,9 @@ package gov.nih.nci.cagrid.testing.system.deployment;
 
 import gov.nih.nci.cagrid.testing.core.TestingConstants;
 
+import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +17,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Nov 5, 2007 10:13:07 AM
- * @version $Id: PortFactory.java,v 1.1 2007-11-05 15:30:10 dervin Exp $ 
+ * @version $Id: PortFactory.java,v 1.2 2007-11-15 00:36:32 dervin Exp $ 
  */
 public class PortFactory {
 
@@ -32,5 +35,49 @@ public class PortFactory {
         Integer assignment = port.getPort();
         assignedPortNumbers.add(assignment);
         return port;
+    }
+    
+    
+    public static List<Integer> getAssignedPortNumbers() {
+        // clone it so modifications to the returned list won't
+        // affect the inner workings of this utility
+        List<Integer> clone = new ArrayList(assignedPortNumbers.size());
+        clone.addAll(assignedPortNumbers);
+        return clone;
+    }
+    
+    
+    /**
+     * Iterates through all assigned ports and checks if they are
+     * currently bound.  All unbound ports will be removed from the assignment
+     * list, and made available for future assignment.
+     */
+    public static synchronized void reclaimPorts() {
+        Iterator<Integer> portIter = assignedPortNumbers.iterator();
+        while (portIter.hasNext()) {
+            Integer port = portIter.next();
+            if (isPortAvailable(port.intValue())) {
+                portIter.remove();
+            }
+        }
+    }
+    
+    
+    private static boolean isPortAvailable(int port) {
+        boolean available = false;
+        ServerSocket sock = null;
+        try {
+            sock = new ServerSocket(port);
+            available = true;
+        } catch (Throwable e) {
+        } finally {
+            if (sock != null) {
+                try {
+                    sock.close();
+                } catch (Throwable t) {
+                }
+            }
+        }
+        return available;
     }
 }
