@@ -61,7 +61,7 @@ import org.apache.commons.logging.LogFactory;
  * @author oster
  */
 public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcessor {
-    private static final String MAIN_RF_TYPE = "main";
+    // private static final String MAIN_RF_TYPE = "main";
     private static final String SEMANTIC_METADATA_DEFAULTS_DATA_SERVICE = "default-Service-SemanticMetadata-data.xml";
     private static final String SEMANTIC_METADATA_DEFAULTS_ANALYTICAL_SERVICE = "default-Service-SemanticMetadata-analytical.xml";
 

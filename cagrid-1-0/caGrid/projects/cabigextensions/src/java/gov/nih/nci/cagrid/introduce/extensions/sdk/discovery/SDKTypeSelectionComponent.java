@@ -40,7 +40,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.Perl5Compiler;
-import org.projectmobius.common.MobiusException;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationMessage;
@@ -327,7 +326,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
             try {
                 // progress.getProgress().setString("Adding results to
                 // service...");
-                results = createNamespaceTypes(schemaDestinationDir, result, copiedXSDs);
+                results = createNamespaceTypes(schemaDestinationDir, copiedXSDs);
             } catch (Exception e) {
                 addError("Problem processing schemas created by SDK: " + e.getMessage());
                 setErrorCauseThrowable(e);
@@ -337,7 +336,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
             return results;
         } finally {
             if (result != null) {
-                int cleanupEventID = progress.startEvent("Cleaning up working directory.");
+                progress.startEvent("Cleaning up working directory.");
                 // clean up our working area when we are done with it
                 result.destroy();
                 progress.stopAll("Complete.");
@@ -349,10 +348,9 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 
     /**
      * @param result
-     * @throws MobiusException
+     * @throws Exception
      */
-    private NamespaceType[] createNamespaceTypes(File schemaDestinationDir, SDKExecutionResult result,
-        List<File> schemas) throws Exception {
+    private NamespaceType[] createNamespaceTypes(File schemaDestinationDir, List<File> schemas) throws Exception {
         List<NamespaceType> namespaceTypes = new ArrayList<NamespaceType>();
         for (File schema : schemas) {
             NamespaceType nsType = CommonTools.createNamespaceType(schema.getAbsolutePath(), schemaDestinationDir);

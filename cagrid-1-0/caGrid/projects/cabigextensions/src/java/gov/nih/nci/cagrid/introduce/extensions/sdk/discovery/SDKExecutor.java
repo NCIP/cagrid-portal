@@ -182,7 +182,6 @@ public class SDKExecutor {
     /**
      * @param workDir
      * @param info
-     * @return
      * @throws SDKExecutionException
      */
     private static void applyXMLConfigurationChanges(File workDir, SDKGenerationInformation info)
