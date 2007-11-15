@@ -9,7 +9,6 @@ import gov.nih.nci.cagrid.data.style.ServiceStyleLoader;
 import gov.nih.nci.cagrid.data.ui.StyleUiLoader;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.data.ui.wizard.ServiceWizard;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -53,7 +52,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Aug 1, 2006
- * @version $Id: DataServiceCreationDialog.java,v 1.4 2007-11-06 15:53:43 hastings Exp $
+ * @version $Id: DataServiceCreationDialog.java,v 1.5 2007-11-15 01:28:39 dervin Exp $
  */
 public class DataServiceCreationDialog extends CreationExtensionUIDialog {
     // default service style is "None / Custom Data Source"
@@ -297,17 +296,6 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
         for (int i = 0; i < extensionDescriptors.size(); i++) {
             ServiceExtensionDescriptionType desc = (ServiceExtensionDescriptionType) extensionDescriptors.get(i);
             if (desc.getName().equals(BDT_EXTENSIONS_NAME)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    private boolean bdtExtensionUsed() {
-        ExtensionType[] extensions = getServiceInfo().getExtensions().getExtension();
-        for (ExtensionType element : extensions) {
-            if (element.getName().equals(BDT_EXTENSIONS_NAME)) {
                 return true;
             }
         }
