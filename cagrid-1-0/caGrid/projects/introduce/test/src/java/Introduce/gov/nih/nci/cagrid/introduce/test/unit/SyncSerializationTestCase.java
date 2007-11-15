@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.test.unit;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.serializers.SyncSerialization;
 

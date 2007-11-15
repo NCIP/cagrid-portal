@@ -8,18 +8,16 @@ import gov.nih.nci.cagrid.introduce.test.TestCaseInfo4;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo5;
 import gov.nih.nci.cagrid.introduce.test.steps.AddResourcePropertyStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddServiceStep;
-import gov.nih.nci.cagrid.introduce.test.steps.CleanupContainerStep;
-import gov.nih.nci.cagrid.introduce.test.steps.CreateContainerStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.DeployServiceToContainerStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.StartContainerStep;
-import gov.nih.nci.cagrid.introduce.test.steps.StopContainerStep;
-import gov.nih.nci.cagrid.testing.core.TestingConstants;
-import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DeployServiceStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 
 import java.util.Vector;
 
@@ -33,30 +31,13 @@ import com.atomicobject.haste.framework.Story;
 
 public class ResourceCreationTest extends Story {
     private TestCaseInfo tci1;
-
     private TestCaseInfo tci2;
-
     private TestCaseInfo tci3;
-
     private TestCaseInfo tci4;
-    
     private TestCaseInfo tci5;
 
-    private static ServiceContainer container = null;
+    private ServiceContainer container;
     
-    static {
-        try {
-            PortPreference ports = new PortPreference(
-                Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + 1001), 
-                Integer.valueOf(TestingConstants.TEST_PORT_UPPER_BOUND.intValue() + 1001), null);
-            container = ServiceContainerFactory.createContainer(
-                ServiceContainerType.GLOBUS_CONTAINER, null, ports);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-    }
-
     public ResourceCreationTest() {
         this.setName("Introduce Resource Creation System Test");
     }
@@ -73,6 +54,14 @@ public class ResourceCreationTest extends Story {
 
 
     protected Vector steps() {
+        // init the service container
+        try {
+            container = ServiceContainerFactory.createContainer(
+                ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
         tci1 = new TestCaseInfo1();
         tci2 = new TestCaseInfo2();
         tci3 = new TestCaseInfo3();
@@ -91,7 +80,7 @@ public class ResourceCreationTest extends Story {
             steps.add(new AddResourcePropertyStep(tci3, false));
             steps.add(new AddResourcePropertyStep(tci4, false));
             steps.add(new AddResourcePropertyStep(tci5, true));
-            steps.add(new DeployServiceToContainerStep(container, tci1));
+            steps.add(new DeployServiceStep(container, tci1.getDir()));
             // TODO: do we need to deploy the other services (tci2-5)?
             steps.add(new StartContainerStep(container));
         } catch (Exception e) {
@@ -105,7 +94,7 @@ public class ResourceCreationTest extends Story {
     protected boolean storySetUp() throws Throwable {
         super.storySetUp();
 
-        Step step2 = new CreateContainerStep(container);
+        Step step2 = new UnpackContainerStep(container);
         try {
             step2.runStep();
         } catch (Throwable e) {
@@ -136,7 +125,7 @@ public class ResourceCreationTest extends Story {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        CleanupContainerStep step3 = new CleanupContainerStep(container);
+        DestroyContainerStep step3 = new DestroyContainerStep(container);
         try {
             step3.runStep();
         } catch (Throwable e) {

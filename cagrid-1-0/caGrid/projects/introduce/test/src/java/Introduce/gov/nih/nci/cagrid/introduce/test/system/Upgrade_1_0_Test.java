@@ -2,20 +2,18 @@ package gov.nih.nci.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
-import gov.nih.nci.cagrid.introduce.test.steps.CleanupContainerStep;
-import gov.nih.nci.cagrid.introduce.test.steps.CreateContainerStep;
-import gov.nih.nci.cagrid.introduce.test.steps.DeployServiceToContainerStep;
 import gov.nih.nci.cagrid.introduce.test.steps.InvokeSimpleMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.StartContainerStep;
-import gov.nih.nci.cagrid.introduce.test.steps.StopContainerStep;
 import gov.nih.nci.cagrid.introduce.test.steps.UnzipOldServiceStep;
 import gov.nih.nci.cagrid.introduce.test.steps.UpgradesStep;
-import gov.nih.nci.cagrid.testing.core.TestingConstants;
-import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DeployServiceStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 
 import java.io.File;
 import java.util.Vector;
@@ -31,21 +29,7 @@ import com.atomicobject.haste.framework.Story;
 public class Upgrade_1_0_Test extends Story {
     private TestCaseInfo tci1;
 
-
-    private static ServiceContainer container = null;
-    
-    static {
-        try {
-            PortPreference ports = new PortPreference(
-                Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + 1201), 
-                Integer.valueOf(TestingConstants.TEST_PORT_UPPER_BOUND.intValue() + 1201), null);
-            container = ServiceContainerFactory.createContainer(
-                ServiceContainerType.GLOBUS_CONTAINER, null, ports);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-    }
+    private ServiceContainer container;
 
 
     public Upgrade_1_0_Test() {
@@ -64,15 +48,23 @@ public class Upgrade_1_0_Test extends Story {
 
 
     protected Vector steps() {
+        // init the container
+        try {
+            container = ServiceContainerFactory.createContainer(
+                ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
         this.tci1 = new TestCaseInfo1();
         Vector<Step> steps = new Vector<Step>();
 
         try {
-            steps.add(new CreateContainerStep(container));
+            steps.add(new UnpackContainerStep(container));
             steps.add(new UnzipOldServiceStep("." + File.separator + "test" + File.separator + "resources"
                 + File.separator + "serviceVersions" + File.separator + "IntroduceTestService-1_0.zip", this.tci1));
             steps.add(new UpgradesStep(this.tci1, true));
-            steps.add(new DeployServiceToContainerStep(container, this.tci1));
+            steps.add(new DeployServiceStep(container, tci1.getDir()));
             steps.add(new StartContainerStep(container));
             steps.add(new InvokeSimpleMethodImplStep(container, this.tci1, "newMethod", false));
         } catch (Exception e) {
@@ -111,7 +103,7 @@ public class Upgrade_1_0_Test extends Story {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        CleanupContainerStep step3 = new CleanupContainerStep(container);
+        DestroyContainerStep step3 = new DestroyContainerStep(container);
         try {
             step3.runStep();
         } catch (Throwable e) {
