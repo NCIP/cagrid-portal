@@ -1,23 +1,23 @@
-
 <c:forEach var="row" items="${discoveryTabModel.rows}">
+<ul class="tabs">
 	<c:set var="numTabs" value="${fn:length(row)}"/>
-	<c:forEach var="tab" items="${row}" varStatus="status">
+	<c:forEach var="tab" items="${row}" varStatus="status">		
 		<c:choose>
 			<c:when test="${!tab.selected}">
+				<li>
 				<portlet:renderURL var="linkUrl">
 					<portlet:param name="selectedTabPath" value="${tab.path}"/>
 				</portlet:renderURL>
 				<a href="<c:out value="${linkUrl}"/>"><c:out value="${tab.label}"/></a>
+				</li>
 			</c:when>
 			<c:otherwise>
-				<b><c:out value="${tab.label}"/></b>
+				<li class="current">
+				<a href="#"><b><c:out value="${tab.label}"/></b></a>
+				</li>
 			</c:otherwise>
 		</c:choose>
-		<c:if test="${status.count < numTabs}">
-			&nbsp;|&nbsp;
-		</c:if>
 	</c:forEach>
-	<br/>
+</ul>	
 </c:forEach>
-<p/>
-Current Path: <c:out value="${discoveryTabModel.currentPath}"/>
+

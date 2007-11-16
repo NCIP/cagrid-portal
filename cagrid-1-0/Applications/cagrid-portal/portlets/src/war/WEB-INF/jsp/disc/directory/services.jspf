@@ -7,6 +7,7 @@
 				<th>Type</th>
 				<th>Status</th>
 				<th></th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -20,6 +21,15 @@
 						<c:set var="rowClass" value="dataRowLight"/>
 					</c:otherwise>
 				</c:choose>
+				
+				<c:choose>
+					<c:when test="${service.class.simpleName == 'GridDataService' && !empty service.domainModel}">
+						<c:set var="isData" value="${true}"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="isData" value="${false}"/>
+					</c:otherwise>
+				</c:choose>
 			
 			<tr class="<c:out value="${rowClass}"/>">
 				<td class="dataCellText">
@@ -27,7 +37,7 @@
 				</td>
 				<td class="dataCellText">
 					<c:choose>
-						<c:when test="${service.class.simpleName == 'GridDataService' && !empty service.domainModel}">
+						<c:when test="${isData}">
 							DATA
 						</c:when>
 						<c:otherwise>
@@ -40,6 +50,13 @@
 					<a alt="More Details..." href="<portlet:actionURL><portlet:param name="operation" value="selectService"/><portlet:param name="selectedId" value="${service.id}"/></portlet:actionURL>">
 						More Details...
 					</a>
+				</td>
+				<td>
+					<c:if test="${isData}">
+						<a alt="Query..." href="<portlet:actionURL><portlet:param name="operation" value="selectServiceForQuery"/><portlet:param name="selectedId" value="${service.id}"/></portlet:actionURL>">
+							Query...
+						</a>
+					</c:if>
 				</td>
 			</tr>
 			</c:forEach>

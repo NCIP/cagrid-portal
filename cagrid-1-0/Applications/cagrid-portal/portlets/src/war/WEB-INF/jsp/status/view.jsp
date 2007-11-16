@@ -1,8 +1,7 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
-
-<table>
+There are currently...<br/>
+<table cellpadding="3">
 <tr>
-	<td>Total Participants:<td>
 	<td>
 		<portlet:actionURL var="participantsAction">
 			<portlet:param name="operation" value="selectDirectoryForDiscovery"/>
@@ -12,9 +11,9 @@
 			<c:out value="${fn:length(statusBean.participantsDirectory.objects)}"/>
 		</a>
 	</td>
+	<td>caBIG Participants,</td>
 </tr>
 <tr>
-	<td>Total Services:</td>
 	<td>
 		<portlet:actionURL var="servicessAction">
 			<portlet:param name="operation" value="selectDirectoryForDiscovery"/>
@@ -24,9 +23,10 @@
 			<c:out value="${fn:length(statusBean.servicesDirectory.objects)}"/>
 		</a>
 	</td>
+	<td>grid services, which includes</td>
 </tr>
 <tr>
-	<td>Data Services:</td>
+	
 	<td>
 		<portlet:actionURL var="dataServicesAction">
 			<portlet:param name="operation" value="selectDirectoryForDiscovery"/>
@@ -36,9 +36,10 @@
 			<c:out value="${fn:length(statusBean.dataServicesDirectory.objects)}"/>
 		</a>
 	</td>
+	<td>data services, and</td>
 </tr>
 <tr>
-	<td>Analytical Services:</td>
+	
 	<td>
 		<portlet:actionURL var="analyticalServicesAction">
 			<portlet:param name="operation" value="selectDirectoryForDiscovery"/>
@@ -48,21 +49,22 @@
 			<c:out value="${fn:length(statusBean.analyticalServicesDirectory.objects)}"/>
 		</a>
 	</td>
+	<td>analytical services.</td>
 </tr>
 </table>
+
 <br/>
-<br/>
-Latest Services:
-<table>
+Here are the five newest services...
+<table cellpadding="10">
 	<thead>
 		<tr>
-			<th>Name</th><th>Type</th>
+			<th><b>Name</b></th><th><b>Type</b></th>
 		</tr>
 	</thead>
 	<tbody>
 		<c:forEach var="serviceInfo" items="${statusBean.latestServices}">
 			<tr>
-				<td>
+				<td style="padding: 1px 8px 1px 1px;">
 					<portlet:actionURL var="selectItemAction">
 						<portlet:param name="operation" value="selectItemForDiscovery"/>
 						<portlet:param name="selectedId" value="${serviceInfo.id}"/>

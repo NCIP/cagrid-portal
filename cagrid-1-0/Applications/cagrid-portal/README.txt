@@ -1,10 +1,22 @@
 ############
 # Contents #
 ############
-1. Installation
-2. Running
-3. Deploying Portlets
-4. Configure the site structure
+1. Requirements
+2. Installation
+3. Running
+4. Deploying Portlets
+5. Configure the site structure
+
+################
+# Requirements #
+################
+
+1. Java 1.5
+   - Make sure JAVA_HOME is set and Java SDK executable is on the PATH.
+2. Ant 1.6.5
+   - Make sure that ANT_HOME is set and Ant executable is on the PATH.
+3. MySQL 5+
+
 
 ################
 # Installation #
@@ -13,7 +25,7 @@
 1. Get a Google Maps API key: http://www.google.com/apis/maps/signup.html
    - If your host's name is my.host.com, then the URL you should use is:
     	http://my.host.com:8080
-   - Edit portlets/src/war/WEB-INF/context/gmap-portlet.xml
+   - Edit portlets/src/war/WEB-INF/context/common.xml
       - In the "mapBean" bean definition, set the "apiKey" property to the key that you obtained.
 
 2. Synchronize with NCICB production trust fabric
@@ -44,6 +56,7 @@
 7. Run: ant aggr:load-workspaces
    - NOTE: you'll see lots of warnings and error messages. Unless you see a stacktrace,
            it worked.
+           
 
 8. Configure the following properties in build-liferay.xml
  - liferay.db.username

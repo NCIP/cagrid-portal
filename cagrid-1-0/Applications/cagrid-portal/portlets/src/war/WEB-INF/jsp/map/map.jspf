@@ -20,7 +20,8 @@
 
 <script type="text/javascript">
     //<![CDATA[
-
+jQuery(document).ready(function() {
+	
 	var baseIcon = new GIcon();
 	baseIcon.iconSize = new GSize(32, 32);
 	baseIcon.shadowSize = new GSize(59, 32);
@@ -39,7 +40,7 @@
     manIcon.image = "<c:url value="/images/man.png"/>";
 	manIcon.shadow = "<c:url value="/images/man.shadow.png"/>";
 	
-    function load() {
+
       if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById("<c:out value="${mapNodeId}"/>"));
         map.setCenter(
@@ -136,7 +137,6 @@
         </c:if>
             
       }
-    }
-	load();
+});
     //]]>
 </script>

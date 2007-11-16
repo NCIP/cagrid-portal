@@ -134,6 +134,27 @@
 	</bean>
 	
 	<bean 
+		id="selectServiceForQueryController"
+		class="gov.nih.nci.cagrid.portal2.portlet.discovery.details.SelectServiceForQueryController"
+		autowire="byName">
+		<property name="commandName" value="selectServiceForQuery"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.discovery.details.SelectDetailsCommand"/>
+		<property name="interPortletMessageSender">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
+				<property name="modePreferenceName" value="dataServiceSelectMode" />
+				<property name="outputQueuePreferenceName" value="selectedDataServiceOutputQueueName" />
+				<property name="outputQueueNameDefaultValue" value="selectedDataService" />
+			</bean>
+		</property>
+		<property name="actionResponseHandler">
+			<bean class="gov.nih.nci.cagrid.portal2.portlet.tab.TabActionResponseHandler">
+				<property name="tabControlConfig" ref="discoveryTabControlConfig"/>
+				<property name="newTabPath" value="/directory/listView"/>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean 
 		id="selectParticipantController"
 		class="gov.nih.nci.cagrid.portal2.portlet.discovery.details.SelectParticipantController"
 		autowire="byName">
@@ -249,6 +270,7 @@
 							
 						<entry key="selectService" 
 							value-ref="selectServiceController" />
+						<entry key="selectServiceForQuery" value-ref="selectServiceForQueryController" />
 							
 						<entry key="selectParticipant" 
 							value-ref="selectParticipantController" />

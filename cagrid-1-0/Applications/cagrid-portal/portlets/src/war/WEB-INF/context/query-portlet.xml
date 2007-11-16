@@ -342,6 +342,7 @@
 	
 	<property name="selectedPathHandlers">
 			<list>
+			
 				<bean class="gov.nih.nci.cagrid.portal2.portlet.query.SelectUmlClassPathHandler" autowire="byName">
 					<property name="interPortletMessageReceiver">
 						<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
@@ -351,6 +352,17 @@
 						</bean>
 					</property>
 					<property name="umlClassSelectedTabPath" value="/query/builder/cqlQuery"/>
+				</bean>
+				
+				<bean class="gov.nih.nci.cagrid.portal2.portlet.query.SelectDataServicePathHandler" autowire="byName">
+					<property name="interPortletMessageReceiver">
+						<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
+							<property name="modePreferenceName" value="dataServiceSelectMode" />
+							<property name="inputQueuePreferenceName" value="selectedDataServiceInputQueueName" />
+							<property name="inputQueueNameDefaultValue" value="selectedDataServiceId" />
+						</bean>
+					</property>
+					<property name="dataServiceSelectedTabPath" value="/model"/>
 				</bean>
 			</list>
 		</property>

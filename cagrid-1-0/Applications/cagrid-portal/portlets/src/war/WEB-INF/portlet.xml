@@ -8,9 +8,9 @@
 	                             
 	
 	<portlet>
-		<description>caGrid Login Portlet</description>
+		<description>Login</description>
 		<portlet-name>cagridauthn</portlet-name>
-		<display-name>caGrid Login Portlet</display-name>
+		<display-name>Login</display-name>
 		<portlet-class>
 			org.springframework.web.portlet.DispatcherPortlet
 		</portlet-class>
@@ -23,8 +23,8 @@
 			<portlet-mode>view</portlet-mode>
 		</supports>
 		<portlet-info>
-			<title>caGrid Login Portlet</title>
-			<short-title>caGrid Login Portlet</short-title>
+			<title>Login</title>
+			<short-title>Login</short-title>
 			<keywords>cagrid,authn</keywords>
 		</portlet-info>
 		<portlet-preferences>
@@ -44,9 +44,9 @@
 	</portlet>
 	
 	<portlet>
-		<description>caGrid Registration Portlet</description>
+		<description>Register</description>
 		<portlet-name>cagridregistration</portlet-name>
-		<display-name>caGrid Registration Portlet</display-name>
+		<display-name>Register</display-name>
 		<portlet-class>
 			org.springframework.web.portlet.DispatcherPortlet
 		</portlet-class>
@@ -59,15 +59,15 @@
 			<portlet-mode>view</portlet-mode>
 		</supports>
 		<portlet-info>
-			<title>caGrid Registration Portlet</title>
-			<short-title>caGrid Registration Portlet</short-title>
+			<title>Registration</title>
+			<short-title>Registration</short-title>
 			<keywords>cagrid,registration</keywords>
 		</portlet-info>
 		
 	</portlet>
 	
 	<portlet>
-		<description>caGrid News Summary Portlet</description>
+		<description>News Summary</description>
 		<portlet-name>cagridnewssummary</portlet-name>
 		<display-name>caGrid News Summary Portlet</display-name>
 		<portlet-class>
@@ -82,8 +82,8 @@
 			<portlet-mode>view</portlet-mode>
 		</supports>
 		<portlet-info>
-			<title>caGrid News Summary Portlet</title>
-			<short-title>caGrid News Summary Portlet</short-title>
+			<title>News</title>
+			<short-title>News</short-title>
 			<keywords>cagrid,news</keywords>
 		</portlet-info>
 		
@@ -109,9 +109,9 @@
 	</portlet>
 	                 
 	<portlet>
-		<description>caGrid News Portlet</description>
+		<description>News</description>
 		<portlet-name>cagridnews</portlet-name>
-		<display-name>caGrid News Portlet</display-name>
+		<display-name>News</display-name>
 		<portlet-class>
 			org.springframework.web.portlet.DispatcherPortlet
 		</portlet-class>
@@ -125,8 +125,8 @@
 			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<portlet-info>
-			<title>caGrid News Portlet</title>
-			<short-title>caGrid News Portlet</short-title>
+			<title>News</title>
+			<short-title>News</short-title>
 			<keywords>cagrid,news</keywords>
 		</portlet-info>
 		
@@ -144,9 +144,9 @@
 	</portlet>
 	                             
 	<portlet>
-		<description>caGrid Status Portlet</description>
+		<description>caGrid Status</description>
 		<portlet-name>cagridstatus</portlet-name>
-		<display-name>caGrid Status Portlet</display-name>
+		<display-name>caGrid Status</display-name>
 		<portlet-class>
 			org.springframework.web.portlet.DispatcherPortlet
 		</portlet-class>
@@ -159,8 +159,8 @@
 			<portlet-mode>view</portlet-mode>
 		</supports>
 		<portlet-info>
-			<title>caGrid Status Portlet</title>
-			<short-title>caGrid Status Portlet</short-title>
+			<title>caGrid Status</title>
+			<short-title>caGrid Status</short-title>
 			<keywords>cagrid,status</keywords>
 		</portlet-info>
 
@@ -245,9 +245,9 @@
 	</portlet>
 
 	<portlet>
-		<description>caGrid Discovery Portlet</description>
+		<description>Discovery</description>
 		<portlet-name>cagriddiscovery</portlet-name>
-		<display-name>caGrid Discovery Portlet</display-name>
+		<display-name>Discovery</display-name>
 		<portlet-class>
 			org.springframework.web.portlet.DispatcherPortlet
 		</portlet-class>
@@ -260,8 +260,8 @@
 			<portlet-mode>view</portlet-mode>
 		</supports>
 		<portlet-info>
-			<title>caGrid Discovery Portlet</title>
-			<short-title>caGrid Discovery Portlet</short-title>
+			<title>Discovery</title>
+			<short-title>Discovery</short-title>
 			<keywords>cagrid,discovery</keywords>
 		</portlet-info>
 		
@@ -298,14 +298,27 @@
                 <value>query:selectedUmlClassId</value>
             </preference>
             
+            <preference>
+                <name>dataServiceSelectMode</name> 
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedDataServiceOutputQueueName</name> 
+                <value>disc:selectedDataServiceId</value>
+            </preference>
+            <preference>
+                <name>disc:selectedDataServiceId</name>
+                <value>query:selectedDataServiceId</value>
+            </preference>
+            
         </portlet-preferences>
 		
 	</portlet>
 	
 	<portlet>
-		<description>caGrid Query Portlet</description>
+		<description>Data Service Query</description>
 		<portlet-name>cagridquery</portlet-name>
-		<display-name>caGrid Query Portlet</display-name>
+		<display-name>Data Service Query</display-name>
 		<portlet-class>
 			org.springframework.web.portlet.DispatcherPortlet
 		</portlet-class>
@@ -318,12 +331,13 @@
 			<portlet-mode>view</portlet-mode>
 		</supports>
 		<portlet-info>
-			<title>caGrid Query Portlet</title>
-			<short-title>caGrid Query Portlet</short-title>
+			<title>Data Service Query</title>
+			<short-title>Data Service Query</short-title>
 			<keywords>cagrid,query</keywords>
 		</portlet-info>
 		
 		<portlet-preferences>
+		
 			<preference>
                 <name>umlClassSelectMode</name> 
                 <value>INTERPORTLET</value>
@@ -332,6 +346,16 @@
                 <name>selectedUmlClassInputQueueName</name> 
                 <value>query:selectedUmlClassId</value>
             </preference>
+            
+            <preference>
+                <name>dataServiceSelectMode</name> 
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedDataServiceInputQueueName</name> 
+                <value>query:selectedDataServiceId</value>
+            </preference>
+            
         </portlet-preferences>
 	</portlet>
 
@@ -363,67 +387,5 @@
 			</preference>
 		</portlet-preferences>
 	</portlet>
-<!-- 
-	<portlet>
-		<description>
-			Content describing what is new in caGrid Portal
-		</description>
-		<portlet-name>WhatsNew</portlet-name>
-		<display-name>What's New</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/content-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-			<portlet-mode>edit</portlet-mode>
-			<portlet-mode>help</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>What's New</title>
-			<short-title>What's New</short-title>
-			<keywords>new</keywords>
-		</portlet-info>
-		<portlet-preferences>
-			<preference>
-				<name>jsp</name>
-				<value>whatsNew</value>
-			</preference>
-		</portlet-preferences>
-	</portlet>
 
-	<portlet>
-		<description>Did You Know</description>
-		<portlet-name>DidYouKnow</portlet-name>
-		<display-name>Did You Know</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/content-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-			<portlet-mode>edit</portlet-mode>
-			<portlet-mode>help</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>Did You Know</title>
-			<short-title>Did You Know</short-title>
-			<keywords>new</keywords>
-		</portlet-info>
-		<portlet-preferences>
-			<preference>
-				<name>jsp</name>
-				<value>didYouKnow</value>
-			</preference>
-		</portlet-preferences>
-	</portlet>
-	 -->
 </portlet-app>

@@ -82,7 +82,6 @@
 		<include name="wsrf_core_stubs.jar" />
 		<include name="wsrf_core.jar" />
 		<include name="wss4j.jar" />
-
 	</patternset>
 
 	<patternset id="cagrid.jars">

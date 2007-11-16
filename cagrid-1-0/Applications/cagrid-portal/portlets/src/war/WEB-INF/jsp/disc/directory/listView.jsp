@@ -11,13 +11,15 @@
 
 <table>
 <tr>
-<td>
+<td style="padding-right: 5px;">
+<b>Directories:</b>
 <form:form action="${action}" commandName="listCommand">
 <%@ include file="/WEB-INF/jsp/disc/directory/directoriesSelect.jspf" %>
 	<input type="hidden" name="operation" value="selectDirectoryList"/>
 </form:form>
 </td>
-<td>
+<td style="padding-right: 5px;">
+<b>Search Results:</b>
 <form:form action="${action}" commandName="listCommand">
 <%@ include file="/WEB-INF/jsp/disc/directory/searchResultsSelect.jspf" %>
 	<input type="hidden" name="operation" value="selectResultsList"/>
@@ -28,10 +30,12 @@
 
 <c:choose>
 	<c:when test="${empty listCommand}">
-		Select a directory.
+		<p>
+		Select an item from either the <i>Directories</i> or <i>Search Resutls</i> drop-down lists, above.
+		</p>
 	</c:when>
 	<c:when test="${fn:length(listCommand.scroller.page) == 0}">
-		This directory is empty.
+		There are no items to display. Perform new search or select a different directory, above.
 	</c:when>
 	<c:otherwise>
 	

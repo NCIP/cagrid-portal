@@ -4,17 +4,13 @@
 		<portlet:actionURL var="loginActionUrl">
 			<portlet:param name="operation" value="login"/>
 		</portlet:actionURL>
-		<a href="<c:out value="${loginActionUrl}"/>">Login</a>&nbsp;|&nbsp;
-		<a href="<c:out value="${registerUrl}"/>">Register</a><br/>
-		<h2>Why Register?</h2>
-		<p>
-			If you register, you'll be able to interact with secure
-			caGrid services.
-		</p>
+		<a href="<c:out value="${loginActionUrl}"/>" style="text-decoration:none"><b>Login</b></a>&nbsp;|&nbsp;
+		<a href="<c:out value="${registerUrl}"/>" style="text-decoration:none"><b>Register</b></a>&nbsp;
+		<a href="<c:out value="${registerUrl}"/>" style="text-decoration:none">Why Register?</a>
+
 	</c:when>
 	<c:otherwise>
-		Welcome, <c:out value="${portalUser.person.firstName}"/> <c:out value="${portalUser.person.lastName}"/><br/>
-		<br/>
+		<b>You are logged in as <c:out value="${portalUser.person.firstName}"/> <c:out value="${portalUser.person.lastName}"/></b><br/>
 		<portlet:actionURL var="logoutActionUrl">
 			<portlet:param name="operation" value="logout"/>
 		</portlet:actionURL>
