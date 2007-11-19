@@ -291,10 +291,11 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 					.getIssuedCredentialLifetime(), c
 					.getIssuedCredentialPathLength(),
 					ClientConstants.DEFAULT_KEY_SIZE);
+			dispose();
 			GridApplication.getContext().showMessage(
 					"Succesfully delegated the credential for "
 							+ c.getCredential().getIdentity() + ".");
-			dispose();
+			
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
