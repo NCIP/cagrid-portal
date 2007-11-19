@@ -52,7 +52,7 @@ public class WindowMenu extends JMenu {
 		});
 
 		prefs = new javax.swing.JMenuItem();
-		prefs.setText("Preferences...");
+		prefs.setText("Preferences");
 		prefs.setIcon(LookAndFeel.getPreferencesIcon());
 		prefs.setMnemonic(java.awt.event.KeyEvent.VK_Q);
 		prefs.addActionListener(new java.awt.event.ActionListener() {

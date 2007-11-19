@@ -4,11 +4,11 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
-import java.beans.PropertyVetoException;
 
 import javax.swing.DefaultDesktopManager;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
+import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -65,6 +65,26 @@ public class MDIDesktopPane extends JDesktopPane {
         return retval;
 
     }
+    
+    public void show(JDialog dialog, Dimensions dim, RenderOptions options) {
+        JInternalFrame[] array = getAllFrames();
+        Point p;
+        checkDesktopSize();
+        if (array.length > 0) {
+            p = array[0].getLocation();
+            p.x = p.x + FRAME_OFFSET;
+            p.y = p.y + FRAME_OFFSET;
+        } else {
+            p = new Point(0, 0);
+        }
+        dialog.setLocation(p.x, p.y);
+        if (dim != null) {
+            dialog.setSize(dim.getWidth(), dim.getHeight());
+        }
+        setRenderOptions(dialog, options);
+        dialog.setVisible(true);
+
+    }
 
 
     private void setRenderOptions(JInternalFrame frame, RenderOptions options) {
@@ -81,6 +101,28 @@ public class MDIDesktopPane extends JDesktopPane {
             if (options.isMaximized()) {
                 try {
                     frame.setMaximum(true);
+                } catch (Exception e) {
+
+                }
+            }
+        }
+
+    }
+    
+    private void setRenderOptions(JDialog dialog, RenderOptions options) {
+        if (options != null) {
+            if (options.isCentered()) {
+                // Determine the new location of the window
+                int w = this.getSize().width;
+                int h = this.getSize().height;
+                int x = this.getLocationOnScreen().x;
+                int y = this.getLocationOnScreen().y;
+                Dimension dim = dialog.getSize();
+                dialog.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
+            }
+            if (options.isMaximized()) {
+                try {
+                    dialog.setSize(this.getSize());
                 } catch (Exception e) {
 
                 }

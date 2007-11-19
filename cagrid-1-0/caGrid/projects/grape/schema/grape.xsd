@@ -16,6 +16,8 @@
 				type="xsd:string" />
 			<xsd:element name="showOnToolBar" minOccurs="1"
 				maxOccurs="1" type="xsd:boolean" />
+			<xsd:element name="mnemonic" minOccurs="0"
+				maxOccurs="1" type="xsd:int" />
 			<xsd:element name="dimensions" minOccurs="0" maxOccurs="1"
 				type="grape:dimensions" />
 			<xsd:element name="renderOptions" minOccurs="0"

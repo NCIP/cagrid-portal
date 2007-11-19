@@ -12,9 +12,11 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -234,7 +236,9 @@ public class GridApplication extends JFrame {
         if (showIcon) {
             item.setIcon(IconUtils.loadIcon(comp.getIcon()));
         }
-        item.setMnemonic(java.awt.event.KeyEvent.VK_Q);
+        if (comp.getMnemonic() != null) {
+            item.setMnemonic(comp.getMnemonic());
+        }
         item.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 executeComponent(comp);
@@ -250,7 +254,6 @@ public class GridApplication extends JFrame {
         button.setText(comp.getTitle());
         button.setToolTipText(comp.getDescription());
         button.setIcon(IconUtils.loadIcon(comp.getIcon()));
-        button.setMnemonic(java.awt.event.KeyEvent.VK_Q);
         button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 executeComponent(comp);
@@ -278,21 +281,70 @@ public class GridApplication extends JFrame {
     private javax.swing.JMenuBar getJJMenuBar(List toolbarComponents) throws Exception {
         if (jJMenuBar == null) {
             jJMenuBar = new javax.swing.JMenuBar();
-            jJMenuBar.add(getFileMenu());
 
+            Menu fileMenu = null;
+            Menu helpMenu = null;
             Menus menus = app.getMenus();
+
             if (menus != null) {
                 Menu[] menu = menus.getMenu();
                 if (menu != null) {
                     for (int i = 0; i < menu.length; i++) {
-                        jJMenuBar.add(getMenu(toolbarComponents, null, menu[i]));
+                        if (menu[i].getTitle().equals("Help")) {
+                            helpMenu = menu[i];
+                        }
+                        if (menu[i].getTitle().equals("File")) {
+                            fileMenu = menu[i];
+                        }
+                    }
+                }
+            }
+
+            jJMenuBar.add(getFileMenu(toolbarComponents, fileMenu));
+
+            if (menus != null) {
+                Menu[] menu = menus.getMenu();
+                if (menu != null) {
+                    for (int i = 0; i < menu.length; i++) {
+                        if (!menu[i].getTitle().equals("Help") && !menu[i].getTitle().equals("File"))
+                            jJMenuBar.add(getMenu(toolbarComponents, null, menu[i]));
                     }
                 }
             }
             jJMenuBar.add(getWindowsMenu());
-            jJMenuBar.add(getHelpMenu());
+            jJMenuBar.add(getHelpMenu(toolbarComponents, helpMenu));
         }
         return jJMenuBar;
+    }
+
+
+    private javax.swing.JMenu addToMenu(List toolbarComponents, JMenu parent, Menu menu) {
+        javax.swing.JMenu jmenu = parent;
+
+        Submenus submenus = menu.getSubmenus();
+        if (submenus != null) {
+            Menu[] submenu = submenus.getMenu();
+            if (submenu != null) {
+                for (int i = 0; i < submenu.length; i++) {
+                    jmenu.add(getMenu(toolbarComponents, menu, submenu[i]));
+                }
+            }
+        }
+
+        Components comps = menu.getComponents();
+        if (comps != null) {
+            Component[] comp = comps.getComponent();
+            if (comp != null) {
+                for (int i = 0; i < comp.length; i++) {
+                    jmenu.add(getComponentItem(comp[i], menu.getShowIcons().booleanValue()));
+                    if (comp[i].isShowOnToolBar()) {
+                        toolbarComponents.add(comp[i]);
+                    }
+                }
+            }
+        }
+
+        return jmenu;
     }
 
 
@@ -302,7 +354,6 @@ public class GridApplication extends JFrame {
         if ((parent != null) && (parent.getShowIcons().booleanValue())) {
             jmenu.setIcon(IconUtils.loadIcon(menu.getIcon()));
         }
-        jmenu.setMnemonic(java.awt.event.KeyEvent.VK_F);
 
         Submenus submenus = menu.getSubmenus();
         if (submenus != null) {
@@ -349,15 +400,20 @@ public class GridApplication extends JFrame {
      * 
      * @return javax.swing.JMenu
      */
-    private javax.swing.JMenu getFileMenu() {
+    private javax.swing.JMenu getFileMenu(List toolbarComponents, Menu menu) {
         if (fileMenu == null) {
             fileMenu = new javax.swing.JMenu();
+            if (menu != null) {
+                addToMenu(toolbarComponents, fileMenu, menu);
+            }
+            fileMenu.addSeparator();
             fileMenu.add(getCloseMenuItem());
             fileMenu.add(getCloseAllMenuItem());
             fileMenu.addSeparator();
             fileMenu.setText("File");
             fileMenu.setMnemonic(java.awt.event.KeyEvent.VK_F);
             fileMenu.add(getExitMenuItem());
+            
         }
         return fileMenu;
     }
@@ -391,9 +447,13 @@ public class GridApplication extends JFrame {
     }
 
 
-    private javax.swing.JMenu getHelpMenu() {
+    private javax.swing.JMenu getHelpMenu(List toolbarComponents, Menu menu) {
         if (helpMenu == null) {
             helpMenu = new javax.swing.JMenu();
+            if (menu != null) {
+                addToMenu(toolbarComponents, helpMenu, menu);
+            }
+            fileMenu.addSeparator();
             helpMenu.add(getJMenuItem());
             helpMenu.setText("Help");
             helpMenu.setMnemonic(java.awt.event.KeyEvent.VK_H);
@@ -552,13 +612,25 @@ public class GridApplication extends JFrame {
 
         public void execute() {
             try {
-                ApplicationComponent comp = (ApplicationComponent) Class.forName(component.getClassname())
-                    .newInstance();
-                comp.setTitle(this.component.getTitle());
-                if (this.component.getIcon() != null) {
-                    comp.setFrameIcon(IconUtils.loadIcon(this.component.getIcon()));
+                Object obj = Class.forName(component.getClassname()).newInstance();
+                if (obj instanceof ApplicationComponent) {
+                    ApplicationComponent comp = (ApplicationComponent) obj;
+                    comp.setTitle(this.component.getTitle());
+                    if (this.component.getIcon() != null) {
+                        comp.setFrameIcon(IconUtils.loadIcon(this.component.getIcon()));
+                    }
+                    app.addApplicationComponent(comp, component.getDimensions(), component.getRenderOptions());
+                } else if (obj instanceof JInternalFrame) {
+                    JInternalFrame comp = (JInternalFrame) obj;
+                    comp.setTitle(this.component.getTitle());
+                    if (this.component.getIcon() != null) {
+                        comp.setFrameIcon(IconUtils.loadIcon(this.component.getIcon()));
+                    }
+                    app.getMDIDesktopPane().add(comp, component.getDimensions(), component.getRenderOptions());
+                } else if (obj instanceof JDialog) {
+                    JDialog comp = (JDialog) obj;
+                    app.getMDIDesktopPane().show(comp, component.getDimensions(), component.getRenderOptions());
                 }
-                app.addApplicationComponent(comp, component.getDimensions(), component.getRenderOptions());
             } catch (Exception e) {
                 e.printStackTrace();
             }
