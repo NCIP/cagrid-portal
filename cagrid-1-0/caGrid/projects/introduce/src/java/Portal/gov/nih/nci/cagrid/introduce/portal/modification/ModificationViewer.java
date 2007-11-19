@@ -258,16 +258,17 @@ public class ModificationViewer extends ApplicationComponent {
     private static final String SERVICE_PROPERTY_DESCRIPTION = "Service property description";
 
 
-    /**
-     * This is the default constructor
-     */
-    public ModificationViewer() {
+    public ModificationViewer(File methodsDirectory, BusyDialogRunnable br) {
         super();
         this.extensionPanels = new ArrayList();
-        // throw a thread out so that i can make sure that if the chooser is
-        // canceled i can dispose of this frame
-        Thread th = createChooserThread();
-        th.start();
+        this.methodsDirectory = methodsDirectory;
+        try {
+            initialize(br);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -277,77 +278,27 @@ public class ModificationViewer extends ApplicationComponent {
         this.methodsDirectory = methodsDirectory;
         try {
 
-            initialize(null);
+            BusyDialogRunnable br = new BusyDialogRunnable((JFrame) GridApplication.getContext().getApplication(),
+                "Modification Viewer Initializing") {
+
+                @Override
+                public void process() {
+                    try {
+                        initialize(this);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+
+            };
+            Thread th = new Thread(br);
+            th.start();
+            th.join();
 
         } catch (Exception e) {
             // should never get here but in case.....
             e.printStackTrace();
-        }
-    }
-
-
-    private Thread createChooserThread() {
-        Thread th = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    chooseService();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (ModificationViewer.this.methodsDirectory == null) {
-                    ModificationViewer.this.dispose();
-                    return;
-                }
-                File file = new File(ModificationViewer.this.methodsDirectory.getAbsolutePath() + File.separator
-                    + IntroduceConstants.INTRODUCE_XML_FILE);
-                if (file.exists() && file.canRead()) {
-                    try {
-
-                        BusyDialogRunnable br = new BusyDialogRunnable(GridApplication.getContext().getApplication(),
-                            "Initializing Modification Viewer") {
-                            @Override
-                            public void process() {
-                                this.setProgressText("Initializing Modification Viewer");
-                                try {
-                                    initialize(this);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            };
-                        };
-
-                        Thread dialogThread = new Thread(br);
-                        dialogThread.start();
-                        dialogThread.join();
-
-                        if (!ModificationViewer.this.beenDisposed) {
-                            ModificationViewer.this.pack();
-                            ModificationViewer.this.setMaximum(true);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        ErrorDialog.showError(e);
-                        if (ModificationViewer.this != null) {
-                            ModificationViewer.this.dispose();
-                        }
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(GridApplication.getContext().getApplication(), "Directory "
-                        + ModificationViewer.this.methodsDirectory.getAbsolutePath()
-                        + " does not seem to be an introduce service");
-                    ModificationViewer.this.dispose();
-                }
-            }
-        };
-        return th;
-    }
-
-
-    private void chooseService() throws Exception {
-        String dir = ResourceManager.promptDir(null);
-        if (dir != null) {
-            this.methodsDirectory = new File(dir);
         }
     }
 
@@ -474,7 +425,6 @@ public class ModificationViewer extends ApplicationComponent {
 
                 initServicePropertyValidation();
 
-                
             }
 
         }

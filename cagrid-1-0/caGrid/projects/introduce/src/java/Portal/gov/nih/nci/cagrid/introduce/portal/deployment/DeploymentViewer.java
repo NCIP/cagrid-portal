@@ -91,55 +91,18 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
     /**
      * This method initializes
      */
-    public DeploymentViewer() {
+    public DeploymentViewer(File serviceDirectory) {
         super();
-        promptAndInitialize();
-    }
-
-
-    private void promptAndInitialize() {
-        Callable chooserCallable = new Callable() {
-            public File call() throws Exception {
-                String dir = ResourceManager.promptDir(null);
-                if (dir != null) {
-                    return new File(dir);
-                }
-                return null;
-            }
-        };
-        FutureTask<File> choiceTask = new FutureTask(chooserCallable);
-        ExecutorService exec = Executors.newSingleThreadExecutor();
-        exec.submit(choiceTask);
-
+        this.serviceDirectory = serviceDirectory;
         try {
-            serviceDirectory = choiceTask.get();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog("Error selecting service directory", ex.getMessage(), ex);
-        }
-
-        if (serviceDirectory == null) {
-            DeploymentViewer.this.dispose();
-            return;
-        }
-        if (serviceDirectory.exists() && serviceDirectory.canRead()) {
-            // init must be done on the Swing worker thread
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    try {
-                        initialize();
-                    } catch (Exception e) {
-                        CompositeErrorDialog.showErrorDialog("Error initializing the deployment: " + e.getMessage(), e);
-                        DeploymentViewer.this.dispose();
-                    }
-                }
-            });
-        } else {
-            CompositeErrorDialog.showErrorDialog("Error deleting directory", "Directory " + serviceDirectory.getAbsolutePath()
-                + " does not seem to be an introduce service");
-            DeploymentViewer.this.dispose();
+            initialize();
+        } catch (Exception e) {
+            e.printStackTrace();
+            this.dispose();
         }
     }
+
+
 
 
     /**
@@ -173,10 +136,8 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
         }
 
         this.setFrameIcon(IntroduceLookAndFeel.getDeployIcon());
-        this.setSize(new Dimension(301, 365));
         this.setContentPane(getHolderPanel());
         this.setTitle("Deploy Grid Service");
-        pack();
     }
 
 

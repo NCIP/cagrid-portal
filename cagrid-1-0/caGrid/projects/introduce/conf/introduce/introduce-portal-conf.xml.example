@@ -7,14 +7,14 @@
     <ApplicationLogo>/caGrid.gif</ApplicationLogo>
     <AboutHTML><![CDATA[<html><center><h2>Introduce: Grid Service Authoring Toolkit</h2></center><center><h3>Version 1.1</h3></center><br><center><h3>This software is produced by<br>The Ohio State University<br>Department of Biomedicalinformatics (http://bmi.osu.edu)</h3></center><br><center><h3><a href="http://www.cagrid.org/mwiki/index.php?title=Introduce">http://www.cagrid.org/mwiki/index.php?title=Introduce</a></h3></center><br><h3>Authors:</h3><br><a href="mailto:hastings@bmi.osu.edu">Shannon Hastings</a><br><a href="mailto:langella@bmi.osu.edu">Stephen Langella</a><br> <a href="mailto:oster@bmi.osu.edu">Scott Oster</a><br><a href="mailto:ervin@bmi.osu.edu">David Ervin</a>]]></AboutHTML>
     <dimensions>
-        <width>1280</width>
-        <height>1024</height>
+        <width>1200</width>
+        <height>900</height>
     </dimensions>
     <initializerClass>gov.nih.nci.cagrid.introduce.portal.init.IntroducePortalInitializer</initializerClass>
     <menus>
-        <menu>
-            <title>Service Development Tools</title>
-            <description>Service Development Tools</description>
+           <menu>
+            <title>File</title>
+            <description>File</description>
             <showIcons>true</showIcons>
             <components>
                 <component>
@@ -39,7 +39,7 @@
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                     	<width>600</width>
-                    	<height>300</height>
+                    	<height>500</height>
                     </dimensions>
                     <renderOptions>
                     	<centered>true</centered>
@@ -48,28 +48,23 @@
                 <component>
                     <title>Modify Service</title>
                     <description>Modify Grid Service</description>
-                    <classname>gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer</classname>
-                    <icon>/cog_edit.png</icon>
+                    <classname>gov.nih.nci.cagrid.introduce.portal.modification.ModificationLauncher</classname>
+                    <icon>/modify.png</icon>
                     <showOnToolBar>true</showOnToolBar>
-                    <dimensions>
-                    	<width>500</width>
-                    	<height>100</height>
-                    </dimensions>
-                    <renderOptions>
-                    	<centered>true</centered>
-                    	<maximized>true</maximized>
-                    </renderOptions>
                 </component>
+             </components>
+        </menu>
+        <menu>
+            <title>Tools</title>
+            <description>Tools</description>
+            <showIcons>true</showIcons>
+            <components>
                    <component>
                     <title>Deploy Service</title>
                     <description>Deploy Service</description>
-                    <classname>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer</classname>
-                    <icon>/cog_go.png</icon>
+                    <classname>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentLauncher</classname>
+                    <icon>/deploy.png</icon>
                     <showOnToolBar>true</showOnToolBar>
-                    <dimensions>
-                        <width>500</width>
-                        <height>325</height>
-                    </dimensions>
                 </component>
                  <component>
                     <title>Browse Data Types</title>
@@ -78,9 +73,69 @@
                     <icon>/models.png</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
-                        <width>550</width>
-                        <height>400</height>
+                        <width>800</width>
+                        <height>600</height>
                     </dimensions>
+                    <renderOptions>
+                    	<centered>true</centered>
+                    </renderOptions>
+                </component>
+            </components>
+        </menu>
+        <menu>
+            <title>Configure</title>
+            <description>Configure</description>
+            <showIcons>true</showIcons>
+            <components>
+                <component>
+                    <title>Configure Introduce</title>
+                    <description>ConfigureIntroduce</description>
+                    <classname>gov.nih.nci.cagrid.introduce.portal.preferences.PreferencesDialog</classname>
+                    <icon>/configure.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                    	<width>600</width>
+                    	<height>400</height>
+                    </dimensions>
+                    <renderOptions>
+                    	<centered>true</centered>
+                    </renderOptions>
+                </component>
+            </components>
+        </menu>
+        <menu>
+            <title>Help</title>
+            <description>Help</description>
+            <showIcons>true</showIcons>
+            <components>
+                <component>
+                    <title>Introduce Help</title>
+                    <description>Introduce Help</description>
+                    <classname>gov.nih.nci.cagrid.introduce.portal.help.IntroduceHelp</classname>
+                    <icon>/help-browser.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+    				<mnemonic>112</mnemonic>
+                    <dimensions>
+                    	<width>800</width>
+                    	<height>600</height>
+                    </dimensions>
+                    <renderOptions>
+                    	<centered>true</centered>
+                    </renderOptions>
+            </component>
+                <component>
+                    <title>Introduce Software Update</title>
+                    <description>Introduce Software Update</description>
+                    <classname>gov.nih.nci.cagrid.introduce.portal.updater.IntroduceUpdateWizard</classname>
+                    <icon>/system-software-update.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                    	<width>400</width>
+                    	<height>500</height>
+                    </dimensions>
+                    <renderOptions>
+                    	<centered>true</centered>
+                    </renderOptions>
                 </component>
             </components>
         </menu>

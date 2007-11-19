@@ -71,7 +71,7 @@
 	<classpathentry kind="lib" path="ext/lib/GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="lib/jhall.jar"/>
+	<classpathentry kind="lib" path="lib/jhall.jar" sourcepath="E:/zips/javahelp-2_0_04/jh2.0/src.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="test/lib/example.jar"/>
@@ -87,7 +87,7 @@
 	<classpathentry kind="lib" path="lib/xsom14.jar"/>
 	<classpathentry kind="lib" path="ext/lib/grouper.jar"/>
 	<classpathentry kind="lib" path="ext/lib/subject-0.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/wizard-0.1.12.jar"/>
+	<classpathentry kind="lib" path="lib/wizard-0.1.12.jar" sourcepath="C:/Users/hastings/Desktop/wizard-0.1.12-src.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/boot.jar"/>
 	<classpathentry kind="lib" path="ext/lib/codegen.jar"/>

@@ -43,8 +43,8 @@ public class PreferencesDialog extends JDialog {
 	/**
 	 * This method initializes
 	 */
-	public PreferencesDialog(Frame owner) {
-		super(owner);
+	public PreferencesDialog() {
+		super(GridApplication.getContext().getApplication());
 		initialize();
 	}
 

@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.model.RenderOptions;
 import org.cagrid.grape.utils.BusyDialogRunnable;
 /**implementation is porvided, however, to create
  * specific look-feel or additions one should extend this panel and add this
@@ -199,8 +200,9 @@ public abstract class CreationViewerBaseComponent extends ApplicationComponent {
 							info.createArchive();
 							setProgressText("launching modification viewer");
 							ModificationViewer modViewer = new ModificationViewer(
-									new File(dirName));
-							GridApplication.getContext().getApplication().addApplicationComponent(modViewer);
+									new File(dirName),this);
+							RenderOptions ro = new RenderOptions(false,true);
+							GridApplication.getContext().getApplication().addApplicationComponent(modViewer,null,ro);
 						} else {
 							setErrorMessage("Error creating new service!");
 							return;

@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.help;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.net.URL;
 
 import javax.help.CSH;
@@ -8,68 +10,74 @@ import javax.help.HelpSet;
 import javax.help.HelpSetException;
 import javax.swing.JFrame;
 
-
-public class IntroduceHelp extends JFrame {
-	private HelpBroker fHelp;
-	private CSH.DisplayHelpFromSource fDisplayHelp;
-	private HelpSet helpSet;
+import org.cagrid.grape.GridApplication;
 
 
-	public IntroduceHelp() {
-		initHelpSystem();
-	}
+public class IntroduceHelp {
+    private static HelpBroker fHelp;
+    private static CSH.DisplayHelpFromSource fDisplayHelp;
+    private static HelpSet helpSet;
+    private static boolean initialized = false;
 
 
-	public CSH.DisplayHelpFromSource getFDisplayHelp() {
-		return fDisplayHelp;
-	}
+    public IntroduceHelp() {
+        if (!initialized) {
+            IntroduceHelp.initialized = true;
+            IntroduceHelp.initHelpSystem();
+        }
+        fDisplayHelp.actionPerformed(new ActionEvent(GridApplication.getContext().getApplication().getMDIDesktopPane(), 0 , "help"));
+    }
 
 
-	public void setFDisplayHelp(CSH.DisplayHelpFromSource displayHelp) {
-		fDisplayHelp = displayHelp;
-	}
+    public static CSH.DisplayHelpFromSource getFDisplayHelp() {
+        return fDisplayHelp;
+    }
 
 
-	public HelpBroker getFHelp() {
-		return fHelp;
-	}
+    public static void setFDisplayHelp(CSH.DisplayHelpFromSource displayHelp) {
+        IntroduceHelp.fDisplayHelp = displayHelp;
+    }
 
 
-	public void setFHelp(HelpBroker help) {
-		fHelp = help;
-	}
+    public static HelpBroker getFHelp() {
+        return fHelp;
+    }
 
 
-	public HelpSet getHelpSet() {
-		return helpSet;
-	}
+    public static void setFHelp(HelpBroker help) {
+        fHelp = help;
+    }
 
 
-	public void setHelpSet(HelpSet helpSet) {
-		this.helpSet = helpSet;
-	}
+    public static HelpSet getHelpSet() {
+        return helpSet;
+    }
 
 
-	/**
-	 * Initialize the JavaHelp system.
-	 */
-	public void initHelpSystem() {
-		// optimization to avoid repeated init
-		if (fHelp != null && fDisplayHelp != null)
-			return;
+    public static void setHelpSet(HelpSet helpSet) {
+        IntroduceHelp.helpSet = helpSet;
+    }
 
-		// (uses the classloader mechanism)
-		ClassLoader loader = this.getClass().getClassLoader();
-		URL helpSetURL = HelpSet.findHelpSet(loader, "introduce.hs");
-		try {
-			helpSet = new HelpSet(null, helpSetURL);
-			fHelp = helpSet.createHelpBroker();
-			fHelp.enableHelpKey(this.getRootPane(), "index", helpSet);
-			fDisplayHelp = new CSH.DisplayHelpFromSource(fHelp);
 
-		} catch (HelpSetException ex) {
-			System.out.println("Cannot create help system with: " + helpSetURL + " " + ex.getMessage());
-		}
-	}
+    /**
+     * Initialize the JavaHelp system.
+     */
+    public static void initHelpSystem() {
+        // optimization to avoid repeated init
+        if (fHelp != null && fDisplayHelp != null)
+            return;
+
+        // (uses the classloader mechanism)
+        ClassLoader loader = IntroduceHelp.class.getClassLoader();
+        URL helpSetURL = HelpSet.findHelpSet(loader, "introduce.hs");
+        try {
+            helpSet = new HelpSet(null, helpSetURL);
+            fHelp = helpSet.createHelpBroker();
+            fDisplayHelp = new CSH.DisplayHelpFromSource(fHelp);
+
+        } catch (HelpSetException ex) {
+            System.out.println("Cannot create help system with: " + helpSetURL + " " + ex.getMessage());
+        }
+    }
 
 }

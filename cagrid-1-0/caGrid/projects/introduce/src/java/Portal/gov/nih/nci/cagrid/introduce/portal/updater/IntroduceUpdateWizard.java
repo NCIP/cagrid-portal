@@ -4,6 +4,12 @@ import org.cagrid.grape.GridApplication;
 import org.pietschy.wizard.Wizard;
 
 public class IntroduceUpdateWizard {
+    
+    public IntroduceUpdateWizard() {
+        showUpdateWizard();
+    }
+    
+    
 	
 	public static void showUpdateWizard(){
 		UpdatePath paths = new UpdatePath();
