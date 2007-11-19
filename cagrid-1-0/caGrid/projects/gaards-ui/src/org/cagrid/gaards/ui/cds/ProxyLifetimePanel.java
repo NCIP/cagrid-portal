@@ -28,11 +28,18 @@ public class ProxyLifetimePanel extends JPanel {
 
 	private JLabel jLabel2 = null;
 
+	private ProxyLifetimeListener listener;
+
 	/**
 	 * This is the default constructor
 	 */
 	public ProxyLifetimePanel() {
+		this(null);
+	}
+
+	public ProxyLifetimePanel(ProxyLifetimeListener listener) {
 		super();
+		this.listener = listener;
 		initialize();
 	}
 
@@ -90,8 +97,11 @@ public class ProxyLifetimePanel extends JPanel {
 	}
 
 	public void setLifetime(long lifetimeSeconds) {
-		if(lifetimeSeconds<0){
-			lifetimeSeconds=0;
+		hours.removeAllItems();
+		minutes.removeAllItems();
+		seconds.removeAllItems();
+		if (lifetimeSeconds < 0) {
+			lifetimeSeconds = 0;
 		}
 		long lhours = (lifetimeSeconds / 60) / 60;
 		long hoursInSeconds = lhours * 60 * 60;
@@ -112,6 +122,24 @@ public class ProxyLifetimePanel extends JPanel {
 
 	}
 
+	public void setLifetime(ProxyLifetime lifetime) {
+		hours.removeAllItems();
+		minutes.removeAllItems();
+		seconds.removeAllItems();
+		for (int i = 0; i <= lifetime.getHours(); i++) {
+			hours.addItem(new Integer(i));
+		}
+
+		for (int i = 0; i <= lifetime.getMinutes(); i++) {
+			minutes.addItem(new Integer(i));
+		}
+
+		for (int i = 0; i <= lifetime.getSeconds(); i++) {
+			seconds.addItem(new Integer(i));
+		}
+
+	}
+
 	/**
 	 * This method initializes hours
 	 * 
@@ -120,6 +148,13 @@ public class ProxyLifetimePanel extends JPanel {
 	private JComboBox getHours() {
 		if (hours == null) {
 			hours = new JComboBox();
+			hours.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (listener != null) {
+						listener.handleProxyLifetimeChange();
+					}
+				}
+			});
 		}
 		return hours;
 	}
@@ -132,6 +167,13 @@ public class ProxyLifetimePanel extends JPanel {
 	private JComboBox getMinutes() {
 		if (minutes == null) {
 			minutes = new JComboBox();
+			minutes.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (listener != null) {
+						listener.handleProxyLifetimeChange();
+					}
+				}
+			});
 		}
 		return minutes;
 	}
@@ -144,10 +186,16 @@ public class ProxyLifetimePanel extends JPanel {
 	private JComboBox getSeconds() {
 		if (seconds == null) {
 			seconds = new JComboBox();
+			seconds.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (listener != null) {
+						listener.handleProxyLifetimeChange();
+					}
+				}
+			});
 		}
 		return seconds;
 	}
-
 
 	public ProxyLifetime getProxyLifetime() {
 		ProxyLifetime lifetime = new ProxyLifetime();

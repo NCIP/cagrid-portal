@@ -32,10 +32,6 @@ import org.cagrid.grape.utils.ErrorDialog;
  */
 public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 
-	private static String IDENTITY_DELEGATION_POLICY = "Identity Delegation Policy";
-
-	private static final int SECONDS_OFFSET = 120;
-
 	private JPanel jContentPane = null;
 
 	private JPanel topPanel = null;
@@ -46,7 +42,7 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 
 	private JPanel buttonPanel = null;
 
-	private JButton addButton = null;
+	private JButton delegateCredentialButton = null;
 
 	private JButton cancelButton = null;
 
@@ -215,23 +211,23 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			buttonPanel.add(getAddButton(), null);
+			buttonPanel.add(getDelegateCredentialButton(), null);
 			buttonPanel.add(getCancelButton(), null);
 		}
 		return buttonPanel;
 	}
 
 	/**
-	 * This method initializes addButton
+	 * This method initializes delegateCredentialButton
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getAddButton() {
-		if (addButton == null) {
-			addButton = new JButton();
-			addButton.setText("Delegate Credential");
-			addButton.setIcon(CDSLookAndFeel.getDelegateCredentialIcon());
-			addButton.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getDelegateCredentialButton() {
+		if (delegateCredentialButton == null) {
+			delegateCredentialButton = new JButton();
+			delegateCredentialButton.setText("Delegate Credential");
+			delegateCredentialButton.setIcon(CDSLookAndFeel.getDelegateCredentialIcon());
+			delegateCredentialButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
 						public void execute() {
@@ -247,14 +243,9 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 				}
 
 			});
-			addButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					delegateCredential();
-				}
-			});
 		}
 
-		return addButton;
+		return delegateCredentialButton;
 	}
 
 	/**
@@ -303,6 +294,7 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 			GridApplication.getContext().showMessage(
 					"Succesfully delegated the credential for "
 							+ c.getCredential().getIdentity() + ".");
+			dispose();
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
@@ -461,6 +453,7 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 										"Please specify a Grid Identity.");
 							}
 							getPolicyTable().addIdentity(gridId);
+							getGridIdentity().setText("");
 						}
 					});
 		}

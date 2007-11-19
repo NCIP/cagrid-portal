@@ -13,6 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.cagrid.gaards.cds.common.ProxyLifetime;
 import org.cagrid.gaards.ui.common.ProxyComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
@@ -27,7 +28,8 @@ import org.globus.gsi.bc.BouncyCastleUtil;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class DelegateProxyWindow extends ApplicationComponent {
+public class DelegateProxyWindow extends ApplicationComponent implements
+		ProxyLifetimeListener {
 
 	private static String IDENTITY_DELEGATION_POLICY = "Identity Delegation Policy";
 
@@ -70,6 +72,8 @@ public class DelegateProxyWindow extends ApplicationComponent {
 	private JLabel jLabel6 = null;
 
 	private JComboBox issuedCredentialPathLength = null;
+
+	private boolean firstProxyLifetimeChange = true;
 
 	/**
 	 * This is the default constructor
@@ -257,11 +261,13 @@ public class DelegateProxyWindow extends ApplicationComponent {
 			mainPanel.add(jLabel3, gridBagConstraints8);
 			mainPanel.add(getDelegationLifetime(), gridBagConstraints9);
 			mainPanel.add(jLabel4, gridBagConstraints10);
-			mainPanel.add(getDelegatedCredentialPathLength(), gridBagConstraints11);
+			mainPanel.add(getDelegatedCredentialPathLength(),
+					gridBagConstraints11);
 			mainPanel.add(jLabel5, gridBagConstraints13);
 			mainPanel.add(getIssuedCredentialLifetime(), gridBagConstraints14);
 			mainPanel.add(jLabel6, gridBagConstraints15);
-			mainPanel.add(getIssuedCredentialPathLength(), gridBagConstraints16);
+			mainPanel
+					.add(getIssuedCredentialPathLength(), gridBagConstraints16);
 		}
 		return mainPanel;
 	}
@@ -365,7 +371,8 @@ public class DelegateProxyWindow extends ApplicationComponent {
 
 			IdentityPolicyDelegateProxyWindow window = new IdentityPolicyDelegateProxyWindow(
 					cache);
-			GridApplication.getContext().addApplicationComponent(window, 600, 350);
+			GridApplication.getContext().addApplicationComponent(window, 600,
+					350);
 			dispose();
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
@@ -405,7 +412,7 @@ public class DelegateProxyWindow extends ApplicationComponent {
 	 */
 	private ProxyLifetimePanel getDelegationLifetime() {
 		if (delegationLifetime == null) {
-			delegationLifetime = new ProxyLifetimePanel();
+			delegationLifetime = new ProxyLifetimePanel(this);
 		}
 		return delegationLifetime;
 	}
@@ -504,6 +511,22 @@ public class DelegateProxyWindow extends ApplicationComponent {
 			handleDelegationPathLengthSelection();
 		}
 		return issuedCredentialPathLength;
+	}
+
+	public void handleProxyLifetimeChange() {
+		if (firstProxyLifetimeChange) {
+			getProxy();
+			handleCredentialSelection();
+			firstProxyLifetimeChange = false;
+		}
+		ProxyLifetime l = getDelegationLifetime().getProxyLifetime();
+		long seconds = ((l.getHours() * 60 * 60) + (l.getMinutes() * 60) + l
+				.getSeconds())
+				- SECONDS_OFFSET;
+		if (seconds < 0) {
+			seconds = 0;
+		}
+		getIssuedCredentialLifetime().setLifetime(seconds);
 	}
 
 }
