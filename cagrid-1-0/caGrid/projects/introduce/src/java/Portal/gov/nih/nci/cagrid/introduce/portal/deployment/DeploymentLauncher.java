@@ -21,11 +21,12 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
 public class DeploymentLauncher {
 
     File serviceDirectory = null;
+    boolean error = false;
 
 
     public DeploymentLauncher() {
         promptAndInitialize();
-        if (serviceDirectory != null) {
+        if (serviceDirectory != null && !error) {
             DeploymentViewer viewer = new DeploymentViewer(serviceDirectory);
             Dimensions dim = new Dimensions(800, 500);
             RenderOptions ro = new RenderOptions();
@@ -38,19 +39,20 @@ public class DeploymentLauncher {
     private void promptAndInitialize() {
 
         try {
-
             String dir = ResourceManager.promptDir(null);
-            if (dir != null && new File(dir).exists() && new File(dir).canRead()) {
-                serviceDirectory = new File(dir);
-            } else {
+            if (dir != null) {
+                if (new File(dir).exists() && new File(dir).canRead()) {
+                    serviceDirectory = new File(dir);
+                }
                 CompositeErrorDialog.showErrorDialog("Error opening directory for deployment", "Directory "
                     + serviceDirectory.getAbsolutePath()
                     + " does not exist or does not seem to be an introduce service");
+                error = true;
             }
-
         } catch (Exception e) {
             CompositeErrorDialog.showErrorDialog("Error opening directory for deployment", "Directory "
-                + serviceDirectory.getAbsolutePath() + " does not exist or does not seem to be an introduce service");
+                + serviceDirectory + " does not exist or does not seem to be an introduce service");
+            error = true;
         }
     }
 
