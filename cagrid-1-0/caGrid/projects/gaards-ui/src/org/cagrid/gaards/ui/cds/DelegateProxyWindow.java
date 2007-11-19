@@ -17,6 +17,7 @@ import org.cagrid.gaards.ui.common.ProxyComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.bc.BouncyCastleUtil;
 
 /**
@@ -29,6 +30,8 @@ import org.globus.gsi.bc.BouncyCastleUtil;
 public class DelegateProxyWindow extends ApplicationComponent {
 
 	private static String IDENTITY_DELEGATION_POLICY = "Identity Delegation Policy";
+
+	private static final int SECONDS_OFFSET = 120;
 
 	private JPanel jContentPane = null;
 
@@ -83,7 +86,7 @@ public class DelegateProxyWindow extends ApplicationComponent {
 	private void initialize() {
 		this.setSize(600, 400);
 		this.setContentPane(getJContentPane());
-		this.setTitle("Delegate Credential");
+		this.setTitle("Delegate Credential (Step 1 of 2)");
 		this.setFrameIcon(CDSLookAndFeel.getDelegateCredentialIcon());
 	}
 
@@ -127,11 +130,13 @@ public class DelegateProxyWindow extends ApplicationComponent {
 			gridBagConstraints16.weightx = 1.0;
 			gridBagConstraints16.anchor = GridBagConstraints.WEST;
 			gridBagConstraints16.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints16.weighty = 1.0D;
 			gridBagConstraints16.gridx = 1;
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.gridx = 0;
 			gridBagConstraints15.anchor = GridBagConstraints.WEST;
 			gridBagConstraints15.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints15.weighty = 1.0D;
 			gridBagConstraints15.gridy = 5;
 			jLabel6 = new JLabel();
 			jLabel6.setText("Issued Credential Path Length");
@@ -140,11 +145,13 @@ public class DelegateProxyWindow extends ApplicationComponent {
 			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints14.anchor = GridBagConstraints.WEST;
 			gridBagConstraints14.weightx = 1.0D;
+			gridBagConstraints14.weighty = 1.0D;
 			gridBagConstraints14.gridy = 4;
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.gridx = 0;
 			gridBagConstraints13.anchor = GridBagConstraints.WEST;
 			gridBagConstraints13.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints13.weighty = 1.0D;
 			gridBagConstraints13.gridy = 4;
 			jLabel5 = new JLabel();
 			jLabel5.setText("Issued Credential Lifetime");
@@ -154,11 +161,13 @@ public class DelegateProxyWindow extends ApplicationComponent {
 			gridBagConstraints11.weightx = 1.0;
 			gridBagConstraints11.anchor = GridBagConstraints.WEST;
 			gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints11.weighty = 1.0D;
 			gridBagConstraints11.gridx = 1;
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.gridx = 0;
 			gridBagConstraints10.anchor = GridBagConstraints.WEST;
 			gridBagConstraints10.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints10.weighty = 1.0D;
 			gridBagConstraints10.gridy = 3;
 			jLabel4 = new JLabel();
 			jLabel4.setText("Delegated Credential Path Length");
@@ -167,11 +176,13 @@ public class DelegateProxyWindow extends ApplicationComponent {
 			gridBagConstraints9.anchor = GridBagConstraints.WEST;
 			gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints9.weightx = 1.0D;
+			gridBagConstraints9.weighty = 1.0D;
 			gridBagConstraints9.gridy = 2;
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.anchor = GridBagConstraints.WEST;
 			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints8.weighty = 1.0D;
 			gridBagConstraints8.gridy = 2;
 			jLabel3 = new JLabel();
 			jLabel3.setText("Delegation Lifetime");
@@ -181,11 +192,13 @@ public class DelegateProxyWindow extends ApplicationComponent {
 			gridBagConstraints7.weightx = 1.0;
 			gridBagConstraints7.anchor = GridBagConstraints.WEST;
 			gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints7.weighty = 1.0D;
 			gridBagConstraints7.gridx = 1;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.gridx = 0;
 			gridBagConstraints6.anchor = GridBagConstraints.WEST;
 			gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints6.weighty = 1.0D;
 			gridBagConstraints6.gridy = 6;
 			jLabel2 = new JLabel();
 			jLabel2.setText("Delegation Policy");
@@ -195,6 +208,7 @@ public class DelegateProxyWindow extends ApplicationComponent {
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints1.anchor = GridBagConstraints.WEST;
+			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints1.weightx = 1.0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -202,11 +216,13 @@ public class DelegateProxyWindow extends ApplicationComponent {
 			gridBagConstraints5.weightx = 1.0;
 			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints5.weighty = 1.0D;
 			gridBagConstraints5.gridx = 1;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.gridx = 0;
 			gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints4.weighty = 1.0D;
 			gridBagConstraints4.gridy = 1;
 			jLabel1 = new JLabel();
 			jLabel1.setText("Credential");
@@ -221,6 +237,7 @@ public class DelegateProxyWindow extends ApplicationComponent {
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints2.weighty = 1.0D;
 			gridBagConstraints2.gridy = 0;
 			jLabel = new JLabel();
 			jLabel.setText("Delegation Service");
@@ -240,13 +257,11 @@ public class DelegateProxyWindow extends ApplicationComponent {
 			mainPanel.add(jLabel3, gridBagConstraints8);
 			mainPanel.add(getDelegationLifetime(), gridBagConstraints9);
 			mainPanel.add(jLabel4, gridBagConstraints10);
-			mainPanel.add(getDelegatedCredentialPathLength(),
-					gridBagConstraints11);
+			mainPanel.add(getDelegatedCredentialPathLength(), gridBagConstraints11);
 			mainPanel.add(jLabel5, gridBagConstraints13);
 			mainPanel.add(getIssuedCredentialLifetime(), gridBagConstraints14);
 			mainPanel.add(jLabel6, gridBagConstraints15);
-			mainPanel
-					.add(getIssuedCredentialPathLength(), gridBagConstraints16);
+			mainPanel.add(getIssuedCredentialPathLength(), gridBagConstraints16);
 		}
 		return mainPanel;
 	}
@@ -333,6 +348,28 @@ public class DelegateProxyWindow extends ApplicationComponent {
 	}
 
 	private void delegateCredential() {
+		try {
+			DelegationRequestCache cache = new DelegationRequestCache();
+			cache.setDelegationURL((String) getCds().getSelectedItem());
+			cache.setCredential(getProxy().getSelectedProxy());
+			cache.setDelegationLifetime(getDelegationLifetime()
+					.getProxyLifetime());
+			cache
+					.setDelegationPathLength(((Integer) getDelegatedCredentialPathLength()
+							.getSelectedItem()).intValue());
+			cache.setIssuedCredentialLifetime(getIssuedCredentialLifetime()
+					.getProxyLifetime());
+			cache
+					.setIssuedCredentialPathLength(((Integer) getIssuedCredentialPathLength()
+							.getSelectedItem()).intValue());
+
+			IdentityPolicyDelegateProxyWindow window = new IdentityPolicyDelegateProxyWindow(
+					cache);
+			GridApplication.getContext().addApplicationComponent(window, 600, 350);
+			dispose();
+		} catch (Exception e) {
+			ErrorDialog.showError(e);
+		}
 
 	}
 
@@ -392,7 +429,8 @@ public class DelegateProxyWindow extends ApplicationComponent {
 			X509Certificate[] certs = getProxy().getSelectedProxy()
 					.getCertificateChain();
 			maxPathLength = getDelegationPathLength(certs[0]);
-			lifetimeSeconds = getProxy().getSelectedProxy().getTimeLeft();
+			lifetimeSeconds = getProxy().getSelectedProxy().getTimeLeft()
+					- SECONDS_OFFSET;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -403,7 +441,10 @@ public class DelegateProxyWindow extends ApplicationComponent {
 		for (int i = 0; i <= maxPathLength; i++) {
 			delegatedCredentialPathLength.addItem(new Integer(i));
 		}
+
 		getDelegationLifetime().setLifetime(lifetimeSeconds);
+		getIssuedCredentialLifetime().setLifetime(
+				lifetimeSeconds - SECONDS_OFFSET);
 	}
 
 	public void handleDelegationPathLengthSelection() {

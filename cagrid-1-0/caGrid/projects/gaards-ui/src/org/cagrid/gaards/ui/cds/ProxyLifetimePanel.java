@@ -90,6 +90,9 @@ public class ProxyLifetimePanel extends JPanel {
 	}
 
 	public void setLifetime(long lifetimeSeconds) {
+		if(lifetimeSeconds<0){
+			lifetimeSeconds=0;
+		}
 		long lhours = (lifetimeSeconds / 60) / 60;
 		long hoursInSeconds = lhours * 60 * 60;
 		long lminutes = (lifetimeSeconds - hoursInSeconds) / 60;
@@ -144,6 +147,7 @@ public class ProxyLifetimePanel extends JPanel {
 		}
 		return seconds;
 	}
+
 
 	public ProxyLifetime getProxyLifetime() {
 		ProxyLifetime lifetime = new ProxyLifetime();
