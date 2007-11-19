@@ -12,7 +12,6 @@ import org.cagrid.gaards.cds.common.ProxyLifetime;
 
 public class ProxyLifetimePanel extends JPanel {
 
-	private static final int MAX_HOURS = 48;
 
 	private static final long serialVersionUID = 1L;
 
