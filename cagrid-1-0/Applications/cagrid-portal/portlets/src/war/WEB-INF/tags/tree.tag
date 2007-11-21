@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="m" tagdir="/WEB-INF/tags"%>
 
-<%@ attribute name="node" required="true" type="gov.nih.nci.cagrid.portal2.portlet.tree.TreeNode"%>
+<%@ attribute name="node" required="true" type="gov.nih.nci.cagrid.portal.portlet.tree.TreeNode"%>
 <%@ attribute name="prefix" required="true"%>
 <%@ attribute name="contentFragment" required="true" fragment="true"%>
 <%@ attribute name="nodeFragment" required="true" fragment="true"%>
@@ -29,7 +29,7 @@
 			</c:otherwise>
 		</c:choose>
 
-		<div>
+		<div style="margin-left:10px">
 		<li class="<c:out value="${nodeClass}"/>"
 			id="<c:out value="${prefix}"/><c:out value="${childNode.path}"/>Node"
 			onclick="<c:out value="${prefix}"/>toggleDiv('<c:out value="${childNode.path}"/>')">

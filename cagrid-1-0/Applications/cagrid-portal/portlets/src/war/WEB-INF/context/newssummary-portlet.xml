@@ -14,7 +14,7 @@
 
 	<bean 
 		id="viewNewsSummaryController"
-		class="gov.nih.nci.cagrid.portal2.portlet.news.ViewNewsSummaryController"
+		class="gov.nih.nci.cagrid.portal.portlet.news.ViewNewsSummaryController"
 		autowire="byName">
 		<property name="successView" value="summary"/>
 		<property name="rssUrl" value="http://james:8080/cagridportlets/news.rss"/>
@@ -22,13 +22,13 @@
 	
 	<bean 
 		id="selectItemForNewsController"
-		class="gov.nih.nci.cagrid.portal2.portlet.news.SelectItemForNewsController"
+		class="gov.nih.nci.cagrid.portal.portlet.news.SelectItemForNewsController"
 		autowire="byName">
 		<property name="commandName" value="selectItemCommand"/>
-		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.news.SelectItemCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.news.SelectItemCommand"/>
 		<property name="redirectUrlPreferenceName" value="selectItemForNewsRedirectUrl"/>
 		<property name="interPortletMessageSender">
-			<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
+			<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 				<property name="modePreferenceName" value="newsItemSelectMode" />
 				<property name="outputQueuePreferenceName" value="selectedNewsItemOutputQueueName" />
 				<property name="outputQueueNameDefaultValue" value="selectedNewsItem" />

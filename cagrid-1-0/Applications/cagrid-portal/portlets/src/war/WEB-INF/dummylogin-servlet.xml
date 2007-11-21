@@ -17,7 +17,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
     	</property>
     </bean>
     
-    <bean name="/login" class="gov.nih.nci.cagrid.portal2.portlet.authn.DummyLoginController"
+    <bean name="/login" class="gov.nih.nci.cagrid.portal.portlet.authn.DummyLoginController"
     	autowire="byName">
 		<property name="autoLoginParam" value="doAutoLogin"/>
     </bean>

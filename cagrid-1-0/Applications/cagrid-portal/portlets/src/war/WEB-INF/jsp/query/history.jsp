@@ -100,20 +100,20 @@ No queries to display.
 <table>
 	<thead>
 		<tr>
-			<th>
-				<!-- Control column -->
+			<th style="padding-right:5px">
+				<b>Operations</b>
 			</th>
-			<th>
-				State	
+			<th style="padding-right:5px">
+				<b>State</b>	
 			</th>
-			<th>
-				Start Time
+			<th style="padding-right:5px">
+				<b>Start Time</b>
 			</th>
-			<th>
-				Finish Time
+			<th style="padding-right:5px">
+				<b>Finish Time</b>
 			</th>
-			<th>
-				Service
+			<th style="padding-right:5px">
+				<b>Service</b>
 			</th>
 		</tr>
 	</thead>

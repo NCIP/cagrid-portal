@@ -26,7 +26,7 @@
 			<!-- TODO: sort this out a bit more -->
 			<include name="**/*.jar"/>
 		</fileset>
-		<fileset dir="${globus.home}/lib">
+		<fileset dir="${aggr.lib.dir}/globus">
 			<include name="*.jar"/>
 		</fileset>
 	</path>
@@ -137,39 +137,45 @@
 	</target>
 	
 	<target name="aggr:run-regsvc" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal2.util.RunRegSvc" classpathref="aggr.run.cp" fork="true" />
+		<java classname="gov.nih.nci.cagrid.portal.util.RunRegSvc" classpathref="aggr.run.cp" fork="true" />
 	</target>
 
 	<target name="aggr:run-metachange" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal2.util.RunMetaChange" classpathref="aggr.run.cp" fork="true" />
+		<java classname="gov.nih.nci.cagrid.portal.util.RunMetaChange" classpathref="aggr.run.cp" fork="true" />
 	</target>
 
 	<target name="aggr:run-status" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal2.util.RunStatusChange" classpathref="aggr.run.cp" fork="true" />
+		<java classname="gov.nih.nci.cagrid.portal.util.RunStatusChange" classpathref="aggr.run.cp" fork="true" />
 	</target>
 
 	<target name="aggr:run-trust" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal2.util.RunTrust" classpathref="aggr.run.cp" fork="true" />
+		<java classname="gov.nih.nci.cagrid.portal.util.RunTrust" classpathref="aggr.run.cp" fork="true" />
 	</target>
 
 	<target name="aggr:run-geocode" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal2.util.RunGeocode" classpathref="aggr.run.cp" fork="true" />
+		<java classname="gov.nih.nci.cagrid.portal.util.RunGeocode" classpathref="aggr.run.cp" fork="true" />
+	</target>
+	
+	<target name="aggr:run-xmlschemas" depends="aggr:prepare-run-cp">
+		<java classname="gov.nih.nci.cagrid.portal.util.RunXmlSchemas" classpathref="aggr.run.cp" fork="true" />
 	</target>
 
+	<!--
 	<target name="aggr:run-text" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal2.util.RunTextIndex" classpathref="aggr.run.cp" fork="true" />
+		<java classname="gov.nih.nci.cagrid.portal.util.RunTextIndex" classpathref="aggr.run.cp" fork="true" />
 	</target>
+	-->
 
 	<target name="aggr:kill-svc-meta" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal2.util.KillServiceMetadata" classpathref="aggr.run.cp" />
+		<java classname="gov.nih.nci.cagrid.portal.util.KillServiceMetadata" classpathref="aggr.run.cp" />
 	</target>
 
 	<target name="aggr:kill-grid-svcs" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal2.util.KillGridServices" classpathref="aggr.run.cp" />
+		<java classname="gov.nih.nci.cagrid.portal.util.KillGridServices" classpathref="aggr.run.cp" />
 	</target>
 
 	<target name="aggr:load-workspaces" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal2.util.WorkspacesLoader" classpathref="aggr.run.cp" fork="true">
+		<java classname="gov.nih.nci.cagrid.portal.util.WorkspacesLoader" classpathref="aggr.run.cp" fork="true">
 			<arg value="${aggr.dir}/etc/caBIG_Workspaces_participants.xls" />
 		</java>
 	</target>	

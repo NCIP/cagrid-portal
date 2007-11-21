@@ -76,7 +76,7 @@
 	
 	</c:when>
 	<c:otherwise>
-No UMLClass is currently selected.
+No UML class is currently selected. Use the <i>Select UML Class</i> tab to select a UML class. 
 	</c:otherwise>
 </c:choose>
 

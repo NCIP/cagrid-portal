@@ -20,10 +20,10 @@
 	</bean>
 
 	<bean id="contentEditController" parent="contentControllerTemplate"
-		class="gov.nih.nci.cagrid.portal2.portlet.content.ContentEditController"/>
+		class="gov.nih.nci.cagrid.portal.portlet.content.ContentEditController"/>
 
 	<bean id="contentViewController" parent="contentControllerTemplate"
-		class="gov.nih.nci.cagrid.portal2.portlet.content.ContentViewController"/>
+		class="gov.nih.nci.cagrid.portal.portlet.content.ContentViewController"/>
 
 	<bean id="portletModeHandlerMapping"
 		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">

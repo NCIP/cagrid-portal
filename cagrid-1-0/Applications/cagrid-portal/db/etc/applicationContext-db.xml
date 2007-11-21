@@ -37,58 +37,62 @@
 		autowire="byName">
 		<property name="annotatedClasses">
 			<list>
-				<value>gov.nih.nci.cagrid.portal2.domain.Address</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.Person</value>
+				<value>gov.nih.nci.cagrid.portal.domain.Address</value>
+				<value>gov.nih.nci.cagrid.portal.domain.Person</value>
 				<value>
-					gov.nih.nci.cagrid.portal2.domain.Participant
+					gov.nih.nci.cagrid.portal.domain.Participant
 				</value>
 				<value>
-					gov.nih.nci.cagrid.portal2.domain.Participation
+					gov.nih.nci.cagrid.portal.domain.Participation
 				</value>
 				<value>
-					gov.nih.nci.cagrid.portal2.domain.PortalUser
+					gov.nih.nci.cagrid.portal.domain.PortalUser
 				</value>
 				<value>
-					gov.nih.nci.cagrid.portal2.domain.Workspace
+					gov.nih.nci.cagrid.portal.domain.Workspace
 				</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.Role</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.GridService</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.GridDataService</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.IndexService</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.ServiceAnnotation</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.StatusChange</value>
+				<value>gov.nih.nci.cagrid.portal.domain.Role</value>
+				<value>gov.nih.nci.cagrid.portal.domain.GridService</value>
+				<value>gov.nih.nci.cagrid.portal.domain.GridDataService</value>
+				<value>gov.nih.nci.cagrid.portal.domain.IndexService</value>
+				<value>gov.nih.nci.cagrid.portal.domain.ServiceAnnotation</value>
+				<value>gov.nih.nci.cagrid.portal.domain.StatusChange</value>
 				
-				<value>gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQuery</value>
-		        <value>gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.dataservice.DCQLQuery</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.dataservice.DCQLQueryInstance</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.dataservice.Query</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.dataservice.QueryInstance</value>
+				<value>gov.nih.nci.cagrid.portal.domain.dataservice.CQLQuery</value>
+		        <value>gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance</value>
+				<value>gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQuery</value>
+				<value>gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance</value>
+				<value>gov.nih.nci.cagrid.portal.domain.dataservice.Query</value>
+				<value>gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance</value>
+				<value>gov.nih.nci.cagrid.portal.domain.dataservice.SharedCQLQuery</value>
 				
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.ServiceMetadata</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.Enumeration</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.PointOfContact</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.ResearchCenter</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.SemanticMetadata</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLAttribute</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLClass</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.common.ValueDomain</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.CaDSRRegistration</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.ContextProperty</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.Fault</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.InputParameter</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.Operation</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.Output</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.Service</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.service.ServiceContext</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.DomainModel</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLAssociation</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.SourceUMLAssociationEdge</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.TargetUMLAssociationEdge</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.ServiceMetadata</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.common.Enumeration</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.service.ServicePointOfContact</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenterPointOfContact</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenter</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.common.SemanticMetadata</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.common.UMLAttribute</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.common.UMLClass</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.common.ValueDomain</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.service.CaDSRRegistration</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.service.ContextProperty</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.service.Fault</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.service.InputParameter</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.service.Operation</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.service.Output</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.service.Service</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.service.ServiceContext</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociation</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.SourceUMLAssociationEdge</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.TargetUMLAssociationEdge</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass</value>
 				
-				<value>gov.nih.nci.cagrid.portal2.domain.news.NewsChannel</value>
-				<value>gov.nih.nci.cagrid.portal2.domain.news.NewsItem</value>
+				<value>gov.nih.nci.cagrid.portal.domain.news.NewsChannel</value>
+				<value>gov.nih.nci.cagrid.portal.domain.news.NewsItem</value>
+				<value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.XMLSchema</value>
 				
 			</list>
 		</property>
@@ -111,7 +115,7 @@
 
 	<aop:config proxy-target-class="true">
 		<aop:pointcut id="daoOperation"
-			expression="execution(* gov.nih.nci.cagrid.portal2.dao..*Dao.*(..))" />
+			expression="execution(* gov.nih.nci.cagrid.portal.dao..*Dao.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="daoOperation" />
 	</aop:config>
 	 -->
@@ -133,49 +137,55 @@
 	</bean>
 
 	<bean id="addressDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.AddressDao" />
+		class="gov.nih.nci.cagrid.portal.dao.AddressDao" />
 
 	<bean id="personDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.PersonDao" />
+		class="gov.nih.nci.cagrid.portal.dao.PersonDao" />
 	<bean id="portalUserDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.PortalUserDao" />
+		class="gov.nih.nci.cagrid.portal.dao.PortalUserDao" />
 
 	<bean id="participantDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.ParticipantDao" />
+		class="gov.nih.nci.cagrid.portal.dao.ParticipantDao" />
 	<bean id="roleDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.RoleDao" />
+		class="gov.nih.nci.cagrid.portal.dao.RoleDao" />
 	
 	<bean id="gridServiceDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.GridServiceDao" />
+		class="gov.nih.nci.cagrid.portal.dao.GridServiceDao" />
 		
 	<bean id="gridDataServiceDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.GridDataServiceDao" />
+		class="gov.nih.nci.cagrid.portal.dao.GridDataServiceDao" />
 		
 	<bean id="indexServiceDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.IndexServiceDao" />
+		class="gov.nih.nci.cagrid.portal.dao.IndexServiceDao" />
 
 	<bean id="pointOfContactDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.PointOfContactDao" />
+		class="gov.nih.nci.cagrid.portal.dao.PointOfContactDao" />
 		
 	<bean id="serviceMetadataDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.ServiceMetadataDao" />
+		class="gov.nih.nci.cagrid.portal.dao.ServiceMetadataDao" />
 		
 	<bean id="workspaceDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.WorkspaceDao" />		
+		class="gov.nih.nci.cagrid.portal.dao.WorkspaceDao" />		
 		
 	<bean id="cqlQueryDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.CQLQueryDao" />
+		class="gov.nih.nci.cagrid.portal.dao.CQLQueryDao" />
 		
 	<bean id="cqlQueryInstanceDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.CQLQueryInstanceDao" />
+		class="gov.nih.nci.cagrid.portal.dao.CQLQueryInstanceDao" />
+		
+	<bean id="sharedCqlQueryDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal.dao.SharedCQLQueryDao" />
 		
 	<bean id="umlClassDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.UMLClassDao" />
+		class="gov.nih.nci.cagrid.portal.dao.UMLClassDao" />
 		
 	<bean id="newsChannelDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.news.NewsChannelDao" />
+		class="gov.nih.nci.cagrid.portal.dao.news.NewsChannelDao" />
 	<bean id="newsItemDao" parent="daoTemplate"
-		class="gov.nih.nci.cagrid.portal2.dao.news.NewsItemDao" />
+		class="gov.nih.nci.cagrid.portal.dao.news.NewsItemDao" />
+		
+	<bean id="xmlSchemaDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal.dao.XMLSchemaDao" />
 
 
 	<bean id="openSessionInViewInterceptor"

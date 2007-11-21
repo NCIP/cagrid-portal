@@ -25,6 +25,8 @@
 				<option value="person.lastName">Last Name</option>
 				<option value="role">Role</option>
 				<option value="affiliation">Affiliation</option>
+				<option value="serviceDescription.name">Service Name</option>
+				<option value="researchCenter.displayName">Research Center Name</option>
 			</select>
 		</td>
 	</tr>

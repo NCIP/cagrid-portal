@@ -50,7 +50,7 @@
 		<copy todir="${portlets.build.war.dir}/WEB-INF/lib"
 			overwrite="true" flatten="true">
 			
-			<fileset dir="${globus.home}/lib">
+			<fileset dir="${aggr.lib.dir}/globus">
 				<patternset refid="globus.jars"/>
 			</fileset>
 			
@@ -60,6 +60,7 @@
 			</fileset>
 			<fileset dir="${aggr.lib.dir}">
 				<include name="cagrid/*.jar" />
+				<include name="cacore/*.jar" />
 			</fileset>
 			<fileset dir="${portlets.lib.dir}">
 				<include name="dwr.jar"/>

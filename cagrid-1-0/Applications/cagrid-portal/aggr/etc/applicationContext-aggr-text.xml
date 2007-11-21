@@ -14,7 +14,7 @@
 
 <!-- 
 	<bean id="textIndexer"
-		class="gov.nih.nci.cagrid.portal2.util.TextIndexer">
+		class="gov.nih.nci.cagrid.portal.util.TextIndexer">
 		<property name="hibernateTemplate" ref="hibernateTemplate"/>
 		<property name="queries">
 			<util:list>

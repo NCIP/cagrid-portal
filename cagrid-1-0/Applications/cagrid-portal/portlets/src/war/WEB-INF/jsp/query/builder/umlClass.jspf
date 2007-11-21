@@ -9,7 +9,7 @@
 
 			<c:when test="${!empty currNode.content}">
 				<b><c:out value="${currNode.content.umlClass.className}"/></b>
-				<ul>
+				<ul style="margin-left:10px">
 					<c:forEach var="att" items="${currNode.content.attributes}">
 						<li>
 							<c:set var="thePath"><c:out value="${currNode.path}"/>/<c:out value="${att.name}"/></c:set>

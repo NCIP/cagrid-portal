@@ -14,12 +14,12 @@
 
 	<bean 
 		id="registerController"
-		class="gov.nih.nci.cagrid.portal2.portlet.register.RegisterController"
+		class="gov.nih.nci.cagrid.portal.portlet.register.RegisterController"
 		autowire="byName">
 		
 		<property name="validators">
 			<list>
-				<bean class="gov.nih.nci.cagrid.portal2.portlet.register.ApplicationValidator"/>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.register.ApplicationValidator"/>
 			</list>
 		</property>
 		

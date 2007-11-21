@@ -15,11 +15,11 @@
 	<import resource="classpath:applicationContext-aggr.xml"/>
 
 	<bean id="addressMonitor"
-		class="gov.nih.nci.cagrid.portal2.aggr.geocode.AddressMonitor">
+		class="gov.nih.nci.cagrid.portal.aggr.geocode.AddressMonitor">
 		<property name="addressDao" ref="addressDao"/>
 		<property name="geocoder">
 			<bean
-				class="gov.nih.nci.cagrid.portal2.aggr.geocode.YahooGeocoder">
+				class="gov.nih.nci.cagrid.portal.aggr.geocode.YahooGeocoder">
 				<property name="baseUrl">
 					<value>
 						http://api.local.yahoo.com/MapsService/V1/geocode

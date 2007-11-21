@@ -14,7 +14,7 @@
 
 	<bean 
 		id="viewLoginController"
-		class="gov.nih.nci.cagrid.portal2.portlet.authn.ViewLoginController"
+		class="gov.nih.nci.cagrid.portal.portlet.authn.ViewLoginController"
 		autowire="byName">
 		<property name="viewName" value="login"/>
 		<property name="portalUserAttributeName" ref="portalUserAttributeName"/>
@@ -22,12 +22,12 @@
 	
 	<bean 
 		id="loginController"
-		class="gov.nih.nci.cagrid.portal2.portlet.authn.LoginController"
+		class="gov.nih.nci.cagrid.portal.portlet.authn.LoginController"
 		autowire="byName"/>
 		
 	<bean 
 		id="logoutController"
-		class="gov.nih.nci.cagrid.portal2.portlet.authn.LogoutController"
+		class="gov.nih.nci.cagrid.portal.portlet.authn.LogoutController"
 		autowire="byName"/>
 	
 	

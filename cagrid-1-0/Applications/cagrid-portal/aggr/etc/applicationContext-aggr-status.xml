@@ -15,23 +15,23 @@
 	<import resource="classpath:applicationContext-aggr.xml"/>
 
 	<bean id="serviceStatusChangeMonitor"
-		class="gov.nih.nci.cagrid.portal2.aggr.status.ServiceStatusChangeMonitor">
+		class="gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusChangeMonitor">
 		<property name="indexServiceUrls" ref="defaultIndexServiceUrls" />
 		<property name="dynamicServiceStatusProvider">
 			<bean
-				class="gov.nih.nci.cagrid.portal2.aggr.status.DynamicServiceStatusProvider">
+				class="gov.nih.nci.cagrid.portal.aggr.status.DynamicServiceStatusProvider">
 				<property name="timeout" value="10000" />
 			</bean>
 		</property>
 		<property name="cachedServiceStatusProvider">
 			<bean
-				class="gov.nih.nci.cagrid.portal2.aggr.status.DBCachedServiceStatusProvider">
+				class="gov.nih.nci.cagrid.portal.aggr.status.DBCachedServiceStatusProvider">
 				<property name="gridServiceDao" ref="gridServiceDao" />
 			</bean>
 		</property>
 		<property name="cachedServiceUrlProvider">
 			<bean
-				class="gov.nih.nci.cagrid.portal2.aggr.regsvc.DBCachedServiceUrlProvider">
+				class="gov.nih.nci.cagrid.portal.aggr.regsvc.DBCachedServiceUrlProvider">
 				<property name="gridServiceDao" ref="gridServiceDao" />
 			</bean>
 		</property>
@@ -51,22 +51,22 @@
 	</bean>
 
 	<bean id="serviceStatusChangeListener"
-		class="gov.nih.nci.cagrid.portal2.aggr.status.ServiceStatusChangeListener">
+		class="gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusChangeListener">
 		<property name="gridServiceDao" ref="gridServiceDao" />
 	</bean>
 	
 	<bean id="serviceStatusMonitor"
-		class="gov.nih.nci.cagrid.portal2.aggr.status.ServiceStatusMonitor">
+		class="gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusMonitor">
 		<property name="indexServiceUrls" ref="defaultIndexServiceUrls" />
 		<property name="cachedServiceUrlProvider">
 			<bean
-				class="gov.nih.nci.cagrid.portal2.aggr.regsvc.DBCachedServiceUrlProvider">
+				class="gov.nih.nci.cagrid.portal.aggr.regsvc.DBCachedServiceUrlProvider">
 				<property name="gridServiceDao" ref="gridServiceDao" />
 			</bean>
 		</property>
 		<property name="gridServiceDao" ref="gridServiceDao" />
 		<property name="serviceStatusPolicy">
-			<bean class="gov.nih.nci.cagrid.portal2.aggr.status.SimpleServiceStatusPolicy">
+			<bean class="gov.nih.nci.cagrid.portal.aggr.status.SimpleServiceStatusPolicy">
 				<property name="maxDowntimeHours" value="96"/>
 			</bean>
 		</property>

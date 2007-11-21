@@ -21,16 +21,17 @@
 		</td>
 	</tr>
 </table>
-<p/>
+<br/>
+<br/>
 </form:form>
 
 <c:choose>
 	<c:when test="${empty umlClasses}">
-		No UML classes to display.
+		Enter a data service URL above.
 	</c:when>
 	<c:otherwise>
-		<div style="width:500px;">
-		<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:200px; overflow:scroll">
+
+		<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:400px; overflow-y:auto">
 		<c:forEach var="umlClass" items="${umlClasses}">
 			
 			<portlet:actionURL var="selectUmlClassAction">
@@ -43,6 +44,6 @@
 			<br/>
 		</c:forEach>
 		</div>
-		</div>
+
 	</c:otherwise>
 </c:choose>

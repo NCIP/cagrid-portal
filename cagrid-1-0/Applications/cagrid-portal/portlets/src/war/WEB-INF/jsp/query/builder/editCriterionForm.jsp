@@ -25,26 +25,28 @@
 
 <table>
 	<thead>
-		<th>Attribute Name</th>
-		<th>Predicate</th>
-		<th>Value(s)</th>
+		<th style="padding:5px"><b>Attribute Name</b></th>
+		<th style="padding:5px"><b>Predicate</b></th>
+		<th style="padding:5px"><b>Value(s)</b></th>
 	</thead>
 	<tbody>
 		<tr>
-			<td><c:out value="${criterionBean.umlAttribute.name}"/></td>
-			<td>
+			<td style="padding:5px"><c:out value="${criterionBean.umlAttribute.name}"/></td>
+			<td style="padding:5px">
 				<form:select path="predicate">
 					<c:forEach var="pred" items="${predicates}">
 						<form:option value="${pred}"/>
 					</c:forEach>
 				</form:select>
 			</td>
-			<td>
+			<td style="padding:5px">
 				<form:input path="value"/>
 			</td>
 		</tr>
 	</tbody>
 </table>
+<br/>
+<br/>
 <input type="button" value="Update" onclick="<portlet:namespace/>doCriterionBeanOp('update')"/>
 <input type="button" value="Delete" onclick="<portlet:namespace/>doCriterionBeanOp('delete')"/>
 <input type="button" value="Cancel" onclick="<portlet:namespace/>doCriterionBeanOp('cancel')"/>

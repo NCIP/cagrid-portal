@@ -11,13 +11,13 @@
 </style>
 <c:choose>
 <c:when test="${!empty resultsCommand.instance.error}">
-		<div style="width:500px;">
-		<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:200px; overflow:scroll">
+		
+		<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:400px; overflow-y:auto; font-size:125%;">
 <pre>
 <c:out value="${resultsCommand.instance.error}" escapeXml="false"/>
 </pre>
 		</div>
-		</div>
+		
 </c:when>
 <c:when test="${empty resultsCommand.instance.result}">
 No results to display.
@@ -29,11 +29,11 @@ No results to display.
 		Results are empty.
 	</c:when>
 	<c:otherwise>
-		<div style="width:500px;">
-		<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:200px; overflow:scroll">
+		
+		<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:400px; overflow-y:auto; font-size:125%;">
 <c:out value="${resultsCommand.prettyXml}" escapeXml="false"/>
 		</div>
-		</div>
+		
 	</c:otherwise>
 </c:choose>
 </c:otherwise>

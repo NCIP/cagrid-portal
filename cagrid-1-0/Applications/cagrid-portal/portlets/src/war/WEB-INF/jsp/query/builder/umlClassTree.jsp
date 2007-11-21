@@ -64,12 +64,16 @@
 <%@ include file="/WEB-INF/jsp/tree/tree_node_styles_frag.jsp"%>
 -->
 </style>
-<p />
+<portlet:renderURL var="backUrl">
+	<portlet:param name="selectedTabPath" value="/query/builder/cqlQuery"/>
+</portlet:renderURL>
+<a href="<c:out value="${backUrl}"/>">&lt;&lt;&nbsp;Back</a>
+<br/>
+<br/>
 <portlet:actionURL var="action"/>
-
 <c:choose>
 	<c:when test="${!empty rootNode}">
-
+Select an attribute of <c:out value="${rootNode.label}"/>, or of an associated class.</br><br/>
 <c:set var="prefix"><portlet:namespace/></c:set>
 <c:set var="node" value="${rootNode}"/>
 <%@ include file="/WEB-INF/jsp/query/builder/umlClass.jspf"%>

@@ -17,27 +17,27 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
     	</property>
     </bean>
     
-    <bean name="/discovery/serviceDetailsNode" class="gov.nih.nci.cagrid.portal2.portlet.tree.TreeNodeDomainObjectSessionViewController">
+    <bean name="/discovery/serviceDetailsNode" class="gov.nih.nci.cagrid.portal.portlet.tree.TreeNodeDomainObjectSessionViewController">
           <property name="viewName" value="disc/details/service/serviceDetailsNode"/>
           <property name="treeFacade" ref="serviceDetailsTreeFacade"/>
 		  <property name="pathParamName" value="path"/>
 		  <property name="hibernateTemplate" ref="hibernateTemplate"/>
     </bean>
     
-    <bean name="/cqlquery/umlClassNode" class="gov.nih.nci.cagrid.portal2.portlet.tree.TreeNodeDomainObjectSessionViewController">
+    <bean name="/cqlquery/umlClassNode" class="gov.nih.nci.cagrid.portal.portlet.tree.TreeNodeDomainObjectSessionViewController">
           <property name="viewName" value="query/builder/umlClassNode"/>
           <property name="treeFacade" ref="umlClassTreeFacade"/>
 		  <property name="pathParamName" value="path"/>
 		  <property name="hibernateTemplate" ref="hibernateTemplate"/>
     </bean>
     
-    <bean name="/cqlquery/cqlQueryNode" class="gov.nih.nci.cagrid.portal2.portlet.tree.TreeNodeDomainObjectSessionViewController">
+    <bean name="/cqlquery/cqlQueryNode" class="gov.nih.nci.cagrid.portal.portlet.tree.TreeNodeDomainObjectSessionViewController">
           <property name="viewName" value="query/builder/cqlQueryNode"/>
           <property name="treeFacade" ref="cqlQueryTreeFacade"/>
 		  <property name="pathParamName" value="path"/>
 		  <property name="hibernateTemplate" ref="hibernateTemplate"/>
 		  <property name="domainObjectRetriever">
-		  	<bean class="gov.nih.nci.cagrid.portal2.portlet.query.cql.CriteriaBeanTreeNodeDomainObjectRetriever"/>
+		  	<bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CriteriaBeanTreeNodeDomainObjectRetriever"/>
 		  </property>
     </bean>
     

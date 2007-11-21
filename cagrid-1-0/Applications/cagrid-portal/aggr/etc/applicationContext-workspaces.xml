@@ -13,7 +13,7 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
 	<util:list id="defaultWorkspaces">
-		<bean class="gov.nih.nci.cagrid.portal2.domain.Workspace">
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
 			<property name="name" value="Clinical Trial Management Systems"/>
 			<property name="abbreviation" value="CTMS"/>
 			<property name="description">
@@ -26,7 +26,7 @@
 			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/CTMS"/>
 			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/clinicalTriallogo.gif"/>
 		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.domain.Workspace">
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
 			<property name="name" value="Integrative Cancer Research"/>
 			<property name="abbreviation" value="ICR"/>
 			<property name="description">
@@ -39,7 +39,7 @@
 			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/ICR"/>
 			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/icrlogo.gif"/>
 		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.domain.Workspace">
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
 			<property name="name" value="In Vivo Imaging"/>
 			<property name="abbreviation" value="IMAGING"/>
 			<property name="description">
@@ -52,7 +52,7 @@
 			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/Imaging"/>
 			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/ImagingIcon.gif"/>
 		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.domain.Workspace">
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
 			<property name="name" value="Tissue Banks and Pathology Tools"/>
 			<property name="abbreviation" value="TBPT"/>
 			<property name="description">
@@ -65,7 +65,7 @@
 			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/TBPT"/>
 			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/tbptlogo.gif"/>			
 		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.domain.Workspace">
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
 			<property name="name" value="Architecture"/>
 			<property name="abbreviation" value="ARCH"/>
 			<property name="description">
@@ -78,7 +78,7 @@
 			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/Architecture"/>
 			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/architecturelogo.gif"/>
 		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.domain.Workspace">
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
 			<property name="name" value="Vocabulary and Common Data Elements"/>
 			<property name="abbreviation" value="VCDE"/>
 			<property name="description">
@@ -91,7 +91,7 @@
 			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/VCDE"/>
 			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/vcdelogo.gif"/>
 		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.domain.Workspace">
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
 			<property name="name" value="Data Sharing and Intellectual Capital"/>
 			<property name="abbreviation" value="DSIC"/>
 			<property name="description">
@@ -104,7 +104,7 @@
 			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/DSIC_SLWG"/>
 			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/dsiclogo.gif"/>
 		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.domain.Workspace">
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
 			<property name="name" value="Documentation and Training"/>
 			<property name="abbreviation" value="TRAINING"/>
 			<property name="description">
@@ -117,7 +117,7 @@
 			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/Training_SLWG"/>
 			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/traininglogo.gif"/>
 		</bean>
-		<bean class="gov.nih.nci.cagrid.portal2.domain.Workspace">
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
 			<property name="name" value="Strategic Planning"/>
 			<property name="abbreviation" value="SP"/>
 			<property name="description">
@@ -132,7 +132,7 @@
 		</bean>
 	</util:list>
 	
-	<bean id="workspacesLoader" class="gov.nih.nci.cagrid.portal2.util.WorkspacesLoader">
+	<bean id="workspacesLoader" class="gov.nih.nci.cagrid.portal.util.WorkspacesLoader">
 		<property name="workspaceDao" ref="workspaceDao"/>
 		<property name="participantDao" ref="participantDao"/>
 		<property name="addressDao" ref="addressDao"/>

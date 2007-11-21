@@ -2,7 +2,6 @@
 
 	<property file="build.properties" />
 	<property environment="env" />
-	<property name="globus.home" value="${env.GLOBUS_LOCATION}" />
 	<property name="ant.home" value="${env.ANT_HOME}" />
 	<property name="tools.ant.lib" value="tools/ant/lib"/>
 	

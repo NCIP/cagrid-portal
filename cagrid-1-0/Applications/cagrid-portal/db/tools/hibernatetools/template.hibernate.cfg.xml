@@ -14,78 +14,85 @@
 		<property name="connection.password">@DB_PASSWORD@</property>
 		<property name="dialect">@DB_DIALECT@</property>
 
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.Address" />
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.Person" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.Address" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.Person" />
 		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.Participant" />
+			class="gov.nih.nci.cagrid.portal.domain.Participant" />
 		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.Participation" />
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.PortalUser" />
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.Role" />
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.GridService" />
+			class="gov.nih.nci.cagrid.portal.domain.Participation" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.PortalUser" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.Role" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.GridService" />
 		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.GridDataService" />
+			class="gov.nih.nci.cagrid.portal.domain.GridDataService" />
 		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.IndexService" />
+			class="gov.nih.nci.cagrid.portal.domain.IndexService" />
 		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.ServiceAnnotation" />
+			class="gov.nih.nci.cagrid.portal.domain.ServiceAnnotation" />
 		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.Workspace" />
+			class="gov.nih.nci.cagrid.portal.domain.Workspace" />
 			
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQuery" />			
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance" />
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.dataservice.DCQLQuery" />
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.dataservice.DCQLQueryInstance" />
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.dataservice.Query" />
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.dataservice.QueryInstance" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.dataservice.CQLQuery" />			
+		<mapping class="gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQuery" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.dataservice.Query" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.dataservice.SharedCQLQuery"/>
 
 
 		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.ServiceMetadata" />
+			class="gov.nih.nci.cagrid.portal.domain.metadata.ServiceMetadata" />
 
 		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.Enumeration" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.PointOfContact" />
-
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.ResearchCenter" />
-
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.SemanticMetadata" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLAttribute" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.UMLClass" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.common.ValueDomain" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.CaDSRRegistration" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.ContextProperty" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.Fault" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.InputParameter" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.Operation" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.Output" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.Service" />
-		<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.metadata.service.ServiceContext" />
-<mapping
-			class="gov.nih.nci.cagrid.portal2.domain.StatusChange" />			
+			class="gov.nih.nci.cagrid.portal.domain.metadata.common.Enumeration" />
 			
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.DomainModel" />
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLAssociation" />
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.SourceUMLAssociationEdge" />
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.TargetUMLAssociationEdge" />
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.metadata.dataservice.UMLClass" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact" />			
+			
+		<mapping class="gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenterPointOfContact" />
 		
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.news.NewsChannel"/>
-		<mapping class="gov.nih.nci.cagrid.portal2.domain.news.NewsItem"/>
+		<mapping class="gov.nih.nci.cagrid.portal.domain.metadata.service.ServicePointOfContact" />
+
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenter" />
+
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.common.SemanticMetadata" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.common.UMLAttribute" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.common.UMLClass" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.common.ValueDomain" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.service.CaDSRRegistration" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.service.ContextProperty" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.service.Fault" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.service.InputParameter" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.service.Operation" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.service.Output" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.service.Service" />
+		<mapping
+			class="gov.nih.nci.cagrid.portal.domain.metadata.service.ServiceContext" />
+<mapping
+			class="gov.nih.nci.cagrid.portal.domain.StatusChange" />			
+			
+		<mapping class="gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociation" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.metadata.dataservice.SourceUMLAssociationEdge" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.metadata.dataservice.TargetUMLAssociationEdge" />
+		<mapping class="gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass" />
+		
+		<mapping class="gov.nih.nci.cagrid.portal.domain.news.NewsChannel"/>
+		<mapping class="gov.nih.nci.cagrid.portal.domain.news.NewsItem"/>
+		
+		<mapping class="gov.nih.nci.cagrid.portal.domain.metadata.dataservice.XMLSchema"/>
 
 	</session-factory>
 

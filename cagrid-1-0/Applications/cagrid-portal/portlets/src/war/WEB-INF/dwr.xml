@@ -9,9 +9,9 @@
     	<param name="beanName" value="cqlQueryHistoryFacade"/>
     </create>
     
-    <convert converter="enum" match="gov.nih.nci.cagrid.portal2.domain.dataservice.QueryInstanceState"/>
+    <convert converter="enum" match="gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstanceState"/>
     
-    <convert converter="bean" match="gov.nih.nci.cagrid.portal2.domain.dataservice.CQLQueryInstance">
+    <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance">
     	<param name="include" value="id, finishTime, startTime, state"/>
     </convert>
     

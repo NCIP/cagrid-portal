@@ -2,7 +2,17 @@
 	<tbody>
 		<tr>
 			<td>QName:</td>
-			<td><c:out value="${outputParam.QName}"/></td>
+			<td>
+				<c:choose>
+					<c:when test="${empty outputParam.xmlSchema}">
+						<c:out value="${outputParam.QName}"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="selectUrl" value="${fn:replace(selectXmlSchemaUrl, 'XML_SCHEMA_ID', outputParam.xmlSchema.id)}"/>
+						<a href="${selectUrl}"><c:out value="${outputParam.QName}"/></a><br/>
+					</c:otherwise>
+				</c:choose>
+			</td>
 		</tr>
 		<tr>
 			<td>UML Class:</td>

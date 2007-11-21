@@ -78,6 +78,13 @@
 	<classpathentry kind="lib" path="portals/liferay/lib/portal-service.jar"/>
 	<classpathentry kind="lib" path="portlets/lib/dwr.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-metadataUtils.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cagrid/GlobalModelExchange.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-GlobalModelExchange-stubs.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-GlobalModelExchange.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-caDSR-common.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-caDSR-client.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-caDSR-stubs.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/client.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/puretls.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jgss.jar"/>

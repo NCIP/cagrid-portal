@@ -1,6 +1,7 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 <%@ include file="/WEB-INF/jsp/query/tabs.jspf" %>
 
+<c:set var="objectInputId"><portlet:namespace/>objectInput</c:set>
 <c:set var="countOnlyInputId"><portlet:namespace/>countOnlyInput</c:set>
 <c:set var="distinctAttributeInputId"><portlet:namespace/>distinctAttributeInput</c:set>
 <c:set var="selectedAttributesInputId"><portlet:namespace/>selectedAttributesInput</c:set>
@@ -10,35 +11,27 @@
 	
 	function <portlet:namespace/>doQueryModifierOp(editOp){
 		var form = document.<portlet:namespace/>editQueryModifierForm;
-		var confirmed =  true;
-		if('delete' == editOp){
-			confirmed = confirm('Do you want to delete this modifier?');
-		}
-		if(confirmed){
-		
-			var somethingSelected = true;
-			if('update' == editOp){
-				var numSelected = 0;
-				jQuery("#<portlet:namespace/>selectedAttributesDiv").find("input").each(function(){
-					if(this.checked){
-						numSelected++;
-					}
-				});
-				
-				var distinctAttributeInputEl = document.getElementById('<c:out value="${distinctAttributeInputId}"/>');
-				var selectedAttributesInputEl = document.getElementById('<c:out value="${selectedAttributesInputId}"/>');
-				if(distinctAttributeInputEl.checked && numSelected == 0){
-					somethingSelected = false;
-					alert("Please select an attribute.");
-				}else if(selectedAttributesInputEl.checked && numSelected == 0){
-					somethingSelected = false;
-					alert("Please select at least one attribute.");
+		var somethingSelected = true;
+		if('update' == editOp){
+			var numSelected = 0;
+			jQuery("#<portlet:namespace/>selectedAttributesDiv").find("input").each(function(){
+				if(this.checked){
+					numSelected++;
 				}
+			});
+			var distinctAttributeInputEl = document.getElementById('<c:out value="${distinctAttributeInputId}"/>');
+			var selectedAttributesInputEl = document.getElementById('<c:out value="${selectedAttributesInputId}"/>');
+			if(distinctAttributeInputEl.checked && numSelected == 0){
+				somethingSelected = false;
+				alert("Please select an attribute.");
+			}else if(selectedAttributesInputEl.checked && numSelected == 0){
+				somethingSelected = false;
+				alert("Please select at least one attribute.");
 			}
-			if(somethingSelected){
-				form.editOperation.value = editOp;
-				form.submit();
-			}
+		}
+		if(somethingSelected){
+			form.editOperation.value = editOp;
+			form.submit();
 		}
 	}
 	var <portlet:namespace/>selectedAttributesMap = {
@@ -67,6 +60,9 @@
 	
 	jQuery(document).ready(function(){
 	 
+	 	jQuery("#<c:out value="${objectInputId}"/>").click(function(){
+   			jQuery("#<portlet:namespace/>selectedAttributesDiv").html("");
+        });
         jQuery("#<c:out value="${countOnlyInputId}"/>").click(function(){
    			jQuery("#<portlet:namespace/>selectedAttributesDiv").html("");
         });
@@ -98,17 +94,19 @@
 <form:form commandName="editQueryModifierCommand" name="${editQueryModifierFormName}" action="${editQueryModifierFormAction}">
 
 <input type="button" value="Update" onclick="<portlet:namespace/>doQueryModifierOp('update')"/>
-<input type="button" value="Delete" onclick="<portlet:namespace/>doQueryModifierOp('delete')"/>
 <input type="button" value="Cancel" onclick="<portlet:namespace/>doQueryModifierOp('cancel')"/>
 <input type="hidden" name="operation" value="updateQueryModifier"/>
 <input type="hidden" name="editOperation" value=""/>
 
 <br/>
-<form:radiobutton id="${countOnlyInputId}" value="COUNT_ONLY" path="modifierType"/>Count Only<br/>
-<form:radiobutton id="${distinctAttributeInputId}" value="DISTINCT_ATTRIBUTE" path="modifierType"/>Distinct Attribute<br/>
-<form:radiobutton id="${selectedAttributesInputId}" value="SELECTED_ATTRIBUTES" path="modifierType"/>Selected Attributes<br/>
-<p/>
-<div id="<portlet:namespace/>selectedAttributesDiv">
+<br/>
+<form:radiobutton id="${objectInputId}" value="OBJECT" path="modifierType"/>Object&nbsp;&nbsp;
+<form:radiobutton id="${countOnlyInputId}" value="COUNT_ONLY" path="modifierType"/>Count Only&nbsp;&nbsp;
+<form:radiobutton id="${distinctAttributeInputId}" value="DISTINCT_ATTRIBUTE" path="modifierType"/>Distinct Attribute&nbsp;&nbsp;
+<form:radiobutton id="${selectedAttributesInputId}" value="SELECTED_ATTRIBUTES" path="modifierType"/>Selected Attributes&nbsp;&nbsp;
+<br/>
+<br/>
+<div id="<portlet:namespace/>selectedAttributesDiv" style="border:3px">
 </div>
 
 </form:form>

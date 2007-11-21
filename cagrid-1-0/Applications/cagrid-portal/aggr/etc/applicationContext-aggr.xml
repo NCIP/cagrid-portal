@@ -28,17 +28,28 @@
 		<constructor-arg value="900000"/>
 	</bean>
 	
+	<bean id="gmeUrl" class="java.lang.String">
+		<constructor-arg value="http://cagrid-service.nci.nih.gov:8080/wsrf/services/cagrid/GlobalModelExchange"/>
+	</bean>
+	
+	<bean id="cadsrUrl" class="java.lang.String">
+		<constructor-arg value="http://cagrid-service.nci.nih.gov:8080/wsrf/services/cagrid/CaDSRService"/>
+	</bean>
+	
 	<bean id="metadataListenerTemplate" abstract="true">
 		<property name="serviceMetadataBuilder">
 			<bean
-				class="gov.nih.nci.cagrid.portal2.aggr.regsvc.ServiceMetadataBuilder" >
+				class="gov.nih.nci.cagrid.portal.aggr.regsvc.ServiceMetadataBuilder" >
 				<property name="hibernateTemplate" ref="hibernateTemplate"/>
+				<property name="gmeUrl" ref="gmeUrl"/>
 			</bean>
 		</property>
 		<property name="domainModelBuilder">
 			<bean
-				class="gov.nih.nci.cagrid.portal2.aggr.regsvc.DomainModelBuilder" >
+				class="gov.nih.nci.cagrid.portal.aggr.regsvc.DomainModelBuilder" >
 				<property name="hibernateTemplate" ref="hibernateTemplate"/>
+				<property name="gmeUrl" ref="gmeUrl"/>
+				<property name="cadsrUrl" ref="cadsrUrl"/>
 			</bean>
 		</property>
 		<property name="metadataTimeout" ref="defaultTimeout" />

@@ -6,6 +6,11 @@
 <script type='text/javascript' src='<c:url value="/dwr/engine.js"/>'></script>
 <script type='text/javascript' src='<c:url value="/dwr/util.js"/>'></script>
 
+<portlet:actionURL var="selectXmlSchemaUrl">
+	<portlet:param name="operation" value="selectXmlSchema"/>
+	<portlet:param name="selectedId" value="XML_SCHEMA_ID"/>
+</portlet:actionURL>
+
 <script type="text/javascript">
 	//<![CDATA[
 	
@@ -30,7 +35,8 @@
 			{ 
 				prefix: prefix, 
 			 	render: wasEmpty, 
-			 	path: id 
+			 	path: id,
+			 	selectXmlSchemaUrl: '<c:out value="${selectXmlSchemaUrl}" escapeXml="false"/>'
 			},
 			{
 				callback:function(html){
@@ -92,17 +98,21 @@
 
 <c:choose>
 	<c:when test="${!empty gridServiceUrl and empty rootNode}">
-No grid service found for <c:out value="${gridServiceUrl}"/>
+No grid service was found for <c:out value="${gridServiceUrl}"/>
 	</c:when>
 	<c:when test="${!empty rootNode}">
-
+<c:set var="resizablePrefix"><portlet:namespace/>detailsTree</c:set>
+<%@ include file="/WEB-INF/jsp/include/resizable_div.jspf" %>
+<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:400px; overflow-y:auto">
 <c:set var="prefix"><portlet:namespace/></c:set>
 <c:set var="node" value="${rootNode}"/>
+
 <%@ include file="/WEB-INF/jsp/disc/details/service/serviceDetails.jspf"%>
-	
+
+</div>
 	</c:when>
 	<c:otherwise>
-No service is currently selected.	
+No service has been selected. Use the search tab to discover services.	
 	</c:otherwise>
 </c:choose>
 

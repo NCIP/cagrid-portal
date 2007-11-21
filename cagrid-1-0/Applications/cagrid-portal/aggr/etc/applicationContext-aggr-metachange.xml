@@ -15,23 +15,23 @@
 	<import resource="classpath:applicationContext-aggr.xml"/>
 
 	<bean id="metadataChangeMonitor"
-		class="gov.nih.nci.cagrid.portal2.aggr.metachange.MetadataChangeMonitor">
+		class="gov.nih.nci.cagrid.portal.aggr.metachange.MetadataChangeMonitor">
 		<property name="indexServiceUrls" ref="defaultIndexServiceUrls" />
 		<property name="dynamicMetadataHashProvider">
 			<bean
-				class="gov.nih.nci.cagrid.portal2.aggr.metachange.DynamicMetadataHashProvider">
+				class="gov.nih.nci.cagrid.portal.aggr.metachange.DynamicMetadataHashProvider">
 				<property name="timeout" ref="defaultTimeout" />
 			</bean>
 		</property>
 		<property name="cachedMetadataHashProvider">
 			<bean
-				class="gov.nih.nci.cagrid.portal2.aggr.metachange.DBCachedMetadataHashProvider">
+				class="gov.nih.nci.cagrid.portal.aggr.metachange.DBCachedMetadataHashProvider">
 				<property name="gridServiceDao" ref="gridServiceDao" />
 			</bean>
 		</property>
 		<property name="cachedServiceUrlProvider">
 			<bean
-				class="gov.nih.nci.cagrid.portal2.aggr.regsvc.DBCachedServiceUrlProvider">
+				class="gov.nih.nci.cagrid.portal.aggr.regsvc.DBCachedServiceUrlProvider">
 				<property name="gridServiceDao" ref="gridServiceDao" />
 			</bean>
 		</property>
@@ -52,7 +52,7 @@
 
 	<bean id="metadataChangeListener"
 		parent="metadataListenerTemplate"
-		class="gov.nih.nci.cagrid.portal2.aggr.metachange.MetadataChangeListener">
+		class="gov.nih.nci.cagrid.portal.aggr.metachange.MetadataChangeListener">
 		<property name="gridServiceDao" ref="gridServiceDao" />
 	</bean>
 	

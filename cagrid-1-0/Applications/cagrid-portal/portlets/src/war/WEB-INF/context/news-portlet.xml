@@ -14,12 +14,12 @@
 
 	<bean 
 		id="viewNewsController"
-		class="gov.nih.nci.cagrid.portal2.portlet.news.ViewNewsController"
+		class="gov.nih.nci.cagrid.portal.portlet.news.ViewNewsController"
 		autowire="byName">
 		<property name="successView" value="news"/>
 		<property name="selectedItemAttribute" value="selectedNewsItem"/>
 		<property name="interPortletMessageReceiver">
-			<bean class="gov.nih.nci.cagrid.portal2.portlet.InterPortletMessageAdapter" autowire="byName">
+			<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 				<property name="modePreferenceName" value="newsItemSelectMode" />
 				<property name="inputQueuePreferenceName" value="selectedNewsItemInputQueueName" />
 				<property name="inputQueueNameDefaultValue" value="selectedNewsItem" />
@@ -29,27 +29,27 @@
 	
 	<bean 
 		id="selectItemController"
-		class="gov.nih.nci.cagrid.portal2.portlet.news.SelectItemController"
+		class="gov.nih.nci.cagrid.portal.portlet.news.SelectItemController"
 		autowire="byName">
 		<property name="commandName" value="selectItemCommand"/>
-		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.news.SelectItemCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.news.SelectItemCommand"/>
 		<property name="successOperation" value="viewNews"/>
 		<property name="selectedItemAttribute" value="selectedNewsItem"/>
 	</bean>
 	
 	<bean 
 		id="listChannelsController"
-		class="gov.nih.nci.cagrid.portal2.portlet.news.ListChannelsController"
+		class="gov.nih.nci.cagrid.portal.portlet.news.ListChannelsController"
 		autowire="byName">
 		<property name="successView" value="channels"/>
 	</bean>
 	
 	<bean 
 		id="editChannelController"
-		class="gov.nih.nci.cagrid.portal2.portlet.news.EditChannelController"
+		class="gov.nih.nci.cagrid.portal.portlet.news.EditChannelController"
 		autowire="byName">
 		<property name="commandName" value="channel"/>
-		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.domain.news.NewsChannel"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal.domain.news.NewsChannel"/>
 		<property name="sessionForm" value="true"/>
 		<property name="formView" value="editChannelForm"/>
 		<property name="successView" value="editChannelForm"/>
@@ -57,7 +57,7 @@
 	
 	<bean 
 		id="listItemsController"
-		class="gov.nih.nci.cagrid.portal2.portlet.news.ListItemsController"
+		class="gov.nih.nci.cagrid.portal.portlet.news.ListItemsController"
 		autowire="byName">
 		<property name="objectName" value="itemsListBean"/>
 		<property name="successView" value="items"/>
@@ -66,21 +66,21 @@
 	
 	<bean 
 		id="scrollItemsController"
-		class="gov.nih.nci.cagrid.portal2.portlet.news.ScrollItemsController"
+		class="gov.nih.nci.cagrid.portal.portlet.news.ScrollItemsController"
 		autowire="byName">
 		<property name="objectName" value="itemsListBean"/>
 		<property name="commandName" value="scrollCommand"/>
-		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.portlet.util.ScrollCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.util.ScrollCommand"/>
 		<property name="successView" value="items"/>
 		<property name="sessionAttributeName" value="itemsListBean"/>
 	</bean>
 	
 	<bean 
 		id="editItemController"
-		class="gov.nih.nci.cagrid.portal2.portlet.news.EditItemController"
+		class="gov.nih.nci.cagrid.portal.portlet.news.EditItemController"
 		autowire="byName">
 		<property name="commandName" value="item"/>
-		<property name="commandClass" value="gov.nih.nci.cagrid.portal2.domain.news.NewsItem"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal.domain.news.NewsItem"/>
 		<property name="sessionForm" value="true"/>
 		<property name="formView" value="editItemForm"/>
 		<property name="successView" value="editItemForm"/>
@@ -153,9 +153,9 @@
 	<bean id="defaultExceptionHandler"
 		parent="defaultExceptionHandlerTemplate" />
 		
-	<bean id="itemsListBeanPrototype" class="gov.nih.nci.cagrid.portal2.portlet.news.ItemsListBean">
+	<bean id="itemsListBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.news.ItemsListBean">
 		<property name="scroller">
-			<bean class="gov.nih.nci.cagrid.portal2.portlet.util.Scroller">
+			<bean class="gov.nih.nci.cagrid.portal.portlet.util.Scroller">
 				<property name="pageSize" value="10"/>
 			</bean>
 		</property>

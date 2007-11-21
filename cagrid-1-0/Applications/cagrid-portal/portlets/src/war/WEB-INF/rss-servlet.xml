@@ -17,7 +17,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
     	</property>
     </bean>
     
-    <bean name="/news.rss" class="gov.nih.nci.cagrid.portal2.portlet.news.ViewRssController"
+    <bean name="/news.rss" class="gov.nih.nci.cagrid.portal.portlet.news.ViewRssController"
     	autowire="byName"/>
 
 </beans>
