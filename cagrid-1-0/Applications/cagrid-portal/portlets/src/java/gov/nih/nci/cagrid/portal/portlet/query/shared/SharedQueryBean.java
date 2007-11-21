@@ -14,6 +14,7 @@ public class SharedQueryBean {
 	
 	private CQLQueryCommand queryCommand;
 	private SharedCQLQuery query;
+	private String prettyXml;
 
 	/**
 	 * 
@@ -36,6 +37,14 @@ public class SharedQueryBean {
 
 	public void setQuery(SharedCQLQuery query) {
 		this.query = query;
+	}
+
+	public String getPrettyXml() {
+		return prettyXml;
+	}
+
+	public void setPrettyXml(String prettyXml) {
+		this.prettyXml = prettyXml;
 	}
 
 }

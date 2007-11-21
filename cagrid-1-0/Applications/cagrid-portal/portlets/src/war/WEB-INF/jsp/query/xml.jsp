@@ -37,7 +37,9 @@
 		<tr>
 			<td colspan="2">
 				<input type="submit" value="Submit Query" />
-				<input type="button" value="Share Query" onclick="<portlet:namespace/>shareQuery()" />
+				<c:if test="${!empty portalUser}">
+					<input type="button" value="Share Query" onclick="<portlet:namespace/>shareQuery()" />
+				</c:if>
 			</td>
 		</tr>
 	</table>

@@ -104,7 +104,7 @@ public class Tab {
 	}
 	
 	public String toString(){
-		return "[name=" + getName() + ", selected=" + isSelected() + "]";
+		return "[name:" + getName() + ", selected:" + isSelected() + ", visible:" + isVisible() + ", authnRequired:" + isAuthnRequired() + "]";
 	}
 
 	public boolean isVisible() {

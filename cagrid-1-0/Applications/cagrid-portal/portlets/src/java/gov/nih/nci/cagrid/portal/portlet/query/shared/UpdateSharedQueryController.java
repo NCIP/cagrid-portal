@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.portal.dao.UMLClassDao;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQuery;
+import gov.nih.nci.cagrid.portal.domain.dataservice.SharedCQLQuery;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand;
@@ -18,6 +19,7 @@ import gov.nih.nci.cagrid.portal.util.PortalUtils;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletRequest;
 
 import org.springframework.validation.BindException;
 
@@ -82,6 +84,7 @@ public class UpdateSharedQueryController extends AbstractQueryActionController {
 					query.setXml(cql);
 					query.setHash(hash);
 					getCqlQueryDao().save(query);
+					getCqlQueryDao().getHibernateTemplate().flush();
 				}
 				bean.getQuery().setCqlQuery(query);
 
@@ -99,6 +102,7 @@ public class UpdateSharedQueryController extends AbstractQueryActionController {
 				bean.getQuery().setTargetClass(targetClass);
 
 				getSharedCqlQueryDao().save(bean.getQuery());
+				getSharedCqlQueryDao().getHibernateTemplate().flush();
 
 				if (owner != null) {
 					owner.getSharedQueries().add(bean.getQuery());
@@ -106,21 +110,28 @@ public class UpdateSharedQueryController extends AbstractQueryActionController {
 				}
 			} else {
 				getSharedCqlQueryDao().save(bean.getQuery());
+				getSharedCqlQueryDao().getHibernateTemplate().flush();
 			}
 
 			response.setRenderParameter("confirmMessage",
 					"The shared query has been successfully saved.");
 		} else if ("delete".equals(editOp)) {
 			PortalUser portalUser = bean.getQuery().getOwner();
+			portalUser = getPortalUserDao().getById(portalUser.getId());
 			portalUser.getSharedQueries().remove(bean.getQuery());
 			bean.getQuery().setOwner(null);
-			getSharedCqlQueryDao().delete(bean.getQuery());
+			SharedCQLQuery query = getSharedCqlQueryDao().getById(bean.getQuery().getId());
+			getSharedCqlQueryDao().delete(query);
 			getPortalUserDao().save(portalUser);
 			response.setRenderParameter("confirmMessage",
 					"The shared query has been successfully deleted.");
 			getQueryModel().setWorkingSharedQuery(null);
 		}
 
+	}
+
+	protected Object getCommand(PortletRequest request) throws Exception {
+		return getQueryModel().getWorkingSharedQuery();
 	}
 
 	public CQLQueryDao getCqlQueryDao() {

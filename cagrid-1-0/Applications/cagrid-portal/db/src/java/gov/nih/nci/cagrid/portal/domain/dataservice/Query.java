@@ -14,6 +14,7 @@ import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -53,7 +54,7 @@ public abstract class Query extends AbstractDomainObject {
 		this.instances = instances;
 	}
 
-	@Column(length = 4000)
+	@Lob
 	public String getXml() {
 		return xml;
 	}

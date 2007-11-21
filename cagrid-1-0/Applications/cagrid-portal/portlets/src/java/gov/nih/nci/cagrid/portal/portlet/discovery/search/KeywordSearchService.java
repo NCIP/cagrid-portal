@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.Participant;
 import gov.nih.nci.cagrid.portal.domain.Person;
+import gov.nih.nci.cagrid.portal.domain.dataservice.SharedCQLQuery;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenterPointOfContact;
 import gov.nih.nci.cagrid.portal.domain.metadata.service.ServicePointOfContact;
@@ -58,6 +59,8 @@ public class KeywordSearchService {
 			klass = Participant.class;
 		} else if (DiscoveryType.POC.equals(searchBean.getDiscoveryType())) {
 			klass = PointOfContact.class;
+		} else if (DiscoveryType.CQL_QUERY.equals(searchBean.getDiscoveryType())) {
+			klass = SharedCQLQuery.class;
 		} else {
 			throw new CaGridPortletApplicationException(
 					"invalid discoveryType: '" + searchBean.getDiscoveryType()

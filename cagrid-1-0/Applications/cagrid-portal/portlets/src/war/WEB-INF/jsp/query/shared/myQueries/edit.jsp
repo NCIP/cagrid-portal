@@ -15,7 +15,6 @@
 			confirmed = confirm('Do you want to delete this shared query?');
 		}
 		if(confirmed){
-			
 			if('cancel' == editOp){
 				form.selectedTabPath.value = '/shared/myQueries/list';
 				form.operation.value = '';
@@ -43,16 +42,10 @@
 <span style="color:red"><form:errors path="*"/></span><br/>
 <table>
 	<tr>
-		<td style="padding-right:5px">Name:</td>
+		<td style="padding-right:5px"><b>Name:</b></td>
 		<td>
 			<form:input path="query.name" size="100"/><br/>
 			<span style="color:red"><form:errors path="query.name"/></span>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding-right:5px">Anonymous:</td>
-		<td>
-			<form:checkbox path="query.anonymous"/>
 		</td>
 	</tr>
 	<tr>
@@ -66,6 +59,7 @@
 </table>
 <input type="hidden" name="editOp" value="save"/>
 <input type="hidden" name="operation" value="updateSharedQuery"/>
+<input type="hidden" name="selectedTabPath" value=""/>
 <c:if test="${!empty sharedQueryBean.query.id}">
 	<input type="button" value="Delete" onclick="<portlet:namespace/>doEditSharedQueryOp('delete')"/>
 </c:if>

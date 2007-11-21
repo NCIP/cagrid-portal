@@ -137,9 +137,9 @@
 		<td valign="top" style="padding-right:5px; text-align:right"><b>Search Fields:</b></td>
 		<td valign="top">
 			<select name="searchFields" multiple size="8">
-				<option value="url">URL</option>
-				<option value="name">Name</option>
-				<option value="description">Description</option>
+				<option value="serviceUrl">URL</option>
+				<option value="serviceName">Name</option>
+				<option value="serviceDescription">Description</option>
 				<option value="inputOutput">Input/Output Class Names</option>
 				<option value="operationNames">Operation Names</option>
 				<option value="semanticMetadata">Semantic Metadata</option>

@@ -22,6 +22,13 @@
 		form.submit();
 	}
 	
+	function <portlet:namespace/>shareBuilderQuery(){
+		var form = document.<portlet:namespace/>criteriaBeanForm;
+		form.action = '<portlet:actionURL/>';
+		form.operation.value = 'shareBuilderQuery';
+		form.submit();
+	}
+	
 	//]]>
 </script>
 <c:set var="criteriaBeanFormName"><portlet:namespace/>criteriaBeanForm</c:set>
@@ -30,6 +37,9 @@
 	<input type="button" value="Add Criterion" onclick="<portlet:namespace/>goToPath('/query/builder/umlClass')"/>
 	<input type="button" value="Export To XML" onclick="<portlet:namespace/>exportToXml()"/>
 	<input type="button" value="Submit Query" onclick="<portlet:namespace/>submitBuilderQuery()"/>
+	<c:if test="${!empty portalUser}">
+		<input type="button" value="Share Query" onclick="<portlet:namespace/>shareBuilderQuery()"/>
+	</c:if>
 	<input type="hidden" name="selectedTabPath" value=""/>
 	<input type="hidden" name="operation" value=""/>
 </form:form>

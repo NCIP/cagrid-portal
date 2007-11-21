@@ -7,6 +7,8 @@ import gov.nih.nci.cagrid.portal.domain.PortalUser;
 
 import javax.portlet.PortletSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
@@ -17,8 +19,11 @@ import org.springframework.web.portlet.context.PortletWebRequest;
  * 
  */
 public class PortalUserRequestInterceptor implements WebRequestInterceptor {
+	
+	private static final Log logger = LogFactory.getLog(PortalUserRequestInterceptor.class);
 
-	private String portalUserAttributeName;
+	private String portalUserSessionAttributeName;
+	private String portalUserRequestAttributeName;
 
 	/**
 	 * 
@@ -56,20 +61,32 @@ public class PortalUserRequestInterceptor implements WebRequestInterceptor {
 	public void preHandle(WebRequest webRequest) throws Exception {
 		PortletWebRequest portletWebRequest = (PortletWebRequest) webRequest;
 		PortalUser portalUser = (PortalUser) portletWebRequest.getRequest()
-				.getPortletSession().getAttribute(getPortalUserAttributeName(),
+				.getPortletSession().getAttribute(getPortalUserSessionAttributeName(),
 						PortletSession.APPLICATION_SCOPE);
-		if (portalUser != null) {
+		if (portalUser == null) {
+			logger.debug("Didn't find PortalUser in session under " + getPortalUserSessionAttributeName());
+		}else{
+			logger.debug("Putting PortalUser in request under " + getPortalUserRequestAttributeName());
 			portletWebRequest.getRequest().setAttribute(
-					getPortalUserAttributeName(), portalUser);
+					getPortalUserRequestAttributeName(), portalUser);
 		}
 	}
 
-	public String getPortalUserAttributeName() {
-		return portalUserAttributeName;
+	public String getPortalUserSessionAttributeName() {
+		return portalUserSessionAttributeName;
 	}
 
-	public void setPortalUserAttributeName(String portalUserAttributeName) {
-		this.portalUserAttributeName = portalUserAttributeName;
+	public void setPortalUserSessionAttributeName(String portalUserAttributeName) {
+		this.portalUserSessionAttributeName = portalUserAttributeName;
+	}
+
+	public String getPortalUserRequestAttributeName() {
+		return portalUserRequestAttributeName;
+	}
+
+	public void setPortalUserRequestAttributeName(
+			String portalUserRequestAttributeName) {
+		this.portalUserRequestAttributeName = portalUserRequestAttributeName;
 	}
 
 }

@@ -8,5 +8,5 @@ package gov.nih.nci.cagrid.portal.portlet.discovery;
  *
  */
 public enum DiscoveryType {
-	SERVICE, PARTICIPANT, POC;
+	SERVICE, PARTICIPANT, POC, CQL_QUERY;
 }
