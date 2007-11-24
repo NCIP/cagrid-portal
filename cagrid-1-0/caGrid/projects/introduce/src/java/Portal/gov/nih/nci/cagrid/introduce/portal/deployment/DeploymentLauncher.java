@@ -43,11 +43,12 @@ public class DeploymentLauncher {
             if (dir != null) {
                 if (new File(dir).exists() && new File(dir).canRead()) {
                     serviceDirectory = new File(dir);
+                } else {
+                    CompositeErrorDialog.showErrorDialog("Error opening directory for deployment", "Directory "
+                        + serviceDirectory.getAbsolutePath()
+                        + " does not exist or does not seem to be an introduce service");
+                    error = true;
                 }
-                CompositeErrorDialog.showErrorDialog("Error opening directory for deployment", "Directory "
-                    + serviceDirectory.getAbsolutePath()
-                    + " does not exist or does not seem to be an introduce service");
-                error = true;
             }
         } catch (Exception e) {
             CompositeErrorDialog.showErrorDialog("Error opening directory for deployment", "Directory "
