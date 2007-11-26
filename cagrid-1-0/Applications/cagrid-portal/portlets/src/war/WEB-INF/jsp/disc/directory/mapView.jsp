@@ -21,7 +21,9 @@
 </tr>
 </table>
 
-<c:set var="selectOperationName" value="selectService"/>
+<c:set var="selectItemOperationName" value="selectService"/>
+<c:set var="selectItemsOperationName" value="selectServices"/>
+
 <c:set var="mapBean" value="${mapCommand}"/>
 
 <%@ include file="/WEB-INF/jsp/map/map.jspf" %>

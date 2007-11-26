@@ -36,6 +36,31 @@
 		</property>
 	</bean>
 	
+	<bean 
+		id="selectItemsForDiscoveryController"
+		class="gov.nih.nci.cagrid.portal.portlet.map.SelectItemsForDiscoveryController"
+		autowire="byName">
+		<property name="commandName" value="selectItemsForDiscovery"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.map.SelectItemsCommand"/>
+		<property name="redirectUrlPreferenceName" value="selectItemsForDiscoveryRedirectUrl"/>
+		<property name="interPortletMessageSender">
+			<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
+				<property name="modePreferenceName" value="discoveryItemsSelectMode" />
+				<property name="outputQueuePreferenceName" value="selectedDiscoveryItemsOutputQueueName" />
+				<property name="outputQueueNameDefaultValue" value="selectedDiscoveryItems" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean 
+		id="selectDirectoryController"
+		class="gov.nih.nci.cagrid.portal.portlet.map.SelectDirectoryController"
+		autowire="byName">
+		<property name="commandName" value="mapCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean"/>
+		<property name="successOperation" value="viewMap"/>
+	</bean>
+	
 	<bean
 	 id="portletModeParameterHandlerMapping"
 		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
@@ -48,6 +73,12 @@
 					<map>
 						<entry key="selectItemForDiscovery" 
 							value-ref="selectItemForDiscoveryController" />
+						<entry key="selectItemsForDiscovery" 
+							value-ref="selectItemsForDiscoveryController" />
+						<entry key="selectDirectory" 
+							value-ref="selectDirectoryController" />
+						<entry key="viewMap" 
+							value-ref="viewMapController" />
 				    </map>
 				</entry>
 	 		</map>

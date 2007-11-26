@@ -5,6 +5,8 @@ package gov.nih.nci.cagrid.portal.portlet.register;
 
 import gov.nih.nci.cagrid.dorian.client.DorianClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
+import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
+import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault;
 
@@ -48,9 +50,9 @@ public class RegisterController extends SimpleFormController implements Initiali
 
 	protected void initBinder(PortletRequest request,
 			PortletRequestDataBinder binder) throws Exception {
-		binder.registerCustomEditor(Application.class, "state",
+		binder.registerCustomEditor(StateCode.class, "state",
 				new StateCodeEditor());
-		binder.registerCustomEditor(Application.class, "country",
+		binder.registerCustomEditor(CountryCode.class, "country",
 				new CountryCodeEditor());
 	}
 

@@ -24,13 +24,22 @@ public class ServiceMapNode extends MapNode {
 	public ServiceMapNode() {
 
 	}
-	
 
-	public boolean isActive(){
+	public boolean isPartiallyActive(){
 		boolean isActive = false;
 		for(ServiceInfo info : getServiceInfos()){
 			if(ServiceStatus.ACTIVE.toString().equals(info.getStatus())){
 				return true;
+			}
+		}
+		return isActive;
+	}
+	
+	public boolean isFullyActive(){
+		boolean isActive = true;
+		for(ServiceInfo info : getServiceInfos()){
+			if(!ServiceStatus.ACTIVE.toString().equals(info.getStatus())){
+				return false;
 			}
 		}
 		return isActive;

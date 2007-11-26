@@ -20,6 +20,11 @@
 		<aop:scoped-proxy proxy-target-class="true"/>
 	</bean>
 	
+	<bean id="discoveryModel" class="gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryModel" scope="globalSession" autowire="byName">
+		<aop:scoped-proxy proxy-target-class="true"/>
+	</bean>		
+	
+	
 	<bean id="cqlQueryInstanceExecutorPrototype" class="gov.nih.nci.cagrid.portal.portlet.query.cql.DefaultCQLQueryInstanceExecutor" scope="prototype">
 		<property name="executorService" ref="executorService"/>
 		<property name="cqlQueryInstanceListener">

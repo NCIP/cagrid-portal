@@ -338,6 +338,16 @@
 					</property>
 					<property name="selectedTabPath" value="/directory/listView" />
 				</bean>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.discovery.SelectDiscoveryResultsPathHandler" autowire="byName">
+					<property name="interPortletMessageReceiver">
+						<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
+							<property name="modePreferenceName" value="discoveryResultsSelectMode" />
+							<property name="inputQueuePreferenceName" value="selectedDiscoveryResultsInputQueueName" />
+							<property name="inputQueueNameDefaultValue" value="selectedDiscoveryResults" />
+						</bean>
+					</property>
+					<property name="selectedTabPath" value="/directory/listView" />
+				</bean>
 			</list>
 		</property>
 		
@@ -409,12 +419,7 @@
 	
 	<bean id="discoveryTabActionResponseHandler" class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
 		<property name="tabControlConfig" ref="discoveryTabControlConfig"/>
-	</bean>
-	
-		
-	<bean id="discoveryModel" class="gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryModel" scope="session" autowire="byName">
-		<aop:scoped-proxy proxy-target-class="true"/>
-	</bean>		
+	</bean>	
 
 	<bean id="discoveryTabModel"
 		class="gov.nih.nci.cagrid.portal.portlet.tab.TabModel" scope="session">

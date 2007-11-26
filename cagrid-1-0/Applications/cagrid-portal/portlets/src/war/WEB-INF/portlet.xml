@@ -225,6 +225,7 @@
 		</portlet-info>
 
 		<portlet-preferences>
+		
 			<preference>
 				<name>selectItemForDiscoveryRedirectUrl</name>
 				<value>/web/guest/2</value>
@@ -241,6 +242,24 @@
              	<name>map:selectedItem</name>
             	<value>disc:selectedItem</value>
         	</preference>
+        	
+        	<preference>
+				<name>selectItemsForDiscoveryRedirectUrl</name>
+				<value>/web/guest/2</value>
+			</preference>	
+			<preference>
+             	<name>discoveryItemsSelectMode</name> 
+            	<value>INTERPORTLET</value>
+         	</preference>
+         	<preference>
+            	<name>selectedDiscoveryItemsOutputQueueName</name> 
+            	<value>map:selectedItems</value>
+         	</preference>
+        	<preference>
+             	<name>map:selectedItems</name>
+            	<value>disc:selectedResults</value>
+        	</preference>
+        	
 		</portlet-preferences>
 	</portlet>
 
@@ -283,6 +302,15 @@
             <preference>
                 <name>selectedDiscoveryItemInputQueueName</name> 
                 <value>disc:selectedItem</value>
+            </preference>
+            
+            <preference>
+                <name>discoveryResultsSelectMode</name> 
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedDiscoveryResultsInputQueueName</name> 
+                <value>disc:selectedResults</value>
             </preference>
 
 			<preference>

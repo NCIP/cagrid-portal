@@ -54,7 +54,6 @@
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-data-validation.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-data-utils.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-data-tools.jar"/>
-	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-data-tests.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-data-stubs.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-data-service.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-data-cql.jar"/>

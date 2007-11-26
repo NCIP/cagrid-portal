@@ -35,10 +35,16 @@ jQuery(document).ready(function() {
 	gPinIcon.image = "<c:url value="/images/grn-pushpin.png"/>";
 	var rPinIcon = new GIcon(pinIcon);
 	rPinIcon.image = "<c:url value="/images/red-pushpin.png"/>";
+	var yPinIcon = new GIcon(pinIcon);
+	yPinIcon.image = "<c:url value="/images/ylw-pushpin.png"/>";
 	
     var manIcon = new GIcon(baseIcon);
     manIcon.image = "<c:url value="/images/man.png"/>";
 	manIcon.shadow = "<c:url value="/images/man.shadow.png"/>";
+	
+	var ctrIcon = new GIcon(baseIcon);
+   	ctrIcon.image = "<c:url value="/images/research-ctr.png"/>";
+	ctrIcon.shadow = "<c:url value="/images/research-ctr.shadow.png"/>";
 	
 
       if (GBrowserIsCompatible()) {
@@ -66,7 +72,7 @@ jQuery(document).ready(function() {
 	        			new GLatLng(
 	        				<c:out value="${pNode.latitude}"/>, 
 	        				<c:out value="${pNode.longitude}"/>),
-	        				{icon:manIcon}
+	        				{icon:ctrIcon}
 	        				);
 	        	GEvent.addListener(
 	        		<c:out value="${markerId}"/>, 
@@ -74,13 +80,23 @@ jQuery(document).ready(function() {
 	        		function() {
 						<c:out value="${markerId}"/>
 							.openInfoWindowHtml(
-								"<div style=\"font-size: 0.9em; width: 200px; height: 75px; overflow: auto;\">" + 
+								"<div style=\"font-size: 0.9em;\">" + 
 								
-								<c:forEach items="${pNode.participants}" var="participant">
-									"<b><c:out value="${participant.name}"/></b><br/>" +
-									"Homepage: <a target=\"_blank\" href=\"<c:out value="${participant.homepageUrl}"/>\"><c:out value="${participant.homepageUrl}"/></a><br/>" +
-									"Workspaces: <ul><c:forEach items="${participant.participation}" var="participation"><li><c:out value="${participation.workspace.name}"/></li></c:forEach></ul><hr/>" + 
-								</c:forEach>
+								<c:choose>
+									<c:when test="${fn:length(pNode.participants) eq 1}">
+										<c:set var="participant" value="${pNode.participants[0]}"/>
+										"<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemOperationName}"/><portlet:param name="selectedId" value="${participant.id}"/><portlet:param name="type" value="PARTICIPANT"/></portlet:actionURL>\" " +
+										"><c:out value="${participant.name}"/></a><br/>" +
+										"Homepage: <a target=\"_blank\" href=\"<c:out value="${participant.homepageUrl}"/>\"><c:out value="${participant.homepageUrl}"/></a>" +
+									</c:when>
+									<c:otherwise>
+										<c:set var="numParticipants" value="${fn:length(pNode.participants)}"/>
+										<c:set var="participantIds"><c:forEach var="participant" items="${pNode.participants}" varStatus="status"><c:out value="${participant.id}"/><c:if test="${status.count lt numParticipants}">,</c:if></c:forEach></c:set>
+										"<c:out value="There are ${numParticipants}"/> participants at this location. " +
+										"<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemsOperationName}"/><portlet:param name="selectedIds" value="${participantIds}"/><portlet:param name="type" value="PARTICIPANT"/></portlet:actionURL>\" " +
+										">View...</a><br/>" +
+									</c:otherwise>
+								</c:choose>
 								
 								"</div>");
 					}
@@ -104,8 +120,11 @@ jQuery(document).ready(function() {
 	        				<c:out value="${svcNode.latitude}"/>, 
 	        				<c:out value="${svcNode.longitude}"/>),
 	        				<c:choose>
-	        					<c:when test="${svcNode.active}">
+	        					<c:when test="${svcNode.fullyActive}">
 	        						{icon:gPinIcon}
+	        					</c:when>
+	        					<c:when test="${svcNode.partiallyActive}">
+	        						{icon:yPinIcon}
 	        					</c:when>
 	        					<c:otherwise>
 	        						{icon:rPinIcon}
@@ -118,17 +137,24 @@ jQuery(document).ready(function() {
 	        		function() {
 						<c:out value="${markerId}"/>
 							.openInfoWindowHtml(
-								"<div style=\"font-size: 0.9em; width: 200px; height: 75px; overflow: auto;\">" + 
+								"<div style=\"font-size: 0.9em;\">" + 
 								
-								<c:forEach items="${svcNode.serviceInfos}" var="svcInfo">
-								
-									"<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectOperationName}"/><portlet:param name="selectedId" value="${svcInfo.id}"/><portlet:param name="type" value="SERVICE"/></portlet:actionURL>\" " +
-                      			   	"alt=\"View Service Details\"><c:out value="${svcInfo.name}"/></a><br/>" +
-									"Hosting Center: <c:out value="${svcInfo.center}"/><br/>" +
-									"Status: <c:out value="${svcInfo.status}"/><br/><hr/>" +
-									
-								</c:forEach>
-								
+								<c:choose>
+									<c:when test="${fn:length(svcNode.serviceInfos) eq 1}">
+										"<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemOperationName}"/><portlet:param name="selectedId" value="${svcInfo.id}"/><portlet:param name="type" value="SERVICE"/></portlet:actionURL>\" " +
+                      			   		"><c:out value="${svcInfo.name}"/></a><br/>" +
+										"Hosting Center: <c:out value="${svcInfo.center}"/><br/>" +
+										"Status: <c:out value="${svcInfo.status}"/><br/>" +
+									</c:when>
+									<c:otherwise>
+										<c:set var="numSvcs" value="${fn:length(svcNode.serviceInfos)}"/>
+										<c:set var="serviceIds"><c:forEach var="svcInfo" items="${svcNode.serviceInfos}" varStatus="status"><c:out value="${svcInfo.id}"/><c:if test="${status.count lt numSvcs}">,</c:if></c:forEach></c:set>
+										"<c:out value="There are ${numSvcs}"/> services at this location. " +
+										"<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemsOperationName}"/><portlet:param name="selectedIds" value="${serviceIds}"/><portlet:param name="type" value="SERVICE"/></portlet:actionURL>\" " +
+										">View...</a><br/>" +
+									</c:otherwise>
+								</c:choose>
+
 								"</div>");
 					}
 				);

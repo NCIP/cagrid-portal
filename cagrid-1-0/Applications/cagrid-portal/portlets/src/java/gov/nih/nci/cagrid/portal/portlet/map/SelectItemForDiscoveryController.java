@@ -78,6 +78,10 @@ public class SelectItemForDiscoveryController extends AbstractCommandController 
 			throw new Exception("Invalid discovery type: " + command.getType());
 		}
 
+		handleSend(request, response, item);
+	}
+	
+	protected void handleSend(ActionRequest request, ActionResponse response, Object item) throws Exception {
 		getInterPortletMessageSender().send(request, item);
 		String redirectUrl = request.getPreferences().getValue(getRedirectUrlPreferenceName(), null);
 		if(redirectUrl == null){

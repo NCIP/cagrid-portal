@@ -6,7 +6,7 @@
 			<td>
 				<c:choose>
 					<c:when test="${empty contextProperty.xmlSchema}">
-						<c:out value="${contextProperty.QName}"/>
+						<c:out value="${contextProperty.name}"/>
 					</c:when>
 					<c:otherwise>
 						<c:set var="selectUrl" value="${fn:replace(selectXmlSchemaUrl, 'XML_SCHEMA_ID', contextProperty.xmlSchema.id)}"/>
