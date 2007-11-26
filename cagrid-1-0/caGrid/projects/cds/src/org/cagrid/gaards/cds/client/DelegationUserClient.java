@@ -193,7 +193,7 @@ public class DelegationUserClient {
 	}
 
 	public List<DelegationRecord> findMyDelegatedCredentials()
-			throws RemoteException, CDSInternalFault {
+			throws RemoteException, CDSInternalFault, PermissionDeniedFault {
 		return findMyDelegatedCredentials(new DelegationRecordFilter());
 	}
 

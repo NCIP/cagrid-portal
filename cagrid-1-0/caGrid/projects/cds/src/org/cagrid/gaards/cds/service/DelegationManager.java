@@ -44,7 +44,14 @@ public class DelegationManager {
 	}
 
 	public DelegationRecord[] findMyDelegatedCredentials(String callerIdentity,
-			DelegationRecordFilter f) throws CDSInternalFault {
+			DelegationRecordFilter f) throws CDSInternalFault,
+			PermissionDeniedFault {
+		if (gov.nih.nci.cagrid.common.Utils.clean(callerIdentity) == null) {
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault
+					.setFaultString("No credentials provided, please authenticate.");
+			throw fault;
+		}
 		if (f == null) {
 			f = new DelegationRecordFilter();
 		}

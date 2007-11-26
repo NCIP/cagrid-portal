@@ -97,18 +97,6 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
 				+ " -url <service url>");
 	}
 
-  public org.cagrid.gaards.cds.common.DelegationRecord[] findMyDelegatedCredentials(org.cagrid.gaards.cds.common.DelegationRecordFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"findMyDelegatedCredentials");
-    org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsRequest params = new org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsRequest();
-    org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsRequestFilter filterContainer = new org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsRequestFilter();
-    filterContainer.setDelegationRecordFilter(filter);
-    params.setFilter(filterContainer);
-    org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsResponse boxedResult = portType.findMyDelegatedCredentials(params);
-    return boxedResult.getDelegationRecord();
-    }
-  }
-
   public org.cagrid.gaards.cds.common.DelegationSigningRequest initiateDelegation(org.cagrid.gaards.cds.common.DelegationRequest req) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"initiateDelegation");
@@ -130,6 +118,18 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
     params.setDelegationSigningResponse(delegationSigningResponseContainer);
     org.cagrid.gaards.cds.stubs.ApproveDelegationResponse boxedResult = portType.approveDelegation(params);
     return boxedResult.getDelegatedCredentialReference();
+    }
+  }
+
+  public org.cagrid.gaards.cds.common.DelegationRecord[] findMyDelegatedCredentials(org.cagrid.gaards.cds.common.DelegationRecordFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findMyDelegatedCredentials");
+    org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsRequest params = new org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsRequest();
+    org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsRequestFilter filterContainer = new org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsRequestFilter();
+    filterContainer.setDelegationRecordFilter(filter);
+    params.setFilter(filterContainer);
+    org.cagrid.gaards.cds.stubs.FindMyDelegatedCredentialsResponse boxedResult = portType.findMyDelegatedCredentials(params);
+    return boxedResult.getDelegationRecord();
     }
   }
 
