@@ -6,9 +6,7 @@
 	
 	<!-- globus -->
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
-	<property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
-	<property name="mapping.src" value="${basedir}/NStoPKG.properties" />
-
+	
     <!-- Information -->
     <property name="project.version" value="1.0" />
 
@@ -21,8 +19,6 @@
     <property name="build.dir" location="${basedir}/build" />
     <property name="build.lib.dir" location="${build.dir}/lib" />
     <property name="classes.dir" location="${build.dir}/classes" />
-	<property name="build.stubs.src" location="${build.dir}/stubs/src"/>
-	<property name="build.stubs.classes" location="${build.dir}/stubs/classes"/>
     <property name="test.classes.dir" location="${build.dir}/classes-test" />
     <property name="javadoc.dir" location="${build.dir}/javadoc" />
     <property name="jar.dir" location="${build.dir}/lib"/>
@@ -133,62 +129,11 @@
         <mkdir dir="${test.ext.lib.dir}" />
     </target>
 	
-	
-	<!-- =================================================================== -->
-	<!-- sets up GT4 related variables                                       -->
-	<!-- =================================================================== -->
-	<target name="setGlobus" if="env.GLOBUS_LOCATION">
-		<!-- GT4 build files and directories-->
-		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
-		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
-		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
-		<property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
-		<!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
-		<property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd -x http://schemas.xmlsoap.org/ws/2004/09/enumeration" />
-	</target>
-	
-	
-	<!-- merge namespace mappings with globus -->
-	<target name="mergeNsMappings" depends="prepare">
-		<ant antfile="${build.stubs}" target="mergePackageMapping">
-			<property name="mapping.src" location="NStoPKG.properties" />
-			<property name="mapping.dst" location="${build.dir}/NStoPKG.properties" />
-		</ant>
-	</target>
-	
-	
-	<!-- =================================================================== -->
-	<!-- Generates the stub source code                                      -->
-	<!-- =================================================================== -->
-	<target name="generateStubs" depends="prepare, setGlobus, mergeNsMappings" description="Generates Beans">
-		<mkdir dir="${build.stubs.src}"/>
-		<property name="mapping.dst" value="${build.dir}/NStoPKG.properties" />
-		<ant antfile="${ant.build.stubs}" target="mergePackageMapping" />
-		<property name="mapping.file" value="${mapping.dst}" />
-		<!-- generate stubs in general for the data service -->
-		<ant antfile="${ant.build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${basedir}/schema"/>
-			<property name="wsdl.file" value="Beans.wsdl"/>
-			<property name="target.stubs.dir" location="${build.stubs.src}"/>
-		</ant>	
-	</target>	
-	
-	
-	<!-- =================================================================== -->
-	<!-- Compiles the stubs code                                             -->
-	<!-- =================================================================== -->
-	<target name="compileStubs" depends="generateStubs" description="Compiles stubs">
-		<mkdir dir="${build.stubs.classes}"/>
-		<javac srcdir="${build.stubs.src}" destdir="${build.stubs.classes}" source="${java.source}" debug="${java.debug}">
-			<classpath refid="build.classpath"/>
-		</javac>
-	</target>
-	
 
     <!-- =================================================================== -->
     <!-- Compiles the source code                                            -->
     <!-- =================================================================== -->
-    <target name="compile" depends="prepare, compileStubs" description="Compiles all the source files.">
+    <target name="compile" depends="prepare" description="Compiles all the source files.">
         <mkdir dir="${classes.dir}" />
         <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="${java.debug}" source="${java.source}">
             <classpath refid="build.classpath" />
@@ -233,18 +178,6 @@
 				<include name="**/*/"/>
 			</fileset>
         </jar>
-    	<jar jarfile="${project.stubs.jarfile}">
-			<manifest>
-	        	<attribute name="Built-By" value="${user.name}" />
-	            <attribute name="Main-Class" value="${main.class}" />
-			</manifest>
-			<fileset dir="${build.stubs.classes}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${build.stubs.src}">
-				<include name="**/*.java"/>
-			</fileset>
-		</jar>
         <jar jarfile="${test.project.jarfile}">
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
@@ -274,50 +207,6 @@
             <tag name="created" scope="all" description="Creation Date:" />
         </javadoc>
     </target>
-	
-	<!-- ============================================================== -->
-	<!-- Runs the deployment validation builder tool                    -->
-	<!-- ============================================================== -->
-	<target name="buildDeploymentValidation" description="Runs the deployment validation builder tool">
-		<java classname="gov.nci.nih.cagrid.validator.builder.DeploymentValidationBuilder" fork="true">
-			<classpath refid="build.classpath"/>
-			<classpath refid="test.classpath"/>
-			<classpath>
-				<fileset dir="${jar.dir}">
-			    	<include name="**/*.jar"/>
-				</fileset>
-			</classpath>
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar"/>
-				</fileset>
-			</classpath>
-			<!-- required for searching through large numbers of classes for test steps -->
-			<jvmarg line="-XX:MaxPermSize=256m"/>
-		</java>
-	</target>
-	
-	
-	<!-- ============================================================== -->
-	<!-- Runs a deployment validation builder tool                      -->
-	<!-- ============================================================== -->
-	<target name="runValidation" description="Runs a grid deployment validation package.  Use -Dvalidation.desc to specify the description file">
-		<java classname="gov.nci.nih.cagrid.validator.ValidationRunner" fork="true">
-			<arg line="${validation.desc}"/>
-			<classpath refid="build.classpath"/>
-			<classpath refid="test.classpath"/>
-			<classpath>
-				<fileset dir="${jar.dir}">
-					<include name="**/*.jar"/>
-				</fileset>
-			</classpath>
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar"/>
-				</fileset>
-			</classpath>
-		</java>
-	</target>
 
     <!-- ============================================================== -->
     <!-- Builds from scratch                                            -->
