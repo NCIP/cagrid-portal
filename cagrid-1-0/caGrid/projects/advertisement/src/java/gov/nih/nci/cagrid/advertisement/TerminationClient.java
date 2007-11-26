@@ -74,6 +74,7 @@ public class TerminationClient {
         // look for entries from the service
         EndpointReferenceType[] entryEPRs = locateEntryEPR(registeredEPR);
         if (entryEPRs == null) {
+            LOG.debug("No entries found.");
             return 0;
         }
         for (EndpointReferenceType entryEPR : entryEPRs) {
@@ -109,8 +110,7 @@ public class TerminationClient {
 
     /**
      * @param registeredEPR
-     * @return
-     *      The EPR as a serialized string
+     * @return The EPR as a serialized string
      * @throws SerializationException
      */
     private static String printEPR(EndpointReferenceType epr) {
