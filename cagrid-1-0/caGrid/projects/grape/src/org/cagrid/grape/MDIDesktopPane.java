@@ -42,6 +42,35 @@ public class MDIDesktopPane extends JDesktopPane {
         super.setBounds(x, y, w, h);
         checkDesktopSize();
     }
+    
+    public Component add(JInternalFrame frame) {
+        JInternalFrame[] array = getAllFrames();
+        Point p;
+        int w;
+        int h;
+
+        Component retval = super.add(frame);
+        checkDesktopSize();
+        if (array.length > 0) {
+            p = array[0].getLocation();
+            p.x = p.x + FRAME_OFFSET;
+            p.y = p.y + FRAME_OFFSET;
+        } else {
+            p = new Point(0, 0);
+        }
+        frame.setLocation(p.x, p.y);
+        if (frame.isResizable()) {
+            w = getWidth() - (getWidth() / 8);
+            h = getHeight() - (getHeight() / 8);
+            if (w < frame.getMinimumSize().getWidth())
+                w = (int) frame.getMinimumSize().getWidth();
+            if (h < frame.getMinimumSize().getHeight())
+                h = (int) frame.getMinimumSize().getHeight();
+            frame.setSize(w, h);
+        }
+        frame.show();
+        return retval;
+    }
 
 
     public Component add(JInternalFrame frame, Dimensions dim, RenderOptions options) {
@@ -63,8 +92,8 @@ public class MDIDesktopPane extends JDesktopPane {
         setRenderOptions(frame, options);
         frame.show();
         return retval;
-
     }
+    
     
     public void show(JDialog dialog, Dimensions dim, RenderOptions options) {
         JInternalFrame[] array = getAllFrames();
