@@ -5,7 +5,7 @@ package gov.nih.nci.cagrid.portal.portlet.map;
 
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.dao.ParticipantDao;
-import gov.nih.nci.cagrid.portal.dao.PointOfContactDao;
+import gov.nih.nci.cagrid.portal.dao.PersonDao;
 import gov.nih.nci.cagrid.portal.portlet.InterPortletMessageSender;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryType;
 
@@ -27,7 +27,7 @@ public class SelectItemForDiscoveryController extends AbstractCommandController 
 	private InterPortletMessageSender interPortletMessageSender;
 	private GridServiceDao gridServiceDao;
 	private ParticipantDao participantDao;
-	private PointOfContactDao pointOfContactDao;
+	private PersonDao personDao;
 	private String redirectUrlPreferenceName;
 
 	/**
@@ -73,18 +73,20 @@ public class SelectItemForDiscoveryController extends AbstractCommandController 
 		} else if (DiscoveryType.PARTICIPANT.equals(command.getType())) {
 			item = getParticipantDao().getById(command.getSelectedId());
 		} else if (DiscoveryType.POC.equals(command.getType())) {
-			item = getPointOfContactDao().getById(command.getSelectedId());
+			item = getPersonDao().getById(command.getSelectedId());
 		} else {
 			throw new Exception("Invalid discovery type: " + command.getType());
 		}
 
 		handleSend(request, response, item);
 	}
-	
-	protected void handleSend(ActionRequest request, ActionResponse response, Object item) throws Exception {
+
+	protected void handleSend(ActionRequest request, ActionResponse response,
+			Object item) throws Exception {
 		getInterPortletMessageSender().send(request, item);
-		String redirectUrl = request.getPreferences().getValue(getRedirectUrlPreferenceName(), null);
-		if(redirectUrl == null){
+		String redirectUrl = request.getPreferences().getValue(
+				getRedirectUrlPreferenceName(), null);
+		if (redirectUrl == null) {
 			throw new Exception("No redirect URL preference provided.");
 		}
 		response.sendRedirect(redirectUrl);
@@ -121,14 +123,6 @@ public class SelectItemForDiscoveryController extends AbstractCommandController 
 		this.participantDao = participantDao;
 	}
 
-	public PointOfContactDao getPointOfContactDao() {
-		return pointOfContactDao;
-	}
-
-	public void setPointOfContactDao(PointOfContactDao pointOfContactDao) {
-		this.pointOfContactDao = pointOfContactDao;
-	}
-
 	public String getRedirectUrlPreferenceName() {
 		return redirectUrlPreferenceName;
 	}
@@ -144,6 +138,14 @@ public class SelectItemForDiscoveryController extends AbstractCommandController 
 	public void setInterPortletMessageSender(
 			InterPortletMessageSender interPortletMessageSender) {
 		this.interPortletMessageSender = interPortletMessageSender;
+	}
+
+	public PersonDao getPersonDao() {
+		return personDao;
+	}
+
+	public void setPersonDao(PersonDao personDao) {
+		this.personDao = personDao;
 	}
 
 }

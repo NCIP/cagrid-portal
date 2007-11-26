@@ -42,6 +42,7 @@ public class ViewMapController extends AbstractViewObjectController {
 		MapBean mapBean = (MapBean) getApplicationContext().getBean("mapBeanPrototype");
 		DiscoveryDirectory selectedDirectory = getDiscoveryModel().getSelectedDirectory();
 		if(selectedDirectory != null){
+			mapBean.setSelectedDirectory(selectedDirectory.getId());
 			if(selectedDirectory.getType().equals(DiscoveryType.SERVICE)){
 				mapBean.addServices((ServiceDirectory)selectedDirectory);
 			}else if(selectedDirectory.getType().equals(DiscoveryType.PARTICIPANT)){
@@ -54,7 +55,7 @@ public class ViewMapController extends AbstractViewObjectController {
 		}else{
 			mapBean.addServices(getAllServicesDirectory());
 			mapBean.addParticipants(getAllParticipantsDirectory());
-			//mapBean.addPointOfContacts(getAllPocsDirectory());	
+			//mapBean.addPointOfContacts(getAllPocsDirectory());
 		}
 		
 		return mapBean;

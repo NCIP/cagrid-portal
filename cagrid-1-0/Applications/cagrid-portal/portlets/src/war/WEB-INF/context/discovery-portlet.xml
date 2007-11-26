@@ -182,6 +182,36 @@
 		</property>
 	</bean>
 	
+	<bean 
+		id="selectItemController"
+		class="gov.nih.nci.cagrid.portal.portlet.discovery.map.SelectItemController"
+		autowire="byName">
+		<property name="commandName" value="selectItemCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.map.SelectItemCommand"/>
+		<property name="actionResponseHandler">
+			<bean class="gov.nih.nci.cagrid.portal.portlet.discovery.map.SelectedItemTabActionResponseHandler">
+				<property name="tabControlConfig" ref="discoveryTabControlConfig"/>
+				<property name="serviceSelectedTabPath" value="/details/service/tree" />
+				<property name="participantSelectedTabPath" value="/details/participant" />
+				<property name="pocSelectedTabPath" value="/details/poc" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean 
+		id="selectItemsController"
+		class="gov.nih.nci.cagrid.portal.portlet.discovery.map.SelectItemsController"
+		autowire="byName">
+		<property name="commandName" value="selectItemCommand"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.map.SelectItemsCommand"/>
+		<property name="actionResponseHandler">
+			<bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+				<property name="tabControlConfig" ref="discoveryTabControlConfig"/>
+				<property name="newTabPath" value="/directory/listView"/>
+			</bean>
+		</property>		
+	</bean>
+	
 	<bean id="viewServiceDetailsController"
 		class="gov.nih.nci.cagrid.portal.portlet.discovery.details.ViewServiceDetailsController"
 		autowire="byName">
@@ -303,6 +333,10 @@
 						<entry key="selectUmlClassForQuery" value-ref="selectUmlClassForQueryController" />
 						
 						<entry key="selectXmlSchema" value-ref="selectXmlSchemaController" />
+						
+						<entry key="selectItem" value-ref="selectItemController" />
+						
+						<entry key="selectItems" value-ref="selectItemsController" />
 							
 					</map>
 				</entry>

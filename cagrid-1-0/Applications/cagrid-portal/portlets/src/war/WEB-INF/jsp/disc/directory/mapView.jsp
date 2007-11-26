@@ -21,8 +21,8 @@
 </tr>
 </table>
 
-<c:set var="selectItemOperationName" value="selectService"/>
-<c:set var="selectItemsOperationName" value="selectServices"/>
+<c:set var="selectItemOperationName" value="selectItem"/>
+<c:set var="selectItemsOperationName" value="selectItems"/>
 
 <c:set var="mapBean" value="${mapCommand}"/>
 

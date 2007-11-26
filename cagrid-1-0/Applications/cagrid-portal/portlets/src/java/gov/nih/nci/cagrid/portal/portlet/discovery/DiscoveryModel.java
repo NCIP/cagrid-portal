@@ -84,8 +84,7 @@ public class DiscoveryModel {
 	public void selectDirectory(String dirId) {
 		DiscoveryDirectory dir = getDirectory(dirId);
 		if (dir == null) {
-			throw new CaGridPortletApplicationException("No such directory '"
-					+ dirId + "'.");
+//			logger.warn("No such directory '" + dirId + "'.");
 		}
 		setSelectedDirectory(dir);
 		setSelectedResults(null);

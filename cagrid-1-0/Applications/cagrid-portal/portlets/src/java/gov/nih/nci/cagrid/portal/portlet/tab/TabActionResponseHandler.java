@@ -55,7 +55,7 @@ public class TabActionResponseHandler implements ActionResponseHandler,
 		}
 	}
 
-	private void handle(ActionRequest request, ActionResponse response,
+	protected void handle(ActionRequest request, ActionResponse response,
 			String newPath) {
 		String paramName = getTabControlConfig().getSelectedPathParameterName();
 		String path = getTabControlConfig().getTabModel().getCurrentPath();

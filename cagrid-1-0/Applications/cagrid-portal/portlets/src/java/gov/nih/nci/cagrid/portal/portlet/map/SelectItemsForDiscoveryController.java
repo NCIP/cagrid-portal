@@ -69,7 +69,7 @@ public class SelectItemsForDiscoveryController extends
 			}
 		} else if (DiscoveryType.POC.equals(command.getType())) {
 			for(Integer id : command.getSelectedIds()){
-				objects.add(getPointOfContactDao().getById(id));
+				objects.add(getPersonDao().getById(id));
 			}
 		} else {
 			throw new Exception("Invalid discovery type: " + command.getType());

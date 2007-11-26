@@ -4,6 +4,7 @@
 package gov.nih.nci.cagrid.portal.portlet.discovery.dir;
 
 import gov.nih.nci.cagrid.portal.dao.PointOfContactDao;
+import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryType;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class PointOfContactDirectory extends DiscoveryDirectory {
 	 * 
 	 */
 	public PointOfContactDirectory() {
-
+		setType(DiscoveryType.POC);
 	}
 
 	/* (non-Javadoc)
