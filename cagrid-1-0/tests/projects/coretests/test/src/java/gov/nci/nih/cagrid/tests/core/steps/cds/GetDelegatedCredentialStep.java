@@ -1,28 +1,30 @@
 /*
  * Created on Jul 14, 2006
  */
-package gov.nci.nih.cagrid.tests.core.steps;
+package gov.nci.nih.cagrid.tests.core.steps.cds;
 
 import gov.nci.nih.cagrid.tests.core.DelegatedCredential;
 import gov.nci.nih.cagrid.tests.core.GridCredential;
-import gov.nih.nci.cagrid.common.Utils;
 
 import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
+import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
+import org.globus.gsi.GlobusCredential;
 
 import com.atomicobject.haste.framework.Step;
 
-public class CDSGetDelegatedCredentialFailStep extends Step {
+public class GetDelegatedCredentialStep extends Step implements
+		GridCredential {
+
 	private GridCredential credential;
 
 	private DelegatedCredential delegatedCredential;
-	private String expectedError;
 
-	public CDSGetDelegatedCredentialFailStep(
-			DelegatedCredential delegatedCredential, GridCredential credential,
-			String expectedError) {
+	private GlobusCredential proxy = null;
+
+	public GetDelegatedCredentialStep(
+			DelegatedCredential delegatedCredential, GridCredential credential) {
 		this.credential = credential;
 		this.delegatedCredential = delegatedCredential;
-		this.expectedError = expectedError;
 	}
 
 	@Override
@@ -32,21 +34,15 @@ public class CDSGetDelegatedCredentialFailStep extends Step {
 		assertNotNull(this.delegatedCredential);
 		assertNotNull(this.delegatedCredential
 				.getDelegatedCredentialReference());
-		assertNotNull(this.expectedError);
 		DelegatedCredentialUserClient client = new DelegatedCredentialUserClient(
 				this.delegatedCredential.getDelegatedCredentialReference(),
 				this.credential.getCredential());
-		try {
-			client.getDelegatedCredential();
-			fail("Should not be able to get delegated credential.");
-		} catch (Exception e) {
-			String error = Utils.getExceptionMessage(e);
-			if (error.indexOf(expectedError)==-1) {
-				fail("Unexpected error encountered:\nEXPECTED:" + expectedError
-						+ "\n RECEIVED:" + error);
-			}
-		}
+		this.proxy = client.getDelegatedCredential();
 
+	}
+
+	public GlobusCredential getCredential() {
+		return this.proxy;
 	}
 
 }

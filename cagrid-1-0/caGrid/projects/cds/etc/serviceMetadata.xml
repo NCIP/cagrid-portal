@@ -68,6 +68,10 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
+      <ns2:Operation description="" name="Destroy">
+       <ns2:inputParameterCollection/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection/>
     </ns2:ServiceContext>

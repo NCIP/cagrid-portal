@@ -37,8 +37,9 @@ public class Errors {
 	public static String CANNOT_APPROVE_INVALID_STATUS = "Cannot approve delegation, only delegated credentials with a \"Pending\" status may be approved.";
 	public static String CANNOT_GET_INVALID_STATUS = "Cannot get delegated credential, the signing credential has not been approved or has been suspended.";
 	public static String CANNOT_CHANGE_STATUS_TO_PENDING = "Cannot change the status of the signing credential to pending.";
-	
-	
+	public static String AUTHENTICATION_REQUIRED = "Authentication required to perform the requested operation.";
+	public static String PERMISSION_DENIED = "You do not have permission to perform the requested operation.";
+
 	public static CDSInternalFault getDatabaseFault(Exception e) {
 		return getInternalFault(UNEXPECTED_DATABASE_ERROR, e);
 	}
@@ -63,7 +64,7 @@ public class Errors {
 		f.setFaultString(error);
 		return f;
 	}
-	
+
 	public static DelegationFault getDelegationFault(String error, Exception e) {
 		DelegationFault f = new DelegationFault();
 		f.setFaultString(error);
@@ -72,7 +73,11 @@ public class Errors {
 		f = (DelegationFault) helper.getFault();
 		return f;
 	}
-	
+
+	public static PermissionDeniedFault getPermissionDeniedFault() {
+		return getPermissionDeniedFault(PERMISSION_DENIED);
+	}
+
 	public static PermissionDeniedFault getPermissionDeniedFault(String error) {
 		PermissionDeniedFault f = new PermissionDeniedFault();
 		f.setFaultString(error);

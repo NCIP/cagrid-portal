@@ -1,7 +1,7 @@
 /*
  * Created on Jul 14, 2006
  */
-package gov.nci.nih.cagrid.tests.core.steps;
+package gov.nci.nih.cagrid.tests.core.steps.cds;
 
 import gov.nci.nih.cagrid.tests.core.DelegationIdentifierReference;
 import gov.nci.nih.cagrid.tests.core.GridCredential;
@@ -16,7 +16,7 @@ import org.globus.gsi.GlobusCredential;
 
 import com.atomicobject.haste.framework.Step;
 
-public class CDSFindMyDelegatedCredentialsStep extends Step implements
+public class FindMyDelegatedCredentialsStep extends Step implements
 		GridCredential {
 
 	private GridCredential credential;
@@ -26,29 +26,29 @@ public class CDSFindMyDelegatedCredentialsStep extends Step implements
 	private DelegationRecordFilter filter;
 	private List<DelegationIdentifierReference> expected;
 
-	public CDSFindMyDelegatedCredentialsStep(String uri,
+	public FindMyDelegatedCredentialsStep(String uri,
 			GridCredential credential) {
 		this(uri, credential, null, (List<DelegationIdentifierReference>) null);
 	}
 
-	public CDSFindMyDelegatedCredentialsStep(String uri,
+	public FindMyDelegatedCredentialsStep(String uri,
 			GridCredential credential, DelegationRecordFilter filter) {
 		this(uri, credential, filter,
 				(List<DelegationIdentifierReference>) null);
 	}
 
-	public CDSFindMyDelegatedCredentialsStep(String uri,
+	public FindMyDelegatedCredentialsStep(String uri,
 			GridCredential credential,
 			List<DelegationIdentifierReference> expected) {
 		this(uri, credential, new DelegationRecordFilter(), expected);
 	}
 
-	public CDSFindMyDelegatedCredentialsStep(String uri,
+	public FindMyDelegatedCredentialsStep(String uri,
 			GridCredential credential, DelegationIdentifierReference ref) {
 		this(uri, credential, new DelegationRecordFilter(), ref);
 	}
 
-	public CDSFindMyDelegatedCredentialsStep(String uri,
+	public FindMyDelegatedCredentialsStep(String uri,
 			GridCredential credential, DelegationRecordFilter f,
 			DelegationIdentifierReference ref) {
 		this.uri = uri;
@@ -58,7 +58,7 @@ public class CDSFindMyDelegatedCredentialsStep extends Step implements
 		this.expected.add(ref);
 	}
 
-	public CDSFindMyDelegatedCredentialsStep(String uri,
+	public FindMyDelegatedCredentialsStep(String uri,
 			GridCredential credential, DelegationRecordFilter f,
 			List<DelegationIdentifierReference> expected) {
 		this.uri = uri;

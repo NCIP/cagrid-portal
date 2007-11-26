@@ -17,6 +17,8 @@ import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.ResourceException;
+import org.oasis.wsrf.lifetime.Destroy;
 
 public class DelegatedCredentialUserClient {
 
@@ -41,6 +43,10 @@ public class DelegatedCredentialUserClient {
 			GlobusCredential cred) throws Exception {
 		client = new org.cagrid.gaards.cds.delegated.client.DelegatedCredentialClient(
 				ref, cred);
+	}
+
+	public void suspend() throws RemoteException, ResourceException {
+		client.destroy(new Destroy());
 	}
 
 	public GlobusCredential getDelegatedCredential() throws RemoteException,

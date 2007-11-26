@@ -1,10 +1,5 @@
 package gov.nci.nih.cagrid.tests.core;
 
-import gov.nci.nih.cagrid.tests.core.steps.CDSCleanupStep;
-import gov.nci.nih.cagrid.tests.core.steps.CDSDelegateCredentialStep;
-import gov.nci.nih.cagrid.tests.core.steps.CDSFindMyDelegatedCredentialsStep;
-import gov.nci.nih.cagrid.tests.core.steps.CDSGetDelegatedCredentialFailStep;
-import gov.nci.nih.cagrid.tests.core.steps.CDSGetDelegatedCredentialStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianAddTrustedCAStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianApproveRegistrationStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianAuthenticateStep;
@@ -18,6 +13,11 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusInstallSecurityDescriptorStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.ProxyActiveStep;
 import gov.nci.nih.cagrid.tests.core.steps.SleepStep;
+import gov.nci.nih.cagrid.tests.core.steps.cds.CleanupStep;
+import gov.nci.nih.cagrid.tests.core.steps.cds.GetDelegatedCredentialFailStep;
+import gov.nci.nih.cagrid.tests.core.steps.cds.GetDelegatedCredentialStep;
+import gov.nci.nih.cagrid.tests.core.steps.cds.DelegateCredentialStep;
+import gov.nci.nih.cagrid.tests.core.steps.cds.FindMyDelegatedCredentialsStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
@@ -72,7 +72,7 @@ public class DelegateCredentialTest extends Story {
 		}
 		new DorianDestroyDefaultProxyStep().runStep();
 		new DorianCleanupStep().runStep();
-		new CDSCleanupStep().runStep();
+		new CleanupStep().runStep();
 	}
 
 	@Override
@@ -140,20 +140,20 @@ public class DelegateCredentialTest extends Story {
 		steps.add(new DorianApproveRegistrationStep(leonardoApp, dorianURL,
 				admin));
 
-		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin));
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin));
 
 		DorianAuthenticateStep leonardo = new DorianAuthenticateStep(
 				leonardoApp.getUserId(), leonardoApp.getPassword(), dorianURL);
 		steps.add(leonardo);
 		steps.add(new DorianDestroyDefaultProxyStep());
 
-		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, leonardo));
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, leonardo));
 
 		List<GridCredential> allowedParties = new ArrayList<GridCredential>();
 		allowedParties.add(leonardo);
 		ProxyLifetime lifetime = new ProxyLifetime();
 		lifetime.setHours(4);
-		CDSDelegateCredentialStep delegateAdmin = new CDSDelegateCredentialStep(
+		DelegateCredentialStep delegateAdmin = new DelegateCredentialStep(
 				cdsURL, admin, allowedParties, lifetime);
 		steps.add(delegateAdmin);
 
@@ -163,17 +163,19 @@ public class DelegateCredentialTest extends Story {
 		DelegationRecordFilter expired = new DelegationRecordFilter();
 		expired.setExpirationStatus(ExpirationStatus.Expired);
 
-		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin,
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin,
 				delegateAdmin));
-		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin, valid,
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, valid,
 				delegateAdmin));
 		steps
-				.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin,
+				.add(new FindMyDelegatedCredentialsStep(cdsURL, admin,
 						expired));
 
-		CDSGetDelegatedCredentialStep admin2 = new CDSGetDelegatedCredentialStep(
+		GetDelegatedCredentialStep admin2 = new GetDelegatedCredentialStep(
 				delegateAdmin, leonardo);
 		steps.add(admin2);
+		
+		
 
 		steps.add(new DorianApproveRegistrationStep(donatelloApp, dorianURL,
 				admin2));
@@ -182,40 +184,44 @@ public class DelegateCredentialTest extends Story {
 				donatelloApp.getUserId(), donatelloApp.getPassword(), dorianURL);
 		steps.add(donatello);
 		steps.add(new DorianDestroyDefaultProxyStep());
-		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, donatello));
-		steps.add(new CDSGetDelegatedCredentialFailStep(delegateAdmin,
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, donatello));
+		steps.add(new GetDelegatedCredentialFailStep(delegateAdmin,
 				donatello, Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL));
+		
+		///Now we want to disable the credential and test
+		
+		
 
 		ProxyLifetime delegationLifetime = new ProxyLifetime();
 		delegationLifetime.setSeconds(SHORT_LIFETIME_SECONDS);
 		ProxyLifetime delegatedCredentialsLifetime = new ProxyLifetime();
 		delegatedCredentialsLifetime.setSeconds((SHORT_LIFETIME_SECONDS / 2));
 
-		CDSDelegateCredentialStep delegateAdminShort = new CDSDelegateCredentialStep(
+		DelegateCredentialStep delegateAdminShort = new DelegateCredentialStep(
 				cdsURL, admin, allowedParties, delegationLifetime,
 				delegatedCredentialsLifetime);
 		steps.add(delegateAdminShort);
 
-		CDSGetDelegatedCredentialStep adminShort = new CDSGetDelegatedCredentialStep(
+		GetDelegatedCredentialStep adminShort = new GetDelegatedCredentialStep(
 				delegateAdminShort, leonardo);
 		steps.add(adminShort);
 
 		steps.add(new ProxyActiveStep(adminShort, true));
-		steps.add(new CDSGetDelegatedCredentialFailStep(delegateAdminShort,
+		steps.add(new GetDelegatedCredentialFailStep(delegateAdminShort,
 				donatello, Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL));
 		long sleepTime = ((SHORT_LIFETIME_SECONDS / 2) * 1000) + 100;
 		steps.add(new SleepStep(sleepTime));
 		steps.add(new ProxyActiveStep(adminShort, false));
 		steps.add(new SleepStep(sleepTime));
-		steps.add(new CDSGetDelegatedCredentialFailStep(delegateAdminShort,
+		steps.add(new GetDelegatedCredentialFailStep(delegateAdminShort,
 				leonardo, "org.globus.wsrf.NoSuchResourceException"));
 		List<DelegationIdentifierReference> expected = new ArrayList<DelegationIdentifierReference>();
 		expected.add(delegateAdmin);
 		expected.add(delegateAdminShort);
-		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin,
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin,
 				expected));
-		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin, valid, delegateAdmin));
-		steps.add(new CDSFindMyDelegatedCredentialsStep(cdsURL, admin, expired,
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, valid, delegateAdmin));
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, expired,
 				delegateAdminShort));
 		return steps;
 	}

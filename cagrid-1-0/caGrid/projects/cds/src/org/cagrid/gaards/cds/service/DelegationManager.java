@@ -7,6 +7,7 @@ import org.cagrid.gaards.cds.common.DelegationRecordFilter;
 import org.cagrid.gaards.cds.common.DelegationRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningResponse;
+import org.cagrid.gaards.cds.common.DelegationStatus;
 import org.cagrid.gaards.cds.common.PublicKey;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
@@ -43,15 +44,21 @@ public class DelegationManager {
 		return this.dcm.getDelegatedCredential(gridIdentity, id, publicKey);
 	}
 
+	public void suspendDelegatedCredential(String callerIdentity,
+			DelegationIdentifier id) throws CDSInternalFault, DelegationFault,
+			PermissionDeniedFault {
+		DelegationRecord r = this.dcm.getDelegationRecord(id);
+		if (r.getGridIdentity().equals(callerIdentity)) {
+			this.dcm.updateDelegatedCredentialStatus(id,
+					DelegationStatus.Suspended);
+		} else {
+			throw Errors.getPermissionDeniedFault();
+		}
+	}
+
 	public DelegationRecord[] findMyDelegatedCredentials(String callerIdentity,
 			DelegationRecordFilter f) throws CDSInternalFault,
 			PermissionDeniedFault {
-		if (gov.nih.nci.cagrid.common.Utils.clean(callerIdentity) == null) {
-			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault
-					.setFaultString("No credentials provided, please authenticate.");
-			throw fault;
-		}
 		if (f == null) {
 			f = new DelegationRecordFilter();
 		}

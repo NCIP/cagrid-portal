@@ -110,6 +110,13 @@ public class DelegatedCredentialClient extends ServiceSecurityClient implements 
 		}
 	}
 
+  public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"destroy");
+    return portType.destroy(params);
+    }
+  }
+
   public org.cagrid.gaards.cds.common.CertificateChain getDelegatedCredential(org.cagrid.gaards.cds.common.PublicKey publicKey) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getDelegatedCredential");

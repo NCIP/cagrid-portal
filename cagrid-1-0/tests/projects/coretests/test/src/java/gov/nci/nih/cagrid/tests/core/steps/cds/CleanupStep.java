@@ -1,20 +1,22 @@
 /*
  * Created on Jun 13, 2006
  */
-package gov.nci.nih.cagrid.tests.core.steps;
+package gov.nci.nih.cagrid.tests.core.steps.cds;
+
+import gov.nci.nih.cagrid.tests.core.steps.AbstractDbCleanupStep;
 
 /**
  * This step drops the dorian table from the configured database.
  * 
  * @author Patrick McConnell
  */
-public class CDSCleanupStep extends AbstractDbCleanupStep {
-    public CDSCleanupStep() {
+public class CleanupStep extends AbstractDbCleanupStep {
+    public CleanupStep() {
         super();
     }
 
 
-    public CDSCleanupStep(String dbUrl, String user, String password) {
+    public CleanupStep(String dbUrl, String user, String password) {
         super(dbUrl, user, password);
     }
 
@@ -26,6 +28,6 @@ public class CDSCleanupStep extends AbstractDbCleanupStep {
 
 
     public static void main(String[] args) throws Throwable {
-        new CDSCleanupStep().runStep();
+        new CleanupStep().runStep();
     }
 }

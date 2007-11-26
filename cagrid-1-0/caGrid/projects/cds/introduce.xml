@@ -162,27 +162,32 @@
       <ns24:Exception description="" name="PermissionDeniedFault" qname="ns30:PermissionDeniedFault" xmlns:ns30="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
      </ns24:Exceptions>
     </ns24:Method>
+    <ns24:Method description="" isImported="true" isProvided="true" name="Destroy" xsi:type="ns24:MethodType">
+     <ns24:Output qName="void" description="" isArray="false"/>
+     <ns24:ImportInformation fromIntroduce="false" inputMessage="ns31:DestroyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns31:DestroyResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ImmediateResourceTermination" wsdlFile="WS-ResourceLifetime.wsdl" xmlns:ns31="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns24:ProviderInformation providerClass="DestroyProvider"/>
+    </ns24:Method>
    </ns24:Methods>
-   <ns31:ResourcePropertiesList xsi:type="ns31:ResourcePropertiesListType" xmlns:ns31="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
-   <ns32:ServiceSecurity xsi:type="ns32:ServiceSecurity" xmlns:ns32="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns32:SecuritySetting xsi:type="ns32:SecuritySetting">Custom</ns32:SecuritySetting>
-    <ns32:TransportLevelSecurity xsi:type="ns32:TransportLevelSecurity">
-     <ns32:CommunicationMethod xsi:type="ns32:CommunicationMethod">Privacy</ns32:CommunicationMethod>
-    </ns32:TransportLevelSecurity>
-    <ns32:RunAsMode xsi:type="ns32:RunAsMode">System</ns32:RunAsMode>
-    <ns32:AnonymousClients xsi:type="ns32:AnonymousCommunication">No</ns32:AnonymousClients>
-    <ns32:ServiceAuthorization xsi:type="ns32:ServiceAuthorization">
-     <ns32:NoAuthorization xsi:type="ns32:NoAuthorization"/>
-    </ns32:ServiceAuthorization>
-   </ns32:ServiceSecurity>
+   <ns32:ResourcePropertiesList xsi:type="ns32:ResourcePropertiesListType" xmlns:ns32="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns33:ServiceSecurity xsi:type="ns33:ServiceSecurity" xmlns:ns33="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns33:SecuritySetting xsi:type="ns33:SecuritySetting">Custom</ns33:SecuritySetting>
+    <ns33:TransportLevelSecurity xsi:type="ns33:TransportLevelSecurity">
+     <ns33:CommunicationMethod xsi:type="ns33:CommunicationMethod">Privacy</ns33:CommunicationMethod>
+    </ns33:TransportLevelSecurity>
+    <ns33:RunAsMode xsi:type="ns33:RunAsMode">System</ns33:RunAsMode>
+    <ns33:AnonymousClients xsi:type="ns33:AnonymousCommunication">No</ns33:AnonymousClients>
+    <ns33:ServiceAuthorization xsi:type="ns33:ServiceAuthorization">
+     <ns33:NoAuthorization xsi:type="ns33:NoAuthorization"/>
+    </ns33:ServiceAuthorization>
+   </ns33:ServiceSecurity>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Represents a Delegated Credential</ns3:description>
   </ns3:Service>
  </ns3:Services>
- <ns33:Extensions xsi:type="ns33:ExtensionsType" xmlns:ns33="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns33:Extension name="cagrid_metadata" version="1.1" xsi:type="ns33:ExtensionType"/>
- </ns33:Extensions>
- <ns34:ServiceProperties xmlns:ns34="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns34:Property description="The configuration file for the credential delegation service." isFromETC="true" key="cdsConfiguration" value="cds-configuration.xml"/>
-  <ns34:Property description="The properties file for the Credential Delegation Service." isFromETC="true" key="cdsProperties" value="cds.properties"/>
- </ns34:ServiceProperties>
+ <ns34:Extensions xsi:type="ns34:ExtensionsType" xmlns:ns34="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns34:Extension name="cagrid_metadata" version="1.1" xsi:type="ns34:ExtensionType"/>
+ </ns34:Extensions>
+ <ns35:ServiceProperties xmlns:ns35="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns35:Property description="The configuration file for the credential delegation service." isFromETC="true" key="cdsConfiguration" value="cds-configuration.xml"/>
+  <ns35:Property description="The properties file for the Credential Delegation Service." isFromETC="true" key="cdsProperties" value="cds.properties"/>
+ </ns35:ServiceProperties>
 </ns1:ServiceDescription>

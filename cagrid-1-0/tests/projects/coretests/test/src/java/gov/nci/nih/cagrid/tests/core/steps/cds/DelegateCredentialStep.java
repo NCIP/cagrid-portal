@@ -1,7 +1,7 @@
 /*
  * Created on Jul 14, 2006
  */
-package gov.nci.nih.cagrid.tests.core.steps;
+package gov.nci.nih.cagrid.tests.core.steps.cds;
 
 import gov.nci.nih.cagrid.tests.core.DelegatedCredential;
 import gov.nci.nih.cagrid.tests.core.DelegationIdentifierReference;
@@ -20,7 +20,7 @@ import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 
 import com.atomicobject.haste.framework.Step;
 
-public class CDSDelegateCredentialStep extends Step implements
+public class DelegateCredentialStep extends Step implements
 		DelegatedCredential, DelegationIdentifierReference {
 
 	private String serviceURL;
@@ -30,14 +30,14 @@ public class CDSDelegateCredentialStep extends Step implements
 	private ProxyLifetime delegatedCredentialsLifetime;
 	private DelegatedCredentialReference delegatedCredentialReference;
 
-	public CDSDelegateCredentialStep(String serviceURL,
+	public DelegateCredentialStep(String serviceURL,
 			GridCredential delegator, List<GridCredential> allowedParties,
 			ProxyLifetime delegatedCredentialsLifetime) {
 		this(serviceURL, delegator, allowedParties, null,
 				delegatedCredentialsLifetime);
 	}
 
-	public CDSDelegateCredentialStep(String serviceURL,
+	public DelegateCredentialStep(String serviceURL,
 			GridCredential delegator, List<GridCredential> allowedParties,
 			ProxyLifetime delegationLifetime,
 			ProxyLifetime delegatedCredentialsLifetime) {

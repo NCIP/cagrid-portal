@@ -14,6 +14,8 @@ import java.rmi.RemoteException;
  */
 public interface DelegatedCredentialI {
 
+  public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException ;
+
   /**
    * This method allows an authorized user to get a delegated credential.
    *
