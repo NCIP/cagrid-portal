@@ -54,17 +54,14 @@ public class DelegateCredentialTest extends Story {
 		super();
 	}
 
-	@Override
 	public String getName() {
 		return "Credential Delegation Service (CDS) Story";
 	}
 
-	@Override
 	protected boolean storySetUp() throws Throwable {
 		return true;
 	}
 
-	@Override
 	protected void storyTearDown() throws Throwable {
 		this.caFile.delete();
 
@@ -77,8 +74,6 @@ public class DelegateCredentialTest extends Story {
 		new CleanupStep().runStep();
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")
 	protected Vector steps() {
 		this.globus = new GlobusHelper(true);
 
@@ -190,16 +185,16 @@ public class DelegateCredentialTest extends Story {
 		SuspendDelegatedCredentialStep suspendAdmin = new SuspendDelegatedCredentialStep(
 				delegateAdmin, admin);
 		steps.add(suspendAdmin);
-		
+
 		DelegationRecordFilter approved = new DelegationRecordFilter();
 		approved.setDelegationStatus(DelegationStatus.Approved);
-		
+
 		DelegationRecordFilter suspended = new DelegationRecordFilter();
 		suspended.setDelegationStatus(DelegationStatus.Suspended);
 
-		
-		steps.add(new FindMyDelegatedCredentialsStep(cdsURL,admin,approved));
-		steps.add(new FindMyDelegatedCredentialsStep(cdsURL,admin,suspended,delegateAdmin));
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, approved));
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, suspended,
+				delegateAdmin));
 
 		ProxyLifetime delegationLifetime = new ProxyLifetime();
 		delegationLifetime.setSeconds(SHORT_LIFETIME_SECONDS);
