@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.testing.system.deployment;
 
 import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,38 +30,39 @@ import org.globus.axis.gsi.GSIConstants;
 import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 import org.jdom.Element;
 import org.oasis.wsrf.lifetime.Destroy;
-import org.projectmobius.common.XMLUtilities;
 
 import com.counter.CounterPortType;
 import com.counter.CreateCounter;
 import com.counter.CreateCounterResponse;
 import com.counter.service.CounterServiceAddressingLocator;
 
-/** 
- *  TomcatServiceContainer
- *  Service container implementation for tomcat
+
+/**
+ * TomcatServiceContainer Service container implementation for tomcat
  * 
  * @author David Ervin
- * 
  * @created Oct 19, 2007 12:01:22 PM
- * @version $Id: TomcatServiceContainer.java,v 1.4 2007-11-05 16:19:58 dervin Exp $ 
+ * @version $Id: TomcatServiceContainer.java,v 1.4 2007/11/05 16:19:58 dervin
+ *          Exp $
  */
 public class TomcatServiceContainer extends ServiceContainer {
-    
+
     private static final Logger LOG = Logger.getLogger(ServiceContainer.class);
-    
+
     public static final int CONNECT_ATTEMPTS = 10;
-    public static final int CONNECT_ATTEPMT_TIMEOUT = 1; // secconds between attempts
+    public static final int CONNECT_ATTEPMT_TIMEOUT = 1; // secconds between
+    // attempts
     public static final int SHUTDOWN_WAIT_TIME = 10; // secconds
     public static final int DEPLOY_WAIT_TIME = 120; // secconds
 
     public static final String ENV_ANT_HOME = "ANT_HOME";
     public static final String ENV_CATALINA_HOME = "CATALINA_HOME";
     public static final String ENV_GLOBUS_LOCATION = "GLOBUS_LOCATION";
-    
+
     public static final String DEPLOY_ANT_TARGET = "deployTomcat";
-    
+
     private Process catalinaProcess;
+
 
     public TomcatServiceContainer(ContainerProperties properties) {
         super(properties);
@@ -84,7 +86,7 @@ public class TomcatServiceContainer extends ServiceContainer {
         } else {
             command.add(ant.getAbsolutePath());
         }
-        
+
         // any arguments
         if (deployArgs != null && deployArgs.size() != 0) {
             command.addAll(deployArgs);
@@ -93,10 +95,10 @@ public class TomcatServiceContainer extends ServiceContainer {
         // target to execute
         command.add(DEPLOY_ANT_TARGET);
 
-        String[] locationEnvironment = new String[]{ENV_CATALINA_HOME + "=" 
+        String[] locationEnvironment = new String[]{ENV_CATALINA_HOME + "="
             + getProperties().getContainerDirectory().getAbsolutePath()};
         String[] editedEnvironment = editEnvironment(locationEnvironment);
-        
+
         LOG.debug("Command environment:\n");
         for (String e : editedEnvironment) {
             LOG.debug(e);
@@ -111,7 +113,7 @@ public class TomcatServiceContainer extends ServiceContainer {
         } catch (Exception ex) {
             throw new ContainerException("Error invoking deploy process: " + ex.getMessage(), ex);
         }
-        
+
         final Process finalDeploy = deployProcess;
         FutureTask<Boolean> future = new FutureTask<Boolean>(new Callable<Boolean>() {
             public Boolean call() {
@@ -125,10 +127,10 @@ public class TomcatServiceContainer extends ServiceContainer {
                 return Boolean.valueOf(finalDeploy.exitValue() == 0);
             }
         });
-        
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(future);
-        
+
         boolean success = false;
         try {
             success = future.get(DEPLOY_WAIT_TIME, TimeUnit.SECONDS).booleanValue();
@@ -138,10 +140,10 @@ public class TomcatServiceContainer extends ServiceContainer {
             future.cancel(true);
             deployProcess.destroy();
         }
-        
+
         executor.shutdownNow();
         deployProcess = null;
-        
+
         if (!success) {
             throw new ContainerException("Deployment ant command failed: " + deployProcess.exitValue());
         }
@@ -153,9 +155,10 @@ public class TomcatServiceContainer extends ServiceContainer {
             // no tomcat, no problem
             return;
         }
-        
-        String shutdown = getProperties().getContainerDirectory().getAbsolutePath() + File.separator + "bin" + File.separator + "catalina";
-        
+
+        String shutdown = getProperties().getContainerDirectory().getAbsolutePath() + File.separator + "bin"
+            + File.separator + "catalina";
+
         List<String> command = new ArrayList<String>();
 
         // executable to call
@@ -166,11 +169,11 @@ public class TomcatServiceContainer extends ServiceContainer {
         } else {
             command.add(shutdown + " stop");
         }
-        
-        String[] locationEnvironment = new String[]{ENV_CATALINA_HOME + "=" 
+
+        String[] locationEnvironment = new String[]{ENV_CATALINA_HOME + "="
             + getProperties().getContainerDirectory().getAbsolutePath()};
         String[] editedEnvironment = editEnvironment(locationEnvironment);
-        
+
         LOG.debug("Command environment:\n");
         for (String e : editedEnvironment) {
             LOG.debug(e);
@@ -179,14 +182,14 @@ public class TomcatServiceContainer extends ServiceContainer {
         String[] commandArray = command.toArray(new String[command.size()]);
         Process shutdownProcess = null;
         try {
-            shutdownProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment, 
+            shutdownProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment,
                 getProperties().getContainerDirectory());
             new StreamGobbler(shutdownProcess.getInputStream(), StreamGobbler.TYPE_OUT).start();
             new StreamGobbler(shutdownProcess.getErrorStream(), StreamGobbler.TYPE_OUT).start();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking startup process: " + ex.getMessage(), ex);
         }
-        
+
         final Process finalShutdownProcess = shutdownProcess;
 
         FutureTask<Boolean> future = new FutureTask<Boolean>(new Callable<Boolean>() {
@@ -207,10 +210,10 @@ public class TomcatServiceContainer extends ServiceContainer {
                 return Boolean.valueOf(finalShutdownProcess.exitValue() == 0);
             }
         });
-        
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(future);
-        
+
         boolean success = false;
         try {
             success = future.get(SHUTDOWN_WAIT_TIME, TimeUnit.SECONDS).booleanValue();
@@ -222,12 +225,12 @@ public class TomcatServiceContainer extends ServiceContainer {
             shutdownProcess.destroy();
             catalinaProcess.destroy();
         }
-        
+
         executor.shutdownNow();
-        
+
         shutdownProcess = null;
         catalinaProcess = null;
-        
+
         if (!success) {
             throw new ContainerException("Shutdown command failed: " + finalShutdownProcess.exitValue());
         }
@@ -240,10 +243,10 @@ public class TomcatServiceContainer extends ServiceContainer {
         } catch (Exception ex) {
             throw new ContainerException("Error setting server port: " + ex.getMessage(), ex);
         }
-        
-        String startup = getProperties().getContainerDirectory().getAbsolutePath() 
-            + File.separator + "bin" + File.separator + "catalina";
-        
+
+        String startup = getProperties().getContainerDirectory().getAbsolutePath() + File.separator + "bin"
+            + File.separator + "catalina";
+
         List<String> command = new ArrayList<String>();
 
         // executable to call
@@ -254,11 +257,11 @@ public class TomcatServiceContainer extends ServiceContainer {
         } else {
             command.add(startup + " run");
         }
-        
-        String[] locationEnvironment = new String[]{ENV_CATALINA_HOME + "=" 
+
+        String[] locationEnvironment = new String[]{ENV_CATALINA_HOME + "="
             + getProperties().getContainerDirectory().getAbsolutePath()};
         String[] editedEnvironment = editEnvironment(locationEnvironment);
-        
+
         LOG.debug("Command environment:\n");
         for (String e : editedEnvironment) {
             LOG.debug(e);
@@ -266,20 +269,20 @@ public class TomcatServiceContainer extends ServiceContainer {
 
         String[] commandArray = command.toArray(new String[command.size()]);
         try {
-            catalinaProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment, 
+            catalinaProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment,
                 getProperties().getContainerDirectory());
             new StreamGobbler(catalinaProcess.getInputStream(), StreamGobbler.TYPE_OUT).start();
             new StreamGobbler(catalinaProcess.getErrorStream(), StreamGobbler.TYPE_OUT).start();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking startup process: " + ex.getMessage(), ex);
         }
-        
+
         // start checking for running
         Exception testException = null;
         sleep(2000);
         boolean running = false;
         for (int i = 0; !running && i < CONNECT_ATTEMPTS; i++) {
-            LOG.debug("Connection attempt " + (i + 1));            
+            LOG.debug("Connection attempt " + (i + 1));
             try {
                 running = isGlobusRunningCounter();
             } catch (Exception ex) {
@@ -295,13 +298,12 @@ public class TomcatServiceContainer extends ServiceContainer {
             }
         }
     }
-    
-    
+
+
     // ---------------
     // Helpers
     // ---------------
-    
-    
+
     private String[] editEnvironment(String[] edits) {
         Map<String, String> envm = new HashMap<String, String>(System.getenv());
         for (String element : edits) {
@@ -317,8 +319,8 @@ public class TomcatServiceContainer extends ServiceContainer {
         }
         return environment;
     }
-    
-    
+
+
     private void sleep(long ms) {
         try {
             Thread.sleep(ms);
@@ -326,19 +328,18 @@ public class TomcatServiceContainer extends ServiceContainer {
             ex.printStackTrace();
         }
     }
-    
-    
+
+
     /**
      * Checks that Globus is running by hitting the counter service
-     * @return
-     *      true if the container service could be contacted
+     * 
+     * @return true if the container service could be contacted
      */
     protected synchronized boolean isGlobusRunningCounter() throws IOException, ServiceException {
         org.globus.axis.util.Util.registerTransport();
         CounterServiceAddressingLocator locator = new CounterServiceAddressingLocator();
         String globusLocation = System.getenv(ENV_GLOBUS_LOCATION);
-        EngineConfiguration engineConfig = 
-            new FileProvider(globusLocation + File.separator + "client-config.wsdd");
+        EngineConfiguration engineConfig = new FileProvider(globusLocation + File.separator + "client-config.wsdd");
         // TODO: do we even need this?
         locator.setEngine(new AxisClient(engineConfig));
 
@@ -357,24 +358,24 @@ public class TomcatServiceContainer extends ServiceContainer {
         counter.destroy(new Destroy());
         return true;
     }
-    
-    
+
+
     private static void setAnonymous(Stub stub) {
         stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
         stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization.getInstance());
         stub._setProperty(GSIConstants.GSI_AUTHORIZATION, org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
     }
-    
-    
+
+
     private void setServerPort() throws Exception {
         Integer port = getProperties().getPortPreference().getPort();
-        File serverConfigFile = new File(getProperties().getContainerDirectory(),
-            "conf" + File.separator + "server.xml");
+        File serverConfigFile = new File(getProperties().getContainerDirectory(), "conf" + File.separator
+            + "server.xml");
         Element configRoot = XMLUtilities.fileNameToDocument(serverConfigFile.getAbsolutePath()).getRootElement();
         for (Element serviceElement : (List<Element>) configRoot.getChildren("Service", configRoot.getNamespace())) {
             if (serviceElement.getAttributeValue("name").equals("Catalina")) {
-                for (Element connectorElement : 
-                    (List<Element>) serviceElement.getChildren("Connector", configRoot.getNamespace())) {
+                for (Element connectorElement : (List<Element>) serviceElement.getChildren("Connector", configRoot
+                    .getNamespace())) {
                     boolean connectorFound = false;
                     if (getProperties().isSecure()) {
                         if (connectorElement.getAttributeValue("port").equals("8443")

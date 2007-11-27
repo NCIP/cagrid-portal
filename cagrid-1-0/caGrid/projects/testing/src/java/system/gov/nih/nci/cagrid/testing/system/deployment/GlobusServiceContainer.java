@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.testing.system.deployment;
 
 import gov.nih.nci.cagrid.common.StreamGobbler;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -30,48 +31,47 @@ import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.oasis.wsrf.lifetime.Destroy;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
 
 import com.counter.CounterPortType;
 import com.counter.CreateCounter;
 import com.counter.CreateCounterResponse;
 import com.counter.service.CounterServiceAddressingLocator;
 
-/** 
- *  GlobusServiceContainer
- *  Container for globus 4.0.3
+
+/**
+ * GlobusServiceContainer Container for globus 4.0.3
  * 
  * @author David Ervin
- * 
  * @created Oct 12, 2007 12:01:17 PM
- * @version $Id: GlobusServiceContainer.java,v 1.4 2007-11-05 16:19:58 dervin Exp $ 
+ * @version $Id: GlobusServiceContainer.java,v 1.4 2007/11/05 16:19:58 dervin
+ *          Exp $
  */
 public class GlobusServiceContainer extends ServiceContainer {
-    
+
     private static final Logger LOG = Logger.getLogger(ServiceContainer.class);
 
     public static final String GLOBUS_CONTAINER_CLASSNAME = "org.globus.wsrf.container.ServiceContainer";
     public static final String GLOBUS_SHUTDOWN_CLASSNAME = "org.globus.wsrf.container.ShutdownClient";
 
     public static final int CONNECT_ATTEMPTS = 10;
-    public static final int SHUTDOWN_WAIT_TIME = 10; // secconds
+    public static final int SHUTDOWN_WAIT_TIME = 10; // seconds
 
     public static final String ENV_ANT_HOME = "ANT_HOME";
     public static final String ENV_GLOBUS_LOCATION = "GLOBUS_LOCATION";
-    
+
     public static final String DEPLOY_ANT_TARGET = "deployGlobus";
-    
+
     private Process globusProcess;
+
 
     public GlobusServiceContainer(ContainerProperties properties) {
         super(properties);
     }
-    
-    
+
+
     public void unpackContainer() throws ContainerException {
         super.unpackContainer();
-        // remove security descriptors for insecure deployment 
+        // remove security descriptors for insecure deployment
         // (so we can run shutdown)
         try {
             editShutdownServiceDescriptor();
@@ -99,7 +99,7 @@ public class GlobusServiceContainer extends ServiceContainer {
         } else {
             command.add(ant.toString());
         }
-        
+
         // any arguments
         if (deployArgs != null && deployArgs.size() != 0) {
             command.addAll(deployArgs);
@@ -108,7 +108,7 @@ public class GlobusServiceContainer extends ServiceContainer {
         // target to execute
         command.add(DEPLOY_ANT_TARGET);
 
-        String[] locationEnvironment = new String[]{ENV_GLOBUS_LOCATION + "=" 
+        String[] locationEnvironment = new String[]{ENV_GLOBUS_LOCATION + "="
             + getProperties().getContainerDirectory().getAbsolutePath()};
         String[] editedEnvironment = editEnvironment(locationEnvironment);
 
@@ -122,13 +122,13 @@ public class GlobusServiceContainer extends ServiceContainer {
         } catch (Exception ex) {
             throw new ContainerException("Error invoking deploy process: " + ex.getMessage(), ex);
         }
-        
+
         if (deployProcess.exitValue() != 0) {
             throw new ContainerException("deployService ant command failed: " + deployProcess.exitValue());
         }
     }
-    
-    
+
+
     private String[] editEnvironment(String[] edits) {
         Map<String, String> envm = new HashMap<String, String>(System.getenv());
         for (String element : edits) {
@@ -172,7 +172,7 @@ public class GlobusServiceContainer extends ServiceContainer {
         } catch (Exception ex) {
             throw new ContainerException("Error obtaining service URL: " + ex.getMessage(), ex);
         }
-        
+
         opts.add("-s");
         System.out.println("Contacting shutown service:" + shutdownUrl);
         LOG.debug("Contacting shutown service:" + shutdownUrl);
@@ -180,14 +180,14 @@ public class GlobusServiceContainer extends ServiceContainer {
 
         // force a JVM kill
         opts.add("hard");
-        
+
         Process proc = null;
         try {
             proc = runGlobusCommand(GLOBUS_SHUTDOWN_CLASSNAME, opts);
         } catch (IOException ex) {
             throw new ContainerException("Error executing shutdown client process: " + ex.getMessage(), ex);
         }
-        
+
         final Process shutdownProc = proc;
 
         boolean success = false;
@@ -207,11 +207,11 @@ public class GlobusServiceContainer extends ServiceContainer {
                 return Boolean.valueOf(result);
             }
         });
-        
+
         // execute the task of waiting for completion and getting the status
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(future);
-        
+
         try {
             // try to get the status
             success = future.get(SHUTDOWN_WAIT_TIME, TimeUnit.SECONDS).booleanValue();
@@ -220,13 +220,13 @@ public class GlobusServiceContainer extends ServiceContainer {
         } finally {
             future.cancel(true);
         }
-        
+
         executor.shutdownNow();
-        
+
         // destroy globus process for saftey
         this.globusProcess.destroy();
         this.globusProcess = null;
-        
+
         if (!success) {
             throw new ContainerException("Unknown error shutting down globus");
         }
@@ -255,7 +255,7 @@ public class GlobusServiceContainer extends ServiceContainer {
         } else {
             opts.add("-nosec");
         }
-        
+
         // start the container
         try {
             globusProcess = runGlobusCommand(GLOBUS_CONTAINER_CLASSNAME, opts);
@@ -269,7 +269,7 @@ public class GlobusServiceContainer extends ServiceContainer {
         boolean running = false;
         for (int i = 0; !running && i < CONNECT_ATTEMPTS; i++) {
             System.out.println("Connection attempt " + i);
-            LOG.debug("Connection attempt " + i);            
+            LOG.debug("Connection attempt " + i);
             try {
                 running = isGlobusRunningCounter();
             } catch (Exception ex) {
@@ -285,8 +285,8 @@ public class GlobusServiceContainer extends ServiceContainer {
             }
         }
     }
-    
-    
+
+
     private void sleep(long ms) {
         try {
             Thread.sleep(ms);
@@ -294,17 +294,17 @@ public class GlobusServiceContainer extends ServiceContainer {
             ex.printStackTrace();
         }
     }
-    
-    
+
+
     /**
      * Checks that Globus is running by hitting the counter service
-     * @return
-     *      true if the container service could be contacted
+     * 
+     * @return true if the container service could be contacted
      */
     protected synchronized boolean isGlobusRunningCounter() throws IOException, ServiceException {
         org.globus.axis.util.Util.registerTransport();
         CounterServiceAddressingLocator locator = new CounterServiceAddressingLocator();
-        EngineConfiguration engineConfig = new FileProvider(getProperties().getContainerDirectory().getAbsolutePath() 
+        EngineConfiguration engineConfig = new FileProvider(getProperties().getContainerDirectory().getAbsolutePath()
             + File.separator + "client-config.wsdd");
         locator.setEngine(new AxisClient(engineConfig));
 
@@ -322,15 +322,15 @@ public class GlobusServiceContainer extends ServiceContainer {
         counter.destroy(new Destroy());
         return true;
     }
-    
-    
+
+
     private static void setAnonymous(Stub stub) {
         stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
         stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization.getInstance());
         stub._setProperty(GSIConstants.GSI_AUTHORIZATION, org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
     }
-    
-    
+
+
     private synchronized Process runGlobusCommand(String clName, List<String> options) throws IOException {
         // create globus startup params
         // %_RUNJAVA% -Dlog4j.configuration=container-log4j.properties
@@ -346,9 +346,9 @@ public class GlobusServiceContainer extends ServiceContainer {
         // ib\cog-url.jar";"C:\Globus4.0.1\lib\axis-url.jar"
         // org.globus.bootstrap.Bootstrap
         // org.globus.wsrf.container.ServiceContainer -nosec -debug
-        
+
         File containerDir = getProperties().getContainerDirectory();
-        
+
         File java = new File(System.getProperty("java.home"), "bin" + File.separator + "java");
         File lib = new File(containerDir, "lib");
         String classpath = lib.getAbsolutePath() + File.separator + "bootstrap.jar";
@@ -360,8 +360,7 @@ public class GlobusServiceContainer extends ServiceContainer {
         cmd.add(java.getAbsolutePath());
         cmd.add("-Dlog4j.configuration=container-log4j.properties");
         cmd.add("-DGLOBUS_LOCATION=" + containerDir.getAbsolutePath());
-        cmd.add("-Djava.endorsed.dirs=" + containerDir.getAbsolutePath() 
-            + File.separator + "endorsed");
+        cmd.add("-Djava.endorsed.dirs=" + containerDir.getAbsolutePath() + File.separator + "endorsed");
         cmd.add("-classpath");
         cmd.add(classpath);
         cmd.add("org.globus.bootstrap.Bootstrap");
@@ -385,8 +384,8 @@ public class GlobusServiceContainer extends ServiceContainer {
         new StreamGobbler(proc.getErrorStream(), StreamGobbler.TYPE_ERR).start();
         return proc;
     }
-    
-    
+
+
     protected void editShutdownServiceDescriptor() throws IOException {
         // if (this.secure) {
         // return;
@@ -395,10 +394,10 @@ public class GlobusServiceContainer extends ServiceContainer {
         Document coreWSDDDoc = null;
         try {
             coreWSDDDoc = XMLUtilities.fileNameToDocument(coreWSDD.getAbsolutePath());
-        } catch (MobiusException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new IOException("Problem loading WSRF Core Service config (" 
-                + coreWSDD.getAbsolutePath() + "):" + e.getMessage());
+            throw new IOException("Problem loading WSRF Core Service config (" + coreWSDD.getAbsolutePath() + "):"
+                + e.getMessage());
         }
 
         List serviceEls = coreWSDDDoc.getRootElement().getChildren("service",
