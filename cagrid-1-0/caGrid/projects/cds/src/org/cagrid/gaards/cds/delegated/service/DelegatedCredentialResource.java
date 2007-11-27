@@ -1,6 +1,5 @@
 package org.cagrid.gaards.cds.delegated.service;
 
-import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 
 import org.cagrid.gaards.cds.common.CertificateChain;
@@ -35,12 +34,9 @@ public class DelegatedCredentialResource implements Resource, RemoveCallback {
 
 	public void remove() throws ResourceException {
 		try {
-			System.out.println("SUSPENDING "+id.getDelegationId());
-			System.out.println("SUSPENDING "+id.getDelegationId());
-			System.out.println("SUSPENDING "+id.getDelegationId());
-			System.out.println("SUSPENDING "+id.getDelegationId());
 			this.cds.suspendDelegatedCredential(getCallerIdentity(), id);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ResourceException(Utils.getExceptionMessage(e), e);
 		}
 	}

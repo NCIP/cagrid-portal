@@ -73,7 +73,8 @@ public class DelegatedCredentialResourceHome implements ResourceHome {
 	public void remove(ResourceKey arg0) throws ResourceException,
 			NoSuchResourceException, InvalidResourceKeyException,
 			RemoveNotSupportedException {
-
+		DelegatedCredentialResource r = (DelegatedCredentialResource) find(arg0);
+		r.remove();
 	}
 
 	public ResourceKey getResourceKey(DelegationIdentifier id) throws Exception {

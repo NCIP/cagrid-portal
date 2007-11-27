@@ -2,6 +2,10 @@ package org.cagrid.gaards.cds.delegated.common;
 
 import java.rmi.RemoteException;
 
+import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
+import org.cagrid.gaards.cds.stubs.types.DelegationFault;
+import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
+
 /**
  * Represents a Delegated Credential
  *
