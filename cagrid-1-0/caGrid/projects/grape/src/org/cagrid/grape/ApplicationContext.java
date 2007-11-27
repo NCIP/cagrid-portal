@@ -67,7 +67,7 @@ public class ApplicationContext {
     }
     
     public void addApplicationComponent(ApplicationComponent comp) {
-        this.application.addApplicationComponent(comp, null, null);
+        this.application.addApplicationComponent(comp);
     }
 
 
