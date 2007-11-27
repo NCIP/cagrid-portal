@@ -120,6 +120,14 @@ public class BulkDataHandlerClient extends ServiceSecurityClient implements Bulk
 	}
 
 
+    /**
+     * Creates a WS-Enumeration resource from the bulk data resource and
+     * returns the enumeration conetxt and resource EPR
+     * 
+     * @return
+     *      The enumeration response container wraps both an EnumerationContext
+     *      and the EPR of the enumeration handler service
+     */
 	public EnumerationResponseContainer createEnumeration() throws RemoteException {
 		synchronized (portTypeMutex) {
 			configureStubSecurity((Stub) portType, "createEnumeration");
@@ -130,6 +138,12 @@ public class BulkDataHandlerClient extends ServiceSecurityClient implements Bulk
 	}
 
 
+    /**
+     * Performs a WS-Transfer get operation against the remote bulk data resource
+     * 
+     * @return
+     *      The XML representation of the bulk data resource
+     */
 	public org.globus.transfer.AnyXmlType get(org.globus.transfer.EmptyType params) throws RemoteException {
 		synchronized (portTypeMutex) {
 			configureStubSecurity((Stub) portType, "get");
@@ -138,6 +152,13 @@ public class BulkDataHandlerClient extends ServiceSecurityClient implements Bulk
 	}
 
 
+    /**
+     * Causes the remote resource to prepare for gridFTP transfer
+     * and return the URLs which point to the data
+     * 
+     * @return
+     *      The GridFTP URLs which access the bulk data resource
+     */
 	public org.apache.axis.types.URI[] getGridFTPURLs() throws RemoteException {
 		synchronized (portTypeMutex) {
 			configureStubSecurity((Stub) portType, "getGridFTPURLs");
@@ -148,6 +169,10 @@ public class BulkDataHandlerClient extends ServiceSecurityClient implements Bulk
 	}
 
 
+    /**
+     * Destroys the remote bulk data resource.  Any subsequent calls which attempt
+     * to access the resource should fail.
+     */
 	public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params)
 		throws RemoteException {
 		synchronized (portTypeMutex) {
@@ -157,12 +182,15 @@ public class BulkDataHandlerClient extends ServiceSecurityClient implements Bulk
 	}
 
 
-	public org.oasis.wsrf.lifetime.SetTerminationTimeResponse setTerminationTime(
+	/**
+     * Sets the termination time after which the remote data resource will cease
+     * to be accessable. 
+	 */
+    public org.oasis.wsrf.lifetime.SetTerminationTimeResponse setTerminationTime(
 		org.oasis.wsrf.lifetime.SetTerminationTime params) throws RemoteException {
 		synchronized (portTypeMutex) {
 			configureStubSecurity((Stub) portType, "setTerminationTime");
 			return portType.setTerminationTime(params);
 		}
 	}
-
 }
