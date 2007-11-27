@@ -829,7 +829,7 @@
 	<!-- =============================================================== -->
 	<!-- CAGRID Tools:                                                   -->
 	<!-- =============================================================== -->
-	<target name="build-tools" depends="prepare">
+	<target name="build-tools" depends="prepare" description="Builds caGrid tools">
 		<resolveDependencies extdir="${projects.dir}/tools/ext">
 			<artifact refid="cagrid.properties" />
 			<artifact refid="core.jars"/>
@@ -839,6 +839,8 @@
 			<artifact refid="dorian.client.jars"/>
 			<artifact refid="cadsr.jars"/>
 			<artifact refid="gme.globus.client.jars"/>
+            <artifact refid="common.test.jars" />
+            <artifact refid="test.coverage.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/tools" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
