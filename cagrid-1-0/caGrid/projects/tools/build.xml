@@ -18,6 +18,10 @@
     <property name="src.dir" location="${basedir}/src/java" />
 	<property name="validator.src.dir" location="${src.dir}/validator"/>
 	
+	<!-- testing dirs -->
+	<property name="test.src.dir" location="${basedir}/test/src/java"/>
+	<property name="test.logs.dir" location="${basedir}/test/logs"/>
+	
 	<!-- output dirs -->
     <property name="build.dir" location="${basedir}/build" />
     <property name="build.lib.dir" location="${build.dir}/lib" />
@@ -25,10 +29,12 @@
 	<property name="validator.classes.dir" location="${classes.dir}/validator" />
 	<property name="build.stubs.src" location="${build.dir}/stubs/src"/>
 	<property name="build.stubs.classes" location="${build.dir}/stubs/classes"/>
+	<property name="test.classes.dir" location="${classes.dir}/test"/>
     
 	<!-- jars -->
     <property name="validator.jarfile" location="${build.lib.dir}/${project.name}${cagrid.master.jar.separator}validator${cagrid.master.jar.separator}${project.version}.jar" />
 	<property name="project.stubs.jarfile" location="${build.lib.dir}/${project.name}${cagrid.master.jar.separator}stubs${cagrid.master.jar.separator}${project.version}.jar"/>
+	<property name="test.jarfile" location="${build.lib.dir}/${project.name}${cagrid.master.jar.separator}test${cagrid.master.jar.separator}${project.version}.jar" />
 	
 	<!-- lib locations -->
     <property name="lib.dir" location="${basedir}/lib" />
@@ -39,6 +45,9 @@
 	<!-- java compiler options -->
     <property name="java.debug" value="on" />
 	<property name="java.source" value="1.5"/>
+	
+	<!-- import the test buildfile -->
+	<import file="test/test.xml" />
 
     
     <!-- =============================================================== -->
@@ -79,7 +88,7 @@
     	<fileset dir="${ext.test.lib.dir}">
 			<include name="**/*.jar"/>
 		</fileset>
-        <path location="${classes.dir}" />
+        <path location="${validator.classes.dir}" />
 		<path location="${build.stubs.classes}" />
         <fileset dir="${globus.dir}/lib">
             <include name="**/*.jar" />
@@ -101,6 +110,18 @@
     		<include name="**/*.jar" />
     	</fileset>
     </path>
+	
+	
+	<!-- =============================================================== -->
+	<!-- The Testing Classpath                                           -->
+	<!-- =============================================================== -->
+	<path id="test.classpath">
+		<path refid="run.classpath" />
+		<pathelement location="${test.classes.dir}"/>
+		<fileset dir="${ext.test.lib.dir}" >
+			<include name="**/*.jar" />
+		</fileset>			
+	</path>
 	
 
     <!-- =============================================================== -->
@@ -179,6 +200,18 @@
     </target>
 	
 	
+	<!-- =================================================================== -->
+	<!-- Compiles the test source code                                       -->
+	<!-- =================================================================== -->
+	<target name="compileTests" depends="compile" description="Compiles the test source files">
+		<mkdir dir="${classes.dir}"/>
+		<mkdir dir="${test.classes.dir}"/>
+		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="${java.debug}" source="${java.source}">
+			<classpath refid="test.build.classpath"/>
+		</javac>
+	</target>
+	
+	
     <!-- ============================================================== -->
     <!-- Cleans up generated stuff                                      -->
     <!-- ============================================================== -->
@@ -190,7 +223,7 @@
     <!-- ============================================================== -->
     <!-- Creates the jar files                                          -->
     <!-- ============================================================== -->
-    <target name="jar" depends="compile" description="Builds the Jar Files">
+    <target name="jar" depends="compile, compileTests" description="Builds the Jar Files">
         <mkdir dir="${build.lib.dir}" />
         <jar jarfile="${validator.jarfile}">
             <manifest>
@@ -204,6 +237,18 @@
                 <include name="**/*.java" />
             </fileset>
         </jar>
+		<jar jarfile="${test.jarfile}">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="${main.class}" />
+			</manifest>
+			<fileset dir="${test.classes.dir}">
+				<include name="**/*/"/>
+			</fileset>
+			<fileset dir="${test.src.dir}">
+				<include name="**/*.java" />
+			</fileset>
+    	</jar>
     	<jar jarfile="${project.stubs.jarfile}">
 			<manifest>
 	        	<attribute name="Built-By" value="${user.name}" />
