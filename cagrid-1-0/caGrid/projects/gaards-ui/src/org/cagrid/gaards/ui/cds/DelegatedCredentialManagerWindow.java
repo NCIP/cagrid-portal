@@ -25,7 +25,6 @@ import org.cagrid.gaards.cds.client.DelegationUserClient;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationRecordFilter;
-import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -93,7 +92,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 		super();
 		this.isAdmin = isAdmin;
 		initialize();
-		this.setFrameIcon(DorianLookAndFeel.getUsersIcon());
+		this.setFrameIcon(CDSLookAndFeel.getDelegateCredentialsIcon());
 	}
 
 	/**
@@ -243,7 +242,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	 */
 	private DelegationRecordsTable getDelegatedCredentialsTable() {
 		if (delegatedCredentialsTable == null) {
-			delegatedCredentialsTable = new DelegationRecordsTable();
+			delegatedCredentialsTable = new DelegationRecordsTable(getSession());
 		}
 		return delegatedCredentialsTable;
 	}
@@ -270,7 +269,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 		if (manageDelegatedCredential == null) {
 			manageDelegatedCredential = new JButton();
 			manageDelegatedCredential.setText("View Record");
-			manageDelegatedCredential.setIcon(DorianLookAndFeel.getUserIcon());
+			manageDelegatedCredential.setIcon(CDSLookAndFeel.getDelegateCredentialIcon());
 			manageDelegatedCredential
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
