@@ -63,7 +63,7 @@ public class ApplicationContext {
 
 
     public void addApplicationComponent(ApplicationComponent comp, int width, int height) {
-        this.application.addApplicationComponent(comp, new Dimensions(width, height), null);
+        this.application.addApplicationComponent(comp, new Dimensions(height, width), null);
     }
     
     public void addApplicationComponent(ApplicationComponent comp) {
