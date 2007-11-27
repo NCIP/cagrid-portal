@@ -71,7 +71,7 @@ public class DiscoveryClient {
     protected static final String DATA_MD_PATH = CONTENT_PATH + "/" + data + ":DomainModel";
 
     // Map the prefixes to there namepsaces
-    protected static Map nsMap = new HashMap();
+    protected static Map<String, String> nsMap = new HashMap<String, String>();
     static {
         nsMap.put(wssg, WSRFConstants.SERVICEGROUP_NS);
         nsMap.put(agg, MetadataConstants.AGGREGATOR_NAMESPACE);
@@ -737,6 +737,7 @@ public class DiscoveryClient {
      * @param args
      *            optional URL to Index Service to query.
      */
+    @SuppressWarnings("null")
     public static void main(String[] args) {
         DiscoveryClient client = null;
         try {

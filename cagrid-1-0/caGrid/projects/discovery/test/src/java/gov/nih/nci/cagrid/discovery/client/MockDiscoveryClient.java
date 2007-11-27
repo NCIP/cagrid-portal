@@ -25,78 +25,79 @@ import org.w3c.dom.NodeList;
  * @author oster
  */
 public class MockDiscoveryClient extends DiscoveryClient {
-	private Node xml;
+    private Node xml;
 
 
-	/**
-	 * @throws MalformedURIException
-	 */
-	public MockDiscoveryClient(Node xml) throws MalformedURIException {
-		super();
-		this.xml = xml;
-	}
+    /**
+     * @throws MalformedURIException
+     */
+    public MockDiscoveryClient(Node xml) throws MalformedURIException {
+        super();
+        this.xml = xml;
+    }
 
 
-	protected EndpointReferenceType[] discoverByFilter(String xpathPredicate) throws ResourcePropertyRetrievalException {
-		XObject result;
-		try {
-			result = XPathAPI.eval(getRootNode(), translateXPath(xpathPredicate));
-		} catch (TransformerException e) {
-			throw new QueryInvalidException("Problem with query: " + xpathPredicate, e);
-		}
-		EndpointReferenceType[] resultsList = null;
+    @Override
+    protected EndpointReferenceType[] discoverByFilter(String xpathPredicate) throws ResourcePropertyRetrievalException {
+        XObject result;
+        try {
+            result = XPathAPI.eval(getRootNode(), translateXPath(xpathPredicate));
+        } catch (TransformerException e) {
+            throw new QueryInvalidException("Problem with query: " + xpathPredicate, e);
+        }
+        EndpointReferenceType[] resultsList = null;
 
-		if (result instanceof XNodeSet) {
-			XNodeSet set = (XNodeSet) result;
-			NodeList list;
-			try {
-				list = set.nodelist();
-			} catch (TransformerException e) {
-				throw new QueryInvalidException("Problem with query: " + xpathPredicate, e);
+        if (result instanceof XNodeSet) {
+            XNodeSet set = (XNodeSet) result;
+            NodeList list;
+            try {
+                list = set.nodelist();
+            } catch (TransformerException e) {
+                throw new QueryInvalidException("Problem with query: " + xpathPredicate, e);
 
-			}
+            }
 
-			resultsList = new EndpointReferenceType[list.getLength()];
-			for (int i = 0; i < list.getLength(); i++) {
-				Node node = list.item(i);
-				if (node instanceof Document) {
-					Object obj;
-					try {
-						obj = ObjectDeserializer.toObject(((Document) node).getDocumentElement(),
-							EndpointReferenceType.class);
-					} catch (DeserializationException e) {
-						throw new ResourcePropertyRetrievalException(
-							"Problem deserializing results: " + e.getMessage(), e);
-					}
-					resultsList[i] = (EndpointReferenceType) obj;
-				} else if (node instanceof Element) {
-					Object obj;
-					try {
-						obj = ObjectDeserializer.toObject((Element) node, EndpointReferenceType.class);
-					} catch (DeserializationException e) {
-						throw new ResourcePropertyRetrievalException(
-							"Problem deserializing results: " + e.getMessage(), e);
-					}
-					resultsList[i] = (EndpointReferenceType) obj;
-				} else {
-					throw new QueryInvalidException("Unexpected query result!");
-				}
-			}
-		} else {
-			throw new QueryInvalidException("Unexpected query result!");
-		}
+            resultsList = new EndpointReferenceType[list.getLength()];
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = list.item(i);
+                if (node instanceof Document) {
+                    Object obj;
+                    try {
+                        obj = ObjectDeserializer.toObject(((Document) node).getDocumentElement(),
+                            EndpointReferenceType.class);
+                    } catch (DeserializationException e) {
+                        throw new ResourcePropertyRetrievalException(
+                            "Problem deserializing results: " + e.getMessage(), e);
+                    }
+                    resultsList[i] = (EndpointReferenceType) obj;
+                } else if (node instanceof Element) {
+                    Object obj;
+                    try {
+                        obj = ObjectDeserializer.toObject((Element) node, EndpointReferenceType.class);
+                    } catch (DeserializationException e) {
+                        throw new ResourcePropertyRetrievalException(
+                            "Problem deserializing results: " + e.getMessage(), e);
+                    }
+                    resultsList[i] = (EndpointReferenceType) obj;
+                } else {
+                    throw new QueryInvalidException("Unexpected query result!");
+                }
+            }
+        } else {
+            throw new QueryInvalidException("Unexpected query result!");
+        }
 
-		return resultsList;
-	}
-
-
-	public void setRootNode(Node node) {
-		this.xml = node;
-	}
+        return resultsList;
+    }
 
 
-	private Node getRootNode() {
-		return xml;
-	}
+    public void setRootNode(Node node) {
+        this.xml = node;
+    }
+
+
+    private Node getRootNode() {
+        return xml;
+    }
 
 }
