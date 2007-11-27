@@ -51,9 +51,7 @@
     <property name="introduce.extensions.dir" location="../introduce/extensions" />
 
     <fileset dir="${ext.schema.dir}" id="cagrid_metadata.schema.fileset">
-        <include name="**/*.xsd" />
-        <exclude name="*.xsd" />
-        <exclude name="*.wsdl" />
+        <include name="cagrid/**/*.xsd" />
     </fileset>
 
     <fileset dir="${ext.schema.dir}" id="cagrid_wsEnum.schema.fileset">
