@@ -35,7 +35,8 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: DelegatedCredentialManagerWindow.java,v 1.1 2007-11-19 17:05:26 langella Exp $
+ * @version $Id: DelegatedCredentialManagerWindow.java,v 1.1 2007/11/19 17:05:26
+ *          langella Exp $
  */
 public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 
@@ -61,10 +62,6 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 
 	private JButton query = null;
 
-	private boolean isQuerying = false;
-
-	private Object mutex = new Object();
-
 	private JPanel progressPanel = null;
 
 	private JProgressBar progress = null;
@@ -74,7 +71,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	private JLabel gridLabel = null;
 
 	private JTextField gridIdentity = null;
-	
+
 	private boolean isAdmin;
 
 	private JLabel jLabel = null;
@@ -341,18 +338,9 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 		return query;
 	}
 
-	private void findDelegatedCredentials() {
+	private synchronized void findDelegatedCredentials() {
 
-		synchronized (mutex) {
-			if (isQuerying) {
-				ErrorDialog
-						.showError("Query Already in Progress",
-								"Please wait until the current query is finished before executing another.");
-				return;
-			} else {
-				isQuerying = true;
-			}
-		}
+		this.getQuery().setEnabled(false);
 
 		this.getDelegatedCredentialsTable().clearTable();
 		this.updateProgress(true, "Querying...");
@@ -367,6 +355,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 					id.setDelegationId(Integer.valueOf(idStr).intValue());
 					f.setDelegationIdentifier(id);
 				} catch (Exception e) {
+					this.updateProgress(false, "Error");
 					ErrorDialog
 							.showError("A Delegation Identifier must be an integer.");
 					return;
@@ -408,8 +397,9 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 			this.updateProgress(false, "Error");
+		} finally {
+			this.getQuery().setEnabled(true);
 		}
-		isQuerying = false;
 
 	}
 

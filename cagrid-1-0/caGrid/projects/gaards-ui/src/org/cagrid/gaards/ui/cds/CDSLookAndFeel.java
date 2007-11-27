@@ -17,5 +17,9 @@ public class CDSLookAndFeel extends LookAndFeel {
 	public final static ImageIcon getDelegateCredentialIcon() {
 		return IconUtils.loadIcon("/delegate-credential.png");
 	}
+	
+	public final static ImageIcon getDelegateCredentialsIcon() {
+		return IconUtils.loadIcon("/delegate-credentials.png");
+	}
 
 }

@@ -226,23 +226,25 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 		if (delegateCredentialButton == null) {
 			delegateCredentialButton = new JButton();
 			delegateCredentialButton.setText("Delegate Credential");
-			delegateCredentialButton.setIcon(CDSLookAndFeel.getDelegateCredentialIcon());
-			delegateCredentialButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Runner runner = new Runner() {
-						public void execute() {
-							delegateCredential();
+			delegateCredentialButton.setIcon(CDSLookAndFeel
+					.getDelegateCredentialIcon());
+			delegateCredentialButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							Runner runner = new Runner() {
+								public void execute() {
+									delegateCredential();
+								}
+							};
+							try {
+								GridApplication.getContext()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
 						}
-					};
-					try {
-						GridApplication.getContext()
-								.executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
-				}
 
-			});
+					});
 		}
 
 		return delegateCredentialButton;
@@ -281,8 +283,9 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 		return cache;
 	}
 
-	private void delegateCredential() {
+	private synchronized void delegateCredential() {
 		try {
+			getDelegateCredentialButton().setEnabled(false);
 			DelegationRequestCache c = getDelegationCache();
 			DelegationUserClient client = new DelegationUserClient(c
 					.getDelegationURL(), c.getCredential());
@@ -295,9 +298,11 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 			GridApplication.getContext().showMessage(
 					"Succesfully delegated the credential for "
 							+ c.getCredential().getIdentity() + ".");
-			
+
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
+		} finally {
+			getDelegateCredentialButton().setEnabled(true);
 		}
 
 	}
