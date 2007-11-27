@@ -6,7 +6,6 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.sql.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -31,7 +30,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: DelegatedCredentialWindow.java,v 1.1 2007-11-27 20:08:35 langella Exp $
+ * @version $Id: DelegatedCredentialWindow.java,v 1.2 2007-11-27 20:09:50 langella Exp $
  */
 public class DelegatedCredentialWindow extends ApplicationComponent {
 

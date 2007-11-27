@@ -17,7 +17,8 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: DelegationRecordsTable.java,v 1.1 2007-11-19 17:05:26 langella Exp $
+ * @version $Id: DelegationRecordsTable.java,v 1.1 2007/11/19 17:05:26 langella
+ *          Exp $
  */
 public class DelegationRecordsTable extends GrapeBaseTable {
 	public final static String RECORD = "record";
@@ -30,8 +31,11 @@ public class DelegationRecordsTable extends GrapeBaseTable {
 
 	public final static String EXPIRATION = "Expiration";
 
-	public DelegationRecordsTable() {
+	private SessionPanel session;
+
+	public DelegationRecordsTable(SessionPanel session) {
 		super(createTableModel());
+		this.session = session;
 		TableColumn c = this.getColumn(RECORD);
 		c.setMaxWidth(0);
 		c.setMinWidth(0);
@@ -96,7 +100,10 @@ public class DelegationRecordsTable extends GrapeBaseTable {
 		Runner runner = new Runner() {
 			public void execute() {
 				try {
-
+					GridApplication.getContext().addApplicationComponent(
+							new DelegatedCredentialWindow(session
+									.getServiceURI(), session.getCredential(),
+									getSelectedRecord()));
 				} catch (Exception e) {
 					ErrorDialog.showError(e);
 				}
