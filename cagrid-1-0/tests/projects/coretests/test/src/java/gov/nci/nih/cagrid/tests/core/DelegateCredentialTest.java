@@ -14,10 +14,11 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.ProxyActiveStep;
 import gov.nci.nih.cagrid.tests.core.steps.SleepStep;
 import gov.nci.nih.cagrid.tests.core.steps.cds.CleanupStep;
-import gov.nci.nih.cagrid.tests.core.steps.cds.GetDelegatedCredentialFailStep;
-import gov.nci.nih.cagrid.tests.core.steps.cds.GetDelegatedCredentialStep;
 import gov.nci.nih.cagrid.tests.core.steps.cds.DelegateCredentialStep;
 import gov.nci.nih.cagrid.tests.core.steps.cds.FindMyDelegatedCredentialsStep;
+import gov.nci.nih.cagrid.tests.core.steps.cds.GetDelegatedCredentialFailStep;
+import gov.nci.nih.cagrid.tests.core.steps.cds.GetDelegatedCredentialStep;
+import gov.nci.nih.cagrid.tests.core.steps.cds.SuspendDelegatedCredentialStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
@@ -34,6 +35,7 @@ import junit.textui.TestRunner;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.cds.common.DelegationRecordFilter;
+import org.cagrid.gaards.cds.common.DelegationStatus;
 import org.cagrid.gaards.cds.common.ExpirationStatus;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
 import org.cagrid.gaards.cds.service.Errors;
@@ -167,15 +169,11 @@ public class DelegateCredentialTest extends Story {
 				delegateAdmin));
 		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, valid,
 				delegateAdmin));
-		steps
-				.add(new FindMyDelegatedCredentialsStep(cdsURL, admin,
-						expired));
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, expired));
 
 		GetDelegatedCredentialStep admin2 = new GetDelegatedCredentialStep(
 				delegateAdmin, leonardo);
 		steps.add(admin2);
-		
-		
 
 		steps.add(new DorianApproveRegistrationStep(donatelloApp, dorianURL,
 				admin2));
@@ -185,12 +183,23 @@ public class DelegateCredentialTest extends Story {
 		steps.add(donatello);
 		steps.add(new DorianDestroyDefaultProxyStep());
 		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, donatello));
-		steps.add(new GetDelegatedCredentialFailStep(delegateAdmin,
-				donatello, Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL));
+		steps.add(new GetDelegatedCredentialFailStep(delegateAdmin, donatello,
+				Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL));
+
+		// /Now we want to disable the credential and test
+		SuspendDelegatedCredentialStep suspendAdmin = new SuspendDelegatedCredentialStep(
+				delegateAdmin, admin);
+		steps.add(suspendAdmin);
 		
-		///Now we want to disable the credential and test
+		DelegationRecordFilter approved = new DelegationRecordFilter();
+		approved.setDelegationStatus(DelegationStatus.Approved);
 		
+		DelegationRecordFilter suspended = new DelegationRecordFilter();
+		suspended.setDelegationStatus(DelegationStatus.Suspended);
+
 		
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL,admin,approved));
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL,admin,suspended,delegateAdmin));
 
 		ProxyLifetime delegationLifetime = new ProxyLifetime();
 		delegationLifetime.setSeconds(SHORT_LIFETIME_SECONDS);
@@ -218,9 +227,9 @@ public class DelegateCredentialTest extends Story {
 		List<DelegationIdentifierReference> expected = new ArrayList<DelegationIdentifierReference>();
 		expected.add(delegateAdmin);
 		expected.add(delegateAdminShort);
-		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin,
-				expected));
-		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, valid, delegateAdmin));
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, expected));
+		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, valid,
+				delegateAdmin));
 		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, expired,
 				delegateAdminShort));
 		return steps;

@@ -4,86 +4,56 @@
 package gov.nci.nih.cagrid.tests.core.steps.cds;
 
 import gov.nci.nih.cagrid.tests.core.DelegatedCredential;
-import gov.nci.nih.cagrid.tests.core.DelegationIdentifierReference;
 import gov.nci.nih.cagrid.tests.core.GridCredential;
+import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.common.Utils;
 
-import java.util.List;
-
-import org.apache.axis.message.MessageElement;
-import org.cagrid.gaards.cds.client.DelegationUserClient;
-import org.cagrid.gaards.cds.common.AllowedParties;
-import org.cagrid.gaards.cds.common.DelegationIdentifier;
-import org.cagrid.gaards.cds.common.DelegationPolicy;
-import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
-import org.cagrid.gaards.cds.common.ProxyLifetime;
-import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
+import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
+import org.globus.gsi.GlobusCredential;
 
 import com.atomicobject.haste.framework.Step;
 
 public class SuspendDelegatedCredentialStep extends Step implements
-		DelegatedCredential, DelegationIdentifierReference {
+		GridCredential {
 
-	private String serviceURL;
-	private GridCredential delegator;
-	private List<GridCredential> allowedParties;
-	private ProxyLifetime delegationLifetime;
-	private ProxyLifetime delegatedCredentialsLifetime;
-	private DelegatedCredentialReference delegatedCredentialReference;
+	private GridCredential credential;
 
-	public SuspendDelegatedCredentialStep(String serviceURL,
-			GridCredential delegator, List<GridCredential> allowedParties,
-			ProxyLifetime delegatedCredentialsLifetime) {
-		this(serviceURL, delegator, allowedParties, null,
-				delegatedCredentialsLifetime);
-	}
+	private DelegatedCredential delegatedCredential;
 
-	public SuspendDelegatedCredentialStep(String serviceURL,
-			GridCredential delegator, List<GridCredential> allowedParties,
-			ProxyLifetime delegationLifetime,
-			ProxyLifetime delegatedCredentialsLifetime) {
-		this.serviceURL = serviceURL;
-		this.delegator = delegator;
-		this.allowedParties = allowedParties;
-		this.delegationLifetime = delegationLifetime;
-		this.delegatedCredentialsLifetime = delegatedCredentialsLifetime;
+	private GlobusCredential proxy = null;
+
+	public SuspendDelegatedCredentialStep(
+			DelegatedCredential delegatedCredential, GridCredential credential) {
+		this.credential = credential;
+		this.delegatedCredential = delegatedCredential;
 	}
 
 	@Override
 	public void runStep() throws Throwable {
-		assertNotNull(this.serviceURL);
-		assertNotNull(this.allowedParties);
-		assertNotNull(this.delegator);
-		assertNotNull(this.delegator.getCredential());
-		assertNotNull(this.delegatedCredentialsLifetime);
+		assertNotNull(this.credential);
+		assertNotNull(this.credential.getCredential());
+		assertNotNull(this.delegatedCredential);
+		assertNotNull(this.delegatedCredential
+				.getDelegatedCredentialReference());
+		DelegatedCredentialUserClient client = new DelegatedCredentialUserClient(
+				this.delegatedCredential.getDelegatedCredentialReference(),
+				this.credential.getCredential());
+		client.suspend();
 
-		IdentityDelegationPolicy policy = new IdentityDelegationPolicy();
-		AllowedParties ap = new AllowedParties();
-		String[] id = new String[allowedParties.size()];
-		for (int i = 0; i < allowedParties.size(); i++) {
-			assertNotNull(allowedParties.get(i).getCredential());
-			id[i] = allowedParties.get(i).getCredential().getIdentity();
+		try {
+			client.getDelegatedCredential();
+			fail("Should not be able to get a delegated credential that was suspended.");
+		} catch (Exception e) {
+			if (Utils.getExceptionMessage(e).indexOf(
+					"org.globus.wsrf.NoSuchResourceException") == -1) {
+				FaultUtil.printFault(e);
+				fail("Should get a NoSuchResourceException when trying to get a suspended credential.");
+			}
 		}
-		ap.setGridIdentity(id);
-		policy.setAllowedParties(ap);
-		DelegationUserClient client = new DelegationUserClient(this.serviceURL,
-				this.delegator.getCredential());
-		this.delegatedCredentialReference = client.delegateCredential(
-				this.delegationLifetime, policy,
-				this.delegatedCredentialsLifetime);
-		getDelegationIdentifier();
-
-	}
-	
-	public DelegationIdentifier getDelegationIdentifier(){
-		MessageElement e =  (MessageElement)this.delegatedCredentialReference.getEndpointReference().getProperties().get(0);
-		MessageElement c = (MessageElement)e.getChildElements().next();
-		String s = c.getValue();
-		DelegationIdentifier id = new DelegationIdentifier();
-		id.setDelegationId(Long.valueOf(s).longValue());
-		return id;
 	}
 
-	public DelegatedCredentialReference getDelegatedCredentialReference() {
-		return this.delegatedCredentialReference;
+	public GlobusCredential getCredential() {
+		return this.proxy;
 	}
+
 }
