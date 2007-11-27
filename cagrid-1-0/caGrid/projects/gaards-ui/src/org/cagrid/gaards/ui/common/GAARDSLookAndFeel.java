@@ -1,10 +1,9 @@
-package org.cagrid.gaards.ui.cds;
+package org.cagrid.gaards.ui.common;
 
 import javax.swing.ImageIcon;
 
-import org.cagrid.gaards.ui.common.GAARDSLookAndFeel;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.IconUtils;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -13,13 +12,14 @@ import org.cagrid.grape.utils.IconUtils;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class CDSLookAndFeel extends GAARDSLookAndFeel {
-	public final static ImageIcon getDelegateCredentialIcon() {
-		return IconUtils.loadIcon("/delegate-credential.png");
+public class GAARDSLookAndFeel extends LookAndFeel {
+
+	public final static ImageIcon getCertificateIcon() {
+		return IconUtils.loadIcon("/certificate.png");
 	}
-	
-	public final static ImageIcon getDelegateCredentialsIcon() {
-		return IconUtils.loadIcon("/delegate-credentials.png");
+
+	public final static ImageIcon getCertificateActionIcon() {
+		return IconUtils.loadIcon("/contact-new.png");
 	}
 
 }

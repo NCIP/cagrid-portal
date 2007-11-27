@@ -2,7 +2,7 @@ package org.cagrid.gaards.ui.dorian;
 
 import javax.swing.ImageIcon;
 
-import org.cagrid.grape.LookAndFeel;
+import org.cagrid.gaards.ui.common.GAARDSLookAndFeel;
 import org.cagrid.grape.utils.IconUtils;
 
 
@@ -13,7 +13,7 @@ import org.cagrid.grape.utils.IconUtils;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class DorianLookAndFeel extends LookAndFeel {
+public class DorianLookAndFeel extends GAARDSLookAndFeel {
 	public final static ImageIcon getIdpIcon() {
 		return IconUtils.loadIcon("/users.png");
 	}
@@ -35,20 +35,9 @@ public class DorianLookAndFeel extends LookAndFeel {
 		return IconUtils.loadIcon("/password.png");
 	}
 
-
 	
 	public final static ImageIcon getHostIcon() {
 		return IconUtils.loadIcon("/computer.png");
-	}
-
-
-	public final static ImageIcon getCertificateIcon() {
-		return IconUtils.loadIcon("/certificate.png");
-	}
-
-
-	public final static ImageIcon getCertificateActionIcon() {
-		return IconUtils.loadIcon("/contact-new.png");
 	}
 
 

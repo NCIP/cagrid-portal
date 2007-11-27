@@ -14,13 +14,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.ui.common.ProxyComboBox;
-import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -30,7 +30,8 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: DelegatedCredentialWindow.java,v 1.2 2007-11-27 20:09:50 langella Exp $
+ * @version $Id: DelegatedCredentialWindow.java,v 1.2 2007/11/27 20:09:50
+ *          langella Exp $
  */
 public class DelegatedCredentialWindow extends ApplicationComponent {
 
@@ -100,6 +101,12 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 
 	private DelegationStatusComboBox status = null;
 
+	private JScrollPane jScrollPane = null;
+
+	private CertificateChainTable certificateChainTable = null;
+
+	private JButton viewCertificate = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -114,7 +121,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 		setDelegationRecord();
 	}
 
-	private void setDelegationRecord() {
+	private void setDelegationRecord() throws Exception {
 		getGridIdentity().setText(record.getGridIdentity());
 		getDelegationIdentifier().setText(
 				String.valueOf(record.getDelegationIdentifier()
@@ -122,9 +129,16 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 		getInitiated().setText(getDateString(record.getDateInitiated()));
 		getApproved().setText(getDateString(record.getDateApproved()));
 		getExpires().setText(getDateString(record.getExpiration()));
-		String str = record.getDelegatedProxyLifetime().getHours()+" hour(s), "+record.getDelegatedProxyLifetime().getMinutes()+" minute(s) "+record.getDelegatedProxyLifetime().getSeconds()+" second(s)";
+		String str = record.getDelegatedProxyLifetime().getHours()
+				+ " hour(s), "
+				+ record.getDelegatedProxyLifetime().getMinutes()
+				+ " minute(s) "
+				+ record.getDelegatedProxyLifetime().getSeconds()
+				+ " second(s)";
 		getLifetime().setText(str);
 		getStatus().setSelectedItem(record.getDelegationStatus());
+		getCertificateChainTable().setCertificateChain(
+				record.getCertificateChain());
 	}
 
 	private String getDateString(long l) {
@@ -253,7 +267,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 
 				}
 			});
-			updateUser.setIcon(DorianLookAndFeel.getUserIcon());
+			updateUser.setIcon(CDSLookAndFeel.getDelegateCredentialsIcon());
 		}
 		return updateUser;
 	}
@@ -276,7 +290,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 							.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, CDSLookAndFeel
 					.getDelegateCredentialsIcon(), getInfoPanel(), null);
-			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel
+			jTabbedPane.addTab(CERTIFICATE_PANEL, CDSLookAndFeel
 					.getCertificateIcon(), getCertificatePanel(), null);
 		}
 		return jTabbedPane;
@@ -433,7 +447,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints.gridy = 1;
 			credentialLabel = new JLabel();
-			credentialLabel.setText("Proxy");
+			credentialLabel.setText("Credential");
 			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
 			gridBagConstraints27.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints27.weightx = 1.0;
@@ -526,8 +540,25 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 	 */
 	private JPanel getCertificatePanel() {
 		if (certificatePanel == null) {
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.gridx = 0;
+			gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridy = 1;
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.fill = GridBagConstraints.BOTH;
+			gridBagConstraints20.weighty = 1.0;
+			gridBagConstraints20.gridx = 0;
+			gridBagConstraints20.gridy = 0;
+			gridBagConstraints20.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints20.weightx = 1.0;
 			certificatePanel = new JPanel();
 			certificatePanel.setLayout(new GridBagLayout());
+			certificatePanel.add(getJScrollPane(), gridBagConstraints20);
+			certificatePanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Certificate Chain", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+							.getPanelLabelColor()));
+			certificatePanel.add(getViewCertificate(), gridBagConstraints21);
 		}
 		return certificatePanel;
 	}
@@ -607,6 +638,51 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			status = new DelegationStatusComboBox(false);
 		}
 		return status;
+	}
+
+	/**
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getCertificateChainTable());
+		}
+		return jScrollPane;
+	}
+
+	/**
+	 * This method initializes certificateChainTable
+	 * 
+	 * @return javax.swing.JTable
+	 */
+	private CertificateChainTable getCertificateChainTable() {
+		if (certificateChainTable == null) {
+			certificateChainTable = new CertificateChainTable();
+		}
+		return certificateChainTable;
+	}
+
+	/**
+	 * This method initializes viewCertificate
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getViewCertificate() {
+		if (viewCertificate == null) {
+			viewCertificate = new JButton();
+			viewCertificate.setText("View Certificate");
+			viewCertificate.setIcon(CDSLookAndFeel.getCertificateIcon());
+			viewCertificate
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							getCertificateChainTable().doubleClick();
+						}
+					});
+		}
+		return viewCertificate;
 	}
 
 }
