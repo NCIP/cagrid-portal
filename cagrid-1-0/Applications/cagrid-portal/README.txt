@@ -24,7 +24,7 @@
 
 1. Get a Google Maps API key: http://www.google.com/apis/maps/signup.html
    - If your host's name is my.host.com, then the URL you should use is:
-    	http://my.host.com:8080
+    	https://my.host.com:8443
    - Edit portlets/src/war/WEB-INF/context/common.xml
       - In the "mapBean" bean definition, set the "apiKey" property to the key that you obtained.
 
@@ -48,8 +48,6 @@
    then you should run something like this SQL:
    
    		create database portal2;
-   		grant all privileges on portal2.* to 'portal2'@'%' identified by 'portal2';
-   		flush privileges;
    		
 6. Run: ant db:load-schema
 
@@ -69,9 +67,35 @@
 10. Create liferay database:
 
 	create database lportal2 character set utf8;
-	grant all privileges on lportal2.* to 'lportal2'@'%' identified by 'lportal2';
-   	flush privileges;
-         
+	
+#############
+# Deploying #
+#############
+
+ant liferay:deploy-authn
+ant liferay:deploy-layouts
+ant liferay:deploy-theme
+ant liferay:deploy-portlets
+
+#####################
+# SSL Configuration #
+#####################
+
+The portal must use HTTPS. The installation script will take care of configuring Tomcat (in JBoss)
+appropriately. But, you must still provide/create the certificate and keystore, and then update the
+deploy.properties before running the installation script.
+
+For further information, look here:
+ - http://tomcat.apache.org/tomcat-5.5-doc/ssl-howto.html
+ - http://docs.jboss.org/jbossas/jboss4guide/r5/html/ch9.chapt.html#ch9.https.sect
+
+To generate a keystore and certificate, execute the following commands:
+
+$JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg RSA -keystore /path/to/my/keystore
+
+Make sure to use the same password for keystore and key. When prompted for first and last
+name, specify the host name.
+
 ###########
 # Running #
 ###########
@@ -86,16 +110,6 @@ Edit JBOSS_HOME/bin/run.sh, set the JAVA_OPTS variable as follows:
 Start JBoss by running: ./run.sh
 You may see some error message about a ClassCastException related to Log4J. You can ignore this.
 
-######################
-# Deploying Portlets #
-######################
-
-By default, the liferay autodeploy directory is $HOME/liferay/deploy. If you place a war file that
-contains a portlet application into that directory, it will be deployed.
-
-You can deploy the cagridportlets.war file by typing:
-
-	ant liferay:deploy-portlets
 	
 
 ################################
@@ -110,44 +124,25 @@ Follow these directions to import the lar file:
 1. Sign in:
    - username: portaladmin@cabig.nci.nih.gov
    - password: p0rtal@dmin
-2. In upper right-hand corner, click drop-down list,
-   then select My Places > My Community > Private Pages
-3. In Communities portlet, click "Communities I have joined" tab.
-4. Click the "Configure Pages" icon for the "Guest" community. 
-   - That's the 3rd icon from the left. It looks two pieces of paper.
-5. Click on the "Import/Export" tab.
-6. Click on the "Import" sub tab.
-7. Select NONE of the checkboxes.
-9. Press the "Browse..." button to navigate to and select "guest-community.lar"
-10. Press "Import"
-11. From upper right-hand corner, click drop-down list,
+2. From upper right-hand corner, click drop-down list,
     then select MyPlaces > My Community. Then click on the icon to the right
     of the "Public Pages" text.
+3. Click on the "Import/Export" tab.
+4. Click on the "Import" sub tab.
+5. Select the "Portlet Preferences" and "Portlet Data" checkboxes.
+6. Press the "Browse..." button to navigate to and select "portaladmin-public-community.lar"
+7. Press "Import"
+8. Repeat steps 11 through 16 for the "Private Pages" and "portaladmin-private-community.lar".   
+9. In upper right-hand corner, click drop-down list,
+   then select My Places > My Community > Private Pages
+10. In Communities portlet, click "Communities I have joined" tab.
+11. Click the "Configure Pages" icon for the "Guest" community. 
+   - That's the 3rd icon from the left. It looks two pieces of paper.
 12. Click on the "Import/Export" tab.
 13. Click on the "Import" sub tab.
 14. Select NONE of the checkboxes.
-15. Press the "Browse..." button to navigate to and select "portaladmin-public-community.lar"
+15. Press the "Browse..." button to navigate to and select "guest-community.lar"
 16. Press "Import"
-17. Repeat steps 11 through 16 for the "Private Pages" and "portaladmin-private-community.lar".
 
 Then you can navigate back to My Places > Guest > Public Pages. Or you could just sign out.
-
-#####################
-# SSL Configuration #
-#####################
-
-The portal must use HTTPS. The installation script will take care of configuring Tomcat (in JBoss)
-appropriately. But, you must still provide/create the certificate and keystore, and then update the
-deploy.properties before running the installation script.
-
-For further information, look here:
- - http://tomcat.apache.org/tomcat-5.5-doc/ssl-howto.html
- - http://docs.jboss.org/jbossas/jboss4guide/r5/html/ch9.chapt.html#ch9.https.sect
-
-To generate a keystor and certificate, execute the following commands:
-
-$JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg RSA -keystore /path/to/my/keystore
-
-Make sure to use the same password for keystore and key. When prompted for first and last
-name, specify the host name.
 
