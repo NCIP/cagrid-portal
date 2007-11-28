@@ -53,7 +53,7 @@
                 <component>
                     <title>Delegate Credential</title>
                     <description>Allows one to delegate their credential</description>
-                    <classname>org.cagrid.gaards.ui.cds.DelegateProxyWindow</classname>
+                    <classname>org.cagrid.gaards.ui.cds.DelegateProxyWindowStep1</classname>
                     <icon>/delegate-credential.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>

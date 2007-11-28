@@ -28,10 +28,8 @@ import org.globus.gsi.bc.BouncyCastleUtil;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class DelegateProxyWindow extends ApplicationComponent implements
+public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 		ProxyLifetimeListener {
-
-	private static String IDENTITY_DELEGATION_POLICY = "Identity Delegation Policy";
 
 	private static final int SECONDS_OFFSET = 120;
 
@@ -78,7 +76,7 @@ public class DelegateProxyWindow extends ApplicationComponent implements
 	/**
 	 * This is the default constructor
 	 */
-	public DelegateProxyWindow() {
+	public DelegateProxyWindowStep1() {
 		super();
 		initialize();
 	}
@@ -369,7 +367,7 @@ public class DelegateProxyWindow extends ApplicationComponent implements
 					.setIssuedCredentialPathLength(((Integer) getIssuedCredentialPathLength()
 							.getSelectedItem()).intValue());
 
-			IdentityPolicyDelegateProxyWindow window = new IdentityPolicyDelegateProxyWindow(
+			DelegateProxyWindowStep2 window = new DelegateProxyWindowStep2((String)getDelegationPolicy().getSelectedItem(),
 					cache);
 			GridApplication.getContext().addApplicationComponent(window, 600,
 					350);
@@ -400,7 +398,7 @@ public class DelegateProxyWindow extends ApplicationComponent implements
 	private JComboBox getDelegationPolicy() {
 		if (delegationPolicy == null) {
 			delegationPolicy = new JComboBox();
-			delegationPolicy.addItem(IDENTITY_DELEGATION_POLICY);
+			delegationPolicy.addItem(CDSUIConstants.IDENTITY_POLICY_TYPE);
 		}
 		return delegationPolicy;
 	}

@@ -26,7 +26,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
+public class DelegateProxyWindowStep2 extends ApplicationComponent {
 
 	private JPanel jContentPane = null;
 
@@ -46,15 +46,19 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 
 	private JTextField credential = null;
 
-	private IdentityDelegationPolicyPanel policyPanel = null;
+	private DelegationPolicyPanel policyPanel = null;
 
 	private DelegationRequestCache cache;
+
+	private String policyType;
 
 	/**
 	 * This is the default constructor
 	 */
-	public IdentityPolicyDelegateProxyWindow(DelegationRequestCache cache) {
+	public DelegateProxyWindowStep2(String policyType,
+			DelegationRequestCache cache) {
 		super();
+		this.policyType = policyType;
 		this.cache = cache;
 		initialize();
 		this.getDelegationService().setText(cache.getDelegationURL());
@@ -297,14 +301,9 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private IdentityDelegationPolicyPanel getPolicyPanel() {
+	private DelegationPolicyPanel getPolicyPanel() {
 		if (policyPanel == null) {
-			policyPanel = new IdentityDelegationPolicyPanel(true);
-			policyPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Identity Delegation Policy",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					LookAndFeel.getPanelLabelColor()));
+			policyPanel = CDSUIUtils.getPolicyPanel(policyType, true);
 		}
 		return policyPanel;
 	}
