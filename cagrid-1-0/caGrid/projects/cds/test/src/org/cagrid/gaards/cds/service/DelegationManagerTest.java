@@ -9,6 +9,7 @@ import java.io.File;
 import junit.framework.TestCase;
 
 import org.cagrid.gaards.cds.common.AllowedParties;
+import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationRecordFilter;
@@ -19,6 +20,7 @@ import org.cagrid.gaards.cds.common.DelegationStatus;
 import org.cagrid.gaards.cds.common.ExpirationStatus;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
+import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.cds.testutils.CA;
 import org.cagrid.gaards.cds.testutils.Constants;
 import org.cagrid.gaards.cds.testutils.Utils;
@@ -38,6 +40,106 @@ public class DelegationManagerTest extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
+		}
+	}
+
+	public void testUpdateDelegationStatusNonAdminUser() {
+		DelegationManager cds = null;
+		try {
+			cds = Utils.getCDS();
+			String leonardoAlias = "leonardo";
+			String donatelloAlias = "donatello";
+
+			GlobusCredential leonardoCred = ca.createCredential(leonardoAlias);
+			GlobusCredential donatelloCred = ca
+					.createCredential(donatelloAlias);
+
+			DelegationPolicy policy = getSimplePolicy(donatelloCred
+					.getIdentity());
+
+			DelegationSigningRequest leonardoReq = cds.initiateDelegation(
+					leonardoCred.getIdentity(),
+					getSimpleDelegationRequest(policy));
+			DelegationSigningResponse leonardoRes = new DelegationSigningResponse();
+			leonardoRes.setDelegationIdentifier(leonardoReq
+					.getDelegationIdentifier());
+			leonardoRes.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+					.toCertificateChain(ca.createProxyCertifcates(
+							leonardoAlias, KeyUtil.loadPublicKey(leonardoReq
+									.getPublicKey().getKeyAsString()), 2)));
+			cds.approveDelegation(leonardoCred.getIdentity(), leonardoRes);
+			DelegationIdentifier id = leonardoReq.getDelegationIdentifier();
+			try {
+				cds.updateDelegatedCredentialStatus(
+						donatelloCred.getIdentity(), id,
+						DelegationStatus.Suspended);
+				fail("Should not be able to update the status of the delegated credential.");
+			} catch (PermissionDeniedFault e) {
+
+			}
+
+			try {
+				cds.updateDelegatedCredentialStatus(leonardoCred.getIdentity(),
+						id, DelegationStatus.Approved);
+				fail("Should not be able to update the status of the delegated credential.");
+			} catch (PermissionDeniedFault e) {
+
+			}
+
+			try {
+				cds.updateDelegatedCredentialStatus(leonardoCred.getIdentity(),
+						id, DelegationStatus.Pending);
+				fail("Should not be able to update the status of the delegated credential.");
+			} catch (PermissionDeniedFault e) {
+
+			}
+
+			cds.updateDelegatedCredentialStatus(leonardoCred.getIdentity(), id,
+					DelegationStatus.Suspended);
+
+			DelegationRecordFilter f = new DelegationRecordFilter();
+			f.setDelegationIdentifier(id);
+			DelegationRecord[] records = cds.findDelegatedCredentials(
+					leonardoCred.getIdentity(), f);
+			assertNotNull(records);
+			assertEquals(1, records.length);
+			assertEquals(DelegationStatus.Suspended, records[0]
+					.getDelegationStatus());
+
+			try {
+				cds.updateDelegatedCredentialStatus(leonardoCred.getIdentity(),
+						id, DelegationStatus.Suspended);
+				fail("Should not be able to update the status of the delegated credential.");
+			} catch (PermissionDeniedFault e) {
+
+			}
+
+			try {
+				cds.updateDelegatedCredentialStatus(leonardoCred.getIdentity(),
+						id, DelegationStatus.Approved);
+				fail("Should not be able to update the status of the delegated credential.");
+			} catch (PermissionDeniedFault e) {
+
+			}
+
+			try {
+				cds.updateDelegatedCredentialStatus(leonardoCred.getIdentity(),
+						id, DelegationStatus.Pending);
+				fail("Should not be able to update the status of the delegated credential.");
+			} catch (PermissionDeniedFault e) {
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			if (cds != null) {
+				try {
+					cds.clear();
+				} catch (Exception e) {
+				}
+			}
 		}
 	}
 
@@ -166,8 +268,8 @@ public class DelegationManagerTest extends TestCase {
 
 	protected void validateFindMy(DelegationManager cds, String gridIdentity,
 			DelegationRecordFilter f, int expectedCount) throws Exception {
-		DelegationRecord[] records = cds.findMyDelegatedCredentials(
-				gridIdentity, f);
+		DelegationRecord[] records = cds.findDelegatedCredentials(gridIdentity,
+				f);
 		assertEquals(expectedCount, records.length);
 		if (f.getDelegationIdentifier() != null) {
 			for (int i = 0; i < records.length; i++) {

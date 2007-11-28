@@ -56,14 +56,42 @@ public class DelegationManager {
 		}
 	}
 
-	public DelegationRecord[] findMyDelegatedCredentials(String callerIdentity,
+	public void updateDelegatedCredentialStatus(String callerIdentity,
+			DelegationIdentifier id, DelegationStatus status)
+			throws CDSInternalFault, DelegationFault, PermissionDeniedFault {
+		if (isAdmin(callerIdentity)) {
+			this.dcm.updateDelegatedCredentialStatus(id, status);
+		} else {
+			DelegationRecord r = this.dcm.getDelegationRecord(id);
+			if (r.getGridIdentity().equals(callerIdentity)) {
+				if ((r.getDelegationStatus().equals(DelegationStatus.Approved))
+						&& (status.equals(DelegationStatus.Suspended))) {
+					this.dcm.updateDelegatedCredentialStatus(id, status);
+				} else {
+					throw Errors.getPermissionDeniedFault();
+				}
+			} else {
+				throw Errors.getPermissionDeniedFault();
+			}
+		}
+	}
+
+	public DelegationRecord[] findDelegatedCredentials(String callerIdentity,
 			DelegationRecordFilter f) throws CDSInternalFault,
 			PermissionDeniedFault {
 		if (f == null) {
 			f = new DelegationRecordFilter();
 		}
-		f.setGridIdentity(callerIdentity);
-		return this.dcm.findDelegatedCredentials(f);
+		if (isAdmin(callerIdentity)) {
+			return this.dcm.findDelegatedCredentials(f);
+		} else {
+			f.setGridIdentity(callerIdentity);
+			return this.dcm.findDelegatedCredentials(f);
+		}
+	}
+
+	private boolean isAdmin(String gridIdentity) throws CDSInternalFault {
+		return false;
 	}
 
 	public void clear() throws CDSInternalFault {

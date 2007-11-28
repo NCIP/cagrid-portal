@@ -117,7 +117,7 @@
       <ns4:Exception description="" name="PermissionDeniedFault" qname="ns16:PermissionDeniedFault" xmlns:ns16="http://cds.gaards.cagrid.org/CredentialDelegationService/types"/>
      </ns4:Exceptions>
     </ns4:Method>
-    <ns4:Method description="This method allows an entity to find delegation records meeting a specified search criteria." isImported="false" isProvided="false" name="findMyDelegatedCredentials" xsi:type="ns4:MethodType">
+    <ns4:Method description="This method allows an entity to find delegation records meeting a specified search criteria." isImported="false" isProvided="false" name="findDelegatedCredentials" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns17:DelegationRecordFilter" description="" isArray="false" name="filter" xmlns:ns17="http://gaards.cagrid.org/cds"/>
      </ns4:Inputs>

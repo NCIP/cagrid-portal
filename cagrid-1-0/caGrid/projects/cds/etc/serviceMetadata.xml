@@ -35,7 +35,7 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="findMyDelegatedCredentials">
+      <ns2:Operation description="" name="findDelegatedCredentials">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns9:DelegationRecordFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="filter" xmlns:ns9="http://gaards.cagrid.org/cds"/>
        </ns2:inputParameterCollection>
