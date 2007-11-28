@@ -70,15 +70,12 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 
 		PortalUser portalUser = null;
 		Integer userId = (Integer) req.getRequest().getAttribute(getUserIdAttributeName());
-		String gridCredential = (String) req.getRequest().getAttribute(
-				getProxyAttributeName());
 		if (userId == null) {
 			logger.debug("Didn't find portal user ID under " + getUserIdAttributeName());
 		} else {
 			portalUser = getPortalUserDao().getById(userId);
 			logger.debug("Putting portal user " + portalUser.getId()
 					+ " in session");
-			portalUser.setGridCredential(gridCredential);
 			req.getRequest().getPortletSession().setAttribute(
 					getPortalUserAttributeName(), portalUser,
 					PortletSession.APPLICATION_SCOPE);

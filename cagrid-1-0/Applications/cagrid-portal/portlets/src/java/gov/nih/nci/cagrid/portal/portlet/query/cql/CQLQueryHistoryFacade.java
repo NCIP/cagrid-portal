@@ -63,25 +63,23 @@ public class CQLQueryHistoryFacade {
 		List<CQLQueryInstance> submitted = getQueryModel()
 				.getSubmittedCqlQueries();
 		
-		logger.debug("Looking for instance '" + instanceId + "'");
-		logger.debug("submitted.size() = " + submitted.size());
-		
 		for (CQLQueryInstance inst : submitted) {
 			inst.getId().equals(instanceId);
 			instance = inst;
 			break;
 		}
 		
+		if(instance != null){
+			//Refresh the object so that it shows correct state.
+			String result = instance.getResult();
+			instance = getCqlQueryInstanceDao().getById(instanceId);
+			instance.setResult(result);
+		}
+		
 		if(instance == null){
 			instance = getCqlQueryInstanceDao().getById(instanceId);
 		}
-		
-		if(instance == null){
-			logger.debug("...didn't find instance");
-		}else{
-			logger.debug("..found it.");
-		}
-		
+
 		return instance;
 	}
 
@@ -90,10 +88,7 @@ public class CQLQueryHistoryFacade {
 		String html = null;
 
 		CQLQueryInstance instance = getCqlQueryInstanceDao().getById(bean.getId());
-		if(instance == null){
-			logger.debug("Didn't find instance");
-		}else{
-			logger.debug("Found instance:" + instance.getId());
+		if(instance != null){
 			for(CQLQueryInstance inst : getQueryModel().getSubmittedCqlQueries()){
 				if(inst.getId().equals(instance.getId())){
 					instance.setResult(inst.getResult());

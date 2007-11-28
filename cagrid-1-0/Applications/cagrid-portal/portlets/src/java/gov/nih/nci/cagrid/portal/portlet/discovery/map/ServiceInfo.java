@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.portal.portlet.discovery.map;
 
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenter;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -25,7 +26,10 @@ public class ServiceInfo {
 	 */
 	public ServiceInfo(GridService service) {
 		setName(service.getServiceMetadata().getServiceDescription().getName());
-		setCenter(service.getServiceMetadata().getHostingResearchCenter().getDisplayName());
+		ResearchCenter rc = service.getServiceMetadata().getHostingResearchCenter();
+		if(rc != null){
+			setCenter(rc.getDisplayName());
+		}
 		setStatus(service.getCurrentStatus().toString());
 		setUrl(service.getUrl());
 		setId(String.valueOf(service.getId()));

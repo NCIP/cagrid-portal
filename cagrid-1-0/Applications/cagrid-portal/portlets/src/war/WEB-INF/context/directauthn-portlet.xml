@@ -13,7 +13,9 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
 
-	<bean id="authnService" class="gov.nih.nci.cagrid.portal.security.AuthnService" autowire="byName"/>
+	<bean id="authnService" class="gov.nih.nci.cagrid.portal.security.AuthnService" autowire="byName">
+		<property name="encryptionService" ref="encryptionServicePrototype"/>
+	</bean>
 	
 	<bean 
 		id="viewLoginController"

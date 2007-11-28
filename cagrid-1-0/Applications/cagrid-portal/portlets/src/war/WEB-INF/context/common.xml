@@ -35,6 +35,7 @@
 			</bean>
 		</property>
 		<property name="timeout" value="60000"/>
+		<property name="encryptionService" ref="encryptionServicePrototype"/>
 	</bean>
 
 	<bean id="executorService" class="gov.nih.nci.cagrid.portal.portlet.util.DelegatingExecutorService">
@@ -81,7 +82,6 @@
 	<bean id="portalUserInterceptor" class="gov.nih.nci.cagrid.portal.portlet.PortalUserInterceptor" autowire="byName">
 		<property name="portalUserAttributeName" ref="portalUserAttributeName"/>
 		<property name="userIdAttributeName" value="CAGRIDPORTAL_ATTS_userId"/>
-		<property name="proxyAttributeName" value="CAGRIDPORTAL_ATTS_gridCredential"/>
 	</bean>
 	<bean id="portalUserRequestInterceptor" class="gov.nih.nci.cagrid.portal.portlet.PortalUserRequestInterceptor" autowire="byName">
 		<property name="portalUserSessionAttributeName" ref="portalUserAttributeName"/>

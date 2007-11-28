@@ -39,31 +39,38 @@
     	}
     );
     </c:if>
-</c:forEach>    
+</c:forEach>
+    var <portlet:namespace/>newActiveInstances;
+    var <portlet:namespace/>currIdx; 
 	
     function <portlet:namespace/>checkActiveInstances(){
-    	
-    	var newActiveInstances = new Array();
+
+		<portlet:namespace/>newActiveInstances = new Array();
+    	if(<portlet:namespace/>activeInstances.length == 0){
+    		clearInterval(<portlet:namespace/>histIntvId);
+    	}
     	for(var i = 0; i < <portlet:namespace/>activeInstances.length; i++){
-    	
+    		<portlet:namespace/>currIdx = i;
     		QueryHistoryFacade.getInstance(<portlet:namespace/>activeInstances[i].id,
     		{
     			callback:function(instance){
     				if(<portlet:namespace/>isInstanceActive(instance)){
-    					newActiveInstances.push(instance);
+    					<portlet:namespace/>newActiveInstances.push(instance);
     				}
     				<portlet:namespace/>updateInstanceDisplay(instance);
+    				
+    				if((<portlet:namespace/>currIdx + 1) == <portlet:namespace/>activeInstances.length){
+    					//We are finished checking all of the instances.
+    					<portlet:namespace/>activeInstances = <portlet:namespace/>newActiveInstances;
+						if(<portlet:namespace/>activeInstances.length == 0){
+    						clearInterval(<portlet:namespace/>histIntvId);
+    					}    				
+    				}
     			},
     			errorHandler:function(errorString, exception){
     				alert("Error getting instance: " + errorString);
     			}
     		});
-    	}
-    	
-    	<portlet:namespace/>activeInstances = newActiveInstances;
-    	
-    	if(<portlet:namespace/>activeInstances.length == 0){
-    		clearInterval(<portlet:namespace/>histIntvId);
     	}
     }
     

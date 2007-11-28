@@ -96,8 +96,6 @@ public class DirectAutoLogin implements AutoLogin {
 			getAuthnTicketDao().delete(authnTicket);
 
 			request.setAttribute(getUserIdAttributeName(), portalUser.getId());
-			request.setAttribute(getProxyAttributeName(), portalUser
-					.getGridCredential());
 
 			credentials = new String[3];
 			credentials[0] = String.valueOf(user.getUserId());

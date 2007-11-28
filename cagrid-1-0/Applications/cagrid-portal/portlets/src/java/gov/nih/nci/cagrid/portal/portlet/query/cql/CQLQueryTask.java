@@ -8,10 +8,8 @@ import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.client.DataServiceClient;
-import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
 
-import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.concurrent.Callable;
@@ -31,14 +29,17 @@ public class CQLQueryTask implements Callable {
 	private CQLQueryInstance instance;
 
 	private CQLQueryInstanceListener listener;
+	
+	private GlobusCredential cred;
 
 	/**
 	 * 
 	 */
 	public CQLQueryTask(CQLQueryInstance instance,
-			CQLQueryInstanceListener listener) {
+			CQLQueryInstanceListener listener, GlobusCredential cred) {
 		this.instance = instance;
 		this.listener = listener;
+		this.cred = cred;
 	}
 
 	/*
@@ -52,15 +53,7 @@ public class CQLQueryTask implements Callable {
 		try {
 			listener.onRunning(instance);
 
-			GlobusCredential cred = null;
-
-			if (instance.getPortalUser() != null) {
-				String proxyStr = instance.getPortalUser().getGridCredential();
-				if (proxyStr != null) {
-					cred = new GlobusCredential(new ByteArrayInputStream(
-							proxyStr.getBytes()));
-				}
-			}
+			
 			DataServiceClient client = null;
 			if (cred != null) {
 				logger.debug("Using credentials of " + cred.getIdentity());

@@ -17,7 +17,6 @@
 		<property name="omniUserEmail" value="portaladmin@cabig.nci.nih.gov"/>
 		<property name="ticketParameterName" value="prng2"/>
 		<property name="userIdAttributeName" value="CAGRIDPORTAL_ATTS_userId"/>
-		<property name="proxyAttributeName" value="CAGRIDPORTAL_ATTS_gridCredential"/>
 		<property name="encryptionService" ref="encryptionServicePrototype"/>
 	</bean>
 	

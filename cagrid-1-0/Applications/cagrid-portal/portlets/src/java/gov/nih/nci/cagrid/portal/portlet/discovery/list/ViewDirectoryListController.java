@@ -61,11 +61,12 @@ public class ViewDirectoryListController extends BaseDiscoveryViewController {
 			listBean = (ListBean) newDirectoryBean();
 			listBean.setType(type);
 			listBean.getScroller().setObjects(objects);
-			listBean.refresh();
+			
 			
 			request.getPortletSession().setAttribute(
 					getListBeanSessionAttributeName(), listBean);
 		}
+		listBean.refresh();
 		return listBean;
 	}
 

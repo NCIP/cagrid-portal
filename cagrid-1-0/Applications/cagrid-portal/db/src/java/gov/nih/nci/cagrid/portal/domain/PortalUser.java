@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -52,7 +53,7 @@ public class PortalUser extends AbstractDomainObject {
 		this.person = person;
 	}
 
-	@Transient
+	@Lob
 	public String getGridCredential() {
 		return gridCredential;
 	}
