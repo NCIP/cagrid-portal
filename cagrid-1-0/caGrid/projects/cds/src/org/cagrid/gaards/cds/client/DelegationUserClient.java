@@ -192,14 +192,22 @@ public class DelegationUserClient {
 		return client.approveDelegation(res);
 	}
 
-	public List<DelegationRecord> findDelegatedCredentials()
+	public List<DelegationRecord> findMyDelegatedCredentials()
 			throws RemoteException, CDSInternalFault, PermissionDeniedFault {
-		return findDelegatedCredentials(new DelegationRecordFilter());
+		return findMyDelegatedCredentials(new DelegationRecordFilter());
 	}
 
-	public List<DelegationRecord> findDelegatedCredentials(
+	public List<DelegationRecord> findMyDelegatedCredentials(
 			DelegationRecordFilter filter) throws RemoteException,
 			CDSInternalFault {
+		if (filter == null) {
+			filter = new DelegationRecordFilter();
+		}
+		if (cred != null) {
+			filter.setGridIdentity(cred.getIdentity());
+		} else {
+
+		}
 		DelegationRecord[] records = client.findDelegatedCredentials(filter);
 		if (records == null) {
 			return new ArrayList<DelegationRecord>();

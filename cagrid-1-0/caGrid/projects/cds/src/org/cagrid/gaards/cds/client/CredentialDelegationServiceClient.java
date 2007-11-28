@@ -97,18 +97,6 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
 				+ " -url <service url>");
 	}
 
-  public org.cagrid.gaards.cds.common.DelegationRecord[] findDelegatedCredentials(org.cagrid.gaards.cds.common.DelegationRecordFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"findDelegatedCredentials");
-    org.cagrid.gaards.cds.stubs.FindDelegatedCredentialsRequest params = new org.cagrid.gaards.cds.stubs.FindDelegatedCredentialsRequest();
-    org.cagrid.gaards.cds.stubs.FindDelegatedCredentialsRequestFilter filterContainer = new org.cagrid.gaards.cds.stubs.FindDelegatedCredentialsRequestFilter();
-    filterContainer.setDelegationRecordFilter(filter);
-    params.setFilter(filterContainer);
-    org.cagrid.gaards.cds.stubs.FindDelegatedCredentialsResponse boxedResult = portType.findDelegatedCredentials(params);
-    return boxedResult.getDelegationRecord();
-    }
-  }
-
   public org.cagrid.gaards.cds.common.DelegationSigningRequest initiateDelegation(org.cagrid.gaards.cds.common.DelegationRequest req) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"initiateDelegation");
@@ -130,6 +118,32 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
     params.setDelegationSigningResponse(delegationSigningResponseContainer);
     org.cagrid.gaards.cds.stubs.ApproveDelegationResponse boxedResult = portType.approveDelegation(params);
     return boxedResult.getDelegatedCredentialReference();
+    }
+  }
+
+  public org.cagrid.gaards.cds.common.DelegationRecord[] findDelegatedCredentials(org.cagrid.gaards.cds.common.DelegationRecordFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findDelegatedCredentials");
+    org.cagrid.gaards.cds.stubs.FindDelegatedCredentialsRequest params = new org.cagrid.gaards.cds.stubs.FindDelegatedCredentialsRequest();
+    org.cagrid.gaards.cds.stubs.FindDelegatedCredentialsRequestFilter filterContainer = new org.cagrid.gaards.cds.stubs.FindDelegatedCredentialsRequestFilter();
+    filterContainer.setDelegationRecordFilter(filter);
+    params.setFilter(filterContainer);
+    org.cagrid.gaards.cds.stubs.FindDelegatedCredentialsResponse boxedResult = portType.findDelegatedCredentials(params);
+    return boxedResult.getDelegationRecord();
+    }
+  }
+
+  public void updateDelegatedCredentialStatus(org.cagrid.gaards.cds.common.DelegationIdentifier id,org.cagrid.gaards.cds.common.DelegationStatus status) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"updateDelegatedCredentialStatus");
+    org.cagrid.gaards.cds.stubs.UpdateDelegatedCredentialStatusRequest params = new org.cagrid.gaards.cds.stubs.UpdateDelegatedCredentialStatusRequest();
+    org.cagrid.gaards.cds.stubs.UpdateDelegatedCredentialStatusRequestId idContainer = new org.cagrid.gaards.cds.stubs.UpdateDelegatedCredentialStatusRequestId();
+    idContainer.setDelegationIdentifier(id);
+    params.setId(idContainer);
+    org.cagrid.gaards.cds.stubs.UpdateDelegatedCredentialStatusRequestStatus statusContainer = new org.cagrid.gaards.cds.stubs.UpdateDelegatedCredentialStatusRequestStatus();
+    statusContainer.setDelegationStatus(status);
+    params.setStatus(statusContainer);
+    org.cagrid.gaards.cds.stubs.UpdateDelegatedCredentialStatusResponse boxedResult = portType.updateDelegatedCredentialStatus(params);
     }
   }
 
