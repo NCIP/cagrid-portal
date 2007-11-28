@@ -53,8 +53,8 @@ public class GlobusServiceContainer extends ServiceContainer {
     public static final String GLOBUS_CONTAINER_CLASSNAME = "org.globus.wsrf.container.ServiceContainer";
     public static final String GLOBUS_SHUTDOWN_CLASSNAME = "org.globus.wsrf.container.ShutdownClient";
 
-    public static final int CONNECT_ATTEMPTS = 10;
-    public static final int SHUTDOWN_WAIT_TIME = 10; // seconds
+    public static final int DEFAULT_SHUTDOWN_WAIT_TIME = 10; // seconds
+    public static final int DEFAULT_STARTUP_WAIT_TIME = 10; // seconds
 
     public static final String ENV_ANT_HOME = "ANT_HOME";
     public static final String ENV_GLOBUS_LOCATION = "GLOBUS_LOCATION";
@@ -214,7 +214,11 @@ public class GlobusServiceContainer extends ServiceContainer {
 
         try {
             // try to get the status
-            success = future.get(SHUTDOWN_WAIT_TIME, TimeUnit.SECONDS).booleanValue();
+            int wait = DEFAULT_SHUTDOWN_WAIT_TIME;
+            if (getProperties().getMaxShutdownWaitTime() != null) {
+                wait = getProperties().getMaxShutdownWaitTime().intValue();
+            }
+            success = future.get(wait, TimeUnit.SECONDS).booleanValue();
         } catch (Exception ex) {
             throw new ContainerException("Error shutting down globus: " + ex.getMessage(), ex);
         } finally {
@@ -267,7 +271,11 @@ public class GlobusServiceContainer extends ServiceContainer {
         Exception testException = null;
         sleep(2000);
         boolean running = false;
-        for (int i = 0; !running && i < CONNECT_ATTEMPTS; i++) {
+        int wait = DEFAULT_STARTUP_WAIT_TIME;
+        if (getProperties().getMaxStartupWaitTime() != null) {
+            wait = getProperties().getMaxStartupWaitTime().intValue();
+        }
+        for (int i = 0; !running && i < wait; i++) {
             System.out.println("Connection attempt " + i);
             LOG.debug("Connection attempt " + i);
             try {
@@ -281,7 +289,7 @@ public class GlobusServiceContainer extends ServiceContainer {
             if (testException != null) {
                 throw new ContainerException("Error starting globus: " + testException.getMessage(), testException);
             } else {
-                throw new ContainerException("Globus non responsive after " + CONNECT_ATTEMPTS + " attempts to connect");
+                throw new ContainerException("Globus non responsive after " + wait + " seconds attempting to connect");
             }
         }
     }

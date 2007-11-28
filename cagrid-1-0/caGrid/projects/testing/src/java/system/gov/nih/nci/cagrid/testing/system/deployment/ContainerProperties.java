@@ -9,7 +9,7 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Oct 12, 2007 12:10:03 PM
- * @version $Id: ContainerProperties.java,v 1.1 2007-10-31 19:29:07 dervin Exp $ 
+ * @version $Id: ContainerProperties.java,v 1.2 2007-11-28 20:11:33 dervin Exp $ 
  */
 public class ContainerProperties {
 
@@ -19,16 +19,22 @@ public class ContainerProperties {
     private boolean secure;
     private File securityDescriptor = null;
     
+    private Integer maxStartupWaitTime;
+    private Integer maxShutdownWaitTime;
+    
     public ContainerProperties() {
     }
     
     
-    public ContainerProperties(File containerDirectory, File containerZip, PortPreference portPreference, boolean secure, File securityDescriptor) {
+    public ContainerProperties(File containerDirectory, File containerZip, PortPreference portPreference, boolean secure, 
+        File securityDescriptor, Integer maxStartupWaitTime, Integer maxShutdownWaitTime) {
         this.containerDirectory = containerDirectory;
         this.containerZip = containerZip;
         this.portPreference = portPreference;
         this.secure = secure;
         this.securityDescriptor = securityDescriptor;
+        this.maxStartupWaitTime = maxStartupWaitTime;
+        this.maxShutdownWaitTime = maxShutdownWaitTime;
     }
 
     
@@ -79,5 +85,25 @@ public class ContainerProperties {
     
     public void setSecurityDescriptor(File securityDescriptor) {
         this.securityDescriptor = securityDescriptor;
+    }
+
+
+    public Integer getMaxShutdownWaitTime() {
+        return maxShutdownWaitTime;
+    }
+
+
+    public void setMaxShutdownWaitTime(Integer maxShutdownWaitTime) {
+        this.maxShutdownWaitTime = maxShutdownWaitTime;
+    }
+
+
+    public Integer getMaxStartupWaitTime() {
+        return maxStartupWaitTime;
+    }
+
+
+    public void setMaxStartupWaitTime(Integer maxStartupWaitTime) {
+        this.maxStartupWaitTime = maxStartupWaitTime;
     }
 }
