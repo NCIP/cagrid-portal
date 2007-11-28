@@ -31,12 +31,13 @@
 	<path id="portlets.compile.cp">
 		<path refid="aggr.compile.cp" />
 		<pathelement location="${aggr.classes.dir}" />
+		<pathelement location="${security.classes.dir}" />
 		<fileset dir="${portlets.lib.dir}">
 			<include name="*.jar" />
 		</fileset>
 	</path>
 
-	<target name="portlets:compile" depends="aggr:compile">
+	<target name="portlets:compile" depends="aggr:compile, security:compile">
 		<mkdir dir="${portlets.classes.dir}" />
 		<javac srcdir="${portlets.src.java.dir}"
 			destdir="${portlets.classes.dir}" debug="${portlets.debug}">
@@ -44,7 +45,7 @@
 		</javac>
 	</target>
 
-	<target name="portlets:build-war-dir" depends="db:jar, portlets:compile">
+	<target name="portlets:build-war-dir" depends="db:jar, security:jar, portlets:compile">
 
 		<mkdir dir="${portlets.build.war.dir}/WEB-INF/lib" />
 		<copy todir="${portlets.build.war.dir}/WEB-INF/lib"
@@ -75,6 +76,10 @@
 				<include name="cagrid-portal-dao.jar"/>
 			</fileset>
 			
+			<fileset dir="${security.build.dir}">
+				<include name="cagrid-portal-security.jar"/>
+			</fileset>
+			
 		</copy>
 		
 		<copy file="${db.jdbc.driver.jar}" todir="${portlets.build.war.dir}/WEB-INF/lib"/>
@@ -91,6 +96,9 @@
 				<include name="*.properties" />
 				<include name="*.xml" />
 				<exclude name="*.hibernate.properties" />
+			</fileset>
+			<fileset dir="${security.dir}/etc">
+				<include name="*.xml" />
 			</fileset>
 			<fileset dir="${aggr.dir}/etc">
 				<include name="*.properties" />

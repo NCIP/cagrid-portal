@@ -131,3 +131,23 @@ Follow these directions to import the lar file:
 17. Repeat steps 11 through 16 for the "Private Pages" and "portaladmin-private-community.lar".
 
 Then you can navigate back to My Places > Guest > Public Pages. Or you could just sign out.
+
+#####################
+# SSL Configuration #
+#####################
+
+The portal must use HTTPS. The installation script will take care of configuring Tomcat (in JBoss)
+appropriately. But, you must still provide/create the certificate and keystore, and then update the
+deploy.properties before running the installation script.
+
+For further information, look here:
+ - http://tomcat.apache.org/tomcat-5.5-doc/ssl-howto.html
+ - http://docs.jboss.org/jbossas/jboss4guide/r5/html/ch9.chapt.html#ch9.https.sect
+
+To generate a keystor and certificate, execute the following commands:
+
+$JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg RSA -keystore /path/to/my/keystore
+
+Make sure to use the same password for keystore and key. When prompted for first and last
+name, specify the host name.
+

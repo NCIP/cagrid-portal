@@ -141,6 +141,19 @@
 		<servlet-name>dummylogin</servlet-name>
 		<url-pattern>/dummylogin/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>directlogin</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>directlogin</servlet-name>
+		<url-pattern>/directlogin/*</url-pattern>
+	</servlet-mapping>
     
    <servlet>
       <servlet-name>view-servlet</servlet-name>

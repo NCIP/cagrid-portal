@@ -18,16 +18,17 @@ import org.springframework.web.portlet.mvc.AbstractController;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
  */
-public class ViewLoginController extends AbstractController {
+public class ViewDirectLoginController extends AbstractController {
 
 	private String portalUserAttributeName;
 	private String viewName;
 	private String errorsAttributeName;
+	private String commandName;
 
 	/**
 	 * 
 	 */
-	public ViewLoginController() {
+	public ViewDirectLoginController() {
 
 	}
 
@@ -53,6 +54,7 @@ public class ViewLoginController extends AbstractController {
 			mav.addObject("portalUser", user);
 		} else {
 			mav.addObject("registerUrl", request.getPreferences().getValue("registerUrl", ""));
+			mav.addObject(getCommandName(), new DirectLoginCommand());
 		}
 
 		return mav;
@@ -83,7 +85,13 @@ public class ViewLoginController extends AbstractController {
 	public void setErrorsAttributeName(String errorsAttributeName) {
 		this.errorsAttributeName = errorsAttributeName;
 	}
-
 	
+	public String getCommandName() {
+		return commandName;
+	}
+
+	public void setCommandName(String commandName) {
+		this.commandName = commandName;
+	}
 
 }

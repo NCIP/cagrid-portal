@@ -6,6 +6,41 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd
 	                             http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
 	                             
+	<portlet>
+		<description>Direct Login</description>
+		<portlet-name>cagriddirectauthn</portlet-name>
+		<display-name>Login</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/directauthn-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Login</title>
+			<short-title>Login</short-title>
+			<keywords>cagrid,authn</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>loginRedirectUrl</name>
+				<value>/cagridportlets/directlogin/login?redirectUrl=</value>
+			</preference>
+			<preference>
+				<name>registerUrl</name>
+				<value>/web/guest/4</value>
+			</preference>
+			<preference>
+				<name>logoutUrl</name>
+				<value>/c/portal/logout</value>
+			</preference>
+		</portlet-preferences>
+	</portlet>
 	
 	<portlet>
 		<description>Login</description>
@@ -412,6 +447,35 @@
 			<preference>
 				<name>jsp</name>
 				<value>welcomeToCaGridPortal</value>
+			</preference>
+		</portlet-preferences>
+	</portlet>
+	
+	<portlet>
+		<description>Interesting Links</description>
+		<portlet-name>cagridinterestinglinks</portlet-name>
+		<display-name>Interesting Links</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/content-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>edit</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Interesting Links</title>
+			<short-title>Links</short-title>
+			<keywords>cagrid,links</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>jsp</name>
+				<value>links</value>
 			</preference>
 		</portlet-preferences>
 	</portlet>

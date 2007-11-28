@@ -37,6 +37,7 @@
 		autowire="byName">
 		<property name="annotatedClasses">
 			<list>
+				<value>gov.nih.nci.cagrid.portal.domain.AuthnTicket</value>
 				<value>gov.nih.nci.cagrid.portal.domain.Address</value>
 				<value>gov.nih.nci.cagrid.portal.domain.Person</value>
 				<value>
@@ -136,6 +137,8 @@
 		</property>
 	</bean>
 
+	<bean id="authnTicketDao" parent="daoTemplate"
+		class="gov.nih.nci.cagrid.portal.dao.AuthnTicketDao" />
 	<bean id="addressDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal.dao.AddressDao" />
 

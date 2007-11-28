@@ -41,6 +41,9 @@
 	<property name="liferay.portal.war.dir" value="${liferay.jboss.home}/server/default/deploy/liferay-portal.war"/>
 	<property name="liferay.autodeploy.dir" value="${liferay.jboss.dir}/deploy"/>
 	<property name="liferay.theme.name" value="cagrid-minimal"/>
+	<property name="liferay.https.port" value="8443"/>
+	<property name="liferay.https.keystore.path" value="${liferay.jboss.dir}/portal-keystore"/>
+	<property name="liferay.https.keystore.password" value="portal"/>
 	
 	<property name="liferay.tomcat.home" value="${user.home}/packages/tomcat/liferay/tomcat-5.5.23"/>
 	
@@ -49,6 +52,7 @@
 	<path id="liferay.compile.cp">
 		<path refid="db.compile.cp"/>
 		<pathelement location="${db.classes.dir}"/>
+		<pathelement location="${security.classes.dir}"/>
 		<fileset dir="${liferay.lib.dir}">
 			<include name="portal-impl.jar"/>
 			<include name="portal-kernel.jar"/>
@@ -65,7 +69,7 @@
 		</fileset>
 	</path>
 	
-	<target name="liferay:compile" depends="db:compile">
+	<target name="liferay:compile" depends="db:compile, security:compile">
 		<mkdir dir="${liferay.classes.dir}" />
 		<javac srcdir="${liferay.src.java.dir}" destdir="${liferay.classes.dir}"
 			debug="${liferay.debug}">
@@ -89,6 +93,9 @@
 				<include name="*.xml" />
 				<exclude name="*.hibernate.properties" />
 			</fileset>
+			<fileset dir="${security.dir}/etc">
+				<include name="*.xml" />
+			</fileset>
 			<fileset dir="${liferay.dir}/etc">
 				<include name="proxy.txt" />
 				<include name="*.xml" />
@@ -99,13 +106,17 @@
 		
 	</target>
 	
-	<target name="liferay:deploy-authn" depends="db:jar, liferay:jar, liferay:jar-resources">
+	<target name="liferay:deploy-authn" depends="db:jar, liferay:jar, liferay:jar-resources, security:jar">
 		
 		<copy todir="${liferay.root.context.dir}/WEB-INF/lib" overwrite="true" flatten="true">
 		
 			<fileset dir="${db.build.dir}">
 				<include name="cagrid-portal-domain.jar"/>
 				<include name="cagrid-portal-dao.jar"/>
+			</fileset>
+			
+			<fileset dir="${security.build.dir}">
+				<include name="cagrid-portal-security.jar"/>
 			</fileset>
 		
 			<fileset dir="${liferay.build.dir}">
@@ -275,12 +286,29 @@
 		<xmltask source="${config.file}" dest="${config.file}">
 			<replace path="/server/mbean[@name='jboss.jca:service=CachedConnectionManager']/attribute[@name='Debug']/text()" withText="false"/>
 		</xmltask>	
-	</target>		
+	</target>
 	
 	<target name="liferay:configure-jboss-jms-service">
 		<concat destfile="${liferay.jboss.home}/server/default/deploy/jms/jbossmq-destinations-service.xml" append="false"><![CDATA[<?xml version="1.0"?>
 <server></server>]]></concat>
 	</target>	
+	
+	<target name="liferay:configure-jboss-tomcat">
+		<property name="config.file" value="${liferay.jboss.home}/server/default/deploy/jbossweb-tomcat55.sar/server.xml"/>
+		<xmltask source="${config.file}" dest="${config.file}">
+			<remove path="/Server/Service[@name='jboss.web']/Connector[@port='8080' or @port='8443']"/>
+			<insert path="/Server/Service[@name='jboss.web']/Engine[@name='jboss.web']" position="before">
+			<![CDATA[
+      <Connector port="${liferay.https.port}" address="$${jboss.bind.address}"
+           maxThreads="100" strategy="ms" maxHttpHeaderSize="8192"
+           emptySessionPath="true"
+           scheme="https" secure="true" clientAuth="false" 
+           keystoreFile="${liferay.https.keystore.path}"
+           keystorePass="${liferay.https.keystore.password}" sslProtocol = "TLS" />			
+			]]>
+			</insert>
+		</xmltask>	
+	</target>
 	
 	<target name="liferay:configure-jboss">
 		<antcall target="liferay:configure-jboss-classpath"/>	
@@ -290,7 +318,8 @@
 		<antcall target="liferay:configure-jboss-jca-service"/>
 		<antcall target="liferay:configure-jboss-jms-service"/>
 		<antcall target="liferay:create-liferay-datasource"/>
-		<antcall target="liferay:copy-liferay-ext-jars"/>		
+		<antcall target="liferay:copy-liferay-ext-jars"/>
+		<antcall target="liferay:configure-jboss-tomcat"/>
 	</target>
 	
 	<target name="liferay:check-dependencies-downloaded">

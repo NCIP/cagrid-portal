@@ -2,7 +2,7 @@
 There are currently...<br/>
 <table cellpadding="3">
 <tr>
-	<td>
+	<td style="padding-right:5px;">
 		<portlet:actionURL var="participantsAction">
 			<portlet:param name="operation" value="selectDirectoryForDiscovery"/>
 			<portlet:param name="selectedDirectory" value="${statusBean.participantsDirectory.id}"/>
@@ -14,7 +14,7 @@ There are currently...<br/>
 	<td>caBIG Participants,</td>
 </tr>
 <tr>
-	<td>
+	<td style="padding-right:5px;">
 		<portlet:actionURL var="servicessAction">
 			<portlet:param name="operation" value="selectDirectoryForDiscovery"/>
 			<portlet:param name="selectedDirectory" value="${statusBean.servicesDirectory.id}"/>
@@ -27,7 +27,7 @@ There are currently...<br/>
 </tr>
 <tr>
 	
-	<td>
+	<td style="padding-right:5px;">
 		<portlet:actionURL var="dataServicesAction">
 			<portlet:param name="operation" value="selectDirectoryForDiscovery"/>
 			<portlet:param name="selectedDirectory" value="${statusBean.dataServicesDirectory.id}"/>
@@ -40,7 +40,7 @@ There are currently...<br/>
 </tr>
 <tr>
 	
-	<td>
+	<td style="padding-right:5px;">
 		<portlet:actionURL var="analyticalServicesAction">
 			<portlet:param name="operation" value="selectDirectoryForDiscovery"/>
 			<portlet:param name="selectedDirectory" value="${statusBean.analyticalServicesDirectory.id}"/>

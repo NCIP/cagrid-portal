@@ -104,7 +104,9 @@
 		<include name="caGrid-1.1-wsEnum.jar" />
 	</patternset>
 
+	
 	<import file="build-db.xml" />
+	<import file="build-security.xml" />
 	<import file="build-aggr.xml" />
 	<import file="build-portlets.xml" />
 	<import file="build-js2.xml" />
@@ -126,6 +128,7 @@
 		<antcall target="portlets:clean"/>
 		<antcall target="js2:clean"/>
 		<antcall target="liferay:clean"/>
+		<antcall target="security:clean"/>
 	</target>
 	
 	<target name="all" depends="clean,compile,test"/>

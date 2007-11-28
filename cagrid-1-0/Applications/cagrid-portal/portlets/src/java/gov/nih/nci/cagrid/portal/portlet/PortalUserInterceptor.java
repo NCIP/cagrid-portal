@@ -28,6 +28,8 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 	private PortalUserDao portalUserDao;
 	private String portalUserAttributeName;
 	private QueryModel queryModel;
+	private String userIdAttributeName;
+	private String proxyAttributeName;
 
 	/**
 	 * 
@@ -67,13 +69,11 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 		PortletWebRequest req = (PortletWebRequest) request;
 
 		PortalUser portalUser = null;
-		String userIdAttName = "CAGRIDPORTAL_ATTS_userId";
-		String proxyAttName = "CAGRIDPORTAL_ATTS_gridCredential";
-		Integer userId = (Integer) req.getRequest().getAttribute(userIdAttName);
+		Integer userId = (Integer) req.getRequest().getAttribute(getUserIdAttributeName());
 		String gridCredential = (String) req.getRequest().getAttribute(
-				proxyAttName);
+				getProxyAttributeName());
 		if (userId == null) {
-			logger.debug("Didn't find portal user ID under " + userIdAttName);
+			logger.debug("Didn't find portal user ID under " + getUserIdAttributeName());
 		} else {
 			portalUser = getPortalUserDao().getById(userId);
 			logger.debug("Putting portal user " + portalUser.getId()
@@ -108,6 +108,22 @@ public class PortalUserInterceptor implements WebRequestInterceptor {
 
 	public void setQueryModel(QueryModel queryModel) {
 		this.queryModel = queryModel;
+	}
+
+	public String getUserIdAttributeName() {
+		return userIdAttributeName;
+	}
+
+	public void setUserIdAttributeName(String userIdAttributeName) {
+		this.userIdAttributeName = userIdAttributeName;
+	}
+
+	public String getProxyAttributeName() {
+		return proxyAttributeName;
+	}
+
+	public void setProxyAttributeName(String proxyAttributeName) {
+		this.proxyAttributeName = proxyAttributeName;
 	}
 
 }

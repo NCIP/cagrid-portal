@@ -11,6 +11,8 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+	
+
 
 	<bean id="interPortletMessageManager" class="gov.nih.nci.cagrid.portal.portlet.SessionBasedInterPortletMessageManager" scope="globalSession" autowire="byName">
 		<aop:scoped-proxy proxy-target-class="true"/>
@@ -78,6 +80,8 @@
 	</bean>
 	<bean id="portalUserInterceptor" class="gov.nih.nci.cagrid.portal.portlet.PortalUserInterceptor" autowire="byName">
 		<property name="portalUserAttributeName" ref="portalUserAttributeName"/>
+		<property name="userIdAttributeName" value="CAGRIDPORTAL_ATTS_userId"/>
+		<property name="proxyAttributeName" value="CAGRIDPORTAL_ATTS_gridCredential"/>
 	</bean>
 	<bean id="portalUserRequestInterceptor" class="gov.nih.nci.cagrid.portal.portlet.PortalUserRequestInterceptor" autowire="byName">
 		<property name="portalUserSessionAttributeName" ref="portalUserAttributeName"/>
@@ -161,7 +165,7 @@
 	<bean id="mapBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean" scope="prototype" autowire="byName">
 
 		<property name="baseUrl" value="http://maps.google.com/maps?file=api&amp;v=2&amp;key="/>
-		<property name="apiKey" value="ABQIAAAA8g3SgjzSraL7VirbuaelwhSZhAwg1T6Cj9L6Y1CRi3YIYx6IHhQlLsIR2usu8NKDKCmrdAcVRkqh8w"/>
+		<property name="apiKey" value="ABQIAAAA8g3SgjzSraL7VirbuaelwhTpCXXa2vrWy0x5XvYq0TNFtv0yKBSHivrL70ESObl7KFoSIz1mFr4Dwg"/>
 		<property name="centerLatitude" value="40"/>
 		<property name="centerLongitude" value="-95"/>
 		<property name="zoomLevel" value="4"/>

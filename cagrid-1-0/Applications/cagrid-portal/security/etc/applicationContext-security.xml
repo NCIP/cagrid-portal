@@ -12,13 +12,10 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 	
-	<bean id="directAutoLogin" class="gov.nih.nci.cagrid.portal.liferay.security.DirectAutoLogin" autowire="byName">
-		<property name="companyWebId" value="cabig.nci.nih.gov"/>
-		<property name="omniUserEmail" value="portaladmin@cabig.nci.nih.gov"/>
-		<property name="ticketParameterName" value="prng2"/>
-		<property name="userIdAttributeName" value="CAGRIDPORTAL_ATTS_userId"/>
-		<property name="proxyAttributeName" value="CAGRIDPORTAL_ATTS_gridCredential"/>
-		<property name="encryptionService" ref="encryptionServicePrototype"/>
+	<bean id="encryptionServicePrototype" class="gov.nih.nci.cagrid.portal.security.EncryptionService" scope="prototype">
+		<constructor-arg value="963-hkjjgoyu78490hkkkbluuuug09733023gljgg985678"/>
 	</bean>
+	
+
 	
 </beans>

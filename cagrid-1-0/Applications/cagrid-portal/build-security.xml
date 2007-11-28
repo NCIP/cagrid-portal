@@ -1,0 +1,33 @@
+<project>
+
+	<property name="security.dir" value="security" />
+	<property name="security.lib.dir" value="${security.dir}/lib" />
+	<property name="security.build.dir" value="${security.dir}/build" />
+	<property name="security.classes.dir" value="${security.build.dir}/classes" />
+	<property name="security.src.java.dir" value="${security.dir}/src/java" />
+	
+	<property name="security.debug" value="true"/>
+	
+	<path id="security.compile.cp">
+		<path refid="db.compile.cp"/>
+		<path refid="aggr.compile.cp"/>
+		<pathelement location="${db.classes.dir}"/>
+	</path>
+	
+	<target name="security:compile" depends="db:compile">
+		<mkdir dir="${security.classes.dir}" />
+		<javac srcdir="${security.src.java.dir}" destdir="${security.classes.dir}"
+			debug="${security.debug}">
+			<classpath refid="security.compile.cp" />
+		</javac>	
+	</target>
+	
+	<target name="security:jar" depends="security:compile">
+		<jar basedir="${security.classes.dir}" destfile="${security.build.dir}/cagrid-portal-security.jar"/>
+	</target>	
+	
+	<target name="security:clean">
+		<delete dir="${security.build.dir}"/>
+	</target>
+	
+</project>

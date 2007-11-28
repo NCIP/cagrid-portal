@@ -14,6 +14,7 @@
 		<property name="connection.password">@DB_PASSWORD@</property>
 		<property name="dialect">@DB_DIALECT@</property>
 
+		<mapping class="gov.nih.nci.cagrid.portal.domain.AuthnTicket"/>
 		<mapping class="gov.nih.nci.cagrid.portal.domain.Address" />
 		<mapping class="gov.nih.nci.cagrid.portal.domain.Person" />
 		<mapping
