@@ -3,6 +3,7 @@ package org.cagrid.gaards.ui.cds;
 import gov.nih.nci.cagrid.common.Runner;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,7 +12,6 @@ import java.util.GregorianCalendar;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -19,11 +19,13 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.cds.client.DelegationAdminClient;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.ui.common.ProxyComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
+import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
 /**
@@ -37,6 +39,8 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 
 	private final static String INFO_PANEL = "General Information";
 
+	private final static String POLICY_PANEL = "Delegation Policy";
+
 	private final static String CERTIFICATE_PANEL = "Certificate Chain";
 
 	private javax.swing.JPanel jContentPane = null;
@@ -47,7 +51,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 
 	private JButton cancel = null;
 
-	private JButton updateUser = null;
+	private JButton updateStatus = null;
 
 	private JTabbedPane jTabbedPane = null;
 
@@ -67,7 +71,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 
 	private JLabel credentialLabel = null;
 
-	private JComboBox proxy = null;
+	private ProxyComboBox proxy = null;
 
 	private JLabel gridIdLabel = null;
 
@@ -107,6 +111,22 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 
 	private JButton viewCertificate = null;
 
+	private JPanel policyPanel = null;
+
+	private JLabel jLabel6 = null;
+
+	private JTextField issuedCredentialPathLength = null;
+
+	private JPanel policyTypePanel = null;
+
+	private JLabel jLabel7 = null;
+
+	private JTextField delegationPolicyType = null;
+
+	private DelegationPolicyPanel delegationPolicyPanel;
+
+	private JPanel infoButtonPanel = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -136,9 +156,30 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 				+ record.getDelegatedProxyLifetime().getSeconds()
 				+ " second(s)";
 		getLifetime().setText(str);
+		getIssuedCredentialPathLength().setText(
+				String.valueOf(record.getDelegationPathLength()));
 		getStatus().setSelectedItem(record.getDelegationStatus());
 		getCertificateChainTable().setCertificateChain(
 				record.getCertificateChain());
+		String policyType = CDSUIUtils.getDelegationPolicyType(record
+				.getDelegationPolicy());
+		getDelegationPolicyType().setText(policyType);
+
+		GridBagConstraints policyPanelConstraints = new GridBagConstraints();
+		policyPanelConstraints.gridx = 0;
+		policyPanelConstraints.fill = GridBagConstraints.BOTH;
+		policyPanelConstraints.insets = new Insets(5, 5, 5, 5);
+		policyPanelConstraints.weightx = 1.0D;
+		policyPanelConstraints.weighty = 1.0D;
+		policyPanelConstraints.gridy = 1;
+		if (this.delegationPolicyPanel != null) {
+			getPolicyPanel().remove(delegationPolicyPanel);
+		}
+		this.delegationPolicyPanel = CDSUIUtils.getPolicyPanel(policyType,
+				false);
+		getPolicyPanel()
+				.add(this.delegationPolicyPanel, policyPanelConstraints);
+		this.delegationPolicyPanel.setPolicy(record.getDelegationPolicy());
 	}
 
 	private String getDateString(long l) {
@@ -217,7 +258,6 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			buttonPanel.add(getUpdateUser(), null);
 			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
@@ -247,15 +287,15 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getUpdateUser() {
-		if (updateUser == null) {
-			updateUser = new JButton();
-			updateUser.setText("Update User");
-			updateUser.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getUpdateStatus() {
+		if (updateStatus == null) {
+			updateStatus = new JButton();
+			updateStatus.setText("Update Status");
+			updateStatus.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
 						public void execute() {
-							updateRecord();
+							updateDelegationStatus();
 						}
 					};
 					try {
@@ -267,13 +307,21 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 
 				}
 			});
-			updateUser.setIcon(CDSLookAndFeel.getDelegateCredentialsIcon());
+			updateStatus.setIcon(CDSLookAndFeel.getDelegateCredentialsIcon());
 		}
-		return updateUser;
+		return updateStatus;
 	}
 
-	private synchronized void updateRecord() {
-
+	private synchronized void updateDelegationStatus() {
+		try {
+			DelegationAdminClient client = new DelegationAdminClient(
+					getService().getText(), getProxy().getSelectedProxy());
+			client.updateDelegationStatus(record.getDelegationIdentifier(),
+					getStatus().getDelegationStatus());
+			GridApplication.getContext().showMessage("The status was succesfully updated.");
+		} catch (Exception e) {
+			ErrorDialog.showError(e);
+		}
 	}
 
 	/**
@@ -290,8 +338,11 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 							.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, CDSLookAndFeel
 					.getDelegateCredentialsIcon(), getInfoPanel(), null);
+			jTabbedPane.addTab(POLICY_PANEL, CDSLookAndFeel
+					.getDelegationPolicyIcon(), getPolicyPanel(), null);
 			jTabbedPane.addTab(CERTIFICATE_PANEL, CDSLookAndFeel
 					.getCertificateIcon(), getCertificatePanel(), null);
+
 		}
 		return jTabbedPane;
 	}
@@ -303,9 +354,23 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
+			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
+			gridBagConstraints23.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints23.gridy = 6;
+			gridBagConstraints23.weightx = 1.0;
+			gridBagConstraints23.anchor = GridBagConstraints.WEST;
+			gridBagConstraints23.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints23.gridx = 1;
+			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+			gridBagConstraints22.gridx = 0;
+			gridBagConstraints22.anchor = GridBagConstraints.WEST;
+			gridBagConstraints22.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints22.gridy = 6;
+			jLabel6 = new JLabel();
+			jLabel6.setText("Issued Credential Path Length");
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints19.gridy = 6;
+			gridBagConstraints19.gridy = 7;
 			gridBagConstraints19.weightx = 1.0;
 			gridBagConstraints19.anchor = GridBagConstraints.WEST;
 			gridBagConstraints19.insets = new Insets(2, 2, 2, 2);
@@ -314,7 +379,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			gridBagConstraints18.gridx = 0;
 			gridBagConstraints18.anchor = GridBagConstraints.WEST;
 			gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints18.gridy = 6;
+			gridBagConstraints18.gridy = 7;
 			jLabel5 = new JLabel();
 			jLabel5.setText("Delegation Status");
 			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
@@ -425,6 +490,8 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			jPanel1.add(getLifetime(), gridBagConstraints17);
 			jPanel1.add(jLabel5, gridBagConstraints18);
 			jPanel1.add(getStatus(), gridBagConstraints19);
+			jPanel1.add(jLabel6, gridBagConstraints22);
+			jPanel1.add(getIssuedCredentialPathLength(), gridBagConstraints23);
 		}
 		return jPanel1;
 	}
@@ -504,6 +571,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			infoPanel = new JPanel();
 			infoPanel.setLayout(new BorderLayout());
 			infoPanel.add(getJPanel1(), java.awt.BorderLayout.NORTH);
+			infoPanel.add(getInfoButtonPanel(), BorderLayout.SOUTH);
 		}
 		return infoPanel;
 	}
@@ -513,7 +581,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getProxy() {
+	private ProxyComboBox getProxy() {
 		if (proxy == null) {
 			proxy = new ProxyComboBox(cred);
 		}
@@ -683,6 +751,100 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 					});
 		}
 		return viewCertificate;
+	}
+
+	/**
+	 * This method initializes policyPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPolicyPanel() {
+		if (policyPanel == null) {
+			GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
+			gridBagConstraints24.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints24.gridy = 0;
+			gridBagConstraints24.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints24.anchor = GridBagConstraints.NORTH;
+			gridBagConstraints24.weightx = 1.0D;
+			gridBagConstraints24.gridx = 0;
+			policyPanel = new JPanel();
+			policyPanel.setLayout(new GridBagLayout());
+			policyPanel.add(getPolicyTypePanel(), gridBagConstraints24);
+		}
+		return policyPanel;
+	}
+
+	/**
+	 * This method initializes issuedCredentialPathLength
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getIssuedCredentialPathLength() {
+		if (issuedCredentialPathLength == null) {
+			issuedCredentialPathLength = new JTextField();
+			issuedCredentialPathLength.setEditable(false);
+		}
+		return issuedCredentialPathLength;
+	}
+
+	/**
+	 * This method initializes policyTypePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPolicyTypePanel() {
+		if (policyTypePanel == null) {
+			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
+			gridBagConstraints26.gridx = 0;
+			gridBagConstraints26.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints26.gridy = 0;
+			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
+			gridBagConstraints25.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints25.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints25.gridx = 1;
+			gridBagConstraints25.gridy = 0;
+			gridBagConstraints25.weightx = 1.0;
+			jLabel7 = new JLabel();
+			jLabel7.setText("Delegation Policy");
+			jLabel7.setFont(new Font("Dialog", Font.BOLD, 14));
+			policyTypePanel = new JPanel();
+			policyTypePanel.setLayout(new GridBagLayout());
+			policyTypePanel.add(jLabel7, gridBagConstraints26);
+			policyTypePanel
+					.add(getDelegationPolicyType(), gridBagConstraints25);
+		}
+		return policyTypePanel;
+	}
+
+	/**
+	 * This method initializes delegationPolicyType
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getDelegationPolicyType() {
+		if (delegationPolicyType == null) {
+			delegationPolicyType = new JTextField();
+			delegationPolicyType.setEditable(false);
+		}
+		return delegationPolicyType;
+	}
+
+	/**
+	 * This method initializes infoButtonPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getInfoButtonPanel() {
+		if (infoButtonPanel == null) {
+			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
+			gridBagConstraints29.gridx = 0;
+			gridBagConstraints29.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints29.gridy = 0;
+			infoButtonPanel = new JPanel();
+			infoButtonPanel.setLayout(new GridBagLayout());
+			infoButtonPanel.add(getUpdateStatus(), gridBagConstraints29);
+		}
+		return infoButtonPanel;
 	}
 
 }

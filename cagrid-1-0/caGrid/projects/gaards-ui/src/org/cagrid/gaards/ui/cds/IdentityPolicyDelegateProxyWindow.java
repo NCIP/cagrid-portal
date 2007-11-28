@@ -1,7 +1,6 @@
 package org.cagrid.gaards.ui.cds;
 
 import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.common.Utils;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,14 +9,11 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import org.cagrid.gaards.cds.client.ClientConstants;
 import org.cagrid.gaards.cds.client.DelegationUserClient;
-import org.cagrid.gaards.cds.common.AllowedParties;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
-import org.cagrid.gaards.ui.dorian.ifs.FindUserDialog;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -50,25 +46,7 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 
 	private JTextField credential = null;
 
-	private JPanel policyPanel = null;
-
-	private JScrollPane jScrollPane = null;
-
-	private GridIdentityTable policyTable = null;
-
-	private JPanel addIdentityPanel = null;
-
-	private JLabel jLabel2 = null;
-
-	private JTextField gridIdentity = null;
-
-	private JButton addIdentityButton = null;
-
-	private JButton removeIdentityButton = null;
-
-	private JPanel identityControlPanel = null;
-
-	private JButton findUserButton = null;
+	private IdentityDelegationPolicyPanel policyPanel = null;
 
 	private DelegationRequestCache cache;
 
@@ -83,19 +61,9 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 		this.getCredential().setText(cache.getCredential().getIdentity());
 		if (cache.getPolicy() != null) {
 			if (cache.getPolicy() instanceof IdentityDelegationPolicy) {
-				IdentityDelegationPolicy p = (IdentityDelegationPolicy) cache
+				IdentityDelegationPolicy policy = (IdentityDelegationPolicy) cache
 						.getPolicy();
-				AllowedParties ap = p.getAllowedParties();
-				if (ap != null) {
-					String[] ids = ap.getGridIdentity();
-					if (ids != null) {
-						for (int i = 0; i < ids.length; i++) {
-							getPolicyTable().addIdentity(ids[0]);
-						}
-
-					}
-
-				}
+				getPolicyPanel().setPolicy(policy);
 			}
 		}
 	}
@@ -270,16 +238,7 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 	}
 
 	private DelegationRequestCache getDelegationCache() {
-		IdentityDelegationPolicy p = new IdentityDelegationPolicy();
-		AllowedParties ap = new AllowedParties();
-		int count = getPolicyTable().getRowCount();
-		String[] ids = new String[count];
-		for (int i = 0; i < count; i++) {
-			ids[i] = (String) getPolicyTable().getValueAt(i, 0);
-		}
-		ap.setGridIdentity(ids);
-		p.setAllowedParties(ap);
-		cache.setPolicy(p);
+		cache.setPolicy(getPolicyPanel().getPolicy());
 		return cache;
 	}
 
@@ -338,210 +297,16 @@ public class IdentityPolicyDelegateProxyWindow extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getPolicyPanel() {
+	private IdentityDelegationPolicyPanel getPolicyPanel() {
 		if (policyPanel == null) {
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.gridx = 0;
-			gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints14.weightx = 1.0D;
-			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints14.gridy = 2;
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.weightx = 1.0D;
-			gridBagConstraints7.gridy = 1;
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.fill = GridBagConstraints.BOTH;
-			gridBagConstraints6.weighty = 1.0;
-			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.gridy = 0;
-			gridBagConstraints6.weightx = 1.0;
-			policyPanel = new JPanel();
-			policyPanel.setLayout(new GridBagLayout());
-			policyPanel.add(getJScrollPane(), gridBagConstraints6);
+			policyPanel = new IdentityDelegationPolicyPanel(true);
 			policyPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null, "Identity Delegation Policy",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 					LookAndFeel.getPanelLabelColor()));
-			policyPanel.add(getAddIdentityPanel(), gridBagConstraints7);
-			policyPanel.add(getIdentityControlPanel(), gridBagConstraints14);
 		}
 		return policyPanel;
-	}
-
-	/**
-	 * This method initializes jScrollPane
-	 * 
-	 * @return javax.swing.JScrollPane
-	 */
-	private JScrollPane getJScrollPane() {
-		if (jScrollPane == null) {
-			jScrollPane = new JScrollPane();
-			jScrollPane.setViewportView(getPolicyTable());
-		}
-		return jScrollPane;
-	}
-
-	/**
-	 * This method initializes policyTable
-	 * 
-	 * @return javax.swing.JTable
-	 */
-	private GridIdentityTable getPolicyTable() {
-		if (policyTable == null) {
-			policyTable = new GridIdentityTable();
-		}
-		return policyTable;
-	}
-
-	/**
-	 * This method initializes addIdentityPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getAddIdentityPanel() {
-		if (addIdentityPanel == null) {
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.gridx = 0;
-			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints9.anchor = GridBagConstraints.WEST;
-			gridBagConstraints9.gridy = 0;
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints8.anchor = GridBagConstraints.WEST;
-			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints8.gridx = 1;
-			gridBagConstraints8.gridy = 0;
-			gridBagConstraints8.weightx = 1.0;
-			jLabel2 = new JLabel();
-			jLabel2.setText("Grid Identity");
-			addIdentityPanel = new JPanel();
-			addIdentityPanel.setLayout(new GridBagLayout());
-			addIdentityPanel.add(jLabel2, gridBagConstraints9);
-			addIdentityPanel.add(getGridIdentity(), gridBagConstraints8);
-			addIdentityPanel.add(getFindUserButton(), new GridBagConstraints());
-		}
-		return addIdentityPanel;
-	}
-
-	/**
-	 * This method initializes gridIdentity
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getGridIdentity() {
-		if (gridIdentity == null) {
-			gridIdentity = new JTextField();
-		}
-		return gridIdentity;
-	}
-
-	/**
-	 * This method initializes addIdentityButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getAddIdentityButton() {
-		if (addIdentityButton == null) {
-			addIdentityButton = new JButton();
-			addIdentityButton.setText("Add");
-			addIdentityButton.setIcon(CDSLookAndFeel.getAddIcon());
-			addIdentityButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							String gridId = Utils.clean(getGridIdentity()
-									.getText());
-							if (gridId == null) {
-								GridApplication.getContext().showMessage(
-										"Please specify a Grid Identity.");
-							}
-							getPolicyTable().addIdentity(gridId);
-							getGridIdentity().setText("");
-						}
-					});
-		}
-		return addIdentityButton;
-	}
-
-	/**
-	 * This method initializes removeIdentityButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getRemoveIdentityButton() {
-		if (removeIdentityButton == null) {
-			removeIdentityButton = new JButton();
-			removeIdentityButton.setText("Remove");
-			removeIdentityButton.setIcon(CDSLookAndFeel.getRemoveIcon());
-			removeIdentityButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							try {
-								getPolicyTable().removeSelectedIdentity();
-							} catch (Exception ex) {
-								GridApplication.getContext().showMessage(
-										ex.getMessage());
-							}
-						}
-					});
-		}
-		return removeIdentityButton;
-	}
-
-	/**
-	 * This method initializes identityControlPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getIdentityControlPanel() {
-		if (identityControlPanel == null) {
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.anchor = GridBagConstraints.WEST;
-			gridBagConstraints13.gridx = 1;
-			gridBagConstraints13.gridy = 0;
-			gridBagConstraints13.insets = new Insets(2, 2, 2, 2);
-			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.anchor = GridBagConstraints.WEST;
-			gridBagConstraints10.gridx = 0;
-			gridBagConstraints10.gridy = 0;
-			gridBagConstraints10.insets = new Insets(2, 2, 2, 2);
-			identityControlPanel = new JPanel();
-			identityControlPanel.setLayout(new GridBagLayout());
-			identityControlPanel.add(getAddIdentityButton(),
-					gridBagConstraints10);
-			identityControlPanel.add(getRemoveIdentityButton(),
-					gridBagConstraints13);
-		}
-		return identityControlPanel;
-	}
-
-	/**
-	 * This method initializes findUserButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getFindUserButton() {
-		if (findUserButton == null) {
-			findUserButton = new JButton();
-			findUserButton.setText("Find...");
-			findUserButton.setIcon(CDSLookAndFeel.getQueryIcon());
-			findUserButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							FindUserDialog dialog = new FindUserDialog();
-							dialog.setModal(true);
-							GridApplication.getContext().showDialog(dialog);
-							if (dialog.getSelectedUser() != null) {
-								getGridIdentity().setText(
-										dialog.getSelectedUser());
-							}
-						}
-					});
-		}
-		return findUserButton;
 	}
 
 }

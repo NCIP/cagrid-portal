@@ -32,6 +32,7 @@ public class DelegationRecordsTable extends GrapeBaseTable {
 	public final static String EXPIRATION = "Expiration";
 
 	private SessionPanel session;
+	
 
 	public DelegationRecordsTable(SessionPanel session) {
 		super(createTableModel());

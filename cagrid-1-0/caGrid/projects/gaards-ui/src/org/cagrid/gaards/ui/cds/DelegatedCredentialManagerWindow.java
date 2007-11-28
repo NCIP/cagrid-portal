@@ -71,7 +71,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 
 	private JTextField gridIdentity = null;
 
-	private boolean isAdmin;
+	private boolean adminMode;
 
 	private JLabel jLabel = null;
 
@@ -88,9 +88,9 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	/**
 	 * This is the default constructor
 	 */
-	public DelegatedCredentialManagerWindow(boolean isAdmin) {
+	public DelegatedCredentialManagerWindow(boolean adminMode) {
 		super();
-		this.isAdmin = isAdmin;
+		this.adminMode = adminMode;
 		initialize();
 		this.setFrameIcon(CDSLookAndFeel.getDelegateCredentialsIcon());
 	}
@@ -100,7 +100,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
-		if (isAdmin) {
+		if (adminMode) {
 			this.setTitle("Delegated Credential Manager");
 		} else {
 			this.setTitle("My Delegated Credentials");
@@ -269,7 +269,8 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 		if (manageDelegatedCredential == null) {
 			manageDelegatedCredential = new JButton();
 			manageDelegatedCredential.setText("View Record");
-			manageDelegatedCredential.setIcon(CDSLookAndFeel.getDelegateCredentialIcon());
+			manageDelegatedCredential.setIcon(CDSLookAndFeel
+					.getDelegateCredentialIcon());
 			manageDelegatedCredential
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -361,7 +362,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 				}
 			}
 
-			if (isAdmin) {
+			if (adminMode) {
 				f.setGridIdentity(Utils.clean(getGridIdentity().getText()));
 
 			} else {
@@ -373,7 +374,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 
 			List<DelegationRecord> records;
 
-			if (isAdmin) {
+			if (adminMode) {
 				// TODO: ADD ADMIN CALL
 				records = new ArrayList<DelegationRecord>();
 			} else {
@@ -517,7 +518,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 			gridBagConstraints6.gridy = 0;
 			gridLabel = new JLabel();
 			gridLabel.setText("Grid Identity");
-			if (isAdmin) {
+			if (adminMode) {
 				gridLabel.setVisible(true);
 				gridLabel.setEnabled(true);
 			} else {
@@ -550,7 +551,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	private JTextField getGridIdentity() {
 		if (gridIdentity == null) {
 			gridIdentity = new JTextField();
-			if (isAdmin) {
+			if (adminMode) {
 				gridIdentity.setVisible(true);
 				gridIdentity.setEnabled(true);
 			} else {

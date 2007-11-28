@@ -21,5 +21,9 @@ public class CDSLookAndFeel extends GAARDSLookAndFeel {
 	public final static ImageIcon getDelegateCredentialsIcon() {
 		return IconUtils.loadIcon("/delegate-credentials.png");
 	}
+	
+	public final static ImageIcon getDelegationPolicyIcon() {
+		return IconUtils.loadIcon("/delegation-policy.png");
+	}
 
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.cagrid.gaards.cds.common.DelegationPolicy;
+import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.configuration.GeneralConfiguration;
 import org.cagrid.grape.configuration.Properties;
@@ -51,5 +53,24 @@ public class CDSUIUtils {
 			log.error(e);
 		}
 		return values;
+	}
+
+	public static DelegationPolicyPanel getPolicyPanel(String policyType,
+			boolean editable) {
+		if (policyType.equals(CDSUIConstants.IDENTITY_POLICY_TYPE)) {
+			return new IdentityDelegationPolicyPanel(editable);
+		} else {
+			return null;
+		}
+	}
+
+	public static String getDelegationPolicyType(DelegationPolicy policy) {
+		if (policy == null) {
+			return "None";
+		} else if (policy instanceof IdentityDelegationPolicy) {
+			return CDSUIConstants.IDENTITY_POLICY_TYPE;
+		} else {
+			return policy.getClass().getName();
+		}
 	}
 }
