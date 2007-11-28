@@ -1,5 +1,7 @@
 package org.cagrid.gaards.cds.service;
 
+import gov.nih.nci.cagrid.common.Utils;
+
 import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
@@ -29,24 +31,28 @@ public class DelegationManager {
 	public DelegationSigningRequest initiateDelegation(String callerIdentity,
 			DelegationRequest req) throws CDSInternalFault, InvalidPolicyFault,
 			DelegationFault, PermissionDeniedFault {
+		verifyAuthenticated(callerIdentity);
 		return this.dcm.initiateDelegation(callerIdentity, req);
 	}
 
 	public DelegationIdentifier approveDelegation(String callerIdentity,
 			DelegationSigningResponse res) throws CDSInternalFault,
 			DelegationFault, PermissionDeniedFault {
+		verifyAuthenticated(callerIdentity);
 		return this.dcm.approveDelegation(callerIdentity, res);
 	}
 
 	public CertificateChain getDelegatedCredential(String gridIdentity,
 			DelegationIdentifier id, PublicKey publicKey)
 			throws CDSInternalFault, DelegationFault, PermissionDeniedFault {
+		verifyAuthenticated(gridIdentity);
 		return this.dcm.getDelegatedCredential(gridIdentity, id, publicKey);
 	}
 
 	public void suspendDelegatedCredential(String callerIdentity,
 			DelegationIdentifier id) throws CDSInternalFault, DelegationFault,
 			PermissionDeniedFault {
+		verifyAuthenticated(callerIdentity);
 		DelegationRecord r = this.dcm.getDelegationRecord(id);
 		if (r.getGridIdentity().equals(callerIdentity)) {
 			this.dcm.updateDelegatedCredentialStatus(id,
@@ -59,6 +65,7 @@ public class DelegationManager {
 	public void updateDelegatedCredentialStatus(String callerIdentity,
 			DelegationIdentifier id, DelegationStatus status)
 			throws CDSInternalFault, DelegationFault, PermissionDeniedFault {
+		verifyAuthenticated(callerIdentity);
 		if (isAdmin(callerIdentity)) {
 			this.dcm.updateDelegatedCredentialStatus(id, status);
 		} else {
@@ -79,6 +86,7 @@ public class DelegationManager {
 	public DelegationRecord[] findDelegatedCredentials(String callerIdentity,
 			DelegationRecordFilter f) throws CDSInternalFault,
 			PermissionDeniedFault {
+		verifyAuthenticated(callerIdentity);
 		if (f == null) {
 			f = new DelegationRecordFilter();
 		}
@@ -87,6 +95,14 @@ public class DelegationManager {
 		} else {
 			f.setGridIdentity(callerIdentity);
 			return this.dcm.findDelegatedCredentials(f);
+		}
+	}
+
+	private void verifyAuthenticated(String callerIdentity)
+			throws PermissionDeniedFault {
+		if (Utils.clean(callerIdentity) == null) {
+			throw Errors
+					.getPermissionDeniedFault(Errors.AUTHENTICATION_REQUIRED);
 		}
 	}
 
