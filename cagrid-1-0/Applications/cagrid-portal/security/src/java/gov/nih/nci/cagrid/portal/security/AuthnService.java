@@ -55,6 +55,7 @@ public class AuthnService {
 	private static final String FIRST_NAME_EXP = "/*[local-name()='Assertion']/*[local-name()='AttributeStatement']/*[local-name()='Attribute' and @AttributeName='urn:mace:dir:attribute-def:givenName']/*[local-name()='AttributeValue']/text()";
 	private static final String LAST_NAME_EXP = "/*[local-name()='Assertion']/*[local-name()='AttributeStatement']/*[local-name()='Attribute' and @AttributeName='urn:mace:dir:attribute-def:sn']/*[local-name()='AttributeValue']/text()";
 
+	private EncryptionService encryptionService;
 	private AuthnTicketDao authnTicketDao;
 	private PortalUserDao portalUserDao;
 	private PersonDao personDao;
@@ -222,9 +223,6 @@ public class AuthnService {
 					ex);
 		}
 
-		PortalUser user = getPortalUser(cred.getIdentity(), email, firstName,
-				lastName);
-
 		String proxyStr = null;
 		try {
 			ByteArrayOutputStream buf = new ByteArrayOutputStream();
@@ -234,7 +232,8 @@ public class AuthnService {
 			throw new AuthnServiceException("Error writing proxy to string: "
 					+ ex.getMessage(), ex);
 		}
-		user.setGridCredential(proxyStr);
+		PortalUser user = getPortalUser(cred.getIdentity(), email, firstName,
+				lastName, proxyStr);
 
 		AuthnTicket ticket = new AuthnTicket();
 		ticket.setPortalUser(user);
@@ -247,7 +246,7 @@ public class AuthnService {
 	}
 
 	protected PortalUser getPortalUser(String gridIdentity, String email,
-			String firstName, String lastName) {
+			String firstName, String lastName, String proxyStr) {
 		PortalUser portalUser = new PortalUser();
 		portalUser.setGridIdentity(gridIdentity);
 		portalUser = getPortalUserDao().getByExample(portalUser);
@@ -260,6 +259,7 @@ public class AuthnService {
 			person.setLastName(lastName);
 			getPersonDao().save(person);
 			portalUser.setPerson(person);
+			portalUser.setGridCredential(getEncryptionService().encrypt(proxyStr));
 			getPortalUserDao().save(portalUser);
 		}
 		return portalUser;
@@ -389,6 +389,14 @@ public class AuthnService {
 
 	public void setTicketLifetime(long ticketLifetime) {
 		this.ticketLifetime = ticketLifetime;
+	}
+
+	public EncryptionService getEncryptionService() {
+		return encryptionService;
+	}
+
+	public void setEncryptionService(EncryptionService encryptionService) {
+		this.encryptionService = encryptionService;
 	}
 
 }
