@@ -1,17 +1,38 @@
 package gov.nih.nci.cagrid.sdkquery4.style.wizard;
 
+import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
+import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
+import gov.nih.nci.cagrid.data.ui.GroupSelectionListener;
+import gov.nih.nci.cagrid.data.ui.NotifyingButtonGroup;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
-import javax.swing.JLabel;
+
 import java.awt.Dimension;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.IOException;
+import java.net.URL;
+
+import javax.swing.ButtonModel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+
+import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.message.SimpleValidationMessage;
+import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.util.ValidationUtils;
+import com.jgoodies.validation.view.ValidationComponentUtils;
 
 /** 
  *  QueryProcessorConfigurationPanel
@@ -20,9 +41,16 @@ import javax.swing.JRadioButton;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.1 2007-11-28 17:26:57 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.2 2007-11-28 21:21:16 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
+    // keys for validation
+    public static final String KEY_APPLICATION_NAME = "Application name";
+    public static final String KEY_BEANS_JAR = "Beans Jar file";
+    public static final String KEY_CONFIG_DIR = "Configuration directory";
+    public static final String KEY_ORM_JAR = "ORM Jar file";
+    public static final String KEY_HOST_NAME = "Application service host name";
+    public static final String KEY_PORT_NUMBER = "Application port number";
 
     private JLabel applicationNameLabel = null;
     private JTextField applicationNameTextField = null;
@@ -45,7 +73,11 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private JPanel localApiPanel = null;
     private JPanel remoteApiPanel = null;
     private JPanel apiConfigPanel = null;
-    private JPanel mainPanel = null;  //  @jve:decl-index=0:visual-constraint="58,30"
+    private JPanel mainPanel = null;
+    
+    private IconFeedbackPanel validationPanel = null;
+    private ValidationResultModel validationModel = null;
+    private DocumentChangeAdapter documentChangeListener = null;
 
 
     /**
@@ -54,7 +86,14 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
      */
     public QueryProcessorConfigurationPanel(ServiceExtensionDescriptionType extensionDescription,
         ServiceInformation info) {
-        super(extensionDescription, info);        
+        super(extensionDescription, info);
+        this.validationModel = new DefaultValidationResultModel();
+        this.documentChangeListener = new DocumentChangeAdapter() {
+            public void documentEdited(DocumentEvent e) {
+                validateInput();
+            }
+        };
+        initialize();
     }
 
 
@@ -72,8 +111,38 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         // TODO Auto-generated method stub
 
     }
-
-
+    
+    
+    private void initialize() {
+        initRadioGroup();
+        this.setLayout(new GridLayout());
+        this.add(getValidationPanel());
+        // set up for validation
+        configureValidation();
+    }
+    
+    
+    private IconFeedbackPanel getValidationPanel() {
+        if (validationPanel == null) {
+            validationPanel = new IconFeedbackPanel(validationModel, getMainPanel());
+        }
+        return validationPanel;
+    }
+    
+    
+    private void initRadioGroup() {
+        NotifyingButtonGroup radioGroup = new NotifyingButtonGroup();
+        radioGroup.addGroupSelectionListener(new GroupSelectionListener() {
+            public void selectionChanged(final ButtonModel previousSelection, final ButtonModel currentSelection) {
+                validateInput();
+            }
+        });
+        radioGroup.add(getLocalApiRadioButton());
+        radioGroup.add(getRemoteApiRadioButton());
+        radioGroup.setSelected(getLocalApiRadioButton().getModel(), true);
+    }
+    
+    
     /**
      * This method initializes applicationNameLabel	
      * 	
@@ -96,6 +165,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private JTextField getApplicationNameTextField() {
         if (applicationNameTextField == null) {
             applicationNameTextField = new JTextField();
+            applicationNameTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return applicationNameTextField;
     }
@@ -124,6 +194,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         if (beansJarTextField == null) {
             beansJarTextField = new JTextField();
             beansJarTextField.setEditable(false);
+            beansJarTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return beansJarTextField;
     }
@@ -140,7 +211,13 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             beansBrowseButton.setText("Browse");
             beansBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    try {
+                        String filename = ResourceManager.promptFile(null, FileFilters.JAR_FILTER);
+                        getBeansJarTextField().setText(filename);
+                        validateInput();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
         }
@@ -171,6 +248,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         if (configDirTextField == null) {
             configDirTextField = new JTextField();
             configDirTextField.setEditable(false);
+            configDirTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return configDirTextField;
     }
@@ -187,7 +265,13 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             configBrowseButton.setText("Browse");
             configBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    try {
+                        String filename = ResourceManager.promptDir(null);
+                        getConfigDirTextField().setText(filename);
+                        validateInput();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
         }
@@ -270,7 +354,10 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             localApiRadioButton.setText("Local API");
             localApiRadioButton.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    System.out.println("itemStateChanged()"); // TODO Auto-generated Event stub itemStateChanged()
+                    boolean local = localApiRadioButton.isSelected();
+                    getOrmJarLabel().setEnabled(local);
+                    getOrmJarTextField().setEnabled(local);
+                    getOrmJarBrowseButton().setEnabled(local);
                 }
             });
         }
@@ -289,7 +376,11 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             remoteApiRadioButton.setText("Remote API");
             remoteApiRadioButton.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    System.out.println("itemStateChanged()"); // TODO Auto-generated Event stub itemStateChanged()
+                    boolean remote = remoteApiRadioButton.isSelected();
+                    getHostNameLabel().setEnabled(remote);
+                    getHostNameTextField().setEnabled(remote);
+                    getPortLabel().setEnabled(remote);
+                    getPortTextField().setEnabled(remote);
                 }
             });
         }
@@ -320,6 +411,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         if (ormJarTextField == null) {
             ormJarTextField = new JTextField();
             ormJarTextField.setEditable(false);
+            ormJarTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return ormJarTextField;
     }
@@ -336,7 +428,13 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             ormJarBrowseButton.setText("Browse");
             ormJarBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    try {
+                        String filename = ResourceManager.promptFile(null, FileFilters.JAR_FILTER);
+                        getOrmJarTextField().setText(filename);
+                        validateInput();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
         }
@@ -366,6 +464,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private JTextField getHostNameTextField() {
         if (hostNameTextField == null) {
             hostNameTextField = new JTextField();
+            hostNameTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return hostNameTextField;
     }
@@ -393,6 +492,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private JTextField getPortTextField() {
         if (portTextField == null) {
             portTextField = new JTextField();
+            portTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return portTextField;
     }
@@ -534,5 +634,96 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             mainPanel.add(getApiConfigPanel(), gridBagConstraints20);
         }
         return mainPanel;
+    }
+    
+    
+    // -----------
+    // validation
+    // -----------
+    
+    
+    private void configureValidation() {
+        ValidationComponentUtils.setMessageKey(getApplicationNameTextField(), KEY_APPLICATION_NAME);
+        ValidationComponentUtils.setMessageKey(getBeansJarTextField(), KEY_BEANS_JAR);
+        ValidationComponentUtils.setMessageKey(getConfigDirTextField(), KEY_CONFIG_DIR);
+        ValidationComponentUtils.setMessageKey(getOrmJarTextField(), KEY_ORM_JAR);
+        ValidationComponentUtils.setMessageKey(getHostNameTextField(), KEY_HOST_NAME);
+        ValidationComponentUtils.setMessageKey(getPortTextField(), KEY_PORT_NUMBER);
+        
+        validateInput();
+        updateComponentTreeSeverity();
+    }
+    
+    
+    private void validateInput() {
+        ValidationResult result = new ValidationResult();
+        
+        String appName = getApplicationNameTextField().getText();
+        if (ValidationUtils.isBlank(appName)) {
+            result.add(new SimpleValidationMessage(
+                KEY_APPLICATION_NAME + " cannot be blank", Severity.ERROR, KEY_APPLICATION_NAME));
+        } else if (appName.split("\\s").length != 1) {
+            result.add(new SimpleValidationMessage(
+                KEY_APPLICATION_NAME + " cannot contain whitespace", Severity.ERROR, KEY_APPLICATION_NAME));
+        }
+        
+        if (ValidationUtils.isBlank(getBeansJarTextField().getText())) {
+            result.add(new SimpleValidationMessage(
+                KEY_BEANS_JAR + " cannot be blank", Severity.ERROR, KEY_BEANS_JAR));
+        } else {
+            // TODO: validate the beans jar somehow
+        }
+        
+        if (ValidationUtils.isBlank(getConfigDirTextField().getText())) {
+            result.add(new SimpleValidationMessage(
+                KEY_CONFIG_DIR + " cannot be blank", Severity.ERROR, KEY_CONFIG_DIR));
+        } else {
+            // TODO: validate the configuration directory
+        }
+        
+        if (getLocalApiRadioButton().isSelected()) {
+            if (ValidationUtils.isBlank(getOrmJarTextField().getText())) {
+                result.add(new SimpleValidationMessage(
+                    KEY_ORM_JAR + " cannot be blank", Severity.ERROR, KEY_ORM_JAR));
+            } else {
+                // TODO: validate the ORM jar
+            }
+        } else { // remote API
+            if (ValidationUtils.isBlank(getHostNameTextField().getText())) {
+                result.add(new SimpleValidationMessage(
+                    KEY_HOST_NAME + " cannot be blank", Severity.ERROR, KEY_HOST_NAME));
+            } else {
+                try {
+                    new URL(getHostNameTextField().getText());
+                } catch (Exception ex) {
+                    result.add(new SimpleValidationMessage(
+                        KEY_HOST_NAME + " is not a valid URL", Severity.ERROR, KEY_HOST_NAME));
+                }
+            }
+            
+            if (ValidationUtils.isBlank(getPortTextField().getText())) {
+                result.add(new SimpleValidationMessage(
+                    KEY_PORT_NUMBER + " cannot be blank", Severity.ERROR, KEY_PORT_NUMBER));
+            } else {
+                try {
+                    Integer.parseInt(getPortTextField().getText());
+                } catch (Exception ex) {
+                    result.add(new SimpleValidationMessage(
+                        KEY_PORT_NUMBER + " is not an integer", Severity.ERROR, KEY_PORT_NUMBER));
+                }
+            }
+        }
+        
+        validationModel.setResult(result);
+        
+        updateComponentTreeSeverity();
+        // update next button enabled
+        setNextEnabled(!validationModel.hasErrors());
+    }
+    
+    
+    private void updateComponentTreeSeverity() {
+        ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
+        ValidationComponentUtils.updateComponentTreeSeverityBackground(this, validationModel.getResult());
     }
 }
