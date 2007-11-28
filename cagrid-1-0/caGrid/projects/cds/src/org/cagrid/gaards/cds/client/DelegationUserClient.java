@@ -14,15 +14,18 @@ import java.util.List;
 
 import org.apache.axis.types.URI;
 import org.cagrid.gaards.cds.common.CertificateChain;
+import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationRecordFilter;
 import org.cagrid.gaards.cds.common.DelegationRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningRequest;
 import org.cagrid.gaards.cds.common.DelegationSigningResponse;
+import org.cagrid.gaards.cds.common.DelegationStatus;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
 import org.cagrid.gaards.cds.common.Utils;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
+import org.cagrid.gaards.cds.service.Errors;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
@@ -192,22 +195,62 @@ public class DelegationUserClient {
 		return client.approveDelegation(res);
 	}
 
+	/**
+	 * This method allows a user to find credentials that they delegated.
+	 * 
+	 * @return A list of records each representing a credential delegated by the
+	 *         user
+	 * @throws RemoteException
+	 * @throws CDSInternalFault
+	 * @throws DelegationInternalFault
+	 * @throws PermissionDeniedFault
+	 */
+
 	public List<DelegationRecord> findMyDelegatedCredentials()
-			throws RemoteException, CDSInternalFault, PermissionDeniedFault {
+			throws RemoteException, CDSInternalFault, DelegationFault,
+			PermissionDeniedFault {
 		return findMyDelegatedCredentials(new DelegationRecordFilter());
 	}
 
+	/**
+	 * This method allows a user to find credentials that they delegated.
+	 * 
+	 * @param filter
+	 *            Search criteria to use in finding delegated credentials
+	 * @return A list of records each representing a credential delegated by the
+	 *         user
+	 * @throws RemoteException
+	 * @throws CDSInternalFault
+	 * @throws DelegationInternalFault
+	 * @throws PermissionDeniedFault
+	 */
+
 	public List<DelegationRecord> findMyDelegatedCredentials(
 			DelegationRecordFilter filter) throws RemoteException,
-			CDSInternalFault {
+			CDSInternalFault, DelegationFault, PermissionDeniedFault {
 		if (filter == null) {
 			filter = new DelegationRecordFilter();
 		}
 		if (cred != null) {
 			filter.setGridIdentity(cred.getIdentity());
 		} else {
-
+			try {
+				GlobusCredential c = ProxyUtil.getDefaultProxy();
+				if (c != null) {
+					filter.setGridIdentity(c.getIdentity());
+				}
+			} catch (Exception e) {
+				DelegationFault f = new DelegationFault();
+				f.setFaultString(e.getMessage());
+				throw f;
+			}
 		}
+
+		if (filter.getGridIdentity() == null) {
+			throw Errors
+					.getPermissionDeniedFault(Errors.AUTHENTICATION_REQUIRED);
+		}
+
 		DelegationRecord[] records = client.findDelegatedCredentials(filter);
 		if (records == null) {
 			return new ArrayList<DelegationRecord>();
@@ -215,6 +258,25 @@ public class DelegationUserClient {
 			List<DelegationRecord> list = Arrays.asList(records);
 			return list;
 		}
+	}
+
+	/**
+	 * This method suspends a delegated credential such that no further
+	 * credentials will be delegated/issued.
+	 * 
+	 * @param id
+	 *            The delegation identifier of the delegated credentials to
+	 *            suspend.
+	 * @throws RemoteException
+	 * @throws CDSInternalFault
+	 * @throws DelegationFault
+	 * @throws PermissionDeniedFault
+	 */
+
+	public void suspendDelegatedCredential(DelegationIdentifier id)
+			throws RemoteException, CDSInternalFault, DelegationFault,
+			PermissionDeniedFault {
+		client.updateDelegatedCredentialStatus(id, DelegationStatus.Suspended);
 	}
 
 }

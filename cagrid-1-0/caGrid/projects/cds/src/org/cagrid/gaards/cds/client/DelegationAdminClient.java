@@ -21,8 +21,6 @@ import org.globus.gsi.GlobusCredential;
  * 
  */
 public class DelegationAdminClient {
-
-	private GlobusCredential cred;
 	private CredentialDelegationServiceClient client;
 
 	public DelegationAdminClient(String url) throws Exception {
@@ -31,7 +29,6 @@ public class DelegationAdminClient {
 
 	public DelegationAdminClient(String url, GlobusCredential cred)
 			throws Exception {
-		this.cred = cred;
 		this.client = new CredentialDelegationServiceClient(url, cred);
 	}
 
