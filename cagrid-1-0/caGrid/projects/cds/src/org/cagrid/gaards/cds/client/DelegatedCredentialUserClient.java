@@ -45,14 +45,43 @@ public class DelegatedCredentialUserClient {
 				ref, cred);
 	}
 
+	/**
+	 * This method suspends this credential, no further credentials will be
+	 * issued or delegated.
+	 * 
+	 * @throws RemoteException
+	 * @throws ResourceException
+	 */
 	public void suspend() throws RemoteException, ResourceException {
 		client.destroy(new Destroy());
 	}
+
+	/**
+	 * This method allow an authorized user to obtain a delegated credential
+	 * 
+	 * @return The delegated credential.
+	 * @throws RemoteException
+	 * @throws CDSInternalFault
+	 * @throws DelegationFault
+	 * @throws PermissionDeniedFault
+	 */
 
 	public GlobusCredential getDelegatedCredential() throws RemoteException,
 			CDSInternalFault, DelegationFault, PermissionDeniedFault {
 		return getDelegatedCredential(ClientConstants.DEFAULT_KEY_SIZE);
 	}
+
+	/**
+	 * This method allow an authorized user to obtain a delegated credential
+	 * 
+	 * @param keySize
+	 *            The size (bits) of the delegated credential's private key.
+	 * @return The delegated credential.
+	 * @throws RemoteException
+	 * @throws CDSInternalFault
+	 * @throws DelegationFault
+	 * @throws PermissionDeniedFault
+	 */
 
 	public GlobusCredential getDelegatedCredential(int keySize)
 			throws RemoteException, CDSInternalFault, DelegationFault,
