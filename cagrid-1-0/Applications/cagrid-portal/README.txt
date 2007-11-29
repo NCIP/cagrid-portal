@@ -147,3 +147,7 @@ Follow these directions to import the lar file:
 
 Then you can navigate back to My Places > Guest > Public Pages. Or you could just sign out.
 
+Note: If you see an error message on the Home page saying that "you don't have privileges to
+view this portlet", right below the Google Map, just restart JBoss.
+
+
