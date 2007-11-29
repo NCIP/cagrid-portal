@@ -132,7 +132,7 @@ Follow these directions to import the lar file:
 5. Select the "Portlet Preferences" and "Portlet Data" checkboxes.
 6. Press the "Browse..." button to navigate to and select "portaladmin-public-community.lar"
 7. Press "Import"
-8. Repeat steps 11 through 16 for the "Private Pages" and "portaladmin-private-community.lar".   
+8. Repeat steps 2 through 7 for the "Private Pages" and "portaladmin-private-community.lar".   
 9. In upper right-hand corner, click drop-down list,
    then select My Places > My Community > Private Pages
 10. In Communities portlet, click "Communities I have joined" tab.
@@ -140,7 +140,7 @@ Follow these directions to import the lar file:
    - That's the 3rd icon from the left. It looks two pieces of paper.
 12. Click on the "Import/Export" tab.
 13. Click on the "Import" sub tab.
-14. Select NONE of the checkboxes.
+14. Select the "Portlet Preferences" and "Portlet Data" checkboxes.
 15. Press the "Browse..." button to navigate to and select "guest-community.lar"
 16. Press "Import"
 
