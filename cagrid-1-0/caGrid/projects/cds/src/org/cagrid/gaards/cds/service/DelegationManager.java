@@ -35,6 +35,13 @@ public class DelegationManager {
 		return this.dcm.initiateDelegation(callerIdentity, req);
 	}
 
+	public DelegationRecord[] findCredentialsDelegatedToClient(
+			String callerIdentity) throws CDSInternalFault,
+			PermissionDeniedFault {
+		verifyAuthenticated(callerIdentity);
+		return this.dcm.findCredentialsDelegatedToClient(callerIdentity);
+	}
+
 	public DelegationIdentifier approveDelegation(String callerIdentity,
 			DelegationSigningResponse res) throws CDSInternalFault,
 			DelegationFault, PermissionDeniedFault {

@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.apache.axis.types.URI;
 import org.cagrid.gaards.cds.common.CertificateChain;
+import org.cagrid.gaards.cds.common.DelegationDescriptor;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
@@ -31,10 +32,6 @@ import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.globus.gsi.GlobusCredential;
 
-/**
- * @author langella
- * 
- */
 public class DelegationUserClient {
 
 	private GlobusCredential cred;
@@ -72,8 +69,7 @@ public class DelegationUserClient {
 			DelegationPolicy policy, ProxyLifetime issuedCredentialLifetime)
 			throws RemoteException, CDSInternalFault, DelegationFault,
 			PermissionDeniedFault, URI.MalformedURIException {
-		return this.delegateCredential(null, policy,
-				issuedCredentialLifetime);
+		return this.delegateCredential(null, policy, issuedCredentialLifetime);
 	}
 
 	/**
@@ -105,8 +101,7 @@ public class DelegationUserClient {
 			CDSInternalFault, DelegationFault, PermissionDeniedFault,
 			URI.MalformedURIException {
 		return this.delegateCredential(delegationLifetime, 1, policy,
-				issuedCredentialLifetime, 0,
-				ClientConstants.DEFAULT_KEY_SIZE);
+				issuedCredentialLifetime, 0, ClientConstants.DEFAULT_KEY_SIZE);
 	}
 
 	/**
@@ -144,12 +139,10 @@ public class DelegationUserClient {
 	 */
 	public DelegatedCredentialReference delegateCredential(
 			ProxyLifetime delegationLifetime, int delegationPathLength,
-			DelegationPolicy policy,
-			ProxyLifetime issuedCredentialLifetime,
-			int issuedCredentialPathLength,
-			int keyLength) throws RemoteException,
-			CDSInternalFault, DelegationFault, PermissionDeniedFault,
-			URI.MalformedURIException {
+			DelegationPolicy policy, ProxyLifetime issuedCredentialLifetime,
+			int issuedCredentialPathLength, int keyLength)
+			throws RemoteException, CDSInternalFault, DelegationFault,
+			PermissionDeniedFault, URI.MalformedURIException {
 
 		DelegationRequest req = new DelegationRequest();
 		req.setDelegationPolicy(policy);
@@ -276,6 +269,29 @@ public class DelegationUserClient {
 			throws RemoteException, CDSInternalFault, DelegationFault,
 			PermissionDeniedFault {
 		client.updateDelegatedCredentialStatus(id, DelegationStatus.Suspended);
+	}
+
+	/**
+	 * This method obtains a list of credentials that have been delegated to
+	 * this client by other clients.
+	 * 
+	 * @return A list of credentials delegated to this client.
+	 * @throws RemoteException
+	 * @throws CDSInternalFault
+	 * @throws PermissionDeniedFault
+	 */
+
+	public List<DelegationDescriptor> findCredentialsDelegatedToClient()
+			throws RemoteException, CDSInternalFault, PermissionDeniedFault {
+		DelegationDescriptor[] results = client
+				.findCredentialsDelegatedToClient();
+		List<DelegationDescriptor> list = new ArrayList<DelegationDescriptor>();
+		if (results != null) {
+			for (int i = 0; i < results.length; i++) {
+				list.add(results[i]);
+			}
+		}
+		return list;
 	}
 
 }

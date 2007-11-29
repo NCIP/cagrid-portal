@@ -113,6 +113,34 @@ public class DelegatedCredentialManager {
 		return handler;
 	}
 
+	public DelegationRecord[] findCredentialsDelegatedToClient(
+			String callerIdentity) throws CDSInternalFault {
+		DelegationRecordFilter f = new DelegationRecordFilter();
+		f.setDelegationStatus(DelegationStatus.Approved);
+		f.setExpirationStatus(ExpirationStatus.Valid);
+		DelegationRecord[] records = findDelegatedCredentials(f);
+		if (records != null) {
+			List<DelegationRecord> list = new ArrayList<DelegationRecord>();
+			for (int i = 0; i < records.length; i++) {
+				try {
+					PolicyHandler handler = this.findHandler(records[i]
+							.getDelegationPolicy().getClass().getName());
+					if (handler.isAuthorized(records[i]
+							.getDelegationIdentifier(), callerIdentity)) {
+						list.add(records[i]);
+					}
+
+				} catch (Exception e) {
+					log.error(e);
+				}
+			}
+			DelegationRecord[] results = new DelegationRecord[list.size()];
+			return list.toArray(results);
+		} else {
+			return new DelegationRecord[0];
+		}
+	}
+
 	public synchronized DelegationSigningRequest initiateDelegation(
 			String callerGridIdentity, DelegationRequest request)
 			throws CDSInternalFault, DelegationFault, InvalidPolicyFault {
@@ -232,9 +260,8 @@ public class DelegatedCredentialManager {
 							.getString(STATUS)));
 					r.setExpiration(rs.getLong(EXPIRATION));
 					r.setGridIdentity(rs.getString(GRID_IDENTITY));
-					r
-							.setIssuedCredentialPathLength(rs
-									.getInt(DELEGATION_PATH_LENGTH));
+					r.setIssuedCredentialPathLength(rs
+							.getInt(DELEGATION_PATH_LENGTH));
 					ProxyLifetime lifetime = new ProxyLifetime();
 					lifetime.setHours(rs.getInt(PROXY_LIFETIME_HOURS));
 					lifetime.setMinutes(rs.getInt(PROXY_LIFETIME_MINUTES));
@@ -538,7 +565,8 @@ public class DelegatedCredentialManager {
 						.createImpersonationProxyCertificate(certs,
 								this.keyManager.getPrivateKey(String.valueOf(id
 										.getDelegationId())), pkey, hours,
-								minutes, seconds, r.getIssuedCredentialPathLength());
+								minutes, seconds, r
+										.getIssuedCredentialPathLength());
 				return Utils.toCertificateChain(proxy);
 			} catch (DelegationFault f) {
 				throw f;

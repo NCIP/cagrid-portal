@@ -6,9 +6,12 @@ import org.apache.axis.MessageContext;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.gaards.cds.common.DelegationDescriptor;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
+import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.delegated.service.DelegatedCredentialResourceHome;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
+import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.tools.database.Database;
 import org.globus.wsrf.security.SecurityManager;
@@ -65,15 +68,18 @@ public class CredentialDelegationServiceImpl extends
 		return caller;
 	}
 
-  public org.cagrid.gaards.cds.common.DelegationSigningRequest initiateDelegation(org.cagrid.gaards.cds.common.DelegationRequest req) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.cds.common.DelegationSigningRequest initiateDelegation(
+			org.cagrid.gaards.cds.common.DelegationRequest req)
+			throws RemoteException,
+			org.cagrid.gaards.cds.stubs.types.CDSInternalFault,
+			org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault,
+			org.cagrid.gaards.cds.stubs.types.DelegationFault,
+			org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
 		return cds.initiateDelegation(getCallerIdentity(), req);
 	}
 
-  public org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference approveDelegation(org.cagrid.gaards.cds.common.DelegationSigningResponse delegationSigningResponse) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
-
-		DelegationIdentifier id = cds.approveDelegation(getCallerIdentity(),
-				delegationSigningResponse);
-
+	private DelegatedCredentialReference getDelegatedCredentialRefernce(
+			DelegationIdentifier id) throws CDSInternalFault {
 		try {
 			MessageContext ctx = MessageContext.getCurrentContext();
 			String transportURL = (String) ctx
@@ -94,13 +100,54 @@ public class CredentialDelegationServiceImpl extends
 
 	}
 
-  public org.cagrid.gaards.cds.common.DelegationRecord[] findDelegatedCredentials(org.cagrid.gaards.cds.common.DelegationRecordFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference approveDelegation(
+			org.cagrid.gaards.cds.common.DelegationSigningResponse delegationSigningResponse)
+			throws RemoteException,
+			org.cagrid.gaards.cds.stubs.types.CDSInternalFault,
+			org.cagrid.gaards.cds.stubs.types.DelegationFault,
+			org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+
+		DelegationIdentifier id = cds.approveDelegation(getCallerIdentity(),
+				delegationSigningResponse);
+		return getDelegatedCredentialRefernce(id);
+
+	}
+
+	public org.cagrid.gaards.cds.common.DelegationRecord[] findDelegatedCredentials(
+			org.cagrid.gaards.cds.common.DelegationRecordFilter filter)
+			throws RemoteException,
+			org.cagrid.gaards.cds.stubs.types.CDSInternalFault,
+			org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
 		return this.cds.findDelegatedCredentials(getCallerIdentity(), filter);
 	}
 
-  public void updateDelegatedCredentialStatus(org.cagrid.gaards.cds.common.DelegationIdentifier id,org.cagrid.gaards.cds.common.DelegationStatus status) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+	public void updateDelegatedCredentialStatus(
+			org.cagrid.gaards.cds.common.DelegationIdentifier id,
+			org.cagrid.gaards.cds.common.DelegationStatus status)
+			throws RemoteException,
+			org.cagrid.gaards.cds.stubs.types.CDSInternalFault,
+			org.cagrid.gaards.cds.stubs.types.DelegationFault,
+			org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
 		this.cds.updateDelegatedCredentialStatus(getCallerIdentity(), id,
 				status);
+	}
+
+	public org.cagrid.gaards.cds.common.DelegationDescriptor[] findCredentialsDelegatedToClient()
+			throws RemoteException,
+			org.cagrid.gaards.cds.stubs.types.CDSInternalFault,
+			org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+		DelegationRecord[] records = this.cds
+				.findCredentialsDelegatedToClient(getCallerIdentity());
+		DelegationDescriptor[] results = new DelegationDescriptor[records.length];
+		for(int i=0; i<records.length; i++){
+			results[i] = new DelegationDescriptor();
+			results[i].setDelegatedCredentialReference(getDelegatedCredentialRefernce(records[i].getDelegationIdentifier()));
+			results[i].setExpiration(records[i].getExpiration());
+			results[i].setGridIdentity(records[i].getGridIdentity());
+			results[i].setIssuedCredentialLifetime(records[i].getIssuedCredentialLifetime());
+			results[i].setIssuedCredentialPathLength(records[i].getIssuedCredentialPathLength());
+		}
+		return results;
 	}
 
 }

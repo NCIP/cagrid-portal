@@ -880,6 +880,32 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
+	
+	public void testFindCredentialsDelegatedToClient(){
+		DelegatedCredentialManager dcm = null;
+		try {
+			dcm = Utils.getDelegatedCredentialManager();
+			String alias = "jdoe";
+			GlobusCredential jdoe = ca.createCredential(alias);
+			GlobusCredential enemy = ca.createCredential("enemy");
+			DelegatedCredential dc = this.delegateAndValidate(dcm, alias,
+					jdoe.getIdentity(), null, 12, 0, 0);
+			assertEquals(0, dcm.findCredentialsDelegatedToClient(enemy.getIdentity()).length);
+			DelegationRecord[] records = dcm.findCredentialsDelegatedToClient(GRID_IDENTITY);
+			assertEquals(1, records.length);
+			assertEquals(dc.getDelegationIdentifier(), records[0].getDelegationIdentifier());
+			assertEquals(jdoe.getIdentity(), records[0].getGridIdentity());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			try {
+				dcm.clearDatabase();
+			} catch (Exception e) {
+			}
+		}
+		
+	}
 
 	private GlobusCredential getDelegatedCredentialAndValidate(
 			DelegatedCredentialManager dcm, String gridIdentity,
