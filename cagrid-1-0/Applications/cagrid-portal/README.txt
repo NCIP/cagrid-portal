@@ -3,9 +3,10 @@
 ############
 1. Requirements
 2. Installation
-3. Running
-4. Deploying Portlets
-5. Configure the site structure
+3. Deploying
+4. SSL Configuration
+5. Running
+6. Configure the site structure
 
 ################
 # Requirements #
@@ -82,8 +83,9 @@ ant liferay:deploy-portlets
 #####################
 
 The portal must use HTTPS. The installation script will take care of configuring Tomcat (in JBoss)
-appropriately. But, you must still provide/create the certificate and keystore, and then update the
-deploy.properties before running the installation script.
+appropriately. But, you must still provide/create the certificate and keystore. By default, 
+the installation script will configure Tomcat to look for the keystore at HOME/portal-liferay/portal-keystore
+And it will expect the password to be 'portal'.
 
 For further information, look here:
  - http://tomcat.apache.org/tomcat-5.5-doc/ssl-howto.html
@@ -107,10 +109,8 @@ Edit JBOSS_HOME/bin/run.sh, set the JAVA_OPTS variable as follows:
 
    JAVA_OPTS="-Xms128m -Xmx512m -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=128m -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC"
 
-Start JBoss by running: ./run.sh
-You may see some error message about a ClassCastException related to Log4J. You can ignore this.
-
-	
+Start JBoss by running: ./run.sh > portal.log &
+Then: tail -500f portal.log
 
 ################################
 # Configure the site structure #
