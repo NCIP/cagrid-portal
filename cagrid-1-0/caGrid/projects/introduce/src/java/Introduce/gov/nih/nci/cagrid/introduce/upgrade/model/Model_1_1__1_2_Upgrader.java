@@ -48,11 +48,13 @@ public class Model_1_1__1_2_Upgrader extends ModelUpgraderBase {
             if (resourceFrameworkType.equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
                 resourceFrameworkOptions.addContent(main);
                 resourceFrameworkOptions.addContent(singleton);
+                resourceFrameworkOptions.addContent(identifiable);
                 resourceFrameworkOptions.addContent(secure);
             } else if (resourceFrameworkType.equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)) {
                 resourceFrameworkOptions.addContent(custom);
             } else if (resourceFrameworkType.equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
                 resourceFrameworkOptions.addContent(singleton);
+                resourceFrameworkOptions.addContent(identifiable);
                 resourceFrameworkOptions.addContent(secure);
             } else if (resourceFrameworkType.equals("base")) {
                 resourceFrameworkOptions.addContent(identifiable);

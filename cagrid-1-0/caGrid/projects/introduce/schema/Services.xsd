@@ -59,7 +59,7 @@
 			<xs:element ref="Singleton" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="Lifetime" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="Identifiable" minOccurs="0" maxOccurs="1" />
-			<xs:element ref="Persistant" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="Persistent" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="Notification" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="Secure" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="ResourcePropertyManagement" minOccurs="0" maxOccurs="1" />
@@ -76,8 +76,8 @@
 	<xs:complexType name="Main"></xs:complexType>
 	<xs:element name="Custom" type="Custom"></xs:element>
 	<xs:complexType name="Custom"></xs:complexType>
-	<xs:element name="Persistant" type="Persistant"></xs:element>
-	<xs:complexType name="Persistant"></xs:complexType>
+	<xs:element name="Persistent" type="Persistent"></xs:element>
+	<xs:complexType name="Persistent"></xs:complexType>
 	<xs:element name="Notification" type="Notification"></xs:element>
 	<xs:complexType name="Notification"></xs:complexType>
 	<xs:element name="Secure" type="Secure"></xs:element>

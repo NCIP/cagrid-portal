@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.Identifiable;
 import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
 import gov.nih.nci.cagrid.introduce.beans.service.Main;
 import gov.nih.nci.cagrid.introduce.beans.service.Notification;
-import gov.nih.nci.cagrid.introduce.beans.service.Persistant;
+import gov.nih.nci.cagrid.introduce.beans.service.Persistent;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourcePropertyManagement;
 import gov.nih.nci.cagrid.introduce.beans.service.Secure;
@@ -84,8 +84,8 @@ public class SkeletonCreator extends Task {
                 serviceType.getResourceFrameworkOptions().setIdentifiable(new Identifiable());
             } else if (option.equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
                 serviceType.getResourceFrameworkOptions().setLifetime(new Lifetime());
-            } else if (option.equals(IntroduceConstants.INTRODUCE_PERSISTANT_RESOURCE)) {
-                serviceType.getResourceFrameworkOptions().setPersistant(new Persistant());
+            } else if (option.equals(IntroduceConstants.INTRODUCE_PERSISTENT_RESOURCE)) {
+                serviceType.getResourceFrameworkOptions().setPersistent(new Persistent());
             } else if (option.equals(IntroduceConstants.INTRODUCE_NOTIFICATION_RESOURCE)) {
                 serviceType.getResourceFrameworkOptions().setNotification(new Notification());
             } else if (option.equals(IntroduceConstants.INTRODUCE_SECURE_RESOURCE)) {

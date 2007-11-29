@@ -12,7 +12,7 @@ import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
  * @author David Ervin
  * 
  * @created Jun 12, 2007 11:46:16 AM
- * @version $Id: DataTestCaseInfo.java,v 1.2 2007-10-30 14:12:18 hastings Exp $ 
+ * @version $Id: DataTestCaseInfo.java,v 1.3 2007-11-29 18:04:59 hastings Exp $ 
  */
 public abstract class DataTestCaseInfo extends TestCaseInfo {
 
@@ -22,7 +22,7 @@ public abstract class DataTestCaseInfo extends TestCaseInfo {
     
 
     public String getResourceFrameworkType() {
-        return IntroduceConstants.INTRODUCE_MAIN_RESOURCE + "," + IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE;
+        return IntroduceConstants.INTRODUCE_MAIN_RESOURCE + "," + IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE + "," + IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE;
     }
     
     

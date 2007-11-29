@@ -1,4 +1,5 @@
 1.1 - 1.2
+-- moved constants file to common so that client and service can both use them
 -- now using jaxmejs 0.5.2 with JAXME-77 patch applied
 -- added ws-notification support as a resource framework option
 -- added support for configuring resource framework options from a list of options

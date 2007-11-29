@@ -10,6 +10,8 @@
 %>
 package <%=arguments.getService().getPackageName()%>.service;
 
+import gov.nih.nci.cagrid.introduce.servicetools.ServiceConfiguration;
+
 import org.globus.wsrf.config.ContainerConfig;
 import java.io.File;
 import javax.naming.InitialContext;
@@ -27,13 +29,13 @@ import org.globus.wsrf.Constants;
  * @created by Introduce Toolkit version <%=IntroduceEnginePropertiesManager.getIntroduceVersion()%>
  * 
  */
-public class ServiceConfiguration {
+public class <%=arguments.getService().getName()%>Configuration implements ServiceConfiguration {
 
-	public static ServiceConfiguration  configuration = null;
+	public static <%=arguments.getService().getName()%>Configuration  configuration = null;
 
-	public static ServiceConfiguration getConfiguration() throws Exception {
-		if (ServiceConfiguration.configuration != null) {
-			return ServiceConfiguration.configuration;
+	public static <%=arguments.getService().getName()%>Configuration getConfiguration() throws Exception {
+		if (<%=arguments.getService().getName()%>Configuration.configuration != null) {
+			return <%=arguments.getService().getName()%>Configuration.configuration;
 		}
 		MessageContext ctx = MessageContext.getCurrentContext();
 
@@ -42,13 +44,15 @@ public class ServiceConfiguration {
 		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
 		try {
 			javax.naming.Context initialContext = new InitialContext();
-			ServiceConfiguration.configuration = (ServiceConfiguration) initialContext.lookup(jndiName);
+			<%=arguments.getService().getName()%>Configuration.configuration = (<%=arguments.getService().getName()%>Configuration) initialContext.lookup(jndiName);
 		} catch (Exception e) {
 			throw new Exception("Unable to instantiate service configuration.", e);
 		}
 
-		return ServiceConfiguration.configuration;
+		return <%=arguments.getService().getName()%>Configuration.configuration;
 	}
+	
+	private String etcDirectoryPath;
 	
 	<%
 	if(sproperties!=null && sproperties.getProperty()!=null){
@@ -60,6 +64,14 @@ public class ServiceConfiguration {
 	}
 	}
 	%>
+	
+	public String getEtcDirectoryPath() {
+		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
+	}
+	
+	public void setEtcDirectoryPath(String etcDirectoryPath) {
+		this.etcDirectoryPath = etcDirectoryPath;
+	}
 
 	<%
 	if(sproperties!=null && sproperties.getProperty()!=null){

@@ -20,7 +20,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 		<%
 		}  else {
 		%>
-		<resource name="home" type="<%=service.getPackageName()%>.service.globus.resource.BaseResourceHome">
+		<resource name="home" type="<%=service.getPackageName()%>.service.globus.resource.<%=serviceName%>ResourceHome">
 		  <resourceParams>
         	<parameter>
          		 <name>factory</name>
@@ -49,7 +49,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 		<%
 		}
 		%>
-		<resource name="configuration" type="<%=service.getPackageName()%>.service.globus.resource.ResourceConfiguration">
+		<resource name="configuration" type="<%=service.getPackageName()%>.service.globus.resource.<%=serviceName%>ResourceConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>
@@ -64,7 +64,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 					<name>registrationTemplateFile</name>
 					<!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
 					<value>ETC-PATH/<%=service.getName()%>_registration.xml</value>
-				</parameter>			
+				</parameter>		
 			</resourceParams>
 		</resource>
 		

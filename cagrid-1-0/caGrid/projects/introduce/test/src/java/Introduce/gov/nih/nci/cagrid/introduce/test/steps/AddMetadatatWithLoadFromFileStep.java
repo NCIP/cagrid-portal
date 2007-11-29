@@ -107,7 +107,7 @@ public class AddMetadatatWithLoadFromFileStep extends BaseStep {
 				+ File.separator + "src" + File.separator + tci.getPackageDir()
 				+ File.separator + "service" + File.separator + "globus"
 				+ File.separator + "resource" + File.separator
-				+ "BaseResourceBase.java";
+				+ tci.getName() + "ResourceBase.java";
 		assertTrue("Checking that BaseResource contains the load method",
 				StepTools.methodExists(serviceInterface,
 						"loadCommonServiceMetadataFromFile"));

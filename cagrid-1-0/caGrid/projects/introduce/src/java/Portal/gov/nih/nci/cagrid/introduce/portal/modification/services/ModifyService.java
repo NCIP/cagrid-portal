@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.Custom;
 import gov.nih.nci.cagrid.introduce.beans.service.Identifiable;
 import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
 import gov.nih.nci.cagrid.introduce.beans.service.Notification;
-import gov.nih.nci.cagrid.introduce.beans.service.Persistant;
+import gov.nih.nci.cagrid.introduce.beans.service.Persistent;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourcePropertyManagement;
 import gov.nih.nci.cagrid.introduce.beans.service.Secure;
@@ -103,7 +103,7 @@ public class ModifyService extends JDialog {
 
     private JCheckBox lifetimeResource = null;
 
-    private JCheckBox singletomResource = null;
+    private JCheckBox singletonResource = null;
 
     private JCheckBox persistantResource = null;
 
@@ -388,16 +388,15 @@ public class ModifyService extends JDialog {
                     if (getCustomResource().isSelected()) {
                         service.getService().getResourceFrameworkOptions().setCustom(new Custom());
                     } else {
+                        service.getService().getResourceFrameworkOptions().setIdentifiable(new Identifiable());
                         if (getSingletomResource().isSelected()) {
                             service.getService().getResourceFrameworkOptions().setSingleton(new Singleton());
-                        } else {
-                            service.getService().getResourceFrameworkOptions().setIdentifiable(new Identifiable());
                         }
                         if (getLifetimeResource().isSelected()) {
                             service.getService().getResourceFrameworkOptions().setLifetime(new Lifetime());
                         }
                         if (getPersistantResource().isSelected()) {
-                            service.getService().getResourceFrameworkOptions().setPersistant(new Persistant());
+                            service.getService().getResourceFrameworkOptions().setPersistent(new Persistent());
                         }
                         if (getNotificationResource().isSelected()) {
                             service.getService().getResourceFrameworkOptions().setNotification(new Notification());
@@ -648,24 +647,24 @@ public class ModifyService extends JDialog {
      * @return javax.swing.JCheckBox
      */
     private JCheckBox getSingletomResource() {
-        if (singletomResource == null) {
-            singletomResource = new JCheckBox();
-            singletomResource.setText(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE);
+        if (singletonResource == null) {
+            singletonResource = new JCheckBox();
+            singletonResource.setText(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE);
             if (service.getService().getResourceFrameworkOptions().getSingleton() != null) {
-                singletomResource.setSelected(true);
+                singletonResource.setSelected(true);
             }
-            singletomResource.setHorizontalAlignment(SwingConstants.LEADING);
+            singletonResource.setHorizontalAlignment(SwingConstants.LEADING);
             if (isNew) {
-                singletomResource.addActionListener(new java.awt.event.ActionListener() {
+                singletonResource.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent e) {
                         checkResourcePropertyOptions();
                     }
                 });
             } else {
-                singletomResource.setEnabled(false);
+                singletonResource.setEnabled(false);
             }
         }
-        return singletomResource;
+        return singletonResource;
     }
 
 
@@ -677,8 +676,8 @@ public class ModifyService extends JDialog {
     private JCheckBox getPersistantResource() {
         if (persistantResource == null) {
             persistantResource = new JCheckBox();
-            persistantResource.setText(IntroduceConstants.INTRODUCE_PERSISTANT_RESOURCE);
-            if (service.getService().getResourceFrameworkOptions().getPersistant() != null) {
+            persistantResource.setText(IntroduceConstants.INTRODUCE_PERSISTENT_RESOURCE);
+            if (service.getService().getResourceFrameworkOptions().getPersistent() != null) {
                 persistantResource.setSelected(true);
             }
             if (isNew) {

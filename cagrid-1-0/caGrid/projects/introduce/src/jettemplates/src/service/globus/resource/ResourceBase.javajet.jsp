@@ -1,7 +1,8 @@
-<%@ page package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource.lifetime" class="LifetimeResourceBaseTemplate" import="gov.nih.nci.cagrid.introduce.common.*,gov.nih.nci.cagrid.introduce.codegen.utils.*,gov.nih.nci.cagrid.introduce.codegen.*,gov.nih.nci.cagrid.introduce.beans.namespace.*,java.util.*,gov.nih.nci.cagrid.introduce.beans.resource.*"%>
+<%@ page package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource.lifetime" class="LifetimeResourceBaseTemplate" import="gov.nih.nci.cagrid.introduce.common.*,gov.nih.nci.cagrid.introduce.codegen.utils.*,gov.nih.nci.cagrid.introduce.codegen.*,gov.nih.nci.cagrid.introduce.beans.namespace.*,java.util.*,gov.nih.nci.cagrid.introduce.beans.resource.*,gov.nih.nci.cagrid.introduce.beans.service.*"%>
 <%  gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation) argument; 
   	Properties properties = arguments.getIntroduceServiceProperties();
 	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
+	ServiceType baseService = arguments.getServices().getService(0);
 	String serviceName = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 	String modifiedServiceName = serviceName;
 	if(serviceName.endsWith("Service")){
@@ -16,18 +17,23 @@ import gov.nih.nci.cagrid.advertisement.AdvertisementClient;
 import gov.nih.nci.cagrid.advertisement.exceptions.UnregistrationException;
 
 import <%=arguments.getService().getPackageName()%>.common.<%=arguments.getService().getName()%>Constants;
-
+import <%=arguments.getService().getPackageName()%>.stubs.<%=arguments.getService().getName()%>ResourceProperties;
+import <%=baseService.getPackageName()%>.service.<%=baseService.getName()%>Configuration;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.xml.namespace.QName;
+
+import gov.nih.nci.cagrid.introduce.servicetools.PersistenceHelper;
+import gov.nih.nci.cagrid.introduce.servicetools.ReflectionResource;
 
 import org.apache.axis.MessageContext;
-import org.apache.axis.components.uuid.UUIDGen;
-import org.apache.axis.components.uuid.UUIDGenFactory;
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.commons.logging.Log;
@@ -44,6 +50,7 @@ import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.RemoveCallback;
 import org.globus.wsrf.PersistenceCallback;
 import org.globus.wsrf.ResourceContext;
+import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceContextException;
 import org.globus.wsrf.ResourceIdentifier;
 import org.globus.wsrf.ResourceKey;
@@ -85,55 +92,33 @@ import org.oasis.wsrf.lifetime.TerminationNotification;
  * @created by Introduce Toolkit version <%=IntroduceEnginePropertiesManager.getIntroduceVersion()%>
  * 
  */
-public abstract class BaseResourceBase implements ResourceProperties,
+public abstract class <%=arguments.getService().getName()%>ResourceBase extends ReflectionResource implements Resource
 
-<% 
-if(arguments.getService().getResourceFrameworkOptions().getIdentifiable()!=null){
-%>                                                  ResourceIdentifier,
-
-<%}
- 
-if(arguments.getService().getResourceFrameworkOptions().getLifetime()!=null){
-%>                                                  ResourceLifetime,
-
-<%}
-
-if(arguments.getService().getResourceFrameworkOptions().getPersistant()!=null){
-%>                                                  PersistenceCallback,
+<%
+if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
+%>                                                  ,PersistenceCallback
 
 <%}
 
 if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
-%>                                                  TopicListAccessor,
+%>                                                  ,TopicListAccessor
 
 <%}
 
 if(arguments.getService().getResourceFrameworkOptions().getSecure()!=null){
-%>                                                  SecureResource,
+%>                                                  ,SecureResource
 
-<%} else {
-%>                                                  Resource,
-
-<% 
-}
+<%}
 
 if(arguments.getService().getResourceFrameworkOptions().getLifetime()!=null){
-%>                                                  RemoveCallback,
+%>                                                  ,RemoveCallback
 
 <%} 
-%>                                                  Initializable {
+%>                                                  {
 
-	static final Log logger = LogFactory.getLog(BaseResourceBase.class);
-	/** the identifier of this resource... should be unique in the service */
-<% 
-if(arguments.getService().getResourceFrameworkOptions().getIdentifiable()!=null){
-%>
-    private Object id;
-	private static final UUIDGen UUIDGEN = UUIDGenFactory.getUUIDGen();
-<%} %>
+	static final Log logger = LogFactory.getLog(<%=arguments.getService().getName()%>ResourceBase.class);
 
-    private ResourcePropertySet propSet;
-	private ResourceConfiguration configuration;
+	private <%=arguments.getService().getName()%>ResourceConfiguration configuration;
 <% 
 if(arguments.getService().getResourceFrameworkOptions().getSecure()!=null){
 %>
@@ -148,14 +133,12 @@ if(arguments.getService().getResourceFrameworkOptions().getSingleton()==null){
     private AdvertisementClient registrationClient;
     
     private URL baseURL;
-
-<%    
-    if(arguments.getService().getResourceFrameworkOptions().getLifetime()!=null){
+<%
+if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 %>
-    private java.util.Calendar terminationTime;
-
-<%} %>
-
+    private PersistenceHelper helper = null;
+<%}
+%>
 <%
 if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
 %>
@@ -163,124 +146,65 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 <%}
 %>
 
+    public <%=arguments.getService().getName()%>ResourceBase() {
 <%
-	if(metadataList!=null && metadataList.getResourceProperty()!=null){
+if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 %>
-    //Define the metadata resource properties
-
-<%
-		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
-			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
-			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(arguments.getNamespaces(),metadata.getQName());
-			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);
-			if(!name.equals("terminationTime") && !name.equals("currentTime")){	
-			//define the RP
-			stringBuffer.append("\tprivate ResourceProperty "+name+"RP;\n");
-			//define the Value bean to hold the value
-			if(schemaInformation.getType().getPackageName()!=null){
-				stringBuffer.append("\tprivate "+ schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()+" "+name+"Value;\n");
-			} else {
-			    stringBuffer.append("\tprivate " + schemaInformation.getType().getClassName()+" "+name+"Value;\n");
-			}
-			}
-		}
-	}
-%>	
-
-
-<%    
-    if(arguments.getService().getResourceFrameworkOptions().getIdentifiable()!=null){
+        try {
+            helper = new gov.nih.nci.cagrid.introduce.servicetools.XmlPersistenceHelper(<%=arguments.getService().getName()%>ResourceProperties.class,<%=baseService.getName()%>Configuration.getConfiguration());
+        } catch (Exception ex) {
+            logger.warn("Unable to initialize persistence helper", ex);
+        }
+<%}
 %>
- 	/**
-	 * @see org.globus.wsrf.ResourceIdentifier#getID()
-	 */
-	public Object getID() {
-		return this.id;
-	}
-<%} %>
+    }
 
 
 	/**
 	 * @see org.globus.wsrf.jndi.Initializable#initialize()
 	 */
-	public void initialize() throws Exception {
-<%    
-    if(arguments.getService().getResourceFrameworkOptions().getIdentifiable()!=null){
-%>
-		this.id = UUIDGEN.nextUUID();
-<%} %>
+	public void initialize(Object resourceBean,
+                           QName resourceElementQName,
+                           Object id) throws ResourceException {
+                           
+        // Call the super initialize on the ReflectionResource                  
+	    super.initialize(resourceBean,resourceElementQName,id);
 <%    
     if(arguments.getService().getResourceFrameworkOptions().getSecure()!=null){
 %>
 		this.desc = null;
 <%} %>
-
-		this.propSet = new SimpleResourcePropertySet(<%=arguments.getService().getName()%>Constants.RESOURCE_PROPERTY_SET);
-		
 <%    
     if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
 %>
 		this.topicList = new SimpleTopicList(this);
+
+        // create the topics for each resource property
+        Iterator it = getResourcePropertySet().iterator();
+        while(it.hasNext()){
+            ResourceProperty prop = (ResourceProperty)it.next();
+            ResourcePropertyTopic tprop = new ResourcePropertyTopic(prop);
+            this.topicList.addTopic(tprop);
+        }
 <%} %>
-		
+
 <%    
     if(arguments.getService().getResourceFrameworkOptions().getMain()!=null){
 %>
 		// this loads the metadata from XML files if this is the main service
-		populateResourceProperty();
+		populateResourceProperties();
 <%} %>
 
-<%    
-    if(arguments.getService().getResourceFrameworkOptions().getLifetime()!=null){
-%>
-		// these are the RPs necessary for resource lifetime management
-		ResourceProperty prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.TERMINATION_TIME, this);
-<%    
-    if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
-        stringBuffer.append("\t\tprop = new ResourcePropertyTopic(prop);\n");
-		stringBuffer.append("\t\tthis.topicList.addTopic((Topic) prop);\n");
-    }
-%>
-		this.propSet.add(prop);
-		
-		// this property exposes the currenttime, as
-		// believed by the local system
-		prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.CURRENT_TIME, this);
-<%    
-    if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
-        stringBuffer.append("\t\tprop = new ResourcePropertyTopic(prop);\n");
-		stringBuffer.append("\t\tthis.topicList.addTopic((Topic) prop);\n");
-    }
-%>
-		this.propSet.add(prop);
-<%} %>
-
-
-<%	
-	if(metadataList!=null && metadataList.getResourceProperty()!=null){
-%>        // now add the metadata as resource properties
-
-<%
-		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
-			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
-			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(arguments.getNamespaces(),metadata.getQName());
-			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);
-		  if(!name.equals("terminationTime") && !name.equals("currentTime")){	
-			stringBuffer.append("\t\tthis."+name+"RP = new SimpleResourceProperty(" + arguments.getService().getName() +"Constants."+name.toUpperCase()+"_Value_RP);\n");
-			stringBuffer.append("\t\tthis."+name+"RP.add(this."+name+"Value);\n");
-			stringBuffer.append("\t\tthis.propSet.add(this."+name+"RP);\n");
-			if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
-			   stringBuffer.append("\t\tthis." +name +"RP = new ResourcePropertyTopic(this." + name + "RP);\n");
-			   stringBuffer.append("\t\tthis.topicList.addTopic((Topic) this." + name + "RP);\n");
-			}
-			stringBuffer.append("\n");
-		  }
-		}
-		}%>	
-		
 		// register the service to the index sevice
 		refreshRegistration(true);
-
+		
+<%
+if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
+%>
+        //call the first store to persist the resource
+        store();
+<%}
+%>
 	}
 	
 	
@@ -295,7 +219,7 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 <%    
     if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
 %>	
-		Topic terminationTopic = ((Topic)getResourcePropertySet().get(<%=arguments.getService().getName() %>Constants.TERMINATIONTIME_Value_RP));
+		Topic terminationTopic = ((Topic)getResourcePropertySet().get(<%=arguments.getService().getName() %>Constants.TERMINATIONTIME));
         if (terminationTopic != null) {
             TerminationNotification terminationNotification =
                 new TerminationNotification();
@@ -310,31 +234,25 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
     }
 %>	
         
-		this.terminationTime = time;
+		super.setTerminationTime(time);
+<%
+if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
+%>
+        //call the first store to persist the resource
+        try {
+            store();
+        } catch (ResourceException e) {
+            throw new RuntimeException(e);
+        }
+<%}
+%>
 	}
 
-	/**
-	 * 
-	 * 
-	 * @see org.globus.wsrf.ResourceLifetime#getTerminationTime()
-	 */
-	public Calendar getTerminationTime() {
-		return this.terminationTime;
-	}
-
-
-	/**
-	 * 
-	 * @see org.globus.wsrf.ResourceLifetime#getCurrentTime()
-	 */
-	public Calendar getCurrentTime() {
-		return Calendar.getInstance();
-	}
 <%} %>
 
 
 	<%if(metadataList!=null && metadataList.getResourceProperty()!=null){
-%>       //Getters/Setters for ResourceProperties
+%>    //Getters/Setters for ResourceProperties
 <%
 		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
 			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
@@ -343,31 +261,39 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 			if(!name.equals("terminationTime") && !name.equals("currentTime")){	
 	%>
 	
-	protected ResourceProperty get<%=CommonTools.upperCaseFirstCharacter(name)%>RP(){
-		return this.<%=name%>RP;
-	}
-	
 	<%
 	if(schemaInformation.getType().getPackageName()!=null){
 	%>
-	public <%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=CommonTools.upperCaseFirstCharacter(name)%>Value(){
-		return this.<%=name%>Value;
+	public <%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=CommonTools.upperCaseFirstCharacter(name)%>(){
+		return ((<%=arguments.getService().getName()%>ResourceProperties) getResourceBean()).get<%=CommonTools.upperCaseFirstCharacter(name)%>();
 	}
 	
-	public void set<%=CommonTools.upperCaseFirstCharacter(name)%>Value(<%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()+" "+name%> ){
-		this.<%=name%>Value=<%=name%>;
-		get<%=CommonTools.upperCaseFirstCharacter(name)%>RP().set(0,<%=name%>);
+	public void set<%=CommonTools.upperCaseFirstCharacter(name)%>(<%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()+" "+name%> ) throws ResourceException {
+		((<%=arguments.getService().getName()%>ResourceProperties) this.getResourceBean()).set<%=CommonTools.upperCaseFirstCharacter(name)%>(<%=name%>);
+<%
+if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
+%>
+        //call the first store to persist the resource
+        store();
+<%}
+%>
 	}
 	<%
 	} else {
 	%>
-	public <%=schemaInformation.getType().getClassName()%> get<%=CommonTools.upperCaseFirstCharacter(name)%>Value(){
-		return this.<%=name%>Value;
+	public <%=schemaInformation.getType().getClassName()%> get<%=CommonTools.upperCaseFirstCharacter(name)%>(){
+		return ((<%=arguments.getService().getName()%>ResourceProperties) getResourceBean()).get<%=CommonTools.upperCaseFirstCharacter(name)%>();
 	}
 	
-	public void set<%=CommonTools.upperCaseFirstCharacter(name)%>Value(<%=schemaInformation.getType().getClassName()+" _"+name%> ){
-		this.<%=name%>Value=_<%=name%>;
-		get<%=CommonTools.upperCaseFirstCharacter(name)%>RP().set(0,_<%=name%>);
+	public void set<%=CommonTools.upperCaseFirstCharacter(name)%>(<%=schemaInformation.getType().getClassName()+" "+name%> ) throws ResourceException {
+		((<%=arguments.getService().getName()%>ResourceProperties) this.getResourceBean()).set<%=CommonTools.upperCaseFirstCharacter(name)%>(<%=name%>);
+<%
+if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
+%>
+        //call the first store to persist the resource
+        store();
+<%}
+%>
 	}
 	<%
 	}
@@ -377,13 +303,6 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 	%>
 
 
-
-	/**
-	 * @see org.globus.wsrf.ResourceProperties#getResourcePropertySet()
-	 */
-	public ResourcePropertySet getResourcePropertySet() {
-		return propSet;
-	}
 	
 <%
 	if(arguments.getService().getResourceFrameworkOptions().getSecure()!=null){
@@ -407,7 +326,7 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 %>  
 
 	
-	public ResourceConfiguration getConfiguration() {
+	public <%=arguments.getService().getName()%>ResourceConfiguration getConfiguration() {
 		if (this.configuration != null) {
 			return this.configuration;
 		}
@@ -421,7 +340,7 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 		logger.debug("Will read configuration from jndi name: " + jndiName);
 		try {
 			Context initialContext = new InitialContext();
-			this.configuration = (ResourceConfiguration) initialContext.lookup(jndiName);
+			this.configuration = (<%=arguments.getService().getName()%>ResourceConfiguration) initialContext.lookup(jndiName);
 		} catch (Exception e) {
 			logger.error("when performing JNDI lookup for " + jndiName + ": " + e, e);
 		}
@@ -609,7 +528,7 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 if(arguments.getService().getResourceFrameworkOptions().getMain()!=null){
 %>
     
-    	private void populateResourceProperty() {
+    	private void populateResourceProperties() {
 	<%	if(metadataList!=null && metadataList.getResourceProperty()!=null){
 		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
 			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
@@ -633,14 +552,16 @@ if(arguments.getService().getResourceFrameworkOptions().getMain()!=null){
 				String className=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName();
 	%>
 	private void load<%=CommonTools.upperCaseFirstCharacter(name)%>FromFile() {
+      if(get<%=CommonTools.upperCaseFirstCharacter(name)%>()==null){
 		try {
 			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
 					+ getConfiguration().get<%=CommonTools.upperCaseFirstCharacter(name)%>File());
-			this.<%=name%>Value = (<%=className%>) Utils.deserializeDocument(dataFile.getAbsolutePath(),
-				<%=className%>.class);
+			((<%=arguments.getService().getName()%>ResourceProperties) this.getResourceBean()).set<%=CommonTools.upperCaseFirstCharacter(name)%>((<%=className%>) Utils.deserializeDocument(dataFile.getAbsolutePath(),
+				<%=className%>.class));
 		} catch (Exception e) {
 			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
 		}
+	  }
 	}		
 	
 	<%		}
@@ -673,23 +594,61 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
     if(arguments.getService().getResourceFrameworkOptions().getLifetime()!=null){
 %>
     public void remove() throws ResourceException {
-
-
+<%
+    if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
+%>     
+		helper.remove(this);
+<%}%>
     }
 <%}%>
 
 <%
-    if(arguments.getService().getResourceFrameworkOptions().getPersistant()!=null){
+    if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 %>
-    public void load(ResourceKey arg0) throws ResourceException, NoSuchResourceException, InvalidResourceKeyException {
-       
 
+    public void load(ResourceKey arg0) throws ResourceException, NoSuchResourceException, InvalidResourceKeyException {
+<%
+    if(arguments.getService().getResourceFrameworkOptions().getSingleton()!=null){
+%>
+        // because this is a singleton we can't use the key to load the resource
+        // because the key is null, we will use the ID
+        // this assumes the resource home will set the id before calling load()
+        Object id = null;
+        try {
+            List list = helper.list();
+            if(list!=null && list.size()>0){
+                id = list.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (id == null) {
+            throw new InvalidResourceKeyException("No persited resource available to load for singleton");
+        }
+       <%=arguments.getService().getName()%>ResourceProperties props = (<%=arguments.getService().getName()%>ResourceProperties)helper.load(<%=arguments.getService().getName()%>ResourceProperties.class, id);
+       this.initialize(props, <%=arguments.getService().getName()%>Constants.RESOURCE_PROPERTY_SET, id);
+<%} else {%>
+	   <%=arguments.getService().getName()%>ResourceProperties props = (<%=arguments.getService().getName()%>ResourceProperties)helper.load(<%=arguments.getService().getName()%>ResourceProperties.class, key.getValue());
+       this.initialize(props, <%=arguments.getService().getName()%>Constants.RESOURCE_PROPERTY_SET, key.getValue());
+<%}%>
     }
 
 
     public void store() throws ResourceException {
-        
-
+<%
+    if(arguments.getService().getResourceFrameworkOptions().getSingleton()!=null){
+%>
+        try {
+            //removing all because we only want one copy of this resource persisted
+            //because this is a singleton
+            helper.removeAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+<%
+    }
+%>
+        helper.store(this);
     }
 <%}%>
 	

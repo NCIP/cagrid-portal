@@ -22,6 +22,6 @@ import org.globus.wsrf.ResourceKey;
  * @created by Introduce Toolkit version <%=IntroduceEnginePropertiesManager.getIntroduceVersion()%>
  * 
  */
-public class <%=arguments.getService().getName()%>Resource extends BaseResourceBase {
+public class <%=arguments.getService().getName()%>Resource extends <%=arguments.getService().getName()%>ResourceBase {
 
 }

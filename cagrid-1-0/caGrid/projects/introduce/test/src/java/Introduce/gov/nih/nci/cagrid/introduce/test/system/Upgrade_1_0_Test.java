@@ -18,6 +18,8 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 import java.io.File;
 import java.util.Vector;
 
+import org.apache.log4j.PropertyConfigurator;
+
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
@@ -34,6 +36,8 @@ public class Upgrade_1_0_Test extends Story {
 
     public Upgrade_1_0_Test() {
         this.setName("Introduce Upgrades System Test");
+        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+            + "log4j.properties");
     }
     
     
@@ -93,7 +97,7 @@ public class Upgrade_1_0_Test extends Story {
         super.storyTearDown();
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(this.tci1);
         try {
-            step1.runStep();
+//            step1.runStep();
         } catch (Throwable e) {
             e.printStackTrace();
         }

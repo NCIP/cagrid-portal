@@ -13,7 +13,10 @@ import gov.nih.nci.cagrid.introduce.test.steps.ModifySimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSimpleMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 
+import java.io.File;
 import java.util.Vector;
+
+import org.apache.log4j.PropertyConfigurator;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
@@ -22,12 +25,15 @@ import junit.textui.TestRunner;
 import com.atomicobject.haste.framework.Story;
 
 public class SyncToolsSmokeTest extends Story {
+
 	private TestCaseInfo tci1;
 
 	private TestCaseInfo tci2;
 
 	public SyncToolsSmokeTest() {
 		this.setName("Introduce Codegen System Test");
+	    PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+	        + "log4j.properties");
 	}
     
     

@@ -15,7 +15,7 @@ package <%=info.getService().getPackageName()%>.service;
 <%if(info.getService().getResourceFrameworkOptions().getCustom()==null){%>
 import <%=info.getService().getPackageName()%>.service.globus.resource.<%=info.getService().getName()%>Resource;
 <%}%>
-import <%=baseService.getPackageName()%>.service.ServiceConfiguration;
+import  <%=baseService.getPackageName()%>.service.<%=baseService.getName()%>Configuration;
 
 import java.rmi.RemoteException;
 
@@ -46,16 +46,16 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 	
 	}
 	
-	public ServiceConfiguration getConfiguration() throws Exception {
-		return ServiceConfiguration.getConfiguration();
+	public <%=baseService.getName()%>Configuration getConfiguration() throws Exception {
+		return <%=baseService.getName()%>Configuration.getConfiguration();
 	}
 	
 	<%
 	if(info.getService().getResourceFrameworkOptions().getCustom()==null){
 	%>
-	public <%=info.getService().getPackageName()%>.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
+	public <%=info.getService().getPackageName()%>.service.globus.resource.<%=info.getService().getName()%>ResourceHome getResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("home");
-		return (<%=info.getService().getPackageName()%>.service.globus.resource.BaseResourceHome)resource;
+		return (<%=info.getService().getPackageName()%>.service.globus.resource.<%=info.getService().getName()%>ResourceHome)resource;
 	}
 
 	<%
@@ -68,9 +68,9 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 	  if(!tserv.getName().equals(info.getService().getName())){
 	   if(tserv.getResourceFrameworkOptions().getCustom()==null){
 	%>
-	public <%=tserv.getPackageName()%>.service.globus.resource.BaseResourceHome get<%=tserv.getName()%>ResourceHome() throws Exception {
+	public <%=tserv.getPackageName()%>.service.globus.resource.<%=tserv.getName()%>ResourceHome get<%=tserv.getName()%>ResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("<%=CommonTools.lowerCaseFirstCharacter(tserv.getName())%>Home");
-		return (<%=tserv.getPackageName()%>.service.globus.resource.BaseResourceHome)resource;
+		return (<%=tserv.getPackageName()%>.service.globus.resource.<%=tserv.getName()%>ResourceHome)resource;
 	}
 	<%
 		  } else {
@@ -103,52 +103,6 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 
 		return resourceHome;
 	}
-	
-	<%if(info.getService().getResourceFrameworkOptions().getMain()!=null && metadataList!=null && metadataList.getResourceProperty()!=null){
-		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
-			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
-			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(info.getNamespaces(),metadata.getQName());
-			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);	
-			if(!name.equals("terminationTime") && !name.equals("currentTime")) {	
-	%>
-	
-	
-	protected <%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=CommonTools.upperCaseFirstCharacter(name)%>Value(){
-		<%=serviceName%>Resource serviceBaseResource;
-		try {
-			serviceBaseResource = (<%=serviceName%>Resource)ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		return serviceBaseResource.get<%=CommonTools.upperCaseFirstCharacter(name)%>Value();
-	}
-
-	<%	}
-	}}%>	
-	
-	<%if(info.getService().getResourceFrameworkOptions().getMain()!=null){%>
-	protected Object getMetadata(QName metadataQName) {
-		<%=serviceName%>Resource serviceBaseResource = null;
-		try {
-			serviceBaseResource = (<%=serviceName%>Resource) ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		ResourcePropertySet resourcePropertySet = serviceBaseResource.getResourcePropertySet();
-		if (resourcePropertySet != null) {
-			ResourceProperty property = resourcePropertySet.get(metadataQName);
-			if (property != null) {
-				return property.get(0);
-			}
-
-		}
-		return null;
-	}
-	<%}%>
 
 
 }

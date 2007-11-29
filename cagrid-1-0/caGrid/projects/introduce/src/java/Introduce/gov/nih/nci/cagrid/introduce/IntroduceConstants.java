@@ -86,7 +86,7 @@ public abstract class IntroduceConstants {
 
     public static final String INTRODUCE_LIFETIME_RESOURCE = "lifetime";
     
-    public static final String INTRODUCE_PERSISTANT_RESOURCE = "persistant";
+    public static final String INTRODUCE_PERSISTENT_RESOURCE = "persistent";
     
     public static final String INTRODUCE_NOTIFICATION_RESOURCE = "notification";
     

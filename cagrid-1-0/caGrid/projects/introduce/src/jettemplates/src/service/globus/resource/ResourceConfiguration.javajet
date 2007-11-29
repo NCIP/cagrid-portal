@@ -20,9 +20,10 @@ package <%=arguments.getService().getPackageName()%>.service.globus.resource;
  * @created by Introduce Toolkit version <%=IntroduceEnginePropertiesManager.getIntroduceVersion()%>
  * 
  */
-public class ResourceConfiguration {
+public class <%=arguments.getService().getName()%>ResourceConfiguration {
 	private String registrationTemplateFile;
 	private boolean performRegistration;
+
 
 <%	if(metadataList!=null && metadataList.getResourceProperty()!=null){
 			for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
@@ -49,6 +50,7 @@ public class ResourceConfiguration {
 	public String getRegistrationTemplateFile() {
 		return registrationTemplateFile;
 	}
+	
 
 
 	public void setRegistrationTemplateFile(String registrationTemplateFile) {

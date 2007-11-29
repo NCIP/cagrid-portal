@@ -9,7 +9,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
    	if(serviceName.endsWith("Service")){
    		modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    	} 
-%><resource xmlns="http://wsrf.globus.org/jndi/config" name="configuration" type="<%=service.getPackageName()%>.service.globus.resource.ResourceConfiguration">
+%><resource xmlns="http://wsrf.globus.org/jndi/config" name="configuration" type="<%=service.getPackageName()%>.service.globus.resource.<%=serviceName%>ResourceConfiguration">
 			<resourceParams>
 				<parameter>
 					<name>factory</name>

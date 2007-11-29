@@ -448,7 +448,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
                         extensions.add(edt.getDisplayName());
                     }
                     createService(getDir().getText(), getService().getText(), getServicePackage().getText(),
-                        getNamespaceDomain().getText(), Arrays.asList(new String[]{IntroduceConstants.INTRODUCE_MAIN_RESOURCE,IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE}),extensions);
+                        getNamespaceDomain().getText(), Arrays.asList(new String[]{IntroduceConstants.INTRODUCE_MAIN_RESOURCE,IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE,IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE}),extensions);
 
                     try {
                         ResourceManager.setStateProperty(ResourceManager.LAST_DIRECTORY, getDir().getText());

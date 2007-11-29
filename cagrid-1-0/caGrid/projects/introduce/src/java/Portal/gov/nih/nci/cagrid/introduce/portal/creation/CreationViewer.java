@@ -433,11 +433,12 @@ public class CreationViewer extends CreationViewerBaseComponent {
                     List resourceOptions = new ArrayList();
                     resourceOptions.add(IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
                     resourceOptions.add(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE);
+                    resourceOptions.add(IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE);
                     if(getLifetimeResource().isSelected()){
                     	resourceOptions.add(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE);
                     }
                     if(getPersistantResource().isSelected()){
-                    	resourceOptions.add(IntroduceConstants.INTRODUCE_PERSISTANT_RESOURCE);
+                    	resourceOptions.add(IntroduceConstants.INTRODUCE_PERSISTENT_RESOURCE);
                     }
                     if(getResourceProperty().isSelected()){
                     	resourceOptions.add(IntroduceConstants.INTRODUCE_RESOURCEPROPETIES_RESOURCE);
@@ -1031,7 +1032,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			persistantResource = new JCheckBox();
 			persistantResource.setToolTipText("enables resources to save state to disk and recover from disk");
 			persistantResource.setSelected(false);
-			persistantResource.setText(IntroduceConstants.INTRODUCE_PERSISTANT_RESOURCE);
+			persistantResource.setText(IntroduceConstants.INTRODUCE_PERSISTENT_RESOURCE);
 			persistantResource.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					checkResourcePropertyOptions();

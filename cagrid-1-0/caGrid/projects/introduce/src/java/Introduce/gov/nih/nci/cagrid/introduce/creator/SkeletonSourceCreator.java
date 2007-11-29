@@ -132,7 +132,7 @@ public class SkeletonSourceCreator {
             ServiceConfigurationTemplate serviceConfT = new ServiceConfigurationTemplate();
             String serviceConfS = serviceConfT.generate(new SpecificServiceInformation(info, service));
             File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
-                + File.separator + "service" + File.separator + "ServiceConfiguration.java");
+                + File.separator + "service" + File.separator + service.getName() + "Configuration.java");
             FileWriter serviceConfFW = new FileWriter(serviceConfF);
             serviceConfFW.write(serviceConfS);
             serviceConfFW.close();
@@ -145,7 +145,7 @@ public class SkeletonSourceCreator {
                 service));
             File metadataConfigurationF = new File(srcDir.getAbsolutePath() + File.separator
                 + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                + File.separator + "resource" + File.separator + "ResourceConfiguration.java");
+                + File.separator + "resource" + File.separator + service.getName() + "ResourceConfiguration.java");
 
             FileWriter metadataConfigurationFW = new FileWriter(metadataConfigurationF);
             metadataConfigurationFW.write(metadataConfigurationS);
@@ -164,7 +164,7 @@ public class SkeletonSourceCreator {
             String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(info, service));
             File baseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
                 + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                + File.separator + "resource" + File.separator + "BaseResourceBase.java");
+                + File.separator + "resource" + File.separator + service.getName() + "ResourceBase.java");
 
             FileWriter baseResourceBaseFW = new FileWriter(baseResourceBaseF);
             baseResourceBaseFW.write(baseResourceBaseS);
@@ -185,7 +185,7 @@ public class SkeletonSourceCreator {
                 String baseResourceHomeS = baseResourceHomeT.generate(new SpecificServiceInformation(info, service));
                 File baseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
                     + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "BaseResourceHome.java");
+                    + File.separator + "resource" + File.separator + service.getName() + "ResourceHome.java");
 
                 FileWriter baseResourceHomeFW = new FileWriter(baseResourceHomeF);
                 baseResourceHomeFW.write(baseResourceHomeS);
@@ -197,7 +197,7 @@ public class SkeletonSourceCreator {
                 String baseResourceHomeS = baseResourceHomeT.generate(new SpecificServiceInformation(info, service));
                 File baseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
                     + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "BaseResourceHome.java");
+                    + File.separator + "resource" + File.separator + service.getName() + "ResourceHome.java");
 
                 FileWriter baseResourceHomeFW = new FileWriter(baseResourceHomeF);
                 baseResourceHomeFW.write(baseResourceHomeS);

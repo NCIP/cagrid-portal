@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.introduce.common.ProviderTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceHomeTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceTemplate;
@@ -82,15 +83,49 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
             .addIssue("Replaced the build-deploy.xml file.",
                 "Put any additions you need to the service deployment in the dev-build-deploy.xml file which has now been created.");
 
-        //clean the config
+        // clean the config
         removeResourcePropertyProvidersFromConfig();
-        //clean the client impl
+        // clean the client impl
         removeGetResourcePropertyMethods();
-        
+
         // foreach service need to replace the resource files.....
         File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
         for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
             ServiceType service = getServiceInformation().getServices().getService(i);
+
+            File oldConstantsFile = new File(srcDir.getAbsolutePath() + File.separator
+                + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                + File.separator + "resource" + File.separator + "ResourceConstants.java");
+            oldConstantsFile.delete();
+
+            ServiceConstantsTemplate resourceContanstsT = new ServiceConstantsTemplate();
+            String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
+                getServiceInformation(), service));
+            File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName()
+                + "Constants.java");
+
+            FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+            resourceContanstsFW.write(resourceContanstsS);
+            resourceContanstsFW.close();
+
+            if (service.getResourceFrameworkOptions().getMain() != null) {
+
+                File oldServiceConfF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator
+                    + "ServiceConfiguration.java");
+                oldServiceConfF.delete();
+
+                ServiceConfigurationTemplate serviceConfT = new ServiceConfigurationTemplate();
+                String serviceConfS = serviceConfT.generate(new SpecificServiceInformation(getServiceInformation(),
+                    service));
+                File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator
+                    + service.getName() + "Configuration.java");
+                FileWriter serviceConfFW = new FileWriter(serviceConfF);
+                serviceConfFW.write(serviceConfS);
+                serviceConfFW.close();
+            }
 
             if (service.getResourceFrameworkOptions().getCustom() == null) {
 
@@ -100,23 +135,27 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
                     + File.separator + "resource" + File.separator + "BaseResource.java");
                 oldbaseResourceF.delete();
 
-                ServiceConstantsTemplate resourceContanstsT = new ServiceConstantsTemplate();
-                String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
-                    getServiceInformation(), service));
-                File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-                    + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator
-                    + service.getName() + "Constants.java");
+                File oldDaseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + "BaseResourceHome.java");
+                oldDaseResourceHomeF.delete();
 
-                FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
-                resourceContanstsFW.write(resourceContanstsS);
-                resourceContanstsFW.close();
+                File oldBaseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + "BaseResourceBase.java");
+                oldBaseResourceBaseF.delete();
+
+                File oldResourceConfigurationF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + "ResourceConfiguration.java");
+                oldResourceConfigurationF.delete();
 
                 ResourceBaseTemplate baseResourceBaseT = new ResourceBaseTemplate();
                 String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(
                     getServiceInformation(), service));
                 File baseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
                     + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                    + File.separator + "resource" + File.separator + "BaseResourceBase.java");
+                    + File.separator + "resource" + File.separator + service.getName() + "ResourceBase.java");
 
                 FileWriter baseResourceBaseFW = new FileWriter(baseResourceBaseF);
                 baseResourceBaseFW.write(baseResourceBaseS);
@@ -139,7 +178,7 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
                         getServiceInformation(), service));
                     File baseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
                         + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                        + File.separator + "resource" + File.separator + "BaseResourceHome.java");
+                        + File.separator + "resource" + File.separator + service.getName() + "ResourceHome.java");
 
                     FileWriter baseResourceHomeFW = new FileWriter(baseResourceHomeF);
                     baseResourceHomeFW.write(baseResourceHomeS);
@@ -152,7 +191,7 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
                         getServiceInformation(), service));
                     File baseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
                         + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-                        + File.separator + "resource" + File.separator + "BaseResourceHome.java");
+                        + File.separator + "resource" + File.separator + service.getName() + "ResourceHome.java");
 
                     FileWriter baseResourceHomeFW = new FileWriter(baseResourceHomeF);
                     baseResourceHomeFW.write(baseResourceHomeS);
@@ -181,11 +220,34 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
         Iterator serviceI = services.iterator();
         while (serviceI.hasNext()) {
             Element service = (Element) serviceI.next();
+            String serviceName = service.getAttributeValue("name");
+            serviceName = serviceName.substring(serviceName.lastIndexOf("/") + 1);
             List resources = service.getChildren("resource", Namespace
                 .getNamespace("http://wsrf.globus.org/jndi/config"));
             Iterator resourceI = resources.iterator();
             while (resourceI.hasNext()) {
                 Element resource = (Element) resourceI.next();
+                if (resource.getAttributeValue("name").equals("home")) {
+                    String type = resource.getAttributeValue("type");
+                    if (type.endsWith(".BaseResourceHome")) {
+                        StringBuffer sb = new StringBuffer(type);
+                        sb.delete(sb.lastIndexOf(".") + 1, sb.length());
+                        sb.insert(sb.lastIndexOf(".") + 1, serviceName + "ResourceHome");
+                        resource.setAttribute("type", sb.toString());
+                    }
+                } else if (resource.getAttributeValue("name").equals("configuration")) {
+                    String type = resource.getAttributeValue("type");
+                    StringBuffer sb = new StringBuffer(type);
+                    sb.delete(sb.lastIndexOf(".") + 1, sb.length());
+                    sb.insert(sb.lastIndexOf(".") + 1, serviceName + "ResourceConfiguration");
+                    resource.setAttribute("type", sb.toString());
+                } else if (resource.getAttributeValue("name").equals("serviceconfiguration")) {
+                    String type = resource.getAttributeValue("type");
+                    StringBuffer sb = new StringBuffer(type);
+                    sb.delete(sb.lastIndexOf(".") + 1, sb.length());
+                    sb.insert(sb.lastIndexOf(".") + 1, serviceName + "ServiceConfiguration");
+                    resource.setAttribute("type", sb.toString());
+                }
                 List parameters = resource.getChild("resourceParams",
                     Namespace.getNamespace("http://wsrf.globus.org/jndi/config")).getChildren("parameter",
                     Namespace.getNamespace("http://wsrf.globus.org/jndi/config"));
@@ -201,8 +263,6 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
                         .getText().equals("resourceClass")) {
                         String oldValue = parameter.getChild("value",
                             Namespace.getNamespace("http://wsrf.globus.org/jndi/config")).getText();
-                        String serviceName = service.getAttributeValue("name");
-                        serviceName = serviceName.substring(serviceName.lastIndexOf("/") + 1);
                         String newValue = oldValue.substring(0, oldValue.lastIndexOf(".") + 1) + serviceName
                             + "Resource";
                         parameter.getChild("value", Namespace.getNamespace("http://wsrf.globus.org/jndi/config"))
@@ -430,12 +490,13 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
             getStatus().addIssue("Schema locations may not be platform independent",
                 "Please ensure that all schema locations are specified using forward slash(/) as file separators.");
         }
-    } 
-    
+    }
+
+
     private void removeResourcePropertyProvidersFromConfig() throws Exception {
         for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
             ServiceType service = getServiceInformation().getServices().getService(i);
-            ProviderTools.removeProviderFromServiceConfig(service, "GetRPProvider", getServiceInformation());  
+            ProviderTools.removeProviderFromServiceConfig(service, "GetRPProvider", getServiceInformation());
             ProviderTools.removeProviderFromServiceConfig(service, "GetMRPProvider", getServiceInformation());
             ProviderTools.removeProviderFromServiceConfig(service, "QueryRPProvider", getServiceInformation());
         }
@@ -444,7 +505,9 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
 
     private void removeGetResourcePropertyMethods() throws Exception {
         // foreach service need to replace the resource files.....
-        // File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
+        // File srcDir = new
+        // File(getServiceInformation().getBaseDirectory().getAbsolutePath() +
+        // File.separator + "src");
         for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
             ServiceType service = getServiceInformation().getServices().getService(i);
             SyncSource syncsource = new SyncSource(getServiceInformation().getBaseDirectory(), getServiceInformation(),
