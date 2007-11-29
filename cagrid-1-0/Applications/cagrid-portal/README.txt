@@ -135,6 +135,7 @@ Follow these directions to import the lar file:
 8. Repeat steps 2 through 7 for the "Private Pages" and "portaladmin-private-community.lar".   
 9. In upper right-hand corner, click drop-down list,
    then select My Places > My Community > Private Pages
+   - This time, just click on the "Private Pages" text, NOT the icon to the right.
 10. In Communities portlet, click "Communities I have joined" tab.
 11. Click the "Configure Pages" icon for the "Guest" community. 
    - That's the 3rd icon from the left. It looks two pieces of paper.
