@@ -1,8 +1,15 @@
 1.1 - 1.2
--- moved constants file to common so that client and service can both use them
--- now using jaxmejs 0.5.2 with JAXME-77 patch applied
--- added ws-notification support as a resource framework option
--- added support for configuring resource framework options from a list of options
+-- Added ability to have resources be persisted
+	-- using XMLPersistanceHelper customized from globus
+-- Renamed some service files so that they all now start with the service name
+	-- BaseResourceBase
+	-- BaseResourceHome
+	-- ResourceConfiguration
+	-- ServiceConfiguration
+-- Moved constants file to common so that client and service can both use them
+-- Now using jaxmejs 0.5.2 with JAXME-77 patch applied
+-- Added ws-notification support as a resource framework option
+-- Added support for configuring resource framework options from a list of options
 -- Fixed problems with finding first letter upper cased methods for addition and removal
 -- Fixed problems when having introduce imported methods that have no package for the return type (void)
 -- Refactored the Resource framework to be one set of templates instead of three
