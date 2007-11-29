@@ -57,7 +57,7 @@ public class DelegationUserClient {
 	 * @param policy
 	 *            The policy specifying who may request this delegated
 	 *            credential from the Credential Delegation Service
-	 * @param delegatedCredentialsLifetime
+	 * @param issuedCredentialLifetime
 	 *            The life time of the credentials delegated to entities by the
 	 *            Credential Delegation Service on you behalf.
 	 * @return A reference to the delegated credential, this reference may be
@@ -69,11 +69,11 @@ public class DelegationUserClient {
 	 * @throws URI.MalformedURIException
 	 */
 	public DelegatedCredentialReference delegateCredential(
-			DelegationPolicy policy, ProxyLifetime delegatedCredentialsLifetime)
+			DelegationPolicy policy, ProxyLifetime issuedCredentialLifetime)
 			throws RemoteException, CDSInternalFault, DelegationFault,
 			PermissionDeniedFault, URI.MalformedURIException {
 		return this.delegateCredential(null, policy,
-				delegatedCredentialsLifetime);
+				issuedCredentialLifetime);
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class DelegationUserClient {
 	 * @param policy
 	 *            The policy specifying who may request this delegated
 	 *            credential from the Credential Delegation Service
-	 * @param delegatedCredentialsLifetime
+	 * @param issuedCredentialLifetime
 	 *            The life time of the credentials delegated to entities by the
 	 *            Credential Delegation Service on you behalf.
 	 * @return A reference to the delegated credential, this reference may be
@@ -101,11 +101,11 @@ public class DelegationUserClient {
 	 */
 	public DelegatedCredentialReference delegateCredential(
 			ProxyLifetime delegationLifetime, DelegationPolicy policy,
-			ProxyLifetime delegatedCredentialsLifetime) throws RemoteException,
+			ProxyLifetime issuedCredentialLifetime) throws RemoteException,
 			CDSInternalFault, DelegationFault, PermissionDeniedFault,
 			URI.MalformedURIException {
 		return this.delegateCredential(delegationLifetime, 1, policy,
-				delegatedCredentialsLifetime, 0,
+				issuedCredentialLifetime, 0,
 				ClientConstants.DEFAULT_KEY_SIZE);
 	}
 
@@ -124,17 +124,16 @@ public class DelegationUserClient {
 	 * @param policy
 	 *            The policy specifying who may request this delegated
 	 *            credential from the Credential Delegation Service
-	 * @param delegatedCredentialsLifetime
+	 * @param issuedCredentialLifetime
 	 *            The life time of the credentials delegated to entities by the
 	 *            Credential Delegation Service on you behalf.
-	 * @param delegatedCredentialsPathLength
+	 * @param issuedCredentialPathLength
 	 *            The path length of the credentials delegated to entities by
 	 *            the Credential Delegation Service on you behalf. A path length
 	 *            of 0 means that entities that can you obtain a delegated
 	 *            credential cannot further delegate it.
-	 * @param delegatedCredentialsKeyLength
-	 *            The key length of the credentials delegated to entities by the
-	 *            Credential Delegation Service.
+	 * @param keyLength
+	 *            The key length of the signing credential.
 	 * @return A reference to the delegated credential, this reference may be
 	 *         used by entites to request a credential.
 	 * @throws RemoteException
@@ -146,17 +145,17 @@ public class DelegationUserClient {
 	public DelegatedCredentialReference delegateCredential(
 			ProxyLifetime delegationLifetime, int delegationPathLength,
 			DelegationPolicy policy,
-			ProxyLifetime delegatedCredentialsLifetime,
-			int delegatedCredentialsPathLength,
-			int delegatedCredentialsKeyLength) throws RemoteException,
+			ProxyLifetime issuedCredentialLifetime,
+			int issuedCredentialPathLength,
+			int keyLength) throws RemoteException,
 			CDSInternalFault, DelegationFault, PermissionDeniedFault,
 			URI.MalformedURIException {
 
 		DelegationRequest req = new DelegationRequest();
 		req.setDelegationPolicy(policy);
-		req.setDelegatedProxyLifetime(delegatedCredentialsLifetime);
-		req.setDelegationPathLength(delegatedCredentialsPathLength);
-		req.setKeyLength(delegatedCredentialsKeyLength);
+		req.setIssuedCredentialLifetime(issuedCredentialLifetime);
+		req.setIssuedCredentialPathLength(issuedCredentialPathLength);
+		req.setKeyLength(keyLength);
 		DelegationSigningRequest dsr = client.initiateDelegation(req);
 
 		int hours = 0;

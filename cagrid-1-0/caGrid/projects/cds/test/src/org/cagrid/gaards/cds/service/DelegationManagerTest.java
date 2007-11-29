@@ -303,12 +303,12 @@ public class DelegationManagerTest extends TestCase {
 		DelegationRequest req = new DelegationRequest();
 		req.setDelegationPolicy(policy);
 		req.setKeyLength(Constants.KEY_LENGTH);
-		req.setDelegationPathLength(Constants.DELEGATION_PATH_LENGTH);
+		req.setIssuedCredentialPathLength(Constants.DELEGATION_PATH_LENGTH);
 		ProxyLifetime lifetime = new ProxyLifetime();
 		lifetime.setHours(0);
 		lifetime.setMinutes(0);
 		lifetime.setSeconds(DEFAULT_PROXY_LIFETIME_SECONDS);
-		req.setDelegatedProxyLifetime(lifetime);
+		req.setIssuedCredentialLifetime(lifetime);
 		return req;
 	}
 

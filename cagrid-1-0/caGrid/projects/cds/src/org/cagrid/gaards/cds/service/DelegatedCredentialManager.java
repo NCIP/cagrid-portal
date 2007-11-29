@@ -124,14 +124,14 @@ public class DelegatedCredentialManager {
 					.getDelegationFault(Errors.INVALID_KEY_LENGTH_SPECIFIED);
 		}
 
-		if (request.getDelegatedProxyLifetime() == null) {
+		if (request.getIssuedCredentialLifetime() == null) {
 			throw Errors
 					.getDelegationFault(Errors.PROXY_LIFETIME_NOT_SPECIFIED);
 		}
 
-		if ((request.getDelegationPathLength() < 0)
+		if ((request.getIssuedCredentialPathLength() < 0)
 				|| (this.proxyPolicy.getMaxDelegationPathLength() < request
-						.getDelegationPathLength())) {
+						.getIssuedCredentialPathLength())) {
 			throw Errors
 					.getDelegationFault(Errors.INVALID_DELEGATION_PATH_LENGTH_SPECIFIED);
 		}
@@ -153,10 +153,10 @@ public class DelegatedCredentialManager {
 			s.setLong(4, new Date().getTime());
 			s.setLong(5, 0);
 			s.setLong(6, 0);
-			s.setInt(7, request.getDelegationPathLength());
-			s.setInt(8, request.getDelegatedProxyLifetime().getHours());
-			s.setInt(9, request.getDelegatedProxyLifetime().getMinutes());
-			s.setInt(10, request.getDelegatedProxyLifetime().getSeconds());
+			s.setInt(7, request.getIssuedCredentialPathLength());
+			s.setInt(8, request.getIssuedCredentialLifetime().getHours());
+			s.setInt(9, request.getIssuedCredentialLifetime().getMinutes());
+			s.setInt(10, request.getIssuedCredentialLifetime().getSeconds());
 			s.execute();
 			s.close();
 			delegationId = db.getLastAutoId(c);
@@ -233,13 +233,13 @@ public class DelegatedCredentialManager {
 					r.setExpiration(rs.getLong(EXPIRATION));
 					r.setGridIdentity(rs.getString(GRID_IDENTITY));
 					r
-							.setDelegationPathLength(rs
+							.setIssuedCredentialPathLength(rs
 									.getInt(DELEGATION_PATH_LENGTH));
 					ProxyLifetime lifetime = new ProxyLifetime();
 					lifetime.setHours(rs.getInt(PROXY_LIFETIME_HOURS));
 					lifetime.setMinutes(rs.getInt(PROXY_LIFETIME_MINUTES));
 					lifetime.setSeconds(rs.getInt(PROXY_LIFETIME_SECONDS));
-					r.setDelegatedProxyLifetime(lifetime);
+					r.setIssuedCredentialLifetime(lifetime);
 				}
 				rs.close();
 				s.close();
@@ -336,7 +336,7 @@ public class DelegatedCredentialManager {
 			try {
 				if (CertUtil.isProxy(BouncyCastleUtil
 						.getCertificateType(certs[0]))) {
-					int currLength = r.getDelegationPathLength();
+					int currLength = r.getIssuedCredentialPathLength();
 					for (int i = 0; i < certs.length; i++) {
 						if (CertUtil.isProxy(BouncyCastleUtil
 								.getCertificateType(certs[i]))) {
@@ -509,11 +509,11 @@ public class DelegatedCredentialManager {
 				int minutes = 0;
 				int seconds = 0;
 				Calendar c = new GregorianCalendar();
-				c.add(Calendar.HOUR_OF_DAY, r.getDelegatedProxyLifetime()
+				c.add(Calendar.HOUR_OF_DAY, r.getIssuedCredentialLifetime()
 						.getHours());
-				c.add(Calendar.MINUTE, r.getDelegatedProxyLifetime()
+				c.add(Calendar.MINUTE, r.getIssuedCredentialLifetime()
 						.getMinutes());
-				c.add(Calendar.SECOND, r.getDelegatedProxyLifetime()
+				c.add(Calendar.SECOND, r.getIssuedCredentialLifetime()
 						.getSeconds()
 						+ PROXY_EXPIRATION_BUFFER_SECONDS);
 
@@ -529,16 +529,16 @@ public class DelegatedCredentialManager {
 								.getDelegationFault(Errors.SIGNING_CREDENTIAL_ABOUT_EXPIRE);
 					}
 				} else {
-					hours = r.getDelegatedProxyLifetime().getHours();
-					minutes = r.getDelegatedProxyLifetime().getMinutes();
-					seconds = r.getDelegatedProxyLifetime().getSeconds();
+					hours = r.getIssuedCredentialLifetime().getHours();
+					minutes = r.getIssuedCredentialLifetime().getMinutes();
+					seconds = r.getIssuedCredentialLifetime().getSeconds();
 				}
 
 				X509Certificate[] proxy = ProxyCreator
 						.createImpersonationProxyCertificate(certs,
 								this.keyManager.getPrivateKey(String.valueOf(id
 										.getDelegationId())), pkey, hours,
-								minutes, seconds, r.getDelegationPathLength());
+								minutes, seconds, r.getIssuedCredentialPathLength());
 				return Utils.toCertificateChain(proxy);
 			} catch (DelegationFault f) {
 				throw f;

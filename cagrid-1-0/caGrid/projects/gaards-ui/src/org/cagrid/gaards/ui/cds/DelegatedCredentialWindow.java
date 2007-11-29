@@ -149,15 +149,15 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 		getInitiated().setText(getDateString(record.getDateInitiated()));
 		getApproved().setText(getDateString(record.getDateApproved()));
 		getExpires().setText(getDateString(record.getExpiration()));
-		String str = record.getDelegatedProxyLifetime().getHours()
+		String str = record.getIssuedCredentialLifetime().getHours()
 				+ " hour(s), "
-				+ record.getDelegatedProxyLifetime().getMinutes()
+				+ record.getIssuedCredentialLifetime().getMinutes()
 				+ " minute(s) "
-				+ record.getDelegatedProxyLifetime().getSeconds()
+				+ record.getIssuedCredentialLifetime().getSeconds()
 				+ " second(s)";
 		getLifetime().setText(str);
 		getIssuedCredentialPathLength().setText(
-				String.valueOf(record.getDelegationPathLength()));
+				String.valueOf(record.getIssuedCredentialPathLength()));
 		getStatus().setSelectedItem(record.getDelegationStatus());
 		getCertificateChainTable().setCertificateChain(
 				record.getCertificateChain());

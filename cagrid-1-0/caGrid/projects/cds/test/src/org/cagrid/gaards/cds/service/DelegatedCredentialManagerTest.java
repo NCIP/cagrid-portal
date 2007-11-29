@@ -95,7 +95,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				DelegationRequest req = new DelegationRequest();
 				req.setDelegationPolicy(new InvalidDelegationPolicy());
 				req.setKeyLength(Constants.KEY_LENGTH);
-				req.setDelegationPathLength(Constants.DELEGATION_PATH_LENGTH);
+				req.setIssuedCredentialPathLength(Constants.DELEGATION_PATH_LENGTH);
 				dcm.initiateDelegation("some user", req);
 				fail("Should not be able to delegate a credential with an invalid delegation policy.");
 			} catch (InvalidPolicyFault e) {
@@ -118,7 +118,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			dcm = Utils.getDelegatedCredentialManager();
 			try {
 				DelegationRequest req = getSimpleDelegationRequest();
-				req.setDelegatedProxyLifetime(null);
+				req.setIssuedCredentialLifetime(null);
 				dcm.initiateDelegation("some user", req);
 				fail("Should not be able to delegate a credential without a delegate proxy lifetime specified.");
 			} catch (DelegationFault e) {
@@ -172,7 +172,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			dcm = Utils.getDelegatedCredentialManager();
 
 			DelegationRequest req = getSimpleDelegationRequest();
-			req.setDelegationPathLength(1);
+			req.setIssuedCredentialPathLength(1);
 
 			try {
 				dcm.initiateDelegation("some user", req);
@@ -911,12 +911,12 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		DelegationRequest req = new DelegationRequest();
 		req.setDelegationPolicy(getSimplePolicy());
 		req.setKeyLength(Constants.KEY_LENGTH);
-		req.setDelegationPathLength(Constants.DELEGATION_PATH_LENGTH);
+		req.setIssuedCredentialPathLength(Constants.DELEGATION_PATH_LENGTH);
 		ProxyLifetime lifetime = new ProxyLifetime();
 		lifetime.setHours(0);
 		lifetime.setMinutes(0);
 		lifetime.setSeconds(DEFAULT_PROXY_LIFETIME_SECONDS);
-		req.setDelegatedProxyLifetime(lifetime);
+		req.setIssuedCredentialLifetime(lifetime);
 		return req;
 	}
 
@@ -976,8 +976,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		assertEquals(0, r.getExpiration());
 		assertEquals(DelegationStatus.Pending, r.getDelegationStatus());
 		assertTrue((0 < r.getDateInitiated()));
-		assertEquals(request.getDelegationPathLength(), r
-				.getDelegationPathLength());
+		assertEquals(request.getIssuedCredentialPathLength(), r
+				.getIssuedCredentialPathLength());
 		assertEquals(request.getDelegationPolicy(), r.getDelegationPolicy());
 		assertNotNull(r.getCertificateChain());
 		assertNull(r.getCertificateChain().getX509Certificate());
@@ -1031,7 +1031,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				proxy).getTime(), r2.getExpiration());
 		assertEquals(DelegationStatus.Approved, r2.getDelegationStatus());
 		assertEquals(r.getDateInitiated(), r2.getDateInitiated());
-		assertEquals(r.getDelegationPathLength(), r2.getDelegationPathLength());
+		assertEquals(r.getIssuedCredentialPathLength(), r2.getIssuedCredentialPathLength());
 		assertEquals(request.getDelegationPolicy(), r2.getDelegationPolicy());
 		X509Certificate[] chain = org.cagrid.gaards.cds.common.Utils
 				.toCertificateArray(r2.getCertificateChain());
