@@ -5,6 +5,9 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
+import org.apache.axis.message.MessageElement;
+import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
+
 public class Utils {
 
 	public static Date getEarliestExpiration(X509Certificate[] certs) {
@@ -16,6 +19,17 @@ public class Utils {
 			}
 		}
 		return earliestTime;
+	}
+
+	public static DelegationIdentifier getDelegationIdentifier(
+			DelegatedCredentialReference ref) {
+		MessageElement e = (MessageElement) ref.getEndpointReference()
+				.getProperties().get(0);
+		MessageElement c = (MessageElement) e.getChildElements().next();
+		String s = c.getValue();
+		DelegationIdentifier id = new DelegationIdentifier();
+		id.setDelegationId(Long.valueOf(s).longValue());
+		return id;
 	}
 
 	public static org.cagrid.gaards.cds.common.X509Certificate convertCertificate(

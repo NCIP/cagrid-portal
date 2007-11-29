@@ -15,6 +15,7 @@ import gov.nci.nih.cagrid.tests.core.steps.ProxyActiveStep;
 import gov.nci.nih.cagrid.tests.core.steps.SleepStep;
 import gov.nci.nih.cagrid.tests.core.steps.cds.CleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.cds.DelegateCredentialStep;
+import gov.nci.nih.cagrid.tests.core.steps.cds.FindCredentialsDelegatedToClientStep;
 import gov.nci.nih.cagrid.tests.core.steps.cds.FindMyDelegatedCredentialsStep;
 import gov.nci.nih.cagrid.tests.core.steps.cds.GetDelegatedCredentialFailStep;
 import gov.nci.nih.cagrid.tests.core.steps.cds.GetDelegatedCredentialStep;
@@ -181,6 +182,14 @@ public class DelegateCredentialTest extends Story {
 		steps.add(new GetDelegatedCredentialFailStep(delegateAdmin, donatello,
 				Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL));
 
+		// Test finding credentials delegated to a client
+		List<DelegationIdentifierReference> clientExpected = new ArrayList<DelegationIdentifierReference>();
+		clientExpected.add(delegateAdmin);
+		steps.add(new FindCredentialsDelegatedToClientStep(cdsURL, admin));
+		steps.add(new FindCredentialsDelegatedToClientStep(cdsURL, leonardo,
+				delegateAdmin));
+		steps.add(new FindCredentialsDelegatedToClientStep(cdsURL, donatello));
+
 		// /Now we want to disable the credential and test
 		SuspendDelegatedCredentialStep suspendAdmin = new SuspendDelegatedCredentialStep(
 				delegateAdmin, admin);
@@ -196,6 +205,11 @@ public class DelegateCredentialTest extends Story {
 		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, suspended,
 				delegateAdmin));
 
+		// Test finding credentials delegated to a client
+		steps.add(new FindCredentialsDelegatedToClientStep(cdsURL, admin));
+		steps.add(new FindCredentialsDelegatedToClientStep(cdsURL, leonardo));
+		steps.add(new FindCredentialsDelegatedToClientStep(cdsURL, donatello));
+
 		ProxyLifetime delegationLifetime = new ProxyLifetime();
 		delegationLifetime.setSeconds(SHORT_LIFETIME_SECONDS);
 		ProxyLifetime delegatedCredentialsLifetime = new ProxyLifetime();
@@ -205,6 +219,12 @@ public class DelegateCredentialTest extends Story {
 				cdsURL, admin, allowedParties, delegationLifetime,
 				delegatedCredentialsLifetime);
 		steps.add(delegateAdminShort);
+
+		// Test finding credentials delegated to a client
+		steps.add(new FindCredentialsDelegatedToClientStep(cdsURL, admin));
+		steps.add(new FindCredentialsDelegatedToClientStep(cdsURL, leonardo,
+				delegateAdminShort));
+		steps.add(new FindCredentialsDelegatedToClientStep(cdsURL, donatello));
 
 		GetDelegatedCredentialStep adminShort = new GetDelegatedCredentialStep(
 				delegateAdminShort, leonardo);
@@ -227,6 +247,9 @@ public class DelegateCredentialTest extends Story {
 				delegateAdmin));
 		steps.add(new FindMyDelegatedCredentialsStep(cdsURL, admin, expired,
 				delegateAdminShort));
+		steps.add(new FindCredentialsDelegatedToClientStep(cdsURL, admin));
+		steps.add(new FindCredentialsDelegatedToClientStep(cdsURL, leonardo));
+		steps.add(new FindCredentialsDelegatedToClientStep(cdsURL, donatello));
 		return steps;
 	}
 
