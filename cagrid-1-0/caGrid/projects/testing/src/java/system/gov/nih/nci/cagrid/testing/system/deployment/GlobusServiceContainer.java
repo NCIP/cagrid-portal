@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.xml.rpc.ServiceException;
 
@@ -25,6 +26,7 @@ import org.apache.axis.client.Stub;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.globus.axis.gsi.GSIConstants;
 import org.globus.wsrf.impl.security.authorization.NoAuthorization;
@@ -116,8 +118,8 @@ public class GlobusServiceContainer extends ServiceContainer {
         Process deployProcess = null;
         try {
             deployProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment, serviceDir);
-            new StreamGobbler(deployProcess.getInputStream(), StreamGobbler.TYPE_OUT).start();
-            new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_OUT).start();
+            new StreamGobbler(deployProcess.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
+            new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
             deployProcess.waitFor();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking deploy process: " + ex.getMessage(), ex);
@@ -193,16 +195,10 @@ public class GlobusServiceContainer extends ServiceContainer {
         boolean success = false;
         // create a Future to get the boolean success status
         FutureTask<Boolean> future = new FutureTask<Boolean>(new Callable<Boolean>() {
-            public Boolean call() {
-                boolean result = false;
-                try {
-                    shutdownProc.waitFor();
-                } catch (InterruptedException e) {
-                    result = false;
-                    e.printStackTrace();
-                }
+            public Boolean call() throws Exception {
+                shutdownProc.waitFor();
                 // return true if the status is 0
-                result = shutdownProc.exitValue() == 0;
+                boolean result = shutdownProc.exitValue() == 0;
                 shutdownProc.destroy();
                 return Boolean.valueOf(result);
             }
@@ -219,17 +215,19 @@ public class GlobusServiceContainer extends ServiceContainer {
                 wait = getProperties().getMaxShutdownWaitTime().intValue();
             }
             success = future.get(wait, TimeUnit.SECONDS).booleanValue();
+        } catch (TimeoutException ex) {
+            throw new ContainerException("Timeout while shutting down globus", ex);
         } catch (Exception ex) {
             throw new ContainerException("Error shutting down globus: " + ex.getMessage(), ex);
         } finally {
-            future.cancel(true);
+            // close down all stop operations
+            future.cancel(true);            
+            executor.shutdownNow();
+
+            // destroy globus process for saftey
+            this.globusProcess.destroy();
+            this.globusProcess = null;
         }
-
-        executor.shutdownNow();
-
-        // destroy globus process for saftey
-        this.globusProcess.destroy();
-        this.globusProcess = null;
 
         if (!success) {
             throw new ContainerException("Unknown error shutting down globus");
@@ -388,8 +386,8 @@ public class GlobusServiceContainer extends ServiceContainer {
 
         // start the process
         Process proc = Runtime.getRuntime().exec(cmd.toArray(new String[0]), editedEnvironment, containerDir);
-        new StreamGobbler(proc.getInputStream(), StreamGobbler.TYPE_OUT).start();
-        new StreamGobbler(proc.getErrorStream(), StreamGobbler.TYPE_ERR).start();
+        new StreamGobbler(proc.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
+        new StreamGobbler(proc.getErrorStream(), StreamGobbler.TYPE_ERR, LOG, Level.DEBUG).start();
         return proc;
     }
 
