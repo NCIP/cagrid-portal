@@ -21,5 +21,9 @@ public class GAARDSLookAndFeel extends LookAndFeel {
 	public final static ImageIcon getCertificateActionIcon() {
 		return IconUtils.loadIcon("/contact-new.png");
 	}
+	
+	public final static ImageIcon getRefreshIcon() {
+		return IconUtils.loadIcon("/view-refresh.png");
+	}
 
 }

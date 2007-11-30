@@ -62,6 +62,18 @@
                     </dimensions>
                 </component>
                 
+                <component>
+                    <title>Get Delegated Credential</title>
+                    <description>Allows one obtain a credential delegated to them.</description>
+                    <classname>org.cagrid.gaards.ui.cds.GetDelegatedCredentialWindow</classname>
+                    <icon>/delegated-credential.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                        <width>800</width>
+                        <height>300</height>
+                    </dimensions>
+                </component>
+                
                  <component>
                     <title>My Delegated Credentials</title>
                     <description>Allows one to view the credentials they delegated.</description>

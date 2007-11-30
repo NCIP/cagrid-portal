@@ -21,6 +21,7 @@ GSBT - Globus Service Build Tools
 	<property name="dorian.images" value="${images.dir}/dorian" />
 	<property name="gts.images" value="${images.dir}/gts" />
 	<property name="gridgrouper.images" value="${images.dir}/gridgrouper" />
+	<property name="cds.images" value="${images.dir}/cds" />
 	<property name="ext.dir" value="ext" />
 	<property name="ext.lib.dir" value="${ext.dir}/lib" />
 	<property name="etc.dir" value="etc" />
@@ -95,6 +96,7 @@ GSBT - Globus Service Build Tools
 			<pathelement location="${dorian.images}" />
 			<pathelement location="${gts.images}" />
 			<pathelement location="${gridgrouper.images}" />
+			<pathelement location="${cds.images}" />
 		</path>
 	</target>
 
@@ -126,6 +128,10 @@ GSBT - Globus Service Build Tools
 			</fileset>
 
 			<fileset dir="${gridgrouper.images}">
+				<include name="**" />
+			</fileset>
+
+			<fileset dir="${cds.images}">
 				<include name="**" />
 			</fileset>
 

@@ -293,5 +293,4 @@ public class DelegationUserClient {
 		}
 		return list;
 	}
-
 }

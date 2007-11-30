@@ -14,8 +14,14 @@ import org.cagrid.grape.utils.IconUtils;
  *          Exp $
  */
 public class CDSLookAndFeel extends GAARDSLookAndFeel {
+	
+	
 	public final static ImageIcon getDelegateCredentialIcon() {
 		return IconUtils.loadIcon("/delegate-credential.png");
+	}
+	
+	public final static ImageIcon getDelegatedCredentialIcon() {
+		return IconUtils.loadIcon("/delegated-credential.png");
 	}
 	
 	public final static ImageIcon getDelegateCredentialsIcon() {
