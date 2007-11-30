@@ -48,6 +48,13 @@
 		id="editChannelController"
 		class="gov.nih.nci.cagrid.portal.portlet.news.EditChannelController"
 		autowire="byName">
+		
+		<property name="validators">
+			<list>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.news.NewsChannelValidator" autowire="byName"/>
+			</list>
+		</property>
+		
 		<property name="commandName" value="channel"/>
 		<property name="commandClass" value="gov.nih.nci.cagrid.portal.domain.news.NewsChannel"/>
 		<property name="sessionForm" value="true"/>
@@ -79,6 +86,13 @@
 		id="editItemController"
 		class="gov.nih.nci.cagrid.portal.portlet.news.EditItemController"
 		autowire="byName">
+		
+		<property name="validators">
+			<list>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.news.NewsItemValidator" autowire="byName"/>
+			</list>
+		</property>
+		
 		<property name="commandName" value="item"/>
 		<property name="commandClass" value="gov.nih.nci.cagrid.portal.domain.news.NewsItem"/>
 		<property name="sessionForm" value="true"/>

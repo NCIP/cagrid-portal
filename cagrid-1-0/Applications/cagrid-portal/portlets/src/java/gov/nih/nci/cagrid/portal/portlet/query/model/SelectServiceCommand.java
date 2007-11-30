@@ -9,8 +9,7 @@ package gov.nih.nci.cagrid.portal.portlet.query.model;
  */
 public class SelectServiceCommand {
 	
-	//TODO: Should provide custom validator and editor to conver to EPR.
-	private String serviceUrl;
+	private String dataServiceUrl;
 
 	/**
 	 * 
@@ -19,12 +18,12 @@ public class SelectServiceCommand {
 
 	}
 
-	public String getServiceUrl() {
-		return serviceUrl;
+	public String getDataServiceUrl() {
+		return dataServiceUrl;
 	}
 
-	public void setServiceUrl(String serviceUrl) {
-		this.serviceUrl = serviceUrl;
+	public void setDataServiceUrl(String serviceUrl) {
+		this.dataServiceUrl = serviceUrl;
 	}
 
 }

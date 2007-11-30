@@ -29,5 +29,7 @@ public abstract class PortletConstants {
 
 	public static final String INVALID_UML_CLASS = "invalidUmlClass";
 
+	public static final String MAX_ACTIVE_QUERIES_MSG = "maxActiveQueries";
+
 	
 }

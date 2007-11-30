@@ -65,7 +65,7 @@ public class GridServiceDao extends AbstractDao<GridService> {
 		GridService svc = null;
 
 		List svcs = getHibernateTemplate().find(
-				"from GridService where url = '" + url + "'");
+				"from GridService where url = ?", new Object[]{url});
 
 		if (svcs.size() > 1) {
 			throw new NonUniqueResultException("Found " + svcs.size()

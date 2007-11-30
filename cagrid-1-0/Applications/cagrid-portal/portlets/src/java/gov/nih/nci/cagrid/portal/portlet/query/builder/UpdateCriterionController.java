@@ -13,6 +13,7 @@ import javax.portlet.PortletRequest;
 
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.validation.BindException;
+import org.springframework.web.portlet.bind.PortletRequestDataBinder;
 
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean;
@@ -23,6 +24,7 @@ import gov.nih.nci.cagrid.portal.portlet.tree.NodeState;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeNode;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import gov.nih.nci.cagrid.portal.portlet.util.XSSFilterEditor;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -61,6 +63,12 @@ public class UpdateCriterionController extends
 	protected Object getCommand(PortletRequest request)
     	throws Exception{
 		return getQueryModel().getSelectedCriterion();
+	}
+	
+	protected void initBinder(PortletRequest request,
+			PortletRequestDataBinder binder) throws Exception {
+		binder.registerCustomEditor(String.class, "value",
+				new XSSFilterEditor());
 	}
     
 

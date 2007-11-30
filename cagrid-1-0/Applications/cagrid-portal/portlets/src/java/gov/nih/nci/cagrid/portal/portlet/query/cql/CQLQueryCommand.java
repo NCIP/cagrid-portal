@@ -3,13 +3,14 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
+import gov.nih.nci.cagrid.portal.portlet.query.model.SelectServiceCommand;
+
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
-public class CQLQueryCommand {
+public class CQLQueryCommand extends SelectServiceCommand {
 	
-	private String dataServiceUrl;
 	private String cqlQuery;
 	private String dataServiceUrlError;
 	private String cqlQueryError;
@@ -24,7 +25,6 @@ public class CQLQueryCommand {
 	}
 	
 	public void clear(){
-		setDataServiceUrl(null);
 		setCqlQuery(null);
 		setDataServiceUrlError(null);
 		setCqlQueryError(null);
@@ -54,14 +54,6 @@ public class CQLQueryCommand {
 
 	public void setCqlQueryError(String cqlQueryError) {
 		this.cqlQueryError = cqlQueryError;
-	}
-
-	public String getDataServiceUrl() {
-		return dataServiceUrl;
-	}
-
-	public void setDataServiceUrl(String dataServiceUrl) {
-		this.dataServiceUrl = dataServiceUrl;
 	}
 
 	public String getDataServiceUrlError() {

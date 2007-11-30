@@ -25,7 +25,8 @@
 		<portlet:param name="channelId" value="${channelId}"/>
 	</c:if>
 </portlet:renderURL>
-<a href="<c:out value="${backUrl}"/>">&lt; Back to items list</a><br/>
+<a href="<c:out value="${backUrl}"/>" style="text-decoration:none;">&lt;&lt; Back to items list</a><br/>
+<br/>
 <c:choose>
 	<c:when test="${empty item}">
 		<c:out value="${confirmMessage}"/>
@@ -34,10 +35,10 @@
 		
 		<c:choose>
 			<c:when test="${empty item.id}">
-				New Item:
+				<b>New Item</b>
 			</c:when>
 			<c:otherwise>
-				Editing Item: <c:out value="${item.title}"/>
+				<b>Editing Item:</b> <c:out value="${item.title}"/>
 			</c:otherwise>
 		</c:choose>
 		<br/>
@@ -47,47 +48,55 @@
 		<form:form name="${formName}" action="${action}" commandName="item">
 			<table>
 				<tr>
-					<td>Title:</td>
+					<td style="padding-right:5px; text-align:right" valign="top">Title:</td>
 					<td>
-						<form:input path="title"/><br/>
+						<form:input path="title" size="100"/><br/>
 						<span style="color:red"><form:errors path="title"/></span>
 					</td>
 				</tr>
 				<tr>
-					<td>Link:</td>
+					<td style="padding-right:5px; text-align:right" valign="top">Link:</td>
 					<td>
-						<form:input path="link"/><br/>
+						<form:input path="link" size="100"/><br/>
 						<span style="color:red"><form:errors path="link"/></span>
 					</td>
 				</tr>
 				<tr>
-					<td>Width:</td>
+					<td style="padding-right:5px; text-align:right" valign="top">Width:</td>
 					<td>
-						<form:input path="width"/><br/>
+						<form:input path="width" size="10"/><br/>
 						<span style="color:red"><form:errors path="width"/></span>
 					</td>
 				</tr>
 				<tr>
-					<td>Height:</td>
+					<td style="padding-right:5px; text-align:right" valign="top">Height:</td>
 					<td>
-						<form:input path="height"/><br/>
+						<form:input path="height" size="10"/><br/>
 						<span style="color:red"><form:errors path="height"/></span>
 					</td>
 				</tr>
 				<tr>
-					<td>Description:</td>
+					<td style="padding-right:5px; text-align:right" valign="top">Description:</td>
 					<td>
-						<form:textarea path="description"/><br/>
+						<form:textarea path="description" cols="97"/><br/>
 						<span style="color:red"><form:errors path="description"/></span>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="padding-top:5px;">
+						<c:if test="${!empty item.id}">
+							<input type="button" value="Delete" onclick="<portlet:namespace/>doEditItemOp('delete')"/>
+						</c:if>
+						<input type="button" value="Save" onclick="<portlet:namespace/>doEditItemOp('save')"/>
 					</td>
 				</tr>
 			</table>
 			<input type="hidden" name="editOp" value="save"/>
 			<input type="hidden" name="operation" value="editItem"/>
 			<c:if test="${!empty item.id}">
-				<input type="button" value="Delete" onclick="<portlet:namespace/>doEditItemOp('delete')"/>
+				<input type="hidden" name="itemId" value="<c:out value="${item.id}"/>"/>
 			</c:if>
-			<input type="button" value="Save" onclick="<portlet:namespace/>doEditItemOp('save')"/>
 		</form:form>
 		<br/>
 	</c:otherwise>

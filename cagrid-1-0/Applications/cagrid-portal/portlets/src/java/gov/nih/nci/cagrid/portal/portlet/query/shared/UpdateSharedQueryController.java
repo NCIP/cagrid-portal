@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.portal.domain.dataservice.SharedCQLQuery;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand;
+import gov.nih.nci.cagrid.portal.portlet.util.XSSFilterEditor;
 import gov.nih.nci.cagrid.portal.util.PortalUtils;
 
 import javax.portlet.ActionRequest;
@@ -22,6 +23,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
 
 import org.springframework.validation.BindException;
+import org.springframework.web.portlet.bind.PortletRequestDataBinder;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -57,6 +59,14 @@ public class UpdateSharedQueryController extends AbstractQueryActionController {
 	public UpdateSharedQueryController(Class commandClass, String commandName) {
 		super(commandClass, commandName);
 
+	}
+
+	protected void initBinder(PortletRequest request,
+			PortletRequestDataBinder binder) throws Exception {
+		binder.registerCustomEditor(String.class, "query.name",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "query.description",
+				new XSSFilterEditor());
 	}
 
 	/*
@@ -120,7 +130,8 @@ public class UpdateSharedQueryController extends AbstractQueryActionController {
 			portalUser = getPortalUserDao().getById(portalUser.getId());
 			portalUser.getSharedQueries().remove(bean.getQuery());
 			bean.getQuery().setOwner(null);
-			SharedCQLQuery query = getSharedCqlQueryDao().getById(bean.getQuery().getId());
+			SharedCQLQuery query = getSharedCqlQueryDao().getById(
+					bean.getQuery().getId());
 			getSharedCqlQueryDao().delete(query);
 			getPortalUserDao().save(portalUser);
 			response.setRenderParameter("confirmMessage",

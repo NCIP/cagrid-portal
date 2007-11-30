@@ -4,8 +4,8 @@
 	<portlet:param name="operation" value="editChannel"/>
 	<portlet:param name="channelId" value="${itemsListBean.channel.id}"/>
 </portlet:renderURL>
-<a href="<c:out value="${backUrl}"/>">&lt; Back to channel</a><br/>
-
+<a href="<c:out value="${backUrl}"/>" style="text-decoration:none;">&lt;&lt; Back to channel</a><br/>
+<br/>
 <portlet:renderURL var="addItemUrl">
 	<portlet:param name="operation" value="editItem"/>
 	<portlet:param name="channelId" value="${itemsListBean.channel.id}"/>
@@ -16,8 +16,8 @@
 		No news items to display.
 	</c:when>
 	<c:otherwise>
-		Items for Channel: <c:out value="${itemsListBean.channel.title}"/><br/>
-		Displaying <c:out value="${itemsListBean.scroller.index + 1}"/> to <c:out value="${itemsListBean.scroller.endIndex}"/>.<br/>
+		<b>Items for Channel:</b> <c:out value="${itemsListBean.channel.title}"/><br/>
+		Displaying <c:out value="${itemsListBean.scroller.index + 1}"/> to <c:out value="${itemsListBean.scroller.endIndex}"/> of <c:out value="${fn:length(itemsListBean.scroller.objects)}"/> items.<br/>
 		<c:set var="scroller" value="${itemsListBean.scroller}"/>
 		<c:set var="scrollOperation" value="scrollItems"/>
 		<%@ include file="/WEB-INF/jsp/include/scroll_controls.jspf" %>

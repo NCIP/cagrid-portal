@@ -44,7 +44,7 @@ public class ApplicationValidator implements Validator {
 	public void validate(Object obj, Errors errors) {
 		for (String requiredField : getRequiredFields()) {
 			ValidationUtils.rejectIfEmptyOrWhitespace(errors, requiredField,
-					"field.required." + requiredField, "Missing required field.");
+					"field.required.register." + requiredField, "Missing required field.");
 		}
 	}
 

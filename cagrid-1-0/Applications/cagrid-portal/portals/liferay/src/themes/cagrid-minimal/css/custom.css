@@ -1,8 +1,17 @@
 /* This file allows you to override default styles in one central location for easier upgrade and maintenance. */
 
+#wrapper {
+	margin: 0 auto;
+	width: 1000px;
+}
+
 #banner {
-	background: #475B82;
-	height: 79px;
+	/*background: #475B82;*/
+	/*filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=1,startColorStr=#e6eef5,endColorStr=#2e3257);*/
+	background-image:url(../images/blue_white_grad.gif);
+	background-repeat:repeat-y;
+	background-position:left;
+	height: 83px;
 	position: relative;
 	margin: 0 auto;
 	border: 0;
@@ -45,6 +54,39 @@ a:link.footerMenuLink,a:visited.footerMenuLink,a:active.footerMenuLink{ /* for t
 }
 a:hover.footerMenuLink{
 	color:#FFFFFF; /* constant: white */
+}
+
+.selected_tab
+{
+background-color:#f0e6c1;
+background-image:url(../images/selected_tab_bg.gif);
+background-repeat:repeat-x;
+border-color:#e7dcb4;
+border:thin;
+border-style:solid;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:12px;
+font-style:normal;
+font-weight:400;
+}
+.normal_tab
+{
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:12px;
+font-style:normal;
+color:#FFFFFF;
+}
+.normal_tab_pipe
+{
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:17px;
+font-style:normal;
+color:#FFFFFF;
+}
+.border_dash{
+border-right:1px;
+border-right-color:#FFFFFF;
+border-right-style:dotted;
 }
 
 #navigation {

@@ -23,7 +23,7 @@
 			<br/>
 			<i>[<fmt:formatDate value="${item.pubDate}" type="both"/>]</i>
 			<br/>
-			<c:out value="${item.description}"/><br/>
+			<c:out value="${item.description}" escapeXml="false"/><br/>
 			<hr/>
 		</c:forEach>
 	</div>

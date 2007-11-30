@@ -5,22 +5,25 @@ package gov.nih.nci.cagrid.portal.portlet.query.model;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletRequest;
 
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.validation.BindException;
+import org.springframework.web.portlet.bind.PortletRequestDataBinder;
 
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryModel;
+import gov.nih.nci.cagrid.portal.portlet.util.XSSFilterEditor;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
+ * 
  */
 public class SelectServiceController extends
 		AbstractActionResponseHandlerCommandController {
-	
+
 	private GridServiceDao gridServiceDao;
 	private QueryModel queryModel;
 
@@ -48,39 +51,35 @@ public class SelectServiceController extends
 
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController#doHandleAction(javax.portlet.ActionRequest, javax.portlet.ActionResponse, java.lang.Object, org.springframework.validation.BindException)
+	protected void initBinder(PortletRequest request,
+			PortletRequestDataBinder binder) throws Exception {
+		binder.registerCustomEditor(String.class, "dataServiceUrl",
+				new XSSFilterEditor());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController#doHandleAction(javax.portlet.ActionRequest,
+	 *      javax.portlet.ActionResponse, java.lang.Object,
+	 *      org.springframework.validation.BindException)
 	 */
 	@Override
 	protected void doHandleAction(ActionRequest request,
 			ActionResponse response, Object obj, BindException errors)
 			throws Exception {
+		if (errors.hasErrors()) {
+			return;
+		}
+
 		SelectServiceCommand command = (SelectServiceCommand) obj;
-		GridDataService selectedService = null;
-		try {
-			selectedService = (GridDataService) getGridServiceDao().getByUrl(
-					command.getServiceUrl());
-		} catch (ClassCastException ex) {
-			errors.rejectValue("serviceUrl", "error.serviceUrl.notDataService",
-					new String[] { command.getServiceUrl() }, "The URL "
-							+ command.getServiceUrl()
-							+ " does not point to a data service.");
-			logger.error(ex);
-			return;
-		}
-		if (selectedService == null) {
-			errors.rejectValue("serviceUrl", "error.serviceUrl.notFound",
-					new String[] { command.getServiceUrl() },
-					"No service found for URL " + command.getServiceUrl());
-			logger.error("No service found for URL " + command.getServiceUrl());
-			return;
-		}
-		if(selectedService != null){
-			logger.debug("Selecting service " + selectedService.getUrl());
-			getQueryModel().setSelectedService(selectedService);
-		}
+
+		GridDataService selectedService = (GridDataService) getGridServiceDao()
+				.getByUrl(command.getDataServiceUrl());
+		logger.debug("Selecting service " + selectedService.getUrl());
+		getQueryModel().setSelectedService(selectedService);
 	}
-	
+
 	@Required
 	public GridServiceDao getGridServiceDao() {
 		return gridServiceDao;

@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.portal.portlet.util.XSSFilterEditor;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -54,6 +55,22 @@ public class RegisterController extends SimpleFormController implements Initiali
 				new StateCodeEditor());
 		binder.registerCustomEditor(CountryCode.class, "country",
 				new CountryCodeEditor());
+		binder.registerCustomEditor(String.class, "userId",
+				new XSSFilterEditor());	
+		binder.registerCustomEditor(String.class, "email",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "firstName",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "lastName",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "organization",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "address",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "city",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "phoneNumber",
+				new XSSFilterEditor());
 	}
 
 	protected Object formBackingObject(PortletRequest request) throws Exception {

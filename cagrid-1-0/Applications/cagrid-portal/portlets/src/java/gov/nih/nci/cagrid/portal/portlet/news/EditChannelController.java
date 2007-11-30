@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.portal.portlet.news;
 
 import gov.nih.nci.cagrid.portal.dao.news.NewsChannelDao;
 import gov.nih.nci.cagrid.portal.domain.news.NewsChannel;
+import gov.nih.nci.cagrid.portal.portlet.util.XSSFilterEditor;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -14,6 +15,7 @@ import javax.portlet.RenderResponse;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.portlet.ModelAndView;
+import org.springframework.web.portlet.bind.PortletRequestDataBinder;
 import org.springframework.web.portlet.mvc.SimpleFormController;
 
 /**
@@ -28,7 +30,17 @@ public class EditChannelController extends SimpleFormController {
 	 * 
 	 */
 	public EditChannelController() {
-
+		setRenderParameters(new String[]{"operation"});
+	}
+	
+	protected void initBinder(PortletRequest request,
+			PortletRequestDataBinder binder) throws Exception {
+		binder.registerCustomEditor(String.class, "title",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "link",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "description",
+				new XSSFilterEditor());
 	}
 
 	protected Object formBackingObject(PortletRequest request) throws Exception {

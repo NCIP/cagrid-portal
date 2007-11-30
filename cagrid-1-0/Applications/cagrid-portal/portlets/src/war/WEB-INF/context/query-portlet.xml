@@ -24,6 +24,13 @@
 		id="selectServiceController"
 		class="gov.nih.nci.cagrid.portal.portlet.query.model.SelectServiceController"
 		autowire="byName">
+		
+		<property name="validators">
+			<list>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.query.model.SelectServiceCommandValidator" autowire="byName"/>
+			</list>
+		</property>
+		
 		<property name="commandName" value="selectServiceCommand"/>
 		<property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.model.SelectServiceCommand"/>
 		<property name="actionResponseHandler">

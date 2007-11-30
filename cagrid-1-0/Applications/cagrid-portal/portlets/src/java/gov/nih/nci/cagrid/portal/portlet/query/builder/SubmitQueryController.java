@@ -11,17 +11,21 @@ import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQuery;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
+import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstanceState;
 import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.PortletConstants;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand;
+import gov.nih.nci.cagrid.portal.portlet.util.XSSFilterEditor;
 import gov.nih.nci.cagrid.portal.util.PortalUtils;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletRequest;
 
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.validation.BindException;
+import org.springframework.web.portlet.bind.PortletRequestDataBinder;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -34,6 +38,7 @@ public class SubmitQueryController extends AbstractQueryActionController {
 	private PortalUserDao portalUserDao;
 	private CQLQueryDao cqlQueryDao;
 	private CQLQueryInstanceDao cqlQueryInstanceDao;
+	private int maxActiveQueries = 3;
 
 	/**
 	 * 
@@ -57,6 +62,12 @@ public class SubmitQueryController extends AbstractQueryActionController {
 	public SubmitQueryController(Class commandClass, String commandName) {
 		super(commandClass, commandName);
 
+	}
+
+	protected void initBinder(PortletRequest request,
+			PortletRequestDataBinder binder) throws Exception {
+		binder.registerCustomEditor(String.class, "dataServiceUrl",
+				new XSSFilterEditor());
 	}
 
 	/*
@@ -87,6 +98,30 @@ public class SubmitQueryController extends AbstractQueryActionController {
 					"Error looking up GridDataService '"
 							+ command.getDataServiceUrl() + "': "
 							+ ex.getMessage(), ex);
+		}
+
+		// Make sure the user has not exceeded the maximum
+		// number of simultaneous queries.
+		int active = 0;
+		for (CQLQueryInstance instance : getQueryModel()
+				.getSubmittedCqlQueries()) {
+			if (QueryInstanceState.RUNNING.equals(instance.getState())
+					|| QueryInstanceState.SCHEDULED.equals(instance.getState())
+					|| QueryInstanceState.UNSCHEDULED.equals(instance
+							.getState())) {
+				active++;
+			}
+		}
+		if (active >= getMaxActiveQueries()) {
+			errors
+					.reject(
+							PortletConstants.MAX_ACTIVE_QUERIES_MSG,
+							new String[] { String.valueOf(getMaxActiveQueries()) },
+							"You have reached the maximum number of" +
+							" simultaneous queries: " + getMaxActiveQueries() + 
+							". Please cancel a" +
+							" running query, or wait for one to complete.");
+			return;
 		}
 
 		try {
@@ -168,6 +203,14 @@ public class SubmitQueryController extends AbstractQueryActionController {
 
 	public void setCqlQueryInstanceDao(CQLQueryInstanceDao cqlQueryInstanceDao) {
 		this.cqlQueryInstanceDao = cqlQueryInstanceDao;
+	}
+
+	public int getMaxActiveQueries() {
+		return maxActiveQueries;
+	}
+
+	public void setMaxActiveQueries(int maxActiveQueries) {
+		this.maxActiveQueries = maxActiveQueries;
 	}
 
 }

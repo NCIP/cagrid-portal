@@ -9,14 +9,14 @@
 <input type="hidden" name="operation" value="selectService"/>
 <table>
 	<tr>
-		<td>
-			Service URL:
+		<td style="padding-right:5px;  text-align:right" valign="top">
+			<b>Service URL:</b>
 		</td>
-		<td>
-			<form:input path="serviceUrl"/><br/>
-			<span style="color:red"><form:errors path="serviceUrl"/></span>
+		<td style="padding-right:5px;  text-align:right" valign="top">
+			<form:input path="dataServiceUrl" size="50" maxlength="1000"/><br/>
+			<span style="color:red"><form:errors path="dataServiceUrl"/></span>
 		</td>
-		<td>
+		<td valign="top">
 			<input type="submit" value="Select"/>
 		</td>
 	</tr>

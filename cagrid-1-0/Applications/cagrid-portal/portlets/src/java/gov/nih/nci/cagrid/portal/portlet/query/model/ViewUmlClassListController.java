@@ -39,7 +39,7 @@ public class ViewUmlClassListController extends AbstractViewObjectController {
 			String url = getQueryModel().getSelectedService()
 			.getUrl();
 			command
-					.setServiceUrl(url);
+					.setDataServiceUrl(url);
 			logger.debug("selected service " + url);
 		}else{
 			logger.debug("no service selected");

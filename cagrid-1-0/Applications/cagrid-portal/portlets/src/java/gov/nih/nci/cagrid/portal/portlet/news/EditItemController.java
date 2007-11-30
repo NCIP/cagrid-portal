@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.portal.dao.news.NewsChannelDao;
 import gov.nih.nci.cagrid.portal.dao.news.NewsItemDao;
 import gov.nih.nci.cagrid.portal.domain.news.NewsChannel;
 import gov.nih.nci.cagrid.portal.domain.news.NewsItem;
+import gov.nih.nci.cagrid.portal.portlet.util.XSSFilterEditor;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -16,6 +17,7 @@ import javax.portlet.RenderResponse;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.portlet.ModelAndView;
+import org.springframework.web.portlet.bind.PortletRequestDataBinder;
 import org.springframework.web.portlet.mvc.SimpleFormController;
 
 /**
@@ -31,8 +33,10 @@ public class EditItemController extends SimpleFormController {
 	 * 
 	 */
 	public EditItemController() {
-
+		setRenderParameters(new String[]{"operation", "itemId"});
 	}
+	
+	
 	
 	protected Object formBackingObject(PortletRequest request) throws Exception {
 		NewsItem item = new NewsItem();
@@ -48,6 +52,20 @@ public class EditItemController extends SimpleFormController {
 			item.setChannel(channel);
 		}
 		return item;
+	}
+	
+	protected void initBinder(PortletRequest request,
+			PortletRequestDataBinder binder) throws Exception {
+		binder.registerCustomEditor(String.class, "title",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "link",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "description",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "height",
+				new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "width",
+				new XSSFilterEditor());
 	}
 	
 	protected void onSubmitAction(ActionRequest request,

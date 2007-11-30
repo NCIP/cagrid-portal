@@ -37,9 +37,9 @@ public class SharedQueryBeanValidator implements Validator {
 	 */
 	public void validate(Object obj, Errors errors) {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "query.name",
-				"field.required.name", null, "A name is required.");
+				"field.required.sharedQuery.name", null, "A name is required.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "query.description",
-				"field.required.description", null,
+				"field.required.sharedQuery.description", null,
 				"A description is required.");
 	}
 
