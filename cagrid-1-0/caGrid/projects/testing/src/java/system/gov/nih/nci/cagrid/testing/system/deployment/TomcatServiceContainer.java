@@ -25,6 +25,7 @@ import org.apache.axis.client.Stub;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.globus.axis.gsi.GSIConstants;
 import org.globus.wsrf.impl.security.authorization.NoAuthorization;
@@ -38,7 +39,8 @@ import com.counter.service.CounterServiceAddressingLocator;
 
 
 /**
- * TomcatServiceContainer Service container implementation for tomcat
+ * TomcatServiceContainer 
+ * Service container implementation for tomcat
  * 
  * @author David Ervin
  * @created Oct 19, 2007 12:01:22 PM
@@ -49,11 +51,8 @@ public class TomcatServiceContainer extends ServiceContainer {
 
     private static final Logger LOG = Logger.getLogger(ServiceContainer.class);
 
-    public static final int CONNECT_ATTEMPTS = 10;
-    public static final int CONNECT_ATTEPMT_TIMEOUT = 1; // secconds between
-    // attempts
-    public static final int SHUTDOWN_WAIT_TIME = 10; // secconds
-    public static final int DEPLOY_WAIT_TIME = 120; // secconds
+    public static final int DEFAULT_STARTUP_WAIT_TIME = 10; // seconds
+    public static final int DEFAULT_SHUTDOWN_WAIT_TIME = 10; // seconds
 
     public static final String ENV_ANT_HOME = "ANT_HOME";
     public static final String ENV_CATALINA_HOME = "CATALINA_HOME";
@@ -108,22 +107,16 @@ public class TomcatServiceContainer extends ServiceContainer {
         Process deployProcess = null;
         try {
             deployProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment, serviceDir);
-            new StreamGobbler(deployProcess.getInputStream(), StreamGobbler.TYPE_OUT).start();
-            new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_OUT).start();
+            new StreamGobbler(deployProcess.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
+            new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking deploy process: " + ex.getMessage(), ex);
         }
 
         final Process finalDeploy = deployProcess;
         FutureTask<Boolean> future = new FutureTask<Boolean>(new Callable<Boolean>() {
-            public Boolean call() {
-                try {
-                    LOG.debug("Waiting for deploy process");
-                    finalDeploy.waitFor();
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                    return Boolean.FALSE;
-                }
+            public Boolean call() throws Exception {
+                LOG.debug("Waiting for deploy process");
                 return Boolean.valueOf(finalDeploy.exitValue() == 0);
             }
         });
@@ -133,16 +126,16 @@ public class TomcatServiceContainer extends ServiceContainer {
 
         boolean success = false;
         try {
-            success = future.get(DEPLOY_WAIT_TIME, TimeUnit.SECONDS).booleanValue();
+            success = future.get().booleanValue();
         } catch (Exception ex) {
             throw new ContainerException("Error deploying service: " + ex.getMessage(), ex);
         } finally {
+            // clean up deploy process and futures
             future.cancel(true);
             deployProcess.destroy();
+            executor.shutdownNow();
+            deployProcess = null;
         }
-
-        executor.shutdownNow();
-        deployProcess = null;
 
         if (!success) {
             throw new ContainerException("Deployment ant command failed: " + deployProcess.exitValue());
@@ -184,8 +177,8 @@ public class TomcatServiceContainer extends ServiceContainer {
         try {
             shutdownProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment,
                 getProperties().getContainerDirectory());
-            new StreamGobbler(shutdownProcess.getInputStream(), StreamGobbler.TYPE_OUT).start();
-            new StreamGobbler(shutdownProcess.getErrorStream(), StreamGobbler.TYPE_OUT).start();
+            new StreamGobbler(shutdownProcess.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
+            new StreamGobbler(shutdownProcess.getErrorStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking startup process: " + ex.getMessage(), ex);
         }
@@ -193,20 +186,13 @@ public class TomcatServiceContainer extends ServiceContainer {
         final Process finalShutdownProcess = shutdownProcess;
 
         FutureTask<Boolean> future = new FutureTask<Boolean>(new Callable<Boolean>() {
-            public Boolean call() {
-                try {
-                    LOG.debug("Waiting for shutdown process");
-                    finalShutdownProcess.waitFor();
-                    LOG.debug("Waiting for catalina process");
-                    catalinaProcess.waitFor();
-                    LOG.debug("Done waiting");
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                    return Boolean.FALSE;
-                } finally {
-                    finalShutdownProcess.destroy();
-                    catalinaProcess.destroy();
-                }
+            public Boolean call() throws Exception {
+                LOG.debug("Waiting for shutdown process");
+                finalShutdownProcess.waitFor();
+                LOG.debug("Waiting for catalina process");
+                catalinaProcess.waitFor();
+                LOG.debug("Done waiting");
+                
                 return Boolean.valueOf(finalShutdownProcess.exitValue() == 0);
             }
         });
@@ -216,17 +202,21 @@ public class TomcatServiceContainer extends ServiceContainer {
 
         boolean success = false;
         try {
-            success = future.get(SHUTDOWN_WAIT_TIME, TimeUnit.SECONDS).booleanValue();
+            int wait = DEFAULT_SHUTDOWN_WAIT_TIME;
+            if (getProperties().getMaxShutdownWaitTime() != null) {
+                wait = getProperties().getMaxShutdownWaitTime().intValue();
+            }
+            success = future.get(wait, TimeUnit.SECONDS).booleanValue();
         } catch (Exception ex) {
             throw new ContainerException("Error shutting down container: " + ex.getMessage(), ex);
         } finally {
             LOG.debug("Shutdown task complete, destroying processes");
             future.cancel(true);
+            executor.shutdownNow();
             shutdownProcess.destroy();
             catalinaProcess.destroy();
         }
 
-        executor.shutdownNow();
 
         shutdownProcess = null;
         catalinaProcess = null;
@@ -271,8 +261,8 @@ public class TomcatServiceContainer extends ServiceContainer {
         try {
             catalinaProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment,
                 getProperties().getContainerDirectory());
-            new StreamGobbler(catalinaProcess.getInputStream(), StreamGobbler.TYPE_OUT).start();
-            new StreamGobbler(catalinaProcess.getErrorStream(), StreamGobbler.TYPE_OUT).start();
+            new StreamGobbler(catalinaProcess.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
+            new StreamGobbler(catalinaProcess.getErrorStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking startup process: " + ex.getMessage(), ex);
         }
@@ -281,20 +271,24 @@ public class TomcatServiceContainer extends ServiceContainer {
         Exception testException = null;
         sleep(2000);
         boolean running = false;
-        for (int i = 0; !running && i < CONNECT_ATTEMPTS; i++) {
+        int wait = DEFAULT_STARTUP_WAIT_TIME;
+        if (getProperties().getMaxStartupWaitTime() != null) {
+            wait = getProperties().getMaxStartupWaitTime().intValue();
+        }
+        for (int i = 0; !running && i < wait; i++) {
             LOG.debug("Connection attempt " + (i + 1));
             try {
                 running = isGlobusRunningCounter();
             } catch (Exception ex) {
                 testException = ex;
             }
-            sleep(CONNECT_ATTEPMT_TIMEOUT * 1000L);
+            sleep(1000);
         }
         if (!running) {
             if (testException != null) {
                 throw new ContainerException("Error starting Tomcat: " + testException.getMessage(), testException);
             } else {
-                throw new ContainerException("Tomcat non responsive after " + CONNECT_ATTEMPTS + " attempts to connect");
+                throw new ContainerException("Tomcat non responsive after " + wait + " seconds attempting to connect");
             }
         }
     }
@@ -369,13 +363,13 @@ public class TomcatServiceContainer extends ServiceContainer {
 
     private void setServerPort() throws Exception {
         Integer port = getProperties().getPortPreference().getPort();
-        File serverConfigFile = new File(getProperties().getContainerDirectory(), "conf" + File.separator
-            + "server.xml");
+        File serverConfigFile = new File(getProperties().getContainerDirectory(), 
+            "conf" + File.separator + "server.xml");
         Element configRoot = XMLUtilities.fileNameToDocument(serverConfigFile.getAbsolutePath()).getRootElement();
         for (Element serviceElement : (List<Element>) configRoot.getChildren("Service", configRoot.getNamespace())) {
             if (serviceElement.getAttributeValue("name").equals("Catalina")) {
-                for (Element connectorElement : (List<Element>) serviceElement.getChildren("Connector", configRoot
-                    .getNamespace())) {
+                for (Element connectorElement : (List<Element>) serviceElement.getChildren(
+                    "Connector", configRoot.getNamespace())) {
                     boolean connectorFound = false;
                     if (getProperties().isSecure()) {
                         if (connectorElement.getAttributeValue("port").equals("8443")

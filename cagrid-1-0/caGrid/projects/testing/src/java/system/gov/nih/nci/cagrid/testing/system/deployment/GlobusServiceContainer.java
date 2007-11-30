@@ -41,7 +41,8 @@ import com.counter.service.CounterServiceAddressingLocator;
 
 
 /**
- * GlobusServiceContainer Container for globus 4.0.3
+ * GlobusServiceContainer 
+ * Service container implementation for globus 4.0.3
  * 
  * @author David Ervin
  * @created Oct 12, 2007 12:01:17 PM
@@ -274,8 +275,7 @@ public class GlobusServiceContainer extends ServiceContainer {
             wait = getProperties().getMaxStartupWaitTime().intValue();
         }
         for (int i = 0; !running && i < wait; i++) {
-            System.out.println("Connection attempt " + i);
-            LOG.debug("Connection attempt " + i);
+            LOG.debug("Connection attempt " + (i + 1));
             try {
                 running = isGlobusRunningCounter();
             } catch (Exception ex) {
