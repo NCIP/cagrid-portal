@@ -180,6 +180,8 @@
             </fileset>
         	<fileset dir="${style.src.dir}">
         		<include name="**/*.java"/>
+				<!-- include the gif for the SDK logo -->
+        		<include name="**/*.gif"/>
         	</fileset>
         </jar>
     </target>
