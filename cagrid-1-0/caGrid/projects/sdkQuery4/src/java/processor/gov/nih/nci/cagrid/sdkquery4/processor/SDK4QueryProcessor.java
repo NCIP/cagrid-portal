@@ -29,18 +29,23 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Oct 3, 2007 10:34:55 AM
- * @version $Id: SDK4QueryProcessor.java,v 1.1 2007-10-03 19:01:14 dervin Exp $ 
+ * @version $Id: SDK4QueryProcessor.java,v 1.2 2007-11-30 19:57:59 dervin Exp $ 
  */
 public class SDK4QueryProcessor extends CQLQueryProcessor {
     // configuration property keys
-    public static final String USE_LOCAL_CLIENT = "useLocalApi";
-    public static final String REMOTE_URL = "remoteServiceUrl";
-    public static final String CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
+    public static final String PROPERTY_APPLICATION_NAME = "applicationName";
+    public static final String PROPERTY_BEANS_JAR_NAME = "beansJarName";
+    public static final String PROPERTY_USE_LOCAL_API = "useLocalApiFlag";
+    public static final String PROPERTY_ORM_JAR_NAME = "ormJarName"; // only for local
+    public static final String PROPERTY_HOST_NAME = "applicationHostName"; // only for remote
+    public static final String PROPERTY_HOST_PORT = "applicationHostPort"; // only for remote
+    public static final String PROPERTY_CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
     
     // default values for properties
-    public static final String DEFAULT_USE_LOCAL_CLIENT = String.valueOf(false);
+    public static final String DEFAULT_USE_LOCAL_API = String.valueOf(false);
     public static final String DEFAULT_CASE_INSENSITIVE_QUERYING = String.valueOf(false);
     
+    // Log4J logger
     private static final Logger LOG = Logger.getLogger(SDK4QueryProcessor.class);
         
     public SDK4QueryProcessor() {
@@ -93,9 +98,13 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     
     public Properties getRequiredParameters() {
         Properties props = new Properties();
-        props.setProperty(USE_LOCAL_CLIENT, DEFAULT_USE_LOCAL_CLIENT);
-        props.setProperty(CASE_INSENSITIVE_QUERYING, DEFAULT_CASE_INSENSITIVE_QUERYING);
-        props.setProperty(REMOTE_URL, "");
+        props.setProperty(PROPERTY_APPLICATION_NAME, "");
+        props.setProperty(PROPERTY_BEANS_JAR_NAME, "");
+        props.setProperty(PROPERTY_CASE_INSENSITIVE_QUERYING, DEFAULT_CASE_INSENSITIVE_QUERYING);
+        props.setProperty(PROPERTY_HOST_NAME, "");
+        props.setProperty(PROPERTY_HOST_PORT, "");
+        props.setProperty(PROPERTY_ORM_JAR_NAME, "");
+        props.setProperty(PROPERTY_USE_LOCAL_API, DEFAULT_USE_LOCAL_API);
         return props;
     }
     
@@ -106,7 +115,7 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     
     
     public String getConfigurationUiClassname() {
-        // TODO: do I even need this?
+        // TODO: return the UI classname once the class is written
         return null;
     }
     
@@ -114,13 +123,13 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     private ApplicationService getApplicationService() throws QueryProcessingException {
         ApplicationService service = null;
         
-        String useLocalValue = getConfiguredParameters().getProperty(USE_LOCAL_CLIENT);
+        String useLocalValue = getConfiguredParameters().getProperty(PROPERTY_USE_LOCAL_API);
         boolean useLocal = Boolean.parseBoolean(useLocalValue);
         try {
             if (useLocal) {
                 service = ApplicationServiceProvider.getApplicationService();
             } else {
-                String url = getConfiguredParameters().getProperty(REMOTE_URL);
+                String url = getRemoteApplicationUrl();
                 service = ApplicationServiceProvider.getApplicationServiceFromUrl(url);
             }
         } catch (Exception ex) {
@@ -131,8 +140,24 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     }
     
     
+    private String getRemoteApplicationUrl() {
+        String hostname = getConfiguredParameters().getProperty(PROPERTY_HOST_NAME);
+        if (!hostname.startsWith("http://") || !hostname.startsWith("https://")) {
+            hostname = "http://" + hostname;
+        }
+        String port = getConfiguredParameters().getProperty(PROPERTY_HOST_PORT);
+        while (hostname.endsWith("/")) {
+            hostname = hostname.substring(0, hostname.length() - 1);
+        }
+        String urlPart = hostname + ":" + port;
+        urlPart += "/";
+        urlPart += getConfiguredParameters().getProperty(PROPERTY_APPLICATION_NAME);
+        return urlPart;
+    }
+    
+    
     private boolean useCaseInsensitiveQueries() throws QueryProcessingException {
-        String caseInsensitiveValue = getConfiguredParameters().getProperty(CASE_INSENSITIVE_QUERYING);
+        String caseInsensitiveValue = getConfiguredParameters().getProperty(PROPERTY_CASE_INSENSITIVE_QUERYING);
         try {
             return Boolean.parseBoolean(caseInsensitiveValue);
         } catch (Exception ex) {

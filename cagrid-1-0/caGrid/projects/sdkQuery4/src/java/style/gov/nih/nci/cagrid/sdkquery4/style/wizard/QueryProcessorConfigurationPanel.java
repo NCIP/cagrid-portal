@@ -1,20 +1,26 @@
 package gov.nih.nci.cagrid.sdkquery4.style.wizard;
 
+import gov.nih.nci.cagrid.common.JarUtilities;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.ui.GroupSelectionListener;
 import gov.nih.nci.cagrid.data.ui.NotifyingButtonGroup;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -25,6 +31,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
+
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
@@ -41,7 +49,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.2 2007-11-28 21:21:16 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.3 2007-11-30 19:57:59 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -51,6 +59,9 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     public static final String KEY_ORM_JAR = "ORM Jar file";
     public static final String KEY_HOST_NAME = "Application service host name";
     public static final String KEY_PORT_NUMBER = "Application port number";
+    
+    // the config dir as a jar file
+    private static File CONFIG_DIR_JAR = null;
 
     private JLabel applicationNameLabel = null;
     private JTextField applicationNameTextField = null;
@@ -110,6 +121,44 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     public void update() {
         // TODO Auto-generated method stub
 
+    }
+    
+    
+    public void movingNext() {
+        // called when the 'next' button is clicked
+        // copy the beans jar in to the service
+        File beansJar = new File(getBeansJarTextField().getText());
+        File beansDest = new File(getServiceInformation().getBaseDirectory(), 
+            "lib" + File.separator + beansJar.getName());
+        try {
+            Utils.copyFile(beansJar, beansDest);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error copying beans jar", ex.getMessage(), ex);
+        }
+        // jar up the config dir, then copy it in too
+        File configDir = new File(getConfigDirTextField().getText());
+        File configJar = new File(getServiceInformation().getBaseDirectory(), 
+            "lib" + File.separator + getApplicationNameTextField().getText() + "-config.jar");
+        try {
+            JarUtilities.jarDirectory(configDir, configJar);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error packaging configuration directory", ex.getMessage(), ex);
+        }
+        CONFIG_DIR_JAR = configJar;
+        // if local API, copy in the orm jar
+        if (getLocalApiRadioButton().isSelected()) {
+            File ormFile = new File(getOrmJarTextField().getText());
+            File ormDest = new File(getServiceInformation().getBaseDirectory(), 
+                "lib" + File.separator + ormFile.getName());
+            try {
+                Utils.copyFile(ormFile, ormDest);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                CompositeErrorDialog.showErrorDialog("Error copying orm jar", ex.getMessage(), ex);
+            }
+        }
     }
     
     
@@ -212,8 +261,15 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             beansBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     try {
-                        String filename = ResourceManager.promptFile(null, FileFilters.JAR_FILTER);
-                        getBeansJarTextField().setText(filename);
+                        String fullFilename = ResourceManager.promptFile(null, FileFilters.JAR_FILTER);
+                        if (getBeansJarTextField().getText().length() != 0) {
+                            File originalFile = new File(getBeansJarTextField().getText());
+                            File copiedFile = new File(getServiceInformation().getBaseDirectory(), "lib" + File.separator + originalFile.getName());
+                            if (copiedFile.exists()) {
+                                copiedFile.delete();
+                            }
+                        }
+                        getBeansJarTextField().setText(fullFilename);
                         validateInput();
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -268,6 +324,11 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
                     try {
                         String filename = ResourceManager.promptDir(null);
                         getConfigDirTextField().setText(filename);
+                        // if the old config dir as jar exists, delete it
+                        if (CONFIG_DIR_JAR != null && CONFIG_DIR_JAR.exists()) {
+                            CONFIG_DIR_JAR.delete();
+                            CONFIG_DIR_JAR = null;
+                        }
                         validateInput();
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -430,6 +491,9 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     try {
                         String filename = ResourceManager.promptFile(null, FileFilters.JAR_FILTER);
+                        if (getOrmJarTextField().getText().length() != 0) {
+                            // TODO: remove old orm jar text field from service lib dir
+                        }
                         getOrmJarTextField().setText(filename);
                         validateInput();
                     } catch (IOException ex) {
@@ -719,11 +783,34 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         updateComponentTreeSeverity();
         // update next button enabled
         setNextEnabled(!validationModel.hasErrors());
+        // store the configuration changes
+        if (!validationModel.hasErrors()) {
+            storeConfigurationProperties();
+        }
     }
     
     
     private void updateComponentTreeSeverity() {
         ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
         ValidationComponentUtils.updateComponentTreeSeverityBackground(this, validationModel.getResult());
+    }
+
+    
+    private void storeConfigurationProperties() {
+        ServiceDescription desc = getServiceInformation().getServiceDescriptor();
+        CommonTools.setServiceProperty(desc, SDK4QueryProcessor.PROPERTY_APPLICATION_NAME, 
+            getApplicationNameTextField().getText(), false);
+        File beansJarFile = new File(getBeansJarTextField().getText());
+        CommonTools.setServiceProperty(desc, SDK4QueryProcessor.PROPERTY_BEANS_JAR_NAME,
+            beansJarFile.getName(), false);
+        boolean isLocal = getLocalApiRadioButton().isSelected();
+        CommonTools.setServiceProperty(desc, SDK4QueryProcessor.PROPERTY_USE_LOCAL_API,
+            String.valueOf(isLocal), false);
+        CommonTools.setServiceProperty(desc, SDK4QueryProcessor.PROPERTY_ORM_JAR_NAME,
+            isLocal ? new File(getOrmJarTextField().getText()).getName() : "", false);
+        CommonTools.setServiceProperty(desc, SDK4QueryProcessor.PROPERTY_HOST_NAME,
+            isLocal ? "" : getHostNameTextField().getText(), false);
+        CommonTools.setServiceProperty(desc, SDK4QueryProcessor.PROPERTY_HOST_PORT,
+            isLocal ? "" : getPortTextField().getText(), false);
     }
 }
