@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.test.system;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo2;
+import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddComplexMethodWithFaulsAndArraysStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddComplexMethodWithFaultStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddImportedMethodStep;
@@ -17,7 +18,7 @@ import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodWithArraysStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodWithFaultStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodWithReturnStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.InvokeSimpleMethodImplStep;
+import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.ModifySimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveAllServicePropertiesStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveMethodStep;
@@ -92,7 +93,7 @@ public class SyncToolsTest extends Story {
             steps.add(new AddSimpleMethodStep(tci2, "newMethod2", true));
             steps.add(new DeployServiceStep(container, tci1.getDir()));
             steps.add(new StartContainerStep(container));
-            steps.add(new InvokeSimpleMethodImplStep(container, tci1, "newMethod", false));
+            steps.add(new InvokeClientStep(container, tci1));
             steps.add(new RemoveSimpleMethodImplStep(tci1, "newMethod", true));
             steps.add(new ModifySimpleMethodStep(tci1, "newMethod", false));
             steps.add(new ModifySimpleMethodStep(tci2, "newMethod2", true));
@@ -105,6 +106,7 @@ public class SyncToolsTest extends Story {
             steps.add(new AddSimpleMethodWithArraysStep(tci1, "newMethodWithArrays", true));
             //archiving has been moved to the GUI
             //steps.add(new RollBackStep(tci1));
+            steps.add(new AddBookstoreSchemaStep(tci1,false));
             steps.add(new AddComplexMethodWithFaultStep(tci1, "newComplexMethodWithFault", false));
             steps.add(new AddComplexMethodWithFaulsAndArraysStep(
                 tci1, "newComplexMethodWithFaultStepsAndArrays", true));

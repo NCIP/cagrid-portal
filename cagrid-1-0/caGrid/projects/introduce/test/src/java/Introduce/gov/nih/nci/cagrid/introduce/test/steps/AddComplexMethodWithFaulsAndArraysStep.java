@@ -38,28 +38,9 @@ public class AddComplexMethodWithFaulsAndArraysStep extends BaseStep {
 	public void runStep() throws Throwable {
 		System.out.println("Adding a complex method with fault.");
 
-		// copy over the bookstore schema to be used with the test
-		Utils.copyFile(new File(getBaseDir() + File.separator + TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
-			+ "bookstore.xsd"), new File(getBaseDir() + File.separator + tci.getDir() + File.separator + "schema"
-			+ File.separator + tci.getName() + File.separator + "bookstore.xsd"));
 
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getBaseDir() + File.separator
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
-		
-		
-
-		NamespaceType type = new NamespaceType();
-		type.setLocation("./" + "bookstore.xsd");
-		type.setNamespace("gme://projectmobius.org/1/BookStore");
-		type.setPackageName("projectmobius.org");
-		SchemaElementType etype = new SchemaElementType();
-		etype.setType("Book");
-		SchemaElementType[] etypeArr = new SchemaElementType[1];
-		etypeArr[0] = etype;
-		type.setSchemaElement(etypeArr);
-		
-		
-		CommonTools.addNamespace(introService, type);
 		
 		MethodsType methodsType =  CommonTools.getService(introService.getServices(),tci.getName()).getMethods();
 

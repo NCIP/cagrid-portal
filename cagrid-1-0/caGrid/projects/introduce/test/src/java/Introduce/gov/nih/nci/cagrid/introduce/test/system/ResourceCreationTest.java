@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.test.TestCaseInfo2;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo3;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo4;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo5;
+import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddResourcePropertyStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddServiceStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
@@ -19,6 +20,7 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 
+import java.awt.print.Book;
 import java.util.Vector;
 
 import junit.framework.TestResult;
@@ -71,6 +73,7 @@ public class ResourceCreationTest extends Story {
 
         try {
             steps.add(new CreateSkeletonStep(tci1, true));
+            steps.add(new AddBookstoreSchemaStep(tci1,false));
             steps.add(new AddServiceStep(tci2, false));
             steps.add(new AddServiceStep(tci3, false));
             steps.add(new AddServiceStep(tci4, false));

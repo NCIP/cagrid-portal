@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
-import gov.nih.nci.cagrid.introduce.test.steps.InvokeSimpleMethodImplStep;
+import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.introduce.test.steps.UnzipOldServiceStep;
 import gov.nih.nci.cagrid.introduce.test.steps.UpgradesStep;
@@ -70,7 +70,7 @@ public class Upgrade_1_0_Test extends Story {
             steps.add(new UpgradesStep(this.tci1, true));
             steps.add(new DeployServiceStep(container, tci1.getDir()));
             steps.add(new StartContainerStep(container));
-            steps.add(new InvokeSimpleMethodImplStep(container, this.tci1, "newMethod", false));
+            steps.add(new InvokeClientStep(container, this.tci1));
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());

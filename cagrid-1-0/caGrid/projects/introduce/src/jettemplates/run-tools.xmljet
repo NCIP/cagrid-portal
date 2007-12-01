@@ -7,7 +7,7 @@
      <target name="runClient" depends="checkGlobus, defineClasspaths" description="Run the sample Client">
         <property name="service.url" value="http://localhost:8080/wsrf/services/cagrid/<%=service.getName() %>" />
         <echo message="Connecting to service: ${service.url}" />
-        <java classname="<%=service.getPackageName() + ".client." + service.getName() + "Client" %>" classpathref="run.classpath" fork="yes">
+        <java failonerror="true" classname="<%=service.getPackageName() + ".client." + service.getName() + "Client" %>" classpathref="run.classpath" fork="yes">
             <jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
             <arg value="-url" />
             <arg value="${service.url}" />

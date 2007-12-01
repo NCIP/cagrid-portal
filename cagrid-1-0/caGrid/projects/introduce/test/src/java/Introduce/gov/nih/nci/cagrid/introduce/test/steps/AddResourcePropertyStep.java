@@ -33,7 +33,7 @@ public class AddResourcePropertyStep extends BaseStep {
 		ResourcePropertiesListType metadatasType = CommonTools.getService(introService.getServices(),tci.getName()).getResourcePropertiesList();
 		ResourcePropertyType metadata = new ResourcePropertyType();
 		metadata.setRegister(true);
-		metadata.setQName(new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security", "Operation"));
+		metadata.setQName(new QName("gme://projectmobius.org/1/BookStore", "Book"));
 		
 		// add new metadata to array in bean
 		// this seems to be a wierd way be adding things....

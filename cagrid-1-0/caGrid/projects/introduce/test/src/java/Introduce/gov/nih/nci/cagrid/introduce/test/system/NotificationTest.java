@@ -1,11 +1,14 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
+import gov.nih.nci.cagrid.introduce.test.NotificationTestCaseInfo;
+import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddMetadataStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddNotificationMethodImplStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddResourcePropertyStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddSetBookMethodStep;
+import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.UnzipOldServiceStep;
-import gov.nih.nci.cagrid.introduce.test.steps.UpgradesStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
@@ -15,41 +18,32 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 
-import java.io.File;
 import java.util.Vector;
-
-import org.apache.log4j.PropertyConfigurator;
-
-import junit.framework.TestResult;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 
 import com.atomicobject.haste.framework.Story;
 
 
-public class Upgrade_1_1_Test extends Story {
-    private TestCaseInfo tci1;
-
+public class NotificationTest extends Story {
+    
     private ServiceContainer container;
+    private NotificationTestCaseInfo tci;
 
-    
-    public Upgrade_1_1_Test() {
-        this.setName("Introduce Upgrades System Test");
-        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
-            + "log4j.properties");
+    public NotificationTest() {
+        this.setName("Introduce Notification System Test");
     }
-    
-    
+
+
     public String getName() {
-        return "Introduce Upgrades System Test";
+        return "Introduce Notification System Test";
     }
-    
-    
+
+
     public String getDescription() {
-        return "Testing the Introduce code generation tools";
+        return "Testing the Introduce Notification support";
     }
 
 
+    @Override
     protected Vector steps() {
         // init the container
         try {
@@ -59,41 +53,35 @@ public class Upgrade_1_1_Test extends Story {
             ex.printStackTrace();
             fail("Failed to create container: " + ex.getMessage());
         }
-        this.tci1 = new TestCaseInfo1();
+        
+        tci = new NotificationTestCaseInfo();
         Vector steps = new Vector();
-
         try {
             steps.add(new UnpackContainerStep(container));
-            steps.add(new UnzipOldServiceStep("." + File.separator + "test" + File.separator + "resources"
-                + File.separator + "serviceVersions" + File.separator + "IntroduceTestService-1_1.zip", this.tci1));
-            steps.add(new UpgradesStep(this.tci1, true));
-            steps.add(new DeployServiceStep(container, this.tci1.getDir()));
+            steps.add(new CreateSkeletonStep(tci, true));
+            steps.add(new AddBookstoreSchemaStep(tci,false));
+            steps.add(new AddResourcePropertyStep(tci,false));
+            steps.add(new AddSetBookMethodStep(tci,false));
+            steps.add(new AddNotificationMethodImplStep(tci,true));
+            steps.add(new DeployServiceStep(container,tci.getDir()));
             steps.add(new StartContainerStep(container));
-            steps.add(new InvokeClientStep(container, this.tci1));
+            steps.add(new InvokeClientStep(container,tci));
+            
         } catch (Exception e) {
             e.printStackTrace();
-            fail();
+            fail(e.getMessage());
         }
         return steps;
     }
-
+    
 
     protected boolean storySetUp() throws Throwable {
-
         super.storySetUp();
-
-        StopContainerStep step2 = new StopContainerStep(container);
+        RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci);
         try {
-            step2.runStep();
+            step1.runStep();
         } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
-        RemoveSkeletonStep step1 = new RemoveSkeletonStep(this.tci1);
-        try {
-           step1.runStep();
-        } catch (Throwable e) {
-
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return true;
@@ -102,22 +90,25 @@ public class Upgrade_1_1_Test extends Story {
 
     protected void storyTearDown() throws Throwable {
         super.storyTearDown();
-        RemoveSkeletonStep step1 = new RemoveSkeletonStep(this.tci1);
+        RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci);
         try {
             step1.runStep();
         } catch (Throwable e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         StopContainerStep step2 = new StopContainerStep(container);
         try {
             step2.runStep();
         } catch (Throwable e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         DestroyContainerStep step3 = new DestroyContainerStep(container);
         try {
             step3.runStep();
         } catch (Throwable e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -127,16 +118,6 @@ public class Upgrade_1_1_Test extends Story {
     // this
     // that the test suite will not error out looking for a single test......
     public void testDummy() throws Throwable {
-    }
-
-
-    /**
-     * Convenience method for running all the Steps in this Story.
-     */
-    public static void main(String args[]) {
-        TestRunner runner = new TestRunner();
-        TestResult result = runner.doRun(new TestSuite(Upgrade_1_1_Test.class));
-        System.exit(result.errorCount() + result.failureCount());
     }
 
 }

@@ -22,6 +22,7 @@ import <%=baseService.getPackageName()%>.service.<%=baseService.getName()%>Confi
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
@@ -181,11 +182,22 @@ if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 
         // create the topics for each resource property
         Iterator it = getResourcePropertySet().iterator();
+        List newTopicProps = new ArrayList();
         while(it.hasNext()){
             ResourceProperty prop = (ResourceProperty)it.next();
-            ResourcePropertyTopic tprop = new ResourcePropertyTopic(prop);
-            this.topicList.addTopic(tprop);
+            prop.getMetaData().getName();
+            prop = new ResourcePropertyTopic(prop);
+            this.topicList.addTopic((Topic)prop);
+            newTopicProps.add(prop);
         }
+        // replace the non topic properties with the topic properties
+        Iterator newTopicIt = newTopicProps.iterator();
+        while(newTopicIt.hasNext()){
+            ResourceProperty prop = (ResourceProperty)newTopicIt.next();
+            getResourcePropertySet().remove(prop.getMetaData().getName());
+            getResourcePropertySet().add(prop);
+        }
+        
 <%} %>
 
 <%    
@@ -195,7 +207,7 @@ if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 		populateResourceProperties();
 <%} %>
 
-		// register the service to the index sevice
+		// register the service to the index service
 		refreshRegistration(true);
 		
 <%
@@ -269,7 +281,8 @@ if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 	}
 	
 	public void set<%=CommonTools.upperCaseFirstCharacter(name)%>(<%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()+" "+name%> ) throws ResourceException {
-		((<%=arguments.getService().getName()%>ResourceProperties) this.getResourceBean()).set<%=CommonTools.upperCaseFirstCharacter(name)%>(<%=name%>);
+        ResourceProperty prop = getResourcePropertySet().get(<%=arguments.getService().getName()%>Constants.<%=new String(name).toUpperCase()%>);
+		prop.set(0, <%=name%>);
 <%
 if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 %>
@@ -286,7 +299,8 @@ if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 	}
 	
 	public void set<%=CommonTools.upperCaseFirstCharacter(name)%>(<%=schemaInformation.getType().getClassName()+" "+name%> ) throws ResourceException {
-		((<%=arguments.getService().getName()%>ResourceProperties) this.getResourceBean()).set<%=CommonTools.upperCaseFirstCharacter(name)%>(<%=name%>);
+		ResourceProperty prop = getResourcePropertySet().get(<%=arguments.getService().getName()%>Constants.<%=new String(name).toUpperCase()%>);
+		prop.set(0, <%=name%>);
 <%
 if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 %>
