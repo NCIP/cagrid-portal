@@ -8,15 +8,15 @@ import java.io.File;
 public class TestCaseInfoForImportService extends TestCaseInfo {
 	public static final String GOLD_SCHEMA_DIR= "test" + File.separator + "resources" + File.separator + "schema";
 
-	public String name = "IntroduceTestService5";
+	public String name = "IntroduceTestImportService";
 
-	public String dir = "IntroduceTestService5";
+	public String dir = "IntroduceTestImportService";
 
-	public String packageName = "org.test3";
+	public String packageName = "org.test.import";
 	
-	public String packageDir = "org" + File.separator + "test3";
+	public String packageDir = "org" + File.separator + "test.import";
 
-	public String namespaceDomain = "http://test3.org/IntroduceTestService5";
+	public String namespaceDomain = "http://test3.org/IntroduceTestImportService";
 
 	public TestCaseInfoForImportService() {
 

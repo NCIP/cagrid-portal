@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
 import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.introduce.test.steps.UnzipOldServiceStep;
@@ -59,7 +59,7 @@ public class Upgrade_1_1_Test extends Story {
             ex.printStackTrace();
             fail("Failed to create container: " + ex.getMessage());
         }
-        this.tci1 = new TestCaseInfo1();
+        this.tci1 = new TestCaseInfoMain();
         Vector steps = new Vector();
 
         try {

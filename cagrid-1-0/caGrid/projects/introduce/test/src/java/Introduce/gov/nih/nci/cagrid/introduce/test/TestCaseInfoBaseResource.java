@@ -5,29 +5,31 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 
 import java.io.File;
 
-public class TestCaseInfo4 extends TestCaseInfo {
+public class TestCaseInfoBaseResource extends TestCaseInfo {
 	public static final String GOLD_SCHEMA_DIR= "test" + File.separator + "resources" + File.separator + "schema";
 
-	public String name = "IntroduceTestSingletonService";
+	public String name = "IntroduceTestService3";
 
 	public String dir = "IntroduceTest";
 
-	public String packageName = "org.test.singleton";
+	public String packageName = "org.test3";
 	
-	public String packageDir = "org" + File.separator + "test";
+	public String packageDir = "org" + File.separator + "test3";
 
-	public String namespaceDomain = "http://test.org/IntroduceTestSingletonService";
+	public String namespaceDomain = "http://test3.org/IntroduceTest";
 
-	public TestCaseInfo4() {
+	public TestCaseInfoBaseResource() {
 
 	}
 
-	public TestCaseInfo4(String name, String dir, String packageName,
+	public TestCaseInfoBaseResource(String name, String dir, String packageName,
 			String namespaceDomain) {
 		this.name = name;
 		this.dir = dir;
 		this.packageName = packageName;
 		this.namespaceDomain = namespaceDomain;
+		
+
 	}
 
 	/* (non-Javadoc)
@@ -77,9 +79,9 @@ public class TestCaseInfo4 extends TestCaseInfo {
 	public String getPackageDir() {
 		return getPackageName().replace('.',File.separatorChar);
 	}
-
+	
 	public String getResourceFrameworkType() {
-		return IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE + "," + IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE;
+		return IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE;
 	}
 
 }

@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo2;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo3;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo4;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo5;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoLifetimeResource;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoBaseResource;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoSingletonResource;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoNotificationResource;
 import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddResourcePropertyStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddServiceStep;
@@ -64,11 +64,11 @@ public class ResourceCreationTest extends Story {
             ex.printStackTrace();
             fail("Failed to create container: " + ex.getMessage());
         }
-        tci1 = new TestCaseInfo1();
-        tci2 = new TestCaseInfo2();
-        tci3 = new TestCaseInfo3();
-        tci4 = new TestCaseInfo4();
-        tci5 = new TestCaseInfo5();
+        tci1 = new TestCaseInfoMain();
+        tci2 = new TestCaseInfoLifetimeResource();
+        tci3 = new TestCaseInfoBaseResource();
+        tci4 = new TestCaseInfoSingletonResource();
+        tci5 = new TestCaseInfoNotificationResource();
         Vector<Step> steps = new Vector<Step>();
 
         try {

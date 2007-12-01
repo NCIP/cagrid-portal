@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo2;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoLifetimeResource;
 import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddComplexMethodWithFaulsAndArraysStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddComplexMethodWithFaultStep;
@@ -20,6 +20,7 @@ import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodWithReturnStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.ModifySimpleMethodStep;
+import gov.nih.nci.cagrid.introduce.test.steps.RemoveAllMetadataStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveAllServicePropertiesStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSimpleMethodImplStep;
@@ -74,8 +75,8 @@ public class SyncToolsTest extends Story {
             ex.printStackTrace();
             fail("Failed to create container: " + ex.getMessage());
         }
-        tci1 = new TestCaseInfo1();
-        tci2 = new TestCaseInfo2();
+        tci1 = new TestCaseInfoMain();
+        tci2 = new TestCaseInfoLifetimeResource();
         Vector<Step> steps = new Vector<Step>();
 
         try {
@@ -104,15 +105,12 @@ public class SyncToolsTest extends Story {
             steps.add(new AddSimpleMethodWithFaultStep(tci1, "newMethodWithFault", false));
             steps.add(new AddSimpleMethodWithReturnStep(tci1, "newMethodWithReturn", false));
             steps.add(new AddSimpleMethodWithArraysStep(tci1, "newMethodWithArrays", true));
-            //archiving has been moved to the GUI
-            //steps.add(new RollBackStep(tci1));
             steps.add(new AddBookstoreSchemaStep(tci1,false));
             steps.add(new AddComplexMethodWithFaultStep(tci1, "newComplexMethodWithFault", false));
             steps.add(new AddComplexMethodWithFaulsAndArraysStep(
                 tci1, "newComplexMethodWithFaultStepsAndArrays", true));
             steps.add(new AddMetadatatWithLoadFromFileStep(tci1, true));
-            //can't do now because main has required resource properties...
-            //steps.add(new RemoveAllMetadataStep(tci1, true));
+            steps.add(new RemoveAllMetadataStep(tci1, true));
             steps.add(new RemoveAllServicePropertiesStep(tci1, true));
         } catch (Exception e) {
             e.printStackTrace();

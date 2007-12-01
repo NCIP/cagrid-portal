@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 
 import java.io.File;
 
-public class TestCaseInfo1 extends TestCaseInfo {
+public class TestCaseInfoMain extends TestCaseInfo {
 	public static final String GOLD_SCHEMA_DIR= "test" + File.separator + "resources" + File.separator + "schema";
 
 	public String name = "IntroduceTestService";
@@ -18,11 +18,11 @@ public class TestCaseInfo1 extends TestCaseInfo {
 
 	public String namespaceDomain = "http://test.org/IntroduceTestService";
 
-	public TestCaseInfo1() {
+	public TestCaseInfoMain() {
 
 	}
 
-	public TestCaseInfo1(String name, String dir, String packageName,
+	public TestCaseInfoMain(String name, String dir, String packageName,
 			String namespaceDomain) {
 		this.name = name;
 		this.dir = dir;

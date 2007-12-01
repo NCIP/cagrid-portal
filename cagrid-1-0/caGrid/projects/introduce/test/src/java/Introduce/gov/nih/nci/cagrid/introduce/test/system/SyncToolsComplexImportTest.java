@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfoForImportService;
 import gov.nih.nci.cagrid.introduce.test.steps.AddComplexMethodWithFaultStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddImportedMethodStep;
@@ -40,7 +40,7 @@ public class SyncToolsComplexImportTest extends Story {
 
 
 	protected Vector steps() {
-		this.tci1 = new TestCaseInfo1();
+		this.tci1 = new TestCaseInfoMain();
 		this.tci3 = new TestCaseInfoForImportService();
 		Vector steps = new Vector();
 

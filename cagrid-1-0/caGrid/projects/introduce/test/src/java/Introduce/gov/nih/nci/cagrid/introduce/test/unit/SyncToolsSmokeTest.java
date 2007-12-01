@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce.test.unit;
 
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo2;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoLifetimeResource;
 import gov.nih.nci.cagrid.introduce.test.steps.AddMetadataStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddServicePropertiesStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddServiceStep;
@@ -49,8 +49,8 @@ public class SyncToolsSmokeTest extends Story {
     
 
 	protected Vector steps() {
-		tci1 = new TestCaseInfo1();
-		tci2 = new TestCaseInfo2();
+		tci1 = new TestCaseInfoMain();
+		tci2 = new TestCaseInfoLifetimeResource();
 		Vector steps = new Vector();
 
 		try {
