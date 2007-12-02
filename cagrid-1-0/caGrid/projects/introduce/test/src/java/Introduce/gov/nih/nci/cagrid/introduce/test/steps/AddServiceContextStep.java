@@ -21,18 +21,18 @@ import java.io.File;
 import java.util.StringTokenizer;
 
 
-public class AddServiceStep extends BaseStep {
+public class AddServiceContextStep extends BaseStep {
     private TestCaseInfo tci;
 
 
-    public AddServiceStep(TestCaseInfo tci, boolean build) throws Exception {
+    public AddServiceContextStep(TestCaseInfo tci, boolean build) throws Exception {
         super(tci.getDir(), build);
         this.tci = tci;
     }
 
 
     public void runStep() throws Throwable {
-        System.out.println("Adding a service.");
+        System.out.println("Adding a service context:" + tci.getName());
 
         ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getBaseDir() + File.separator
             + tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);

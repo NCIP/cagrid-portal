@@ -1,14 +1,15 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfoLifetimeResource;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfoBaseResource;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfoSingletonResource;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoLifetimeResource;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfoNotificationResource;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoPersistentResource;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoSingletonResource;
 import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
-import gov.nih.nci.cagrid.introduce.test.steps.AddResourcePropertyStep;
-import gov.nih.nci.cagrid.introduce.test.steps.AddServiceStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddBookResourcePropertyStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddServiceContextStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
@@ -20,7 +21,6 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 
-import java.awt.print.Book;
 import java.util.Vector;
 
 import junit.framework.TestResult;
@@ -37,6 +37,7 @@ public class ResourceCreationTest extends Story {
     private TestCaseInfo tci3;
     private TestCaseInfo tci4;
     private TestCaseInfo tci5;
+    private TestCaseInfo tci6;
 
     private ServiceContainer container;
     
@@ -69,22 +70,24 @@ public class ResourceCreationTest extends Story {
         tci3 = new TestCaseInfoBaseResource();
         tci4 = new TestCaseInfoSingletonResource();
         tci5 = new TestCaseInfoNotificationResource();
+        tci6 = new TestCaseInfoPersistentResource();
         Vector<Step> steps = new Vector<Step>();
 
         try {
             steps.add(new CreateSkeletonStep(tci1, true));
             steps.add(new AddBookstoreSchemaStep(tci1,false));
-            steps.add(new AddServiceStep(tci2, false));
-            steps.add(new AddServiceStep(tci3, false));
-            steps.add(new AddServiceStep(tci4, false));
-            steps.add(new AddServiceStep(tci5, false));
-            steps.add(new AddResourcePropertyStep(tci1, false));
-            steps.add(new AddResourcePropertyStep(tci2, false));
-            steps.add(new AddResourcePropertyStep(tci3, false));
-            steps.add(new AddResourcePropertyStep(tci4, false));
-            steps.add(new AddResourcePropertyStep(tci5, true));
+            steps.add(new AddServiceContextStep(tci2, false));
+            steps.add(new AddServiceContextStep(tci3, false));
+            steps.add(new AddServiceContextStep(tci4, false));
+            steps.add(new AddServiceContextStep(tci5, false));
+            steps.add(new AddServiceContextStep(tci6, false));
+            steps.add(new AddBookResourcePropertyStep(tci1, false));
+            steps.add(new AddBookResourcePropertyStep(tci2, false));
+            steps.add(new AddBookResourcePropertyStep(tci3, false));
+            steps.add(new AddBookResourcePropertyStep(tci4, false));
+            steps.add(new AddBookResourcePropertyStep(tci5, false));
+            steps.add(new AddBookResourcePropertyStep(tci6, true));
             steps.add(new DeployServiceStep(container, tci1.getDir()));
-            // TODO: do we need to deploy the other services (tci2-5)?
             steps.add(new StartContainerStep(container));
         } catch (Exception e) {
             e.printStackTrace();

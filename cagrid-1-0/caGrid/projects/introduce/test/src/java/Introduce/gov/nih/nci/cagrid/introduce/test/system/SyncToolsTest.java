@@ -11,7 +11,7 @@ import gov.nih.nci.cagrid.introduce.test.steps.AddMetadataStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddMetadatatWithLoadFromFileStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddMethodReturningClientHandleMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddServicePropertiesStep;
-import gov.nih.nci.cagrid.introduce.test.steps.AddServiceStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddServiceContextStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodWithArraysStep;
@@ -82,7 +82,7 @@ public class SyncToolsTest extends Story {
         try {
             steps.add(new UnpackContainerStep(container));
             steps.add(new CreateSkeletonStep(tci1, true));
-            steps.add(new AddServiceStep(tci2, true));
+            steps.add(new AddServiceContextStep(tci2, true));
             steps.add(new AddMethodReturningClientHandleMethodStep(
                 tci1, tci2, "testClientReturn", false, true));
             steps.add(new AddMethodReturningClientHandleMethodStep(

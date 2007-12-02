@@ -8,7 +8,10 @@ import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 
+import java.io.File;
 import java.util.Vector;
+
+import org.apache.log4j.PropertyConfigurator;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
@@ -25,6 +28,8 @@ public class SyncToolsSimpleImportTest extends Story {
 
 	public SyncToolsSimpleImportTest() {
 		this.setName("Introduce Codegen Simple Import System Test");
+		PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+            + "log4j.properties");
 	}
     
     

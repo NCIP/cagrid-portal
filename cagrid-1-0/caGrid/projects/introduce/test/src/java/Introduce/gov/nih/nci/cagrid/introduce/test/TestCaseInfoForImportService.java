@@ -12,9 +12,9 @@ public class TestCaseInfoForImportService extends TestCaseInfo {
 
 	public String dir = "IntroduceTestImportService";
 
-	public String packageName = "org.test.import";
+	public String packageName = "org.test.im";
 	
-	public String packageDir = "org" + File.separator + "test.import";
+	public String packageDir = "org" + File.separator + "test"+ File.separator + "im";
 
 	public String namespaceDomain = "http://test3.org/IntroduceTestImportService";
 

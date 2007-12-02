@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfoLifetimeResource;
 import gov.nih.nci.cagrid.introduce.test.steps.AddMetadataStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddServicePropertiesStep;
-import gov.nih.nci.cagrid.introduce.test.steps.AddServiceStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddServiceContextStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
@@ -55,7 +55,7 @@ public class SyncToolsSmokeTest extends Story {
 
 		try {
 			steps.add(new CreateSkeletonStep(tci1, true));
-			steps.add(new AddServiceStep(tci2, true));
+			steps.add(new AddServiceContextStep(tci2, true));
 			steps.add(new AddMetadataStep(tci1, true));
 			steps.add(new AddServicePropertiesStep(tci1, true));
 			steps.add(new AddSimpleMethodStep(tci1, "newMethod", false));

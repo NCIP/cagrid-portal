@@ -14,11 +14,11 @@ import java.io.File;
 import javax.xml.namespace.QName;
 
 
-public class AddResourcePropertyStep extends BaseStep {
+public class AddBookResourcePropertyStep extends BaseStep {
 	private TestCaseInfo tci;
 
 
-	public AddResourcePropertyStep(TestCaseInfo tci, boolean build) throws Exception {
+	public AddBookResourcePropertyStep(TestCaseInfo tci, boolean build) throws Exception {
 		super(tci.getDir(),build);
 		this.tci = tci;
 	}

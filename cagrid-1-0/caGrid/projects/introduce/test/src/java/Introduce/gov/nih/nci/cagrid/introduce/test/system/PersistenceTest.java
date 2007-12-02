@@ -1,9 +1,8 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.NotificationTestCaseInfo;
+import gov.nih.nci.cagrid.introduce.test.PersistentTestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
-import gov.nih.nci.cagrid.introduce.test.steps.AddMetadataStep;
-import gov.nih.nci.cagrid.introduce.test.steps.AddNotificationMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddBookResourcePropertyStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSetBookMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
@@ -23,23 +22,23 @@ import java.util.Vector;
 import com.atomicobject.haste.framework.Story;
 
 
-public class NotificationTest extends Story {
+public class PersistenceTest extends Story {
     
     private ServiceContainer container;
-    private NotificationTestCaseInfo tci;
+    private PersistentTestCaseInfo tci;
 
-    public NotificationTest() {
-        this.setName("Introduce Notification System Test");
+    public PersistenceTest() {
+        this.setName("Introduce Persistence System Test");
     }
 
 
     public String getName() {
-        return "Introduce Notification System Test";
+        return "Introduce Persistence System Test";
     }
 
 
     public String getDescription() {
-        return "Testing the Introduce Notification support";
+        return "Testing the Introduce Persistence support";
     }
 
 
@@ -54,7 +53,7 @@ public class NotificationTest extends Story {
             fail("Failed to create container: " + ex.getMessage());
         }
         
-        tci = new NotificationTestCaseInfo();
+        tci = new PersistentTestCaseInfo();
         Vector steps = new Vector();
         try {
             steps.add(new UnpackContainerStep(container));
@@ -62,10 +61,15 @@ public class NotificationTest extends Story {
             steps.add(new AddBookstoreSchemaStep(tci,false));
             steps.add(new AddBookResourcePropertyStep(tci,false));
             steps.add(new AddSetBookMethodStep(tci,false));
-            steps.add(new AddNotificationMethodImplStep(tci,true));
+            //steps.add(new AddPersistenceMethodImplStep(tci,true));
             steps.add(new DeployServiceStep(container,tci.getDir()));
             steps.add(new StartContainerStep(container));
             steps.add(new InvokeClientStep(container,tci));
+            steps.add(new StopContainerStep(container));
+            //steps.add(new AddPersistenceMethodImplStep(tci,true));
+            steps.add(new StartContainerStep(container));
+            steps.add(new InvokeClientStep(container,tci));
+            
             
         } catch (Exception e) {
             e.printStackTrace();
