@@ -1,12 +1,14 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
-import gov.nih.nci.cagrid.introduce.test.NotificationTestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.PersistentTestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddBookResourcePropertyStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddGetBookMethodStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddPersistenceMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSetBookMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
+import gov.nih.nci.cagrid.introduce.test.steps.ModifyPersistenceClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
@@ -57,16 +59,20 @@ public class PersistenceTest extends Story {
         Vector steps = new Vector();
         try {
             steps.add(new UnpackContainerStep(container));
-            steps.add(new CreateSkeletonStep(tci, true));
+            steps.add(new CreateSkeletonStep(tci, false));
             steps.add(new AddBookstoreSchemaStep(tci,false));
             steps.add(new AddBookResourcePropertyStep(tci,false));
             steps.add(new AddSetBookMethodStep(tci,false));
-            //steps.add(new AddPersistenceMethodImplStep(tci,true));
+            steps.add(new AddGetBookMethodStep(tci,false));
+            steps.add(new AddPersistenceMethodImplStep(tci,true));
+            
             steps.add(new DeployServiceStep(container,tci.getDir()));
             steps.add(new StartContainerStep(container));
             steps.add(new InvokeClientStep(container,tci));
+            
             steps.add(new StopContainerStep(container));
-            //steps.add(new AddPersistenceMethodImplStep(tci,true));
+            
+            steps.add(new ModifyPersistenceClientStep(tci,true));
             steps.add(new StartContainerStep(container));
             steps.add(new InvokeClientStep(container,tci));
             
