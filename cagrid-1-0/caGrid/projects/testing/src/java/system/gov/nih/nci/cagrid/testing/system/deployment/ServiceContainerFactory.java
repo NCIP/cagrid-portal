@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Oct 16, 2007 12:09:02 PM
- * @version $Id: ServiceContainerFactory.java,v 1.3 2007-12-03 15:03:57 jpermar Exp $ 
+ * @version $Id: ServiceContainerFactory.java,v 1.4 2007-12-03 18:20:37 dervin Exp $ 
  */
 public class ServiceContainerFactory {
     
@@ -55,6 +55,7 @@ public class ServiceContainerFactory {
         return container;
     }
     
+    
     /**
      * 
      * @param type
@@ -64,6 +65,7 @@ public class ServiceContainerFactory {
      * @param maxShutdownTime units are seconds
      * @param heapSizeInMegabytes whole value between 32 and probably 1024. This is passed to the command line. E.g,. -Xmx128m. Pass null here for default
      * @return
+     *      The service container instance
      * @throws IOException
      */
     public static ServiceContainer createContainer(
@@ -96,6 +98,7 @@ public class ServiceContainerFactory {
         }
         return container;
     }
+    
     
     private static File getTempDirectory(ServiceContainerType type) throws IOException {
         File tempDir = new File(TestingConstants.TEST_TEMP_DIR);

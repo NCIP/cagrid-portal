@@ -106,6 +106,7 @@
 		</fileset>
 	</path>
 
+	
 	<path id="test.classpath">
 		<path refid="base.classpath" />
 		<pathelement location="${test.stubs.dest}" />
