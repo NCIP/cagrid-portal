@@ -8,15 +8,13 @@ import java.io.File;
 public class TestCaseInfoBaseResource extends TestCaseInfo {
 	public static final String GOLD_SCHEMA_DIR= "test" + File.separator + "resources" + File.separator + "schema";
 
-	public String name = "IntroduceTestService3";
+	public String name = "IntroduceTestBaseResourceService";
 
 	public String dir = "IntroduceTest";
 
-	public String packageName = "org.test3";
+	public String packageName = "org.test.base.resource";
 	
-	public String packageDir = "org" + File.separator + "test3";
-
-	public String namespaceDomain = "http://test3.org/IntroduceTest";
+	public String namespaceDomain = "http://resource.base.test.org/IntroduceTestBaseResourceService";
 
 	public TestCaseInfoBaseResource() {
 

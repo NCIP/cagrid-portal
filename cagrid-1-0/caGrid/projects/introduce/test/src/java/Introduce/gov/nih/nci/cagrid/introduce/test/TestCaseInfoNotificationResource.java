@@ -8,15 +8,13 @@ import java.io.File;
 public class TestCaseInfoNotificationResource extends TestCaseInfo {
 	public static final String GOLD_SCHEMA_DIR= "test" + File.separator + "resources" + File.separator + "schema";
 
-	public String name = "IntroduceTestNotificationService";
+	public String name = "IntroduceTestNotificationResourceService";
 
 	public String dir = "IntroduceTest";
 
-	public String packageName = "org.test.notification";
-	
-	public String packageDir = "org" + File.separator + "test";
+	public String packageName = "org.test.notification.resource";
 
-	public String namespaceDomain = "http://test.org/IntroduceTestNotificationService";
+	public String namespaceDomain = "http://resource.notification.test.org/IntroduceTestNotificationResourceService";
 
 	public TestCaseInfoNotificationResource() {
 

@@ -10,11 +10,11 @@ public class NotificationTestCaseInfo extends TestCaseInfo {
 
 	public String name = "IntroduceTestNotificationService";
 
-	public String dir = "IntroduceTestNotificationService";
+	public String dir = "IntroduceTest";
 
 	public String packageName = "org.test.notification";
 
-	public String namespaceDomain = "http://test.org/IntroduceTestNotificationService";
+	public String namespaceDomain = "http://notification.test.org/IntroduceTestNotificationService";
 
 	public NotificationTestCaseInfo() {
 

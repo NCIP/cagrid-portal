@@ -16,7 +16,7 @@ public class TestCaseInfoForImportService extends TestCaseInfo {
 	
 	public String packageDir = "org" + File.separator + "test"+ File.separator + "im";
 
-	public String namespaceDomain = "http://test3.org/IntroduceTestImportService";
+	public String namespaceDomain = "http://im.test.org/IntroduceTestImportService";
 
 	public TestCaseInfoForImportService() {
 

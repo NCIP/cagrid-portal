@@ -8,15 +8,13 @@ import java.io.File;
 public class TestCaseInfoPersistentResource extends TestCaseInfo {
 	public static final String GOLD_SCHEMA_DIR= "test" + File.separator + "resources" + File.separator + "schema";
 
-	public String name = "IntroduceTestPersistentService";
+	public String name = "IntroduceTestPersistentResourceService";
 
 	public String dir = "IntroduceTest";
 
-	public String packageName = "org.test.persistent";
-	
-	public String packageDir = "org" + File.separator + "test";
+	public String packageName = "org.test.persistent.resource";
 
-	public String namespaceDomain = "http://test.org/IntroduceTestPersistentService";
+	public String namespaceDomain = "http://resource.persistent.test.org/IntroduceTestPersistentResourceService";
 
 	public TestCaseInfoPersistentResource() {
 

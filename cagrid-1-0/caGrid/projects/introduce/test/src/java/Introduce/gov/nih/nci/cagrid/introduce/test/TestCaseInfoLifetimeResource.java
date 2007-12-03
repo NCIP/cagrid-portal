@@ -8,15 +8,13 @@ import java.io.File;
 public class TestCaseInfoLifetimeResource extends TestCaseInfo {
 	public static final String GOLD_SCHEMA_DIR= "test" + File.separator + "resources" + File.separator + "schema";
 
-	public String name = "IntroduceTestServiceInnerService";
+	public String name = "IntroduceTestServiceLifetimeResourceService";
 
 	public String dir = "IntroduceTest";
 
-	public String packageName = "org.test2";
-	
-	public String packageDir = "org" + File.separator + "test2";
+	public String packageName = "org.test.lifetime.resource";
 
-	public String namespaceDomain = "http://test2.org/IntroduceTestInnerService";
+	public String namespaceDomain = "http://resource.lifetime.test.org/IntroduceTestLifetimeResourceService";
 
 	public TestCaseInfoLifetimeResource() {
 

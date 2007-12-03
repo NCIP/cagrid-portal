@@ -8,15 +8,13 @@ import java.io.File;
 public class TestCaseInfoSingletonResource extends TestCaseInfo {
 	public static final String GOLD_SCHEMA_DIR= "test" + File.separator + "resources" + File.separator + "schema";
 
-	public String name = "IntroduceTestSingletonService";
+	public String name = "IntroduceTestSingletonResourceService";
 
 	public String dir = "IntroduceTest";
 
-	public String packageName = "org.test.singleton";
-	
-	public String packageDir = "org" + File.separator + "test";
+	public String packageName = "org.test.singleton.resource";
 
-	public String namespaceDomain = "http://test.org/IntroduceTestSingletonService";
+	public String namespaceDomain = "http://resource.singleton.test.org/IntroduceTestSingletonResourceService";
 
 	public TestCaseInfoSingletonResource() {
 

@@ -10,11 +10,11 @@ public class PersistentTestCaseInfo extends TestCaseInfo {
 
 	public String name = "IntroduceTestPersistentService";
 
-	public String dir = "IntroduceTestPersistentService";
+	public String dir = "IntroduceTest";
 
 	public String packageName = "org.test.persistent";
 
-	public String namespaceDomain = "http://test.org/IntroduceTestPersistentService";
+	public String namespaceDomain = "http://persistent.test.org/IntroduceTestPersistentService";
 
 	public PersistentTestCaseInfo() {
 
