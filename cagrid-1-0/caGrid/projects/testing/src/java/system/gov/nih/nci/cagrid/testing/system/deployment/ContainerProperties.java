@@ -10,7 +10,7 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Oct 12, 2007 12:10:03 PM
- * @version $Id: ContainerProperties.java,v 1.3 2007-12-03 15:03:57 jpermar Exp $ 
+ * @version $Id: ContainerProperties.java,v 1.4 2007-12-03 18:20:22 dervin Exp $ 
  */
 public class ContainerProperties {
 
@@ -25,10 +25,9 @@ public class ContainerProperties {
 	private Integer heapSizeInMegabytes;
 
 
-	/*
 	public ContainerProperties() {
+        
 	}
-	 */
 
 	public ContainerProperties(File containerDirectory, File containerZip, PortPreference portPreference,
 		boolean secure, File securityDescriptor, Integer maxStartupWaitTime, Integer maxShutdownWaitTime,
@@ -117,4 +116,9 @@ public class ContainerProperties {
 	public Integer getHeapSizeInMegabytes() {
 		return heapSizeInMegabytes;
 	}
+    
+    
+    public void setHeapSizeInMegabytes(Integer heapSizeInMegabytes) {
+        this.heapSizeInMegabytes = heapSizeInMegabytes;
+    }
 }
