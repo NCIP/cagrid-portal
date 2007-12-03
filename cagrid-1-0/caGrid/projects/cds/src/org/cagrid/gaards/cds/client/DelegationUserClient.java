@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.apache.axis.types.URI;
 import org.cagrid.gaards.cds.common.CertificateChain;
+import org.cagrid.gaards.cds.common.ClientDelegationFilter;
 import org.cagrid.gaards.cds.common.DelegationDescriptor;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
@@ -283,8 +284,46 @@ public class DelegationUserClient {
 
 	public List<DelegationDescriptor> findCredentialsDelegatedToClient()
 			throws RemoteException, CDSInternalFault, PermissionDeniedFault {
+		return findCredentialsDelegatedToClient(new ClientDelegationFilter());
+	}
+
+	/**
+	 * This method obtains a list of credentials that have been delegated to
+	 * this client by other clients.
+	 * 
+	 * @param ownerGridIdentity
+	 *            The grid identity of the owner to restrict this search to.
+	 * @return A list of credentials delegated to this client.
+	 * @throws RemoteException
+	 * @throws CDSInternalFault
+	 * @throws PermissionDeniedFault
+	 */
+
+	public List<DelegationDescriptor> findCredentialsDelegatedToClient(
+			String ownerGridIdentity) throws RemoteException, CDSInternalFault,
+			PermissionDeniedFault {
+		ClientDelegationFilter f = new ClientDelegationFilter();
+		f.setGridIdentity(ownerGridIdentity);
+		return findCredentialsDelegatedToClient(f);
+	}
+
+	/**
+	 * This method obtains a list of credentials that have been delegated to
+	 * this client by other clients.
+	 * 
+	 * @param filter
+	 *            Search criteria to use in filtering credentials
+	 * @return A list of credentials delegated to this client.
+	 * @throws RemoteException
+	 * @throws CDSInternalFault
+	 * @throws PermissionDeniedFault
+	 */
+
+	public List<DelegationDescriptor> findCredentialsDelegatedToClient(
+			ClientDelegationFilter filter) throws RemoteException,
+			CDSInternalFault, PermissionDeniedFault {
 		DelegationDescriptor[] results = client
-				.findCredentialsDelegatedToClient();
+				.findCredentialsDelegatedToClient(filter);
 		List<DelegationDescriptor> list = new ArrayList<DelegationDescriptor>();
 		if (results != null) {
 			for (int i = 0; i < results.length; i++) {

@@ -97,15 +97,6 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
 				+ " -url <service url>");
 	}
 
-  public org.cagrid.gaards.cds.common.DelegationDescriptor[] findCredentialsDelegatedToClient() throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"findCredentialsDelegatedToClient");
-    org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientRequest params = new org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientRequest();
-    org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientResponse boxedResult = portType.findCredentialsDelegatedToClient(params);
-    return boxedResult.getDelegationDescriptor();
-    }
-  }
-
   public org.cagrid.gaards.cds.common.DelegationSigningRequest initiateDelegation(org.cagrid.gaards.cds.common.DelegationRequest req) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"initiateDelegation");
@@ -153,6 +144,18 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
     statusContainer.setDelegationStatus(status);
     params.setStatus(statusContainer);
     org.cagrid.gaards.cds.stubs.UpdateDelegatedCredentialStatusResponse boxedResult = portType.updateDelegatedCredentialStatus(params);
+    }
+  }
+
+  public org.cagrid.gaards.cds.common.DelegationDescriptor[] findCredentialsDelegatedToClient(org.cagrid.gaards.cds.common.ClientDelegationFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findCredentialsDelegatedToClient");
+    org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientRequest params = new org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientRequest();
+    org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientRequestFilter filterContainer = new org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientRequestFilter();
+    filterContainer.setClientDelegationFilter(filter);
+    params.setFilter(filterContainer);
+    org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientResponse boxedResult = portType.findCredentialsDelegatedToClient(params);
+    return boxedResult.getDelegationDescriptor();
     }
   }
 

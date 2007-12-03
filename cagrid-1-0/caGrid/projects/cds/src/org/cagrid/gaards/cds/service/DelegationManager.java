@@ -3,6 +3,7 @@ package org.cagrid.gaards.cds.service;
 import gov.nih.nci.cagrid.common.Utils;
 
 import org.cagrid.gaards.cds.common.CertificateChain;
+import org.cagrid.gaards.cds.common.ClientDelegationFilter;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationRecordFilter;
@@ -36,10 +37,10 @@ public class DelegationManager {
 	}
 
 	public DelegationRecord[] findCredentialsDelegatedToClient(
-			String callerIdentity) throws CDSInternalFault,
+			String callerIdentity, ClientDelegationFilter filter) throws CDSInternalFault,
 			PermissionDeniedFault {
 		verifyAuthenticated(callerIdentity);
-		return this.dcm.findCredentialsDelegatedToClient(callerIdentity);
+		return this.dcm.findCredentialsDelegatedToClient(callerIdentity, filter);
 	}
 
 	public DelegationIdentifier approveDelegation(String callerIdentity,

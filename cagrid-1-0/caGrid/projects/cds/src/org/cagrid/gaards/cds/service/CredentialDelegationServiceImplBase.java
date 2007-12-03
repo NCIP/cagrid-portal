@@ -1,14 +1,12 @@
 package org.cagrid.gaards.cds.service;
 
-import org.cagrid.gaards.cds.service.globus.resource.CredentialDelegationServiceResource;
-import org.cagrid.gaards.cds.service.ServiceConfiguration;
-
 import java.rmi.RemoteException;
 
 import javax.naming.InitialContext;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.MessageContext;
+import org.cagrid.gaards.cds.service.globus.resource.CredentialDelegationServiceResource;
 import org.globus.wsrf.Constants;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceContextException;

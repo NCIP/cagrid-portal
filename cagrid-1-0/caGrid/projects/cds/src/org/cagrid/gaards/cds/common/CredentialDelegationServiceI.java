@@ -18,16 +18,6 @@ import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 public interface CredentialDelegationServiceI {
 
   /**
-   * This method will find the credentials that have been delegated to the client by other entities.
-   *
-   * @throws CDSInternalFault
-   *	
-   * @throws PermissionDeniedFault
-   *	
-   */
-  public org.cagrid.gaards.cds.common.DelegationDescriptor[] findCredentialsDelegatedToClient() throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
-
-  /**
    * Allows a party to initate the delegation of their credential such that other parties may access their credential to act on their behalf.
    *
    * @param req
@@ -79,6 +69,17 @@ public interface CredentialDelegationServiceI {
    *	
    */
   public void updateDelegatedCredentialStatus(org.cagrid.gaards.cds.common.DelegationIdentifier id,org.cagrid.gaards.cds.common.DelegationStatus status) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
+
+  /**
+   * This method will find the credentials that have been delegated to the client by other entities.
+   *
+   * @param filter
+   * @throws CDSInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
+  public org.cagrid.gaards.cds.common.DelegationDescriptor[] findCredentialsDelegatedToClient(org.cagrid.gaards.cds.common.ClientDelegationFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
 
 }
 

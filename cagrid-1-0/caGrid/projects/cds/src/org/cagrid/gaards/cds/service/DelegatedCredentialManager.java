@@ -20,6 +20,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.CertificateChain;
+import org.cagrid.gaards.cds.common.ClientDelegationFilter;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
@@ -114,10 +115,16 @@ public class DelegatedCredentialManager {
 	}
 
 	public DelegationRecord[] findCredentialsDelegatedToClient(
-			String callerIdentity) throws CDSInternalFault {
+			String callerIdentity, ClientDelegationFilter filter)
+			throws CDSInternalFault {
 		DelegationRecordFilter f = new DelegationRecordFilter();
 		f.setDelegationStatus(DelegationStatus.Approved);
 		f.setExpirationStatus(ExpirationStatus.Valid);
+
+		if (filter != null) {
+			f.setGridIdentity(filter.getGridIdentity());
+		}
+
 		DelegationRecord[] records = findDelegatedCredentials(f);
 		if (records != null) {
 			List<DelegationRecord> list = new ArrayList<DelegationRecord>();

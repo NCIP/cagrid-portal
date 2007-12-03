@@ -26,12 +26,6 @@ public class CredentialDelegationServiceProviderImpl{
 	}
 	
 
-    public org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientResponse findCredentialsDelegatedToClient(org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
-    org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientResponse boxedResult = new org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientResponse();
-    boxedResult.setDelegationDescriptor(impl.findCredentialsDelegatedToClient());
-    return boxedResult;
-  }
-
     public org.cagrid.gaards.cds.stubs.InitiateDelegationResponse initiateDelegation(org.cagrid.gaards.cds.stubs.InitiateDelegationRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     org.cagrid.gaards.cds.stubs.InitiateDelegationResponse boxedResult = new org.cagrid.gaards.cds.stubs.InitiateDelegationResponse();
     boxedResult.setDelegationSigningRequest(impl.initiateDelegation(params.getReq().getDelegationRequest()));
@@ -53,6 +47,12 @@ public class CredentialDelegationServiceProviderImpl{
     public org.cagrid.gaards.cds.stubs.UpdateDelegatedCredentialStatusResponse updateDelegatedCredentialStatus(org.cagrid.gaards.cds.stubs.UpdateDelegatedCredentialStatusRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     org.cagrid.gaards.cds.stubs.UpdateDelegatedCredentialStatusResponse boxedResult = new org.cagrid.gaards.cds.stubs.UpdateDelegatedCredentialStatusResponse();
     impl.updateDelegatedCredentialStatus(params.getId().getDelegationIdentifier(),params.getStatus().getDelegationStatus());
+    return boxedResult;
+  }
+
+    public org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientResponse findCredentialsDelegatedToClient(org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientResponse boxedResult = new org.cagrid.gaards.cds.stubs.FindCredentialsDelegatedToClientResponse();
+    boxedResult.setDelegationDescriptor(impl.findCredentialsDelegatedToClient(params.getFilter().getClientDelegationFilter()));
     return boxedResult;
   }
 
