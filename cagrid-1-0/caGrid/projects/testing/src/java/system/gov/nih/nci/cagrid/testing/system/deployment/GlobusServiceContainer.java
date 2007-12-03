@@ -85,7 +85,7 @@ public class GlobusServiceContainer extends ServiceContainer {
     }
 
 
-    protected void deploy(File serviceDir, List<String> deployArgs) throws ContainerException {
+    protected synchronized void deploy(File serviceDir, List<String> deployArgs) throws ContainerException {
         String antHome = System.getenv(ENV_ANT_HOME);
         if (antHome == null || antHome.equals("")) {
             throw new ContainerException(ENV_ANT_HOME + " not set");
@@ -120,7 +120,7 @@ public class GlobusServiceContainer extends ServiceContainer {
         try {
             deployProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment, serviceDir);
             new StreamGobbler(deployProcess.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
-            new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
+            new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_ERR, LOG, Level.DEBUG).start();
             deployProcess.waitFor();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking deploy process: " + ex.getMessage(), ex);
@@ -186,8 +186,7 @@ public class GlobusServiceContainer extends ServiceContainer {
 
         Process proc = null;
         try {
-        	//use default heap here
-            proc = runGlobusCommand(GLOBUS_SHUTDOWN_CLASSNAME, null, opts);
+            proc = runGlobusCommand(GLOBUS_SHUTDOWN_CLASSNAME, opts);
         } catch (IOException ex) {
             throw new ContainerException("Error executing shutdown client process: " + ex.getMessage(), ex);
         }
@@ -262,7 +261,7 @@ public class GlobusServiceContainer extends ServiceContainer {
 
         // start the container
         try {
-            globusProcess = runGlobusCommand(GLOBUS_CONTAINER_CLASSNAME, this.properties.getHeapSizeInMegabytes(), opts);
+            globusProcess = runGlobusCommand(GLOBUS_CONTAINER_CLASSNAME, opts);
         } catch (IOException ex) {
             throw new ContainerException("Error executing globus command: " + ex.getMessage(), ex);
         }
@@ -343,9 +342,10 @@ public class GlobusServiceContainer extends ServiceContainer {
      * @param heapSizeInMegabytes null for default value. This must make sense for java command line. E.g., 64, 128, 256, etc.
      * @param options
      * @return
+     *      The process created
      * @throws IOException
      */
-    private synchronized Process runGlobusCommand(String clName, Integer heapSizeInMegabytes, List<String> options) throws IOException {
+    private synchronized Process runGlobusCommand(String clName, List<String> options) throws IOException {
         // create globus startup params
         // %_RUNJAVA% -Dlog4j.configuration=container-log4j.properties
         // %LOCAL_OPTS% %GLOBUS_OPTIONS% -classpath %LOCALCLASSPATH%
@@ -372,8 +372,8 @@ public class GlobusServiceContainer extends ServiceContainer {
         // build command
         ArrayList<String> cmd = new ArrayList<String>();
         cmd.add(java.getAbsolutePath());
-        if (heapSizeInMegabytes != null) {
-        	cmd.add("-Xmx" + heapSizeInMegabytes.toString() + "m");
+        if (getProperties().getHeapSizeInMegabytes() != null) {
+        	cmd.add("-Xmx" + getProperties().getHeapSizeInMegabytes().toString() + "m");
         }
         cmd.add("-Dlog4j.configuration=container-log4j.properties");
         cmd.add("-DGLOBUS_LOCATION=" + containerDir.getAbsolutePath());
