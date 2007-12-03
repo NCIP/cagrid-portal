@@ -26,7 +26,7 @@ import junit.textui.TestRunner;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.23 2007-12-03 16:27:18 hastings Exp $
+ * @version $Id: SystemTests.java,v 1.24 2007-12-03 18:22:47 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     
@@ -93,8 +93,7 @@ public class SystemTests extends BaseSystemTest {
         // 8) start globus
         steps.add(new StartContainerStep(container));
         // 9) test data service
-        steps.add(new InvokeDataServiceStep("localhost", info.getName(), 
-            container.getProperties().getPortPreference()));
+        steps.add(new InvokeDataServiceStep(container, info.getName()));
         // 10) verify the audit log
         steps.add(new VerifyAuditLogStep(auditorLogFile.getAbsolutePath()));
         return steps;

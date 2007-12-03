@@ -26,7 +26,7 @@ import java.util.Vector;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.14 2007-12-03 16:27:19 hastings Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.15 2007-12-03 18:22:47 dervin Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -88,8 +88,7 @@ public class UpgradedServiceSystemTest extends Story {
 		// 7) start globus
 		steps.add(new StartContainerStep(container));
 		// 8) test data service
-		steps.add(new InvokeDataServiceStep(
-			"localhost", info.getName(), container.getProperties().getPortPreference()));
+		steps.add(new InvokeDataServiceStep(container, info.getName()));
 		return steps;
 	}
 	

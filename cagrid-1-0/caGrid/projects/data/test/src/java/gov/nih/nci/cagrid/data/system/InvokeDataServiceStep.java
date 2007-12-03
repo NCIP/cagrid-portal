@@ -12,13 +12,13 @@ import gov.nih.nci.cagrid.data.client.DataServiceClient;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
-import gov.nih.nci.cagrid.testing.system.deployment.NoAvailablePortException;
-import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.util.Iterator;
 
 import org.apache.axis.message.MessageElement;
+import org.apache.axis.types.URI;
 import org.projectmobius.bookstore.Book;
 
 /** 
@@ -27,19 +27,16 @@ import org.projectmobius.bookstore.Book;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: InvokeDataServiceStep.java,v 1.6 2007-12-03 16:27:18 hastings Exp $ 
+ * @version $Id: InvokeDataServiceStep.java,v 1.7 2007-12-03 18:22:47 dervin Exp $ 
  */
 public class InvokeDataServiceStep extends Step {
-	public static final String URL_PART = "/wsrf/services/cagrid/";
 	
-	private String hostName;
-	private String serviceName;
-    private PortPreference port;
-	
-	public InvokeDataServiceStep(String hostName, String serviceName, PortPreference port) {
-		this.hostName = hostName;
-		this.port = port;
-		this.serviceName = serviceName;
+    private ServiceContainer container;
+    private String serviceName;
+    
+	public InvokeDataServiceStep(ServiceContainer container, String serviceName) {
+		this.container = container;
+        this.serviceName = serviceName;
 	}
 	
 
@@ -143,7 +140,9 @@ public class InvokeDataServiceStep extends Step {
 	}
 	
 	
-	private String getServiceUrl() throws NoAvailablePortException {
-		return "http://" + hostName + ":" + port.getPort().intValue() + URL_PART + serviceName; 
+	private String getServiceUrl() throws Exception {
+		URI baseUri = container.getContainerBaseURI();
+        String url = baseUri.toString() + "cagrid/" + serviceName;
+        return url;
 	}
 }
