@@ -5,6 +5,7 @@ import gov.nci.nih.cagrid.validator.ValidationPackage;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
+import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
 import gov.nih.nci.cagrid.tests.core.beans.validation.Schedule;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
@@ -36,8 +37,6 @@ import junit.swingui.TestRunner;
 
 import org.apache.axis.types.URI.MalformedURIException;
 
-import com.atomicobject.haste.framework.StoryBook;
-
 /** 
  *  DeploymentValidationBuilder
  *  Utility to build a grid deployment validation test
@@ -45,7 +44,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:14:58 PM
- * @version $Id: DeploymentValidationBuilder.java,v 1.1 2007-11-26 17:09:10 dervin Exp $ 
+ * @version $Id: DeploymentValidationBuilder.java,v 1.2 2007-12-03 16:27:19 hastings Exp $ 
  */
 public class DeploymentValidationBuilder extends JFrame {
     // -XX:MaxPermSize=256m

@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.creation.enumeration;
 
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.DeleteOldServiceStep;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
 import java.util.Vector;
@@ -10,15 +11,13 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import com.atomicobject.haste.framework.Story;
-
 /** 
  *  CreateEnumerationTests
  *  Tests creation of an enumeration supporting caGrid 1.0 Data Service
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 30, 2006 
- * @version $Id: CreateEnumerationTests.java,v 1.4 2007-06-12 16:13:40 dervin Exp $ 
+ * @version $Id: CreateEnumerationTests.java,v 1.5 2007-12-03 16:27:19 hastings Exp $ 
  */
 public class CreateEnumerationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";

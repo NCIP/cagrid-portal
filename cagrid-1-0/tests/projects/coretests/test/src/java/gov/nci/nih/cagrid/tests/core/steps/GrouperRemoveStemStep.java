@@ -5,8 +5,7 @@ package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClient;
-
-import com.atomicobject.haste.framework.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 
 public class GrouperRemoveStemStep extends Step {

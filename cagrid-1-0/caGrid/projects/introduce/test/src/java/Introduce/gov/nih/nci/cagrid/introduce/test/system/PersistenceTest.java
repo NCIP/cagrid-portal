@@ -18,10 +18,9 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.util.Vector;
-
-import com.atomicobject.haste.framework.Story;
 
 
 public class PersistenceTest extends Story {
@@ -46,16 +45,7 @@ public class PersistenceTest extends Story {
 
     @Override
     protected Vector steps() {
-        // init the container
-        try {
-            container = ServiceContainerFactory.createContainer(
-                ServiceContainerType.GLOBUS_CONTAINER);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-        
-        tci = new PersistentTestCaseInfo();
+
         Vector steps = new Vector();
         try {
             steps.add(new UnpackContainerStep(container));
@@ -86,7 +76,17 @@ public class PersistenceTest extends Story {
     
 
     protected boolean storySetUp() throws Throwable {
-        super.storySetUp();
+        // init the container
+        try {
+            container = ServiceContainerFactory.createContainer(
+                ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        
+        tci = new PersistentTestCaseInfo();
+        
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci);
         try {
             step1.runStep();
@@ -99,7 +99,6 @@ public class PersistenceTest extends Story {
 
 
     protected void storyTearDown() throws Throwable {
-        super.storyTearDown();
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci);
         try {
             step1.runStep();
@@ -121,13 +120,6 @@ public class PersistenceTest extends Story {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-
-    // used to make sure that if we are going to use a junit testsuite to test
-    // this
-    // that the test suite will not error out looking for a single test......
-    public void testDummy() throws Throwable {
     }
 
 }

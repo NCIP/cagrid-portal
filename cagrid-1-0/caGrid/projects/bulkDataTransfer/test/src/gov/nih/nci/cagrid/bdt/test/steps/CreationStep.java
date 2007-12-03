@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 
@@ -19,15 +20,13 @@ import javax.xml.namespace.QName;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
-import com.atomicobject.haste.framework.Step;
-
 
 /**
  * CreationStep 
  * Step to create a BDT service using the Introduce engine
  * 
  * @created Aug 22, 2006
- * @version $Id: CreationStep.java,v 1.13 2007-11-09 14:44:45 dervin Exp $
+ * @version $Id: CreationStep.java,v 1.14 2007-12-03 16:27:18 hastings Exp $
  */
 public class CreationStep extends Step {
     

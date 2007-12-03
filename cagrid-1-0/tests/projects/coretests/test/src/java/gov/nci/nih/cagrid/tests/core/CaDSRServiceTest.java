@@ -12,6 +12,7 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 import gov.nci.nih.cagrid.tests.core.util.CaDSRExtractUtils;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -22,8 +23,6 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 import org.apache.axis.types.URI.MalformedURIException;
-
-import com.atomicobject.haste.framework.Story;
 
 
 /**

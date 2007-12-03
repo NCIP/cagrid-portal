@@ -1,14 +1,13 @@
 package gov.nih.nci.cagrid.data.system;
 
-import java.io.File;
-
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
-import com.atomicobject.haste.framework.Step;
+import java.io.File;
 
 
 /**

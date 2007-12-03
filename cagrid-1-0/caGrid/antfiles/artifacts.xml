@@ -100,11 +100,6 @@
 				<include name="*.jar" />
 			</fileset>
 		</artifact>
-		<artifact track="test" type="jars" id="system.test.jars">
-			<fileset dir="${test.lib.dir}">
-				<include name="*haste*.jar" />
-			</fileset>
-		</artifact>
 
 
 		<!-- Project Created Artifacts -->

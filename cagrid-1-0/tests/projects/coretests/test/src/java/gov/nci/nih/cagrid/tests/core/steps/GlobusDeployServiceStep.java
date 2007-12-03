@@ -3,13 +3,12 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
-import java.io.File;
-import java.util.List;
-
-import com.atomicobject.haste.framework.Step;
-
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+
+import java.io.File;
+import java.util.List;
 
 
 /**

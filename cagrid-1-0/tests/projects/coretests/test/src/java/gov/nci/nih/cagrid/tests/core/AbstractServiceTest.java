@@ -7,13 +7,12 @@ import gov.nci.nih.cagrid.tests.core.steps.ServiceCreateStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
 import gov.nci.nih.cagrid.tests.core.util.ServiceHelper;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
 import java.util.Vector;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
-
-import com.atomicobject.haste.framework.Story;
 
 
 /**

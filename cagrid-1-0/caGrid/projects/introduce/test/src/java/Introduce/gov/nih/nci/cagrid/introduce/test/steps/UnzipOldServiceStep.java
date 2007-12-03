@@ -1,11 +1,10 @@
 package gov.nih.nci.cagrid.introduce.test.steps;
 
-import java.io.File;
-
 import gov.nih.nci.cagrid.common.ZipUtilities;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
-import com.atomicobject.haste.framework.Step;
+import java.io.File;
 
 public class UnzipOldServiceStep extends Step {
 

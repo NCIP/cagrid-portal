@@ -34,6 +34,7 @@ import gov.nci.nih.cagrid.tests.core.util.NoAvailablePortException;
 import gov.nci.nih.cagrid.tests.core.util.PortPreference;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -44,8 +45,6 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 import org.apache.axis.types.URI.MalformedURIException;
-
-import com.atomicobject.haste.framework.Story;
 
 
 /**

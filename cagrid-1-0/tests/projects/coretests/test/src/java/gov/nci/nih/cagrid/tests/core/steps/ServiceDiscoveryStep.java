@@ -11,12 +11,11 @@ import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.service.Operation;
 import gov.nih.nci.cagrid.metadata.service.ServiceContext;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
-
-import com.atomicobject.haste.framework.Step;
 
 
 /**

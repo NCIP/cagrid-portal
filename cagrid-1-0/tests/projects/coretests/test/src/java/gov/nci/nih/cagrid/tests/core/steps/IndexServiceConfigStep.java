@@ -4,6 +4,7 @@
 package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,8 +15,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
-
-import com.atomicobject.haste.framework.Step;
 
 
 /**

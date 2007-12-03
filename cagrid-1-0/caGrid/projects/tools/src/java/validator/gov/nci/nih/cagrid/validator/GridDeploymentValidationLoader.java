@@ -5,6 +5,9 @@ import gov.nci.nih.cagrid.validator.steps.base.DeleteTempDirStep;
 import gov.nci.nih.cagrid.validator.steps.base.TestServiceMetaData;
 import gov.nci.nih.cagrid.validator.steps.base.TestServiceUpStep;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
+import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceTestStep;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceTestStepConfigurationProperty;
@@ -24,10 +27,6 @@ import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
-import com.atomicobject.haste.framework.Step;
-import com.atomicobject.haste.framework.Story;
-import com.atomicobject.haste.framework.StoryBook;
-
 /** 
  *  GridDeploymentValidationLoader
  *  Loader utility for grid deploymentm validation tests
@@ -35,7 +34,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 3:04:08 PM
- * @version $Id: GridDeploymentValidationLoader.java,v 1.1 2007-11-26 17:09:10 dervin Exp $ 
+ * @version $Id: GridDeploymentValidationLoader.java,v 1.2 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class GridDeploymentValidationLoader {
     

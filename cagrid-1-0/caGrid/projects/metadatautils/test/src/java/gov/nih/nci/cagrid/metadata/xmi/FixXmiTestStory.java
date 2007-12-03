@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.metadata.xmi;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,9 +12,6 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import com.atomicobject.haste.framework.Step;
-import com.atomicobject.haste.framework.Story;
-
 /** 
  *  FixXmiTestStory
  *  Haste system-testing story to exercise fix-xmi functionality
@@ -20,7 +19,7 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Nov 8, 2007 10:50:25 AM
- * @version $Id: FixXmiTestStory.java,v 1.1 2007-11-08 20:28:07 dervin Exp $ 
+ * @version $Id: FixXmiTestStory.java,v 1.2 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class FixXmiTestStory extends Story {    
     public static final String SDK_ZIP_LOCATION = "ext/resources/caCORE_SDK_321.zip";

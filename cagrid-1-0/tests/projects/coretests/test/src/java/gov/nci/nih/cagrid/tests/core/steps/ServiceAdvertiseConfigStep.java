@@ -4,6 +4,7 @@
 package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,8 +14,6 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
-
-import com.atomicobject.haste.framework.Step;
 
 
 /**

@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  VerifyBDTImplAddedStep
@@ -25,7 +25,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 29, 2007 2:28:04 PM
- * @version $Id: VerifyBDTImplAddedStep.java,v 1.5 2007-06-19 15:58:07 dervin Exp $ 
+ * @version $Id: VerifyBDTImplAddedStep.java,v 1.6 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class VerifyBDTImplAddedStep extends Step {
     

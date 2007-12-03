@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.creation.bdt;
 
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.DeleteOldServiceStep;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
 import java.util.Vector;
@@ -10,8 +11,6 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import com.atomicobject.haste.framework.Story;
-
 /** 
  *  BDTDataServiceCreationTests
  *  Tests for creating a BDT Data Service
@@ -19,7 +18,7 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 2:41:25 PM
- * @version $Id: BDTDataServiceCreationTests.java,v 1.6 2007-10-30 14:12:18 hastings Exp $ 
+ * @version $Id: BDTDataServiceCreationTests.java,v 1.7 2007-12-03 16:27:20 hastings Exp $ 
  */
 public class BDTDataServiceCreationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";

@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.data.creation;
 
+import gov.nih.nci.cagrid.testing.system.haste.JVMStoryRunner;
+import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
+
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-
-import com.atomicobject.haste.framework.JVMStoryRunner;
-import com.atomicobject.haste.framework.StoryBook;
 
 /** 
  *  DataServiceCreationTests

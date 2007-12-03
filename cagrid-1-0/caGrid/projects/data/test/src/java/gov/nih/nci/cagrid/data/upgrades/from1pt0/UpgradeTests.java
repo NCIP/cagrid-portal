@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.data.upgrades.from1pt0;
 
+import gov.nih.nci.cagrid.testing.system.haste.JVMStoryRunner;
+import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
+
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-
-import com.atomicobject.haste.framework.JVMStoryRunner;
-import com.atomicobject.haste.framework.StoryBook;
 
 /** 
  *  UpgradeTests
@@ -12,7 +12,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTests.java,v 1.2 2007-10-01 17:04:49 hastings Exp $ 
+ * @version $Id: UpgradeTests.java,v 1.3 2007-12-03 16:27:19 hastings Exp $ 
  */
 public class UpgradeTests extends StoryBook {
 

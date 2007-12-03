@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.data.system;
 
+import gov.nih.nci.cagrid.testing.system.haste.JVMStoryRunner;
+import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
+
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-
-import com.atomicobject.haste.framework.JVMStoryRunner;
-import com.atomicobject.haste.framework.StoryBook;
 
 /** 
  *  DataServiceSystemTests
@@ -12,7 +12,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: DataServiceSystemTests.java,v 1.1 2006-11-08 18:09:38 dervin Exp $ 
+ * @version $Id: DataServiceSystemTests.java,v 1.2 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class DataServiceSystemTests extends StoryBook {
 

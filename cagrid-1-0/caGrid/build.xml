@@ -156,6 +156,7 @@
             <artifact refid="common.test.jars" />
             <artifact refid="core.test.jars" />
             <artifact refid="test.coverage.jars" />
+        	<artifact refid="testing.system.jars"/>
             <artifact refid="common.metadata.jars" />
             <artifact refid="data.metadata.jars" />
         	<artifact refid="jdom.jars" />
@@ -252,7 +253,7 @@
             <artifact refid="common.test.jars" />
             <artifact refid="core.test.jars" />
             <artifact refid="test.coverage.jars" />
-            <artifact refid="system.test.jars" />
+        	<artifact refid="testing.system.jars"/>
             <artifact refid="introduce.full.test.jars" />
             <artifact refid="common.metadata.jars" />
             <artifact refid="cadsr.jars" />
@@ -814,6 +815,7 @@
             <artifact refid="data.jars" />
 			<artifact refid="smartquote.translator.jars"/>
             <artifact refid="data.schemas" />
+        	<artifact refid="testing.system.jars"/>
         </resolveDependencies>
         <!-- query processor jars required by the styles -->
         <resolveDependencies extdir="${projects.dir}/dataExtensions/extension/sdk31">
@@ -837,6 +839,7 @@
 			<artifact refid="grape.jars"/>
 			<artifact refid="introduce.jars"/>
 			<artifact refid="dorian.client.jars"/>
+			<artifact refid="testing.system.jars"/>
 			<artifact refid="cadsr.jars"/>
 			<artifact refid="gme.globus.client.jars"/>
             <artifact refid="common.test.jars" />
@@ -863,6 +866,7 @@
             <artifact refid="security.metadata.jars" />
             <artifact refid="servicesecurity.jars" />
             <artifact refid="test.coverage.jars" />
+        	<artifact refid="testing.system.jars"/>
         </resolveDependencies>
         <ant dir="${projects.dir}/bulkDataTransfer" inheritAll="false" antfile="build.xml" target="all" />
     </target>

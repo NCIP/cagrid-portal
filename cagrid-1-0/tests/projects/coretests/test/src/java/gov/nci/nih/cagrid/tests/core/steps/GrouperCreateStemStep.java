@@ -7,8 +7,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClient;
 import gov.nih.nci.cagrid.gridgrouper.testutils.Utils;
-
-import com.atomicobject.haste.framework.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 
 public class GrouperCreateStemStep extends Step {

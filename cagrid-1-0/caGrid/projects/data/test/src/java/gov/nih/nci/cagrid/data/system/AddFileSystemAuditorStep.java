@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.data.system;
 
-import java.io.File;
-
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.auditing.AuditorConfiguration;
@@ -13,8 +11,9 @@ import gov.nih.nci.cagrid.data.service.auditing.FileDataServiceAuditor;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
-import com.atomicobject.haste.framework.Step;
+import java.io.File;
 
 /** 
  *  AddFileSystemAuditorStep
@@ -24,7 +23,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created May 25, 2007 1:58:49 PM
- * @version $Id: AddFileSystemAuditorStep.java,v 1.1 2007-05-25 20:03:41 dervin Exp $ 
+ * @version $Id: AddFileSystemAuditorStep.java,v 1.2 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class AddFileSystemAuditorStep extends Step {
     

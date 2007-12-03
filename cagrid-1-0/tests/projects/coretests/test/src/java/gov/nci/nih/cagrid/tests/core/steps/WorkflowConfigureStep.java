@@ -5,10 +5,9 @@ package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-
-import com.atomicobject.haste.framework.Step;
 
 /**
  * This step deploys a service to a temporary globus container by running the deployGlobus ant task

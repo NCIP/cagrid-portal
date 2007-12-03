@@ -4,10 +4,9 @@
 package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.util.AntUtils;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-
-import com.atomicobject.haste.framework.Step;
 
 public class GrouperInitStep
 	extends Step

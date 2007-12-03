@@ -1,8 +1,7 @@
 package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.GridCredential;
-
-import com.atomicobject.haste.framework.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 public class ProxyActiveStep extends Step {
 	private GridCredential credential;

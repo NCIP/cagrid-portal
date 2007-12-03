@@ -1,16 +1,16 @@
 package gov.nci.nih.cagrid.validator.steps;
 
-import java.util.Properties;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import javax.net.ssl.*;
 
-import com.atomicobject.haste.framework.Step;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 
 public class TestHttpsServices extends Step{
 	public static class MyTrustManager implements javax.net.ssl.TrustManager,

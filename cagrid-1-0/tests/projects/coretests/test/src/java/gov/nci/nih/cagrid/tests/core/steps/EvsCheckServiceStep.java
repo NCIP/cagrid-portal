@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.evs.service.EVSHistoryRecordsSearchParams;
 import gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams;
 import gov.nih.nci.cagrid.evs.service.EVSSourceSearchParams;
 import gov.nih.nci.cagrid.evsgridservice.client.EVSGridServiceClient;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.evs.domain.Association;
 import gov.nih.nci.evs.domain.Atom;
 import gov.nih.nci.evs.domain.Definition;
@@ -30,8 +31,6 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
-
-import com.atomicobject.haste.framework.Step;
 
 
 /**

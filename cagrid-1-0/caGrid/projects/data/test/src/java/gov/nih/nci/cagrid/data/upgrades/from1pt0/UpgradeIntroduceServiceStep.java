@@ -1,11 +1,10 @@
 package gov.nih.nci.cagrid.data.upgrades.from1pt0;
 
-import java.io.File;
-
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.upgrade.UpgradeManager;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
-import com.atomicobject.haste.framework.Step;
+import java.io.File;
 
 
 /**

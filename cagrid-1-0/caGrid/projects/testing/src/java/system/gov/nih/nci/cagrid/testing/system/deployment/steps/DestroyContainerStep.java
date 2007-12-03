@@ -1,10 +1,9 @@
 package gov.nih.nci.cagrid.testing.system.deployment.steps;
 
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import org.apache.log4j.Logger;
-
-import com.atomicobject.haste.framework.Step;
 
 /**
  * DestroyContainerStep 
@@ -12,7 +11,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 8, 2006
- * @version $Id: DestroyContainerStep.java,v 1.1 2007-11-01 19:37:22 dervin Exp $
+ * @version $Id: DestroyContainerStep.java,v 1.2 2007-12-03 16:27:18 hastings Exp $
  */
 public class DestroyContainerStep extends Step {
     private static final Logger LOG = Logger.getLogger(DestroyContainerStep.class);

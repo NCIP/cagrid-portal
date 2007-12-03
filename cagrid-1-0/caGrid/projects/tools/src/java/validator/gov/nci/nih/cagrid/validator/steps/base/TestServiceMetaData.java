@@ -3,11 +3,12 @@
  */
 package gov.nci.nih.cagrid.validator.steps.base;
 
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
+import gov.nih.nci.cagrid.metadata.ServiceMetadata;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
-
-import com.atomicobject.haste.framework.Step;
-import gov.nih.nci.cagrid.metadata.*;
 
 
 /**

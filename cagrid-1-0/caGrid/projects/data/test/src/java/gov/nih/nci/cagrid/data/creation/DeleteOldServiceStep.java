@@ -2,10 +2,9 @@ package gov.nih.nci.cagrid.data.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  DeleteOldServiceStep

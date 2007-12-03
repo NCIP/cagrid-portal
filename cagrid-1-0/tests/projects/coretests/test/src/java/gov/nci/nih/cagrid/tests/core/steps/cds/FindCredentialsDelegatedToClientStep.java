@@ -5,6 +5,7 @@ package gov.nci.nih.cagrid.tests.core.steps.cds;
 
 import gov.nci.nih.cagrid.tests.core.DelegationIdentifierReference;
 import gov.nci.nih.cagrid.tests.core.GridCredential;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,6 @@ import org.cagrid.gaards.cds.common.DelegationDescriptor;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.Utils;
 import org.globus.gsi.GlobusCredential;
-
-import com.atomicobject.haste.framework.Step;
 
 public class FindCredentialsDelegatedToClientStep extends Step implements
 		GridCredential {

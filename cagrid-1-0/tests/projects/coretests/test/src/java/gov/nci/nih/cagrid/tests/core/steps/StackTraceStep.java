@@ -3,6 +3,8 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,8 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
-
-import com.atomicobject.haste.framework.Step;
 
 public class StackTraceStep
 	extends Step

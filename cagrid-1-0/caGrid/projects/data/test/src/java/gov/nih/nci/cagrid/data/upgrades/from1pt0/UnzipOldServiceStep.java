@@ -1,10 +1,9 @@
 package gov.nih.nci.cagrid.data.upgrades.from1pt0;
 
 import gov.nih.nci.cagrid.common.ZipUtilities;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  UnzipOldServiceStep
@@ -12,7 +11,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UnzipOldServiceStep.java,v 1.4 2007-06-12 16:13:40 dervin Exp $ 
+ * @version $Id: UnzipOldServiceStep.java,v 1.5 2007-12-03 16:27:19 hastings Exp $ 
  */
 public class UnzipOldServiceStep extends Step {
 	private String testDir;

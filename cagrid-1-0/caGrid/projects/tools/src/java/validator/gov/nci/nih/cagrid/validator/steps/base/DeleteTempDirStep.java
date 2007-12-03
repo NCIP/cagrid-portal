@@ -1,10 +1,9 @@
 package gov.nci.nih.cagrid.validator.steps.base;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  DeleteTempDirStep
@@ -13,7 +12,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 11:31:24 AM
- * @version $Id: DeleteTempDirStep.java,v 1.1 2007-11-26 17:09:10 dervin Exp $ 
+ * @version $Id: DeleteTempDirStep.java,v 1.2 2007-12-03 16:27:19 hastings Exp $ 
  */
 public class DeleteTempDirStep extends Step {
     

@@ -2,12 +2,11 @@ package gov.nih.nci.cagrid.data.style.cacore32.test;
 
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.DeleteOldServiceStep;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
 import java.util.Vector;
-
-import com.atomicobject.haste.framework.Step;
-import com.atomicobject.haste.framework.Story;
 
 /** 
  *  SDK32StyleCreationStory
@@ -16,7 +15,7 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Jul 18, 2007 2:35:15 PM
- * @version $Id: SDK32StyleCreationStory.java,v 1.3 2007-10-11 20:52:25 dervin Exp $ 
+ * @version $Id: SDK32StyleCreationStory.java,v 1.4 2007-12-03 16:27:20 hastings Exp $ 
  */
 public class SDK32StyleCreationStory extends Story {
     public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";

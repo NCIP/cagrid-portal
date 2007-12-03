@@ -1,14 +1,14 @@
 package gov.nih.nci.cagrid.data.creation;
 
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
+
 import java.io.File;
 import java.util.Vector;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-
-import com.atomicobject.haste.framework.Step;
-import com.atomicobject.haste.framework.Story;
 
 /** 
  *  CreationTests

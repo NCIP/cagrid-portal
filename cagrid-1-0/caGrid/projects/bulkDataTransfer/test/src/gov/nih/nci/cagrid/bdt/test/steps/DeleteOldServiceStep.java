@@ -2,10 +2,9 @@ package gov.nih.nci.cagrid.bdt.test.steps;
 
 import gov.nih.nci.cagrid.bdt.test.unit.CreationTest;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  DeleteOldServiceStep
@@ -14,7 +13,7 @@ import com.atomicobject.haste.framework.Step;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006 
- * @version $Id: DeleteOldServiceStep.java,v 1.1 2007-03-20 18:44:46 hastings Exp $ 
+ * @version $Id: DeleteOldServiceStep.java,v 1.2 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class DeleteOldServiceStep extends Step {
 	

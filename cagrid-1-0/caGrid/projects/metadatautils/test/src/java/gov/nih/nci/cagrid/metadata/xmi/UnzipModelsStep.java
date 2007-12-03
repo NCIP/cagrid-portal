@@ -1,10 +1,9 @@
 package gov.nih.nci.cagrid.metadata.xmi;
 
 import gov.nih.nci.cagrid.common.ZipUtilities;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  UnzipModelsStep
@@ -13,7 +12,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Oct 24, 2007 11:50:38 AM
- * @version $Id: UnzipModelsStep.java,v 1.1 2007-10-24 16:43:23 dervin Exp $ 
+ * @version $Id: UnzipModelsStep.java,v 1.2 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class UnzipModelsStep extends Step {
     

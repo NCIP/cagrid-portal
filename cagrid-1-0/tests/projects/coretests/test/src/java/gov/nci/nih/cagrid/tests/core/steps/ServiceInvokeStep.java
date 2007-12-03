@@ -8,6 +8,7 @@ import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
 import gov.nci.nih.cagrid.tests.core.util.ReflectionUtils;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -20,8 +21,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import org.globus.gsi.GlobusCredential;
-
-import com.atomicobject.haste.framework.Step;
 
 
 /**

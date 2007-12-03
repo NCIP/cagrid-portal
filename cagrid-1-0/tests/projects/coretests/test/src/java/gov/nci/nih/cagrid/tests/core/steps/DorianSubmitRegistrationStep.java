@@ -5,8 +5,7 @@ package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nih.nci.cagrid.dorian.client.IdPRegistrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
-
-import com.atomicobject.haste.framework.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 
 /**

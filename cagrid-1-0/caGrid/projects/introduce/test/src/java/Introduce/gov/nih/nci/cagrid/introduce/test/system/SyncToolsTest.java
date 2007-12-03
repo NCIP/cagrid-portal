@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfoLifetimeResource;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
 import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddComplexMethodWithFaulsAndArraysStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddComplexMethodWithFaultStep;
@@ -10,8 +10,8 @@ import gov.nih.nci.cagrid.introduce.test.steps.AddImportedMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddMetadataStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddMetadatatWithLoadFromFileStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddMethodReturningClientHandleMethodStep;
-import gov.nih.nci.cagrid.introduce.test.steps.AddServicePropertiesStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddServiceContextStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddServicePropertiesStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodWithArraysStep;
@@ -33,15 +33,14 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.util.Vector;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-
-import com.atomicobject.haste.framework.Step;
-import com.atomicobject.haste.framework.Story;
 
 
 public class SyncToolsTest extends Story {
@@ -51,42 +50,32 @@ public class SyncToolsTest extends Story {
 
     private ServiceContainer container;
 
+
     public SyncToolsTest() {
         this.setName("Introduce Codegen System Test");
     }
-    
-    
+
+
     public String getName() {
         return "Introduce Codegen System Test";
     }
-    
-    
+
+
     public String getDescription() {
         return "Testing the Introduce code generation tools";
     }
 
 
     protected Vector steps() {
-        // init the container
-        try {
-            container = ServiceContainerFactory.createContainer(
-                ServiceContainerType.GLOBUS_CONTAINER);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-        tci1 = new TestCaseInfoMain();
-        tci2 = new TestCaseInfoLifetimeResource();
         Vector<Step> steps = new Vector<Step>();
 
         try {
             steps.add(new UnpackContainerStep(container));
             steps.add(new CreateSkeletonStep(tci1, true));
             steps.add(new AddServiceContextStep(tci2, true));
-            steps.add(new AddMethodReturningClientHandleMethodStep(
-                tci1, tci2, "testClientReturn", false, true));
-            steps.add(new AddMethodReturningClientHandleMethodStep(
-                tci1, tci2, "testClientReturnWithArray", true, true));
+            steps.add(new AddMethodReturningClientHandleMethodStep(tci1, tci2, "testClientReturn", false, true));
+            steps
+                .add(new AddMethodReturningClientHandleMethodStep(tci1, tci2, "testClientReturnWithArray", true, true));
             steps.add(new AddMetadataStep(tci1, true));
             steps.add(new AddServicePropertiesStep(tci1, true));
             steps.add(new AddSimpleMethodStep(tci1, "newMethod", false));
@@ -105,10 +94,10 @@ public class SyncToolsTest extends Story {
             steps.add(new AddSimpleMethodWithFaultStep(tci1, "newMethodWithFault", false));
             steps.add(new AddSimpleMethodWithReturnStep(tci1, "newMethodWithReturn", false));
             steps.add(new AddSimpleMethodWithArraysStep(tci1, "newMethodWithArrays", true));
-            steps.add(new AddBookstoreSchemaStep(tci1,false));
+            steps.add(new AddBookstoreSchemaStep(tci1, false));
             steps.add(new AddComplexMethodWithFaultStep(tci1, "newComplexMethodWithFault", false));
-            steps.add(new AddComplexMethodWithFaulsAndArraysStep(
-                tci1, "newComplexMethodWithFaultStepsAndArrays", true));
+            steps
+                .add(new AddComplexMethodWithFaulsAndArraysStep(tci1, "newComplexMethodWithFaultStepsAndArrays", true));
             steps.add(new AddMetadatatWithLoadFromFileStep(tci1, true));
             steps.add(new RemoveAllMetadataStep(tci1, true));
             steps.add(new RemoveAllServicePropertiesStep(tci1, true));
@@ -121,7 +110,16 @@ public class SyncToolsTest extends Story {
 
 
     protected boolean storySetUp() throws Throwable {
-        super.storySetUp();
+        // init the container
+        try {
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        tci1 = new TestCaseInfoMain();
+        tci2 = new TestCaseInfoLifetimeResource();
+
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
         try {
             step1.runStep();
@@ -134,7 +132,6 @@ public class SyncToolsTest extends Story {
 
 
     protected void storyTearDown() throws Throwable {
-        super.storyTearDown();
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
         try {
             step1.runStep();
@@ -157,14 +154,6 @@ public class SyncToolsTest extends Story {
             e.printStackTrace();
         }
     }
-
-
-    // used to make sure that if we are going to use a junit testsuite to test
-    // this
-    // that the test suite will not error out looking for a single test......
-    public void testDummy() throws Throwable {
-    }
-
 
     /**
      * Convenience method for running all the Steps in this Story.

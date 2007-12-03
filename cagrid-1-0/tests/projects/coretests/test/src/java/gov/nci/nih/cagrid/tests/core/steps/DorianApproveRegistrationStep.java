@@ -3,16 +3,15 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
-import org.globus.gsi.GlobusCredential;
-
 import gov.nci.nih.cagrid.tests.core.GridCredential;
 import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
-import com.atomicobject.haste.framework.Step;
+import org.globus.gsi.GlobusCredential;
 
 /**
  * This step approves a user application by finding the user in dorian and

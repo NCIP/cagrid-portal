@@ -4,12 +4,11 @@
 package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.rmi.RemoteException;
 
 import javax.xml.rpc.ServiceException;
-
-import com.atomicobject.haste.framework.Step;
 
 
 /**

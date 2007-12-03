@@ -8,7 +8,7 @@ import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
 import gov.nci.nih.cagrid.tests.core.util.SourceUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -20,8 +20,6 @@ import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
-
-import com.atomicobject.haste.framework.Step;
 
 /**
  * This step creates a new Introduce service by running a series of ant commands on an introduce.xml 

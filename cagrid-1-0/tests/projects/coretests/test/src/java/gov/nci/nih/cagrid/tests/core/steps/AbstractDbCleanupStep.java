@@ -3,12 +3,12 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import com.atomicobject.haste.framework.Step;
 
 /**
  * This is a base step for dropping database tables.  It is typically used to cleanup some work done

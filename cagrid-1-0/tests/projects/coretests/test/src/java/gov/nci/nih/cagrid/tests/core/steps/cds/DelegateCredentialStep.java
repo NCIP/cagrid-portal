@@ -6,6 +6,7 @@ package gov.nci.nih.cagrid.tests.core.steps.cds;
 import gov.nci.nih.cagrid.tests.core.DelegatedCredential;
 import gov.nci.nih.cagrid.tests.core.DelegationIdentifierReference;
 import gov.nci.nih.cagrid.tests.core.GridCredential;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.util.List;
 
@@ -13,12 +14,9 @@ import org.apache.axis.message.MessageElement;
 import org.cagrid.gaards.cds.client.DelegationUserClient;
 import org.cagrid.gaards.cds.common.AllowedParties;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
-import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
-
-import com.atomicobject.haste.framework.Step;
 
 public class DelegateCredentialStep extends Step implements
 		DelegatedCredential, DelegationIdentifierReference {

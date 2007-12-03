@@ -3,18 +3,17 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
-import java.io.File;
-
 import gov.nci.nih.cagrid.tests.core.compare.BeanComparator;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+
+import java.io.File;
 
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
-
-import com.atomicobject.haste.framework.Step;
 
 
 /**

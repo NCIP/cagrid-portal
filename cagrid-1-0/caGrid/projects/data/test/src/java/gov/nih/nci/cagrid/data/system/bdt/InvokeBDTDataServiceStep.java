@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContaine
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.testing.system.deployment.NoAvailablePortException;
 import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -31,8 +32,6 @@ import org.projectmobius.common.XMLUtilities;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAddressingLocator;
 
-import com.atomicobject.haste.framework.Step;
-
 /** 
  *  InvokeBDTDataServiceStep
  *  Step to invoke a BDT data service and exercise its methods
@@ -40,7 +39,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:37:02 PM
- * @version $Id: InvokeBDTDataServiceStep.java,v 1.7 2007-10-31 19:32:05 dervin Exp $ 
+ * @version $Id: InvokeBDTDataServiceStep.java,v 1.8 2007-12-03 16:27:19 hastings Exp $ 
  */
 public class InvokeBDTDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";

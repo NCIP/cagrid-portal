@@ -1,11 +1,11 @@
 package gov.nci.nih.cagrid.validator.steps;
 
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+
 import java.io.File;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  AbstractBaseServiceTestStep
@@ -14,7 +14,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Sep 5, 2007 11:47:16 AM
- * @version $Id: AbstractBaseServiceTestStep.java,v 1.1 2007-11-26 17:09:10 dervin Exp $ 
+ * @version $Id: AbstractBaseServiceTestStep.java,v 1.2 2007-12-03 16:27:19 hastings Exp $ 
  */
 public abstract class AbstractBaseServiceTestStep extends Step {
     

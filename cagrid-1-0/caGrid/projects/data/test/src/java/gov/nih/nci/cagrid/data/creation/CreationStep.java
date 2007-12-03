@@ -8,13 +8,12 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  CreationStep

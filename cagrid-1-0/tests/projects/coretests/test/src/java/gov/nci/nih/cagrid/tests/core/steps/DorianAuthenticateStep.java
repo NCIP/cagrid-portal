@@ -11,10 +11,9 @@ import gov.nih.nci.cagrid.dorian.client.IdPUserClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import org.globus.gsi.GlobusCredential;
-
-import com.atomicobject.haste.framework.Step;
 
 
 /**

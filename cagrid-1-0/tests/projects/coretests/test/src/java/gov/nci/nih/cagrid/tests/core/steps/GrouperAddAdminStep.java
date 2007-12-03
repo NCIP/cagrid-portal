@@ -4,11 +4,10 @@
 package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.util.AntUtils;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 import java.util.Properties;
-
-import com.atomicobject.haste.framework.Step;
 
 
 public class GrouperAddAdminStep extends Step {

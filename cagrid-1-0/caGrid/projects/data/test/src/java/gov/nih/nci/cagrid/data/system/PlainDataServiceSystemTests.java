@@ -10,10 +10,9 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.util.Vector;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  PlainDataServiceSystemTests
@@ -23,7 +22,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Sep 28, 2007 12:22:29 PM
- * @version $Id: PlainDataServiceSystemTests.java,v 1.6 2007-11-05 21:33:55 dervin Exp $ 
+ * @version $Id: PlainDataServiceSystemTests.java,v 1.7 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class PlainDataServiceSystemTests extends BaseSystemTest {
     

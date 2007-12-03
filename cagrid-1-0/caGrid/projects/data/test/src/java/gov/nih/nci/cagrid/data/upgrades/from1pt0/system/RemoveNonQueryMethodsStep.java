@@ -7,10 +7,9 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  RemoveNonQueryMethodsStep
@@ -18,7 +17,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: RemoveNonQueryMethodsStep.java,v 1.1 2007-02-28 15:01:27 dervin Exp $ 
+ * @version $Id: RemoveNonQueryMethodsStep.java,v 1.2 2007-12-03 16:27:19 hastings Exp $ 
  */
 public class RemoveNonQueryMethodsStep extends Step {
 	private String serviceDir;

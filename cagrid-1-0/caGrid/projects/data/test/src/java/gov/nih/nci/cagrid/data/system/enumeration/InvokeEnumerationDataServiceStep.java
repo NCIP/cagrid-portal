@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.NoAvailablePortException;
 import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -29,15 +30,13 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.Release;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAddressingLocator;
 
-import com.atomicobject.haste.framework.Step;
-
 /** 
  *  InvokeEnumerationDataServiceStep
  *  Testing step to invoke an enumeration data service
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 23, 2006 
- * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.10 2007-10-31 19:32:05 dervin Exp $ 
+ * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.11 2007-12-03 16:27:19 hastings Exp $ 
  */
 public class InvokeEnumerationDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";

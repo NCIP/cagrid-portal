@@ -14,18 +14,17 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
 import java.util.Vector;
-
-import org.apache.log4j.PropertyConfigurator;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import com.atomicobject.haste.framework.Step;
-import com.atomicobject.haste.framework.Story;
+import org.apache.log4j.PropertyConfigurator;
 
 
 public class Upgrade_1_0_Test extends Story {
@@ -52,15 +51,6 @@ public class Upgrade_1_0_Test extends Story {
 
 
     protected Vector steps() {
-        // init the container
-        try {
-            container = ServiceContainerFactory.createContainer(
-                ServiceContainerType.GLOBUS_CONTAINER);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-        this.tci1 = new TestCaseInfoMain();
         Vector<Step> steps = new Vector<Step>();
 
         try {
@@ -80,8 +70,16 @@ public class Upgrade_1_0_Test extends Story {
 
 
     protected boolean storySetUp() throws Throwable {
-        super.storySetUp();
-
+        // init the container
+        try {
+            container = ServiceContainerFactory.createContainer(
+                ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        this.tci1 = new TestCaseInfoMain();
+        
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(this.tci1);
         try {
            step1.runStep();
@@ -94,7 +92,6 @@ public class Upgrade_1_0_Test extends Story {
 
 
     protected void storyTearDown() throws Throwable {
-        super.storyTearDown();
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(this.tci1);
         try {
 //            step1.runStep();
@@ -113,13 +110,6 @@ public class Upgrade_1_0_Test extends Story {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-    }
-
-
-    // used to make sure that if we are going to use a junit testsuite to test
-    // this
-    // that the test suite will not error out looking for a single test......
-    public void testDummy() throws Throwable {
     }
 
 

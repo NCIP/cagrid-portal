@@ -3,14 +3,13 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+import gov.nci.nih.cagrid.tests.core.util.FileUtils;
+import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+
 import java.io.File;
 
 import org.globus.common.CoGProperties;
-
-import com.atomicobject.haste.framework.Step;
-
-import gov.nci.nih.cagrid.tests.core.util.FileUtils;
-import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 
 
 /**

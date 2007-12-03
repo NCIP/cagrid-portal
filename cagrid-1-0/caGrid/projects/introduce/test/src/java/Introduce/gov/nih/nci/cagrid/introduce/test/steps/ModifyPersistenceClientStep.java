@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.introduce.test.steps;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.util.SourceUtils;
 
 import java.io.File;
 

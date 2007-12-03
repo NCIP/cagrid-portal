@@ -3,7 +3,7 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
-import com.atomicobject.haste.framework.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 
 /**

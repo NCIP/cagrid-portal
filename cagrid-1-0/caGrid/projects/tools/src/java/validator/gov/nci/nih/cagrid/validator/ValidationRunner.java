@@ -1,5 +1,6 @@
 package gov.nci.nih.cagrid.validator;
 
+import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
 import gov.nih.nci.cagrid.tests.core.beans.validation.Interval;
 
 import java.io.FileInputStream;
@@ -9,12 +10,10 @@ import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.apache.axis.types.Time;
-
 import junit.framework.TestResult;
 import junit.textui.TestRunner;
 
-import com.atomicobject.haste.framework.StoryBook;
+import org.apache.axis.types.Time;
 
 /** 
  *  ValidationRunner
@@ -23,7 +22,7 @@ import com.atomicobject.haste.framework.StoryBook;
  * @author David Ervin
  * 
  * @created Aug 29, 2007 1:17:37 PM
- * @version $Id: ValidationRunner.java,v 1.1 2007-11-26 17:09:10 dervin Exp $ 
+ * @version $Id: ValidationRunner.java,v 1.2 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class ValidationRunner {
     

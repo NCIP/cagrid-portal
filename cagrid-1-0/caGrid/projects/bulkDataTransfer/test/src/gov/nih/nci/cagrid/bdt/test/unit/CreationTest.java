@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.bdt.test.unit;
 import gov.nih.nci.cagrid.bdt.test.steps.CreationStep;
 import gov.nih.nci.cagrid.bdt.test.steps.DeleteOldServiceStep;
 import gov.nih.nci.cagrid.bdt.test.steps.VerifyBDTImplAddedStep;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
 import java.util.Vector;
@@ -11,8 +12,6 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import com.atomicobject.haste.framework.Story;
-
 /** 
  *  CreationTests
  *  BDT service creation tests
@@ -20,7 +19,7 @@ import com.atomicobject.haste.framework.Story;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006 
- * @version $Id: CreationTest.java,v 1.6 2007-06-12 20:19:03 dervin Exp $ 
+ * @version $Id: CreationTest.java,v 1.7 2007-12-03 16:27:19 hastings Exp $ 
  */
 public class CreationTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -58,14 +57,6 @@ public class CreationTest extends Story {
 		}
 		return dir;
 	}
-	
-	
-	// used to make sure that if we are going to use a junit testsuite to 
-	// test this that the test suite will not error out 
-	// looking for a single test......
-	public void testDummy() throws Throwable {
-	}
-
 
 	/**
 	 * Convenience method for running all the Steps in this Story.
@@ -75,4 +66,5 @@ public class CreationTest extends Story {
 		TestResult result = runner.doRun(new TestSuite(CreationTest.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
+
 }

@@ -5,11 +5,10 @@ package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 import java.io.IOException;
-
-import com.atomicobject.haste.framework.Step;
 
 /**
  * This is a step that replaces \@caCOREServiceURL\@ in the jndi-config.xml of a Globus deployed caDSR service

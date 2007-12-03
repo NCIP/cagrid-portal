@@ -7,11 +7,10 @@ import gov.nci.nih.cagrid.tests.core.DelegatedCredential;
 import gov.nci.nih.cagrid.tests.core.GridCredential;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
 import org.globus.gsi.GlobusCredential;
-
-import com.atomicobject.haste.framework.Step;
 
 public class SuspendDelegatedCredentialStep extends Step implements
 		GridCredential {

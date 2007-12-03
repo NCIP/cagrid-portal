@@ -5,6 +5,7 @@ package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.SchemaInfo;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -29,8 +30,6 @@ import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import com.atomicobject.haste.framework.Step;
 
 
 /**

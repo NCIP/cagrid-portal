@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.data.system;
 
-import java.io.File;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
-import com.atomicobject.haste.framework.Step;
+import java.io.File;
 
 /** 
  *  VerifyAuditLogStep
@@ -12,7 +12,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created May 25, 2007 2:21:26 PM
- * @version $Id: VerifyAuditLogStep.java,v 1.1 2007-05-25 20:03:41 dervin Exp $ 
+ * @version $Id: VerifyAuditLogStep.java,v 1.2 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class VerifyAuditLogStep extends Step {
     

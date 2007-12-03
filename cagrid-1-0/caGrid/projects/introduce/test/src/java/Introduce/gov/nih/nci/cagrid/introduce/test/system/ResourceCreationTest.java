@@ -7,8 +7,8 @@ import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfoNotificationResource;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfoPersistentResource;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfoSingletonResource;
-import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddBookResourcePropertyStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddServiceContextStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
@@ -20,15 +20,14 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.util.Vector;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-
-import com.atomicobject.haste.framework.Step;
-import com.atomicobject.haste.framework.Story;
 
 
 public class ResourceCreationTest extends Story {
@@ -57,20 +56,6 @@ public class ResourceCreationTest extends Story {
 
 
     protected Vector steps() {
-        // init the service container
-        try {
-            container = ServiceContainerFactory.createContainer(
-                ServiceContainerType.GLOBUS_CONTAINER);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-        tci1 = new TestCaseInfoMain();
-        tci2 = new TestCaseInfoLifetimeResource();
-        tci3 = new TestCaseInfoBaseResource();
-        tci4 = new TestCaseInfoSingletonResource();
-        tci5 = new TestCaseInfoNotificationResource();
-        tci6 = new TestCaseInfoPersistentResource();
         Vector<Step> steps = new Vector<Step>();
 
         try {
@@ -98,7 +83,21 @@ public class ResourceCreationTest extends Story {
 
 
     protected boolean storySetUp() throws Throwable {
-        super.storySetUp();
+        // init the service container
+        try {
+            container = ServiceContainerFactory.createContainer(
+                ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        tci1 = new TestCaseInfoMain();
+        tci2 = new TestCaseInfoLifetimeResource();
+        tci3 = new TestCaseInfoBaseResource();
+        tci4 = new TestCaseInfoSingletonResource();
+        tci5 = new TestCaseInfoNotificationResource();
+        tci6 = new TestCaseInfoPersistentResource();
+        
 
         Step step2 = new UnpackContainerStep(container);
         try {
@@ -118,7 +117,6 @@ public class ResourceCreationTest extends Story {
 
 
     protected void storyTearDown() throws Throwable {
-        super.storyTearDown();
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
         try {
             step1.runStep();
@@ -137,13 +135,6 @@ public class ResourceCreationTest extends Story {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-    }
-
-
-    // used to make sure that if we are going to use a junit testsuite to test
-    // this
-    // that the test suite will not error out looking for a single test......
-    public void testDummy() throws Throwable {
     }
 
 

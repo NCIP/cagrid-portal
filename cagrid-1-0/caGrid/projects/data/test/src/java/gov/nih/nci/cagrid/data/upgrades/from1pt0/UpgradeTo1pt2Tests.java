@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.upgrades.from1pt0;
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.DeleteOldServiceStep;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
 import java.util.Vector;
@@ -11,15 +12,13 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import com.atomicobject.haste.framework.Story;
-
 /** 
  *  UpgradeTo1pt1Tests
  *  Tests to upgrade a data service from 1.0 to 1.1
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTo1pt2Tests.java,v 1.3 2007-10-03 14:36:21 dervin Exp $ 
+ * @version $Id: UpgradeTo1pt2Tests.java,v 1.4 2007-12-03 16:27:19 hastings Exp $ 
  */
 public class UpgradeTo1pt2Tests extends Story {
     public static final String TEST_DIR = ".." + File.separator + "data" + File.separator + "test";

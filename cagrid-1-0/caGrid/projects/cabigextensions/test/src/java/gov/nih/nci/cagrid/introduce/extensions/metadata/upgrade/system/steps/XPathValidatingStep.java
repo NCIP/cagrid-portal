@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.upgrade.system.steps;
 
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+
 import java.util.Iterator;
 
 import org.apache.commons.jxpath.JXPathContext;
-
-import com.atomicobject.haste.framework.Step;
 
 
 /**

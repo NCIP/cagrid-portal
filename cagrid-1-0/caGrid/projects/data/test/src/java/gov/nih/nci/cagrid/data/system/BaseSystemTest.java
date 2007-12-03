@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.system;
 
-import com.atomicobject.haste.framework.Story;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 /** 
  *  BaseSystemTest
@@ -9,7 +9,7 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:21:41 PM
- * @version $Id: BaseSystemTest.java,v 1.2 2007-11-05 21:33:55 dervin Exp $ 
+ * @version $Id: BaseSystemTest.java,v 1.3 2007-12-03 16:27:18 hastings Exp $ 
  */
 public abstract class BaseSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";

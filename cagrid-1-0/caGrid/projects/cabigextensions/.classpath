@@ -83,7 +83,6 @@
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius-castor-0.9.4.3-xml.jar"/>
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/shaste-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/activation.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/antlr.jar"/>
@@ -141,5 +140,6 @@
 	<classpathentry kind="lib" path="ext/test/lib/jaxmejs-0.5.2.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-system.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,10 +1,9 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.NotificationTestCaseInfo;
-import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
-import gov.nih.nci.cagrid.introduce.test.steps.AddMetadataStep;
-import gov.nih.nci.cagrid.introduce.test.steps.AddNotificationMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddBookResourcePropertyStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddNotificationMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSetBookMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
@@ -17,10 +16,9 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.util.Vector;
-
-import com.atomicobject.haste.framework.Story;
 
 
 public class NotificationTest extends Story {
@@ -45,16 +43,7 @@ public class NotificationTest extends Story {
 
     @Override
     protected Vector steps() {
-        // init the container
-        try {
-            container = ServiceContainerFactory.createContainer(
-                ServiceContainerType.GLOBUS_CONTAINER);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-        
-        tci = new NotificationTestCaseInfo();
+
         Vector steps = new Vector();
         try {
             steps.add(new UnpackContainerStep(container));
@@ -76,7 +65,17 @@ public class NotificationTest extends Story {
     
 
     protected boolean storySetUp() throws Throwable {
-        super.storySetUp();
+        // init the container
+        try {
+            container = ServiceContainerFactory.createContainer(
+                ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        
+        tci = new NotificationTestCaseInfo();
+        
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci);
         try {
             step1.runStep();
@@ -89,7 +88,6 @@ public class NotificationTest extends Story {
 
 
     protected void storyTearDown() throws Throwable {
-        super.storyTearDown();
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci);
         try {
             step1.runStep();
@@ -111,13 +109,6 @@ public class NotificationTest extends Story {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-
-    // used to make sure that if we are going to use a junit testsuite to test
-    // this
-    // that the test suite will not error out looking for a single test......
-    public void testDummy() throws Throwable {
     }
 
 }

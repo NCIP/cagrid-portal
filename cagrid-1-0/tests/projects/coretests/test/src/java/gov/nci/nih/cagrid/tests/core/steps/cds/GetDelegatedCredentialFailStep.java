@@ -6,10 +6,9 @@ package gov.nci.nih.cagrid.tests.core.steps.cds;
 import gov.nci.nih.cagrid.tests.core.DelegatedCredential;
 import gov.nci.nih.cagrid.tests.core.GridCredential;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
-
-import com.atomicobject.haste.framework.Step;
 
 public class GetDelegatedCredentialFailStep extends Step {
 	private GridCredential credential;

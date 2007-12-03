@@ -2,10 +2,9 @@ package gov.nih.nci.cagrid.data.upgrades.from1pt0;
 
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  BuildUpgradedServiceStep
@@ -13,7 +12,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: BuildUpgradedServiceStep.java,v 1.4 2007-10-25 16:48:29 hastings Exp $ 
+ * @version $Id: BuildUpgradedServiceStep.java,v 1.5 2007-12-03 16:27:19 hastings Exp $ 
  */
 public class BuildUpgradedServiceStep extends Step {
 	

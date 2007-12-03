@@ -1,9 +1,9 @@
 package gov.nci.nih.cagrid.validator;
 
-import java.util.Vector;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 
-import com.atomicobject.haste.framework.Step;
-import com.atomicobject.haste.framework.Story;
+import java.util.Vector;
 
 /** 
  *  ServiceValidationStory
@@ -12,7 +12,7 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 10:33:18 AM
- * @version $Id: ServiceValidationStory.java,v 1.1 2007-11-26 17:09:10 dervin Exp $ 
+ * @version $Id: ServiceValidationStory.java,v 1.2 2007-12-03 16:27:18 hastings Exp $ 
  */
 public abstract class ServiceValidationStory extends Story {
     

@@ -9,12 +9,11 @@ import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 import gov.nih.nci.cagrid.fqp.client.FederatedQueryProcessorClient;
 import gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.rmi.RemoteException;
 
 import org.oasis.wsrf.lifetime.Destroy;
-
-import com.atomicobject.haste.framework.Step;
 
 
 public class FQPAsynchronousQueryImmediateTerminationStep extends Step {

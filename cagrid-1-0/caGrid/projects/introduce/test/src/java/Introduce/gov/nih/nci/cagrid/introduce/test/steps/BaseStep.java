@@ -2,10 +2,9 @@ package gov.nih.nci.cagrid.introduce.test.steps;
 
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-
-import com.atomicobject.haste.framework.Step;
 
 
 public abstract class BaseStep extends Step {

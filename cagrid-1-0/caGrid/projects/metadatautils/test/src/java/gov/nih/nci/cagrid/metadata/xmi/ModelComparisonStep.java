@@ -5,14 +5,13 @@ import gov.nih.nci.cagrid.metadata.common.SemanticMetadata;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  ModelComparisonStep
@@ -21,7 +20,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Oct 24, 2007 1:27:00 PM
- * @version $Id: ModelComparisonStep.java,v 1.3 2007-10-29 15:57:57 dervin Exp $ 
+ * @version $Id: ModelComparisonStep.java,v 1.4 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class ModelComparisonStep extends Step {
     

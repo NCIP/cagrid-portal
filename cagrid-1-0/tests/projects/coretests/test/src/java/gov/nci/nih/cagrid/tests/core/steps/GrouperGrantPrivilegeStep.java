@@ -10,12 +10,11 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClient;
 import gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
-
-import com.atomicobject.haste.framework.Step;
 
 
 public class GrouperGrantPrivilegeStep extends Step {

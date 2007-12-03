@@ -4,8 +4,7 @@
 package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
-
-import com.atomicobject.haste.framework.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 /**
  * This step destroys the globus default user proxy.

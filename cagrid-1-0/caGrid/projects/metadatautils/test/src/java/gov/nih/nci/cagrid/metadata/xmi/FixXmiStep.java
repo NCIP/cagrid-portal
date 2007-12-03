@@ -1,11 +1,9 @@
 package gov.nih.nci.cagrid.metadata.xmi;
 
-import gov.nih.nci.cagrid.metadata.xmi.FixXmiExecutor;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 import java.io.FileFilter;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  FixXmiStep
@@ -14,7 +12,7 @@ import com.atomicobject.haste.framework.Step;
  * @author David Ervin
  * 
  * @created Nov 8, 2007 11:18:10 AM
- * @version $Id: FixXmiStep.java,v 1.1 2007-11-08 20:28:07 dervin Exp $ 
+ * @version $Id: FixXmiStep.java,v 1.2 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class FixXmiStep extends Step {
     private String sdkDir;

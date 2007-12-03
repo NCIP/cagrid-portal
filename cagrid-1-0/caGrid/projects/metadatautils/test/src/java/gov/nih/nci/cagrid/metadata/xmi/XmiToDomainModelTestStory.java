@@ -1,13 +1,13 @@
 package gov.nih.nci.cagrid.metadata.xmi;
 
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
+
 import java.util.Vector;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-
-import com.atomicobject.haste.framework.Step;
-import com.atomicobject.haste.framework.Story;
 
 /** 
  *  XmiToDomainModelTestStory
@@ -16,7 +16,7 @@ import com.atomicobject.haste.framework.Story;
  * @author David Ervin
  * 
  * @created Oct 24, 2007 11:48:02 AM
- * @version $Id: XmiToDomainModelTestStory.java,v 1.2 2007-10-24 20:22:24 dervin Exp $ 
+ * @version $Id: XmiToDomainModelTestStory.java,v 1.3 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class XmiToDomainModelTestStory extends Story {
     public static final String MODEL_ZIP_FILE = "test/resources/models.zip";

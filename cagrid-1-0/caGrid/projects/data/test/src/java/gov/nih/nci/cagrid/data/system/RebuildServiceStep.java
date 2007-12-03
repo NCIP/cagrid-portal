@@ -8,13 +8,12 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
-
-import com.atomicobject.haste.framework.Step;
 
 /** 
  *  RebuildServiceStep
@@ -23,7 +22,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: RebuildServiceStep.java,v 1.11 2007-10-31 19:32:05 dervin Exp $ 
+ * @version $Id: RebuildServiceStep.java,v 1.12 2007-12-03 16:27:18 hastings Exp $ 
  */
 public class RebuildServiceStep extends Step {
 	
