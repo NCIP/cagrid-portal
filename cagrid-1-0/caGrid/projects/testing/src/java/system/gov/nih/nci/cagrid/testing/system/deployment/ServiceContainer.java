@@ -17,11 +17,11 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Oct 12, 2007 9:37:44 AM
- * @version $Id: ServiceContainer.java,v 1.3 2007-11-05 16:19:58 dervin Exp $ 
+ * @version $Id: ServiceContainer.java,v 1.4 2007-12-03 15:03:57 jpermar Exp $ 
  */
 public abstract class ServiceContainer {
     
-    private ContainerProperties properties = null;
+    protected ContainerProperties properties = null;
     
     protected boolean unpacked = false;    
     protected boolean started = false;

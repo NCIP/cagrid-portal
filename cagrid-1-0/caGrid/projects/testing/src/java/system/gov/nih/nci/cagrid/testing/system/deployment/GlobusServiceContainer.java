@@ -186,7 +186,8 @@ public class GlobusServiceContainer extends ServiceContainer {
 
         Process proc = null;
         try {
-            proc = runGlobusCommand(GLOBUS_SHUTDOWN_CLASSNAME, opts);
+        	//use default heap here
+            proc = runGlobusCommand(GLOBUS_SHUTDOWN_CLASSNAME, null, opts);
         } catch (IOException ex) {
             throw new ContainerException("Error executing shutdown client process: " + ex.getMessage(), ex);
         }
@@ -261,7 +262,7 @@ public class GlobusServiceContainer extends ServiceContainer {
 
         // start the container
         try {
-            globusProcess = runGlobusCommand(GLOBUS_CONTAINER_CLASSNAME, opts);
+            globusProcess = runGlobusCommand(GLOBUS_CONTAINER_CLASSNAME, this.properties.getHeapSizeInMegabytes(), opts);
         } catch (IOException ex) {
             throw new ContainerException("Error executing globus command: " + ex.getMessage(), ex);
         }
@@ -336,8 +337,15 @@ public class GlobusServiceContainer extends ServiceContainer {
         stub._setProperty(GSIConstants.GSI_AUTHORIZATION, org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
     }
 
-
-    private synchronized Process runGlobusCommand(String clName, List<String> options) throws IOException {
+    /**
+     * 
+     * @param clName
+     * @param heapSizeInMegabytes null for default value. This must make sense for java command line. E.g., 64, 128, 256, etc.
+     * @param options
+     * @return
+     * @throws IOException
+     */
+    private synchronized Process runGlobusCommand(String clName, Integer heapSizeInMegabytes, List<String> options) throws IOException {
         // create globus startup params
         // %_RUNJAVA% -Dlog4j.configuration=container-log4j.properties
         // %LOCAL_OPTS% %GLOBUS_OPTIONS% -classpath %LOCALCLASSPATH%
@@ -364,6 +372,9 @@ public class GlobusServiceContainer extends ServiceContainer {
         // build command
         ArrayList<String> cmd = new ArrayList<String>();
         cmd.add(java.getAbsolutePath());
+        if (heapSizeInMegabytes != null) {
+        	cmd.add("-Xmx" + heapSizeInMegabytes.toString() + "m");
+        }
         cmd.add("-Dlog4j.configuration=container-log4j.properties");
         cmd.add("-DGLOBUS_LOCATION=" + containerDir.getAbsolutePath());
         cmd.add("-Djava.endorsed.dirs=" + containerDir.getAbsolutePath() + File.separator + "endorsed");
