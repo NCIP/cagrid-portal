@@ -56,6 +56,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 
     public static final String ENV_ANT_HOME = "ANT_HOME";
     public static final String ENV_CATALINA_HOME = "CATALINA_HOME";
+    public static final String ENV_CATALINA_OPTS = "CATALINA_OPTS";
     public static final String ENV_GLOBUS_LOCATION = "GLOBUS_LOCATION";
 
     public static final String DEPLOY_ANT_TARGET = "deployTomcat";
@@ -248,9 +249,18 @@ public class TomcatServiceContainer extends ServiceContainer {
             command.add(startup + " run");
         }
 
-        String[] locationEnvironment = new String[]{ENV_CATALINA_HOME + "="
-            + getProperties().getContainerDirectory().getAbsolutePath()};
-        String[] editedEnvironment = editEnvironment(locationEnvironment);
+        // edit the environment
+        List<String> edits = new ArrayList<String>();
+        edits.add(ENV_ANT_HOME + "=" + getProperties().getContainerDirectory().getAbsolutePath());
+        if (getProperties().getHeapSizeInMegabytes() != null) {
+            String currentCatalinaOpts = System.getenv(ENV_CATALINA_OPTS);
+            if (currentCatalinaOpts != null) {
+                edits.add(ENV_CATALINA_OPTS + "=\"" + currentCatalinaOpts + " -Xmx" + getProperties().getHeapSizeInMegabytes() + "m\"");
+            } else {
+                edits.add(ENV_CATALINA_OPTS + "=\"-Xmx" + getProperties().getHeapSizeInMegabytes() + "m\"");
+            }
+        }
+        String[] editedEnvironment = editEnvironment(edits.toArray(new String[0]));
 
         LOG.debug("Command environment:\n");
         for (String e : editedEnvironment) {
@@ -297,6 +307,7 @@ public class TomcatServiceContainer extends ServiceContainer {
     // ---------------
     // Helpers
     // ---------------
+    
 
     private String[] editEnvironment(String[] edits) {
         Map<String, String> envm = new HashMap<String, String>(System.getenv());
