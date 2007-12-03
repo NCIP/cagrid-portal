@@ -26,9 +26,6 @@
 	<!-- Should db layer be compiled with debug on? -->
 	<property name="db.debug" value="true" />
 
-	<property name="db.profile" value="default" />
-	<property name="hibernate.properties"
-		value="${db.dir}/etc/${db.profile}.hibernate.properties" />
 	<property file="${hibernate.properties}" />
 
 	<property name="db.jdbc.driver.jar"
@@ -48,27 +45,37 @@
 		classpathref="hibernatetoolslib" />
 
 	<target name="db:configure-hibernate-tools">
+		
 		<copy
 			file="${db.tools.hibernate.dir}/template.hibernate.cfg.xml"
 			tofile="${db.tools.hibernate.config}" overwrite="true">
 			<filterset>
-				<filter token="DB_DRIVER"
-					value="${hibernate.connection.driver_class}" />
 				<filter token="DB_URL"
-					value="${hibernate.connection.url}" />
+					value="${cagrid.portal.db.url}" />
 				<filter token="DB_USERNAME"
-					value="${hibernate.connection.username}" />
+					value="${cagrid.portal.db.username}" />
 				<filter token="DB_PASSWORD"
-					value="${hibernate.connection.password}" />
-				<filter token="DB_DIALECT" value="${hibernate.dialect}" />
+					value="${cagrid.portal.db.password}" />
 			</filterset>
 		</copy>
+		<delete file="${db.tools.hibernate.dir}/temp.xml"/>
+		<xmltask source="${db.dir}/etc/applicationContext-db.xml">
+			<call path="/*[local-name()='beans']/*[local-name()='bean' and @id='sessionFactory']/*[local-name()='property' and @name='annotatedClasses']/*[local-name()='list']/*[local-name()='value']">
+				<param name="classname" path="normalize-space(text())"/>
+				<actions>
+					<concat destfile="${db.tools.hibernate.dir}/temp.xml" append="true"><![CDATA[<mapping class="@{classname}"/>
+]]></concat>
+				</actions>
+			</call>
+		</xmltask>
+		<xmltask source="${db.tools.hibernate.config}" dest="${db.tools.hibernate.config}" preservetype="true">
+			<insert path="/hibernate-configuration/session-factory" file="${db.tools.hibernate.dir}/temp.xml"/>
+		</xmltask>
+		<delete file="${db.tools.hibernate.dir}/temp.xml"/>
 	</target>
 
 	<target name="db:gen-ddl"
 		depends="db:configure-hibernate-tools,db:compile">
-
-		<echo>${hibernate.dialect}</echo>
 
 		<mkdir dir="${db.gen.dir}" />
 		<hibernatetool destdir="${db.gen.dir}">
@@ -177,10 +184,10 @@
 	
 	<target name="db:load-schema" depends="db:gen-ddl">
 
-		<sql driver="${hibernate.connection.driver_class}"
-			url="${hibernate.connection.url}"
-			userid="${hibernate.connection.username}"
-			password="${hibernate.connection.password}"
+		<sql driver="com.mysql.jdbc.Driver"
+			url="${cagrid.portal.db.url}"
+			userid="${cagrid.portal.db.username}"
+			password="${cagrid.portal.db.password}"
 			src="${db.gen.dir}/cagrid-portal.ddl">
 			<classpath>
 				<pathelement location="${db.jdbc.driver.jar}" />
@@ -189,7 +196,7 @@
 
 	</target>
 	
-	
+	<!--
 	<target name="db:prepare-run-cp" depends="db:compile">
 		<copy todir="${db.classes.dir}" overwrite="true">
 			<fileset dir="${db.dir}/etc">
@@ -212,10 +219,11 @@
 			</classpath>
 		</java>
 	</target>
-
+	-->
 
 	<target name="db:clean">
 		<delete dir="${db.build.dir}" />
 		<delete dir="${db.test.build.dir}" />
 	</target>
+
 </project>

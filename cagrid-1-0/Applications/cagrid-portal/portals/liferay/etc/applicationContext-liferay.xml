@@ -12,6 +12,8 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 	
+	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+	
 	<bean id="directAutoLogin" class="gov.nih.nci.cagrid.portal.liferay.security.DirectAutoLogin" autowire="byName">
 		<property name="companyWebId" value="cabig.nci.nih.gov"/>
 		<property name="omniUserEmail" value="portaladmin@cabig.nci.nih.gov"/>

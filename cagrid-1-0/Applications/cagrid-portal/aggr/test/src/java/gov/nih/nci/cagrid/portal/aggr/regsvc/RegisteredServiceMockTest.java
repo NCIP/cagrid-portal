@@ -43,8 +43,7 @@ public class RegisteredServiceMockTest extends TestCase {
 		final String svcUrl2 = "http://service2";
 		final String svcUrl3 = "http://service3";
 		
-		Set<String> indexSvcUrls = new HashSet<String>();
-		indexSvcUrls.add(indexSvcUrl);
+		String[] indexSvcUrls = new String[]{indexSvcUrl};
 		
 		StaticApplicationContext ctx = new StaticApplicationContext();
 		ctx.start();

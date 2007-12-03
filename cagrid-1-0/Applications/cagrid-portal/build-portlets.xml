@@ -95,7 +95,6 @@
 			<fileset dir="${db.dir}/etc">
 				<include name="*.properties" />
 				<include name="*.xml" />
-				<exclude name="*.hibernate.properties" />
 			</fileset>
 			<fileset dir="${security.dir}/etc">
 				<include name="*.xml" />
@@ -106,16 +105,17 @@
 				<exclude name="applicationContext-workspaces.xml"/>
 				<include name="*.wsdd" />
 				<exclude name="*.sync-description.xml"/>
-				<exclude name="*.hibernate.properties" />
 			</fileset>
 
 		</copy>
 		
+		<!--
 		<copy file="${db.dir}/etc/${db.profile}.hibernate.properties"
 			tofile="${portlets.classes.dir}/hibernate.properties"
 			overwrite="true" />
+			-->
 			
-		<copy file="${aggr.dir}/etc/${target.grid}.sync-description.xml"
+		<copy file="${aggr.trust.syncgts.file}"
 			tofile="${portlets.classes.dir}/sync-description.xml"
 			overwrite="true" />			
 
@@ -124,6 +124,10 @@
 			overwrite="true">
 			<fileset dir="${portlets.src.war.dir}" />
 		</copy>
+		
+		<antcall target="create-cagridportal-properties">
+			<param name="target.dir" value="${portlets.classes.dir}/cagridportal.properties"/>
+		</antcall>
 
 	</target>
 

@@ -92,22 +92,20 @@
 			<fileset dir="${db.dir}/etc">
 				<include name="*.properties" />
 				<include name="*.xml" />
-				<exclude name="*.hibernate.properties"/>
 			</fileset>
 			<fileset dir="${aggr.dir}/etc">
 				<include name="*.properties" />
 				<include name="*.xml" />
 				<include name="*.wsdd" />
 				<exclude name="*.sync-description.xml"/>
-				<exclude name="*.hibernate.properties"/>
 			</fileset>
 		</copy>
 
-		<copy file="${db.dir}/etc/${db.profile}.hibernate.properties"
-			tofile="${aggr.classes.dir}/hibernate.properties"
-			overwrite="true" />
+		<antcall target="create-cagridportal-properties">
+			<param name="target.dir" value="${aggr.classes.dir}/cagridportal.properties"/>
+		</antcall>
 			
-		<copy file="${aggr.dir}/etc/${target.grid}.sync-description.xml"
+		<copy file="${aggr.trust.syncgts.file}"
 			tofile="${aggr.classes.dir}/sync-description.xml"
 			overwrite="true" />			
 			

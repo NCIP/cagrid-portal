@@ -40,9 +40,7 @@ public class RegisteredServiceMonitor extends AbstractMonitor {
 		logger.debug("Checking for new services...");
 		
 		Collection<RegisteredServiceEvent> events = new ArrayList<RegisteredServiceEvent>();
-		Set<String> urls = getIndexServiceUrls();
-		logger.debug("Checking " + urls.size() + " urls.");
-		for (String indexSvcUrl : urls) {
+		for (String indexSvcUrl : getIndexServiceUrls()) {
 			logger.debug("On Index Service: " + indexSvcUrl);
 			Set<String> cachedSvcUrls = null;
 			try {

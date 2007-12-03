@@ -78,8 +78,8 @@ public class PortalUtils {
 		}
 	}
 
-	public static boolean isEmpty(String email) {
-		return email == null || email.trim().length() == 0;
+	public static boolean isEmpty(String text) {
+		return text == null || text.trim().length() == 0 || text.trim().equals("null");
 	}
 
 	public static String createHash(String in) {

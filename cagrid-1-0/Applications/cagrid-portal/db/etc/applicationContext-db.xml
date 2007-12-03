@@ -10,27 +10,23 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
-	<!-- ========================= RESOURCE DEFINITIONS ========================= -->
-
-	<!-- Configurer that replaces ${...} placeholders with values from a properties file -->
-	<!-- (in this case, JDBC-related settings for the dataSource definition below) -->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location"
-			value="classpath:hibernate.properties" />
+			value="classpath:cagridportal.properties" />
 	</bean>
 
 	<bean id="dataSource"
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
-		p:driverClassName="${hibernate.connection.driver_class}"
+		p:driverClassName="com.mysql.jdbc.Driver"
 		p:maxActive="5" p:maxIdle="2" p:maxWait="180000"
 		p:removeAbandoned="true" p:removeAbandonedTimeout="300"
 		p:logAbandoned="true" p:testWhileIdle="true" p:testOnReturn="true"
 		p:timeBetweenEvictionRunsMillis="300000"
 		p:minEvictableIdleTimeMillis="600000"
-		p:url="${hibernate.connection.url}"
-		p:username="${hibernate.connection.username}"
-		p:password="${hibernate.connection.password}" />
+		p:url="${cagrid.portal.db.url}"
+		p:username="${cagrid.portal.db.username}"
+		p:password="${cagrid.portal.db.password}" />
 
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
@@ -106,21 +102,6 @@
 
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
-<!-- 
-	<tx:advice id="txAdvice" transaction-manager="transactionManager">
-		<tx:attributes>
-			<tx:method name="get*" read-only="true" />
-			<tx:method name="*" />
-		</tx:attributes>
-	</tx:advice>
-
-	<aop:config proxy-target-class="true">
-		<aop:pointcut id="daoOperation"
-			expression="execution(* gov.nih.nci.cagrid.portal.dao..*Dao.*(..))" />
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="daoOperation" />
-	</aop:config>
-	 -->
-
 	<bean id="hibernateTemplate"
 		class="org.springframework.orm.hibernate3.HibernateTemplate">
 		<property name="checkWriteOperations">
@@ -190,7 +171,7 @@
 	<bean id="xmlSchemaDao" parent="daoTemplate"
 		class="gov.nih.nci.cagrid.portal.dao.XMLSchemaDao" />
 
-
+<!-- 
 	<bean id="openSessionInViewInterceptor"
 		class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor"
 		autowire="byName">
@@ -201,8 +182,6 @@
 			<value>FLUSH_AUTO</value>
 		</property>
 	</bean>
-
-
-
+ -->
 
 </beans>

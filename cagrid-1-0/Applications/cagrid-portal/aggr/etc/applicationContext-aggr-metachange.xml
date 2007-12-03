@@ -16,7 +16,7 @@
 
 	<bean id="metadataChangeMonitor"
 		class="gov.nih.nci.cagrid.portal.aggr.metachange.MetadataChangeMonitor">
-		<property name="indexServiceUrls" ref="defaultIndexServiceUrls" />
+		<property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}" />
 		<property name="dynamicMetadataHashProvider">
 			<bean
 				class="gov.nih.nci.cagrid.portal.aggr.metachange.DynamicMetadataHashProvider">

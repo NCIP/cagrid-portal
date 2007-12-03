@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
@@ -106,6 +107,9 @@ public class ShareQueryController extends AbstractQueryActionController {
 		String targetClassName = null;
 		try {
 
+			//NOTE: We don't need to worry about XML bomb here since,
+			//CQL was already validated (i.e. parsed with Axis API which
+			//disables DOCTYPE).
 			Document doc = DocumentBuilderFactory.newInstance()
 					.newDocumentBuilder().parse(
 							new ByteArrayInputStream(cqlQuery.getBytes()));

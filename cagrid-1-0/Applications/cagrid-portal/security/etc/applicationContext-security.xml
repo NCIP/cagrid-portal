@@ -12,10 +12,14 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 	
-	<bean id="encryptionServicePrototype" class="gov.nih.nci.cagrid.portal.security.EncryptionService" scope="prototype">
-		<constructor-arg value="963-hkjjgoyu78490hkkkbluuuug09733023gljgg985678"/>
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:cagridportal.properties" />
 	</bean>
 	
-
+	<bean id="encryptionServicePrototype" class="gov.nih.nci.cagrid.portal.security.EncryptionService" scope="prototype">
+		<constructor-arg value="${cagrid.portal.security.encryption.key}"/>
+	</bean>
 	
 </beans>

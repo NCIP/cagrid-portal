@@ -16,7 +16,7 @@
 
 	<bean id="serviceStatusChangeMonitor"
 		class="gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusChangeMonitor">
-		<property name="indexServiceUrls" ref="defaultIndexServiceUrls" />
+		<property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}" />
 		<property name="dynamicServiceStatusProvider">
 			<bean
 				class="gov.nih.nci.cagrid.portal.aggr.status.DynamicServiceStatusProvider">
@@ -57,7 +57,7 @@
 	
 	<bean id="serviceStatusMonitor"
 		class="gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusMonitor">
-		<property name="indexServiceUrls" ref="defaultIndexServiceUrls" />
+		<property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}" />
 		<property name="cachedServiceUrlProvider">
 			<bean
 				class="gov.nih.nci.cagrid.portal.aggr.regsvc.DBCachedServiceUrlProvider">

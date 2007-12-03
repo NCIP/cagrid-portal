@@ -1,7 +1,7 @@
 
 
 <script
-	src="<c:out value="${mapBean.baseUrl}"/><c:out value="${mapBean.apiKey}"/>"
+	src="<c:out value="${mapBean.baseUrl}" escapeXml="false"/><c:out value="${mapBean.apiKey}" escapeXml="false"/>"
 	type="text/javascript"></script>
 
 <c:set var="mapNodeId"><portlet:namespace />-gmap</c:set>

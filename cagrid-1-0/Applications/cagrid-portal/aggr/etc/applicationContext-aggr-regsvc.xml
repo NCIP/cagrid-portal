@@ -16,7 +16,7 @@
 	
 	<bean id="registeredServiceMonitor"
 		class="gov.nih.nci.cagrid.portal.aggr.regsvc.RegisteredServiceMonitor">
-		<property name="indexServiceUrls" ref="defaultIndexServiceUrls" />
+		<property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}" />
 		<property name="dynamicServiceUrlProvider">
 			<bean
 				class="gov.nih.nci.cagrid.portal.aggr.regsvc.DynamicServiceUrlProvider">

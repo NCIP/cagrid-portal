@@ -11,14 +11,15 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
-
-	<util:set id="defaultIndexServiceUrls">
-<!-- 
-		<value>http://cbiovdev5012.nci.nih.gov:8080/wsrf/services/DefaultIndexService</value>
-		 -->	
-		<value>http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService</value>
 	
-	</util:set>
+	
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:cagridportal.properties" />
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
 	<bean id="defaultTimeout" class="java.lang.Long">
 		<constructor-arg value="10000"/>
@@ -29,11 +30,11 @@
 	</bean>
 	
 	<bean id="gmeUrl" class="java.lang.String">
-		<constructor-arg value="http://cagrid-service.nci.nih.gov:8080/wsrf/services/cagrid/GlobalModelExchange"/>
+		<constructor-arg value="${cagrid.portal.gmeUrl}"/>
 	</bean>
 	
 	<bean id="cadsrUrl" class="java.lang.String">
-		<constructor-arg value="http://cagrid-service.nci.nih.gov:8080/wsrf/services/cagrid/CaDSRService"/>
+		<constructor-arg value="${cagrid.portal.cadsrUrl}"/>
 	</bean>
 	
 	<bean id="metadataListenerTemplate" abstract="true">

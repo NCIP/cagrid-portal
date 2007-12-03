@@ -17,17 +17,11 @@
 	<property name="liferay.test.src.java.dir"
 		value="${liferay.test.dir}/src/java" />
 		
-	<property name="liferay.jboss.dir" value="${user.home}/portal-liferay"/>
 	<property name="liferay.jboss.download.url" value="http://switch.dl.sourceforge.net/sourceforge/jboss/jboss-4.0.5.GA.zip"/>
 	<property name="liferay.jboss.zip" value="${liferay.jboss.dir}/jboss-4.0.5.GA.zip"/>
 	<property name="liferay.jboss.home" value="${liferay.jboss.dir}/jboss-4.0.5.GA"/>
 	<property name="liferay.root.context.dir" value="${liferay.jboss.home}/server/default/deploy/liferay-portal.war"/>
-	<property name="liferay.db.host" value="localhost" />
-	<property name="liferay.db.port" value="3306" />
-	<property name="liferay.db.name" value="lportal2" />
 	<property name="liferay.db.url" value="jdbc:mysql://${liferay.db.host}:${liferay.db.port}/${liferay.db.name}" />
-	<property name="liferay.db.username" value="lportal2" />
-	<property name="liferay.db.password" value="lportal2" />
 	<property name="liferay.db.driver" value="com.mysql.jdbc.Driver" />
 	<property name="liferay.db.driver.path" value="${basedir}/${db.jdbc.driver.jar}" />
 	<property name="liferay.downloads.dir" value="${liferay.jboss.dir}"/>
@@ -41,11 +35,6 @@
 	<property name="liferay.portal.war.dir" value="${liferay.jboss.home}/server/default/deploy/liferay-portal.war"/>
 	<property name="liferay.autodeploy.dir" value="${liferay.jboss.dir}/deploy"/>
 	<property name="liferay.theme.name" value="cagrid-minimal"/>
-	<property name="liferay.https.port" value="8443"/>
-	<property name="liferay.https.keystore.path" value="${liferay.jboss.dir}/portal-keystore"/>
-	<property name="liferay.https.keystore.password" value="portal"/>
-	
-	<property name="liferay.tomcat.home" value="${user.home}/packages/tomcat/liferay/tomcat-5.5.23"/>
 	
 	<property name="liferay.debug" value="true"/>
 	
@@ -85,19 +74,19 @@
 	
 		<mkdir dir="${liferay.build.dir}/resources"/>
 		
-		<copy file="${db.dir}/etc/${db.profile}.hibernate.properties" tofile="${liferay.build.dir}/resources/hibernate.properties"/>
+		<antcall target="create-cagridportal-properties">
+			<param name="target.dir" value="${liferay.build.dir}/resources/cagridportal.properties"/>
+		</antcall>
 		
 		<copy todir="${liferay.build.dir}/resources">
 			<fileset dir="${db.dir}/etc">
 				<include name="*.properties" />
 				<include name="*.xml" />
-				<exclude name="*.hibernate.properties" />
 			</fileset>
 			<fileset dir="${security.dir}/etc">
 				<include name="*.xml" />
 			</fileset>
 			<fileset dir="${liferay.dir}/etc">
-				<include name="proxy.txt" />
 				<include name="*.xml" />
 			</fileset>		
 		</copy>
@@ -151,6 +140,13 @@
 				<include name="*.xml"/>
 				<include name="*.properties"/>
 			</fileset>
+			
+			<filterset>
+				<filter token="LIFERAY_AUTODEPLOY_DIR" value="${liferay.autodeploy.dir}" />
+				<filter token="LIFERAY_ADMIN_PASSWORD" value="${liferay.admin.password}" />
+				<filter token="LIFERAY_ADMIN_USERNAME" value="${liferay.admin.username}" />
+			</filterset>
+			
 		</copy>
 		
 	</target>
@@ -372,10 +368,6 @@
 		</delete>
 		
 		<delete file="${liferay.portal.war.dir}/WEB-INF/lib/log4j.jar"/>
-		
-		<propertyfile file="${liferay.portal.war.dir}/WEB-INF/classes/portal-ext.properties">
-			<entry key="auto.deploy.dest.dir" value="${liferay.jboss.home}/server/default/deploy"/>
-		</propertyfile>
 				
 	</target>
 	
@@ -407,7 +399,12 @@
 		<copy file="${liferay.build.dir}/${liferay.theme.name}.war" todir="${liferay.autodeploy.dir}" overwrite="true"/>
 	</target>
 	
-	
+	<target name="liferay:deploy-all">
+		<antcall target="liferay:deploy-authn"/>
+		<antcall target="liferay:deploy-layouts"/>
+		<antcall target="liferay:deploy-theme"/>
+		<antcall target="liferay:deploy-portlets"/>
+	</target>
 	
 	<target name="liferay:build-database">
 	

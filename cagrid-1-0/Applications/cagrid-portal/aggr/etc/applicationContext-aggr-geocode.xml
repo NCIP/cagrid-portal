@@ -20,14 +20,8 @@
 		<property name="geocoder">
 			<bean
 				class="gov.nih.nci.cagrid.portal.aggr.geocode.YahooGeocoder">
-				<property name="baseUrl">
-					<value>
-						http://api.local.yahoo.com/MapsService/V1/geocode
-					</value>
-				</property>
-				<property name="yahooAppId">
-					<value>Qe7jSizV34F.2qscztSCYBhp6wBahsYBLHnqZrZ_ivRFflp9Fxhh83JuSbnT04DS1Q--</value>
-				</property>
+				<property name="baseUrl" value="${cagrid.portal.geocoder.yahoo.baseUrl}"/>
+				<property name="yahooAppId" value="${cagrid.portal.geocoder.yahoo.appId}"/>
 				<property name="timeout" value="10000"/>
 			</bean>
 		</property>
