@@ -7,13 +7,20 @@
     <property name="cobertura.report.dir" value="${build.dir}/coverage" />
     <property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" />
     <property name="introduce.dir" location="../introduce" />
+	<property name="halt.on.error" value="false"/>
+	<property name="failed.message" value="Tests failed! Check test reports."/>
 	
 	<!-- using ant contrib for contidionals, looping, and runtarget -->
-	<taskdef resource="net/sf/antcontrib/antlib.xml">
-		<classpath>
-	    	<pathelement location="${lib.dir}/ant-contrib.jar" />
-		</classpath>
-	</taskdef>
+	<target name="init">
+		<taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath>
+				<fileset dir="${ext.lib.dir}">
+			    	<include name="ant-contrib*.jar"/>
+				</fileset>
+			</classpath>
+		</taskdef>
+	</target>
+	
 	
 	<target name="prepareClasspaths">
 		<path id="Introduce.test.classpath">
@@ -45,6 +52,7 @@
 		</path>
 	</target>
 
+	
     <target name="instrument">
         <taskdef classpathref="test.classpath" resource="tasks.properties" />
         <mkdir dir="${instrumented.classes.dir}" />
@@ -65,12 +73,20 @@
     </target>
 	
 	
-	<target name="test" depends="testCore, testStyles" description="Tests the data extension"/>
+	<target name="test" depends="init, testCore, testStyles" description="Tests the data extension">
+		<fail message="Data Extensions Core ${failed.message}" if="core.test.failed"/>
+		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
+			<sequential>
+				<fail message="Data Service Style @{style.name} ${failed.message}" if="@{style.name}.style.test.failed"/>
+			</sequential>
+		</for>
+	</target>
 	
 	
 	<target name="testCore" depends="instrument, prepareClasspaths" description="tests the extension core">
 		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+		<junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" 
+		errorproperty="core.test.failed" failureproperty="core.test.failed" showoutput="true" fork="yes" forkmode="once">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
 			<jvmarg value="-Dintroduce.base.dir=../introduce" />
 			<jvmarg value="-Dbuild.dir=${test.core.classes.dir}" />
@@ -89,13 +105,16 @@
 		</junit>
 	</target>
 
-	<target name="testStyles" depends="instrument, prepareClasspaths" description="Tests service styles">
+	
+	<target name="testStyles" depends="init, instrument, prepareClasspaths" description="Tests service styles">
 		<mkdir dir="${junit.results.dir}" />
 		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
 			<sequential>
 				<echo message="Testing service style @{style.name}"/>
 				<var name="style.test.lib.file" value="${build.jars.dir}/${project.jar.prefix}style${cagrid.master.jar.separator}tests${cagrid.master.jar.separator}@{style.name}.jar"/>
-				<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+				<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" 
+					errorproperty="@{style.name}.style.test.failed" failureproperty="@{style.name}.style.test.failed" 
+					showoutput="true" fork="yes" forkmode="once">
 					<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
 					<jvmarg value="-Dintroduce.base.dir=${introduce.dir}" />
 					<jvmarg value="-Dbuild.dir=${test.core.classes.dir}" />
@@ -120,9 +139,9 @@
 			</sequential>
 		</for>
 	</target>
+	
 
-    <target name="coverageReport" depends="test" description="Runs the tests and generates a test
-		coverage report.">
+    <target name="coverageReport" depends="test" description="Runs the tests and generates a test coverage report.">
         <cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
             <fileset dir="${test.core.src.dir}">
                 <include name="**/*.java" />
