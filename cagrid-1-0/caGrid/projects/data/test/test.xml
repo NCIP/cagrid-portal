@@ -76,7 +76,8 @@
     <target name="testCore" depends="setGlobus" description="Runs the base set of tests for the data service core">
         <!-- assumes all code has been compiled -->
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="core.test.failed" failureproperty="core.test.failed" 
+        <junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" 
+        	errorproperty="core.test.failed" failureproperty="core.test.failed" 
         	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="build.dirs" value="${build.utils.dest};${build.extension.dest};${build.service.dest}" />
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
@@ -102,7 +103,8 @@
     <!-- tests creation of a basic data service -->
     <target name="testCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests" unless="base.service.created">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="basic.creation.test.failed" failureproperty="basic.creation.test.failed" 
+        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" 
+        	errorproperty="basic.creation.test.failed" failureproperty="basic.creation.test.failed" 
         	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
@@ -128,7 +130,8 @@
     <!-- tests creation of an enumeration supporting data service -->
     <target name="testEnumerationCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="enumeration.service.created">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="enumeration.creation.test.failed" failureproperty="enumeration.creation.test.failed" 
+        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" 
+        	errorproperty="enumeration.creation.test.failed" failureproperty="enumeration.creation.test.failed" 
         	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
@@ -154,7 +157,8 @@
     <!-- tests creation of a BDT data service -->
     <target name="testBdtCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="bdt.service.created">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="bdt.creation.test.failed" failureproperty="bdt.creation.test.failed" 
+        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" 
+        	errorproperty="bdt.creation.test.failed" failureproperty="bdt.creation.test.failed" 
         	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
@@ -188,7 +192,8 @@
 	
     <!-- system tests against the basic data service -->
     <target name="testBasicSystem" depends="setGlobus, prepareClasspaths, testCreation" description="Runs the service creation and then system tests">
-        <junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="basic.system.test.failed" failureproperty="basic.system.test.failed" 
+        <junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" 
+        	errorproperty="basic.system.test.failed" failureproperty="basic.system.test.failed" 
         	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
@@ -211,7 +216,8 @@
 
     <!-- system tests against the enumeration data service -->
     <target name="testEnumerationSystem" depends="setGlobus, testEnumerationCreation" description="Tests the enumeration data service system">
-        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="enumeration.system.test.failed" failureproperty="enumeration.system.test.failed" 
+        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" 
+        	errorproperty="enumeration.system.test.failed" failureproperty="enumeration.system.test.failed" 
         	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
@@ -234,7 +240,8 @@
     <!-- tests upgrading a 1.0 service to current -->
     <target name="testUpgradeFrom1pt0" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to the current version" unless="upgrade.1pt0.completed">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="upgrade.test.failed" failureproperty="upgrade.test.failed" 
+        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" 
+        	errorproperty="upgrade.test.failed" failureproperty="upgrade.test.failed" 
         	showoutput="true" fork="yes" >
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
@@ -262,7 +269,8 @@
 
     <!-- system tests against the service upgraded from 1.0 to current -->
     <target name="testUpgradedFrom1pt0System" depends="setGlobus, testUpgradeFrom1pt0" description="Performs system tests on the upgraded (1.0 to current) service">
-        <junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="upgrade.system.test.failed" failureproperty="upgrade.system.test.failed" 
+        <junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" 
+        	errorproperty="upgrade.system.test.failed" failureproperty="upgrade.system.test.failed" 
         	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
@@ -284,7 +292,8 @@
 
     <!-- system tests for the BDT data service -->
     <target name="testBdtSystem" depends="setGlobus, testBdtCreation" description="Tests invocation of the BDT data service">
-        <junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="bdt.system.test.failed" failureproperty="bdt.system.test.failed" 
+        <junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" 
+        	errorproperty="bdt.system.test.failed" failureproperty="bdt.system.test.failed" 
         	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
