@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="lib" path="lib/acegi-security-1.0.4.jar"/>
-	<classpathentry kind="lib" path="lib/cas-server-core-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/cas-server-core-3.1.jar" sourcepath="/cas-server-3.1/cas-server-core/src/main/java"/>
 	<classpathentry kind="lib" path="lib/casclient-2.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
@@ -26,6 +26,9 @@
 	<classpathentry kind="lib" path="lib/standard-1.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/xmldsig-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/xmlsec-1.4.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-stubs.jar" sourcepath="/caGrid-1.0-cds/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-authentication-service-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-authentication-service-common.jar"/>
@@ -58,5 +61,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" sourcepath="/globussource"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wss4j.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar" sourcepath="/GT4_LOCATION/Xerces-J-src.2.6.2.zip"/>
+	<classpathentry kind="src" path="/caGrid-1.0-gts"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

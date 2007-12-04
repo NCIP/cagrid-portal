@@ -14,6 +14,7 @@
     <property name="webcontent.dir" location="webcontent" />
 
     <property name="src.java.dir" location="src/java" />
+    <property name="src.resources.dir" location="src/resources" />
 
     <property name="build.dir" location="build" />
     <property name="build.classes.dir" location="${build.dir}/classes" />
@@ -33,6 +34,12 @@
     </path>
 
     <target name="build-war">
+        <copy todir="${build.classes.dir}" flatten="true" overwrite="true">
+            <fileset dir="${src.resources.dir}">
+                <include name="*.xml" />
+            	<include name="*.xsd" />
+            </fileset>
+		</copy>
         <mkdir dir="${build.war.dir}/WEB-INF/lib" />
         <copy todir="${build.war.dir}/WEB-INF/lib" flatten="true" overwrite="true">
             <!-- TODO: make these includes only include what is necessary... and handle version conflicts -->
