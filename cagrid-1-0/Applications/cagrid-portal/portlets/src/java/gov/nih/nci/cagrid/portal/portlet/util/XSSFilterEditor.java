@@ -25,9 +25,10 @@ public class XSSFilterEditor extends PropertyEditorSupport {
 
 	public void setAsText(String text) {
 		if (!PortalUtils.isEmpty(text)) {
-			setValue(filter.filter(text));
-		}else{
-			setValue("");
+			String filtered = filter.filter(text);
+			if(!PortalUtils.isEmpty(filtered)){
+				setValue(filtered);
+			}
 		}
 	}
 

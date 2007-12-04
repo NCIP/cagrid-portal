@@ -32,16 +32,49 @@
 				<value>/cagridportlets/directlogin/login?redirectUrl=</value>
 			</preference>
 			<preference>
-				<name>registerUrl</name>
-				<value>/web/guest/4</value>
-			</preference>
-			<preference>
 				<name>logoutUrl</name>
 				<value>/c/portal/logout</value>
 			</preference>
 		</portlet-preferences>
 	</portlet>
 	
+	<portlet>
+		<description>Greeting</description>
+		<portlet-name>cagridgreeting</portlet-name>
+		<display-name>Login</display-name>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/greeting-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Greeting</title>
+			<short-title>Greeting</short-title>
+			<keywords>cagrid,authn</keywords>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>registerUrl</name>
+				<value>/web/guest/register</value>
+			</preference>
+			<preference>
+				<name>loginUrl</name>
+				<value>/web/guest/login</value>
+			</preference>
+			<preference>
+				<name>logoutUrl</name>
+				<value>/c/portal/logout</value>
+			</preference>			
+		</portlet-preferences>
+	</portlet>
+	
+	<!-- 
 	<portlet>
 		<description>Login</description>
 		<portlet-name>cagridauthn</portlet-name>
@@ -77,6 +110,7 @@
 			</preference>
 		</portlet-preferences>
 	</portlet>
+	 -->
 	
 	<portlet>
 		<description>Register</description>
@@ -125,7 +159,7 @@
 		<portlet-preferences>
 			<preference>
 				<name>selectItemForNewsRedirectUrl</name>
-				<value>/web/guest/3</value>
+				<value>/web/guest/news</value>
 			</preference>
 			<preference>
                 <name>newsItemSelectMode</name> 
@@ -202,11 +236,11 @@
 		<portlet-preferences>
 			<preference>
 				<name>selectItemForDiscoveryRedirectUrl</name>
-				<value>/web/guest/2</value>
+				<value>/web/guest/tools</value>
 			</preference>
 			<preference>
 				<name>selectDirectoryForDiscoveryRedirectUrl</name>
-				<value>/web/guest/2</value>
+				<value>/web/guest/tools</value>
 			</preference>
 			<preference>
              	<name>discoveryDirectorySelectMode</name> 
@@ -263,7 +297,7 @@
 		
 			<preference>
 				<name>selectItemForDiscoveryRedirectUrl</name>
-				<value>/web/guest/2</value>
+				<value>/web/guest/tools</value>
 			</preference>	
 			<preference>
              	<name>discoveryItemSelectMode</name> 
@@ -280,7 +314,7 @@
         	
         	<preference>
 				<name>selectItemsForDiscoveryRedirectUrl</name>
-				<value>/web/guest/2</value>
+				<value>/web/guest/tools</value>
 			</preference>	
 			<preference>
              	<name>discoveryItemsSelectMode</name> 

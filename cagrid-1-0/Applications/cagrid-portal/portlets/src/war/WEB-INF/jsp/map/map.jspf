@@ -33,19 +33,19 @@ jQuery(document).ready(function() {
 	var aSvcUp = new GIcon(baseIcon);
 	aSvcUp.image = "<c:url value="/images/analytical_services.gif"/>";
 	var aSvcDown = new GIcon(baseIcon);
-	aSvcDown.image = "<c:url value="/images/analytical_services.gif"/>";
+	aSvcDown.image = "<c:url value="/images/analytical_services-inactive.gif"/>";
 	
 	var dSvcUp = new GIcon(baseIcon);
 	dSvcUp.image = "<c:url value="/images/data-services.gif"/>";
 	var dSvcDown = new GIcon(baseIcon);
-	dSvcDown.image = "<c:url value="/images/data-services.gif"/>";
+	dSvcDown.image = "<c:url value="/images/data-services-inactive.gif"/>";
 	
 	var ctrUp = new GIcon(baseIcon);
 	ctrUp.image = "<c:url value="/images/hosting-research-center.gif"/>";
 	var ctrPartial = new GIcon(baseIcon);
-	ctrPartial.image = "<c:url value="/images/hosting-research-center.gif"/>";
+	ctrPartial.image = "<c:url value="/images/hosting-research-center-partial.gif"/>";
 	var ctrDown = new GIcon(baseIcon);
-	ctrDown.image = "<c:url value="/images/hosting-research-center.gif"/>";
+	ctrDown.image = "<c:url value="/images/hosting-research-center-inactive.gif"/>";
 	
 	var partCtr = new GIcon(baseIcon);
    	partCtr.image = "<c:url value="/images/participant_institute.gif"/>";

@@ -37,7 +37,7 @@ jQuery(document).ready(function(){
 
 <style>
 .<c:out value="${resizablePrefix}"/>resizehandle {
-	background:transparent url("http://www.jquery.info/images/resizer.png") no-repeat scroll 45%;
+	background:transparent url("<c:url value="/images/resizer.png"/>") no-repeat scroll 45%;
 	cursor:s-resize;
 	font-size:0.1em;
 	height:16px;

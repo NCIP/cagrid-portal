@@ -1,0 +1,5 @@
+		<b>You are logged in as <c:out value="${portalUser.person.firstName}"/> <c:out value="${portalUser.person.lastName}"/></b><br/>
+		<portlet:actionURL var="logoutActionUrl">
+			<portlet:param name="operation" value="logout"/>
+		</portlet:actionURL>
+		<a href="<c:out value="${logoutActionUrl}"/>">Logout</a>

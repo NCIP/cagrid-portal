@@ -14,12 +14,20 @@
 	
 	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 	
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:cagridportal.properties" />
+	</bean>
+	
 	<bean id="directAutoLogin" class="gov.nih.nci.cagrid.portal.liferay.security.DirectAutoLogin" autowire="byName">
 		<property name="companyWebId" value="cabig.nci.nih.gov"/>
 		<property name="omniUserEmail" value="portaladmin@cabig.nci.nih.gov"/>
 		<property name="ticketParameterName" value="prng2"/>
 		<property name="userIdAttributeName" value="CAGRIDPORTAL_ATTS_userId"/>
 		<property name="encryptionService" ref="encryptionServicePrototype"/>
+		<property name="authnErrorMessageAttributeName" value="CAGRIDPORTAL_ATTS_authnError"/>
+		<property name="portalAdminEmailAddress" value="${cagrid.portal.admin.email}"/>
 	</bean>
 	
 </beans>

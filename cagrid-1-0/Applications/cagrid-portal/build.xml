@@ -145,7 +145,17 @@
 			<entry key="cagrid.portal.gmeUrl" value="${cagrid.portal.gmeUrl}"/>
 			<entry key="cagrid.portal.cadsrUrl" value="${cagrid.portal.cadsrUrl}"/>
 			<entry key="cagrid.portal.security.encryption.key" value="${cagrid.portal.security.encryption.key}"/>
+			<entry key="cagrid.portal.admin.email" value="${cagrid.portal.admin.email}"/>
+			<entry key="cagrid.portal.idpInfo" value="${cagrid.portal.idpInfo}"/>
 		</propertyfile>
+	</target>
+	
+	<target name="config-trust">
+		<copy todir="${user.home}/.globus/certificates" overwrite="true">
+			<fileset dir="${aggr.trust.certs.dir}">
+				<include name="*"/>
+			</fileset>
+		</copy>
 	</target>
 
 </project>

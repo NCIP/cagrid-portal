@@ -32,14 +32,9 @@ public class ServletRenderer implements TreeNodeRenderer {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see test.TreeNodeRenderer#render(test.TreeNode)
-	 */
 	public String render(TreeNode node, Map<String, Object> params) {
 		
-		logger.debug("Rendering " + node.getPath());
+//		logger.debug("Rendering " + node.getPath());
 
 		String out = null;
 		
@@ -54,7 +49,7 @@ public class ServletRenderer implements TreeNodeRenderer {
 		} catch (Exception ex) {
 			throw new RuntimeException("Error rendering: " + ex.getMessage(), ex);
 		}
-		logger.debug("Returning HTML:\n" + out);
+//		logger.debug("Returning HTML:\n" + out);
 		return out;
 	}
 

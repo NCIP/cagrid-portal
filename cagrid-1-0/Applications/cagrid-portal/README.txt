@@ -24,25 +24,25 @@
 ################
 
 1. Get a Google Maps API key: http://www.google.com/apis/maps/signup.html
-   - If your host's name is my.host.com, then the URL you should use is:
-    	https://my.host.com:8443
-   - Edit portlets/src/war/WEB-INF/context/common.xml
-      - In the "mapBean" bean definition, set the "apiKey" property to the key that you obtained.
+   - If your host's name is my.host.com, and the HTTP server is listening to port 8080
+     then the URL you should use is: http://my.host.com:8080
+   - Use this key to set the value of cagrid.portal.map.google.apiKey in build.properties.
+   
+2. Get an ApplicationID from Yahoo: https://developer.yahoo.com/wsregapp/index.php
+   Use this ID to set the value of cagrid.portal.geocoder.yahoo.appId in build.properties.
 
-2. Synchronize with NCICB production trust fabric
-   - Either the caGrid distribution to do this: http://www.cagrid.org/mwiki/index.php?title=GTS:1.1:Administrators_Guide:SyncGTS:Command_Line_Approach
-   - Or, just copy aggr/certificates/nci_prod/* to ~/.globus/certificates/
+3. Synchronize with NCICB production trust fabric
+   - Run: ant config-trust
 
-3. Configure DB profiles:
- - DB profile configurations are under db/etc directory. Configure the "default" and "test"
-   profiles.
-   - In db/etc/default.hibernate.properties, edit:
-     - hibernate.connection.url
-     - hibernate.connection.username
-     - hibernate.connection.password
-   - Do the same for db/etc/test.hibernate.properties
+4. Configure DB profiles:
+   - Set the following properties in build.properties
+     - liferay.db.host
+	 - liferay.db.port
+	 - liferay.db.name
+	 - liferay.db.username
+	 - liferay.db.password
 
-4. Install mysql.
+******* STILL WORKING *******	 
 
 5. Create database:
  - For example, if the value of hibernate.connection.url is "jdbc:mysql://localhost:3306/portal2"
@@ -150,4 +150,10 @@ Then you can navigate back to My Places > Guest > Public Pages. Or you could jus
 Note: If you see an error message on the Home page saying that "you don't have privileges to
 view this portlet", right below the Google Map, just restart JBoss.
 
+################
+# Known Issues #
+################
+
+1. Custom caGrid favicon does not appear.
+    - See: http://support.liferay.com/browse/LEP-3996;
 

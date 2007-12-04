@@ -149,6 +149,14 @@
 			
 		</copy>
 		
+		<copy todir="${liferay.root.context.dir}/WEB-INF" overwrite="true">
+			<fileset dir="${liferay.src.war.dir}/WEB-INF">
+				<include name="applicationContext-acegi-security.xml"/>
+				<include name="web.xml"/>
+				<include name="lib/acegi-security-1.0.3.jar"/>
+			</fileset>
+		</copy>
+		
 	</target>
 	
 	<target name="liferay:clean">
@@ -292,7 +300,7 @@
 	<target name="liferay:configure-jboss-tomcat">
 		<property name="config.file" value="${liferay.jboss.home}/server/default/deploy/jbossweb-tomcat55.sar/server.xml"/>
 		<xmltask source="${config.file}" dest="${config.file}">
-			<remove path="/Server/Service[@name='jboss.web']/Connector[@port='8080' or @port='8443']"/>
+			<remove path="/Server/Service[@name='jboss.web']/Connector[@port='8443']"/>
 			<insert path="/Server/Service[@name='jboss.web']/Engine[@name='jboss.web']" position="before">
 			<![CDATA[
       <Connector port="${liferay.https.port}" address="$${jboss.bind.address}"
