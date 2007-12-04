@@ -66,7 +66,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_tools.jar" sourcepath="/GT4_LOCATION/ws-core-4.0.3-src.zip"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wss4j.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/xalan.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar" sourcepath="/GT4_LOCATION/Xerces-J-src.2.6.2.zip"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
@@ -97,7 +96,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dataExtensions-sdkstyle.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dataExtensions-ui.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-dataExtensions-upgrades.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-core.jar" />
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-updater.jar"/>
 	<classpathentry kind="lib" path="ext/lib/validation-2.0.0.jar"/>
@@ -116,6 +115,6 @@
 	<classpathentry kind="lib" path="ext/lib/sdk/remote-client/lib/spring.jar"/>
 	<classpathentry kind="lib" path="ext/lib/sdk/remote-client/lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="ext/lib/sdk/remote-client/conf"/>
-	<classpathentry kind="lib" path="lib/bcel.jar"/>
+	<classpathentry kind="lib" path="lib/bcel.jar" />
 	<classpathentry kind="output" path="bin"/>
 </classpath>
