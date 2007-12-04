@@ -1097,18 +1097,28 @@
 
 
     <!-- =============================================================== -->
-    <!-- WEBSSO:                                                         -->
+    <!-- WEBSSO Server:                                                         -->
     <!-- =============================================================== -->
     <target name="build-websso" depends="prepare" description="Builds the Web SSO server">
         <resolveDependencies extdir="${projects.dir}/websso/ext">
             <artifact refid="cagrid.properties" />
             <artifact refid="dorian.client.jars" />
             <artifact refid="dorian.endorsed" />
-            <!-- TODO: add CDS artificat-->
+        	<artifact refid="cds.client.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/websso" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
+    <!-- =============================================================== -->
+    <!-- WEBSSO Client:                                                         -->
+    <!-- =============================================================== -->
+    <target name="build-websso-client" depends="prepare" description="Builds the Web SSO client">
+        <resolveDependencies extdir="${projects.dir}/websso-client/ext">
+            <artifact refid="cagrid.properties" />
+        	<artifact refid="cds.client.jars" />
+        </resolveDependencies>
+        <ant dir="${projects.dir}/websso-client" inheritAll="false" antfile="build.xml" target="all" />
+    </target>
 
 
     <!-- ============================================================== -->
