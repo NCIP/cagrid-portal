@@ -7,6 +7,8 @@
     <property name="cobertura.report.dir" value="${build.dir}/coverage" />
     <property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" />
     <property name="introduce.dir" location="../introduce" />
+	<property name="halt.on.error" value="false"/>
+	<property name="failed.message" value="Tests failed! Check test reports."/>
 
     <target name="prepareClasspaths">
         <path id="Introduce.test.classpath">
@@ -34,6 +36,7 @@
             <path refid="Introduce.test.classpath" />
         </path>
     </target>
+	
 
     <target name="instrument">
         <taskdef classpathref="test.classpath" resource="tasks.properties" />
@@ -54,19 +57,27 @@
         </cobertura-instrument>
     </target>
 
+	
     <!-- calls every test -->
     <target name="testEverything" depends="test, systemTest" description="Runs all system and non-system tests" />
 
 
     <!-- tests everything but system -->
-    <target name="test" depends="instrument, testCore, testCreation, testEnumerationCreation, testBdtCreation, testUpgradeFrom1pt0" description="Runs all non-system tests." />
+    <target name="test" depends="instrument, testCore, testCreation, testEnumerationCreation, testBdtCreation, testUpgradeFrom1pt0" description="Runs all non-system tests." >
+        <fail message="Data core ${failed.message}" if="core.test.failed" />
+        <fail message="Data basic creation ${failed.message}" if="basic.creation.test.failed" />
+        <fail message="Data enumeration creation ${failed.message}" if="enumeration.creation.test.failed" />
+        <fail message="Data BDT creation ${failed.message}" if="bdt.creation.test.failed" />
+        <fail message="Data upgrade ${failed.message}" if="upgrade.test.failed" />
+   	</target>
 
 
     <!-- tests data service core components -->
     <target name="testCore" depends="setGlobus" description="Runs the base set of tests for the data service core">
         <!-- assumes all code has been compiled -->
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+        <junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="core.test.failed" failureproperty="core.test.failed" 
+        	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="build.dirs" value="${build.utils.dest};${build.extension.dest};${build.service.dest}" />
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
@@ -85,14 +96,14 @@
                 </fileset>
             </batchtest>
         </junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />
     </target>
 
 
     <!-- tests creation of a basic data service -->
     <target name="testCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests" unless="base.service.created">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="basic.creation.test.failed" failureproperty="basic.creation.test.failed" 
+        	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <jvmarg value="-Dbuild.dir=${test.classes.dir}" />
@@ -110,7 +121,6 @@
                 </fileset>
             </batchtest>
         </junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />
         <property name="base.service.created" value="true" />
     </target>
 
@@ -118,7 +128,8 @@
     <!-- tests creation of an enumeration supporting data service -->
     <target name="testEnumerationCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="enumeration.service.created">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="enumeration.creation.test.failed" failureproperty="enumeration.creation.test.failed" 
+        	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <jvmarg value="-Dbuild.dir=${test.classes.dir}" />
@@ -136,7 +147,6 @@
                 </fileset>
             </batchtest>
         </junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />
         <property name="enumeration.service.created" value="true" />
     </target>
 
@@ -144,7 +154,8 @@
     <!-- tests creation of a BDT data service -->
     <target name="testBdtCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="bdt.service.created">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="bdt.creation.test.failed" failureproperty="bdt.creation.test.failed" 
+        	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <jvmarg value="-Dbuild.dir=${test.classes.dir}" />
@@ -162,17 +173,23 @@
                 </fileset>
             </batchtest>
         </junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />
         <property name="bdt.service.created" value="true" />
     </target>
 
 
     <!-- tests overall system  -->
-    <target name="systemTest" depends="setGlobus, prepareClasspaths, testBasicSystem, testEnumerationSystem, testBdtSystem, testUpgradedFrom1pt0System" description="Runs system tests (deploy, invoke, etc)" />
+    <target name="systemTest" depends="setGlobus, prepareClasspaths, testBasicSystem, testEnumerationSystem, testBdtSystem, testUpgradedFrom1pt0System" description="Runs system tests (deploy, invoke, etc)" >
+        <fail message="Tests failed! Check test reports." if="basic.system.test.failed" />
+        <fail message="Tests failed! Check test reports." if="enumeration.system.test.failed" />
+        <fail message="Tests failed! Check test reports." if="bdt.system.test.failed" />
+    	<fail message="Tests failed! Check test reports." if="upgrade.system.test.failed" />
+    </target>
+	
 	
     <!-- system tests against the basic data service -->
     <target name="testBasicSystem" depends="setGlobus, prepareClasspaths, testCreation" description="Runs the service creation and then system tests">
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+        <junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="basic.system.test.failed" failureproperty="basic.system.test.failed" 
+        	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
@@ -189,13 +206,13 @@
                 </fileset>
             </batchtest>
         </junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />
     </target>
 
 
     <!-- system tests against the enumeration data service -->
     <target name="testEnumerationSystem" depends="setGlobus, testEnumerationCreation" description="Tests the enumeration data service system">
-        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="enumeration.system.test.failed" failureproperty="enumeration.system.test.failed" 
+        	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
@@ -211,14 +228,14 @@
                 </fileset>
             </batchtest>
         </junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />
     </target>
 
 
     <!-- tests upgrading a 1.0 service to current -->
     <target name="testUpgradeFrom1pt0" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to the current version" unless="upgrade.1pt0.completed">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" >
+        <junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="upgrade.test.failed" failureproperty="upgrade.test.failed" 
+        	showoutput="true" fork="yes" >
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
             <classpath refid="all.test.classpath" />
@@ -239,14 +256,14 @@
                 </fileset>
             </batchtest>
         </junit>
-        <fail message="Upgrade 1.0 tests failed!" if="test.failed" />
         <property name="upgrade.1pt0.completed" value="true" />
     </target>
 
 
     <!-- system tests against the service upgraded from 1.0 to current -->
     <target name="testUpgradedFrom1pt0System" depends="setGlobus, testUpgradeFrom1pt0" description="Performs system tests on the upgraded (1.0 to current) service">
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+        <junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="upgrade.system.test.failed" failureproperty="upgrade.system.test.failed" 
+        	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
@@ -262,13 +279,13 @@
                 </fileset>
             </batchtest>
         </junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />
     </target>
 
 
     <!-- system tests for the BDT data service -->
     <target name="testBdtSystem" depends="setGlobus, testBdtCreation" description="Tests invocation of the BDT data service">
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+        <junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" errorproperty="bdt.system.test.failed" failureproperty="bdt.system.test.failed" 
+        	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
@@ -284,12 +301,10 @@
                 </fileset>
             </batchtest>
         </junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />
     </target>
 
 
-    <target name="coverageReport" depends="test" description="Runs the tests and generates a test
-		coverage report.">
+    <target name="coverageReport" depends="test" description="Runs the tests and generates a test coverage report.">
         <cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
             <fileset dir="${cql.src.dir}">
                 <include name="**/*.java" />
