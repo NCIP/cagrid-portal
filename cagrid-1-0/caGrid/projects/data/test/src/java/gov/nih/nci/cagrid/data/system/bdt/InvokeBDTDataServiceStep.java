@@ -6,8 +6,7 @@ import gov.nih.nci.cagrid.data.bdt.client.BDTDataServiceClient;
 import gov.nih.nci.cagrid.data.system.enumeration.InvokeEnumerationDataServiceStep;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
-import gov.nih.nci.cagrid.testing.system.deployment.NoAvailablePortException;
-import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.InputStream;
@@ -22,6 +21,7 @@ import org.apache.axis.client.AxisClient;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI;
 import org.apache.axis.utils.ClassUtils;
 import org.globus.transfer.AnyXmlType;
 import org.globus.transfer.EmptyType;
@@ -39,19 +39,17 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAd
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:37:02 PM
- * @version $Id: InvokeBDTDataServiceStep.java,v 1.8 2007-12-03 16:27:19 hastings Exp $ 
+ * @version $Id: InvokeBDTDataServiceStep.java,v 1.9 2007-12-04 15:49:09 dervin Exp $ 
  */
 public class InvokeBDTDataServiceStep extends Step {
-	public static final String URL_PART = "/wsrf/services/cagrid/";
 	
-	private String hostName;
+    private ServiceContainer container;
 	private String serviceName;
-    private PortPreference portPreference;	
-	
-	public InvokeBDTDataServiceStep(String hostName, String serviceName, PortPreference port) {
-		this.hostName = hostName;
+
+
+	public InvokeBDTDataServiceStep(ServiceContainer container, String serviceName) {
+        this.container = container;
 		this.serviceName = serviceName;
-        this.portPreference = port;
 	}
 	
 
@@ -182,7 +180,8 @@ public class InvokeBDTDataServiceStep extends Step {
     }
 	
 	
-	private String getServiceUrl() throws NoAvailablePortException {
-		return "http://" + hostName + ":" + portPreference.getPort() + URL_PART + serviceName;
+	private String getServiceUrl() throws Exception {
+        URI baseUri = container.getContainerBaseURI();
+        return baseUri.toString() + "cagrid/" + serviceName;
 	}
 }

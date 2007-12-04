@@ -26,7 +26,7 @@ import junit.textui.TestRunner;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.24 2007-12-03 18:22:47 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.25 2007-12-04 15:49:09 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     
@@ -52,6 +52,14 @@ public class SystemTests extends BaseSystemTest {
 
 
     protected boolean storySetUp() {
+        // initialize the service container instance
+        try {
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        
         // 1) set up a clean, temporary Globus
         Step step = new UnpackContainerStep(container);
         try {
@@ -65,15 +73,6 @@ public class SystemTests extends BaseSystemTest {
 
 
     protected Vector steps() {
-        // initialize the service container instance
-        // I can only get away with this because steps() is called on story construction
-        try {
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-        
         DataTestCaseInfo info = new CreationTests.TestDataServiceInfo();
         Vector steps = new Vector();
         // data service presumed to have been created

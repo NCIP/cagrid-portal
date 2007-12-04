@@ -9,8 +9,7 @@ import gov.nih.nci.cagrid.data.enumeration.client.EnumerationDataServiceClient;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
-import gov.nih.nci.cagrid.testing.system.deployment.NoAvailablePortException;
-import gov.nih.nci.cagrid.testing.system.deployment.PortPreference;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.InputStream;
@@ -23,6 +22,7 @@ import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI;
 import org.apache.axis.utils.ClassUtils;
 import org.globus.ws.enumeration.ClientEnumIterator;
 import org.projectmobius.bookstore.Book;
@@ -36,19 +36,16 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAd
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 23, 2006 
- * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.11 2007-12-03 16:27:19 hastings Exp $ 
+ * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.12 2007-12-04 15:49:09 dervin Exp $ 
  */
 public class InvokeEnumerationDataServiceStep extends Step {
-	public static final String URL_PART = "/wsrf/services/cagrid/";
 	
-	private String hostName;
+    private ServiceContainer container;
 	private String serviceName;
-    private PortPreference portPreference;
 	
-	public InvokeEnumerationDataServiceStep(String hostName, String serviceName, PortPreference port) {
-		this.hostName = hostName;
+	public InvokeEnumerationDataServiceStep(ServiceContainer container, String serviceName) {
+        this.container = container;
 		this.serviceName = serviceName;
-        this.portPreference = port;
 	}
 	
     
@@ -99,16 +96,16 @@ public class InvokeEnumerationDataServiceStep extends Step {
 		gov.nih.nci.cagrid.cqlquery.Object target = new gov.nih.nci.cagrid.cqlquery.Object();
 		target.setName("non.existant.class");
 		query.setTarget(target);
-		EnumerationResponseContainer container = null;
+		EnumerationResponseContainer enumContainer = null;
 		try {
-			container = client.enumerationQuery(query);
+			enumContainer = client.enumerationQuery(query);
 		} catch (QueryProcessingExceptionType ex) {
 			assertTrue("Query Processing Exception Type thrown", true);
 		} finally {
-			if (container != null && container.getContext() != null) {
+			if (enumContainer != null && enumContainer.getContext() != null) {
 				Release release = new Release();
-				release.setEnumerationContext(container.getContext());
-                createDataSource(container.getEPR()).releaseOp(release);
+				release.setEnumerationContext(enumContainer.getContext());
+                createDataSource(enumContainer.getEPR()).releaseOp(release);
 			}
 		}
 	}
@@ -128,16 +125,16 @@ public class InvokeEnumerationDataServiceStep extends Step {
 		});
 		target.setGroup(group);
 		query.setTarget(target);
-		EnumerationResponseContainer container = null;
+		EnumerationResponseContainer enumContainer = null;
 		try {
-			container = client.enumerationQuery(query);
+			enumContainer = client.enumerationQuery(query);
 		} catch (MalformedQueryExceptionType ex) {
 			assertTrue("Malformed Query Exception Type thrown", true);
 		} finally {
-			if (container != null && container.getContext() != null) {
+			if (enumContainer != null && enumContainer.getContext() != null) {
 				Release release = new Release();
-				release.setEnumerationContext(container.getContext());
-				createDataSource(container.getEPR()).releaseOp(release);
+				release.setEnumerationContext(enumContainer.getContext());
+				createDataSource(enumContainer.getEPR()).releaseOp(release);
 			}
 		}		
 	}
@@ -148,27 +145,27 @@ public class InvokeEnumerationDataServiceStep extends Step {
 		gov.nih.nci.cagrid.cqlquery.Object target = new gov.nih.nci.cagrid.cqlquery.Object();
 		target.setName(Book.class.getName());
 		query.setTarget(target);
-		EnumerationResponseContainer container = null;
+		EnumerationResponseContainer enumContainer = null;
 		try {
-			container = client.enumerationQuery(query);
+			enumContainer = client.enumerationQuery(query);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw ex;
 		}
-		return container;
+		return enumContainer;
 	}
 	
 	
 	private void iterateEnumeration(EnumerationDataServiceClient client) throws Exception {
-		EnumerationResponseContainer container = queryForBooks(client);
+		EnumerationResponseContainer enumContainer = queryForBooks(client);
         
-        DataSource dataSource = createDataSource(container.getEPR());
+        DataSource dataSource = createDataSource(enumContainer.getEPR());
         
 		/*
 		 * This is the preferred way to access an enumeration, but the client enum iterator hides
 		 * remote exceptions from the user and throws an empty NoSuchElement exception.
 		 */
-		ClientEnumIterator iter = new ClientEnumIterator(dataSource, container.getContext());
+		ClientEnumIterator iter = new ClientEnumIterator(dataSource, enumContainer.getContext());
 		int resultCount = 0;
 		try {
 			while (iter.hasNext()) {
@@ -238,7 +235,8 @@ public class InvokeEnumerationDataServiceStep extends Step {
 	}
 	
 	
-	private String getServiceUrl() throws NoAvailablePortException {
-		return "http://" + hostName + ":" + portPreference.getPort().intValue() + URL_PART + serviceName;
+	private String getServiceUrl() throws Exception {
+        URI baseUri = container.getContainerBaseURI();
+        return baseUri.toString() + "cagrid/" + serviceName;
 	}
 }

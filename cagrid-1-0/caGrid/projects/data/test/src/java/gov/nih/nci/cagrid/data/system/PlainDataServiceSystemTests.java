@@ -22,7 +22,7 @@ import java.util.Vector;
  * @author David Ervin
  * 
  * @created Sep 28, 2007 12:22:29 PM
- * @version $Id: PlainDataServiceSystemTests.java,v 1.7 2007-12-03 16:27:18 hastings Exp $ 
+ * @version $Id: PlainDataServiceSystemTests.java,v 1.8 2007-12-04 15:49:09 dervin Exp $ 
  */
 public class PlainDataServiceSystemTests extends BaseSystemTest {
     
@@ -47,6 +47,14 @@ public class PlainDataServiceSystemTests extends BaseSystemTest {
     
     
     protected boolean storySetUp() {
+        // instantiate a new container instance
+        try {
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        
         // 1) set up a clean, temporary service container
         Step step = new UnpackContainerStep(container);
         try {
@@ -60,13 +68,6 @@ public class PlainDataServiceSystemTests extends BaseSystemTest {
 
 
     protected Vector steps() {
-        try {
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-        
         DataTestCaseInfo info = new CreationTests.PlainDataServiceInfo();
         Vector<Step> steps = new Vector<Step>();
         // data service presumed to have been created

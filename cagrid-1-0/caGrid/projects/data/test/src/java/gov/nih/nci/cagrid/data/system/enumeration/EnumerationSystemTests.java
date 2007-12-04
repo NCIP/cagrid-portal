@@ -54,6 +54,14 @@ public class EnumerationSystemTests extends BaseSystemTest {
 
 
 	protected boolean storySetUp() {
+        // obtain a new container instance
+        try {
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        
 		// unpack the service container
         Step unpack = new UnpackContainerStep(container);
         try {
@@ -67,12 +75,6 @@ public class EnumerationSystemTests extends BaseSystemTest {
 
 
 	protected Vector steps() {
-        try {
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
         DataTestCaseInfo info = new CreateEnumerationTests.TestEnumerationDataServiceInfo();
 		Vector steps = new Vector();
 		// an enumeration supporting data service is presumed to have been
@@ -90,8 +92,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 		// 6) start container
 		steps.add(new StartContainerStep(container));
 		// 7) test data service
-		steps.add(new InvokeEnumerationDataServiceStep("localhost", info.getName(), 
-            container.getProperties().getPortPreference()));
+		steps.add(new InvokeEnumerationDataServiceStep(container, info.getName()));
 		return steps;
 	}
 

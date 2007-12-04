@@ -26,7 +26,7 @@ import java.util.Vector;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.15 2007-12-03 18:22:47 dervin Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.16 2007-12-04 15:49:09 dervin Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -44,6 +44,14 @@ public class UpgradedServiceSystemTest extends Story {
     
 	
 	protected boolean storySetUp() {
+        // obtain a new container instance
+        try {
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        
 		// unpack container
         Step unpack = new UnpackContainerStep(container);
         try {
@@ -62,13 +70,6 @@ public class UpgradedServiceSystemTest extends Story {
 
 
 	protected Vector steps() {
-        try {
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-        
         DataTestCaseInfo info = new UpgradeTo1pt2Tests.Upgrade1pt0to1pt1TestServiceInfo();
 		Vector steps = new Vector();
 		// steps to invoke the upgraded service 

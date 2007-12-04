@@ -32,7 +32,7 @@ import junit.textui.TestRunner;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:19:42 PM
- * @version $Id: BDTDataServiceSystemTests.java,v 1.11 2007-12-03 16:27:18 hastings Exp $ 
+ * @version $Id: BDTDataServiceSystemTests.java,v 1.12 2007-12-04 15:49:09 dervin Exp $ 
  */
 public class BDTDataServiceSystemTests extends BaseSystemTest {
     
@@ -54,6 +54,14 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 	
 	
 	protected boolean storySetUp() {
+        // obtain a new container instance
+        try {
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
+        
 		// verify the BDT service has been built
 		File serviceDir = new File(BDTDataServiceCreationTests.SERVICE_DIR);
 		assertTrue("BDT Data Service directory NOT FOUND", serviceDir.exists());
@@ -75,13 +83,6 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 
 
 	protected Vector steps() {
-        try {
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
-        
         DataTestCaseInfo info = new BDTDataServiceCreationTests.TestBDTDataServiceInfo();
 		Vector<Step> steps = new Vector<Step>();
 		// assumes the BDT service has been created already
@@ -98,8 +99,7 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 		// 6) start the container
 		steps.add(new StartContainerStep(container));
 		// 7) test bdt data service
-		steps.add(new InvokeBDTDataServiceStep("localhost", 
-            BDTDataServiceCreationTests.SERVICE_NAME, container.getProperties().getPortPreference()));
+		steps.add(new InvokeBDTDataServiceStep(container, BDTDataServiceCreationTests.SERVICE_NAME));
 		return steps;
 	}
 	
