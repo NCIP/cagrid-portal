@@ -5,6 +5,12 @@
 	<property file="${build.ext.properties}"/>
 	<property file="build.properties" />
 	
+	<path id="uhp" location="${user.home}"/>
+	<pathconvert targetos="windows" property="c" refid="p"/>
+	<echo>${c}</echo>
+	</target>	
+	<property name="user.home.path" value=""/>
+	
 	<property environment="env" />
 	<property name="ant.home" value="${env.ANT_HOME}" />
 	<property name="tools.ant.lib" value="tools/ant/lib"/>
@@ -151,6 +157,7 @@
 	</target>
 	
 	<target name="config-trust">
+		<mkdir dir="${user.home}/.globus/certificates"/>
 		<copy todir="${user.home}/.globus/certificates" overwrite="true">
 			<fileset dir="${aggr.trust.certs.dir}">
 				<include name="*"/>
@@ -159,10 +166,14 @@
 	</target>
 	
 	<target name="install">
+		<antcall target="config-trust"/>
 		<antcall target="db:load-schema"/>
 		<antcall target="aggr:load-workspaces"/>
 		<antcall target="liferay:install-liferay"/>
 		<antcall target="liferay:deploy-all"/>
+		
 	</target>
+	
+	
 
 </project>

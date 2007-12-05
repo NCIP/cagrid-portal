@@ -150,6 +150,10 @@
 			
 		</copy>
 		
+		<!-- This is need on windows if user.home is used to set up the autodeploy path. -->
+		<replaceregexp file="${liferay.root.context.dir}/WEB-INF/classes/portal-ext.properties" 
+			match="\\" replace="\/" flags="g"/>
+		
 		<copy todir="${liferay.root.context.dir}/WEB-INF" overwrite="true">
 			<fileset dir="${liferay.src.war.dir}/WEB-INF">
 				<include name="applicationContext-acegi-security.xml"/>
