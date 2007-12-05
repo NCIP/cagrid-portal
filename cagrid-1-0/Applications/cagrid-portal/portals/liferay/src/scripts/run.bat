@@ -3,10 +3,10 @@ rem -------------------------------------------------------------------------
 rem JBoss Bootstrap Script for Win32
 rem -------------------------------------------------------------------------
 
-rem $Id: run.bat,v 1.1 2007-12-05 12:02:50 joshua Exp $
+rem $Id: run.bat,v 1.2 2007-12-05 14:30:02 joshua Exp $
 
 rem JAP: Setting JAVA_OPTS here, and commenting out memory allocation settings later file.
-set JAVA_OPTS="-Xms128m -Xmx512m -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=128m -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC"
+set JAVA_OPTS=-Xms128m -Xmx512m -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=128m -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC
 
 @if not "%ECHO%" == ""  echo %ECHO%
 @if "%OS%" == "Windows_NT"  setlocal
