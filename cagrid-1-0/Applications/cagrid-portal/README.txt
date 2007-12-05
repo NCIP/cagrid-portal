@@ -106,7 +106,7 @@ GTS client to maintain the trust fabric, but the trust fabric must be bootstrapp
 
 By default, the portal will use the nci_prod as the target grid. If you are using this
 grid, you don't need to do anything. If you are using another target grid, the you need 
-to three things:
+to do three things:
  1. Create a sync-description.xml file to configure the GTS client that the portal uses.
  2. Bootstrap the trust fabric by placing root certificates under the 
     $HOME/.globus/certificates directory
@@ -147,6 +147,10 @@ edit the following properties:
  - cagrid.portal.geocoder.yahoo.apiId
  - cagrid.portal.map.google.apiKey
  - cagrid.portal.security.encryption.key
+ 
+If you are using a different target grid (i.e. not nci_prod), the you need to set the value of
+the 'aggr.trust.syncgts.file' and 'aggr.trust.certs.dir' properties to the path to your
+sync-description.xm file and the directory in which the root certificates are found, respectively.
 
 ################
 # Installation #
@@ -188,8 +192,8 @@ On Unix/Linux/Mac, you should do something like this:
 
 # Import the Site Structure #
 
-The basic site structure can be configured by using one of the Liferay administrative portlets
-to import a Liferay Archive (lar) files. I've created these lar files in the $SRC/portals/liferay/lars/ 
+The basic site structure can be configured by using the Liferay administrative portlets
+to import Liferay Archive (lar) files. I've created these lar files in the $SRC/portals/liferay/lars/ 
 directory.
 
 Follow these directions to import the lar file:
