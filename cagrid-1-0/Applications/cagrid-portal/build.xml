@@ -157,5 +157,12 @@
 			</fileset>
 		</copy>
 	</target>
+	
+	<target name="install">
+		<antcall target="db:load-schema"/>
+		<antcall target="aggr:load-workspaces"/>
+		<antcall target="liferay:install-liferay"/>
+		<antcall target="liferay:deploy-all"/>
+	</target>
 
 </project>

@@ -8,6 +8,7 @@
 	<property name="liferay.src.war.dir" value="${liferay.dir}/src/war" />
 	<property name="liferay.src.layouts.dir" value="${liferay.dir}/src/layouts" />
 	<property name="liferay.src.themes.dir" value="${liferay.dir}/src/themes" />
+	<property name="liferay.src.scripts.dir" value="${liferay.dir}/src/scripts" />
 
 	<property name="liferay.test.dir" value="${liferay.dir}/test" />
 	<property name="liferay.test.lib.dir" value="${liferay.test.dir}/lib" />
@@ -314,6 +315,15 @@
 		</xmltask>	
 	</target>
 	
+	<target name="liferay:copy-startup-scripts">
+		<copy todir="${liferay.jboss.home}/bin" overwrite="true">
+			<fileset dir="${liferay.src.scripts.dir}">
+				<include name="run.sh"/>
+				<include name="run.bat"/>
+			</fileset>
+		</copy>
+	</target>
+	
 	<target name="liferay:configure-jboss">
 		<antcall target="liferay:configure-jboss-classpath"/>	
 		<antcall target="liferay:configure-jboss-root"/>
@@ -324,6 +334,7 @@
 		<antcall target="liferay:create-liferay-datasource"/>
 		<antcall target="liferay:copy-liferay-ext-jars"/>
 		<antcall target="liferay:configure-jboss-tomcat"/>
+		<antcall target="liferay:copy-startup-scripts"/>
 	</target>
 	
 	<target name="liferay:check-dependencies-downloaded">
@@ -379,12 +390,45 @@
 				
 	</target>
 	
+	<target name="liferay:add-cagrid-category">
+		<property name="config.file" value="${liferay.portal.war.dir}/WEB-INF/liferay-display.xml"/>
+		<xmltask source="${config.file}" dest="${config.file}" preservetype="true">
+			<remove path="/display/category[@name='category.cagrid']"/>
+			<insert path="/display/category[@name='category.cms']" position="before">
+			<![CDATA[
+	<category name="category.cagrid">
+		<portlet id="cagriddirectauthn_WAR_cagridportlets" />
+		<portlet id="cagridgreeting_WAR_cagridportlets" />
+		<portlet id="cagridregistration_WAR_cagridportlets" />
+		<portlet id="cagridnewssummary_WAR_cagridportlets" />
+		<portlet id="cagridnews_WAR_cagridportlets" />
+		<portlet id="cagridstatus_WAR_cagridportlets" />
+		<portlet id="cagridmap_WAR_cagridportlets" />
+		<portlet id="cagriddiscovery_WAR_cagridportlets" />
+		<portlet id="cagridquery_WAR_cagridportlets" />
+		<portlet id="WelcomeToCaGridPortal_WAR_cagridportlets" />
+		<portlet id="cagridinterestinglinks_WAR_cagridportlets" />
+	</category>
+			]]>
+			</insert>
+		</xmltask>
+	</target>
+	
+	<target name="liferay:configure-liferay-messages">
+		<mkdir dir="${liferay.portal.war.dir}/WEB-INF/classes/content"/>
+		<propertyfile file="${liferay.portal.war.dir}/WEB-INF/classes/content/Language-ext.properties">
+			<entry key="category.cagrid" value="caGrid"/>
+		</propertyfile>
+	</target>
+	
 	<target name="liferay:install-liferay">
 		<antcall target="liferay:install-jboss"/>
 		<antcall target="liferay:configure-jboss"/>
 		<antcall target="liferay:deploy-liferay-portal-war"/>
+		<antcall target="liferay:add-cagrid-category"/>
+		<antcall target="liferay:configure-liferay-messages"/>
 	</target>
-	
+
 	<target name="liferay:deploy-portlets" depends="portlets:war">
 		<copy file="${portlets.build.dir}/cagridportlets.war" todir="${liferay.autodeploy.dir}" overwrite="true"/>
 	</target>
