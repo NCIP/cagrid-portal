@@ -21,7 +21,7 @@ import javax.swing.JPanel;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: AbstractWizardPanel.java,v 1.2 2007-07-27 01:56:26 dervin Exp $ 
+ * @version $Id: AbstractWizardPanel.java,v 1.3 2007-12-05 17:30:54 dervin Exp $ 
  */
 public abstract class AbstractWizardPanel extends JPanel {
 	private static Map bitBucket;
@@ -118,6 +118,15 @@ public abstract class AbstractWizardPanel extends JPanel {
 	 * to the GUI needed by data changed in the extension data / bit bucket
 	 */
 	public abstract void update();
+    
+    
+    /**
+     * Called when the user clicks the button to travel to the next panel in the wizard.
+     * Use this call to perform any changes to the underlying service model.
+     */
+    public void movingNext() {
+        // Default implementation does nothing
+    }
 	
 	
 	/**
