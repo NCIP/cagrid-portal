@@ -36,7 +36,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Oct 3, 2007 10:34:55 AM
- * @version $Id: SDK4QueryProcessor.java,v 1.3 2007-12-05 17:21:10 dervin Exp $ 
+ * @version $Id: SDK4QueryProcessor.java,v 1.4 2007-12-05 21:27:47 dervin Exp $ 
  */
 public class SDK4QueryProcessor extends CQLQueryProcessor {
     // configuration property keys
@@ -247,6 +247,7 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
             throw new InitializationException("Error instantiating class inheritance manager: " 
                 + ex.getMessage(), ex);
         }
+        LOG.debug("Inheritance manager initialized");
     }
     
     
