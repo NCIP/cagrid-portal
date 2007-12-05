@@ -7,6 +7,7 @@
 	<classpathentry kind="src" path="portlets/src/java"/>
 	<classpathentry kind="src" path="portals/liferay/src/java"/>
 	<classpathentry kind="src" path="security/src/java"/>
+	<classpathentry kind="src" path="portlets/test/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="db/lib/spring/spring.jar"/>
 	<classpathentry kind="lib" path="db/lib/hibernate/core/commons-logging-1.0.4.jar"/>
