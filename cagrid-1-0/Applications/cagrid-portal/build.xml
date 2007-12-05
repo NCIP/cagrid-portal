@@ -4,13 +4,6 @@
 	<property name="build.ext.properties" value="build-${target.env}.properties"/>
 	<property file="${build.ext.properties}"/>
 	<property file="build.properties" />
-	
-	<path id="uhp" location="${user.home}"/>
-	<pathconvert targetos="windows" property="c" refid="p"/>
-	<echo>${c}</echo>
-	</target>	
-	<property name="user.home.path" value=""/>
-	
 	<property environment="env" />
 	<property name="ant.home" value="${env.ANT_HOME}" />
 	<property name="tools.ant.lib" value="tools/ant/lib"/>
