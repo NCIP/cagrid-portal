@@ -31,6 +31,13 @@
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
 		autowire="byName">
+		
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.MySQLDialect
+			</value>
+		</property>
+		
 		<property name="annotatedClasses">
 			<list>
 				<value>gov.nih.nci.cagrid.portal.domain.AuthnTicket</value>
