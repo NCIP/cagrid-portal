@@ -32,4 +32,11 @@ public class XSSFilterEditor extends PropertyEditorSupport {
 		}
 	}
 
+	public String getAsText(){
+		String text = (String)getValue();
+		if(PortalUtils.isEmpty(text)){
+			return null;
+		}
+		return text;
+	}
 }

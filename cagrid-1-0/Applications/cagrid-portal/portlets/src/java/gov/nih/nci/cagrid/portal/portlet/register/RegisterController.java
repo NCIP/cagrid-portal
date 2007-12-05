@@ -36,7 +36,8 @@ import org.springframework.web.portlet.mvc.SimpleFormController;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
  */
-public class RegisterController extends SimpleFormController implements InitializingBean{
+public class RegisterController extends SimpleFormController implements
+		InitializingBean {
 
 	private List<String> stateCodes = new ArrayList<String>();
 	private List<String> countryCodes = new ArrayList<String>();
@@ -51,26 +52,21 @@ public class RegisterController extends SimpleFormController implements Initiali
 
 	protected void initBinder(PortletRequest request,
 			PortletRequestDataBinder binder) throws Exception {
+		
 		binder.registerCustomEditor(StateCode.class, "state",
 				new StateCodeEditor());
 		binder.registerCustomEditor(CountryCode.class, "country",
 				new CountryCodeEditor());
-		binder.registerCustomEditor(String.class, "userId",
-				new XSSFilterEditor());	
-		binder.registerCustomEditor(String.class, "email",
-				new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "firstName",
-				new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "lastName",
-				new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "organization",
-				new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "address",
-				new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "city",
-				new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "phoneNumber",
-				new XSSFilterEditor());
+
+		binder.registerCustomEditor(String.class, "userId", new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "email", new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "firstName", new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "lastName", new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "organization", new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "address", new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "addres2", new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "city", new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "phoneNumber", new XSSFilterEditor());
 	}
 
 	protected Object formBackingObject(PortletRequest request) throws Exception {
@@ -109,8 +105,9 @@ public class RegisterController extends SimpleFormController implements Initiali
 						.getMessage() }, "Error contacting Dorian service: "
 						+ ex.getFaultString());
 			} catch (InvalidUserPropertyFault ex) {
-				errors.reject("dorianInvalidUserPropertyError", new String[] { ex
-						.getFaultString() }, ex.getFaultString());
+				errors.reject("dorianInvalidUserPropertyError",
+						new String[] { ex.getFaultString() }, ex
+								.getFaultString());
 			} catch (RemoteException ex) {
 				errors.reject("dorianServiceError", new String[] { ex
 						.getMessage() }, "Error contacting Dorian service: "
@@ -164,8 +161,8 @@ public class RegisterController extends SimpleFormController implements Initiali
 		setStateCodes(sort(getStateCodes()));
 		setCountryCodes(sort(getCountryCodes()));
 	}
-	
-	private List<String> sort(List<String> values){
+
+	private List<String> sort(List<String> values) {
 		return new ArrayList<String>(new TreeSet<String>(values));
 	}
 
