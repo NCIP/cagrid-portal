@@ -13,7 +13,9 @@
 # Check-out caGrid Portal from CVS #
 
 You can use the following settings to check out the source code:
- - protocol: pserver
+ - username: anonymous
+ - password: anonymous
+ - protocol: ssh
  - host: cbiocvs2.nci.nih.gov
  - repository: /share/content/gforge/cagrid-1-0
  - module: cagrid-1-0/Applications/cagrid-portal
