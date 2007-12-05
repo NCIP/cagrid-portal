@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ui.GroupSelectionListener;
 import gov.nih.nci.cagrid.data.ui.NotifyingButtonGroup;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
@@ -26,6 +27,7 @@ import java.net.URL;
 
 import javax.swing.ButtonModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -49,7 +51,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.3 2007-11-30 19:57:59 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.4 2007-12-05 21:28:18 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -85,11 +87,12 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private JPanel remoteApiPanel = null;
     private JPanel apiConfigPanel = null;
     private JPanel mainPanel = null;
+    private JCheckBox caseInsensitiveCheckBox = null;
     
     private IconFeedbackPanel validationPanel = null;
     private ValidationResultModel validationModel = null;
     private DocumentChangeAdapter documentChangeListener = null;
-
+    
 
     /**
      * @param extensionDescription
@@ -188,7 +191,8 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         });
         radioGroup.add(getLocalApiRadioButton());
         radioGroup.add(getRemoteApiRadioButton());
-        radioGroup.setSelected(getLocalApiRadioButton().getModel(), true);
+        getLocalApiRadioButton().setSelected(true);
+        getRemoteApiRadioButton().setSelected(false);
     }
     
     
@@ -347,13 +351,19 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
      */
     private JPanel getBasicConfigPanel() {
         if (basicConfigPanel == null) {
+            GridBagConstraints gridBagConstraints110 = new GridBagConstraints();
+            gridBagConstraints110.gridx = 0;
+            gridBagConstraints110.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints110.gridwidth = 3;
+            gridBagConstraints110.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints110.gridy = 4;
             GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
             gridBagConstraints7.gridx = 2;
             gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints7.gridy = 2;
+            gridBagConstraints7.gridy = 3;
             GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
             gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints6.gridy = 2;
+            gridBagConstraints6.gridy = 3;
             gridBagConstraints6.weightx = 1.0;
             gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints6.gridx = 1;
@@ -361,7 +371,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             gridBagConstraints5.gridx = 0;
             gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints5.gridy = 2;
+            gridBagConstraints5.gridy = 3;
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.gridx = 2;
             gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
@@ -399,6 +409,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             basicConfigPanel.add(getConfigDirLabel(), gridBagConstraints5);
             basicConfigPanel.add(getConfigDirTextField(), gridBagConstraints6);
             basicConfigPanel.add(getConfigBrowseButton(), gridBagConstraints7);
+            basicConfigPanel.add(getCaseInsensitiveCheckBox(), gridBagConstraints110);
         }
         return basicConfigPanel;
     }
@@ -798,19 +809,47 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     
     private void storeConfigurationProperties() {
         ServiceDescription desc = getServiceInformation().getServiceDescriptor();
-        CommonTools.setServiceProperty(desc, SDK4QueryProcessor.PROPERTY_APPLICATION_NAME, 
+        CommonTools.setServiceProperty(desc, 
+            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_APPLICATION_NAME, 
             getApplicationNameTextField().getText(), false);
         File beansJarFile = new File(getBeansJarTextField().getText());
-        CommonTools.setServiceProperty(desc, SDK4QueryProcessor.PROPERTY_BEANS_JAR_NAME,
+        CommonTools.setServiceProperty(desc, 
+            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_BEANS_JAR_NAME,
             beansJarFile.getName(), false);
+        CommonTools.setServiceProperty(desc, 
+            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_CASE_INSENSITIVE_QUERYING,
+            String.valueOf(getCaseInsensitiveCheckBox().isSelected()), false);
         boolean isLocal = getLocalApiRadioButton().isSelected();
-        CommonTools.setServiceProperty(desc, SDK4QueryProcessor.PROPERTY_USE_LOCAL_API,
+        CommonTools.setServiceProperty(desc, 
+            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_USE_LOCAL_API,
             String.valueOf(isLocal), false);
-        CommonTools.setServiceProperty(desc, SDK4QueryProcessor.PROPERTY_ORM_JAR_NAME,
+        CommonTools.setServiceProperty(desc, 
+            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_ORM_JAR_NAME,
             isLocal ? new File(getOrmJarTextField().getText()).getName() : "", false);
-        CommonTools.setServiceProperty(desc, SDK4QueryProcessor.PROPERTY_HOST_NAME,
+        CommonTools.setServiceProperty(desc, 
+            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_HOST_NAME,
             isLocal ? "" : getHostNameTextField().getText(), false);
-        CommonTools.setServiceProperty(desc, SDK4QueryProcessor.PROPERTY_HOST_PORT,
+        CommonTools.setServiceProperty(desc, 
+            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_HOST_PORT,
             isLocal ? "" : getPortTextField().getText(), false);
+    }
+
+
+    /**
+     * This method initializes caseInsensitiveCheckBox	
+     * 	
+     * @return javax.swing.JCheckBox	
+     */
+    private JCheckBox getCaseInsensitiveCheckBox() {
+        if (caseInsensitiveCheckBox == null) {
+            caseInsensitiveCheckBox = new JCheckBox();
+            caseInsensitiveCheckBox.setText("Case Insensitive Querying");
+            caseInsensitiveCheckBox.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    validateInput();
+                }
+            });
+        }
+        return caseInsensitiveCheckBox;
     }
 }
