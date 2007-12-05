@@ -873,6 +873,8 @@ public final class CommonTools {
      *            The key of the service property to set
      * @param value
      *            The value to associate with the property key
+     * @param description
+     *            The description of the service property
      */
     public static void setServiceProperty(ServiceDescription desc, String key, String value, boolean isFromETC,
         String description) {
