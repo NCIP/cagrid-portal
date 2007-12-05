@@ -13,12 +13,12 @@ package gov.nih.nci.cagrid.introduce.servicetools;
 import javax.xml.namespace.QName;
 
 import org.globus.wsrf.NoSuchResourceException;
-import org.globus.wsrf.PersistenceCallback;
 import org.globus.wsrf.RemoveCallback;
 import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceHome;
 import org.globus.wsrf.ResourceKey;
+import org.globus.wsrf.impl.lifetime.SetTerminationTimeProvider;
 
 
 /**
@@ -65,12 +65,10 @@ public abstract class SingletonResourceHomeImpl implements ResourceHome {
     }
 
 
-    /**
-     * Always throws as an exception - not permitted to remove any key.
-     */
     public void remove(ResourceKey key) throws ResourceException {
         if (this.singleResource instanceof RemoveCallback) {
             ((RemoveCallback) this.singleResource).remove();
+            SetTerminationTimeProvider.sendTerminationNotification(this.singleResource);
         }
     }
 

@@ -620,7 +620,7 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
     if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 %>
 
-    public void load(ResourceKey arg0) throws ResourceException, NoSuchResourceException, InvalidResourceKeyException {
+    public void load(ResourceKey resourceKey) throws ResourceException, NoSuchResourceException, InvalidResourceKeyException {
 <%
     if(arguments.getService().getResourceFrameworkOptions().getSingleton()!=null){
 %>
@@ -642,8 +642,8 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
        <%=arguments.getService().getName()%>ResourceProperties props = (<%=arguments.getService().getName()%>ResourceProperties)helper.load(<%=arguments.getService().getName()%>ResourceProperties.class, id);
        this.initialize(props, <%=arguments.getService().getName()%>Constants.RESOURCE_PROPERTY_SET, id);
 <%} else {%>
-	   <%=arguments.getService().getName()%>ResourceProperties props = (<%=arguments.getService().getName()%>ResourceProperties)helper.load(<%=arguments.getService().getName()%>ResourceProperties.class, key.getValue());
-       this.initialize(props, <%=arguments.getService().getName()%>Constants.RESOURCE_PROPERTY_SET, key.getValue());
+	   <%=arguments.getService().getName()%>ResourceProperties props = (<%=arguments.getService().getName()%>ResourceProperties)helper.load(<%=arguments.getService().getName()%>ResourceProperties.class, resourceKey.getValue());
+       this.initialize(props, <%=arguments.getService().getName()%>Constants.RESOURCE_PROPERTY_SET, resourceKey.getValue());
 <%}%>
     }
 

@@ -59,7 +59,7 @@ public class XmlPersistenceHelper extends FilePersistenceHelper implements Persi
 
     public XmlPersistenceHelper(Class beanClass, ServiceConfiguration configuration)
         throws IOException {
-        super(beanClass, getDefaultStorageDirectory(new File(configuration.getEtcDirectoryPath()), beanClass),FILE_SUFFIX);
+        super(beanClass, getDefaultStorageDirectory(new File(configuration.getEtcDirectoryPath() + File.separator  + "persisted"), beanClass),FILE_SUFFIX);
         
     }
 

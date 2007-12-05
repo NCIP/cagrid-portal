@@ -11,7 +11,7 @@
 	if(!resourceService.getName().equals(arguments.getService().getName())){
 %>
 		org.apache.axis.message.addressing.EndpointReferenceType epr = new org.apache.axis.message.addressing.EndpointReferenceType();
-		<%=resourceService.getPackageName()%>.service.globus.resource.BaseResourceHome home = null;
+		<%=resourceService.getPackageName()%>.service.globus.resource.<%=resourceService.getName()%>ResourceHome home = null;
 		org.globus.wsrf.ResourceKey resourceKey = null;
 		org.apache.axis.MessageContext ctx = org.apache.axis.MessageContext.getCurrentContext();
 		String servicePath = ctx.getTargetService();
@@ -19,7 +19,7 @@
 
 		try {
 			javax.naming.Context initialContext = new javax.naming.InitialContext();
-			home = (<%=resourceService.getPackageName()%>.service.globus.resource.BaseResourceHome) initialContext.lookup(homeName);
+			home = (<%=resourceService.getPackageName()%>.service.globus.resource.<%=resourceService.getName()%>ResourceHome) initialContext.lookup(homeName);
 			resourceKey = home.createResource();
 			
 			//  Grab the newly created resource
@@ -56,7 +56,7 @@
 } else {
 %>
 		try {
-            <%=resourceService.getPackageName()%>.service.globus.resource.BaseResourceHome home = getResourceHome(); 
+            <%=resourceService.getPackageName()%>.service.globus.resource.<%=resourceService.getName()%>ResourceHome home = getResourceHome(); 
             org.globus.wsrf.ResourceKey key = home.createResource(); 
             
             //  Grab the newly created resource

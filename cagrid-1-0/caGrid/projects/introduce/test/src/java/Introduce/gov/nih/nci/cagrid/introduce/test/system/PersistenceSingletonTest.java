@@ -23,12 +23,12 @@ import gov.nih.nci.cagrid.testing.system.haste.Story;
 import java.util.Vector;
 
 
-public class PersistenceTest extends Story {
+public class PersistenceSingletonTest extends Story {
     
     private ServiceContainer container;
     private PersistentTestCaseInfo tci;
 
-    public PersistenceTest() {
+    public PersistenceSingletonTest() {
         this.setName("Introduce Persistence System Test");
     }
 

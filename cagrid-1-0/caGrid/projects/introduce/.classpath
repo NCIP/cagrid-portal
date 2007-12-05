@@ -95,7 +95,7 @@
 	<classpathentry kind="lib" path="ext/lib/osgi.jar"/>
 	<classpathentry kind="lib" path="ext/lib/resources.jar"/>
 	<classpathentry kind="lib" path="ext/lib/runtime.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar" sourcepath="/caGrid-core"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-GlobalModelExchange-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
