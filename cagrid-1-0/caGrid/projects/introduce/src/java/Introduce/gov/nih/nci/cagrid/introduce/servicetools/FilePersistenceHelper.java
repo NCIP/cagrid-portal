@@ -31,10 +31,6 @@ public class FilePersistenceHelper {
 
     public static final String SERVER_ID = ContainerConfig.CONTAINER_ID_PROPERTY;
 
-    private static final String FILE_PERSISTENCE_DIR = getPersistenceDirectory();
-
-    private static final String PERSISTENCE_DIR_PROPERTY = Constants.CONTAINER_PROPERTY + ".persistence.dir";
-
     private static Log logger = LogFactory.getLog(FilePersistenceHelper.class.getName());
 
     protected Class beanClass;
@@ -44,48 +40,6 @@ public class FilePersistenceHelper {
 
     private static String getServerID() {
         return ContainerConfig.getContainerID();
-    }
-
-
-    private static String getPersistenceDirectory() {
-        String value = System.getProperty(PERSISTENCE_DIR_PROPERTY);
-        return (value == null) ? System.getProperty("user.home") + File.separatorChar + ".globus" + File.separatorChar
-            + "persisted" : value;
-    }
-
-
-    /**
-     * Gets a base directory location where the objects of the given type should
-     * be stored.
-     * 
-     * @param beanClass
-     *            the type of the objects that will be stored in the directory.
-     *            The name of type will be used to construct the base directory
-     *            location.
-     * @return the base directory location
-     * @throws IOException
-     *             if unable to get the base directory location
-     */
-    public static File getDefaultStorageDirectory(Class beanClass) throws IOException {
-        if (beanClass == null) {
-            return null;
-        }
-        String fullClassName = beanClass.getName();
-        String className = fullClassName;
-        int pos = className.lastIndexOf('.');
-        if (pos != -1) {
-            className = className.substring(pos + 1);
-        }
-
-        String dir = FILE_PERSISTENCE_DIR + File.separatorChar + getServerID() + File.separatorChar + className;
-
-        File baseDir = new File(FILE_PERSISTENCE_DIR);
-        File storageDir = new File(dir);
-        if (!storageDir.getCanonicalPath().startsWith(baseDir.getCanonicalPath())) {
-            throw new IOException("invalidStorageDir: " + dir);
-        }
-
-        return storageDir;
     }
 
 
@@ -108,12 +62,6 @@ public class FilePersistenceHelper {
         }
 
         return storageDir;
-    }
-
-
-    public static String getDefaultStorageDir(Class beanClass) throws IOException {
-        File dir = getDefaultStorageDirectory(beanClass);
-        return (dir == null) ? null : dir.getAbsolutePath();
     }
 
 
@@ -144,8 +92,8 @@ public class FilePersistenceHelper {
      * Creates FilePersistenceHelper with default storage directory based on the
      * beanClass name and specified suffix.
      */
-    public FilePersistenceHelper(Class beanClass, String suffix) throws IOException {
-        this(beanClass, getDefaultStorageDirectory(beanClass), suffix);
+    public FilePersistenceHelper(Class beanClass, ServiceConfiguration configuration, String suffix) throws IOException {
+        this(beanClass, getDefaultStorageDirectory(new File(configuration.getEtcDirectoryPath() + File.separator  + "persisted"),beanClass), suffix);
     }
 
 
@@ -301,5 +249,6 @@ public class FilePersistenceHelper {
             return (name.endsWith(this.suffix));
         }
     }
+
 
 }

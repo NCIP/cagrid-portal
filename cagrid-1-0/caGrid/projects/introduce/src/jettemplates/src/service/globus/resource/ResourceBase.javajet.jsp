@@ -20,10 +20,14 @@ import <%=arguments.getService().getPackageName()%>.common.<%=arguments.getServi
 import <%=arguments.getService().getPackageName()%>.stubs.<%=arguments.getService().getName()%>ResourceProperties;
 import <%=baseService.getPackageName()%>.service.<%=baseService.getName()%>Configuration;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,6 +35,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.xml.namespace.QName;
 
+import gov.nih.nci.cagrid.introduce.servicetools.FilePersistenceHelper;
 import gov.nih.nci.cagrid.introduce.servicetools.PersistenceHelper;
 import gov.nih.nci.cagrid.introduce.servicetools.ReflectionResource;
 
@@ -76,6 +81,7 @@ import org.globus.wsrf.utils.AddressingUtils;
 import org.globus.wsrf.Topic;
 import org.globus.wsrf.TopicList;
 import org.globus.wsrf.TopicListAccessor;
+import org.globus.wsrf.utils.SubscriptionPersistenceUtils;
 
 import org.globus.wsrf.impl.ResourcePropertyTopic;
 import org.globus.wsrf.impl.SimpleTopicList;
@@ -137,7 +143,10 @@ if(arguments.getService().getResourceFrameworkOptions().getSingleton()==null){
 <%
 if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 %>
-    private PersistenceHelper helper = null;
+    //used to persist the resource properties
+    private PersistenceHelper resourcePropertyPersistenceHelper = null;
+    //used to persist notifications
+    private FilePersistenceHelper resourcePersistenceHelper = null;
 <%}
 %>
 <%
@@ -146,15 +155,17 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
     private TopicList topicList;
 <%}
 %>
-
+    private boolean beingLoaded = false;
+    
     public <%=arguments.getService().getName()%>ResourceBase() {
 <%
 if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 %>
         try {
-            helper = new gov.nih.nci.cagrid.introduce.servicetools.XmlPersistenceHelper(<%=arguments.getService().getName()%>ResourceProperties.class,<%=baseService.getName()%>Configuration.getConfiguration());
+            resourcePropertyPersistenceHelper = new gov.nih.nci.cagrid.introduce.servicetools.XmlPersistenceHelper(<%=arguments.getService().getName()%>ResourceProperties.class,<%=baseService.getName()%>Configuration.getConfiguration());
+            resourcePersistenceHelper = new FilePersistenceHelper(this.getClass(),HelloWorldConfiguration.getConfiguration(),".resource");
         } catch (Exception ex) {
-            logger.warn("Unable to initialize persistence helper", ex);
+            logger.warn("Unable to initialize resource properties persistence helper", ex);
         }
 <%}
 %>
@@ -611,7 +622,7 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 <%
     if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 %>     
-		helper.remove(this);
+		resourcePropertyPersistenceHelper.remove(this);
 <%}%>
     }
 <%}%>
@@ -621,6 +632,7 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
 %>
 
     public void load(ResourceKey resourceKey) throws ResourceException, NoSuchResourceException, InvalidResourceKeyException {
+	  beingLoaded = true;
 <%
     if(arguments.getService().getResourceFrameworkOptions().getSingleton()!=null){
 %>
@@ -629,7 +641,7 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
         // this assumes the resource home will set the id before calling load()
         Object id = null;
         try {
-            List list = helper.list();
+            List list = resourcePropertyPersistenceHelper.list();
             if(list!=null && list.size()>0){
                 id = list.get(0);
             }
@@ -637,32 +649,130 @@ if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null)
             e.printStackTrace();
         }
         if (id == null) {
+            beingLoaded = false;
             throw new InvalidResourceKeyException("No persited resource available to load for singleton");
         }
-       <%=arguments.getService().getName()%>ResourceProperties props = (<%=arguments.getService().getName()%>ResourceProperties)helper.load(<%=arguments.getService().getName()%>ResourceProperties.class, id);
+        
+        //first we will recover the resource properties and initialize the resource
+       <%=arguments.getService().getName()%>ResourceProperties props = (<%=arguments.getService().getName()%>ResourceProperties)resourcePropertyPersistenceHelper.load(<%=arguments.getService().getName()%>ResourceProperties.class, id);
        this.initialize(props, <%=arguments.getService().getName()%>Constants.RESOURCE_PROPERTY_SET, id);
-<%} else {%>
-	   <%=arguments.getService().getName()%>ResourceProperties props = (<%=arguments.getService().getName()%>ResourceProperties)helper.load(<%=arguments.getService().getName()%>ResourceProperties.class, resourceKey.getValue());
-       this.initialize(props, <%=arguments.getService().getName()%>Constants.RESOURCE_PROPERTY_SET, resourceKey.getValue());
+       
+               //next we will recover the resource itself
+        File file = resourcePersistenceHelper.getKeyAsFile(this.getClass(), id);
+        if (!file.exists()) {
+            beingLoaded = false;
+            throw new NoSuchResourceException();
+        }
+        FileInputStream fis = null;
+        int value = 0;
+        try {
+            fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+<%
+    if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
+%>
+            SubscriptionPersistenceUtils.loadSubscriptionListeners(
+                this.getTopicList(), ois);
 <%}%>
+        } catch (Exception e) {
+            beingLoaded = false;
+            throw new ResourceException("Failed to load resource", e);
+        } finally {
+            if (fis != null) {
+                try { fis.close(); } catch (Exception ee) {}
+            }
+        } 
+       
+<%} else {%>
+       //first we will recover the resource properties and initialize the resource
+	   <%=arguments.getService().getName()%>ResourceProperties props = (<%=arguments.getService().getName()%>ResourceProperties)resourcePropertyPersistenceHelper.load(<%=arguments.getService().getName()%>ResourceProperties.class, resourceKey.getValue());
+       this.initialize(props, <%=arguments.getService().getName()%>Constants.RESOURCE_PROPERTY_SET, resourceKey.getValue());
+       
+        //next we will recover the resource itself
+        File file = resourcePersistenceHelper.getKeyAsFile(this.getClass(), resourceKey.getValue());
+        if (!file.exists()) {
+            beingLoaded = false;
+            throw new NoSuchResourceException();
+        }
+        FileInputStream fis = null;
+        int value = 0;
+        try {
+            fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+<%
+    if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
+%>
+            SubscriptionPersistenceUtils.loadSubscriptionListeners(
+                this.getTopicList(), ois);
+<%}%>
+        } catch (Exception e) {
+            beingLoaded = false;
+            throw new ResourceException("Failed to load resource", e);
+        } finally {
+            if (fis != null) {
+                try { fis.close(); } catch (Exception ee) {}
+            }
+        } 
+       
+<%}%>
+       beingLoaded = false;
     }
 
 
     public void store() throws ResourceException {
+      if(!beingLoaded){
 <%
     if(arguments.getService().getResourceFrameworkOptions().getSingleton()!=null){
 %>
         try {
             //removing all because we only want one copy of this resource persisted
             //because this is a singleton
-            helper.removeAll();
+            resourcePropertyPersistenceHelper.removeAll();
+            resourcePersistenceHelper.removeAll();
         } catch (Exception e) {
             e.printStackTrace();
         }
 <%
     }
 %>
-        helper.store(this);
+        //store the resource properties
+        resourcePropertyPersistenceHelper.store(this);
+        
+        FileOutputStream fos = null;
+        File tmpFile = null;
+
+        try {
+            tmpFile = File.createTempFile(
+                this.getClass().getName(), ".tmp",
+                resourcePersistenceHelper.getStorageDirectory());
+            fos = new FileOutputStream(tmpFile);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+<%
+    if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
+%>
+            SubscriptionPersistenceUtils.storeSubscriptionListeners(
+                this.getTopicList(), oos);
+<%}%>
+        } catch (Exception e) {
+            if (tmpFile != null) {
+                tmpFile.delete();
+            }
+            throw new ResourceException("Failed to store resource", e);
+        } finally {
+            if (fos != null) {
+                try { fos.close();} catch (Exception ee) {}
+            }
+        }
+
+        File file = resourcePersistenceHelper.getKeyAsFile(this.getClass(), getID());
+        if (file.exists()) {
+            file.delete();
+        }
+        if (!tmpFile.renameTo(file)) {
+            tmpFile.delete();
+            throw new ResourceException("Failed to store resource");
+        }
+        }
     }
 <%}%>
 	
