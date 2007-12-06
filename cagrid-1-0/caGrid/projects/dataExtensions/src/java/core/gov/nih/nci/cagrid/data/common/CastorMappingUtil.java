@@ -22,7 +22,7 @@ import org.jdom.input.SAXBuilder;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 26, 2006 
- * @version $Id: CastorMappingUtil.java,v 1.6 2007-12-06 16:45:40 dervin Exp $ 
+ * @version $Id: CastorMappingUtil.java,v 1.7 2007-12-06 18:37:58 dervin Exp $ 
  */
 public class CastorMappingUtil {
     /**
@@ -242,7 +242,7 @@ public class CastorMappingUtil {
             e.printStackTrace();
             throw new Exception("Document construction failed:" + e.getMessage(), e);
         }
-        Element root = doc.getRootElement();
+        Element root = doc.detachRootElement();
         return root;
     }
     
