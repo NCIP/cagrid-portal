@@ -1,16 +1,19 @@
 package gov.nih.nci.cagrid.data.common;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.projectmobius.common.XMLUtilities;
+import org.jdom.input.SAXBuilder;
 
 /** 
  *  CastorMappingUtil
@@ -19,9 +22,14 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 26, 2006 
- * @version $Id: CastorMappingUtil.java,v 1.5 2007-09-04 16:22:28 dervin Exp $ 
+ * @version $Id: CastorMappingUtil.java,v 1.6 2007-12-06 16:45:40 dervin Exp $ 
  */
 public class CastorMappingUtil {
+    /**
+     * Setting this feature controls how xerxes handles external DTDs
+     */
+    public static final String XERXES_LOAD_DTD_FEATURE = "http://apache.org/xml/features/nonvalidating/load-external-dtd";
+    
     public static final String CASTOR_MARSHALLING_MAPPING_FILE = "xml-mapping.xml";
     public static final String EDITED_CASTOR_MARSHALLING_MAPPING_FILE = "edited-" + CASTOR_MARSHALLING_MAPPING_FILE;
     public static final String CASTOR_UNMARSHALLING_MAPPING_FILE = "unmarshaller-xml-mapping.xml";
@@ -41,7 +49,7 @@ public class CastorMappingUtil {
 	 * @throws Exception
 	 */
 	public static String changeNamespaceOfPackage(String mapping, String packageName, String namespace) throws Exception {
-		Element mappingRoot = XMLUtilities.stringToDocument(mapping).getRootElement();
+        Element mappingRoot = stringToElementNoDoctypes(mapping);
 		// get class elements
 		String oldNamespace = null;
 		String oldPrefix = null;
@@ -79,7 +87,7 @@ public class CastorMappingUtil {
 						int nsStart = elementString.indexOf(oldNamespace);
 						int nsEnd = nsStart + oldNamespace.length();
 						String changedString = elementString.substring(0, nsStart) + namespace + elementString.substring(nsEnd);
-						Element changedElement = XMLUtilities.stringToDocument(changedString).detachRootElement();
+						Element changedElement = stringToElementNoDoctypes(changedString);
 						fieldElem.removeContent(bindXmlElement);
 						fieldElem.addContent(changedElement);
 					}
@@ -101,7 +109,7 @@ public class CastorMappingUtil {
      *      The edited text of the castor mapping
      */
     public static String removeAssociationMappings(String mappingText) throws Exception {
-        Element mappingRoot = XMLUtilities.stringToDocument(mappingText).getRootElement();
+        Element mappingRoot = stringToElementNoDoctypes(mappingText);
         // <mapping>
         List classElements = mappingRoot.getChildren("class", mappingRoot.getNamespace());
         Iterator classElemIter = classElements.iterator();
@@ -220,6 +228,22 @@ public class CastorMappingUtil {
             + '/' + serviceInfo.getServices().getService(0).getName()
             + '-' + EDITED_CASTOR_UNMARSHALLING_MAPPING_FILE;
         return mappingName;
+    }
+    
+    
+    private static Element stringToElementNoDoctypes(String string) throws Exception {
+        Document doc = null;
+        try {
+            SAXBuilder builder = new SAXBuilder(false);
+            builder.setFeature(
+                XERXES_LOAD_DTD_FEATURE, false);
+            doc = builder.build(new ByteArrayInputStream(string.getBytes()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Document construction failed:" + e.getMessage(), e);
+        }
+        Element root = doc.getRootElement();
+        return root;
     }
     
     
