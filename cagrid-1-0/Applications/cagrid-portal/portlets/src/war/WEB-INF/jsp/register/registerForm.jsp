@@ -28,43 +28,7 @@ case letter, at least one number, and at least one symbol
 	</span>
 	<table>
 		<tr>
-			<td style="padding-right:5px">
-				Username:
-			</td>
-			<td>
-				<form:input path="userId" size="50"/>&nbsp;<span style="color:red">*</span><br/>
-				<span style="color:red"><form:errors path="userId"/></span>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				Email:
-			</td>
-			<td>
-				<form:input path="email" size="50"/>&nbsp;<span style="color:red">*</span><br/>
-				<span style="color:red"><form:errors path="email"/></span>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				Phone:
-			</td>
-			<td>
-				<form:input path="phoneNumber" size="50"/>&nbsp;<span style="color:red">*</span><br/>
-				<span style="color:red"><form:errors path="phoneNumber"/></span>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				Password:
-			</td>
-			<td>
-				<form:password path="password" size="50"/>&nbsp;<span style="color:red">*</span><br/>
-				<span style="color:red"><form:errors path="password"/></span>
-			</td>
-		</tr>
-		<tr>
-			<td>
+			<td style="padding-right:5px; text-align:right">
 				First Name:
 			</td>
 			<td>
@@ -73,7 +37,7 @@ case letter, at least one number, and at least one symbol
 			</td>
 		</tr>
 		<tr>
-			<td>
+			<td style="padding-right:5px; text-align:right">
 				Last Name:
 			</td>
 			<td>
@@ -82,7 +46,43 @@ case letter, at least one number, and at least one symbol
 			</td>
 		</tr>
 		<tr>
+			<td style="padding-right:5px; text-align:right">
+				Username:
+			</td>
 			<td>
+				<form:input path="userId" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<span style="color:red"><form:errors path="userId"/></span>
+			</td>
+		</tr>
+		<tr>
+			<td style="padding-right:5px; text-align:right">
+				Password:
+			</td>
+			<td>
+				<form:password path="password" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<span style="color:red"><form:errors path="password"/></span>
+			</td>
+		</tr>
+		<tr>
+			<td style="padding-right:5px; text-align:right">
+				Email:
+			</td>
+			<td>
+				<form:input path="email" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<span style="color:red"><form:errors path="email"/></span>
+			</td>
+		</tr>
+		<tr>
+			<td style="padding-right:5px; text-align:right">
+				Phone:
+			</td>
+			<td>
+				<form:input path="phoneNumber" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<span style="color:red"><form:errors path="phoneNumber"/></span>
+			</td>
+		</tr>
+		<tr>
+			<td style="padding-right:5px; text-align:right">
 				Organization:
 			</td>
 			<td>
@@ -91,7 +91,7 @@ case letter, at least one number, and at least one symbol
 			</td>
 		</tr>
 		<tr>
-			<td>
+			<td style="padding-right:5px; text-align:right">
 				Street Address 1:
 			</td>
 			<td>
@@ -100,7 +100,7 @@ case letter, at least one number, and at least one symbol
 			</td>
 		</tr>
 		<tr>
-			<td>
+			<td style="padding-right:5px; text-align:right">
 				Street Address 2:
 			</td>
 			<td>
@@ -109,7 +109,7 @@ case letter, at least one number, and at least one symbol
 			</td>
 		</tr>
 		<tr>
-			<td>
+			<td style="padding-right:5px; text-align:right">
 				City:
 			</td>
 			<td>
@@ -118,7 +118,7 @@ case letter, at least one number, and at least one symbol
 			</td>
 		</tr>
 		<tr>
-			<td>
+			<td style="padding-right:5px; text-align:right">
 				State:
 			</td>
 			<td>
@@ -127,7 +127,7 @@ case letter, at least one number, and at least one symbol
 			</td>
 		</tr>
 		<tr>
-			<td>
+			<td style="padding-right:5px; text-align:right">
 				Postal Code:
 			</td>
 			<td>
@@ -136,7 +136,7 @@ case letter, at least one number, and at least one symbol
 			</td>
 		</tr>
 		<tr>
-			<td>
+			<td style="padding-right:5px; text-align:right">
 				Country:
 			</td>
 			<td>
@@ -144,7 +144,14 @@ case letter, at least one number, and at least one symbol
 				<span style="color:red"><form:errors path="country"/></span>
 			</td>
 		</tr>
+		<tr>
+			<td></td>
+			<td style="padding-top:5px;">
+				<input type="submit" value="Submit"/>
+			</td>
+		</tr>
 	</table>
-	<input type="submit" value="Submit"/>
+	
 </form:form>
+<br/>
 <span style="color:red">*</span> Indicates that a field is required.

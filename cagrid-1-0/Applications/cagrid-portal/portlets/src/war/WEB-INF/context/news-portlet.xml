@@ -83,10 +83,9 @@
 		id="scrollItemsController"
 		class="gov.nih.nci.cagrid.portal.portlet.news.ScrollItemsController"
 		autowire="byName">
-		<property name="objectName" value="itemsListBean"/>
 		<property name="commandName" value="scrollCommand"/>
 		<property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.util.ScrollCommand"/>
-		<property name="successView" value="items"/>
+		<property name="successOperation" value="listItems"/>
 		<property name="sessionAttributeName" value="itemsListBean"/>
 	</bean>
 	
@@ -128,6 +127,7 @@
 						<entry key="editChannel" value-ref="editChannelController" />
 						<entry key="listItems" value-ref="listItemsController" />
 						<entry key="editItem" value-ref="editItemController" />
+						<entry key="scrollItems" value-ref="scrollItemsController" />
 				    </map>
 				</entry>
 				<entry key="view">

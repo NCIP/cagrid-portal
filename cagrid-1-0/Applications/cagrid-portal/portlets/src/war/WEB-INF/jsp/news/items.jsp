@@ -29,7 +29,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="item" items="${itemsListBean.scroller.objects}" varStatus="rowStatus">
+			<c:forEach var="item" items="${itemsListBean.scroller.page}" varStatus="rowStatus">
 				<c:choose>
 					<c:when test="${rowStatus.index % 2 == 0}">
 						<c:set var="rowClass" value="dataRowDark"/>

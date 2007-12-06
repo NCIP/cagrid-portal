@@ -38,6 +38,7 @@
 
 	</c:when>
 	<c:otherwise>
+	<a href="/web/guest/home" style="text-decoration:none;">&lt;&lt; To Full Page</a><br/><br/>
 <%@ include file="/WEB-INF/jsp/directauthn/greeting.jspf"%>
 	</c:otherwise>
 </c:choose>

@@ -20,8 +20,7 @@ import org.springframework.web.portlet.mvc.AbstractCommandController;
  */
 public class ScrollItemsController extends AbstractCommandController {
 	
-	private String objectName;
-	private String successView;
+	private String successOperation;
 	private String sessionAttributeName;
 
 	/**
@@ -52,10 +51,12 @@ public class ScrollItemsController extends AbstractCommandController {
 	 * @see org.springframework.web.portlet.mvc.AbstractCommandController#handleAction(javax.portlet.ActionRequest, javax.portlet.ActionResponse, java.lang.Object, org.springframework.validation.BindException)
 	 */
 	@Override
-	protected void handleAction(ActionRequest arg0, ActionResponse arg1,
-			Object arg2, BindException arg3) throws Exception {
-		throw new IllegalArgumentException(getClass().getName() + " doesn't handle action requests.");
-
+	protected void handleAction(ActionRequest request, ActionResponse response,
+			Object obj, BindException errors) throws Exception {
+		ScrollCommand command = (ScrollCommand)obj;
+		ItemsListBean itemsListBean = (ItemsListBean) request.getPortletSession().getAttribute(getSessionAttributeName());
+		itemsListBean.getScroller().scroll(command);
+		response.setRenderParameter("operation", getSuccessOperation());
 	}
 
 	/* (non-Javadoc)
@@ -65,20 +66,15 @@ public class ScrollItemsController extends AbstractCommandController {
 	protected ModelAndView handleRender(RenderRequest request,
 			RenderResponse response, Object obj, BindException errors)
 			throws Exception {
-		ModelAndView mav = new ModelAndView(getSuccessView());
-		ScrollCommand command = (ScrollCommand)obj;
-		ItemsListBean itemsListBean = (ItemsListBean) request.getPortletSession().getAttribute(getSessionAttributeName());
-		itemsListBean.getScroller().scroll(command);
-		mav.addObject(getObjectName());
-		return mav;
+		throw new IllegalArgumentException(getClass().getName() + " doesn't handle render requests.");
 	}
 
-	public String getSuccessView() {
-		return successView;
+	public String getSuccessOperation() {
+		return successOperation;
 	}
 
-	public void setSuccessView(String successView) {
-		this.successView = successView;
+	public void setSuccessOperation(String successView) {
+		this.successOperation = successView;
 	}
 
 	public String getSessionAttributeName() {
@@ -87,14 +83,6 @@ public class ScrollItemsController extends AbstractCommandController {
 
 	public void setSessionAttributeName(String sessionAttributeName) {
 		this.sessionAttributeName = sessionAttributeName;
-	}
-
-	public String getObjectName() {
-		return objectName;
-	}
-
-	public void setObjectName(String objectName) {
-		this.objectName = objectName;
 	}
 
 }
