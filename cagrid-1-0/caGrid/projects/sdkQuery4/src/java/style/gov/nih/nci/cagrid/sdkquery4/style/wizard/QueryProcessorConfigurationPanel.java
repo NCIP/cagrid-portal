@@ -51,7 +51,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.4 2007-12-05 21:28:18 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.5 2007-12-06 18:43:24 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -185,14 +185,14 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private void initRadioGroup() {
         NotifyingButtonGroup radioGroup = new NotifyingButtonGroup();
         radioGroup.addGroupSelectionListener(new GroupSelectionListener() {
-            public void selectionChanged(final ButtonModel previousSelection, final ButtonModel currentSelection) {
+            public void selectionChanged(ButtonModel previousSelection, ButtonModel currentSelection) {
                 validateInput();
             }
         });
         radioGroup.add(getLocalApiRadioButton());
         radioGroup.add(getRemoteApiRadioButton());
-        getLocalApiRadioButton().setSelected(true);
-        getRemoteApiRadioButton().setSelected(false);
+        radioGroup.setSelected(getLocalApiRadioButton().getModel(), true);
+        setLocalRemoteComponentsEnabled();
     }
     
     
@@ -268,7 +268,8 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
                         String fullFilename = ResourceManager.promptFile(null, FileFilters.JAR_FILTER);
                         if (getBeansJarTextField().getText().length() != 0) {
                             File originalFile = new File(getBeansJarTextField().getText());
-                            File copiedFile = new File(getServiceInformation().getBaseDirectory(), "lib" + File.separator + originalFile.getName());
+                            File copiedFile = new File(getServiceInformation().getBaseDirectory(), 
+                                "lib" + File.separator + originalFile.getName());
                             if (copiedFile.exists()) {
                                 copiedFile.delete();
                             }
@@ -426,10 +427,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             localApiRadioButton.setText("Local API");
             localApiRadioButton.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    boolean local = localApiRadioButton.isSelected();
-                    getOrmJarLabel().setEnabled(local);
-                    getOrmJarTextField().setEnabled(local);
-                    getOrmJarBrowseButton().setEnabled(local);
+                    setLocalRemoteComponentsEnabled();
                 }
             });
         }
@@ -448,11 +446,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             remoteApiRadioButton.setText("Remote API");
             remoteApiRadioButton.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    boolean remote = remoteApiRadioButton.isSelected();
-                    getHostNameLabel().setEnabled(remote);
-                    getHostNameTextField().setEnabled(remote);
-                    getPortLabel().setEnabled(remote);
-                    getPortTextField().setEnabled(remote);
+                    setLocalRemoteComponentsEnabled();
                 }
             });
         }
@@ -514,6 +508,25 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             });
         }
         return ormJarBrowseButton;
+    }
+    
+    
+    /**
+     * This method initializes caseInsensitiveCheckBox  
+     *  
+     * @return javax.swing.JCheckBox    
+     */
+    private JCheckBox getCaseInsensitiveCheckBox() {
+        if (caseInsensitiveCheckBox == null) {
+            caseInsensitiveCheckBox = new JCheckBox();
+            caseInsensitiveCheckBox.setText("Case Insensitive Querying");
+            caseInsensitiveCheckBox.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    validateInput();
+                }
+            });
+        }
+        return caseInsensitiveCheckBox;
     }
 
 
@@ -805,6 +818,11 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
         ValidationComponentUtils.updateComponentTreeSeverityBackground(this, validationModel.getResult());
     }
+    
+    
+    // ------------
+    // helpers
+    // ------------
 
     
     private void storeConfigurationProperties() {
@@ -833,23 +851,16 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_HOST_PORT,
             isLocal ? "" : getPortTextField().getText(), false);
     }
-
-
-    /**
-     * This method initializes caseInsensitiveCheckBox	
-     * 	
-     * @return javax.swing.JCheckBox	
-     */
-    private JCheckBox getCaseInsensitiveCheckBox() {
-        if (caseInsensitiveCheckBox == null) {
-            caseInsensitiveCheckBox = new JCheckBox();
-            caseInsensitiveCheckBox.setText("Case Insensitive Querying");
-            caseInsensitiveCheckBox.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    validateInput();
-                }
-            });
-        }
-        return caseInsensitiveCheckBox;
+    
+    
+    private void setLocalRemoteComponentsEnabled() {
+        boolean local = localApiRadioButton.isSelected();
+        getOrmJarLabel().setEnabled(local);
+        getOrmJarTextField().setEnabled(local);
+        getOrmJarBrowseButton().setEnabled(local);
+        getHostNameLabel().setEnabled(!local);
+        getHostNameTextField().setEnabled(!local);
+        getPortLabel().setEnabled(!local);
+        getPortTextField().setEnabled(!local);
     }
 }
