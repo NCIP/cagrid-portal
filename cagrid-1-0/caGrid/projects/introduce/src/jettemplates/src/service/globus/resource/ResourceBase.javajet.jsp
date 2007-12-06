@@ -163,7 +163,7 @@ if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 %>
         try {
             resourcePropertyPersistenceHelper = new gov.nih.nci.cagrid.introduce.servicetools.XmlPersistenceHelper(<%=arguments.getService().getName()%>ResourceProperties.class,<%=baseService.getName()%>Configuration.getConfiguration());
-            resourcePersistenceHelper = new FilePersistenceHelper(this.getClass(),HelloWorldConfiguration.getConfiguration(),".resource");
+            resourcePersistenceHelper = new FilePersistenceHelper(this.getClass(),<%=baseService.getName()%>Configuration.getConfiguration(),".resource");
         } catch (Exception ex) {
             logger.warn("Unable to initialize resource properties persistence helper", ex);
         }
