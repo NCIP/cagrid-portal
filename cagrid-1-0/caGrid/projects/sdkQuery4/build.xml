@@ -62,6 +62,34 @@
 	<property name="style.dest.dir" location="${introduce.extensions.dir}/data/styles/cacore4"/>
 	
 	<!-- =============================================================== -->
+	<!-- The Build Classpath                                             -->
+	<!-- =============================================================== -->
+	<path id="build.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.lib.dir}">
+			<include name="**/*.jar" />
+			<!-- castor is supplied from the remote-client -->
+			<exclude name="castor-0.9.9.jar"/>
+		</fileset>
+		<fileset dir="${test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${globus.dir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.remote-client.lib.dir}">
+			<include name="castor-1.0.2.jar"/>
+			<!-- TODO: include more stuff? -->
+		</fileset>
+	</path>
+	
+	
+	<!-- =============================================================== -->
 	<!-- The Test Classpath                                              -->
 	<!-- =============================================================== -->
 	<path id="test.classpath">
@@ -103,6 +131,7 @@
 	<!-- compiles the style source code -->
 	<target name="compileStyle" depends="init, compileProcessor">
 		<javac srcdir="${style.src.dir}" destdir="${build.style.dest}" debug="${java.debug}" source="${java.source}">
+			<!--
 			<classpath>
 				<pathelement location="${build.processor.dest}"/>
 				<fileset dir="${lib.dir}">
@@ -118,6 +147,12 @@
 			    	<include name="*.jar" />
 				</fileset>
 			</classpath>
+			-->
+			<compilerarg value="-Xlint:unchecked"/>
+			<classpath refid="build.classpath"/>
+			<classpath>
+				<pathelement location="${build.processor.dest}"/>
+			</classpath>
 			<include name="**/*.java" />
 		</javac>
 	</target>
@@ -126,6 +161,7 @@
 	<!-- compiles the query processor source code -->
 	<target name="compileProcessor" depends="init">
 		<javac srcdir="${processor.src.dir}" destdir="${build.processor.dest}" debug="${java.debug}" source="${java.source}">
+			<!-- 
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar"/>
@@ -140,6 +176,8 @@
                     <include name="*.jar" />
                 </fileset>
 			</classpath>
+			-->
+			<classpath refid="build.classpath"/>
 			<include name="**/*.java" />
 		</javac>
 	</target>
