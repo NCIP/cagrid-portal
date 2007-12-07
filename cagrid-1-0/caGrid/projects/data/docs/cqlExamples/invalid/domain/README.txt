@@ -1,1 +1,0 @@
-This folder contains documents which are structuraly valid CQL, but fail validation against the testing caBIO domain model.

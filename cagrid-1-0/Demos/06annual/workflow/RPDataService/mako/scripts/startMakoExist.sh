@@ -1,1 +1,0 @@
-java -Djava.util.logging.config.file=../logging.properties -Xmx1000m -classpath "@mobius.exist.classpath@" org.projectmobius.services.mako.Mako $1

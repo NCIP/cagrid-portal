@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<definitions name="CoreTestBeans" xmlns="http://schemas.xmlsoap.org/wsdl/" >
-	<import location="ValidationDescription.xsd"/>
-	<import location="Schedule.xsd"/>
-</definitions>

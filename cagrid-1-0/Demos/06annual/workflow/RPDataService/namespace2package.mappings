@@ -1,5 +1,0 @@
-http\://rproteomics.cagrid.nci.nih.gov/RPData=gov.nih.nci.cagrid.rproteomics.stubs
-http\://rproteomics.cagrid.nci.nih.gov/RPData/bindings=gov.nih.nci.cagrid.rproteomics.stubs.bindings
-http\://rproteomics.cagrid.nci.nih.gov/RPData/service=gov.nih.nci.cagrid.rproteomics.stubs.service
-http\://CQL.caBIG/1/gov.nih.nci.cagrid.CQL=gov.nih.nci.cagrid.cql
-gme\://RProteomics.caBIG/5/edu.duke.cabig.rproteomics.domain.serviceInterface=caBIG.RProteomics

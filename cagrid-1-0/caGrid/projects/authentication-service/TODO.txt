@@ -1,4 +1,0 @@
-1) Rename the eclipse project
-2) Integrate into build
-3) Rename the jar files
-4) Integrate with opensaml (cagrid)

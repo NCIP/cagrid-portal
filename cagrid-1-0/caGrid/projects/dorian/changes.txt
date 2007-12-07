@@ -1,6 +1,0 @@
-Dorian 1.x
-===========
-
-1) UI enhancements, including the migration to the GRAPE framework.
-2) Added support to remove a user's grid account when a user's local account to the Dorian IdP is removed.
-

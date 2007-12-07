@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<definitions name="DataServiceBeans" xmlns="http://schemas.xmlsoap.org/wsdl/" >
-	<import location="ClassToQname.xsd"/>
-	<import location="DataServiceAuditorConfiguration.xsd"/>
-	<import location="DataServiceExtensionData.xsd"/>
-	<import location="DataServiceStyle.xsd"/>
-	<import location="1_gov.nih.nci.cagrid.CQLQuery.xsd"/>
-	<import location="1_gov.nih.nci.cagrid.CQLResultSet.xsd"/>
-</definitions>

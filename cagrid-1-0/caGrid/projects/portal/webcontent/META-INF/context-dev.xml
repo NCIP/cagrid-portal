@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context path="/portal"
-         docBase="C:\dev\cvsroot\cagrid-1-0\caGrid\projects\portal\webcontent"
-         reloadable="true" orverride="true">
-</Context>

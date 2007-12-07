@@ -1,5 +1,0 @@
-http\://www.globus.org/namespaces/cagrid/RProteomics/RProteomics=org.globus.cagrid.RProteomics.stubs
-http\://www.globus.org/namespaces/cagrid/RProteomics/RProteomics/bindings=org.globus.cagrid.RProteomics.stubs.bindings
-http\://www.globus.org/namespaces/cagrid/RProteomics/RProteomics/service=org.globus.cagrid.RProteomics.stubs.service
-gme\://RProteomics.caBIG/5/edu.duke.cabig.rproteomics.domain.serviceInterface=edu.duke.cabig.rproteomics.domain.serviceinterface
-rproteomics.cabig.duke.edu/1/scanFeatures=edu.duke.cabig.rproteomics.domain.serviceinterface

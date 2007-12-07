@@ -1,4 +1,0 @@
-- is this the best way to deal with creating etc/torque.properties? (build process is creating from sample)
-  - need to deal with this for testing too
-- deal with: Collections jar for torque is newer and is required over the one in globus......
-- system test doesn't create database yet (how to handle test database?)
