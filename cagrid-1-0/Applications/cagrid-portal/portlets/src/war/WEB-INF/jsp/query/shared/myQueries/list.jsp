@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
 <%@ include file="/WEB-INF/jsp/query/tabs.jspf" %>
 <%@ include file="/WEB-INF/jsp/include/table_styles.jspf" %>
 <c:set var="formName"><portlet:namespace/>MySharedQueryOpForm</c:set>

@@ -39,7 +39,6 @@
 			<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 				<property name="modePreferenceName" value="discoveryItemSelectMode" />
 				<property name="outputQueuePreferenceName" value="selectedDiscoveryItemOutputQueueName" />
-				<property name="outputQueueNameDefaultValue" value="selectedDiscoveryItem" />
 			</bean>
 		</property>
 	</bean>
@@ -55,7 +54,6 @@
 			<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 				<property name="modePreferenceName" value="discoveryDirectorySelectMode" />
 				<property name="outputQueuePreferenceName" value="selectedDiscoveryDirectoryOutputQueueName" />
-				<property name="outputQueueNameDefaultValue" value="selectedDiscoveryDirectory" />
 			</bean>
 		</property>
 	</bean>
@@ -108,7 +106,6 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<!-- Exception Handler -->
 	<bean id="defaultExceptionHandler"
 		parent="defaultExceptionHandlerTemplate" />
 		

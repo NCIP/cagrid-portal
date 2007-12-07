@@ -30,7 +30,6 @@
 			<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 				<property name="modePreferenceName" value="newsItemSelectMode" />
 				<property name="inputQueuePreferenceName" value="selectedNewsItemInputQueueName" />
-				<property name="inputQueueNameDefaultValue" value="selectedNewsItem" />
 			</bean>
 		</property>
 	</bean>
@@ -171,7 +170,6 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<!-- Exception Handler -->
 	<bean id="defaultExceptionHandler"
 		parent="defaultExceptionHandlerTemplate" />
 		

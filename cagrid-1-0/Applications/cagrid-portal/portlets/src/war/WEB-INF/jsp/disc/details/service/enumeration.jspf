@@ -1,7 +1,7 @@
-<table>
+<table class="detailstable">
 	<tbody>
 		<tr>
-			<td>Value Meaning:</td>
+			<td class="detailslabelcell">Value Meaning:</td>
 			<td><c:out value="${enumeration.version}"/></td>
 		</tr>
 	</tbody>

@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
 
 <b>Username Constraints:</b>
 <ul>

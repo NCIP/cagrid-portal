@@ -14,6 +14,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.validation.BindException;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.mvc.AbstractCommandController;
@@ -107,6 +108,7 @@ public class SelectItemForDiscoveryController extends AbstractCommandController 
 				+ " doesn't handle render requests.");
 	}
 
+	@Required
 	public GridServiceDao getGridServiceDao() {
 		return gridServiceDao;
 	}
@@ -115,6 +117,7 @@ public class SelectItemForDiscoveryController extends AbstractCommandController 
 		this.gridServiceDao = gridServiceDao;
 	}
 
+	@Required
 	public ParticipantDao getParticipantDao() {
 		return participantDao;
 	}
@@ -123,6 +126,7 @@ public class SelectItemForDiscoveryController extends AbstractCommandController 
 		this.participantDao = participantDao;
 	}
 
+	@Required
 	public String getRedirectUrlPreferenceName() {
 		return redirectUrlPreferenceName;
 	}
@@ -131,6 +135,7 @@ public class SelectItemForDiscoveryController extends AbstractCommandController 
 		this.redirectUrlPreferenceName = redirectUrl;
 	}
 
+	@Required
 	public InterPortletMessageSender getInterPortletMessageSender() {
 		return interPortletMessageSender;
 	}
@@ -140,6 +145,7 @@ public class SelectItemForDiscoveryController extends AbstractCommandController 
 		this.interPortletMessageSender = interPortletMessageSender;
 	}
 
+	@Required
 	public PersonDao getPersonDao() {
 		return personDao;
 	}

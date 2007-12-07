@@ -1,6 +1,6 @@
-<table>
+<table class="detailstable">
 	<tbody>
-		<tr>
+		<tr class="detailslabelcell">
 			<td>Description:</td>
 			<td><c:out value="${operation.description}"/></td>
 		</tr>

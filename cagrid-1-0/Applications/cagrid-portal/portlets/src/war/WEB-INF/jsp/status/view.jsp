@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp" %>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
 There are currently...<br/>
 <table cellpadding="3">
 <tr>

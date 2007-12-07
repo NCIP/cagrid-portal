@@ -39,7 +39,6 @@
 			<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 				<property name="modePreferenceName" value="newsItemSelectMode" />
 				<property name="outputQueuePreferenceName" value="selectedNewsItemOutputQueueName" />
-				<property name="outputQueueNameDefaultValue" value="selectedNewsItem" />
 			</bean>
 		</property>
 	</bean>
@@ -89,7 +88,6 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<!-- Exception Handler -->
 	<bean id="defaultExceptionHandler"
 		parent="defaultExceptionHandlerTemplate" />
 

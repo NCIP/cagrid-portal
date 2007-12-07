@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp" %>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
 
 <%@ include file="/WEB-INF/jsp/disc/tabs.jspf" %>
 

@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
 
 <c:set var="formName"><portlet:namespace/>editChanelForm</c:set>
 <script type="text/javascript">

@@ -5,6 +5,8 @@ package gov.nih.nci.cagrid.portal.portlet;
 
 import javax.portlet.PortletRequest;
 
+import org.springframework.beans.factory.annotation.Required;
+
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
@@ -15,9 +17,7 @@ public class InterPortletMessageAdapter implements InterPortletMessageSender,
 	private InterPortletMessageManager interPortletMessageManager;
 	private String modePreferenceName;
 	private String inputQueuePreferenceName;
-	private String inputQueueNameDefaultValue;
 	private String outputQueuePreferenceName;
-	private String outputQueueNameDefaultValue;
 
 	/**
 	 * 
@@ -48,8 +48,7 @@ public class InterPortletMessageAdapter implements InterPortletMessageSender,
 			return;
 		}
 		String outputQueueName = request.getPreferences().getValue(
-				getOutputQueuePreferenceName(),
-				getOutputQueueNameDefaultValue());
+				getOutputQueuePreferenceName(), null);
 		getInterPortletMessageManager().send(request, outputQueueName, object);
 	}
 
@@ -63,11 +62,12 @@ public class InterPortletMessageAdapter implements InterPortletMessageSender,
 			return null;
 		}
 		String inputQueueName = request.getPreferences().getValue(
-				getInputQueuePreferenceName(), getInputQueueNameDefaultValue());
+				getInputQueuePreferenceName(), null);
 		return getInterPortletMessageManager().receive(request, inputQueueName);
 
 	}
 
+	@Required
 	public InterPortletMessageManager getInterPortletMessageManager() {
 		return interPortletMessageManager;
 	}
@@ -77,6 +77,7 @@ public class InterPortletMessageAdapter implements InterPortletMessageSender,
 		this.interPortletMessageManager = interPortletMessageManager;
 	}
 
+	@Required
 	public String getModePreferenceName() {
 		return modePreferenceName;
 	}
@@ -85,6 +86,7 @@ public class InterPortletMessageAdapter implements InterPortletMessageSender,
 		this.modePreferenceName = modePreferenceName;
 	}
 
+	@Required
 	public String getInputQueuePreferenceName() {
 		return inputQueuePreferenceName;
 	}
@@ -93,29 +95,13 @@ public class InterPortletMessageAdapter implements InterPortletMessageSender,
 		this.inputQueuePreferenceName = inputQueuePreferenceName;
 	}
 
-	public String getInputQueueNameDefaultValue() {
-		return inputQueueNameDefaultValue;
-	}
-
-	public void setInputQueueNameDefaultValue(String inputQueueNameDefaultValue) {
-		this.inputQueueNameDefaultValue = inputQueueNameDefaultValue;
-	}
-
+	@Required
 	public String getOutputQueuePreferenceName() {
 		return outputQueuePreferenceName;
 	}
 
 	public void setOutputQueuePreferenceName(String outputQueuePreferenceName) {
 		this.outputQueuePreferenceName = outputQueuePreferenceName;
-	}
-
-	public String getOutputQueueNameDefaultValue() {
-		return outputQueueNameDefaultValue;
-	}
-
-	public void setOutputQueueNameDefaultValue(
-			String outputQueueNameDefaultValue) {
-		this.outputQueueNameDefaultValue = outputQueueNameDefaultValue;
 	}
 
 }

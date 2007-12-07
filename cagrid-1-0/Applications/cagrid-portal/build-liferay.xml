@@ -196,6 +196,7 @@
 	</target>
 	
 	<target name="liferay:configure-jboss-classpath">
+		<!-- No DTD or Schema needed. -->
 		<property name="config.file" value="${liferay.jboss.home}/server/default/conf/jboss-service.xml"/>
 		<xmltask source="${config.file}" dest="${config.file}">
 			<remove path="/server/classpath"/>
@@ -213,9 +214,12 @@
 	
 		<delete file="${liferay.jboss.home}/server/default/deploy/jbossweb-tomcat55.sar/ROOT.war"/>
 	
+		<!-- Downloaded DTD to tools/ant/resources/web-app_2_3.dtd -->
 		<property name="config.file" value="${liferay.jboss.home}/server/default/deploy/jbossweb-tomcat55.sar/conf/web.xml"/>
 		<echo>Config File: ${config.file}</echo>
-		<xmltask source="${config.file}" dest="${config.file}" failWithoutMatch="true">
+		<xmltask preservetype="true" source="${config.file}" dest="${config.file}" failWithoutMatch="true">
+			<xmlcatalog refid="portal.catalog"/>
+		
 			<replace path="/*[local-name()='web-app']/*[local-name()='servlet' and ./*[local-name()='servlet-name' and text()='default']]">
 				<![CDATA[
    <servlet xmlns="http://java.sun.com/xml/ns/j2ee">
@@ -283,14 +287,17 @@
 	</target>
 	
 	<target name="liferay:configure-jboss-jaas">
+		<!-- Downloaded DTD to tools/ant/resources/security_config.dtd -->
 		<property name="config.file" value="${liferay.jboss.home}/server/default/conf/login-config.xml"/>
-		<xmltask source="${config.file}" dest="${config.file}" preservetype="true">
+		<xmltask preservetype="true" source="${config.file}" dest="${config.file}">
+			<xmlcatalog refid="portal.catalog"/>
 			<remove path="/policy/application-policy[@name='other']"/>
 		</xmltask>	
 	</target>
 		
 		
 	<target name="liferay:configure-jboss-jca-service">
+		<!-- No DTD or Schema needed. -->
 		<property name="config.file" value="${liferay.jboss.home}/server/default/deploy/jbossjca-service.xml"/>
 		<xmltask source="${config.file}" dest="${config.file}">
 			<replace path="/server/mbean[@name='jboss.jca:service=CachedConnectionManager']/attribute[@name='Debug']/text()" withText="false"/>
@@ -303,6 +310,7 @@
 	</target>	
 	
 	<target name="liferay:configure-jboss-tomcat">
+		<!-- No DTD or Schema needed. -->
 		<property name="config.file" value="${liferay.jboss.home}/server/default/deploy/jbossweb-tomcat55.sar/server.xml"/>
 		<xmltask source="${config.file}" dest="${config.file}">
 			<remove path="/Server/Service[@name='jboss.web']/Connector[@port='8443']"/>
@@ -395,8 +403,10 @@
 	</target>
 	
 	<target name="liferay:add-cagrid-category">
+		<!-- Downloaded to tools/ant/resources/liferay-display_4_0_0.dtd -->
 		<property name="config.file" value="${liferay.portal.war.dir}/WEB-INF/liferay-display.xml"/>
 		<xmltask source="${config.file}" dest="${config.file}" preservetype="true">
+			<xmlcatalog refid="portal.catalog"/>
 			<remove path="/display/category[@name='category.cagrid']"/>
 			<insert path="/display/category[@name='category.cms']" position="before">
 			<![CDATA[
@@ -461,50 +471,6 @@
 		<antcall target="liferay:deploy-theme"/>
 		<antcall target="liferay:deploy-portlets"/>
 	</target>
-	
-	<target name="liferay:build-database">
-	
-		<!-- 
-		<sql
-    		driver="${liferay.db.driver}"
-    		url="jdbc:mysql://${liferay.db.host}:${liferay.db.port}/mysql"
-    		userid="root"
-    		password="${liferay.db.root}"
-		>
-			<![CDATA[
-			drop database if exists ${liferay.db.name};
-			create database ${liferay.db.name} character set utf8;
-			]]>
-			<classpath>
-				<pathelement location="${liferay.db.driver.path}"/>
-			</classpath>
-		</sql>
-		 -->
-		<!-- 
-		<sql
-    		driver="${liferay.db.driver}"
-    		url="${liferay.db.url}"
-    		userid="${liferay.db.username}"
-    		password="${liferay.db.password}"
-    		src="portals/liferay/src/sql/create-minimal-mysql.sql"
-		>
-			<classpath>
-				<pathelement location="${liferay.db.driver.path}"/>
-			</classpath>
-		</sql>
-		 -->
-		
-		<sql
-    		driver="${liferay.db.driver}"
-    		url="${liferay.db.url}"
-    		userid="${liferay.db.username}"
-    		password="${liferay.db.password}"
-    		src="portals/liferay/src/sql/portal-data.sql"
-		>
-			<classpath>
-				<pathelement location="${liferay.db.driver.path}"/>
-			</classpath>
-		</sql>
-	</target>
+
 	
 </project>

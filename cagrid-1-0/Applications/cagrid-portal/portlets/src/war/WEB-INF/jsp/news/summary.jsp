@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
 <c:set var="resizablePrefix"><portlet:namespace/>summary</c:set>
 <%@ include file="/WEB-INF/jsp/include/resizable_div.jspf" %>
 <a alt="Subscribe to caGrid RSS News Feed" href="<c:out value="${rssUrl}"/>" style="text-decoration:none">

@@ -30,17 +30,10 @@ public class SessionBasedInterPortletMessageManager implements
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.nih.nci.cagrid.portal.portlet.InterPortletMessageManager#isTrue(javax.portlet.PortletRequest, java.lang.String)
-	 */
-	public boolean isTrue(PortletRequest request, String preferenceName) {
-		return "true".equals(request.getPreferences().getValue(preferenceName, "false"));
-	}
-
-	/* (non-Javadoc)
 	 * @see gov.nih.nci.cagrid.portal.portlet.InterPortletMessageManager#receive(javax.portlet.PortletRequest, java.lang.String)
 	 */
 	public Object receive(PortletRequest request, String inputQueueName) {
-		logger.debug("Receiving from " + inputQueueName);
+//		logger.debug("Receiving from " + inputQueueName);
 		return queues.remove(inputQueueName);
 	}
 
@@ -48,10 +41,10 @@ public class SessionBasedInterPortletMessageManager implements
 	 * @see gov.nih.nci.cagrid.portal.portlet.InterPortletMessageManager#send(javax.portlet.ActionRequest, java.lang.String, java.lang.Object)
 	 */
 	public void send(PortletRequest request, String outputQueueName, Object value) {
-		logger.debug("Sending to " + outputQueueName + ": " + value);
+//		logger.debug("Sending to " + outputQueueName + ": " + value);
 		String[] inputQueueNames = request.getPreferences().getValues(outputQueueName, new String[0]);
 		for(String inputQueueName : inputQueueNames){
-			logger.debug("sending to " + inputQueueName);
+//			logger.debug("sending to " + inputQueueName);
 			queues.put(inputQueueName, value);
 		}
 	}

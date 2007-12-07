@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.Participant;
 import gov.nih.nci.cagrid.portal.domain.Person;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenter;
+import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryResults;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.AbstractDirectoryBean;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectory;
@@ -129,6 +130,9 @@ public class MapBean extends AbstractDirectoryBean {
 			if (node == null) {
 				node = new ServiceMapNode();
 				putNode(svcNodes, node, key);
+			}
+			if(service.getId() == null){
+				throw new CaGridPortletApplicationException("service '" + service.getUrl() + " has no id");
 			}
 			ServiceInfo info = new ServiceInfo(service);
 			node.getServiceInfos().add(info);

@@ -1,11 +1,11 @@
-<table>
+<table class="detailstable">
 	<tbody>
 		<tr>
-			<td>Name:</td>
+			<td class="detailslabelcell">Name:</td>
 			<td><c:out value="${inputParam.name}"/></td>
 		</tr>
 		<tr>
-			<td>QName:</td>
+			<td class="detailslabelcell">QName:</td>
 			<td>
 				<c:choose>
 					<c:when test="${empty inputParam.xmlSchema}">
@@ -18,25 +18,29 @@
 				</c:choose>
 			</td>
 		</tr>
+		<c:if test="${!empty inputParam.UMLClass}">
 		<tr>
-			<td>UML Class:</td>
+			<td class="detailslabelcell">UML Class:</td>
 			<td>
 			<c:if test="${!empty inputParam.UMLClass}">
 				<c:out value="${inputParam.UMLClass.packageName}"/>.<c:out value="${inputParam.UMLClass.className}"/>
 			</c:if>
 			</td>
 		</tr>
+		</c:if>
 		<tr>
-			<td>Index:</td>
+			<td class="detailslabelcell">Index:</td>
 			<td><c:out value="${inputParam.index}"/></td>
 		</tr>
 		<tr>
-			<td>Is Array?:</td>
+			<td class="detailslabelcell">Is Array?:</td>
 			<td><c:out value="${inputParam.array}"/></td>
 		</tr>
+		<c:if test="${inputParam.array}">
 		<tr>
-			<td>Dimensionality:</td>
+			<td class="detailslabelcell">Dimensionality:</td>
 			<td><c:out value="${inputParam.dimensionality}"/></td>
 		</tr>
+		</c:if>
 	</tbody>
 </table>

@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
 <c:choose>
 	<c:when test="${empty portalUser}">
 		<portlet:renderURL var="portalAuthnUrl"/>

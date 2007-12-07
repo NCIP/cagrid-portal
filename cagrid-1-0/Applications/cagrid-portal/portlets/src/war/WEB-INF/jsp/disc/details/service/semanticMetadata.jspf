@@ -1,5 +1,5 @@
 <c:forEach var="semanticMetadata" items="${sms}">
-<table>
+<table class="detailstable">
 	<thead>
 		<th colspan="2">
 			<b><c:out value="${semanticMetadata.conceptName}"/></b>
@@ -7,11 +7,11 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td>Concept Code:</td>
+			<td class="detailslabelcell">Concept Code:</td>
 			<td><c:out value="${semanticMetadata.conceptCode}"/></td>
 		</tr>
 		<tr>
-			<td>Definition:</td>
+			<td class="detailslabelcell">Definition:</td>
 			<td><c:out value="${semanticMetadata.conceptDefinition}"/></td>
 		</tr>
 	</tbody>

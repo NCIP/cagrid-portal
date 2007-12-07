@@ -1,34 +1,36 @@
+
+
 <c:set var="sd" value="${gridService.serviceMetadata.serviceDescription}"/>
-<table>
-	<thead>
-		<th colspan="2">
-			<b><c:out value="${sd.name}"/></b>
-		</th>
-	</thead>
+<b><c:out value="${sd.name}"/></b>
+<table class="detailstable" style="margin-left:5px;">
 	<tbody>
 		<tr>
-			<td>URL:</td>
+			<td class="detailslabelcell">URL:</td>
 			<td><c:out value="${gridService.url}"/></td>
 		</tr>
 		<tr>
-			<td>Status:</td>
+			<td class="detailslabelcell">Status:</td>
 			<td><c:out value="${gridService.currentStatus}"/></td>
 		</tr>
 		<tr>
-			<td>Description:</td>
+			<td class="detailslabelcell">Description:</td>
 			<td><c:out value="${sd.description}"/></td>
 		</tr>
 		<tr>
-			<td>Version:</td>
+			<td class="detailslabelcell">Version:</td>
 			<td><c:out value="${sd.version}"/></td>
 		</tr>
+		<c:if test="${!empty sd.caDSRRegistration.registrationStatus}">
 		<tr>
-			<td>caDSR Registration Status:</td>
+			<td class="detailslabelcell">caDSR Registration Status:</td>
 			<td><c:out value="${sd.caDSRRegistration.registrationStatus}"/></td>
 		</tr>
+		</c:if>
+		<c:if test="${!empty sd.caDSRRegistration.workflowStatus}">
 		<tr>
-			<td>caDSR Workflow Status:</td>
+			<td class="detailslabelcell">caDSR Workflow Status:</td>
 			<td><c:out value="${sd.caDSRRegistration.workflowStatus}"/></td>
 		</tr>
+		</c:if>
 	</tbody>
 </table>

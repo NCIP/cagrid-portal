@@ -101,6 +101,22 @@
 		<include name="mail.jar" />
 		<include name="caGrid-1.1-wsEnum.jar" />
 	</patternset>
+	
+	<xmlcatalog id="portal.catalog">
+		<dtd 
+			publicId="-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+			location="./tools/ant/resources/web-app_2_3.dtd"/>
+		<dtd 
+			publicId="-//Liferay//DTD Display 4.0.0//EN"
+			location="./tools/ant/resources/liferay-display_4_0_0.dtd"/>
+		<dtd 
+			publicId="-//JBoss//DTD JBOSS Security Config 3.0//EN"
+			location="./tools/ant/resources/security_config.dtd"/>
+		<dtd 
+			publicId="-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+			location="./tools/ant/resources/hibernate-configuration-3.0.dtd"/>
+
+	</xmlcatalog>
 
 	
 	<import file="build-db.xml" />
@@ -167,6 +183,35 @@
 		
 	</target>
 	
-	
+	<target name="javadoc" depends="db:compile,aggr:compile,portlets:compile,liferay:compile,security:compile">
+		<mkdir dir="docs/api"/>
+        <javadoc packagenames="*" destdir="docs/api" author="true" version="true" use="true" windowtitle="caGrid Portal API">
+
+            <sourcepath>
+                <pathelement location="${db.src.java.dir}" />
+                <pathelement location="${aggr.src.java.dir}" />
+                <pathelement location="${portlets.src.java.dir}" />
+                <pathelement location="${liferay.src.java.dir}" />
+                <pathelement location="${security.src.java.dir}" />
+            </sourcepath>
+
+            <classpath>
+                <pathelement location="${db.classes.dir}" />
+                <pathelement location="${aggr.classes.dir}" />
+                <pathelement location="${portlets.classes.dir}" />
+                <pathelement location="${liferay.classes.dir}" />
+                <pathelement location="${security.classes.dir}" />
+                <path refid="db.compile.cp"/>
+                <path refid="aggr.compile.cp"/>
+                <path refid="portlets.compile.cp"/>
+                <path refid="liferay.compile.cp"/>
+                <path refid="security.compile.cp"/>
+            </classpath>
+
+            <tag name="todo" scope="all" description="To do:" />
+            <tag name="created" scope="all" description="Created On:" />
+
+        </javadoc>
+    </target>
 
 </project>

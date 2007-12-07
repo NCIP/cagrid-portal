@@ -1,11 +1,11 @@
-<table>
+<table class="detailstable">
 	<tbody>
 		<tr>
-			<td>Name:</td>
+			<td class="detailslabelcell">Name:</td>
 			<td><c:out value="${fault.name}"/></td>
 		</tr>
 		<tr>
-			<td>Description:</td>
+			<td  class="detailslabelcell">Description:</td>
 			<td><c:out value="${fault.description}"/></td>
 		</tr>
 	</tbody>

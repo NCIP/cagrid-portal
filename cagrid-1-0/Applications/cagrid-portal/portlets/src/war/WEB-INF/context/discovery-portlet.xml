@@ -151,7 +151,6 @@
 			<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 				<property name="modePreferenceName" value="dataServiceSelectMode" />
 				<property name="outputQueuePreferenceName" value="selectedDataServiceOutputQueueName" />
-				<property name="outputQueueNameDefaultValue" value="selectedDataService" />
 			</bean>
 		</property>
 		<property name="actionResponseHandler">
@@ -273,7 +272,6 @@
 			<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 				<property name="modePreferenceName" value="umlClassSelectMode" />
 				<property name="outputQueuePreferenceName" value="selectedUmlClassOutputQueueName" />
-				<property name="outputQueueNameDefaultValue" value="selectedUmlClassId" />
 			</bean>
 		</property>
 		<property name="actionResponseHandler">
@@ -363,7 +361,6 @@
 						<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 							<property name="modePreferenceName" value="discoveryItemSelectMode" />
 							<property name="inputQueuePreferenceName" value="selectedDiscoveryItemInputQueueName" />
-							<property name="inputQueueNameDefaultValue" value="selectedDiscoveryItem" />
 						</bean>
 					</property>
 					<property name="serviceSelectedTabPath" value="/details/service/tree" />
@@ -375,7 +372,6 @@
 						<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 							<property name="modePreferenceName" value="discoveryDirectorySelectMode" />
 							<property name="inputQueuePreferenceName" value="selectedDiscoveryDirectoryInputQueueName" />
-							<property name="inputQueueNameDefaultValue" value="selectedDiscoveryDirectory" />
 						</bean>
 					</property>
 					<property name="selectedTabPath" value="/directory/listView" />
@@ -385,7 +381,6 @@
 						<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 							<property name="modePreferenceName" value="discoveryResultsSelectMode" />
 							<property name="inputQueuePreferenceName" value="selectedDiscoveryResultsInputQueueName" />
-							<property name="inputQueueNameDefaultValue" value="selectedDiscoveryResults" />
 						</bean>
 					</property>
 					<property name="selectedTabPath" value="/directory/listView" />
@@ -445,7 +440,6 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<!-- Exception Handler -->
 	<bean id="defaultExceptionHandler"
 		parent="defaultExceptionHandlerTemplate" />
 		

@@ -11,8 +11,6 @@ import javax.portlet.PortletRequest;
  */
 public interface InterPortletMessageManager {
 
-	boolean isTrue(PortletRequest request, String preferenceName);
-
 	void send(PortletRequest request, String outputQueueName, Object value);
 
 	Object receive(PortletRequest request, String inputQueueName);

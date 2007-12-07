@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
 <%@ include file="/WEB-INF/jsp/include/table_styles.jspf" %>
 <portlet:renderURL var="backUrl">
 	<portlet:param name="operation" value="editChannel"/>

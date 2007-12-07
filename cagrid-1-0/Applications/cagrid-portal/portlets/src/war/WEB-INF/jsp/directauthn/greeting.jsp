@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
 <c:choose>
 	<c:when test="${empty portalUser}">
 		<a href="<c:out value="${loginUrl}"/>" style="text-decoration:none"><b>Login</b></a>&nbsp;|&nbsp;	

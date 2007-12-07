@@ -1,7 +1,7 @@
-<table>
+<table class="detailstable">
 	<tbody>
 		<tr>
-			<td>Description:</td>
+			<td class="detailslabelcell">Description:</td>
 			<td><c:out value="${serviceContext.description}"/></td>
 		</tr>
 	</tbody>

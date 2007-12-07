@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
 <%@ include file="/WEB-INF/jsp/query/tabs.jspf" %>
 <%@ taglib prefix="m" tagdir="/WEB-INF/tags"%>
 
@@ -59,7 +59,7 @@
 
 <style type="text/css">
 <!--
-<%@ include file="/WEB-INF/jsp/tree/tree_node_styles_frag.jsp"%>
+<%@ include file="/WEB-INF/jsp/include/tree_node_styles.jspf"%>
 -->
 </style>
 <p />

@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp" %>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
 <div style="margin-left:15px">
 <portlet:actionURL var="action"/>
 <form:form action="${action}" commandName="mapBean">

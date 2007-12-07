@@ -4,7 +4,8 @@
 1. Pre-Installation
 2. Installation
 3. Post-Installation
-4. Re-installation
+4. Re-Installation
+5. Firewall/Connectivity Considerations
 
 ####################
 # Pre-Installation #
@@ -22,7 +23,9 @@ You can use the following settings to check out the source code:
  
 If you are using a commandline CVS client, you could use this command:
 
-cvs -d :pserver:anonymous@cbiocvs2.nci.nih.gov:/share/content/gforge/cagrid-1-0 co cagrid-1-0/Applications/cagrid-portal
+   export CVS_RSH=ssh
+   cvs -d :ext:anonymous@cbiocvs2.nci.nih.gov:/share/content/gforge/cagrid-1-0 co \
+      cagrid-1-0/Applications/cagrid-portal
 
 After checkout, the caGrid Portal source code directory (referred to henceforth as $SRC) 
 will be located under ./cagrid-1-0/Applications/cagrid-portal.
@@ -260,4 +263,28 @@ up data and doing batch imports of data.
 3. Re-create databases.
 4. From $SRC, run: ant -Dtarget.env=<env> clean install
 
+########################################
+# Firewall/Connectivity Considerations #
+########################################
 
+By default, the portal installation script will download JBoss and several Liferay artifacts. If you
+are behind a firewall, you will need to provide the proxy configuration for your JVM. Essentially,
+you just need to set the ANT_OPTS environment variable to include the standard Java proxy
+settings, like so:
+
+  export ANT_OPTS="-Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080"
+
+Further instructions are here: http://ant.apache.org/manual/proxy.html
+
+IF YOU HAVE NO INTERNET ACCESS, you can still use the installation script. You will just need
+to download the dependencies manually and then edit/provide the following properties in build.properties
+so that they point to local directories/files:
+
+ - liferay.jboss.home
+ - liferay.jboss.zip
+ - liferay.downloads.dir
+ - liferay.dependencies.zip
+ - liferay.war
+
+ See build-liferay.xml for details.
+ 

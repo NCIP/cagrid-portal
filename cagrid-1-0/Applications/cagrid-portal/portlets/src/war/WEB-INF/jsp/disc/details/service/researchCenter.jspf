@@ -1,4 +1,4 @@
-<table>
+<table class="detailstable">
 	<thead>
 		<th colspan="2">
 			<c:if test="${!empty researchCenter.imageUrl}">
@@ -8,44 +8,62 @@
 		</th>
 	</thead>
 	<tbody>
+		<c:if test="${!empty researchCenter.shortName}">
 		<tr>
-			<td>Short Name:</td>
+			<td class="detailslabelcell">Short Name:</td>
 			<td><c:out value="${researchCenter.shortName}"/></td>
 		</tr>
+		</c:if>
+		<c:if test="${!empty researchCenter.homepageUrl}">
 		<tr>
-			<td>Homepage URL:</td>
+			<td class="detailslabelcell">Homepage URL:</td>
 			<td><c:out value="${researchCenter.homepageUrl}"/></td>
 		</tr>
+		</c:if>
+		<c:if test="${!empty researchCenter.description}">
 		<tr>
-			<td>Description:</td>
+			<td  class="detailslabelcell">Description:</td>
 			<td><c:out value="${researchCenter.description}"/></td>
 		</tr>
+		</c:if>
+		<c:if test="${!empty researchCenter.rssNewsUrl}">
 		<tr>
-			<td>RSS URL:</td>
+			<td class="detailslabelcell">RSS URL:</td>
 			<td><c:out value="${researchCenter.rssNewsUrl}"/></td>
 		</tr>
+		</c:if>
+		<c:if test="${!empty researchCenter.address.country}">
 		<tr>
-			<td>Country:</td>
+			<td class="detailslabelcell">Country:</td>
 			<td><c:out value="${researchCenter.address.country}"/></td>
 		</tr>
+		</c:if>
+		<c:if test="${!empty researchCenter.address.stateProvince}">
 		<tr>
-			<td>State/Province:</td>
+			<td class="detailslabelcell">State/Province:</td>
 			<td><c:out value="${researchCenter.address.stateProvince}"/></td>
 		</tr>
+		</c:if>
+		<c:if test="${!empty researchCenter.address.locality}">
 		<tr>
-			<td>Locality:</td>
+			<td class="detailslabelcell">Locality:</td>
 			<td><c:out value="${researchCenter.address.locality}"/></td>
 		</tr>
+		</c:if>
+		<c:if test="${!empty researchCenter.address.postalCode}">
 		<tr>
-			<td>Postal Code:</td>
+			<td class="detailslabelcell">Postal Code:</td>
 			<td><c:out value="${researchCenter.address.postalCode}"/></td>
 		</tr>
+		</c:if>
+		<c:if test="${!empty researchCenter.address.street1}">
 		<tr>
-			<td>Street:</td>
+			<td class="detailslabelcell">Street:</td>
 			<td>
 				<c:out value="${researchCenter.address.street1}"/><br/>
 				<c:out value="${researchCenter.address.street2}"/>
 			</td>
 		</tr>
+		</c:if>
 	</tbody>
 </table>

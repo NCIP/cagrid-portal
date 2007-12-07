@@ -575,7 +575,6 @@
 						<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 							<property name="modePreferenceName" value="umlClassSelectMode" />
 							<property name="inputQueuePreferenceName" value="selectedUmlClassInputQueueName" />
-							<property name="inputQueueNameDefaultValue" value="selectedUmlClassId" />
 						</bean>
 					</property>
 					<property name="umlClassSelectedTabPath" value="/query/builder/cqlQuery"/>
@@ -586,7 +585,6 @@
 						<bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
 							<property name="modePreferenceName" value="dataServiceSelectMode" />
 							<property name="inputQueuePreferenceName" value="selectedDataServiceInputQueueName" />
-							<property name="inputQueueNameDefaultValue" value="selectedDataServiceId" />
 						</bean>
 					</property>
 					<property name="dataServiceSelectedTabPath" value="/model"/>
@@ -803,8 +801,5 @@
 	</bean>
 	
 	<bean id="cqlQueryService" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryService" autowire="byName"/>
-
-
-	
 	
 </beans>

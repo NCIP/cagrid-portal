@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp" %>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
 <%@ include file="/WEB-INF/jsp/query/tabs.jspf" %>
 
 <c:set var="resizablePrefix"><portlet:namespace/>resultsXml</c:set>

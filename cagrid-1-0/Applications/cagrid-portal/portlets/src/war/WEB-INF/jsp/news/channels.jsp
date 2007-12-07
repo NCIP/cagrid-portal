@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
 <portlet:renderURL var="addChannelUrl">
 	<portlet:param name="operation" value="editChannel"/>
 </portlet:renderURL>

@@ -115,7 +115,6 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<!-- Exception Handler -->
 	<bean id="defaultExceptionHandler"
 		parent="defaultExceptionHandlerTemplate" />
 		

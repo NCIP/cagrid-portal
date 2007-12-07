@@ -69,6 +69,7 @@
 			</call>
 		</xmltask>
 		<xmltask source="${db.tools.hibernate.config}" dest="${db.tools.hibernate.config}" preservetype="true">
+			<xmlcatalog refid="portal.catalog"/>
 			<insert path="/hibernate-configuration/session-factory" file="${db.tools.hibernate.dir}/temp.xml"/>
 		</xmltask>
 		<delete file="${db.tools.hibernate.dir}/temp.xml"/>

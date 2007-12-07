@@ -54,8 +54,6 @@
 	
 	</bean>
 	
-	
-	<!-- Message source for this context, loaded from localized "messages_xx" files -->
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
@@ -64,14 +62,12 @@
 		</property>										
 	</bean>
 
-	<!-- Default View Resolver -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
 		<property name="prefix" value="/WEB-INF/jsp/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
 	
-	<!-- This interceptor forwards the mapping request parameter from an ActionRequest to be used as a render parameter. -->
 	<bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
 	
 	<bean id="openSessionInViewInterceptor" class="gov.nih.nci.cagrid.portal.portlet.util.OpenSessionInViewInterceptor">
@@ -97,13 +93,8 @@
 
 	<!-- Abstract Default ExceptionHandler -->
 	<bean id="defaultExceptionHandlerTemplate" class="gov.nih.nci.cagrid.portal.portlet.util.DefaultExceptionResolver" abstract="true">
-		<property name="defaultErrorView" value="error"/>
-		<property name="exceptionMappings">
-			<props>
-				<prop key="javax.portlet.PortletSecurityException">unauthorized</prop>
-				<prop key="javax.portlet.UnavailableException">unavailable</prop>
-			</props>
-		</property>  
+		<property name="adminEmail" value="${cagrid.portal.admin.email}"/>
+		<property name="viewName" value="error"/>
 	</bean>
 
 	
