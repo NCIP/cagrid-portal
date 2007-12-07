@@ -26,7 +26,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Oct 5, 2007 2:08:34 PM
- * @version $Id: SDK4InitializationPanel.java,v 1.3 2007-11-06 15:53:43 hastings Exp $ 
+ * @version $Id: SDK4InitializationPanel.java,v 1.4 2007-12-07 15:37:52 dervin Exp $ 
  */
 public class SDK4InitializationPanel extends CoreDsIntroPanel {
     
@@ -52,9 +52,9 @@ public class SDK4InitializationPanel extends CoreDsIntroPanel {
                 libs = new AdditionalLibraries();
                 data.setAdditionalLibraries(libs);
             }
-            Set jarNames = new HashSet();
+            Set<String> jarNames = new HashSet<String>();
             if (libs.getJarName() != null) {
-                Collections.addAll(jarNames, (Object[]) libs.getJarName());
+                Collections.addAll(jarNames, libs.getJarName());
             }
             // list the libraries
             File[] jars = styleLibDir.listFiles(new FileFilters.JarFileFilter());
