@@ -2,20 +2,12 @@ package gov.nih.nci.cagrid.metadata.xmi;
 
 import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.XMLUtilities;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-import org.jasciidammit.ConfigurationException;
-import org.jasciidammit.JAsciiDammit;
-import org.jdom.Element;
-import org.jdom.filter.Filter;
 
 /** 
  *  FixXmiExecutor
@@ -24,16 +16,11 @@ import org.jdom.filter.Filter;
  * @author David Ervin
  * 
  * @created Oct 29, 2007 2:11:31 PM
- * @version $Id: FixXmiExecutor.java,v 1.6 2007-11-09 15:59:51 dervin Exp $ 
+ * @version $Id: FixXmiExecutor.java,v 1.7 2007-12-10 20:36:19 dervin Exp $ 
  */
 public class FixXmiExecutor {
     public static final Logger LOG = Logger.getLogger(FixXmiExecutor.class);
     
-    public static final String ERROR_APOSTROPHE = "’";
-    
-    // problematic elements in the original XMI
-    public static final String DOCTYPE_UML_EA = "<!DOCTYPE XMI SYSTEM \"UML_EA.dtd\">";
-
     // ant tasks
     public static final String FIX_XMI_TASK = "fix-xmi";
     public static final String COMPILE_GENERATOR_TASK = "compile-generator";
@@ -145,81 +132,9 @@ public class FixXmiExecutor {
         System.out.println("Clean XMI");
         File cleanedFile = new File(originalXmi.getParentFile(), "cleaned_" + originalXmi.getName());
         StringBuffer xmiContents = Utils.fileToStringBuffer(originalXmi);
-        cleanSmartquotes(xmiContents);
-        cleanDoctype(xmiContents);
-        cleanTaggedValues(xmiContents);
+        XmiCleaner.cleanXmi(xmiContents);
         Utils.stringBufferToFile(xmiContents, cleanedFile.getAbsolutePath());
         return cleanedFile;
-    }
-    
-    
-    private static void cleanSmartquotes(StringBuffer xmiContents) throws IOException {
-        String raw = xmiContents.toString();
-        raw = raw.replace(ERROR_APOSTROPHE, "'");
-        try {
-            raw = new JAsciiDammit().translate(raw);
-            xmiContents.delete(0, xmiContents.length());
-            xmiContents.append(raw);
-        } catch (ConfigurationException ex) {
-            ex.printStackTrace();
-            IOException ioe = new IOException(ex.getMessage());
-            ioe.initCause(ex);
-            throw ioe;
-        }
-    }
-    
-    
-    private static void cleanDoctype(StringBuffer xmiContents) {
-        int start = xmiContents.indexOf(DOCTYPE_UML_EA); 
-        if (start != -1) {
-            System.out.println("OFFENDING DOCTYPE ELEMENT FOUND");
-            xmiContents.delete(start, start + DOCTYPE_UML_EA.length());
-        }
-    }
-    
-    
-    private static void cleanTaggedValues(StringBuffer xmiContents) throws IOException {
-        // UML namespace == xmlns:UML="omg.org/UML1.3"
-        Element xmiElement = null;
-        try {
-            xmiElement = XMLUtilities.stringToDocument(xmiContents.toString()).getRootElement();
-        } catch (Exception ex) {
-            IOException ioe = new IOException(ex.getMessage());
-            ioe.initCause(ex);
-            throw ioe;
-        }
-        // iterate everything, looking for <UML:TaggedValue ../>
-        Filter taggedValueFilter = new Filter() {
-            public boolean matches(Object obj) {
-                if (obj instanceof Element) {
-                    Element elem = (Element) obj;
-                    if (elem.getName().equals("TaggedValue")) {
-                        return elem.getAttribute("value") == null;
-                    }
-                }
-                return false;
-            }
-        };
-        Iterator<Element> badTaggedValues = xmiElement.getDescendants(taggedValueFilter);
-        List<Element> removeElements = new LinkedList<Element>();
-        while (badTaggedValues.hasNext()) {
-            removeElements.add(badTaggedValues.next());
-        }
-        for (Element removeMe : removeElements) {
-            removeMe.detach();
-        }
-        
-        System.out.println("Removed " + removeElements.size() + " TaggedValues with no 'value' attribute");
-        String cleanXmi = null;
-        try {
-            cleanXmi = XMLUtilities.formatXML(XMLUtilities.elementToString(xmiElement));
-        } catch (Exception ex) {
-            IOException ioe = new IOException(ex.getMessage());
-            ioe.initCause(ex);
-            throw ioe;
-        }
-        xmiContents.delete(0, xmiContents.length());
-        xmiContents.append(cleanXmi);
     }
     
     
