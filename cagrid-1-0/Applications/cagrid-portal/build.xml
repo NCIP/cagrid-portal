@@ -183,6 +183,7 @@
 			<entry key="cagrid.portal.security.encryption.key" value="${cagrid.portal.security.encryption.key}"/>
 			<entry key="cagrid.portal.admin.email" value="${cagrid.portal.admin.email}"/>
 			<entry key="cagrid.portal.idpInfo" value="${cagrid.portal.idpInfo}"/>
+			<entry key="cagrid.portal.ifsUrl" value="${cagrid.portal.ifsUrl}"/>
 			<entry key="cagrid.portal.http.port" value="${liferay.http.port}"/>
 			<entry key="cagrid.portal.https.port" value="${liferay.https.port}"/>
 			<entry key="cagrid.portal.trust.synchronizeEnabled" value="${cagrid.portal.trust.synchronizeEnabled}"/>

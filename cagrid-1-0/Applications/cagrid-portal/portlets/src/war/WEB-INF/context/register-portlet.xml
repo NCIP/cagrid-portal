@@ -36,7 +36,7 @@
 		<property name="sessionForm" value="true"/>
 		<property name="formView" value="registerForm"/>
 		<property name="successView" value="registerForm"/>
-		<property name="ifsUrl" value="https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
+		<property name="ifsUrl" value="${cagrid.portal.ifsUrl}"/>
 	</bean>
 	
 	<bean id="portletModeHandlerMapping"
