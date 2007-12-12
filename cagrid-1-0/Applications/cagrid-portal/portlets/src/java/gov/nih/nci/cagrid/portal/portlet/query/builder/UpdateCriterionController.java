@@ -68,7 +68,7 @@ public class UpdateCriterionController extends
 	protected void initBinder(PortletRequest request,
 			PortletRequestDataBinder binder) throws Exception {
 		binder.registerCustomEditor(String.class, "value",
-				new XSSFilterEditor());
+				new XSSFilterEditor(binder.getBindingResult(), "value"));
 	}
     
 

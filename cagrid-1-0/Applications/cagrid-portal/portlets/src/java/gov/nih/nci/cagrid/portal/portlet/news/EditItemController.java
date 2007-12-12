@@ -57,15 +57,15 @@ public class EditItemController extends SimpleFormController {
 	protected void initBinder(PortletRequest request,
 			PortletRequestDataBinder binder) throws Exception {
 		binder.registerCustomEditor(String.class, "title",
-				new XSSFilterEditor());
+				new XSSFilterEditor(binder.getBindingResult(), "title"));
 		binder.registerCustomEditor(String.class, "link",
-				new XSSFilterEditor());
+				new XSSFilterEditor(binder.getBindingResult(), "link"));
 		binder.registerCustomEditor(String.class, "description",
-				new XSSFilterEditor());
+				new XSSFilterEditor(binder.getBindingResult(), "description"));
 		binder.registerCustomEditor(String.class, "height",
-				new XSSFilterEditor());
+				new XSSFilterEditor(binder.getBindingResult(), "heigth"));
 		binder.registerCustomEditor(String.class, "width",
-				new XSSFilterEditor());
+				new XSSFilterEditor(binder.getBindingResult(), "width"));
 	}
 	
 	protected void onSubmitAction(ActionRequest request,

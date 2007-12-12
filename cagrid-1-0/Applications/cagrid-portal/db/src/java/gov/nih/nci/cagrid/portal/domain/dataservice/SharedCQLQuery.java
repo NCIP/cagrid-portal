@@ -33,7 +33,6 @@ public class SharedCQLQuery extends AbstractDomainObject {
 	private GridDataService targetService;
 	private UMLClass targetClass;
 	private Date shareDate = new Date();
-	boolean anonymous = true;
 	private String description;
 	private String name;
 	
@@ -91,14 +90,6 @@ public class SharedCQLQuery extends AbstractDomainObject {
 
 	public void setShareDate(Date shareDate) {
 		this.shareDate = shareDate;
-	}
-
-	public boolean isAnonymous() {
-		return anonymous;
-	}
-
-	public void setAnonymous(boolean anonymous) {
-		this.anonymous = anonymous;
 	}
 
 	@Lob

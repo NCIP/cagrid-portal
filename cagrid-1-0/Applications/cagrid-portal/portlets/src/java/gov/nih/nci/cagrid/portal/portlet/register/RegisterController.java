@@ -53,20 +53,21 @@ public class RegisterController extends SimpleFormController implements
 	protected void initBinder(PortletRequest request,
 			PortletRequestDataBinder binder) throws Exception {
 		
+
 		binder.registerCustomEditor(StateCode.class, "state",
 				new StateCodeEditor());
 		binder.registerCustomEditor(CountryCode.class, "country",
 				new CountryCodeEditor());
 
-		binder.registerCustomEditor(String.class, "userId", new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "email", new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "firstName", new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "lastName", new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "organization", new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "address", new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "addres2", new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "city", new XSSFilterEditor());
-		binder.registerCustomEditor(String.class, "phoneNumber", new XSSFilterEditor());
+		binder.registerCustomEditor(String.class, "userId", new XSSFilterEditor(binder.getBindingResult(), "userId"));
+		binder.registerCustomEditor(String.class, "email", new XSSFilterEditor(binder.getBindingResult(), "email"));
+		binder.registerCustomEditor(String.class, "firstName", new XSSFilterEditor(binder.getBindingResult(), "firstName"));
+		binder.registerCustomEditor(String.class, "lastName", new XSSFilterEditor(binder.getBindingResult(), "lastName"));
+		binder.registerCustomEditor(String.class, "organization", new XSSFilterEditor(binder.getBindingResult(), "organization"));
+		binder.registerCustomEditor(String.class, "address", new XSSFilterEditor(binder.getBindingResult(), "address"));
+		binder.registerCustomEditor(String.class, "addres2", new XSSFilterEditor(binder.getBindingResult(), "address2"));
+		binder.registerCustomEditor(String.class, "city", new XSSFilterEditor(binder.getBindingResult(), "city"));
+		binder.registerCustomEditor(String.class, "phoneNumber", new XSSFilterEditor(binder.getBindingResult(), "phoneNumber"));
 	}
 
 	protected Object formBackingObject(PortletRequest request) throws Exception {

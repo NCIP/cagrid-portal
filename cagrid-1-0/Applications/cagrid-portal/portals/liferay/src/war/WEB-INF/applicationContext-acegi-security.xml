@@ -6,6 +6,12 @@
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:cagridportal.properties" />
+	</bean>
+
 	<bean id="filterChainProxy"
 		class="org.acegisecurity.util.FilterChainProxy">
 		<property name="filterInvocationDefinitionSource">
@@ -43,8 +49,31 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 	</bean>
 
 	<bean id="secureChannelProcessor"
-		class="org.acegisecurity.securechannel.SecureChannelProcessor" />
+		class="org.acegisecurity.securechannel.SecureChannelProcessor">
+		<property name="entryPoint">
+			<bean class="org.acegisecurity.securechannel.RetryWithHttpsEntryPoint">
+				<property name="portMapper">
+					<ref local="portMapper"/>
+				</property>
+			</bean>
+		</property>
+	</bean>
 	<bean id="insecureChannelProcessor"
-		class="org.acegisecurity.securechannel.InsecureChannelProcessor" />
+		class="org.acegisecurity.securechannel.InsecureChannelProcessor" >
+		<property name="entryPoint">
+			<bean class="org.acegisecurity.securechannel.RetryWithHttpEntryPoint">
+				<property name="portMapper">
+					<ref local="portMapper"/>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="portMapper" class="org.acegisecurity.util.PortMapperImpl">
+		<property name="portMappings">
+			<map>
+				<entry key="${cagrid.portal.http.port}" value="${cagrid.portal.https.port}"/>
+			</map>
+		</property>
+	</bean>
 
 </beans>

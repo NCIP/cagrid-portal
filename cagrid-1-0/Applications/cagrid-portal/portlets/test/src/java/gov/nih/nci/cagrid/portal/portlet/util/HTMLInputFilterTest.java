@@ -41,13 +41,13 @@ import junit.framework.TestCase;
  * @author Joseph O'Connell <joe.oconnell at gmail dot com>
  * @version 1.0 
  */
-public class HTMLInputFilterTestCase extends TestCase
+public class HTMLInputFilterTest extends TestCase
 {  
   protected HTMLInputFilter vFilter;
   
   protected void setUp() 
   { 
-    vFilter = new HTMLInputFilter( true );
+    vFilter = new HTMLInputFilter(false);
   }
   
   protected void tearDown()
@@ -164,5 +164,7 @@ public class HTMLInputFilterTestCase extends TestCase
       t("<!-- a<b --->", "<!-- a&lt;b --->");
     }
   }
+  
+
 
 }

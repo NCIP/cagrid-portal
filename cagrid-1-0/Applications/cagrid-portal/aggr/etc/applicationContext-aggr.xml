@@ -42,15 +42,15 @@
 			<bean
 				class="gov.nih.nci.cagrid.portal.aggr.regsvc.ServiceMetadataBuilder" >
 				<property name="hibernateTemplate" ref="hibernateTemplate"/>
-				<property name="gmeUrl" ref="gmeUrl"/>
+				<!-- property name="gmeUrl" ref="gmeUrl"/ -->
 			</bean>
 		</property>
 		<property name="domainModelBuilder">
 			<bean
 				class="gov.nih.nci.cagrid.portal.aggr.regsvc.DomainModelBuilder" >
 				<property name="hibernateTemplate" ref="hibernateTemplate"/>
-				<property name="gmeUrl" ref="gmeUrl"/>
-				<property name="cadsrUrl" ref="cadsrUrl"/>
+				<!-- property name="gmeUrl" ref="gmeUrl"/ -->
+				<!-- property name="cadsrUrl" ref="cadsrUrl"/ -->
 			</bean>
 		</property>
 		<property name="metadataTimeout" ref="defaultTimeout" />

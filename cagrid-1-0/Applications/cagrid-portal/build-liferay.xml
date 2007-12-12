@@ -19,9 +19,11 @@
 		value="${liferay.test.dir}/src/java" />
 		
 	<property name="liferay.jboss.download.url" value="http://switch.dl.sourceforge.net/sourceforge/jboss/jboss-4.0.5.GA.zip"/>
+	<property name="liferay.jboss.dir.name" value="jboss-4.0.5.GA"/>
 	<property name="liferay.jboss.zip" value="${liferay.jboss.dir}/jboss-4.0.5.GA.zip"/>
-	<property name="liferay.jboss.home" value="${liferay.jboss.dir}/jboss-4.0.5.GA"/>
-	<property name="liferay.root.context.dir" value="${liferay.jboss.home}/server/default/deploy/liferay-portal.war"/>
+	<property name="liferay.jboss.home" value="${liferay.jboss.dir}/${liferay.jboss.dir.name}"/>
+	<property name="liferay.jboss.deploy.dest.dir" value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy"/>
+	<property name="liferay.root.context.dir" value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/liferay-portal.war"/>
 	<property name="liferay.db.url" value="jdbc:mysql://${liferay.db.host}:${liferay.db.port}/${liferay.db.name}" />
 	<property name="liferay.db.driver" value="com.mysql.jdbc.Driver" />
 	<property name="liferay.db.driver.path" value="${basedir}/${db.jdbc.driver.jar}" />
@@ -33,7 +35,7 @@
 	<property name="liferay.mail.username" value="nobody" />
 	<property name="liferay.mail.password" value="password" />
 	<property name="liferay.mail.host" value="localhost" />
-	<property name="liferay.portal.war.dir" value="${liferay.jboss.home}/server/default/deploy/liferay-portal.war"/>
+	<property name="liferay.portal.war.dir" value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/liferay-portal.war"/>
 	<property name="liferay.autodeploy.dir" value="${liferay.jboss.dir}/deploy"/>
 	<property name="liferay.theme.name" value="cagrid-minimal"/>
 	
@@ -121,7 +123,7 @@
 
 		</copy>
 		
-		<copy todir="${liferay.jboss.home}/server/default/lib/ext" overwrite="true" flatten="true">
+		<copy todir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext" overwrite="true" flatten="true">
 			<fileset dir="${aggr.lib.dir}">
 				<include name="cagrid/cog-jglobus.jar"/>
 			</fileset>
@@ -143,6 +145,7 @@
 			</fileset>
 			
 			<filterset>
+				<filter token="LIFERAY_JBOSS_DEPLOY_DEST_DIR" value="${liferay.jboss.deploy.dest.dir}" />
 				<filter token="LIFERAY_AUTODEPLOY_DIR" value="${liferay.autodeploy.dir}" />
 				<filter token="LIFERAY_ADMIN_PASSWORD" value="${liferay.admin.password}" />
 				<filter token="LIFERAY_ADMIN_USERNAME" value="${liferay.admin.username}" />
@@ -190,14 +193,24 @@
 		<unzip src="${liferay.jboss.zip}" dest="${liferay.jboss.dir}"/>
 	</target>
 	
-	<target name="liferay:install-jboss">
-		<antcall target="liferay:download-jboss"/>
-		<antcall target="liferay:unzip-jboss"/>
+	<target name="liferay:install-jboss" depends="liferay:test-jboss">
+		<if>
+			<not>
+				<isset property="liferay.jboss.available"/>
+			</not>
+			<then>
+				<echo>Installing JBoss</echo>
+
+				<antcall target="liferay:download-jboss"/>
+				<antcall target="liferay:unzip-jboss"/>
+
+			</then>
+		</if>
 	</target>
 	
 	<target name="liferay:configure-jboss-classpath">
 		<!-- No DTD or Schema needed. -->
-		<property name="config.file" value="${liferay.jboss.home}/server/default/conf/jboss-service.xml"/>
+		<property name="config.file" value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/conf/jboss-service.xml"/>
 		<xmltask source="${config.file}" dest="${config.file}">
 			<remove path="/server/classpath"/>
 			<insert path="/server/mbean[1]" position="before">
@@ -212,10 +225,10 @@
 	
 	<target name="liferay:configure-jboss-root">
 	
-		<delete file="${liferay.jboss.home}/server/default/deploy/jbossweb-tomcat55.sar/ROOT.war"/>
+		<delete file="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/jbossweb-tomcat55.sar/ROOT.war"/>
 	
 		<!-- Downloaded DTD to tools/ant/resources/web-app_2_3.dtd -->
-		<property name="config.file" value="${liferay.jboss.home}/server/default/deploy/jbossweb-tomcat55.sar/conf/web.xml"/>
+		<property name="config.file" value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/jbossweb-tomcat55.sar/conf/web.xml"/>
 		<echo>Config File: ${config.file}</echo>
 		<xmltask preservetype="true" source="${config.file}" dest="${config.file}" failWithoutMatch="true">
 			<xmlcatalog refid="portal.catalog"/>
@@ -249,7 +262,7 @@
 	</target>
 	
 	<target name="liferay:create-liferay-datasource">
-		<concat destfile="${liferay.jboss.home}/server/default/deploy/liferay-ds.xml" append="false"><![CDATA[<datasources>
+		<concat destfile="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/liferay-ds.xml" append="false"><![CDATA[<datasources>
    <local-tx-datasource>
      <jndi-name>jdbc/LiferayPool</jndi-name>
      <connection-url>
@@ -266,7 +279,7 @@
 	</target>
 	
 	<target name="liferay:configure-jboss-mail-service">
-		<concat destfile="${liferay.jboss.home}/server/default/deploy/mail-service.xml" append="false"><![CDATA[<server>
+		<concat destfile="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/mail-service.xml" append="false"><![CDATA[<server>
 	<mbean code="org.jboss.mail.MailService" name="jboss:service=MailSession">
 		<attribute name="JNDIName">mail/MailSession</attribute>
 		<attribute name="User">${liferay.mail.username}</attribute>
@@ -288,7 +301,7 @@
 	
 	<target name="liferay:configure-jboss-jaas">
 		<!-- Downloaded DTD to tools/ant/resources/security_config.dtd -->
-		<property name="config.file" value="${liferay.jboss.home}/server/default/conf/login-config.xml"/>
+		<property name="config.file" value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/conf/login-config.xml"/>
 		<xmltask preservetype="true" source="${config.file}" dest="${config.file}">
 			<xmlcatalog refid="portal.catalog"/>
 			<remove path="/policy/application-policy[@name='other']"/>
@@ -298,42 +311,64 @@
 		
 	<target name="liferay:configure-jboss-jca-service">
 		<!-- No DTD or Schema needed. -->
-		<property name="config.file" value="${liferay.jboss.home}/server/default/deploy/jbossjca-service.xml"/>
+		<property name="config.file" value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/jbossjca-service.xml"/>
 		<xmltask source="${config.file}" dest="${config.file}">
 			<replace path="/server/mbean[@name='jboss.jca:service=CachedConnectionManager']/attribute[@name='Debug']/text()" withText="false"/>
 		</xmltask>	
 	</target>
 	
 	<target name="liferay:configure-jboss-jms-service">
-		<concat destfile="${liferay.jboss.home}/server/default/deploy/jms/jbossmq-destinations-service.xml" append="false"><![CDATA[<?xml version="1.0"?>
+		<concat destfile="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/jms/jbossmq-destinations-service.xml" append="false"><![CDATA[<?xml version="1.0"?>
 <server></server>]]></concat>
 	</target>	
 	
 	<target name="liferay:configure-jboss-tomcat">
-		<!-- No DTD or Schema needed. -->
-		<property name="config.file" value="${liferay.jboss.home}/server/default/deploy/jbossweb-tomcat55.sar/server.xml"/>
-		<xmltask source="${config.file}" dest="${config.file}">
-			<remove path="/Server/Service[@name='jboss.web']/Connector[@port='8443']"/>
-			<insert path="/Server/Service[@name='jboss.web']/Engine[@name='jboss.web']" position="before">
-			<![CDATA[
-      <Connector port="${liferay.https.port}" address="$${jboss.bind.address}"
-           maxThreads="100" strategy="ms" maxHttpHeaderSize="8192"
-           emptySessionPath="true"
-           scheme="https" secure="true" clientAuth="false" 
-           keystoreFile="${liferay.https.keystore.path}"
-           keystorePass="${liferay.https.keystore.password}" sslProtocol = "TLS" />			
-			]]>
-			</insert>
-		</xmltask>	
+		<if>
+			<istrue value="${liferay.jboss.configure.connectors}"/>
+			<then>
+				<!-- No DTD or Schema needed. -->
+				<property name="config.file" value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"/>
+				<xmltask source="${config.file}" dest="${config.file}">
+				
+					<remove path="/Server/Service[@name='jboss.web']/Connector[@port='8080']"/>
+					<insert path="/Server/Service[@name='jboss.web']/Engine[@name='jboss.web']" position="before">
+					<![CDATA[
+		      <Connector acceptCount="100" address="${jboss.bind.address}" connectionTimeout="20000" 
+		      		disableUploadTimeout="true" emptySessionPath="true" enableLookups="false" 
+		      		maxHttpHeaderSize="8192" maxThreads="250" port="${liferay.http.port}" 
+		      		redirectPort="${liferay.https.port}" strategy="ms"/>
+					]]>
+					</insert>
+				
+					<remove path="/Server/Service[@name='jboss.web']/Connector[@port='8443']"/>
+					<insert path="/Server/Service[@name='jboss.web']/Engine[@name='jboss.web']" position="before">
+					<![CDATA[
+		      <Connector port="${liferay.https.port}" address="$${jboss.bind.address}"
+		           maxThreads="100" strategy="ms" maxHttpHeaderSize="8192"
+		           emptySessionPath="true"
+		           scheme="https" secure="true" clientAuth="false" 
+		           keystoreFile="${liferay.https.keystore.path}"
+		           keystorePass="${liferay.https.keystore.password}" sslProtocol="TLS" />			
+					]]>
+					</insert>
+					
+				</xmltask>
+			</then>
+		</if>
 	</target>
 	
 	<target name="liferay:copy-startup-scripts">
-		<copy todir="${liferay.jboss.home}/bin" overwrite="true">
-			<fileset dir="${liferay.src.scripts.dir}">
-				<include name="run.sh"/>
-				<include name="run.bat"/>
-			</fileset>
-		</copy>
+		<if>
+			<istrue value="${liferay.jboss.deploy.scripts}"/>
+			<then>
+				<copy todir="${liferay.jboss.home}/bin" overwrite="true">
+					<fileset dir="${liferay.src.scripts.dir}">
+						<include name="run.sh"/>
+						<include name="run.bat"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
 	</target>
 	
 	<target name="liferay:configure-jboss">
@@ -372,9 +407,9 @@
 	</target>
 	
 	<target name="liferay:copy-liferay-ext-jars" depends="liferay:download-dependencies">
-		<mkdir dir="${liferay.jboss.home}/server/default/lib/ext"/>
-		<unzip src="${liferay.downloads.dir}/${liferay.dependencies.zip}" dest="${liferay.jboss.home}/server/default/lib/ext"/>
-		<copy file="${liferay.db.driver.path}" todir="${liferay.jboss.home}/server/default/lib/ext"/>
+		<mkdir dir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext"/>
+		<unzip src="${liferay.downloads.dir}/${liferay.dependencies.zip}" dest="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext"/>
+		<copy file="${liferay.db.driver.path}" todir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext"/>
 	</target>
 	
 	<target name="liferay:deploy-liferay-portal-war" depends="liferay:download-war">
@@ -389,10 +424,10 @@
 			</fileset>
 		</move>
 				
-		<move file="${liferay.portal.war.dir}/WEB-INF/lib/commons-collections.jar" todir="${liferay.jboss.home}/server/default/lib"/>
+		<move file="${liferay.portal.war.dir}/WEB-INF/lib/commons-collections.jar" todir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib"/>
 		
 		<delete>
-			<fileset dir="${liferay.jboss.home}/server/default/lib">
+			<fileset dir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib">
 				<include name="hibernate3.jar"/>
 				<include name="jboss-hibernate.jar"/>
 			</fileset>

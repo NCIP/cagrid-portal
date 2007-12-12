@@ -121,6 +121,10 @@
 		<pathelement location="${db.test.classes.dir}" />
 		<pathelement location="${db.test.dir}" />
 		<pathelement location="db/test/build/classes" />
+		<pathelement location="db/test/etc" />
+		<fileset dir="${db.test.lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
 	</path>
 
 	<target name="db:compile">
@@ -151,31 +155,27 @@
 			<fileset dir="${db.dir}/etc">
 				<include name="*.properties" />
 				<include name="*.xml" />
-				<exclude name="*.hibernate.properties" />
 			</fileset>
 		</copy>
 
-		<copy file="${db.dir}/etc/test.hibernate.properties"
-			tofile="${db.test.classes.dir}/hibernate.properties"
-			overwrite="true" />
 	</target>
 
-	<target name="db:test" depends="db:prepare-test-cp">
+	<target name="db:test" depends="db:compile, db:prepare-test-cp">
 
 		<mkdir dir="${db.test.build.dir}/junit-reports" />
 		<junit printsummary="yes" showoutput="true" fork="true">
 
-			<jvmarg value="-Ddata.file.prefix=${data.file.prefix}" />
-
 			<classpath refid="db.test.run.cp" />
+			
+			<classpath>
+				<pathelement location="db/test/etc"/>
+			</classpath>
 
-			<formatter type="plain" />
+			<formatter type="xml" />
 
 			<batchtest todir="${db.test.build.dir}/junit-reports">
 				<fileset dir="${db.test.src.java.dir}">
-					<include name="**/AddressDaoTest.java" />
-					<include name="**/PersonDaoTest.java" />
-					<include name="**/GridServiceDaoTest.java" />
+					<include name="**/*Test.java" />
 					<exclude name="**/Abstract*.java" />
 				</fileset>
 			</batchtest>
@@ -221,6 +221,12 @@
 		</java>
 	</target>
 	-->
+	
+	<target name="db:run" depends="db:prepare-test-cp">
+			<java classname="gov.nih.nci.cagrid.portal.TestDB">
+				<classpath refid="db.test.run.cp"/>
+			</java>
+		</target>
 
 	<target name="db:clean">
 		<delete dir="${db.build.dir}" />

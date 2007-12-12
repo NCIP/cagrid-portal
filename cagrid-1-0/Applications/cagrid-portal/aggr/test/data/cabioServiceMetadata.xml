@@ -1,0 +1,44 @@
+<ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
+ <ns1:serviceDescription>
+  <ns2:Service description="The CaBIOSvc grid service exposes the caBIO API hosted by NCICB." name="CaBIOSvc" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+   <ns2:pointOfContactCollection>
+    <ns3:PointOfContact affiliation="SemanticBits" email="joshua.phillips@semanticbits.com" firstName="Joshua" lastName="Phillips" role="Developer" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   </ns2:pointOfContactCollection>
+   <ns2:serviceContextCollection>
+    <ns2:ServiceContext description="The main service context" name="CaBIOSvc">
+     <ns2:operationCollection>
+      <ns2:Operation description="Returns a description of the security requirements for interacting with this service." name="getServiceSecurityMetadata">
+       <ns2:inputParameterCollection/>
+       <ns2:Output qName="ns4:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="Implements the standard DataService query operation." name="query">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns5:CQLQuery" dimensionality="1" index="0" isArray="false" isRequired="false" name="cqlQuery" xmlns:ns5="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns6:CQLQueryResultCollection" dimensionality="1" isArray="false" xmlns:ns6="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="Returned if there is an error while processing the query." name="QueryProcessingException"/>
+        <ns2:Fault description="Returned if the query is malformed." name="MalformedQueryException"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+     </ns2:operationCollection>
+     <ns2:contextPropertyCollection>
+      <ns2:ContextProperty description="caGrid standard service metadata" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
+      <ns2:ContextProperty description="The caBIO Domain Model, version 3.1" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice}DomainModel"/>
+     </ns2:contextPropertyCollection>
+    </ns2:ServiceContext>
+   </ns2:serviceContextCollection>
+   <ns7:SemanticMetadata conceptCode="C63541" conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services." conceptName="Grid Service" order="0" xmlns:ns7="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns8:SemanticMetadata conceptCode="C63544" conceptDefinition="A web service which accepts as input a query targeted at a data resource addressable by the system and returns information to the client in the form of one or more data objects." conceptName="Data Grid Service" order="1" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+  </ns2:Service>
+ </ns1:serviceDescription>
+ <ns1:hostingResearchCenter>
+  <ns9:ResearchCenter displayName=" NCI Center for Biomedical Informatics and Information Technology " shortName="CBIIT" xmlns:ns9="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns9:Address country="US" locality="Rockville" postalCode="20852" stateProvince="MD" street1="2115 East Jefferson Street - Suite 5000"/>
+   <ns9:pointOfContactCollection>
+    <ns9:PointOfContact affiliation="NCICB Application Support" email="ncicbmb@mail.nih.gov" firstName="" lastName="" role="maintainer"/>
+   </ns9:pointOfContactCollection>
+  </ns9:ResearchCenter>
+ </ns1:hostingResearchCenter>
+</ns1:ServiceMetadata>

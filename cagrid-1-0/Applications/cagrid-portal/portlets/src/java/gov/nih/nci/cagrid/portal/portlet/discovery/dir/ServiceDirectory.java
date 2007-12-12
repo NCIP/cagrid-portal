@@ -4,8 +4,10 @@
 package gov.nih.nci.cagrid.portal.portlet.discovery.dir;
 
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
+import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryType;
+import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class ServiceDirectory extends DiscoveryDirectory {
 	 */
 	@Override
 	public List getObjects() {
-		List objects = null;
+		List<GridService> objects = null;
 		
 		if(ServiceDirectoryType.ALL.equals(getServiceDirectoryType())){
 			objects = getGridServiceDao().getAll();
@@ -44,6 +46,8 @@ public class ServiceDirectory extends DiscoveryDirectory {
 		}else{
 			throw new CaGridPortletApplicationException("Unknown ServiceDirectoryType: " + getServiceDirectoryType());
 		}
+		
+		objects = PortletUtils.filterBannedServices(objects);
 		
 		return objects;
 	}

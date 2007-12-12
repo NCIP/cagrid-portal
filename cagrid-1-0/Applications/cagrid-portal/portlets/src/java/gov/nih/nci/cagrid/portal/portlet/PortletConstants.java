@@ -31,5 +31,7 @@ public abstract class PortletConstants {
 
 	public static final String MAX_ACTIVE_QUERIES_MSG = "maxActiveQueries";
 
+	public static final String XSS_TEXT_MSG = "xssText";
+
 	
 }

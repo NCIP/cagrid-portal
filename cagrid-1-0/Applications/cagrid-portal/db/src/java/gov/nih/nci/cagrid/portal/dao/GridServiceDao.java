@@ -132,11 +132,22 @@ public class GridServiceDao extends AbstractDao<GridService> {
 
 	public List<GridService> getLatestServices(int latestServicesLimit) {
 		List<GridService> latest = new ArrayList<GridService>();
-		List<GridService> l = getHibernateTemplate().find(
-				"select gs from GridService gs " +
+		//This query doesn't work on HSQLDB or Derby, which makes it difficult for testing.
+		//So, changing to just select IDs and then retrieve the objects.
+//		List<GridService> l = getHibernateTemplate().find(
+//				"select gs from GridService gs " +
+//				"join gs.statusHistory status " +
+//				"group by gs.id " + 
+//				"order by min(status.time) desc");
+		List<Integer> ids = getHibernateTemplate().find(
+				"select gs.id from GridService gs " +
 				"join gs.statusHistory status " +
 				"group by gs.id " + 
 				"order by min(status.time) desc");
+		List<GridService> l = new ArrayList<GridService>();
+		for(Integer id : ids){
+			l.add((GridService) getHibernateTemplate().get(GridService.class, id));
+		}
 		for(int i = 0; i < latestServicesLimit && i < l.size(); i++){
 			latest.add(l.get(i));
 		}

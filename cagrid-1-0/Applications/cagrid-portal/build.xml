@@ -123,7 +123,9 @@
 	<import file="build-security.xml" />
 	<import file="build-aggr.xml" />
 	<import file="build-portlets.xml" />
+	<!-- 
 	<import file="build-js2.xml" />
+	 -->
 	<import file="build-liferay.xml" />
 	
 
@@ -132,17 +134,33 @@
 	</target>
 	
 	<target name="test">
+	
 		<antcall target="db:test"/>
 		<antcall target="aggr:test"/>
+		<antcall target="portlets:test"/>
+	
+		<mkdir dir="docs/test/report/html"/>
+		
+		<junitreport todir="docs/test/report">
+  			<fileset dir=".">
+    			<include name="**/junit-reports/TEST-*.xml"/>
+  			</fileset>
+  			<report format="frames" todir="docs/test/report/html"/>
+		</junitreport>
+		
 	</target>
 
 	<target name="clean">
 		<antcall target="db:clean"/>
 		<antcall target="aggr:clean"/>
 		<antcall target="portlets:clean"/>
+		<!-- 
 		<antcall target="js2:clean"/>
+		 -->
 		<antcall target="liferay:clean"/>
 		<antcall target="security:clean"/>
+		
+		<delete dir="docs"/>
 	</target>
 	
 	<target name="all" depends="clean,compile,test"/>
@@ -152,6 +170,9 @@
 			<entry key="cagrid.portal.db.url" value="${cagrid.portal.db.url}"/>
 			<entry key="cagrid.portal.db.username" value="${cagrid.portal.db.username}"/>
 			<entry key="cagrid.portal.db.password" value="${cagrid.portal.db.password}"/>
+			<entry key="cagrid.portal.db.dialect" value="${cagrid.portal.db.dialect}"/>
+			<entry key="cagrid.portal.db.driver" value="${cagrid.portal.db.driver}"/>
+			<entry key="cagrid.portal.db.show_sql" value="${cagrid.portal.db.show_sql}"/>
 			<entry key="cagrid.portal.indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
 			<entry key="cagrid.portal.geocoder.yahoo.baseUrl" value="${cagrid.portal.geocoder.yahoo.baseUrl}"/>
 			<entry key="cagrid.portal.geocoder.yahoo.appId" value="${cagrid.portal.geocoder.yahoo.appId}"/>
@@ -162,16 +183,24 @@
 			<entry key="cagrid.portal.security.encryption.key" value="${cagrid.portal.security.encryption.key}"/>
 			<entry key="cagrid.portal.admin.email" value="${cagrid.portal.admin.email}"/>
 			<entry key="cagrid.portal.idpInfo" value="${cagrid.portal.idpInfo}"/>
+			<entry key="cagrid.portal.http.port" value="${liferay.http.port}"/>
+			<entry key="cagrid.portal.https.port" value="${liferay.https.port}"/>
+			<entry key="cagrid.portal.trust.synchronizeEnabled" value="${cagrid.portal.trust.synchronizeEnabled}"/>
 		</propertyfile>
 	</target>
 	
 	<target name="config-trust">
-		<mkdir dir="${user.home}/.globus/certificates"/>
-		<copy todir="${user.home}/.globus/certificates" overwrite="true">
-			<fileset dir="${aggr.trust.certs.dir}">
-				<include name="*"/>
-			</fileset>
-		</copy>
+		<if>
+			<istrue value="${aggr.trust.copy.certificates}"/>
+			<then>
+				<mkdir dir="${user.home}/.globus/certificates"/>
+				<copy todir="${user.home}/.globus/certificates" overwrite="true">
+					<fileset dir="${aggr.trust.certs.dir}">
+						<include name="*"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
 	</target>
 	
 	<target name="install">
@@ -182,6 +211,7 @@
 		<antcall target="liferay:deploy-all"/>
 		
 	</target>
+	
 	
 	<target name="javadoc" depends="db:compile,aggr:compile,portlets:compile,liferay:compile,security:compile">
 		<mkdir dir="docs/api"/>

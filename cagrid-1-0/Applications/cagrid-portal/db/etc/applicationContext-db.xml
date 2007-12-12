@@ -18,7 +18,7 @@
 
 	<bean id="dataSource"
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
-		p:driverClassName="com.mysql.jdbc.Driver"
+		p:driverClassName="${cagrid.portal.db.driver}"
 		p:maxActive="5" p:maxIdle="2" p:maxWait="180000"
 		p:removeAbandoned="true" p:removeAbandonedTimeout="300"
 		p:logAbandoned="true" p:testWhileIdle="true" p:testOnReturn="true"
@@ -34,7 +34,8 @@
 		
 		<property name="hibernateProperties">
 			<value>
-				hibernate.dialect=org.hibernate.dialect.MySQLDialect
+				hibernate.dialect=${cagrid.portal.db.dialect}
+				hibernate.show_sql=${cagrid.portal.db.show_sql}
 			</value>
 		</property>
 		

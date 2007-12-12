@@ -37,8 +37,8 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 	private static final Log logger = LogFactory
 			.getLog(DomainModelBuilder.class);
 
-	private String gmeUrl;
-	private String cadsrUrl;
+//	private String gmeUrl;
+//	private String cadsrUrl;
 
 	public DomainModel build(
 			gov.nih.nci.cagrid.metadata.dataservice.DomainModel modelIn)
@@ -231,6 +231,7 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 			List<UMLAssociationEdge> deduppedList = new ArrayList<UMLAssociationEdge>();
 			deduppedList.addAll(dedupped.values());
 			umlClass.setAssociations(deduppedList);
+			handlePersist(modelOut);
 			handlePersist(umlClass);
 		}
 
@@ -239,20 +240,20 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 		modelOut.setProjectShortName(modelIn.getProjectShortName());
 		modelOut.setProjectVersion(modelIn.getProjectVersion());
 
-		addXmlSchemas(modelOut, getGmeUrl(), getCadsrUrl());
+//		addXmlSchemas(modelOut, getGmeUrl(), getCadsrUrl());
 
 		return (DomainModel) handlePersist(modelOut);
 	}
 
-	protected void addXmlSchemas(DomainModel domainModel, String gmeUrl, String cadsrUrl) {
-		List<XMLSchema> xmlSchemas = PortalUtils.getXMLSchemas(domainModel, cadsrUrl, gmeUrl); 
-		for(XMLSchema xmlSchema : xmlSchemas){
-			if(xmlSchema.getId() == null){
-				handlePersist(xmlSchema);
-			}
-			domainModel.getXmlSchemas().add(xmlSchema);	
-		}
-	}
+//	protected void addXmlSchemas(DomainModel domainModel, String gmeUrl, String cadsrUrl) {
+//		List<XMLSchema> xmlSchemas = PortalUtils.getXMLSchemas(domainModel, cadsrUrl, gmeUrl); 
+//		for(XMLSchema xmlSchema : xmlSchemas){
+//			if(xmlSchema.getId() == null){
+//				handlePersist(xmlSchema);
+//			}
+//			domainModel.getXmlSchemas().add(xmlSchema);	
+//		}
+//	}
 
 	private void addAssocMapping(
 			Map<String, List<UMLAssociationEdge>> assocMap, String refId,
@@ -318,20 +319,20 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 		return (UMLClass) handlePersist(umlClassOut);
 	}
 
-	public String getGmeUrl() {
-		return gmeUrl;
-	}
-
-	public void setGmeUrl(String gmeUrl) {
-		this.gmeUrl = gmeUrl;
-	}
-
-	public String getCadsrUrl() {
-		return cadsrUrl;
-	}
-
-	public void setCadsrUrl(String cadsrUrl) {
-		this.cadsrUrl = cadsrUrl;
-	}
+//	public String getGmeUrl() {
+//		return gmeUrl;
+//	}
+//
+//	public void setGmeUrl(String gmeUrl) {
+//		this.gmeUrl = gmeUrl;
+//	}
+//
+//	public String getCadsrUrl() {
+//		return cadsrUrl;
+//	}
+//
+//	public void setCadsrUrl(String cadsrUrl) {
+//		this.cadsrUrl = cadsrUrl;
+//	}
 
 }
