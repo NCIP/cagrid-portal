@@ -1,8 +1,11 @@
 package gov.nih.nci.cagrid.sdkquery4.style.wizard;
 
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.ui.GroupSelectionListener;
+import gov.nih.nci.cagrid.data.ui.NotifyingButtonGroup;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -16,6 +19,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 
+import javax.swing.ButtonModel;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,7 +42,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Dec 11, 2007 9:56:51 AM
- * @version $Id: QueryProcessorSecurityPanel.java,v 1.1 2007-12-12 16:18:09 dervin Exp $ 
+ * @version $Id: QueryProcessorSecurityPanel.java,v 1.2 2007-12-12 16:27:48 dervin Exp $ 
  */
 public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
     // validation keys
@@ -58,6 +62,7 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
     private IconFeedbackPanel validationPanel = null;
     private ValidationResultModel validationModel = null;
     private DocumentChangeAdapter documentChangeListener = null;
+    private NotifyingButtonGroup radioButtonGroup = null;
 
     public QueryProcessorSecurityPanel(
         ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
@@ -68,6 +73,7 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
                 validateInput();
             }
         };
+        getRadioButtonGroup();
         initialize();
     }
 
@@ -84,7 +90,8 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
 
     public void update() {
         // TODO Auto-generated method stub
-
+        // this will get set by reading properties
+        PortalUtils.setContainerEnabled(getSecurityOptionsPanel(), useSecurityCheckBox.isSelected());
     }
     
     
@@ -93,6 +100,23 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
         this.add(getValidationPanel());
         // set up for validation
         configureValidation();
+    }
+    
+    
+    private NotifyingButtonGroup getRadioButtonGroup() {
+        if (radioButtonGroup == null) {
+            radioButtonGroup = new NotifyingButtonGroup();
+            radioButtonGroup.addGroupSelectionListener(new GroupSelectionListener() {
+                public void selectionChanged(ButtonModel previousSelection, ButtonModel currentSelection) {
+                    validateInput();
+                }
+            });
+            radioButtonGroup.add(getStaticLoginRadioButton());
+            radioButtonGroup.add(getGridIdentityRadioButton());
+            radioButtonGroup.setSelected(getStaticLoginRadioButton().getModel(), true);
+            setLoginComponentsEnabled();
+        }
+        return radioButtonGroup;
     }
     
     
@@ -138,7 +162,7 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
             useSecurityCheckBox.setText("Use Security");
             useSecurityCheckBox.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    System.out.println("itemStateChanged()"); // TODO Auto-generated Event stub itemStateChanged()
+                    PortalUtils.setContainerEnabled(getSecurityOptionsPanel(), useSecurityCheckBox.isSelected());
                 }
             });
         }
@@ -361,5 +385,14 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
         ServiceDescription desc = getServiceInformation().getServiceDescriptor();
         String paddedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + rawKey;
         CommonTools.setServiceProperty(desc, paddedKey, value, false);
+    }
+    
+    
+    private void setLoginComponentsEnabled() {
+        boolean enable = getUseSecurityCheckBox().isSelected() && getStaticLoginRadioButton().isSelected();
+        getUsernameLabel().setEnabled(enable);
+        getUsernameTextField().setEnabled(enable);
+        getPasswordLabel().setEnabled(enable);
+        getPasswordTextField().setEnabled(enable);
     }
 }
