@@ -27,6 +27,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
@@ -42,7 +44,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Dec 11, 2007 9:56:51 AM
- * @version $Id: QueryProcessorSecurityPanel.java,v 1.2 2007-12-12 16:27:48 dervin Exp $ 
+ * @version $Id: QueryProcessorSecurityPanel.java,v 1.3 2007-12-12 17:35:02 dervin Exp $ 
  */
 public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
     // validation keys
@@ -89,9 +91,22 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
 
 
     public void update() {
-        // TODO Auto-generated method stub
-        // this will get set by reading properties
-        PortalUtils.setContainerEnabled(getSecurityOptionsPanel(), useSecurityCheckBox.isSelected());
+        try {
+            String useLoginValue = getConfigurationProperty(SDK4QueryProcessor.PROPERTY_USE_LOGIN);
+            boolean useLogin = useLoginValue != null && Boolean.parseBoolean(useLoginValue);
+            getUseSecurityCheckBox().setSelected(useLogin);
+            String useGridIdentValue = getConfigurationProperty(SDK4QueryProcessor.PROPERTY_USE_GRID_IDENTITY_LOGIN);
+            boolean useGridIdent = useGridIdentValue != null && Boolean.parseBoolean(useGridIdentValue);
+            getGridIdentityRadioButton().setSelected(useGridIdent);
+            String loginUsername = getConfigurationProperty(SDK4QueryProcessor.PROPERTY_STATIC_LOGIN_USERNAME);
+            String loginPassword = getConfigurationProperty(SDK4QueryProcessor.PROPERTY_STATIC_LOGIN_PASSWORD);
+            getUsernameTextField().setText(loginUsername);
+            getPasswordTextField().setText(loginPassword);
+            PortalUtils.setContainerEnabled(getSecurityOptionsPanel(), useLogin);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error loading configuration", ex.getMessage(), ex);
+        }
     }
     
     
@@ -163,6 +178,7 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
             useSecurityCheckBox.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
                     PortalUtils.setContainerEnabled(getSecurityOptionsPanel(), useSecurityCheckBox.isSelected());
+                    setLoginComponentsEnabled();
                 }
             });
         }
@@ -336,7 +352,7 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
             }
             if (ValidationUtils.isBlank(getPasswordTextField().getText())) {
                 result.add(new SimpleValidationMessage(
-                    KEY_PASSWORD_FIELD + " must not be blank", Severity.ERROR, KEY_USERNAME_FIELD));
+                    KEY_PASSWORD_FIELD + " must not be blank", Severity.ERROR, KEY_PASSWORD_FIELD));
             }
         }
         
@@ -388,11 +404,25 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
     }
     
     
+    private String getConfigurationProperty(String rawKey) throws Exception {
+        ServiceDescription desc = getServiceInformation().getServiceDescriptor();
+        String paddedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + rawKey;
+        if (CommonTools.servicePropertyExists(desc, paddedKey)) {
+            return CommonTools.getServicePropertyValue(desc, paddedKey);
+        }
+        return null;
+    }
+    
+    
     private void setLoginComponentsEnabled() {
         boolean enable = getUseSecurityCheckBox().isSelected() && getStaticLoginRadioButton().isSelected();
         getUsernameLabel().setEnabled(enable);
         getUsernameTextField().setEnabled(enable);
         getPasswordLabel().setEnabled(enable);
         getPasswordTextField().setEnabled(enable);
+        if (!enable) {
+            getUsernameTextField().setText("");
+            getPasswordTextField().setText("");
+        }
     }
 }
