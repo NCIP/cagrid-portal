@@ -36,7 +36,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Oct 3, 2007 10:34:55 AM
- * @version $Id: SDK4QueryProcessor.java,v 1.5 2007-12-12 16:18:09 dervin Exp $ 
+ * @version $Id: SDK4QueryProcessor.java,v 1.6 2007-12-12 16:18:56 dervin Exp $ 
  */
 public class SDK4QueryProcessor extends CQLQueryProcessor {
     // configuration property keys
@@ -149,6 +149,7 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
         
         String useLocalValue = getConfiguredParameters().getProperty(PROPERTY_USE_LOCAL_API);
         boolean useLocal = Boolean.parseBoolean(useLocalValue);
+        // TODO: service login stuff here
         try {
             if (useLocal) {
                 service = ApplicationServiceProvider.getApplicationService();
