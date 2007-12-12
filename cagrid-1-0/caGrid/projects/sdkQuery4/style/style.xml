@@ -7,7 +7,7 @@
 	<CreationWizardPanels>
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.SDK4InitializationPanel"/>
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.QueryProcessorConfigurationPanel"/>
-		<!-- csm panel goes here -->
+		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.QueryProcessorSecurityPanel"/>
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.data.style.sdkstyle.wizard.DomainModelPanel"/>
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.data.style.sdkstyle.wizard.SchemaTypesPanel"/>
 	</CreationWizardPanels>

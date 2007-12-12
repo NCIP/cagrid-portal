@@ -36,7 +36,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Oct 3, 2007 10:34:55 AM
- * @version $Id: SDK4QueryProcessor.java,v 1.4 2007-12-05 21:27:47 dervin Exp $ 
+ * @version $Id: SDK4QueryProcessor.java,v 1.5 2007-12-12 16:18:09 dervin Exp $ 
  */
 public class SDK4QueryProcessor extends CQLQueryProcessor {
     // configuration property keys
@@ -47,6 +47,11 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     public static final String PROPERTY_HOST_NAME = "applicationHostName"; // only for remote
     public static final String PROPERTY_HOST_PORT = "applicationHostPort"; // only for remote
     public static final String PROPERTY_CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
+    
+    public static final String PROPERTY_USE_LOGIN = "useServiceLogin";
+    public static final String PROPERTY_USE_GRID_IDENTITY_LOGIN = "useGridIdentityLogin";
+    public static final String PROPERTY_STATIC_LOGIN_USERNAME = "staticLoginUsername";
+    public static final String PROPERTY_STATIC_LOGIN_PASSWORD = "staticLoginPassword";
     
     // default values for properties
     public static final String DEFAULT_USE_LOCAL_API = String.valueOf(false);
