@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class CQLQueryBean extends CriteriaBean {
 	
-	private QueryModifierType modifierType;
+	private QueryModifierType modifierType = QueryModifierType.COUNT_ONLY;
 	private List<String> selectedAttributes = new ArrayList<String>();
 
 	/**
