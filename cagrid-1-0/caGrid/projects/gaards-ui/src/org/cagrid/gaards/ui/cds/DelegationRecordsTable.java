@@ -32,7 +32,6 @@ public class DelegationRecordsTable extends GrapeBaseTable {
 	public final static String EXPIRATION = "Expiration";
 
 	private SessionPanel session;
-	
 
 	public DelegationRecordsTable(SessionPanel session) {
 		super(createTableModel());
@@ -75,7 +74,11 @@ public class DelegationRecordsTable extends GrapeBaseTable {
 		} else {
 			v.add("Valid");
 		}
-		v.add(d.toString());
+		if (r.getExpiration() <= 0) {
+			v.add("");
+		} else {
+			v.add(d.toString());
+		}
 		addRow(v);
 	}
 
