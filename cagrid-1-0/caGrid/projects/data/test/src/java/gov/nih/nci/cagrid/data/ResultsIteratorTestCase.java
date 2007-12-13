@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import java.io.File;
 import java.io.FileReader;
 import java.io.StringReader;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import junit.framework.TestCase;
@@ -19,6 +20,8 @@ import junit.textui.TestRunner;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.Namespace;
+import org.projectmobius.bookstore.Book;
 
 /** 
  *  ResultsIteratorTestCase
@@ -27,11 +30,15 @@ import org.jdom.Element;
  * @author David Ervin
  * 
  * @created Dec 12, 2007 1:02:25 PM
- * @version $Id: ResultsIteratorTestCase.java,v 1.1 2007-12-13 16:28:14 dervin Exp $ 
+ * @version $Id: ResultsIteratorTestCase.java,v 1.2 2007-12-13 17:53:12 dervin Exp $ 
  */
 public class ResultsIteratorTestCase extends TestCase {
+    public static final int EXPECTED_OBJECT_RESULT_COUNT = 5;
+
     // system property indicating where the result documents live
     public static final String RESULTS_XML_DIR = "results.xml.dir";
+    
+    public static final String BOOKSTORE_URI = "gme://projectmobius.org/1/BookStore";
     
     private static Logger LOG = Logger.getLogger(ResultsIteratorTestCase.class);
     
@@ -40,17 +47,70 @@ public class ResultsIteratorTestCase extends TestCase {
     }
     
     
-    /* Enable these as tests get implemented
     public void testObjectIteration() {
-        
+        CQLQueryResults results = loadResults("objectResults.xml");
+        CQLQueryResultsIterator iter = new CQLQueryResultsIterator(results, false);
+        assertTrue("Object iterator had no results", iter.hasNext());
+        int iterationCount = 0;
+        while (iter.hasNext()) {
+            Object o = iter.next();
+            assertNotNull("Object iteration result was null", o);
+            assertEquals("Object iteration result was of unexpected type", Book.class, o.getClass());
+            iterationCount++;
+        }
+        assertEquals("Object iterator returned unexpected number of results", EXPECTED_OBJECT_RESULT_COUNT, iterationCount);
+        try {
+            iter.next();
+            fail("Object iterator did not throw NoSuchElementException with no results to return");
+        } catch (NoSuchElementException ex) {
+            // expected
+        }
     }
     
     
     public void testObjectXmlIteration() {
+        CQLQueryResults results = loadResults("objectResults.xml");
+        CQLQueryResultsIterator iter = new CQLQueryResultsIterator(results, true);
+        assertTrue("Object XML iterator had no results", iter.hasNext());
         
+        // deserialize the result and compare to the deserialized doc from the original XML
+        Element resultsRoot = loadElement("objectResults.xml");
+        List objectResultElements = resultsRoot.getChildren("ObjectResult", resultsRoot.getNamespace());
+        int iterationCount = 0;
+        while (iter.hasNext()) {
+            Object o = iter.next();
+            assertNotNull("Object XML iteratation result was null", o);
+            assertEquals("Object XML iteration resut was of unexpected type", String.class, o.getClass());
+            assertTrue("Iterator went past number of results in document", iterationCount < objectResultElements.size());
+            Element objectResultElement = (Element) objectResultElements.get(iterationCount);
+            Element bookElement = objectResultElement.getChild("Book", Namespace.getNamespace(BOOKSTORE_URI));
+            String originalString = XMLUtilities.elementToString(bookElement);
+            String resultString = (String) o;
+            
+            Book originalBook = null;
+            Book resultBook = null;
+            try {
+                originalBook = (Book) Utils.deserializeObject(new StringReader(originalString), Book.class);
+                resultBook = (Book) Utils.deserializeObject(new StringReader(resultString), Book.class);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                fail("Error deserializing XML: " + ex.getMessage());
+            }
+            assertEquals("Original book and result book objects did not match", originalBook, resultBook);
+            
+            iterationCount++;
+        }
+        assertEquals("Object XML iterator returned unexpected number of results", EXPECTED_OBJECT_RESULT_COUNT, iterationCount);
+        try {
+            iter.next();
+            fail("Book XML iterator did not throw NoSuchElementException with no results to return");
+        } catch (NoSuchElementException ex) {
+            // expected
+        }
     }
     
     
+    /* Enable these as tests get implemented
     public void testAttributeIteration() {
         
     }
