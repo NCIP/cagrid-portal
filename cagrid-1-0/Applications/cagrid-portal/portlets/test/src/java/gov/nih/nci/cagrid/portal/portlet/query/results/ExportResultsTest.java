@@ -58,27 +58,9 @@ public class ExportResultsTest extends TestCase {
 				ex.printStackTrace();
 			}
 
-			HSSFWorkbook wb = new HSSFWorkbook();
-			HSSFSheet spreadSheet = wb.createSheet("query results");
-			List<String> headers = table.getHeaders();
-			HSSFRow headerRow = spreadSheet.createRow(0);
-			for (short i = 0; i < headers.size(); i++) {
-				HSSFCell cell = headerRow.createCell(i);
-				cell.setCellValue(headers.get(i));
-			}
-			List<Map<String, Object>> rows = table.getRows();
-			for (short rowNum = 1; rowNum < rows.size(); rowNum++) {
-				Map<String, Object> rowData = rows.get(rowNum);
-				HSSFRow row = spreadSheet.createRow(rowNum);
-				for (short colNum = 0; colNum < headers.size(); colNum++) {
-					HSSFCell cell = row.createCell(colNum);
-					Object value = rowData.get(headers.get(colNum));
-					if (value != null) {
-						cell.setCellValue(value.toString());
-					}
-				}
-			}
-			assertTrue("expected 90 rows; lastRowNum is " + spreadSheet.getLastRowNum(), spreadSheet.getLastRowNum() == 89);
+			HSSFWorkbook wb = ExportResultsController.createWorkbook(table, "query_results");
+			HSSFSheet spreadSheet = wb.getSheetAt(0);
+			assertTrue("expected 91 rows; lastRowNum is " + spreadSheet.getLastRowNum(), spreadSheet.getLastRowNum() == 90);
 //			FileOutputStream output = new FileOutputStream(new File(
 //					"results.xls"));
 //			wb.write(output);

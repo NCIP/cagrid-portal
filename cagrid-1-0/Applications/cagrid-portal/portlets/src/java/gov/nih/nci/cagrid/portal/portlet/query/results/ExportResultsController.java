@@ -3,14 +3,13 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.results;
 
-import java.io.ByteArrayInputStream;
-import java.util.List;
-import java.util.Map;
-
-import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryModel;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import gov.nih.nci.cagrid.portal.portlet.util.Table;
+
+import java.io.ByteArrayInputStream;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +51,17 @@ public class ExportResultsController extends AbstractController {
 		Table table = PortletUtils
 				.buildTableFromCQLResults(new ByteArrayInputStream(xml
 						.getBytes()));
+		
+		response.setContentType("application/vnd.ms-excel");
+		response.addHeader("Content-Disposition",
+				"attachment;filename=\"query_results.xls\"");
+		HSSFWorkbook wb = createWorkbook(table, "query_results");
+		wb.write(response.getOutputStream());
+
+		return null;
+	}
+	
+	public static HSSFWorkbook createWorkbook(Table table, String title){
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet spreadSheet = wb.createSheet("query_results");
 		List<String> headers = table.getHeaders();
@@ -61,8 +71,8 @@ public class ExportResultsController extends AbstractController {
 			cell.setCellValue(headers.get(i));
 		}
 		List<Map<String, Object>> rows = table.getRows();
-		for (short rowNum = 1; rowNum < rows.size(); rowNum++) {
-			Map<String, Object> rowData = rows.get(rowNum);
+		for (short rowNum = 1; rowNum <= rows.size(); rowNum++) {
+			Map<String, Object> rowData = rows.get(rowNum - 1);
 			HSSFRow row = spreadSheet.createRow(rowNum);
 			for (short colNum = 0; colNum < headers.size(); colNum++) {
 				HSSFCell cell = row.createCell(colNum);
@@ -72,13 +82,7 @@ public class ExportResultsController extends AbstractController {
 				}
 			}
 		}
-		response.setContentType("application/vnd.ms-excel");
-		response.addHeader("Content-Disposition",
-				"attachment;filename=\"query_results.xls\"");
-		
-		wb.write(response.getOutputStream());
-
-		return null;
+		return wb;
 	}
 
 	@Required
