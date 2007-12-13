@@ -100,13 +100,11 @@
 			<property name="target.stubs.dir" location="${cql.1.0.stubs.src}"/>
 		</ant>
 		<!-- generate beans for CQL 2.0 -->
-		<!-- commented out until there is some CQL 2.0 
 		<ant antfile="${ant.build.stubs}" target="generateStubs">
 			<property name="source.stubs.dir" location="${cql.2.0.schema.dest}" />
 			<property name="wsdl.file" value="CQL2.0-Beans.wsdl" />
 			<property name="target.stubs.dir" location="${cql.2.0.stubs.src}" />
 		</ant>
-		-->
 	</target>
 
 
@@ -120,7 +118,6 @@
 				</fileset>
 			</classpath>
 		</javac>
-		<!-- commented out until some CQL 2.0 classes are added
 		<javac srcdir="${cql.2.0.stubs.src}" destdir="${build.cql.2.0.stubs.dest}" debug="${java.debug}" source="${java.source}">
 			<include name="**/*.java" />
 			<classpath>
@@ -129,7 +126,6 @@
 				</fileset>
 			</classpath>
 		</javac>
-		-->
 	</target>
 
 
@@ -143,7 +139,6 @@
 				<include name="**/*.java" />
 			</fileset>
 		</jar>
-		<!-- commented out until some CQL 2.0 classes are added
 		<jar destfile="${cql.2.0.jar.file}">
 			<fileset dir="${build.cql.2.0.stubs.dest}">
 				<include name="**/*.class"/>
@@ -152,7 +147,6 @@
 				<include name="**/*.java" />
 			</fileset>
 		</jar>
-		-->
 	</target>
 
 
