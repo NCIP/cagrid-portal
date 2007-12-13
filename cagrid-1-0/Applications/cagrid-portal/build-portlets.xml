@@ -36,12 +36,30 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
+	
+	<path id="portlets.test.compile.cp">
+		<path refid="portlets.compile.cp"/>
+		<pathelement location="${portlets.classes.dir}"/>
+		<!-- There is are no test-specific jars yet. 
+		<fileset dir="${portlets.test.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		 -->
+	</path>
 
 	<target name="portlets:compile" depends="aggr:compile, security:compile">
 		<mkdir dir="${portlets.classes.dir}" />
 		<javac srcdir="${portlets.src.java.dir}"
 			destdir="${portlets.classes.dir}" debug="${portlets.debug}">
 			<classpath refid="portlets.compile.cp" />
+		</javac>
+	</target>
+	
+	<target name="portlets:compile-test" depends="portlets:compile">
+		<mkdir dir="${portlets.test.classes.dir}" />
+		<javac srcdir="${portlets.test.src.java.dir}"
+			destdir="${portlets.test.classes.dir}" debug="${portlets.debug}">
+			<classpath refid="portlets.test.compile.cp" />
 		</javac>
 	</target>
 
@@ -108,12 +126,6 @@
 			</fileset>
 
 		</copy>
-		
-		<!--
-		<copy file="${db.dir}/etc/${db.profile}.hibernate.properties"
-			tofile="${portlets.classes.dir}/hibernate.properties"
-			overwrite="true" />
-			-->
 			
 		<copy file="${aggr.trust.syncgts.file}"
 			tofile="${portlets.classes.dir}/sync-description.xml"
@@ -142,16 +154,32 @@
 		<delete dir="${portlets.test.build.dir}" />
 	</target>
 	
-	<target name="portlets:run-test" depends="portlets:build-war-dir">
-		<java classname="test.TestCriteriaBean">
+	<target name="portlets:test" depends="portlets:compile-test, portlets:build-war-dir">
+
+		<mkdir dir="${portlets.test.build.dir}/junit-reports" />
+		
+		<junit printsummary="yes" showoutput="true" fork="true">
+
 			<classpath>
+				
 				<pathelement location="${portlets.build.war.dir}/WEB-INF/classes"/>
 				<fileset dir="${portlets.build.war.dir}/WEB-INF/lib">
 					<include name="*.jar"/>
 				</fileset>
 				<pathelement location="portlets/test/etc"/>
+				<path refid="portlets.test.compile.cp"/>
+				<pathelement location="${portlets.test.classes.dir}"/>
 			</classpath>
-		</java>
+
+			<formatter type="xml" />
+
+			<batchtest todir="${portlets.test.build.dir}/junit-reports">
+				<fileset dir="${portlets.test.src.java.dir}">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+
+		</junit>
 	</target>	
 
 </project>

@@ -46,7 +46,7 @@
 		<property name="ticketParameterName" value="prng2"/>
 		<property name="errorsAttributeName" value="loginErrors"/>
 		<property name="errorOperationName" value="viewLogin"/>
-		<property name="ifsUrl" value="https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
+		<property name="ifsUrl" value="${cagrid.portal.ifsUrl}"/>
 		<property name="encryptionService" ref="encryptionServicePrototype"/>
 	</bean>
 	

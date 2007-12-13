@@ -35,6 +35,7 @@
 		<path refid="aggr.compile.cp"/>
 		<path refid="db.test.compile.cp"/>
 		<pathelement location="${aggr.classes.dir}"/>
+		<pathelement location="${db.test.classes.dir}" />		
 	</path>
 	
 	<path id="aggr.run.cp">
@@ -49,6 +50,7 @@
 		<pathelement location="${aggr.test.classes.dir}" />
 		<pathelement location="${aggr.test.dir}"/>
 		<pathelement location="aggr/test/build/classes"/>
+		<path refid="db.test.run.cp" />
 	</path>	
 	
 	<target name="aggr:compile" depends="db:compile">
@@ -59,7 +61,7 @@
 		</javac>	
 	</target>
 	
-	<target name="aggr:compile-test" depends="aggr:compile">
+	<target name="aggr:compile-test" depends="aggr:compile, db:compile-test">
 		<mkdir dir="${aggr.test.classes.dir}" />
 		<javac srcdir="${aggr.test.src.java.dir}" destdir="${aggr.test.classes.dir}"
 			debug="true">
@@ -76,13 +78,10 @@
 				<include name="*.properties" />
 				<include name="*.xml" />
 				<include name="*.wsdd" />
-				<exclude name="*.hibernate.properties"/>
 			</fileset>
 		</copy>
 
-		<copy file="${db.dir}/etc/test.hibernate.properties"
-			tofile="${aggr.test.classes.dir}/hibernate.properties"
-			overwrite="true" />
+
 	</target>
 	
 	<target name="aggr:prepare-run-cp"
@@ -118,7 +117,7 @@
 
 			<classpath refid="aggr.test.run.cp" />
 
-			<formatter type="plain" />
+			<formatter type="xml" />
 
 			<batchtest todir="${aggr.test.build.dir}/junit-reports">
 				<fileset dir="${aggr.test.src.java.dir}">

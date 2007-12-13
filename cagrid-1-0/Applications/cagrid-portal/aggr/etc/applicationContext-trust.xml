@@ -13,7 +13,9 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
     <bean id="syncGTSInitBean" class="gov.nih.nci.cagrid.portal.util.SyncGTSInitUtility">
-        <!--Set the indexes to aggregate from-->
+        
+        <property name="synchronizeEnabled" value="${cagrid.portal.trust.synchronizeEnabled}"/>
+        
         <property name="syncGTSDescriptionFile">
             <value>classpath:sync-description.xml</value>
         </property>

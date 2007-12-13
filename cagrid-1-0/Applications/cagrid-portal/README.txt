@@ -108,18 +108,31 @@ configured on the machine that will host the portal. The portal itself will use 
 GTS client to maintain the trust fabric, but the trust fabric must be bootstrapped.
 
 By default, the portal will use the nci_prod as the target grid. If you are using this
-grid, you don't need to do anything. If you are using another target grid, the you need 
+grid, you don't need to do anything. 
+
+If you are using one of the following grids:
+ - nci_dev, nci_stage, osu_dev, training
+Then the trust synchronization configuration has already been provided. You will just
+need to create a corresponding build.properties file. Look at build-nci_qa.properties
+as an example. When you run the installation script, you'll have to specify the name
+of your target environment. More details about this are provided in the Configure
+caGrid Portal Installation section below.
+
+If you are using another target grid, the you need 
 to do three things:
  1. Create a sync-description.xml file to configure the GTS client that the portal uses.
  2. Bootstrap the trust fabric by placing root certificates under the 
     $HOME/.globus/certificates directory
  3. Configure caGrid Portal to use your sync-description.xml configuration.
  
-Directions for configuring caGrid Portal to use another sync-description.xml are provided
-below. Directions for configuring a trust fabric using caGrid tools are here:
+Do configure the portal to uses your sync-description.xml and certificates, you need to edit
+the 'aggr.trust.syncgts.file' and 'aggr.trust.certs.dir' properties to the path to your
+sync-description.xm file and the directory in which the root certificates are found, respectively.
+ 
+Directions for configuring a trust fabric using caGrid tools are here:
  - http://www.cagrid.org/mwiki/index.php?title=GTS:1.1:Administrators_Guide:Syncing_With_the_Trust_Fabric
 
-# Configure caGrid Installation #
+# Configure caGrid Portal Installation #
 
 The caGrid Portal installation script is at $SRC/build.xml. This is an Ant build file. It is configured
 by the properties that are defined in the build.properties file in the same directory. 
@@ -150,10 +163,6 @@ edit the following properties:
  - cagrid.portal.geocoder.yahoo.apiId
  - cagrid.portal.map.google.apiKey
  - cagrid.portal.security.encryption.key
- 
-If you are using a different target grid (i.e. not nci_prod), the you need to set the value of
-the 'aggr.trust.syncgts.file' and 'aggr.trust.certs.dir' properties to the path to your
-sync-description.xm file and the directory in which the root certificates are found, respectively.
 
 ################
 # Installation #

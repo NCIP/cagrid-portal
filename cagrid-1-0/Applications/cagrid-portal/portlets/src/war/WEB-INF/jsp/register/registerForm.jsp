@@ -2,13 +2,13 @@
 
 <b>Username Constraints:</b>
 <ul>
-	<li>Must be between 4 and 10 characters in length.</li>
+	<li>Must be between 4 and 15 characters in length.</li>
 </ul>
 <br/>
 <b>Password Constraints:</b><br/>
 <ul>
 	<li>
-Must be between 6 and 10 characters and
+Must be between 10 and 20 characters and
 CANNOT contain a dictionary word and MUST 
 contain at least one upper case letter, at least one lower 
 case letter, at least one number, and at least one symbol 

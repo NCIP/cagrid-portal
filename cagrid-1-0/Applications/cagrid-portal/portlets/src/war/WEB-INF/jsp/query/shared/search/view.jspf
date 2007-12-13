@@ -2,7 +2,9 @@
 <c:when test="${!empty sharedQuery}">
 <b>Description:</b>
 <br/>
-<c:out value="${sharedQuery.query.description}"/>
+<pre>
+<c:out value="${sharedQuery.query.description}" escapeXml="false"/>
+</pre>
 <br/>
 <br/>
 <b>XML:</b>
