@@ -58,10 +58,12 @@ $theme.include($top_messages_include)
 		<div class="footerMenu">
 		<table summary="" cellpadding="0" cellspacing="0" border="0">
             <tr>
+            	<!--
             	<td height="20" class="footerMenuItem"  onclick="document.location.href='#'">
                 &nbsp;&nbsp;<a class="footerMenuLink" href="/web/guest/help">HELP</a>&nbsp;&nbsp;
                 </td>
                 <td><img src="$images_folder/ncicb/ftrMenuSeparator.gif" width="1" height="16" alt="" /></td>
+              	-->
                 <td height="20" class="footerMenuItem"  onclick="document.location.href='#'">
                 &nbsp;&nbsp;<a class="footerMenuLink" href="/web/guest/contact">CONTACT US</a>&nbsp;&nbsp;
                 </td>
