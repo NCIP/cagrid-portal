@@ -80,6 +80,7 @@
 			<fileset dir="${aggr.lib.dir}">
 				<include name="cagrid/*.jar" />
 				<include name="cacore/*.jar" />
+				<include name="poi/*.jar" />
 			</fileset>
 			<fileset dir="${portlets.lib.dir}">
 				<include name="dwr.jar"/>
