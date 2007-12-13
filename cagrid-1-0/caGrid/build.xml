@@ -749,6 +749,17 @@
 
         <ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="all" />
     </target>
+	
+	
+	<!-- =============================================================== -->
+	<!-- CAGRID CQL:                                                     -->
+	<!-- =============================================================== -->
+	<target name="build-cql" depends="prepare" description="Builds caGrid's CQL beans">
+		<resolveDependencies extdir="${projects.dir}/cql/ext">
+			<artifact refid="cagrid.properties"/>
+		</resolveDependencies>
+		<ant dir="${projects.dir}/cql" inheritAll="false" antfile="build.xml" target="all"/>
+	</target>
 
 
     <!-- =============================================================== -->
