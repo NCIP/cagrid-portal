@@ -17,7 +17,6 @@ import gov.nih.nci.cagrid.portal.domain.metadata.common.SemanticMetadata;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.ValueDomain;
-import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.XMLSchema;
 import gov.nih.nci.cagrid.portal.domain.metadata.service.CaDSRRegistration;
 import gov.nih.nci.cagrid.portal.domain.metadata.service.ContextProperty;
 import gov.nih.nci.cagrid.portal.domain.metadata.service.Fault;
@@ -49,7 +48,7 @@ public class ServiceMetadataBuilder {
 
 	private HibernateTemplate hibernateTemplate;
 	
-	private String gmeUrl;
+//	private String gmeUrl;
 
 	public ServiceMetadata build(
 			gov.nih.nci.cagrid.metadata.ServiceMetadata sMetaIn) {
@@ -101,7 +100,7 @@ public class ServiceMetadataBuilder {
 			gov.nih.nci.cagrid.metadata.service.Service svcIn) {
 
 		Service svcOut = new Service();
-
+		handlePersist(svcOut);
 		svcOut.setName(svcIn.getName());
 		svcOut.setDescription(svcIn.getDescription());
 		svcOut.setVersion(svcIn.getVersion());
@@ -237,7 +236,7 @@ public class ServiceMetadataBuilder {
 		outputOut.setArray(outputIn.isIsArray());
 		outputOut.setDimensionality(outputIn.getDimensionality());
 		outputOut.setQName(outputIn.getQName().toString());
-		outputOut.setXmlSchema(getXMLSchemaForQName(outputOut.getQName()));
+//		outputOut.setXmlSchema(getXMLSchemaForQName(outputOut.getQName()));
 
 		if (outputIn.getUMLClass() != null) {
 			outputOut.setUMLClass(buildUMLClass(outputIn.getUMLClass()));
@@ -246,13 +245,13 @@ public class ServiceMetadataBuilder {
 		return (Output) handlePersist(outputOut);
 	}
 	
-	protected XMLSchema getXMLSchemaForQName(String qName){
-		XMLSchema xmlSchema = PortalUtils.getXMLSchemaForQName(getHibernateTemplate(), qName, getGmeUrl());
-		if(xmlSchema != null && xmlSchema.getId() == null){
-			xmlSchema = (XMLSchema)handlePersist(xmlSchema);
-		}
-		return xmlSchema;
-	}
+//	protected XMLSchema getXMLSchemaForQName(String qName){
+//		XMLSchema xmlSchema = PortalUtils.getXMLSchemaForQName(getHibernateTemplate(), qName, getGmeUrl());
+//		if(xmlSchema != null && xmlSchema.getId() == null){
+//			xmlSchema = (XMLSchema)handlePersist(xmlSchema);
+//		}
+//		return xmlSchema;
+//	}
 	
 	
 
@@ -265,7 +264,7 @@ public class ServiceMetadataBuilder {
 		paramOut.setName(paramIn.getName());
 		paramOut.setQName(paramIn.getQName().toString());
 		paramOut.setRequired(paramIn.isIsRequired());
-		paramOut.setXmlSchema(getXMLSchemaForQName(paramOut.getQName()));
+//		paramOut.setXmlSchema(getXMLSchemaForQName(paramOut.getQName()));
 
 		if (paramIn.getUMLClass() != null) {
 			paramOut.setUMLClass(buildUMLClass(paramIn.getUMLClass()));
@@ -388,7 +387,7 @@ public class ServiceMetadataBuilder {
 		ContextProperty ctxPropOut = new ContextProperty();
 		ctxPropOut.setDescription(ctxPropIn.getDescription());
 		ctxPropOut.setName(ctxPropIn.getName());
-		ctxPropOut.setXmlSchema(getXMLSchemaForQName(ctxPropOut.getName()));
+//		ctxPropOut.setXmlSchema(getXMLSchemaForQName(ctxPropOut.getName()));
 		return (ContextProperty) handlePersist(ctxPropOut);
 	}
 
@@ -428,14 +427,14 @@ public class ServiceMetadataBuilder {
 		pocOut.setAffiliation(pocIn.getAffiliation());
 		pocOut.setRole(pocIn.getRole());
 		pocOut.setPerson(person);
-
+		
 		return (PointOfContact) handlePersist(pocOut);
 	}
 
 	protected ResearchCenter buildResearchCenter(
 			gov.nih.nci.cagrid.metadata.common.ResearchCenter rCtrIn) {
 		ResearchCenter rCtrOut = new ResearchCenter();
-
+		handlePersist(rCtrOut);
 		if (rCtrIn.getAddress() != null) {
 			rCtrOut.setAddress(buildAddress(rCtrIn.getAddress()));
 		}
@@ -518,12 +517,12 @@ public class ServiceMetadataBuilder {
 		this.hibernateTemplate = hibernateTemplate;
 	}
 
-	public String getGmeUrl() {
-		return gmeUrl;
-	}
-
-	public void setGmeUrl(String gmeUrl) {
-		this.gmeUrl = gmeUrl;
-	}
+//	public String getGmeUrl() {
+//		return gmeUrl;
+//	}
+//
+//	public void setGmeUrl(String gmeUrl) {
+//		this.gmeUrl = gmeUrl;
+//	}
 
 }

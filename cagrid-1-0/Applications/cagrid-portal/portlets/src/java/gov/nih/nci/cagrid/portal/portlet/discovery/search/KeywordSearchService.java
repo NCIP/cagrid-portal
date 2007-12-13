@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.portal.domain.metadata.service.ServicePointOfContact;
 import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryResults;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryType;
+import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -137,6 +138,14 @@ public class KeywordSearchService {
 			}
 			objects.clear();
 			objects.addAll(persons);
+		}else if(DiscoveryType.SERVICE.equals(searchBean.getDiscoveryType())){
+			List<GridService> svcs = new ArrayList<GridService>();
+			for(DomainObject obj : objects){
+				svcs.add((GridService)obj);
+			}
+			svcs = PortletUtils.filterBannedServices(svcs);
+			objects.clear();
+			objects.addAll(svcs);
 		}
 
 		sess.close();

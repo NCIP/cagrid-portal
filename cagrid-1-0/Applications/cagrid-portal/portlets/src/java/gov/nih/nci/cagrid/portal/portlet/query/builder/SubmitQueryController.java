@@ -67,7 +67,7 @@ public class SubmitQueryController extends AbstractQueryActionController {
 	protected void initBinder(PortletRequest request,
 			PortletRequestDataBinder binder) throws Exception {
 		binder.registerCustomEditor(String.class, "dataServiceUrl",
-				new XSSFilterEditor());
+				new XSSFilterEditor(binder.getBindingResult(), "dataServiceUrl"));
 	}
 
 	/*

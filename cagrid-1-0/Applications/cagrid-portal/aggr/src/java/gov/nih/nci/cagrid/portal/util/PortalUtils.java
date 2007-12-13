@@ -162,6 +162,9 @@ public class PortalUtils {
 			// + ". Using '" + context + "'.", ex);
 		}
 		String projectVersion = proj.getVersion();
+		if(projectVersion == null){
+			projectVersion = "1.0";
+		}
 		if (projectVersion.indexOf(".") < 0) {
 			projectVersion += ".0";
 		}

@@ -3,10 +3,14 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.util;
 
+import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
 import gov.nih.nci.cagrid.portal.util.PortalUtils;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.portlet.PortletRequest;
@@ -166,6 +170,16 @@ public class PortletUtils {
 					path.substring(idx + 1) };
 		}
 		return parts;
+	}
+	
+	public static List<GridService> filterBannedServices(List<GridService> in){
+		List<GridService> out = new ArrayList<GridService>();
+		for(GridService svc : in){
+			if(!ServiceStatus.BANNED.equals(svc.getCurrentStatus())){
+				out.add(svc);
+			}
+		}
+		return out;
 	}
 
 }

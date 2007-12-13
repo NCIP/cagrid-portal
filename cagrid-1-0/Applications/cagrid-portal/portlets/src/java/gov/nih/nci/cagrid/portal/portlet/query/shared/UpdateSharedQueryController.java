@@ -64,9 +64,9 @@ public class UpdateSharedQueryController extends AbstractQueryActionController {
 	protected void initBinder(PortletRequest request,
 			PortletRequestDataBinder binder) throws Exception {
 		binder.registerCustomEditor(String.class, "query.name",
-				new XSSFilterEditor());
+				new XSSFilterEditor(binder.getBindingResult(), "query.name"));
 		binder.registerCustomEditor(String.class, "query.description",
-				new XSSFilterEditor());
+				new XSSFilterEditor(binder.getBindingResult(), "query.description"));
 	}
 
 	/*
@@ -80,6 +80,10 @@ public class UpdateSharedQueryController extends AbstractQueryActionController {
 	protected void doHandleAction(ActionRequest request,
 			ActionResponse response, Object obj, BindException errors)
 			throws Exception {
+		
+		if(errors.hasErrors()){
+			return;
+		}
 
 		String editOp = request.getParameter("editOp");
 		SharedQueryBean bean = (SharedQueryBean) obj;

@@ -56,8 +56,8 @@ public class SimpleServiceStatusPolicy implements ServiceStatusPolicy {
 					&& changeToNotActiveIdx < statusHistory.size()) {
 				StatusChange change = statusHistory.get(changeToNotActiveIdx);
 				Date now = new Date();
-				int diffInHours = (int) ((change.getTime().getTime() - now
-						.getTime()) / (1000 * 60 * 60));
+				int diffInHours = (int) ((now
+						.getTime() - change.getTime().getTime()) / (1000 * 60 * 60));
 				if (diffInHours >= getMaxDowntimeHours()) {
 					shouldBan = true;
 				}
