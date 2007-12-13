@@ -12,7 +12,6 @@ import org.cagrid.gaards.cds.common.ProxyLifetime;
 
 public class ProxyLifetimePanel extends JPanel {
 
-
 	private static final long serialVersionUID = 1L;
 
 	private JLabel jLabel = null;
@@ -198,11 +197,24 @@ public class ProxyLifetimePanel extends JPanel {
 
 	public ProxyLifetime getProxyLifetime() {
 		ProxyLifetime lifetime = new ProxyLifetime();
-		lifetime.setHours(((Integer) getHours().getSelectedItem()).intValue());
-		lifetime.setMinutes(((Integer) getMinutes().getSelectedItem())
-				.intValue());
-		lifetime.setSeconds(((Integer) getSeconds().getSelectedItem())
-				.intValue());
+		int hours = 0;
+		if (getHours().getSelectedItem() != null) {
+			hours = ((Integer) getHours().getSelectedItem()).intValue();
+		}
+		lifetime.setHours(hours);
+
+		int minutes = 0;
+		if (getMinutes().getSelectedItem() != null) {
+			minutes = ((Integer) getMinutes().getSelectedItem()).intValue();
+		}
+		lifetime.setMinutes(minutes);
+
+		int seconds = 0;
+		if (getSeconds().getSelectedItem() != null) {
+			seconds = ((Integer) getSeconds().getSelectedItem()).intValue();
+		}
+
+		lifetime.setSeconds(seconds);
 		return lifetime;
 	}
 
