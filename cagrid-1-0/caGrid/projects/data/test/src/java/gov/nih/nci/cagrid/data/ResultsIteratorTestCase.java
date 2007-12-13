@@ -2,8 +2,10 @@ package gov.nih.nci.cagrid.data;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
+import gov.nih.nci.cagrid.cqlresultset.CQLAttributeResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLCountResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
+import gov.nih.nci.cagrid.cqlresultset.TargetAttribute;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 
 import java.io.File;
@@ -30,10 +32,12 @@ import org.projectmobius.bookstore.Book;
  * @author David Ervin
  * 
  * @created Dec 12, 2007 1:02:25 PM
- * @version $Id: ResultsIteratorTestCase.java,v 1.2 2007-12-13 17:53:12 dervin Exp $ 
+ * @version $Id: ResultsIteratorTestCase.java,v 1.3 2007-12-13 20:03:59 dervin Exp $ 
  */
 public class ResultsIteratorTestCase extends TestCase {
+    public static final int EXPECTED_ATTRIBUTE_PER_RESULT_COUNT = 2;
     public static final int EXPECTED_OBJECT_RESULT_COUNT = 5;
+    public static final int EXPECTED_ATTRIBUTE_RESULT_COUNT = 5;
 
     // system property indicating where the result documents live
     public static final String RESULTS_XML_DIR = "results.xml.dir";
@@ -80,7 +84,7 @@ public class ResultsIteratorTestCase extends TestCase {
         while (iter.hasNext()) {
             Object o = iter.next();
             assertNotNull("Object XML iteratation result was null", o);
-            assertEquals("Object XML iteration resut was of unexpected type", String.class, o.getClass());
+            assertEquals("Object XML iteration result was of unexpected type", String.class, o.getClass());
             assertTrue("Iterator went past number of results in document", iterationCount < objectResultElements.size());
             Element objectResultElement = (Element) objectResultElements.get(iterationCount);
             Element bookElement = objectResultElement.getChild("Book", Namespace.getNamespace(BOOKSTORE_URI));
@@ -103,23 +107,78 @@ public class ResultsIteratorTestCase extends TestCase {
         assertEquals("Object XML iterator returned unexpected number of results", EXPECTED_OBJECT_RESULT_COUNT, iterationCount);
         try {
             iter.next();
-            fail("Book XML iterator did not throw NoSuchElementException with no results to return");
+            fail("Object XML iterator did not throw NoSuchElementException with no results to return");
         } catch (NoSuchElementException ex) {
             // expected
         }
     }
     
     
-    /* Enable these as tests get implemented
     public void testAttributeIteration() {
-        
+        CQLQueryResults results = loadResults("attributeResults.xml");
+        CQLQueryResultsIterator iter = new CQLQueryResultsIterator(results, false);
+        assertTrue("Attribute iterator had no results", iter.hasNext());
+        int iterationCount = 0;
+        while (iter.hasNext()) {
+            Object o = iter.next();
+            assertNotNull("Attribute iteration result was null", o);
+            assertEquals("Attribute iteration result was of unexpected type", TargetAttribute[].class, o.getClass());
+            iterationCount++;
+        }
+        assertEquals("Attribute iterator returned unexpected number of results", EXPECTED_ATTRIBUTE_RESULT_COUNT, iterationCount);
+        try {
+            iter.next();
+            fail("Attribute iterator did not throw NoSuchElementException with no results to return");
+        } catch (NoSuchElementException ex) {
+            // expected
+        }
     }
     
     
     public void testAttributeXmlIteration() {
+        CQLQueryResults results = loadResults("attributeResults.xml");
+        CQLQueryResultsIterator iter = new CQLQueryResultsIterator(results, true);
+        assertTrue("Attribute XML iterator had no results", iter.hasNext());
         
+        // deserialize the result and compare to the deserialized doc from the original XML
+        Element resultsRoot = loadElement("attributeResults.xml");
+        List attributeResultElements = resultsRoot.getChildren("AttributeResult", resultsRoot.getNamespace());
+        int iterationCount = 0;
+        while (iter.hasNext()) {
+            Object o = iter.next();
+            assertNotNull("Attribute XML iteratation result was null", o);
+            assertEquals("Attribute XML iteration result was of unexpected type", String.class, o.getClass());
+            assertTrue("Iterator went past number of results in document", iterationCount < attributeResultElements.size());
+            Element attributeResultElement = (Element) attributeResultElements.get(iterationCount);
+            /*
+            List attributeElements = attributeResultElement.getChildren("Attribute", attributeResultElement.getNamespace());
+            assertEquals("Unexpected number of attribute elements", EXPECTED_ATTRIBUTE_PER_RESULT_COUNT, attributeElements.size());
+            */
+            
+            String originalString = XMLUtilities.elementToString(attributeResultElement);
+            String resultString = (String) o;
+            
+            CQLAttributeResult originalAttributes = null;
+            CQLAttributeResult resultAttributes = null;
+            try {
+                originalAttributes = (CQLAttributeResult) Utils.deserializeObject(new StringReader(originalString), CQLAttributeResult.class);
+                resultAttributes = (CQLAttributeResult) Utils.deserializeObject(new StringReader(resultString), CQLAttributeResult.class);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                fail("Error deserializing XML: " + ex.getMessage());
+            }
+            assertEquals("Original and result attributes did not match", originalAttributes, resultAttributes);
+            
+            iterationCount++;
+        }
+        assertEquals("Attribute XML iterator returned unexpected number of results", EXPECTED_ATTRIBUTE_RESULT_COUNT, iterationCount);
+        try {
+            iter.next();
+            fail("Attribute XML iterator did not throw NoSuchElementException with no results to return");
+        } catch (NoSuchElementException ex) {
+            // expected
+        }
     }
-    */
     
     
     public void testCountIteration() {
