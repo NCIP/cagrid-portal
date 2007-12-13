@@ -4,8 +4,8 @@
 		No news items to display.
 	</c:when>
 	<c:otherwise>
-		<h2><c:out value="${selectedItem.title}"/></h2><br/>
-		<fmt:formatDate value="${selectedItem.pubDate}" type="both"/><br/>
+		<span style="font-size:200%"><c:out value="${selectedItem.title}"/></span><br/>
+		<i>[<fmt:formatDate value="${selectedItem.pubDate}" type="both"/>]</i><br/>
 		<p/>
 		<c:out value="${selectedItem.description}" escapeXml="false"/>
 		<p/>
@@ -20,7 +20,7 @@
 		</iframe>
 		<br/>
 		<hr/>
-		<h3>Other News:</h3>
+		<span style="font-size:150%">Other News:</span>
 		<c:forEach var="item" items="${items}">
 			<c:if test="${item.id ne selectedItem.id}">
 			<portlet:actionURL var="selectItemAction">

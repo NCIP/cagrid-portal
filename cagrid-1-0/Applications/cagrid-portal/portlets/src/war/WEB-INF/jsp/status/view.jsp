@@ -1,4 +1,40 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
+<div style="height:500px">
+Here are the five newest services...
+<table cellpadding="10" width="100%">
+	<thead>
+		<tr>
+			<th><b>Name</b></th><th><b>Type</b></th>
+		</tr>
+	</thead>
+	<tbody>
+		<c:forEach var="serviceInfo" items="${statusBean.latestServices}">
+			<tr>
+				<td style="padding-top:8px; padding-right:10px">
+					<portlet:actionURL var="selectItemAction">
+						<portlet:param name="operation" value="selectItemForDiscovery"/>
+						<portlet:param name="selectedId" value="${serviceInfo.id}"/>
+						<portlet:param name="type" value="SERVICE"/>
+					</portlet:actionURL>
+					<a href="<c:out value="${selectItemAction}"/>">			
+						<c:out value="${serviceInfo.name}"/>
+					</a>
+				</td>
+				<td>
+					<c:choose>
+						<c:when test="${serviceInfo.type == 'DATA'}">
+							<img src="<c:url value="/images/data-services.gif"/>" height="20" />
+						</c:when>
+						<c:otherwise>
+							<img src="<c:url value="/images/analytical_services.gif"/>" height="20" />
+						</c:otherwise>
+					</c:choose>
+				</td>
+			</tr>
+		</c:forEach>	
+	</tbody>
+</table>
+<br/>
 There are currently...<br/>
 <table cellpadding="3">
 <tr>
@@ -23,7 +59,7 @@ There are currently...<br/>
 			<c:out value="${fn:length(statusBean.servicesDirectory.objects)}"/>
 		</a>
 	</td>
-	<td>grid services, which includes</td>
+	<td>grid services, which include</td>
 </tr>
 <tr>
 	
@@ -52,32 +88,4 @@ There are currently...<br/>
 	<td>analytical services.</td>
 </tr>
 </table>
-
-<br/>
-Here are the five newest services...
-<table cellpadding="10">
-	<thead>
-		<tr>
-			<th><b>Name</b></th><th><b>Type</b></th>
-		</tr>
-	</thead>
-	<tbody>
-		<c:forEach var="serviceInfo" items="${statusBean.latestServices}">
-			<tr>
-				<td style="padding: 1px 8px 1px 1px;">
-					<portlet:actionURL var="selectItemAction">
-						<portlet:param name="operation" value="selectItemForDiscovery"/>
-						<portlet:param name="selectedId" value="${serviceInfo.id}"/>
-						<portlet:param name="type" value="SERVICE"/>
-					</portlet:actionURL>
-					<a href="<c:out value="${selectItemAction}"/>">			
-						<c:out value="${serviceInfo.name}"/>
-					</a>
-				</td>
-				<td>
-					<c:out value="${serviceInfo.type}"/>
-				</td>
-			</tr>
-		</c:forEach>	
-	</tbody>
-</table>
+</div>
