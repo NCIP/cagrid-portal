@@ -1,9 +1,14 @@
 package gov.nih.nci.cagrid.data.utilities;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlresultset.CQLAttributeResult;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 
+import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import javax.xml.namespace.QName;
 
 /** 
  *  CQLAttributeResultIterator
@@ -15,11 +20,17 @@ import java.util.NoSuchElementException;
  * @version $Id$ 
  */
 public class CQLAttributeResultIterator implements Iterator {
+    
+    public static final QName CQL_ATTRIBUTE_RESULT_QNAME = 
+        new QName(DataServiceConstants.CQL_RESULT_SET_URI, "CQLAttributeResult");
+    
 	private CQLAttributeResult[] results;
+    private boolean xmlOnly;
 	private int currentIndex;
 	
-	CQLAttributeResultIterator(CQLAttributeResult[] results) {
+	CQLAttributeResultIterator(CQLAttributeResult[] results, boolean xmlOnly) {
 		this.results = results;
+        this.xmlOnly = xmlOnly;
 		this.currentIndex = -1;
 	}
 	
@@ -35,13 +46,24 @@ public class CQLAttributeResultIterator implements Iterator {
 
 
 	/**
-	 * @return TypeAttribute[]
+	 * @return TypeAttribute[] or a serialized CQLAttributeResult
 	 */
 	public Object next() {
+        if (currentIndex >= results.length - 1) {
+            // works because on first call, currentIndex == -1
+            throw new NoSuchElementException();
+        }
 		currentIndex++;
-		if (currentIndex >= results.length) {
-			throw new NoSuchElementException();
-		}
-		return results[currentIndex].getAttribute();
+		CQLAttributeResult result = results[currentIndex];
+        if (xmlOnly) {
+            StringWriter writer = new StringWriter();
+            try {
+                Utils.serializeObject(result, CQL_ATTRIBUTE_RESULT_QNAME, writer);
+            } catch (Exception ex) {
+                throw new RuntimeException("Error serializing attribute results: " + ex.getMessage(), ex);
+            }
+            return writer.getBuffer().toString();
+        }
+        return result.getAttribute();
 	}
 }

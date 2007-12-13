@@ -60,10 +60,11 @@ public class CQLObjectResultIterator implements Iterator {
 
 
 	public Object next() {
+        if (currentIndex >= results.length - 1) {
+            // works because on first call, currentIndex == -1
+            throw new NoSuchElementException();
+        }
 		currentIndex++;
-		if (currentIndex >= results.length) {
-			throw new NoSuchElementException();
-		}
 		MessageElement element = results[currentIndex].get_any()[0];
 		try {
 			if (messageContext == null) {
@@ -128,8 +129,7 @@ public class CQLObjectResultIterator implements Iterator {
 		
 		element.output(serializationContext);
 		
-		writer.flush();
-		return writer.getBuffer().toString();
+        return writer.getBuffer().toString();
 	}
 	
 	

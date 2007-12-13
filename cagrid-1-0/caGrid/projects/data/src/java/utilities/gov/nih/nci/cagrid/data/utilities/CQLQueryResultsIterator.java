@@ -1,12 +1,18 @@
 package gov.nih.nci.cagrid.data.utilities;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.cqlresultset.CQLCountResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.xml.namespace.QName;
 
 import org.apache.axis.utils.ClassUtils;
 
@@ -20,6 +26,10 @@ import org.apache.axis.utils.ClassUtils;
  * @version $Id$ 
  */
 public class CQLQueryResultsIterator implements Iterator {
+    public static final QName CQL_COUNT_RESULT_QNAME = 
+        new QName(DataServiceConstants.CQL_RESULT_SET_URI, "CQLCountResult");
+    
+    
 	private CQLQueryResults results;
 	private Iterator resultIterator;
 	private boolean xmlOnly;
@@ -104,13 +114,11 @@ public class CQLQueryResultsIterator implements Iterator {
 					results.getObjectResult(), results.getTargetClassname(), 
 					xmlOnly, findConfigWsdd());
 			} else if (results.getAttributeResult() != null && results.getAttributeResult().length != 0) {
-				resultIterator = new CQLAttributeResultIterator(results.getAttributeResult());
+				resultIterator = new CQLAttributeResultIterator(results.getAttributeResult(), xmlOnly);
 			} else if (results.getIdentifierResult() != null && results.getIdentifierResult().length != 0) {
-				resultIterator = new CQLIdentifierResultIterator(results.getIdentifierResult());
+				resultIterator = new CQLIdentifierResultIterator(results.getIdentifierResult(), xmlOnly);
 			} else if (results.getCountResult() != null) {
-				List tmp = new ArrayList(1);
-				tmp.add(new Long(results.getCountResult().getCount()));
-				resultIterator = tmp.iterator();
+				resultIterator = new CountIterator(results.getCountResult(), xmlOnly);
 			} else {
 				resultIterator = new NullIterator("No results");
 			}
@@ -126,6 +134,44 @@ public class CQLQueryResultsIterator implements Iterator {
 		}
 		return wsddConfigStream;
 	}
+    
+    
+    private static class CountIterator implements Iterator {
+        private Iterator iter;
+        
+        public CountIterator(CQLCountResult result, boolean xmlOnly) {
+            Object item = null;
+            if (xmlOnly) {
+                StringWriter writer = new StringWriter();
+                try {
+                    Utils.serializeObject(result, CQL_COUNT_RESULT_QNAME, writer);
+                } catch (Exception ex) {
+                    throw new RuntimeException("Error serializing count result: " + ex.getMessage(), ex);
+                }
+                item = writer.getBuffer().toString();
+            } else {
+                item = Long.valueOf(result.getCount());
+            }
+            List tmp = new ArrayList(1);
+            tmp.add(item);
+            iter = tmp.iterator();
+        }
+        
+        
+        public void remove() {
+            throw new UnsupportedOperationException("remove() is not supported by " + getClass().getName());
+        }
+        
+        
+        public boolean hasNext() {
+            return iter.hasNext();
+        }
+        
+        
+        public Object next() {
+            return iter.next();
+        }
+    }
 	
 	
 	private static class NullIterator implements Iterator {
