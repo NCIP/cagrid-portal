@@ -28,6 +28,12 @@ of the method in the introduce.xml when it compares it to the list of methods.
 
 To Do:  
 
+undeploy while introduce is running.
+
+undeploy gui
+
+finish persistent notification test
+
 add documentation fot he types of reosures that introduce provides by default
 
 fix bug in validation of custom beans being shown when the panel is not visible
