@@ -103,7 +103,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar" />
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-GlobalModelExchange-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-graph.jar"/>
@@ -119,7 +119,6 @@
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/validation-2.0.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.1-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-core.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-system.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-tests.jar"/>
@@ -133,5 +132,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-wsEnum-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jasciidammit-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-CQL-cql.1.0.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.2-core-tests.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
