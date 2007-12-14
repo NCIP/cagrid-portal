@@ -330,7 +330,10 @@
 				<property name="config.file" value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"/>
 				<xmltask source="${config.file}" dest="${config.file}">
 				
-					<remove path="/Server/Service[@name='jboss.web']/Connector[@port='8080']"/>
+					<!-- Just remove all the Connector elements -->
+					<remove path="/Server/Service[@name='jboss.web']/Connector"/>
+				
+					<!-- remove path="/Server/Service[@name='jboss.web']/Connector[@port='8080']"/ -->
 					<insert path="/Server/Service[@name='jboss.web']/Engine[@name='jboss.web']" position="before">
 					<![CDATA[
 		      <Connector acceptCount="100" address="${jboss.bind.address}" connectionTimeout="20000" 
@@ -340,7 +343,7 @@
 					]]>
 					</insert>
 				
-					<remove path="/Server/Service[@name='jboss.web']/Connector[@port='8443']"/>
+					<!-- remove path="/Server/Service[@name='jboss.web']/Connector[@port='8443']"/ -->
 					<insert path="/Server/Service[@name='jboss.web']/Engine[@name='jboss.web']" position="before">
 					<![CDATA[
 		      <Connector port="${liferay.https.port}" address="$${jboss.bind.address}"

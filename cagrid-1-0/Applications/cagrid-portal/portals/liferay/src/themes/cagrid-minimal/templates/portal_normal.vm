@@ -29,8 +29,10 @@ $theme.include($top_messages_include)
         	</tr>
       	</table>
       	<!-- End NCICB Banner -->
-      	<img src="$images_folder/caGrid_logo.png" height="55" alt="caGrid Portal Logo"/>
-
+      	<img src="$images_folder/caGrid_logo.png" height="80" alt="caGrid Portal Logo" style="position:relative; top:-10px"/>
+		<!--
+		<img src="$images_folder/logo_v3b_copy.gif" height="60" alt="caGrid Portal Logo"/>
+		-->
 		#parse ("$full_templates_path/dock.vm")
 
 		#if ($update_available_url)
@@ -63,7 +65,7 @@ $theme.include($top_messages_include)
                 &nbsp;&nbsp;<a class="footerMenuLink" href="/web/guest/help">HELP</a>&nbsp;&nbsp;
                 </td>
                 <td><img src="$images_folder/ncicb/ftrMenuSeparator.gif" width="1" height="16" alt="" /></td>
-              	-->
+                -->
                 <td height="20" class="footerMenuItem"  onclick="document.location.href='#'">
                 &nbsp;&nbsp;<a class="footerMenuLink" href="/web/guest/contact">CONTACT US</a>&nbsp;&nbsp;
                 </td>

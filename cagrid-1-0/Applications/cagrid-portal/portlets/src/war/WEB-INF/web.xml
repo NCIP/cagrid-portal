@@ -151,8 +151,21 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>content</servlet-name>
-		<url-pattern>/content/*</url-pattern>
+		<servlet-name>export</servlet-name>
+		<url-pattern>/export/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>export</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>export</servlet-name>
+		<url-pattern>/export/*</url-pattern>
 	</servlet-mapping>
     
    <servlet>

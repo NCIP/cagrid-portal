@@ -27,6 +27,7 @@ No results to display.
 	<c:otherwise>
 		<span class="scrollerStyle2">
 			Displaying <c:out value="${scroller.index + 1}"/> to <c:out value="${scroller.endIndex}"/></span> of <c:out value="${fn:length(scroller.objects)}"/> results.
+			&nbsp<a href="/cagridportlets/export/query_results.xls">Export to Excel</a>
 		<br/>		
 		<c:set var="scroller" value="${scroller}"/>
 		<c:set var="scrollOperation" value="scrollQueryInstanceResults"/>
