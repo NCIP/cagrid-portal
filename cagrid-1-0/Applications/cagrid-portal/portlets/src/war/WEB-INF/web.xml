@@ -151,8 +151,8 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>export</servlet-name>
-		<url-pattern>/export/*</url-pattern>
+		<servlet-name>content</servlet-name>
+		<url-pattern>/content/*</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
