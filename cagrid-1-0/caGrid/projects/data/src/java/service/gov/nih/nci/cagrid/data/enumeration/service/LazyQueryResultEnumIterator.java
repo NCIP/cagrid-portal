@@ -20,7 +20,7 @@ import org.globus.wsrf.utils.AnyHelper;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 7, 2006 
- * @version $Id: LazyQueryResultEnumIterator.java,v 1.1 2006-12-18 14:48:47 dervin Exp $ 
+ * @version $Id: LazyQueryResultEnumIterator.java,v 1.2 2007-12-14 17:10:46 dervin Exp $ 
  */
 public class LazyQueryResultEnumIterator implements EnumIterator {
 	private boolean hasBeenReleased = false;
@@ -36,7 +36,7 @@ public class LazyQueryResultEnumIterator implements EnumIterator {
 			throw new NoSuchElementException("The enumeration has been released!");
 		}
 		// list to hold soap elements
-		List soapElements = new ArrayList();
+		List<SOAPElement> soapElements = new ArrayList<SOAPElement>();
 		// timer variable
 		long startTime = System.currentTimeMillis();
 		// compute current state

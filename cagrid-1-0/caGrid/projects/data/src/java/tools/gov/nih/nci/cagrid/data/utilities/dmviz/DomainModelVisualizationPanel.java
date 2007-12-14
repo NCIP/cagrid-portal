@@ -42,7 +42,7 @@ import org.tigris.gef.event.GraphSelectionListener;
  * @author David Ervin
  * 
  * @created Mar 30, 2007 10:23:05 AM
- * @version $Id: DomainModelVisualizationPanel.java,v 1.4 2007-09-25 18:44:23 dervin Exp $ 
+ * @version $Id: DomainModelVisualizationPanel.java,v 1.5 2007-12-14 17:10:46 dervin Exp $ 
  */
 public class DomainModelVisualizationPanel extends JPanel {
 
@@ -92,7 +92,8 @@ public class DomainModelVisualizationPanel extends JPanel {
     
     
     public void selectClass(String name) {
-        Map<UMLClass, gov.nih.nci.cagrid.graph.uml.UMLClass> reverse = new HashMap();
+        Map<UMLClass, gov.nih.nci.cagrid.graph.uml.UMLClass> reverse = 
+            new HashMap<UMLClass, gov.nih.nci.cagrid.graph.uml.UMLClass>();
         for (gov.nih.nci.cagrid.graph.uml.UMLClass gClass : graphClassToUML.keySet()) {
             reverse.put(graphClassToUML.get(gClass), gClass);
         }

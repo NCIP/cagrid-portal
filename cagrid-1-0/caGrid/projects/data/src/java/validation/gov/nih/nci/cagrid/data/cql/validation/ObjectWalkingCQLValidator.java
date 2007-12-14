@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public class ObjectWalkingCQLValidator implements CqlStructureValidator {
 	
-	private static Set predicateValues = null;
+	private static Set<String> predicateValues = null;
 	
 	public void validateCqlStructure(CQLQuery query) throws MalformedQueryException {
 		if (query.getQueryModifier() != null) {
@@ -95,7 +95,7 @@ public class ObjectWalkingCQLValidator implements CqlStructureValidator {
 		if (attr.getPredicate() != null) {
 			// use a static set of predicate values for efficiency when checking multiple attributes
 			if (predicateValues == null) {
-				predicateValues = new HashSet();
+				predicateValues = new HashSet<String>();
 				predicateValues.add(Predicate._EQUAL_TO);
 				predicateValues.add(Predicate._GREATER_THAN);
 				predicateValues.add(Predicate._GREATER_THAN_EQUAL_TO);

@@ -152,7 +152,7 @@ public class CQLQueryResultsIterator implements Iterator {
             } else {
                 item = Long.valueOf(result.getCount());
             }
-            List tmp = new ArrayList(1);
+            List<Object> tmp = new ArrayList<Object>(1);
             tmp.add(item);
             iter = tmp.iterator();
         }

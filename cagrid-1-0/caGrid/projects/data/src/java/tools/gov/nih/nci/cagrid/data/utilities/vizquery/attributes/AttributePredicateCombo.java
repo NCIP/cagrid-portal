@@ -20,14 +20,14 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Apr 6, 2007 9:34:11 AM
- * @version $Id: AttributePredicateCombo.java,v 1.2 2007-11-06 15:53:43 hastings Exp $ 
+ * @version $Id: AttributePredicateCombo.java,v 1.3 2007-12-14 17:11:52 dervin Exp $ 
  */
 public class AttributePredicateCombo extends JComboBox {
 
     private List<AttributePredicateChangeListener> listeners = null;
     
     public AttributePredicateCombo() {
-        listeners = new LinkedList();
+        listeners = new LinkedList<AttributePredicateChangeListener>();
         loadPredicates();
         addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {

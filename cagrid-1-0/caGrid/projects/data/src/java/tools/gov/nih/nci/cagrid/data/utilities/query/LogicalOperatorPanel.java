@@ -49,7 +49,7 @@ public class LogicalOperatorPanel extends JPanel {
 	private void initLogicButtons() {
 		// walk the static logical op fields
 		Field[] fields = LogicalOperator.class.getFields();
-		List ops = new ArrayList();
+		List<String> ops = new ArrayList<String>();
 		for (int i = 0; i < fields.length; i++) {
 			int mods = fields[i].getModifiers();
 			if (Modifier.isStatic(mods) && Modifier.isPublic(mods)
@@ -66,7 +66,7 @@ public class LogicalOperatorPanel extends JPanel {
 		Collections.sort(ops);
 		// create buttons
 		for (int i = 0; i < ops.size(); i++) {
-			JRadioButton button = new JRadioButton((String) ops.get(i));
+			JRadioButton button = new JRadioButton(ops.get(i));
 			group.add(button);
 			if (button.getText().equals(LogicalOperator._AND)) {
 				// schema default for logical ops is AND

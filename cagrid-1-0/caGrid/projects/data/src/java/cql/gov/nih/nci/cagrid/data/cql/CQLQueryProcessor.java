@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Properties;
@@ -55,7 +56,8 @@ public abstract class CQLQueryProcessor {
 	 */
 	public void initialize(Properties parameters, InputStream wsdd) throws InitializationException {
 		// validate the parameters
-		Set required = new HashSet(getRequiredParameters().keySet());
+		Set<String> required = new HashSet<String>();
+        Collections.addAll(required, (String[]) getRequiredParameters().keySet().toArray());
 		required.removeAll(parameters.keySet());
 		if (required.size() != 0) {
 			// some required parameters NOT specified!
@@ -150,7 +152,7 @@ public abstract class CQLQueryProcessor {
      *      The set of property names
      */
     public Set<String> getPropertiesFromEtc() {
-        return new HashSet();
+        return new HashSet<String>();
     }
     
     

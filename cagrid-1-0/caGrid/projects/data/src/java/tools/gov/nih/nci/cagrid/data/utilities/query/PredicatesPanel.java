@@ -49,7 +49,7 @@ public class PredicatesPanel extends JPanel {
 	private void initPredicateButtons() {
 		// walk the static predicate fields
 		Field[] fields = Predicate.class.getFields();
-		List predicates = new ArrayList();
+		List<String> predicates = new ArrayList<String>();
 		for (int i = 0; i < fields.length; i++) {
 			int mods = fields[i].getModifiers();
 			if (Modifier.isStatic(mods) && Modifier.isPublic(mods)
@@ -66,7 +66,7 @@ public class PredicatesPanel extends JPanel {
 		Collections.sort(predicates);
 		// create buttons
 		for (int i = 0; i < predicates.size(); i++) {
-			JRadioButton button = new JRadioButton((String) predicates.get(i));
+			JRadioButton button = new JRadioButton(predicates.get(i));
 			group.add(button);
 			if (button.getText().equals(Predicate._EQUAL_TO)) {
 				// schema default for predicate is EQUAL_TO

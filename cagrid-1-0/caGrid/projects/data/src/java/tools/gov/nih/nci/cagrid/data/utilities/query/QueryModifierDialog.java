@@ -84,8 +84,8 @@ public class QueryModifierDialog extends JDialog {
 				}
 			}
 		} else if (existingModifier.getAttributeNames() != null) {
-			Set names = new HashSet();
-			Collections.addAll(names, (java.lang.Object[]) existingModifier.getAttributeNames());
+			Set<String> names = new HashSet<String>();
+			Collections.addAll(names, existingModifier.getAttributeNames());
 			for (int i = 0; i < getAttributesPanel().getComponentCount(); i++) {
 				JCheckBox check = (JCheckBox) getAttributesPanel().getComponent(i);
 				check.setSelected(names.contains(check.getText()));
@@ -392,7 +392,7 @@ public class QueryModifierDialog extends JDialog {
 							}
 						}
 					} else if (getMultipleAttributesRadioButton().isSelected()) {
-						List names = new ArrayList();
+						List<String> names = new ArrayList<String>();
 						for (int i = 0; i < getAttributesPanel().getComponentCount(); i++) {
 							JCheckBox check = (JCheckBox) getAttributesPanel().getComponent(i);
 							if (check.isSelected()) {

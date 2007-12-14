@@ -109,7 +109,7 @@ public class DomainModelValidator implements CqlDomainValidator {
 				if (enumerationCollection != null && enumerationCollection.getEnumeration() != null
 					&& enumerationCollection.getEnumeration().length > 0) {
 					Enumeration[] enumeration = enumerationCollection.getEnumeration();
-					Set permValues = new HashSet();
+					Set<String> permValues = new HashSet<String>();
 					for (int i = 0; i < enumeration.length; i++) {
 						Enumeration e = enumeration[i];
 						permValues.add(e.getPermissibleValue());
@@ -223,9 +223,9 @@ public class DomainModelValidator implements CqlDomainValidator {
 
 	private UMLAssociation[] getAllAssociationsFromSource(String sourceClass, DomainModel model) {
 		String[] classNames = getClassHierarchy(sourceClass, model);
-		Set associations = new HashSet();
+		Set<UMLAssociation> associations = new HashSet<UMLAssociation>();
 		for (int i = 0; i < classNames.length; i++) {
-			Collections.addAll(associations, (java.lang.Object[]) getUmlAssociations(classNames[i], model));
+			Collections.addAll(associations, getUmlAssociations(classNames[i], model));
 		}
 		UMLAssociation[] assocArray = new UMLAssociation[associations.size()];
 		associations.toArray(assocArray);
@@ -245,7 +245,7 @@ public class DomainModelValidator implements CqlDomainValidator {
 
 
 	private UMLAssociation[] getUmlAssociations(String sourceClass, DomainModel model) {
-		List associations = new ArrayList();
+		List<UMLAssociation> associations = new ArrayList<UMLAssociation>();
 		if (model.getExposedUMLAssociationCollection() != null
 			&& model.getExposedUMLAssociationCollection().getUMLAssociation() != null) {
 			for (int i = 0; i < model.getExposedUMLAssociationCollection().getUMLAssociation().length; i++) {

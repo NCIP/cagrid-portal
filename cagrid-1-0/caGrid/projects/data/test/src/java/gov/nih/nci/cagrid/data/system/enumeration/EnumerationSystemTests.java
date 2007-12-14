@@ -76,7 +76,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 
 	protected Vector steps() {
         DataTestCaseInfo info = new CreateEnumerationTests.TestEnumerationDataServiceInfo();
-		Vector steps = new Vector();
+		Vector<Step> steps = new Vector<Step>();
 		// an enumeration supporting data service is presumed to have been
 		// created by a previous testing process
 		// 1) Add the bookstore schema to the data service

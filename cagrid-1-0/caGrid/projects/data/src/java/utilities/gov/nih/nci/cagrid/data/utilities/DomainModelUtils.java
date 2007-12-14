@@ -23,7 +23,8 @@ import java.util.Set;
  */
 public class DomainModelUtils {
 
-	private static Map domainRefedClasses = new HashMap();
+	private static Map<DomainModel, Map<String, UMLClass>> domainRefedClasses = 
+        new HashMap<DomainModel, Map<String, UMLClass>>();
 	
 	/**
 	 * Return the UMLClass from the DomainModel's exposed UML Classes if the
@@ -40,17 +41,17 @@ public class DomainModelUtils {
 		if (model == null) {
 			return null;
 		}
-		Map refedClasses = (Map) domainRefedClasses.get(model);
+		Map<String, UMLClass> refedClasses = domainRefedClasses.get(model);
 		if (refedClasses == null) {
 			// populate class references for this model
 			UMLClass[] classes = model.getExposedUMLClassCollection().getUMLClass();
-			refedClasses = new HashMap(classes.length);
+			refedClasses = new HashMap<String, UMLClass>(classes.length);
 			for (int i = 0; i < classes.length; i++) {
 				UMLClass clazz = classes[i];
 				refedClasses.put(clazz.getId(), clazz);
 			}
 		}
-		UMLClass refedClass = (UMLClass) refedClasses.get(reference.getRefid());
+		UMLClass refedClass = refedClasses.get(reference.getRefid());
 		return refedClass;
 	}
 	
@@ -81,16 +82,16 @@ public class DomainModelUtils {
 	 * 		All superclasses of the named class
 	 */
 	public static UMLClass[] getAllSuperclasses(DomainModel model, String className) {
-		Set supers = getSuperclasses(model, className);
+		Set<UMLClass> supers = getSuperclasses(model, className);
 		UMLClass[] classes = new UMLClass[supers.size()];
 		supers.toArray(classes);
 		return classes;
 	}
 	
 	
-	private static Set getSuperclasses(DomainModel model, String className) {
+	private static Set<UMLClass> getSuperclasses(DomainModel model, String className) {
 		UMLGeneralization[] generalization = model.getUmlGeneralizationCollection().getUMLGeneralization();
-		Set superclasses = new HashSet();
+		Set<UMLClass> superclasses = new HashSet<UMLClass>();
 		// find all generalizations where subclass is the class in question,
 		// then get the superclasses from each
 		for (int i = 0; generalization != null && i < generalization.length; i++) {

@@ -28,7 +28,7 @@ import org.projectmobius.bookstore.BookStore;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> 
  * @created Nov 7, 2006 
- * @version $Id: TestingCQLQueryProcessor.java,v 1.3 2007-02-28 15:00:39 dervin Exp $ 
+ * @version $Id: TestingCQLQueryProcessor.java,v 1.4 2007-12-14 17:10:46 dervin Exp $ 
  */
 public class TestingCQLQueryProcessor extends LazyCQLQueryProcessor {
 	public static final String PROPERTY_STARTS_WITH_LOWERCASE = "thisPropertyStartsWithLowercase";
@@ -89,7 +89,7 @@ public class TestingCQLQueryProcessor extends LazyCQLQueryProcessor {
 	
 	
 	private List getResultsList(CQLQuery query) throws QueryProcessingException {
-		List results = new LinkedList();
+		List<Object> results = new LinkedList<Object>();
 		if (query.getTarget().getName().equals(Book.class.getName())) {
 			for (int i = 0; i < BOOK_COUNT; i++) {			
 				Book book = new Book();

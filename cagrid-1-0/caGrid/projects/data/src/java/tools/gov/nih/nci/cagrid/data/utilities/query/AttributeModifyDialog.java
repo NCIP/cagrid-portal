@@ -216,7 +216,7 @@ public class AttributeModifyDialog extends JDialog {
 				}
 			});
 			// populate the combo box in alphabetical order
-			List predicates = new ArrayList();
+			List<Predicate> predicates = new ArrayList<Predicate>();
 			try {
 				Field[] predFields = Predicate.class.getFields();
 				for (int i = 0; i < predFields.length; i++) {
@@ -224,7 +224,7 @@ public class AttributeModifyDialog extends JDialog {
 					if (field.getType().equals(Predicate.class)) {
 						if (Modifier.isPublic(field.getModifiers())
 							&& Modifier.isStatic(field.getModifiers())) {
-							predicates.add(field.get(null));
+							predicates.add((Predicate) field.get(null));
 						}
 					}
 				}
@@ -232,8 +232,8 @@ public class AttributeModifyDialog extends JDialog {
 				CompositeErrorDialog.showErrorDialog("Error populating predicate list: " + ex.getMessage(), ex);
 			}
 			// sort the predicates
-			Collections.sort(predicates, new Comparator() {
-				public int compare(Object o1, Object o2) {
+			Collections.sort(predicates, new Comparator<Predicate>() {
+				public int compare(Predicate o1, Predicate o2) {
 					return o1.toString().compareTo(o2.toString());
 				}
 			});

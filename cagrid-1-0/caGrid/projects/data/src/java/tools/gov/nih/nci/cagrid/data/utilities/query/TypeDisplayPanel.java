@@ -47,8 +47,8 @@ public class TypeDisplayPanel extends JPanel {
 		this.traverser = typeTraverser;
 		((DefaultListModel) getTypesList().getModel()).removeAllElements();
 		BaseType[] allTypes = traverser.getBaseTypes();
-		Arrays.sort(allTypes, new Comparator() {
-			public int compare(Object o1, Object o2) {
+		Arrays.sort(allTypes, new Comparator<BaseType>() {
+			public int compare(BaseType o1, BaseType o2) {
 				return o1.toString().compareTo(o2.toString());
 			}
 		});

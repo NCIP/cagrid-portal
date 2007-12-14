@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gov.nih.nci.cagrid.data.utilities.validation;
 
 import java.net.URI;
@@ -51,7 +48,7 @@ public class WSDLUtils {
 	}
 
 
-	public static void walkWSDLFindingSchema(Definition mainDefinition, Map schemas) {
+	public static void walkWSDLFindingSchema(Definition mainDefinition, Map<String, org.jdom.Element> schemas) {
 		LOG.debug("Looking at WSDL at:" + mainDefinition.getDocumentBaseURI());
 		org.jdom.Element schema = extractTypesSchema(mainDefinition);
 		if (schema != null) {

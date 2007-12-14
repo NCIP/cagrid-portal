@@ -285,7 +285,7 @@ public abstract class BaseServiceImpl {
     
     private synchronized void initializeAuditors() throws RemoteException {
         if (auditors == null) {
-            auditors = new LinkedList();
+            auditors = new LinkedList<DataServiceAuditor>();
             try {
                 String configFileName = getDataServiceConfig().getProperty(
                     DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY);

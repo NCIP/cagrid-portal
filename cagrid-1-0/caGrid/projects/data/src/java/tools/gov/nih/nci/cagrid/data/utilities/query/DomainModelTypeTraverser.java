@@ -23,12 +23,12 @@ import java.util.Map;
  * @version $Id$ 
  */
 public class DomainModelTypeTraverser implements TypeTraverser {
-	private Map classesByName;
+	private Map<String, UMLClass> classesByName;
 	private DomainModel model;
 	
 	public DomainModelTypeTraverser(DomainModel model) {
 		this.model = model;
-		this.classesByName = new HashMap();
+		this.classesByName = new HashMap<String, UMLClass>();
 		UMLClass[] classes = model.getExposedUMLClassCollection().getUMLClass();
 		for (int i = 0; i < classes.length; i++) {
 			classesByName.put(classes[i].getPackageName() + "." + classes[i].getClassName(), classes[i]);
@@ -49,9 +49,9 @@ public class DomainModelTypeTraverser implements TypeTraverser {
 
 
 	public AssociatedType[] getAssociatedTypes(BaseType type) {
-		List associatedTypes = new ArrayList();
+		List<AssociatedType> associatedTypes = new ArrayList<AssociatedType>();
 		// get the uml class for the base type
-		UMLClass typeClass = (UMLClass) classesByName.get(type.getTypeName());
+		UMLClass typeClass = classesByName.get(type.getTypeName());
 		// get associations from the model
 		UMLAssociation[] associations = model.getExposedUMLAssociationCollection().getUMLAssociation();
 		if (associations != null) {
@@ -76,9 +76,9 @@ public class DomainModelTypeTraverser implements TypeTraverser {
 
 
 	public AttributeType[] getAttributes(BaseType type) {
-		List attributes = new ArrayList();
+		List<AttributeType> attributes = new ArrayList<AttributeType>();
 		// get the UMLClass for the named base type
-		UMLClass umlClass = (UMLClass) classesByName.get(type.getTypeName());
+		UMLClass umlClass = classesByName.get(type.getTypeName());
 		UMLAttribute[] umlAttributes = umlClass.getUmlAttributeCollection().getUMLAttribute();
 		if (umlAttributes != null) {
 			for (int i = 0; i < umlAttributes.length; i++) {

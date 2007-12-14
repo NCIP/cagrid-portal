@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.creation.enumeration;
 
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.creation.DeleteOldServiceStep;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
@@ -17,7 +18,7 @@ import junit.textui.TestRunner;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 30, 2006 
- * @version $Id: CreateEnumerationTests.java,v 1.5 2007-12-03 16:27:19 hastings Exp $ 
+ * @version $Id: CreateEnumerationTests.java,v 1.6 2007-12-14 17:10:46 dervin Exp $ 
  */
 public class CreateEnumerationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -39,7 +40,7 @@ public class CreateEnumerationTests extends Story {
 
 	protected Vector steps() {
         DataTestCaseInfo info = new TestEnumerationDataServiceInfo();
-		Vector steps = new Vector();
+		Vector<Step> steps = new Vector<Step>();
 		// 1. delete any existing enumeration data service directory
 		steps.add(new DeleteOldServiceStep(info));
 		// 2. create a new enumeration data service

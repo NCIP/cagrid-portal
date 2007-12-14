@@ -68,7 +68,8 @@ public class SetQueryProcessorStep extends Step {
         Properties testProperties = testProc.getRequiredParameters();
         // remove all current props for cql query processors
         ServicePropertiesProperty[] currentProperties = desc.getServiceProperties().getProperty();
-        List retainedPropereties = new ArrayList();
+        List<ServicePropertiesProperty> retainedPropereties = 
+            new ArrayList<ServicePropertiesProperty>();
         for (int i = 0; i < currentProperties.length; i++) {
             if (!currentProperties[i].getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
                 retainedPropereties.add(currentProperties[i]);

@@ -23,6 +23,7 @@ import org.apache.axis.utils.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globus.wsrf.utils.AddressingUtils;
+import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 
@@ -157,7 +158,7 @@ public class CQLQueryResultsValidator {
 		}
 
 		// extract the schema types
-		Map schemas = new HashMap();
+		Map<String, Element> schemas = new HashMap<String, Element>();
 		WSDLUtils.walkWSDLFindingSchema(wsdlDefinition, schemas);
 
 		try {

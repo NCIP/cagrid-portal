@@ -754,7 +754,7 @@ public class QueryBuilder extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// walk the static predicate fields
 					Field[] fields = Predicate.class.getFields();
-					List predicates = new ArrayList();
+					List<Predicate> predicates = new ArrayList<Predicate>();
 					for (int i = 0; i < fields.length; i++) {
 						int mods = fields[i].getModifiers();
 						if (Modifier.isStatic(mods) && Modifier.isPublic(mods)
@@ -768,8 +768,8 @@ public class QueryBuilder extends JFrame {
 						}
 					}
 					// sort the predicates by value
-					Collections.sort(predicates, new Comparator() {
-						public int compare(java.lang.Object o1, java.lang.Object o2) {
+					Collections.sort(predicates, new Comparator<Predicate>() {
+						public int compare(Predicate o1, Predicate o2) {
 							return o1.toString().compareTo(o2.toString());
 						}
 					});
@@ -901,8 +901,8 @@ public class QueryBuilder extends JFrame {
 	
 	
 	private void enableQueryBuildingButtons(JButton[] buttons) {
-		Set enabledButtons = new HashSet();
-		Collections.addAll(enabledButtons, (java.lang.Object[]) buttons);
+		Set<JButton> enabledButtons = new HashSet<JButton>();
+		Collections.addAll(enabledButtons, buttons);
 		for (int i = 0; i < getContextButtonPanel().getComponentCount(); i++) {
 			JButton button = (JButton) getContextButtonPanel().getComponent(i);
 			button.setEnabled(enabledButtons.contains(button));
