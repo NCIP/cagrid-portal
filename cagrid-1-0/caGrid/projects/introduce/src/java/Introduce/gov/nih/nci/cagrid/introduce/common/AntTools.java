@@ -52,17 +52,17 @@ public class AntTools {
 
 
     public static String getAntUndeployTomcatCommand(String buildFileDir) throws Exception {
-        return createDeploymentCommand(buildFileDir, "unDeployTomcat");
+        return createDeploymentCommand(buildFileDir, "undeployTomcat");
     }
 
 
     public static String getAntUndeployJBossCommand(String buildFileDir) throws Exception {
-        return createDeploymentCommand(buildFileDir, "unDeployJBoss");
+        return createDeploymentCommand(buildFileDir, "undeployJBoss");
     }
 
 
     public static String getAntUndeployGlobusCommand(String buildFileDir) throws Exception {
-        return createDeploymentCommand(buildFileDir, "unDeployGlobus");
+        return createDeploymentCommand(buildFileDir, "undeployGlobus");
     }
 
 
