@@ -777,6 +777,8 @@
             <artifact refid="data.metadata.jars" />
             <artifact refid="metadata.schemas" />
             <artifact refid="metadatautils.jars" />
+        	<artifact refid="cql.1.0.schemas"/>
+			<artifact refid="cql.1.0.beans.jar"/>
             <artifact refid="graph.jars" />
         	<artifact refid="grape.jars" />
             <artifact refid="security.metadata.schemas" />
@@ -824,6 +826,7 @@
             <artifact refid="ws.enum.jars" />
             <artifact refid="bdt.jars" />
             <artifact refid="data.jars" />
+        	<artifact refid="cql.1.0.schemas"/>
 			<artifact refid="smartquote.translator.jars"/>
             <artifact refid="data.schemas" />
         	<artifact refid="testing.system.jars"/>
