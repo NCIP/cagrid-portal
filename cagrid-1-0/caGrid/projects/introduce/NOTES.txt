@@ -44,7 +44,7 @@ bug in security panels not adhering to pdp based policies
 
 fatal error message on modification save should just say click ok to roll back
 
-software update does not seem to be showing if soemthing is already installed
+software update does not seem to be showing if something is already installed
 
 make sure that the validators on package names show error if invalid and warn if just bad practice
 
