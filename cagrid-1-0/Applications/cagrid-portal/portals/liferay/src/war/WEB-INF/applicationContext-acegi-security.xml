@@ -71,7 +71,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 	<bean id="portMapper" class="org.acegisecurity.util.PortMapperImpl">
 		<property name="portMappings">
 			<map>
-				<entry key="${cagrid.portal.http.port}" value="${cagrid.portal.https.port}"/>
+				<entry key="${cagrid.portal.httpRedirect.port}" value="${cagrid.portal.httpsRedirect.port}"/>
 			</map>
 		</property>
 	</bean>
