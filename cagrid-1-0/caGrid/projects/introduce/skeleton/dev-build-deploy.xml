@@ -40,7 +40,7 @@
 	<!-- ============================================================== -->
 	<!-- Post UnDeploy Globus                                              -->
 	<!-- ============================================================== -->
-	<target name="postUneployGlobus">
+	<target name="postUndeployGlobus">
 
 	</target>
 	
