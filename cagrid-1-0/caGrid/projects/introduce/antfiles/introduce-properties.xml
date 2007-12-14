@@ -11,7 +11,7 @@
 	
 	<!-- Information -->
 	<property name="project.name" value="Introduce" />
-	<property name="project.version" value="1.1" />
+	<property name="project.version" value="1.2" />
     
 	<!-- Source, Config, and Libraries -->
 	<property name="ext.dir" location="${basedir}/ext" />
@@ -19,6 +19,7 @@
 	<property name="templates.src.dir" location="${basedir}/src/jettemplates" />
 	<property name="templates.created.src.dir" location="${basedir}/src/java/Introduce/gov/nih/nci/cagrid/introduce/templates" />
 	<property name="beans.created.src.dir" location="${basedir}/src/java/Introduce/gov/nih/nci/cagrid/introduce/beans" />
+	<property name="servicetasks.beans.created.src.dir" location="${basedir}/src/java/Introduce/gov/nih/nci/cagrid/introduce/servicetasks/beans" />
 	<property name="lib.dir" location="${basedir}/lib" />
 	<property name="ext.lib.dir" location="${ext.dir}/lib" />
 	<property name="schema.dir" location="${basedir}/schema" />
@@ -43,7 +44,7 @@
 	<property name="junit.results.dir" value="${build.dir}/junit" />
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
 	
-	<property name="soap.binding.fix.jar" value="${basedir}/skeleton/tools/lib/${jars.prefixname}soapBindingFix.jar"/>
+	<property name="service.tasks.jar" value="${basedir}/skeleton/tools/lib/${jars.prefixname}serviceTasks.jar"/>
 	<property name="service.tools.jar" value="${basedir}/skeleton/lib/${jars.prefixname}serviceTools.jar"/>
 	
 	

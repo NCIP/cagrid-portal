@@ -276,13 +276,18 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
         writer.close();
         getStatus().addDescriptionLine("retemplated jndi file");
 
-        // need to add the soapFix.jar to the tools lib directory
-        Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "tools" + File.separator + "lib"
-            + File.separator + "caGrid-1.1-Introduce-1.1-soapBindingFix.jar"), new File(getServicePath()
-            + File.separator + "tools" + File.separator + "lib" + File.separator
-            + "caGrid-1.1-Introduce-1.1-soapBindingFix.jar"));
-        getStatus().addDescriptionLine(
-            "added soapFix jar to enable patching the soap bindings that get generated for custom beans");
+        // need to add the service tasks .jar to the tools lib directory
+        File serviceTasksJar = new File("." + File.separator + "skeleton" + File.separator + "tools" + File.separator
+            + "lib" + File.separator + "caGrid-1.1-Introduce-1.2-serviceTasks.jar");
+        if (serviceTasksJar.exists() && serviceTasksJar.canRead()) {
+            Utils.copyFile(serviceTasksJar, new File(getServicePath() + File.separator + "tools" + File.separator
+                + "lib" + File.separator + "caGrid-1.1-Introduce-1.2-serviceTasks.jar"));
+            getStatus().addDescriptionLine(
+                "added service tasks jar to enable patching the soap bindings that get generated for custom beans");
+        } else {
+            throw new Exception("Cannot find service tasks jar to copy into the service: "
+                + serviceTasksJar.getAbsolutePath());
+        }
 
         // need to move the ant-contrib.jar to the tools lib directory
         File currentContribFile = new File(getServicePath() + File.separator + "lib" + File.separator

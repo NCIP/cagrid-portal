@@ -48,14 +48,34 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
     protected void upgrade() throws Exception {
 
         // need to replace the build.xml
+        // need to replace the build.xml
         Utils.copyFile(new File(getServicePath() + File.separator + "build.xml"), new File(getServicePath()
             + File.separator + "build.xml.OLD"));
+        Utils.copyFile(new File(getServicePath() + File.separator + "build-deploy.xml"), new File(getServicePath()
+            + File.separator + "build-deploy.xml.OLD"));
+        Utils.copyFile(new File(getServicePath() + File.separator + "dev-build.xml"), new File(getServicePath()
+            + File.separator + "dev-build.xml.OLD"));
+        Utils.copyFile(new File(getServicePath() + File.separator + "dev-build-deploy.xml"), new File(getServicePath()
+            + File.separator + "dev-build-deploy.xml.OLD"));
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build.xml"), new File(
             getServicePath() + File.separator + "build.xml"));
+        Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "dev-build.xml"), new File(
+            getServicePath() + File.separator + "dev-build.xml"));
+        getStatus().addDescriptionLine("replaced build.xml with new version");
+        
+        Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build-deploy.xml"), new File(
+            getServicePath() + File.separator + "build-deploy.xml"));
+        Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "dev-build-deploy.xml"), new File(
+            getServicePath() + File.separator + "dev-build-deploy.xml"));
+        getStatus().addDescriptionLine("replaced build-deploy.xml with new version");
+        
+        getStatus().addIssue("Replaced the build.xml file.",
+        "Put any additions you need to the service build in the dev-build.xml file which has now been created.");
+        
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build-stubs.xml"), new File(
             getServicePath() + File.separator + "build-stubs.xml"));
-        getStatus().addDescriptionLine("replaced build.xml with new version");
         getStatus().addDescriptionLine("added build-stubs.xml");
+        
 
         // clean the config
         removeResourcePropertyProvidersFromConfig();
@@ -221,6 +241,29 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
         writer.close();
         getStatus().addDescriptionLine("changed jndi file to use new names of the resource home and configureation classes");
 
+        
+        //replacing the soap fix jar with the new service tasks jar
+        File oldSoapJar = new File(getServicePath() + File.separator + "tools" + File.separator
+            + "lib" + File.separator + "caGrid-1.1-Introduce-1.1-soapBindingFix.jar");
+        if(oldSoapJar.exists() && oldSoapJar.canRead()){
+            oldSoapJar.delete();
+        } else{
+            throw new Exception("Cannot remove old soap fix jar: " + oldSoapJar.delete());
+        }
+        // need to add the service tasks .jar to the tools lib directory
+        File serviceTasksJar = new File("." + File.separator + "skeleton" + File.separator + "tools" + File.separator
+            + "lib" + File.separator + "caGrid-1.1-Introduce-1.2-serviceTasks.jar");
+        if (serviceTasksJar.exists() && serviceTasksJar.canRead()) {
+            Utils.copyFile(serviceTasksJar, new File(getServicePath() + File.separator + "tools" + File.separator
+                + "lib" + File.separator + "caGrid-1.1-Introduce-1.2-serviceTasks.jar"));
+            getStatus().addDescriptionLine(
+                "added service tasks jar to enable patching the soap bindings that get generated for custom beans");
+        } else {
+            throw new Exception("Cannot find service tasks jar to copy into the service: "
+                + serviceTasksJar.getAbsolutePath());
+        }
+        
+        
         getStatus().setStatus(StatusBase.UPGRADE_OK);
     }
 

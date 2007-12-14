@@ -21,8 +21,9 @@
         <delete dir="${build.dir}" />
         <delete dir="${templates.created.src.dir}" />
         <delete dir="${beans.created.src.dir}" />
+    	<delete dir="${servicetasks.beans.created.src.dir}" />
         <delete dir="${updates.dir}" />
-        <delete file="${soap.binding.fix.jar}" />
+        <delete file="${service.tasks.jar}" />
         <delete file="${service.tools.jar}" />
     </target>
 
@@ -127,6 +128,13 @@
             <property name="wsdl.file" value="beans.wsdl" />
             <property name="ns.excludes" value="-x http://cagrid.nci.nih.gov/1/GridGrouper" />
         </ant>
+        <ant antfile="${build.stubs}" target="generateStubs" inheritall="false">
+            <property name="mapping.file" location="${basedir}/schema/namespace2package.mappings" />
+            <property name="source.stubs.dir" location="${basedir}/schema" />
+            <property name="target.stubs.dir" location="${src.dir}/Introduce" />
+            <property name="wsdl.file" value="servicetoolBeans.wsdl" />
+            <property name="ns.excludes" value="" />
+        </ant>
     </target>
 
 
@@ -214,7 +222,7 @@
     <!-- Create Jars                                                         -->
     <!-- =================================================================== -->
     <target name="jar" depends="compile" description="Builds the Jar Files">
-        <jar jarfile="${jars.prefix}core${jars.sufix}" basedir="${introduce.classes.dir}" defaultExcludes="false" update="no">
+        <jar jarfile="${jars.prefix}core${jars.sufix}" basedir="${introduce.classes.dir}" excludes="gov/nih/nci/cagrid/introduce/servicetasks/**/* gov/nih/nci/cagrid/introduce/servicetools/**/*" defaultExcludes="false" update="no">
             <manifest>
                 <attribute name="Created-By" value="${user.name}" />
             </manifest>
@@ -224,7 +232,7 @@
                 <attribute name="Created-By" value="${user.name}" />
             </manifest>
         </jar>
-        <jar jarfile="${soap.binding.fix.jar}" basedir="${introduce.classes.dir}" includes="gov/nih/nci/cagrid/introduce/axis/*" defaultExcludes="false" update="no">
+        <jar jarfile="${service.tasks.jar}" basedir="${introduce.classes.dir}" includes="gov/nih/nci/cagrid/introduce/servicetasks/**/*" defaultExcludes="false" update="no">
             <manifest>
                 <attribute name="Created-By" value="${user.name}" />
             </manifest>
