@@ -160,7 +160,7 @@ edit the following properties:
  - cagrid.portal.db.url
  - cagrid.portal.db.username
  - cagrid.portal.db.password
- - cagrid.portal.geocoder.yahoo.apiId
+ - cagrid.portal.geocoder.yahoo.appId
  - cagrid.portal.map.google.apiKey
  - cagrid.portal.security.encryption.key
 
@@ -250,7 +250,7 @@ view this portlet", right below the Google Map, just restart JBoss.
 
 A file named 'cagridportal.properties' will be generated and placed in two locations on 
 the filesystem:
- - $JBOSS_HOME/server/default/deploy/liferay-portal.war/WEB-INF/lib/cagrid-portal-liferay-resources.jar!cagridportal.properties
+ - $JBOSS_HOME/server/default/deploy/liferay-portal.war/WEB-INF/classes/cagridportal.properties
  - $JBOSS_HOME/server/default/deploy/cagridportlets/WEB-INF/classes/cagridportal.properties
 
 The value of the 'cagrid.portal.security.encryption.key' property in this file will be used to

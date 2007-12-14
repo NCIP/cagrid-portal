@@ -186,6 +186,8 @@
 			<entry key="cagrid.portal.ifsUrl" value="${cagrid.portal.ifsUrl}"/>
 			<entry key="cagrid.portal.http.port" value="${liferay.http.port}"/>
 			<entry key="cagrid.portal.https.port" value="${liferay.https.port}"/>
+			<entry key="cagrid.portal.httpRedirect.port" value="${cagrid.portal.httpRedirect.port}"/>
+			<entry key="cagrid.portal.httpsRedirect.port" value="${cagrid.portal.httpsRedirect.port}"/>
 			<entry key="cagrid.portal.trust.synchronizeEnabled" value="${cagrid.portal.trust.synchronizeEnabled}"/>
 		</propertyfile>
 	</target>

@@ -37,6 +37,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class WorkspacesLoader {
 
+	private static final boolean DEBUG = false;
+
 	private static final Log logger = LogFactory.getLog(WorkspacesLoader.class);
 
 	private WorkspaceDao workspaceDao;
@@ -95,27 +97,25 @@ public class WorkspacesLoader {
 						"Couldn't find worksheet with name '"
 								+ workspace.getAbbreviation() + "'");
 			} else {
-				logger.debug("Populating workspace '"
-						+ workspace.getAbbreviation() + "'");
+				if (DEBUG) {
+					logger.debug("Populating workspace '"
+							+ workspace.getAbbreviation() + "'");
+				}
 
 				// start from 2 as Row 1 is header
 				for (int i = 1; i <= sheet.getLastRowNum(); i++) {
 					HSSFRow dataRow = sheet.getRow(i);
 
 					Participant participant = new Participant();
-					
+
 					try {
 
-						
 						participant.setName(getDataCellValue(dataRow
 								.getCell((short) 0)));
 						participant.setInstitution(getDataCellValue(dataRow
 								.getCell((short) 1)));
 						participant.setHomepageUrl(getDataCellValue(dataRow
 								.getCell((short) 2)));
-
-						
-						
 
 						participant.setPhone(getDataCellValue(dataRow
 								.getCell((short) 10)));
@@ -141,8 +141,7 @@ public class WorkspacesLoader {
 						if (existing != null) {
 							participant = existing;
 						}
-						
-						
+
 						getParticipantDao().save(participant);
 
 						Address address = new Address();
@@ -171,21 +170,23 @@ public class WorkspacesLoader {
 							getParticipantDao().save(participant);
 
 						} catch (NonUniqueResultException ex) {
-							String msg = "Bad address for participant '"
-									+ participant.getName() + "'";
-							logger.warn(msg);
-							// throw new BadAddressException(msg, ex);
+							if (DEBUG) {
+								String msg = "Bad address for participant '"
+										+ participant.getName() + "'";
+								logger.warn(msg);
+							}
 						}
 
 					} catch (InvalidParticipantException ex) {
-						logger.error(ex.getMessage());
+						if(DEBUG){
+							logger.error(ex.getMessage());
+						}
 						continue;
 					}
-					
+
 					getWorkspaceDao().save(workspace);
-					
-					String status = getDataCellValue(dataRow
-							.getCell((short) 3));
+
+					String status = getDataCellValue(dataRow.getCell((short) 3));
 					Participation participation = new Participation();
 					if ("Voluntary".equals(status)) {
 						participation.setStatus(ParticipantStatus.VOLUNTARY);
@@ -196,13 +197,14 @@ public class WorkspacesLoader {
 					}
 					participation.setWorkspace(workspace);
 					participation.setParticipant(participant);
-					getParticipantDao().getHibernateTemplate().save(participation);
-					
+					getParticipantDao().getHibernateTemplate().save(
+							participation);
+
 					participant.getParticipation().add(participation);
 					getParticipantDao().save(participant);
-					
+
 					workspace.getParticipation().add(participation);
-					
+
 				}
 				getWorkspaceDao().save(workspace);
 			}
