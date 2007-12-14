@@ -103,7 +103,6 @@
 		<mkdir dir="tmp" />
 
 		<runtarget target="preDeployTomcat" />
-		<createDeploymentFile/>
 		<runtarget target="deployWebApp" />
 	</target>
 
@@ -125,7 +124,6 @@
 		<mkdir dir="tmp" />
 
 		<runtarget target="preDeployJBoss" />
-		<createDeploymentFile/>
 		<runtarget target="deployWebApp" />
 	</target>
 
@@ -136,6 +134,7 @@
 
 		<runtarget target="prepareDeploymentTmp" />
 
+		<createDeploymentFile/>
 
 		<copy overwrite="true" toDir="${service.deployment.dir}">
 			<fileset dir="tmp">
@@ -243,7 +242,7 @@
 		<runtarget target="postUndeployGlobus" />
 	</target>
 	
-	<target name="undeployTomcat" depends="setDeploymentProperties" description="undeploy a service from a tomcat container (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+	<target name="undeployTomcat" depends="checkGlobus,setDeploymentProperties" description="undeploy a service from a tomcat container (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 		<property name="webapp.dir" value="${tomcat.dir}" />
 		<property name="webapp.deploy.dir" value="${webapp.dir}/webapps/${globus.webapp}/WEB-INF" />
 		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/lib" />
@@ -258,7 +257,7 @@
 		<runtarget target="postUndeployTomcat" />
 	</target>
 
-	<target name="undeployJBoss" depends="setDeploymentProperties" description="undeploy a service from a jboss container (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+	<target name="undeployJBoss" depends="checkGlobus,setDeploymentProperties" description="undeploy a service from a jboss container (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 		<property name="webapp.dir" value="${jboss.dir}/server/default/deploy/wsrf.war" />
 		<property name="webapp.deploy.dir" value="${webapp.dir}/WEB-INF" />
 		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/lib" />

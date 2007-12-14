@@ -46,6 +46,26 @@ public class AntTools {
     }
 
 
+    public static String getAntDeployGlobusCommand(String buildFileDir) throws Exception {
+        return createDeploymentCommand(buildFileDir, "deployGlobus");
+    }
+
+
+    public static String getAntUndeployTomcatCommand(String buildFileDir) throws Exception {
+        return createDeploymentCommand(buildFileDir, "unDeployTomcat");
+    }
+
+
+    public static String getAntUndeployJBossCommand(String buildFileDir) throws Exception {
+        return createDeploymentCommand(buildFileDir, "unDeployJBoss");
+    }
+
+
+    public static String getAntUndeployGlobusCommand(String buildFileDir) throws Exception {
+        return createDeploymentCommand(buildFileDir, "unDeployGlobus");
+    }
+
+
     private static String fixPathforOS(String path) {
         String os = System.getProperty("os.name");
         if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
@@ -54,11 +74,6 @@ public class AntTools {
             path = path.replaceAll(" ", "\\ ");
         }
         return path;
-    }
-
-
-    public static String getAntDeployGlobusCommand(String buildFileDir) throws Exception {
-        return createDeploymentCommand(buildFileDir, "deployGlobus");
     }
 
 
@@ -79,12 +94,14 @@ public class AntTools {
 
     public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
         String packagename, String namespacedomain, String resourceOptions, String extensions) throws Exception {
-        return getAntSkeletonCreationCommand(buildFileDir, name, dir, packagename, namespacedomain, resourceOptions, extensions, false);
+        return getAntSkeletonCreationCommand(buildFileDir, name, dir, packagename, namespacedomain, resourceOptions,
+            extensions, false);
     }
 
 
     public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
-        String packagename, String namespacedomain, String resourceOptions, String extensions, boolean debug) throws Exception {
+        String packagename, String namespacedomain, String resourceOptions, String extensions, boolean debug)
+        throws Exception {
         // fix dir path if it relative......
         logger.debug("CREATION: builddir: " + buildFileDir);
         logger.debug("CREATION: destdir: " + dir);
@@ -96,7 +113,8 @@ public class AntTools {
         String cmd = " -Dintroduce.skeleton.destination.dir=" + dir + " -Dintroduce.skeleton.service.name=" + name
             + " -Dintroduce.skeleton.package=" + packagename + " -Dintroduce.skeleton.package.dir="
             + packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
-            + namespacedomain + " -Dintroduce.skeleton.resource.options=" + resourceOptions + " -Dintroduce.skeleton.extensions=" + extensions + " createService";
+            + namespacedomain + " -Dintroduce.skeleton.resource.options=" + resourceOptions
+            + " -Dintroduce.skeleton.extensions=" + extensions + " createService";
         cmd = getAntCommandCall(buildFileDir, debug) + cmd;
         logger.debug("CREATION: cmd: " + cmd);
         return cmd;
@@ -174,6 +192,5 @@ public class AntTools {
         }
         return null;
     }
-
 
 }
