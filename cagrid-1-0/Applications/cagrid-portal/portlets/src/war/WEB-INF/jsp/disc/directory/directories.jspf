@@ -8,7 +8,7 @@
 		<form:option value="TBPT">--Tissue Banks and Pathology Tools</form:option>
 		<form:option value="ARCH">--Architecture</form:option>
 		<form:option value="VCDE">--Vocabulary and Common Data Elements</form:option>
-		<form:option value="DSIC">--Data Sharing and Intellectual Capitol</form:option>
+		<form:option value="DSIC">--Data Sharing and Intellectual Capital</form:option>
 		<form:option value="TRAINING">--Documentation and Training</form:option>
 		<form:option value="SP">--Strategic Planning</form:option>
 		<form:option value="pocs">All Points of Contact</form:option>
