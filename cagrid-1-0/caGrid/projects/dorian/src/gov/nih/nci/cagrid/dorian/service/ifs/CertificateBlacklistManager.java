@@ -87,6 +87,7 @@ public class CertificateBlacklistManager {
 	}
 
 	public List<BigInteger> getBlackList() throws DorianInternalFault {
+		buildDatabase();
 		List<BigInteger> list = new ArrayList<BigInteger>();
 		Connection c = null;
 		try {
