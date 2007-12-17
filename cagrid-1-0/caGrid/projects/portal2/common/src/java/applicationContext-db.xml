@@ -43,6 +43,9 @@
 					gov.nih.nci.cagrid.portal2.domain.Participant
 				</value>
 				<value>
+					gov.nih.nci.cagrid.portal2.domain.Participation
+				</value>
+				<value>
 					gov.nih.nci.cagrid.portal2.domain.PortalUser
 				</value>
 				<value>
