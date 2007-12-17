@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 /** 
  *  PortFactory
@@ -17,10 +18,9 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Nov 5, 2007 10:13:07 AM
- * @version $Id: PortFactory.java,v 1.2 2007-11-15 00:36:32 dervin Exp $ 
+ * @version $Id: PortFactory.java,v 1.3 2007-12-17 17:38:02 dervin Exp $ 
  */
 public class PortFactory {
-
     private static List<Integer> assignedPortNumbers = null;
     
     public static PortPreference getPort() throws NoAvailablePortException {
@@ -29,10 +29,20 @@ public class PortFactory {
         }
         Integer[] usedPorts = new Integer[assignedPortNumbers.size()];
         assignedPortNumbers.toArray(usedPorts);
-        PortPreference port = new PortPreference(
-            TestingConstants.TEST_PORT_LOWER_BOUND, TestingConstants.TEST_PORT_UPPER_BOUND,
-            usedPorts);
+        PortPreference port = null;
+        // determine if testing port assignment is in effect
+        if (usingTestingPortAssignmentMode()) {
+            Integer testPort = getTestingPort();
+            port = new PortPreference(testPort);
+        } else {
+            port = new PortPreference(
+                TestingConstants.TEST_PORT_LOWER_BOUND, 
+                TestingConstants.TEST_PORT_UPPER_BOUND,
+                usedPorts);
+        }
+        // grab the port
         Integer assignment = port.getPort();
+        // record its usage
         assignedPortNumbers.add(assignment);
         return port;
     }
@@ -41,7 +51,7 @@ public class PortFactory {
     public static List<Integer> getAssignedPortNumbers() {
         // clone it so modifications to the returned list won't
         // affect the inner workings of this utility
-        List<Integer> clone = new ArrayList(assignedPortNumbers.size());
+        List<Integer> clone = new ArrayList<Integer>(assignedPortNumbers.size());
         clone.addAll(assignedPortNumbers);
         return clone;
     }
@@ -79,5 +89,37 @@ public class PortFactory {
             }
         }
         return available;
+    }
+    
+    
+    public static boolean usingTestingPortAssignmentMode() {
+        Properties props = System.getProperties();
+        if (props.containsKey(TestingConstants.USE_TESTING_ASSIGNMENT_MODE)) {
+            String val = props.getProperty(TestingConstants.USE_TESTING_ASSIGNMENT_MODE);
+            boolean b = Boolean.parseBoolean(val);
+            if (b) {
+                System.out.println("USING TEST PORT ASSIGNMENT MODE");
+                System.out.println("USING TEST PORT ASSIGNMENT MODE");
+                System.out.println("USING TEST PORT ASSIGNMENT MODE");
+            }
+            return b;
+        }
+        return false;
+    }
+    
+    
+    private static Integer getTestingPort() {
+        int range = TestingConstants.TEST_PORT_UPPER_BOUND.intValue() -
+            TestingConstants.TEST_PORT_LOWER_BOUND.intValue();
+        boolean used = true;
+        int count = 0;
+        Integer testPort = null;
+        while (used && count < range) { 
+            int offset = (int) (System.currentTimeMillis() % range);
+            testPort = Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + offset);
+            used = assignedPortNumbers.contains(testPort) && isPortAvailable(testPort.intValue());
+            count++;
+        }
+        return testPort;
     }
 }
