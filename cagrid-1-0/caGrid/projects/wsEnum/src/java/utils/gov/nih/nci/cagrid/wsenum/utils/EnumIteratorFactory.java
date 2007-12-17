@@ -21,7 +21,7 @@ import org.globus.wsrf.utils.io.IndexedObjectFileUtils;
  * @author David Ervin
  * 
  * @created Apr 30, 2007 12:18:15 PM
- * @version $Id: EnumIteratorFactory.java,v 1.2 2007-09-13 18:05:20 dervin Exp $ 
+ * @version $Id: EnumIteratorFactory.java,v 1.3 2007-12-17 19:18:38 dervin Exp $ 
  */
 public class EnumIteratorFactory {
 
@@ -151,8 +151,8 @@ public class EnumIteratorFactory {
     }
     
     
-    private static List iteratorToList(Iterator iter) {
-        List l = new LinkedList();
+    private static List<Object> iteratorToList(Iterator iter) {
+        List<Object> l = new LinkedList<Object>();
         while (iter.hasNext()) {
             l.add(iter.next());
         }

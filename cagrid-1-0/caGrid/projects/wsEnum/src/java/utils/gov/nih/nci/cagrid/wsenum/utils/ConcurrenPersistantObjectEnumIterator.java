@@ -35,7 +35,7 @@ import org.globus.wsrf.encoding.SerializationException;
  * @author David Ervin
  * 
  * @created Apr 10, 2007 10:02:57 AM
- * @version $Id: ConcurrenPersistantObjectEnumIterator.java,v 1.2 2007-06-06 16:59:27 dervin Exp $ 
+ * @version $Id: ConcurrenPersistantObjectEnumIterator.java,v 1.3 2007-12-17 19:18:38 dervin Exp $ 
  */
 public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator {
     
@@ -164,7 +164,7 @@ public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator
         if (enumerationIsReleased()) {
             throw new NoSuchElementException("Enumeration has been released");
         }
-        Callable resultsCreator = getResultsCreator(constraints);
+        Callable<IterationResult> resultsCreator = getResultsCreator(constraints);
         FutureTask<IterationResult> createResultTask = new FutureTask<IterationResult>(resultsCreator);
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(createResultTask);
@@ -207,8 +207,8 @@ public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator
     }
     
     
-    protected Callable getResultsCreator(final IterationConstraints constraints) {
-        Callable resultsCreator = new Callable() {
+    protected Callable<IterationResult> getResultsCreator(final IterationConstraints constraints) {
+        Callable<IterationResult> resultsCreator = new Callable<IterationResult>() {
             public IterationResult call() throws NoSuchElementException {
                 // create the list of elements to be returned
                 List<SOAPElement> soapElements = new LinkedList<SOAPElement>();
