@@ -81,9 +81,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-portal.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-updater.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-advertisement.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-authentication-service-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-authentication-service-common.jar"/>
@@ -122,5 +119,8 @@
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-system.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-portal.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-updater.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
