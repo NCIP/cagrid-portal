@@ -102,7 +102,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar" sourcepath="/caGrid-1.0-core"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-cql.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-service.jar"/>
@@ -115,9 +115,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-GlobalModelExchange-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-graph.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-core.jar" sourcepath="/caGrid-introduce"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-portal.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-updater.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-data.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-security.jar"/>
@@ -128,12 +125,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-wsEnum.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.1-core-tests.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.1-portal.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.1-portal-tests.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.1-updater.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.1-updater-tests.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-1.3.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/validation-2.0.0.jar"/>
@@ -141,5 +132,11 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-system.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-portal.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-updater.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.2-core-tests.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.2-portal-tests.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.2-updater-tests.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
