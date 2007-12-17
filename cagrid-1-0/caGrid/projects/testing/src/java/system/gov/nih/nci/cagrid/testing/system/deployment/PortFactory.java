@@ -18,7 +18,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Nov 5, 2007 10:13:07 AM
- * @version $Id: PortFactory.java,v 1.3 2007-12-17 17:38:02 dervin Exp $ 
+ * @version $Id: PortFactory.java,v 1.4 2007-12-17 17:39:07 dervin Exp $ 
  */
 public class PortFactory {
     private static List<Integer> assignedPortNumbers = null;
@@ -96,13 +96,7 @@ public class PortFactory {
         Properties props = System.getProperties();
         if (props.containsKey(TestingConstants.USE_TESTING_ASSIGNMENT_MODE)) {
             String val = props.getProperty(TestingConstants.USE_TESTING_ASSIGNMENT_MODE);
-            boolean b = Boolean.parseBoolean(val);
-            if (b) {
-                System.out.println("USING TEST PORT ASSIGNMENT MODE");
-                System.out.println("USING TEST PORT ASSIGNMENT MODE");
-                System.out.println("USING TEST PORT ASSIGNMENT MODE");
-            }
-            return b;
+            return Boolean.parseBoolean(val);
         }
         return false;
     }

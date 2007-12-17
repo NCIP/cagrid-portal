@@ -9,6 +9,8 @@
     <property name="introduce.dir" location="../introduce" />
 	<property name="halt.on.error" value="false"/>
 	<property name="failed.message" value="Tests failed! Check test reports."/>
+	<property name="testing.port.assingment.mode" value="true"/>
+	
 
     <target name="prepareClasspaths">
         <path id="Introduce.test.classpath">
@@ -197,6 +199,7 @@
         	errorproperty="basic.system.test.failed" failureproperty="basic.system.test.failed" 
         	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+        	<sysproperty key="use.testing.port.assignment" value="${testing.port.assingment.mode}"/>
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
             <classpath refid="all.test.classpath" />
@@ -221,6 +224,7 @@
         	errorproperty="enumeration.system.test.failed" failureproperty="enumeration.system.test.failed" 
         	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+        	<sysproperty key="use.testing.port.assignment" value="${testing.port.assingment.mode}"/>
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
             <classpath refid="all.test.classpath" />
@@ -274,6 +278,7 @@
         	errorproperty="upgrade.system.test.failed" failureproperty="upgrade.system.test.failed" 
         	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+        	<sysproperty key="use.testing.port.assignment" value="${testing.port.assingment.mode}"/>
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
             <classpath refid="all.test.classpath" />
@@ -297,6 +302,7 @@
         	errorproperty="bdt.system.test.failed" failureproperty="bdt.system.test.failed" 
         	showoutput="true" fork="yes" forkmode="once">
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+        	<sysproperty key="use.testing.port.assignment" value="${testing.port.assingment.mode}"/>
             <jvmarg value="-Dintroduce.base.dir=../introduce" />
             <classpath location="${instrumented.classes.dir}" />
             <classpath refid="all.test.classpath" />
