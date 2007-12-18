@@ -68,7 +68,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: DomainModelPanel.java,v 1.3 2007-11-06 15:53:40 hastings Exp $ 
+ * @version $Id: DomainModelPanel.java,v 1.4 2007-12-18 19:50:17 dervin Exp $ 
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 	
@@ -701,9 +701,9 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	
 	private void removeUmlPackages(String[] packageNames) {
 		// change the gui
-		Set selected = new HashSet();
-		Collections.addAll(selected, (Object[]) packageNames);
-		Vector remaining = new Vector();
+		Set<String> selected = new HashSet<String>();
+		Collections.addAll(selected, packageNames);
+		Vector<String> remaining = new Vector<String>();
 		for (int i = 0; i < getSelectedPackagesList().getModel().getSize(); i++) {
 			String name = (String) getSelectedPackagesList().getModel().getElementAt(i);
 			if (!selected.contains(name)) {
@@ -719,7 +719,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 		try {
 			CadsrInformation information = getCadsrInformation();
 			CadsrPackage[] packages = information.getPackages();
-			List remainingPackages = new ArrayList();
+			List<CadsrPackage> remainingPackages = new ArrayList<CadsrPackage>();
 			for (int i = 0; i < packages.length; i++) {
 				if (!selected.contains(packages[i].getName())) {
 					remainingPackages.add(packages[i]);
@@ -767,17 +767,18 @@ public class DomainModelPanel extends AbstractWizardPanel {
 				info.setProjectLongName(model.getProjectLongName());
 				info.setProjectVersion(model.getProjectVersion());
 				// walk classes, creating package groupings as needed
-				Map packageClasses = new HashMap();
+				Map<String, List<String>> packageClasses = new HashMap<String, List<String>>();
 				UMLClass[] modelClasses = model.getExposedUMLClassCollection().getUMLClass(); 
 				for (int i = 0; i < modelClasses.length; i++) {
 					String packageName = modelClasses[i].getPackageName();
+                    List<String> classList = null;
 					if (packageClasses.containsKey(packageName)) {
-						((List) packageClasses.get(packageName)).add(modelClasses[i].getClassName());
+                        classList = packageClasses.get(packageName);
 					} else {
-						List classList = new ArrayList();
-						classList.add(modelClasses[i].getClassName());
+						classList = new ArrayList<String>();
 						packageClasses.put(packageName, classList);
 					}
+                    classList.add(modelClasses[i].getClassName());
 				}
 				// create cadsr packages
 				CadsrPackage[] packages = new CadsrPackage[packageClasses.keySet().size()];
@@ -791,11 +792,11 @@ public class DomainModelPanel extends AbstractWizardPanel {
 					pack.setName(packName);
 					pack.setMappedNamespace(mappedNamespace);
 					// create ClassMappings for the package's classes
-					List classNameList = (List) packageClasses.get(packName);
+					List<String> classNameList = packageClasses.get(packName);
 					ClassMapping[] mappings = new ClassMapping[classNameList.size()];
 					for (int i = 0; i < classNameList.size(); i++) {
 						ClassMapping mapping = new ClassMapping();
-						String className = (String) classNameList.get(i);
+						String className = classNameList.get(i);
 						mapping.setClassName(className);
 						mapping.setElementName(className);
 						mapping.setSelected(true);
