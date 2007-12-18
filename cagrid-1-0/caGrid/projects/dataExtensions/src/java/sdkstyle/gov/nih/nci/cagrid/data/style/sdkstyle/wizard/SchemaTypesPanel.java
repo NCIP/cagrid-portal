@@ -50,7 +50,7 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 26, 2006
- * @version $Id: SchemaTypesPanel.java,v 1.3 2007-11-06 15:53:40 hastings Exp $
+ * @version $Id: SchemaTypesPanel.java,v 1.4 2007-12-18 21:57:41 dervin Exp $
  */
 public class SchemaTypesPanel extends AbstractWizardPanel {
     
@@ -76,9 +76,9 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
         try {
             Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
             CadsrInformation info = data.getCadsrInformation();
-            Set currentPackageNames = new HashSet();
+            Set<String> currentPackageNames = new HashSet<String>();
             for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
-                currentPackageNames.add(getPackageNamespaceTable().getValueAt(i, 0));
+                currentPackageNames.add((String) getPackageNamespaceTable().getValueAt(i, 0));
             }
             if (info != null && info.getPackages() != null) {
                 CadsrPackage[] packs = info.getPackages();

@@ -38,7 +38,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 26, 2006 
- * @version $Id: PackageSchemasTable.java,v 1.4 2007-11-06 15:53:40 hastings Exp $ 
+ * @version $Id: PackageSchemasTable.java,v 1.5 2007-12-18 21:57:41 dervin Exp $ 
  */
 public class PackageSchemasTable extends JTable {
 
@@ -73,7 +73,7 @@ public class PackageSchemasTable extends JTable {
 
 
     public void addNewCadsrPackage(ServiceInformation serviceInfo, CadsrPackage pack) {
-        Vector row = new Vector(4);
+        Vector<Object> row = new Vector<Object>(4);
         row.add(pack.getName());
         row.add(pack.getMappedNamespace());
         row.add(STATUS_NEVER_TRIED);
@@ -189,11 +189,11 @@ public class PackageSchemasTable extends JTable {
     
     
     private boolean packageResolvedByNamespace(CadsrPackage pkg, NamespaceType namespace) {
-        Set<String> classNames = new HashSet();
+        Set<String> classNames = new HashSet<String>();
         for (ClassMapping mapping : pkg.getCadsrClass()) {
             classNames.add(mapping.getClassName());
         }
-        Set<String> elementNames = new HashSet();
+        Set<String> elementNames = new HashSet<String>();
         for (SchemaElementType element : namespace.getSchemaElement()) {
             elementNames.add(element.getType());
         }
@@ -202,7 +202,7 @@ public class PackageSchemasTable extends JTable {
         }
         
         // sort out the resolution errors
-        Set<String> nonResolvedClasses = new HashSet();
+        Set<String> nonResolvedClasses = new HashSet<String>();
         nonResolvedClasses.addAll(classNames);
         nonResolvedClasses.removeAll(elementNames);
         
