@@ -3,4 +3,4 @@
 		<portlet:actionURL var="logoutActionUrl">
 			<portlet:param name="operation" value="logout"/>
 		</portlet:actionURL>
-		<a href="<c:out value="${logoutActionUrl}"/>">Logout</a>
+		<a href="<c:out value="${logoutActionUrl}"/>">Log Out</a>

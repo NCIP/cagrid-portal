@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.map.ServiceInfo;
+import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class StatusBean {
 	
 	public List<ServiceInfo> getLatestServices(){
 		List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
-		List<GridService> services = getGridServiceDao().getLatestServices(getLatestServicesLimit());
+		List<GridService> services = PortletUtils.filterBannedServices(getGridServiceDao().getLatestServices(getLatestServicesLimit()));
 		for(GridService service : services){
 			serviceInfos.add(new ServiceInfo(service));
 		}

@@ -101,6 +101,9 @@ public class RegisterController extends SimpleFormController implements
 		if (!errors.hasErrors()) {
 			try {
 				confirmationMessage = client.registerWithIdP(application);
+				if("Your account was approved, your current account status is Active.".equals(confirmationMessage)){
+					confirmationMessage = "Your account was approved. Your current account status is Active.";
+				}
 			} catch (DorianInternalFault ex) {
 				errors.reject("dorianServiceError", new String[] { ex
 						.getMessage() }, "Error contacting Dorian service: "

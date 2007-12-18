@@ -259,9 +259,9 @@ public class AuthnService {
 			person.setLastName(lastName);
 			getPersonDao().save(person);
 			portalUser.setPerson(person);
-			portalUser.setGridCredential(getEncryptionService().encrypt(proxyStr));
-			getPortalUserDao().save(portalUser);
 		}
+		portalUser.setGridCredential(getEncryptionService().encrypt(proxyStr));
+		getPortalUserDao().save(portalUser);
 		return portalUser;
 	}
 

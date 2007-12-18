@@ -47,7 +47,7 @@ public class DynamicServiceStatusProvider implements ServiceStatusProvider {
 			logger.error("Ping thread interrupted: "+ ex.getMessage(), ex);
 		}
 		if(!t.isFinished()){
-			logger.error("Ping thread timed out.");
+			//logger.error("Ping thread timed out.");
 			status = ServiceStatus.INACTIVE;
 		}else if(t.getEx() != null){
 			logger.error("Ping thread encoutered error: " + t.getEx().getMessage(), t.getEx());

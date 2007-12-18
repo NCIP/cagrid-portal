@@ -105,12 +105,31 @@ public class GridServiceDao extends AbstractDao<GridService> {
 		getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session session)
 					throws HibernateException, SQLException {
+				GridService svc = (GridService) session.get(GridService.class, gridService.getId());
 				StatusChange change = new StatusChange();
-				change.setService(gridService);
+				change.setService(svc);
 				change.setTime(new Date());
 				change.setStatus(ServiceStatus.BANNED);
-				gridService.getStatusHistory().add(change);
-				session.save(gridService);
+				session.save(change);
+				svc.getStatusHistory().add(change);
+				session.save(svc);
+				return null;
+			}
+		});
+	}
+	
+	public void unbanService(final GridService gridService) {
+		getHibernateTemplate().execute(new HibernateCallback() {
+			public Object doInHibernate(Session session)
+					throws HibernateException, SQLException {
+				GridService svc = (GridService) session.get(GridService.class, gridService.getId());
+				StatusChange change = new StatusChange();
+				change.setService(svc);
+				change.setTime(new Date());
+				change.setStatus(ServiceStatus.UNKNOWN);
+				session.save(change);
+				svc.getStatusHistory().add(change);
+				session.save(svc);
 				return null;
 			}
 		});
