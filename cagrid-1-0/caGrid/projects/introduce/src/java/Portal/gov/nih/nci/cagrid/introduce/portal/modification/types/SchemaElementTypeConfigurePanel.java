@@ -60,7 +60,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 
 	private ValidationResultModel validationModel = new DefaultValidationResultModel();
 
-	private static final String CLASSNAME = "Classname";  //  @jve:decl-index=0:
+	private static final String CLASSNAME = "Classname"; // @jve:decl-index=0:
 
 	private static final String SERIALIZER = "Serializer"; // @jve:decl-index=0:
 
@@ -122,7 +122,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		this.setSize(new Dimension(265, 279));
 		this.add(getBeanPanel(), gridBagConstraints2);
 		this.add(getCustomBeanWrapperPanel(), gridBagConstraints8);
-		
+
 		initValidation();
 	}
 
@@ -139,48 +139,76 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 
 		ValidationResult result = new ValidationResult();
 
-		if (ValidationUtils.isNotBlank(this.getClassNameText().getText())) {
-			if (ValidationUtils.isBlank(this.getSerializerText().getText())) {
-				result.add(new SimpleValidationMessage(SERIALIZER
-						+ " must not be blank.", Severity.ERROR, SERIALIZER));
-			}
-			if (ValidationUtils.isBlank(this.getDeserializerText().getText())) {
-				result.add(new SimpleValidationMessage(DESERIALIZER
-						+ " must not be blank.", Severity.ERROR, DESERIALIZER));
-			}
-			if(!CommonTools.isValidPackageAndClassName(this.getClassNameText().getText())){
-				result.add(new SimpleValidationMessage(CLASSNAME
-						+ " might not be a valid fully qualified class name.", Severity.WARNING, CLASSNAME));
-			}
-		}
+		if (getCustomBeanPanel().isVisible()) {
 
-		if (ValidationUtils.isNotBlank(this.getSerializerText().getText())) {
-			if (ValidationUtils.isBlank(this.getClassNameText().getText())) {
-				result.add(new SimpleValidationMessage(CLASSNAME
-						+ " must not be blank.", Severity.ERROR, CLASSNAME));
+			if (ValidationUtils.isNotBlank(this.getClassNameText().getText())) {
+				if (ValidationUtils.isBlank(this.getSerializerText().getText())) {
+					result
+							.add(new SimpleValidationMessage(SERIALIZER
+									+ " must not be blank.", Severity.ERROR,
+									SERIALIZER));
+				}
+				if (ValidationUtils.isBlank(this.getDeserializerText()
+						.getText())) {
+					result.add(new SimpleValidationMessage(DESERIALIZER
+							+ " must not be blank.", Severity.ERROR,
+							DESERIALIZER));
+				}
+				if (!CommonTools.isValidPackageAndClassName(this
+						.getClassNameText().getText())) {
+					result
+							.add(new SimpleValidationMessage(
+									CLASSNAME
+											+ " might not be a valid fully qualified class name.",
+									Severity.WARNING, CLASSNAME));
+				}
 			}
-			if (ValidationUtils.isBlank(this.getDeserializerText().getText())) {
-				result.add(new SimpleValidationMessage(DESERIALIZER
-						+ " must not be blank.", Severity.ERROR, DESERIALIZER));
-			}
-			if(!CommonTools.isValidPackageAndClassName(this.getSerializerText().getText())){
-				result.add(new SimpleValidationMessage(SERIALIZER
-						+ " might not be a valid fully qualified class name.", Severity.WARNING, SERIALIZER));
-			}
-		}
 
-		if (ValidationUtils.isNotBlank(this.getDeserializerText().getText())) {
-			if (ValidationUtils.isBlank(this.getSerializerText().getText())) {
-				result.add(new SimpleValidationMessage(SERIALIZER
-						+ " must not be blank.", Severity.ERROR, SERIALIZER));
+			if (ValidationUtils.isNotBlank(this.getSerializerText().getText())) {
+				if (ValidationUtils.isBlank(this.getClassNameText().getText())) {
+					result
+							.add(new SimpleValidationMessage(CLASSNAME
+									+ " must not be blank.", Severity.ERROR,
+									CLASSNAME));
+				}
+				if (ValidationUtils.isBlank(this.getDeserializerText()
+						.getText())) {
+					result.add(new SimpleValidationMessage(DESERIALIZER
+							+ " must not be blank.", Severity.ERROR,
+							DESERIALIZER));
+				}
+				if (!CommonTools.isValidPackageAndClassName(this
+						.getSerializerText().getText())) {
+					result
+							.add(new SimpleValidationMessage(
+									SERIALIZER
+											+ " might not be a valid fully qualified class name.",
+									Severity.WARNING, SERIALIZER));
+				}
 			}
-			if (ValidationUtils.isBlank(this.getClassNameText().getText())) {
-				result.add(new SimpleValidationMessage(CLASSNAME
-						+ " must not be blank.", Severity.ERROR, CLASSNAME));
-			}
-			if(!CommonTools.isValidPackageAndClassName(this.getDeserializerText().getText())){
-				result.add(new SimpleValidationMessage(DESERIALIZER
-						+ " might not be a valid fully qualified class name.", Severity.WARNING, DESERIALIZER));
+
+			if (ValidationUtils
+					.isNotBlank(this.getDeserializerText().getText())) {
+				if (ValidationUtils.isBlank(this.getSerializerText().getText())) {
+					result
+							.add(new SimpleValidationMessage(SERIALIZER
+									+ " must not be blank.", Severity.ERROR,
+									SERIALIZER));
+				}
+				if (ValidationUtils.isBlank(this.getClassNameText().getText())) {
+					result
+							.add(new SimpleValidationMessage(CLASSNAME
+									+ " must not be blank.", Severity.ERROR,
+									CLASSNAME));
+				}
+				if (!CommonTools.isValidPackageAndClassName(this
+						.getDeserializerText().getText())) {
+					result
+							.add(new SimpleValidationMessage(
+									DESERIALIZER
+											+ " might not be a valid fully qualified class name.",
+									Severity.WARNING, DESERIALIZER));
+				}
 			}
 		}
 
@@ -190,9 +218,10 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 
 	private void updateComponentTreeSeverity() {
 		ValidationComponentUtils
-				.updateComponentTreeMandatoryAndBlankBackground(this);
-		ValidationComponentUtils.updateComponentTreeSeverityBackground(this,
-				this.validationModel.getResult());
+				.updateComponentTreeMandatoryAndBlankBackground(this
+						.getCustomBeanPanel());
+		ValidationComponentUtils.updateComponentTreeSeverityBackground(this
+				.getCustomBeanPanel(), this.validationModel.getResult());
 	}
 
 	/**
@@ -512,6 +541,8 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 						customizeLabel.setIcon(PortalLookAndFeel
 								.getRemoveIcon());
 					}
+
+					validateInput();
 				}
 
 			});
