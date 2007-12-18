@@ -30,6 +30,8 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
@@ -59,6 +61,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.BusyDialogRunnable;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
 /** 
@@ -68,7 +71,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: DomainModelPanel.java,v 1.4 2007-12-18 19:50:17 dervin Exp $ 
+ * @version $Id: DomainModelPanel.java,v 1.5 2007-12-18 21:57:31 dervin Exp $ 
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 	
@@ -82,13 +85,15 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	private JTextField fileTextField = null;
 	private JButton browseButton = null;
 	private JPanel dmFilePanel = null;
-	private CaDSRBrowserPanel caDsrBrowser = null;
+	private InternalCaDSRBrowserPanel caDsrBrowser = null;
 	private JList selectedPackagesList = null;
 	private JScrollPane selectedPackagesScrollPane = null;
 	private JButton addPackageButton = null;
 	private JButton removePackageButton = null;
 	private JPanel packageButtonsPanel = null;
 	private JPanel caDsrPanel = null;
+
+    private JButton addProjectButton = null;
 
     public DomainModelPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
 		super(extensionDescription, info);
@@ -462,9 +467,9 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	}
 	
 	
-	private CaDSRBrowserPanel getCaDsrBrowser() {
+	private InternalCaDSRBrowserPanel getCaDsrBrowser() {
 		if (caDsrBrowser == null) {
-			caDsrBrowser = new CaDSRBrowserPanel(true, false);
+			caDsrBrowser = new InternalCaDSRBrowserPanel(true, false);
 			String url = ResourceManager.getServiceURLProperty(DataServiceConstants.CADSR_SERVICE_URL);
 			caDsrBrowser.setDefaultCaDSRURL(url);
 			caDsrBrowser.getCadsr().setText(url);
@@ -504,6 +509,46 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	}
 
 
+    /**
+     * This method initializes addProjectButton 
+     *  
+     * @return javax.swing.JButton  
+     */
+    private JButton getAddProjectButton() {
+        if (addProjectButton == null) {
+            addProjectButton = new JButton();
+            addProjectButton.setText("Add Project");
+            addProjectButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    if (validateProjectSelection()) {
+                        BusyDialogRunnable bdr = new BusyDialogRunnable(
+                            GridApplication.getContext().getApplication(), "Loading All Packages from Project") {
+                            public void process() {
+                                getAddProjectButton().setEnabled(false);
+                                setProgressText("Finding packages in selected project");
+                                UMLPackageMetadata[] packages = getCaDsrBrowser().getAvailablePackages();
+                                int current = 1;
+                                setProgressText("Adding packages to model");
+                                for (UMLPackageMetadata pack : packages) {
+                                    setProgressText("Adding package " + current + 
+                                        " of " + packages.length + " (" + pack.getName() + ")");
+                                    // the add method already ignores existing packages
+                                    addUmlPackage(pack);
+                                    current++;
+                                }
+                                getAddProjectButton().setEnabled(true);
+                            }
+                        };
+                        Thread runner = new Thread(bdr);
+                        runner.start();
+                    }
+                }
+            });
+        }
+        return addProjectButton;
+    }
+
+
 	/**
 	 * This method initializes jButton	
 	 * 	
@@ -515,36 +560,12 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			addPackageButton.setText("Add Package");
 			addPackageButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// get the selected package
-					Project proj = getCaDsrBrowser().getSelectedProject();
-					if (lastSelectedProject != null) {
-						// verify the project is still the same
-						if (!lastSelectedProject.getLongName().equals(proj.getLongName()) ||
-							!lastSelectedProject.getVersion().equals(proj.getVersion())) {
-							// they don't match...
-							String[] message = {
-								"The selected project is not the same as the project",
-								"to which the previously selected packages belong.",
-								"To use this project, all currently selected packages",
-								"must be removed from the domain model.",
-								"Procede?"
-							};
-							int choice = JOptionPane.showConfirmDialog(
-								DomainModelPanel.this, message, "Project Conflict", JOptionPane.YES_NO_OPTION);
-							if (choice == JOptionPane.YES_OPTION) {
-								// remove all packages from list, set the last selected project
-								getSelectedPackagesList().setListData(new String[0]);
-							} else {
-								// user selected no, so bail out
-								return;
-							}
-						}
-					}
-					lastSelectedProject = proj;
-					UMLPackageMetadata pack = getCaDsrBrowser().getSelectedPackage();
-					if (pack != null) {
-						addUmlPackage(pack);
-					}
+				    if (validateProjectSelection()) {
+				        UMLPackageMetadata pack = getCaDsrBrowser().getSelectedPackage();
+				        if (pack != null) {
+				            addUmlPackage(pack);
+				        }
+                    }
 				}
 			});
 		}
@@ -585,18 +606,15 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	 */
 	private JPanel getPackageButtonsPanel() {
 		if (packageButtonsPanel == null) {
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.gridx = 1;
-			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints7.gridy = 0;
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints6.gridy = 0;
+			GridLayout gridLayout = new GridLayout();
+			gridLayout.setRows(1);
+			gridLayout.setHgap(4);
+			gridLayout.setColumns(3);
 			packageButtonsPanel = new JPanel();
-			packageButtonsPanel.setLayout(new GridBagLayout());
-			packageButtonsPanel.add(getAddPackageButton(), gridBagConstraints6);
-			packageButtonsPanel.add(getRemovePackageButton(), gridBagConstraints7);
+			packageButtonsPanel.setLayout(gridLayout);
+			packageButtonsPanel.add(getAddProjectButton(), null);
+			packageButtonsPanel.add(getAddPackageButton(), null);
+			packageButtonsPanel.add(getRemovePackageButton(), null);
 		}
 		return packageButtonsPanel;
 	}
@@ -617,6 +635,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			gridBagConstraints10.gridx = 1;
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.gridx = 1;
+			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints9.gridy = 0;
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.gridx = 0;
@@ -633,6 +652,37 @@ public class DomainModelPanel extends AbstractWizardPanel {
 		}
 		return caDsrPanel;
 	}
+    
+    
+    private boolean validateProjectSelection() {
+        // get the selected project
+        Project proj = getCaDsrBrowser().getSelectedProject();
+        if (lastSelectedProject != null) {
+            // verify the project is still the same
+            if (!lastSelectedProject.getLongName().equals(proj.getLongName()) ||
+                !lastSelectedProject.getVersion().equals(proj.getVersion())) {
+                // they don't match...
+                String[] message = {
+                    "The selected project is not the same as the project",
+                    "to which the previously selected packages belong.",
+                    "To use this project, all currently selected packages",
+                    "must be removed from the domain model.",
+                    "Procede?"
+                };
+                int choice = JOptionPane.showConfirmDialog(
+                    DomainModelPanel.this, message, "Project Conflict", JOptionPane.YES_NO_OPTION);
+                if (choice == JOptionPane.YES_OPTION) {
+                    // remove all packages from list, set the last selected project
+                    getSelectedPackagesList().setListData(new String[0]);
+                } else {
+                    // user selected no, so bail out
+                    return false;
+                }
+            }
+        }
+        lastSelectedProject = proj;
+        return true;
+    }
 	
 	
 	private void addUmlPackage(UMLPackageMetadata pack) {
@@ -853,4 +903,32 @@ public class DomainModelPanel extends AbstractWizardPanel {
 		data.setCadsrInformation(info);
 		ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
 	}
+    
+    
+    private static class InternalCaDSRBrowserPanel extends CaDSRBrowserPanel {
+        
+        public InternalCaDSRBrowserPanel() {
+            super();
+        }
+        
+        
+        public InternalCaDSRBrowserPanel(boolean showQueryPanel, boolean showClassSelection) {
+            super(showQueryPanel, showClassSelection);
+        }
+        
+        
+        public UMLPackageMetadata[] getAvailablePackages() {
+            int count = getPackageComboBox().getItemCount();
+            List<UMLPackageMetadata> packs = new ArrayList<UMLPackageMetadata>();
+            for (int i = 0; i < count; i++) {
+                Object o = getPackageComboBox().getItemAt(i);
+                if (o instanceof PackageDisplay) {
+                    packs.add(((PackageDisplay) o).getPackage());
+                }
+            }
+            UMLPackageMetadata[] packArray = new UMLPackageMetadata[packs.size()];
+            packs.toArray(packArray);
+            return packArray;
+        }
+    }
 }
