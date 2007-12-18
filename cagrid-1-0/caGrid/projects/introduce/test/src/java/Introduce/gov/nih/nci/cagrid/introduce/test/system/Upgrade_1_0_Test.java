@@ -94,7 +94,7 @@ public class Upgrade_1_0_Test extends Story {
     protected void storyTearDown() throws Throwable {
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(this.tci1);
         try {
-//            step1.runStep();
+           step1.runStep();
         } catch (Throwable e) {
             e.printStackTrace();
         }

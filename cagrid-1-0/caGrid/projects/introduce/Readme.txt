@@ -19,6 +19,12 @@ ANT_HOME         "path to the ant installation"
 GLOBUS_LOCATION  "path to the globus installation"
 
 -------------------------------------------
+O P T I O N A L  E N V I R O N M E N T   V A R I A B L E S
+-------------------------------------------
+CATALINA_HOME     "path to tomcat with globus deployed"
+JBOSS_HOME        "path to jboss with globus deployed"
+
+-------------------------------------------
 E X E C U T I N G
 -------------------------------------------
 To launch Introduce: ant introduce

@@ -116,7 +116,7 @@ public class PersistenceResourcesTest extends Story {
     protected void storyTearDown() throws Throwable {
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci);
         try {
-            //step1.runStep();
+            step1.runStep();
         } catch (Throwable e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
