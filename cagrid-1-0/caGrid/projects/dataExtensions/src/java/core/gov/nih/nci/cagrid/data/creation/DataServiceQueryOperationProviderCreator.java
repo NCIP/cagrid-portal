@@ -131,16 +131,17 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
                 return false;
             }
         };
-        File extensionSchemaDir = new File(ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath()
-            + File.separator + "data" + File.separator + "schema" + File.separator + "Data");
-        List<File> schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, dataXsdFilter);
+        // get schemas for data services
+        File baseSchemaDir = new File(ExtensionsLoader.getInstance().getExtensionsDir(), 
+            "data" + File.separator + "schema");
+        File dataSchemaDir = new File(baseSchemaDir, "Data");
+        List<File> dataSchemaFiles = Utils.recursiveListFiles(dataSchemaDir, dataXsdFilter);
         // also copy the WSDL for data services
-        // schemaFiles.add(new File(getWsdlFileName(props)));
-        schemaFiles.add(new File(extensionSchemaDir + File.separator + "DataService.wsdl"));
+        dataSchemaFiles.add(new File(dataSchemaDir, "DataService.wsdl"));
         try {
-            for (File schemaFile : schemaFiles) {
+            for (File schemaFile : dataSchemaFiles) {
                 String subname = schemaFile.getAbsolutePath().substring(
-                    extensionSchemaDir.getAbsolutePath().length() + File.separator.length());
+                    dataSchemaDir.getAbsolutePath().length() + File.separator.length());
                 File schemaOut = new File(schemaDir + File.separator + subname);
                 Utils.copyFile(schemaFile, schemaOut);
             }
@@ -148,12 +149,11 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
             throw new CreationExtensionException("Error copying data service schemas: " 
                 + ex.getMessage(), ex);
         }
-        // finally, all external (to data services) schemas
-        File xsdDir = new File(ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath() 
-            + File.separator + "data" + File.separator + "schema" + File.separator + "xsd");
+        // finally, all external (to data services) schemas, including CQL
+        File externalSchemaDir = new File(baseSchemaDir, "xsd");
         File xsdOutDir = new File(schemaDir + File.separator + "xsd");
         try {
-            Utils.copyDirectory(xsdDir, xsdOutDir);
+            Utils.copyDirectory(externalSchemaDir, xsdOutDir);
         } catch (Exception ex) {
             throw new CreationExtensionException("Error copying external schemas: " 
                 + ex.getMessage(), ex);
@@ -169,7 +169,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
             namespaces = new NamespacesType();
         }
         // add some namespaces to the service
-        List dsNamespaces = new ArrayList(Arrays.asList(namespaces.getNamespace()));
+        List<NamespaceType> dsNamespaces = new ArrayList<NamespaceType>(Arrays.asList(namespaces.getNamespace()));
         NamespaceType queryNamespace = null;
         NamespaceType resultNamespace = null;
         NamespaceType resultRestrictionNamespace = null;
@@ -179,9 +179,11 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
         try {
             // query namespace
             queryNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
+                + "xsd" + File.separator + "cql1.0" + File.separator 
                 + DataServiceConstants.CQL_QUERY_SCHEMA, schemaDirFile);
             // query result namespace
             resultNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
+                + "xsd" + File.separator + "cql1.0" + File.separator
                 + DataServiceConstants.CQL_RESULT_SET_SCHEMA, schemaDirFile);
             resultRestrictionNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
                 + CQLResultTypesGenerator.getResultTypeXSDFileName(
@@ -249,6 +251,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
             directory.mkdirs();
         }
         // from the lib directory
+        // FIXME: These depend on the caGrid version, and should probably read it from a file
         File libDir = new File(ExtensionsLoader.getInstance().getExtensionsDir() + File.separator + "lib");
         File[] libs = libDir.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
