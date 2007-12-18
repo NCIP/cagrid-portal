@@ -2219,6 +2219,23 @@ public class ModificationViewer extends ApplicationComponent {
     private JTextField getServicePropertyDescriptionTextField() {
         if (this.servicePropertyDescriptionTextField == null) {
             this.servicePropertyDescriptionTextField = new JTextField();
+            this.servicePropertyDescriptionTextField.getDocument().addDocumentListener(new DocumentListener() {
+
+                public void removeUpdate(DocumentEvent e) {
+                    validateServicePropertiesInput();
+                }
+
+
+                public void insertUpdate(DocumentEvent e) {
+                    validateServicePropertiesInput();
+                }
+
+
+                public void changedUpdate(DocumentEvent e) {
+                    validateServicePropertiesInput();
+                }
+
+            });
         }
         return this.servicePropertyDescriptionTextField;
     }
