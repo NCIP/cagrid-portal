@@ -51,14 +51,16 @@ public class HostCertificateManager extends LoggingObject {
 	private CertificateAuthority ca;
 	private IdentityFederationConfiguration conf;
 	private Publisher publisher;
+	private CertificateBlacklistManager blackList;
 
 
 	public HostCertificateManager(Database db, IdentityFederationConfiguration conf, CertificateAuthority ca,
-		Publisher publisher) {
+		Publisher publisher, CertificateBlacklistManager blackList) {
 		this.db = db;
 		this.ca = ca;
 		this.conf = conf;
 		this.publisher = publisher;
+		this.blackList = blackList;
 	}
 
 
@@ -121,6 +123,9 @@ public class HostCertificateManager extends LoggingObject {
 		Connection c = null;
 
 		try {
+			java.security.cert.X509Certificate oldCert = CertUtil.loadCertificate(record.getCertificate().getCertificateAsString());
+			blackList.addCertificateToBlackList(oldCert, blackList.CERTIFICATE_RENEWED);
+			
 			ca.deleteCredentials(record.getHost());
 			java.security.PublicKey key = KeyUtil.loadPublicKey(record.getPublicKey().getKeyAsString());
 			Date start = new Date();

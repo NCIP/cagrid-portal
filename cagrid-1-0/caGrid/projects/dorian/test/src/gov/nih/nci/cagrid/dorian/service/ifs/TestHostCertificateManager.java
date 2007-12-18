@@ -26,7 +26,6 @@ import junit.framework.TestCase;
 
 import org.cagrid.tools.database.Database;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -38,17 +37,17 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 	public final static String OWNER = "owner";
 	private Database db;
 	private CertificateAuthority ca;
-
+	private CertificateBlacklistManager blackList;
 
 	public void publishCRL() {
 		// TODO Auto-generated method stub
 
 	}
 
-
 	public void testCreateAndDestroy() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -57,10 +56,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 
 	}
 
-
 	public void testRenewHostCertificate() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -89,10 +88,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testRenewHostCertificateInvalidStatus() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -137,12 +136,12 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testGetHostCertificateSerialNumbers() {
 		try {
 			int total = 5;
 			String hostPrefix = "localhost";
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			List<Long> ids = new ArrayList<Long>();
 			String owner = OWNER;
@@ -150,17 +149,20 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 				String host = hostPrefix + i;
 				HostCertificateRequest req = getHostCertificateRequest(host);
 				long id = hcm.requestHostCertifcate(owner, req);
-				assertEquals(0, hcm.getHostCertificateRecordsSerialNumbers(owner).size());
+				assertEquals(0, hcm.getHostCertificateRecordsSerialNumbers(
+						owner).size());
 				ids.add(Long.valueOf(id));
 			}
 
 			for (int i = 0; i < total; i++) {
 				long id = ids.get(i).longValue();
 				hcm.approveHostCertifcate(id);
-				List<Long> sn = hcm.getHostCertificateRecordsSerialNumbers(owner);
+				List<Long> sn = hcm
+						.getHostCertificateRecordsSerialNumbers(owner);
 				assertEquals((i + 1), sn.size());
 				for (int j = 0; j < (i + 1); j++) {
-					HostCertificateRecord r = hcm.getHostCertificateRecord(ids.get(j));
+					HostCertificateRecord r = hcm.getHostCertificateRecord(ids
+							.get(j));
 					boolean found = false;
 					for (int x = 0; x < sn.size(); x++) {
 						if (r.getSerialNumber() == sn.get(x).longValue()) {
@@ -180,12 +182,12 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testGetDisabledHostCertificates() {
 		try {
 			int total = 5;
 			String hostPrefix = "localhost";
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			List<Long> ids = new ArrayList<Long>();
 			String owner = OWNER;
@@ -193,15 +195,18 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 				String host = hostPrefix + i;
 				HostCertificateRequest req = getHostCertificateRequest(host);
 				long id = hcm.requestHostCertifcate(owner, req);
-				assertEquals(0, hcm.getDisabledHostCertificatesSerialNumbers().size());
+				assertEquals(0, hcm.getDisabledHostCertificatesSerialNumbers()
+						.size());
 				ids.add(Long.valueOf(id));
 			}
 
 			for (int i = 0; i < total; i++) {
 				long id = ids.get(i).longValue();
 				hcm.approveHostCertifcate(id);
-				assertEquals(0, hcm.getDisabledHostCertificatesSerialNumbers().size());
-				List<Long> sn = hcm.getHostCertificateRecordsSerialNumbers(owner);
+				assertEquals(0, hcm.getDisabledHostCertificatesSerialNumbers()
+						.size());
+				List<Long> sn = hcm
+						.getHostCertificateRecordsSerialNumbers(owner);
 				assertEquals((i + 1), sn.size());
 			}
 
@@ -214,7 +219,8 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 				List<Long> sn = hcm.getDisabledHostCertificatesSerialNumbers();
 				assertEquals((i + 1), sn.size());
 				for (int j = 0; j < (i + 1); j++) {
-					HostCertificateRecord r = hcm.getHostCertificateRecord(ids.get(j));
+					HostCertificateRecord r = hcm.getHostCertificateRecord(ids
+							.get(j));
 					boolean found = false;
 					for (int x = 0; x < sn.size(); x++) {
 						if (r.getSerialNumber() == sn.get(x).longValue()) {
@@ -237,7 +243,8 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 				List<Long> sn = hcm.getDisabledHostCertificatesSerialNumbers();
 				assertEquals((i + 1), sn.size());
 				for (int j = 0; j < (i + 1); j++) {
-					HostCertificateRecord r = hcm.getHostCertificateRecord(ids.get(j));
+					HostCertificateRecord r = hcm.getHostCertificateRecord(ids
+							.get(j));
 					boolean found = false;
 					for (int x = 0; x < sn.size(); x++) {
 						if (r.getSerialNumber() == sn.get(x).longValue()) {
@@ -257,12 +264,12 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testCreateAndApproveManyHostCertificate() {
 		try {
 			int total = 5;
 			String hostPrefix = "localhost";
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			List<HostCertificateRequest> requests = new ArrayList<HostCertificateRequest>();
 			List<Long> ids = new ArrayList<Long>();
@@ -271,12 +278,14 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 				HostCertificateRequest req = getHostCertificateRequest(host);
 				String owner = OWNER + i;
 				long id = hcm.requestHostCertifcate(owner, req);
-				validateAfterCertificateRequest((i + 1), (i + 1), hcm, owner, req, id);
+				validateAfterCertificateRequest((i + 1), (i + 1), hcm, owner,
+						req, id);
 				requests.add(req);
 				ids.add(Long.valueOf(id));
 
 				assertEquals(0, hcm.getHostCertificateRecords(OWNER).size());
-				List<HostCertificateRecord> records = hcm.getHostCertificateRecords(owner);
+				List<HostCertificateRecord> records = hcm
+						.getHostCertificateRecords(owner);
 				assertEquals(1, records.size());
 				assertEquals(host, records.get(0).getHost());
 				assertEquals(owner, records.get(0).getOwner());
@@ -287,12 +296,15 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 				HostCertificateRequest req = requests.get(i);
 				String owner = OWNER + i;
 				HostCertificateRecord record = hcm.approveHostCertifcate(id);
-				validateAfterCertificateApproval(total, (i + 1), hcm, id, owner, req, record);
+				validateAfterCertificateApproval(total, (i + 1), hcm, id,
+						owner, req, record);
 				HostCertificateFilter f = new HostCertificateFilter();
 				f.setStatus(HostCertificateStatus.Pending);
-				assertEquals(total - (i + 1), hcm.findHostCertificates(f).size());
+				assertEquals(total - (i + 1), hcm.findHostCertificates(f)
+						.size());
 
-				List<HostCertificateRecord> records = hcm.getHostCertificateRecords(owner);
+				List<HostCertificateRecord> records = hcm
+						.getHostCertificateRecords(owner);
 				assertEquals(1, records.size());
 				assertEquals(record, records.get(0));
 			}
@@ -326,7 +338,8 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 				HostCertificateFilter f = new HostCertificateFilter();
 				f.setSubject("foobar");
 				assertEquals(0, hcm.findHostCertificates(f).size());
-				String caSubject = ca.getCACertificate().getSubjectDN().getName();
+				String caSubject = ca.getCACertificate().getSubjectDN()
+						.getName();
 				int caindex = caSubject.lastIndexOf(",");
 				String caPreSub = caSubject.substring(0, caindex);
 				f.setSubject(caPreSub);
@@ -339,7 +352,8 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			// Test Find by Multiple
 			try {
 				HostCertificateFilter f = new HostCertificateFilter();
-				String caSubject = ca.getCACertificate().getSubjectDN().getName();
+				String caSubject = ca.getCACertificate().getSubjectDN()
+						.getName();
 				int caindex = caSubject.lastIndexOf(",");
 				String caPreSub = caSubject.substring(0, caindex);
 				f.setStatus(HostCertificateStatus.Active);
@@ -366,7 +380,8 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 				f.setStatus(HostCertificateStatus.Suspended);
 				f.setOwner(newOwner);
 				assertEquals((i + 1), hcm.findHostCertificates(f).size());
-				List<HostCertificateRecord> records = hcm.getHostCertificateRecords(newOwner);
+				List<HostCertificateRecord> records = hcm
+						.getHostCertificateRecords(newOwner);
 				assertEquals((i + 1), records.size());
 			}
 
@@ -376,30 +391,34 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testFindExpiredHostCertificates() {
 		try {
 			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
-			HostCertificateManager hcm = new HostCertificateManager(db, conf, ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db, conf,
+					ca, this, blackList);
 			hcm.clearDatabase();
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			Thread.currentThread().yield();
-			long id1 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost1"));
+			long id1 = hcm.requestHostCertifcate(OWNER,
+					getHostCertificateRequest("localhost1"));
 			hcm.approveHostCertifcate(id1);
-			long id2 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost2"));
+			long id2 = hcm.requestHostCertifcate(OWNER,
+					getHostCertificateRequest("localhost2"));
 			HostCertificateFilter f1 = new HostCertificateFilter();
 			f1.setIsExpired(Boolean.TRUE);
 			HostCertificateFilter f2 = new HostCertificateFilter();
 			f2.setIsExpired(Boolean.FALSE);
 			assertEquals(0, hcm.findHostCertificates(f1).size());
 			assertEquals(1, hcm.findHostCertificates(f2).size());
-			Thread.sleep((conf.getCredentialPolicy().getCredentialLifetime().getSeconds() * 1000) + 100);
+			Thread.sleep((conf.getCredentialPolicy().getCredentialLifetime()
+					.getSeconds() * 1000) + 100);
 			assertEquals(1, hcm.findHostCertificates(f1).size());
 			assertEquals(0, hcm.findHostCertificates(f2).size());
 			hcm.approveHostCertifcate(id2);
 			assertEquals(1, hcm.findHostCertificates(f1).size());
 			assertEquals(1, hcm.findHostCertificates(f2).size());
-			Thread.sleep((conf.getCredentialPolicy().getCredentialLifetime().getSeconds() * 1000) + 100);
+			Thread.sleep((conf.getCredentialPolicy().getCredentialLifetime()
+					.getSeconds() * 1000) + 100);
 			assertEquals(2, hcm.findHostCertificates(f1).size());
 			assertEquals(0, hcm.findHostCertificates(f2).size());
 		} catch (Exception e) {
@@ -408,10 +427,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testCreateAndApproveHostCertificate() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -424,37 +443,43 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testOwnerRemovedUpdateHostCertificates() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
-			long id1 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost1"));
+			long id1 = hcm.requestHostCertifcate(OWNER,
+					getHostCertificateRequest("localhost1"));
 			hcm.approveHostCertifcate(id1);
 			HostCertificateUpdate update1 = new HostCertificateUpdate();
 			update1.setId(id1);
 			update1.setStatus(HostCertificateStatus.Suspended);
 			hcm.updateHostCertificateRecord(update1);
 
-			long id2 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost2"));
+			long id2 = hcm.requestHostCertifcate(OWNER,
+					getHostCertificateRequest("localhost2"));
 			hcm.approveHostCertifcate(id2);
 
-			long id3 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost3"));
+			long id3 = hcm.requestHostCertifcate(OWNER,
+					getHostCertificateRequest("localhost3"));
 
 			hcm.ownerRemovedUpdateHostCertificates(OWNER);
-			assertEquals(HostCertificateStatus.Compromised, hcm.getHostCertificateRecord(id1).getStatus());
-			assertEquals(HostCertificateStatus.Compromised, hcm.getHostCertificateRecord(id2).getStatus());
-			assertEquals(HostCertificateStatus.Rejected, hcm.getHostCertificateRecord(id3).getStatus());
+			assertEquals(HostCertificateStatus.Compromised, hcm
+					.getHostCertificateRecord(id1).getStatus());
+			assertEquals(HostCertificateStatus.Compromised, hcm
+					.getHostCertificateRecord(id2).getStatus());
+			assertEquals(HostCertificateStatus.Rejected, hcm
+					.getHostCertificateRecord(id3).getStatus());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
 		}
 	}
 
-
 	public void testApproveActiveHostCertificate() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -473,10 +498,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testApproveRejectedHostCertificate() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -498,10 +523,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testApproveSuspendedHostCertificate() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -525,10 +550,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testApproveCompromisedHostCertificate() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -552,10 +577,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testCreateDuplicateHostCertificate() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -563,7 +588,8 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRecord record = hcm.approveHostCertifcate(id);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 			try {
-				hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost"));
+				hcm.requestHostCertifcate(OWNER,
+						getHostCertificateRequest("localhost"));
 				fail("Should have Failed!!");
 			} catch (InvalidHostCertificateRequestFault f) {
 
@@ -583,10 +609,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testCreateHostCertificateWithACompromisedKey() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -605,27 +631,31 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 
 			}
 
-			hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("newhost"));
+			hcm.requestHostCertifcate(OWNER,
+					getHostCertificateRequest("newhost"));
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
 		}
 	}
-
 
 	public void testCreateHostCertificateBadHostname() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			try {
-				hcm.requestHostCertifcate(OWNER, getHostCertificateRequest(null));
+				hcm.requestHostCertifcate(OWNER,
+						getHostCertificateRequest(null));
 				fail("Should have Failed!!");
 			} catch (InvalidHostCertificateRequestFault f) {
 
 			}
 
 			try {
-				hcm.requestHostCertifcate(OWNER, getHostCertificateRequest(" "));
+				hcm
+						.requestHostCertifcate(OWNER,
+								getHostCertificateRequest(" "));
 				fail("Should have Failed!!");
 			} catch (InvalidHostCertificateRequestFault f) {
 
@@ -636,10 +666,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testCreateHostCertificateInvalidPublicKey() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			try {
 				HostCertificateRequest req = getHostCertificateRequest("localhost");
@@ -683,13 +713,14 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testCreateHostCertificateInvalidPublicKeySize() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			try {
-				HostCertificateRequest req = getHostCertificateRequest("localhost", 512);
+				HostCertificateRequest req = getHostCertificateRequest(
+						"localhost", 512);
 				hcm.requestHostCertifcate(OWNER, req);
 				fail("Should have Failed!!");
 			} catch (InvalidHostCertificateRequestFault f) {
@@ -702,10 +733,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testUpdateHostCertificateStatusBeforeApproval() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -724,17 +755,18 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRecord record = hcm.approveHostCertifcate(id);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 			hcm.updateHostCertificateRecord(update);
-			assertEquals(HostCertificateStatus.Suspended, hcm.getHostCertificateRecord(id).getStatus());
+			assertEquals(HostCertificateStatus.Suspended, hcm
+					.getHostCertificateRecord(id).getStatus());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
 		}
 	}
 
-
 	public void testUpdateHostCertificateOwnerBeforeApproval() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -751,10 +783,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testUpdateHostCertificateOwner() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -773,10 +805,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testUpdateAllHostCertificate() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -798,10 +830,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testUpdateNonExistingHostCertificate() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -825,10 +857,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testUpdateCompromisedHostCertificate() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -855,10 +887,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testUpdateApprovedHostCertificateToPending() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -881,10 +913,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testUpdateHostCertificateStatus() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -895,7 +927,8 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			update.setId(id);
 			update.setStatus(HostCertificateStatus.Suspended);
 			hcm.updateHostCertificateRecord(update);
-			assertEquals(HostCertificateStatus.Suspended, hcm.getHostCertificateRecord(id).getStatus());
+			assertEquals(HostCertificateStatus.Suspended, hcm
+					.getHostCertificateRecord(id).getStatus());
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -903,10 +936,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void testUpdateRejectedHostCertificate() {
 		try {
-			HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this);
+			HostCertificateManager hcm = new HostCertificateManager(db,
+					getConf(), ca, this, blackList);
 			hcm.clearDatabase();
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
@@ -931,13 +964,14 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		}
 	}
 
-
-	private HostCertificateRequest getHostCertificateRequest(String host) throws Exception {
-		return getHostCertificateRequest(host, ca.getConfiguration().getUserKeySize().getValue());
+	private HostCertificateRequest getHostCertificateRequest(String host)
+			throws Exception {
+		return getHostCertificateRequest(host, ca.getConfiguration()
+				.getUserKeySize().getValue());
 	}
 
-
-	private HostCertificateRequest getHostCertificateRequest(String host, int keySize) throws Exception {
+	private HostCertificateRequest getHostCertificateRequest(String host,
+			int keySize) throws Exception {
 		KeyPair pair = KeyUtil.generateRSAKeyPair(keySize);
 		HostCertificateRequest req = new HostCertificateRequest();
 		req.setHostname(host);
@@ -948,33 +982,36 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		return req;
 	}
 
-
-	private void validateAfterCertificateRequest(HostCertificateManager hcm, HostCertificateRequest req, long id)
-		throws Exception {
+	private void validateAfterCertificateRequest(HostCertificateManager hcm,
+			HostCertificateRequest req, long id) throws Exception {
 		validateAfterCertificateRequest(1, 1, hcm, OWNER, req, id);
 	}
 
-
-	private void validateAfterCertificateRequest(int count, int statusCount, HostCertificateManager hcm, String owner,
-		HostCertificateRequest req, long id) throws Exception {
-		validateFindHostCertificates(count, statusCount, hcm, id, -1, null, req.getHostname(), owner, req
-			.getPublicKey(), HostCertificateStatus.Pending, "");
+	private void validateAfterCertificateRequest(int count, int statusCount,
+			HostCertificateManager hcm, String owner,
+			HostCertificateRequest req, long id) throws Exception {
+		validateFindHostCertificates(count, statusCount, hcm, id, -1, null, req
+				.getHostname(), owner, req.getPublicKey(),
+				HostCertificateStatus.Pending, "");
 	}
 
-
-	private void validateAfterCertificateApproval(HostCertificateManager hcm, long id, String owner,
-		HostCertificateRequest req, HostCertificateRecord record) throws Exception {
+	private void validateAfterCertificateApproval(HostCertificateManager hcm,
+			long id, String owner, HostCertificateRequest req,
+			HostCertificateRecord record) throws Exception {
 		validateAfterCertificateApproval(1, 1, hcm, id, owner, req, record);
 	}
 
-
-	private void validateAfterCertificateApproval(int count, int statusCount, HostCertificateManager hcm, long id,
-		String owner, HostCertificateRequest req, HostCertificateRecord record) throws Exception {
+	private void validateAfterCertificateApproval(int count, int statusCount,
+			HostCertificateManager hcm, long id, String owner,
+			HostCertificateRequest req, HostCertificateRecord record)
+			throws Exception {
 		assertEquals(req.getHostname(), record.getHost());
 		assertEquals(req.getPublicKey(), record.getPublicKey());
 		assertEquals(owner, record.getOwner());
 		assertEquals(HostCertificateStatus.Active, record.getStatus());
-		String subject = gov.nih.nci.cagrid.dorian.common.Utils.getHostCertificateSubject(ca.getCACertificate(), req.getHostname());
+		String subject = gov.nih.nci.cagrid.dorian.common.Utils
+				.getHostCertificateSubject(ca.getCACertificate(), req
+						.getHostname());
 		assertEquals(subject, record.getSubject());
 		HostCertificateRecord r = hcm.getHostCertificateRecord(id);
 		assertEquals(record.getPublicKey(), r.getPublicKey());
@@ -986,50 +1023,59 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		assertEquals(record.getStatus(), r.getStatus());
 		assertEquals(record.getSubject(), r.getSubject());
 		assertEquals(record, r);
-		validateFindHostCertificates(count, statusCount, hcm, id, record.getSerialNumber(), record.getCertificate(),
-			req.getHostname(), owner, req.getPublicKey(), HostCertificateStatus.Active, subject);
+		validateFindHostCertificates(count, statusCount, hcm, id, record
+				.getSerialNumber(), record.getCertificate(), req.getHostname(),
+				owner, req.getPublicKey(), HostCertificateStatus.Active,
+				subject);
 	}
 
-
-	private void validateFindHostCertificates(int count, int statusCount, HostCertificateManager hcm, long id, long sn,
-		X509Certificate cert, String host, String owner, PublicKey key, HostCertificateStatus status, String subject)
-		throws Exception {
+	private void validateFindHostCertificates(int count, int statusCount,
+			HostCertificateManager hcm, long id, long sn, X509Certificate cert,
+			String host, String owner, PublicKey key,
+			HostCertificateStatus status, String subject) throws Exception {
 
 		List<HostCertificateRecord> l1 = hcm.findHostCertificates(null);
 		assertEquals(count, l1.size());
 		if (count == 1) {
-			validateHostCertificateRecord(l1.get(count - 1), id, sn, cert, host, owner, key, status, subject);
+			validateHostCertificateRecord(l1.get(count - 1), id, sn, cert,
+					host, owner, key, status, subject);
 		}
 
 		if (count == 1) {
-			List<HostCertificateRecord> l2 = hcm.findHostCertificates(new HostCertificateFilter());
+			List<HostCertificateRecord> l2 = hcm
+					.findHostCertificates(new HostCertificateFilter());
 			assertEquals(count, l2.size());
-			validateHostCertificateRecord(l2.get(count - 1), id, sn, cert, host, owner, key, status, subject);
+			validateHostCertificateRecord(l2.get(count - 1), id, sn, cert,
+					host, owner, key, status, subject);
 		}
 		HostCertificateFilter f3 = new HostCertificateFilter();
 		f3.setHost(host);
 		List<HostCertificateRecord> l3 = hcm.findHostCertificates(f3);
 		assertEquals(1, l3.size());
-		validateHostCertificateRecord(l3.get(0), id, sn, cert, host, owner, key, status, subject);
+		validateHostCertificateRecord(l3.get(0), id, sn, cert, host, owner,
+				key, status, subject);
 
 		HostCertificateFilter f4 = new HostCertificateFilter();
 		f4.setId(new BigInteger(String.valueOf(id)));
 		List<HostCertificateRecord> l4 = hcm.findHostCertificates(f4);
 		assertEquals(1, l4.size());
-		validateHostCertificateRecord(l4.get(0), id, sn, cert, host, owner, key, status, subject);
+		validateHostCertificateRecord(l4.get(0), id, sn, cert, host, owner,
+				key, status, subject);
 
 		HostCertificateFilter f5 = new HostCertificateFilter();
 		f5.setOwner(owner);
 		List<HostCertificateRecord> l5 = hcm.findHostCertificates(f5);
 		assertEquals(1, l5.size());
-		validateHostCertificateRecord(l5.get(0), id, sn, cert, host, owner, key, status, subject);
+		validateHostCertificateRecord(l5.get(0), id, sn, cert, host, owner,
+				key, status, subject);
 
 		if (sn >= 0) {
 			HostCertificateFilter f6 = new HostCertificateFilter();
 			f6.setSerialNumber(new BigInteger(String.valueOf(sn)));
 			List<HostCertificateRecord> l6 = hcm.findHostCertificates(f6);
 			assertEquals(1, l6.size());
-			validateHostCertificateRecord(l6.get(0), id, sn, cert, host, owner, key, status, subject);
+			validateHostCertificateRecord(l6.get(0), id, sn, cert, host, owner,
+					key, status, subject);
 		}
 
 		HostCertificateFilter f7 = new HostCertificateFilter();
@@ -1037,12 +1083,14 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		List<HostCertificateRecord> l7 = hcm.findHostCertificates(f7);
 		assertEquals(statusCount, l7.size());
 		if (statusCount == 1) {
-			validateHostCertificateRecord(l7.get(0), id, sn, cert, host, owner, key, status, subject);
+			validateHostCertificateRecord(l7.get(0), id, sn, cert, host, owner,
+					key, status, subject);
 		} else if (statusCount > 1) {
 			f7.setId(new BigInteger(String.valueOf(id)));
 			l7 = hcm.findHostCertificates(f7);
 			assertEquals(1, l7.size());
-			validateHostCertificateRecord(l7.get(0), id, sn, cert, host, owner, key, status, subject);
+			validateHostCertificateRecord(l7.get(0), id, sn, cert, host, owner,
+					key, status, subject);
 		}
 
 		if (gov.nih.nci.cagrid.common.Utils.clean(subject) != null) {
@@ -1050,13 +1098,14 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			f8.setSubject(subject);
 			List<HostCertificateRecord> l8 = hcm.findHostCertificates(f8);
 			assertEquals(1, l8.size());
-			validateHostCertificateRecord(l8.get(0), id, sn, cert, host, owner, key, status, subject);
+			validateHostCertificateRecord(l8.get(0), id, sn, cert, host, owner,
+					key, status, subject);
 		}
 	}
 
-
-	private void validateHostCertificateRecord(HostCertificateRecord record, long id, long sn, X509Certificate cert,
-		String host, String owner, PublicKey key, HostCertificateStatus status, String subject) {
+	private void validateHostCertificateRecord(HostCertificateRecord record,
+			long id, long sn, X509Certificate cert, String host, String owner,
+			PublicKey key, HostCertificateStatus status, String subject) {
 		assertEquals(id, record.getId());
 		assertEquals(sn, record.getSerialNumber());
 		assertEquals(cert, record.getCertificate());
@@ -1067,15 +1116,13 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		assertEquals(subject, record.getSubject());
 	}
 
-
-	public void setHostCertificateStatus(HostCertificateManager hcm, long id, HostCertificateStatus status)
-		throws Exception {
+	public void setHostCertificateStatus(HostCertificateManager hcm, long id,
+			HostCertificateStatus status) throws Exception {
 		HostCertificateUpdate update = new HostCertificateUpdate();
 		update.setId(id);
 		update.setStatus(status);
 		hcm.updateHostCertificateRecord(update);
 	}
-
 
 	private IdentityFederationConfiguration getConf() {
 		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
@@ -1092,7 +1139,6 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		return conf;
 	}
 
-
 	private IdentityFederationConfiguration getExpiringCredentialsConf() {
 		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
 		CredentialPolicy cp = new CredentialPolicy();
@@ -1108,24 +1154,25 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		return conf;
 	}
 
-
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = Utils.getCA(db);
+			blackList = new CertificateBlacklistManager(db);
+			blackList.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
 
-
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
 			ca.clearCertificateAuthority();
+			blackList.clearDatabase();
 			assertEquals(0, db.getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

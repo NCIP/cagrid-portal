@@ -30,7 +30,6 @@ import junit.framework.TestCase;
 
 import org.cagrid.tools.database.Database;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -54,6 +53,7 @@ public class TestUserManager extends TestCase implements Publisher {
 
 	private PropertyManager props;
 
+	private CertificateBlacklistManager blackList;
 
 	public void testSingleUserIdPNameBasedIdentitfiers() {
 		try {
@@ -65,7 +65,6 @@ public class TestUserManager extends TestCase implements Publisher {
 
 	}
 
-
 	public void testSingleUserIdPIdBasedIdentitfiers() {
 		try {
 			checkSingleUser(getUserManagerIdBasedIdentities());
@@ -75,7 +74,6 @@ public class TestUserManager extends TestCase implements Publisher {
 		}
 
 	}
-
 
 	public void testMultipleUsersIdPNameBasedIdentitfiers() {
 		try {
@@ -87,7 +85,6 @@ public class TestUserManager extends TestCase implements Publisher {
 
 	}
 
-
 	public void testMultipleUsersIdPIdBasedIdentitfiers() {
 		try {
 			checkMultipleUsers(getUserManagerIdBasedIdentities());
@@ -97,7 +94,6 @@ public class TestUserManager extends TestCase implements Publisher {
 		}
 
 	}
-
 
 	public void checkSingleUser(UserManager um) {
 		try {
@@ -113,9 +109,11 @@ public class TestUserManager extends TestCase implements Publisher {
 			assertNotNull(user.getGridId());
 			assertNotNull(user.getUserStatus());
 			assertEquals(IFSUserStatus.Pending, user.getUserStatus());
-			StringReader ureader = new StringReader(user.getCertificate().getCertificateAsString());
+			StringReader ureader = new StringReader(user.getCertificate()
+					.getCertificateAsString());
 			X509Certificate cert = CertUtil.loadCertificate(ureader);
-			assertEquals(user.getGridId(), UserManager.subjectToIdentity(cert.getSubjectDN().getName()));
+			assertEquals(user.getGridId(), UserManager.subjectToIdentity(cert
+					.getSubjectDN().getName()));
 			assertEquals(user, um.getUser(user.getIdPId(), user.getUID()));
 			assertEquals(user, um.getUser(user.getGridId()));
 			assertEquals(1, um.getDisabledUsers().size());
@@ -237,7 +235,8 @@ public class TestUserManager extends TestCase implements Publisher {
 			// Now we test updating credentials
 			um.renewUserCredentials(getIdp(u5), u5);
 			assertEquals(u5, um.getUser(u5.getGridId()));
-			StringReader r = new StringReader(u5.getCertificate().getCertificateAsString());
+			StringReader r = new StringReader(u5.getCertificate()
+					.getCertificateAsString());
 			X509Certificate newCert = CertUtil.loadCertificate(r);
 			if (cert.equals(newCert)) {
 				assertTrue(false);
@@ -257,11 +256,12 @@ public class TestUserManager extends TestCase implements Publisher {
 		}
 	}
 
-
-	private boolean isUserSerialIdInList(IFSUser usr, Map<String, DisabledUser> list) throws Exception {
+	private boolean isUserSerialIdInList(IFSUser usr,
+			Map<String, DisabledUser> list) throws Exception {
 		if (list.containsKey(usr.getGridId())) {
 			long sn = list.get(usr.getGridId()).getSerialNumber();
-			X509Certificate cert = CertUtil.loadCertificate(usr.getCertificate().getCertificateAsString());
+			X509Certificate cert = CertUtil.loadCertificate(usr
+					.getCertificate().getCertificateAsString());
 			long certsn = cert.getSerialNumber().longValue();
 			if (sn == certsn) {
 				return true;
@@ -269,7 +269,6 @@ public class TestUserManager extends TestCase implements Publisher {
 		}
 		return false;
 	}
-
 
 	public void checkMultipleUsers(UserManager um) {
 		try {
@@ -301,9 +300,11 @@ public class TestUserManager extends TestCase implements Publisher {
 				assertNotNull(user.getGridId());
 				assertNotNull(user.getUserStatus());
 				assertEquals(IFSUserStatus.Pending, user.getUserStatus());
-				StringReader ureader = new StringReader(user.getCertificate().getCertificateAsString());
+				StringReader ureader = new StringReader(user.getCertificate()
+						.getCertificateAsString());
 				X509Certificate cert = CertUtil.loadCertificate(ureader);
-				assertEquals(user.getGridId(), UserManager.subjectToIdentity(cert.getSubjectDN().getName()));
+				assertEquals(user.getGridId(), UserManager
+						.subjectToIdentity(cert.getSubjectDN().getName()));
 				assertEquals(user, um.getUser(user.getIdPId(), user.getUID()));
 				assertEquals(user, um.getUser(user.getGridId()));
 				assertEquals((i + 1), um.getDisabledUsers().size());
@@ -443,7 +444,8 @@ public class TestUserManager extends TestCase implements Publisher {
 				// Now we test updating credentials
 				um.renewUserCredentials(getIdp(u5), u5);
 				assertEquals(u5, um.getUser(u5.getGridId()));
-				StringReader r = new StringReader(u5.getCertificate().getCertificateAsString());
+				StringReader r = new StringReader(u5.getCertificate()
+						.getCertificateAsString());
 				X509Certificate newCert = CertUtil.loadCertificate(r);
 				if (cert.equals(newCert)) {
 					assertTrue(false);
@@ -458,7 +460,8 @@ public class TestUserManager extends TestCase implements Publisher {
 			for (int i = 0; i < list.length; i++) {
 				count = count - 1;
 				um.removeUser(list[i]);
-				assertEquals(count + INIT_USER, um.getUsers(new IFSUserFilter()).length);
+				assertEquals(count + INIT_USER, um
+						.getUsers(new IFSUserFilter()).length);
 			}
 			assertEquals(0, um.getUsers(new IFSUserFilter()).length);
 		} catch (Exception e) {
@@ -473,8 +476,8 @@ public class TestUserManager extends TestCase implements Publisher {
 		}
 	}
 
-
-	private IdentityFederationConfiguration getConf(IdentityAssignmentPolicy p) throws Exception {
+	private IdentityFederationConfiguration getConf(IdentityAssignmentPolicy p)
+			throws Exception {
 		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
 		conf.setIdentityAssignmentPolicy(p);
 		CredentialPolicy cp = new CredentialPolicy();
@@ -503,7 +506,6 @@ public class TestUserManager extends TestCase implements Publisher {
 		return conf;
 	}
 
-
 	private IFSDefaults getDefaults() throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName("Initial IdP");
@@ -529,7 +531,8 @@ public class TestUserManager extends TestCase implements Publisher {
 		idp.setEmailAttributeDescriptor(email);
 
 		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-		methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
+		methods[0] = SAMLAuthenticationMethod
+				.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
 		idp.setAuthenticationMethod(methods);
 		idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
 
@@ -549,11 +552,12 @@ public class TestUserManager extends TestCase implements Publisher {
 		return new IFSDefaults(idp, usr);
 	}
 
-
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
 			db = Utils.getDB();
+			blackList = new CertificateBlacklistManager(db);
+			blackList.clearDatabase();
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = Utils.getCA(db);
 			memoryCA = new CA(Utils.getCASubject());
@@ -564,28 +568,28 @@ public class TestUserManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public UserManager getUserManagerNameBasedIdentities() throws Exception {
 		IdentityFederationConfiguration conf = getConf(IdentityAssignmentPolicy.name);
 		TrustedIdPManager tm = new TrustedIdPManager(conf, db);
-		UserManager um = new UserManager(db, conf, props, ca, tm, this, getDefaults());
+		UserManager um = new UserManager(db, conf, props, ca, blackList, tm,
+				this, getDefaults());
 		um.clearDatabase();
 		return um;
 	}
-
 
 	public UserManager getUserManagerIdBasedIdentities() throws Exception {
 		IdentityFederationConfiguration conf = getConf(IdentityAssignmentPolicy.id);
 		TrustedIdPManager tm = new TrustedIdPManager(conf, db);
-		UserManager um = new UserManager(db, conf, props, ca, tm, this, getDefaults());
+		UserManager um = new UserManager(db, conf, props, ca, blackList, tm,
+				this, getDefaults());
 		um.clearDatabase();
 		return um;
 	}
 
-
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
+			blackList.clearDatabase();
 			assertEquals(0, db.getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -593,11 +597,9 @@ public class TestUserManager extends TestCase implements Publisher {
 		}
 	}
 
-
 	public void publishCRL() {
 
 	}
-
 
 	private TrustedIdP getIdp(IFSUser usr) {
 		TrustedIdP idp = new TrustedIdP();

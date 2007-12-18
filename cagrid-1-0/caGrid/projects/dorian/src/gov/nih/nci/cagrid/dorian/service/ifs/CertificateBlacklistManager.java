@@ -4,7 +4,8 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
-import java.math.BigInteger;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +19,8 @@ import org.cagrid.tools.database.Database;
 
 public class CertificateBlacklistManager {
 
+	public static final String CERTIFICATE_RENEWED = "CERTIFICATE RENEWED";
+	public static final String ACCOUNT_DELETED = "ACCOUNT DELETED";
 	public static final String TABLE = "certificate_blacklist";
 	private static final String SERIAL = "SERIAL_NUMBER";
 	private static final String SUBJECT = "SUBJECT";
@@ -33,6 +36,30 @@ public class CertificateBlacklistManager {
 		log = LogFactory.getLog(this.getClass().getName());
 	}
 
+	public synchronized void addCertificateToBlackList(
+			gov.nih.nci.cagrid.dorian.bean.X509Certificate cert, String reason)
+			throws DorianInternalFault {
+		try {
+			addCertificateToBlackList(CertUtil.loadCertificate(cert
+					.getCertificateAsString()), reason);
+		} catch (GeneralSecurityException e) {
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("Unexpected Error");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} catch (IOException e) {
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("Unexpected Error");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
+
+	}
+
 	public synchronized void addCertificateToBlackList(X509Certificate cert,
 			String reason) throws DorianInternalFault {
 		buildDatabase();
@@ -42,7 +69,7 @@ public class CertificateBlacklistManager {
 				c = db.getConnection();
 				PreparedStatement s = c.prepareStatement("INSERT INTO " + TABLE
 						+ " SET " + SERIAL + "= ?," + SUBJECT + "= ?," + REASON
-						+ "= ?," + CERTIFICATE+ "= ?");
+						+ "= ?," + CERTIFICATE + "= ?");
 				s.setLong(1, cert.getSerialNumber().longValue());
 				s.setString(2, cert.getSubjectDN().getName());
 				s.setString(3, reason);
@@ -86,9 +113,9 @@ public class CertificateBlacklistManager {
 
 	}
 
-	public List<BigInteger> getBlackList() throws DorianInternalFault {
+	public List<Long> getBlackList() throws DorianInternalFault {
 		buildDatabase();
-		List<BigInteger> list = new ArrayList<BigInteger>();
+		List<Long> list = new ArrayList<Long>();
 		Connection c = null;
 		try {
 			c = db.getConnection();
@@ -96,7 +123,7 @@ public class CertificateBlacklistManager {
 					+ " from " + TABLE);
 			ResultSet rs = s.executeQuery();
 			while (rs.next()) {
-				list.add(BigInteger.valueOf(rs.getLong(SERIAL)));
+				list.add(Long.valueOf(rs.getLong(SERIAL)));
 			}
 			rs.close();
 			s.close();

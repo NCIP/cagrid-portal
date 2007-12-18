@@ -36,13 +36,13 @@ public class TestCertificateBlacklistManager extends TestCase {
 				assertEquals(i, blackList.getBlackList().size());
 				blackList.addCertificateToBlackList(creds[i].getCertificate(),
 						"Testing");
-				List<BigInteger> list = blackList.getBlackList();
+				List<Long> list = blackList.getBlackList();
 				assertEquals((i + 1), list.size());
 				for (int j = 0; j <= i; j++) {
 					boolean found = false;
 					for (int x = 0; x < list.size(); x++) {
 						if (creds[j].getCertificate().getSerialNumber().equals(
-								list.get(x))) {
+								BigInteger.valueOf(list.get(x).longValue()))) {
 							found = true;
 							break;
 						}
@@ -60,13 +60,13 @@ public class TestCertificateBlacklistManager extends TestCase {
 			for (int i = 0; i < size; i++) {
 				assertEquals((size-i), blackList.getBlackList().size());
 				blackList.removeCertificateFromBlackList(creds[i].getCertificate().getSerialNumber().longValue());
-				List<BigInteger> list = blackList.getBlackList();
+				List<Long> list = blackList.getBlackList();
 				assertEquals(size-(i+1), list.size());
 				for (int j = 0; j <= i; j++) {
 					boolean found = false;
 					for (int x = 0; x < list.size(); x++) {
 						if (creds[j].getCertificate().getSerialNumber().equals(
-								list.get(x))) {
+								BigInteger.valueOf(list.get(x).longValue()))) {
 							found = true;
 							break;
 						}
@@ -93,6 +93,7 @@ public class TestCertificateBlacklistManager extends TestCase {
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = new CA();
 			blackList = new CertificateBlacklistManager(db);
+			blackList.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -101,7 +102,6 @@ public class TestCertificateBlacklistManager extends TestCase {
 
 	protected void tearDown() throws Exception {
 		super.setUp();
-
 		try {
 			blackList.clearDatabase();
 		} catch (Exception e) {
