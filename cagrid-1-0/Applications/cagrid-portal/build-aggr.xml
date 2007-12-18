@@ -177,8 +177,13 @@
 		</java>
 	</target>	
 	
-	<target name="aggr:run-test" depends="aggr:prepare-run-cp">
-		<java classname="test.TestCQLQuery" classpathref="aggr.run.cp" />
+	<target name="aggr:ban-mgr" depends="aggr:prepare-run-cp">
+		<input message="Enter operation:" validargs="ban,unban" addproperty="aggr:banOp"/>
+		<input message="Enter service URL:" addproperty="aggr:banOpUrl"/>
+		<java classname="gov.nih.nci.cagrid.portal.util.ServiceBanManager" classpathref="aggr.run.cp" >
+			<arg value="${aggr:banOp}"/>
+			<arg value="${aggr:banOpUrl}"/>
+		</java>
 	</target>
 
 </project>

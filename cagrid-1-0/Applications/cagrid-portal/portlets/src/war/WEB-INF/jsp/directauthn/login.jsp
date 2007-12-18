@@ -28,7 +28,7 @@
 				<tr>
 					<td></td>
 					<td style="padding-top:10px;">
-						<input type="submit" value="Login"/>
+						<input type="submit" value="Log In"/>
 					</td>
 				</tr>
 			</table>
