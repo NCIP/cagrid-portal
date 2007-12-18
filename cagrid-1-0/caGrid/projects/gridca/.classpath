@@ -17,9 +17,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-cli-2.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
-	<classpathentry kind="lib" path="lib/jce.zip"/>
 	<classpathentry kind="lib" path="lib/jprov.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
