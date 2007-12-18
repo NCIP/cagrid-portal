@@ -30,7 +30,7 @@ public class JaxPValidCqlTestCase extends TestCase {
 	public JaxPValidCqlTestCase(String name) {
 		super(name);
 		try {
-			validator = new JaxPCqlValidator("ext/xsd/cql1.0/1_gov.nih.nci.cagrid.CQLQuery.xsd");
+			validator = new JaxPCqlValidator("schema/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
