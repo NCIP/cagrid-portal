@@ -744,10 +744,8 @@
             <artifact refid="data.metadata.jars" />
             <artifact refid="metadata.schemas" />
             <artifact refid="metadatautils.jars" />
-        	<!-- until required
         	<artifact refid="cql.1.0.schemas"/>
 			<artifact refid="cql.1.0.beans.jar"/>
-			-->
             <artifact refid="graph.jars" />
         	<artifact refid="grape.jars" />
             <artifact refid="security.metadata.schemas" />
@@ -795,12 +793,11 @@
             <artifact refid="ws.enum.jars" />
             <artifact refid="bdt.jars" />
             <artifact refid="data.jars" />
-			<!-- until required
         	<artifact refid="cql.1.0.schemas"/>
         	<artifact refid="cql.1.0.beans.jar"/>
-        	-->
 			<artifact refid="smartquote.translator.jars"/>
             <artifact refid="data.schemas" />
+			<artifact refid="data.wsdls"/>
         	<artifact refid="testing.system.jars"/>
         </resolveDependencies>
         <!-- query processor jars required by the styles -->
@@ -894,10 +891,8 @@
             <artifact refid="caCORE.jars" />
             <artifact refid="core.test.jars" />
             <artifact refid="data.jars" />
-			<!-- until required
 			<artifact refid="cql.1.0.schemas"/>
 			<artifact refid="cql.1.0.beans.jar"/>
-			-->
             <artifact refid="introduce.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="data.metadata.jars" />
@@ -920,10 +915,8 @@
             <artifact refid="mds.jars" />
             <artifact refid="core.test.jars" />
             <artifact refid="data.jars" />
-			<!-- until required
 			<artifact refid="cql.1.0.schemas"/>
 			<artifact refid="cql.1.0.beans.jar"/>
-			-->
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
             <artifact refid="data.cql.testing.docs" />
@@ -948,10 +941,8 @@
             <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
             <artifact refid="data.jars" />
-			<!-- until required
 			<artifact refid="cql.1.0.schemas"/>
 			<artifact refid="cql.1.0.beans.jar"/>
-			-->
         	<artifact refid="grape.jars" />
             <artifact refid="core.test.jars" />
             <artifact refid="common.test.jars" />
@@ -1004,16 +995,15 @@
             <artifact refid="common.metadata.jars" />
             <artifact refid="servicesecurity.jars" />
             <artifact refid="data.jars" />
-			<!-- until required
-			<artifact refid="cql.1.0.schemas"/>
 			<artifact refid="cql.1.0.beans.jar"/>
-			-->
             <artifact refid="advertisement.jars" />
             <artifact refid="jdom.jars" />
         </resolveDependencies>
         <delete dir="${projects.dir}/fqp/schema/FederatedQueryProcessor/xsd" />
         <resolveDependencies extdir="${projects.dir}/fqp/schema/FederatedQueryProcessor">
-            <artifact refid="data.cql.schemas" />
+            <artifact refid="data.schemas" />
+			<artifact refid="data.wsdls"/>
+			<artifact refid="cql.1.0.schemas"/>
             <artifact refid="metadata.schemas" />
         </resolveDependencies>
         <ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="all" />
