@@ -8,6 +8,7 @@
 		</sequence>
 		<attribute name="serviceName" type="string"></attribute>
 		<attribute name="deploymentPrefix" type="string"></attribute>
+		<attribute name="serviceDeploymentDirName" type="string"></attribute>
 	</complexType>
 
 	<complexType name="Jars">

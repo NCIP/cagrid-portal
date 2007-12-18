@@ -43,9 +43,11 @@
 	<property name="jars.sufix" value=".jar" />
 	<property name="junit.results.dir" value="${build.dir}/junit" />
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
-	
-	<property name="service.tasks.jar" value="${basedir}/skeleton/tools/lib/${jars.prefixname}serviceTasks.jar"/>
-	<property name="service.tools.jar" value="${basedir}/skeleton/lib/${jars.prefixname}serviceTools.jar"/>
+	<property name="skeleton.dir" value="${basedir}/skeleton" />
+	<property name="skeleton.lib.dir" value="${skeleton.dir}/lib" />
+	<property name="skeleton.tools.lib.dir" value="${skeleton.dir}/tools/lib" />
+	<property name="service.tasks.jar" value="${skeleton.tools.lib.dir}/${jars.prefixname}serviceTasks.jar"/>
+	<property name="service.tools.jar" value="${skeleton.lib.dir}/${jars.prefixname}serviceTools.jar"/>
 	
 	
 	<property name="java.source" value="1.5" />

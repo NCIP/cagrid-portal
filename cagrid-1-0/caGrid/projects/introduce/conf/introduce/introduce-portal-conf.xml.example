@@ -45,13 +45,6 @@
                     	<centered>true</centered>
                     </renderOptions>
                 </component>
-                <component>
-                    <title>Modify Service</title>
-                    <description>Modify Grid Service</description>
-                    <classname>gov.nih.nci.cagrid.introduce.portal.modification.ModificationLauncher</classname>
-                    <icon>/modify.png</icon>
-                    <showOnToolBar>true</showOnToolBar>
-                </component>
              </components>
         </menu>
         <menu>
@@ -59,12 +52,33 @@
             <description>Tools</description>
             <showIcons>true</showIcons>
             <components>
-                   <component>
+                <component>
+                    <title>Modify Service</title>
+                    <description>Modify Grid Service</description>
+                    <classname>gov.nih.nci.cagrid.introduce.portal.modification.ModificationLauncher</classname>
+                    <icon>/cog_edit.png</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                </component>
+                <component>
                     <title>Deploy Service</title>
                     <description>Deploy Service</description>
                     <classname>gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentLauncher</classname>
-                    <icon>/deploy.png</icon>
+                    <icon>/cog_go.png</icon>
                     <showOnToolBar>true</showOnToolBar>
+                </component>
+                <component>
+                    <title>Undeploy Service</title>
+                    <description>Undeploy Service</description>
+                    <classname>gov.nih.nci.cagrid.introduce.portal.undeployment.UndeployServiceViewer</classname>
+                    <icon>/cog_back.png</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                    <dimensions>
+                        <width>600</width>
+                        <height>400</height>
+                    </dimensions>
+                    <renderOptions>
+                    	<centered>true</centered>
+                    </renderOptions>
                 </component>
                  <component>
                     <title>Browse Data Types</title>

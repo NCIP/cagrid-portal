@@ -83,7 +83,7 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
 
     public final static ImageIcon getModifyIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/modify.png"));
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_edit.png"));
     }
 
 
@@ -105,7 +105,10 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
     public final static ImageIcon getDeployIcon() {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_go.png"));
     }
-
+    
+    public final static ImageIcon getUndeployIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_back.png"));
+    }
 
     public final static ImageIcon getNamespaceIcon() {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/chart_organisation.png"));

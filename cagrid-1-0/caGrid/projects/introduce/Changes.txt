@@ -1,4 +1,5 @@
 1.1 - 1.2
+-- Added abiilty for services to be undeployed
 -- Added ability to have resources be persisted
 	-- using XMLPersistanceHelper customized from globus
 -- Renamed some service files so that they all now start with the service name

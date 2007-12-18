@@ -15,7 +15,7 @@ import org.apache.tools.ant.Task;
 import org.globus.wsrf.encoding.ObjectSerializer;
 
 
-public class DeploymentFileGenerator extends Task {
+public class DeploymentFileGeneratorTask extends Task {
 
     public static final String DEPLOYMENT_PERSISTENCE_FILE = "introduceDeployment.xml";
     public static final QName DEPLOYMENT_PERSISTENCE_QNAME = new QName(
@@ -35,6 +35,7 @@ public class DeploymentFileGenerator extends Task {
         Deployment deployment = new Deployment();
         deployment.setServiceName(properties.getProperty("introduce.skeleton.service.name"));
         deployment.setDeploymentPrefix(properties.getProperty("service.deployment.prefix"));
+        deployment.setServiceDeploymentDirName(properties.getProperty("service.deployment.dir.name"));
 
         // get the list of jars to be deployed and add them
         File libDir = new File(properties.getProperty("build.lib.dir"));
