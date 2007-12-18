@@ -4,6 +4,4 @@
 	<import location="DataServiceAuditorConfiguration.xsd"/>
 	<import location="DataServiceExtensionData.xsd"/>
 	<import location="DataServiceStyle.xsd"/>
-	<import location="1_gov.nih.nci.cagrid.CQLQuery.xsd"/>
-	<import location="1_gov.nih.nci.cagrid.CQLResultSet.xsd"/>
 </definitions>

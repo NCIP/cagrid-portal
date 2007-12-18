@@ -12,7 +12,7 @@
   <types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
-      <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" schemaLocation="./1_gov.nih.nci.cagrid.CQLQuery.xsd" />
+      <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" schemaLocation="./xsd/cql1.0/1_gov.nih.nci.cagrid.CQLQuery.xsd" />
       <import namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing" schemaLocation="./addressing.xsd" />
       <import namespace="http://gov.nih.nci.cagrid.enumeration/EnumerationResponseContainer" schemaLocation="./EnumerationResponseContainer.xsd"/>
       <import namespace="http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService/types" schemaLocation="./EnumerationDataServiceTypes.xsd" />
