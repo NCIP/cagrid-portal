@@ -99,5 +99,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-advertisement.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-1.1-Introduce-1.1-serviceTools.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-CQL-cql.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
