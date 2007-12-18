@@ -125,7 +125,7 @@ public class MDIDesktopPane extends JDesktopPane {
                 int x = this.getLocationOnScreen().x;
                 int y = this.getLocationOnScreen().y;
                 Dimension dim = frame.getSize();
-                frame.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
+                frame.setLocation(w / 2 - dim.width / 2, h / 2 - dim.height / 2);
             }
             if (options.isMaximized()) {
                 try {
