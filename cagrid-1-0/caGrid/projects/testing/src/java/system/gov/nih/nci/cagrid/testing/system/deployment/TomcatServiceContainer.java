@@ -109,7 +109,7 @@ public class TomcatServiceContainer extends ServiceContainer {
         try {
             deployProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment, serviceDir);
             new StreamGobbler(deployProcess.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
-            new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
+            new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_OUT, LOG, Level.ERROR).start();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking deploy process: " + ex.getMessage(), ex);
         }
@@ -179,7 +179,7 @@ public class TomcatServiceContainer extends ServiceContainer {
             shutdownProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment,
                 getProperties().getContainerDirectory());
             new StreamGobbler(shutdownProcess.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
-            new StreamGobbler(shutdownProcess.getErrorStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
+            new StreamGobbler(shutdownProcess.getErrorStream(), StreamGobbler.TYPE_OUT, LOG, Level.ERROR).start();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking startup process: " + ex.getMessage(), ex);
         }
@@ -272,7 +272,7 @@ public class TomcatServiceContainer extends ServiceContainer {
             catalinaProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment,
                 getProperties().getContainerDirectory());
             new StreamGobbler(catalinaProcess.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
-            new StreamGobbler(catalinaProcess.getErrorStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
+            new StreamGobbler(catalinaProcess.getErrorStream(), StreamGobbler.TYPE_OUT, LOG, Level.ERROR).start();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking startup process: " + ex.getMessage(), ex);
         }
@@ -377,10 +377,14 @@ public class TomcatServiceContainer extends ServiceContainer {
         File serverConfigFile = new File(getProperties().getContainerDirectory(), 
             "conf" + File.separator + "server.xml");
         Element configRoot = XMLUtilities.fileNameToDocument(serverConfigFile.getAbsolutePath()).getRootElement();
-        for (Element serviceElement : (List<Element>) configRoot.getChildren("Service", configRoot.getNamespace())) {
+        Iterator serviceElementIterator = configRoot.getChildren("Service", configRoot.getNamespace()).iterator();
+        while (serviceElementIterator.hasNext()) {
+            Element serviceElement = (Element) serviceElementIterator.next();
             if (serviceElement.getAttributeValue("name").equals("Catalina")) {
-                for (Element connectorElement : (List<Element>) serviceElement.getChildren(
-                    "Connector", configRoot.getNamespace())) {
+                Iterator connectorElementIterator = serviceElement.getChildren(
+                    "Connector", configRoot.getNamespace()).iterator();
+                while (connectorElementIterator.hasNext()) {
+                    Element connectorElement = (Element) connectorElementIterator.next();
                     boolean connectorFound = false;
                     if (getProperties().isSecure()) {
                         if (connectorElement.getAttributeValue("port").equals("8443")

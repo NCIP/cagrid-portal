@@ -120,7 +120,7 @@ public class GlobusServiceContainer extends ServiceContainer {
         try {
             deployProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment, serviceDir);
             new StreamGobbler(deployProcess.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
-            new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_ERR, LOG, Level.DEBUG).start();
+            new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_ERR, LOG, Level.ERROR).start();
             deployProcess.waitFor();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking deploy process: " + ex.getMessage(), ex);
@@ -251,11 +251,15 @@ public class GlobusServiceContainer extends ServiceContainer {
             System.out.println("Starting Globus on port: " + port);
             LOG.debug("Starting Globus on port: " + port);
         }
-        // enable security if applicable
+        
+        // security specialization
+        // if secure, but no descriptor, uses default
         if (getProperties().isSecure() && getProperties().getSecurityDescriptor() != null) {
+            // secure, with container descriptor
             opts.add("-containerDesc");
             opts.add(getProperties().getSecurityDescriptor().getAbsolutePath());
-        } else {
+        } else if (!getProperties().isSecure()) {
+            // insecure
             opts.add("-nosec");
         }
 
@@ -398,7 +402,7 @@ public class GlobusServiceContainer extends ServiceContainer {
         // start the process
         Process proc = Runtime.getRuntime().exec(cmd.toArray(new String[0]), editedEnvironment, containerDir);
         new StreamGobbler(proc.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
-        new StreamGobbler(proc.getErrorStream(), StreamGobbler.TYPE_ERR, LOG, Level.DEBUG).start();
+        new StreamGobbler(proc.getErrorStream(), StreamGobbler.TYPE_ERR, LOG, Level.ERROR).start();
         return proc;
     }
 
