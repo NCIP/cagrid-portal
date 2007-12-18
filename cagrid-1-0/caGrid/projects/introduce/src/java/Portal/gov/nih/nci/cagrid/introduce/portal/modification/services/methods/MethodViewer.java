@@ -622,7 +622,7 @@ public class MethodViewer extends javax.swing.JDialog {
             if (!getIsFromIntroduceCheckBox().isSelected()) {
 
                 if (ValidationUtils.isNotBlank(this.getWsdlImportPackageNameTextField().getText())
-                    && !CommonTools.isValidPackageAndClassName(this.getWsdlImportPackageNameTextField().getText())) {
+                    && !CommonTools.isValidPackageName(this.getWsdlImportPackageNameTextField().getText())) {
                     result.add(new SimpleValidationMessage("Package does not appear to be a valid java package name.",
                         Severity.WARNING, METHOD_IMPORT_PACKAGE));
                 } else if (ValidationUtils.isBlank(this.getWsdlImportPackageNameTextField().getText())) {
