@@ -22,7 +22,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Apr 2, 2007 1:35:01 PM
- * @version $Id: DomainModelCreationUtil.java,v 1.2 2007-07-27 13:41:26 dervin Exp $ 
+ * @version $Id: DomainModelCreationUtil.java,v 1.3 2007-12-18 19:10:26 dervin Exp $ 
  */
 public class DomainModelCreationUtil {
     
@@ -46,10 +46,10 @@ public class DomainModelCreationUtil {
         proj.setVersion(cadsrInfo.getProjectVersion());
 
         // Set of selected (fully qualified) class names
-        Set selectedClasses = new HashSet();
+        Set<String> selectedClasses = new HashSet<String>();
 
         // Set of targetable class names
-        Set targetableClasses = new HashSet();
+        Set<String> targetableClasses = new HashSet<String>();
 
         // walk through the selected packages
         for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {

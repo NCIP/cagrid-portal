@@ -19,7 +19,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Jul 12, 2007 10:49:42 AM
- * @version $Id: StyleUiLoader.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: StyleUiLoader.java,v 1.2 2007-12-18 19:11:40 dervin Exp $ 
  */
 public class StyleUiLoader {
 
@@ -36,7 +36,7 @@ public class StyleUiLoader {
     public static List<AbstractWizardPanel> loadWizardPanels(ServiceStyleContainer container,
         ServiceExtensionDescriptionType extensionDescription, ServiceInformation serviceInfo) 
         throws Exception {
-        List<AbstractWizardPanel> wizardPanels = new ArrayList();
+        List<AbstractWizardPanel> wizardPanels = new ArrayList<AbstractWizardPanel>();
         DataServiceStyleCreationWizardPanels panelDescriptions = 
             container.getServiceStyle().getCreationWizardPanels();
         if (panelDescriptions != null) {

@@ -42,7 +42,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Jun 27, 2007 8:58:22 AM
- * @version $Id: QueryProcessorConfigPanel.java,v 1.5 2007-11-06 15:53:41 hastings Exp $ 
+ * @version $Id: QueryProcessorConfigPanel.java,v 1.6 2007-12-18 19:11:40 dervin Exp $ 
  */
 public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     
@@ -213,7 +213,7 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
                 DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
             // remove all query processor config properties from the service properties
             ServicePropertiesProperty[] oldProperties = getServiceInfo().getServiceProperties().getProperty();
-            List<ServicePropertiesProperty> keptProperties = new ArrayList();
+            List<ServicePropertiesProperty> keptProperties = new ArrayList<ServicePropertiesProperty>();
             for (ServicePropertiesProperty oldProp : oldProperties) {
                 if (!oldProp.getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
                     keptProperties.add(oldProp);
@@ -274,7 +274,7 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
                     // start by removing the old query processor properties
                     ServicePropertiesProperty[] oldProperties = 
                         getServiceInfo().getServiceProperties().getProperty();
-                    List<ServicePropertiesProperty> keptProperties = new ArrayList();
+                    List<ServicePropertiesProperty> keptProperties = new ArrayList<ServicePropertiesProperty>();
                     for (ServicePropertiesProperty prop : oldProperties) {
                         if (!prop.getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
                             keptProperties.add(prop);

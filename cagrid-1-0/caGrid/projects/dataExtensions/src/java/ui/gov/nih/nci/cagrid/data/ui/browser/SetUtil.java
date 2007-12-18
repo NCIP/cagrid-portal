@@ -10,12 +10,12 @@ import java.util.Set;
  * @author David Ervin
  * 
  * @created Jul 16, 2007 11:02:33 AM
- * @version $Id: SetUtil.java,v 1.1 2007-07-17 13:40:36 dervin Exp $ 
+ * @version $Id: SetUtil.java,v 1.2 2007-12-18 19:12:03 dervin Exp $ 
  */
 public class SetUtil {
 
-    public static Set difference(Set a, Set b) {
-        Set diff = new HashSet();
+    public static Set difference(Set<?> a, Set<?> b) {
+        Set<Object> diff = new HashSet<Object>();
         for (Object o : a) {
             if (!b.contains(o)) {
                 diff.add(o);
@@ -29,9 +29,9 @@ public class SetUtil {
         return diff;
     }
     
-    public static Set intersect(Set a, Set b) {
-        Set intersect = new HashSet();
-        Set union = new HashSet();
+    public static Set intersect(Set<?> a, Set<?> b) {
+        Set<Object> intersect = new HashSet<Object>();
+        Set<Object> union = new HashSet<Object>();
         union.addAll(a);
         union.addAll(b);
         for (Object o : union) {

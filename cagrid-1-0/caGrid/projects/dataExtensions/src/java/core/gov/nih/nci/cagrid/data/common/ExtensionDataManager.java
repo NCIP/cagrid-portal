@@ -22,7 +22,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 10:04:04 AM
- * @version $Id: ExtensionDataManager.java,v 1.2 2007-08-24 14:15:02 dervin Exp $ 
+ * @version $Id: ExtensionDataManager.java,v 1.3 2007-12-18 19:10:26 dervin Exp $ 
  */
 public class ExtensionDataManager {
     
@@ -385,7 +385,7 @@ public class ExtensionDataManager {
     public List<String> getCadsrPackageNames() throws Exception {
         CadsrInformation info = getCadsrInformation();
         if (info.getPackages() != null) {
-            List<String> names = new ArrayList(info.getPackages().length);
+            List<String> names = new ArrayList<String>(info.getPackages().length);
             for (CadsrPackage pack : info.getPackages()) {
                 names.add(pack.getName());
             }

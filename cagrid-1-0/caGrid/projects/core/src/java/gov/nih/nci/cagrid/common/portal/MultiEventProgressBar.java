@@ -19,13 +19,13 @@ import javax.swing.SwingUtilities;
  */
 public class MultiEventProgressBar extends JProgressBar {
 
-	private Map events;
+	private Map<Integer, String> events;
 	private int id;
 	private boolean hideWhenComplete;
 
 
 	public MultiEventProgressBar(boolean onlyShowWhenWorking) {
-		this.events = new HashMap();
+		this.events = new HashMap<Integer, String>();
 		this.id = 0;
 		this.hideWhenComplete = onlyShowWhenWorking;
 		this.setVisible(!onlyShowWhenWorking);
@@ -76,7 +76,7 @@ public class MultiEventProgressBar extends JProgressBar {
 					min = num;
 				}
 			}
-			String s = (String) events.get(min);
+			String s = events.get(min);
 			updateProgress(true, s);
 		}
 	}

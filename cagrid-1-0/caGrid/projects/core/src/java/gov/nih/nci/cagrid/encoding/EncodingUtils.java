@@ -25,7 +25,7 @@ public class EncodingUtils {
 
 	// maps <mapping location> to <Mapping>
 	// using Hashtable for synchronization correctness
-	protected static Map mappingCacheMap = new Hashtable();
+	protected static Map<String, Mapping> mappingCacheMap = new Hashtable<String, Mapping>();
 
 
 	public static Mapping getMapping(MessageContext context) {
@@ -70,7 +70,7 @@ public class EncodingUtils {
 		Mapping mapping = null;
 		if (mappingCacheMap.containsKey(mappingLocation)) {
 			LOG.debug("Loading Mapping from cache for location:" + mappingLocation);
-			mapping = (Mapping) mappingCacheMap.get(mappingLocation);
+			mapping = mappingCacheMap.get(mappingLocation);
 		} else {
 			LOG.debug("Unable to loading Mapping from cache for location:" + mappingLocation);
 			LOG.debug("Attempting to load mapping from mapping location:" + mappingLocation);

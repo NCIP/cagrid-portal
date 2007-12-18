@@ -149,7 +149,7 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
         // copy new libraries in
         File extLibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "lib");
         File[] dataLibs = extLibDir.listFiles(newDataLibFilter);
-        List<File> outLibs = new ArrayList(dataLibs.length);
+        List<File> outLibs = new ArrayList<File>(dataLibs.length);
         for (File newLib : dataLibs) {
             File out = new File(serviceLibDir.getAbsolutePath() 
                 + File.separator + newLib.getName());

@@ -19,7 +19,7 @@ import javax.swing.JPanel;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:50:26 AM
- * @version $Id: MonitoredEventsPanel.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: MonitoredEventsPanel.java,v 1.2 2007-12-18 19:11:40 dervin Exp $ 
  */
 public class MonitoredEventsPanel extends JPanel {
 
@@ -34,7 +34,7 @@ public class MonitoredEventsPanel extends JPanel {
     private ItemListener eventSelectionListener = null;
 
     public MonitoredEventsPanel() {
-        changeListeners = new LinkedList();
+        changeListeners = new LinkedList<MonitoredEventsChangeListener>();
         changeNotificationEnabled = true;
         initialize();
     }

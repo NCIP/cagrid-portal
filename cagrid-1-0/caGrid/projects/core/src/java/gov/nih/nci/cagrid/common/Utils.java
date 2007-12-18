@@ -266,7 +266,7 @@ public class Utils {
 			java.lang.Object removal) {
 		Class arrayType = array.getClass().getComponentType();
 		int length = Array.getLength(array);
-		List temp = new ArrayList(length - 1);
+		List<Object> temp = new ArrayList<Object>(length - 1);
 		for (int i = 0; i < length; i++) {
 			java.lang.Object o = Array.get(array, i);
 			if (!o.equals(removal)) {
@@ -460,14 +460,14 @@ public class Utils {
 				.getClassForQName(qname);
 	}
 
-	public static List recursiveListFiles(File baseDir, final FileFilter filter) {
+	public static List<File> recursiveListFiles(File baseDir, final FileFilter filter) {
 		FileFilter dirFilter = new FileFilter() {
 			public boolean accept(File pathname) {
 				return pathname.isDirectory() || filter.accept(pathname);
 			}
 		};
 		File[] fileArray = baseDir.listFiles(dirFilter);
-		List files = new ArrayList(fileArray.length);
+		List<File> files = new ArrayList<File>(fileArray.length);
 		for (int i = 0; i < fileArray.length; i++) {
 			if (fileArray[i].isDirectory()) {
 				files.addAll(recursiveListFiles(fileArray[i], filter));
@@ -527,7 +527,7 @@ public class Utils {
 		for (int i = 0; i < parentDirsNeeded; i++) {
 			relPath.append("..").append(File.separatorChar);
 		}
-		List parentPaths = new LinkedList();
+		List<String> parentPaths = new LinkedList<String>();
 		File parentDir = new File(destDir);
 		for (int i = 0; i < parentDirsKept; i++) {
 			parentPaths.add(parentDir.getName());

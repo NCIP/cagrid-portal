@@ -11,16 +11,16 @@ import java.util.Vector;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin </A> 
  *   
  * @created Dec 18, 2003 
- * @version $Id: RunnerGroup.java,v 1.2 2007-04-05 16:42:56 langella Exp $ 
+ * @version $Id: RunnerGroup.java,v 1.3 2007-12-18 19:09:46 dervin Exp $ 
  */
 
 public class RunnerGroup {
 
-	public List tasks;
+	public List<Runner> tasks;
 
 
 	public RunnerGroup() {
-		tasks = new Vector();
+		tasks = new Vector<Runner>();
 	}
 
 
@@ -35,7 +35,6 @@ public class RunnerGroup {
 
 
 	public Runner get(int i) {
-		return (Runner) tasks.get(i);
+		return tasks.get(i);
 	}
-
 }

@@ -40,7 +40,7 @@ import org.apache.log4j.Logger;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 16, 2006 
- * @version $Id: BaseCodegenPostProcessorExtension.java,v 1.2 2007-08-24 14:14:50 dervin Exp $ 
+ * @version $Id: BaseCodegenPostProcessorExtension.java,v 1.3 2007-12-18 19:10:26 dervin Exp $ 
  */
 public abstract class BaseCodegenPostProcessorExtension implements CodegenExtensionPostProcessor {
 	private static final Logger logger = Logger.getLogger(DataServiceOperationProviderCodegenPostProcessor.class);
@@ -63,7 +63,7 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
 		File classpathFile = new File(serviceDir + File.separator + ".classpath");
 		if (classpathFile.exists()) {
 			logger.info("Modifying eclipse .classpath file");
-			Set libs = new HashSet();
+			Set<File> libs = new HashSet<File>();
 			ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
 			AdditionalLibraries additionalLibs = null;
 			try {
@@ -98,7 +98,7 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
 		throws CodegenExtensionException {
 		try {
             Mappings mappings = new Mappings();
-            List classMappings = new LinkedList();
+            List<ClassToQname> classMappings = new LinkedList<ClassToQname>();
             // the first placeto look for mappings is in the caDSR information, which 
             // is derived from the data service Domain Model.  If no domain model is to be used,
             // the mappings are still required to do anything with caCORE SDK beans, or BDT in general
@@ -132,7 +132,7 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
                 logger.warn("Falling back to schema information for class to qname mapping.");
                 NamespaceType[] namespaces = info.getNamespaces().getNamespace();
                 // a set of namespaces to ignore
-                Set nsIgnores = new HashSet();
+                Set<String> nsIgnores = new HashSet<String>();
                 nsIgnores.add(IntroduceConstants.W3CNAMESPACE);
                 nsIgnores.add(info.getServices().getService(0).getNamespace());
                 nsIgnores.add(DataServiceConstants.BDT_DATA_SERVICE_NAMESPACE);

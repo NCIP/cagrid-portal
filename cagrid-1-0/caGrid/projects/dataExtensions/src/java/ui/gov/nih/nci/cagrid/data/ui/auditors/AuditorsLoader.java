@@ -22,14 +22,14 @@ import java.util.jar.JarFile;
  * @author David Ervin
  * 
  * @created May 23, 2007 4:05:52 PM
- * @version $Id: AuditorsLoader.java,v 1.2 2007-08-06 14:04:08 dervin Exp $ 
+ * @version $Id: AuditorsLoader.java,v 1.3 2007-12-18 19:11:40 dervin Exp $ 
  */
 public class AuditorsLoader {
 
     public static List<Class> getAvailableAuditorClasses(File libDir) throws MalformedURLException, IOException {
         // list jars from the lib dir as URLs
         List jarFiles = Utils.recursiveListFiles(libDir, new FileFilters.JarFileFilter());
-        List<URL> jarUrls = new LinkedList();
+        List<URL> jarUrls = new LinkedList<URL>();
         for (int i = 0; i < jarFiles.size(); i++) {
             File jarFile = (File) jarFiles.get(i);
             if (jarFile.isFile()) {
@@ -40,8 +40,7 @@ public class AuditorsLoader {
         jarUrls.toArray(urlArray);
         System.out.println("Looking for data service auditor subclasses");
         // load all subclasses of DataServiceAuditor
-        List<Class> subclasses = new LinkedList();
-        Class baseClass = DataServiceAuditor.class;
+        List<Class> subclasses = new LinkedList<Class>();
         for (int i = 0; i < jarFiles.size(); i++) {
             // loader created each time because 
             // iterating over many classes clogs up the cache in the loader
@@ -62,8 +61,8 @@ public class AuditorsLoader {
                         // System.err.println("Error loading class (" + name
                         // + "):" + e.getMessage());
                     }
-                    if (loadedClass != null && baseClass.isAssignableFrom(loadedClass)
-                        && !baseClass.getName().equals(loadedClass.getName())) {
+                    if (loadedClass != null && DataServiceAuditor.class.isAssignableFrom(loadedClass)
+                        && !DataServiceAuditor.class.getName().equals(loadedClass.getName())) {
                         subclasses.add(loadedClass);
                     }
                 }

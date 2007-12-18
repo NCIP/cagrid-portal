@@ -32,7 +32,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created May 21, 2007 11:38:54 AM
- * @version $Id: AuditorSelectionPanel.java,v 1.4 2007-11-15 21:49:20 hastings Exp $ 
+ * @version $Id: AuditorSelectionPanel.java,v 1.5 2007-12-18 19:11:40 dervin Exp $ 
  */
 public class AuditorSelectionPanel extends JPanel {
 
@@ -50,7 +50,7 @@ public class AuditorSelectionPanel extends JPanel {
     public AuditorSelectionPanel(File serviceBaseDir) {
         super();
         this.serviceBaseDir = serviceBaseDir;
-        auditorAdditionListeners = new LinkedList();
+        auditorAdditionListeners = new LinkedList<AuditorAdditionListener>();
         initialize();
     }
     

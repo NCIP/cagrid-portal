@@ -44,7 +44,7 @@ public class JarUtilities {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		JarOutputStream jarOut = new JarOutputStream(bytes);
 		// copy all entries except the one with the matching name
-		Set copiedEntries = new HashSet();
+		Set<String> copiedEntries = new HashSet<String>();
 		Enumeration jarEntries = jar.entries();
 		while (jarEntries.hasMoreElements()) {
 			JarEntry entry = (JarEntry) jarEntries.nextElement();

@@ -49,7 +49,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created May 11, 2006
- * @version $Id: ClassBrowserPanel.java,v 1.6 2007-11-06 15:53:42 hastings Exp $
+ * @version $Id: ClassBrowserPanel.java,v 1.7 2007-12-18 19:12:03 dervin Exp $
  */
 public class ClassBrowserPanel extends JPanel {
 
@@ -72,8 +72,8 @@ public class ClassBrowserPanel extends JPanel {
 	public ClassBrowserPanel(ExtensionDataManager extensionDataManager, ServiceInformation serviceInfo) {
 		this.extensionDataManager = extensionDataManager;
 		this.serviceInfo = serviceInfo;
-		classSelectionListeners = new LinkedList();
-		additionalJarsListeners = new LinkedList();
+		classSelectionListeners = new LinkedList<ClassSelectionListener>();
+		additionalJarsListeners = new LinkedList<AdditionalJarsChangeListener>();
         initFirstTime();
         initialize();
 	}
@@ -140,7 +140,7 @@ public class ClassBrowserPanel extends JPanel {
 	
 	private void addJars(String[] jarFiles) {
 		// only bother adding the jar file to the list if it's not in there yet
-        Set<String> uniqueJars = new HashSet();
+        Set<String> uniqueJars = new HashSet<String>();
         Collections.addAll(uniqueJars, getAdditionalJars());
         for (String jarFile : jarFiles) {
             String shortJarName = (new File(jarFile)).getName();
@@ -268,9 +268,9 @@ public class ClassBrowserPanel extends JPanel {
 			removeJarsButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// identify selected / kept jars
-					Set selected = new HashSet();
+					Set<Object> selected = new HashSet<Object>();
 					Collections.addAll(selected, getAdditionalJarsList().getSelectedValues());
-					Vector keptJars = new Vector();
+					Vector<String> keptJars = new Vector<String>();
 					for (int i = 0; i < getAdditionalJarsList().getModel().getSize(); i++) {
 						String jarName = (String) getAdditionalJarsList().getModel().getElementAt(i);
 						if (!selected.contains(jarName)) {
@@ -443,7 +443,7 @@ public class ClassBrowserPanel extends JPanel {
 
 
 	private void populateClassDropdown() {
-        SortedSet<String> foundClassNames = new TreeSet();
+        SortedSet<String> foundClassNames = new TreeSet<String>();
 		String libDir = serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + "lib";
 		String[] additionalJarNames = getAdditionalJars();
         try {
@@ -453,7 +453,7 @@ public class ClassBrowserPanel extends JPanel {
             for (int i = 0; i < libFiles.length; i++) {
                 urls[i] = libFiles[i].toURL();
             }
-			Class queryProcessorClass = CQLQueryProcessor.class;
+			Class<?> queryProcessorClass = CQLQueryProcessor.class;
             // search for query processor classes from additional jars list
             for (String jarName : additionalJarNames) {
                 // creates a new loader each time to avoid having every class in the service
@@ -486,7 +486,7 @@ public class ClassBrowserPanel extends JPanel {
             }
             // potentially populate the class drop down
             DefaultComboBoxModel model = (DefaultComboBoxModel) getClassSelectionComboBox().getModel();
-            SortedSet<String> currentClassNames = new TreeSet();
+            SortedSet<String> currentClassNames = new TreeSet<String>();
             for (int i = 0; i < model.getSize(); i++) {
                 currentClassNames.add(model.getElementAt(i).toString());
             }

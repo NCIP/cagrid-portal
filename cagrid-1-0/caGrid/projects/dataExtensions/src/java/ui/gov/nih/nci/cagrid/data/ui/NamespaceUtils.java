@@ -32,7 +32,7 @@ import org.projectmobius.protocol.gme.SchemaNode;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Jul 21, 2006
- * @version $Id: NamespaceUtils.java,v 1.3 2007-11-06 15:53:41 hastings Exp $
+ * @version $Id: NamespaceUtils.java,v 1.4 2007-12-18 19:11:40 dervin Exp $
  */
 public class NamespaceUtils {
 
@@ -161,7 +161,7 @@ public class NamespaceUtils {
      * @return Map from class name to element name
      */
     public static Map<String, String> mapClassesToElementNames(UMLClassMetadata[] classes, NamespaceType nsType) {
-        List<String> classNames = new LinkedList();
+        List<String> classNames = new LinkedList<String>();
         for (UMLClassMetadata currentClass : classes) {
             classNames.add(currentClass.getName());
         }
@@ -171,7 +171,7 @@ public class NamespaceUtils {
 
     public static Map<String, String> mapClassNamesToElementNames(List<String> classNames,
         NamespaceType packageNamespace) {
-        Map<String, String> mapping = new HashMap();
+        Map<String, String> mapping = new HashMap<String, String>();
         for (String name : classNames) {
             boolean nameSet = false;
             for (SchemaElementType elemType : packageNamespace.getSchemaElement()) {

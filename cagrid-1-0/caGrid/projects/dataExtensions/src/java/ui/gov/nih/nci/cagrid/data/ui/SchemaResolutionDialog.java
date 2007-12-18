@@ -36,7 +36,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 27, 2006
- * @version $Id: SchemaResolutionDialog.java,v 1.6 2007-11-06 15:53:41 hastings Exp $
+ * @version $Id: SchemaResolutionDialog.java,v 1.7 2007-12-18 19:11:40 dervin Exp $
  */
 public class SchemaResolutionDialog extends JDialog {
 
@@ -222,7 +222,7 @@ public class SchemaResolutionDialog extends JDialog {
     
     
     private synchronized void insertAndSortTab(final NamespaceTypeDiscoveryComponent component, final String displayName) {
-        List<String> titles = new ArrayList();
+        List<String> titles = new ArrayList<String>();
         for (int i = 0; i < getDiscoveryTabbedPane().getTabCount(); i++) {
             titles.add(getDiscoveryTabbedPane().getTitleAt(i).toLowerCase());
         }

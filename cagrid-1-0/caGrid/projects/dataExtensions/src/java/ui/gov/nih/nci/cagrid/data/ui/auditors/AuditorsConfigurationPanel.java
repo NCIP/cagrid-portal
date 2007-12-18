@@ -34,7 +34,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:40:27 AM
- * @version $Id: AuditorsConfigurationPanel.java,v 1.4 2007-11-06 15:53:41 hastings Exp $ 
+ * @version $Id: AuditorsConfigurationPanel.java,v 1.5 2007-12-18 19:11:40 dervin Exp $ 
  */
 public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel {
     
@@ -96,7 +96,7 @@ public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel 
                     try {
                         DataServiceAuditors auditors = getExtensionDataManager().getAuditorsConfiguration();
                         List<AuditorConfiguration> keptConfigurations = 
-                            new ArrayList(auditors.getAuditorConfiguration().length - 1);
+                            new ArrayList<AuditorConfiguration>(auditors.getAuditorConfiguration().length - 1);
                         for (AuditorConfiguration config : auditors.getAuditorConfiguration()) {
                             if (!(config.getClassName().equals(className) 
                                 && config.getInstanceName().equals(instanceName))) {

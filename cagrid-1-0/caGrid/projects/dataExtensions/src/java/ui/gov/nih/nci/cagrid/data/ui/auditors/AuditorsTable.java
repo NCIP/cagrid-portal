@@ -22,7 +22,7 @@ import org.cagrid.grape.table.GrapeTableCellEditor;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:41:23 AM
- * @version $Id: AuditorsTable.java,v 1.3 2007-11-06 15:53:41 hastings Exp $ 
+ * @version $Id: AuditorsTable.java,v 1.4 2007-12-18 19:11:40 dervin Exp $ 
  */
 public class AuditorsTable extends JTable {
     
@@ -33,7 +33,7 @@ public class AuditorsTable extends JTable {
 
     public AuditorsTable() {
         super();
-        auditorChangeListeners = new LinkedList();
+        auditorChangeListeners = new LinkedList<AuditorChangeListener>();
         setModel(getAuditorsTableModel());
         // renderers and editors to handle components on the table
         setDefaultRenderer(Object.class, new AuditorsTableCellRenderer());
@@ -85,7 +85,7 @@ public class AuditorsTable extends JTable {
     
     
     public void addAuditor(String className, String instanceName) {
-        Vector row = new Vector(4);
+        Vector<Object> row = new Vector<Object>(4);
         row.add(className);
         row.add(instanceName);
         JButton configureButton = new JButton("Configure");
@@ -137,7 +137,7 @@ public class AuditorsTable extends JTable {
     }
     
     
-    public Class getColumnClass(int col) {
+    public Class<?> getColumnClass(int col) {
         return col < 2 ? String.class : Component.class;
     }
     

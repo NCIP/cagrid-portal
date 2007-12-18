@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:58:45 AM
- * @version $Id: AuditorConfigurationPropertiesTable.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: AuditorConfigurationPropertiesTable.java,v 1.2 2007-12-18 19:11:40 dervin Exp $ 
  */
 public class AuditorConfigurationPropertiesTable extends JTable {
 
@@ -32,7 +32,7 @@ public class AuditorConfigurationPropertiesTable extends JTable {
     public AuditorConfigurationPropertiesTable() {
         super();
         setModel(getConfigurationPropertiesModel());
-        propertyChangeListeners = new LinkedList();
+        propertyChangeListeners = new LinkedList<AuditorPropertyChangeListener>();
     }
     
     
@@ -70,7 +70,7 @@ public class AuditorConfigurationPropertiesTable extends JTable {
                     }
                 }
             }
-            Vector<String> row = new Vector(3);
+            Vector<String> row = new Vector<String>(3);
             row.add(key);
             row.add(defaultValue);
             row.add(currentValue);
