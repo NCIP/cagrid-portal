@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 
 import java.io.InputStream;
-import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Properties;
@@ -55,16 +55,24 @@ public abstract class CQLQueryProcessor {
 	 * @throws InitializationException
 	 */
 	public void initialize(Properties parameters, InputStream wsdd) throws InitializationException {
-		// validate the parameters
 		Set<String> required = new HashSet<String>();
-        Collections.addAll(required, (String[]) getRequiredParameters().keySet().toArray());
-		required.removeAll(parameters.keySet());
+        // add all the required parameters to a set
+        Enumeration requiredKeys = getRequiredParameters().keys();
+        while (requiredKeys.hasMoreElements()) {
+            required.add((String) requiredKeys.nextElement());
+        }
+        // remove all the parameters provided
+        Enumeration providedKeys = parameters.keys();
+        while (providedKeys.hasMoreElements()) {
+            required.remove(providedKeys.nextElement().toString());
+        }
+        // verify the provided parameters cover the required ones
 		if (required.size() != 0) {
 			// some required parameters NOT specified!
 			StringBuffer error = new StringBuffer();
 			error.append("Required parameters for query processor ");
 			error.append(getClass().getName()).append(" not specified: ");
-			Iterator requiredKeyIter = required.iterator();
+			Iterator<String> requiredKeyIter = required.iterator();
 			while (requiredKeyIter.hasNext()) {
 				error.append(requiredKeyIter.next());
 				if (requiredKeyIter.hasNext()) {
