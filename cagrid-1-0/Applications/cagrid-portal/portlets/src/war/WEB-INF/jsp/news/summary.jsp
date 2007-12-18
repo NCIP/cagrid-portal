@@ -2,7 +2,7 @@
 
 <c:set var="resizablePrefix"><portlet:namespace/>summary</c:set>
 <%@ include file="/WEB-INF/jsp/include/resizable_div.jspf" %>
-<a alt="Subscribe to caGrid RSS News Feed" href="<c:out value="${rssUrl}"/>" style="text-decoration:none">
+<a alt="Subscribe to caGrid RSS News Feed" href="/cagridportlets/news.rss" style="text-decoration:none">
 	<img alt="Subscribe to caGrid RSS News Feed" src="<c:url value="/images/rss.png"/>" align="absmiddle" height="16"/>
 	&nbsp;Subscribe to caGrid News Feed
 </a>
