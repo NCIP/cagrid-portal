@@ -330,7 +330,6 @@
         <resolveDependencies extdir="${projects.dir}/gridca/ext">
             <artifact refid="cagrid.properties" />
             <artifact refid="core.jars" />
-            <artifact refid="grape.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
         </resolveDependencies>
