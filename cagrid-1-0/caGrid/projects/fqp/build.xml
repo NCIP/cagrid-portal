@@ -21,12 +21,12 @@
     <property name="tools.dir" value="tools" />
     <property name="tools.lib.dir" value="tools/lib" />
     <property name="schema.dir" value="schema" />
+	<property name="ext.schema.dir" location="${basedir}/ext/xsd"/>
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 
     <!--import developers targets and properties (which can be overridden)-->
     <import file="dev-build.xml" />
 
-    <!-- Jars -->
     <!-- Jars -->
 	<property name="jar.prefix" value="${service.name}" />
     <property name="common.jar.name" value="${jar.prefix}-common.jar" />
