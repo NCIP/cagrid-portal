@@ -192,13 +192,13 @@ public class GridApplication extends JFrame {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            System.out.println("Failed to setting system look and feel.");
+            System.out.println("Failed to set system look and feel.");
         }
 
         // run the initializer if there is one.
         if (this.app.getInitializerClass() != null) {
-            ApplicationInitializer appInit = (ApplicationInitializer) Class.forName(this.app.getInitializerClass())
-                .newInstance();
+            ApplicationInitializer appInit = (ApplicationInitializer) Class.forName(
+                this.app.getInitializerClass()).newInstance();
             appInit.intialize();
         }
 
@@ -512,7 +512,7 @@ public class GridApplication extends JFrame {
 
     public void addApplicationComponent(ApplicationComponent frame, int width, int height) {
         this.lastComp = frame;
-        getMDIDesktopPane().add(frame, width, height);
+        getMDIDesktopPane().add(frame, new Dimensions(height, width), null);
     }
 
 
