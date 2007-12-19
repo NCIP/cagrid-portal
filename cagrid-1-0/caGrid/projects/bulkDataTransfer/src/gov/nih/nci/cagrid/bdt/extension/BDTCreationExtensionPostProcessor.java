@@ -119,7 +119,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		}
 
 		// add some namespaces to the service
-		List bdtNamespaces = new ArrayList(Arrays.asList(namespaces.getNamespace()));
+		List<NamespaceType> bdtNamespaces = new ArrayList<NamespaceType>(Arrays.asList(namespaces.getNamespace()));
 		// metadata
 		NamespaceType metadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.METADATA_SCHEMA, schemaDirFile);
