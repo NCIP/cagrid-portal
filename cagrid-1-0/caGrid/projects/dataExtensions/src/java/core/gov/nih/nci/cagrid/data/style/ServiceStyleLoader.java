@@ -17,13 +17,13 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Jul 9, 2007 12:34:36 PM
- * @version $Id: ServiceStyleLoader.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: ServiceStyleLoader.java,v 1.2 2007-12-19 19:34:19 dervin Exp $ 
  */
 public class ServiceStyleLoader {
 
     public static List<ServiceStyleContainer> getAvailableStyles() throws Exception {
         // list to store style descriptions
-        List<ServiceStyleContainer> styles = new ArrayList();
+        List<ServiceStyleContainer> styles = new ArrayList<ServiceStyleContainer>();
         
         // locate the styles directory
         File extensionsDir = ExtensionsLoader.getInstance().getExtensionsDir();
