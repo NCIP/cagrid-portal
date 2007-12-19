@@ -158,7 +158,7 @@ public class SyncTools {
                     SymbolTable table = null;
 
                     parser.setQuiet(true);
-                    //parser.setAllWanted(true);
+                    // parser.setAllWanted(true);
                     parser.setImports(true);
 
                     List excludeList = new ArrayList();
@@ -235,10 +235,11 @@ public class SyncTools {
         ServiceInformation info = new ServiceInformation(this.baseDirectory);
 
         if ((info.getServiceDescriptor().getIntroduceVersion() == null)
-            || !info.getServiceDescriptor().getIntroduceVersion().equals(IntroduceEnginePropertiesManager.getIntroduceVersion())) {
+            || !info.getServiceDescriptor().getIntroduceVersion().equals(
+                IntroduceEnginePropertiesManager.getIntroduceVersion())) {
             throw new Exception("Introduce version in project (" + info.getServiceDescriptor().getIntroduceVersion()
-                + ") does not match version provided by Introduce Toolkit ( " + IntroduceEnginePropertiesManager.getIntroduceVersion()
-                + " )");
+                + ") does not match version provided by Introduce Toolkit ( "
+                + IntroduceEnginePropertiesManager.getIntroduceVersion() + " )");
         }
 
         // have to set the service directory in the service properties
@@ -246,7 +247,6 @@ public class SyncTools {
             this.baseDirectory.getAbsolutePath());
 
         File schemaDir = new File(this.baseDirectory.getAbsolutePath() + File.separator + "schema");
-
 
         // before we actually process anything we must create the code and conf
         // required for any new services which were added.....
@@ -393,9 +393,8 @@ public class SyncTools {
 
         table = null;
         System.gc();
-        
-        
-        //make a copy of the model to compate with next time
+
+        // make a copy of the model to compate with next time
         Utils.copyFile(new File(baseDirectory.getAbsolutePath() + File.separator
             + IntroduceConstants.INTRODUCE_XML_FILE), new File(baseDirectory.getAbsolutePath() + File.separator
             + IntroduceConstants.INTRODUCE_XML_FILE + ".prev"));
@@ -537,21 +536,26 @@ public class SyncTools {
                         MessageEntry type = table.getMessageEntry(messageQName);
 
                         if (type != null) {
-                            Object obj = type.getMessage().getParts().values().iterator().next();
-                            PartImpl messagePart = (PartImpl) obj;
-                            if (messagePart.getElementName() != null) {
-                                Element element = table.getElement(messagePart.getElementName());
+                            if (type.getMessage().getParts() != null && type.getMessage().getParts().values() != null
+                                && type.getMessage().getParts().size() > 0) {
+                                Object obj = type.getMessage().getParts().values().iterator().next();
+                                PartImpl messagePart = (PartImpl) obj;
+                                if (messagePart.getElementName() != null) {
+                                    Element element = table.getElement(messagePart.getElementName());
 
-                                mtype.setInputMessageClass(element.getName());
-                                mtype
-                                    .setBoxedInputParameter(CommonTools.lowerCaseFirstCharacter(messagePart.getName()));
-                            } else if (messagePart.getTypeName() != null) {
-                                Type messtype = table.getType(messagePart.getTypeName());
-                                if (messtype != null) {
-                                    mtype.setInputMessageClass(messtype.getName());
+                                    mtype.setInputMessageClass(element.getName());
                                     mtype.setBoxedInputParameter(CommonTools.lowerCaseFirstCharacter(messagePart
                                         .getName()));
+                                } else if (messagePart.getTypeName() != null) {
+                                    Type messtype = table.getType(messagePart.getTypeName());
+                                    if (messtype != null) {
+                                        mtype.setInputMessageClass(messtype.getName());
+                                        mtype.setBoxedInputParameter(CommonTools.lowerCaseFirstCharacter(messagePart
+                                            .getName()));
+                                    }
                                 }
+                            } else {
+                                logger.warn("WARNING: message type does not have any parts: " + messageQName);
                             }
                         } else {
                             logger.warn("WARNING: Cannot find input message entry: " + messageQName);
@@ -574,7 +578,8 @@ public class SyncTools {
                         type = table.getMessageEntry(messageQName);
 
                         if (type != null) {
-                            if (type.getMessage().getParts().size() > 0) {
+                            if (type.getMessage().getParts() != null && type.getMessage().getParts().values() != null
+                                && type.getMessage().getParts().size() > 0) {
                                 PartImpl messagePart = (PartImpl) type.getMessage().getParts().values().iterator()
                                     .next();
                                 if (messagePart.getElementName() != null) {
@@ -649,7 +654,7 @@ public class SyncTools {
                 sschc.createSkeleton(info.getBaseDirectory(), info, newService);
                 ssopc.createSkeleton(new SpecificServiceInformation(info, newService));
                 sec.createSkeleton(info, newService);
-                
+
                 // if this is a new service we need to add it's new "service"
                 // element to the WSDD
                 NewServerConfigTemplate newServerConfigT = new NewServerConfigTemplate();
@@ -682,19 +687,18 @@ public class SyncTools {
                     jndiConfigT.generate(new SpecificServiceInformation(info, newService))).getRootElement();
                 serverConfigJNDIDoc.getRootElement().addContent(0, newServiceJNDIElement.detach());
 
-                
-                //we now need to process the resource framework options and add what
-                //ever providers need to be added
-                if (newService.getResourceFrameworkOptions().getLifetime()!=null) {
+                // we now need to process the resource framework options and add
+                // what
+                // ever providers need to be added
+                if (newService.getResourceFrameworkOptions().getLifetime() != null) {
                     ProviderTools.addLifetimeResourceProvider(newService, info);
                 }
-                if(newService.getResourceFrameworkOptions().getNotification()!=null){
+                if (newService.getResourceFrameworkOptions().getNotification() != null) {
                     ProviderTools.addSubscribeResourceProvider(newService, info);
                 }
-                if(newService.getResourceFrameworkOptions().getResourcePropertyManagement()!=null){
+                if (newService.getResourceFrameworkOptions().getResourcePropertyManagement() != null) {
                     ProviderTools.addResourcePropertiesManagementResourceFrameworkOption(newService, info);
                 }
-               
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -717,7 +721,7 @@ public class SyncTools {
             e.printStackTrace();
         }
     }
-    
+
 
     /**
      * Walk the model and build up a set of namespaces to not generate classes
