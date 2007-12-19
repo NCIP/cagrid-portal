@@ -76,14 +76,7 @@
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="src" path="src/java/validation"/>
 	<classpathentry kind="src" path="src/java/common"/>
-	<classpathentry kind="lib" path="ext/lib/acme.jar"/>
-	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
 	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
-	<classpathentry kind="lib" path="ext/lib/jmi-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/nsuml-0.4.20_modified.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ocl-argo-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/swidgets-0.1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
 	<classpathentry kind="src" path="src/java/cql"/>
 	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_enum.jar"/>
@@ -129,10 +122,10 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-wsEnum-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jasciidammit-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-CQL-cql.1.0.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.2-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-updater.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-CQL-cql.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

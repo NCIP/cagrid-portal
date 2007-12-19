@@ -250,7 +250,6 @@
     <target name="build-graph" depends="prepare" description="Builds graph">
         <resolveDependencies extdir="${projects.dir}/graph/ext">
             <artifact refid="cagrid.properties" />
-            <artifact refid="core.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/graph" inheritAll="false" antfile="build.xml" target="all" />
     </target>
