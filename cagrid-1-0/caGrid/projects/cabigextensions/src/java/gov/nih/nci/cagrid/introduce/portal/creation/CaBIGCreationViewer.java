@@ -33,7 +33,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
@@ -45,8 +44,8 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
 
 
 /**
- * CaBIGCreationViewer
- * Creation dialog for caBIG services
+ * CaBIGCreationViewer 
+ * Creation dialog for caBIG service
  * 
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -56,87 +55,54 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  *          Exp $
  */
 public class CaBIGCreationViewer extends CreationViewerBaseComponent {
-    
+
+    // keys for validation of input components
     public static final String SERVICE_DIR = "Service directory";
     public static final String SERVICE_NAME = "Service name";
     public static final String SERVICE_PACKAGE = "Service package name";
     public static final String SERVICE_NAMESPACE = "Service namespace";
 
-
-    public static final String SCHEMA_DIR = "schema";
-
+    // defaults
     private static final String DEFAULT_NAME = "HelloWorld";
-
     private static final String DEFAULT_JAVA_PACKAGE = "gov.nih.nci.cagrid.helloworld";
-
     private static final String DEFAULT_NAMESPACE = "http://helloworld.cagrid.nci.nih.gov/HelloWorld";
 
+    // extension names
     private static final String DATA_EXTSION_NAME = "data";
-
     private static final String METADATA_EXTSION_NAME = MetadataConstants.EXTENSION_NAME;
 
     private JPanel inputPanel = null;
-
     private JPanel mainPanel = null;
-
     private JPanel buttonPanel = null;
-
     private JButton createButton = null;
-
     private JLabel serviceLabel = null;
-
     private JTextField service = null;
-
     private JLabel destinationLabel = null;
-
     private JTextField dir = null;
-
     private JButton dirButton = null;
-
     private JLabel packageLabel = null;
-
     private JTextField servicePackage = null;
-
     private JLabel namespaceLabel = null;
-
     private JTextField namespaceDomain = null;
-
     private JButton closeButton = null;
-
     private JComboBox serviceStyleSeletor = null;
-
     private JPanel extensionsPanel = null;
-
     private JButton addExtensionButton = null;
-
     private JButton removeExtensionButton = null;
-
     private JScrollPane extensionsScrollPane = null;
-
     private ExtensionsTable extensionsTable = null;
-
     private JPanel extensionsTablePanel = null;
-
     private JLabel upExtensionLabel = null;
-
     private JLabel downExtensionLabel = null;
-
     private JPanel extSelectionPanel = null;
-
     private JPanel serviceStylePanel = null;
-
     private JTabbedPane jTabbedPane = null;
-
     private JPanel serviceTyeSelectionPanel = null;
-
     private JRadioButton dataRadioButton = null;
-
     private JRadioButton analyticalRadioButton = null;
-
     private ButtonGroup serviceStyleButtonGroup = null;
-    
-    private ValidationResultModel validationModel = new DefaultValidationResultModel();
 
+    private ValidationResultModel validationModel = new DefaultValidationResultModel();
 
 
     public CaBIGCreationViewer() {
@@ -155,12 +121,13 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
         this.setTitle("Create a caBIG Grid Service");
         getServiceStyleButtonGroup().add(getDataRadioButton());
         getServiceStyleButtonGroup().add(getAnalyticalRadioButton());
-        getServiceStyleButtonGroup().setSelected(getAnalyticalRadioButton().getModel(), true);
+        getServiceStyleButtonGroup().setSelected(
+            getAnalyticalRadioButton().getModel(), true);
         addAnalyticalExtensions();
-        
+
         initValidation();
     }
-    
+
 
     private void initValidation() {
         ValidationComponentUtils.setMessageKey(getService(), SERVICE_NAME);
@@ -175,20 +142,23 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
 
 
     private void validateInput() {
-
         ValidationResult result = new ValidationResult();
 
         if (!ValidationUtils.isNotBlank(this.getDir().getText())) {
-            result.add(new SimpleValidationMessage(SERVICE_DIR + " must not be blank.", Severity.ERROR, SERVICE_DIR));
+            result.add(new SimpleValidationMessage(SERVICE_DIR + " must not be blank.", 
+                Severity.ERROR, SERVICE_DIR));
         } else {
             File file = new File(this.getDir().getText());
-            if(file.exists()){
-                result.add(new SimpleValidationMessage(SERVICE_DIR + " already exists and will be removed when new skeleton is created.", Severity.WARNING, SERVICE_DIR));
+            if (file.exists()) {
+                result.add(new SimpleValidationMessage(SERVICE_DIR
+                    + " already exists and will be removed when new skeleton is created.", 
+                    Severity.WARNING, SERVICE_DIR));
             }
         }
 
         if (!ValidationUtils.isNotBlank(this.getService().getText())) {
-            result.add(new SimpleValidationMessage(SERVICE_NAME + " must not be blank.", Severity.ERROR, SERVICE_NAME));
+            result.add(new SimpleValidationMessage(SERVICE_NAME + " must not be blank.", 
+                Severity.ERROR, SERVICE_NAME));
         } else if (!CommonTools.isValidServiceName(this.getService().getText())) {
             result.add(new SimpleValidationMessage(SERVICE_NAME
                 + " is not valid.  Service name must be a java compatible class name. ("
@@ -196,8 +166,8 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
         }
 
         if (!ValidationUtils.isNotBlank(this.getServicePackage().getText())) {
-            result.add(new SimpleValidationMessage(SERVICE_PACKAGE + " must not be blank.", Severity.ERROR,
-                SERVICE_PACKAGE));
+            result.add(new SimpleValidationMessage(SERVICE_PACKAGE + " must not be blank.", 
+                Severity.ERROR, SERVICE_PACKAGE));
         } else if (!CommonTools.isValidPackageName(this.getServicePackage().getText())) {
             result.add(new SimpleValidationMessage(SERVICE_PACKAGE
                 + " is not valid.  Service package must be in valid java package format. ("
@@ -205,8 +175,8 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
         }
 
         if (!ValidationUtils.isNotBlank(this.getNamespaceDomain().getText())) {
-            result.add(new SimpleValidationMessage(SERVICE_NAMESPACE + " must not be blank.", Severity.ERROR,
-                SERVICE_NAMESPACE));
+            result.add(new SimpleValidationMessage(SERVICE_NAMESPACE + " must not be blank.", 
+                Severity.ERROR, SERVICE_NAMESPACE));
         } else {
             try {
                 new URI(this.getNamespaceDomain().getText());
@@ -239,24 +209,24 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
 
 
     private void addAnalyticalExtensions() {
-        ServiceExtensionDescriptionType serviceExtension = 
-            ExtensionsLoader.getInstance().getServiceExtension(METADATA_EXTSION_NAME);
+        ServiceExtensionDescriptionType serviceExtension = ExtensionsLoader.getInstance()
+            .getServiceExtension(METADATA_EXTSION_NAME);
         String displayName = serviceExtension.getDisplayName();
         getExtensionsTable().addRow(displayName);
     }
 
 
     private void addDataExtensions() {
-        ServiceExtensionDescriptionType serviceExtension = 
-            ExtensionsLoader.getInstance().getServiceExtension(DATA_EXTSION_NAME);
+        ServiceExtensionDescriptionType serviceExtension = ExtensionsLoader.getInstance()
+            .getServiceExtension(DATA_EXTSION_NAME);
         String displayName = serviceExtension.getDisplayName();
         getExtensionsTable().addRow(displayName);
     }
 
 
     private void removeDataExtensions() {
-        ServiceExtensionDescriptionType serviceExtension = 
-            ExtensionsLoader.getInstance().getServiceExtension(DATA_EXTSION_NAME);
+        ServiceExtensionDescriptionType serviceExtension = ExtensionsLoader.getInstance()
+            .getServiceExtension(DATA_EXTSION_NAME);
         String displayName = serviceExtension.getDisplayName();
         getExtensionsTable().removeRow(displayName);
     }
@@ -294,10 +264,9 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
             gridBagConstraints10.gridx = 1;
             inputPanel = new JPanel();
             inputPanel.setLayout(new GridBagLayout());
-            inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                null, "Define the service", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, 
-                null, PortalLookAndFeel.getPanelLabelColor()));
+            inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Define the service",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             packageLabel = new JLabel();
             packageLabel.setText("STEP 3:  Enter a Java package for the generated code:");
             GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -436,7 +405,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
             createButton.setIcon(IntroduceLookAndFeel.getCreateServiceIcon());
             createButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    List extensions = new ArrayList();
+                    List<String> extensions = new ArrayList<String>();
                     for (int i = 0; i < getExtensionsTable().getRowCount(); i++) {
                         ServiceExtensionDescriptionType edt = null;
                         try {
@@ -448,7 +417,10 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
                         extensions.add(edt.getDisplayName());
                     }
                     createService(getDir().getText(), getService().getText(), getServicePackage().getText(),
-                        getNamespaceDomain().getText(), Arrays.asList(new String[]{IntroduceConstants.INTRODUCE_MAIN_RESOURCE,IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE,IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE}),extensions);
+                        getNamespaceDomain().getText(), Arrays.asList(new String[]{
+                                IntroduceConstants.INTRODUCE_MAIN_RESOURCE,
+                                IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE,
+                                IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE}), extensions);
 
                     try {
                         ResourceManager.setStateProperty(ResourceManager.LAST_DIRECTORY, getDir().getText());
@@ -492,20 +464,8 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
         if (service == null) {
             service = new JTextField();
             service.setText(DEFAULT_NAME);
-            service.getDocument().addDocumentListener(new DocumentListener() {
-                public void changedUpdate(DocumentEvent e) {
-                    updateSuggestedNamespace();
-                    validateInput();
-                }
-
-
-                public void removeUpdate(DocumentEvent e) {
-                    updateSuggestedNamespace();
-                    validateInput();
-                }
-
-
-                public void insertUpdate(DocumentEvent e) {
+            service.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
                     updateSuggestedNamespace();
                     validateInput();
                 }
@@ -597,23 +557,11 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
         if (servicePackage == null) {
             servicePackage = new JTextField();
             servicePackage.setText((DEFAULT_JAVA_PACKAGE).toLowerCase());
-            servicePackage.getDocument().addDocumentListener(new DocumentListener() {
-                public void changedUpdate(DocumentEvent e) {
+            servicePackage.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
                     updateSuggestedNamespace();
                     validateInput();
-                }
-
-
-                public void removeUpdate(DocumentEvent e) {
-                    updateSuggestedNamespace();
-                    validateInput();
-                }
-
-
-                public void insertUpdate(DocumentEvent e) {
-                    updateSuggestedNamespace();
-                    validateInput();
-                }
+                }    
             });
         }
         return servicePackage;
@@ -689,10 +637,9 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
             gridBagConstraints19.gridy = 2;
             extensionsPanel = new JPanel();
             extensionsPanel.setLayout(new GridBagLayout());
-            extensionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                null, "Service Extensions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, 
-                null, PortalLookAndFeel.getPanelLabelColor()));
+            extensionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Extensions",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             extensionsPanel.add(getExtSelectionPanel(), gridBagConstraints13);
             extensionsPanel.add(getExtensionsTable(), gridBagConstraints19);
             extensionsPanel.add(getExtensionsTableionsTablePanel(), gridBagConstraints20);
@@ -793,8 +740,8 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
             gridBagConstraints14.anchor = java.awt.GridBagConstraints.NORTHWEST;
             gridBagConstraints14.gridy = 1;
             downExtensionLabel = new JLabel();
-            downExtensionLabel.setToolTipText("Moves the selected extension " +
-                "down in the list so that it will be executed after the preceding extensions");
+            downExtensionLabel.setToolTipText("Moves the selected extension "
+                + "down in the list so that it will be executed after the preceding extensions");
             downExtensionLabel.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
@@ -807,8 +754,8 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
             });
             downExtensionLabel.setIcon(IntroduceLookAndFeel.getDownIcon());
             upExtensionLabel = new JLabel();
-            upExtensionLabel.setToolTipText("moves the selected extension " +
-                "higher in the list so that it will be executed before the following extensions");
+            upExtensionLabel.setToolTipText("moves the selected extension "
+                + "higher in the list so that it will be executed before the following extensions");
             upExtensionLabel.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
@@ -882,10 +829,9 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
             gridBagConstraints17.weighty = 1.0;
             serviceStylePanel = new JPanel();
             serviceStylePanel.setLayout(new GridBagLayout());
-            serviceStylePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                null, "Customize the service", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, 
-                null, PortalLookAndFeel.getPanelLabelColor()));
+            serviceStylePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Customize the service",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             serviceStylePanel.add(getJTabbedPane(), gridBagConstraints17);
         }
         return serviceStylePanel;
@@ -900,8 +846,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
     private JTabbedPane getJTabbedPane() {
         if (jTabbedPane == null) {
             jTabbedPane = new JTabbedPane();
-            jTabbedPane.addTab("Standard", null, 
-                getServiceTyeSelectionPanel(), "Standard configuration options.");
+            jTabbedPane.addTab("Standard", null, getServiceTyeSelectionPanel(), "Standard configuration options.");
             jTabbedPane.addTab("Advanced", null, getExtensionsPanel(),
                 "Provides access to configuration of specific Introduce extensions.");
         }
