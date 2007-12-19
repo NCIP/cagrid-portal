@@ -102,7 +102,7 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
                 ExtensionType extension = extensionVersions[j];
                 if (extension.getCompatibleIntroduceVersions() != null) {
                     if (isCompatibleExtension(extension.getCompatibleIntroduceVersions())
-                        && (!isExtensionInstalled(extension) || isExtensionNewer(extension))) {
+                        && isInstalledOrExtensionNewer(extension)) {
                         ExtensionUpdateTreeNode node = null;
                         if (extension.getVersion() != null) {
                             node = new ExtensionUpdateTreeNode(extension.getDisplayName() + " ("
@@ -135,8 +135,9 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
                     extensionInstalled = true;
                 }
             } else {
-                if (ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion()!=null && ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion().equals(
-                    extension.getVersion())) {
+                if (ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion() != null
+                    && ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion().equals(
+                        extension.getVersion())) {
                     extensionInstalled = true;
                 }
             }
@@ -145,16 +146,20 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
     }
 
 
-    private boolean isExtensionNewer(ExtensionType extension) {
+    private boolean isInstalledOrExtensionNewer(ExtensionType extension) {
         boolean newer = false;
         if (ExtensionsLoader.getInstance().getExtension(extension.getName()) != null) {
             String installedVersion = ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion();
-            if (installedVersion == null && extension.getVersion()!=null) {
+            if (installedVersion == null && extension.getVersion() != null) {
                 newer = true;
             } else if (installedVersion != null && extension.getVersion() != null) {
-                if (!isOlderVersion(installedVersion, extension.getVersion()) && !isExtensionInstalled(extension)) {
+                if (!isOlderVersion(installedVersion, extension.getVersion()) || isExtensionInstalled(extension)) {
                     newer = true;
                 }
+            } else if ((installedVersion == null && extension.getVersion() == null)
+                || (installedVersion != null && extension.getVersion() != null && installedVersion.equals(extension
+                    .getVersion()))) {
+                newer = true;
             }
         }
         return newer;

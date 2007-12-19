@@ -28,44 +28,18 @@ of the method in the introduce.xml when it compares it to the list of methods.
 
 To Do:  
 
-undeploy while introduce is running.
 
-undeploy gui
+finish persistent notification test (need to figure how to manage the container from two different client invocations)
 
-finish persistent notification test
-
-add documentation fot he types of reosures that introduce provides by default
-
-fix bug in validation of custom beans being shown when the panel is not visible
+add documentation for he types of resources that introduce provides by default
 
 service props can be different from duece to command line
 
 bug in security panels not adhering to pdp based policies
 
-fatal error message on modification save should just say click ok to roll back
-
-software update does not seem to be showing if something is already installed
-
-make sure that the validators on package names show error if invalid and warn if just bad practice
-
 invalid introduce xml threw null pointer stop refreshing screen with no error.....
 
-synctools 540: make sure that if there are no parts that you throw a nicer exception than null pointer.
-
-if you use globus dir in the classpath for the runtarget, then the client-config.wsdd for globus is used and not the one that contains your custom mappings
-
-check the upgrade framework, make sure it is giving enough information
-
 need to validate schemas when importing them into introduce
-
-Add notification support to any resource
-
-upgrading is not really done until sync is ran, so in modification gui make sure the user
-is notified that it is not complete until they hit save.
-
-resource refactoring needs to be done completely (first pass done still need to combine into one)
-
-in the types file importer check the support for includes, and imports and check on whether it works when importing and including from ../
 
 when using CSM and not setting the context then it throws up error dialogs at random times as well as it lets you close the method mod viewer
 even though it is wrong ang then pops up an error dialog.  It should be validating on the close or done buttons.
@@ -74,9 +48,7 @@ make gui work one service at a time
 
 make deployer deploy remotely
 
-need to validate soapfix
-
-need to validate that namespace exist policy on the descovery tools is working. (Globus one does not do anything curently and not sure if scotts cadsr one has been moved forward)
+need to validate that namespace exist policy on the discovery tools is working. (Globus one does not do anything curently and not sure if scotts cadsr one has been moved forward)
 
 reload preferences from defaults
 
@@ -101,7 +73,32 @@ add tests to system tests for (coverage report shows no coverage):
 
 
 ============================ D O N E ================================================================
+software update does not seem to be showing if something is already installed
 
+in the types file importer check the support for includes, and imports and check on whether it works when importing and including from ../ (does not work from ../ and not supporting now)
+
+fatal error message on modification save should just say click ok to roll back
+
+Add notification support to any resource
+
+if you use globus dir in the classpath for the runtarget, then the client-config.wsdd for globus is used and not the one that contains your custom mappings
+
+make sure that the validators on package names show error if invalid and warn if just bad practice
+
+need to validate soapfix
+
+check the upgrade framework, make sure it is giving enough information
+
+upgrading is not really done until sync is ran, so in modification gui make sure the user
+is notified that it is not complete until they hit save.
+
+resource refactoring needs to be done completely (first pass done still need to combine into one)
+
+fix bug in validation of custom beans being shown when the panel is not visible
+
+undeploy while introduce is running.
+
+undeploy gui
 
 componentized resource building by selecting features or interfaces to implement. 
 
