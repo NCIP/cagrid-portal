@@ -43,6 +43,7 @@ public class MDIDesktopPane extends JDesktopPane {
         checkDesktopSize();
     }
     
+    
     public Component add(JInternalFrame frame) {
         JInternalFrame[] array = getAllFrames();
         Point p;
@@ -120,12 +121,11 @@ public class MDIDesktopPane extends JDesktopPane {
         if (options != null) {
             if (options.isCentered()) {
                 // Determine the new location of the window
-                int w = this.getSize().width;
-                int h = this.getSize().height;
-                int x = this.getLocationOnScreen().x;
-                int y = this.getLocationOnScreen().y;
-                Dimension dim = frame.getSize();
-                frame.setLocation(w / 2 - dim.width / 2, h / 2 - dim.height / 2);
+                Dimension paneSize = this.getSize();
+                Dimension frameSize = frame.getSize();
+                frame.setLocation(
+                    (paneSize.width / 2) - (frameSize.width / 2),
+                    (paneSize.height / 2) - (frameSize.height / 2));
             }
             if (options.isMaximized()) {
                 try {
@@ -142,12 +142,11 @@ public class MDIDesktopPane extends JDesktopPane {
         if (options != null) {
             if (options.isCentered()) {
                 // Determine the new location of the window
-                int w = this.getSize().width;
-                int h = this.getSize().height;
-                int x = this.getLocationOnScreen().x;
-                int y = this.getLocationOnScreen().y;
-                Dimension dim = dialog.getSize();
-                dialog.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
+                Dimension paneSize = this.getSize();
+                Dimension dialogSize = dialog.getSize();
+                dialog.setLocation(
+                    (paneSize.width / 2) - (dialogSize.width / 2),
+                    (paneSize.height / 2) - (dialogSize.height / 2));
             }
             if (options.isMaximized()) {
                 try {
