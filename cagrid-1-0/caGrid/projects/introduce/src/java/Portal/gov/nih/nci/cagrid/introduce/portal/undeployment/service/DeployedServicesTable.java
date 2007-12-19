@@ -24,6 +24,7 @@ public class DeployedServicesTable extends PortalBaseTable {
 
 	public DeployedServicesTable() {
 		super(createTableModel());
+		setTableHeader(null);
 
 		initialize();
 	}
@@ -81,7 +82,6 @@ public class DeployedServicesTable extends PortalBaseTable {
 		this.setColumnSelectionAllowed(false);
 		this.setRowSelectionAllowed(true);
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.getTableHeader().setReorderingAllowed(false);
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);

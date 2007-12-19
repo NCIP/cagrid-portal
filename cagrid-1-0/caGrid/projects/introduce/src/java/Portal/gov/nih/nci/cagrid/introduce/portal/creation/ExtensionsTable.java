@@ -17,6 +17,7 @@ public class ExtensionsTable extends PortalBaseTable {
 
 	public ExtensionsTable() {
 		super(createTableModel());
+		this.setTableHeader(null);
 	}
 
 
@@ -150,6 +151,7 @@ public class ExtensionsTable extends PortalBaseTable {
 		public MyDefaultTableModel() {
 			super();
 			addColumn(NAME);
+
 		}
 
 

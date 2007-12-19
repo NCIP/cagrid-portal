@@ -147,17 +147,11 @@ public class CreationViewer extends CreationViewerBaseComponent {
      */
     private void initialize() {
         this.setContentPane(new IconFeedbackPanel(this.validationModel, getMainPanel()));
-        this.setSize(new Dimension(676, 248));
         this.setContentPane(getMainPanel());
         this.setFrameIcon(IntroduceLookAndFeel.getCreateServiceIcon());
         this.setTitle("Create a Grid Service");
 
         initValidation();
-        
-        
-        GridApplication.getContext().centerComponent(this);
-        this.pack();
-        this.show();
     }
 
 
