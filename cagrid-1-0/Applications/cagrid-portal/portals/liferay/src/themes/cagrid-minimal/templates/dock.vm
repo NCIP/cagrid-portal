@@ -10,12 +10,6 @@
 			</li>
 		#end
 
-		#if ($show_my_account)
-			<li class="my-account">
-				<a href="$my_account_url">$my_account_text</a>
-			</li>
-		#end
-
 		#if ($show_sign_out)
 			<li class="sign-out">
 				<a href="$sign_out_url">$sign_out_text</a>
