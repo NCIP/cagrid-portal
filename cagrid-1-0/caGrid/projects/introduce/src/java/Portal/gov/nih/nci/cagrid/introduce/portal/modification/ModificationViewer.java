@@ -112,6 +112,10 @@ import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
+import javax.swing.BorderFactory;
+import javax.swing.border.TitledBorder;
+import java.awt.Font;
+import java.awt.Color;
 
 
 /**
@@ -715,6 +719,7 @@ public class ModificationViewer extends ApplicationComponent {
     private JScrollPane getMethodsScrollPane() {
         if (this.methodsScrollPane == null) {
             this.methodsScrollPane = new JScrollPane();
+            methodsScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Operations", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
             this.methodsScrollPane.setViewportView(getMethodsTable());
         }
         return this.methodsScrollPane;
