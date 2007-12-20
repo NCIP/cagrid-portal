@@ -24,7 +24,7 @@ import java.util.Map;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2HQL.java,v 1.2 2007-10-03 18:06:16 dervin Exp $ 
+ * @version $Id: CQL2HQL.java,v 1.3 2007-12-20 16:15:54 dervin Exp $ 
  */
 public class CQL2HQL {
 	
@@ -111,7 +111,7 @@ public class CQL2HQL {
 	private static void processTarget(Object target, StringBuilder hql,
 		boolean avoidSubclasses, boolean caseInsensitive) throws QueryProcessingException {
 		
-		List associationTrace = new LinkedList();
+		List<String> associationTrace = new LinkedList<String>();
 		
 		hql.append("From ").append(target.getName()).append(' ');
 		
@@ -159,7 +159,7 @@ public class CQL2HQL {
 	 * @throws QueryProcessingException
 	 */
 	private static void processAttribute(Attribute attribute, StringBuilder hql, 
-		List associationTrace, String objectClassName, boolean caseInsensitive) throws QueryProcessingException {
+		List<String> associationTrace, String objectClassName, boolean caseInsensitive) throws QueryProcessingException {
 		boolean isBoolAttribute = BooleanAttributeCheckCache.isFieldBoolean(objectClassName, attribute.getName());
 		boolean unaryPredicate = attribute.getPredicate().equals(Predicate.IS_NOT_NULL)
 			|| attribute.getPredicate().equals(Predicate.IS_NULL);
@@ -214,7 +214,7 @@ public class CQL2HQL {
 	 * 		A flag indicating that queries should be performed without regard to case
 	 * @throws QueryProcessingException
 	 */
-	private static void processAssociation(Association association, StringBuilder hql, List associationTrace,
+	private static void processAssociation(Association association, StringBuilder hql, List<String> associationTrace,
 		String originClassName, boolean caseInsensitive) throws QueryProcessingException {
 		String roleName = ClassAccessUtilities.getRoleName(originClassName, association);
 		if (roleName == null) {
@@ -255,7 +255,7 @@ public class CQL2HQL {
 	 * 		A flag indicating queries should be performed without regard to case
 	 * @throws QueryProcessingException
 	 */
-	private static void processGroup(Group group, StringBuilder hql, List associationTrace, 
+	private static void processGroup(Group group, StringBuilder hql, List<String> associationTrace, 
 		String originClass, boolean caseInsensitive) throws QueryProcessingException {
 		String logic = convertLogicalOperator(group.getLogicRelation());
 		boolean mustAddLogic = false;
@@ -351,7 +351,7 @@ public class CQL2HQL {
 	 * @return
 	 * 		An HQL fragment
 	 */
-	private static String buildAssociationTrace(List associationTrace) {
+	private static String buildAssociationTrace(List<String> associationTrace) {
 		// build up what the trace to this association looks like
 		StringBuilder trace = new StringBuilder();
 		Iterator traceIter = associationTrace.iterator();

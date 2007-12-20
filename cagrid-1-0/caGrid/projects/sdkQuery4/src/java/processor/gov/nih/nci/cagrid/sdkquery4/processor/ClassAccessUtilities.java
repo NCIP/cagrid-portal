@@ -21,9 +21,9 @@ import java.util.Set;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 3, 2006 
- * @version $Id: ClassAccessUtilities.java,v 1.1 2007-10-02 19:05:27 dervin Exp $ 
+ * @version $Id: ClassAccessUtilities.java,v 1.2 2007-12-20 16:15:54 dervin Exp $ 
  */
-public class ClassAccessUtilities {	
+public class ClassAccessUtilities {
 	/**
 	 * Gets the role name of an association relative to its parent class.
 	 * 
@@ -98,7 +98,7 @@ public class ClassAccessUtilities {
 			Collections.addAll(allFields, classFields);
 			checkClass = checkClass.getSuperclass();
 		}
-		List namedFields = new ArrayList();
+		List<Field> namedFields = new ArrayList<Field>();
 		Iterator fieldIter = allFields.iterator();
 		while (fieldIter.hasNext()) {
 			Field field = (Field) fieldIter.next();
