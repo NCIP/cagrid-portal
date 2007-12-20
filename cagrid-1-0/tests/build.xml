@@ -89,6 +89,7 @@
 			<artifact refid="sdk.32.query.jars"/>
 			<artifact refid="sdkInstaller.jars"/>
 			<artifact refid="data.jars"/>
+			<artifact refid="cql.1.0.beans.jar"/>
 		</resolveDependencies>
 		<ant dir="${tests.projects.dir}/sdkQueryEquivalence" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
