@@ -109,12 +109,24 @@ You provided the following information:
 	</table>
 </c:when>
 <c:otherwise>
-<b>Username Constraints:</b>
+<span style="font-size:120%">Why Register?</span>
+<br/>
+If you have an NIH username and password, then you do not need to
+register. You can just select the NCICB AuthenticationService IdP on the 
+<a href="/web/guest/login">Log In screen</a>. If you don't have an NIH account then you 
+will need to register in order to take advantage of some of the portal's features, e.g.
+sharing queries and interacting with secure caGrid services. Registering for an account here
+will enable you to log in to the portal using the NCICB Dorian Identity Provider. 
+You cannot use this account to log in to the portal using the NCICB AuthenticationService
+Identity Provider.
+<br/>
+<br/>
+<span style="font-size:120%">Username Constraints:</span><br/>
 <ul>
 	<li>Must be between 4 and 15 characters in length.</li>
 </ul>
 <br/>
-<b>Password Constraints:</b><br/>
+<span style="font-size:120%">Password Constraints:</span><br/>
 <ul>
 	<li>
 Must be between 10 and 20 characters and
@@ -123,7 +135,6 @@ contain at least one upper case letter, at least one lower
 case letter, at least one number, and at least one symbol 
 (~!@#$%^&*()_-+={}[]|:;&lt;&gt;,.?).
 	</li>
-
 </ul>
 <p/>
 

@@ -1,6 +1,16 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
 <c:choose>
 	<c:when test="${empty portalUser}">
+	
+		If you have an NIH username and password, then
+		select the NCICB AuthenticationService IdP before pressing the Log
+		In button. If you do not have an NIH username and password, but you
+		have already registered through the portal (or through the caGrid Browser), then select the 
+		NCICB Dorian Identity Provider. If you have not yet registered, you may do so by 
+		clicking <a href="/web/guest/register">here</a>.
+		<br/>
+		<br/>
+	
 		<portlet:renderURL var="portalAuthnUrl"/>
 		<portlet:actionURL var="action">
 			<portlet:param name="operation" value="login"/>
