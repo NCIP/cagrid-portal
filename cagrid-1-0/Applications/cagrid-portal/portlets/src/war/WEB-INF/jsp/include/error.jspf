@@ -4,8 +4,8 @@
 <br/>
 <a href="/web/guest/home" style="text-decoration:none">&lt;&lt; To Home Page</a><br/>
 <p>
-An error occured during the processing of your request. 
-Please contact the adminstrator at <c:out value="${adminEmail}"/> and 
+An error occurred during the processing of your request. 
+Please contact the administrator at <c:out value="${adminEmail}"/> and 
 provide the information below.
 </p>
 <br/>
