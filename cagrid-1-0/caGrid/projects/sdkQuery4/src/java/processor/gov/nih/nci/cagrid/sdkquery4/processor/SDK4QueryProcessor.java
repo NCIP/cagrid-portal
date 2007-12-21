@@ -18,15 +18,12 @@ import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.bcel.classfile.JavaClass;
 import org.apache.log4j.Logger;
 
 /** 
@@ -36,7 +33,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Oct 3, 2007 10:34:55 AM
- * @version $Id: SDK4QueryProcessor.java,v 1.6 2007-12-12 16:18:56 dervin Exp $ 
+ * @version $Id: SDK4QueryProcessor.java,v 1.7 2007-12-21 20:09:53 dervin Exp $ 
  */
 public class SDK4QueryProcessor extends CQLQueryProcessor {
     // configuration property keys
@@ -60,8 +57,7 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     // Log4J logger
     private static final Logger LOG = Logger.getLogger(SDK4QueryProcessor.class);
     
-    private Map<String, Boolean> classHasSubclasses;
-    private InheritanceManager inheritanceManager;
+    private CQL2ParameterizedHQL cqlTranslator;
         
     public SDK4QueryProcessor() {
         super();
@@ -73,7 +69,7 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
      */
     public void initialize(Properties parameters, InputStream wsdd) throws InitializationException {
         super.initialize(parameters, wsdd);
-        initializeInheritanceManager();
+        initializeCqlToHqlTranslator();
     }
 
 
@@ -97,7 +93,10 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
                     }
                 } else { // multiple attributes
                     attributeNames = mods.getAttributeNames();
-                    resultsAsArrays = rawResults;
+                    resultsAsArrays = new LinkedList<Object[]>();
+                    for (Object o : rawResults) {
+                        resultsAsArrays.add((Object[]) o);
+                    }
                 }
                 cqlResults = CQLResultsCreationUtil.createAttributeResults(
                     resultsAsArrays, cqlQuery.getTarget().getName(), attributeNames);
@@ -204,20 +203,14 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
         // get the caCORE application service
         ApplicationService service = getApplicationService();
 
-        // see if the target has subclasses
-        boolean subclassesDetected = classHasSubclasses(query.getTarget().getName());
-
-        // see if queries should be made case insensitive
-        boolean caseInsensitive = useCaseInsensitiveQueries();
-
         // generate the HQL to perform the query
         // new CQL2HQL process handles query modifiers at HQL level
-        String hql = CQL2HQL.convertToHql(query, subclassesDetected, caseInsensitive);
-        System.out.println("Executing HQL: " + hql);
-        LOG.debug("Executing HQL:" + hql);
+        ParameterizedHqlQuery parameterizedHql = cqlTranslator.convertToHql(query);
+        System.out.println("Executing HQL:\n" + parameterizedHql);
+        LOG.debug("Executing HQL:\n" + parameterizedHql);
 
         // process the query
-        HQLCriteria hqlCriteria = new HQLCriteria(hql);
+        HQLCriteria hqlCriteria = new HQLCriteria(parameterizedHql.getHql(), parameterizedHql.getParameters());
         List targetObjects = null;
         try {
             targetObjects = service.query(hqlCriteria);
@@ -228,7 +221,7 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     }
     
     
-    private void initializeInheritanceManager() throws InitializationException {
+    private void initializeCqlToHqlTranslator() throws InitializationException {
         // no inheritance manager yet
         String beansJarName = getConfiguredParameters().getProperty(PROPERTY_BEANS_JAR_NAME);
         // examine the classpath for the jar
@@ -248,32 +241,11 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
         File beansJar = new File(beansJarFilename);
         LOG.debug("Beans jar found: " + beansJar.getAbsolutePath());
         try {
-            inheritanceManager = InheritanceManager.getManager(beansJar, false);
+            cqlTranslator = new CQL2ParameterizedHQL(beansJar, useCaseInsensitiveQueries());
         } catch (Exception ex) {
-            throw new InitializationException("Error instantiating class inheritance manager: " 
+            throw new InitializationException("Error instantiating CQL to HQL translator: " 
                 + ex.getMessage(), ex);
         }
-        LOG.debug("Inheritance manager initialized");
-    }
-    
-    
-    private synchronized boolean classHasSubclasses(String className) throws QueryProcessingException {
-        // ensure the map exists
-        if (classHasSubclasses == null) {
-            classHasSubclasses = new HashMap<String, Boolean>();
-        }
-        Boolean hasSubclasses = classHasSubclasses.get(className);
-        if (hasSubclasses == null) {
-            // never been checked
-            try {
-                List<JavaClass> subs = inheritanceManager.getSubclasses(className);
-                hasSubclasses = Boolean.valueOf(subs == null || subs.size() == 0);
-                classHasSubclasses.put(className, hasSubclasses);
-            } catch (ClassNotFoundException ex) {
-                throw new QueryProcessingException("No class " + className + " found in the beans jar file: " 
-                    + ex.getMessage(), ex);
-            }
-        }
-        return hasSubclasses.booleanValue();
+        LOG.debug("CQL to HQL translator initialized");
     }
 }
