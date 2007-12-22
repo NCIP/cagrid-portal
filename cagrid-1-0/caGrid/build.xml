@@ -388,7 +388,7 @@
     <target name="build-dorian" depends="configure-dorian" description="Builds the dorian project">
         <resolveDependencies extdir="${projects.dir}/dorian/ext">
             <artifact refid="cagrid.properties" />
-            <artifact refid="service.tools.jars" />
+            <artifact refid="db.tools.jars" />
             <artifact refid="mds.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
@@ -409,7 +409,7 @@
             <artifact refid="metadata.schemas" />
         </resolveDependencies>
         <resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
-            <artifact refid="service.tools.schemas" />
+            <artifact refid="db.tools.schemas" />
         </resolveDependencies>
         <ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
     </target>
@@ -442,7 +442,7 @@
     <target name="build-cds" depends="prepare" description="Builds the Grid Delegation Service project">
         <resolveDependencies extdir="${projects.dir}/cds/ext">
             <artifact refid="cagrid.properties" />
-            <artifact refid="service.tools.jars" />
+            <artifact refid="db.tools.jars" />
             <artifact refid="mds.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
@@ -457,9 +457,6 @@
         <delete dir="${projects.dir}/cds/schema/CredentialDelegationService/xsd" />
         <resolveDependencies extdir="${projects.dir}/cds/schema/CredentialDelegationService">
             <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-        <resolveDependencies extdir="${projects.dir}/cds/schema/CredentialDelegationService">
-            <artifact refid="service.tools.schemas" />
         </resolveDependencies>
         <ant dir="${projects.dir}/cds" inheritAll="false" antfile="build.xml" target="all" />
     </target>

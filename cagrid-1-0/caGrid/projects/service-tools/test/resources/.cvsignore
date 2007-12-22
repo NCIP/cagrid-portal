@@ -1,2 +1,4 @@
 db-config.xml
 event-auditor-conf.xml
+events.properties
+event-manager.xml

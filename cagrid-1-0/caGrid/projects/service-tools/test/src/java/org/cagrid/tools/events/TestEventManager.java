@@ -2,7 +2,6 @@ package org.cagrid.tools.events;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 
-import java.util.List;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -14,25 +13,25 @@ import junit.framework.TestCase;
  * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A href="mailto:ervin@bmi.osu.edu">David Ervin</A>
  */
-public class TestEventManager extends TestCase implements SubjectResolver {
+public class TestEventManager extends TestCase{
 
 	public void testEventManager() {
 		try {
-			EventManager em = new EventManager(this);
+			EventManager em = new EventManager();
 			String e1 = "Event 1";
 			String e2 = "Event 2";
 			String e3 = "Event 3";
 			String e4 = "Event 4";
 			String h1Name = "Handler 1";
-			SimpleEventHandler h1 = new SimpleEventHandler(h1Name, getTestEventHandlerConfiguration());
+			SimpleEventHandler h1 = new SimpleEventHandler(h1Name);
 			String h2Name = "Handler 2";
-			SimpleEventHandler h2 = new SimpleEventHandler(h2Name, getTestEventHandlerConfiguration());
+			SimpleEventHandler h2 = new SimpleEventHandler(h2Name);
 			em.registerHandler(h1);
 			em.registerHandler(h2);
-			em.registerEventWithHandler(e1, h1.getName());
-			em.registerEventWithHandler(e3, h1.getName());
-			em.registerEventWithHandler(e2, h2.getName());
-			em.registerEventWithHandler(e3, h2.getName());
+			em.registerEventWithHandler(new EventToHandlerMapping(e1, h1.getName()));
+			em.registerEventWithHandler(new EventToHandlerMapping(e3, h1.getName()));
+			em.registerEventWithHandler(new EventToHandlerMapping(e2, h2.getName()));
+			em.registerEventWithHandler(new EventToHandlerMapping(e3, h2.getName()));
 
 			Set s1 = em.getHandlers(e1);
 			assertEquals(1, s1.size());
@@ -88,49 +87,21 @@ public class TestEventManager extends TestCase implements SubjectResolver {
 
 		}
 	}
-
-
-	public void testEventManagerWithEventPolicy() {
+	
+	public void testEventManagerFromConfiguration() {
 		try {
-			EventManager em = new EventManager(this);
-			EventHandlingPolicy policy = new EventHandlingPolicy();
-			EventHandlers list = new EventHandlers();
-			EventHandlerDescription d1 = new EventHandlerDescription();
-			d1.setName("Handler 1");
-			d1.setClassName(SimpleEventHandler.class.getName());
-			d1.setEventHandlerConfiguration(getTestEventHandlerConfiguration());
-			EventHandlerDescription d2 = new EventHandlerDescription();
-			d2.setName("Handler 2");
-			d2.setClassName(SimpleEventHandler.class.getName());
-			d2.setEventHandlerConfiguration(getTestEventHandlerConfiguration());
-			list.setEventHandlerDescription(new EventHandlerDescription[]{d1, d2});
-			policy.setEventHandlers(list);
+			EventManager em = Utils.getEventManager();
 			String e1 = "Event 1";
 			String e2 = "Event 2";
 			String e3 = "Event 3";
 			String e4 = "Event 4";
-
-			EventToHandlersMapping m1 = new EventToHandlersMapping();
-			m1.setEventName(e1);
-			m1.setHandlerName(new String[]{d1.getName()});
-
-			EventToHandlersMapping m2 = new EventToHandlersMapping();
-			m2.setEventName(e2);
-			m2.setHandlerName(new String[]{d2.getName()});
-
-			EventToHandlersMapping m3 = new EventToHandlersMapping();
-			m3.setEventName(e3);
-			m3.setHandlerName(new String[]{d1.getName(), d2.getName()});
-
-			EventMappings mappings = new EventMappings();
-			mappings.setEventToHandlersMapping(new EventToHandlersMapping[]{m1, m2, m3});
-			policy.setEventMappings(mappings);
-
-			em.registerEventHandlingPolicy(policy);
-
-			SimpleEventHandler h1 = (SimpleEventHandler) em.getHandler(d1.getName());
-			SimpleEventHandler h2 = (SimpleEventHandler) em.getHandler(d2.getName());
-
+			String h1Name = "Handler 1";
+		
+			String h2Name = "Handler 2";
+	
+			SimpleEventHandler h1 = (SimpleEventHandler)em.getHandler(h1Name);
+			SimpleEventHandler h2 = (SimpleEventHandler)em.getHandler(h2Name);
+			
 			Set s1 = em.getHandlers(e1);
 			assertEquals(1, s1.size());
 			assertTrue(s1.contains(h1));
@@ -198,30 +169,5 @@ public class TestEventManager extends TestCase implements SubjectResolver {
 
 	}
 
-
-	public String lookupAttribute(String targetId, String att) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public List<String> resolveSubjects(String targetGroup) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public final static String PROPERTY_NAME = "Test Property";
-	public final static String PROPERTY_VALUE = "Testing 123";
-
-
-	public static EventHandlerConfiguration getTestEventHandlerConfiguration() {
-		EventHandlerConfiguration conf = new EventHandlerConfiguration();
-		Property[] props = new Property[1];
-		props[0] = new Property();
-		props[0].setName(PROPERTY_NAME);
-		props[0].setValue(PROPERTY_VALUE);
-		conf.setProperty(props);
-		return conf;
-	}
 
 }

@@ -2,11 +2,11 @@ package org.cagrid.tools.events;
 
 import gov.nih.nci.cagrid.common.Utils;
 
-import java.lang.reflect.Constructor;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,19 +23,33 @@ public class EventManager {
 
 	private Map<String, EventHandler> handlers;
 	private Map<String, Set<String>> events;
-	private SubjectResolver resolver;
 	private Log log;
 
-
-	public EventManager(SubjectResolver resolver) {
-		this.log = LogFactory.getLog(this.getClass().getName());
-		this.resolver = resolver;
-		handlers = new HashMap<String, EventHandler>();
-		events = new HashMap<String, Set<String>>();
+	public EventManager() throws InvalidHandlerException {
+		this(null, null);
 	}
 
+	public EventManager(List<EventHandler> handlerList,
+			List<EventToHandlerMapping> mappings)
+			throws InvalidHandlerException {
+		this.log = LogFactory.getLog(this.getClass().getName());
+		handlers = new HashMap<String, EventHandler>();
+		events = new HashMap<String, Set<String>>();
 
-	public void logEvent(String targetId, String reportingPartyId, String eventType, String message) {
+		if (handlerList != null) {
+			for (int i = 0; i < handlerList.size(); i++) {
+				this.registerHandler(handlerList.get(i));
+			}
+		}
+		if (mappings != null) {
+			for (int i = 0; i < mappings.size(); i++) {
+				this.registerEventWithHandler(mappings.get(i));
+			}
+		}
+	}
+
+	public void logEvent(String targetId, String reportingPartyId,
+			String eventType, String message) {
 		try {
 			// TODO: Thread this out.
 			Event e = new Event();
@@ -54,75 +68,34 @@ public class EventManager {
 		}
 	}
 
-
-	public void registerEventHandlingPolicy(EventHandlingPolicy policy) throws InvalidHandlerException {
-		if (policy != null) {
-			EventHandlers eh = policy.getEventHandlers();
-			if (eh != null) {
-				EventHandlerDescription[] handlers = eh.getEventHandlerDescription();
-				if (handlers != null) {
-					Class[] types = new Class[2];
-					types[0] = String.class;
-					types[1] = EventHandlerConfiguration.class;
-					EventHandler handler = null;
-					for (int i = 0; i < handlers.length; i++) {
-						try {
-							Constructor c = Class.forName(handlers[i].getClassName()).getConstructor(types);
-							handler = (EventHandler) c.newInstance(new Object[]{handlers[i].getName(),
-									handlers[i].getEventHandlerConfiguration()});
-
-						} catch (Exception e) {
-							throw new InvalidHandlerException("Could not create an instance of the "
-								+ handlers[i].getName() + " event handler.", e);
-						}
-						registerHandler(handler);
-					}
-
-				}
-			}
-			EventMappings em = policy.getEventMappings();
-			if (em != null) {
-				EventToHandlersMapping[] mappings = em.getEventToHandlersMapping();
-				if (mappings != null) {
-					for (int i = 0; i < mappings.length; i++) {
-						String[] handlers = mappings[i].getHandlerName();
-						if (handlers != null) {
-							for (int j = 0; j < handlers.length; j++) {
-								this.registerEventWithHandler(mappings[i].getEventName(), handlers[j]);
-							}
-						}
-					}
-				}
-			}
+	public void registerEventWithHandler(EventToHandlerMapping mapping)
+			throws InvalidHandlerException {
+		if (!handlers.containsKey(mapping.getHandlerName())) {
+			throw new InvalidHandlerException("Cannot register the event "
+					+ mapping.getEventName() + " with the handler "
+					+ mapping.getHandlerName()
+					+ ", no such handler is registered.");
 		}
-	}
-
-
-	public void registerEventWithHandler(String eventName, String handlerName) throws InvalidHandlerException {
-		if (!handlers.containsKey(handlerName)) {
-			throw new InvalidHandlerException("Cannot register the event " + eventName + " with the handler "
-				+ handlerName + ", no such handler is registered.");
-		}
-		Set set = events.get(eventName);
+		Set set = events.get(mapping.getEventName());
 		if (set == null) {
 			set = new HashSet<String>();
-			events.put(eventName, set);
+			events.put(mapping.getEventName(), set);
 		}
-		if (!set.contains(handlerName)) {
-			set.add(handlerName);
+		if (!set.contains(mapping.getHandlerName())) {
+			set.add(mapping.getHandlerName());
 		}
 	}
 
-
-	protected EventHandler getHandler(String name) throws InvalidHandlerException {
+	protected EventHandler getHandler(String name)
+			throws InvalidHandlerException {
 
 		if (!handlers.containsKey(name)) {
-			throw new InvalidHandlerException("Cannot get the handler " + name + ", no such handler is registered.");
+			throw new InvalidHandlerException("Cannot get the handler " + name
+					+ ", no such handler is registered.");
 		} else {
 			return this.handlers.get(name);
 		}
 	}
-
 
 	protected Set<EventHandler> getHandlers(String event) {
 		Set<EventHandler> set = new HashSet<EventHandler>();
@@ -137,20 +110,20 @@ public class EventManager {
 		return set;
 	}
 
-
-	public void registerHandler(EventHandler handler) throws InvalidHandlerException {
+	public void registerHandler(EventHandler handler)
+			throws InvalidHandlerException {
 		if (Utils.clean(handler.getName()) == null) {
-			throw new InvalidHandlerException("Invalid name provided for handler.");
+			throw new InvalidHandlerException(
+					"Invalid name provided for handler.");
 		}
 
 		if (!handlers.containsKey(handler.getName())) {
-			handler.setSubjectResolver(resolver);
 			handlers.put(handler.getName(), handler);
 		} else {
-			throw new InvalidHandlerException("The handler " + handler.getName() + " is already registered.");
+			throw new InvalidHandlerException("The handler "
+					+ handler.getName() + " is already registered.");
 		}
 	}
-
 
 	public void unregisterHandler(String name) {
 		handlers.remove(name);
@@ -159,7 +132,6 @@ public class EventManager {
 			itr.next().remove(name);
 		}
 	}
-
 
 	public void unregisterEventWithHandler(String eventName, String handlerName) {
 		Set set = events.get(eventName);

@@ -7,9 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import org.cagrid.tools.database.Database;
-import org.cagrid.tools.database.DatabaseConfiguration;
 import org.cagrid.tools.database.DatabaseException;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -17,7 +15,7 @@ import org.cagrid.tools.database.DatabaseException;
  * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A href="mailto:ervin@bmi.osu.edu">David Ervin</A>
  */
-public class EventAuditor extends EventHandler {
+public class EventAuditor extends BaseEventHandler {
 
 	private Database db;
 
@@ -39,29 +37,18 @@ public class EventAuditor extends EventHandler {
 
 	private String table;
 
-
-	public EventAuditor(String name, EventHandlerConfiguration conf) throws EventHandlerInitializationException {
-		super(name, conf);
+	public EventAuditor(String name, Database db, String tableName)
+			throws EventHandlerInitializationException {
+		super(name);
 		try {
-			DatabaseConfiguration dc = new DatabaseConfiguration();
-			dc.setHost(this.getPropertyValue(DB_HOST_PROPERTY));
-			dc.setPort(Integer.valueOf(this.getPropertyValue(DB_PORT_PROPERTY)).intValue());
-			dc.setUsername(this.getPropertyValue(DB_USERNAME_PROPERTY));
-			dc.setPassword(this.getPropertyValue(DB_PASSWORD_PROPERTY));
-			this.db = new Database(dc, this.getPropertyValue(DB_NAME_PROPERTY));
+			this.db = db;
 			db.createDatabaseIfNeeded();
-			this.table = this.getPropertyValue(DB_TABLE_PROPERTY);
+			this.table = tableName;
 		} catch (Exception e) {
-			throw new EventHandlerInitializationException("Error initializing the event handler, " + name + ": "
-				+ e.getMessage(), e);
+			throw new EventHandlerInitializationException(
+					"Error initializing the event handler, " + name + ": "
+							+ e.getMessage(), e);
 		}
-	}
-
-
-	public EventAuditor(String name, Database db, String table) {
-		super(name, null);
-		this.db = db;
-		this.table = table;
 	}
 
 
@@ -70,15 +57,14 @@ public class EventAuditor extends EventHandler {
 			insertEvent(event);
 		} catch (DatabaseException e) {
 			getLog().error(e.getMessage(), e);
-			throw new EventHandlingException("An unexpected database error occurred.", e);
+			throw new EventHandlingException(
+					"An unexpected database error occurred.", e);
 		}
 	}
-
 
 	public boolean eventExists(long eventId) throws DatabaseException {
 		return db.exists(table, EVENT_ID, eventId);
 	}
-
 
 	public Event getEvent(long eventId) throws DatabaseException {
 		Event event = null;
@@ -87,7 +73,8 @@ public class EventAuditor extends EventHandler {
 
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select * from " + table + " WHERE " + EVENT_ID + "= ?");
+			PreparedStatement s = c.prepareStatement("select * from " + table
+					+ " WHERE " + EVENT_ID + "= ?");
 			s.setLong(1, eventId);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -103,7 +90,8 @@ public class EventAuditor extends EventHandler {
 			s.close();
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new DatabaseException("An unexpected database error occurred.", e);
+			throw new DatabaseException(
+					"An unexpected database error occurred.", e);
 		} finally {
 			db.releaseConnection(c);
 		}
@@ -111,46 +99,54 @@ public class EventAuditor extends EventHandler {
 		return event;
 	}
 
-
 	public void deleteEvent(long eventId) throws DatabaseException {
 		buildDatabase();
 		try {
-			db.update("delete from " + this.table + " where " + EVENT_ID + "=" + eventId);
+			db.update("delete from " + this.table + " where " + EVENT_ID + "="
+					+ eventId);
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new DatabaseException("An unexpected database error occurred.", e);
+			throw new DatabaseException(
+					"An unexpected database error occurred.", e);
 		}
 	}
 
-
-	private Event insertEvent(Event event) throws DatabaseException, EventHandlingException {
+	private Event insertEvent(Event event) throws DatabaseException,
+			EventHandlingException {
 		buildDatabase();
 		Connection c = null;
 		try {
 
 			if (Utils.clean(event.getTargetId()) == null) {
-				throw new EventHandlingException("Could not audit event, no target id was specified.");
+				throw new EventHandlingException(
+						"Could not audit event, no target id was specified.");
 			}
 
 			if (Utils.clean(event.getReportingPartyId()) == null) {
-				throw new EventHandlingException("Could not audit event, no reporting party was specified.");
+				throw new EventHandlingException(
+						"Could not audit event, no reporting party was specified.");
 			}
 
 			if (Utils.clean(event.getEventType()) == null) {
-				throw new EventHandlingException("Could not audit event, no event type was specified.");
+				throw new EventHandlingException(
+						"Could not audit event, no event type was specified.");
 			}
 
 			if (Utils.clean(event.getMessage()) == null) {
-				throw new EventHandlingException("Could not audit event, no event message was specified.");
+				throw new EventHandlingException(
+						"Could not audit event, no event message was specified.");
 			}
 
 			if (event.getOccurredAt() <= 0) {
-				throw new EventHandlingException("Could not audit event, no occurred at date was specified.");
+				throw new EventHandlingException(
+						"Could not audit event, no occurred at date was specified.");
 			}
 
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("INSERT INTO " + this.table + " SET " + TARGET_ID + "= ?, "
-				+ REPORTING_PARTY_ID + "= ?, " + EVENT_TYPE + "= ?, " + OCCURRED_AT + "= ?, " + MESSAGE + "= ?");
+			PreparedStatement s = c.prepareStatement("INSERT INTO "
+					+ this.table + " SET " + TARGET_ID + "= ?, "
+					+ REPORTING_PARTY_ID + "= ?, " + EVENT_TYPE + "= ?, "
+					+ OCCURRED_AT + "= ?, " + MESSAGE + "= ?");
 
 			s.setString(1, event.getTargetId());
 			s.setString(2, event.getReportingPartyId());
@@ -162,7 +158,8 @@ public class EventAuditor extends EventHandler {
 			s.close();
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
-			throw new DatabaseException("An unexpected database error occurred.", e);
+			throw new DatabaseException(
+					"An unexpected database error occurred.", e);
 		} finally {
 			if (c != null) {
 				db.releaseConnection(c);
@@ -171,22 +168,22 @@ public class EventAuditor extends EventHandler {
 		return event;
 	}
 
-
 	public void clearDatabase() throws DatabaseException {
 		buildDatabase();
 		db.update("DROP TABLE IF EXISTS " + this.table);
 		dbBuilt = false;
 	}
 
-
 	private void buildDatabase() throws DatabaseException {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(table)) {
 				String trust = "CREATE TABLE " + this.table + " (" + EVENT_ID
-					+ " INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + TARGET_ID + " VARCHAR(255) NOT NULL,"
-					+ REPORTING_PARTY_ID + " VARCHAR(255) NOT NULL," + EVENT_TYPE + " VARCHAR(50) NOT NULL,"
-					+ OCCURRED_AT + " BIGINT NOT NULL," + MESSAGE + " TEXT NOT NULL,"
-					+ "INDEX document_index (EVENT_ID));";
+						+ " INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+						+ TARGET_ID + " VARCHAR(255) NOT NULL,"
+						+ REPORTING_PARTY_ID + " VARCHAR(255) NOT NULL,"
+						+ EVENT_TYPE + " VARCHAR(50) NOT NULL," + OCCURRED_AT
+						+ " BIGINT NOT NULL," + MESSAGE + " TEXT NOT NULL,"
+						+ "INDEX document_index (EVENT_ID));";
 				db.update(trust);
 			}
 			dbBuilt = true;

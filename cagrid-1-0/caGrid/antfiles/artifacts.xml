@@ -119,10 +119,10 @@
 			</fileset>
 		</artifact>
 
-		<artifact track="main" type="jars" id="service.tools.jars">
+		<artifact track="main" type="jars" id="db.tools.jars">
 			<generatingantcall target="build-service-tools" />
 			<fileset dir="${projects.dir}/service-tools/build/jars">
-				<include name="*.jar" />
+				<include name="caGrid-*-db.jar" />
 				<exclude name="*test*.jar" />
 			</fileset>
 
@@ -136,7 +136,7 @@
 			</fileset>
 		</artifact>
 
-		<artifact track="main" type="schemas" id="service.tools.schemas">
+		<artifact track="main" type="schemas" id="db.tools.schemas">
 			<fileset dir="${projects.dir}/service-tools/schema">
 				<include name="**/*.xsd" />
 			</fileset>

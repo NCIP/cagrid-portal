@@ -22,7 +22,8 @@
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="jar.dir" value="${build.dir}/jars" />
-	<property name="project.jarfile" value="${jar.dir}/${project.name}.jar" />
+	<property name="db.jarfile" value="${jar.dir}/${cagrid.master.jar.prefix}db.jar" />
+	<property name="events.jarfile" value="${jar.dir}/${cagrid.master.jar.prefix}events.jar" />
 	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="ext.lib.dir" value="${basedir}/ext/lib" />
 	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
@@ -54,8 +55,8 @@
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
-			<include name="**/*.jar" />
-		</fileset>
+					<include name="**/*.jar" />
+				</fileset>
 		<pathelement location="${stubs.dest}" />
 	</path>
 
@@ -153,13 +154,6 @@
 			<property name="target.stubs.dir" location="${stubs.src}" />
 			<property name="ns.excludes" value="${GT4.ns.excludes}" />
 		</ant>
-		<!-- EVENTS CONFIGURATION SCHEMA -->
-		<ant antfile="${build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}" />
-			<property name="wsdl.file" value="Events.wsdl" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
-			<property name="ns.excludes" value="${GT4.ns.excludes}" />
-		</ant>
 	</target>
 
 	<target name="compileStubs" depends="stubs">
@@ -203,13 +197,20 @@
 	<!-- ============================================================== -->
 	<target name="jar" depends="compile" description="Builds the Jar Files">
 		<mkdir dir="${jar.dir}" />
-		<jar jarfile="${project.jarfile}">
+		<jar jarfile="${db.jarfile}">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Main-Class" value="${main.class}" />
 			</manifest>
-			<fileset dir="${classes.dir}" includes="**/**" />
-			<fileset dir="${stubs.dest}" includes="**/**" />
+			<fileset dir="${classes.dir}" includes="**/database/**" />
+			<fileset dir="${stubs.dest}" includes="**/database/**" />
+		</jar>
+
+		<jar jarfile="${events.jarfile}">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+			</manifest>
+			<fileset dir="${classes.dir}" includes="**/events/**" />
+			<fileset dir="${stubs.dest}" includes="**/events/**" />
 		</jar>
 
 	</target>

@@ -9,13 +9,13 @@ import java.util.Set;
  * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A href="mailto:ervin@bmi.osu.edu">David Ervin</A>
  */
-public class SimpleEventHandler extends EventHandler {
+public class SimpleEventHandler extends BaseEventHandler {
 
 	private Set<String> eventsRecord;
 
 
-	public SimpleEventHandler(String name, EventHandlerConfiguration conf) {
-		super(name, conf);
+	public SimpleEventHandler(String name) {
+		super(name);
 		eventsRecord = new HashSet<String>();
 	}
 

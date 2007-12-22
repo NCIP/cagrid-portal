@@ -14,7 +14,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-service-tools.jar" sourcepath="/caGrid-1.0-service-tools"/>
 	<classpathentry kind="lib" path="ext/lib/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="lib" path="ext/lib/commons-pool-1.2.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
@@ -74,5 +73,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" sourcepath="/globussource"/>
 	<classpathentry kind="lib" path="lib/spring-beans.jar"/>
 	<classpathentry kind="lib" path="lib/spring-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-db.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -4,8 +4,6 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 
 import java.util.Date;
 
-import org.cagrid.tools.Utils;
-
 import junit.framework.TestCase;
 
 
@@ -37,7 +35,7 @@ public class TestEventAuditor extends TestCase {
 	public void testEventAuditorFromConfig() {
 		EventAuditor auditor = null;
 		try {
-			auditor = new EventAuditor("Auditor", Utils.getEventAuditorConfiguration());
+			auditor = org.cagrid.tools.events.Utils.getEventAuditor();
 			validateEventAuditor(auditor);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -51,70 +49,6 @@ public class TestEventAuditor extends TestCase {
 		}
 	}
 	
-	public void testEventAuditorBadConfiguration() {
-		try {
-			EventHandlerConfiguration conf = Utils.getEventAuditorConfiguration();
-			assertTrue(disableProperty(conf, EventAuditor.DB_HOST_PROPERTY));
-			new EventAuditor("Auditor", conf);
-			fail("Should not be able to construct event auditor with bad configuration,");
-		} catch (Exception e) {
-		}
-		
-		try {
-			EventHandlerConfiguration conf = Utils.getEventAuditorConfiguration();
-			assertTrue(disableProperty(conf, EventAuditor.DB_NAME_PROPERTY));
-			new EventAuditor("Auditor", conf);
-			fail("Should not be able to construct event auditor with bad configuration,");
-		} catch (Exception e) {
-		}
-		
-		try {
-			EventHandlerConfiguration conf = Utils.getEventAuditorConfiguration();
-			assertTrue(disableProperty(conf, EventAuditor.DB_PASSWORD_PROPERTY));
-			new EventAuditor("Auditor", conf);
-			fail("Should not be able to construct event auditor with bad configuration,");
-		} catch (Exception e) {
-		}
-		
-		try {
-			EventHandlerConfiguration conf = Utils.getEventAuditorConfiguration();
-			assertTrue(disableProperty(conf, EventAuditor.DB_PORT_PROPERTY));
-			new EventAuditor("Auditor", conf);
-			fail("Should not be able to construct event auditor with bad configuration,");
-		} catch (Exception e) {
-		}
-		
-		try {
-			EventHandlerConfiguration conf = Utils.getEventAuditorConfiguration();
-			assertTrue(disableProperty(conf, EventAuditor.DB_TABLE_PROPERTY));
-			new EventAuditor("Auditor", conf);
-			fail("Should not be able to construct event auditor with bad configuration,");
-		} catch (Exception e) {
-		}
-		
-		try {
-			EventHandlerConfiguration conf = Utils.getEventAuditorConfiguration();
-			assertTrue(disableProperty(conf, EventAuditor.DB_USERNAME_PROPERTY));
-			new EventAuditor("Auditor", conf);
-			fail("Should not be able to construct event auditor with bad configuration,");
-		} catch (Exception e) {
-		}
-	}
-
-
-	private boolean disableProperty(EventHandlerConfiguration conf, String property) throws Exception {
-		boolean disabled = false;
-		Property[] prop = conf.getProperty();
-		if (prop != null) {
-			for (int i = 0; i < prop.length; i++) {
-				if (prop[i].getName().equals(property)) {
-					prop[i].setValue(null);
-					disabled = true;
-				}
-			}
-		}
-		return disabled;
-	}
 
 
 	private void validateEventAuditor(EventAuditor auditor) throws Exception {

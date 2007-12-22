@@ -7,7 +7,6 @@ import junit.framework.TestCase;
 
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.database.DatabaseConfiguration;
-import org.cagrid.tools.events.EventHandlerConfiguration;
 
 
 public class Utils {
@@ -26,13 +25,5 @@ public class Utils {
 			db.createDatabaseIfNeeded();
 		}
 		return db;
-	}
-
-
-	public static EventHandlerConfiguration getEventAuditorConfiguration() throws Exception {
-		InputStream resource = TestCase.class.getResourceAsStream(Constants.EVENT_AUDITOR_CONFIG);
-		EventHandlerConfiguration conf = (EventHandlerConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-			new InputStreamReader(resource), EventHandlerConfiguration.class);
-		return conf;
 	}
 }
