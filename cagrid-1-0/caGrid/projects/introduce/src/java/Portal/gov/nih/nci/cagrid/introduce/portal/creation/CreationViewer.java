@@ -146,7 +146,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
      * This method initializes this
      */
     private void initialize() {
-        this.setContentPane(new IconFeedbackPanel(this.validationModel, getMainPanel()));
+        this.setContentPane(getMainPanel());
         this.setFrameIcon(IntroduceLookAndFeel.getCreateServiceIcon());
         this.setTitle("Create a Grid Service");
 
@@ -918,7 +918,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 	private JTabbedPane getMainTabbedPane() {
 		if (mainTabbedPane == null) {
 			mainTabbedPane = new JTabbedPane();
-			mainTabbedPane.addTab("Settings", null, getInputPanel(), null);
+			mainTabbedPane.addTab("Settings", null, new IconFeedbackPanel(this.validationModel, getInputPanel()), null);
 			mainTabbedPane.addTab("Advanced", null, getAdvancedPanel(), null);
 		}
 		return mainTabbedPane;

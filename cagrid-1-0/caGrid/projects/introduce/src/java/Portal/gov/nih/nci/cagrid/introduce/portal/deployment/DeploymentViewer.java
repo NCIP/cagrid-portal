@@ -133,7 +133,8 @@ public class DeploymentViewer extends ApplicationComponent {
 		if (mainPanel == null) {
 			mainPanel = new JTabbedPane();
 			mainPanel.addTab("General Deployment", getDefaultPanel());
-			mainPanel.addTab("Advanced Deployment", getAdvancedDeploymentPanel());
+			mainPanel.addTab("Advanced Deployment",
+					getAdvancedDeploymentPanel());
 			mainPanel.addTab("Service Properties", getServicePropertiesPanel());
 
 			// run any extensions that need to be ran
@@ -178,9 +179,16 @@ public class DeploymentViewer extends ApplicationComponent {
 		}
 		return mainPanel;
 	}
-	
-	private void resetGUI(){
-		serviceDeploymentNameTextField.setText(getAdvancedDeploymentPanel().getDeploymentProperties().getProperty(IntroduceConstants.INTRODUCE_DEPLOYMENT_PREFIX_PROPERTY) + "/" + info.getServices().getService(0).getName());
+
+	private void resetGUI() {
+		getDeployButton().setEnabled(
+				getAdvancedDeploymentPanel().validateInput());
+		serviceDeploymentNameTextField
+				.setText(getAdvancedDeploymentPanel()
+						.getDeploymentProperties()
+						.getProperty(
+								IntroduceConstants.INTRODUCE_DEPLOYMENT_PREFIX_PROPERTY)
+						+ "/" + info.getServices().getService(0).getName());
 	}
 
 	/**
@@ -341,7 +349,8 @@ public class DeploymentViewer extends ApplicationComponent {
 			gridBagConstraints6.gridy = 1;
 			containerLocationLabel = new JLabel();
 			containerLocationLabel.setText("Container Location");
-			containerLocationLabel.setFont(containerLocationLabel.getFont().deriveFont(Font.BOLD));
+			containerLocationLabel.setFont(containerLocationLabel.getFont()
+					.deriveFont(Font.BOLD));
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.gridx = 0;
@@ -358,11 +367,14 @@ public class DeploymentViewer extends ApplicationComponent {
 									"Deployment Location",
 									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									new Font("Dialog", Font.BOLD, 12), PortalLookAndFeel
-											.getPanelLabelColor()));
-			deploymentTypePanel.add(getDeploymentTypeSelector(), gridBagConstraints2);
-			deploymentTypePanel.add(containerLocationLabel, gridBagConstraints6);
-			deploymentTypePanel.add(getContainerLocationTextField(), gridBagConstraints7);
+									new Font("Dialog", Font.BOLD, 12),
+									PortalLookAndFeel.getPanelLabelColor()));
+			deploymentTypePanel.add(getDeploymentTypeSelector(),
+					gridBagConstraints2);
+			deploymentTypePanel
+					.add(containerLocationLabel, gridBagConstraints6);
+			deploymentTypePanel.add(getContainerLocationTextField(),
+					gridBagConstraints7);
 		}
 		return deploymentTypePanel;
 	}
@@ -375,18 +387,31 @@ public class DeploymentViewer extends ApplicationComponent {
 	private JComboBox getDeploymentTypeSelector() {
 		if (deploymentTypeSelector == null) {
 			deploymentTypeSelector = new JComboBox();
-			deploymentTypeSelector.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if(((String)deploymentTypeSelector.getSelectedItem()).equals(TOMCAT)){
-						getContainerLocationTextField().setText(System.getenv(IntroduceConstants.TOMCAT));
-					} else if(((String)deploymentTypeSelector.getSelectedItem()).equals(GLOBUS)){
-						getContainerLocationTextField().setText(System.getenv(IntroduceConstants.GLOBUS));
-					} else if(((String)deploymentTypeSelector.getSelectedItem()).equals(JBOSS)){
-						getContainerLocationTextField().setText(System.getenv(IntroduceConstants.JBOSS));
-					}
-				}
-			});
-			
+			deploymentTypeSelector
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if (((String) deploymentTypeSelector
+									.getSelectedItem()).equals(TOMCAT)) {
+								getContainerLocationTextField()
+										.setText(
+												System
+														.getenv(IntroduceConstants.TOMCAT));
+							} else if (((String) deploymentTypeSelector
+									.getSelectedItem()).equals(GLOBUS)) {
+								getContainerLocationTextField()
+										.setText(
+												System
+														.getenv(IntroduceConstants.GLOBUS));
+							} else if (((String) deploymentTypeSelector
+									.getSelectedItem()).equals(JBOSS)) {
+								getContainerLocationTextField()
+										.setText(
+												System
+														.getenv(IntroduceConstants.JBOSS));
+							}
+						}
+					});
+
 			if (System.getenv(IntroduceConstants.TOMCAT) != null) {
 				deploymentTypeSelector.addItem(TOMCAT);
 			}
@@ -441,7 +466,8 @@ public class DeploymentViewer extends ApplicationComponent {
 			defaultPanel.setLayout(new GridBagLayout());
 			defaultPanel.add(getButtonPanel(), gridBagConstraints1);
 			defaultPanel.add(getDeploymentTypePanel(), gridBagConstraints11);
-			defaultPanel.add(getDeploymentInformationPanel(), gridBagConstraints);
+			defaultPanel.add(getDeploymentInformationPanel(),
+					gridBagConstraints);
 		}
 		return defaultPanel;
 	}
@@ -492,9 +518,9 @@ public class DeploymentViewer extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes deploymentInformationPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes deploymentInformationPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getDeploymentInformationPanel() {
 		if (deploymentInformationPanel == null) {
@@ -511,7 +537,8 @@ public class DeploymentViewer extends ApplicationComponent {
 			gridBagConstraints10.gridy = 0;
 			serviceLocationLabel = new JLabel();
 			serviceLocationLabel.setText("Service Location");
-			serviceLocationLabel.setFont(serviceLocationLabel.getFont().deriveFont(Font.BOLD));
+			serviceLocationLabel.setFont(serviceLocationLabel.getFont()
+					.deriveFont(Font.BOLD));
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.fill = GridBagConstraints.BOTH;
 			gridBagConstraints9.gridy = 2;
@@ -525,7 +552,8 @@ public class DeploymentViewer extends ApplicationComponent {
 			gridBagConstraints8.gridy = 2;
 			serviceNamespaceLabel = new JLabel();
 			serviceNamespaceLabel.setText("Service Namespace");
-			serviceNamespaceLabel.setFont(serviceNamespaceLabel.getFont().deriveFont(Font.BOLD));
+			serviceNamespaceLabel.setFont(serviceNamespaceLabel.getFont()
+					.deriveFont(Font.BOLD));
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 0;
 			gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
@@ -538,71 +566,95 @@ public class DeploymentViewer extends ApplicationComponent {
 			gridBagConstraints4.gridx = 1;
 			serviceDeploymentNameLabel = new JLabel();
 			serviceDeploymentNameLabel.setText("Service Deployment Name");
-			serviceDeploymentNameLabel.setFont(serviceDeploymentNameLabel.getFont().deriveFont(Font.BOLD));
+			serviceDeploymentNameLabel.setFont(serviceDeploymentNameLabel
+					.getFont().deriveFont(Font.BOLD));
 			deploymentInformationPanel = new JPanel();
 			deploymentInformationPanel.setLayout(new GridBagLayout());
-			deploymentInformationPanel.setBorder(BorderFactory.createTitledBorder(null, "Deployment Information", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
-			deploymentInformationPanel.add(serviceDeploymentNameLabel, gridBagConstraints5);
-			deploymentInformationPanel.add(getServiceDeploymentNameTextField(), gridBagConstraints4);
-			deploymentInformationPanel.add(serviceNamespaceLabel, gridBagConstraints8);
-			deploymentInformationPanel.add(getServiceNamespaceTextField(), gridBagConstraints9);
-			deploymentInformationPanel.add(serviceLocationLabel, gridBagConstraints10);
-			deploymentInformationPanel.add(getServiceLocationTextField(), gridBagConstraints12);
+			deploymentInformationPanel.setBorder(BorderFactory
+					.createTitledBorder(null, "Deployment Information",
+							TitledBorder.DEFAULT_JUSTIFICATION,
+							TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+									Font.BOLD, 12), IntroduceLookAndFeel
+									.getPanelLabelColor()));
+			deploymentInformationPanel.add(serviceDeploymentNameLabel,
+					gridBagConstraints5);
+			deploymentInformationPanel.add(getServiceDeploymentNameTextField(),
+					gridBagConstraints4);
+			deploymentInformationPanel.add(serviceNamespaceLabel,
+					gridBagConstraints8);
+			deploymentInformationPanel.add(getServiceNamespaceTextField(),
+					gridBagConstraints9);
+			deploymentInformationPanel.add(serviceLocationLabel,
+					gridBagConstraints10);
+			deploymentInformationPanel.add(getServiceLocationTextField(),
+					gridBagConstraints12);
 		}
 		return deploymentInformationPanel;
 	}
 
 	/**
-	 * This method initializes serviceDeploymentNameTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes serviceDeploymentNameTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JLabel getServiceDeploymentNameTextField() {
 		if (serviceDeploymentNameTextField == null) {
 			serviceDeploymentNameTextField = new JLabel();
-			serviceDeploymentNameTextField.setText(getAdvancedDeploymentPanel().getDeploymentProperties().getProperty(IntroduceConstants.INTRODUCE_DEPLOYMENT_PREFIX_PROPERTY) + "/" + info.getServices().getService(0).getName());
-			serviceDeploymentNameTextField.setFont(serviceDeploymentNameTextField.getFont().deriveFont(Font.ITALIC));
+			serviceDeploymentNameTextField
+					.setText(getAdvancedDeploymentPanel()
+							.getDeploymentProperties()
+							.getProperty(
+									IntroduceConstants.INTRODUCE_DEPLOYMENT_PREFIX_PROPERTY)
+							+ "/" + info.getServices().getService(0).getName());
+			serviceDeploymentNameTextField
+					.setFont(serviceDeploymentNameTextField.getFont()
+							.deriveFont(Font.ITALIC));
 		}
 		return serviceDeploymentNameTextField;
 	}
 
 	/**
-	 * This method initializes containerLocationTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes containerLocationTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JLabel getContainerLocationTextField() {
 		if (containerLocationTextField == null) {
 			containerLocationTextField = new JLabel();
-			containerLocationTextField.setFont(containerLocationTextField.getFont().deriveFont(Font.ITALIC));
+			containerLocationTextField.setFont(containerLocationTextField
+					.getFont().deriveFont(Font.ITALIC));
 		}
 		return containerLocationTextField;
 	}
 
 	/**
-	 * This method initializes serviceNamespaceTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes serviceNamespaceTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JLabel getServiceNamespaceTextField() {
 		if (serviceNamespaceTextField == null) {
 			serviceNamespaceTextField = new JLabel();
-			serviceNamespaceTextField.setFont(serviceNamespaceTextField.getFont().deriveFont(Font.ITALIC));
-			serviceNamespaceTextField.setText(info.getServices().getService(0).getNamespace());
+			serviceNamespaceTextField.setFont(serviceNamespaceTextField
+					.getFont().deriveFont(Font.ITALIC));
+			serviceNamespaceTextField.setText(info.getServices().getService(0)
+					.getNamespace());
 		}
 		return serviceNamespaceTextField;
 	}
 
 	/**
-	 * This method initializes serviceLocationTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes serviceLocationTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JLabel getServiceLocationTextField() {
 		if (serviceLocationTextField == null) {
 			serviceLocationTextField = new JLabel();
-			serviceLocationTextField.setFont(serviceLocationTextField.getFont().deriveFont(Font.ITALIC));
-			serviceLocationTextField.setText(info.getBaseDirectory().getAbsolutePath());
+			serviceLocationTextField.setFont(serviceLocationTextField.getFont()
+					.deriveFont(Font.ITALIC));
+			serviceLocationTextField.setText(info.getBaseDirectory()
+					.getAbsolutePath());
 		}
 		return serviceLocationTextField;
 	}

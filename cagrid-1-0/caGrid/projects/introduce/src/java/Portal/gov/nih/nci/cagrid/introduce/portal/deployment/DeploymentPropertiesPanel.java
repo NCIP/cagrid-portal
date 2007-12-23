@@ -95,11 +95,11 @@ public class DeploymentPropertiesPanel extends JPanel {
 				TitledBorder.DEFAULT_POSITION,
 				new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel
 						.getPanelLabelColor()));
-		// this.add(
-		// new IconFeedbackPanel(this.validationModel, getContentPanel()),
-		// gridBagConstraints);
+		 this.add(
+				new IconFeedbackPanel(this.validationModel, getContentPanel()),
+				gridBagConstraints);
 
-		this.add(getContentPanel(), gridBagConstraints);
+		//this.add(getContentPanel(), gridBagConstraints);
 
 		initValidation();
 
@@ -127,7 +127,7 @@ public class DeploymentPropertiesPanel extends JPanel {
 		validateInput();
 	}
 
-	private void validateInput() {
+	public boolean validateInput() {
 
 		ValidationResult result = new ValidationResult();
 
@@ -187,12 +187,17 @@ public class DeploymentPropertiesPanel extends JPanel {
 		this.validationModel.setResult(result);
 
 		updateComponentTreeSeverity();
+
+		if (result.getErrors() != null && result.getErrors().size() > 0) {
+			return false;
+		}
+		return true;
 	}
 
 	private void updateComponentTreeSeverity() {
 		ValidationComponentUtils
-				.updateComponentTreeMandatoryAndBlankBackground(this);
-		ValidationComponentUtils.updateComponentTreeSeverityBackground(this,
+				.updateComponentTreeMandatoryAndBlankBackground(this.contentPanel);
+		ValidationComponentUtils.updateComponentTreeSeverityBackground(this.contentPanel,
 				this.validationModel.getResult());
 	}
 
@@ -500,12 +505,16 @@ public class DeploymentPropertiesPanel extends JPanel {
 				.getSelectedItem()).equals("days")) {
 			multiplier = 1000 * 60 * 60 * 24;
 		}
-		props.put(
-				IntroduceConstants.INTRODUCE_DEPLOYMENT_INDEX_REFRESH_PROPERTY,
-				String
-						.valueOf((Integer
-								.parseInt(getIndexServiceRefreshjTextField()
-										.getText()) * multiplier)));
+		try {
+			props.put(
+					IntroduceConstants.INTRODUCE_DEPLOYMENT_INDEX_REFRESH_PROPERTY,
+					String
+							.valueOf((Integer
+									.parseInt(getIndexServiceRefreshjTextField()
+											.getText()) * multiplier)));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
 		if (((String) getRegistrationIntervalSelectionComboBox()
 				.getSelectedItem()).equals("minutes")) {
 			multiplier = 60;
@@ -516,12 +525,17 @@ public class DeploymentPropertiesPanel extends JPanel {
 				.getSelectedItem()).equals("days")) {
 			multiplier = 60 * 60 * 24;
 		}
-		props
-				.put(
-						IntroduceConstants.INTRODUCE_DEPLOYMENT_REFRESH_REGISTRATION_PROPERTY,
-						String.valueOf((Integer
-								.parseInt(getRegistrationRefreshjTextField()
-										.getText()) * multiplier)));
+		try {
+			props
+					.put(
+							IntroduceConstants.INTRODUCE_DEPLOYMENT_REFRESH_REGISTRATION_PROPERTY,
+							String.valueOf((Integer
+									.parseInt(getRegistrationRefreshjTextField()
+											.getText()) * multiplier)));
+		} catch (NumberFormatException e) {
+
+			e.printStackTrace();
+		}
 		return props;
 
 	}
