@@ -11,4 +11,4 @@ service.deployment.prefix=<%=gov.nih.nci.cagrid.introduce.common.IntroduceEngine
 perform.index.service.registration=true
 index.service.url=<%=gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager.getIntroduceDefaultIndexService()%>
 index.service.registration.refresh_seconds=600
-index.service.index.refresh_milliseconds=30000
+index.service.index.refresh_milliseconds=300000

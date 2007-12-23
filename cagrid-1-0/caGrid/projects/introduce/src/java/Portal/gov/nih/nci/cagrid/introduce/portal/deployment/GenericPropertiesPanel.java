@@ -15,14 +15,14 @@ import org.cagrid.grape.ApplicationComponent;
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
  */
-public abstract class GenericPropertiesApplicationComponent extends ApplicationComponent {
+public abstract class GenericPropertiesPanel extends JPanel {
 
     private Map textFields;
     private Map labels;
     private Map passwordFields;
 
 
-    public GenericPropertiesApplicationComponent() {
+    public GenericPropertiesPanel() {
         super();
         this.textFields = new HashMap();
         this.labels = new HashMap();

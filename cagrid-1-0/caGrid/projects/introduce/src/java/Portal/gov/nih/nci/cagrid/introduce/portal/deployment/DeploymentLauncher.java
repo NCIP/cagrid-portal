@@ -1,16 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal.deployment;
 
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
-import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
 
 import java.io.File;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-
-import javax.swing.SwingUtilities;
 
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.model.Dimensions;
@@ -28,7 +20,7 @@ public class DeploymentLauncher {
         promptAndInitialize();
         if (serviceDirectory != null && !error) {
             DeploymentViewer viewer = new DeploymentViewer(serviceDirectory);
-            Dimensions dim = new Dimensions(600, 600);
+            Dimensions dim = new Dimensions(300, 600);
             RenderOptions ro = new RenderOptions();
             ro.setCentered(true);
             GridApplication.getContext().addApplicationComponent(viewer, dim, ro);

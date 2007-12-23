@@ -147,7 +147,6 @@ public class CreationViewer extends CreationViewerBaseComponent {
      */
     private void initialize() {
         this.setContentPane(new IconFeedbackPanel(this.validationModel, getMainPanel()));
-        this.setContentPane(getMainPanel());
         this.setFrameIcon(IntroduceLookAndFeel.getCreateServiceIcon());
         this.setTitle("Create a Grid Service");
 
@@ -161,7 +160,6 @@ public class CreationViewer extends CreationViewerBaseComponent {
         ValidationComponentUtils.setMessageKey(getNamespaceDomain(), SERVICE_NAMESPACE);
         ValidationComponentUtils.setMessageKey(getDir(), SERVICE_DIR);
 
-        // updateModel();
         validateInput();
         updateComponentTreeSeverity();
     }

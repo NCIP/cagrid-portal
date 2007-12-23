@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
@@ -15,25 +14,27 @@ import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceDeploymentUIPanel;
 import gov.nih.nci.cagrid.introduce.statistics.StatisticsClient;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.Properties;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.BusyDialogRunnable;
 import org.cagrid.grape.utils.CompositeErrorDialog;
@@ -49,7 +50,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class DeploymentViewer extends GenericPropertiesApplicationComponent {
+public class DeploymentViewer extends ApplicationComponent {
 
 	public static final String GLOBUS = "Globus";
 
@@ -57,9 +58,7 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 
 	public static final String JBOSS = "JBoss"; // @jve:decl-index=0:
 
-	private ServiceInformation info = null;
-
-	private JPanel deployPropertiesPanel = null;
+	private ServiceInformation info = null; // @jve:decl-index=0:
 
 	private JTabbedPane mainPanel = null;
 
@@ -73,13 +72,31 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 
 	private JComboBox deploymentTypeSelector = null;
 
-	private JPanel servicePropertiesPanel = null;
-
-	private JScrollPane servicePropertiesScrollPane = null;
-
 	private JPanel defaultPanel = null;
 
 	private JPanel holderPanel = null;
+
+	private DeploymentPropertiesPanel advancedDeploymentPanel = null;
+
+	private ServicePropertiesPanel servicePropertiesPanel = null;
+
+	private JPanel deploymentInformationPanel = null;
+
+	private JLabel serviceDeploymentNameLabel = null;
+
+	private JLabel serviceDeploymentNameTextField = null;
+
+	private JLabel containerLocationLabel = null;
+
+	private JLabel containerLocationTextField = null;
+
+	private JLabel serviceNamespaceLabel = null;
+
+	private JLabel serviceNamespaceTextField = null;
+
+	private JLabel serviceLocationLabel = null;
+
+	private JLabel serviceLocationTextField = null;
 
 	/**
 	 * This method initializes
@@ -102,74 +119,9 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 	private void initialize() throws Exception {
 		this.info = new ServiceInformation(serviceDirectory);
 
-		if (info != null) {
-			// load up the deploy properties;
-			Enumeration keys = info.getDeploymentProperties().keys();
-			int i = 0;
-			while (keys.hasMoreElements()) {
-				String key = (String) keys.nextElement();
-				this.addTextField(this.getDeployPropertiesPanel(), key, info
-						.getDeploymentProperties().getProperty(key), i++, true);
-				this.getLabel(key).setFont(
-						this.getLabel(key).getFont().deriveFont(Font.BOLD));
-			}
-
-			// load up the service properties
-			if (info != null
-					&& info.getServiceDescriptor().getServiceProperties() != null
-					&& info.getServiceDescriptor().getServiceProperties()
-							.getProperty() != null) {
-				for (i = 0; i < info.getServiceDescriptor()
-						.getServiceProperties().getProperty().length; i++) {
-					ServicePropertiesProperty prop = info
-							.getServiceProperties().getProperty(i);
-					this.addTextField(this.getServicePropertiesPanel(), prop
-							.getKey(), prop.getValue(), i, true);
-					this.getTextField(prop.getKey()).setForeground(Color.BLUE);
-
-				}
-			}
-		}
-
 		this.setFrameIcon(IntroduceLookAndFeel.getDeployIcon());
 		this.setContentPane(getHolderPanel());
 		this.setTitle("Deploy Grid Service");
-	}
-
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getDeployPropertiesPanel() {
-		if (deployPropertiesPanel == null) {
-			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints10.gridy = 3;
-			gridBagConstraints10.weightx = 1.0;
-			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints10.gridwidth = 2;
-			gridBagConstraints10.weighty = 1.0D;
-			gridBagConstraints10.gridx = 1;
-			deployPropertiesPanel = new JPanel();
-			deployPropertiesPanel.setLayout(new GridBagLayout());
-			deployPropertiesPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Deployment Properties",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, PortalLookAndFeel
-											.getPanelLabelColor()));
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.gridx = 0;
-			gridBagConstraints9.gridy = 3;
-			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
-		}
-		return deployPropertiesPanel;
 	}
 
 	/**
@@ -181,8 +133,10 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 		if (mainPanel == null) {
 			mainPanel = new JTabbedPane();
 			mainPanel.addTab("General Deployment", getDefaultPanel());
-			// run any extensions that need to be ran
+			mainPanel.addTab("Advanced Deployment", getAdvancedDeploymentPanel());
+			mainPanel.addTab("Service Properties", getServicePropertiesPanel());
 
+			// run any extensions that need to be ran
 			if ((info != null && info.getServiceDescriptor().getExtensions() != null)
 					&& (info.getServiceDescriptor().getExtensions()
 							.getExtension() != null)) {
@@ -212,6 +166,7 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 			}
 			mainPanel.addChangeListener(new javax.swing.event.ChangeListener() {
 				public void stateChanged(javax.swing.event.ChangeEvent e) {
+					resetGUI();
 					for (int i = 0; i < getMainPanel().getTabCount(); i++) {
 						Component tab = getMainPanel().getComponentAt(i);
 						if (tab instanceof ServiceDeploymentUIPanel) {
@@ -222,6 +177,10 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 			});
 		}
 		return mainPanel;
+	}
+	
+	private void resetGUI(){
+		serviceDeploymentNameTextField.setText(getAdvancedDeploymentPanel().getDeploymentProperties().getProperty(IntroduceConstants.INTRODUCE_DEPLOYMENT_PREFIX_PROPERTY) + "/" + info.getServices().getService(0).getName());
 	}
 
 	/**
@@ -277,14 +236,9 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 
 							setProgressText("writing deployment property file");
 
-							Enumeration keys = info.getDeploymentProperties()
-									.keys();
-							while (keys.hasMoreElements()) {
-								String key = (String) keys.nextElement();
-								String value = getTextFieldValue(key);
-								info.getDeploymentProperties().setProperty(key,
-										value);
-							}
+							info
+									.setDeplymentProperties(getAdvancedDeploymentPanel()
+											.getDeploymentProperties());
 
 							try {
 								info
@@ -305,22 +259,8 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 								setErrorMessage("Error: " + ex.getMessage());
 							}
 
-							Properties serviceProps = new Properties();
-							// load up the service properties
-							if (info.getServiceDescriptor()
-									.getServiceProperties() != null
-									&& info.getServiceDescriptor()
-											.getServiceProperties()
-											.getProperty() != null) {
-								for (int i = 0; i < info.getServiceProperties()
-										.getProperty().length; i++) {
-									ServicePropertiesProperty prop = info
-											.getServiceProperties()
-											.getProperty(i);
-									serviceProps.put(prop.getKey(),
-											getTextFieldValue(prop.getKey()));
-								}
-							}
+							Properties serviceProps = getServicePropertiesPanel()
+									.getServiceProperties();
 
 							try {
 								serviceProps
@@ -389,8 +329,25 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 	 */
 	private JPanel getDeploymentTypePanel() {
 		if (deploymentTypePanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.fill = GridBagConstraints.BOTH;
+			gridBagConstraints7.gridy = 1;
+			gridBagConstraints7.weightx = 1.0;
+			gridBagConstraints7.insets = new Insets(2, 20, 2, 2);
+			gridBagConstraints7.gridx = 1;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints6.gridy = 1;
+			containerLocationLabel = new JLabel();
+			containerLocationLabel.setText("Container Location");
+			containerLocationLabel.setFont(containerLocationLabel.getFont().deriveFont(Font.BOLD));
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.gridy = 0;
+			gridBagConstraints2.gridwidth = 2;
+			gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints2.weightx = 1.0;
 			deploymentTypePanel = new JPanel();
 			deploymentTypePanel.setLayout(new GridBagLayout());
@@ -401,10 +358,11 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 									"Deployment Location",
 									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, PortalLookAndFeel
+									new Font("Dialog", Font.BOLD, 12), PortalLookAndFeel
 											.getPanelLabelColor()));
-			deploymentTypePanel.add(getDeploymentTypeSelector(),
-					gridBagConstraints2);
+			deploymentTypePanel.add(getDeploymentTypeSelector(), gridBagConstraints2);
+			deploymentTypePanel.add(containerLocationLabel, gridBagConstraints6);
+			deploymentTypePanel.add(getContainerLocationTextField(), gridBagConstraints7);
 		}
 		return deploymentTypePanel;
 	}
@@ -417,6 +375,18 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 	private JComboBox getDeploymentTypeSelector() {
 		if (deploymentTypeSelector == null) {
 			deploymentTypeSelector = new JComboBox();
+			deploymentTypeSelector.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if(((String)deploymentTypeSelector.getSelectedItem()).equals(TOMCAT)){
+						getContainerLocationTextField().setText(System.getenv(IntroduceConstants.TOMCAT));
+					} else if(((String)deploymentTypeSelector.getSelectedItem()).equals(GLOBUS)){
+						getContainerLocationTextField().setText(System.getenv(IntroduceConstants.GLOBUS));
+					} else if(((String)deploymentTypeSelector.getSelectedItem()).equals(JBOSS)){
+						getContainerLocationTextField().setText(System.getenv(IntroduceConstants.JBOSS));
+					}
+				}
+			});
+			
 			if (System.getenv(IntroduceConstants.TOMCAT) != null) {
 				deploymentTypeSelector.addItem(TOMCAT);
 			}
@@ -442,58 +412,18 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 	}
 
 	/**
-	 * This method initializes servicePropertiesPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getServicePropertiesPanel() {
-		if (servicePropertiesPanel == null) {
-			servicePropertiesPanel = new JPanel();
-			servicePropertiesPanel.setBackground(Color.WHITE);
-			servicePropertiesPanel.setLayout(new GridBagLayout());
-		}
-		return servicePropertiesPanel;
-	}
-
-	/**
-	 * This method initializes servicePropertiesScrollPane
-	 * 
-	 * @return javax.swing.JScrollPane
-	 */
-	private JScrollPane getServicePropertiesScrollPane() {
-		if (servicePropertiesScrollPane == null) {
-			servicePropertiesScrollPane = new JScrollPane();
-			servicePropertiesScrollPane.setSize(new Dimension(400, 200));
-			servicePropertiesScrollPane
-					.setPreferredSize(new Dimension(400, 200));
-			servicePropertiesScrollPane
-					.setViewportView(getServicePropertiesPanel());
-			servicePropertiesScrollPane
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Service Properties",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, PortalLookAndFeel
-											.getPanelLabelColor()));
-		}
-		return servicePropertiesScrollPane;
-	}
-
-	/**
 	 * This method initializes defaultPanel
 	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getDefaultPanel() {
 		if (defaultPanel == null) {
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints13.weighty = 1.0;
-			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.gridy = 2;
-			gridBagConstraints13.weightx = 1.0;
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.fill = GridBagConstraints.BOTH;
+			gridBagConstraints.weightx = 1.0D;
+			gridBagConstraints.weighty = 1.0D;
+			gridBagConstraints.gridy = 2;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 0;
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
@@ -507,22 +437,11 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.gridheight = 1;
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridheight = 1;
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.gridy = 1;
-			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-			gridBagConstraints.weightx = 0.0D;
-			gridBagConstraints.weighty = 0.0D;
-			gridBagConstraints.gridwidth = 1;
 			defaultPanel = new JPanel();
 			defaultPanel.setLayout(new GridBagLayout());
-			defaultPanel.add(getDeployPropertiesPanel(), gridBagConstraints);
 			defaultPanel.add(getButtonPanel(), gridBagConstraints1);
 			defaultPanel.add(getDeploymentTypePanel(), gridBagConstraints11);
-			defaultPanel.add(getServicePropertiesScrollPane(),
-					gridBagConstraints13);
+			defaultPanel.add(getDeploymentInformationPanel(), gridBagConstraints);
 		}
 		return defaultPanel;
 	}
@@ -545,5 +464,146 @@ public class DeploymentViewer extends GenericPropertiesApplicationComponent {
 			holderPanel.add(getMainPanel(), gridBagConstraints3);
 		}
 		return holderPanel;
+	}
+
+	/**
+	 * This method initializes advancedDeploymentPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private DeploymentPropertiesPanel getAdvancedDeploymentPanel() {
+		if (advancedDeploymentPanel == null) {
+			advancedDeploymentPanel = new DeploymentPropertiesPanel(info
+					.getDeploymentProperties());
+		}
+		return advancedDeploymentPanel;
+	}
+
+	/**
+	 * This method initializes servicePropertiesPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private ServicePropertiesPanel getServicePropertiesPanel() {
+		if (servicePropertiesPanel == null) {
+			servicePropertiesPanel = new ServicePropertiesPanel(info);
+		}
+		return servicePropertiesPanel;
+	}
+
+	/**
+	 * This method initializes deploymentInformationPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getDeploymentInformationPanel() {
+		if (deploymentInformationPanel == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.fill = GridBagConstraints.BOTH;
+			gridBagConstraints12.gridy = 0;
+			gridBagConstraints12.weightx = 1.0;
+			gridBagConstraints12.insets = new Insets(2, 20, 2, 2);
+			gridBagConstraints12.gridx = 1;
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.gridx = 0;
+			gridBagConstraints10.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints10.fill = GridBagConstraints.BOTH;
+			gridBagConstraints10.gridy = 0;
+			serviceLocationLabel = new JLabel();
+			serviceLocationLabel.setText("Service Location");
+			serviceLocationLabel.setFont(serviceLocationLabel.getFont().deriveFont(Font.BOLD));
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.fill = GridBagConstraints.BOTH;
+			gridBagConstraints9.gridy = 2;
+			gridBagConstraints9.weightx = 1.0;
+			gridBagConstraints9.insets = new Insets(2, 20, 2, 2);
+			gridBagConstraints9.gridx = 1;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints8.fill = GridBagConstraints.BOTH;
+			gridBagConstraints8.gridy = 2;
+			serviceNamespaceLabel = new JLabel();
+			serviceNamespaceLabel.setText("Service Namespace");
+			serviceNamespaceLabel.setFont(serviceNamespaceLabel.getFont().deriveFont(Font.BOLD));
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.gridx = 0;
+			gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints5.gridy = 1;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.fill = GridBagConstraints.BOTH;
+			gridBagConstraints4.gridy = 1;
+			gridBagConstraints4.weightx = 1.0;
+			gridBagConstraints4.insets = new Insets(2, 20, 2, 2);
+			gridBagConstraints4.gridx = 1;
+			serviceDeploymentNameLabel = new JLabel();
+			serviceDeploymentNameLabel.setText("Service Deployment Name");
+			serviceDeploymentNameLabel.setFont(serviceDeploymentNameLabel.getFont().deriveFont(Font.BOLD));
+			deploymentInformationPanel = new JPanel();
+			deploymentInformationPanel.setLayout(new GridBagLayout());
+			deploymentInformationPanel.setBorder(BorderFactory.createTitledBorder(null, "Deployment Information", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
+			deploymentInformationPanel.add(serviceDeploymentNameLabel, gridBagConstraints5);
+			deploymentInformationPanel.add(getServiceDeploymentNameTextField(), gridBagConstraints4);
+			deploymentInformationPanel.add(serviceNamespaceLabel, gridBagConstraints8);
+			deploymentInformationPanel.add(getServiceNamespaceTextField(), gridBagConstraints9);
+			deploymentInformationPanel.add(serviceLocationLabel, gridBagConstraints10);
+			deploymentInformationPanel.add(getServiceLocationTextField(), gridBagConstraints12);
+		}
+		return deploymentInformationPanel;
+	}
+
+	/**
+	 * This method initializes serviceDeploymentNameTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JLabel getServiceDeploymentNameTextField() {
+		if (serviceDeploymentNameTextField == null) {
+			serviceDeploymentNameTextField = new JLabel();
+			serviceDeploymentNameTextField.setText(getAdvancedDeploymentPanel().getDeploymentProperties().getProperty(IntroduceConstants.INTRODUCE_DEPLOYMENT_PREFIX_PROPERTY) + "/" + info.getServices().getService(0).getName());
+			serviceDeploymentNameTextField.setFont(serviceDeploymentNameTextField.getFont().deriveFont(Font.ITALIC));
+		}
+		return serviceDeploymentNameTextField;
+	}
+
+	/**
+	 * This method initializes containerLocationTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JLabel getContainerLocationTextField() {
+		if (containerLocationTextField == null) {
+			containerLocationTextField = new JLabel();
+			containerLocationTextField.setFont(containerLocationTextField.getFont().deriveFont(Font.ITALIC));
+		}
+		return containerLocationTextField;
+	}
+
+	/**
+	 * This method initializes serviceNamespaceTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JLabel getServiceNamespaceTextField() {
+		if (serviceNamespaceTextField == null) {
+			serviceNamespaceTextField = new JLabel();
+			serviceNamespaceTextField.setFont(serviceNamespaceTextField.getFont().deriveFont(Font.ITALIC));
+			serviceNamespaceTextField.setText(info.getServices().getService(0).getNamespace());
+		}
+		return serviceNamespaceTextField;
+	}
+
+	/**
+	 * This method initializes serviceLocationTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JLabel getServiceLocationTextField() {
+		if (serviceLocationTextField == null) {
+			serviceLocationTextField = new JLabel();
+			serviceLocationTextField.setFont(serviceLocationTextField.getFont().deriveFont(Font.ITALIC));
+			serviceLocationTextField.setText(info.getBaseDirectory().getAbsolutePath());
+		}
+		return serviceLocationTextField;
 	}
 } // @jve:decl-index=0:visual-constraint="10,10"
