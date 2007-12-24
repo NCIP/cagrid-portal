@@ -21,12 +21,12 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar" sourcepath="/GT4_LOCATION/ws-core-4.0.3-src.zip"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" sourcepath="/JGLOBUS_SOURCE"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-tomcat.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commonj.jar"/>
@@ -49,7 +49,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jaxrpc.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jce-jdk13-125.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jgss.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/junit.jar" sourcepath="/JUNIT_SRC_HOME/junitsrc.zip"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/junit.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/log4j-1.2.8.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/naming-common.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/naming-factory.jar"/>
@@ -63,14 +63,14 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_common.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_registry_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_registry.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_tools.jar" sourcepath="/GT4_LOCATION/ws-core-4.0.3-src.zip"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_tools.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wss4j.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xalan.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar" sourcepath="/GT4_LOCATION/Xerces-J-src.2.6.2.zip"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" sourcepath="/globussource"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar"/>
 	<classpathentry kind="lib" path="lib/spring-beans.jar"/>
 	<classpathentry kind="lib" path="lib/spring-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-db.jar"/>
