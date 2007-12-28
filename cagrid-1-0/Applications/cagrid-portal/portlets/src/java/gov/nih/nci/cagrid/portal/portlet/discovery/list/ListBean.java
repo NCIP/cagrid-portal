@@ -36,7 +36,10 @@ public class ListBean extends AbstractDirectoryBean {
 		List refreshed = new ArrayList();
 		for(Iterator i = getScroller().getObjects().iterator(); i.hasNext();){
 			DomainObject obj = (DomainObject)i.next();
-			refreshed.add(getHibernateTemplate().get(obj.getClass(), obj.getId()));
+			obj = (DomainObject)getHibernateTemplate().get(obj.getClass(), obj.getId());
+			if(obj != null){
+				refreshed.add(obj);
+			}
 		}
 		getScroller().setObjects(refreshed);
 	}
