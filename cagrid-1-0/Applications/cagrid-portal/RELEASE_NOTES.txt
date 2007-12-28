@@ -1,0 +1,135 @@
+    
+                         caGrid Portal
+                          Version 2.0
+                       December 28, 2007 
+
+
+================================================================
+                            Contents
+================================================================
+    
+1.0 caGrid Portal Introduction
+2.0 Release History
+3.0 New Features and Updates
+4.0 Bug fixes since last release
+5.0 Known Issues/Defects
+6.0 Bug Reports and Support
+7.0 Documentation
+8.0 References
+
+================================================================
+                  1.0 caGrid Portal Introduction
+================================================================
+
+    This document contains the release notes for the caGrid 
+    Portal 2.0 release.  
+
+    This release of caGrid Portal consolidates and extends the
+    feature sets of earlier release of both the caGrid Portal
+    and caGrid Browser applications. The portal architecture was
+    also completely redesigned for this release. While the portal
+    was previously a sub project of caGrid, it is now a separate
+    project with an independent release schedule.
+
+
+================================================================
+                      2.0 Release History
+================================================================
+
+    caGrid Portal 1.1 was released with caGrid 1.1 on 17th December 2007
+
+================================================================
+                      3.0 New Features and Updates
+================================================================
+
+RFE		Description
+------------------------------------------------------------   
+4133	Portal should purge retired services
+
+The complete list of new features and additional details can be 
+found on the caGrid Project wiki here:
+  http://www.cagrid.org/mwiki/index.php?title=Portal:Portal
+
+Specific highlighted improvements of caGrid Portal 2.0 include:
+ * Unification of caGrid Portal and caGrid Browser feature sets.
+ * Simplified discovery interfaces for services, participants, and POCs.
+ * Enhanced views of service metadata and data service domain models.
+ * Integration of discovery and data service query functionality.
+ * Graphical CQL query builder.
+ * Enhanced data service query execution and history tracking.
+ * Support for annotating and sharing CQL queries.
+ * Export of data service query results to MS Excel format.
+ * Enhanced GAARDS registration interface.
+ 
+================================================================
+                      4.0 Bug fixes Since Last Release
+================================================================
+
+Bug		Description
+------------------------------------------------------------   
+3867	Portal not showing all operations for all services
+8409	Portal data-load code inconsistently populates database on successive loads.
+
+The complete fixed bug list and additional details can be found on the project Gforge Tracker:
+  http://gforge.nci.nih.gov/tracker/index.php?group_id=25&atid=174
+
+================================================================
+                     5.0 Known Issues Not Yet Fixed
+================================================================
+
+Update to date bug reports and feature requests can be found on the tracker section
+of the project's gforge site:
+http://gforge.nci.nih.gov/tracker/?group_id=25
+
+At the time of release, there are no known issues.
+
+
+================================================================
+                	6.0 Bug Reports and Support
+================================================================
+
+	The preferred approach is to first search the user's email
+	archives for your problem, then email your question to the
+	list.  Bugs can also be entered on the gforge project page.
+	
+	User's listserv archive:
+	https://list.nih.gov/archives/cagrid_users-l.html
+	
+	Join listserv:
+	https://list.nih.gov/cgi-bin/wa?SUBED1=cagrid_users-l&A=1
+
+	GForge Project Page:
+	http://gforge.nci.nih.gov/projects/cagrid-1-0/
+	
+	Submit Bug:
+	http://gforge.nci.nih.gov/tracker/?func=add&group_id=25&atid=174
+	
+================================================================
+                     	7.0 Documentation
+================================================================
+
+	The release documentation can be found along with the downloads on the 
+	caGrid project's gforge file section:
+	   http://gforge.nci.nih.gov/frs/?group_id=25
+
+	The latest documentation, including individual project design documents,
+	can be found on the caGrid wiki:
+	   http://www.cagrid.org/mwiki/index.php?title=Portal:Portal
+	
+
+================================================================
+                    	8.0 References
+================================================================
+    
+The following urls access web pages relevant to caGrid.
+
+    caBIG Home Page
+    --  http://cabig.nci.nih.gov/
+    
+    NCICB Download Center
+    --  http://ncicb.nci.nih.gov/download/
+
+    caGrid
+    -- http://cagrid.org
+    -- https://cabig.nci.nih.gov/workspaces/Architecture/caGrid1-0/
+    -- http://gforge.nci.nih.gov/projects/cagrid-1-0/

@@ -27,7 +27,8 @@ import org.springframework.core.io.Resource;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
  */
-public class ViewSharedQueryController extends AbstractQueryRenderController implements InitializingBean {
+public class ViewSharedQueryController extends AbstractQueryRenderController
+		implements InitializingBean {
 
 	private Resource xslResource;
 	private Transformer xmlTransformer;
@@ -48,20 +49,29 @@ public class ViewSharedQueryController extends AbstractQueryRenderController imp
 	@Override
 	protected Object getObject(RenderRequest request) {
 		SharedQueryBean bean = getQueryModel().getWorkingSharedQuery();
+		if (bean == null) {
+			//Couldn't be null if was deleted before page refresh.
+			return null;
+		}
 		SharedCQLQuery sharedQuery = bean.getQuery();
+		if (sharedQuery == null) {
+			//Should not be null if bean is not null, but just in case...
+			return null;
+		}
 		sharedQuery = getSharedCqlQueryDao().getById(sharedQuery.getId());
 		if (sharedQuery == null) {
-			//Could be null if it was deleted.
-			bean = null;
-		} else {
-			bean.setQuery(sharedQuery);
-			try {
-				bean.setPrettyXml(transformXML(sharedQuery.getCqlQuery().getXml()));
-			} catch (Exception ex) {
-				throw new CaGridPortletApplicationException(
-						"Error transforming query: " + ex.getMessage(), ex);
-			}
+			// Could be null if it was just now deleted.
+			return null;
 		}
+
+		bean.setQuery(sharedQuery);
+		try {
+			bean.setPrettyXml(transformXML(sharedQuery.getCqlQuery().getXml()));
+		} catch (Exception ex) {
+			throw new CaGridPortletApplicationException(
+					"Error transforming query: " + ex.getMessage(), ex);
+		}
+
 		return bean;
 	}
 

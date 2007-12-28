@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.portal.portlet.query.shared;
 
 import javax.portlet.RenderRequest;
 
+import gov.nih.nci.cagrid.portal.portlet.discovery.list.ListBean;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryRenderController;
 
 /**
@@ -28,7 +29,9 @@ public class ViewSharedQueriesSearchResultsController extends
 	 */
 	@Override
 	protected Object getObject(RenderRequest request) {
-		return request.getPortletSession().getAttribute(getListBeanSessionAttributeName());
+		ListBean listBean = (ListBean)request.getPortletSession().getAttribute(getListBeanSessionAttributeName());
+		listBean.refresh();
+		return listBean;
 	}
 
 	public String getListBeanSessionAttributeName() {

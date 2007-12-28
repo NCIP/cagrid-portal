@@ -53,6 +53,7 @@ public class ScrollDiscoveryListController extends
 			throws Exception {
 		ScrollCommand command = (ScrollCommand)obj;
 		ListBean bean = (ListBean)request.getPortletSession().getAttribute(getListBeanSessionAttributeName());
+		bean.refresh();
 		bean.getScroller().scroll(command);
 	}
 

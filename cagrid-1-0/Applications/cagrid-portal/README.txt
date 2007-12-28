@@ -1,3 +1,6 @@
+For the latest version of this information, see here:
+   http://www.cagrid.org/mwiki/index.php?title=CaGrid:How-To:Install_caGrid_Portal_2.0
+
 ############
 # Contents #
 ############

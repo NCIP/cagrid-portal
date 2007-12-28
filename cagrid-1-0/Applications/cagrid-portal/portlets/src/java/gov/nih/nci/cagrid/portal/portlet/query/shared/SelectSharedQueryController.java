@@ -14,17 +14,17 @@ import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
+ * 
  */
 public class SelectSharedQueryController extends AbstractQueryActionController {
 
 	private SharedCQLQueryDao sharedCqlQueryDao;
-	
+
 	/**
 	 * 
 	 */
 	public SelectSharedQueryController() {
-		
+
 	}
 
 	/**
@@ -44,18 +44,27 @@ public class SelectSharedQueryController extends AbstractQueryActionController {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController#doHandleAction(javax.portlet.ActionRequest, javax.portlet.ActionResponse, java.lang.Object, org.springframework.validation.BindException)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController#doHandleAction(javax.portlet.ActionRequest,
+	 *      javax.portlet.ActionResponse, java.lang.Object,
+	 *      org.springframework.validation.BindException)
 	 */
 	@Override
 	protected void doHandleAction(ActionRequest request,
 			ActionResponse response, Object obj, BindException errors)
 			throws Exception {
-		SelectSharedQueryCommand command = (SelectSharedQueryCommand)obj;
-		SharedCQLQuery query = getSharedCqlQueryDao().getById(command.getQueryId());
-		SharedQueryBean bean = new SharedQueryBean();
-		bean.setQuery(query);
-		getQueryModel().setWorkingSharedQuery(bean);
+		SelectSharedQueryCommand command = (SelectSharedQueryCommand) obj;
+		SharedCQLQuery query = getSharedCqlQueryDao().getById(
+				command.getQueryId());
+		if (query == null) {
+			getQueryModel().setWorkingSharedQuery(null);
+		} else {
+			SharedQueryBean bean = new SharedQueryBean();
+			bean.setQuery(query);
+			getQueryModel().setWorkingSharedQuery(bean);
+		}
 	}
 
 	public SharedCQLQueryDao getSharedCqlQueryDao() {
