@@ -81,8 +81,43 @@ Update to date bug reports and feature requests can be found on the tracker sect
 of the project's gforge site:
 http://gforge.nci.nih.gov/tracker/?group_id=25
 
-At the time of release, there are no known issues.
+------------------------------------------------------------
+BUG: 11266
 
+DESCRIPTION:
+Portal users can formulate queries that return so much data that it causes the application to run out of memory.
+
+WORKAROUND:
+
+The axis.jar file from Globus 4.0.3 must be patched. You can download a pre-patched version here:
+  https://gforge.nci.nih.gov/frs/download.php/3063/axis.jar
+Or you can follow the directions below to create your own. If you download the pre-patched version, then
+start with step 6, below.
+
+1. Download ws-core-enum:
+http://gforge.nci.nih.gov/frs/download.php/1334/ws-core-enum-4.0.3.zip
+2. Unzip
+3. Copy SocketInputStream.java from here:
+ https://gforge.nci.nih.gov/tracker/download.php/25/174/11266/2371/SocketInputStream.java
+ ..to here:
+ ws-core-4.0.3/java/lib-src/ws-axis/ws-axis/java/src/org/apache/axis/transport/http/SocketInputStream.java
+4. Follow instructions in ws-core-4.0.3/java/lib-src/ws-axis/ws-axis/java/docs/index.html for building axis.
+5. Update axis.jar from globus
+  mkdir some_dir
+  cd some_dir
+  cp <path_to_globus>/lib/axis.jar .
+  mkdir -p org/apache/axis/transport/http
+  cp <path_to_globus>/java/lib-src/ws-axis/ws-axis/build/classes/org/apache/axis/transport/http/SocketInputStream.class org/apache/axis/transport/http 
+  jar -uf axis.jar org/apache/axis/transport/http/SocketInputStream.class
+6. Put axis.jar in JBOSS_HOME/server/default/deploy/cagridportlets.war/WEB-INF/lib
+7. Exit JBOSS_HOME/server/default/deploy/properties-service.xml
+Add this property:
+  org.apache.axis.transport.http.maxBytes=3000000
+8. Restart JBoss
+
+This will restrict results to three megabytes.
+
+------------------------------------------------------------
 
 ================================================================
                 	6.0 Bug Reports and Support
