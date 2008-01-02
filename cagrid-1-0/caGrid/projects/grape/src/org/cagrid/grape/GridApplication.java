@@ -161,7 +161,6 @@ public class GridApplication extends JFrame {
         }
 
         try {
-
             Application app = (Application) Utils.deserializeDocument(file.getAbsolutePath(), Application.class);
 
             // launch the portal with the passed config
@@ -180,11 +179,9 @@ public class GridApplication extends JFrame {
 
             applicationInstance.setVisible(true);
             applicationInstance.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -202,7 +199,7 @@ public class GridApplication extends JFrame {
             appInit.intialize();
         }
 
-        List toolbarComponents = new ArrayList();
+        List<Component> toolbarComponents = new ArrayList<Component>();
         this.setJMenuBar(getJJMenuBar(toolbarComponents));
         this.getContentPane().setLayout(new BorderLayout());
         this.getContentPane().add(getJScrollPane(), BorderLayout.CENTER);
@@ -216,7 +213,6 @@ public class GridApplication extends JFrame {
                 this.setIconImage(icon.getImage());
             }
         }
-
     }
 
 
@@ -237,7 +233,7 @@ public class GridApplication extends JFrame {
             item.setIcon(IconUtils.loadIcon(comp.getIcon()));
         }
         if (comp.getMnemonic() != null) {
-            item.setMnemonic(comp.getMnemonic());
+            item.setMnemonic(comp.getMnemonic().intValue());
         }
         item.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -268,7 +264,6 @@ public class GridApplication extends JFrame {
             scrollPane = new JScrollPane();
             scrollPane.getViewport().add(this.getMDIDesktopPane());
         }
-
         return scrollPane;
     }
 
@@ -278,12 +273,12 @@ public class GridApplication extends JFrame {
      * 
      * @return javax.swing.JMenuBar
      */
-    private javax.swing.JMenuBar getJJMenuBar(List toolbarComponents) throws Exception {
+    private javax.swing.JMenuBar getJJMenuBar(List<Component> toolbarComponents) throws Exception {
         if (jJMenuBar == null) {
             jJMenuBar = new javax.swing.JMenuBar();
 
-            Menu fileMenu = null;
-            Menu helpMenu = null;
+            Menu localFileMenu = null;
+            Menu localHelpMenu = null;
             Menus menus = app.getMenus();
 
             if (menus != null) {
@@ -291,16 +286,16 @@ public class GridApplication extends JFrame {
                 if (menu != null) {
                     for (int i = 0; i < menu.length; i++) {
                         if (menu[i].getTitle().equals("Help")) {
-                            helpMenu = menu[i];
+                            localHelpMenu = menu[i];
                         }
                         if (menu[i].getTitle().equals("File")) {
-                            fileMenu = menu[i];
+                            localFileMenu = menu[i];
                         }
                     }
                 }
             }
 
-            jJMenuBar.add(getFileMenu(toolbarComponents, fileMenu));
+            jJMenuBar.add(getFileMenu(toolbarComponents, localFileMenu));
 
             if (menus != null) {
                 Menu[] menu = menus.getMenu();
@@ -312,13 +307,13 @@ public class GridApplication extends JFrame {
                 }
             }
             jJMenuBar.add(getWindowsMenu());
-            jJMenuBar.add(getHelpMenu(toolbarComponents, helpMenu));
+            jJMenuBar.add(getHelpMenu(toolbarComponents, localHelpMenu));
         }
         return jJMenuBar;
     }
 
 
-    private javax.swing.JMenu addToMenu(List toolbarComponents, JMenu parent, Menu menu) {
+    private javax.swing.JMenu addToMenu(List<Component> toolbarComponents, JMenu parent, Menu menu) {
         javax.swing.JMenu jmenu = parent;
 
         Submenus submenus = menu.getSubmenus();
@@ -348,7 +343,7 @@ public class GridApplication extends JFrame {
     }
 
 
-    private javax.swing.JMenu getMenu(List toolbarComponents, Menu parent, Menu menu) {
+    private javax.swing.JMenu getMenu(List<Component> toolbarComponents, Menu parent, Menu menu) {
         javax.swing.JMenu jmenu = new javax.swing.JMenu();
         jmenu.setText(menu.getTitle());
         if ((parent != null) && (parent.getShowIcons().booleanValue())) {
@@ -400,7 +395,7 @@ public class GridApplication extends JFrame {
      * 
      * @return javax.swing.JMenu
      */
-    private javax.swing.JMenu getFileMenu(List toolbarComponents, Menu menu) {
+    private javax.swing.JMenu getFileMenu(List<Component> toolbarComponents, Menu menu) {
         if (fileMenu == null) {
             fileMenu = new javax.swing.JMenu();
             if (menu != null) {
@@ -447,7 +442,7 @@ public class GridApplication extends JFrame {
     }
 
 
-    private javax.swing.JMenu getHelpMenu(List toolbarComponents, Menu menu) {
+    private javax.swing.JMenu getHelpMenu(List<Component> toolbarComponents, Menu menu) {
         if (helpMenu == null) {
             helpMenu = new javax.swing.JMenu();
             if (menu != null) {
@@ -573,7 +568,6 @@ public class GridApplication extends JFrame {
                 t.printStackTrace();
             }
         }
-
     }
 
 
@@ -606,7 +600,6 @@ public class GridApplication extends JFrame {
         public ExecuteComponent(GridApplication app, Component comp) {
             this.component = comp;
             this.app = app;
-
         }
 
 
@@ -634,7 +627,6 @@ public class GridApplication extends JFrame {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     }
 }

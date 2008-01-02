@@ -27,12 +27,12 @@ import org.cagrid.grape.model.ConfigurationGroups;
  */
 public class ConfigurationManager {
 
-	private static final String GRAPE_USER_HOME = Utils.getCaGridUserHome().getAbsolutePath() + File.separator
-		+ "grape";
+	private static final String GRAPE_USER_HOME = Utils.getCaGridUserHome().getAbsolutePath() 
+        + File.separator + "grape";
 
-	private Map confsByName = null;
+	private Map<String, ConfigurationDescriptor> confsByName = null;
 
-	private Map objectsByName = null;
+	private Map<String, Object> objectsByName = null;
 
 	private Logger log;
 
@@ -40,8 +40,8 @@ public class ConfigurationManager {
 
 
 	public ConfigurationManager(Configuration configuration) throws Exception {
-		confsByName = new HashMap();
-		objectsByName = new HashMap();
+		confsByName = new HashMap<String, ConfigurationDescriptor>();
+		objectsByName = new HashMap<String, Object>();
 		this.configuration = configuration;
 		log = Logger.getLogger(this.getClass().getName());
 		if (configuration != null) {
@@ -49,7 +49,6 @@ public class ConfigurationManager {
 			f.mkdirs();
 			this.processConfigurationGroups(configuration.getConfigurationGroups());
 			this.processConfigurationDescriptors(configuration.getConfigurationDescriptors());
-
 		}
 	}
 
@@ -121,13 +120,12 @@ public class ConfigurationManager {
 			confsByName.put(des.getSystemName(), des);
 			objectsByName.put(des.getSystemName(), obj);
 		}
-
 	}
 
 
 	public ConfigurationDescriptor getConfigurationDescriptor(String systemName) throws Exception {
 		if (confsByName.containsKey(systemName)) {
-			return (ConfigurationDescriptor) confsByName.get(systemName);
+			return confsByName.get(systemName);
 		} else {
 			throw new Exception("The configuration " + systemName + " does not exist!!!");
 		}
@@ -163,5 +161,4 @@ public class ConfigurationManager {
 			throw new Exception("Error saving the configuration " + systemName + ":\n" + e.getMessage());
 		}
 	}
-
 }

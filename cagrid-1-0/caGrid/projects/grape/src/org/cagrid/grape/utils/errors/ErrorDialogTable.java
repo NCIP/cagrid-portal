@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
  * @author David Ervin
  * 
  * @created Apr 13, 2007 9:20:12 AM
- * @version $Id: ErrorDialogTable.java,v 1.1 2007-04-13 18:11:01 dervin Exp $ 
+ * @version $Id: ErrorDialogTable.java,v 1.2 2008-01-02 19:38:06 dervin Exp $ 
  */
 public class ErrorDialogTable extends JTable {
     private DefaultTableModel model = null;
@@ -38,8 +38,8 @@ public class ErrorDialogTable extends JTable {
                 return col != 0;
             }
         };
-        rowData = new HashMap();
-        tableListeners = new LinkedList();
+        rowData = new HashMap<Integer, ErrorContainer>();
+        tableListeners = new LinkedList<ErrorDialogTableListener>();
         setModel(model);
         setDefaultRenderer(Object.class, new ErrorDialogTableCellRenderer());
         setDefaultEditor(Component.class, new JComponentCellEditor());
@@ -51,13 +51,13 @@ public class ErrorDialogTable extends JTable {
     }
     
     
-    public Class getColumnClass(int col) {
+    public Class<?> getColumnClass(int col) {
         return col == 0 ? String.class : Component.class;
     }
     
     
     public void addError(ErrorContainer container) {
-        Vector row = new Vector();
+        Vector<Object> row = new Vector<Object>();
         row.add(container.getMessage());
         JButton detailButton = new JButton();
         detailButton.setText("Details");

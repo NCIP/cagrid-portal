@@ -54,7 +54,7 @@ public class ConfigurationTree extends JTree {
 	 * @return A List of GridServiceTreeNodes
 	 */
 	public List getSelectedNodes() {
-		List selected = new LinkedList();
+		List<DefaultMutableTreeNode> selected = new LinkedList<DefaultMutableTreeNode>();
 		TreePath[] currentSelection = this.getSelectionPaths();
 		if (currentSelection != null) {
 			for (int i = 0; i < currentSelection.length; i++) {

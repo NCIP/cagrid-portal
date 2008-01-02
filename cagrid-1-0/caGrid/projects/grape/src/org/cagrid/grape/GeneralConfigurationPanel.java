@@ -38,7 +38,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 
 	private JLabel icon = null;
 
-	private Map properties;
+	private Map<String, Property> properties;
 
 	private JPanel propertiesPanel = null;
 
@@ -80,7 +80,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	 */
 	public GeneralConfigurationPanel(ConfigurationDescriptorTreeNode treeNode, Object conf) {
 		super(treeNode, conf);
-		this.properties = new HashMap();
+		this.properties = new HashMap<String, Property>();
 		initialize();
 	}
 
@@ -95,7 +95,6 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	 * 
 	 */
 	private void initialize() {
-
 		GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 		gridBagConstraints12.gridx = 0;
 		gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
@@ -243,7 +242,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 
 
 	private void setCurrentProperty(String name) {
-		Property p = (Property) properties.get(name);
+		Property p = properties.get(name);
 		this.getPropertyDescription().setText(p.getDescription());
 		loadValues(p);
 	}
@@ -453,7 +452,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	private void moveUp() {
 		int index = values.getSelectedIndex();
 		if (index > 0) {
-			Property p = (Property) properties.get(getPropertySelector().getSelectedItem());
+			Property p = properties.get(getPropertySelector().getSelectedItem());
 			Values v = p.getValues();
 			String[] vals = v.getValue();
 			String temp = vals[index - 1];
@@ -468,7 +467,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 	private void moveDown() {
 		int index = values.getSelectedIndex();
 		if (index != -1) {
-			Property p = (Property) properties.get(getPropertySelector().getSelectedItem());
+			Property p = properties.get(getPropertySelector().getSelectedItem());
 			Values v = p.getValues();
 			String[] vals = v.getValue();
 			if (index < (vals.length - 1)) {
@@ -490,7 +489,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			return;
 		} else {
 
-			Property p = (Property) properties.get(getPropertySelector().getSelectedItem());
+			Property p = properties.get(getPropertySelector().getSelectedItem());
 			Values v = p.getValues();
 			String[] newVals = null;
 			if (v != null) {
@@ -525,7 +524,7 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 			showErrorMessage("Error Removing Value", "No value selected, please select a value to remove!!!");
 		} else {
 
-			Property p = (Property) properties.get(getPropertySelector().getSelectedItem());
+			Property p = properties.get(getPropertySelector().getSelectedItem());
 			Values v = p.getValues();
 			String[] vals = v.getValue();
 			if (vals.length == 1) {
@@ -626,5 +625,4 @@ public class GeneralConfigurationPanel extends ConfigurationBasePanel {
 		}
 		return decreaseButton;
 	}
-
 }
