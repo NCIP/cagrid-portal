@@ -2,19 +2,20 @@ package org.cagrid.tools.events;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import junit.framework.TestCase;
-
 
 public class TestEventAuditor extends TestCase {
 	private final static String TABLE = "EVENT_AUDITOR";
 
-
 	public void testEventAuditor() {
 		EventAuditor auditor = null;
 		try {
-			auditor = new EventAuditor("Auditor", org.cagrid.tools.Utils.getDB(), TABLE);
+			auditor = new EventAuditor("Auditor", org.cagrid.tools.Utils
+					.getDB(), TABLE);
 			validateEventAuditor(auditor);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -27,10 +28,6 @@ public class TestEventAuditor extends TestCase {
 			}
 		}
 	}
-
-
-	
-
 
 	public void testEventAuditorFromConfig() {
 		EventAuditor auditor = null;
@@ -48,8 +45,6 @@ public class TestEventAuditor extends TestCase {
 			}
 		}
 	}
-	
-
 
 	private void validateEventAuditor(EventAuditor auditor) throws Exception {
 		int events = 5;
@@ -57,9 +52,15 @@ public class TestEventAuditor extends TestCase {
 		String reportingParty = "Some Admin";
 		String eventType = "Error";
 
+		GregorianCalendar c = new GregorianCalendar();
+		Date start = c.getTime();
+		c.add(Calendar.HOUR, 1);
+		Date end = c.getTime();
+
 		for (int i = 0; i < events; i++) {
 			Event e = new Event();
-			e.setTargetId(target + i);
+			String targetId = target + i;
+			e.setTargetId(targetId);
 			e.setReportingPartyId(reportingParty);
 			e.setEventType(eventType);
 			e.setOccurredAt(new Date().getTime());
@@ -71,6 +72,25 @@ public class TestEventAuditor extends TestCase {
 			assertTrue(auditor.eventExists(e.getEventId()));
 			Event e2 = auditor.getEvent(e.getEventId());
 			assertEquals(e, e2);
+			assertEquals(1, auditor
+					.findEvents(targetId, null, null, null, null).size());
+			assertEquals((i + 1), auditor.findEvents(null, reportingParty,
+					null, null, null).size());
+			assertEquals((i + 1), auditor.findEvents(null, null, eventType,
+					null, null).size());
+			assertEquals((i + 1), auditor.findEvents(null, null, null, start,
+					null).size());
+			assertEquals((i + 1), auditor.findEvents(null, null, null, null,
+					end).size());
+			assertEquals((i + 1), auditor.findEvents(null, null, null, start,
+					end).size());
+			assertEquals(0, auditor.findEvents(null, null, null, null, start)
+					.size());
+			assertEquals(0, auditor.findEvents(null, null, null, end, null)
+					.size());
+
+			assertEquals(1, auditor.findEvents(targetId, reportingParty,
+					eventType, start, end).size());
 		}
 
 		for (int i = 0; i < events; i++) {

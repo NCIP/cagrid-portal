@@ -5,6 +5,9 @@ import gov.nih.nci.cagrid.common.Utils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.database.DatabaseException;
@@ -43,7 +46,6 @@ public class EventAuditor extends BaseEventHandler {
 							+ e.getMessage(), e);
 		}
 	}
-
 
 	public void handleEvent(Event event) throws EventHandlingException {
 		try {
@@ -104,6 +106,111 @@ public class EventAuditor extends BaseEventHandler {
 		}
 	}
 
+	private boolean appendToSQLBuffer(StringBuffer sql, boolean whereAppended,
+			String field) {
+		return appendToSQLBuffer(sql, whereAppended, field, "=");
+	}
+
+	private boolean appendToSQLBuffer(StringBuffer sql, boolean whereAppended,
+			String field, String operator) {
+		if (whereAppended) {
+			sql.append(" AND " + field + " " + operator + " ?");
+		} else {
+			sql.append(" WHERE " + field + " " + operator + " ?");
+			whereAppended = true;
+		}
+		return whereAppended;
+	}
+
+	public List<Event> findEvents(String targetId, String reportingPartyId,
+			String eventType, Date start, Date end) throws DatabaseException {
+		buildDatabase();
+		List<Event> events = new ArrayList<Event>();
+		Connection c = null;
+		try {
+			c = db.getConnection();
+
+			StringBuffer sql = new StringBuffer();
+			sql.append("select * from " + table);
+
+			boolean whereAppended = false;
+
+			if (targetId != null) {
+				whereAppended = appendToSQLBuffer(sql, whereAppended, TARGET_ID);
+			}
+
+			if (reportingPartyId != null) {
+				whereAppended = appendToSQLBuffer(sql, whereAppended,
+						REPORTING_PARTY_ID);
+			}
+
+			if (eventType != null) {
+				whereAppended = appendToSQLBuffer(sql, whereAppended,
+						EVENT_TYPE);
+			}
+
+			if (start != null) {
+				whereAppended = appendToSQLBuffer(sql, whereAppended,
+						OCCURRED_AT, ">=");
+			}
+
+			if (end != null) {
+				whereAppended = appendToSQLBuffer(sql, whereAppended,
+						OCCURRED_AT, "<=");
+			}
+
+			PreparedStatement s = c.prepareStatement(sql.toString());
+			int count = 1;
+
+			if (targetId != null) {
+				s.setString(count, targetId);
+				count = count + 1;
+			}
+
+			if (reportingPartyId != null) {
+				s.setString(count, reportingPartyId);
+				count = count + 1;
+			}
+
+			if (eventType != null) {
+				s.setString(count, eventType);
+				count = count + 1;
+			}
+
+			if (start != null) {
+				s.setLong(count, start.getTime());
+				count = count + 1;
+			}
+
+			if (end != null) {
+				s.setLong(count, end.getTime());
+				count = count + 1;
+			}
+
+			ResultSet rs = s.executeQuery();
+			while (rs.next()) {
+				Event event = new Event();
+				event.setEventId(rs.getLong(EVENT_ID));
+				event.setTargetId(rs.getString(TARGET_ID));
+				event.setReportingPartyId(rs.getString(REPORTING_PARTY_ID));
+				event.setEventType(rs.getString(EVENT_TYPE));
+				event.setOccurredAt(rs.getLong(OCCURRED_AT));
+				event.setMessage(rs.getString(MESSAGE));
+				events.add(event);
+			}
+			rs.close();
+			s.close();
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new DatabaseException(
+					"An unexpected database error occurred.", e);
+		} finally {
+			db.releaseConnection(c);
+		}
+
+		return events;
+	}
+
 	private Event insertEvent(Event event) throws DatabaseException,
 			EventHandlingException {
 		buildDatabase();
@@ -160,12 +267,12 @@ public class EventAuditor extends BaseEventHandler {
 		}
 		return event;
 	}
-	
-	public void clear() throws EventHandlingException{
-		try{
-		this.clearDatabase();
+
+	public void clear() throws EventHandlingException {
+		try {
+			this.clearDatabase();
 		} catch (Exception e) {
-			throw new EventHandlingException(Utils.getExceptionMessage(e),e);
+			throw new EventHandlingException(Utils.getExceptionMessage(e), e);
 		}
 	}
 
