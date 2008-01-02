@@ -118,6 +118,26 @@
 				<exclude name="*test*.jar" />
 			</fileset>
 		</artifact>
+		
+		<artifact track="main" type="jars" id="events.tools.jars">
+					<generatingantcall target="build-service-tools" />
+					<fileset dir="${projects.dir}/service-tools/build/jars">
+						<include name="caGrid-*-db.jar" />
+						<include name="caGrid-*-events.jar" />
+						<exclude name="*test*.jar" />
+					</fileset>
+
+					<fileset dir="${projects.dir}/service-tools/lib">
+						<include name="commons-dbcp-1.2.2.jar" />
+						<include name="commons-pool-1.2.jar" />
+						<include name="mysql-connector-java-3.0.16-ga-bin.jar" />
+						<include name="spring-beans.jar" />
+						<include name="spring-core.jar" />
+					</fileset>
+					<fileset dir="${projects.dir}/service-tools/ext/lib">
+						<include name="caGrid-*-core.jar" />
+					</fileset>
+		</artifact>
 
 		<artifact track="main" type="jars" id="db.tools.jars">
 			<generatingantcall target="build-service-tools" />

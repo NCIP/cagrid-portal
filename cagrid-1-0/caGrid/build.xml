@@ -443,6 +443,7 @@
         <resolveDependencies extdir="${projects.dir}/cds/ext">
             <artifact refid="cagrid.properties" />
             <artifact refid="db.tools.jars" />
+        	<artifact refid="events.tools.jars" />
             <artifact refid="mds.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="test.coverage.jars" />
