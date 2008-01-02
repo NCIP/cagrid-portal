@@ -160,6 +160,14 @@ public class EventAuditor extends BaseEventHandler {
 		}
 		return event;
 	}
+	
+	public void clear() throws EventHandlingException{
+		try{
+		this.clearDatabase();
+		} catch (Exception e) {
+			throw new EventHandlingException(Utils.getExceptionMessage(e),e);
+		}
+	}
 
 	public void clearDatabase() throws DatabaseException {
 		buildDatabase();

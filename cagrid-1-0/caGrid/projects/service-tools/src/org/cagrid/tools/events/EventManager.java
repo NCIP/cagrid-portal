@@ -141,4 +141,15 @@ public class EventManager {
 		}
 	}
 
+	public void clearHandlers() {
+		Iterator<EventHandler> itr = handlers.values().iterator();
+		while (itr.hasNext()) {
+			try {
+				itr.next().clear();
+			} catch (Exception e) {
+				log.error(e);
+			}
+		}
+	}
+
 }

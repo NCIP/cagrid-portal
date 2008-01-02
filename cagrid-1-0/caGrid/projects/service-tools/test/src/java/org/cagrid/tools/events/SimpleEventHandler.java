@@ -33,5 +33,9 @@ public class SimpleEventHandler extends BaseEventHandler {
 	public void handleEvent(Event event) {
 		eventsRecord.add(event.getEventType());
 	}
+	
+	public void clear(){
+		eventsRecord.clear();
+	}
 
 }
