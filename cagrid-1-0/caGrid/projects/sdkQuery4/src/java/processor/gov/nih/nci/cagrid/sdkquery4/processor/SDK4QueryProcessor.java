@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
+import org.globus.wsrf.security.SecurityManager;
 
 /** 
  *  SDK4QueryProcessor
@@ -33,7 +34,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Oct 3, 2007 10:34:55 AM
- * @version $Id: SDK4QueryProcessor.java,v 1.7 2007-12-21 20:09:53 dervin Exp $ 
+ * @version $Id: SDK4QueryProcessor.java,v 1.8 2008-01-02 22:04:10 dervin Exp $ 
  */
 public class SDK4QueryProcessor extends CQLQueryProcessor {
     // configuration property keys
@@ -146,15 +147,36 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     private ApplicationService getApplicationService() throws QueryProcessingException {
         ApplicationService service = null;
         
-        String useLocalValue = getConfiguredParameters().getProperty(PROPERTY_USE_LOCAL_API);
-        boolean useLocal = Boolean.parseBoolean(useLocalValue);
-        // TODO: service login stuff here
+        boolean useLocal = useLocalApplicationService();
+        boolean useLogin = useServiceLogin();
+        boolean useStaticLogin = useStaticLogin();
         try {
+            String username = null;
+            String passwd = null;
+            if (useLogin) {
+                if (useStaticLogin) {
+                    username = getConfiguredParameters().getProperty(PROPERTY_STATIC_LOGIN_USERNAME);
+                    passwd = username = getConfiguredParameters().getProperty(PROPERTY_STATIC_LOGIN_PASSWORD);
+                } else {
+                    SecurityManager securityManager = SecurityManager.getManager();
+                    username = securityManager.getCaller();
+                    // TODO: password?
+                }
+            }
+            
             if (useLocal) {
-                service = ApplicationServiceProvider.getApplicationService();
+                if (useLogin) {
+                    service = ApplicationServiceProvider.getApplicationService(username, passwd);
+                } else {
+                    service = ApplicationServiceProvider.getApplicationService();   
+                }
             } else {
                 String url = getRemoteApplicationUrl();
-                service = ApplicationServiceProvider.getApplicationServiceFromUrl(url);
+                if (useLogin) {
+                    service = ApplicationServiceProvider.getApplicationServiceFromUrl(url, username, passwd);
+                } else {
+                    service = ApplicationServiceProvider.getApplicationServiceFromUrl(url);   
+                }
             }
         } catch (Exception ex) {
             throw new QueryProcessingException("Error obtaining application service instance: " + ex.getMessage(), ex);
@@ -186,6 +208,36 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
             return Boolean.parseBoolean(caseInsensitiveValue);
         } catch (Exception ex) {
             throw new QueryProcessingException("Error determining case insensitivity: " + ex.getMessage(), ex);
+        }
+    }
+    
+    
+    private boolean useLocalApplicationService() throws QueryProcessingException {
+        String useLocalValue = getConfiguredParameters().getProperty(PROPERTY_USE_LOCAL_API);
+        try {
+            return Boolean.parseBoolean(useLocalValue);
+        } catch (Exception ex) {
+            throw new QueryProcessingException("Error determining local application service use: " + ex.getMessage(), ex);
+        }
+    }
+    
+    
+    private boolean useServiceLogin() throws QueryProcessingException {
+        String useLoginValue = getConfiguredParameters().getProperty(PROPERTY_USE_LOGIN);
+        try {
+            return Boolean.parseBoolean(useLoginValue);
+        } catch (Exception ex) {
+            throw new QueryProcessingException("Error determining login use flag: " + ex.getMessage(), ex);
+        }
+    }
+    
+    
+    private boolean useStaticLogin() throws QueryProcessingException {
+        String useGridIdentLogin = getConfiguredParameters().getProperty(PROPERTY_USE_GRID_IDENTITY_LOGIN);
+        try {
+            return !Boolean.parseBoolean(useGridIdentLogin);
+        } catch (Exception ex) {
+            throw new QueryProcessingException("Error determining use of static login: " + ex.getMessage(), ex);
         }
     }
     
