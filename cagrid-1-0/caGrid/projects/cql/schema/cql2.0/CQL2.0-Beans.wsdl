@@ -2,4 +2,6 @@
 <definitions name="CQL_2.0_Beans" xmlns="http://schemas.xmlsoap.org/wsdl/" >
 	<import location="AssociationPopulationSpec.xsd"/>
 	<import location="Aggregations.xsd"/>
+	<import location="Predicates.xsd"/>
+	<import location="CQLAttribute.xsd"/>
 </definitions>
