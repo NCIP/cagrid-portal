@@ -2295,10 +2295,7 @@ public class ModificationViewer extends ApplicationComponent {
         } else {
             String[] errorMessages = discoveryComponent.getErrorMessage();
             if (errorMessages != null && errorMessages.length > 0) {
-                // TODO:FIX ME
-                // CompositeErrorDialog.showError("Problem adding types, see
-                // details for more information.", errorMessages,
-                // discoveryComponent.getErrorCauseThrowable());
+                CompositeErrorDialog.showErrorDialog("Problem adding types, see details for more information.", errorMessages, discoveryComponent.getErrorCauseThrowable());
             } else {
                 CompositeErrorDialog.showErrorDialog("Unspecified problem adding types.", discoveryComponent
                     .getErrorCauseThrowable());

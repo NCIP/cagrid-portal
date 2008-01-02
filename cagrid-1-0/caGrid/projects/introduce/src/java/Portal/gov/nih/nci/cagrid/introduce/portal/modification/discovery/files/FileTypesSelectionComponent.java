@@ -169,6 +169,8 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
             namespaces.toArray(types);
             return types;
         } catch (Exception e) {
+        	addError("Error processing schema: " + e.getMessage());
+        	setErrorCauseThrowable(e);
             e.printStackTrace();
             return null;
         }
@@ -188,7 +190,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
                 for (int i = 0; i < importEls.size(); i++) {
                     org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
                     String location = importEl.getAttributeValue("schemaLocation");
-                    if (location != null) {
+                    if (location != null && !(location.startsWith("http:") || location.startsWith("gme:"))) {
                         String namespace = importEl.getAttributeValue("namespace");
                         if (namespace != null) {
                             // see if namespace already exists if so check
@@ -255,15 +257,19 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
             for (int i = 0; i < importEls.size(); i++) {
                 org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
                 String location = importEl.getAttributeValue("schemaLocation");
-                if (location != null) {
+                if (location != null && !(location.startsWith("http:") || location.startsWith("gme:"))) {
                     File currentPath = schemaFile.getCanonicalFile().getParentFile();
                     if (!schemaFile.equals(new File(currentPath.getCanonicalPath() + File.separator + location))) {
                         File importedSchema = new File(currentPath + File.separator + location);
                         if (!visitedSchemas.contains(importedSchema.getCanonicalPath())) {
                             // only copy schemas not yet visited
+                        	if(importedSchema.exists() && importedSchema.canRead()){
                             copySchemas(importedSchema.getCanonicalPath(), new File(copyToDirectory.getCanonicalFile()
                                 + File.separator + location).getParentFile(), visitedSchemas, storedSchemas,
                                 namespaceExistsPolicy);
+                        	} else {
+                        		throw new Exception("Imported schema cannot be found: " + importedSchema.getAbsolutePath());
+                        	}
                         }
                     } else {
                         System.err.println("WARNING: Schema is importing itself. " + schemaFile);
