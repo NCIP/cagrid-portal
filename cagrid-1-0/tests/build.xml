@@ -88,8 +88,8 @@
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="sdk.32.query.jars"/>
 			<artifact refid="sdkInstaller.jars"/>
-			<artifact refid="data.jars"/>
 			<artifact refid="cql.1.0.beans.jar"/>
+			<artifact refid="data.jars"/>
 		</resolveDependencies>
 		<ant dir="${tests.projects.dir}/sdkQueryEquivalence" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -130,6 +130,7 @@
             <artifact refid="data.jars" />
 	    <artifact refid="testing.system.jars"/>
 	    <artifact refid="testing.containers" />
+	    <artifact refid="cql.1.0.beans.jar"/>
         </resolveDependencies>
         <delete failonerror="false">
             <fileset dir="${tests.projects.dir}/coretests/test/resources/services/BasicDataService/lib">
