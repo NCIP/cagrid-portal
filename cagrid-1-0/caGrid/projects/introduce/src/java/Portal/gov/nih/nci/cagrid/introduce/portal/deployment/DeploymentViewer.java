@@ -242,7 +242,7 @@ public class DeploymentViewer extends ApplicationComponent {
 								e1.printStackTrace();
 							}
 
-							setProgressText("writing deployment property file");
+							setProgressText("writing deployment property file...");
 
 							info
 									.setDeplymentProperties(getAdvancedDeploymentPanel()
@@ -423,10 +423,20 @@ public class DeploymentViewer extends ApplicationComponent {
 			}
 			try {
 				if (ResourceManager
-						.getStateProperty(ResourceManager.LAST_DEPLOYMENT) != null
-						&& System.getenv(ResourceManager.LAST_DEPLOYMENT) != null) {
-					deploymentTypeSelector.setSelectedItem(ResourceManager
-							.getStateProperty(ResourceManager.LAST_DEPLOYMENT));
+						.getStateProperty(ResourceManager.LAST_DEPLOYMENT) != null) {
+					boolean found = false;
+					for (int i = 0; i < deploymentTypeSelector.getItemCount(); i++) {
+						if (((String) deploymentTypeSelector.getItemAt(i))
+								.equals(ResourceManager
+										.getStateProperty(ResourceManager.LAST_DEPLOYMENT))) {
+							found = true;
+						}
+					}
+					if (found) {
+						deploymentTypeSelector
+								.setSelectedItem(ResourceManager
+										.getStateProperty(ResourceManager.LAST_DEPLOYMENT));
+					}
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

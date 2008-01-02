@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.undeployment;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer;
 import gov.nih.nci.cagrid.introduce.portal.undeployment.service.DeployedServicesTable;
@@ -168,57 +169,79 @@ public class UndeployServiceViewer extends ApplicationComponent {
 			if (System.getenv(IntroduceConstants.JBOSS) != null) {
 				containerSelectorComboBox.addItem(DeploymentViewer.JBOSS);
 			}
+
+			try {
+				if (ResourceManager
+						.getStateProperty(ResourceManager.LAST_DEPLOYMENT) != null) {
+					boolean found = false;
+					for (int i = 0; i < containerSelectorComboBox
+							.getItemCount(); i++) {
+						if (((String) containerSelectorComboBox.getItemAt(i))
+								.equals(ResourceManager
+										.getStateProperty(ResourceManager.LAST_DEPLOYMENT))) {
+							found = true;
+						}
+					}
+					if (found) {
+						containerSelectorComboBox
+								.setSelectedItem(ResourceManager
+										.getStateProperty(ResourceManager.LAST_DEPLOYMENT));
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
+			processContainerSelection();
+
 			containerSelectorComboBox
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							String containerType = (String) containerSelectorComboBox
-									.getSelectedItem();
-							try {
-								getServicesTable().removeAllRows();
-							} catch (Exception e2) {
-								e2.printStackTrace();
-								return;
-							}
-							String webAppDir = null;
-							String webAppEtcDir = null;
-							if (containerType.equals(DeploymentViewer.GLOBUS)) {
-								webAppDir = System.getenv("GLOBUS_LOCATION");
-								webAppEtcDir = webAppDir + File.separator
-										+ "etc";
-							} else if (containerType
-									.equals(DeploymentViewer.TOMCAT)) {
-								webAppDir = System.getenv("CATALINA_HOME")
-										+ File.separator + "webapps"
-										+ File.separator + "wsrf";
-								webAppEtcDir = webAppDir + File.separator
-										+ "WEB-INF" + File.separator + "etc";
-							} else if (containerType
-									.equals(DeploymentViewer.JBOSS)) {
-								webAppDir = System.getenv("JBOSS_HOME")
-										+ File.separator + "server"
-										+ File.separator + "default"
-										+ File.separator + "deploy"
-										+ File.separator + "wsrf.war";
-								webAppEtcDir = webAppDir + File.separator
-										+ "WEB-INF" + File.separator + "etc";
-							}
-							Map<String, Deployment> map = null;
-							try {
-								map = UndeployServiceHelper
-										.loadIntroduceServices(webAppEtcDir);
-							} catch (Exception e1) {
-								e1.printStackTrace();
-								return;
-							}
-							Iterator<Deployment> it = map.values().iterator();
-							while (it.hasNext()) {
-								getServicesTable().addRow(it.next());
-							}
+							processContainerSelection();
 						}
 					});
 		}
 		return containerSelectorComboBox;
+	}
+
+	private void processContainerSelection() {
+		String containerType = (String) containerSelectorComboBox
+				.getSelectedItem();
+		try {
+			getServicesTable().removeAllRows();
+		} catch (Exception e2) {
+			e2.printStackTrace();
+			return;
+		}
+		String webAppDir = null;
+		String webAppEtcDir = null;
+		if (containerType.equals(DeploymentViewer.GLOBUS)) {
+			webAppDir = System.getenv("GLOBUS_LOCATION");
+			webAppEtcDir = webAppDir + File.separator + "etc";
+		} else if (containerType.equals(DeploymentViewer.TOMCAT)) {
+			webAppDir = System.getenv("CATALINA_HOME") + File.separator
+					+ "webapps" + File.separator + "wsrf";
+			webAppEtcDir = webAppDir + File.separator + "WEB-INF"
+					+ File.separator + "etc";
+		} else if (containerType.equals(DeploymentViewer.JBOSS)) {
+			webAppDir = System.getenv("JBOSS_HOME") + File.separator + "server"
+					+ File.separator + "default" + File.separator + "deploy"
+					+ File.separator + "wsrf.war";
+			webAppEtcDir = webAppDir + File.separator + "WEB-INF"
+					+ File.separator + "etc";
+		}
+		Map<String, Deployment> map = null;
+		try {
+			map = UndeployServiceHelper.loadIntroduceServices(webAppEtcDir);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			return;
+		}
+		Iterator<Deployment> it = map.values().iterator();
+		while (it.hasNext()) {
+			getServicesTable().addRow(it.next());
+		}
 	}
 
 	/**
@@ -256,8 +279,9 @@ public class UndeployServiceViewer extends ApplicationComponent {
 								Deployment dep = getServicesTable()
 										.getSelectedRowData();
 								if (dep != null) {
-									
-									//build up properties that the undeploy helper will need to undeploy the service
+
+									// build up properties that the undeploy
+									// helper will need to undeploy the service
 									String containerType = (String) containerSelectorComboBox
 											.getSelectedItem();
 									getServicesTable().removeAll();
@@ -309,13 +333,22 @@ public class UndeployServiceViewer extends ApplicationComponent {
 												+ File.separator + "share"
 												+ File.separator + "schema";
 									}
-									
-									//use the undeploy helper to remove the service
-									UndeployServiceHelper helper = new UndeployServiceHelper(webAppDir, webAppLibDir, webAppSchemaDir, webAppEtcDir, dep.getServiceDeploymentDirName(), dep.getDeploymentPrefix(), dep.getServiceName());
+
+									// use the undeploy helper to remove the
+									// service
+									UndeployServiceHelper helper = new UndeployServiceHelper(
+											webAppDir, webAppLibDir,
+											webAppSchemaDir, webAppEtcDir,
+											dep.getServiceDeploymentDirName(),
+											dep.getDeploymentPrefix(), dep
+													.getServiceName());
 									helper.execute();
-									
-									//force refresh on the services table
-									getContainerSelectorComboBox().setSelectedItem(getContainerSelectorComboBox().getSelectedItem());
+
+									// force refresh on the services table
+									getContainerSelectorComboBox()
+											.setSelectedItem(
+													getContainerSelectorComboBox()
+															.getSelectedItem());
 								}
 							} catch (Exception ex) {
 								ex.printStackTrace();
@@ -340,9 +373,9 @@ public class UndeployServiceViewer extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes servicesScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes servicesScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getServicesScrollPane() {
 		if (servicesScrollPane == null) {
