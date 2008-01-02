@@ -28,13 +28,6 @@ public class EventAuditor extends BaseEventHandler {
 	private final static String OCCURRED_AT = "OCCURRED_AT";
 	private final static String MESSAGE = "MESSAGE";
 
-	public final static String DB_NAME_PROPERTY = "db-name";
-	public final static String DB_TABLE_PROPERTY = "db-table";
-	public final static String DB_HOST_PROPERTY = "db-host";
-	public final static String DB_PORT_PROPERTY = "db-port";
-	public final static String DB_USERNAME_PROPERTY = "db-username";
-	public final static String DB_PASSWORD_PROPERTY = "db-password";
-
 	private String table;
 
 	public EventAuditor(String name, Database db, String tableName)
