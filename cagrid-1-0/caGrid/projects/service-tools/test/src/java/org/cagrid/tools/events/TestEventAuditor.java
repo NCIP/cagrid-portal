@@ -56,7 +56,7 @@ public class TestEventAuditor extends TestCase {
 		Date start = c.getTime();
 		c.add(Calendar.HOUR, 1);
 		Date end = c.getTime();
-
+		Thread.currentThread().sleep(100);
 		for (int i = 0; i < events; i++) {
 			Event e = new Event();
 			String targetId = target + i;
@@ -84,8 +84,7 @@ public class TestEventAuditor extends TestCase {
 					end).size());
 			assertEquals((i + 1), auditor.findEvents(null, null, null, start,
 					end).size());
-			assertEquals(0, auditor.findEvents(null, null, null, null, start)
-					.size());
+			assertEquals(0, auditor.findEvents(null, null, null, null, start).size());
 			assertEquals(0, auditor.findEvents(null, null, null, end, null)
 					.size());
 
