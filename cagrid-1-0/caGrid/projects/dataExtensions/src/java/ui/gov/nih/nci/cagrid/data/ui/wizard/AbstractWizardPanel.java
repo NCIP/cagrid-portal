@@ -21,20 +21,20 @@ import javax.swing.JPanel;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: AbstractWizardPanel.java,v 1.3 2007-12-05 17:30:54 dervin Exp $ 
+ * @version $Id: AbstractWizardPanel.java,v 1.4 2008-01-02 19:32:08 dervin Exp $ 
  */
 public abstract class AbstractWizardPanel extends JPanel {
-	private static Map bitBucket;
+	private static Map<Object, Object> bitBucket;
 
 	private ServiceExtensionDescriptionType extDescription;
 	private ServiceInformation serviceInfo;
-	private List listeners;
+	private List<ButtonEnableListener> listeners;
 	
 	public AbstractWizardPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super();
 		this.extDescription = extensionDescription;
 		this.serviceInfo = info;
-		this.listeners = new LinkedList();
+		this.listeners = new LinkedList<ButtonEnableListener>();
 	}
 	
 	
@@ -60,9 +60,9 @@ public abstract class AbstractWizardPanel extends JPanel {
 	 * @return
 	 * 		A map for storing arbitrary data
 	 */
-	protected Map getBitBucket() {
+	protected Map<Object, Object> getBitBucket() {
 		if (bitBucket == null) {
-			bitBucket = Collections.synchronizedMap(new HashMap());
+			bitBucket = Collections.synchronizedMap(new HashMap<Object, Object>());
 		}
 		return bitBucket;
 	}

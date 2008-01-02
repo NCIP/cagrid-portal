@@ -66,16 +66,13 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.8 2007-11-15 21:49:20 hastings Exp $
+ * @version $Id: DomainModelConfigPanel.java,v 1.9 2008-01-02 19:32:08 dervin Exp $
  */
 public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
     private transient List<DomainModelClassSelectionListener> classSelectionListeners = null;
-
     private transient Project mostRecentProject;
-
     private transient DomainModel installedDomainModel = null;
-    
     private transient boolean currentlyFromCadsr;
 
     private JButton visualizeDomainModelButton = null;
@@ -642,14 +639,14 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
         proj.setVersion(model.getProjectVersion());
 
         // walk classes from the model, grouping classes by package
-        Map<String, List<String>> packageToClass = new HashMap();
+        Map<String, List<String>> packageToClass = new HashMap<String, List<String>>();
         if (model.getExposedUMLClassCollection() != null 
             && model.getExposedUMLClassCollection().getUMLClass() != null) {
             for (UMLClass umlClass : model.getExposedUMLClassCollection().getUMLClass()) {
                 String packName = umlClass.getPackageName();
                 List<String> classList = packageToClass.get(packName);
                 if (classList == null) {
-                    classList = new LinkedList();
+                    classList = new LinkedList<String>();
                     packageToClass.put(packName, classList);
                 }
                 classList.add(umlClass.getClassName());
@@ -657,8 +654,8 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
         }
 
         // walk packages names --> class lists, create CadsrPackages
-        List<CadsrPackage> cadsrPackages = new ArrayList(packageToClass.keySet().size());
-        List<UMLClassTreeNode> addedClassNodes = new LinkedList();
+        List<CadsrPackage> cadsrPackages = new ArrayList<CadsrPackage>(packageToClass.keySet().size());
+        List<UMLClassTreeNode> addedClassNodes = new LinkedList<UMLClassTreeNode>();
         for (String packName : packageToClass.keySet()) {
             // get the namespace type for the package
             NamespaceType packageNamespace = getNamespaceForPackage(
@@ -714,7 +711,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
         Map<String, String> classToElement = NamespaceUtils.mapClassNamesToElementNames(
             classNames, packageNamespace);
         // create ClassMappings for the package's classes
-        List<ClassMapping> mappingList = new ArrayList(classNames.size());
+        List<ClassMapping> mappingList = new ArrayList<ClassMapping>(classNames.size());
         for (String className : classNames) {
             ClassMapping mapping = new ClassMapping();
             mapping.setClassName(className);
@@ -812,7 +809,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 getCadsrBrowserPanel().getCadsr().getText());
             // TODO: potentially slow, use some kind of threading
             UMLClassMetadata[] classes = cadsrClient.findClassesInPackage(project, pack.getName());
-            List<String> classNames = new ArrayList(classes.length);
+            List<String> classNames = new ArrayList<String>(classes.length);
             for (UMLClassMetadata currentClass : classes) {
                 classNames.add(currentClass.getName());
             }

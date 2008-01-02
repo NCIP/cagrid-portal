@@ -34,10 +34,10 @@ import javax.swing.table.TableCellEditor;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 6, 2006 
- * @version $Id: ClassElementSerializationTable.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: ClassElementSerializationTable.java,v 1.2 2008-01-02 19:32:08 dervin Exp $ 
  */
 public class ClassElementSerializationTable extends JTable {
-	private List classInformationChangeListeners = null;
+	private List<ClassInformatonChangeListener> classInformationChangeListeners = null;
 	private SerializationPopupMenu popup = null;
 
 	public ClassElementSerializationTable() {
@@ -49,7 +49,8 @@ public class ClassElementSerializationTable extends JTable {
 			ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		setSelectionModel(listSelection);
 		setRowSelectionAllowed(true);
-		this.classInformationChangeListeners = new LinkedList();
+		this.classInformationChangeListeners = 
+            new LinkedList<ClassInformatonChangeListener>();
 		// add model listener to fire off editing events
 		getModel().addTableModelListener(new TableModelListener() {
 			public void tableChanged(TableModelEvent e) {
@@ -91,7 +92,7 @@ public class ClassElementSerializationTable extends JTable {
 	
 	
 	public void addClass(String pack, ClassMapping mapping, NamespaceType nsType) {
-		Vector row = new Vector(7);
+		Vector<Object> row = new Vector<Object>(7);
 		row.add(pack);
 		row.add(mapping.getClassName());
 		row.add(nsType.getNamespace());
@@ -229,7 +230,7 @@ public class ClassElementSerializationTable extends JTable {
 	
 	private static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel() {
-			public Class getColumnClass(int column) {
+			public Class<?> getColumnClass(int column) {
 				return column == 6 || column == 3 ? Component.class : Object.class;
 			}
 		};

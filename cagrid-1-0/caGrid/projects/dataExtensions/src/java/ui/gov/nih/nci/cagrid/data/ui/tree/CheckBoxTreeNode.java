@@ -18,7 +18,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Apr 20, 2006 
- * @version $Id: CheckBoxTreeNode.java,v 1.2 2007-08-10 17:01:13 dervin Exp $ 
+ * @version $Id: CheckBoxTreeNode.java,v 1.3 2008-01-02 19:32:08 dervin Exp $ 
  */
 public class CheckBoxTreeNode extends DefaultMutableTreeNode {
 
@@ -69,12 +69,12 @@ public class CheckBoxTreeNode extends DefaultMutableTreeNode {
 	
 	
 	public CheckBoxTreeNode[] getCheckedChildren() {
-		List checked = new ArrayList();
+		List<CheckBoxTreeNode> checked = new ArrayList<CheckBoxTreeNode>();
 		Enumeration childEnum = children();
 		while (childEnum.hasMoreElements()) {
 			Object node = childEnum.nextElement();
 			if (node instanceof CheckBoxTreeNode && ((CheckBoxTreeNode) node).isChecked()) {
-				checked.add(node);
+				checked.add((CheckBoxTreeNode) node);
 			}
 		}
 		CheckBoxTreeNode[] checkedNodes = new CheckBoxTreeNode[checked.size()];

@@ -24,16 +24,16 @@ import javax.swing.tree.TreeSelectionModel;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 5, 2006 
- * @version $Id: CheckBoxTree.java,v 1.2 2007-08-10 17:01:02 dervin Exp $ 
+ * @version $Id: CheckBoxTree.java,v 1.3 2008-01-02 19:32:08 dervin Exp $ 
  */
 public class CheckBoxTree extends JTree {
 	private DefaultTreeModel model;
 	private DefaultMutableTreeNode rootNode;
-	private List checkTreeSelectionListeners;
+	private List<CheckTreeSelectionListener> checkTreeSelectionListeners;
 	
 	public CheckBoxTree() {
 		super();
-		checkTreeSelectionListeners = new LinkedList();
+		checkTreeSelectionListeners = new LinkedList<CheckTreeSelectionListener>();
 		setCellRenderer(new CellRenderer());
 		setCellEditor(new CellEditor());
 		setEditable(true);
@@ -102,7 +102,7 @@ public class CheckBoxTree extends JTree {
 	
 	
 	public CheckBoxTreeNode[] getCheckedNodes() {
-		List selected = new ArrayList();
+		List<CheckBoxTreeNode> selected = new ArrayList<CheckBoxTreeNode>();
 		Enumeration nodes = getRootNode().depthFirstEnumeration();
 		while (nodes.hasMoreElements()) {
 			TreeNode treeNode = (TreeNode) nodes.nextElement();

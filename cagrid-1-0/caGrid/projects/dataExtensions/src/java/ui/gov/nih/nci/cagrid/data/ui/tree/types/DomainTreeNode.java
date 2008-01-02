@@ -23,21 +23,21 @@ import javax.swing.tree.DefaultTreeModel;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Apr 20, 2006 
- * @version $Id: DomainTreeNode.java,v 1.1 2007-07-12 17:20:52 dervin Exp $ 
+ * @version $Id: DomainTreeNode.java,v 1.2 2008-01-02 19:32:08 dervin Exp $ 
  */
 public class DomainTreeNode extends CheckBoxTreeNode {
 	
 	private NamespaceType namespace;
 	private TargetTypesTree parentTree;
-	private Map checkBoxTypes;
-	private Map typeCheckBoxes;
+	private Map<JCheckBox, SchemaElementType> checkBoxTypes;
+	private Map<SchemaElementType, JCheckBox> typeCheckBoxes;
 
 	public DomainTreeNode(TargetTypesTree tree, NamespaceType namespace) {
 		super(tree, namespace.getNamespace());
 		this.parentTree = tree;
 		this.namespace = namespace;
-		this.checkBoxTypes = new HashMap();
-		this.typeCheckBoxes = new HashMap();
+		this.checkBoxTypes = new HashMap<JCheckBox, SchemaElementType>();
+		this.typeCheckBoxes = new HashMap<SchemaElementType, JCheckBox>();
 		
 		// add child nodes
 		SchemaElementType[] types = namespace.getSchemaElement();
@@ -77,7 +77,7 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 	
 	public void checkTypeNodes(SchemaElementType[] types) {
 		for (int i = 0; i < types.length; i++) {
-			JCheckBox check = (JCheckBox) typeCheckBoxes.get(types[i]);
+			JCheckBox check = typeCheckBoxes.get(types[i]);
 			if (check != null) {
 				check.setSelected(true);
 			}

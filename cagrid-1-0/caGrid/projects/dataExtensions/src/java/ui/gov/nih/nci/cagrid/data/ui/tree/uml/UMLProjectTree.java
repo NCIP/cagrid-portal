@@ -20,19 +20,19 @@ import javax.swing.tree.TreePath;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 5, 2006 
- * @version $Id: UMLProjectTree.java,v 1.2 2007-08-10 17:27:01 dervin Exp $ 
+ * @version $Id: UMLProjectTree.java,v 1.3 2008-01-02 19:32:08 dervin Exp $ 
  */
 public class UMLProjectTree extends CheckBoxTree {
 	private Map<String, UMLPackageTreeNode> packageNodes;
 
 	public UMLProjectTree() {
 		super();
-		packageNodes = new HashMap();
+		packageNodes = new HashMap<String, UMLPackageTreeNode>();
 	}
     
     
     public Set<String> getPackagesInTree() {
-        Set<String> packageNames = new HashSet();
+        Set<String> packageNames = new HashSet<String>();
         packageNames.addAll(packageNodes.keySet());
         return packageNames;
     }
@@ -115,7 +115,7 @@ public class UMLProjectTree extends CheckBoxTree {
 	
 	
 	public String[] getSelectedClassNames(String packageName) {
-		List names = new ArrayList();
+		List<String> names = new ArrayList<String>();
 		UMLPackageTreeNode packNode = getUmlPackageNode(packageName);
 		Enumeration classNodes = packNode.children();
 		while (classNodes.hasMoreElements()) {
