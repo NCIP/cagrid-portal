@@ -385,10 +385,8 @@ public class ErrorDialog extends JDialog {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
-
 		this.setContentPane(getJContentPane());
 		this.setTitle("Error");
 		hideDetails();
