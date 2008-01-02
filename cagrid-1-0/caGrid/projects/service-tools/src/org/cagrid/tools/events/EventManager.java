@@ -48,6 +48,16 @@ public class EventManager {
 		}
 	}
 
+	public EventHandler getEventHandler(String name)
+			throws InvalidHandlerException {
+		if (handlers.containsKey(name)) {
+			return handlers.get(name);
+		} else {
+			throw new InvalidHandlerException(
+					"Could not find the event handler " + name + ".");
+		}
+	}
+
 	public void logEvent(String targetId, String reportingPartyId,
 			String eventType, String message) {
 		try {
