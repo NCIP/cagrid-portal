@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.bdt.test.unit;
 import gov.nih.nci.cagrid.bdt.test.steps.CreationStep;
 import gov.nih.nci.cagrid.bdt.test.steps.DeleteOldServiceStep;
 import gov.nih.nci.cagrid.bdt.test.steps.VerifyBDTImplAddedStep;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
@@ -19,7 +20,7 @@ import junit.textui.TestRunner;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006 
- * @version $Id: CreationTest.java,v 1.7 2007-12-03 16:27:19 hastings Exp $ 
+ * @version $Id: CreationTest.java,v 1.8 2008-01-02 19:49:00 dervin Exp $ 
  */
 public class CreationTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -39,7 +40,7 @@ public class CreationTest extends Story {
 	
 
 	protected Vector steps() {
-		Vector steps = new Vector();
+		Vector<Step> steps = new Vector<Step>();
 		// delete any existing service
 		steps.add(new DeleteOldServiceStep());
 		// create a new enumeration supporting data service
@@ -58,6 +59,7 @@ public class CreationTest extends Story {
 		return dir;
 	}
 
+    
 	/**
 	 * Convenience method for running all the Steps in this Story.
 	 */
@@ -66,5 +68,4 @@ public class CreationTest extends Story {
 		TestResult result = runner.doRun(new TestSuite(CreationTest.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
-
 }
