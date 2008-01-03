@@ -39,10 +39,33 @@
 			<batchtest fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
 					<include name="**/*TestCase.java"/>
+					<exclude name="**/system/*"/>
 				</fileset>
 			</batchtest>
 		</junit>
         <fail message="Tests failed! Check test reports." if="test.failed" />   
+	</target>
+	
+	
+	<target name="systemTest" depends="compileTests, instrument" description="Runs the tests.">
+		<mkdir dir="${junit.results.dir}"/>
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+			<sysproperty key="build.dirs" value="${instrumented.classes.dir}"/>
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
+			<sysproperty key="processor.config.file" file="test/resources/testProcessorConfig.properties"/>
+			<jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
+			<classpath location="${instrumented.classes.dir}"/>
+			<classpath refid="test.classpath"/>
+			<classpath>
+				<pathelement path="${test.classes.dir}"/>
+			</classpath>
+			<formatter type="xml"/>
+			<batchtest fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/system/*.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
 	</target>
 	
 	
