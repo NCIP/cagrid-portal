@@ -209,8 +209,8 @@ public class ModifyService extends JDialog {
             result.add(new SimpleValidationMessage(SERVICE_NAME + " must not be blank.", Severity.ERROR, SERVICE_NAME));
         } else if (!CommonTools.isValidServiceName(serviceNameTextField.getText())) {
             result.add(new SimpleValidationMessage(SERVICE_NAME
-                + " is not valid, Service name must be a java compatible class name. ("
-                + CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")", Severity.ERROR, SERVICE_NAME));
+                + " is not valid, Service name must be a java compatible class name ("
+                + CommonTools.ALLOWED_JAVA_CLASS_REGEX + ") and must not contain any java reserved words.", Severity.ERROR, SERVICE_NAME));
             return;
         }
 
@@ -243,7 +243,7 @@ public class ModifyService extends JDialog {
             result.add(new SimpleValidationMessage(SERVICE_PACKAGE + " must not be blank.", Severity.ERROR,
                 SERVICE_PACKAGE));
         } else if (!CommonTools.isValidPackageName(this.getServicePackageNameTextField().getText())) {
-            result.add(new SimpleValidationMessage(SERVICE_PACKAGE + " is not in valid java package format",
+            result.add(new SimpleValidationMessage(SERVICE_PACKAGE + " is not in valid java package format or may contain java reserved words.",
                 Severity.ERROR, SERVICE_PACKAGE));
         }
 

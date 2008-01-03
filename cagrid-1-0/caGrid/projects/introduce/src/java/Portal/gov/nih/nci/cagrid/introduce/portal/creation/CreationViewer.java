@@ -202,8 +202,8 @@ public class CreationViewer extends CreationViewerBaseComponent {
             result.add(new SimpleValidationMessage(SERVICE_NAME + " must not be blank.", Severity.ERROR, SERVICE_NAME));
         } else if (!CommonTools.isValidServiceName(this.getService().getText())) {
             result.add(new SimpleValidationMessage(SERVICE_NAME
-                + " is not valid.  Service name must be a java compatible class name. ("
-                + CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")", Severity.ERROR, SERVICE_NAME));
+                + " is not valid.  Service name must be a java compatible class name ("
+                + CommonTools.ALLOWED_JAVA_CLASS_REGEX + ") and not contain any java reserved words.", Severity.ERROR, SERVICE_NAME));
         }
 
         if (!ValidationUtils.isNotBlank(this.getServicePackage().getText())) {
@@ -211,8 +211,8 @@ public class CreationViewer extends CreationViewerBaseComponent {
                 SERVICE_PACKAGE));
         } else if (!CommonTools.isValidPackageName(this.getServicePackage().getText())) {
             result.add(new SimpleValidationMessage(SERVICE_PACKAGE
-                + " is not valid.  Service package must be in valid java package format. ("
-                + CommonTools.ALLOWED_JAVA_PACKAGE_REGEX + ")", Severity.ERROR, SERVICE_PACKAGE));
+                + " is not valid.  Service package must be in valid java package format ("
+                + CommonTools.ALLOWED_JAVA_PACKAGE_REGEX + ")  and not contain any java reserved words.", Severity.ERROR, SERVICE_PACKAGE));
         }
 
         if (!ValidationUtils.isNotBlank(this.getNamespaceDomain().getText())) {

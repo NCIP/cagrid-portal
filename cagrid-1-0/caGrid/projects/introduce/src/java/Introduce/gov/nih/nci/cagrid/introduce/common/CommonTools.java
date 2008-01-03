@@ -28,6 +28,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,7 +51,6 @@ import org.projectmobius.common.MobiusException;
 public final class CommonTools {
     private static final Logger logger = Logger.getLogger(CommonTools.class);
 
-
     public static final String ALLOWED_JAVA_CLASS_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
 
     public static final String ALLOWED_JAVA_FIELD_REGEX = "[a-z\\_]++[A-Za-z0-9\\_\\$]*";
@@ -61,10 +61,18 @@ public final class CommonTools {
 
     public static final String ALLOWED_EXISTING_JAVA_PACKAGE_REGEX = "[a-zA-Z\\_]++[A-Za-z0-9\\_\\$]*";
 
-    
-    private CommonTools(){
-        
+    public static final List JAVA_KEYWORDS = new ArrayList(Arrays.asList(new String[]{"abstract", "continue", "for", "new",
+            "switch", "assert", "default", "goto", "package", "synchronized", "boolean", "do", "if", "private", "this",
+            "break", "double", "implements", "protected", "throw", "byte", "else", "import", "public", "throws",
+            "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try", "char",
+            "final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const",
+            "float", "native", "super", "while"}));
+
+
+    private CommonTools() {
+
     }
+
 
     public static Process createAndOutputProcess(String cmd) throws Exception {
         final Process p;
@@ -168,7 +176,7 @@ public final class CommonTools {
             StringTokenizer strtok = new StringTokenizer(packageName, ".", false);
             while (strtok.hasMoreElements()) {
                 String packageItem = strtok.nextToken();
-                if (!packageItem.matches(ALLOWED_JAVA_PACKAGE_REGEX)) {
+                if (!packageItem.matches(ALLOWED_JAVA_PACKAGE_REGEX) || JAVA_KEYWORDS.contains(packageItem)) {
                     return false;
                 }
             }
@@ -185,7 +193,7 @@ public final class CommonTools {
             StringTokenizer strtok = new StringTokenizer(packageName, ".", false);
             while (strtok.hasMoreElements()) {
                 String packageItem = strtok.nextToken();
-                if (!packageItem.matches(ALLOWED_EXISTING_JAVA_PACKAGE_REGEX)) {
+                if (!packageItem.matches(ALLOWED_EXISTING_JAVA_PACKAGE_REGEX)|| JAVA_KEYWORDS.contains(packageItem)) {
                     return false;
                 }
             }
@@ -207,7 +215,7 @@ public final class CommonTools {
         if (classname.substring(0, 1).toLowerCase().equals(classname.substring(0, 1))) {
             return false;
         }
-        if (!classname.matches(ALLOWED_JAVA_CLASS_REGEX)) {
+        if (!classname.matches(ALLOWED_JAVA_CLASS_REGEX)|| JAVA_KEYWORDS.contains(classname)) {
             return false;
         }
         return true;
@@ -217,7 +225,7 @@ public final class CommonTools {
 
     public static boolean isValidJavaField(String serviceName) {
         if (serviceName.length() > 0) {
-            if (!serviceName.matches(ALLOWED_JAVA_FIELD_REGEX)) {
+            if (!serviceName.matches(ALLOWED_JAVA_FIELD_REGEX)|| JAVA_KEYWORDS.contains(serviceName)) {
                 return false;
             }
         }
@@ -233,7 +241,6 @@ public final class CommonTools {
         }
         return true;
     }
-
 
 
     /**
@@ -388,7 +395,8 @@ public final class CommonTools {
     public static MethodType getMethod(MethodsType methods, String name) {
         if ((methods != null) && (methods.getMethod() != null)) {
             for (int i = 0; i < methods.getMethod().length; i++) {
-                if (CommonTools.lowerCaseFirstCharacter(methods.getMethod(i).getName()).equals(CommonTools.lowerCaseFirstCharacter(name))) {
+                if (CommonTools.lowerCaseFirstCharacter(methods.getMethod(i).getName()).equals(
+                    CommonTools.lowerCaseFirstCharacter(name))) {
                     return methods.getMethod(i);
                 }
             }
@@ -982,7 +990,7 @@ public final class CommonTools {
         desc.getServiceProperties().setProperty(propertyArray);
         return removed;
     }
-    
+
 
     /**
      * Determines if schema element types from a namespace type are referenced
@@ -1135,7 +1143,6 @@ public final class CommonTools {
     }
 
 
-
     /**
      * Returns the input string with the first character converted to lower case
      * 
@@ -1185,7 +1192,5 @@ public final class CommonTools {
         }
         return null;
     }
-    
 
-  
 }
