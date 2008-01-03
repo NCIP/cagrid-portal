@@ -478,7 +478,6 @@
             <artifact refid="mds.jars" />
             <artifact refid="common.test.jars" />
             <artifact refid="core.test.jars" />
-            <artifact refid="gridca.jars" />
             <artifact refid="servicesecurity.jars" />
             <artifact refid="security.metadata.jars" />
             <artifact refid="common.metadata.jars" />
