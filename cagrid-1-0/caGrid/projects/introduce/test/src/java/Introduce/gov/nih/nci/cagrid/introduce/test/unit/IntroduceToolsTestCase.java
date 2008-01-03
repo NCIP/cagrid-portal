@@ -39,7 +39,7 @@ public class IntroduceToolsTestCase extends TestCase {
 		assertTrue(CommonTools.isValidPackageName("i"));
 		assertTrue(CommonTools.isValidPackageName("is"));
 		assertTrue(CommonTools
-			.isValidPackageName("this.is.a.really.long.package.name.just.to.be.sure.this.is.ok.with.my.package.parser.i.will.even.put.in.some.stupid.characters.like.a0193.and.sdjr23lkj23lk456jl.test.org"));
+			.isValidPackageName("is.a.really.name.just.to.be.sure.is.ok.with.my.parser.i.will.even.put.in.some.stupid.characters.like.a0193.and.sdjr23lkj23lk456jl.test.org"));
 		assertTrue(CommonTools.isValidPackageName("_test.org"));
 	}
 
@@ -51,6 +51,7 @@ public class IntroduceToolsTestCase extends TestCase {
 		assertFalse(CommonTools.isValidPackageName("1"));
 		assertFalse(CommonTools.isValidPackageName("1.2"));
 		assertFalse(CommonTools.isValidPackageName("1s"));
+		assertFalse(CommonTools.isValidPackageName("import.package"));
 		assertFalse(CommonTools
 			.isValidPackageName("this.is.a.really.long.package.name.just.to.be.sure.this.is.ok.with.my.package.parser.i.will.even.put.in.some.stupid.characters.like.a0193.and.sdjr23lkj23lk456jl.test.#org"));
 		assertFalse(CommonTools.isValidPackageName("_test.Forg"));
