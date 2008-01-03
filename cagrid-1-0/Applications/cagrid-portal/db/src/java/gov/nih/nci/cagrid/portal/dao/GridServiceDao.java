@@ -25,6 +25,11 @@ import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
 import gov.nih.nci.cagrid.portal.domain.StatusChange;
 import gov.nih.nci.cagrid.portal.domain.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.SourceUMLAssociationEdge;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.TargetUMLAssociationEdge;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociation;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociationEdge;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -81,6 +86,7 @@ public class GridServiceDao extends AbstractDao<GridService> {
 		if (sMeta != null) {
 			logger.debug("Deleting service metadata " + sMeta.getId());
 			service.setServiceMetadata(null);
+			sMeta.setService(null);
 			getHibernateTemplate().delete(sMeta);
 		} else {
 			logger.warn("Service " + service.getUrl()
@@ -92,6 +98,17 @@ public class GridServiceDao extends AbstractDao<GridService> {
 			if (dModel != null) {
 				logger.debug("Deleting domain model " + dModel.getId());
 				dataService.setDomainModel(null);
+				dModel.setService(null);
+				for(UMLClass klass : dModel.getClasses()){
+					for(UMLAssociationEdge edge : klass.getAssociations()){
+						if(edge instanceof SourceUMLAssociationEdge){
+							UMLAssociation assoc = ((SourceUMLAssociationEdge)edge).getAssociation();
+							getHibernateTemplate().delete(assoc);
+						}
+						getHibernateTemplate().delete(edge);
+					}
+					getHibernateTemplate().delete(klass);
+				}
 				getHibernateTemplate().delete(dModel);
 			} else {
 				logger.warn("Data service " + dataService.getUrl()

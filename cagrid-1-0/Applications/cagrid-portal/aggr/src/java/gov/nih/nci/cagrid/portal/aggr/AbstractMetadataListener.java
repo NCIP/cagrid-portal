@@ -12,6 +12,8 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.portal.util.Metadata;
 import gov.nih.nci.cagrid.portal.util.PortalUtils;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationListener;
 
 /**
@@ -19,6 +21,8 @@ import org.springframework.context.ApplicationListener;
  *
  */
 public abstract class AbstractMetadataListener implements ApplicationListener {
+	
+	private static final Log logger = LogFactory.getLog(AbstractMetadataListener.class);
 
 	private ServiceMetadataBuilder serviceMetadataBuilder;
 
@@ -50,7 +54,9 @@ public abstract class AbstractMetadataListener implements ApplicationListener {
 		ServiceMetadata serviceMetadata = sMetaBuilder.build(meta.smeta);
 		serviceMetadata.setService(service);
 		service.setServiceMetadata(serviceMetadata);
-		service.setMetadataHash(PortalUtils.createHashFromMetadata(meta));
+		String hash = PortalUtils.createHashFromMetadata(meta);
+		logger.debug("new hash: " + hash);
+		service.setMetadataHash(hash);
 	}
 	
 	

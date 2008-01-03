@@ -54,6 +54,8 @@
 		parent="metadataListenerTemplate"
 		class="gov.nih.nci.cagrid.portal.aggr.metachange.MetadataChangeListener">
 		<property name="gridServiceDao" ref="gridServiceDao" />
+		<property name="sharedCqlQueryDao" ref="sharedCqlQueryDao" />
+		<property name="cqlQueryInstanceDao" ref="cqlQueryInstanceDao" />
 	</bean>
 	
     
