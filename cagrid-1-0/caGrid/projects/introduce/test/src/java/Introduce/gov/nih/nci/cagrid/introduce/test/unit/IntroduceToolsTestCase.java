@@ -24,6 +24,7 @@ public class IntroduceToolsTestCase extends TestCase {
 	public void testIsNotValidServiceName() {
 		assertFalse(CommonTools.isValidServiceName("_MyService"));
 		assertFalse(CommonTools.isValidServiceName("My1-23"));
+		assertFalse(CommonTools.isValidServiceName("abacadabra"));
 		assertFalse(CommonTools.isValidServiceName("0My123_Service"));
 		assertFalse(CommonTools.isValidServiceName("_2My123_TestService"));
 		assertFalse(CommonTools.isValidServiceName("*&M123_TestService23"));
