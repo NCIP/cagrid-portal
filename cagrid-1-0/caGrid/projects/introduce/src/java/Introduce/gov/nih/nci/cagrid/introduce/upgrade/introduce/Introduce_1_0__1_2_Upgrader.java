@@ -83,6 +83,10 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
             .addIssue("Replaced the build-deploy.xml file.",
                 "Put any additions you need to the service deployment in the dev-build-deploy.xml file which has now been created.");
 
+        // copy the jdom.jar from the lib to the tools/lib
+        Utils.copyFile(new File("skeleton"  + File.separator + "tools" + File.separator + "lib" + File.separator + "jdom-1.0.jar"), new File(
+            getServicePath() + File.separator + "tools" + File.separator + "lib" + File.separator + "jdom-1.0.jar"));
+
         // clean the config
         removeResourcePropertyProvidersFromConfig();
         // clean the client impl

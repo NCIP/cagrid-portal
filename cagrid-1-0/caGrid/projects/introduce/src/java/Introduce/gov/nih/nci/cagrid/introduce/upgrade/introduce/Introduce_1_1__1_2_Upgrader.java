@@ -76,6 +76,13 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
             getServicePath() + File.separator + "build-stubs.xml"));
         getStatus().addDescriptionLine("added build-stubs.xml");
         
+        
+
+        // copy the jdom.jar from the lib to the tools/lib
+        Utils.copyFile(new File("skeleton"  + File.separator + "tools" + File.separator + "lib" + File.separator + "jdom-1.0.jar"), new File(
+            getServicePath() + File.separator + "tools" + File.separator + "lib" + File.separator + "jdom-1.0.jar"));
+
+        
 
         // clean the config
         removeResourcePropertyProvidersFromConfig();
