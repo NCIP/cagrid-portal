@@ -633,7 +633,6 @@
         <resolveDependencies extdir="${projects.dir}/introduce/skeleton">
             <artifact refid="core.jars" />
             <artifact refid="advertisement.jars" />
-            <artifact refid="jdom.jars" />
             <artifact refid="security.metadata.jars" />
             <artifact refid="servicesecurity.jars" />
         </resolveDependencies>

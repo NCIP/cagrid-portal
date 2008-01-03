@@ -188,7 +188,7 @@
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
+				<include name="caGrid-*-core.jar" />
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="axis.jar" />
