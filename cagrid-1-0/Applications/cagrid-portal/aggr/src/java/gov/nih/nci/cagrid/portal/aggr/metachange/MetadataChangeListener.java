@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,6 +104,7 @@ public class MetadataChangeListener extends AbstractMetadataListener {
 		getGridServiceDao().deleteMetadata(service);
 		setMetadata(service, meta);
 		getGridServiceDao().save(service);
+		getGridServiceDao().getHibernateTemplate().flush();
 
 		if (sharedCqlQueries.size() > 0) {
 			GridDataService dataService = (GridDataService) service;
@@ -128,6 +130,7 @@ public class MetadataChangeListener extends AbstractMetadataListener {
 
 	}
 
+	@Required
 	public GridServiceDao getGridServiceDao() {
 		return gridServiceDao;
 	}
@@ -136,6 +139,7 @@ public class MetadataChangeListener extends AbstractMetadataListener {
 		this.gridServiceDao = gridServiceDao;
 	}
 
+	@Required
 	public SharedCQLQueryDao getSharedCqlQueryDao() {
 		return sharedCqlQueryDao;
 	}
@@ -144,6 +148,7 @@ public class MetadataChangeListener extends AbstractMetadataListener {
 		this.sharedCqlQueryDao = sharedCqlQueryDao;
 	}
 
+	@Required
 	public CQLQueryInstanceDao getCqlQueryInstanceDao() {
 		return cqlQueryInstanceDao;
 	}
