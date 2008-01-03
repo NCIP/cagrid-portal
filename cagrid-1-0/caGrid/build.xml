@@ -947,6 +947,7 @@
             <artifact refid="validation.jars" />
         	<artifact refid="data.extensions.jars" />
             <artifact refid="data.cql.testing.docs" />
+        	<artifact refid="testing.system.jars" />
         </resolveDependencies>
         <resolveDependencies targetdir="${projects.dir}/sdkQuery4/ext/lib/sdk/remote-client">
             <artifact refid="caCORE.4.0.remote-client.package" />

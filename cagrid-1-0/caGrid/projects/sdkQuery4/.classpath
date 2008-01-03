@@ -117,5 +117,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-updater.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-core.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-system.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
