@@ -34,7 +34,7 @@ import org.globus.wsrf.security.SecurityManager;
  * @author David Ervin
  * 
  * @created Oct 3, 2007 10:34:55 AM
- * @version $Id: SDK4QueryProcessor.java,v 1.8 2008-01-02 22:04:10 dervin Exp $ 
+ * @version $Id: SDK4QueryProcessor.java,v 1.9 2008-01-04 17:51:45 dervin Exp $ 
  */
 public class SDK4QueryProcessor extends CQLQueryProcessor {
     // configuration property keys
@@ -54,6 +54,8 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     // default values for properties
     public static final String DEFAULT_USE_LOCAL_API = String.valueOf(false);
     public static final String DEFAULT_CASE_INSENSITIVE_QUERYING = String.valueOf(false);
+    public static final String DEFAULT_USE_LOGIN = String.valueOf(false);
+    public static final String DEFAULT_USE_GRID_IDENTITY_LOGIN = String.valueOf(false);
     
     // Log4J logger
     private static final Logger LOG = Logger.getLogger(SDK4QueryProcessor.class);
@@ -129,6 +131,10 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
         props.setProperty(PROPERTY_HOST_PORT, "");
         props.setProperty(PROPERTY_ORM_JAR_NAME, "");
         props.setProperty(PROPERTY_USE_LOCAL_API, DEFAULT_USE_LOCAL_API);
+        props.setProperty(PROPERTY_USE_LOGIN, DEFAULT_USE_LOGIN);
+        props.setProperty(PROPERTY_USE_GRID_IDENTITY_LOGIN, DEFAULT_USE_GRID_IDENTITY_LOGIN);
+        props.setProperty(PROPERTY_STATIC_LOGIN_USERNAME, "");
+        props.setProperty(PROPERTY_STATIC_LOGIN_PASSWORD, "");
         return props;
     }
     
