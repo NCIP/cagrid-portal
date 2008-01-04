@@ -17,6 +17,9 @@ import junit.framework.TestCase;
 import org.cagrid.gaards.cds.common.AllowedParties;
 import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.ClientDelegationFilter;
+import org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter;
+import org.cagrid.gaards.cds.common.DelegatedCredentialAuditRecord;
+import org.cagrid.gaards.cds.common.DelegatedCredentialEvent;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
@@ -66,17 +69,20 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		DelegatedCredentialManager dcm = null;
 		try {
 			dcm = Utils.getDelegatedCredentialManager();
-
 			try {
 				new DelegatedCredentialManager(Utils.getDatabase(), Utils
 						.getPropertyManager(), new InvalidKeyManager(),
-						new ArrayList<PolicyHandler>(), new ProxyPolicy());
+						new ArrayList<PolicyHandler>(), new ProxyPolicy(),
+						Utils.getEventManager());
 				fail("Should not be able to change Key Manager.");
 			} catch (CDSInternalFault e) {
 				if (!e.getFaultString().equals(Errors.KEY_MANAGER_CHANGED)) {
 					fail("Should not be able to change Key Manager.");
 				}
 			}
+			assertEquals(
+					0,
+					dcm.searchAuditLog(new DelegatedCredentialAuditFilter()).length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -96,12 +102,16 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				DelegationRequest req = new DelegationRequest();
 				req.setDelegationPolicy(new InvalidDelegationPolicy());
 				req.setKeyLength(Constants.KEY_LENGTH);
-				req.setIssuedCredentialPathLength(Constants.DELEGATION_PATH_LENGTH);
+				req
+						.setIssuedCredentialPathLength(Constants.DELEGATION_PATH_LENGTH);
 				dcm.initiateDelegation("some user", req);
 				fail("Should not be able to delegate a credential with an invalid delegation policy.");
 			} catch (InvalidPolicyFault e) {
 
 			}
+			assertEquals(
+					0,
+					dcm.searchAuditLog(new DelegatedCredentialAuditFilter()).length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -128,6 +138,9 @@ public class DelegatedCredentialManagerTest extends TestCase {
 					fail("Should not be able to delegate a credential without a delegate proxy lifetime specified.");
 				}
 			}
+			assertEquals(
+					0,
+					dcm.searchAuditLog(new DelegatedCredentialAuditFilter()).length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -156,6 +169,9 @@ public class DelegatedCredentialManagerTest extends TestCase {
 					fail("Should not be able to delegate a credential with an invalid Key Length.");
 				}
 			}
+			assertEquals(
+					0,
+					dcm.searchAuditLog(new DelegatedCredentialAuditFilter()).length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -184,6 +200,9 @@ public class DelegatedCredentialManagerTest extends TestCase {
 					fail("Should not be able to delegate a credential with an invalid delegation path length.");
 				}
 			}
+			assertEquals(
+					0,
+					dcm.searchAuditLog(new DelegatedCredentialAuditFilter()).length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -201,8 +220,12 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			dcm = Utils.getDelegatedCredentialManager();
 
 			String alias = "some user";
+			assertEquals(0,
+					dcm.searchAuditLog(Utils.getInitiatedAuditFilter()).length);
 			DelegationSigningRequest req = dcm.initiateDelegation(alias,
 					getSimpleDelegationRequest());
+			assertEquals(1,
+					dcm.searchAuditLog(Utils.getInitiatedAuditFilter()).length);
 			try {
 				DelegationSigningResponse res = new DelegationSigningResponse();
 				res.setDelegationIdentifier(req.getDelegationIdentifier());
@@ -276,8 +299,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				AllowedParties ap = new AllowedParties();
 				ap.setGridIdentity(users);
 				policy.setAllowedParties(ap);
-				list.add(delegateAndValidate(dcm, alias, gridIdentity, policy,i)
-						.getDelegationIdentifier());
+				list.add(delegateAndValidate(dcm, alias, gridIdentity, policy,
+						i).getDelegationIdentifier());
 			}
 			for (int i = 0; i < list.size(); i++) {
 				DelegationIdentifier id = list.get(i);
@@ -601,7 +624,16 @@ public class DelegatedCredentialManagerTest extends TestCase {
 					fail("Should not be able get delegated credential.");
 				}
 			}
-
+			assertEquals(0,
+					dcm.searchAuditLog(Utils.getIssuedAuditFilter(id)).length);
+			DelegatedCredentialAuditRecord[] ar = dcm.searchAuditLog(Utils
+					.getAccessDeniedAuditFilter(id));
+			assertEquals(1, ar.length);
+			assertEquals(id, ar[0].getDelegationIdentifier());
+			assertEquals(GRID_IDENTITY + 2, ar[0].getSourceGridIdentity());
+			assertEquals(
+					DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+					ar[0].getEvent());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -654,6 +686,17 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				}
 			}
 
+			assertEquals(0,
+					dcm.searchAuditLog(Utils.getIssuedAuditFilter(id)).length);
+			DelegatedCredentialAuditRecord[] ar = dcm.searchAuditLog(Utils
+					.getAccessDeniedAuditFilter(id));
+			assertEquals(1, ar.length);
+			assertEquals(id, ar[0].getDelegationIdentifier());
+			assertEquals(GRID_IDENTITY, ar[0].getSourceGridIdentity());
+			assertEquals(
+					DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+					ar[0].getEvent());
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -692,6 +735,17 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				}
 			}
 
+			assertEquals(0,
+					dcm.searchAuditLog(Utils.getIssuedAuditFilter(id)).length);
+			DelegatedCredentialAuditRecord[] ar = dcm.searchAuditLog(Utils
+					.getAccessDeniedAuditFilter(id));
+			assertEquals(1, ar.length);
+			assertEquals(id, ar[0].getDelegationIdentifier());
+			assertEquals(GRID_IDENTITY, ar[0].getSourceGridIdentity());
+			assertEquals(
+					DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+					ar[0].getEvent());
+
 			PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
 					.getKeyAsString());
 			X509Certificate[] proxy = this.ca.createProxyCertifcates(alias,
@@ -700,9 +754,37 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			res.setDelegationIdentifier(id);
 			res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
 					.toCertificateChain(proxy));
+
 			dcm.approveDelegation(gridIdentity, res);
+
+			DelegatedCredentialAuditRecord[] ar2 = dcm.searchAuditLog(Utils
+					.getApprovedAuditFilter(id));
+			assertEquals(1, ar2.length);
+			assertEquals(id, ar2[0].getDelegationIdentifier());
+			assertEquals(gridIdentity, ar2[0].getSourceGridIdentity());
+			assertEquals(DelegatedCredentialEvent.DelegationApproved, ar2[0]
+					.getEvent());
+
 			dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
-			dcm.updateDelegatedCredentialStatus(id, DelegationStatus.Suspended);
+
+			DelegatedCredentialAuditRecord[] ar3 = dcm.searchAuditLog(Utils
+					.getIssuedAuditFilter(id));
+			assertEquals(1, ar3.length);
+			assertEquals(id, ar3[0].getDelegationIdentifier());
+			assertEquals(GRID_IDENTITY, ar3[0].getSourceGridIdentity());
+			assertEquals(DelegatedCredentialEvent.DelegatedCredentialIssued,
+					ar3[0].getEvent());
+
+			dcm.updateDelegatedCredentialStatus(gridIdentity, id,
+					DelegationStatus.Suspended);
+
+			DelegatedCredentialAuditRecord[] ar4 = dcm.searchAuditLog(Utils
+					.getUpdateStatusAuditFilter(id));
+			assertEquals(1, ar4.length);
+			assertEquals(id, ar4[0].getDelegationIdentifier());
+			assertEquals(gridIdentity, ar4[0].getSourceGridIdentity());
+			assertEquals(DelegatedCredentialEvent.DelegationStatusUpdated,
+					ar4[0].getEvent());
 			try {
 				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
 				fail("Should not be able get delegated credential.");
@@ -712,8 +794,12 @@ public class DelegatedCredentialManagerTest extends TestCase {
 					fail("Should not be able get delegated credential.");
 				}
 			}
-			dcm.updateDelegatedCredentialStatus(id, DelegationStatus.Approved);
+			assertEquals(2,dcm.searchAuditLog(Utils.getAccessDeniedAuditFilter(id)).length);
+			dcm.updateDelegatedCredentialStatus(gridIdentity, id,
+					DelegationStatus.Approved);
+			assertEquals(2,dcm.searchAuditLog(Utils.getUpdateStatusAuditFilter(id)).length);
 			dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
+			assertEquals(2,dcm.searchAuditLog(Utils.getIssuedAuditFilter(id)).length);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -726,6 +812,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
+	
 
 	public void testGetDelegatedCredentialSignatureCredentialAboutToExpire() {
 
@@ -754,6 +841,15 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
 					.toCertificateChain(proxy));
 			dcm.approveDelegation(gridIdentity, res);
+			
+			DelegatedCredentialAuditRecord[] ar1 = dcm.searchAuditLog(Utils
+					.getApprovedAuditFilter(id));
+			assertEquals(1, ar1.length);
+			assertEquals(id, ar1[0].getDelegationIdentifier());
+			assertEquals(gridIdentity, ar1[0].getSourceGridIdentity());
+			assertEquals(DelegatedCredentialEvent.DelegationApproved,
+					ar1[0].getEvent());
+			
 			try {
 				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
 				fail("Should not be able get delegated credential.");
@@ -763,6 +859,14 @@ public class DelegatedCredentialManagerTest extends TestCase {
 					fail("Should not be able get delegated credential.");
 				}
 			}
+			
+			DelegatedCredentialAuditRecord[] ar2 = dcm.searchAuditLog(Utils
+					.getAccessDeniedAuditFilter(id));
+			assertEquals(1, ar2.length);
+			assertEquals(id, ar2[0].getDelegationIdentifier());
+			assertEquals(GRID_IDENTITY, ar2[0].getSourceGridIdentity());
+			assertEquals(DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+					ar2[0].getEvent());
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -775,6 +879,10 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
+	
+	// ///////////////////////////////////////////////////////////////////////////////
+	/* LEFT OFF HERE */
+	// ///////////////////////////////////////////////////////////////////////////////
 
 	public void testGetDelegatedCredentialInvalidKeyLength() {
 
@@ -802,6 +910,15 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
 					.toCertificateChain(proxy));
 			dcm.approveDelegation(gridIdentity, res);
+			
+			DelegatedCredentialAuditRecord[] ar1 = dcm.searchAuditLog(Utils
+					.getApprovedAuditFilter(id));
+			assertEquals(1, ar1.length);
+			assertEquals(id, ar1[0].getDelegationIdentifier());
+			assertEquals(gridIdentity, ar1[0].getSourceGridIdentity());
+			assertEquals(DelegatedCredentialEvent.DelegationApproved,
+					ar1[0].getEvent());
+			
 			try {
 				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
 				fail("Should not be able get delegated credential.");
@@ -811,6 +928,14 @@ public class DelegatedCredentialManagerTest extends TestCase {
 					fail("Should not be able get delegated credential.");
 				}
 			}
+			
+			DelegatedCredentialAuditRecord[] ar2 = dcm.searchAuditLog(Utils
+					.getAccessDeniedAuditFilter(id));
+			assertEquals(1, ar2.length);
+			assertEquals(id, ar2[0].getDelegationIdentifier());
+			assertEquals(GRID_IDENTITY, ar2[0].getSourceGridIdentity());
+			assertEquals(DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+					ar2[0].getEvent());
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -881,20 +1006,23 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
-	
-	public void testFindCredentialsDelegatedToClient(){
+
+	public void testFindCredentialsDelegatedToClient() {
 		DelegatedCredentialManager dcm = null;
 		try {
 			dcm = Utils.getDelegatedCredentialManager();
 			String alias = "jdoe";
 			GlobusCredential jdoe = ca.createCredential(alias);
 			GlobusCredential enemy = ca.createCredential("enemy");
-			DelegatedCredential dc = this.delegateAndValidate(dcm, alias,
-					jdoe.getIdentity(), null, 12, 0, 0);
-			assertEquals(0, dcm.findCredentialsDelegatedToClient(enemy.getIdentity(),new ClientDelegationFilter()).length);
-			DelegationRecord[] records = dcm.findCredentialsDelegatedToClient(GRID_IDENTITY,null);
+			DelegatedCredential dc = this.delegateAndValidate(dcm, alias, jdoe
+					.getIdentity(), null, 12, 0, 0);
+			assertEquals(0, dcm.findCredentialsDelegatedToClient(enemy
+					.getIdentity(), new ClientDelegationFilter()).length);
+			DelegationRecord[] records = dcm.findCredentialsDelegatedToClient(
+					GRID_IDENTITY, null);
 			assertEquals(1, records.length);
-			assertEquals(dc.getDelegationIdentifier(), records[0].getDelegationIdentifier());
+			assertEquals(dc.getDelegationIdentifier(), records[0]
+					.getDelegationIdentifier());
 			assertEquals(jdoe.getIdentity(), records[0].getGridIdentity());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -905,7 +1033,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			} catch (Exception e) {
 			}
 		}
-		
+
 	}
 
 	private GlobusCredential getDelegatedCredentialAndValidate(
@@ -930,6 +1058,14 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				.getDefaultTrustedCertificates().getCertificates(),
 				CertificateRevocationLists
 						.getDefaultCertificateRevocationLists());
+		
+		DelegatedCredentialAuditRecord[] ar = dcm.searchAuditLog(Utils
+				.getIssuedAuditFilter(id));
+		assertEquals(1, ar.length);
+		assertEquals(id, ar[0].getDelegationIdentifier());
+		assertEquals(GRID_IDENTITY, ar[0].getSourceGridIdentity());
+		assertEquals(DelegatedCredentialEvent.DelegatedCredentialIssued,
+				ar[0].getEvent());
 
 		return new GlobusCredential(pair.getPrivate(), delegatedProxy);
 	}
@@ -960,11 +1096,12 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			DelegationPolicy policy) throws Exception {
 		return delegateAndValidate(dcm, alias, gridIdentity, policy, 12, 0, 0);
 	}
-	
+
 	protected DelegatedCredential delegateAndValidate(
 			DelegatedCredentialManager dcm, String alias, String gridIdentity,
 			DelegationPolicy policy, int expected) throws Exception {
-		return delegateAndValidate(dcm, alias, gridIdentity, policy, 12, 0, 0,expected);
+		return delegateAndValidate(dcm, alias, gridIdentity, policy, 12, 0, 0,
+				expected);
 	}
 
 	protected DelegatedCredential delegateAndValidate(
@@ -982,7 +1119,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			int delegationCount) throws Exception {
 
 		DelegationRecordFilter f = new DelegationRecordFilter();
-		
+
 		validateFind(dcm, f, delegationCount);
 
 		DelegationRequest request = getSimpleDelegationRequest();
@@ -991,8 +1128,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 		DelegationSigningRequest req = dcm.initiateDelegation(gridIdentity,
 				request);
-		
-		
+
 		DelegationIdentifier id = req.getDelegationIdentifier();
 		assertNotNull(id);
 		assertTrue(dcm.delegationExists(id));
@@ -1008,16 +1144,25 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		assertEquals(request.getDelegationPolicy(), r.getDelegationPolicy());
 		assertNotNull(r.getCertificateChain());
 		assertNull(r.getCertificateChain().getX509Certificate());
-		
-		//Validate Find Operation
-		
-		validateFind(dcm, f, (delegationCount+1));
+
+		// Validate Auditing
+		DelegatedCredentialAuditRecord[] ar1 = dcm.searchAuditLog(Utils
+				.getInitiatedAuditFilter(id));
+		assertEquals(1, ar1.length);
+		assertEquals(id, ar1[0].getDelegationIdentifier());
+		assertEquals(DelegatedCredentialEvent.DelegationInitiated, ar1[0]
+				.getEvent());
+		assertEquals(gridIdentity, ar1[0].getSourceGridIdentity());
+
+		// Validate Find Operation
+
+		validateFind(dcm, f, (delegationCount + 1));
 		resetFilter(f);
 		f.setDelegationIdentifier(req.getDelegationIdentifier());
 		validateFind(dcm, f, 1);
 		resetFilter(f);
 		f.setGridIdentity(gridIdentity);
-		validateFind(dcm, f, (delegationCount+1));
+		validateFind(dcm, f, (delegationCount + 1));
 		resetFilter(f);
 		f.setExpirationStatus(ExpirationStatus.Valid);
 		validateFind(dcm, f, (delegationCount));
@@ -1038,8 +1183,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		f.setGridIdentity(gridIdentity);
 		f.setDelegationStatus(DelegationStatus.Pending);
 		validateFind(dcm, f, 1);
-		
-		
+
 		PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
 				.getKeyAsString());
 		X509Certificate[] proxy = this.ca.createProxyCertifcates(alias,
@@ -1058,7 +1202,8 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				proxy).getTime(), r2.getExpiration());
 		assertEquals(DelegationStatus.Approved, r2.getDelegationStatus());
 		assertEquals(r.getDateInitiated(), r2.getDateInitiated());
-		assertEquals(r.getIssuedCredentialPathLength(), r2.getIssuedCredentialPathLength());
+		assertEquals(r.getIssuedCredentialPathLength(), r2
+				.getIssuedCredentialPathLength());
 		assertEquals(request.getDelegationPolicy(), r2.getDelegationPolicy());
 		X509Certificate[] chain = org.cagrid.gaards.cds.common.Utils
 				.toCertificateArray(r2.getCertificateChain());
@@ -1067,19 +1212,28 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		for (int i = 0; i < proxy.length; i++) {
 			assertEquals(proxy[i], chain[i]);
 		}
-		
-		//Validate Find Operation
+
+		// Validate Auditing
+		DelegatedCredentialAuditRecord[] ar2 = dcm.searchAuditLog(Utils
+				.getApprovedAuditFilter(id));
+		assertEquals(1, ar2.length);
+		assertEquals(id, ar2[0].getDelegationIdentifier());
+		assertEquals(DelegatedCredentialEvent.DelegationApproved, ar2[0]
+				.getEvent());
+		assertEquals(gridIdentity, ar2[0].getSourceGridIdentity());
+
+		// Validate Find Operation
 		resetFilter(f);
-		validateFind(dcm, f, (delegationCount+1));
+		validateFind(dcm, f, (delegationCount + 1));
 		resetFilter(f);
 		f.setDelegationIdentifier(req.getDelegationIdentifier());
 		validateFind(dcm, f, 1);
 		resetFilter(f);
 		f.setGridIdentity(gridIdentity);
-		validateFind(dcm, f, (delegationCount+1));
+		validateFind(dcm, f, (delegationCount + 1));
 		resetFilter(f);
 		f.setExpirationStatus(ExpirationStatus.Valid);
-		validateFind(dcm, f, (delegationCount+1));
+		validateFind(dcm, f, (delegationCount + 1));
 		resetFilter(f);
 		f.setExpirationStatus(ExpirationStatus.Expired);
 		validateFind(dcm, f, 0);
@@ -1091,7 +1245,7 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		validateFind(dcm, f, 0);
 		resetFilter(f);
 		f.setDelegationStatus(DelegationStatus.Approved);
-		validateFind(dcm, f, delegationCount+1);
+		validateFind(dcm, f, delegationCount + 1);
 		resetFilter(f);
 		f.setDelegationIdentifier(req.getDelegationIdentifier());
 		f.setGridIdentity(gridIdentity);

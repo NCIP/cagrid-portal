@@ -1,12 +1,16 @@
 package org.cagrid.gaards.cds.testutils;
 
-import org.cagrid.gaards.cds.service.DelegationManager;
+import org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter;
+import org.cagrid.gaards.cds.common.DelegatedCredentialEvent;
+import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.service.ConfigurationConstants;
 import org.cagrid.gaards.cds.service.DelegatedCredentialManager;
+import org.cagrid.gaards.cds.service.DelegationManager;
 import org.cagrid.gaards.cds.service.KeyManager;
 import org.cagrid.gaards.cds.service.PropertyManager;
 import org.cagrid.gaards.cds.service.policy.IdentityPolicyHandler;
 import org.cagrid.tools.database.Database;
+import org.cagrid.tools.events.EventManager;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -62,4 +66,69 @@ public class Utils {
 				.getBean(ConfigurationConstants.PROPERTY_MANAGER_CONFIGURATION_BEAN);
 	}
 
+	public static EventManager getEventManager() throws Exception {
+		XmlBeanFactory factory = loadConfiguration();
+		return (EventManager) factory
+				.getBean(ConfigurationConstants.EVENT_MANAGER);
+	}
+
+	public static DelegatedCredentialAuditFilter getInitiatedAuditFilter() {
+		return getInitiatedAuditFilter(null);
+	}
+
+	public static DelegatedCredentialAuditFilter getInitiatedAuditFilter(
+			DelegationIdentifier id) {
+		DelegatedCredentialAuditFilter f = new DelegatedCredentialAuditFilter();
+		f.setEvent(DelegatedCredentialEvent.DelegationInitiated);
+		f.setDelegationIdentifier(id);
+		return f;
+	}
+	
+	public static DelegatedCredentialAuditFilter getApprovedAuditFilter() {
+		return getApprovedAuditFilter(null);
+	}
+
+	public static DelegatedCredentialAuditFilter getApprovedAuditFilter(
+			DelegationIdentifier id) {
+		DelegatedCredentialAuditFilter f = new DelegatedCredentialAuditFilter();
+		f.setEvent(DelegatedCredentialEvent.DelegationApproved);
+		f.setDelegationIdentifier(id);
+		return f;
+	}
+	
+	public static DelegatedCredentialAuditFilter getIssuedAuditFilter() {
+		return getIssuedAuditFilter(null);
+	}
+
+	public static DelegatedCredentialAuditFilter getIssuedAuditFilter(
+			DelegationIdentifier id) {
+		DelegatedCredentialAuditFilter f = new DelegatedCredentialAuditFilter();
+		f.setEvent(DelegatedCredentialEvent.DelegatedCredentialIssued);
+		f.setDelegationIdentifier(id);
+		return f;
+	}
+	
+	public static DelegatedCredentialAuditFilter getAccessDeniedAuditFilter() {
+		return getAccessDeniedAuditFilter(null);
+	}
+
+	public static DelegatedCredentialAuditFilter getAccessDeniedAuditFilter(
+			DelegationIdentifier id) {
+		DelegatedCredentialAuditFilter f = new DelegatedCredentialAuditFilter();
+		f.setEvent(DelegatedCredentialEvent.DelegatedCredentialAccessDenied);
+		f.setDelegationIdentifier(id);
+		return f;
+	}
+	
+	public static DelegatedCredentialAuditFilter getUpdateStatusdAuditFilter() {
+		return getUpdateStatusAuditFilter(null);
+	}
+
+	public static DelegatedCredentialAuditFilter getUpdateStatusAuditFilter(
+			DelegationIdentifier id) {
+		DelegatedCredentialAuditFilter f = new DelegatedCredentialAuditFilter();
+		f.setEvent(DelegatedCredentialEvent.DelegationStatusUpdated);
+		f.setDelegationIdentifier(id);
+		return f;
+	}
 }

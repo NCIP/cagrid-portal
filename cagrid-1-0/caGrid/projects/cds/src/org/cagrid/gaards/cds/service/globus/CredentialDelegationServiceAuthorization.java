@@ -77,6 +77,11 @@ public class CredentialDelegationServiceAuthorization implements PDP {
 		
 		
 	}
+					
+	public static void authorizeSearchDelegatedCredentialAuditLog() throws RemoteException {
+		
+		
+	}
 	
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -128,6 +133,14 @@ public class CredentialDelegationServiceAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("findCredentialsDelegatedToClient")){
 			try{
 				authorizeFindCredentialsDelegatedToClient();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("searchDelegatedCredentialAuditLog")){
+			try{
+				authorizeSearchDelegatedCredentialAuditLog();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

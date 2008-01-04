@@ -9,6 +9,7 @@ import java.io.File;
 import junit.framework.TestCase;
 
 import org.cagrid.gaards.cds.common.AllowedParties;
+import org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
@@ -128,6 +129,89 @@ public class DelegationManagerTest extends TestCase {
 				fail("Should not be able to update the status of the delegated credential.");
 			} catch (PermissionDeniedFault e) {
 
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			if (cds != null) {
+				try {
+					cds.clear();
+				} catch (Exception e) {
+				}
+			}
+		}
+	}
+
+	public void testAuditNonAdminUser() {
+		DelegationManager cds = null;
+		try {
+			cds = Utils.getCDS();
+			String leonardoAlias = "leonardo";
+			String donatelloAlias = "donatello";
+
+			GlobusCredential leonardoCred = ca.createCredential(leonardoAlias);
+			GlobusCredential donatelloCred = ca
+					.createCredential(donatelloAlias);
+
+			DelegationPolicy policy = getSimplePolicy(donatelloCred
+					.getIdentity());
+
+			DelegationSigningRequest leonardoReq = cds.initiateDelegation(
+					leonardoCred.getIdentity(),
+					getSimpleDelegationRequest(policy));
+			DelegationSigningResponse leonardoRes = new DelegationSigningResponse();
+			leonardoRes.setDelegationIdentifier(leonardoReq
+					.getDelegationIdentifier());
+			leonardoRes.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+					.toCertificateChain(ca.createProxyCertifcates(
+							leonardoAlias, KeyUtil.loadPublicKey(leonardoReq
+									.getPublicKey().getKeyAsString()), 2)));
+			cds.approveDelegation(leonardoCred.getIdentity(), leonardoRes);
+			DelegationIdentifier id = leonardoReq.getDelegationIdentifier();
+
+			DelegatedCredentialAuditFilter f = null;
+
+			try {
+				cds.searchDelegatedCredentialAuditLog(leonardoCred
+						.getIdentity(), f);
+				fail("Should not be able to search the audit log.");
+			} catch (PermissionDeniedFault e) {
+				if (!e
+						.getFaultString()
+						.equals(
+								Errors.PERMISSION_DENIED_NO_DELEGATED_CREDENTIAL_SPECIFIED)) {
+					fail("Should not be able to search the audit log.");
+				}
+			}
+			f = new DelegatedCredentialAuditFilter();
+			try {
+				cds.searchDelegatedCredentialAuditLog(leonardoCred
+						.getIdentity(), f);
+				fail("Should not be able to search the audit log.");
+			} catch (PermissionDeniedFault e) {
+				if (!e
+						.getFaultString()
+						.equals(
+								Errors.PERMISSION_DENIED_NO_DELEGATED_CREDENTIAL_SPECIFIED)) {
+					fail("Should not be able to search the audit log.");
+				}
+			}
+
+			f.setDelegationIdentifier(id);
+			assertEquals(2, cds.searchDelegatedCredentialAuditLog(leonardoCred
+					.getIdentity(), f).length);
+
+			try {
+				cds.searchDelegatedCredentialAuditLog(donatelloCred
+						.getIdentity(), f);
+				fail("Should not be able to search the audit log.");
+			} catch (PermissionDeniedFault e) {
+				if (!e.getFaultString().equals(
+						Errors.PERMISSION_DENIED_TO_AUDIT)) {
+					fail("Should not be able to search the audit log.");
+				}
 			}
 
 		} catch (Exception e) {

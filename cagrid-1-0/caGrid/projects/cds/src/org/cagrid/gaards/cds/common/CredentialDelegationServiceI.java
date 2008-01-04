@@ -81,5 +81,18 @@ public interface CredentialDelegationServiceI {
    */
   public org.cagrid.gaards.cds.common.DelegationDescriptor[] findCredentialsDelegatedToClient(org.cagrid.gaards.cds.common.ClientDelegationFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
 
+  /**
+   * This method allows a party to search the audit logs for delegated credentials.
+   *
+   * @param f
+   * @throws CDSInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   * @throws DelegationFault
+   *	
+   */
+  public org.cagrid.gaards.cds.common.DelegatedCredentialAuditRecord[] searchDelegatedCredentialAuditLog(org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter f) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault ;
+
 }
 

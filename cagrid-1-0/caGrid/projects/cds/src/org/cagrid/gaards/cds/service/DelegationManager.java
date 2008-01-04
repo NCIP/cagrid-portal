@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.common.Utils;
 
 import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.ClientDelegationFilter;
+import org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter;
+import org.cagrid.gaards.cds.common.DelegatedCredentialAuditRecord;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationRecordFilter;
@@ -37,10 +39,11 @@ public class DelegationManager {
 	}
 
 	public DelegationRecord[] findCredentialsDelegatedToClient(
-			String callerIdentity, ClientDelegationFilter filter) throws CDSInternalFault,
-			PermissionDeniedFault {
+			String callerIdentity, ClientDelegationFilter filter)
+			throws CDSInternalFault, PermissionDeniedFault {
 		verifyAuthenticated(callerIdentity);
-		return this.dcm.findCredentialsDelegatedToClient(callerIdentity, filter);
+		return this.dcm
+				.findCredentialsDelegatedToClient(callerIdentity, filter);
 	}
 
 	public DelegationIdentifier approveDelegation(String callerIdentity,
@@ -63,7 +66,7 @@ public class DelegationManager {
 		verifyAuthenticated(callerIdentity);
 		DelegationRecord r = this.dcm.getDelegationRecord(id);
 		if (r.getGridIdentity().equals(callerIdentity)) {
-			this.dcm.updateDelegatedCredentialStatus(id,
+			this.dcm.updateDelegatedCredentialStatus(callerIdentity, id,
 					DelegationStatus.Suspended);
 		} else {
 			throw Errors.getPermissionDeniedFault();
@@ -75,13 +78,15 @@ public class DelegationManager {
 			throws CDSInternalFault, DelegationFault, PermissionDeniedFault {
 		verifyAuthenticated(callerIdentity);
 		if (isAdmin(callerIdentity)) {
-			this.dcm.updateDelegatedCredentialStatus(id, status);
+			this.dcm
+					.updateDelegatedCredentialStatus(callerIdentity, id, status);
 		} else {
 			DelegationRecord r = this.dcm.getDelegationRecord(id);
 			if (r.getGridIdentity().equals(callerIdentity)) {
 				if ((r.getDelegationStatus().equals(DelegationStatus.Approved))
 						&& (status.equals(DelegationStatus.Suspended))) {
-					this.dcm.updateDelegatedCredentialStatus(id, status);
+					this.dcm.updateDelegatedCredentialStatus(callerIdentity,
+							id, status);
 				} else {
 					throw Errors.getPermissionDeniedFault();
 				}
@@ -125,5 +130,31 @@ public class DelegationManager {
 
 	public DelegatedCredentialManager getDelegatedCredentialManager() {
 		return this.dcm;
+	}
+
+	public DelegatedCredentialAuditRecord[] searchDelegatedCredentialAuditLog(
+			String callerIdentity, DelegatedCredentialAuditFilter f)
+			throws CDSInternalFault, DelegationFault, PermissionDeniedFault {
+		verifyAuthenticated(callerIdentity);
+		if (f == null) {
+			f = new DelegatedCredentialAuditFilter();
+		}
+		if (isAdmin(callerIdentity)) {
+			return this.dcm.searchAuditLog(f);
+		} else {
+			if (f.getDelegationIdentifier() == null) {
+				throw Errors
+						.getPermissionDeniedFault(Errors.PERMISSION_DENIED_NO_DELEGATED_CREDENTIAL_SPECIFIED);
+			} else {
+				DelegationRecord r = this.dcm.getDelegationRecord(f
+						.getDelegationIdentifier());
+				if (!r.getGridIdentity().equals(callerIdentity)) {
+					throw Errors
+							.getPermissionDeniedFault(Errors.PERMISSION_DENIED_TO_AUDIT);
+				} else {
+					return this.dcm.searchAuditLog(f);
+				}
+			}
+		}
 	}
 }

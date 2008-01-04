@@ -159,4 +159,16 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
     }
   }
 
+  public org.cagrid.gaards.cds.common.DelegatedCredentialAuditRecord[] searchDelegatedCredentialAuditLog(org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter f) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"searchDelegatedCredentialAuditLog");
+    org.cagrid.gaards.cds.stubs.SearchDelegatedCredentialAuditLogRequest params = new org.cagrid.gaards.cds.stubs.SearchDelegatedCredentialAuditLogRequest();
+    org.cagrid.gaards.cds.stubs.SearchDelegatedCredentialAuditLogRequestF fContainer = new org.cagrid.gaards.cds.stubs.SearchDelegatedCredentialAuditLogRequestF();
+    fContainer.setDelegatedCredentialAuditFilter(f);
+    params.setF(fContainer);
+    org.cagrid.gaards.cds.stubs.SearchDelegatedCredentialAuditLogResponse boxedResult = portType.searchDelegatedCredentialAuditLog(params);
+    return boxedResult.getDelegatedCredentialAuditRecord();
+    }
+  }
+
 }

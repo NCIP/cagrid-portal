@@ -112,18 +112,26 @@ public class CredentialDelegationServiceImpl extends
 	}
 
   public org.cagrid.gaards.cds.common.DelegationDescriptor[] findCredentialsDelegatedToClient(org.cagrid.gaards.cds.common.ClientDelegationFilter filter) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
-		DelegationRecord[] records = this.cds
-				.findCredentialsDelegatedToClient(getCallerIdentity(),filter);
+		DelegationRecord[] records = this.cds.findCredentialsDelegatedToClient(
+				getCallerIdentity(), filter);
 		DelegationDescriptor[] results = new DelegationDescriptor[records.length];
-		for(int i=0; i<records.length; i++){
+		for (int i = 0; i < records.length; i++) {
 			results[i] = new DelegationDescriptor();
-			results[i].setDelegatedCredentialReference(getDelegatedCredentialRefernce(records[i].getDelegationIdentifier()));
+			results[i]
+					.setDelegatedCredentialReference(getDelegatedCredentialRefernce(records[i]
+							.getDelegationIdentifier()));
 			results[i].setExpiration(records[i].getExpiration());
 			results[i].setGridIdentity(records[i].getGridIdentity());
-			results[i].setIssuedCredentialLifetime(records[i].getIssuedCredentialLifetime());
-			results[i].setIssuedCredentialPathLength(records[i].getIssuedCredentialPathLength());
+			results[i].setIssuedCredentialLifetime(records[i]
+					.getIssuedCredentialLifetime());
+			results[i].setIssuedCredentialPathLength(records[i]
+					.getIssuedCredentialPathLength());
 		}
 		return results;
+	}
+
+  public org.cagrid.gaards.cds.common.DelegatedCredentialAuditRecord[] searchDelegatedCredentialAuditLog(org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter f) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault {
+		return this.cds.searchDelegatedCredentialAuditLog(getCallerIdentity(),f);
 	}
 
 }

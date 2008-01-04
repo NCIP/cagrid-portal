@@ -21,6 +21,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.ClientDelegationFilter;
+import org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter;
+import org.cagrid.gaards.cds.common.DelegatedCredentialAuditRecord;
+import org.cagrid.gaards.cds.common.DelegatedCredentialEvent;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.DelegationRecord;
@@ -39,6 +42,10 @@ import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.tools.database.Database;
+import org.cagrid.tools.events.Event;
+import org.cagrid.tools.events.EventAuditor;
+import org.cagrid.tools.events.EventManager;
+import org.cagrid.tools.events.InvalidHandlerException;
 import org.globus.gsi.CertUtil;
 import org.globus.gsi.CertificateRevocationLists;
 import org.globus.gsi.TrustedCertificates;
@@ -60,6 +67,7 @@ public class DelegatedCredentialManager {
 	private final static String PROXY_LIFETIME_HOURS = "PROXY_LIFETIME_HOURS";
 	private final static String PROXY_LIFETIME_MINUTES = "PROXY_LIFETIME_MINUTES";
 	private final static String PROXY_LIFETIME_SECONDS = "PROXY_LIFETIME_SECONDS";
+	private final static String DELEGATED_CREDENTIAL_AUDITOR = "delegatedCredentialAuditor";
 
 	public final static int PROXY_EXPIRATION_BUFFER_SECONDS = 5;
 
@@ -69,14 +77,27 @@ public class DelegatedCredentialManager {
 	private Log log;
 	private KeyManager keyManager;
 	private ProxyPolicy proxyPolicy;
+	private EventManager events;
+	private EventAuditor delegationAuditor;
 
 	public DelegatedCredentialManager(Database db, PropertyManager properties,
 			KeyManager keyManager, List<PolicyHandler> policyHandlers,
-			ProxyPolicy proxyPolicy) throws CDSInternalFault {
+			ProxyPolicy proxyPolicy, EventManager events)
+			throws CDSInternalFault {
 		this.db = db;
 		this.log = LogFactory.getLog(this.getClass().getName());
 		this.handlers = policyHandlers;
 		this.proxyPolicy = proxyPolicy;
+		this.events = events;
+		try {
+			this.delegationAuditor = (EventAuditor) events
+					.getEventHandler(DELEGATED_CREDENTIAL_AUDITOR);
+		} catch (InvalidHandlerException e) {
+			throw Errors
+					.getInternalFault(
+							"Could not initialize the delegation credential manager, could not obtain the delegated credential auditor.",
+							e);
+		}
 		String currentKeyManager = properties.getKeyManager();
 		if ((currentKeyManager != null)
 				&& (!currentKeyManager.equals(keyManager.getClass().getName()))) {
@@ -112,6 +133,56 @@ public class DelegatedCredentialManager {
 			throw f;
 		}
 		return handler;
+	}
+
+	public DelegatedCredentialAuditRecord[] searchAuditLog(
+			DelegatedCredentialAuditFilter f) throws CDSInternalFault {
+		try {
+			String targetId = null;
+			if (f.getDelegationIdentifier() != null) {
+				targetId = String.valueOf(f.getDelegationIdentifier()
+						.getDelegationId());
+			}
+
+			String eventType = null;
+			if (f.getEvent() != null) {
+				eventType = f.getEvent().getValue();
+			}
+
+			Date start = null;
+			if (f.getStartDate() != null) {
+				start = new Date(f.getStartDate().longValue());
+			}
+			Date end = null;
+
+			if (f.getEndDate() != null) {
+				end = new Date(f.getEndDate().longValue());
+			}
+			List<Event> events = this.delegationAuditor.findEvents(targetId, f
+					.getSourceGridIdentity(), eventType, start, end);
+			DelegatedCredentialAuditRecord[] records = new DelegatedCredentialAuditRecord[events
+					.size()];
+			for (int i = 0; i < events.size(); i++) {
+				records[i] = new DelegatedCredentialAuditRecord();
+				DelegationIdentifier id = new DelegationIdentifier();
+				id.setDelegationId(Long.valueOf(events.get(i).getTargetId())
+						.longValue());
+				records[i].setDelegationIdentifier(id);
+				records[i].setEvent(DelegatedCredentialEvent.fromValue(events
+						.get(i).getEventType()));
+				records[i].setMessage(events.get(i).getMessage());
+				records[i].setOccurredAt(events.get(i).getOccurredAt());
+				records[i].setSourceGridIdentity(events.get(i)
+						.getReportingPartyId());
+			}
+
+			return records;
+		} catch (Exception e) {
+			throw Errors
+					.getInternalFault(
+							"An unexpected error occurred in searching the audit logs.",
+							e);
+		}
 	}
 
 	public DelegationRecord[] findCredentialsDelegatedToClient(
@@ -206,6 +277,9 @@ public class DelegatedCredentialManager {
 			PublicKey publicKey = new PublicKey();
 			publicKey.setKeyAsString(KeyUtil.writePublicKey(keys.getPublic()));
 			req.setPublicKey(publicKey);
+			logEvent(delegationId, callerGridIdentity,
+					DelegatedCredentialEvent.DelegationInitiated,
+					"Delegation initiated for " + callerGridIdentity + ".");
 			return req;
 		} catch (CDSInternalFault e) {
 			try {
@@ -231,6 +305,20 @@ public class DelegatedCredentialManager {
 			throw Errors.getDatabaseFault(e);
 		} finally {
 			db.releaseConnection(c);
+		}
+	}
+
+	private void logEvent(long delegationId, String callerGridIdentity,
+			DelegatedCredentialEvent event, String message)
+			throws CDSInternalFault {
+		try {
+			events.logEvent(String.valueOf(delegationId), callerGridIdentity,
+					event.getValue(), message);
+		} catch (Exception e) {
+			throw Errors
+					.getInternalFault(
+							"Unexpected error encountered in establishing the audit trail.",
+							e);
 		}
 	}
 
@@ -451,6 +539,10 @@ public class DelegatedCredentialManager {
 			} finally {
 				this.db.releaseConnection(conn);
 			}
+			logEvent(id.getDelegationId(), callerGridIdentity,
+					DelegatedCredentialEvent.DelegationApproved,
+					"The delegated credential for " + callerGridIdentity
+							+ " has been approved.");
 			return id;
 		} else {
 			throw Errors
@@ -459,13 +551,15 @@ public class DelegatedCredentialManager {
 
 	}
 
-	public void updateDelegatedCredentialStatus(DelegationIdentifier id,
-			DelegationStatus status) throws CDSInternalFault, DelegationFault {
+	public void updateDelegatedCredentialStatus(String callerGridIdentity,
+			DelegationIdentifier id, DelegationStatus status)
+			throws CDSInternalFault, DelegationFault {
 		if (this.delegationExists(id)) {
 			if (status.equals(DelegationStatus.Pending)) {
 				throw Errors
 						.getDelegationFault(Errors.CANNOT_CHANGE_STATUS_TO_PENDING);
 			}
+			DelegationRecord r = getDelegationRecord(id);
 			Connection conn = null;
 			try {
 				conn = this.db.getConnection();
@@ -482,6 +576,11 @@ public class DelegatedCredentialManager {
 				this.db.releaseConnection(conn);
 			}
 
+			logEvent(id.getDelegationId(), callerGridIdentity,
+					DelegatedCredentialEvent.DelegationStatusUpdated,
+					"Delegation Status changed from "
+							+ r.getDelegationStatus().getValue() + " to "
+							+ status.getValue());
 		} else {
 			throw Errors
 					.getDelegationFault(Errors.DELEGATION_RECORD_DOES_NOT_EXIST);
@@ -496,6 +595,11 @@ public class DelegatedCredentialManager {
 			DelegationRecord r = this.getDelegationRecord(id);
 
 			if (!r.getDelegationStatus().equals(DelegationStatus.Approved)) {
+				logEvent(
+						id.getDelegationId(),
+						gridIdentity,
+						DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+						Errors.CANNOT_GET_INVALID_STATUS);
 				throw Errors
 						.getDelegationFault(Errors.CANNOT_GET_INVALID_STATUS);
 			}
@@ -505,16 +609,31 @@ public class DelegatedCredentialManager {
 				handler = this.findHandler(r.getDelegationPolicy().getClass()
 						.getName());
 			} catch (Exception e) {
+				logEvent(
+						id.getDelegationId(),
+						gridIdentity,
+						DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+						Errors.POLICY_HANDLER_NOT_FOUND);
 				throw Errors.getInternalFault(Errors.POLICY_HANDLER_NOT_FOUND,
 						e);
 			}
 			if (!handler.isAuthorized(id, gridIdentity)) {
+				logEvent(
+						id.getDelegationId(),
+						gridIdentity,
+						DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+						Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL);
 				throw Errors
 						.getPermissionDeniedFault(Errors.PERMISSION_DENIED_TO_DELEGATED_CREDENTIAL);
 			}
 			Date now = new Date();
 			Date expiration = new Date(r.getExpiration());
 			if (now.after(expiration)) {
+				logEvent(
+						id.getDelegationId(),
+						gridIdentity,
+						DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+						Errors.SIGNING_CREDENTIAL_EXPIRED);
 				throw Errors
 						.getDelegationFault(Errors.SIGNING_CREDENTIAL_EXPIRED);
 			}
@@ -525,6 +644,11 @@ public class DelegatedCredentialManager {
 
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
+				logEvent(
+						id.getDelegationId(),
+						gridIdentity,
+						DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+						Errors.UNEXPECTED_ERROR_LOADING_CERTIFICATE_CHAIN);
 				throw Errors.getInternalFault(
 						Errors.UNEXPECTED_ERROR_LOADING_CERTIFICATE_CHAIN, e);
 			}
@@ -535,6 +659,11 @@ public class DelegatedCredentialManager {
 						.getKeyAsString());
 				int length = ((RSAPublicKey) pkey).getModulus().bitLength();
 				if (!this.proxyPolicy.isKeySizeSupported(length)) {
+					logEvent(
+							id.getDelegationId(),
+							gridIdentity,
+							DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+							Errors.INVALID_KEY_LENGTH_SPECIFIED);
 					throw Errors
 							.getDelegationFault(Errors.INVALID_KEY_LENGTH_SPECIFIED);
 				}
@@ -559,6 +688,11 @@ public class DelegatedCredentialManager {
 					if (diff > PROXY_EXPIRATION_BUFFER_SECONDS) {
 						seconds = (int) diff - PROXY_EXPIRATION_BUFFER_SECONDS;
 					} else {
+						logEvent(
+								id.getDelegationId(),
+								gridIdentity,
+								DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+								Errors.SIGNING_CREDENTIAL_ABOUT_EXPIRE);
 						throw Errors
 								.getDelegationFault(Errors.SIGNING_CREDENTIAL_ABOUT_EXPIRE);
 					}
@@ -574,6 +708,11 @@ public class DelegatedCredentialManager {
 										.getDelegationId())), pkey, hours,
 								minutes, seconds, r
 										.getIssuedCredentialPathLength());
+				logEvent(id.getDelegationId(), gridIdentity,
+						DelegatedCredentialEvent.DelegatedCredentialIssued,
+						"A credential was issued to " + gridIdentity
+								+ ".  The credential will expire on "
+								+ proxy[0].getNotAfter().toString() + ".");
 				return Utils.toCertificateChain(proxy);
 			} catch (DelegationFault f) {
 				throw f;
@@ -749,6 +888,12 @@ public class DelegatedCredentialManager {
 
 		try {
 			this.keyManager.deleteAll();
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+
+		try {
+			events.clearHandlers();
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}

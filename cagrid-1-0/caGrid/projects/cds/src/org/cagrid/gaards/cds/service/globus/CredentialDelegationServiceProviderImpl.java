@@ -56,4 +56,10 @@ public class CredentialDelegationServiceProviderImpl{
     return boxedResult;
   }
 
+    public org.cagrid.gaards.cds.stubs.SearchDelegatedCredentialAuditLogResponse searchDelegatedCredentialAuditLog(org.cagrid.gaards.cds.stubs.SearchDelegatedCredentialAuditLogRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault {
+    org.cagrid.gaards.cds.stubs.SearchDelegatedCredentialAuditLogResponse boxedResult = new org.cagrid.gaards.cds.stubs.SearchDelegatedCredentialAuditLogResponse();
+    boxedResult.setDelegatedCredentialAuditRecord(impl.searchDelegatedCredentialAuditLog(params.getF().getDelegatedCredentialAuditFilter()));
+    return boxedResult;
+  }
+
 }
