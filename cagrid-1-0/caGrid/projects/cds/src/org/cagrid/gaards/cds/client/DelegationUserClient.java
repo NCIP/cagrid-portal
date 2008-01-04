@@ -15,6 +15,8 @@ import java.util.List;
 import org.apache.axis.types.URI;
 import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.ClientDelegationFilter;
+import org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter;
+import org.cagrid.gaards.cds.common.DelegatedCredentialAuditRecord;
 import org.cagrid.gaards.cds.common.DelegationDescriptor;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
@@ -328,6 +330,32 @@ public class DelegationUserClient {
 		if (results != null) {
 			for (int i = 0; i < results.length; i++) {
 				list.add(results[i]);
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * Allows one to search the audit logs from Delegated Credential(s).
+	 * 
+	 * @param f
+	 *            The search criteria
+	 * @return Returns a list of audit records meeting the search criteria
+	 * @throws RemoteException
+	 * @throws CDSInternalFault
+	 * @throws DelegationFault
+	 * @throws PermissionDeniedFault
+	 */
+
+	public List<DelegatedCredentialAuditRecord> searchDelegatedCredentialAuditLog(
+			DelegatedCredentialAuditFilter f) throws RemoteException,
+			CDSInternalFault, DelegationFault, PermissionDeniedFault {
+		DelegatedCredentialAuditRecord[] r = client
+				.searchDelegatedCredentialAuditLog(f);
+		List<DelegatedCredentialAuditRecord> list = new ArrayList<DelegatedCredentialAuditRecord>();
+		if (r != null) {
+			for (int i = 0; i < r.length; i++) {
+				list.add(r[i]);
 			}
 		}
 		return list;
