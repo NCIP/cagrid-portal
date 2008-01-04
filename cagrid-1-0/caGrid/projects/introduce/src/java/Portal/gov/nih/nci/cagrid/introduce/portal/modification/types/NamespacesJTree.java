@@ -23,6 +23,7 @@ public class NamespacesJTree extends JTree {
 
 	public NamespacesJTree(NamespacesType namespaces, boolean showW3CSimpleTypes) {
 		this.showW3CSimpleTypes = showW3CSimpleTypes;
+		setRootVisible(false);
 		setCellRenderer(new NamespacesTreeRenderer(model));
 		setNamespaces(namespaces);
 	}

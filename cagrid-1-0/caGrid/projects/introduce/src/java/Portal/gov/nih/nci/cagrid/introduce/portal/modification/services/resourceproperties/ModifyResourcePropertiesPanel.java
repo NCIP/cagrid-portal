@@ -38,6 +38,10 @@ import javax.swing.event.TableModelListener;
 import javax.xml.namespace.QName;
 
 import org.cagrid.grape.utils.ErrorDialog;
+import javax.swing.BorderFactory;
+import javax.swing.border.TitledBorder;
+import java.awt.Font;
+import java.awt.Color;
 
 
 public class ModifyResourcePropertiesPanel extends JPanel {
@@ -158,6 +162,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
         if (this.namespacesScrollPane == null) {
             this.namespacesScrollPane = new JScrollPane();
             this.namespacesScrollPane.setPreferredSize(new java.awt.Dimension(200, 240));
+            namespacesScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Imported Data Types", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
             this.namespacesScrollPane.setViewportView(getNamespacesJTree());
         }
         return this.namespacesScrollPane;

@@ -87,6 +87,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -161,19 +162,19 @@ public class ModificationViewer extends ApplicationComponent {
 
     private JLabel serviceNameLabel = null;
 
-    private JTextField serviceName = null;
+    private JLabel serviceName = null;
 
     private JLabel namespaceLable = null;
 
-    private JTextField namespace = null;
+    private JLabel namespace = null;
 
     private JLabel lastSavedLabel = null;
 
-    private JTextField lastSaved = null;
+    private JLabel lastSaved = null;
 
     private JLabel saveLocationLabel = null;
 
-    private JTextField saveLocation = null;
+    private JLabel saveLocation = null;
 
     private JPanel discoveryPanel = null;
 
@@ -260,6 +261,8 @@ public class ModificationViewer extends ApplicationComponent {
     private static final String SERVICE_PROPERTY_VALUE = "Service property default value";
 
     private static final String SERVICE_PROPERTY_DESCRIPTION = "Service property description";
+
+	private JLabel descriptionInfoLabel = null;
 
 
     public ModificationViewer(File methodsDirectory, BusyDialogRunnable br) {
@@ -491,7 +494,7 @@ public class ModificationViewer extends ApplicationComponent {
             gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
             this.mainPanel.add(getButtonPanel(), gridBagConstraints2);
             this.mainPanel.add(getSelectPanel(), gridBagConstraints3);
-            this.mainPanel.add(getContentTabbedPane(), gridBagConstraints13);
+            mainPanel.add(getContentTabbedPane(), gridBagConstraints13);
         }
         return this.mainPanel;
     }
@@ -608,7 +611,7 @@ public class ModificationViewer extends ApplicationComponent {
             gridBagConstraints23.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints23.gridy = 1;
             this.saveLocationLabel = new JLabel();
-            this.saveLocationLabel.setText("Location");
+            this.saveLocationLabel.setText("Location: ");
             this.saveLocationLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
             GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
             gridBagConstraints22.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -623,7 +626,7 @@ public class ModificationViewer extends ApplicationComponent {
             gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints21.gridy = 1;
             this.lastSavedLabel = new JLabel();
-            this.lastSavedLabel.setText("Last Saved");
+            this.lastSavedLabel.setText("Last Saved: ");
             this.lastSavedLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
             GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
             gridBagConstraints20.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -637,7 +640,7 @@ public class ModificationViewer extends ApplicationComponent {
             gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints19.gridy = 0;
             this.namespaceLable = new JLabel();
-            this.namespaceLable.setText("Namespace");
+            this.namespaceLable.setText("Namespace: ");
             this.namespaceLable.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
             GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
             gridBagConstraints18.gridx = 0;
@@ -652,7 +655,7 @@ public class ModificationViewer extends ApplicationComponent {
             gridBagConstraints17.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints17.weightx = 1.0;
             this.serviceNameLabel = new JLabel();
-            this.serviceNameLabel.setText("Service Name");
+            this.serviceNameLabel.setText("Service Name: ");
             this.serviceNameLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
             this.selectPanel = new JPanel();
             this.selectPanel.setLayout(new GridBagLayout());
@@ -998,6 +1001,8 @@ public class ModificationViewer extends ApplicationComponent {
     private JTabbedPane getContentTabbedPane() {
         if (this.contentTabbedPane == null) {
             this.contentTabbedPane = new JTabbedPane();
+            //this.contentTabbedPane.setTabPlacement(SwingConstants.LEFT);
+            this.contentTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
             this.contentTabbedPane.addTab("Types", null, getTypesSplitPane(), null);
             this.contentTabbedPane.addTab("Operations", null, getMethodsPanel(), null);
             this.contentTabbedPane.addTab("Metadata", null, getRpHolderPanel(), null);
@@ -1095,11 +1100,11 @@ public class ModificationViewer extends ApplicationComponent {
      * 
      * @return javax.swing.JTextField
      */
-    private JTextField getServiceName() {
+    private JLabel getServiceName() {
         if (this.serviceName == null) {
-            this.serviceName = new JTextField();
-            this.serviceName.setEditable(false);
-            this.serviceName.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+            this.serviceName = new JLabel();
+            //this.serviceName.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+            this.serviceName.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
             this.serviceName.setText(this.info.getIntroduceServiceProperties().getProperty(
                 IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
         }
@@ -1112,13 +1117,13 @@ public class ModificationViewer extends ApplicationComponent {
      * 
      * @return javax.swing.JTextField
      */
-    private JTextField getNamespace() {
+    private JLabel getNamespace() {
         if (this.namespace == null) {
-            this.namespace = new JTextField();
+            this.namespace = new JLabel();
             this.namespace.setText(this.info.getIntroduceServiceProperties().getProperty(
                 IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
-            this.namespace.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
-            this.namespace.setEditable(false);
+            //this.namespace.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+            this.namespace.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
         }
         return this.namespace;
     }
@@ -1129,11 +1134,11 @@ public class ModificationViewer extends ApplicationComponent {
      * 
      * @return javax.swing.JTextField
      */
-    private JTextField getLastSaved() {
+    private JLabel getLastSaved() {
         if (this.lastSaved == null) {
-            this.lastSaved = new JTextField();
-            this.lastSaved.setEditable(false);
-            this.lastSaved.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+            this.lastSaved = new JLabel();
+            //this.lastSaved.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+            this.lastSaved.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
             setLastSaved(this.info.getIntroduceServiceProperties().getProperty(
                 IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
         }
@@ -1158,12 +1163,12 @@ public class ModificationViewer extends ApplicationComponent {
      * 
      * @return javax.swing.JTextField
      */
-    private JTextField getSaveLocation() {
+    private JLabel getSaveLocation() {
         if (this.saveLocation == null) {
-            this.saveLocation = new JTextField();
+            this.saveLocation = new JLabel();
             this.saveLocation.setText(this.methodsDirectory.getAbsolutePath());
-            this.saveLocation.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
-            this.saveLocation.setEditable(false);
+            this.saveLocation.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
+            //this.saveLocation.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
         }
         return this.saveLocation;
     }
@@ -1292,6 +1297,8 @@ public class ModificationViewer extends ApplicationComponent {
     private JScrollPane getNamespaceTableScrollPane() {
         if (this.namespaceTableScrollPane == null) {
             this.namespaceTableScrollPane = new JScrollPane();
+            namespaceTableScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Imported Data Types", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
+            
             // this.namespaceTableScrollPane.setPreferredSize(new Dimension(300,
             // 400));
             // this.namespaceTableScrollPane.setSize(new Dimension(300,
@@ -1695,6 +1702,7 @@ public class ModificationViewer extends ApplicationComponent {
             gridBagConstraints28.insets = new java.awt.Insets(5, 5, 5, 5);
             this.servicePropertiesTableContainerPanel = new JPanel();
             this.servicePropertiesTableContainerPanel.setLayout(new GridBagLayout());
+            servicePropertiesTableContainerPanel.setBorder(BorderFactory.createTitledBorder(null, "Service Properties", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
             this.servicePropertiesTableContainerPanel.add(getServicePropertiesTableScrollPane(), gridBagConstraints28);
         }
         return this.servicePropertiesTableContainerPanel;
@@ -1788,6 +1796,7 @@ public class ModificationViewer extends ApplicationComponent {
             gridBagConstraints43.gridx = 0;
             this.servicePropertiesControlPanel = new JPanel();
             this.servicePropertiesControlPanel.setLayout(new GridBagLayout());
+            servicePropertiesControlPanel.setBorder(BorderFactory.createTitledBorder(null, "Add New Service Property", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
             this.servicePropertiesControlPanel.add(getServicePropertyKeyTextField(), gridBagConstraints38);
             this.servicePropertiesControlPanel.add(getServicePropertyValueTextField(), gridBagConstraints39);
             this.servicePropertiesControlPanel.add(this.servicePropertiesKeyLabel, gridBagConstraints40);
@@ -2022,6 +2031,7 @@ public class ModificationViewer extends ApplicationComponent {
             gridBagConstraints46.insets = new java.awt.Insets(2, 2, 2, 2);
             this.resourcesPanel = new JPanel();
             this.resourcesPanel.setLayout(new GridBagLayout());
+            resourcesPanel.setBorder(BorderFactory.createTitledBorder(null, "Service Contexts", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
             this.resourcesPanel.add(getResourcesScrollPane(), gridBagConstraints46);
         }
         return this.resourcesPanel;
@@ -2160,7 +2170,7 @@ public class ModificationViewer extends ApplicationComponent {
             this.resourcesOptionsPanel = new JPanel(new CardLayout());
             this.resourcesOptionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
                 "Information and Options", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), PortalLookAndFeel.getPanelLabelColor()));
         }
         return this.resourcesOptionsPanel;
     }
@@ -2173,13 +2183,21 @@ public class ModificationViewer extends ApplicationComponent {
      */
     private JPanel getDescriptionPanel() {
         if (this.descriptionPanel == null) {
+            GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+            gridBagConstraints10.gridx = 0;
+            gridBagConstraints10.gridy = 0;
+            descriptionInfoLabel = new JLabel();
+            descriptionInfoLabel.setText("Enter a description for this service below.");
             GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
             gridBagConstraints12.fill = GridBagConstraints.BOTH;
             gridBagConstraints12.weighty = 1.0;
+            gridBagConstraints12.gridy = 1;
             gridBagConstraints12.weightx = 1.0;
             this.descriptionPanel = new JPanel();
             this.descriptionPanel.setLayout(new GridBagLayout());
-            this.descriptionPanel.add(getDescriptionScrollPane(), gridBagConstraints12);
+            descriptionPanel.setBorder(BorderFactory.createTitledBorder(null, "Service Description", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
+            descriptionPanel.add(getDescriptionScrollPane(), gridBagConstraints12);
+            descriptionPanel.add(descriptionInfoLabel, gridBagConstraints10);
         }
         return this.descriptionPanel;
     }

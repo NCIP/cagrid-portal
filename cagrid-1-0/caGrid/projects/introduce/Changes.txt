@@ -1,4 +1,5 @@
 1.1 - 1.2
+-- Removed ServiceTasks JDOM dependecy to the services lib directory and moved it to the tools directory.
 -- Added abiilty for services to be undeployed
 -- Added ability to have resources be persisted
 	-- using XMLPersistanceHelper customized from globus

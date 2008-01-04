@@ -25,6 +25,7 @@ import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
@@ -215,7 +216,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
         this.add(getSecureCommunicationPanel(), gridBagConstraints71);
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Security Configuration",
             javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-            null, PortalLookAndFeel.getPanelLabelColor()));
+            new Font("Dialog", Font.BOLD, 12), PortalLookAndFeel.getPanelLabelColor()));
         this.add(getTransportPanel(), gridBagConstraints17);
         synchronize();
         isInited = true;
