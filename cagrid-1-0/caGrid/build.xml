@@ -719,6 +719,8 @@
 	<target name="build-cql" depends="prepare" description="Builds caGrid's CQL beans">
 		<resolveDependencies extdir="${projects.dir}/cql/ext">
 			<artifact refid="cagrid.properties"/>
+			<artifact refid="core.test.jars"/>
+            <artifact refid="common.test.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/cql" inheritAll="false" antfile="build.xml" target="all"/>
 	</target>
