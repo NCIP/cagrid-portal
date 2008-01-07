@@ -10,8 +10,6 @@
 	<classpathentry kind="src" path="test/src/java/style/cacore31"/>
 	<classpathentry kind="src" path="test/src/java/style/cacore32"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="ext/lib/acme.jar"/>
-	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-advertisement.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-BulkDataHandler-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-BulkDataHandler-common.jar"/>
@@ -58,17 +56,12 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/jmi-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius-castor-0.9.4.3-xml.jar"/>
-	<classpathentry kind="lib" path="ext/lib/nsuml-0.4.20_modified.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ocl-argo-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
-	<classpathentry kind="lib" path="ext/lib/swidgets-0.1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/validation-2.0.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_enum.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_stubs_enum.jar"/>
