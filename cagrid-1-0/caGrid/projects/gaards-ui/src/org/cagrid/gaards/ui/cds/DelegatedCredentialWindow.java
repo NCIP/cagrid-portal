@@ -1,6 +1,7 @@
 package org.cagrid.gaards.ui.cds;
 
 import gov.nih.nci.cagrid.common.Runner;
+import gov.nih.nci.cagrid.common.Utils;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -21,6 +22,8 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.cds.client.DelegationAdminClient;
+import org.cagrid.gaards.cds.client.DelegationUserClient;
+import org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.ui.common.ProxyComboBox;
 import org.cagrid.gaards.ui.dorian.ifs.FindUserDialog;
@@ -28,6 +31,7 @@ import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
+import org.cagrid.grape.utils.MultiEventProgressBar;
 import org.globus.gsi.GlobusCredential;
 
 /**
@@ -177,6 +181,10 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 
 	private JButton clear = null;
 
+	private JPanel progressPanel = null;
+
+	private MultiEventProgressBar progress = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -248,7 +256,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 	private void initialize() {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Delegate Credential [" + record.getGridIdentity() + "]");
-		this.setSize(600, 400);
+		this.setSize(600, 600);
 
 	}
 
@@ -906,6 +914,12 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 	 */
 	private JPanel getAuditPanel() {
 		if (auditPanel == null) {
+			GridBagConstraints gridBagConstraints48 = new GridBagConstraints();
+			gridBagConstraints48.gridx = 0;
+			gridBagConstraints48.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints48.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints48.weightx = 1.0D;
+			gridBagConstraints48.gridy = 2;
 			GridBagConstraints gridBagConstraints47 = new GridBagConstraints();
 			gridBagConstraints47.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints47.gridy = 1;
@@ -920,7 +934,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			gridBagConstraints32.gridy = 0;
 			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
 			gridBagConstraints30.fill = GridBagConstraints.BOTH;
-			gridBagConstraints30.gridy = 2;
+			gridBagConstraints30.gridy = 3;
 			gridBagConstraints30.weightx = 1.0;
 			gridBagConstraints30.weighty = 1.0;
 			gridBagConstraints30.insets = new Insets(2, 2, 2, 2);
@@ -930,6 +944,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			auditPanel.add(getJScrollPane1(), gridBagConstraints30);
 			auditPanel.add(getSearchPanel(), gridBagConstraints32);
 			auditPanel.add(getSearchButtonPanel(), gridBagConstraints47);
+			auditPanel.add(getProgressPanel(), gridBagConstraints48);
 		}
 		return auditPanel;
 	}
@@ -1314,6 +1329,43 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 		return searchButtonPanel;
 	}
 
+	private void performAudit() {
+		getSearchButton().setEnabled(false);
+		getClear().setEnabled(false);
+		getAuditRecords().clearTable();
+		int eventId = getProgress().startEvent("Peforming Audit.....");
+		try {
+			if((searchStartDate!=null)&&(searchEndDate!=null)){
+				if(searchStartDate.after(searchEndDate)){
+					ErrorDialog.showError("The start date cannot be after the end date.");
+					return;
+				}
+			}
+				DelegatedCredentialAuditFilter f = new DelegatedCredentialAuditFilter();
+				f.setDelegationIdentifier(this.record.getDelegationIdentifier());
+				f.setSourceGridIdentity(Utils.clean(getSourceIdentity().getText()));
+				f.setEvent(getEventType().getEvent());
+				if(searchStartDate!=null){
+					f.setStartDate(new Long(searchStartDate.getTimeInMillis()));
+				}
+				
+				if(searchEndDate!=null){
+					f.setEndDate(new Long(searchEndDate.getTimeInMillis()));
+				}
+				
+				DelegationUserClient client = new DelegationUserClient(this.serviceId,this.cred);
+				this.getAuditRecords().addRecords(client.searchDelegatedCredentialAuditLog(f));
+				
+		} catch (Exception f) {
+			ErrorDialog.showError(f);
+			return;
+		} finally {
+			getProgress().stopEvent(eventId, "");
+			getSearchButton().setEnabled(true);
+			getClear().setEnabled(true);
+		}
+	}
+
 	/**
 	 * This method initializes searchButton
 	 * 
@@ -1324,6 +1376,21 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			searchButton = new JButton();
 			searchButton.setText("Search");
 			searchButton.setIcon(LookAndFeel.getQueryIcon());
+			searchButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Runner runner = new Runner() {
+						public void execute() {
+							performAudit();
+						}
+					};
+					try {
+						GridApplication.getContext()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+			});
 		}
 		return searchButton;
 	}
@@ -1350,6 +1417,38 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			});
 		}
 		return clear;
+	}
+
+	/**
+	 * This method initializes progressPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getProgressPanel() {
+		if (progressPanel == null) {
+			GridBagConstraints gridBagConstraints49 = new GridBagConstraints();
+			gridBagConstraints49.gridx = 0;
+			gridBagConstraints49.insets = new Insets(2, 20, 2, 20);
+			gridBagConstraints49.weightx = 1.0D;
+			gridBagConstraints49.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints49.gridy = 0;
+			progressPanel = new JPanel();
+			progressPanel.setLayout(new GridBagLayout());
+			progressPanel.add(getProgress(), gridBagConstraints49);
+		}
+		return progressPanel;
+	}
+
+	/**
+	 * This method initializes progress
+	 * 
+	 * @return javax.swing.JProgressBar
+	 */
+	private MultiEventProgressBar getProgress() {
+		if (progress == null) {
+			progress = new MultiEventProgressBar(true);
+		}
+		return progress;
 	}
 
 }
