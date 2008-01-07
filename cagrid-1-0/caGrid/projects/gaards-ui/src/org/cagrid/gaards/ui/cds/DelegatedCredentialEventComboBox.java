@@ -1,6 +1,6 @@
 package org.cagrid.gaards.ui.cds;
 
-import org.cagrid.gaards.cds.common.DelegationStatus;
+import org.cagrid.gaards.cds.common.DelegatedCredentialEvent;
 import org.cagrid.gaards.ui.common.AxisTypeComboBox;
 
 /**
@@ -10,18 +10,14 @@ import org.cagrid.gaards.ui.common.AxisTypeComboBox;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class DelegationStatusComboBox extends AxisTypeComboBox {
+public class DelegatedCredentialEventComboBox extends AxisTypeComboBox {
 
-	public DelegationStatusComboBox() {
-		this(false);
+	public DelegatedCredentialEventComboBox() {
+		super(DelegatedCredentialEvent.class, true);
 	}
 
-	public DelegationStatusComboBox(boolean anyState) {
-		super(DelegationStatus.class, anyState);
-	}
-
-	public DelegationStatus getDelegationStatus() {
-		return (DelegationStatus) getSelectedObject();
+	public DelegatedCredentialEvent getEvent() {
+		return (DelegatedCredentialEvent) getSelectedObject();
 	}
 
 }

@@ -1,4 +1,4 @@
-package org.cagrid.gaards.ui.dorian.idp;
+package org.cagrid.gaards.ui.common;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -14,9 +14,12 @@ import javax.swing.JComboBox;
  *          Exp $
  */
 public abstract class AxisTypeComboBox extends JComboBox {
+	
+	public static String ANY = "Any";
 
 	private List list;
 	private Class c;
+	private boolean any;
 
 	public AxisTypeComboBox(Class c) {
 		this(c, false);
@@ -25,9 +28,10 @@ public abstract class AxisTypeComboBox extends JComboBox {
 	public AxisTypeComboBox(Class c,boolean any) {
 		list = new ArrayList();
 		this.c = c;
+		this.any = any;
 
 		if (any) {
-			list.add("Any");
+			list.add(ANY);
 		}
 
 		Field[] fields = c.getFields();
@@ -45,6 +49,13 @@ public abstract class AxisTypeComboBox extends JComboBox {
 		for (int i = 0; i < list.size(); i++) {
 			this.addItem(list.get(i));
 		}
+	}
+	
+	public void setToAny(){
+		if(any){
+			setSelectedItem(ANY);
+		}
+		
 	}
 
 	public Object getSelectedObject() {

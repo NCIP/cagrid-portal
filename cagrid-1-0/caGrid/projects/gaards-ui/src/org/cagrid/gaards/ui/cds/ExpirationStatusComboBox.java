@@ -1,7 +1,7 @@
 package org.cagrid.gaards.ui.cds;
 
 import org.cagrid.gaards.cds.common.ExpirationStatus;
-import org.cagrid.gaards.ui.dorian.idp.AxisTypeComboBox;
+import org.cagrid.gaards.ui.common.AxisTypeComboBox;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

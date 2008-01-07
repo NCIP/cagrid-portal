@@ -3,6 +3,7 @@ package org.cagrid.gaards.ui.cds;
 import gov.nih.nci.cagrid.common.Runner;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,6 +23,7 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.gaards.cds.client.DelegationAdminClient;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.dorian.ifs.FindUserDialog;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -42,6 +44,8 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 	private final static String POLICY_PANEL = "Delegation Policy";
 
 	private final static String CERTIFICATE_PANEL = "Certificate Chain";
+
+	private final static String AUDITING_PANEL = "Auditing";
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -126,6 +130,52 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 	private DelegationPolicyPanel delegationPolicyPanel;
 
 	private JPanel infoButtonPanel = null;
+
+	private JPanel auditPanel = null;
+
+	private JScrollPane jScrollPane1 = null;
+
+	private DelegatedCredentialAuditRecordTable auditRecords = null;
+
+	private JPanel searchPanel = null;
+
+	private JLabel jLabel8 = null;
+
+	private JPanel identityPanel = null;
+
+	private JTextField sourceIdentity = null;
+
+	private JButton findSource = null;
+
+	private JPanel auditTypePanel = null;
+
+	private JLabel jLabel9 = null;
+
+	private DelegatedCredentialEventComboBox eventType = null;
+
+	private JPanel dateRangePanel = null;
+
+	private JLabel jLabel10 = null;
+
+	private JTextField startDate = null;
+
+	private JButton startDateButton = null;
+
+	private JLabel jLabel11 = null;
+
+	private JTextField endDate = null;
+
+	private JButton endDateButton = null;
+
+	private Calendar searchStartDate;
+
+	private Calendar searchEndDate;
+
+	private JPanel searchButtonPanel = null;
+
+	private JButton searchButton = null;
+
+	private JButton clear = null;
 
 	/**
 	 * This is the default constructor
@@ -318,7 +368,8 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 					getService().getText(), getProxy().getSelectedProxy());
 			client.updateDelegationStatus(record.getDelegationIdentifier(),
 					getStatus().getDelegationStatus());
-			GridApplication.getContext().showMessage("The status was succesfully updated.");
+			GridApplication.getContext().showMessage(
+					"The status was succesfully updated.");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
@@ -342,7 +393,8 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 					.getDelegationPolicyIcon(), getPolicyPanel(), null);
 			jTabbedPane.addTab(CERTIFICATE_PANEL, CDSLookAndFeel
 					.getCertificateIcon(), getCertificatePanel(), null);
-
+			jTabbedPane.addTab(AUDITING_PANEL, CDSLookAndFeel.getAudtingIcon(),
+					getAuditPanel(), null);
 		}
 		return jTabbedPane;
 	}
@@ -845,6 +897,459 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			infoButtonPanel.add(getUpdateStatus(), gridBagConstraints29);
 		}
 		return infoButtonPanel;
+	}
+
+	/**
+	 * This method initializes auditPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getAuditPanel() {
+		if (auditPanel == null) {
+			GridBagConstraints gridBagConstraints47 = new GridBagConstraints();
+			gridBagConstraints47.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints47.gridy = 1;
+			gridBagConstraints47.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints47.weightx = 1.0D;
+			gridBagConstraints47.gridx = 0;
+			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
+			gridBagConstraints32.gridx = 0;
+			gridBagConstraints32.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints32.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints32.weightx = 1.0D;
+			gridBagConstraints32.gridy = 0;
+			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
+			gridBagConstraints30.fill = GridBagConstraints.BOTH;
+			gridBagConstraints30.gridy = 2;
+			gridBagConstraints30.weightx = 1.0;
+			gridBagConstraints30.weighty = 1.0;
+			gridBagConstraints30.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints30.gridx = 0;
+			auditPanel = new JPanel();
+			auditPanel.setLayout(new GridBagLayout());
+			auditPanel.add(getJScrollPane1(), gridBagConstraints30);
+			auditPanel.add(getSearchPanel(), gridBagConstraints32);
+			auditPanel.add(getSearchButtonPanel(), gridBagConstraints47);
+		}
+		return auditPanel;
+	}
+
+	/**
+	 * This method initializes jScrollPane1
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getJScrollPane1() {
+		if (jScrollPane1 == null) {
+			jScrollPane1 = new JScrollPane();
+			jScrollPane1.setViewportView(getAuditRecords());
+		}
+		return jScrollPane1;
+	}
+
+	/**
+	 * This method initializes auditRecords
+	 * 
+	 * @return javax.swing.JTable
+	 */
+	private DelegatedCredentialAuditRecordTable getAuditRecords() {
+		if (auditRecords == null) {
+			auditRecords = new DelegatedCredentialAuditRecordTable();
+		}
+		return auditRecords;
+	}
+
+	/**
+	 * This method initializes searchPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getSearchPanel() {
+		if (searchPanel == null) {
+			GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
+			gridBagConstraints40.gridx = 0;
+			gridBagConstraints40.weightx = 1.0D;
+			gridBagConstraints40.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints40.gridy = 1;
+			GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
+			gridBagConstraints37.gridx = 0;
+			gridBagConstraints37.insets = new Insets(0, 0, 0, 0);
+			gridBagConstraints37.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints37.gridy = 2;
+			GridBagConstraints gridBagConstraints34 = new GridBagConstraints();
+			gridBagConstraints34.gridx = 0;
+			gridBagConstraints34.anchor = GridBagConstraints.CENTER;
+			gridBagConstraints34.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints34.insets = new Insets(0, 0, 0, 0);
+			gridBagConstraints34.weightx = 1.0D;
+			gridBagConstraints34.gridy = 0;
+			jLabel8 = new JLabel();
+			jLabel8.setText("Source Identity");
+			searchPanel = new JPanel();
+			searchPanel.setLayout(new GridBagLayout());
+			searchPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Audting Search Criteria",
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+							.getPanelLabelColor()));
+			searchPanel.add(getIdentityPanel(), gridBagConstraints34);
+			searchPanel.add(getAuditTypePanel(), gridBagConstraints37);
+			searchPanel.add(getDateRangePanel(), gridBagConstraints40);
+		}
+		return searchPanel;
+	}
+
+	/**
+	 * This method initializes identityPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getIdentityPanel() {
+		if (identityPanel == null) {
+			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
+			gridBagConstraints36.gridx = 2;
+			gridBagConstraints36.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints36.anchor = GridBagConstraints.WEST;
+			gridBagConstraints36.gridy = 0;
+			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
+			gridBagConstraints35.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints35.gridx = 1;
+			gridBagConstraints35.gridy = 0;
+			gridBagConstraints35.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints35.anchor = GridBagConstraints.WEST;
+			gridBagConstraints35.weightx = 1.0;
+			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
+			gridBagConstraints33.gridx = 0;
+			gridBagConstraints33.anchor = GridBagConstraints.WEST;
+			gridBagConstraints33.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints33.gridy = 0;
+			identityPanel = new JPanel();
+			identityPanel.setLayout(new GridBagLayout());
+			identityPanel.add(jLabel8, gridBagConstraints33);
+			identityPanel.add(getSourceIdentity(), gridBagConstraints35);
+			identityPanel.add(getFindSource(), gridBagConstraints36);
+		}
+		return identityPanel;
+	}
+
+	/**
+	 * This method initializes sourceIdentity
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getSourceIdentity() {
+		if (sourceIdentity == null) {
+			sourceIdentity = new JTextField();
+		}
+		return sourceIdentity;
+	}
+
+	/**
+	 * This method initializes findSource
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getFindSource() {
+		if (findSource == null) {
+			findSource = new JButton();
+			findSource.setText("Find");
+			findSource.setIcon(LookAndFeel.getQueryIcon());
+			findSource.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					FindUserDialog dialog = new FindUserDialog();
+					dialog.setModal(true);
+					GridApplication.getContext().showDialog(dialog);
+					if (dialog.getSelectedUser() != null) {
+						getGridIdentity().setText(dialog.getSelectedUser());
+					}
+				}
+			});
+		}
+		return findSource;
+	}
+
+	/**
+	 * This method initializes auditTypePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getAuditTypePanel() {
+		if (auditTypePanel == null) {
+			GridBagConstraints gridBagConstraints39 = new GridBagConstraints();
+			gridBagConstraints39.gridx = 0;
+			gridBagConstraints39.anchor = GridBagConstraints.WEST;
+			gridBagConstraints39.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints39.gridy = 0;
+			GridBagConstraints gridBagConstraints38 = new GridBagConstraints();
+			gridBagConstraints38.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints38.anchor = GridBagConstraints.WEST;
+			gridBagConstraints38.gridx = 1;
+			gridBagConstraints38.gridy = 0;
+			gridBagConstraints38.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints38.weightx = 1.0;
+			jLabel9 = new JLabel();
+			jLabel9.setText("Audit Event");
+			auditTypePanel = new JPanel();
+			auditTypePanel.setLayout(new GridBagLayout());
+			auditTypePanel.add(jLabel9, gridBagConstraints39);
+			auditTypePanel.add(getEventType(), gridBagConstraints38);
+		}
+		return auditTypePanel;
+	}
+
+	/**
+	 * This method initializes eventType
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private DelegatedCredentialEventComboBox getEventType() {
+		if (eventType == null) {
+			eventType = new DelegatedCredentialEventComboBox();
+		}
+		return eventType;
+	}
+
+	/**
+	 * This method initializes dateRangePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getDateRangePanel() {
+		if (dateRangePanel == null) {
+			GridBagConstraints gridBagConstraints46 = new GridBagConstraints();
+			gridBagConstraints46.gridx = 5;
+			gridBagConstraints46.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints46.anchor = GridBagConstraints.WEST;
+			gridBagConstraints46.gridy = 0;
+			GridBagConstraints gridBagConstraints45 = new GridBagConstraints();
+			gridBagConstraints45.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints45.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints45.gridx = 4;
+			gridBagConstraints45.gridy = 0;
+			gridBagConstraints45.anchor = GridBagConstraints.WEST;
+			gridBagConstraints45.weightx = 1.0;
+			GridBagConstraints gridBagConstraints44 = new GridBagConstraints();
+			gridBagConstraints44.gridx = 2;
+			gridBagConstraints44.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints44.anchor = GridBagConstraints.WEST;
+			gridBagConstraints44.gridy = 0;
+			GridBagConstraints gridBagConstraints43 = new GridBagConstraints();
+			gridBagConstraints43.gridx = 3;
+			gridBagConstraints43.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints43.gridy = 0;
+			jLabel11 = new JLabel();
+			jLabel11.setText("End Date");
+			GridBagConstraints gridBagConstraints42 = new GridBagConstraints();
+			gridBagConstraints42.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints42.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints42.gridx = 1;
+			gridBagConstraints42.gridy = 0;
+			gridBagConstraints42.anchor = GridBagConstraints.WEST;
+			gridBagConstraints42.weightx = 1.0;
+			GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
+			gridBagConstraints41.gridx = 0;
+			gridBagConstraints41.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints41.anchor = GridBagConstraints.WEST;
+			gridBagConstraints41.gridy = 0;
+			jLabel10 = new JLabel();
+			jLabel10.setText("Start Date");
+			dateRangePanel = new JPanel();
+			dateRangePanel.setLayout(new GridBagLayout());
+			dateRangePanel.add(jLabel10, gridBagConstraints41);
+			dateRangePanel.add(getStartDate(), gridBagConstraints42);
+			dateRangePanel.add(getStartDateButton(), gridBagConstraints44);
+			dateRangePanel.add(jLabel11, gridBagConstraints43);
+			dateRangePanel.add(getEndDate(), gridBagConstraints45);
+			dateRangePanel.add(getEndDateButton(), gridBagConstraints46);
+		}
+		return dateRangePanel;
+	}
+
+	/**
+	 * This method initializes startDate
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getStartDate() {
+		if (startDate == null) {
+			startDate = new JTextField();
+			startDate.setEditable(false);
+		}
+		return startDate;
+	}
+
+	/**
+	 * This method initializes startDateButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getStartDateButton() {
+		if (startDateButton == null) {
+			startDateButton = new JButton();
+			startDateButton.setIcon(CDSLookAndFeel.getCalendarIcon());
+			startDateButton.setText("Select");
+			startDateButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							SelectDateDialog dialog = new SelectDateDialog(true);
+							dialog.setModal(true);
+							GridApplication.getContext().showDialog(dialog);
+							Calendar c = dialog.getDate();
+							if (c != null) {
+								searchStartDate = c;
+								getStartDate().setText(
+										formatDate(searchStartDate));
+							}
+						}
+					});
+		}
+		return startDateButton;
+	}
+
+	/**
+	 * This method initializes endDate
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getEndDate() {
+		if (endDate == null) {
+			endDate = new JTextField();
+			endDate.setEditable(false);
+			endDate.setText("");
+		}
+		return endDate;
+	}
+
+	/**
+	 * This method initializes endDateButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getEndDateButton() {
+		if (endDateButton == null) {
+			endDateButton = new JButton();
+			endDateButton.setIcon(CDSLookAndFeel.getCalendarIcon());
+			endDateButton.setText("Select");
+			endDateButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							SelectDateDialog dialog = new SelectDateDialog(
+									false);
+							dialog.setModal(true);
+							GridApplication.getContext().showDialog(dialog);
+							Calendar c = dialog.getDate();
+							if (c != null) {
+								searchEndDate = c;
+								getEndDate().setText(formatDate(searchEndDate));
+							}
+						}
+					});
+		}
+		return endDateButton;
+	}
+
+	private String formatDate(Calendar c) {
+		StringBuffer sb = new StringBuffer();
+		int month = c.get(Calendar.MONTH) + 1;
+		if (month < 10) {
+			sb.append("0" + month);
+		} else {
+			sb.append(month);
+		}
+
+		sb.append("/");
+
+		int day = c.get(Calendar.DAY_OF_MONTH);
+		if (day < 10) {
+			sb.append("0" + day);
+		} else {
+			sb.append(day);
+		}
+
+		sb.append("/");
+
+		int year = c.get(Calendar.YEAR);
+		sb.append(year);
+
+		sb.append("  @  ");
+
+		int hour = c.get(Calendar.HOUR);
+		if (hour == 0) {
+			hour = 12;
+		}
+		if (hour < 10) {
+			sb.append("0" + hour);
+		} else {
+			sb.append(hour);
+		}
+
+		sb.append(":");
+
+		int minute = c.get(Calendar.MINUTE);
+		if (minute < 10) {
+			sb.append("0" + minute);
+		} else {
+			sb.append(minute);
+		}
+		if (c.get(Calendar.AM_PM) == Calendar.AM) {
+			sb.append(" AM");
+		} else {
+			sb.append(" PM");
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * This method initializes searchButtonPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getSearchButtonPanel() {
+		if (searchButtonPanel == null) {
+			searchButtonPanel = new JPanel();
+			searchButtonPanel.setLayout(new FlowLayout());
+			searchButtonPanel.add(getSearchButton(), null);
+			searchButtonPanel.add(getClear(), null);
+		}
+		return searchButtonPanel;
+	}
+
+	/**
+	 * This method initializes searchButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getSearchButton() {
+		if (searchButton == null) {
+			searchButton = new JButton();
+			searchButton.setText("Search");
+			searchButton.setIcon(LookAndFeel.getQueryIcon());
+		}
+		return searchButton;
+	}
+
+	/**
+	 * This method initializes clear
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getClear() {
+		if (clear == null) {
+			clear = new JButton();
+			clear.setText("Clear");
+			clear.setIcon(CDSLookAndFeel.getClearIcon());
+			clear.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					getSourceIdentity().setText("");
+					getEventType().setToAny();
+					searchStartDate = null;
+					getStartDate().setText("");
+					searchEndDate = null;
+					getEndDate().setText("");
+				}
+			});
+		}
+		return clear;
 	}
 
 }

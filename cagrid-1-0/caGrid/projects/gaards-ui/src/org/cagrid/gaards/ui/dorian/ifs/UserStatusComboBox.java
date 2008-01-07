@@ -1,6 +1,6 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
-import org.cagrid.gaards.ui.dorian.idp.AxisTypeComboBox;
+import org.cagrid.gaards.ui.common.AxisTypeComboBox;
 
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 
