@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.common;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -89,6 +90,51 @@ public class JarUtilities {
         }
         jarOut.flush();
         jarOut.close();
+    }
+    
+    
+    /**
+     * Inserts an entry in a Jar file.  If an entry with the given name is found,
+     * it will be replaced with the new one.
+     * 
+     * @param jarFile
+     *      The jar file to be appended
+     * @param entryName
+     *      The name of the new entry
+     * @param data
+     *      The data to add to the zip
+     * @throws IOException
+     */
+    public static void insertEntry(File jarFile, String entryName, byte[] data) throws IOException {
+        // create a temp file
+        File tempJar = File.createTempFile(jarFile.getName(), "tmp");
+        tempJar.delete();
+        FileOutputStream tempOut = new FileOutputStream(tempJar);
+        JarOutputStream jarOut = new JarOutputStream(tempOut);
+        
+        // start streaming the input stream over to the temp
+        JarFile jarIn = new JarFile(jarFile);
+        Enumeration<JarEntry> entries = jarIn.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry inputEntry = entries.nextElement();
+            if (!inputEntry.getName().equals(entryName)) {
+                InputStream entryStream = jarIn.getInputStream(inputEntry);
+                jarOut.putNextEntry(inputEntry);
+                copyStreams(entryStream, jarOut);
+                jarOut.closeEntry();
+            }
+        }
+        
+        // create new entry
+        JarEntry insert = new JarEntry(entryName);
+        jarOut.putNextEntry(insert);
+        copyStreams(new ByteArrayInputStream(data), jarOut);
+        jarOut.closeEntry();
+        jarOut.close();
+        
+        jarIn.close();
+        jarFile.delete();
+        tempJar.renameTo(jarFile);
     }
 	
 	
