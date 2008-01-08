@@ -18,7 +18,7 @@ import junit.framework.TestCase;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: ZipUtilitiesTestCase.java,v 1.6 2008-01-08 20:09:02 dervin Exp $ 
+ * @version $Id: ZipUtilitiesTestCase.java,v 1.7 2008-01-08 20:54:31 dervin Exp $ 
  */
 public class ZipUtilitiesTestCase extends TestCase {
 	public static final String SOURCE_DIR = "src" + File.separator + "java";
@@ -120,7 +120,7 @@ public class ZipUtilitiesTestCase extends TestCase {
             assertTrue("Old zip file existed, and was deleted", deleted);
         }
         try {
-            ZipUtilities.zipDirectory(new File(SOURCE_DIR), new File(ZIP_FILE_NAME));
+            ZipUtilities.zipDirectory(new File(SOURCE_DIR), zipFile);
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Error creating test zip file: " + ex.getMessage());
@@ -128,7 +128,7 @@ public class ZipUtilitiesTestCase extends TestCase {
         
         String insertText = "I am the very model of a modern major general";
         byte[] insertData = insertText.getBytes();
-        String entryPath = "test/insert/entry/majorGeneral.txt";
+        String entryPath = "test" + File.separator + "insert" + File.separator + "entry" + File.separator + "majorGeneral.txt";
         
         try {
             ZipUtilities.insertEntry(zipFile, entryPath, insertData);
