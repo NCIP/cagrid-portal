@@ -18,7 +18,7 @@ import junit.framework.TestCase;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: ZipUtilitiesTestCase.java,v 1.4 2007-03-29 19:12:38 dervin Exp $ 
+ * @version $Id: ZipUtilitiesTestCase.java,v 1.5 2008-01-08 19:14:24 dervin Exp $ 
  */
 public class ZipUtilitiesTestCase extends TestCase {
 	public static final String SOURCE_DIR = "src" + File.separator + "java";
@@ -109,8 +109,34 @@ public class ZipUtilitiesTestCase extends TestCase {
 			assertTrue("Byte position " + i + "(" + sourceFileContents[i] + ") == (" + extractedContentBytes[i] + ")",
 				sourceFileContents[i] == extractedContentBytes[i]);
 		}
-		// now delete the zip file
-		File zipFile = new File(ZIP_FILE_NAME);
-		zipFile.delete();
 	}
+    
+    
+    public void testInsertZipEntry() {
+        String insertText = "I am the very model of a modern major general";
+        byte[] insertData = insertText.getBytes();
+        String entryPath = "test/insert/entry/majorGeneral.txt";
+        
+        try {
+            ZipUtilities.insertEntry(new File(ZIP_FILE_NAME), entryPath, insertData);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            fail("Failed to insert: " + ex.getMessage());
+        }
+        
+        byte[] extractedData = null;
+        try {
+            extractedData = ZipUtilities.extractEntryContents(new File(ZIP_FILE_NAME), entryPath);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Error extracting entry: " + ex.getMessage());
+        }
+        
+        String extractText = new String(extractedData, 0, extractedData.length);
+        assertEquals("Extracted bytes did not match input", insertText, extractText);
+        
+        // now delete the zip file
+        File zipFile = new File(ZIP_FILE_NAME);
+        zipFile.delete();
+    }
 }

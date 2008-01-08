@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.common;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -10,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -23,7 +25,7 @@ import java.util.zip.ZipOutputStream;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: ZipUtilities.java,v 1.3 2007-02-21 19:34:25 dervin Exp $ 
+ * @version $Id: ZipUtilities.java,v 1.4 2008-01-08 19:14:24 dervin Exp $ 
  */
 public class ZipUtilities {
 	
@@ -135,6 +137,51 @@ public class ZipUtilities {
 		output.close();
 		return output.toByteArray();
 	}
+    
+    
+    /**
+     * Inserts an entry in a Zip file.  If an entry with the given name is found,
+     * it will be replaced with the new one.
+     * 
+     * @param zipFile
+     *      The zip file to be appended
+     * @param entryName
+     *      The name of the new entry
+     * @param data
+     *      The data to add to the zip
+     * @throws IOException
+     */
+    public static void insertEntry(File zipFile, String entryName, byte[] data) throws IOException {
+        // create a temp file
+        File tempZip = File.createTempFile(zipFile.getName(), "tmp");
+        tempZip.delete();
+        FileOutputStream tempOut = new FileOutputStream(tempZip);
+        ZipOutputStream zipOut = new ZipOutputStream(tempOut);
+        
+        // start streaming the input stream over to the temp
+        ZipFile zipIn = new ZipFile(zipFile);
+        Enumeration<? extends ZipEntry> entries = zipIn.entries();
+        while (entries.hasMoreElements()) {
+            ZipEntry inputEntry = entries.nextElement();
+            if (!inputEntry.getName().equals(entryName)) {
+                InputStream entryStream = zipIn.getInputStream(inputEntry);
+                zipOut.putNextEntry(inputEntry);
+                copyStreams(entryStream, zipOut);
+                zipOut.closeEntry();
+            }
+        }
+        
+        // create new entry
+        ZipEntry insert = new ZipEntry(entryName);
+        zipOut.putNextEntry(insert);
+        copyStreams(new ByteArrayInputStream(data), zipOut);
+        zipOut.closeEntry();
+        zipOut.close();
+        
+        zipIn.close();
+        zipFile.delete();
+        tempZip.renameTo(zipFile);
+    }
 	
 	
 	/**
