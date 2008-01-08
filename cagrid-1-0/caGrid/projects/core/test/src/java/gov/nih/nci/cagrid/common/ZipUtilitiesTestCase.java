@@ -18,7 +18,7 @@ import junit.framework.TestCase;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: ZipUtilitiesTestCase.java,v 1.5 2008-01-08 19:14:24 dervin Exp $ 
+ * @version $Id: ZipUtilitiesTestCase.java,v 1.6 2008-01-08 20:09:02 dervin Exp $ 
  */
 public class ZipUtilitiesTestCase extends TestCase {
 	public static final String SOURCE_DIR = "src" + File.separator + "java";
@@ -113,12 +113,25 @@ public class ZipUtilitiesTestCase extends TestCase {
     
     
     public void testInsertZipEntry() {
+        // ensure the testing zip exists
+        File zipFile = new File(ZIP_FILE_NAME);
+        if (zipFile.exists()) {
+            boolean deleted = zipFile.delete();
+            assertTrue("Old zip file existed, and was deleted", deleted);
+        }
+        try {
+            ZipUtilities.zipDirectory(new File(SOURCE_DIR), new File(ZIP_FILE_NAME));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Error creating test zip file: " + ex.getMessage());
+        }
+        
         String insertText = "I am the very model of a modern major general";
         byte[] insertData = insertText.getBytes();
         String entryPath = "test/insert/entry/majorGeneral.txt";
         
         try {
-            ZipUtilities.insertEntry(new File(ZIP_FILE_NAME), entryPath, insertData);
+            ZipUtilities.insertEntry(zipFile, entryPath, insertData);
         } catch (IOException ex) {
             ex.printStackTrace();
             fail("Failed to insert: " + ex.getMessage());
@@ -126,7 +139,7 @@ public class ZipUtilitiesTestCase extends TestCase {
         
         byte[] extractedData = null;
         try {
-            extractedData = ZipUtilities.extractEntryContents(new File(ZIP_FILE_NAME), entryPath);
+            extractedData = ZipUtilities.extractEntryContents(zipFile, entryPath);
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Error extracting entry: " + ex.getMessage());
@@ -136,7 +149,6 @@ public class ZipUtilitiesTestCase extends TestCase {
         assertEquals("Extracted bytes did not match input", insertText, extractText);
         
         // now delete the zip file
-        File zipFile = new File(ZIP_FILE_NAME);
         zipFile.delete();
     }
 }
