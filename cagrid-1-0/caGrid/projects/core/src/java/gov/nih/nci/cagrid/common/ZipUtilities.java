@@ -25,7 +25,7 @@ import java.util.zip.ZipOutputStream;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: ZipUtilities.java,v 1.4 2008-01-08 19:14:24 dervin Exp $ 
+ * @version $Id: ZipUtilities.java,v 1.5 2008-01-08 21:12:37 dervin Exp $ 
  */
 public class ZipUtilities {
 	
@@ -180,7 +180,9 @@ public class ZipUtilities {
         
         zipIn.close();
         zipFile.delete();
-        tempZip.renameTo(zipFile);
+        
+        Utils.copyFile(tempZip, zipFile);
+        tempZip.delete();
     }
 	
 	
