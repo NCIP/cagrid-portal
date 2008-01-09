@@ -5,6 +5,7 @@
 	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="build/stubs-TransferService/src"/>
 	<classpathentry kind="src" path="webapp/src"/>
+	<classpathentry kind="src" path="extension/src"/>
 	<classpathentry kind="lib" path="E:/ws-core-4.0.3/lib/addressing-1.0.jar"/>
 	<classpathentry kind="lib" path="E:/ws-core-4.0.3/lib/axis.jar"/>
 	<classpathentry kind="lib" path="E:/ws-core-4.0.3/lib/axis-url.jar"/>

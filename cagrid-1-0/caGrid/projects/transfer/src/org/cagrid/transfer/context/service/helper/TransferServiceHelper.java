@@ -15,8 +15,7 @@ public class TransferServiceHelper {
         org.apache.axis.MessageContext ctx = org.apache.axis.MessageContext.getCurrentContext();
 
         String servicePath = ctx.getTargetService();
-        String homeName = org.globus.wsrf.Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/"
-            + "transferServiceContextHome";
+        String homeName = "java:comp/env/services/cagrid/TransferServiceContext/home";
 
         try {
             javax.naming.Context initialContext = new javax.naming.InitialContext();
@@ -55,8 +54,7 @@ public class TransferServiceHelper {
         org.globus.wsrf.ResourceKey resourceKey = null;
         org.apache.axis.MessageContext ctx = org.apache.axis.MessageContext.getCurrentContext();
         String servicePath = ctx.getTargetService();
-        String homeName = org.globus.wsrf.Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/"
-            + "transferServiceContextHome";
+        String homeName = "java:comp/env/services/cagrid/TransferServiceContext/home";
 
         try {
             javax.naming.Context initialContext = new javax.naming.InitialContext();
@@ -95,8 +93,7 @@ public class TransferServiceHelper {
         org.globus.wsrf.ResourceKey resourceKey = null;
         org.apache.axis.MessageContext ctx = org.apache.axis.MessageContext.getCurrentContext();
         String servicePath = ctx.getTargetService();
-        String homeName = org.globus.wsrf.Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/"
-            + "transferServiceContextHome";
+        String homeName = "java:comp/env/services/cagrid/TransferServiceContext/home";
 
         try {
             javax.naming.Context initialContext = new javax.naming.InitialContext();

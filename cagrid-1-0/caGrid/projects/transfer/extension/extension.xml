@@ -3,7 +3,6 @@
     <ns1:ServiceExtensionDescription displayName="caGrid Transfer" name="caTransfer">
         <ns1:CreationPostProcessor>org.cagrid.transfer.extension.TransferExtensionCreationPostProcessor</ns1:CreationPostProcessor>
         <ns1:Properties> 
-           
         </ns1:Properties>
     </ns1:ServiceExtensionDescription>
 </ns1:ExtensionDescription>
