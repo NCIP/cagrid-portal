@@ -1,0 +1,1 @@
+You have to make a JNDI resource link in the service that is going to use Transfer so that it cant find the TransferContextResourceHome

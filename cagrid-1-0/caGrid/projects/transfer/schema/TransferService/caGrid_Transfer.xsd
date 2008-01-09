@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://transfer.cagrid.org/Transfer"
+	xmlns:tns="http://transfer.cagrid.org/Transfer"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	attributeFormDefault="unqualified">
+
+
+	<xs:complexType name="DataTransferDescriptor">
+		<xs:sequence>
+			<xs:element type="string" name="id"></xs:element>
+			<xs:element type="string" name="url"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="DataTransferDescriptor"
+		type="tns:DataTransferDescriptor">
+	</xs:element>
+
+	<xs:complexType name="DataDescriptor">
+		<xs:sequence>
+			<xs:element type="string" name="location"></xs:element>
+			<xs:element type="string" name="userDN"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="DataDescriptor"
+		type="tns:DataDescriptor">
+	</xs:element>
+
+</xs:schema>
