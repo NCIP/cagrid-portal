@@ -11,7 +11,7 @@
 	<!-- For the dart server-->
 	<property name="dart.port" value="80" />
 	<property name="dart.project" value="caGrid-1.0" />
-	<property name="dart.server" value="quality.bmi.ohio-state.edu" />
+	<property name="dart.server" value="quality.cagrid.org" />
 	<property name="dart.client.jar" value="${test.lib.dir}/DartClient-1.0.7.jar" />
 	<property name="build.name.template" location="${test.dir}/BuildNameTemplate.xml"/>
 
