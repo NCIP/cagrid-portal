@@ -71,6 +71,10 @@
           <name>etcDirectoryPath</name>
           <value>ETC-PATH</value>
         </parameter>
+        <parameter>
+          <name>transferServletBaseURL</name>
+          <value>@transferServletBaseURL@</value>
+        </parameter>
       </resourceParams>
     </resource>
     <resource name="home" type="org.cagrid.transfer.service.globus.resource.TransferServiceResourceHome">

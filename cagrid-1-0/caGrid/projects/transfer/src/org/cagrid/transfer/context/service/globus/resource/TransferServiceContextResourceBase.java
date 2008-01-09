@@ -115,7 +115,6 @@ public abstract class TransferServiceContextResourceBase extends ReflectionResou
             resourcePropertyPersistenceHelper = new gov.nih.nci.cagrid.introduce.servicetools.XmlPersistenceHelper(TransferServiceContextResourceProperties.class,TransferServiceConfiguration.getConfiguration());
             resourcePersistenceHelper = new FilePersistenceHelper(this.getClass(),TransferServiceConfiguration.getConfiguration(),".resource");
         } catch (Exception ex) {
-            ex.printStackTrace();
             logger.warn("Unable to initialize resource properties persistence helper", ex);
         }
     }
