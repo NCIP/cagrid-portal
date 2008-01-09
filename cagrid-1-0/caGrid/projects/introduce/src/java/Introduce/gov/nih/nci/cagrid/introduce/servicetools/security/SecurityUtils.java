@@ -13,6 +13,15 @@ import org.globus.wsrf.security.SecurityManager;
  */
 public class SecurityUtils {
 
+    public static String getCallerIdentity() throws Exception {
+        String caller = SecurityManager.getManager().getCaller();
+        if ((caller == null) || (caller.equals("<anonymous>"))) {
+            return null;
+        }
+        return caller;
+    }
+
+
     /**
      * Create a new ResourceSecurityDescriptor using the current peer as the
      * identity to use for acccess. This will only alow this peer to have access
@@ -23,25 +32,28 @@ public class SecurityUtils {
      * @throws SecurityDescriptorException
      */
     public static ResourceSecurityDescriptor createCreatorOnlyResourceSecurityDescriptor() throws SecurityException,
-        SecurityDescriptorException {
+        SecurityDescriptorException, Exception {
         ResourceSecurityDescriptor desc = null;
 
-        String peer = SecurityManager.getManager().getCaller();
-        // Create a resource security descriptorResourceSecurityDescriptor
-        desc = new ResourceSecurityDescriptor();
-        // Configure a chain of PDPsString
-        String authzChain = "idenAuthz:org.globus.wsrf.impl.security.authorization.IdentityAuthorization";
-        // Create configuration object that implements PDPConfig
-        ResourcePDPConfig config = new ResourcePDPConfig(authzChain);
-        // Set properties that are required by the PDPs on the configuration
-        // object.
-        // Property used by Identity authorization: scope, property name,
-        // property value
-        config.setProperty("idenAuthz", "identity", peer);
-        try {
-            desc.setAuthzChain(authzChain, config, "Caller Only Resource Chain", "caller");
-        } catch (InitializeException e) {
-            e.printStackTrace();
+        String peer = getCallerIdentity();
+        // only if there is a peer(non anon caller) should you hook it in.
+        if (peer != null) {
+            // Create a resource security descriptorResourceSecurityDescriptor
+            desc = new ResourceSecurityDescriptor();
+            // Configure a chain of PDPsString
+            String authzChain = "idenAuthz:org.globus.wsrf.impl.security.authorization.IdentityAuthorization";
+            // Create configuration object that implements PDPConfig
+            ResourcePDPConfig config = new ResourcePDPConfig(authzChain);
+            // Set properties that are required by the PDPs on the configuration
+            // object.
+            // Property used by Identity authorization: scope, property name,
+            // property value
+            config.setProperty("idenAuthz", "identity", peer);
+            try {
+                desc.setAuthzChain(authzChain, config, "Caller Only Resource Chain", "caller");
+            } catch (InitializeException e) {
+                e.printStackTrace();
+            }
         }
 
         return desc;
