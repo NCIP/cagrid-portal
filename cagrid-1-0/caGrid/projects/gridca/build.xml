@@ -405,5 +405,27 @@ GSBT - Globus Service Build Tools
 			</classpath>
 		</java>
 	</target>
+	
+	<target name="createTomcatKeystore" description="Generates a Grid Trust Report.">
+			<java classname="gov.nih.nci.cagrid.gridca.commandline.TomcatKeystoreCreator" fork="false" newenvironment="true" failonerror="true">
+				<classpath>
+					<fileset dir="${build.lib.dir}">
+						<include name="**/*.jar" />
+					</fileset>
+					<fileset dir="${ext.lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+					<fileset dir="${lib.dir}">
+						<include name="**/*.jar" />
+					</fileset>
+					<fileset dir="${globus.location}/lib">
+						<include name="*.jar" />
+						<exclude name="${jar.name}" />
+						<exclude name="xml-apis.jar" />
+						<exclude name="xercesImpl.jar" />
+					</fileset>
+				</classpath>
+			</java>
+		</target>
 
 </project>
