@@ -29,18 +29,12 @@ import org.globus.wsrf.config.ContainerConfig;
  */
 public class FilePersistenceHelper {
 
-    public static final String SERVER_ID = ContainerConfig.CONTAINER_ID_PROPERTY;
 
     private static Log logger = LogFactory.getLog(FilePersistenceHelper.class.getName());
 
     protected Class beanClass;
     protected File storageDir;
     protected String fileSuffix;
-
-
-    private static String getServerID() {
-        return ContainerConfig.getContainerID();
-    }
 
 
     public static File getDefaultStorageDirectory(File baseDir, Class beanClass) throws IOException {
@@ -54,7 +48,7 @@ public class FilePersistenceHelper {
             className = className.substring(pos + 1);
         }
 
-        String dir = baseDir.getAbsolutePath() + File.separatorChar + getServerID() + File.separatorChar + className;
+        String dir = baseDir.getAbsolutePath() + File.separatorChar + className;
 
         File storageDir = new File(dir);
         if (!storageDir.getCanonicalPath().startsWith(baseDir.getCanonicalPath())) {
