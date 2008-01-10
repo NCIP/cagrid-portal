@@ -88,9 +88,12 @@
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
-			<fileset dir="../ext/lib">
+			<fileset dir="../build/lib">
 				<include name="*.jar" />
 			</fileset>
+                        <fileset dir="../ext/lib">
+                                <include name="*.jar" />
+                        </fileset>
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="*.jar" />
 			</fileset>
