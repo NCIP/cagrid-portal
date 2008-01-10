@@ -87,7 +87,7 @@ public class TransferServlet extends HttpServlet {
                 resp.getOutputStream().write(bytes);
                 length = fis.read(bytes);
             }
-            resp.getOutputStream().write(bytes);
+            resp.getOutputStream().write(bytes,0,length);
         }
 
     }

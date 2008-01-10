@@ -15,9 +15,8 @@ import java.io.IOException;
 
 
 public class TransferExtensionCreationPostProcessor implements CreationExtensionPostProcessor {
-    private File extensionDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "caTransfer");
-    private File extensionSchemaDir = new File(extensionDir.getAbsolutePath() + File.separator + "schema" + File.separator
-        + "TransferService");
+    private File extensionDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "caGrid_Transfer");
+    private File extensionSchemaDir = new File(extensionDir.getAbsolutePath() + File.separator + "schema");
     private File extensionLibDir = new File(extensionDir.getAbsolutePath() + File.separator + "lib");
     
     public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation info)
@@ -31,25 +30,43 @@ public class TransferExtensionCreationPostProcessor implements CreationExtension
         }
 
         // copy in the caGrid transfer schema and add the namespace types for it
-        File transferSchema = new File(extensionSchemaDir + File.separator + "caGrid_Transfer.xsd");
+        File transferSchema = new File(extensionSchemaDir + File.separator + "TransferServiceContextTypes.xsd");
         try {
             Utils
-                .copyFile(transferSchema, new File(getServiceSchemaDir(info) + File.separator + "caGrid_Transfer.xsd"));
+                .copyFile(transferSchema, new File(getServiceSchemaDir(info) + File.separator + "TransferServiceContextTypes.xsd"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        NamespaceType transferNamespace = null;
+        NamespaceType transferServiceNamespace = null;
         try {
-            transferNamespace = CommonTools.createNamespaceType(getServiceSchemaDir(info) + File.separator
+            transferServiceNamespace = CommonTools.createNamespaceType(getServiceSchemaDir(info) + File.separator
+                + "TransferServiceContextTypes.xsd", new File(getServiceSchemaDir(info)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        transferServiceNamespace.setGenerateStubs(new Boolean(false));
+        transferServiceNamespace.setPackageName("org.cagrid.transfer.context.stubs.types");
+        CommonTools.addNamespace(info.getServiceDescriptor(), transferServiceNamespace);
+        
+        File transferDescSchema = new File(extensionSchemaDir + File.separator + "caGrid_Transfer.xsd");
+        try {
+            Utils
+                .copyFile(transferDescSchema, new File(getServiceSchemaDir(info) + File.separator + "caGrid_Transfer.xsd"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        NamespaceType transferDescNamespace = null;
+        try {
+            transferDescNamespace = CommonTools.createNamespaceType(getServiceSchemaDir(info) + File.separator
                 + "caGrid_Transfer.xsd", new File(getServiceSchemaDir(info)));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        transferNamespace.setGenerateStubs(new Boolean(false));
-        transferNamespace.setPackageName("org.cagrid.transfer.descriptor");
-        CommonTools.addNamespace(info.getServiceDescriptor(), transferNamespace);
-
+        transferDescNamespace.setGenerateStubs(new Boolean(false));
+        transferDescNamespace.setPackageName("org.cagrid.transfer.descriptor");
+        CommonTools.addNamespace(info.getServiceDescriptor(), transferDescNamespace);
     }
     
     private void copyLibraries(ServiceInformation info) throws Exception {
