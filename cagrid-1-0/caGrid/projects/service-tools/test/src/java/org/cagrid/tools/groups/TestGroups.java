@@ -1,16 +1,14 @@
-package gov.nih.nci.cagrid.dorian.service.ifs;
+package org.cagrid.tools.groups;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
-import gov.nih.nci.cagrid.dorian.test.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.cagrid.tools.Utils;
 import org.cagrid.tools.database.Database;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -26,7 +24,6 @@ public class TestGroups extends TestCase {
 	private static final int MEMBER_COUNT = 5;
 	private static final String MEMBER_PREFIX = "member";
 
-
 	public void testAddExistingGroup() {
 		GroupManager gm = new GroupManager(db);
 		try {
@@ -34,7 +31,7 @@ public class TestGroups extends TestCase {
 			try {
 				gm.addGroup(grp.getName());
 				fail("Should not be able to add the group because it already exists.");
-			} catch (DorianInternalFault f) {
+			} catch (GroupException f) {
 
 			}
 		} catch (Exception e) {
@@ -49,15 +46,15 @@ public class TestGroups extends TestCase {
 		}
 
 	}
-	
+
 	public void testAddExistingMembers() {
 		GroupManager gm = new GroupManager(db);
 		try {
 			Group grp = validateAddingGroupAndMembers(gm, "mygroup");
 			try {
-				grp.addMember(MEMBER_PREFIX+"0");
+				grp.addMember(MEMBER_PREFIX + "0");
 				fail("Should not be able to add member because the membership already exists.");
-			} catch (DorianInternalFault f) {
+			} catch (GroupException f) {
 
 			}
 		} catch (Exception e) {
@@ -72,8 +69,6 @@ public class TestGroups extends TestCase {
 		}
 
 	}
-
-
 
 	public void testMultipleGroups() {
 		GroupManager gm = new GroupManager(db);
@@ -101,8 +96,8 @@ public class TestGroups extends TestCase {
 		}
 	}
 
-
-	private Group validateAddingGroupAndMembers(GroupManager gm, String name) throws Exception {
+	private Group validateAddingGroupAndMembers(GroupManager gm, String name)
+			throws Exception {
 		gm.addGroup(name);
 		assertTrue(gm.groupExists(name));
 		Group grp = gm.getGroup(name);
@@ -126,14 +121,15 @@ public class TestGroups extends TestCase {
 				}
 			}
 			if (!found) {
-				fail("The member " + member + " should be a member of the group but is not.");
+				fail("The member " + member
+						+ " should be a member of the group but is not.");
 			}
 		}
 		return grp;
 	}
 
-
-	private void validateRemovingGroupAndMembers(GroupManager gm, Group grp) throws Exception {
+	private void validateRemovingGroupAndMembers(GroupManager gm, Group grp)
+			throws Exception {
 		for (int i = 0; i < MEMBER_COUNT - 2; i++) {
 			String member = MEMBER_PREFIX + i;
 			assertTrue(grp.isMember(member));
@@ -147,7 +143,6 @@ public class TestGroups extends TestCase {
 		assertFalse(gm.groupExists(grp.getName()));
 		assertEquals(0, grp.getMembers().size());
 	}
-
 
 	public void testGroup() {
 		GroupManager gm = new GroupManager(db);
@@ -165,15 +160,15 @@ public class TestGroups extends TestCase {
 			}
 		}
 	}
-	
+
 	public void testRemoveAllMembersFromGroup() {
 		GroupManager gm = new GroupManager(db);
 		String member = "MemberX";
 		String memberToBeRemoved = "MemberY";
 		try {
-			String grpPrefix="mygroup";
-			for(int i=0; i<3; i++){
-				String grpName = grpPrefix+i;
+			String grpPrefix = "mygroup";
+			for (int i = 0; i < 3; i++) {
+				String grpName = grpPrefix + i;
 				gm.addGroup(grpName);
 				Group grp = gm.getGroup(grpName);
 				grp.addMember(member);
@@ -183,8 +178,8 @@ public class TestGroups extends TestCase {
 				assertEquals(2, grp.getMembers().size());
 			}
 			gm.removeUserFromAllGroups(memberToBeRemoved);
-			for(int i=0; i<3; i++){
-				String grpName = grpPrefix+i;
+			for (int i = 0; i < 3; i++) {
+				String grpName = grpPrefix + i;
 				Group grp = gm.getGroup(grpName);
 				assertEquals(true, grp.isMember(member));
 				assertEquals(false, grp.isMember(memberToBeRemoved));
@@ -201,8 +196,6 @@ public class TestGroups extends TestCase {
 			}
 		}
 	}
-	
-
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -214,7 +207,6 @@ public class TestGroups extends TestCase {
 			assertTrue(false);
 		}
 	}
-
 
 	protected void tearDown() throws Exception {
 		super.setUp();

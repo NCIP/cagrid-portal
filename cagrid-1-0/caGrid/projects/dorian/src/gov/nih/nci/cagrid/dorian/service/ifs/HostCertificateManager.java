@@ -124,7 +124,7 @@ public class HostCertificateManager extends LoggingObject {
 
 		try {
 			java.security.cert.X509Certificate oldCert = CertUtil.loadCertificate(record.getCertificate().getCertificateAsString());
-			blackList.addCertificateToBlackList(oldCert, blackList.CERTIFICATE_RENEWED);
+			blackList.addCertificateToBlackList(oldCert, CertificateBlacklistManager.CERTIFICATE_RENEWED);
 			
 			ca.deleteCredentials(record.getHost());
 			java.security.PublicKey key = KeyUtil.loadPublicKey(record.getPublicKey().getKeyAsString());

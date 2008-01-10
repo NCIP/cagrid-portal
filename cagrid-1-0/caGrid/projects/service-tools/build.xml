@@ -24,6 +24,7 @@
 	<property name="jar.dir" value="${build.dir}/jars" />
 	<property name="db.jarfile" value="${jar.dir}/${cagrid.master.jar.prefix}db.jar" />
 	<property name="events.jarfile" value="${jar.dir}/${cagrid.master.jar.prefix}events.jar" />
+	<property name="groups.jarfile" value="${jar.dir}/${cagrid.master.jar.prefix}groups.jar" />
 	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="ext.lib.dir" value="${basedir}/ext/lib" />
 	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
@@ -212,6 +213,14 @@
 			<fileset dir="${classes.dir}" includes="**/events/**" />
 			<fileset dir="${stubs.dest}" includes="**/events/**" />
 		</jar>
+		
+		<jar jarfile="${groups.jarfile}">
+				<manifest>
+					<attribute name="Built-By" value="${user.name}" />
+				</manifest>
+				<fileset dir="${classes.dir}" includes="**/groups/**" />
+				<fileset dir="${stubs.dest}" includes="**/groups/**" />
+			</jar>
 
 	</target>
 

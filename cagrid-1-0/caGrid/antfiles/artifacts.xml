@@ -118,25 +118,43 @@
 				<exclude name="*test*.jar" />
 			</fileset>
 		</artifact>
-		
-		<artifact track="main" type="jars" id="events.tools.jars">
-					<generatingantcall target="build-service-tools" />
-					<fileset dir="${projects.dir}/service-tools/build/jars">
-						<include name="caGrid-*-db.jar" />
-						<include name="caGrid-*-events.jar" />
-						<exclude name="*test*.jar" />
-					</fileset>
 
-					<fileset dir="${projects.dir}/service-tools/lib">
-						<include name="commons-dbcp-1.2.2.jar" />
-						<include name="commons-pool-1.2.jar" />
-						<include name="mysql-connector-java-3.0.16-ga-bin.jar" />
-						<include name="spring-beans.jar" />
-						<include name="spring-core.jar" />
-					</fileset>
-					<fileset dir="${projects.dir}/service-tools/ext/lib">
-						<include name="caGrid-*-core.jar" />
-					</fileset>
+		<artifact track="main" type="jars" id="events.tools.jars">
+			<generatingantcall target="build-service-tools" />
+			<fileset dir="${projects.dir}/service-tools/build/jars">
+				<include name="caGrid-*-db.jar" />
+				<include name="caGrid-*-events.jar" />
+				<exclude name="*test*.jar" />
+			</fileset>
+
+			<fileset dir="${projects.dir}/service-tools/lib">
+				<include name="commons-dbcp-1.2.2.jar" />
+				<include name="commons-pool-1.2.jar" />
+				<include name="mysql-connector-java-3.0.16-ga-bin.jar" />
+				<include name="spring-beans.jar" />
+				<include name="spring-core.jar" />
+			</fileset>
+			<fileset dir="${projects.dir}/service-tools/ext/lib">
+				<include name="caGrid-*-core.jar" />
+			</fileset>
+		</artifact>
+
+		<artifact track="main" type="jars" id="groups.tools.jars">
+			<generatingantcall target="build-service-tools" />
+			<fileset dir="${projects.dir}/service-tools/build/jars">
+				<include name="caGrid-*-db.jar" />
+				<include name="caGrid-*-groups.jar" />
+				<exclude name="*test*.jar" />
+			</fileset>
+
+			<fileset dir="${projects.dir}/service-tools/lib">
+				<include name="commons-dbcp-1.2.2.jar" />
+				<include name="commons-pool-1.2.jar" />
+				<include name="mysql-connector-java-3.0.16-ga-bin.jar" />
+			</fileset>
+			<fileset dir="${projects.dir}/service-tools/ext/lib">
+				<include name="caGrid-*-core.jar" />
+			</fileset>
 		</artifact>
 
 		<artifact track="main" type="jars" id="db.tools.jars">
@@ -543,38 +561,38 @@
 				<include name="**/*.wsdl" />
 			</fileset>
 		</artifact>
-		
+
 		<artifact track="main" type="schemas" id="data.wsdls">
 			<fileset dir="${projects.dir}/data/schema">
-				<include name="**/*.wsdl"/>
+				<include name="**/*.wsdl" />
 			</fileset>
 		</artifact>
-		
+
 		<artifact track="main" type="resources" id="data.cql.testing.docs">
 			<fileset dir="${projects.dir}/data/docs/cqlExamples">
 				<include name="**/*.xml" />
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="cql.1.0.beans.jar">
-			<generatingantcall target="build-cql"/>
+			<generatingantcall target="build-cql" />
 			<fileset dir="${projects.dir}/cql/build/lib">
-				<include name="*-cql.1.0.jar"/>
+				<include name="*-cql.1.0.jar" />
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="cql.2.0.beans.jar">
-			<generatingantcall target="build-cql"/>
+			<generatingantcall target="build-cql" />
 			<fileset dir="${projects.dir}/cql/build/lib">
-				<include name="*-cql.2.0.jar"/>
+				<include name="*-cql.2.0.jar" />
 			</fileset>
 		</artifact>
 		<artifact track="main" type="schemas" id="cql.1.0.schemas">
 			<fileset dir="${projects.dir}/cql/schema">
-				<include name="cql1.0/**/*.xsd"/>
+				<include name="cql1.0/**/*.xsd" />
 			</fileset>
 		</artifact>
 		<artifact track="main" type="schemas" id="cql.2.0.schemas">
 			<fileset dir="${projects.dir}/cql/schema">
-				<include name="cql2.0/**/*.xsd"/>
+				<include name="cql2.0/**/*.xsd" />
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="data.extensions.jars">
@@ -848,10 +866,10 @@
 			</fileset>
 		</artifact>
 		<artifact track="main" type="resources" id="cds.ui.conf">
-					<fileset dir="${current.grid.dir}">
-						<include name="cds-ui-configuration.xml" />
-					</fileset>
-				</artifact>
+			<fileset dir="${current.grid.dir}">
+				<include name="cds-ui-configuration.xml" />
+			</fileset>
+		</artifact>
 		<artifact track="main" type="resources" id="gridgrouper.ui.conf">
 			<fileset dir="${current.grid.dir}">
 				<include name="gridgrouper-ui-configuration.xml" />

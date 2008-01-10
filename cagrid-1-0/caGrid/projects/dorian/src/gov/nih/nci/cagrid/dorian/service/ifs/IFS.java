@@ -53,6 +53,9 @@ import java.util.Map;
 
 import org.bouncycastle.asn1.x509.CRLReason;
 import org.cagrid.tools.database.Database;
+import org.cagrid.tools.groups.Group;
+import org.cagrid.tools.groups.GroupException;
+import org.cagrid.tools.groups.GroupManager;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -101,22 +104,37 @@ public class IFS extends LoggingObject implements Publisher {
 		threadManager = new ThreadManager();
 		this.blackList = new CertificateBlacklistManager(db);
 		tm = new TrustedIdPManager(conf, db);
-		um = new UserManager(db, conf, properties, ca, this.blackList, tm, this, defaults);
+		um = new UserManager(db, conf, properties, ca, this.blackList, tm,
+				this, defaults);
 		um.buildDatabase();
 		this.groupManager = new GroupManager(db);
-		if (!this.groupManager.groupExists(ADMINISTRATORS)) {
-			this.groupManager.addGroup(ADMINISTRATORS);
-			this.administrators = this.groupManager.getGroup(ADMINISTRATORS);
-			if (defaults.getDefaultUser() != null) {
-				this.administrators.addMember(defaults.getDefaultUser()
-						.getGridId());
+		try {
+			if (!this.groupManager.groupExists(ADMINISTRATORS)) {
+				this.groupManager.addGroup(ADMINISTRATORS);
+				this.administrators = this.groupManager
+						.getGroup(ADMINISTRATORS);
+				if (defaults.getDefaultUser() != null) {
+					this.administrators.addMember(defaults.getDefaultUser()
+							.getGridId());
+				} else {
+					logWarning("COULD NOT ADD DEFAULT USER TO ADMINISTRATORS GROUP, NO DEFAULT USER WAS FOUND!!!");
+				}
 			} else {
-				logWarning("COULD NOT ADD DEFAULT USER TO ADMINISTRATORS GROUP, NO DEFAULT USER WAS FOUND!!!");
+				this.administrators = this.groupManager
+						.getGroup(ADMINISTRATORS);
 			}
-		} else {
-			this.administrators = this.groupManager.getGroup(ADMINISTRATORS);
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in setting up the administrators group.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
 		}
-		this.hostManager = new HostCertificateManager(db, this.conf, ca, this, blackList);
+		this.hostManager = new HostCertificateManager(db, this.conf, ca, this,
+				blackList);
 
 		if (!ignoreCRL) {
 			publishCRL = true;
@@ -255,6 +273,15 @@ public class IFS extends LoggingObject implements Publisher {
 							+ idpCert.getSubjectDN().getName()
 							+ " could not be resolved!!!");
 			throw fault;
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in removing the user from all groups.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
 		}
 	}
 
@@ -263,9 +290,23 @@ public class IFS extends LoggingObject implements Publisher {
 		IFSUser caller = um.getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
-		um.removeUser(usr);
-		this.hostManager.ownerRemovedUpdateHostCertificates(usr.getGridId());
-		this.groupManager.removeUserFromAllGroups(usr.getGridId());
+		try {
+			um.removeUser(usr);
+			this.hostManager
+					.ownerRemovedUpdateHostCertificates(usr.getGridId());
+			this.groupManager.removeUserFromAllGroups(usr.getGridId());
+		} catch (InvalidUserFault e) {
+			throw e;
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in removing the user from all groups.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 	public IFSUser renewUserCredentials(String callerGridIdentity, IFSUser usr)
@@ -290,10 +331,21 @@ public class IFS extends LoggingObject implements Publisher {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
-		if (!this.administrators.isMember(gridIdentity)) {
-			IFSUser admin = getUser(gridIdentity);
-			verifyActiveUser(admin);
-			this.administrators.addMember(gridIdentity);
+		try {
+			if (!this.administrators.isMember(gridIdentity)) {
+				IFSUser admin = getUser(gridIdentity);
+				verifyActiveUser(admin);
+				this.administrators.addMember(gridIdentity);
+			}
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in adding the user to the administrators group.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
 		}
 	}
 
@@ -302,7 +354,18 @@ public class IFS extends LoggingObject implements Publisher {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
-		this.administrators.removeMember(gridIdentity);
+		try {
+			this.administrators.removeMember(gridIdentity);
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in removing the user from the administrators group.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 	public String[] getAdmins(String callerGridIdentity)
@@ -310,12 +373,23 @@ public class IFS extends LoggingObject implements Publisher {
 		IFSUser caller = getUser(callerGridIdentity);
 		verifyActiveUser(caller);
 		verifyAdminUser(caller);
-		List members = this.administrators.getMembers();
-		String[] admins = new String[members.size()];
-		for (int i = 0; i < members.size(); i++) {
-			admins[i] = (String) members.get(i);
+		try {
+			List members = this.administrators.getMembers();
+			String[] admins = new String[members.size()];
+			for (int i = 0; i < members.size(); i++) {
+				admins[i] = (String) members.get(i);
+			}
+			return admins;
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred determining the members of the administrators group.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
 		}
-		return admins;
 	}
 
 	public X509Certificate[] createProxy(SAMLAssertion saml,
@@ -779,11 +853,23 @@ public class IFS extends LoggingObject implements Publisher {
 
 	private void verifyAdminUser(IFSUser usr) throws DorianInternalFault,
 			PermissionDeniedFault {
-		if (administrators.isMember(usr.getGridId())) {
-			return;
-		} else {
-			PermissionDeniedFault fault = new PermissionDeniedFault();
-			fault.setFaultString("You are NOT an Administrator!!!");
+		try {
+			if (administrators.isMember(usr.getGridId())) {
+				return;
+			} else {
+				PermissionDeniedFault fault = new PermissionDeniedFault();
+				fault.setFaultString("You are NOT an Administrator!!!");
+				throw fault;
+			}
+
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in determining if the user is a member of the administrators group.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
 	}
@@ -901,7 +987,18 @@ public class IFS extends LoggingObject implements Publisher {
 	public void clearDatabase() throws DorianInternalFault {
 		this.um.clearDatabase();
 		this.tm.clearDatabase();
-		this.groupManager.clearDatabase();
+		try {
+			this.groupManager.clearDatabase();
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in deleting the groups database.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		}
 		this.hostManager.clearDatabase();
 		this.blackList.clearDatabase();
 		try {
