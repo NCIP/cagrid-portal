@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
 import gov.nih.nci.cagrid.data.ui.GroupSelectionListener;
 import gov.nih.nci.cagrid.data.ui.NotifyingButtonGroup;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
@@ -51,7 +52,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.5 2007-12-06 18:43:24 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.6 2008-01-11 20:33:20 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -150,6 +151,23 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             CompositeErrorDialog.showErrorDialog("Error packaging configuration directory", ex.getMessage(), ex);
         }
         CONFIG_DIR_JAR = configJar;
+        // grab the castor marshalling and unmarshalling xml mapping files
+        // from the config dir and copy them into the service's package structure
+        try {
+            StringBuffer marshallingMappingFile = Utils.fileToStringBuffer(
+                new File(configDir, CastorMappingUtil.CASTOR_MARSHALLING_MAPPING_FILE));
+            StringBuffer unmarshallingMappingFile = Utils.fileToStringBuffer(
+                new File(configDir, CastorMappingUtil.CASTOR_UNMARSHALLING_MAPPING_FILE));
+            // copy the mapping files to the service's source dir + base package name
+            String marshallOut = CastorMappingUtil.getMarshallingCastorMappingFileName(getServiceInformation());
+            String unmarshallOut = CastorMappingUtil.getUnmarshallingCastorMappingFileName(getServiceInformation());
+            Utils.stringBufferToFile(marshallingMappingFile, marshallOut);
+            Utils.stringBufferToFile(unmarshallingMappingFile, unmarshallOut);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error extracting castor mapping files", ex.getMessage(), ex);
+        }
+        
         // if local API, copy in the orm jar
         if (getLocalApiRadioButton().isSelected()) {
             File ormFile = new File(getOrmJarTextField().getText());
