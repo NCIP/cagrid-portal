@@ -25,7 +25,7 @@ import java.util.zip.ZipOutputStream;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: ZipUtilities.java,v 1.5 2008-01-08 21:12:37 dervin Exp $ 
+ * @version $Id: ZipUtilities.java,v 1.6 2008-01-11 15:49:48 dervin Exp $ 
  */
 public class ZipUtilities {
 	
@@ -158,31 +158,37 @@ public class ZipUtilities {
         FileOutputStream tempOut = new FileOutputStream(tempZip);
         ZipOutputStream zipOut = new ZipOutputStream(tempOut);
         
-        // start streaming the input stream over to the temp
-        ZipFile zipIn = new ZipFile(zipFile);
-        Enumeration<? extends ZipEntry> entries = zipIn.entries();
-        while (entries.hasMoreElements()) {
-            ZipEntry inputEntry = entries.nextElement();
-            if (!inputEntry.getName().equals(entryName)) {
-                InputStream entryStream = zipIn.getInputStream(inputEntry);
-                zipOut.putNextEntry(inputEntry);
-                copyStreams(entryStream, zipOut);
-                zipOut.closeEntry();
+        try {
+            // start streaming the input stream over to the temp
+            ZipFile zipIn = new ZipFile(zipFile);
+            Enumeration<? extends ZipEntry> entries = zipIn.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry inputEntry = entries.nextElement();
+                if (!inputEntry.getName().equals(entryName)) {
+                    InputStream entryStream = zipIn.getInputStream(inputEntry);
+                    zipOut.putNextEntry(inputEntry);
+                    copyStreams(entryStream, zipOut);
+                    zipOut.closeEntry();
+                }
             }
+
+            // create new entry
+            ZipEntry insert = new ZipEntry(entryName);
+            zipOut.putNextEntry(insert);
+            copyStreams(new ByteArrayInputStream(data), zipOut);
+            zipOut.closeEntry();
+            zipOut.close();
+
+            zipIn.close();
+            zipFile.delete();
+
+            Utils.copyFile(tempZip, zipFile);
+        } finally {
+            // should delete the temp file regardless of what happens 
+            // in the try block, and just let any exceptions percolate
+            // up the stack
+            tempZip.delete();
         }
-        
-        // create new entry
-        ZipEntry insert = new ZipEntry(entryName);
-        zipOut.putNextEntry(insert);
-        copyStreams(new ByteArrayInputStream(data), zipOut);
-        zipOut.closeEntry();
-        zipOut.close();
-        
-        zipIn.close();
-        zipFile.delete();
-        
-        Utils.copyFile(tempZip, zipFile);
-        tempZip.delete();
     }
 	
 	

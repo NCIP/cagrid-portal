@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.jar.JarEntry;
@@ -30,6 +29,17 @@ import java.util.jar.JarOutputStream;
  */
 public class JarUtilities {
 	
+    /**
+     * Gets the contents of a jar entry as a StringBuffer
+     * 
+     * @param jar
+     *      The jar to extract from
+     * @param entryName
+     *      The name of the entry to be extracted
+     * @return
+     *      The contents of a jar entry, or null if no such entry exists
+     * @throws IOException
+     */
 	public static StringBuffer getFileContents(JarFile jar, String entryName) throws IOException {
 		JarEntry entry = jar.getJarEntry(entryName);
 		if (entry == null) {
@@ -41,26 +51,38 @@ public class JarUtilities {
 	}
 	
 	
+    /**
+     * Removes an entry from a jar file
+     * 
+     * @param jar
+     *      The jar file
+     * @param entryName
+     *      The name of the entry to remove
+     * @return
+     *      The data of the jar with the entry removed
+     * @throws IOException
+     */
 	public static byte[] removeJarEntry(JarFile jar, String entryName) throws IOException {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		JarOutputStream jarOut = new JarOutputStream(bytes);
+        
 		// copy all entries except the one with the matching name
 		Set<String> copiedEntries = new HashSet<String>();
 		Enumeration jarEntries = jar.entries();
 		while (jarEntries.hasMoreElements()) {
-			JarEntry entry = (JarEntry) jarEntries.nextElement();
-			String name = entry.getName();
-			if (!name.equals(entryName)) {
-				if (!copiedEntries.contains(name)) {
-					jarOut.putNextEntry(entry);
-					InputStream entryStream = jar.getInputStream(entry);
-					byte[] entryBytes = streamToBytes(entryStream);
-					entryStream.close();
-					jarOut.write(entryBytes);
-					jarOut.closeEntry();
-					copiedEntries.add(name);
-				}
-			}
+		    JarEntry entry = (JarEntry) jarEntries.nextElement();
+		    String name = entry.getName();
+		    if (!name.equals(entryName)) {
+		        if (!copiedEntries.contains(name)) {
+		            jarOut.putNextEntry(entry);
+		            InputStream entryStream = jar.getInputStream(entry);
+		            byte[] entryBytes = streamToBytes(entryStream);
+		            entryStream.close();
+		            jarOut.write(entryBytes);
+		            jarOut.closeEntry();
+		            copiedEntries.add(name);
+		        }
+		    }
 		}
 		jarOut.flush();
 		jarOut.close();
@@ -68,17 +90,24 @@ public class JarUtilities {
 	}
     
     
+    /**
+     * Places the contents of a directory in a Jar file
+     * 
+     * @param dir
+     *      The directory
+     * @param jarFile
+     *      The jar file
+     * @throws IOException
+     */
     public static void jarDirectory(File dir, File jarFile) throws IOException {
         JarOutputStream jarOut = new JarOutputStream(new FileOutputStream(jarFile));
-        List files = Utils.recursiveListFiles(dir, new FileFilter() {
+        List<File> files = Utils.recursiveListFiles(dir, new FileFilter() {
             public boolean accept(File name) {
                 return true;
             }
         });
         int baseDirNameLength = dir.getAbsolutePath().length();
-        Iterator fileIter = files.iterator();
-        while (fileIter.hasNext()) {
-            File fileToAdd = (File) fileIter.next();
+        for (File fileToAdd : files) {
             String relativeFileName = fileToAdd.getAbsolutePath().substring(baseDirNameLength + 1);
             JarEntry entry = new JarEntry(relativeFileName);
             jarOut.putNextEntry(entry);
@@ -112,32 +141,45 @@ public class JarUtilities {
         FileOutputStream tempOut = new FileOutputStream(tempJar);
         JarOutputStream jarOut = new JarOutputStream(tempOut);
         
-        // start streaming the input stream over to the temp
-        JarFile jarIn = new JarFile(jarFile);
-        Enumeration<JarEntry> entries = jarIn.entries();
-        while (entries.hasMoreElements()) {
-            JarEntry inputEntry = entries.nextElement();
-            if (!inputEntry.getName().equals(entryName)) {
-                InputStream entryStream = jarIn.getInputStream(inputEntry);
-                jarOut.putNextEntry(inputEntry);
-                copyStreams(entryStream, jarOut);
-                jarOut.closeEntry();
+        try {
+            // start streaming the input stream over to the temp
+            JarFile jarIn = new JarFile(jarFile);
+            Enumeration<JarEntry> entries = jarIn.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry inputEntry = entries.nextElement();
+                if (!inputEntry.getName().equals(entryName)) {
+                    InputStream entryStream = jarIn.getInputStream(inputEntry);
+                    jarOut.putNextEntry(inputEntry);
+                    copyStreams(entryStream, jarOut);
+                    jarOut.closeEntry();
+                }
             }
+
+            // create new entry
+            JarEntry insert = new JarEntry(entryName);
+            jarOut.putNextEntry(insert);
+            copyStreams(new ByteArrayInputStream(data), jarOut);
+            jarOut.closeEntry();
+            jarOut.close();
+
+            jarIn.close();
+            jarFile.delete();
+
+            Utils.copyFile(tempJar, jarFile);
+        } finally {
+            tempJar.delete();
         }
-        
-        // create new entry
-        JarEntry insert = new JarEntry(entryName);
-        jarOut.putNextEntry(insert);
-        copyStreams(new ByteArrayInputStream(data), jarOut);
-        jarOut.closeEntry();
-        jarOut.close();
-        
-        jarIn.close();
-        jarFile.delete();
-        tempJar.renameTo(jarFile);
     }
 	
 	
+    /**
+     * Reads a stream and returns the byte content of it
+     * @param stream
+     *      The stream
+     * @return
+     *      The data of the stream
+     * @throws IOException
+     */
 	private static byte[] streamToBytes(InputStream stream) throws IOException {
 		byte[] bytes = new byte[0];
 		byte[] buffer = new byte[8192];
