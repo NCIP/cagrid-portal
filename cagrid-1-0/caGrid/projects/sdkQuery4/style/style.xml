@@ -9,11 +9,11 @@
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.QueryProcessorConfigurationPanel"/>
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.QueryProcessorSecurityPanel"/>
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.data.style.sdkstyle.wizard.DomainModelPanel"/>
-		<CreationWizardPanel classname="gov.nih.nci.cagrid.data.style.sdkstyle.wizard.SchemaTypesPanel"/>
+		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.SchemaMappingPanel"/>
 	</CreationWizardPanels>
 	<ModificationUiPanel classname="gov.nih.nci.cagrid.sdkquery4.style.modification.SDK4InformationPanel"/>
 	<!-- commented out until implementation exists
 	<CreationHelper postCreationClassname="gov.nih.nci.cagrid.data.style.cacore32.helpers.SDK32PostCreationProcessor"/>
-	<CodegenHelpers postCodegenClassname="gov.nih.nci.cagrid.data.style.cacore32.helpers.SDK32PostCodegenHelper"/>
 	-->
+	<CodegenHelpers postCodegenClassname="gov.nih.nci.cagrid.sdkquery4.style.helper.SDK4PostCodegenHelper"/>
 </DataServiceStyle>
