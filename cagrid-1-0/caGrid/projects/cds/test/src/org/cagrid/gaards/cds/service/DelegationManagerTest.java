@@ -60,34 +60,31 @@ public class DelegationManagerTest extends TestCase {
 			checkAdminList(admin.getIdentity(), cds, admins);
 			String userPrefix = "/O=XYZ/OU=ABC/CN=user";
 			int count = 3;
-			for(int i=0; i<count; i++){
-				String user = userPrefix+i;
-				try{
+			for (int i = 0; i < count; i++) {
+				String user = userPrefix + i;
+				try {
 					cds.addAdmin(user, user);
 					fail("Should not be able to execute admin operation.");
-				}catch (PermissionDeniedFault e) {
-					if (!e.getFaultString().equals(
-							Errors.ADMIN_REQUIRED)) {
+				} catch (PermissionDeniedFault e) {
+					if (!e.getFaultString().equals(Errors.ADMIN_REQUIRED)) {
 						fail("Should not be able to execute admin operation.");
 					}
 				}
-				
-				try{
+
+				try {
 					cds.removeAdmin(user, user);
 					fail("Should not be able to execute admin operation.");
-				}catch (PermissionDeniedFault e) {
-					if (!e.getFaultString().equals(
-							Errors.ADMIN_REQUIRED)) {
+				} catch (PermissionDeniedFault e) {
+					if (!e.getFaultString().equals(Errors.ADMIN_REQUIRED)) {
 						fail("Should not be able to execute admin operation.");
 					}
 				}
-				
-				try{
+
+				try {
 					cds.getAdmins(user);
 					fail("Should not be able to execute admin operation.");
-				}catch (PermissionDeniedFault e) {
-					if (!e.getFaultString().equals(
-							Errors.ADMIN_REQUIRED)) {
+				} catch (PermissionDeniedFault e) {
+					if (!e.getFaultString().equals(Errors.ADMIN_REQUIRED)) {
 						fail("Should not be able to execute admin operation.");
 					}
 				}
@@ -95,17 +92,16 @@ public class DelegationManagerTest extends TestCase {
 				admins.add(user);
 				this.checkAdminList(user, cds, admins);
 			}
-			
-			for(int i=0; i<count; i++){
-				String user = userPrefix+i;
+
+			for (int i = 0; i < count; i++) {
+				String user = userPrefix + i;
 				cds.removeAdmin(admin.getIdentity(), user);
 				admins.remove(user);
-				try{
+				try {
 					cds.getAdmins(user);
 					fail("Should not be able to execute admin operation.");
-				}catch (PermissionDeniedFault e) {
-					if (!e.getFaultString().equals(
-							Errors.ADMIN_REQUIRED)) {
+				} catch (PermissionDeniedFault e) {
+					if (!e.getFaultString().equals(Errors.ADMIN_REQUIRED)) {
 						fail("Should not be able to execute admin operation.");
 					}
 				}
@@ -260,7 +256,7 @@ public class DelegationManagerTest extends TestCase {
 			}
 		}
 	}
-	
+
 	public void testUpdateDelegationStatusAdminUser() {
 		DelegationManager cds = null;
 		try {
@@ -290,8 +286,8 @@ public class DelegationManagerTest extends TestCase {
 			DelegationIdentifier id = leonardoReq.getDelegationIdentifier();
 
 			try {
-				cds.updateDelegatedCredentialStatus(admin.getIdentity(),
-						id, DelegationStatus.Pending);
+				cds.updateDelegatedCredentialStatus(admin.getIdentity(), id,
+						DelegationStatus.Pending);
 				fail("Should not be able to update the status of the delegated credential.");
 			} catch (DelegationFault e) {
 				if (!e.getFaultString().equals(
@@ -312,15 +308,91 @@ public class DelegationManagerTest extends TestCase {
 			assertEquals(DelegationStatus.Suspended, records[0]
 					.getDelegationStatus());
 
-				cds.updateDelegatedCredentialStatus(admin.getIdentity(),
-						id, DelegationStatus.Approved);
-				
-				 records = cds.findDelegatedCredentials(
-							leonardoCred.getIdentity(), f);
-					assertNotNull(records);
-					assertEquals(1, records.length);
-					assertEquals(DelegationStatus.Approved, records[0]
-							.getDelegationStatus());
+			cds.updateDelegatedCredentialStatus(admin.getIdentity(), id,
+					DelegationStatus.Approved);
+
+			records = cds.findDelegatedCredentials(leonardoCred.getIdentity(),
+					f);
+			assertNotNull(records);
+			assertEquals(1, records.length);
+			assertEquals(DelegationStatus.Approved, records[0]
+					.getDelegationStatus());
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			if (cds != null) {
+				try {
+					cds.clear();
+				} catch (Exception e) {
+				}
+			}
+		}
+	}
+
+	public void testAuditAdminUser() {
+		DelegationManager cds = null;
+		try {
+			cds = Utils.getCDS();
+			GlobusCredential admin = addInitialAdmin();
+			String leonardoAlias = "leonardo";
+			String donatelloAlias = "donatello";
+
+			GlobusCredential leonardoCred = ca.createCredential(leonardoAlias);
+			GlobusCredential donatelloCred = ca
+					.createCredential(donatelloAlias);
+
+			DelegationPolicy policy = getSimplePolicy(donatelloCred
+					.getIdentity());
+
+			DelegationSigningRequest leonardoReq = cds.initiateDelegation(
+					leonardoCred.getIdentity(),
+					getSimpleDelegationRequest(policy));
+			DelegationSigningResponse leonardoRes = new DelegationSigningResponse();
+			leonardoRes.setDelegationIdentifier(leonardoReq
+					.getDelegationIdentifier());
+			leonardoRes.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+					.toCertificateChain(ca.createProxyCertifcates(
+							leonardoAlias, KeyUtil.loadPublicKey(leonardoReq
+									.getPublicKey().getKeyAsString()), 2)));
+			cds.approveDelegation(leonardoCred.getIdentity(), leonardoRes);
+			DelegationIdentifier id = leonardoReq.getDelegationIdentifier();
+
+			DelegatedCredentialAuditFilter f = null;
+
+			try {
+				cds.searchDelegatedCredentialAuditLog(leonardoCred
+						.getIdentity(), f);
+				fail("Should not be able to search the audit log.");
+			} catch (PermissionDeniedFault e) {
+				if (!e
+						.getFaultString()
+						.equals(
+								Errors.PERMISSION_DENIED_NO_DELEGATED_CREDENTIAL_SPECIFIED)) {
+					fail("Should not be able to search the audit log.");
+				}
+			}
+			f = new DelegatedCredentialAuditFilter();
+
+			cds.searchDelegatedCredentialAuditLog(admin.getIdentity(), f);
+			assertEquals(2, cds.searchDelegatedCredentialAuditLog(admin
+					.getIdentity(), f).length);
+
+			f.setDelegationIdentifier(id);
+			assertEquals(2, cds.searchDelegatedCredentialAuditLog(admin
+					.getIdentity(), f).length);
+
+			try {
+				cds.searchDelegatedCredentialAuditLog(donatelloCred
+						.getIdentity(), f);
+				fail("Should not be able to search the audit log.");
+			} catch (PermissionDeniedFault e) {
+				if (!e.getFaultString().equals(
+						Errors.PERMISSION_DENIED_TO_AUDIT)) {
+					fail("Should not be able to search the audit log.");
+				}
+			}
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -418,10 +490,11 @@ public class DelegationManagerTest extends TestCase {
 		}
 	}
 
-	public void testFindMyDelegatedCredentials() {
+	public void testFindDelegatedCredentials() {
 		DelegationManager cds = null;
 		try {
 			cds = Utils.getCDS();
+			GlobusCredential admin = addInitialAdmin();
 			String leonardoAlias = "leonardo";
 			String donatelloAlias = "donatello";
 			String michelangeloAlias = "michelangelo";
@@ -463,60 +536,70 @@ public class DelegationManagerTest extends TestCase {
 					getSimpleDelegationRequest(policy));
 
 			DelegationRecordFilter f = new DelegationRecordFilter();
+			validateFind(cds, admin.getIdentity(), f, 3,false);
 			validateFindMy(cds, leonardoCred.getIdentity(), f, 1);
 			validateFindMy(cds, donatelloCred.getIdentity(), f, 2);
 			validateFindMy(cds, michelangeloCred.getIdentity(), f, 0);
 
 			resetFilter(f);
 			f.setDelegationIdentifier(leonardoReq.getDelegationIdentifier());
+			validateFind(cds, admin.getIdentity(), f, 1,false);
 			validateFindMy(cds, leonardoCred.getIdentity(), f, 1);
 			validateFindMy(cds, donatelloCred.getIdentity(), f, 0);
 			validateFindMy(cds, michelangeloCred.getIdentity(), f, 0);
 
 			resetFilter(f);
 			f.setDelegationIdentifier(donatelloReq.getDelegationIdentifier());
+			validateFind(cds, admin.getIdentity(), f, 1,false);
 			validateFindMy(cds, leonardoCred.getIdentity(), f, 0);
 			validateFindMy(cds, donatelloCred.getIdentity(), f, 1);
 			validateFindMy(cds, michelangeloCred.getIdentity(), f, 0);
 
 			resetFilter(f);
 			f.setGridIdentity(leonardoCred.getIdentity());
+			validateFind(cds, admin.getIdentity(), f, 1,false);
 			validateFindMy(cds, leonardoCred.getIdentity(), f, 1);
 			validateFindMy(cds, donatelloCred.getIdentity(), f, 2);
 			validateFindMy(cds, michelangeloCred.getIdentity(), f, 0);
 
 			resetFilter(f);
 			f.setGridIdentity(donatelloCred.getIdentity());
+			validateFind(cds, admin.getIdentity(), f, 2,false);
 			validateFindMy(cds, leonardoCred.getIdentity(), f, 1);
 			validateFindMy(cds, donatelloCred.getIdentity(), f, 2);
 			validateFindMy(cds, michelangeloCred.getIdentity(), f, 0);
 
 			resetFilter(f);
 			f.setGridIdentity(michelangeloCred.getIdentity());
+			validateFind(cds, admin.getIdentity(), f, 0,false);
 			validateFindMy(cds, leonardoCred.getIdentity(), f, 1);
 			validateFindMy(cds, donatelloCred.getIdentity(), f, 2);
 			validateFindMy(cds, michelangeloCred.getIdentity(), f, 0);
 
 			resetFilter(f);
 			f.setExpirationStatus(ExpirationStatus.Valid);
+			validateFind(cds, admin.getIdentity(), f, 2,false);
 			validateFindMy(cds, leonardoCred.getIdentity(), f, 1);
 			validateFindMy(cds, donatelloCred.getIdentity(), f, 1);
 			validateFindMy(cds, michelangeloCred.getIdentity(), f, 0);
 
 			resetFilter(f);
 			f.setExpirationStatus(ExpirationStatus.Expired);
+			validateFind(cds, admin.getIdentity(), f, 0,false);
 			validateFindMy(cds, leonardoCred.getIdentity(), f, 0);
 			validateFindMy(cds, donatelloCred.getIdentity(), f, 0);
 			validateFindMy(cds, michelangeloCred.getIdentity(), f, 0);
 
 			resetFilter(f);
 			f.setDelegationStatus(DelegationStatus.Approved);
+			validateFind(cds, admin.getIdentity(), f, 2,false);
 			validateFindMy(cds, leonardoCred.getIdentity(), f, 1);
 			validateFindMy(cds, donatelloCred.getIdentity(), f, 1);
 			validateFindMy(cds, michelangeloCred.getIdentity(), f, 0);
 
 			resetFilter(f);
 			f.setDelegationStatus(DelegationStatus.Pending);
+			validateFind(cds, admin.getIdentity(), f, 1,false);
 			validateFindMy(cds, leonardoCred.getIdentity(), f, 0);
 			validateFindMy(cds, donatelloCred.getIdentity(), f, 1);
 			validateFindMy(cds, michelangeloCred.getIdentity(), f, 0);
@@ -543,6 +626,12 @@ public class DelegationManagerTest extends TestCase {
 
 	protected void validateFindMy(DelegationManager cds, String gridIdentity,
 			DelegationRecordFilter f, int expectedCount) throws Exception {
+		validateFind(cds, gridIdentity, f, expectedCount, true);
+	}
+
+	protected void validateFind(DelegationManager cds, String gridIdentity,
+			DelegationRecordFilter f, int expectedCount, boolean matchIds)
+			throws Exception {
 		DelegationRecord[] records = cds.findDelegatedCredentials(gridIdentity,
 				f);
 		assertEquals(expectedCount, records.length);
@@ -552,9 +641,10 @@ public class DelegationManagerTest extends TestCase {
 						.getDelegationIdentifier());
 			}
 		}
-
-		for (int i = 0; i < records.length; i++) {
-			assertEquals(gridIdentity, records[i].getGridIdentity());
+		if (matchIds) {
+			for (int i = 0; i < records.length; i++) {
+				assertEquals(gridIdentity, records[i].getGridIdentity());
+			}
 		}
 
 		if (f.getDelegationStatus() != null) {
