@@ -1,7 +1,12 @@
 package org.cagrid.gaards.cds.service;
 
+import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
 
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.ClientDelegationFilter;
 import org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter;
@@ -18,16 +23,45 @@ import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
+import org.cagrid.tools.groups.Group;
+import org.cagrid.tools.groups.GroupException;
+import org.cagrid.tools.groups.GroupManager;
 
 public class DelegationManager {
 
+	public static final String ADMINISTRATORS = "administrators";
 	private DelegatedCredentialManager dcm;
 	private PropertyManager properties;
+	private Group administrators;
+	private GroupManager groupManager;
+	private Log log;
 
 	public DelegationManager(PropertyManager properties,
-			DelegatedCredentialManager dcm) throws CDSInternalFault {
+			DelegatedCredentialManager dcm, GroupManager groupManager)
+			throws CDSInternalFault {
 		this.dcm = dcm;
+		this.log = LogFactory.getLog(this.getClass().getName());
 		this.properties = properties;
+		this.groupManager = groupManager;
+		try {
+			if (!this.groupManager.groupExists(ADMINISTRATORS)) {
+				this.groupManager.addGroup(ADMINISTRATORS);
+				this.administrators = this.groupManager
+						.getGroup(ADMINISTRATORS);
+			} else {
+				this.administrators = this.groupManager
+						.getGroup(ADMINISTRATORS);
+			}
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			CDSInternalFault fault = new CDSInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in setting up the administrators group.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CDSInternalFault) helper.getFault();
+			throw fault;
+		}
 
 	}
 
@@ -111,6 +145,68 @@ public class DelegationManager {
 		}
 	}
 
+	public void addAdmin(String callerIdentity, String gridIdentity)
+			throws CDSInternalFault, PermissionDeniedFault {
+		verifyAuthenticated(callerIdentity);
+		verifyAdmin(callerIdentity);
+		try {
+			this.administrators.addMember(gridIdentity);
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			CDSInternalFault fault = new CDSInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in adding the user as a administrator.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CDSInternalFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+	public void removeAdmin(String callerIdentity, String gridIdentity)
+			throws CDSInternalFault, PermissionDeniedFault {
+		verifyAuthenticated(callerIdentity);
+		verifyAdmin(callerIdentity);
+		try {
+			this.administrators.removeMember(gridIdentity);
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			CDSInternalFault fault = new CDSInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in removing the user from the administrators group.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CDSInternalFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+	public String[] getAdmins(String callerIdentity) throws CDSInternalFault,
+			PermissionDeniedFault {
+		verifyAuthenticated(callerIdentity);
+		verifyAdmin(callerIdentity);
+		try {
+			List<String> list = this.administrators.getMembers();
+			return list.toArray(new String[list.size()]);
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			CDSInternalFault fault = new CDSInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in obtaining a list of administrators.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CDSInternalFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+	private void verifyAdmin(String gridIdentity) throws CDSInternalFault,
+			PermissionDeniedFault {
+		if (!isAdmin(gridIdentity)) {
+			throw Errors.getPermissionDeniedFault(Errors.ADMIN_REQUIRED);
+		}
+	}
+
 	private void verifyAuthenticated(String callerIdentity)
 			throws PermissionDeniedFault {
 		if (Utils.clean(callerIdentity) == null) {
@@ -120,12 +216,39 @@ public class DelegationManager {
 	}
 
 	private boolean isAdmin(String gridIdentity) throws CDSInternalFault {
-		return false;
+		try {
+			if (this.administrators.isMember(gridIdentity)) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			CDSInternalFault fault = new CDSInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in determining if the user is an administrator.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CDSInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 	public void clear() throws CDSInternalFault {
 		dcm.clearDatabase();
 		properties.clearAllProperties();
+		try {
+			groupManager.clearDatabase();
+		} catch (GroupException e) {
+			log.error(e.getMessage(), e);
+			CDSInternalFault fault = new CDSInternalFault();
+			fault
+					.setFaultString("An unexpected error occurred in removing all groups.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (CDSInternalFault) helper.getFault();
+			throw fault;
+		}
 	}
 
 	public DelegatedCredentialManager getDelegatedCredentialManager() {

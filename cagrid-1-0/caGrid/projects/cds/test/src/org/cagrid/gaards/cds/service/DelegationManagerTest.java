@@ -5,6 +5,8 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -21,15 +23,19 @@ import org.cagrid.gaards.cds.common.DelegationStatus;
 import org.cagrid.gaards.cds.common.ExpirationStatus;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
+import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.cds.testutils.CA;
 import org.cagrid.gaards.cds.testutils.Constants;
 import org.cagrid.gaards.cds.testutils.Utils;
+import org.cagrid.tools.groups.Group;
+import org.cagrid.tools.groups.GroupManager;
 import org.globus.gsi.GlobusCredential;
 
 public class DelegationManagerTest extends TestCase {
 
 	private int DEFAULT_PROXY_LIFETIME_SECONDS = 300;
+	private final static String ADMIN_ALIAS = "admin";
 
 	private CA ca;
 	private File caCert;
@@ -42,6 +48,117 @@ public class DelegationManagerTest extends TestCase {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
 		}
+	}
+
+	public void testManagesAdmins() {
+		DelegationManager cds = null;
+		try {
+			GlobusCredential admin = addInitialAdmin();
+			cds = Utils.getCDS();
+			List<String> admins = new ArrayList<String>();
+			admins.add(admin.getIdentity());
+			checkAdminList(admin.getIdentity(), cds, admins);
+			String userPrefix = "/O=XYZ/OU=ABC/CN=user";
+			int count = 3;
+			for(int i=0; i<count; i++){
+				String user = userPrefix+i;
+				try{
+					cds.addAdmin(user, user);
+					fail("Should not be able to execute admin operation.");
+				}catch (PermissionDeniedFault e) {
+					if (!e.getFaultString().equals(
+							Errors.ADMIN_REQUIRED)) {
+						fail("Should not be able to execute admin operation.");
+					}
+				}
+				
+				try{
+					cds.removeAdmin(user, user);
+					fail("Should not be able to execute admin operation.");
+				}catch (PermissionDeniedFault e) {
+					if (!e.getFaultString().equals(
+							Errors.ADMIN_REQUIRED)) {
+						fail("Should not be able to execute admin operation.");
+					}
+				}
+				
+				try{
+					cds.getAdmins(user);
+					fail("Should not be able to execute admin operation.");
+				}catch (PermissionDeniedFault e) {
+					if (!e.getFaultString().equals(
+							Errors.ADMIN_REQUIRED)) {
+						fail("Should not be able to execute admin operation.");
+					}
+				}
+				cds.addAdmin(admin.getIdentity(), user);
+				admins.add(user);
+				this.checkAdminList(user, cds, admins);
+			}
+			
+			for(int i=0; i<count; i++){
+				String user = userPrefix+i;
+				cds.removeAdmin(admin.getIdentity(), user);
+				admins.remove(user);
+				try{
+					cds.getAdmins(user);
+					fail("Should not be able to execute admin operation.");
+				}catch (PermissionDeniedFault e) {
+					if (!e.getFaultString().equals(
+							Errors.ADMIN_REQUIRED)) {
+						fail("Should not be able to execute admin operation.");
+					}
+				}
+				this.checkAdminList(admin.getIdentity(), cds, admins);
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			if (cds != null) {
+				try {
+					cds.clear();
+				} catch (Exception e) {
+				}
+			}
+		}
+	}
+
+	private void checkAdminList(String admin, DelegationManager cds,
+			List<String> expected) throws Exception {
+		assertNotNull(expected);
+		assertNotNull(admin);
+		assertNotNull(cds);
+		String[] actual = cds.getAdmins(admin);
+		assertNotNull(actual);
+		assertEquals(expected.size(), actual.length);
+		for (int i = 0; i < expected.size(); i++) {
+			boolean found = false;
+			for (int j = 0; j < actual.length; j++) {
+				if (actual[j].equals(expected.get(i))) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				fail("Did not find an expected administrator.");
+			}
+		}
+	}
+
+	private GlobusCredential addInitialAdmin() throws Exception {
+		GlobusCredential admin = ca.createCredential(ADMIN_ALIAS);
+		GroupManager gm = Utils.getGroupManager();
+		Group admins = null;
+		if (!gm.groupExists(DelegationManager.ADMINISTRATORS)) {
+			gm.addGroup(DelegationManager.ADMINISTRATORS);
+			admins = gm.getGroup(DelegationManager.ADMINISTRATORS);
+		} else {
+			admins = gm.getGroup(DelegationManager.ADMINISTRATORS);
+		}
+		admins.addMember(admin.getIdentity());
+		assertTrue(admins.isMember(admin.getIdentity()));
+		return admin;
 	}
 
 	public void testUpdateDelegationStatusNonAdminUser() {
@@ -130,6 +247,80 @@ public class DelegationManagerTest extends TestCase {
 			} catch (PermissionDeniedFault e) {
 
 			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			if (cds != null) {
+				try {
+					cds.clear();
+				} catch (Exception e) {
+				}
+			}
+		}
+	}
+	
+	public void testUpdateDelegationStatusAdminUser() {
+		DelegationManager cds = null;
+		try {
+			cds = Utils.getCDS();
+			GlobusCredential admin = addInitialAdmin();
+			String leonardoAlias = "leonardo";
+			String donatelloAlias = "donatello";
+
+			GlobusCredential leonardoCred = ca.createCredential(leonardoAlias);
+			GlobusCredential donatelloCred = ca
+					.createCredential(donatelloAlias);
+
+			DelegationPolicy policy = getSimplePolicy(donatelloCred
+					.getIdentity());
+
+			DelegationSigningRequest leonardoReq = cds.initiateDelegation(
+					leonardoCred.getIdentity(),
+					getSimpleDelegationRequest(policy));
+			DelegationSigningResponse leonardoRes = new DelegationSigningResponse();
+			leonardoRes.setDelegationIdentifier(leonardoReq
+					.getDelegationIdentifier());
+			leonardoRes.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+					.toCertificateChain(ca.createProxyCertifcates(
+							leonardoAlias, KeyUtil.loadPublicKey(leonardoReq
+									.getPublicKey().getKeyAsString()), 2)));
+			cds.approveDelegation(leonardoCred.getIdentity(), leonardoRes);
+			DelegationIdentifier id = leonardoReq.getDelegationIdentifier();
+
+			try {
+				cds.updateDelegatedCredentialStatus(admin.getIdentity(),
+						id, DelegationStatus.Pending);
+				fail("Should not be able to update the status of the delegated credential.");
+			} catch (DelegationFault e) {
+				if (!e.getFaultString().equals(
+						Errors.CANNOT_CHANGE_STATUS_TO_PENDING)) {
+					fail("Should not be able to update the status of the delegated credential.");
+				}
+			}
+
+			cds.updateDelegatedCredentialStatus(admin.getIdentity(), id,
+					DelegationStatus.Suspended);
+
+			DelegationRecordFilter f = new DelegationRecordFilter();
+			f.setDelegationIdentifier(id);
+			DelegationRecord[] records = cds.findDelegatedCredentials(
+					leonardoCred.getIdentity(), f);
+			assertNotNull(records);
+			assertEquals(1, records.length);
+			assertEquals(DelegationStatus.Suspended, records[0]
+					.getDelegationStatus());
+
+				cds.updateDelegatedCredentialStatus(admin.getIdentity(),
+						id, DelegationStatus.Approved);
+				
+				 records = cds.findDelegatedCredentials(
+							leonardoCred.getIdentity(), f);
+					assertNotNull(records);
+					assertEquals(1, records.length);
+					assertEquals(DelegationStatus.Approved, records[0]
+							.getDelegationStatus());
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

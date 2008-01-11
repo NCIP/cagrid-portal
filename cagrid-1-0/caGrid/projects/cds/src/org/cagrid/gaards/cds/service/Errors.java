@@ -38,6 +38,7 @@ public class Errors {
 	public static String CANNOT_GET_INVALID_STATUS = "Cannot get delegated credential, the signing credential has not been approved or has been suspended.";
 	public static String CANNOT_CHANGE_STATUS_TO_PENDING = "Cannot change the status of the signing credential to pending.";
 	public static String AUTHENTICATION_REQUIRED = "Authentication required to perform the requested operation.";
+	public static String ADMIN_REQUIRED = "You must be an administrator to perform the requested operation.";
 	public static String PERMISSION_DENIED = "You do not have permission to perform the requested operation.";
 	public static String PERMISSION_DENIED_NO_DELEGATED_CREDENTIAL_SPECIFIED = "You must specify a delegated credential to audit.";
 	public static String PERMISSION_DENIED_TO_AUDIT = "You do not have permission to audit the specified delegated credential.";

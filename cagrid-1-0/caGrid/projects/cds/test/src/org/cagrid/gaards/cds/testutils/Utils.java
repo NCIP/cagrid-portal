@@ -11,6 +11,7 @@ import org.cagrid.gaards.cds.service.PropertyManager;
 import org.cagrid.gaards.cds.service.policy.IdentityPolicyHandler;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.events.EventManager;
+import org.cagrid.tools.groups.GroupManager;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -32,6 +33,12 @@ public class Utils {
 		XmlBeanFactory factory = loadConfiguration();
 		return (DelegationManager) factory
 				.getBean(ConfigurationConstants.CDS_BEAN);
+	}
+	
+	public static GroupManager getGroupManager() throws Exception {
+		XmlBeanFactory factory = loadConfiguration();
+		return (GroupManager) factory
+				.getBean(ConfigurationConstants.GROUP_MANAGER_BEAN);
 	}
 
 	public static DelegatedCredentialManager getDelegatedCredentialManager()

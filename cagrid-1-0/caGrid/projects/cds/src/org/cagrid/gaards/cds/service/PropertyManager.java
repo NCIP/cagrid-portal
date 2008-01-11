@@ -19,7 +19,7 @@ public class PropertyManager {
 	private static String TABLE = "properties";
 	private static String VERSION_PROPERTY = "version";
 	private static String KEY_MANAGER = "Key Manager";
-	public static float CURRENT_VERSION = 1.1F;
+	public static float CURRENT_VERSION = 1.2F;
 	private MetadataManager manager;
 	private Metadata version;
 	private Metadata keyManager;
@@ -33,7 +33,7 @@ public class PropertyManager {
 			if (version == null) {
 				version = new Metadata();
 				version.setName(VERSION_PROPERTY);
-				version.setDescription("The software version of this Dorian.");
+				version.setDescription("The software version of this CDS.");
 				version.setValue(String.valueOf(CURRENT_VERSION));
 				this.manager.update(version);
 			}
@@ -45,18 +45,6 @@ public class PropertyManager {
 						.setDescription("The key manager class used to manage keys.");
 			}
 		} catch (Exception e) {
-			System.out.println("");
-			System.out.println("");
-			System.out.println("");
-			System.out.println("");
-			System.out.println("********************************************");
-			System.out.println(e.getMessage());
-			System.out.println("********************************************");
-			System.out.println("");
-			System.out.println("");
-			System.out.println("");
-			System.out.println("");
-			
 			log.error(e.getMessage(), e);
 			CDSInternalFault fault = new CDSInternalFault();
 			fault

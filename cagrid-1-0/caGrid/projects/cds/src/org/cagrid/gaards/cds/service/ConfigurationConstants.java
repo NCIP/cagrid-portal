@@ -8,4 +8,5 @@ public class ConfigurationConstants {
 	public static final String IDENTITY_POLICY_HANDLER = "identityPolicyHandler";
 	public static final String EVENT_MANAGER = "eventManager";
 	public static final String CDS_BEAN = "delegationManager";
+	public static final String GROUP_MANAGER_BEAN = "groupManager";
 }

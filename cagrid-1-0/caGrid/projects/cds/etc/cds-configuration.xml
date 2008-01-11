@@ -79,6 +79,11 @@
 		class="org.cagrid.gaards.cds.service.PropertyManager">
 		<constructor-arg index="0" ref="database" />
 	</bean>
+	
+	<bean id="groupManager"
+		class="org.cagrid.tools.groups.GroupManager">
+		<constructor-arg index="0" ref="database" />
+	</bean>
 
 	<bean id="proxyPolicy"
 		class="org.cagrid.gaards.cds.service.ProxyPolicy">
@@ -112,6 +117,7 @@
 		class="org.cagrid.gaards.cds.service.DelegationManager">
 		<constructor-arg index="0" ref="propertyManager" />
 		<constructor-arg index="1" ref="delegatedCredentialManager" />
+		<constructor-arg index="2" ref="groupManager" />
 	</bean>
 
 
