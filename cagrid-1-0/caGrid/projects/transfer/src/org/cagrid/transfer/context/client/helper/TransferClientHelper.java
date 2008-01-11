@@ -11,7 +11,7 @@ import org.ietf.jgss.GSSCredential;
 
 public class TransferClientHelper {
 
-    public InputStream getDataStream(DataTransferDescriptor desc, GSSCredential creds) throws Exception {
+    public static InputStream getDataStream(DataTransferDescriptor desc, GSSCredential creds) throws Exception {
         URL url = new URL(desc.getUrl());
         if (url.getProtocol().equals("http")) {
             URLConnection conn = url.openConnection();
@@ -26,7 +26,7 @@ public class TransferClientHelper {
         throw new Exception("Protocol " + url.getProtocol() + " not supported.");
     }
     
-    public InputStream getDataStream(DataTransferDescriptor desc) throws Exception {
+    public static InputStream getDataStream(DataTransferDescriptor desc) throws Exception {
         URL url = new URL(desc.getUrl());
         if (url.getProtocol().equals("http")) {
             URLConnection conn = url.openConnection();
